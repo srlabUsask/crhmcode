@@ -1,0 +1,74 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 2
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\SNAP\MET97.obs
+C:\SNAP\Snapoutput.obs
+######
+DLLs:
+######
+C:\Crhm\SnapDLL.dll
+######
+Modules:
+######
+Snap C:\Crhm\SnapDLL.dll 03/14/03
+######
+Dates:
+######
+1997 3 25
+1997 4 28
+######
+Parameters:
+######
+Snap n
+3.3 3.3 
+Snap PHIE
+0.65 0.65 
+Snap raintemp
+0.5 0.5 
+Snap SD
+84.05 84.05 
+Snap SWI
+0.03 0.03 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Snap a 1 2
+Snap at 1 2
+Snap maxwet 1 2
+Snap phie 1 2
+Snap sd 1 2
+Snap swe 1 2
+Snap swi 1 2
+Snap waves 1 2
+######
+Display_Observation:
+######
+obs SnapMaxwet 1 _obs
+obs Snapphie 1 _obs
+obs SnapSD 1 _obs
+obs Snapswe 1 _obs
+obs Snapswi 1 _obs
+obs Snapwaves 1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\Snap_DLLver.prj
+ 
+(cm)
+ 
+ 
+######

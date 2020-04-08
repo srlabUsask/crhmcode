@@ -1,0 +1,63 @@
+Description - to be added
+###### Version NON DLL 4.02  Creation: 4/8/2020 02:06
+Dimensions:
+######
+nhru 1
+nlay 2
+nobs 1
+######
+Macros:
+######
+'Calc_tmean'
+'declreadobs, t, NOBS," temperature observation", (°C)'
+'declvar, Status, NHRU, "indicates if Obs available", ()'
+'declvar, t_mean, NHRU, "calculated t mean", (°C)'
+'command'
+'var sum, i'
+'if(STEP == 1)'
+'t_mean[hh] = 0'
+'endif'
+'if(STEP%FREQ == 0)'
+'sum = 0'
+'Status[hh] = 0'
+'for(i = 0; i < FREQ; i=i+1)'
+'ReadAheadObs = i'
+'Status[hh] = Status[hh] + ReadAheadObs'
+'sum = sum + t[hh]'
+'endfor'
+'t_mean[hh] = sum/FREQ'
+'endif'
+'end'
+######
+Observations:
+######
+Badlake73_76.obs
+######
+Dates:
+######
+1973 1 1
+1976 1 1
+######
+Modules:
+######
+Calc_tmean Macro 04/20/06
+######
+Parameters:
+###### 'basin' parameters always first
+######
+Initial_State
+######
+######
+Final_State
+######
+######
+Display_Variable:
+######
+Calc_tmean t_mean 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+######

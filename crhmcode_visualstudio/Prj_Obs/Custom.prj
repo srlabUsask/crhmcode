@@ -1,0 +1,103 @@
+Description - to be added
+###### Version: NON-DLL 5.40  Creation: 4/12/2005 11:14
+Dimensions:
+######
+nhru 2
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Macro1// comment'
+'declparam, param, NHRU, 0.2, 0.0, 1.0, description, (units) // comment'
+'// comment'
+'declreadobs, t, NOBS, description, (units) // comment'
+'// comment'
+'declvar, OutVar, NHRU, description, (units) // comment'
+'// comment'
+'declvar, XOutVar, NHRU, description, (units) // comment'
+'// comment'
+'declgetvar, obs, hru_t   // comment'
+'command // comment'
+'// comment'
+'OutVar[1]=param[1]*t[1]  OutVar[2]=param[2]*t[1]  // comment'
+'// comment'
+'var i i=i+1 XOutVar= sin(i) var j j=i+180 XOutVar[2] = sin(j) // comment'
+'end // comment'
+'Macro2 // comment'
+'declparam, param2, NHRU, 0.2, 0.0, 1.0, description, (units)'
+'declreadobs, t, NOBS, description, (units) // comment'
+'declvar, Z, NHRU, description, (units) // comment'
+'declvar, Y, NHRU, description, (units) // comment'
+'declgetvar, Macro1, OutVar // comment'
+'command // comment '
+'Z[hh]=param2[hh]*t[1] Y[hh] = param2[hh]*OutVar[hh] // comment'
+'end // comment'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1973 12 31
+######
+Modules:
+######
+global CRHM basic 12/16/04
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/14/05
+Macro1 Modules 04/12/05
+Macro2 Modules 04/12/05
+######
+Parameters:
+######
+global hru_ASL
+0 0 
+global hru_elev
+637 637 
+global hru_GSL
+0 0 
+global hru_lat
+51.32 51.32 
+global Time_Offset
+0 0 
+Macro1 param
+0.2 0.21 
+Macro2 param2
+0.3 0.31 
+obs basin_area
+1 
+obs catchadjust
+1 1 
+obs hru_area
+1 1 
+obs tmax_allrain
+0 0 
+obs tmax_allsnow
+0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Macro2 Y 1 2
+Macro2 Z 1 2
+######
+Display_Observation:
+######
+obs t 1 _obs
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+junk.prj
+ 
+(units)
+ 
+ 
+ 
+######

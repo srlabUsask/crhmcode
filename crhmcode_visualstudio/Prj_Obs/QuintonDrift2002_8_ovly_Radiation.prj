@@ -1,0 +1,137 @@
+Description - to be added
+###### Version: DLL 1.06  Creation: 11/10/03 14:19
+Dimensions:
+######
+nhru 8
+nlay 3
+nobs 2
+######
+Observations:
+######
+GB402_TB.obs
+WL_116 - 2002.obs
+Gb202_01.obs
+######
+Dates:
+######
+2002 5 19
+2002 8 26
+######
+DLLs:
+######
+QuintonDLL.dll
+NewModulesDLL.dll
+######
+Modules:
+######
+global CRHM basic 02/19/03
+Qmelt QuintonDLL.dll 04/10/03
+Qdrift QuintonDLL.dll 02/28/03
+Quinton QuintonDLL.dll 10/19/03
+######
+Parameters:
+######
+basin catchadjust
+1 1 1 1 1 1 1 1 
+basin DrainTo
+2 3 4 5 6 7 8 0 
+basin length
+27 14 14 14 14 14 14 14 
+basin Type
+1 2 2 2 2 2 2 2 
+global hru_ASL
+0 0 0 0 0 0 0 0 
+global hru_elev
+637 637 637 637 637 637 637 637 
+global hru_GSL
+0 0 0 0 0 0 0 0 
+global hru_lat
+60.52 60.52 60.52 60.52 60.52 60.52 60.52 60.52 
+global Time_Offset
+2 0 0 0 0 0 0 0 
+Qdrift InitSWE
+400 0 0 0 0 0 0 0 
+Qdrift meltLag
+0 0 0 0 0 0 0 0 
+Qdrift meltstorage
+0 0 0 0 0 0 0 0 
+Qmelt TIa0Mn
+0 0 0 0 0 0 0 0 
+Qmelt TIa1Mn
+0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Qmelt TIs0Mn
+0 0 0 0 0 0 0 0 
+Qmelt TIs1Mn
+0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Quinton a
+25 25 25 25 25 25 25 25 
+15 15 15 15 15 15 15 15 
+15 15 15 15 15 15 15 15 
+Quinton d
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+Quinton Drained
+0 0.075 0 0 0 0 0 0 
+Quinton flowLag
+0 0 0 0 0 0 0 0 
+Quinton flowstorage
+0 0 0 0 0 0 0 0 
+Quinton FrozenTo
+0 0 0 0 0 0 0 0 
+Quinton n
+2 2 2 2 2 2 2 2 
+1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 
+1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 
+Quinton Pors
+0.96 
+0.9 
+0.87 
+0.43 
+0.43 
+Quinton Residual
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 
+0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 
+Quinton runoffLag
+0 0 0 0 0 0 0 0 
+Quinton runoffstorage
+0 0 0 0 0 0 0 0 
+Quinton slope
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+Quinton soil_type
+0 0 0 0 0 0 0 0 
+2 1 1 1 1 1 1 1 
+2 2 2 2 2 2 2 2 
+Quinton tinit
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Quinton d_surface 2 8
+Quinton Depth 2 8
+Quinton dmelt 2 8
+global Qdro -1
+Qdrift SWE -1
+Quinton transit 2
+######
+Display_Observation:
+######
+obs GB2_Rin -1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+(m)
+ 
+ 
+(m)
+ 
+ 
+######

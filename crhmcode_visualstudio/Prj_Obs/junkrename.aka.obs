@@ -1,0 +1,6 @@
+Macro1 varD OutVar Var
+Macro1 VARG hru_t obs_t obs
+XMacroX VARD Y Ynew
+XMacroX VARD Z Znew
+XMacroX VARG OutVar Var Macro1
+obs VARD hru_t obs_t

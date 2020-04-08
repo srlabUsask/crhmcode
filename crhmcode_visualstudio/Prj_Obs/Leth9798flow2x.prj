@@ -1,0 +1,114 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\Leth9798.obs
+######
+Modules:
+######
+global
+calcsun
+obs
+intcp
+pbsm
+albedo
+netall
+ebsm
+crack
+net_rn
+evap
+srunoff
+smbal
+route
+######
+Dates:
+######
+1997 9 1
+1998 5 1
+######
+Parameters:
+######
+basin basin_area
+11.3900003433228 
+basin hru_area
+4.67000007629395 
+basin hru_elev
+637 
+crack fallstat
+50 
+ebsm nfactor
+0 
+ebsm tfactor
+2 
+evap Ht
+0.00999999977648258 
+evap Zref
+1.5 
+evap Zwind
+10 
+evap evap_type
+0 
+evap hru_elev
+638 
+global hru_ASL
+0 
+global hru_GSL
+0 
+global hru_lat
+51.3170013427734 
+net_rn F_Qg
+0.200000002980232 
+netall hru_alb
+0.170000001788139 
+obs catchadjust
+0 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+pbsm distrib
+1 
+pbsm fetch
+1000 
+pbsm Ht
+0.00999999977648258 
+route Kstorage
+0 
+route Lag
+0.5 
+route order
+1 
+route whereto
+3 
+smbal cov_type
+3 
+smbal soil2gw_max
+0 
+smbal soil_moist_init
+187 
+smbal soil_moist_max
+375 
+smbal soil_rechr_init
+30 
+smbal soil_rechr_max
+60 
+smbal soil_type
+2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+
+######
+Display_Observation:
+######
+
+######

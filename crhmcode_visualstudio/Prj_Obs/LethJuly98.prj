@@ -1,0 +1,146 @@
+Description - to be added
+###### Version: CRHM 1.99  Creation: 05/11/07 09:44
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+LethJuly98.obs
+######
+Dates:
+######
+1998 7 1
+1998 7 10
+######
+Modules:
+######
+albedo_param CRHM 11/22/05
+global CRHM 08/28/06
+obs CRHM 04/03/07
+calcsun CRHM 06/09/05
+intcp CRHM 11/15/06
+netall CRHM 11/22/06
+GreenAmpt CRHM 01/18/07
+evap CRHM 05/03/07
+Soil CRHM 04/13/07
+######
+Parameters:
+######
+albedo_param Albedo_Value
+0.17 
+basin basin_area
+1 
+basin hru_area
+1 
+basin hru_elev
+637 
+basin soil_moist_init
+187 
+basin soil_moist_max
+375 
+basin soil_type
+2 
+evap evap_type
+0 
+evap F_Qg
+0.2 
+evap Ht
+0.1 
+evap Htmax
+0.1 
+evap inhibit_evap
+0 
+evap LAImax
+3 
+evap LAImin
+0 
+evap PM_method
+0 
+evap rcs
+25 
+evap s
+1 
+evap Soil_Moist
+0.5 
+evap Zwind
+10 
+global hru_ASL
+0 
+global hru_GSL
+0 
+global hru_lat
+51.32 
+global Time_Offset
+0 
+GreenAmpt pond_drainage
+0.1 
+GreenAmpt soiltype
+4 
+obs catchadjust
+1 
+obs HRU_OBS
+1 
+obs lapse_rate
+0.75 
+obs obs_elev
+637 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+Soil cov_type
+2 
+Soil rechr_ssr_K
+0 
+Soil Sdinit
+0 
+Soil Sdmax
+0 
+Soil Sd_gw_K
+0 
+Soil Sd_ssr_K
+0 
+Soil soil_gw_K
+0 
+Soil soil_rechr_init
+30 
+Soil soil_rechr_max
+60 
+Soil transp_limited
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+GreenAmpt cuminfil 1
+GreenAmpt cumrunoff 1
+evap hru_cum_actet 1
+evap hru_cum_evap 1
+obs hru_p 1
+GreenAmpt infil 1
+GreenAmpt pond 1
+GreenAmpt runoff 1
+Soil soil_moist 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\LethJuly98.prj
+ 
+(mm)
+ 
+ 
+ 
+######

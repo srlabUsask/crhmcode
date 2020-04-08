@@ -1,0 +1,48 @@
+Description - to be added
+###### Version: NON-DLL 5.04  Creation: 5/27/03 15:10
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\Crhm\shapes.obs
+######
+Modules:
+######
+######
+Dates:
+######
+2001 1 1
+2001 1 11
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+obs ea -1 _obs
+obs Pulse 1 _obs
+obs Ramp 1 _obs
+obs Sine 1 _obs
+obs Square 1 _obs
+obs t 1 _obs
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\shapes.prj
+ 
+
+ 
+ 
+######

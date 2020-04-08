@@ -1,0 +1,84 @@
+Description - to be added
+###### Version: CRHM_NEW 1.51  Creation: 10/27/2005 13:35
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+C:\CRHM\pbsm.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+obs CRHM new 05/03/05
+intcp CRHM new 07/08/05
+sbsm CRHM new 10/27/05
+######
+Parameters:
+######
+basin basin_area
+3 
+basin hru_area
+1 1 1 
+obs catchadjust
+1 1 1 
+obs hru_elev
+637 637 637 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+sbsm distrib
+0.5 1 1 
+sbsm fetch
+1000 1000 1000 
+sbsm Ht
+0.1 0.25 1 
+sbsm inhibit_evap
+0 0 0 
+sbsm zr
+0.1 0.05 0.05 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+sbsm BasinSnowLoss 1
+sbsm cumBasinSnowGain 1
+sbsm cumBasinSnowLoss 1
+sbsm cumDrift 1 2 3
+sbsm cumSno 1
+sbsm cumSubl 1 2 3
+sbsm SWE 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+TChart
+ 
+ 
+(mm Int)
+ 
+ 
+ 
+######

@@ -1,0 +1,251 @@
+Description - to be added
+###### Version: CRHM 2.02  Creation: 08/31/07 13:28
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+AKAs:
+######
+OBSR Decide_Opportunity Qsi Qsi# Slope_Qsi
+OBSR frozen t0_inhibit t0_inhibit# Decide_Opportunity
+VARG Convert_runoff_runoffD runoff meltrunoff frozen
+VARG route runoff runoffD Convert_runoff_runoffD
+######
+Macros:
+######
+'MyWhile'
+'declvar,Time2, NHRU, "My time step", (int)'
+'declvar,Time, NHRU, "My time step", (int)'
+'declvar,TimeAct, NHRU, "Step", (int)'
+'declvar,Estar, NHRU, "saturation vapour pressure", (int)'
+'declvar,Patmos, NHRU, "atmospheric pressure pressure", (kPa)'
+'declvar,RHOa, NHRU, "air density", (kg/m^3)'
+'declvar,Spec_humid, NHRU, "specific humidity", (kg/kg)'
+'declgetvar, "*", hru_t, "(°C)"'
+'declgetvar, "*", hru_ea, "(kPa)"'
+'declparam, Ht, NHRU,[0.1], 0.01, 100.0, description, (m)'
+'command'
+'  var i'
+'  Time2[hh] = 0'
+'  for(i=0;i <10;i=i+1)'
+'    Time2[hh] = Time2[hh]+1'
+'  endfor'
+'   Estar[hh] = estar(hru_t)'
+'   Patmos[hh] = patmos(Ht[hh])'
+'   RHOa[hh] = rhoa(hru_t[hh], hru_ea[hh],  Patmos[hh])'
+'   Spec_humid[hh] = spec_humid( hru_ea[hh],  Patmos[hh])'
+'  while(Time[hh] < STEP*2)'
+'   Time[hh] =Time[hh] +0.1'
+'  endwhile'
+'   TimeAct[hh] =STEP'
+'end'
+'Convert_runoff_runoffD'
+'declgetvar, frozen, runoff, (mm/d)'
+'declvar,runoffD, NHRU, "daily runoff", (m)'
+'command'
+'if(STEP%FREQ == 1)'
+'  runoffD[hh] = runoff[hh]'
+'else'
+'  runoffD[hh] = runoffD[hh] +runoff[hh]'
+'endif'
+'end'
+'Decide_Opportunity'
+'declobs, t0_inhibit#, NHRU, "inhibit incrementing of opportunity time", ()'
+'declgetvar, *, hru_t, (°C)'
+'declreadobs, Qsi, NOBS, "measured short-wave", (W/m^2)'
+'command'
+'if(hru_t[hh] > 0 && Qsi[hh] > 100)'
+'  t0_inhibit#[hh] =1'
+'else'
+'  t0_inhibit#[hh] =0'
+'endif'
+'end'
+'Slope_Qsi'
+'declobs, Qsi#, NHRU, "Created short-wave", (W/m^2)'
+'declreadobs, Qsi, NOBS, "measured short-wave", (W/m^2)'
+'declgetvar, global, Qdro, (W/m^2)'
+'declgetvar, global, Qdfo, (W/m^2)'
+'declgetvar, global, Qdflat, (W/m^2)'
+'setpeer, Qdro'
+'command'
+'var Q'
+'Q = Qdro[hh] + Qdfo[hh]'
+'if(Qdflat[hh] > 1.0)'
+'  Qsi#[hh] = Qsi[hh]/Qdflat[hh]*Q'
+'else'
+'  Qsi#[hh] = 0'
+'endif'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+basin CRHM 06/22/06
+global CRHM 07/12/07
+obs CRHM 06/06/07
+MyWhile Macro 04/20/06
+Slope_Qsi Macro 04/20/06
+calcsun CRHM 06/09/05
+Decide_Opportunity Macro 04/20/06
+intcp CRHM 11/15/06
+pbsm CRHM 09/27/06
+albedo CRHM 07/30/07
+netall CRHM 11/22/06
+ebsm CRHM 02/21/06
+evap CRHM 05/03/07
+frozen CRHM 06/06/07
+Convert_runoff_runoffD Macro 04/20/06
+smbal CRHM 12/14/06
+route CRHM 08/18/06
+######
+Parameters:
+######
+albedo Albedo_bare
+0.17 0.17 0.17
+albedo Albedo_snow
+0.85 0.85 0.85
+basin basin_area
+11.39
+basin basin_name
+'CRHM Basin Model'
+basin hru_area
+4.67 5.04 1.68
+basin hru_ASL
+0 0 0
+basin hru_elev
+637 637 637
+basin hru_GSL
+30 0 0
+basin hru_lat
+51.32 51.32 51.32
+basin hru_names
+'HRU1' 'HRU2' 'HRU3'
+basin Ht
+0.2 0.4 1
+basin inhibit_evap
+0 0 0
+basin RUN_ID
+1
+basin soil_moist_max
+375 375 375
+basin soil_type
+2 2 2
+ebsm delay_melt
+0 120 115
+ebsm nfactor
+0 0 0
+ebsm tfactor
+0 0 0
+evap evap_type
+0 0 0
+evap F_Qg
+0.2 0.2 0.2
+evap Htmax
+0.1 0.1 0.1
+evap LAImax
+3 3 3
+evap LAImin
+0 0 0
+evap PM_method
+0 0 0
+evap rcs
+25 25 25
+evap s
+1 1 1
+evap Soil_Moist
+0.5 0.5 0.5
+evap Zwind
+10 10 10
+frozen C
+1.14 1.14 1.14
+frozen hru_tsoil
+269.1 269.1 269.1
+frozen S0
+0.95 0.95 0.95
+frozen Si
+0.3 0.3 0.3
+frozen t0
+118 60 149
+frozen t_ice_lens
+-20 -20 -20
+global Time_Offset
+0 0 0
+obs catchadjust
+1 1 1
+obs HRU_OBS
+1 1 1
+obs lapse_rate
+0.75 0.75 0.75
+obs obs_elev
+637 637 637
+obs tmax_allrain
+0 0 0
+obs tmax_allsnow
+0 0 0
+pbsm distrib
+1 1 1
+pbsm fetch
+1000 1000 1000
+pbsm inhibit_bs
+0 0 0
+route Kstorage
+0 0 0.5
+route Lag
+0 0 0
+route order
+1 2 3
+route whereto
+0 3 0
+smbal cov_type
+3 3 3
+smbal soil2gw_max
+0 0 0
+smbal soil_moist_init
+225 225 225
+smbal soil_rechr_init
+45 45 45
+smbal soil_rechr_max
+60 60 60
+smbal transp_limited
+0 0 0
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+MyWhile Estar 1
+MyWhile Patmos 1
+MyWhile RHOa 1
+MyWhile Spec_humid 1
+obs t0_inhibit# 1
+MyWhile Time2 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+
+C:\Modelling\CRHM\EBSM_PLT1_FZEN_Granger03.prj
+
+(int)
+
+
+
+######

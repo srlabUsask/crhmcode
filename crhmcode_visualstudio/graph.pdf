@@ -1,0 +1,14 @@
+<html>
+	Hi, how are you.
+
+	<canvas id="myCanvas" width="200" height="100"></canvas>
+
+	<script>
+		var canvas = document.getElementById("myCanvas");
+		var ctx = canvas.getContext("2d");
+		ctx.fillStyle = "#FF0000";
+		ctx.fillRect(0, 0, 150, 75);
+	</script>
+
+
+</html>

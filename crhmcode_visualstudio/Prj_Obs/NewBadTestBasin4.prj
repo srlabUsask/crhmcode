@@ -1,0 +1,128 @@
+Description - to be added
+###### Version: NON-DLL 5.44  Creation: 6/23/2005 14:42
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 3
+######
+Macros:
+######
+'Convert_Qnsn_QnD'
+'declreadobs, Qnsn, NOBS, description, (units)'
+'declobs,QnD, NHRU, description, (units)'
+'command'
+'if(STEP%FREQ == 1) QnD[hh] = Qnsn[hh]*0.0864 else QnD[hh] = QnD[hh] + Qnsn[hh]*0.0864 endif'
+'end'
+######
+Observations:
+######
+Winter1974@.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+basin CRHM new 11/25/04
+global CRHM new 05/31/05
+obs CRHM new 05/03/05
+calcsun CRHM new 05/03/05
+long CRHM new 06/23/05
+intcp CRHM new 01/01/02
+NO_pbsm CRHM new 12/06/04
+albedo CRHM new 05/11/05
+NeedleLeaf CRHM new 05/27/05
+netall CRHM new 05/11/05
+Convert_Qnsn_QnD Modules 04/12/05
+ebsm CRHM new 06/23/05
+######
+Parameters:
+######
+basin Albedo
+0.17 0.17 0.17 
+basin basin_area
+3 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 1 1 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin hru_names
+'HRU' 'HRU2' 'HRU3' 
+basin RUN_ID
+1 
+ebsm delay_melt
+0 0 0 
+ebsm nfactor
+0 0 0 
+ebsm tfactor
+0 0 0 
+global Extra
+0 0 0 
+global Time_Offset
+0 0 0 
+NeedleLeaf Albedo
+1 0 0 
+NeedleLeaf Ht
+0.1 0.1 0.1 
+NeedleLeaf LAI
+2.2 2.2 2.2 
+NeedleLeaf Vf
+0.5 0.5 0.5 
+NeedleLeaf Z0
+0.001 0.001 0.001 
+NeedleLeaf Zref
+1.5 1.5 1.5 
+NeedleLeaf Zwind
+10 10 10 
+NO_pbsm inhibit_evap
+0 0 0 
+obs catchadjust
+0 0 0 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+ebsm Qn_ebsm 1
+obs QnDx 1
+ebsm snowmeltD 1
+NO_pbsm SWE 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\CRHM\badlakeflow7374.prj
+ 
+(MJ)
+ 
+ 
+ 
+######

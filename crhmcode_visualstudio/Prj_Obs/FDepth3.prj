@@ -1,0 +1,97 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 3
+nobs 1
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Modules:
+######
+global
+calcsun
+obs
+intcp
+pbsm
+Kevin
+frostdepth
+######
+Dates:
+######
+1973 11 1
+1974 4 1
+######
+Parameters:
+######
+Kevin Asnow1
+0.8000 
+Kevin Asnow2
+0.6000 
+Kevin Asoil
+0.2000 
+Kevin cv
+0.3300 
+Kevin meltthresh
+1.0000 
+Kevin nfactor
+0.0000 
+Kevin tfactor
+0.1000 
+frostdepth V0
+10.0000 
+frostdepth d
+2.0000 
+2.0000 
+2.0000 
+frostdepth por
+0.5000 
+0.5000 
+0.5000 
+frostdepth soil_type
+2 
+2 
+2 
+frostdepth theta
+0.5000 
+0.5000 
+0.5000 
+global hru_ASL
+0.0000 
+global hru_GSL
+0.0000 
+global hru_elev
+637.0000 
+global hru_lat
+51.3170 
+obs catchadjust
+0 
+obs tmax_allrain
+0.0000 
+obs tmax_allsnow
+0.0000 
+pbsm basin_area
+11.3900 
+pbsm distrib
+1.0000 
+pbsm fetch
+1000.0000 
+pbsm hru_area
+4.6700 
+pbsm Ht
+0.0100 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+frostdepth frostdepth 1
+######
+Display_Observation:
+######
+
+######

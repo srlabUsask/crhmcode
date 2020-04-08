@@ -1,0 +1,81 @@
+Description - to be added
+###### Version: DLL 1.40  Creation: 4/5/2005 14:26
+Dimensions:
+######
+nhru 2
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\CRHM\f1_03.obs
+C:\CRHM\FEC_110_50701.obs
+######
+Dates:
+######
+2003 4 10
+2003 5 7
+######
+DLLs:
+######
+C:\CRHM\April2004DLL.dll
+######
+Modules:
+######
+global CRHM basic 12/16/04
+NeedleLeaf C:\CRHM\April2004DLL.dll 04/05/05
+######
+Parameters:
+######
+basin hru_elev
+637 637 
+global hru_ASL
+0 0 
+global hru_GSL
+0 0 
+global hru_lat
+60.52 60.52 
+global Time_Offset
+2 2 
+NeedleLeaf Albedo
+0.8 0.8 
+NeedleLeaf emiss
+0.985 0.985 
+NeedleLeaf LAI
+0 0 
+NeedleLeaf Vf
+1 1 
+NeedleLeaf Z0
+0.001 0.001 
+NeedleLeaf Zref
+1.5 1.5 
+NeedleLeaf Zwind
+10 10 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+NeedleLeaf Qstar 1
+NeedleLeaf Tsnow 1
+######
+Display_Observation:
+######
+obs ir_snow 1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+TChart
+ 
+ 
+(W/m2)
+ 
+ 
+ 
+######

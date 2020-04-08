@@ -1,0 +1,190 @@
+Description - to be added
+###### Version: CRHM_NEW 1.6  Creation: 1/13/2006 13:26
+Dimensions:
+######
+nhru 4
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Convert_Qnsn_QnD'
+'declreadobs, Qnsn, NOBS, description, (units)'
+'declobs,QnD, NHRU, description, (units)'
+'command'
+'if(STEP%FREQ == 1) QnD[hh] = Qnsn[hh]*0.0864/FREQ else QnD[hh] = QnD[hh] + Qnsn[hh]*0.0864/FREQ endif'
+'end'
+'Slope_Qsi'
+'declobs, Qsi#, NHRU, "Created short-wave", (W/m2)'
+'declreadobs, Qsi, NOBS, "measured short-wave", (W/m2)'
+'declgetvar, global, Qdro'
+'declgetvar, global, Qdfo'
+'declgetvar, global, Qdflat'
+'declvar, Short, NHRU, "short-wave", (W/m2)'
+'declvar, ShortC, NHRU, "corrected short-wave for slope", (W/m2)'
+'setpeer, Qdro'
+'command'
+'Short[hh] = Qdro[hh] + Qdfo[hh]'
+'if(Qdflat[hh] > 1.0)'
+'  ShortC[hh] = Qsi[hh]/Qdflat[hh]*Short[hh]'
+'  Qsi#[hh] = ShortC[hh]'
+'else'
+'  ShortC[hh] = 0'
+'  Qsi#[hh] = 0'
+'endif'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+basin CRHM new 11/25/04
+global CRHM new 08/10/05
+obs CRHM new 05/03/05
+calcsun CRHM new 05/03/05
+intcp CRHM new 07/08/05
+Kevin CRHM new 01/13/06
+pbsm CRHM new 01/11/06
+Greencrack CRHM new 01/11/06
+smbal CRHM new 01/13/06
+netall CRHM new 05/11/05
+route CRHM new 01/13/06
+evap CRHM new 12/01/05
+######
+Parameters:
+######
+basin basin_area
+4 
+basin basin_name
+'CRHM Basin Model' 
+basin depress_stor_MAX
+0 0 0 0 
+basin hru_area
+1 1 1 1 
+basin hru_ASL
+0 0 0 0 
+basin hru_elev
+637 637 637 637 
+basin hru_GSL
+0 0 0 0 
+basin hru_lat
+51.32 51.32 51.32 51.32 
+basin hru_names
+'HRU' 'HRU2' 'HRU3' 'HRU4' 
+basin Ht
+0.1 0.2 0.3 1 
+basin inhibit_evap
+0 0 0 0 
+basin RUN_ID
+1 
+basin soil_moist_init
+187 187 187 187 
+basin soil_moist_max
+375 375 375 375 
+evap evap_type
+0 0 0 0 
+evap F_Qg
+0.2 0.2 0.2 0.2 
+evap Zref
+1.5 1.5 1.5 1.5 
+evap Zwind
+10 10 10 10 
+global Time_Offset
+0 0 0 0 
+Greencrack fallstat
+50 50 50 50 
+Greencrack Major
+5 5 5 5 
+Greencrack soiltype
+4 4 4 4 
+Kevin Asnow1
+0.8 0.8 0.8 0.8 
+Kevin Asnow2
+0.6 0.6 0.6 0.6 
+Kevin Asoil
+0.2 0.2 0.2 0.2 
+Kevin cv
+0.33 0.33 0.33 0.33 
+Kevin meltthresh
+1 1 1 1 
+Kevin nfactor
+0 0 0 0 
+Kevin tfactor
+0 0 0 0 
+obs catchadjust
+1 1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 0.75 
+obs obs_elev
+637 637 637 637 
+obs tmax_allrain
+0 0 0 0 
+obs tmax_allsnow
+0 0 0 0 
+pbsm distrib
+1 1 1 1 
+pbsm fetch
+1000 1000 1000 1000 
+pbsm inhibit_bs
+0 0 0 0 
+route depression2gw
+1 0 0 0 
+route gw_time_range
+366 366 366 366 
+route Kstorage
+0 0 0 0 
+route Lag
+0 0 0 0 
+route order
+1 2 3 4 
+route whereto
+0 0 0 0 
+smbal cov_type
+3 3 3 3 
+smbal depress_stor_INIT
+0 0 0 0 
+smbal snowinfil_type
+0 0 0 0 
+smbal soil2gw_max
+0 0 0 0 
+smbal soil_rechr_init
+30 30 30 30 
+smbal soil_rechr_max
+60 60 60 60 
+smbal soil_type
+2 2 2 2 
+smbal transp_limited
+0 0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+pbsm SWE 1 2 3 4
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2005
+ 
+C:\Wolfcreek\CRHM_GB\Kevin_PLT1_2002.prj
+ 
+(mm)
+ 
+ 
+ 
+######

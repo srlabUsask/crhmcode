@@ -1,0 +1,248 @@
+Description - to be added
+###### Version: CRHM 2.33  Creation: 01/10/08 14:46
+Dimensions:
+######
+nhru 7
+nlay 1
+nobs 1
+######
+Macros:
+######
+'ABCTest_GrpA'
+'declgroup 7'
+'basin'
+'global'
+'obs'
+'calcsun'
+'intcp'
+'pbsm'
+'command'
+'end'
+'Decide_Opportunity'
+'declobs, t0_inhibit#, NHRU, "inhibit incrementing of opportunity time", ()'
+'declgetvar, *, hru_t, (°C)'
+'declreadobs, Qsi, NOBS, "measured short-wave", (W/m^2)'
+'command'
+'if(hru_t[hh] > 0 && Qsi[hh] > 100)'
+'  t0_inhibit#[hh] =1'
+'else'
+'  t0_inhibit#[hh] =0'
+'endif'
+'end'
+'Convert_runoff_runoffD'
+'declgetvar, frozen, runoff, (mm/d)'
+'declvar,runoffD, NHRU, "daily runoff", (m)'
+'command'
+'if(STEP%FREQ == 1)'
+'  runoffD[hh] = runoff[hh]'
+'else'
+'  runoffD[hh] = runoffD[hh] +runoff[hh]'
+'endif'
+'end'
+'Bad74_Frozen_GrpB'
+'declgroup 3'
+'basin'
+'global'
+'obs'
+'Slope_Qsi'
+'calcsun'
+'Decide_Opportunity'
+'intcp'
+'pbsm'
+'albedo'
+'netall'
+'ebsm'
+'evap'
+'frozen'
+'Convert_runoff_runoffD'
+'smbal'
+'route'
+'command'
+'end'
+######
+Observations:
+######
+C:\Logan\Logan_CRHM_Dec21_home\St Denis MetData2006.obs
+######
+Dates:
+######
+2005 10 31
+2006 5 1
+######
+Modules:
+######
+ABCTest_GrpA Macro 04/20/06
+Bad74_Frozen_GrpB Macro 04/20/06
+######
+Parameters:
+######
+ABCTest_GrpA basin_area
+3.85
+ABCTest_GrpA basin_name
+'St Denis NWA'
+ABCTest_GrpA catchadjust
+0 0 0 0 0 0 0
+ABCTest_GrpA distrib
+1101 3 1 3 2 5 10
+ABCTest_GrpA fetch
+300 300 300 300 300 300 300
+ABCTest_GrpA hru_area
+0.5 0.4 1 0.5 1 0.3 0.15
+ABCTest_GrpA hru_ASL
+0 180 0 0 0 0 0
+ABCTest_GrpA hru_elev
+565 558 555 545 555 540 542
+ABCTest_GrpA hru_GSL
+0 15 0 15 0 15 2
+ABCTest_GrpA hru_lat
+52.2 52.2 52.2 52.2 52.2 52.2 52.2
+ABCTest_GrpA hru_names
+'stubble hilltop' 'stubble slope' 'stubble level' 'stubble valley' 'grass level' 'grass valley' 'slough'
+ABCTest_GrpA HRU_OBS
+1 1 1 1 1 1 1
+ABCTest_GrpA Ht
+0.05 0.12 0.15 0.2 0.5 0.5 3
+ABCTest_GrpA inhibit_bs
+0 0 0 0 0 0 0
+ABCTest_GrpA inhibit_evap
+0 0 0 0 0 0 0
+ABCTest_GrpA lapse_rate
+10.75 0.75 0.75 0.75 0.75 0.75 0.75
+ABCTest_GrpA obs_elev
+554 554 554 554 554 554 554
+ABCTest_GrpA Time_Offset
+0 0 0 0 0 0 0
+ABCTest_GrpA tmax_allrain
+0 0 0 0 0 0 0
+ABCTest_GrpA tmax_allsnow
+0 0 0 0 0 0 0
+Bad74_Frozen_GrpB Albedo_bare
+0.17 0.17 0.17
+Bad74_Frozen_GrpB Albedo_snow
+0.85 0.85 0.85
+Bad74_Frozen_GrpB basin_area
+11.39
+Bad74_Frozen_GrpB basin_name
+'CRHM Basin Model'
+Bad74_Frozen_GrpB C
+1.14 1.14 1.14
+Bad74_Frozen_GrpB catchadjust
+1 1 1
+Bad74_Frozen_GrpB cov_type
+3 3 3
+Bad74_Frozen_GrpB delay_melt
+0 120 115
+Bad74_Frozen_GrpB distrib
+1 1 1
+Bad74_Frozen_GrpB evap_type
+0 0 0
+Bad74_Frozen_GrpB fetch
+1000 1000 1000
+Bad74_Frozen_GrpB F_Qg
+0.2 0.2 0.2
+Bad74_Frozen_GrpB hru_area
+4.67 5.04 1.68
+Bad74_Frozen_GrpB hru_ASL
+0 0 0
+Bad74_Frozen_GrpB hru_elev
+637 637 637
+Bad74_Frozen_GrpB hru_GSL
+30 0 0
+Bad74_Frozen_GrpB hru_lat
+51.32 51.32 51.32
+Bad74_Frozen_GrpB hru_names
+'HRU1' 'HRU2' 'HRU3'
+Bad74_Frozen_GrpB HRU_OBS
+1 1 1
+Bad74_Frozen_GrpB hru_tsoil
+269.1 269.1 269.1
+Bad74_Frozen_GrpB Ht
+0.2 0.4 1
+Bad74_Frozen_GrpB Htmax
+0.1 0.1 0.1
+Bad74_Frozen_GrpB inhibit_bs
+0 0 0
+Bad74_Frozen_GrpB inhibit_evap
+0 0 0
+Bad74_Frozen_GrpB Kstorage
+0 0 0.5
+Bad74_Frozen_GrpB Lag
+0 0 0
+Bad74_Frozen_GrpB LAImax
+3 3 3
+Bad74_Frozen_GrpB LAImin
+0 0 0
+Bad74_Frozen_GrpB lapse_rate
+0.75 0.75 0.75
+Bad74_Frozen_GrpB nfactor
+0 0 0
+Bad74_Frozen_GrpB obs_elev
+637 637 637
+Bad74_Frozen_GrpB order
+1 2 3
+Bad74_Frozen_GrpB PM_method
+0 0 0
+Bad74_Frozen_GrpB rcs
+25 25 25
+Bad74_Frozen_GrpB s
+1 1 1
+Bad74_Frozen_GrpB S0
+0.95 0.95 0.95
+Bad74_Frozen_GrpB Si
+0.3 0.3 0.3
+Bad74_Frozen_GrpB soil2gw_max
+0 0 0
+Bad74_Frozen_GrpB Soil_Moist
+0.5 0.5 0.5
+Bad74_Frozen_GrpB soil_moist_init
+225 225 225
+Bad74_Frozen_GrpB soil_moist_max
+375 375 375
+Bad74_Frozen_GrpB soil_rechr_init
+45 45 45
+Bad74_Frozen_GrpB soil_rechr_max
+60 60 60
+Bad74_Frozen_GrpB soil_type
+2 2 2
+Bad74_Frozen_GrpB t0
+118 60 149
+Bad74_Frozen_GrpB tfactor
+0 0 0
+Bad74_Frozen_GrpB Time_Offset
+0 0 0
+Bad74_Frozen_GrpB tmax_allrain
+0 0 0
+Bad74_Frozen_GrpB tmax_allsnow
+0 0 0
+Bad74_Frozen_GrpB transp_limited
+0 0 0
+Bad74_Frozen_GrpB t_ice_lens
+-20 -20 -20
+Bad74_Frozen_GrpB whereto
+0 3 0
+Bad74_Frozen_GrpB Zwind
+10 10 10
+basin RUN_ID
+1
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+ABCTest_GrpA SWE@A 1 2 3 4 5 6 7
+Bad74_Frozen_GrpB SWE@B 1 2 3
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+
+
+(mm)
+
+
+
+######

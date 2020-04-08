@@ -1,0 +1,120 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 3
+nlay 3
+nobs 1
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Modules:
+######
+global CRHM basic 02/21/02
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/01/02
+intcp CRHM basic 01/01/02
+pbsm CRHM basic 02/20/02
+Kevin CRHM basic 01/01/02
+frostdepth CRHM basic 02/07/03
+frozen CRHM basic 01/01/02
+######
+Dates:
+######
+1974 2 1
+1974 6 1
+######
+Parameters:
+######
+basin basin_area
+11.39 
+basin hru_area
+4.67 5.04 1.68 
+frostdepth d
+2 2 2 
+2 2 2 
+2 2 2 
+frostdepth por
+0.5 0.5 0.5 
+0.5 0.5 0.5 
+0.5 0.5 0.5 
+frostdepth soil_type
+2 2 2 
+2 2 2 
+2 2 2 
+frostdepth Ta
+10 10 10 
+frostdepth theta
+0.5 0.5 0.5 
+0.5 0.5 0.5 
+0.5 0.5 0.5 
+frozen C
+1 1 1 
+frozen hru_tsoil
+269.1 269.1 269.1 
+frozen porosity
+0.4 0.4 0.4 
+frozen S0
+0.8 0.8 0.8 
+frozen Si
+0.3 0.3 0.3 
+global hru_ASL
+0 0 0 
+global hru_elev
+637 637 637 
+global hru_GSL
+0 0 0 
+global hru_lat
+51.32 51.32 51.32 
+Kevin Asnow1
+0.8 0.8 0.8 
+Kevin Asnow2
+0.6 0.6 0.6 
+Kevin Asoil
+0.2 0.2 0.2 
+Kevin cv
+0.33 0.33 0.33 
+Kevin meltthresh
+1 1 1 
+Kevin nfactor
+0 0 0 
+Kevin tfactor
+0.4 0.4 0.4 
+obs catchadjust
+0 0 0 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+pbsm distrib
+1 1 1 
+pbsm fetch
+1000 1000 1000 
+pbsm Ht
+0.01 0.25 1 
+######
+Initial_State
+######
+C:\CRHM\frozeninfil_33.int
+######
+Display_Variable:
+######
+frozen cumrunoff 1 2 3
+frozen cumsnowinfil 1 2 3
+Kevin cumsnowmelt 1 2 3
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\frozeninfil_33.prj
+ 
+(mm)
+ 
+ 
+######

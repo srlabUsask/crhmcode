@@ -1,0 +1,70 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 4
+nobs 4
+######
+Observations:
+######
+C:\Quinton\thermo_calorimetric.obs
+######
+DLLs:
+######
+C:\CRHM\QuintonDLL.dll
+######
+Modules:
+######
+Qgcalc C:\CRHM\QuintonDLL.dll 03/27/03
+######
+Dates:
+######
+1993 5 10
+1993 5 27
+######
+Parameters:
+######
+Qgcalc d
+0.14 
+0.11 
+0.13 
+0.14 
+Qgcalc Pors
+0.96 
+0.9 
+0.87 
+0.43 
+0.43 
+Qgcalc soil_type
+1 
+1 
+2 
+3 
+Qgcalc tinit
+-8 
+-8 
+-8 
+-8 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Qgcalc Qp 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+ 
+(m)
+ 
+(W/m2)
+ 
+ 
+######

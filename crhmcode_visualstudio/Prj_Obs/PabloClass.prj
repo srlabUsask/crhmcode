@@ -1,0 +1,75 @@
+Description - to be added
+###### Version: CRHM_NEW 1.75  Creation: 08/18/2006 10:33
+Dimensions:
+######
+nhru 5
+nlay 1
+nobs 1
+######
+Macros:
+######
+'ReadClass'
+'declreadobs, run, NOBS, description,(mm/int)'
+'declreadobs, gw, NOBS, description,(mm/int)'
+'declreadobs, ssr, NOBS, description,(mm/int)'
+'declvar, meltrunoff, NHRU, description, (mm/int)'
+'declvar, soil_to_gw_D, NHRU, description, (mm/int)'
+'declvar, soil_to_ssr_D, NHRU, description, (mm/int)'
+'command'
+'meltrunoff[hh] = run[hh]'
+'soil_to_gw_D[hh] = gw[hh]'
+'soil_to_ssr_D[hh] = ssr[hh]'
+'end'
+######
+Observations:
+######
+PabloClassSim.obs
+######
+Dates:
+######
+2001 1 1
+2001 1 24
+######
+Modules:
+######
+ReadClass Macro 04/20/06
+route CRHM 08/18/06
+######
+Parameters:
+######
+route basin_area
+1 
+route hru_area
+1 1 1 1 1 
+route Kstorage
+1 1 1 1 1 
+route Lag
+0 0 0 0 0 
+route order
+1 2 3 4 5 
+route whereto
+0 0 0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+route basinflow 1
+route basinflow_s 1
+route basingw 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\PabloClass.prj
+ 
+(m^3/int)
+ 
+ 
+ 
+######

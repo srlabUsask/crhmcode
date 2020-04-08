@@ -1,0 +1,110 @@
+Description - to be added
+###### Version: NON-DLL 5.45  Creation: 6/24/2005 10:55
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+global CRHM new 05/31/05
+obs CRHM new 05/03/05
+long CRHM new 06/23/05
+intcp CRHM new 01/01/02
+pbsm CRHM new 05/04/05
+MSM CRHM new 06/24/05
+######
+Parameters:
+######
+basin basin_area
+11.39 
+basin hru_area
+4.67 5.04 1.68 
+basin hru_elev
+637 637 637 
+global Extra
+0 0 0 
+global hru_ASL
+0 0 0 
+global hru_GSL
+0 0 0 
+global hru_lat
+51.32 51.32 51.32 
+global Time_Offset
+0 0 0 
+MSM a1
+1.08E7 1.08E7 1.08E7 
+MSM a2
+7.2E5 7.2E5 7.2E5 
+MSM amax
+0.84 0.84 0.84 
+MSM amin
+0.5 0.5 0.5 
+MSM hru_elev
+1380 1380 1380 
+MSM smin
+10 10 10 
+MSM Z0snow
+0.01 0.01 0.01 
+MSM Zref
+2 2 2 
+obs catchadjust
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+pbsm distrib
+1 1 1 
+pbsm fetch
+1000 1000 1000 
+pbsm Ht
+0.01 0.25 1 
+pbsm inhibit_bs
+0 0 0 
+pbsm inhibit_evap
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+MSM snowmeltD 1 2 3
+pbsm SWE 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\CRHM\badlakeflow7374.prj
+ 
+(mm)
+ 
+ 
+ 
+######

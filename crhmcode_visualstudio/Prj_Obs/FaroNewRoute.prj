@@ -1,0 +1,135 @@
+Description - to be added
+###### Version: NON-DLL 5.38  Creation: 2/8/2005 14:49
+Dimensions:
+######
+nhru 6
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\faro03.obs
+######
+Dates:
+######
+2003 12 16
+2004 9 2
+######
+Modules:
+######
+global CRHM basic 12/16/04
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/14/05
+intcp CRHM basic 01/01/02
+netall CRHM basic 12/06/04
+pbsm CRHM basic 05/12/04
+net_rn CRHM basic 12/03/04
+albedo CRHM basic 07/27/04
+evap CRHM basic 12/08/04
+ebsm CRHM basic 12/03/04
+Greencrack CRHM basic 02/07/05
+smbal CRHM basic 01/27/05
+route CRHM basic 02/08/05
+######
+Parameters:
+######
+basin basin_area
+4 
+basin hru_area
+1.3 0.1 0.3 0.3 0.1 1.9 
+basin hru_elev
+1200 1300 1150 1190 1200 1220 
+basin Ht
+0.01 0.2 0.2 0.2 0.2 1.5 
+basin inhibit_evap
+0 0 0 0 0 0 
+basin soil_moist_init
+161.3 112.5 30 56.25 56.25 30 
+basin soil_moist_max
+375 375 375 375 375 375 
+ebsm delay_melt
+60 80 60 60 60 60 
+ebsm nfactor
+0 0 0 0 0 0 
+ebsm tfactor
+0 0.5 0 0 0 0 
+evap evap_type
+0 0 0 0 0 0 
+evap Zref
+1.5 1.5 1.5 1.5 1.5 1.5 
+evap Zwind
+10 10 10 10 10 10 
+global hru_ASL
+0 360 180 90 270 0 
+global hru_GSL
+0 60 60 60 60 0 
+global hru_lat
+62.33 62.33 62.33 62.33 62.33 62.33 
+global Time_Offset
+0 0 0 0 0 0 
+Greencrack fallstat
+50 50 50 50 50 50 
+Greencrack Major
+5 5 5 5 5 5 
+Greencrack soiltype
+4 4 4 4 4 4 
+netall hru_alb
+0.21 0.14 0.14 0.14 0.14 0.14 
+net_rn F_Qg
+0.2 0.2 0.2 0.2 0.2 0.2 
+obs catchadjust
+1 1 1 1 1 1 
+obs tmax_allrain
+0 0 0 0 0 0 
+obs tmax_allsnow
+0 0 0 0 0 0 
+pbsm distrib
+1 1 1 1 1 1 
+pbsm fetch
+1000 1000 1000 1000 1000 1000 
+pbsm inhibit_bs
+0 0 0 0 0 0 
+route Kstorage
+0 0 0 0 0 0 
+route Lag
+0 0 0 0 0 0 
+route order
+1 2 3 4 5 6 
+route whereto
+0 0 0 0 0 0 
+smbal cov_type
+0 0 0 0 0 0 
+smbal soil2gw_max
+0 0 0 0 0 0 
+smbal soil_rechr_init
+30 30 30 30 30 30 
+smbal soil_rechr_max
+60 60 60 60 60 60 
+smbal soil_type
+3 3 3 3 3 1 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+route basinflow 1
+route basingw 1
+route cuminflow 1
+route cumoutflow 1
+Greencrack cumrunoff 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\Faro\Faro6HRU9798.prj
+ 
+(m3 Int)
+ 
+ 
+ 
+######

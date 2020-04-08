@@ -1,0 +1,174 @@
+Description - to be added
+###### Version: CRHM 1.92  Creation: 12/12/06 15:40
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Decide_Opportunity'
+'declobs, t0_inhibit#, NHRU, "inhibit incrementing of opportunity time", ()'
+'declgetvar, *, hru_t, "(°C)"'
+'declreadobs, Qsi, NOBS, "measured short-wave", (W/m^2)'
+'command'
+'if(hru_t[hh] > 0 && Qsi[hh] > 100)'
+'  t0_inhibit#[hh] =1'
+'else'
+'  t0_inhibit#[hh] =0'
+'endif'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+basin CRHM 06/22/06
+global CRHM 08/28/06
+obs CRHM 05/25/06
+calcsun CRHM 06/09/05
+Decide_Opportunity Macro 04/20/06
+intcp CRHM 11/15/06
+pbsm CRHM 09/27/06
+albedo CRHM 12/15/05
+netall CRHM 11/22/06
+ebsm CRHM 02/21/06
+evap CRHM 10/31/06
+frozen CRHM 12/06/06
+smbal CRHM 09/25/06
+route CRHM 08/18/06
+######
+Parameters:
+######
+albedo Albedo_bare
+0.17 0.17 0.17
+basin basin_area
+3
+basin basin_name
+'CRHM Basin Model'
+basin hru_area
+1 1 1
+basin hru_ASL
+0 0 0
+basin hru_elev
+637 637 637
+basin hru_GSL
+30 0 0
+basin hru_lat
+51.32 51.32 51.32
+basin hru_names
+'HRU' 'HRU2' 'HRU3'
+basin Ht
+0.2 0.4 1
+basin inhibit_evap
+0 0 0
+basin RUN_ID
+1
+basin soil_moist_max
+375 375 375
+ebsm delay_melt
+0 120 115
+ebsm nfactor
+0 0 0
+ebsm tfactor
+0 0 0
+evap evap_type
+0 0 0
+evap F_Qg
+0.2 0.2 0.2
+evap GrangerRatio
+0 0 0
+evap rs
+0.000579 0.000579 0.000579
+evap Zref
+1.5 1.5 1.5
+evap Zwind
+10 10 10
+frozen C
+1 1 1
+frozen hru_tsoil
+269.1 269.1 269.1
+frozen S0
+0.8 0.8 0.8
+frozen Si
+0.5 0.5 0.5
+frozen t0
+264 192 480
+frozen t_ice_lens
+-20 -20 -20
+global Time_Offset
+0 0 0
+obs catchadjust
+1 1 1
+obs HRU_OBS
+1 1 1
+obs lapse_rate
+0.75 0.75 0.75
+obs obs_elev
+637 637 637
+obs tmax_allrain
+0 0 0
+obs tmax_allsnow
+0 0 0
+pbsm distrib
+0 1 1
+pbsm fetch
+1000 1000 1000
+pbsm inhibit_bs
+0 0 0
+route Kstorage
+0 0 0
+route Lag
+0 0 0
+route order
+1 2 3
+route whereto
+0 0 0
+smbal cov_type
+1 1 1
+smbal soil2gw_max
+0 0 0
+smbal soil_moist_init
+187 187 187
+smbal soil_rechr_init
+30 30 30
+smbal soil_rechr_max
+60 60 60
+smbal soil_type
+2 2 2
+smbal transp_limited
+0 0 0
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+obs t0_inhibit# 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+
+C:\CRHM\Bad74_frozen2.prj
+
+()
+
+
+
+######

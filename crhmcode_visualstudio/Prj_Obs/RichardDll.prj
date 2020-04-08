@@ -1,0 +1,67 @@
+Description - to be added
+###### Version: DLL 1.09  Creation: 1/7/2004 14:06
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+test_in.obs
+test_out.obs
+######
+Dates:
+######
+1996 10 6
+1997 6 11
+######
+DLLs:
+######
+C:\CRHM\RichardDll.dll
+######
+Modules:
+######
+SimpleSnow C:\CRHM\Richard.dll 12/08/03
+######
+Parameters:
+######
+SimpleSnow a1
+1.08E7
+SimpleSnow a2
+7.2E5
+SimpleSnow amax
+0.84
+SimpleSnow amin
+0.5
+SimpleSnow Ps
+8.4E4
+SimpleSnow smin
+10
+SimpleSnow z0
+0.001
+SimpleSnow z1
+2
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+SimpleSnow SWE 1
+######
+Display_Observation:
+######
+obs SWE0 1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+TChart
+
+
+(kg/m2)
+
+
+######

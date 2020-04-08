@@ -1,0 +1,106 @@
+Description - to be added
+###### Version: DLL 1.39  Creation: 3/18/2005 15:05
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1973 12 31
+######
+DLLs:
+######
+C:\CRHM\ExampleDLL.dll
+######
+Modules:
+######
+global2 CRHM basic 12/16/04
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/14/05
+Example C:\CRHM\ExampleDLL.dll 03/17/05
+######
+Parameters:
+######
+Example commands
+'var X X = 1.3^0.5 OutVar = -X*t OutVar2 = X*t' 
+Example invar
+'hru_t' 
+Example invarMod
+'*' 
+Example obs
+'t' 
+Example obs_help
+'(°C)' 
+Example obs_names
+'HRU' 
+Example outvar
+'OutVar' 'OutVar2' 
+Example outvarDesc
+'OutVar' 'OutVar2' 
+Example outvarUnits
+'(°C)' '(°C)' 
+Example P
+0.4 
+Example par
+0.2 
+Example param
+'P' 
+Example paramDefault
+'3*0.2' 
+Example paramDesc
+'description' 
+Example paramMax
+'1.0' 
+Example paramMin
+'0.0' 
+Example paramUnits
+'(units)' 
+global2 hru_ASL
+0 
+global2 hru_elev
+637 
+global2 hru_GSL
+0 
+global2 hru_lat
+51.32 
+global2 Time_Offset
+0 
+obs basin_area
+1 
+obs catchadjust
+1 
+obs hru_area
+1 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Example OutVar 1
+Example OutVar2 1
+######
+Display_Observation:
+######
+obs t 1 _obs
+######
+TChart:
+######
+ 
+ 
+(units)
+ 
+ 
+ 
+######

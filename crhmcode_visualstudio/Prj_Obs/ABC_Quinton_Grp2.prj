@@ -1,0 +1,139 @@
+Description - to be added
+###### Version: CRHM 2.40  Creation: 04/17/08 15:05
+Dimensions:
+######
+nhru 8
+nlay 3
+nobs 1
+######
+Macros:
+######
+'Structure'
+'  declstruct'
+'  Qdrift2'
+'  Quinton2'
+'command'
+'end'
+######
+Observations:
+######
+GB401_TB.obs
+C:\CRHM\Quinton_output.obs
+######
+Dates:
+######
+2001 6 6
+2001 8 26
+######
+Modules:
+######
+Qmelt2 CRHM 04/10/03
+Structure Macro 04/20/06
+######
+Parameters:
+######
+Qmelt2 TIa0Mn <-10 to 10>
+0 0 0 0 0 0 0 0 
+Qmelt2 TIa1Mn <0 to 10>
+0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Qmelt2 TIs0Mn <-10 to 10>
+0 0 0 0 0 0 0 0 
+Qmelt2 TIs1Mn <0 to 10>
+0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Structure a <0 to 50>
+25 25 25 25 25 25 25 25 
+15 15 15 15 15 15 15 15 
+15 15 15 15 15 15 15 15 
+Structure catchadjust <0 to 2>
+1 1 1 1 1 1 1 1 
+Structure d <0 to 100>
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+Structure Drained <0 to 1>
+0 0.075 0 0 0 0 0 0 
+Structure DrainTo <0 to 20>
+2 3 4 5 6 7 8 0 
+Structure DriftDrainTo <0 to 20>
+2 3 4 5 6 7 8 9 
+Structure flowLag <-1 to 192>
+0 0 0 0 0 0 0 0 
+Structure flowstorage <0 to 20>
+0 0 0 0 0 0 0 0 
+Structure FrozenTo <0 to 1>
+0 0 0 0 0 0 0 0 
+Structure HRU_struct <1 to 2>
+1 2 2 2 2 2 2 2 
+Structure InitSWE <0 to 1000>
+400 0 0 0 0 0 0 0 
+Structure K_a <0 to 0.1>
+0.011 0.011 0.011 0.011 0.011 0.011 0.011 0.011 
+Structure K_b <-10 to -0.1>
+-4.218 -4.218 -4.218 -4.218 -4.218 -4.218 -4.218 -4.218 
+Structure length <0 to 1E4>
+27 14 14 14 14 14 14 14 
+Structure lengthsnow <0 to 1E4>
+27 0 0 0 0 0 0 0 
+Structure meltLag <0 to 48>
+0 0 0 0 0 0 0 0 
+Structure meltstorage <0 to 20>
+0 0 0 0 0 0 0 0 
+Structure n <0 to 10>
+2 2 2 2 2 2 2 2 
+1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 
+1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 
+Structure Pors <0 to 1>
+0.96 
+0.9 
+0.87 
+0.43 
+0.43 
+Structure Residual <0 to 1>
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 
+0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 
+Structure runoffLag <0 to 48>
+0 0 0 0 0 0 0 0 
+Structure runoffstorage <0 to 20>
+0 0 0 0 0 0 0 0 
+Structure slope <0 to 1>
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+Structure soil_type <0 to 4>
+0 0 0 0 0 0 0 0 
+1 1 1 1 1 1 1 1 
+2 2 2 2 2 2 2 2 
+Structure tinit <-40 to 10>
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Structure d_surface@a 2 8
+Structure Depth@a 2 8
+Structure dmelt@a 2 8
+######
+Display_Observation:
+######
+obs d_surface(2) 1 _obs
+obs d_surface(8) 1 _obs
+obs Depth(2) 1 _obs
+obs Depth(8) 1 _obs
+obs dmelt(2) 1 _obs
+obs dmelt(8) 1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+(m)
+ 
+ 
+(m)
+ 
+ 
+ 
+######

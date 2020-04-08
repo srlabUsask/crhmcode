@@ -1,0 +1,47 @@
+Description - to be added
+###### Version: CRHM 1.98  Creation: 04/26/07 15:40
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+LE_H_expand.obs
+######
+Dates:
+######
+1999 1 1
+1999 2 1
+######
+Modules:
+######
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+######
+TChart:
+######
+Current Date: 04/26/07 10:09
+ 
+C:\CRHM\LE_H_expand.obs Last modified: 04/25/07 16:22
+Description: Lethbridge_Ameriflux_Site_1999-2004_evap_param
+ 
+
+ 
+ 
+ 
+######

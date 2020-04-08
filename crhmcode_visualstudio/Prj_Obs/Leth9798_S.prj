@@ -1,0 +1,132 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 4
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\Leth9798.obs
+######
+Modules:
+######
+global
+calcsun
+obs
+intcp
+pbsm
+albedo
+netall
+ebsm
+crack
+net_rn
+evap
+srunoff
+smbal
+route
+######
+Dates:
+######
+1997 9 1
+1998 5 1
+######
+Parameters:
+######
+calcsun a
+0.150000005960464 0.150000005960464 0.150000005960464 0.150000005960464 
+calcsun b
+0 0 0 0 
+crack fallstat
+50 50 50 50 
+ebsm nfactor
+0 0 0 0 
+ebsm tfactor
+2 2 2 2 
+evap Ht
+0.00999999977648258 0.25 0.5 1 
+evap Zwind
+10 10 10 10 
+evap evap_type
+0 0 0 0 
+evap hru_elev
+894.599975585938 894.599975585938 894.599975585938 894.599975585938 
+global hru_ASL
+0 0 0 0 
+global hru_GSL
+0 0 0 0 
+global hru_Lat
+50.1130981445313 50.1130981445313 50.1130981445313 50.1130981445313 
+global hru_elev
+894.460021972656 894.460021972656 894.460021972656 894.460021972656 
+intcp basin_area
+127.349998474121 
+intcp cov_type
+3 3 3 3 
+intcp covden_sum
+0.5 0.5 0.5 0.5 
+intcp covden_win
+0.5 0.5 0.5 0.5 
+intcp snow_intcp
+0.100000001490116 0.100000001490116 0.100000001490116 0.100000001490116 
+intcp srain_intcp
+0.100000001490116 0.100000001490116 0.100000001490116 0.100000001490116 
+intcp wrain_intcp
+0.100000001490116 0.100000001490116 0.100000001490116 0.100000001490116 
+net_rn F_Qg
+0.200000002980232 0.200000002980232 0.200000002980232 0.200000002980232 
+obs Zref
+1 1 1 1 
+obs catchadjust
+1 1 1 1 
+obs hru_elev
+894.460021972656 894.460021972656 894.460021972656 894.460021972656 
+obs tmax_allrain
+0 0 0 0 
+obs tmax_allsnow
+0 0 0 0 
+pbsm basin_area
+127.349998474121 
+pbsm distrib
+1 1 1 1 
+pbsm fetch
+1000 1000 1000 1000 
+pbsm hru_area
+15.5100002288818 21.3999996185303 79.5599975585938 10.8800001144409 
+pbsm Ht
+0.00999999977648258 0.25 0.5 1 
+route Kstorage
+0 0 0 1 
+route Lag
+0.5 0.5 0.5 2 
+route basin_area
+127.349998474121 
+route hru_area
+15.5100002288818 21.3999996185303 79.5599975585938 10.8800001144409 
+route order
+1 2 3 4 
+route whereto
+4 4 4 0 
+smbal cov_type
+3 3 3 3 
+smbal soil2gw_max
+0 0 0 0 
+smbal soil_moist_init
+187 187 187 187 
+smbal soil_moist_max
+375 375 375 375 
+smbal soil_rechr_init
+30 30 30 30 
+smbal soil_rechr_max
+60 60 60 60 
+smbal soil_type
+2 2 2 2 
+######
+Display_Variable:
+######
+pbsm cumDrift 1 2 3 4
+pbsm cumSno 1
+pbsm cumSubl 1 2 3 4
+pbsm SWE 1 2 3 4
+######

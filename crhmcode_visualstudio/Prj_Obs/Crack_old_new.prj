@@ -1,0 +1,102 @@
+Description - to be added
+###### Version: CRHM 1.62  Creation: 2/8/2006 13:53
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Use_snowmeltD'
+'declreadobs, snowmeltD_new, NOBS, "snowmeltD from new", (mm)'
+'declvar, snowmeltD, NHRU, "snowmelt from other program", (mm)'
+'command'
+'snowmeltD[hh] = snowmeltD_new[hh]'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+C:\CRHM\junk_snowmeltD_new.obs
+C:\CRHM\junk_snowmeltD_old.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+Use_snowmeltD Macro 09/14/05
+basin CRHM basic 11/25/04
+global CRHM basic 12/01/05
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/14/05
+intcp CRHM basic 01/01/02
+NO_pbsm CRHM basic 12/06/04
+crack CRHM basic 02/08/06
+######
+Parameters:
+######
+basin basin_area
+1 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 
+basin hru_ASL
+0 
+basin hru_elev
+1380 
+basin hru_GSL
+0 
+basin hru_lat
+60.5 
+basin hru_names
+'PLT' 
+basin RUN_ID
+1 
+crack fallstat
+50 
+crack Major
+5 
+global Time_Offset
+2 
+NO_pbsm inhibit_evap
+0 
+obs catchadjust
+1 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Use_snowmeltD snowmeltD 1
+NO_pbsm SWE 1
+######
+Display_Observation:
+######
+obs snowmeltD_new 1 _obs
+obs snowmeltD_old 1 _obs
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2005
+ 
+EBSM_PLT1_2002.prj
+ 
+
+ 
+ 
+ 
+######

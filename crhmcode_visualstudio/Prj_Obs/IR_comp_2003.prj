@@ -1,0 +1,44 @@
+Description - to be added
+###### Version: NON-DLL 5.08  Creation: 12/17/2003 10:08
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\GB403_TB.obs
+C:\CRHM\IR-Granger 2003.obs
+######
+Dates:
+######
+2003 5 1
+2003 9 1
+######
+Modules:
+######
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+obs ts 1 _obs
+obs tsp 1 _obs
+######
+TChart:
+######
+TChart
+ 
+ 
+
+ 
+ 
+######

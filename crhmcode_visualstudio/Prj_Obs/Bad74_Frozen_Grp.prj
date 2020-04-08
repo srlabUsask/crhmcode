@@ -1,0 +1,182 @@
+Description - to be added
+###### Version: CRHM 2.39  Creation: 04/09/08 10:10
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Decide_Opportunity'
+'declobs, t0_inhibit#, NHRU, "inhibit incrementing of opportunity time", ()'
+'declgetvar, obs, hru_t, "(°C)"'
+'declreadobs, Qsi, NOBS, "measured short-wave", (W/m^2)'
+'command'
+'if(hru_t[hh] > 0 && Qsi[hh] > 100)'
+'  t0_inhibit#[hh] =1'
+'else'
+'  t0_inhibit#[hh] =0'
+'endif'
+'end'
+'Bad74_Frozen_GrpA'
+'declgroup 3'
+'basin'
+'global'
+'obs'
+'calcsun'
+'intcp'
+'pbsm'
+'albedo'
+'netall'
+'ebsm'
+'evap'
+'frozen'
+'smbal'
+'route'
+'command'
+'end'
+######
+AKAs:
+######
+OBSR Bad74_Frozen_GrpA Qsi Qsi# Slope_Qsi
+OBSR Bad74_Frozen_GrpA t0_inhibit t0_inhibit# Decide_Opportunity
+OBSR Decide_Opportunity Qsi Qsi# Slope_Qsi
+######
+Observations:
+######
+Winter1974.obs
+C:\CRHM\hru_t.obs
+C:\CRHM\t0_inhibit.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+global CRHM 02/04/08
+obs CRHM 02/25/08
+Slope_Qsi CRHM 07/06/06
+Decide_Opportunity Macro 04/20/06
+Bad74_Frozen_GrpA Macro 04/20/06
+######
+Parameters:
+######
+Bad74_Frozen_GrpA Albedo_bare <0 to 1>
+0.17 0.17 0.17 
+Bad74_Frozen_GrpA Albedo_snow <0 to 1>
+0.85 0.85 0.85 
+Bad74_Frozen_GrpA basin_name
+'Basin' 
+Bad74_Frozen_GrpA C <0 to 3>
+1.14 1.14 1.14 
+Bad74_Frozen_GrpA cov_type <0 to 2>
+2 2 2 
+Bad74_Frozen_GrpA delay_melt <0 to 200>
+0 120 115 
+Bad74_Frozen_GrpA distrib <-10 to 10>
+0 1 1 
+Bad74_Frozen_GrpA evap_type <0 to 1>
+0 0 0 
+Bad74_Frozen_GrpA fetch <300 to 1E4>
+1000 1000 1000 
+Bad74_Frozen_GrpA F_Qg <0 to 1>
+0.2 0.2 0.2 
+Bad74_Frozen_GrpA hru_names
+'HRU' 'HRU2' 'HRU3' 
+Bad74_Frozen_GrpA hru_tsoil <223 to 273.1>
+269.1 269.1 269.1 
+Bad74_Frozen_GrpA Ht <0.001 to 100>
+0.2 0.4 1 
+Bad74_Frozen_GrpA inhibit_bs <0 to 1>
+0 0 0 
+Bad74_Frozen_GrpA inhibit_evap <0 to 1>
+0 0 0 
+Bad74_Frozen_GrpA Kstorage <0 to 200>
+0 0 0 
+Bad74_Frozen_GrpA Lag <0 to 1E4>
+0 0 0 
+Bad74_Frozen_GrpA nfactor <0 to 10>
+0 0 0 
+Bad74_Frozen_GrpA order <1 to 1000>
+1 2 3 
+Bad74_Frozen_GrpA RUN_ID <-1E8 to 1E8>
+1 
+Bad74_Frozen_GrpA S0 <0 to 1>
+0.95 0.95 0.95 
+Bad74_Frozen_GrpA Si <0 to 1>
+0.3 0.3 0.3 
+Bad74_Frozen_GrpA soil2gw_max <0 to 312>
+0 0 0 
+Bad74_Frozen_GrpA soil_moist_init <0 to 2500>
+225 225 225 
+Bad74_Frozen_GrpA soil_moist_max <0 to 2500>
+375 375 375 
+Bad74_Frozen_GrpA soil_rechr_init <0 to 625>
+45 45 45 
+Bad74_Frozen_GrpA soil_rechr_max <0 to 250>
+60 60 60 
+Bad74_Frozen_GrpA soil_withdrawal <1 to 4>
+3 3 3 
+Bad74_Frozen_GrpA t0 <0 to 1000>
+100 70 217 
+Bad74_Frozen_GrpA tfactor <0 to 10>
+0 0 0 
+Bad74_Frozen_GrpA transp_limited <0 to 1>
+0 0 0 
+Bad74_Frozen_GrpA t_ice_lens <-50 to 0>
+-20 -20 -20 
+Bad74_Frozen_GrpA whereto <0 to 1000>
+0 3 0 
+basin basin_area <1E-6 to 1E9>
+11.39 
+basin catchadjust <0 to 1>
+1 1 1 
+basin hru_area <1E-6 to 1E9>
+4.67 5.04 1.68 
+basin hru_ASL <0 to 360>
+0 0 0 
+basin hru_elev <0 to 1E5>
+637 637 637 
+basin hru_GSL <0 to 90>
+30 0 0 
+basin hru_lat <-90 to 90>
+51.32 51.32 51.32 
+basin HRU_OBS <1 to 100>
+1 1 1 
+basin lapse_rate <0 to 2>
+0.75 0.75 0.75 
+basin obs_elev <0 to 1E5>
+637 637 637 
+basin Time_Offset <-12 to 12>
+0 0 0 
+basin tmax_allrain <-10 to 10>
+0 0 0 
+basin tmax_allsnow <-10 to 10>
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Bad74_Frozen_GrpA SWE@A 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+Bad74_Frozen.prj
+ 
+(mm)
+ 
+ 
+ 
+######

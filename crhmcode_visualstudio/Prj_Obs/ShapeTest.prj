@@ -1,0 +1,62 @@
+Description - to be added
+###### Version: CRHM 2.41  Creation: 05/23/08 13:45
+Dimensions:
+######
+nhru 40
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Shape_Input'
+'declparam, Range, NHRU,[1!],  0.0, 2000, "Range values", ()'
+'declparam, Column_Count, BASIN,[8],  1, 200, "column count", ()'
+'declvar, Range_Var, NHRU, "range values", ()'
+'command'
+'  Range_Var[hh] = Range[hh]'
+'end'
+######
+Observations:
+######
+######
+Dates:
+######
+2008 5 22 48
+2008 5 24
+######
+Modules:
+######
+Shape_Input Macro 04/20/06
+######
+Parameters:
+######
+Shape_Input Column_Count <1 to 200>
+5 
+Shape_Input Range <0 to 2000>
+1 2 3 4 5 6 7 8 9 10 
+11 12 13 14 15 16 17 18 19 20 
+21 22 23 24 25 26 27 28 29 30 
+31 32 33 34 35 36 37 38 39 40 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Shape_Input Range_Var 1 10 11 12 13 14 15 16 17 18 19 2 20 21 22 23 24 25 26 27 28 29 3 30 31 32 33 34 35 36 37 38 39 4 40 5 6 7 8 9
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+ 
+()
+ 
+ 
+ 
+######

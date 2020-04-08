@@ -1,0 +1,45 @@
+Description - to be added
+###### Version: NON-DLL 5.13  Creation: 4/27/2004 14:38
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 7
+######
+Observations:
+######
+C:\CRHM\SOTE1973_75.obs
+######
+Dates:
+######
+1973 1 1
+1975 12 31
+######
+Modules:
+######
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+obs ts 1 _obs 2_obs 3_obs 4_obs 5_obs 6_obs 7_obs
+######
+TChart:
+######
+Current Date: 4/27/2004 14:33
+ 
+C:\CRHM\simulation_exp.obs Last modified: 4/27/2004 09:50
+Description: Simulation test (04/27/01)
+ 
+
+ 
+ 
+ 
+######

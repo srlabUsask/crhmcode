@@ -1,0 +1,86 @@
+Description - to be added
+###### Version: CRHM_NEW 1.82  Creation: 10/05/06 16:04
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Ht_file'
+'declreadobs,Heights, NOBS, "Vegetation height", (m)'
+'declparam, Ht, NHRU,0.1, 0.01, 10.0, description, (m)'
+'declvar, Ht_Var, NHRU, "vegetation height", (m)'
+'command'
+'  Ht[hh] =  Heights[hh]'
+'  Ht_Var[hh] = Ht[hh]'
+'end'
+######
+Observations:
+######
+C:\Robs StDenis_Comp of excel and CRHM\StDenis_Rob\Obs\StDenis.obs
+C:\CRHM\Heights.obs
+######
+Dates:
+######
+2006 5 20
+2006 6 2
+######
+Modules:
+######
+Ht_file Macro 04/20/06
+obs CRHM 05/25/06
+ShuttleWallaceD CRHM 10/05/06
+######
+Parameters:
+######
+basin basin_area
+1 
+basin hru_area
+1 
+basin hru_elev
+637 
+basin Ht
+0.45 
+obs catchadjust
+1 
+obs HRU_OBS
+1 
+obs lapse_rate
+0.75 
+obs obs_elev
+637 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+ShuttleWallaceD Cr
+0.5 
+ShuttleWallaceD inhibit_evap
+0 
+ShuttleWallaceD LAI
+0.2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Ht_file Ht_Var 1
+######
+Display_Observation:
+######
+obs Heights 1 _obs
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\StDenisNewDaily.prj
+ 
+(m)
+ 
+ 
+ 
+######

@@ -1,0 +1,12 @@
+Simulation test (04/04/01)
+$$ comment
+$Sim(01/01/01, 01/11/2001, 1) simulation
+$Sine sine(1.0 0.0 01/04/01 01/06/01)
+$Ramp ramp(2.0 1.0 0 01/04/01)
+$Square square(1.0 2.0 01/07/01 01/09/01)
+$Pulse pulse(01/04/01 01/06/01)
+$t const(-0.2) my constant
+$rh const(60) my constant
+$C2 const(01/02/02) my constant
+$ea ea(t, rh) vapour pressure
+############################################

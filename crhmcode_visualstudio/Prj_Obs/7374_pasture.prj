@@ -1,0 +1,43 @@
+Description - to be added
+###### Version: NON-DLL 5.28  Creation: 9/14/2004 14:50
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\Program Files\CRHM\Examples\badlakeflow7374.prj
+ 
+(m3/s)
+ 
+ 
+ 
+######

@@ -1,0 +1,85 @@
+Description - to be added
+###### Version: CRHM 1.95  Creation: 02/06/07 16:28
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\SnoBal\tests\Data\snobal\in.obs
+C:\SnoBal\tests\Data\snobal\pr.obs
+C:\CRHM\snobal.obs
+######
+Dates:
+######
+1997 4 1
+1997 5 29
+######
+Modules:
+######
+Snobal CRHM 02/05/07
+######
+Parameters:
+######
+Snobal hru_elev
+500 
+Snobal Init_h2o_sat
+0.01 
+Snobal Init_rho
+200 
+Snobal Init_T_s
+270 
+Snobal Init_T_s_0
+270 
+Snobal Init_T_s_l
+270 
+Snobal Init_z_s
+1 
+Snobal max_h2o_vol
+0.05 
+Snobal max_z_s_0
+0.2 
+Snobal relative_hts
+0 
+Snobal run_no_snow
+0 
+Snobal z_0
+0.001 
+Snobal z_g
+0.1 
+Snobal z_T
+1 
+Snobal z_u
+1 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Snobal z_s 1
+Snobal z_s_0 1
+Snobal z_s_l 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+ 
+(m)
+ 
+ 
+ 
+######

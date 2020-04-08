@@ -1,0 +1,125 @@
+Description - to be added
+###### Version: CRHM 1.97  Creation: 04/17/07 16:10
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Snobal_Input'
+'    declreadobs, S_n_Obs, NOBS, "net solar radiation", "(W/m^2)"'
+'    declreadobs, I_lw_Obs, NOBS, "incoming longwave (thermal) rad ", "(W/m^2)"'
+'    declreadobs, T_a_Obs, NOBS, "air temp", "(°C)"'
+'    declreadobs, e_a_Obs, NOBS, "vapor pressure", "(Pa)"'
+'    declreadobs, u_Obs, NOBS, "wind speed", "(m/s)'
+'    declreadobs, T_g_Obs, NOBS, "soil temp at depth z_g", "(C)"'
+'    declreadobs, m_pp_Obs, NHRU, "total precip mass", "(kg/m^2)"'
+'    declreadobs, m_snow_Obs, NHRU, "snowfall", "()"'
+'    declreadobs, m_rain_Obs, NHRU, "rainfall", "()"'
+'    declreadobs, rho_snow_Obs, NOBS, density of snowfall", "(kg/m^2)"'
+'    declreadobs, T_pp_Obs, NOBS, "precip temp", "(°C)"'
+'    declvar, hru_S_n,  NHRU, "net solar radiation", "(W/m^2)"'
+'    declvar, hru_I_lw, NHRU, "incoming longwave (thermal) rad ", "(W/m^2)"'
+'    declvar, hru_t,  NHRU, "air temp", "(°C)"'
+'    declvar, hru_ea,  NHRU, "vapor pressure", "(kPa)"'
+'    declvar, hru_u , NHRU, "wind speed", "(m/s)"'
+'    declvar, hru_T_g,  NHRU, "soil temp at depth z_g", "(K)"'
+'    declvar, net_p, NHRU, "specific mass of total precip", "(kg/m^2)"'
+'    declvar, net_rain, NHRU, "specific mass of rain in precip", "(kg/m^2)"'
+'    declvar, net_snow, NHRU, "specific mass in snow in precip", "(kg/m^2)"'
+'    declvar, hru_drift, NHRU, "specific mass of drifting snow", "(kg/m^2)"'
+'    declvar, hru_subl, NHRU, "specific mass of sublimation", "(kg/m^2)"'
+'    declvar, hru_rho_snow, NHRU, "density of snowfall", "(kg/m^2)"'
+'    declvar, hru_T_pp, NHRU, "precip temp", "(°C)"'
+'command'
+'  hru_S_n[hh] = S_n_Obs[hh]'
+'  hru_I_lw[hh] =  I_lw_Obs[hh]'
+'  hru_t[hh] = T_a_Obs[hh]'
+'  hru_ea[hh] = e_a_Obs[hh]/1000'
+'  hru_u[hh] = u_Obs[hh]'
+'  hru_T_g[hh] = T_g_Obs[hh]'
+'  net_p[hh] = m_pp_Obs[hh]'
+'  net_rain[hh] = m_rain_Obs[hh]'
+'  net_snow[hh] = m_snow_Obs[hh]'
+'  hru_rho_snow[hh] = rho_snow_Obs[hh]'
+'  hru_T_pp[hh] = T_pp_Obs[hh]'
+'  if( u_Obs[hh] > 6.0)'
+'    hru_drift[hh] = 0.0'
+'  else'
+'    hru_drift[hh] = 0.0'
+'  endif'
+'end'
+######
+Observations:
+######
+C:\SnoBal\snobal_testdata_winzip\snobal_data_input.obs
+C:\SnoBal\snobal_testdata_winzip\snobal_ppt_input.obs
+C:\SnoBal\snobal_testdata_winzip\Snobal_out.obs
+######
+Dates:
+######
+1998 3 24
+1998 3 27
+######
+Modules:
+######
+Snobal_Input Macro 04/20/06
+Snobal CRHM 04/10/07
+######
+Parameters:
+######
+Snobal basin_area
+1 
+Snobal hru_area
+1 
+Snobal hru_elev
+929 
+Snobal max_h2o_vol
+0.01 
+Snobal max_z_s_0
+0.25 
+Snobal relative_hts
+1 
+Snobal z_0
+0.001 
+Snobal z_g
+0.3 
+Snobal z_T
+3 
+Snobal z_u
+3 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Snobal h2o_max 1
+Snobal h2o_total 1
+Snobal_Input net_p 1
+Snobal_Input net_rain 1
+Snobal_Input net_snow 1
+Snobal ro_predict 1
+Snobal snowcover 1
+Snobal snowmelt_int 1
+Snobal SWE 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+ 
+(kg/m^2)
+ 
+ 
+ 
+######

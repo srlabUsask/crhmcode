@@ -1,0 +1,42 @@
+Description - to be added
+###### Version: NON-DLL 5.09  Creation: 1/8/2004 15:02
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 10
+######
+Observations:
+######
+Ts_2003.obs
+######
+Dates:
+######
+2003 1 1
+2003 8 24
+######
+Modules:
+######
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+obs Ts 1 _obs 10_obs 2_obs 3_obs 4_obs 5_obs 6_obs 7_obs 8_obs 9_obs
+######
+TChart:
+######
+TChart
+ 
+ 
+
+ 
+ 
+######

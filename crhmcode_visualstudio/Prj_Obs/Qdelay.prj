@@ -1,0 +1,45 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 4
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\Dell\Granger\2002\GB402_TB.obs
+######
+Modules:
+######
+Pdelay Quinton model 10/23/02
+######
+Dates:
+######
+2002 5 28
+2002 7 25
+######
+Parameters:
+######
+Pdelay catchadjust
+1 1 1 1 
+Pdelay DrainTo
+2 3 4 0 
+Pdelay hru_area
+1 1 1 1 
+Pdelay Kstorage
+1 1 1 1 
+Pdelay Lag
+3 2 1 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Pdelay cump_delay 1 2 3 4
+######
+Display_Observation:
+######
+obs p 1 _obs
+######

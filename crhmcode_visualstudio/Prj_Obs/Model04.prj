@@ -1,0 +1,66 @@
+Description - to be added
+###### Version: DLL 1.12  Creation: 3/9/2004 10:01
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\BadJul74.obs
+######
+Dates:
+######
+1973 7 1
+1973 7 3
+######
+DLLs:
+######
+C:\CRHM\March2004DLL.dll
+######
+Modules:
+######
+global2 CRHM basic 02/19/03
+Model C:\CRHM\March2004DLL.dll 03/08/04
+######
+Parameters:
+######
+basin hru_lat
+51.32 
+global2 hru_ASL
+0 
+global2 hru_elev
+637 
+global2 hru_GSL
+0 
+global2 Time_Offset
+0 
+Model N
+0 
+Model N0
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Model Q0 1
+global2 Qdro 1
+Model Qlw 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+TChart
+ 
+ 
+(W/m2)
+ 
+ 
+######

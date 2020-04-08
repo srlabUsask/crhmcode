@@ -1,0 +1,83 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+BadJul74.obs
+######
+Modules:
+######
+global CRHM basic 02/21/02
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/01/02
+intcp CRHM basic 01/01/02
+netall CRHM basic 01/01/02
+net_rn CRHM basic 01/01/02
+evap CRHM basic 02/25/02
+######
+Dates:
+######
+1973 7 1
+1973 8 1
+######
+Parameters:
+######
+basin basin_area
+11.39 
+basin hru_area
+4.67 
+basin hru_elev
+637 
+evap evap_type
+0 
+evap Ht
+0.01 
+evap Zref
+1.5 
+evap Zwind
+10 
+global hru_ASL
+0 
+global hru_GSL
+0 
+global hru_lat
+51.32 
+netall hru_alb
+0.17 
+net_rn F_Qg
+0.2 
+obs catchadjust
+0 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+evap hru_cum_evap 1
+evap hru_cum_evapD 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2002
+ 
+C:\Crhm\evaptestJul.prj
+ 
+(W/m2)
+ 
+ 
+######

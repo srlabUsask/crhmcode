@@ -1,0 +1,66 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 2
+nlay 1
+nobs 5
+######
+Observations:
+######
+C:\Crhm\ArrayT.obs
+######
+Modules:
+######
+basin CRHM basic 05/30/02
+global CRHM basic 02/21/02
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/01/02
+######
+Dates:
+######
+1973 7 1
+1973 8 1
+######
+Parameters:
+######
+basin basin_area
+9.71 
+basin hru_area
+4.67 5.04 
+basin hru_ASL
+0 0 
+basin hru_elev
+637 637 
+basin hru_GSL
+0 0 
+basin hru_lat
+51.32 51.32 
+obs catchadjust
+0 0 
+obs tmax_allrain
+0 0 
+obs tmax_allsnow
+0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+obs hru_t 1
+######
+Display_Observation:
+######
+obs t 1 _obs 2_obs 3_obs 4_obs 5_obs
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2002
+ 
+C:\Crhm\depth73_75.prj
+ 
+(°C)
+ 
+ 
+######

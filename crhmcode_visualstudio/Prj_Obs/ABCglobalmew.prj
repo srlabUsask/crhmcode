@@ -1,0 +1,68 @@
+Description - to be added
+###### Version: CRHM (new) 5.48  Creation: 8/10/2005 13:57
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\CRHM\ABCOrgGlobal2.obs
+######
+Dates:
+######
+2005 8 1
+2005 8 10
+######
+Modules:
+######
+global CRHM new 08/10/05
+######
+Parameters:
+######
+global hru_ASL
+0 0 0 
+global hru_elev
+637 637 637 
+global hru_GSL
+0 30 -30 
+global hru_lat
+60 60 60 
+global Time_Offset
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+global Qdfo 1 2 3
+global Qdro 1 2 3
+######
+Display_Observation:
+######
+obs Qdfo(1) 1 _obs
+obs Qdfo(2) 1 _obs
+obs Qdfo(3) 1 _obs
+obs Qdro(1) 1 _obs
+obs Qdro(2) 1 _obs
+obs Qdro(3) 1 _obs
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+TChart
+ 
+ 
+(W/m2)
+ 
+ 
+ 
+######

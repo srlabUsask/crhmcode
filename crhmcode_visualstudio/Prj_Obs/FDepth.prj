@@ -1,0 +1,74 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\Leth9798.obs
+######
+Modules:
+######
+global
+calcsun
+obs
+intcp
+pbsm
+frostdepth
+######
+Dates:
+######
+1997 11 1
+1998 4 1
+######
+Parameters:
+######
+frostdepth L
+33.3499997854233 
+frostdepth V0
+10 
+frostdepth c
+2.20000004768372 
+frostdepth d
+2 
+frostdepth k
+1.50000005305628 
+global hru_ASL
+0 
+global hru_GSL
+0 
+global hru_elev
+637 
+global hru_lat
+51.3170013427734 
+obs catchadjust
+0 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+pbsm basin_area
+11.3900003433228 
+pbsm distrib
+1 
+pbsm fetch
+1000 
+pbsm hru_area
+4.67000007629395 
+pbsm Ht
+0.00999999977648258 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+frostdepth frostdepth 1
+######
+Display_Observation:
+######
+
+######

@@ -1,0 +1,62 @@
+Description - to be added
+###### Version: DLL 1.13  Creation: 4/13/2004 09:15
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\P1-EC.obs
+C:\CRHM\pl1_2002.obs
+######
+Dates:
+######
+2002 4 11
+2002 5 29
+######
+DLLs:
+######
+C:\CRHM\April2004DLL.dll
+######
+Modules:
+######
+global2 CRHM basic 02/19/03
+Sicart C:\CRHM\April2004DLL.dll 04/02/04
+######
+Parameters:
+######
+global2 hru_ASL
+0 
+global2 hru_elev
+637 
+global2 hru_GSL
+0 
+global2 hru_lat
+60.52 
+global2 Time_Offset
+2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Sicart Lw 1
+global2 Qdro 1
+######
+Display_Observation:
+######
+obs Qli 1 _obs
+obs Qsi 1 _obs
+######
+TChart:
+######
+TChart
+ 
+ 
+(W/m2)
+ 
+ 
+######

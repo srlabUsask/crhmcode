@@ -1,0 +1,95 @@
+Description - to be added
+###### Version: CRHM 1.96  Creation: 03/19/07 09:44
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\Snobal\Snobal_testdata_winzip\Snobal_data_input.obs
+C:\Snobal\Snobal_testdata_winzip\Snobal_ppt_input.obs
+C:\Snobal\Snobal_testdata_winzip\Snobal_out.obs
+######
+Dates:
+######
+1997 10 1
+1998 6 1
+######
+Modules:
+######
+SnobalCRHM CRHM 03/19/07
+######
+Parameters:
+######
+SnobalCRHM basin_area
+1
+SnobalCRHM hru_area
+1
+SnobalCRHM hru_elev
+929
+SnobalCRHM Init_h2o_sat
+0
+SnobalCRHM Init_rho
+200
+SnobalCRHM Init_T_s
+270
+SnobalCRHM Init_T_s_0
+270
+SnobalCRHM Init_T_s_l
+270
+SnobalCRHM Init_z_s
+0
+SnobalCRHM max_h2o_vol
+0.01
+SnobalCRHM max_z_s_0
+0.25
+SnobalCRHM relative_hts
+1
+SnobalCRHM run_no_snow
+0
+SnobalCRHM z_0
+0.01
+SnobalCRHM z_g
+0.3
+SnobalCRHM z_T
+3
+SnobalCRHM z_u
+3
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+SnobalCRHM E_int 1
+SnobalCRHM E_s_int 1
+SnobalCRHM m_rain 1
+SnobalCRHM m_s 1
+SnobalCRHM m_s_0 1
+SnobalCRHM m_s_l 1
+SnobalCRHM m_snow 1
+SnobalCRHM melt_int 1
+SnobalCRHM ro_predict_int 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+
+
+(kg/m^2*int)
+
+
+
+######

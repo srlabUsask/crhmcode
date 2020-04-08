@@ -1,0 +1,76 @@
+Description - to be added
+###### Version: DLL 1.30  Creation: 10/28/2004 15:34
+Dimensions:
+######
+nhru 2
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\f1_03_All.obs
+C:\CRHM\FEC_110_50701.obs
+######
+Dates:
+######
+2003 4 10
+2003 4 25
+######
+DLLs:
+######
+C:\CRHM\April2004DLL.dll
+######
+Modules:
+######
+global2 CRHM basic 02/19/03
+NeedleLeaf C:\CRHM\April2004DLL.dll 10/21/04
+######
+Parameters:
+######
+basin hru_elev
+637 637 
+global2 hru_ASL
+0 0 
+global2 hru_GSL
+0 0 
+global2 hru_lat
+60.52 60.52 
+global2 Time_Offset
+2 2 
+NeedleLeaf Albedo
+0.8 0.8 
+NeedleLeaf emiss
+0.985 0.985 
+NeedleLeaf LAI
+2.2 2.2 
+NeedleLeaf Vf
+0.05 0.05 
+NeedleLeaf z0
+0.001 0.001 
+NeedleLeaf z1
+2 2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+NeedleLeaf Qloi 1
+NeedleLeaf Qloisn 1
+NeedleLeaf Tsnow 1
+######
+Display_Observation:
+######
+obs ir_snow 1 _obs
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+needleleaf2.prj
+ 
+(W/m2)
+ 
+ 
+ 
+######
