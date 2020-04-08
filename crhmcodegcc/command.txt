@@ -1,0 +1,3 @@
+g++ -Iboost_1_34_1 codeconsole/*.cpp -o output.out -w -fpermissive -Wfatal-errors -lstdc++
+
+./output.out smithcreek.prj

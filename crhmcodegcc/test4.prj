@@ -1,0 +1,89 @@
+Description - to be added
+###### Version NON DLL 4.02  Creation: 3/19/2020 17:52
+Dimensions:
+######
+nhru 1
+nlay 2
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+Badlake73_76.obs
+######
+Dates:
+######
+1973 1 1
+1976 1 1
+######
+Modules:
+######
+basin CRHM 02/24/12
+global CRHM 04/19/13
+######
+Parameters:
+###### 'basin' parameters always first
+basin basin_area <1e-06 to 1e+09>
+3 
+basin basin_name
+'Basin' 
+basin hru_area <1e-06 to 1e+09>
+1 
+basin hru_ASL <0 to 360>
+0 
+basin hru_elev <0 to 1e+05>
+637 
+basin hru_GSL <0 to 90>
+0 
+basin hru_lat <-90 to 90>
+51.32 
+basin hru_names
+'HRU' 
+basin INIT_STATE
+''
+basin Loop_to
+'_' '_' 
+basin RapidAdvance_to
+'_' 
+basin RUN_END <0 to 1e+05>
+0 
+basin RUN_ID <-1e+08 to 1e+08>
+1 
+basin RUN_START <0 to 1e+05>
+0 
+basin StateVars_to_Update
+'_' '_' '_' '_' '_' '_' '_' '_' '_' '_' 
+basin TraceVars
+'_' '_' '_' '_' '_' '_' '_' '_' '_' '_' 
+global hru_ASL <-360 to 360>
+0 
+global hru_elev <0 to 1e+05>
+637 
+global hru_GSL <-90 to 90>
+0 
+global hru_lat <-90 to 90>
+51.32 
+global Time_Offset <-12 to 12>
+0 
+######
+Initial_State
+######
+######
+Final_State
+######
+######
+Display_Variable:
+######
+basin run_ID 1
+global Qdflat 1
+######
+Display_Observation:
+######
+obs ea 1 _obs
+obs rh 1 _obs
+######
+TChart:
+######
+######
