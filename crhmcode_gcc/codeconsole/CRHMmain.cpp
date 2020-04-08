@@ -12,7 +12,7 @@
 #include <sstream>
 #include <fstream>
 #include <time.h>
-#include "boost/shared_ptr.hpp"
+//#include "boost/shared_ptr.hpp"
 #include "GlobalDll.h"
 //#include "ClassCRHM.h"
 #include "ClassModule.h"
@@ -44,7 +44,7 @@ extern string AKAstrings[];
 typedef pair<string, string>  PairDllModule;
 typedef multimap<string, string>  TDllModule;
 
-typedef boost::shared_ptr<Classinfo> Pinfo;
+typedef shared_ptr<Classinfo> Pinfo;
 typedef pair<string, Pinfo>  Pairinfo;
 typedef multimap<string, Pinfo>  paras;
 
