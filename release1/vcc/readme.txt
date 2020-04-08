@@ -7,6 +7,6 @@
    	Regsvr32 C:/test/TeeChart2018.ocx
    You will get a relevant message after successful registration.
    
-3. You are now ready to run the visual version of the CRHM software. Go to the folder 'crhmvisualsoftware'. You will see that there is a file called 'CRHM_GUI.exe'. Double click this file to see the software dialog.
+3. You are now ready to run the visual version of the CRHM software. Go to the folder 'crhmsoftware'. You will see that there is a file called 'CRHM_GUI.exe'. Double click this file to see the software dialog.
 
 4. The 'crhmsoftware' folder contains some project files (.prj files) and their respective observation files (.obs files). You can test the software by running the 'BadLake1974-1975.prj' file. The 'smithcreek.prj' file and the associated obs files are also stored in the 'crhmsoftware' folder. You can try running the 'smithcreek.prj' as well.
