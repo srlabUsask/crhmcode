@@ -181,7 +181,7 @@ typedef std::map<std::string, VarCHRM> symtab_t;
 ///////////////////////////////////////////////////////////////////////////////
 
 class execbase;
-typedef boost::shared_ptr<execbase> Execbase;
+typedef std::shared_ptr<execbase> Execbase;
 
 class execbase {
 public:
