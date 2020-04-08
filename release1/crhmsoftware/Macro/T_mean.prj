@@ -1,0 +1,74 @@
+Description - to be added
+###### Version: CRHM 3.95_03  Creation: 5/9/2012 10:12
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Calc_tmean'
+'declreadobs, t, NHRU," temperature observation", (°C)'
+'declvar, Status, NHRU, "indicates if Obs available", ()'
+'declvar, t_mean, NHRU, "calculated t mean", (°C)'
+'declparam, HRU_OBS, NHRU,1, 0.0, 1.0, "Observation table", ()'
+'command'
+'  var sum, i'
+'  if(STEP == 1)'
+'    t_mean[hh] = 0'
+'  endif'
+'  if(STEP%FREQ == 1)'
+'    sum = 0'
+'    Status[hh] = 0'
+'    for(i = 0; i < FREQ; i=i+1)'
+'      ReadAheadObs = i'
+'      Status[hh] = Status[hh] + ReadAheadObs'
+'      sum = sum + t[hh]'
+'    endfor'
+'     t_mean[hh] = sum/FREQ'
+'  endif'
+'end'
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+Calc_tmean Macro 04/20/06
+######
+Parameters:
+###### 'basin' parameters always first
+Calc_tmean HRU_OBS <0 to 1>
+1 
+######
+Initial_State
+######
+######
+Final_State
+######
+######
+Display_Variable:
+######
+Calc_tmean Status 1
+Calc_tmean t_mean 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+ 
+()
+ 
+ 
+ 
+######
