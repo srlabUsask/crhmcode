@@ -1,3 +1,5 @@
+Please execute the following steps for running the visual version of the CRHM software.
+
 1. I guess you have the boost library folder 'boost_1_34_1'. Put this folder in the 'C:' drive. If you do not have this folder, you can get it from the following link.
    https://drive.google.com/open?id=1mXmNCzQwwqz4W81GkJ2ec_QWVNMgttDK
 
