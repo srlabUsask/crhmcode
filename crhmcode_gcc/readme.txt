@@ -2,7 +2,9 @@ Please execute the following instructions in order to run the GCC version of CRH
 
 1. Let us assume that this readme.txt file and all other contents are residing in a folder called 'crhmcode_gcc'.
 
-2. I guess you already have the boost library folder 'boost_1_34_1'. Put this boost library folder in the 'crhmcode_gcc' folder.
+2. I guess you already have the boost library folder 'boost_1_34_1'. Put this boost library folder in the 'crhmcode_gcc' folder. If you do not have the boost library folder, you can get it from the following link.
+
+   https://drive.google.com/open?id=1mXmNCzQwwqz4W81GkJ2ec_QWVNMgttDK
 
 3. If you want to run a project, you need to put the project file (.prj file) in the 'crhmgcc' folder.
 
@@ -10,9 +12,9 @@ Please execute the following instructions in order to run the GCC version of CRH
 
 5. Go into the 'crhmcode_gcc' folder using a terminal.
 
-6. run the following command for compiling the code and generating the executable.
+6. Run the following command for compiling the code and generating the executable.
 
-g++ -Iboost_1_34_1 codeconsole/*.cpp -o output.out -w -fpermissive -Wfatal-errors -lstdc++
+   g++ -Iboost_1_34_1 codeconsole/*.cpp -o output.out -w -fpermissive -Wfatal-errors -lstdc++
 
 7. The executable "output.out" has now been generated. Now execute the following command for running the project 'BadLake1974-1975.prj'.
 

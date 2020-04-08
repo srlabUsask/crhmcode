@@ -1,4 +1,5 @@
-1. I guess you have the boost library folder 'boost_1_34_1'. Put this folder in the 'C:' drive.
+1. I guess you have the boost library folder 'boost_1_34_1'. Put this folder in the 'C:' drive. If you do not have this folder, you can get it from the following link.
+   https://drive.google.com/open?id=1mXmNCzQwwqz4W81GkJ2ec_QWVNMgttDK
 
 2. Register the 'TeeChart2018.ocx' file using the following command.
 	Regsvr32 <path to the ocx file>
