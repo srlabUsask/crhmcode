@@ -39,7 +39,7 @@ extern string AKAstrings[];
 typedef pair<string, string>  PairDllModule;
 typedef multimap<string, string>  TDllModule;
 
-typedef shared_ptr<Classinfo> Pinfo;
+typedef std::shared_ptr<Classinfo> Pinfo;
 typedef pair<string, Pinfo>  Pairinfo;
 typedef multimap<string, Pinfo>  paras;
 
@@ -263,7 +263,7 @@ try {
 	std::istringstream iss(res);
 
 	*/
-	
+
 
 
 	//reading the macros
@@ -759,11 +759,11 @@ try {
 					while (c = DataFile.peek(), !isalpha(c) && c != '#')
 						DataFile.ignore(256, '\n');
 				}
-				
+
 				bool isEmpty = Global::MapPars.empty();
 				long cnt = 0;
 				if (!isEmpty) { cnt = Global::MapPars.size(); }
-				
+
 				DataFile.clear();
 			} // while
 			//SqueezeParams();  // converts identical parameters to basin parameters
@@ -1247,7 +1247,7 @@ void CRHMmain::MacroClick(void)
 void CRHMmain::ListBoxMacroClear() { // used by Macro
 
 	ClassVar * thisVar;
-	
+
 
 	if (SeriesCnt <= 0)
 		ListBox3->Clear();
@@ -1255,7 +1255,7 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		int indx;
 		string serTitle;
 		int jj;
-		
+
 		//Initialize the cdSeries variable in case it has not been yet - Matt
 		SeriesCnt = ListBox3->Count;
 		cdSeries = new TSeries*[SeriesCnt];
@@ -1304,7 +1304,7 @@ void CRHMmain::MacroLoad(void)
 
 	ClearModules(false);
 
-	
+
 
 	if (Global::MacroModulesList->Count > 0) {
 		int Macro = 0;
@@ -1409,7 +1409,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 				delete FileData;
 				return false;
 			}
-			
+
 			setStartDate(FileData->Dt1);
 			setEndDate(FileData->Dt2);
 
@@ -1678,7 +1678,7 @@ bool  CRHMmain::FindFileName(string &FileName) {
 	//ApplicationDir =   ExtractFilePath(AnsiReplaceStr(Application->ExeName, "/", "\\")); // Fix for "C:/Program files/CRHM/Examples
 
 	//ApplicationDir =   "C:/CH/CRHM/Examples
-	 
+
 	//ProjectDirectory = ExtractFilePath(AnsiReplaceStr(OpenNamePrj, "/", "\\")); // Fix for "C:/Program files/CRHM/Examples
 
 	if (FileExistsSp(FileName)) // file path directory
@@ -1872,7 +1872,7 @@ void  CRHMmain::RunClick(void) {
 	Global::MapObsGet.clear();
 
 
-	
+
 	try {
 		for (Modii = 0; Modii < Global::OurModulesList->Count; Modii++)
 			((ClassModule*)(Global::OurModulesList->Objects[Modii]))->initbase();
@@ -2089,7 +2089,7 @@ void  CRHMmain::RunClick(void) {
 
 					//clock_t begintime = clock();///////////////////////////////////////////////////////////////////////////////////////
 
-					p->run();					
+					p->run();
 
 					//float timediff = float(clock() - begintime) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
 					//ts->addTime(p->Name, timediff);
@@ -2107,11 +2107,11 @@ void  CRHMmain::RunClick(void) {
 
 			  // module loop control
 
-			
+
 			if (Global::CRHMControlSaveCnt && !(Global::CRHMStatus & 1)) { // Set module mode. Save current position.
 				ControlSaveState(false, StatePar, Global::ModuleBitSet);
 				Global::CRHMStatus |= 1; // set module control bit and inhibit display.
-				LogMessage("Start save Main", DD);			
+				LogMessage("Start save Main", DD);
 			}
 
 			// module loop control reset
@@ -2144,7 +2144,7 @@ void  CRHMmain::RunClick(void) {
 						xx = *mmsData[ii];
 
 						if (xx < xLimit)
-						{		
+						{
 							cdSeries[ii]->AddXY(Global::DTnow, xx);
 						}
 						else
@@ -2155,7 +2155,7 @@ void  CRHMmain::RunClick(void) {
 					else {
 						xx = (*mmsDataL[ii]);
 						if (xx < lLimit)
-						{							
+						{
 							cdSeries[ii]->AddXY(Global::DTnow, xx);
 						}
 						else
@@ -2172,7 +2172,7 @@ void  CRHMmain::RunClick(void) {
 		int d = iter;
 		Global::BuildFlag = CRHM::DECL;
 
-		
+
 	}
 
 	catch (exception &E) {
@@ -2504,7 +2504,7 @@ void  CRHMmain::LastRprt(void)
 
 
 
-void CRHMmain:: DoObsStatus(bool &First) 
+void CRHMmain:: DoObsStatus(bool &First)
 {
 	if (First) {
 		for (int ii = 0; ii < ObsFilesList->Count; ii++) {
@@ -2947,40 +2947,40 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 	bool Prj = false;
 	if (filepath.find(".prj") != std::string::npos) { Prj = true; }
-	
+
 	if (Prj) {
-	
+
 		//need to modify
 		//Main->Text = Main->Text.SubString(1, 49) + " - " + SaveDialogPrj->FileName;
-	
+
 		ProjectList->Add("Dimensions:");
 		ProjectList->Add("######");
 		ProjectList->Add(string("nhru " + to_string(Global::maxhru)));
 		ProjectList->Add(string("nlay " + to_string(Global::nlay)));
 		ProjectList->Add(string("nobs " + to_string(Global::nobs)));
 		ProjectList->Add("######");
-	
+
 		ProjectList->Add("Macros:");
 		ProjectList->Add("######");
-	
+
 		for (int ii = 0; ii < Global::MacroModulesList->Count; ++ii)
 			ProjectList->Add("'" + Global::MacroModulesList->Strings[ii] + "'");
-	
+
 		ProjectList->Add("######");
-	
+
 		if (!Global::MapAKA.empty()) {
 			Mapstr2::iterator it;
-	
+
 			ProjectList->Add("AKAs:");
 			ProjectList->Add("######");
-	
+
 			for (it = Global::MapAKA.begin(); it != Global::MapAKA.end(); ++it) {
 				string Var = (*it).first + ' ' + (*it).second;
 				ProjectList->Add(Var.c_str());
 			}
 			ProjectList->Add("######");
 		}
-	
+
 		ProjectList->Add("Observations:");
 		ProjectList->Add("######");
 		for (int ii = 0; ii < ObsFilesList->Count; ii++) {
@@ -2988,13 +2988,13 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			ProjectList->Add(S);
 		}
 		ProjectList->Add("######");
-	
+
 		ProjectList->Add("Dates:");
 		ProjectList->Add("######");
 		string S;
 
 
-		double date1 = GetStartDate();		
+		double date1 = GetStartDate();
 		S = StandardConverterUtility::GetDateInString(date1);
 
 
@@ -3009,7 +3009,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		ProjectList->Add(S);
 		ProjectList->Add("######");
-	
+
 #ifdef CRHM_DLL
 		if (OpenDLLs->Count > 0) {
 			ProjectList->Add("DLLs:");
@@ -3022,7 +3022,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			ProjectList->Add("######");
 		}
 #endif
-	
+
 		ProjectList->Add("Modules:");
 		ProjectList->Add("######");
 		for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
@@ -3035,11 +3035,11 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			}
 			else
 				S = S + " ";
-	
+
 			S = S + thisModule->DLLName + " ";
 			S = S + thisModule->Version;
 			ProjectList->Add(S);
-	
+
 			if (thisModule->isGroup || thisModule->isStruct) {
 				list<ModulePtr> ::iterator iterM;
 				iterM = ((ClassMacro *)thisModule)->Modules.begin();
@@ -3053,7 +3053,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 					}
 					else
 						S = S + " ";
-	
+
 					S = S + (*iterM)->DLLName + " ";
 					S = S + (*iterM)->Version;
 					ProjectList->Add(S);
@@ -3062,29 +3062,29 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			}
 		}
 		ProjectList->Add("######");
-	
+
 		ProjectList->Add("Parameters:");
 		ProjectList->Add("###### 'basin' parameters always first");
-	
+
 		for (int bb = 0; bb < 2; ++bb) { // shared parameters first - initially over-write all others
 			for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
 				thisPar = (*itPar).second;
-	
+
 				if (thisPar->param == "HRU_group")
 					continue;
 				if (bb == 0 && thisPar->module != "shared")
 					continue;
 				if (bb == 1 && thisPar->module == "shared")
 					continue;
-	
+
 				string S = string(thisPar->module.c_str()) + " " + string(thisPar->param.c_str());
-	
+
 				if (thisPar->varType != CRHM::Txt)
 					S += " <" + FloatToStrF(thisPar->minVal, ffGeneral, 4, 0) + " to " + FloatToStrF(thisPar->maxVal, ffGeneral, 4, 0) + ">";
-					
+
 
 				ProjectList->Add(S);
-	
+
 				for (int jj = 0; jj<thisPar->lay; jj++) {
 					S = "";
 					for (int ii = 0; ii < thisPar->dim; ii++) {
@@ -3097,39 +3097,39 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 								S = S + "'" + thisPar->Strings->Strings[ii] + "' ";
 							else
 								S = "''"; // handle null string
-	
+
 						if (ii % 16 == 15) {
 							ProjectList->Add(S);
 							S = "";
 						}
 					}
-					
+
 					//if (!S.IsEmpty()) { ProjectList->Add(S); S = ""; }
 					if (S.length() != 0) { ProjectList->Add(S); S = ""; }
 				}
-				
+
 				//if (!S.IsEmpty()) ProjectList->Add(S);
 				if (S.length() != 0) ProjectList->Add(S);
 			} // output loop
 		}  // basin module/other loop
-	
+
 		ProjectList->Add("######");
-	
+
 		ProjectList->Add("Initial_State");
 		ProjectList->Add("######");
-	
+
 
 		//need to modify
 		//TMenuItem *StateItem;
 		//StateItem = MainMenu1->Items->Items[5];
-	
+
 		//if (StateItem->Count > 5) { // State files open
 		//	for (int ii = 5; ii < StateItem->Count; ++ii)
 		//		ProjectList->Add(StateItem->Items[ii]->Caption);
 		//}
-	
+
 		ProjectList->Add("######");
-	
+
 		ProjectList->Add("Final_State");
 		ProjectList->Add("######");
 		if (SaveStateFlag) {
@@ -3147,7 +3147,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//	T = T + " " + string(water_year_month);
 	//ProjectList->Add(T);
 	//ProjectList->Add("######");
-	
+
 	//ProjectList->Add("Log_Time_Format");
 	//ProjectList->Add("######");
 
@@ -3156,47 +3156,47 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//ProjectList->Add(T);
 
 	//ProjectList->Add("######");
-	
+
 	if (Global::LOGVARLOAD) {
 		ProjectList->Add("LOGVARLOAD");
 		ProjectList->Add("######");
 	}
-	
+
 	ProjectList->Add("Display_Variable:");
 	ProjectList->Add("######");
-	
+
 	for (int ii = 0; ii < SeriesCnt; ii++) { // transfer TeeChart data
-	
+
 		//ClassVar *thisVar = (ClassVar *)cdSeries[ii]->Tag;
 
 		//need to modify
 		//thisVar->TchrtOpt = cdSeries[ii]->VertAxis == aRightAxis;
 		//thisVar->TchrtOpt = 0;
 	}
-	
+
 	lastVar = NULL;
 	Output = "";
-	
+
 
 	//need to modify
 	//if (HruNames)
 		//HruNameClick(Sender);
 
 	int c = ListBox1->Count;
-	
+
 	for (int ii = 0; ii < ListBox3->Count; ++ii) {
-	
+
 		long lay, dim;
-	
+
 		ExtractHruLay(ListBox3->Strings[ii], dim, lay);
-	
+
 		//need to modify possibly
 		ClassVar *thisVar = (ClassVar *)ListBox3->Objects[ii]; //previous code
 		//ClassVar *thisVar = (ClassVar *)ii; //Manishankar's code
 
 
 		//thisVar->TchrtOpt = 1; //added by Manishankar
-	
+
 		if (thisVar != NULL)
 		{
 			if (thisVar->TchrtOpt)
@@ -3219,48 +3219,48 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			lastVar = thisVar;
 		}
 	}
-	
+
 	//if (!Output.IsEmpty()) ProjectList->Add(Output);
 	if (Output.length() != 0) ProjectList->Add(Output);
-	
+
 	ProjectList->Add("######");
-	
+
 	ProjectList->Add("Display_Observation:");
 	ProjectList->Add("######");
-	
+
 	lastVar = NULL;
 	string kind, lastkind;
 	Output = "";
-	
+
 	for (int ii = 0; ii < ListBox4->Count; ii++) {
-	
+
 		string S = ListBox4->Strings[ii];
 		string FullName;
 		long dim=0, lay=0;
 		kind = "_obs";
-	
+
 
 		//need to modify
 		//string Name = ExtractHruLayFunct(ListBox4->Strings[ii], dim, lay, kind, FullName);
 		string Name = GetObservationName(ListBox4->Strings[ii]);
 		ExtractHruLay(ListBox4->Strings[ii], dim, lay);
 		//string Name = "";
-	
+
 
 		//need to modify
 		//TLineSeries *cdSeries = (TLineSeries *)ListBox4->Objects[ii];
 		TSeries *cdSeries = (TSeries *)ListBox4->Objects[ii];
-	
+
 		ClassVar *thisVar;
 		thisVar = NULL;
-		
+
 		//need to modify
 		thisVar = (ClassVar *)cdSeries->Tag; // always OK for observation
 
 		thisVar = (ClassVar *)ListBox4->Objects[ii]; //added by Manishankar for testing.
 		//Name = ListBox4->Strings[ii];
 
-	
+
 		if (!thisVar || !thisVar->FileData) {  // VarObsFunct
 			if (!thisVar) {
 				long Indx = ListBox3->IndexOf(FullName);
@@ -3270,18 +3270,18 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 					thisVar = VarFind(string(string("obs ") + Name.c_str()));
 			}
 		}
-	
-		
+
+
 
 		//need to modify
 		//if (cdSeries->VertAxis == aRightAxis)
 			//dim = -dim;
-	
+
 		string SS = to_string(dim);
-	
+
 		if (lay > 0)
 			SS += "," + to_string(lay);
-	
+
 		if (Output != "" && (thisVar != lastVar || kind != lastkind)) {
 			ProjectList->Add(Output + " " + lastkind);
 			if (thisVar)
@@ -3298,7 +3298,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 				Output = (thisVar->module + " " + Name.c_str() + " " + SS.c_str()).c_str();
 			}
 		}
-	
+
 		lastVar = thisVar;
 		lastkind = kind;
 
@@ -3340,19 +3340,19 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 
 	}
-	
-	
+
+
 	if (Output.length() != 0) ProjectList->Add(Output + " " + kind); // handle last output
-	
+
 	ProjectList->Add("######");
-	
+
 
 	//need to check
 	//if (PrjAutoRun->Checked) {
 	//	ProjectList->Add("Auto_Run");
 	//	ProjectList->Add("######");
 	//}
-	
+
 	//if (SaveChartTemplate->Checked) {
 	//	ProjectList->Add("SaveChartTemplate");
 	//	ProjectList->Add("######");
@@ -3385,10 +3385,10 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//	ProjectList->Add("Summary_Screen");
 	//	ProjectList->Add("######");
 	//}
-	
+
 	ProjectList->Add("TChart:");
 	ProjectList->Add("######");
-	
+
 
 	//need to check
 	//for (int ii = 0; ii < Chart->Title->Text->Count; ++ii)
@@ -3415,20 +3415,20 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//	ProjectList->Add(S);
 	//}
 	ProjectList->Add("######");
-	
-	
+
+
 	//need to check
 	//ProjectList->SaveToFile(SaveDialogPrj->FileName);
 	ProjectList->SaveToFile(filepath);
-	
+
 	ProjectList->Clear();
-	
-	
+
+
 	//need to check
 	//dirty = false;
 
 
-	
+
 
 }
 
@@ -3580,7 +3580,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 	if (observationname[l - 1] == '\n') { observationname[l - 1] = '\0'; }
 
 
-	FILE * obfile = fopen(obsfilepath, "r");	
+	FILE * obfile = fopen(obsfilepath, "r");
 
 	char line[128], obsname[128];
 	char * token, obsnames[50][128];
@@ -3590,15 +3590,15 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 
 	while (fgets(line, sizeof line, obfile) != NULL) //reading the lines upto #############.
 	{
-		for (int i = 0; i < strlen(line); i++) 
-		{ 
-			obsname[i] = line[i]; 
-			if (line[i] == ' ') 
-			{ 
-				obsname[i] = '\0'; 
-				strcpy(obsnames[j], obsname); 
-				break; 
-			} 
+		for (int i = 0; i < strlen(line); i++)
+		{
+			obsname[i] = line[i];
+			if (line[i] == ' ')
+			{
+				obsname[i] = '\0';
+				strcpy(obsnames[j], obsname);
+				break;
+			}
 		}
 		if (strcmp(obsname, observationname) == 0) { obsindex = j+1; }
 		if (line[0] == '#') { break; }
@@ -3607,10 +3607,10 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 		{
 			char test[128]; test[0] = '$'; test[1] = '\0';
 			strcat(test, obsnames[i]);
-			if (strcmp(obsname, test) == 0) 
-			{ 
+			if (strcmp(obsname, test) == 0)
+			{
 				j--;
-				break; 				
+				break;
 			}
 		}
 		j++;
@@ -3621,35 +3621,35 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 
 	int obscount = j;
 	char tokens[50][50];
-	int tokencount = 0;	
+	int tokencount = 0;
 	float obsvalue = 0.0;
 	int dateelements = 0, year, month, day, hour, minute, second;
 	double ddate;
 
-	
+
 	while (fgets(line, sizeof line, obfile) != NULL) //reading the data values.
 	{
 		tokencount = 0;
 		token = strtok(line, " \t");
-		while (token != NULL) 
-		{ 
-			strcpy(tokens[tokencount], token); 
-			tokencount++; 
+		while (token != NULL)
+		{
+			strcpy(tokens[tokencount], token);
+			tokencount++;
 			token = strtok(NULL, " \t");
 		}
 		obsvalue = atof(tokens[tokencount - obscount + obsindex - 1]);
 
 		dateelements = tokencount - obscount;
 		if (dateelements == 1) { ddate = atof(tokens[0]); }
-		else 
-		{ 
-			year = atoi(tokens[0]); month = atoi(tokens[1]); day = atoi(tokens[2]); hour = atoi(tokens[3]); 
+		else
+		{
+			year = atoi(tokens[0]); month = atoi(tokens[1]); day = atoi(tokens[2]); hour = atoi(tokens[3]);
 			ddate = StandardConverterUtility::GetDateTimeInDouble(year, month, day, hour, 0, 0);
 		}
 
 		observationseries->AddXY(ddate, obsvalue);
 	}
-	
+
 }
 
 
@@ -3813,7 +3813,7 @@ string CRHMmain::BuildLay(string S, long Lay) {
 
 
 //
-//	
+//
 //	MapDim::iterator itDim;
 //	ClassPar *thisPar;
 //	ClassVar *lastVar = NULL;

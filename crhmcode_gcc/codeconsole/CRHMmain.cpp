@@ -44,7 +44,7 @@ extern string AKAstrings[];
 typedef pair<string, string>  PairDllModule;
 typedef multimap<string, string>  TDllModule;
 
-typedef shared_ptr<Classinfo> Pinfo;
+typedef std::shared_ptr<Classinfo> Pinfo;
 typedef pair<string, Pinfo>  Pairinfo;
 typedef multimap<string, Pinfo>  paras;
 
