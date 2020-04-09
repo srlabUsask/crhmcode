@@ -3044,7 +3044,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 				list<ModulePtr> ::iterator iterM;
 				iterM = ((ClassMacro *)thisModule)->Modules.begin();
 				while (iterM != ((ClassMacro *)thisModule)->Modules.end()) {
-					boost::weak_ptr<ClassModule> MP((*iterM));
+					std::weak_ptr<ClassModule> MP((*iterM));
 					string S = string(" +") + (*iterM)->NameRoot.c_str();
 					if ((*iterM)->variation > 0) {
 						string AA("#0 ");

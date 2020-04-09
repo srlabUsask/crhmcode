@@ -1,0 +1,41 @@
+Description - to be added
+###### Version NON DLL 4.02  Creation: 4/9/2020 15:13
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+D:\test\smith\CRHM_output_11.obs
+######
+Dates:
+######
+1953 10 31
+2007 10 30
+######
+Modules:
+######
+######
+Parameters:
+###### 'basin' parameters always first
+######
+Initial_State
+######
+######
+Final_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+######
+TChart:
+######
+######

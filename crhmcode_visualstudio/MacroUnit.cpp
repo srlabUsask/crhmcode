@@ -128,7 +128,7 @@ void ClassMacro::decl(void) {
 			//ModulePtr Test(Mod->klone());
 			ModulePtr Test(Mod->klone(Name));
 
-			boost::weak_ptr<ClassModule> MG(Test);
+			std::weak_ptr<ClassModule> MG(Test);
 
 			string S1 = typeid(*Mod).name();
 			string S2 = typeid(*Test).name();
@@ -208,7 +208,7 @@ void ClassMacro::decl(void) {
 									   //  long JJ = Calls.size();
 	iterC = Calls.begin();
 	while (iterC != Calls.end()) {
-		boost::weak_ptr<DefCRHM> CP((*iterC));
+		std::weak_ptr<DefCRHM> CP((*iterC));
 		(*iterC)->CallDecl();
 		++iterC;
 	}
@@ -239,7 +239,7 @@ void ClassMacro::init(void) {
 		list<ModulePtr> ::iterator iter;
 		iter = Modules.begin();
 		while (iter != Modules.end()) {
-			boost::weak_ptr<ClassModule> MP((*iter));
+			std::weak_ptr<ClassModule> MP((*iter));
 			(*iter)->init();
 
 			++iter;

@@ -13,9 +13,9 @@ using namespace std;
 
 class DefCRHM;
 
-typedef boost::shared_ptr<DefCRHM> DefCRHMPtr;
+typedef std::shared_ptr<DefCRHM> DefCRHMPtr;
 
-typedef boost::shared_ptr<ClassModule> ModulePtr;
+typedef std::shared_ptr<ClassModule> ModulePtr;
 
 string Add_Quote(string s);
 
