@@ -1892,13 +1892,13 @@ void  CRHMmain::RunClick(void) {
 		FileData = (ClassData *)ObsFilesList->Objects[0];
 
 		//this is for the gcc version
-		DTstartR = FileData->Dt1;
-		DTendR = FileData->Dt2;
+		//DTstartR = FileData->Dt1;
+		//DTendR = FileData->Dt2;
 	}
 
 	if (DTstartR < FileData->Dt1) {
-		Common::Message ("test :", std::to_string(DTstartR));
-		Common::Message ("test :", std::to_string(FileData->Dt1));
+		//Common::Message ("test :", std::to_string(DTstartR));
+		//Common::Message ("test :", std::to_string(FileData->Dt1));
 		LogMessageX("Start Time before first Observation");
 		GoodRun = false;
 	}

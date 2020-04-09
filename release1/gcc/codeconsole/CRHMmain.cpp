@@ -12,7 +12,7 @@
 #include <sstream>
 #include <fstream>
 #include <time.h>
-#include "boost/shared_ptr.hpp"
+//#include "boost/shared_ptr.hpp"
 #include "GlobalDll.h"
 //#include "ClassCRHM.h"
 #include "ClassModule.h"
@@ -44,7 +44,7 @@ extern string AKAstrings[];
 typedef pair<string, string>  PairDllModule;
 typedef multimap<string, string>  TDllModule;
 
-typedef boost::shared_ptr<Classinfo> Pinfo;
+typedef std::shared_ptr<Classinfo> Pinfo;
 typedef pair<string, Pinfo>  Pairinfo;
 typedef multimap<string, Pinfo>  paras;
 
@@ -1892,13 +1892,13 @@ void  CRHMmain::RunClick(void) {
 		FileData = (ClassData *)ObsFilesList->Objects[0];
 
 		//this is for the gcc version
-		DTstartR = FileData->Dt1;
-		DTendR = FileData->Dt2;
+		//DTstartR = FileData->Dt1;
+		//DTendR = FileData->Dt2;
 	}
 
 	if (DTstartR < FileData->Dt1) {
-		Common::Message ("test :", std::to_string(DTstartR));
-		Common::Message ("test :", std::to_string(FileData->Dt1));
+		//Common::Message ("test :", std::to_string(DTstartR));
+		//Common::Message ("test :", std::to_string(FileData->Dt1));
 		LogMessageX("Start Time before first Observation");
 		GoodRun = false;
 	}
