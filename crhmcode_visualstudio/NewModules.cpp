@@ -90,7 +90,7 @@ void MoveModulesToGlobal(string DLLName) {
 	DLLModules.AddModule(new Classbasin("basin", "02/24/12", CRHM::BASIC));
 	DLLModules.AddModule(new Classglobal("global", "04/19/13", CRHM::BASIC));
 
-	//testing making modules from macros of SmithCreek project. //written by Manishankar
+	//testing making modules from macros of SmithCreek project. //written by Manishankar. uncommenting the following lines will enable the classes for the macros.
 
 	//DLLModules.AddModule(new ClassGrow_Crop("Grow_Crop", "04/19/13", CRHM::BASIC)); //written by Manishankar
 	//DLLModules.AddModule(new Classdisplay("Display", "04/19/13", CRHM::BASIC)); //written by Manishankar

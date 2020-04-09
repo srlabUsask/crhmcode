@@ -181,7 +181,7 @@ typedef std::map<std::string, VarCHRM> symtab_t;
 ///////////////////////////////////////////////////////////////////////////////
 
 class execbase;
-typedef std::shared_ptr<execbase> Execbase;
+typedef std::shared_ptr<execbase> Execbase;  //std now contains the shared_ptr. Thus, getting rid of boost.
 
 class execbase {
 public:

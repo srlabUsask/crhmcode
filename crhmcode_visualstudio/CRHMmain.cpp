@@ -39,7 +39,7 @@ extern string AKAstrings[];
 typedef pair<string, string>  PairDllModule;
 typedef multimap<string, string>  TDllModule;
 
-typedef std::shared_ptr<Classinfo> Pinfo;
+typedef std::shared_ptr<Classinfo> Pinfo; //std now contains the shared_ptr. Thus, getting rid of boost.
 typedef pair<string, Pinfo>  Pairinfo;
 typedef multimap<string, Pinfo>  paras;
 
