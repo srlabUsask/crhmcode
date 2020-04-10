@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 4/8/2020 19:51
+###### Version NON DLL 4.02  Creation: 4/9/2020 23:23
 Dimensions:
 ######
 nhru 1
@@ -8,24 +8,17 @@ nobs 1
 ######
 Macros:
 ######
-'Calc_tmean'
-'declreadobs, t, NOBS," temperature observation", (°C)'
-'declvar, Status, NHRU, "indicates if Obs available", ()'
-'declvar, t_mean, NHRU, "calculated t mean", (°C)'
+'Display displays Above  t >= 0,  Below < 0. 09/02/11'
+'declreadobs, t, NOBS, "temperature", (°C)'
+'declvar, Above, NHRU, "Temperature above zero", (°C)'
+'declvar, Below, NHRU, "Temperature below zero", (°C)'
 'command'
-'var sum, i'
-'if(STEP == 1)'
-'t_mean[hh] = 0'
-'endif'
-'if(STEP%FREQ == 0)'
-'sum = 0'
-'Status[hh] = 0'
-'for(i = 0; i < FREQ; i=i+1)'
-'ReadAheadObs = i'
-'Status[hh] = Status[hh] + ReadAheadObs'
-'sum = sum + t[hh]'
-'endfor'
-'t_mean[hh] = sum/FREQ'
+'if(t[hh] >= 0.0)'
+'Above[hh] = t[hh]'
+'Below[hh] =  NO_DISPLAY'
+'else'
+'Above[hh] = NO_DISPLAY'
+'Below[hh] = t[hh]'
 'endif'
 'end'
 ######
@@ -40,7 +33,7 @@ Dates:
 ######
 Modules:
 ######
-Calc_tmean Macro 04/20/06
+Display Macro 04/20/06
 ######
 Parameters:
 ###### 'basin' parameters always first
@@ -53,8 +46,8 @@ Final_State
 ######
 Display_Variable:
 ######
-Calc_tmean t_mean 1
-Calc_tmean Status 1
+Display Above 1
+Display Below 1
 ######
 Display_Observation:
 ######
