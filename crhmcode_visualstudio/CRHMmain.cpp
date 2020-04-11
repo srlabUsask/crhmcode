@@ -1827,6 +1827,7 @@ void  CRHMmain::RunClick(void) {
 
 	ClassPar *thisPar;
 
+	
 	double P;
 	thisPar = ParFind("basin RUN_START");
 	if (thisPar) {
@@ -1861,6 +1862,7 @@ void  CRHMmain::RunClick(void) {
 			}
 		}
 	}
+	
 
 	Global::DTmin = (int)((DTstartR - Global::DTstart)* Global::Freq);
 	Global::DTindx = Global::DTmin;
