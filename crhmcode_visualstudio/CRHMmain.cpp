@@ -846,7 +846,7 @@ try {
 								TSeries * cdSeries = new TSeries(((int)(Dif * thisVar->FileData->Freq))*thisVar->FileData->ModN);
 
 								//move inside to avoid null ptr exception - Matt
-								cdSeries->Tag = (int)thisVar;
+								cdSeries->Tag = (long)thisVar;
 
 								cdSeries->Title = SS;
 							}
@@ -1976,7 +1976,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 		thisVar = (ClassVar *)(ListBox3->Objects[ii]);
 
-		cdSeries[ii]->Tag = (int)thisVar;
+		cdSeries[ii]->Tag = (long)thisVar;
 
 		string S = ListBox3->Strings[ii];
 		cdSeries[ii]->Title = S;

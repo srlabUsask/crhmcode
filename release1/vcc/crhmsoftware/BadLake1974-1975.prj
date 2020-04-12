@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 4/11/2020 20:20
+###### Version NON DLL 4.02  Creation: 4/12/2020 12:22
 Dimensions:
 ######
 nhru 3
@@ -279,6 +279,8 @@ pbsm SWE 1 2 3
 ######
 Display_Observation:
 ######
+obs rh 1 _obs
+obs Qn 1 _obs
 ######
 TChart:
 ######

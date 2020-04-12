@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 4/9/2020 15:12
+###### Version NON DLL 4.02  Creation: 4/12/2020 1:2
 Dimensions:
 ######
 nhru 52
@@ -147,7 +147,6 @@ Macros:
 Observations:
 ######
 Yorkton_hourly_t,rh,u_1Jan1953-30Oct2007.obs
-SmithCreek_compiled_daily_ppt_1Jan1953-30Oct2007.obs
 SmithCreek_compiled_daily_ppt_1Jan1953-30Oct2007.obs
 ######
 Dates:
@@ -1451,10 +1450,10 @@ SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpB evap_type <0 to 2>
 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
 2 2 2 2 
 SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpB fallstat <-1 to 100>
-77.68 77.2 -nan(ind) 0 0 81.82 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 
-31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 
-31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 31.51 
-31.51 31.51 31.51 31.51 
+77.68 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 
+77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 
+77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 77.2 
+77.2 77.2 77.2 77.2 
 SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpB fetch <300 to 1e+04>
 1000 1000 500 300 300 300 300 300 300 300 300 300 300 300 300 300 
 300 300 300 300 300 300 300 300 300 300 300 300 300 300 300 300 

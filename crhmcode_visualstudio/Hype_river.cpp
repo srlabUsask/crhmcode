@@ -391,7 +391,7 @@ void ClassWQ_River::production_mineralisation(const long watertype, const float 
 			if (conductN[hh])  new_concentration(INpool[0], vol, &conc_lay[(int)i_in[hh] - 1][hh]);
 			if (conductN[hh])  new_concentration(ONpool[0], vol, &conc_lay[(int)i_on[hh] - 1][hh]);
 			if (conductP[hh])  new_concentration(SRPpool[0], vol, &conc_lay[(int)i_sp[hh] - 1][hh]);
-			if (conductP[hh])  (PPpool[0], vol, conc_lay[(int)&i_pp[hh] - 1][hh]);
+			if (conductP[hh])  (PPpool[0], vol, conc_lay[(long)&i_pp[hh] - 1][hh]);
 		}
 	}
 

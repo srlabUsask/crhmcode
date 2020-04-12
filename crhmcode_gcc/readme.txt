@@ -14,7 +14,7 @@ Please execute the following instructions in order to run the GCC version of CRH
 
 6. Run the following command for compiling the code and generating the executable.
 
-   g++ -Iboost_1_34_1 codeconsole/*.cpp -o output.out -w -fpermissive -Wfatal-errors -lstdc++
+   g++ -Iboost_1_34_1 codeconsole/*.cpp -o output.out -w -Wfatal-errors -lstdc++
 
 7. The executable "output.out" has now been generated. Now execute the following command for running the project 'BadLake1974-1975.prj'.
 
