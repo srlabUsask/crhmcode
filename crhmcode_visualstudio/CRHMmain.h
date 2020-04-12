@@ -187,7 +187,9 @@ public:
 
 	TStringList* getVariables();
 
-	void RunClick2();
+	MMSData * RunClick2Start();
+	void RunClick2Middle(MMSData * mmsdata, long startdate, long enddate);
+	void CRHMmain::RunClick2End(MMSData * mmsdata);
 	void RunClick(void);
 	void AllRprt();
 	void  ControlReadState(bool MainLoop, ClassPar * VarPar);

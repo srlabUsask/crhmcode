@@ -1735,6 +1735,512 @@ string  CRHMmain::ExtractHruLay(string S, long &Hru, long &Lay) {
 	return S.substr(0, jj);
 }
 
+MMSData *  CRHMmain::RunClick2Start()
+{
+	ClassVar *thisVar;
+	float **mmsData;
+	long **mmsDataL;
+	bool GoodRun = true;
+	MMSData * mmsdata = new MMSData();
+
+	//TimingStatistics * ts = new TimingStatistics();
+
+	//clock_t begintime2 = clock();
+
+
+	//Classobs test("obs","undefined", CRHM::PROTO);
+	//test.decl();
+
+	MapVar::iterator itVar;
+	//PlotControl->IntervalControl = 0;
+	//PlotControl->IntervalLength = 3; // make default
+	Global::ModuleBitSet.reset();
+
+	Global::HRU_OBS = Global::HRU_OBS_DIRECT; // always correct? Not set by macro project?
+	Global::OBS_AS_IS = false;
+	Global::WQ_prj = false;
+
+
+	if (Global::IndxMin != 0) {
+		AfxMessageBox(_T("First observation day - not an entire day"));
+		return mmsdata;  // do not run
+	}
+
+	if (ListBox3->Count == 0) {
+		AfxMessageBox(_T("No model output selected"));
+		return mmsdata;  // nothing selected
+	}
+
+	string Message = "Project file: " + OpenNamePrj;
+	LogMessageX(Message.c_str());
+	LogMessageX(" ");
+
+	for (int ii = 0; ii < ObsFilesList->Count; ii++) {
+		Message = "Observation file: " + ObsFilesList->Strings[ii];
+		LogMessageX(Message.c_str());
+	}
+	LogMessageX(" ");
+
+	if (OpenStateFlag) {
+		Message = "State file: " + OpenNameState;
+		LogMessageX(Message.c_str());
+		LogMessageX(" ");
+	}
+
+	double Dt = Common::DateTimeDt();
+	Message = string("Time of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
+	LogMessageX(Message.c_str());
+
+	string S = string("Module List \"");
+	for (int ii = 0; ii < Global::OurModulesList->Count; ++ii) {
+		ClassModule* thisModule = (ClassModule*)Global::OurModulesList->Objects[ii];
+		S += Global::OurModulesList->Strings[ii];
+		if (thisModule->variation != 0) {
+			string AA("#0");
+			AA[1] += log(thisModule->variation) / log(2) + 1;
+			S += AA;
+		}
+
+		if (ii == Global::OurModulesList->Count - 1)
+			S += ".\"";
+		else
+			S += ", ";
+	}
+
+	if (!Global::MapAKA.empty()) {
+		Mapstr2::iterator it;
+		LogMessageX("Linkage modifications (AKAs)");
+		for (it = Global::MapAKA.begin(); it != Global::MapAKA.end(); ++it) {
+
+			Message = string((*it).first.c_str()) + " " + string((*it).second.c_str());
+			LogMessageX(Message.c_str());
+		}
+		LogMessageX(" ");
+	}
+
+	Global::DeclRootList->Clear(); // used by AKA to stop looping
+
+								   // clears storage for observation read and function lists
+	((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
+
+	double DTstartR = Picker1;
+	double DTendR = Picker2;
+
+	ClassPar *thisPar;
+
+
+	double P;
+	thisPar = ParFind("basin RUN_START");
+	if (thisPar) {
+		if (thisPar->ivalues[0] > 0)
+			P = thisPar->ivalues[0];
+	}
+	else {
+		MapPar::iterator itPar;
+
+		for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
+			thisPar = (*itPar).second;
+			if (thisPar->param == "RUN_START" && thisPar->ivalues[0] > 0) {
+				P = thisPar->ivalues[0];
+				break;
+			}
+		}
+	}
+
+	thisPar = ParFind("basin RUN_END");
+	if (thisPar) {
+		if (thisPar->ivalues[0] > 0)
+			P = thisPar->ivalues[0];
+	}
+	else {
+		MapPar::iterator itPar;
+
+		for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
+			thisPar = (*itPar).second;
+			if (thisPar->param == "RUN_END" && thisPar->ivalues[0] > 0) {
+				P = thisPar->ivalues[0];
+				break;
+			}
+		}
+	}
+
+
+	Global::DTmin = (int)((DTstartR - Global::DTstart)* Global::Freq);
+	Global::DTindx = Global::DTmin;
+	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+
+	int Modii = 0;
+	Global::MapVarsGet.clear();
+	Global::MapVarsPut.clear();
+	Global::MapObsGet.clear();
+
+
+
+	try {
+		for (Modii = 0; Modii < Global::OurModulesList->Count; Modii++)
+			((ClassModule*)(Global::OurModulesList->Objects[Modii]))->initbase();
+	}
+
+	catch (CRHMException Except) { // serious error - program had to stop immediately
+		LogMessageX(Except.Message.c_str()); // , "Initialisation of module - "); // + string((ClassModule*) Global::OurModulesList->Objects[Modii])->Name)
+		GoodRun = false;
+		//GoodRun = true;
+	}
+
+	catch (exception &E) {
+		//ShowMessage(E.Message + " in Initialisation of " + ((ClassModule*) Global::OurModulesList->Objects[Modii])->Name);
+		LogMessageX(E.what());
+		GoodRun = false;
+	}
+
+	catch (...) {
+		LogMessageX("Unknown error");
+		GoodRun = false;
+	}
+
+	if (DTstartR >= DTendR) {
+		LogMessageX("Start Time >= EndTime");
+		GoodRun = false;
+	}
+
+
+	ClassData * FileData = NULL;
+	if (ObsFilesList->Count > 0)
+	{
+		FileData = (ClassData *)ObsFilesList->Objects[0];
+	}
+
+	if (DTstartR < FileData->Dt1) {
+		LogMessageX("Start Time before first Observation");
+		GoodRun = false;
+	}
+
+	if (DTendR > FileData->Dt2) {
+		LogMessageX("End Time after last Observation");
+		GoodRun = false;
+	}
+
+	if (GoodRun) {
+		if (!OpenStateFlag) {
+			thisPar = ParFind("basin INIT_STATE");
+			if (thisPar && thisPar->Strings->Count && !thisPar->Strings->Strings[0].empty()) {
+				OpenNameState = thisPar->Strings->Strings[0];
+				OpenStateFlag = true;
+			}
+			else {
+				MapPar::iterator itPar;
+
+				for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
+					thisPar = (*itPar).second;
+					if (thisPar->param == "INIT_STATE" && thisPar->Strings->Count && !thisPar->Strings->Strings[0].empty()) {
+						OpenNameState = thisPar->Strings->Strings[0];
+						OpenStateFlag = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	if (OpenStateFlag)
+		ReadStateFile(GoodRun);
+
+	if (!GoodRun) { //cleanup memory before returning
+
+					// deletes storage for observation read list
+		((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
+
+		// deletes module allocated storage
+		for (int ii = 0; ii < Modii; ii++)
+			((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(false);
+
+		Global::BuildFlag = CRHM::DECL;
+		return mmsdata;
+	}
+
+	Global::BuildFlag = CRHM::RUN;
+	Global::DTmax = (int)((DTendR - Global::DTstart)* Global::Freq);
+
+	SeriesCnt = ListBox3->Count;
+
+	int Cnt = Global::DTmax - Global::DTmin;
+	cdSeries = new TSeries*[SeriesCnt];
+
+	for (int ii = 0; ii < SeriesCnt; ++ii)
+		cdSeries[ii] = new TSeries(Cnt);
+
+	mmsData = new float*[SeriesCnt];
+	mmsDataL = new long*[SeriesCnt];
+
+	for (int ii = 0; ii < ListBox3->Count; ii++) {
+
+		thisVar = (ClassVar *)(ListBox3->Objects[ii]);
+
+		cdSeries[ii]->Tag = (int)thisVar;
+
+		string S = ListBox3->Strings[ii];
+		cdSeries[ii]->Title = S;
+
+		long lay, dim;
+
+		S = ExtractHruLay(S, dim, lay);
+
+		if (thisVar->varType == CRHM::Float) {
+			mmsDataL[ii] = NULL;
+			if (thisVar->lay == 0) {
+				mmsData[ii] = thisVar->values + (dim - 1);
+			}
+			else {
+				mmsData[ii] = (thisVar->layvalues[lay - 1]) + (dim - 1);
+			}
+		}
+		else if (thisVar->varType == CRHM::Int) {
+			mmsData[ii] = NULL;
+			if (thisVar->lay == 0) {
+				mmsDataL[ii] = thisVar->ivalues + (dim - 1);
+			}
+			else {
+				mmsDataL[ii] = (thisVar->ilayvalues[lay - 1]) + (dim - 1);
+			}
+		}
+	}
+
+	
+
+	LogMessageX(" ");
+	S = string("timestep ") + DttoStr(Global::Interval * 24) + " hr.";
+	LogDebug(S.c_str());
+
+	LogDebugT("\"start of run\".");
+	LogMessageX(" ");
+
+	Global::CRHMControlSaveCnt = 0; // set by module
+	Global::CRHMStatus = 0; // module status; module control = 1 , main control = 2 and Finished = 4. Both inhibit output.
+	Global::LoopCntDown = -1;
+	StatePar = NULL;
+	Global::ModuleBitSet.reset();
+
+	
+	mmsdata->mmsData = mmsData;
+	mmsdata->mmsDataL = mmsDataL;
+	mmsdata->GoodRun = GoodRun;
+	mmsdata->S = S;
+	return mmsdata;
+}
+
+void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
+{
+	float **mmsData = mmsdata->mmsData; 
+	long ** mmsDataL = mmsdata->mmsDataL;
+	bool GoodRun = mmsdata->GoodRun; 
+	string S = mmsdata->S;
+
+	bool First = true;
+	try 
+	{
+		int iter = 0;
+		//for (Global::DTindx = Global::DTmin; Global::DTindx < Global::DTmax; Global::DTindx++) 
+		for (Global::DTindx = startdate; Global::DTindx < enddate; Global::DTindx++)
+		{
+
+			iter++;
+
+
+			if (Global::Freq == 1)
+				Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx);
+			else
+				Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+
+			if ((double)Global::RapidAdvanceTo > 0.0 && !(Global::CRHMStatus & 4)) {
+				if (Global::DTnow < Global::RapidAdvanceTo)
+					Global::CRHMStatus |= 2; // set module control and inhibit display
+
+				else if (Global::DTnow == Global::RapidAdvanceTo + Global::Interval && !Global::LoopCnt) { // reached RapidAdvanceTo and NO looping.
+					Global::CRHMStatus &= 125; // clear status == 2 (main control) and resume display
+					LogMessage("Terminate fast loop aheadMain", DD);
+				}
+				else if (Global::DTnow == Global::RapidAdvanceTo && Global::LoopCnt) { // reached RapidAdvanceTo with looping.
+					if (Global::LoopCntDown == -1) { // first time
+						Global::LoopCntDown = Global::LoopCnt;
+						StatePar = ParFind("basin StateVars_to_Update");
+						ControlSaveState(true, StatePar, Global::RunUpBitSet); // save this position
+						LogMessage("Initialise LoopTo Main", DD);
+					}
+				}
+				else if (Global::DTnow == Global::LoopTo && Global::LoopCnt) { // reached LoopTo position
+					ControlReadState(true, StatePar); // return to earlier position
+					--Global::LoopCntDown; // after above ReadState
+					LogMessage("Reached loop Main", DD);
+					if (Global::LoopCntDown <= 0) {
+						ResetLoopList();
+						Global::CRHMStatus &= 125; // remove status == 2 (inhibit display)
+						Global::CRHMStatus |= 4; // flag done
+						Global::LoopCntDown = -1;
+						LogMessage("Terminate LoopTo Main", DD);
+						continue;
+					}
+				}
+			} // end of RapidAdvanceTo logic
+
+			  // determine which obervation files have good data
+			DoObsStatus(First);
+			// reads observations for current interval
+
+
+			//--------------------------------------------------------------------------------------------------
+			bool Reset = true;
+			for (Global::CurrentModuleRun = 0; Global::CurrentModuleRun < Global::OurModulesList->Count; Global::CurrentModuleRun++) {
+
+				long Last = Global::CRHMControlSaveCnt;
+
+				ClassModule *p = (ClassModule*)Global::OurModulesList->Objects[Global::CurrentModuleRun];
+				// Simple project for module obs. For group always when !CRHMStatus otherwise only selected groups
+
+
+				//clock_t btime = clock(); //////////////////////////////////////////////////////////////////////////////////////////////
+
+				p->ReadObs(Reset);
+				Reset = false;
+
+				//float tdiff = float(clock() - btime) / CLOCKS_PER_SEC; ///////////////////////////////////////////////////////////////
+				//ts->addTime("ReadObs", tdiff);
+
+				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {
+
+					//time stamp
+
+					//clock_t begintime = clock();///////////////////////////////////////////////////////////////////////////////////////
+
+					p->run();
+
+					//float timediff = float(clock() - begintime) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
+					//ts->addTime(p->Name, timediff);
+
+					//time stamp
+
+				}
+
+				// module flag loop
+
+				if (Last != Global::CRHMControlSaveCnt) // means last module/group
+					Global::ModuleBitSet.set(Global::CurrentModuleRun);
+			} // end for
+			  //--------------------------------------------------------------------------------------------------
+
+			  // module loop control
+
+
+			if (Global::CRHMControlSaveCnt && !(Global::CRHMStatus & 1)) { // Set module mode. Save current position.
+				ControlSaveState(false, StatePar, Global::ModuleBitSet);
+				Global::CRHMStatus |= 1; // set module control bit and inhibit display.
+				LogMessage("Start save Main", DD);
+			}
+
+			// module loop control reset
+			bool DoOutput = true;
+			if ((Global::CRHMStatus & 1) && (!Global::CRHMControlSaveCnt || Global::DTindx >= Global::DTmax - 1)) { // handles daily + last day of run
+				ControlReadState(false, NULL); // restore all
+				Global::CRHMStatus &= 126; // reset module mode.
+				Global::CRHMControlSaveCnt = 0; // required for Global::DTindx >= Global::DTmax-1 condition
+				LogMessage("End save Main", DD);
+				LogDebug(" ");
+
+				if (Global::Freq == 1) {
+					Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx);
+					Global::DTindx -= 1;
+				}
+				else {
+					Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+					Global::DTindx -= 1;
+				}
+
+				DoOutput = false;
+			}
+
+
+			if (!(Global::CRHMStatus & 7) && !(Global::CRHMControlSaveCnt) && DoOutput) { // display if not module or main controlled. why?
+
+				double xx;
+				for (int ii = 0; ii < SeriesCnt; ii++) {
+					if (mmsData[ii] != NULL) {
+						xx = *mmsData[ii];
+
+						if (xx < xLimit)
+						{
+							cdSeries[ii]->AddXY(Global::DTnow, xx);
+						}
+						else
+						{
+							cdSeries[ii]->AddXY(Global::DTnow, -9999);
+						}
+					}
+					else {
+						xx = (*mmsDataL[ii]);
+						if (xx < lLimit)
+						{
+							cdSeries[ii]->AddXY(Global::DTnow, xx);
+						}
+						else
+						{
+							cdSeries[ii]->AddXY(Global::DTnow, -9999);
+						}
+					}
+
+				}
+			}
+
+		} // end for
+
+		int d = iter;
+		Global::BuildFlag = CRHM::DECL;
+
+
+	}
+
+	catch (exception &E) {
+		//    string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
+		//    ShowMessage(S);
+		LogError(S + " (" + FloatToStrF(Global::DTnow, ffGeneral, 10, 0) + ")", ERR);
+		GoodRun = false;
+	}
+}
+
+void CRHMmain::RunClick2End(MMSData * mmsdata) 
+{
+	float ** mmsData = mmsdata->mmsData;
+	long ** mmsDataL = mmsdata->mmsDataL; 
+	bool GoodRun = mmsdata->GoodRun;
+
+	double Dt = Common::DateTimeDt();
+	string Message = string("End of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
+	LogMessageX(Message.c_str());
+
+	delete[] mmsData;
+	delete[] mmsDataL;
+
+	// deletes storage for observation read list
+	((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
+
+	// deletes module allocated storage
+	//for (int ii = 0; ii < Global::OurModulesList->Count; ii++)
+	//	((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(true);
+
+	if (GoodRun) {
+		//    LogDebugT("\"end of run\".");
+		if (ReportAll)
+			AllRprt();
+		else
+			LastRprt();
+	}
+
+	//float timediff2 = float(clock() - begintime2) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
+	//ts->addTime("totaltime", timediff2);
+
+	//ts->writeStatistics();
+
+}
+
+
 void  CRHMmain::RunClick(void) {
 
 	ClassVar *thisVar;

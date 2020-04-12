@@ -677,6 +677,16 @@ public:
 };
 
 
+class MMSData
+{
+public:
+	float ** mmsData;
+	long ** mmsDataL;
+	bool GoodRun;
+	string S;
+};
+
+
 
 
 
