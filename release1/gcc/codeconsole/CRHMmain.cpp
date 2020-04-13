@@ -1729,7 +1729,7 @@ void  CRHMmain::RunClick(void) {
 		return;  // nothing selected
 	}
 
-	string Message = "Project file: " + OpenNamePrj;
+	string Message = "\n\nProject file: " + OpenProjectPath;
 	LogMessageX(Message.c_str());
 	LogMessageX(" ");
 
@@ -2191,7 +2191,7 @@ void  CRHMmain::RunClick(void) {
 	}*/
 
 	Dt = Common::DateTimeDt();
-	Message = string("End of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
+	Message = string("End of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version+"\n";
 	LogMessageX(Message.c_str());
 
 
