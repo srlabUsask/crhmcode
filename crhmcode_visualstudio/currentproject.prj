@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 4/12/2020 12:45
+###### Version NON DLL 4.02  Creation: 4/12/2020 20:24
 Dimensions:
 ######
 nhru 1
@@ -47,7 +47,6 @@ Final_State
 Display_Variable:
 ######
 Display Above 1
-Display Below 1
 ######
 Display_Observation:
 ######
