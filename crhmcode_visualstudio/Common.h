@@ -614,7 +614,7 @@ public:
 	void static writefile(string content)
 	{
 		ofstream myfile; 
-		myfile.open("d:/testfile.txt", ios::app); 
+		myfile.open("d:/testfile2.txt", ios::app); 
 		myfile << "\n" << content; 
 		myfile.close();
 	}
