@@ -1,13 +1,26 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 4/14/2020 17:1
+###### Version NON DLL 4.02  Creation: 4/15/2020 16:22
 Dimensions:
 ######
-nhru 1
+nhru 3
 nlay 2
 nobs 1
 ######
 Macros:
 ######
+'Display displays Above  t >= 0,  Below < 0. 09/02/11'
+'declreadobs, t, NOBS, "temperature", (°C)'
+'declvar, Above, NHRU, "Temperature above zero", (°C)'
+'declvar, Below, NHRU, "Temperature below zero", (°C)'
+'command'
+'if(t[hh] >= 0.0)'
+'Above[hh] = t[hh]'
+'Below[hh] =  NO_DISPLAY'
+'else'
+'Above[hh] = NO_DISPLAY'
+'Below[hh] = t[hh]'
+'endif'
+'end'
 ######
 Observations:
 ######
@@ -15,263 +28,15 @@ Badlake73_76.obs
 ######
 Dates:
 ######
-1973 1 1
-1976 1 1
+1974 10 1
+1975 6 1
 ######
 Modules:
 ######
-basin CRHM 02/24/12
-global CRHM 04/19/13
-obs CRHM 11/28/17
-calcsun CRHM 10/01/13
-intcp CRHM 02/24/15
-netall CRHM 03/22/16
-pbsm CRHM 11/20/17
-albedo CRHM 08/11/11
-evap CRHM 09/26/13
-ebsm CRHM 01/18/16
-Greencrack CRHM 03/22/13
-Soil CRHM 11/28/17
-Netroute CRHM 04/24/17
+Display Macro 04/20/06
 ######
 Parameters:
 ###### 'basin' parameters always first
-albedo Albedo_bare <0 to 1>
-0.17 
-albedo Albedo_snow <0 to 1>
-0.85 
-albedo hru_lat <-90 to 90>
-51.32 
-basin basin_area <1e-06 to 1e+09>
-3 
-basin basin_name
-'Basin' 
-basin hru_area <1e-06 to 1e+09>
-1 
-basin hru_ASL <0 to 360>
-0 
-basin hru_elev <0 to 1e+05>
-637 
-basin hru_GSL <0 to 90>
-0 
-basin hru_lat <-90 to 90>
-51.32 
-basin hru_names
-'HRU' 
-basin INIT_STATE
-''
-basin Loop_to
-' ' ' ' 
-basin RapidAdvance_to
-' ' 
-basin RUN_END <0 to 1e+05>
-0 
-basin RUN_ID <-1e+08 to 1e+08>
-1 
-basin RUN_START <0 to 1e+05>
-0 
-basin StateVars_to_Update
-' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 
-basin TraceVars
-' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 
-ebsm basin_area <1e-06 to 1e+09>
-3 
-ebsm delay_melt <0 to 366>
-0 
-ebsm hru_area <1e-06 to 1e+09>
-1 
-ebsm nfactor <0 to 10>
-0 
-ebsm Qe_subl_from_SWE <0 to 1>
-0 
-ebsm tfactor <0 to 10>
-0 
-ebsm Use_QnD <0 to 1>
-0 
-evap basin_area <1e-06 to 1e+09>
-3 
-evap evap_type <0 to 2>
-0 
-evap F_Qg <0 to 1>
-0.1 
-evap hru_area <1e-06 to 1e+09>
-1 
-evap hru_elev <0 to 1e+05>
-637 
-evap Ht <0.001 to 100>
-0.1 
-evap inhibit_evap <0 to 1>
-0 
-evap rs <0 to 0.01>
-0 
-evap Zwind <0.01 to 100>
-10 
-global hru_ASL <-360 to 360>
-0 
-global hru_elev <0 to 1e+05>
-637 
-global hru_GSL <-90 to 90>
-0 
-global hru_lat <-90 to 90>
-51.32 
-global Time_Offset <-12 to 12>
-0 
-Greencrack basin_area <1e-06 to 1e+09>
-3 
-Greencrack fallstat <-1 to 100>
-50 
-Greencrack hru_area <1e-06 to 1e+09>
-1 
-Greencrack Major <1 to 100>
-5 
-Greencrack PriorInfiltration <0 to 1>
-0 
-Greencrack soil_moist_init <0 to 2500>
-187 
-Greencrack soil_moist_max <0 to 5000>
-375 
-Greencrack soil_type <0 to 12>
-4 
-intcp basin_area <1e-06 to 1e+09>
-3 
-intcp hru_area <1e-06 to 1e+09>
-1 
-Netroute basin_area <1e-06 to 1e+09>
-3 
-Netroute gwKstorage <0 to 200>
-0 
-Netroute gwLag <0 to 1e+04>
-0 
-Netroute gwwhereto <-1000 to 1000>
-0 
-Netroute hru_area <1e-06 to 1e+09>
-1 
-Netroute Kstorage <0 to 200>
-0 
-Netroute Lag <0 to 1e+04>
-0 
-Netroute order <1 to 1000>
-1 
-Netroute preferential_flow <0 to 1>
-0 
-Netroute runKstorage <0 to 200>
-0 
-Netroute runLag <0 to 1e+04>
-0 
-Netroute Sdmax <0 to 1000>
-0 
-Netroute Sd_ByPass <0 to 1>
-0 
-Netroute soil_rechr_ByPass <0 to 1>
-1 
-Netroute soil_rechr_max <0 to 350>
-60 
-Netroute ssrKstorage <0 to 200>
-0 
-Netroute ssrLag <0 to 1e+04>
-0 
-Netroute whereto <0 to 1000>
-0 
-obs basin_area <1e-06 to 1e+09>
-3 
-obs catchadjust <0 to 3>
-0 
-obs ClimChng_flag <0 to 1>
-0 
-obs ClimChng_precip <0 to 10>
-1 
-obs ClimChng_t <-50 to 50>
-0 
-obs ElevChng_flag <0 to 1>
-0 
-obs hru_area <1e-06 to 1e+09>
-1 
-obs hru_elev <0 to 1e+05>
-0 
-obs HRU_OBS <1 to 100>
-1 
-2 
-3 
-3 
-3 
-obs lapse_rate <0 to 2>
-0.75 
-obs obs_elev <0 to 1e+05>
-0 
-0 
-obs ppt_daily_distrib <0 to 1>
-1 
-obs precip_elev_adj <-1 to 1>
-0 
-obs snow_rain_determination <0 to 2>
-0 
-obs tmax_allrain <-10 to 10>
-4 
-obs tmax_allsnow <-10 to 10>
-0 
-pbsm A_S <0 to 2>
-0.003 
-pbsm basin_area <1e-06 to 1e+09>
-3 
-pbsm distrib <-10 to 10>
-0 
-pbsm fetch <300 to 1e+04>
-1000 
-pbsm hru_area <1e-06 to 1e+09>
-1 
-pbsm Ht <0.001 to 100>
-0.1 
-pbsm inhibit_bs <0 to 1>
-0 
-pbsm inhibit_evap <0 to 1>
-0 
-pbsm inhibit_subl <0 to 1>
-0 
-pbsm N_S <1 to 500>
-320 
-Soil basin_area <1e-06 to 1e+09>
-3 
-Soil cov_type <0 to 2>
-1 
-Soil gw_init <0 to 5000>
-187 
-Soil gw_K <0 to 100>
-0 
-Soil gw_max <0 to 5000>
-375 
-Soil hru_area <1e-06 to 1e+09>
-1 
-Soil inhibit_evap <0 to 1>
-0 
-Soil lower_ssr_K <0 to 100>
-0 
-Soil rechr_ssr_K <0 to 100>
-0 
-Soil Sdinit <0 to 5000>
-0 
-Soil Sdmax <0 to 5000>
-0 
-Soil Sd_gw_K <0 to 100>
-0 
-Soil Sd_ssr_K <0 to 100>
-0 
-Soil soil_gw_K <0 to 100>
-0 
-Soil soil_moist_init <0 to 5000>
-187 
-Soil soil_moist_max <0 to 5000>
-375 
-Soil soil_rechr_init <0 to 250>
-30 
-Soil soil_rechr_max <0 to 350>
-60 
-Soil soil_ssr_runoff <0 to 1>
-1 
-Soil soil_withdrawal <1 to 4>
-3 
-3 
-Soil transp_limited <0 to 1>
-0 
 ######
 Initial_State
 ######
@@ -281,8 +46,8 @@ Final_State
 ######
 Display_Variable:
 ######
-Soil gw 1
-Greencrack infil 1
+Display Above 1
+Display Below 1
 ######
 Display_Observation:
 ######
