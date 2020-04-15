@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------
 
 //#include "CRHM_parse.h"
-#include "boost/spirit/error_handling/exceptions.hpp"
+#include <boost/spirit/include/classic_exceptions.hpp>
 //#include "CRHMmain.h"
 
 extern double xLimit;

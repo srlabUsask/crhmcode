@@ -13,17 +13,20 @@
 #include "Common.h"
 #include "ClassCRHM.h"
 #include "ClassModule.h"
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/symbols.hpp>
-#include <boost/spirit/utility.hpp>
-#include "boost/spirit/error_handling/exceptions.hpp"
+#include <boost/spirit/include/classic_core.hpp>
+//#include <boost/spirit/symbols.hpp>
+#include <boost/spirit/include/classic_symbols.hpp>
+//#include <boost/spirit/utility.hpp>
+#include <boost/spirit/include/classic_utility.hpp>
+//#include "boost/spirit/error_handling/exceptions.hpp"
+#include <boost/spirit/include/classic_exceptions.hpp>
 
 /*=============================================================================
 Spirit v1.6.2
 =============================================================================*/
 
 using namespace std;
-using namespace boost::spirit;
+using namespace BOOST_SPIRIT_CLASSIC_NS;
 
 template <typename T, typename result = bool>
 struct L_not : public unary_function<T, result> {
