@@ -1,0 +1,95 @@
+Description - to be added
+###### Version: CRHM_NEW 1.66  Creation: 3/17/2006 13:43
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 3
+######
+Macros:
+######
+'MyTest'
+'declvar, Step1, NHRU, "Step number", ()'
+'declvar, Step2, NHRU, "Step number", ()'
+'command'
+'var v var y'
+'if(STEP/FREQ==1) v=1 y = 11 else v=2 y = 12 endif'
+'Step1[hh] = v'
+'Step2[hh] = y'
+'end'
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1973 11 1
+######
+Modules:
+######
+MyTest Macro 09/14/05
+basin CRHM new 11/25/04
+global CRHM new 08/10/05
+obs CRHM new 05/03/05
+######
+Parameters:
+######
+basin basin_area
+3 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 1 1 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin hru_names
+'HRU' 'HRU2' 'HRU3' 
+basin RUN_ID
+1 
+global Time_Offset
+0 0 0 
+obs catchadjust
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+MyTest Step1 1
+MyTest Step2 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\CRHM\badlakeflow7374.prj
+ 
+()
+ 
+ 
+ 
+######

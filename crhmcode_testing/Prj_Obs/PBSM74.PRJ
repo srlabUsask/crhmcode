@@ -1,0 +1,80 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Observations:
+######
+Winter1974.obs
+######
+Modules:
+######
+basin CRHM basic 05/30/02
+global CRHM basic 02/21/02
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/01/02
+intcp CRHM basic 01/01/02
+pbsm CRHM basic 02/20/02
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Parameters:
+######
+basin basin_area
+11.39
+basin hru_area
+4.67 5.04 1.68
+basin hru_ASL
+0 0 0
+basin hru_elev
+637 637 637
+basin hru_GSL
+0 0 0
+basin hru_lat
+51.32 51.32 51.32
+global Time_Offset
+0 0 0
+obs catchadjust
+0 0 0
+obs tmax_allrain
+0 0 0
+obs tmax_allsnow
+0 0 0
+pbsm distrib
+1 1 1
+pbsm fetch
+1000 1000 1000
+pbsm Ht
+0.01 0.25 1
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+pbsm cumDrift 1 2
+pbsm cumSno 1
+pbsm cumSubl 1 2
+pbsm SWE 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+
+pbsm74.prj
+
+
+
+
+######

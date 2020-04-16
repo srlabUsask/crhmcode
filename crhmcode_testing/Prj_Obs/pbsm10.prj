@@ -1,0 +1,100 @@
+Description - to be added
+###### Version: CRHM 2.45  Creation: 07/08/08 13:54
+Dimensions:
+######
+nhru 10
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+basin CRHM 06/22/06
+obs CRHM 06/10/08
+intcp CRHM 11/15/06
+pbsm CRHM 06/03/08
+######
+Parameters:
+######
+basin basin_area <1E-6 to 1E9>
+10
+basin basin_name
+'CRHM_Basin_Model'
+basin hru_area <1E-6 to 1E9>
+1 1 1 1 1 1 1 1 1 1
+basin hru_ASL <0 to 360>
+0 0 0 0 0 0 0 0 0 0
+basin hru_elev <0 to 1E5>
+637 637 637 637 637 637 637 637 637 637
+basin hru_GSL <0 to 90>
+0 0 0 0 0 0 0 0 0 0
+basin hru_lat <-90 to 90>
+51.32 51.32 51.32 51.32 51.32 51.32 51.32 51.32 51.32 51.32
+basin hru_names
+'HRU' 'HRU2' 'HRU3' 'HRU3' 'HRU3' 'HRU3' 'HRU3' 'HRU3' 'HRU3' 'HRU3'
+basin RUN_ID <-1E8 to 1E8>
+1
+obs catchadjust <0 to 1>
+1 1 1 1 1 1 1 1 1 1
+obs HRU_OBS <1 to 100>
+1 1 1 1 1 1 1 1 1 1
+obs lapse_rate <0 to 2>
+0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75
+obs obs_elev <0 to 1E5>
+637 637 637 637 637 637 637 637 637 637
+obs ppt_daily_distrib <0 to 1>
+1 1 1 1 1 1 1 1 1 1
+obs tmax_allrain <-10 to 10>
+0 0 0 0 0 0 0 0 0 0
+obs tmax_allsnow <-10 to 10>
+0 0 0 0 0 0 0 0 0 0
+pbsm A_S <0 to 0.01>
+0.003 0.003 0.003 0.003 0.003 0.003 0.003 0.003 0.003 0.003
+pbsm distrib <-10 to 10>
+0 1 1 1 1 1 1 1 1 1
+pbsm fetch <300 to 1E4>
+1000 1000 1000 1000 1000 1000 1000 1000 1000 1000
+pbsm Ht <0.001 to 100>
+0.1 0.2 0.3 0.4 0.5 0.6 0.7
+0.8 0.9 1
+pbsm inhibit_bs <0 to 1>
+0 0 0 0 0 0 0 0 0 0
+pbsm inhibit_evap <0 to 1>
+0 0 0 0 0 0 0 0 0 0
+pbsm N_S <1 to 500>
+320 320 320 320 320 320 320 320 320 320
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+pbsm SWE 1 10 2 3 4 5 6 7 8 9
+######
+Display_Observation:
+######
+######
+Log_All
+######
+TChart:
+######
+TChart
+
+pbsm.prj
+
+(mm)
+
+
+
+######

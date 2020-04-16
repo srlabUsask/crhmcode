@@ -1,0 +1,57 @@
+Description - to be added
+###### Version NON DLL 4.02  Creation: 4/15/2020 16:22
+Dimensions:
+######
+nhru 3
+nlay 2
+nobs 1
+######
+Macros:
+######
+'Display displays Above  t >= 0,  Below < 0. 09/02/11'
+'declreadobs, t, NOBS, "temperature", (°C)'
+'declvar, Above, NHRU, "Temperature above zero", (°C)'
+'declvar, Below, NHRU, "Temperature below zero", (°C)'
+'command'
+'if(t[hh] >= 0.0)'
+'Above[hh] = t[hh]'
+'Below[hh] =  NO_DISPLAY'
+'else'
+'Above[hh] = NO_DISPLAY'
+'Below[hh] = t[hh]'
+'endif'
+'end'
+######
+Observations:
+######
+Badlake73_76.obs
+######
+Dates:
+######
+1974 10 1
+1975 6 1
+######
+Modules:
+######
+Display Macro 04/20/06
+######
+Parameters:
+###### 'basin' parameters always first
+######
+Initial_State
+######
+######
+Final_State
+######
+######
+Display_Variable:
+######
+Display Above 1
+Display Below 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+######

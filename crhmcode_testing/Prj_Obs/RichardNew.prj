@@ -1,0 +1,103 @@
+Description - to be added
+###### Version: NON-DLL 5.44  Creation: 6/1/2005 13:50
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Myobs'
+'declreadobs,ppt, NOBS,"daily precipitation", (mm/day)'
+'declobs,snow, NHRU, "interval precipitation", (mm/int)'
+'command'
+'snow[hh] =ppt[1]/FREQ'
+'end'
+'Change'
+'declgetvar,SimpleSnow, SWE'
+'declvar, Change, NHRU, "SWE change", (units)'
+'decllocal, last, NHRU, "Last SWE", (units)'
+'command'
+'Change[hh]=SWE[hh] - last[hh]'
+'last[hh] = SWE[hh]'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974@.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+Myobs Modules 04/12/05
+global CRHM new 05/31/05
+long CRHM new 05/31/05
+SimpleSnow CRHM new 06/01/05
+Change Modules 04/12/05
+######
+Parameters:
+######
+global Extra
+0 
+global hru_ASL
+0 
+global hru_elev
+637 
+global hru_GSL
+0 
+global hru_lat
+51.32 
+global Time_Offset
+0 
+SimpleSnow a1
+1.08E7 
+SimpleSnow a2
+7.2E5 
+SimpleSnow amax
+0.84 
+SimpleSnow amin
+0.5 
+SimpleSnow Kstorage
+1 
+SimpleSnow Lag
+0 
+SimpleSnow Pa
+84 
+SimpleSnow smin
+10 
+SimpleSnow Z0
+0.001 
+SimpleSnow Zref
+2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+SimpleSnow Melt 1
+SimpleSnow MeltClark 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2005
+ 
+C:\CRHM\Richard_mmsm.prj
+ 
+(kg/m2)
+ 
+ 
+ 
+######

@@ -1,0 +1,137 @@
+Description - to be added
+###### Version: NON-DLL 5.38  Creation: 2/21/2005 13:49
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Observations:
+######
+Winter1975.obs
+1975discharge.obs
+C:\Program Files\CRHM\Examples\D74.obs
+######
+Dates:
+######
+1974 10 1
+1975 6 1
+######
+Modules:
+######
+global CRHM basic 12/16/04
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/14/05
+intcp CRHM basic 01/01/02
+netall CRHM basic 12/06/04
+pbsm CRHM basic 05/12/04
+net_rn CRHM basic 12/03/04
+albedo CRHM basic 07/27/04
+evap CRHM basic 12/08/04
+ebsm CRHM basic 12/03/04
+Greencrack CRHM basic 02/18/05
+smbal CRHM basic 01/27/05
+route CRHM basic 02/09/05
+######
+Parameters:
+######
+basin basin_area
+11.39 
+basin hru_area
+4.67 5.04 1.68 
+basin hru_elev
+637 637 637 
+basin Ht
+0.01 0.35 1 
+basin inhibit_evap
+0 0 0 
+basin soil_moist_init
+375 375 375 
+basin soil_moist_max
+375 375 375 
+ebsm delay_melt
+0 0 0 
+ebsm nfactor
+0 0 0 
+ebsm tfactor
+0 0 0 
+evap evap_type
+1 1 1 
+evap Zref
+1.5 1.5 1.5 
+evap Zwind
+10 10 10 
+global hru_ASL
+0 0 0 
+global hru_GSL
+0 0 0 
+global hru_lat
+51.32 51.32 51.32 
+global Time_Offset
+0 0 0 
+Greencrack fallstat
+92 50 50 
+Greencrack Major
+5 5 5 
+Greencrack soiltype
+5 5 5 
+netall hru_alb
+0.1 0.17 0.17 
+net_rn F_Qg
+0.2 0.2 0.2 
+obs catchadjust
+1 1 1 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+pbsm distrib
+1 1 1 
+pbsm fetch
+1000 1000 1000 
+pbsm inhibit_bs
+0 0 0 
+route Kstorage
+0 0 1 
+route Lag
+0.5 0.5 2 
+route order
+1 2 3 
+route whereto
+3 3 0 
+smbal cov_type
+0 1 2 
+smbal soil2gw_max
+0 0 0 
+smbal soil_rechr_init
+55 30 30 
+smbal soil_rechr_max
+60 60 60 
+smbal soil_type
+2 2 2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+route basinflow_s 1
+Greencrack RainOnSnow 1
+######
+Display_Observation:
+######
+obs discharge 1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\Program Files\CRHM\Examples\badlakeflow7475.prj
+ 
+(m3/s)
+ 
+ 
+ 
+######

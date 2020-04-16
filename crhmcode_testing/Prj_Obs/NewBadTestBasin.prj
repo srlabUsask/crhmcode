@@ -1,0 +1,127 @@
+Description - to be added
+###### Version: NON-DLL 5.44  Creation: 6/9/2005 16:28
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 3
+######
+Macros:
+######
+'SicartLong'
+'declreadobs, t, NOBS, "temp", (C)'
+'declreadobs, ea, NOBS, "vapour pressure", (kPa)'
+'declreadobs, rh, NOBS, "relative humidity", (fraction)'
+'declparam, tau, NHRU, [0.75], 0.0, 1.0, "atmospheric transmittance", ()'
+'declobs,Qli, NHRU, "incoming long-wave", (W/m2)'
+'setpeer,hru_SunAct'
+'command'
+'Qli[hh] = 1.24*((ea[0]*10)/(t[0]+273.15))^(1/7)*(1 + 0.44*rh[0]/100 - 0.18*tau[hh])*5.67E-8*(t[0]+273.15)^4'
+'end'
+'MyStep'
+'declvar, Step, NHRU, "Step number", ()'
+'command'
+'if(STEP > 1) Step[hh] =1 endif'
+'Step[hh] = STEP %FREQ'
+'end'
+######
+Observations:
+######
+Winter1974@.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+MyStep Modules 04/12/05
+basin CRHM new 11/25/04
+global CRHM new 05/31/05
+obs CRHM new 05/03/05
+long CRHM new 06/01/05
+intcp CRHM new 01/01/02
+NO_pbsm CRHM new 12/06/04
+SnowPlus CRHM new 06/02/05
+######
+Parameters:
+######
+basin basin_area
+3 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 1 1 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin hru_names
+'HRU' 'HRU2' 'HRU3' 
+basin RUN_ID
+1 
+global Extra
+0 0 0 
+global Time_Offset
+0 0 0 
+NO_pbsm inhibit_evap
+0 0 0 
+obs catchadjust
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+SnowPlus a1
+1.08E7 1.08E7 1.08E7 
+SnowPlus a2
+7.2E5 7.2E5 7.2E5 
+SnowPlus amax
+0.84 0.84 0.84 
+SnowPlus amin
+0.5 0.5 0.5 
+SnowPlus Pa
+84 84 84 
+SnowPlus smin
+10 10 10 
+SnowPlus Z0
+0.001 0.001 0.001 
+SnowPlus Zref
+2 2 2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+SnowPlus snowmeltD 1
+MyStep Step 1
+NO_pbsm SWE 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\CRHM\badlakeflow7374.prj
+ 
+(mm)
+ 
+ 
+ 
+######

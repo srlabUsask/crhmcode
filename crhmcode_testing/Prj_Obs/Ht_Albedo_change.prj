@@ -1,0 +1,176 @@
+Description - to be added
+###### Version: CRHM_DLL 1.92  Creation: 12/04/06 15:17
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Ht_Change'
+'declparam, Ht, NHRU,[0.1], 0.01, 100.0, description, (m)'
+'declparam, Ht_change, NHRU,[0.1], 0.01, 1.0, description, (m)'
+'declparam, Ht_min, NHRU,[0.1], 0.01, 3.0, description, (m)'
+'declparam, Ht_max, NHRU,[0.1], 0.01, 3.0, description, (m)'
+'declparam, Ht_Julian, NHRU,[195], 1, 366, description, ()'
+'declvar, Ht_Var, NHRU, "vegetation height", (m)'
+'declvar, Ht_Start, NHRU, "vegetation height", ()'
+'command'
+'  if(STEP == 1)'
+'    Ht[hh] = Ht_min[hh]'
+'  endif'
+' '
+'  if(JULIAN >= Ht_Julian)'
+'    Ht_Start[hh] = JULIAN'
+' '
+'    if(LASTINT)'
+'      Ht[hh] =  Ht[hh] + Ht_change[hh]'
+'    endif'
+' '
+'    if( Ht[hh] > Ht_max[hh])'
+'        Ht[hh] = Ht_max[hh]'
+'    endif'
+' '
+'  endif'
+' '
+'  Ht_Var[hh] = Ht[hh]'
+'end'
+'Albedo_Change'
+'declparam, Albedo_change, NHRU,[0.001], 0.0, 1.0, description, ()'
+'declparam, Albedo_min, NHRU,[0.1], 0.01, 1.0, description, ()'
+'declparam, Albedo_max, NHRU,[0.1], 0.01, 1.0, description, ()'
+'declparam, Albedo_Julian, NHRU,[195], 1, 366, description, ()'
+'declvar, Albedo, NHRU, "vegetation Albedo", ()'
+'declvar, Albedo_Start, NHRU, "vegetation Albedo", ()'
+'command'
+'  if(STEP == 1)'
+'    Albedo[hh] =Albedo_min[hh]'
+'  endif'
+''
+'  if(JULIAN >= Albedo_Julian)'
+'    Albedo_Start[hh] = JULIAN'
+''
+'    if(LASTINT)'
+'      Albedo[hh] =  Albedo[hh] + Albedo_change[hh]'
+'    endif'
+''
+'    if(Albedo[hh] > Albedo_max[hh])'
+'        Albedo[hh] = Albedo_max[hh]'
+'    endif'
+'  endif'
+'end'
+######
+Observations:
+######
+C:\CRHM\Badlake73_76.obs
+C:\CRHM\Netall_Qg_Qn.obs
+######
+Dates:
+######
+1974 10 1
+1975 6 1
+######
+Modules:
+######
+Albedo_Change Macro 04/20/06
+Ht_Change Macro 04/20/06
+basin CRHM 06/22/06
+global CRHM 08/28/06
+obs CRHM 05/25/06
+calcsun CRHM 06/09/05
+netall CRHM 11/22/06
+evap CRHM 10/31/06
+######
+Parameters:
+######
+Albedo_Change Albedo_change
+0.001 0 0 
+Albedo_Change Albedo_Julian
+195 0 0 
+Albedo_Change Albedo_max
+0.1 0 0 
+Albedo_Change Albedo_min
+0.1 0 0 
+basin basin_area
+3 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 1 1 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin hru_names
+'HRU' 'HRU2' 'HRU3' 
+basin Ht
+0.1 0.1 0.1 
+basin RUN_ID
+1 
+evap evap_type
+0 1 2 
+evap F_Qg
+0.2 0.2 0.2 
+evap GrangerRatio
+0 0 0 
+evap inhibit_evap
+0 0 0 
+evap rs
+0.000579 0.000579 0.000579 
+evap Zref
+2 2 2 
+evap Zwind
+10 10 10 
+global Time_Offset
+0 0 0 
+Ht_Change Ht_change
+0.1 0.1 0.1 
+Ht_Change Ht_Julian
+195 195 195 
+Ht_Change Ht_max
+0.1 0.1 0.1 
+Ht_Change Ht_min
+0.1 0.1 0.1 
+obs catchadjust
+1 1 1 
+obs HRU_OBS
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+evap hru_cum_evap 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+group1.prj
+ 
+(mm)
+ 
+ 
+ 
+######

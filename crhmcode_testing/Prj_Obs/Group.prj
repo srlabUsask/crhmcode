@@ -1,0 +1,155 @@
+Description - to be added
+###### Version: CRHM_DLL 1.92  Creation: 12/04/06 15:17
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'MyGroup'
+'  declgroup'
+'    obs'
+'    calcsun'
+'    intcp'
+'    pbsm'
+'    albedo'
+'    netall'
+'    ebsm'
+'    evap'
+'    crack'
+'    smbal'
+'    route'
+'command'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+global CRHM 08/28/06
+MyGroup Macro 04/20/06
+######
+Parameters:
+######
+basin hru_elev
+637 637 637 
+global hru_ASL
+0 0 0 
+global hru_GSL
+0 0 0 
+global hru_lat
+51.32 51.32 51.32 
+global Time_Offset
+0 0 0 
+MyGroup Albedo_bare
+0.17 0.17 0.17 
+MyGroup basin_area
+1 
+MyGroup catchadjust
+1 1 1 
+MyGroup cov_type
+3 3 3 
+MyGroup delay_melt
+0 0 0 
+MyGroup distrib
+1 1 1 
+MyGroup evap_type
+0 0 0 
+MyGroup fallstat
+50 50 50 
+MyGroup fetch
+1000 1000 1000 
+MyGroup F_Qg
+0.2 0.2 0.2 
+MyGroup GrangerRatio
+0 0 0 
+MyGroup hru_area
+1 1 1 
+MyGroup hru_group
+1 0 0 
+MyGroup HRU_OBS
+1 1 1 
+MyGroup Ht
+0.1 0.2 1 
+MyGroup inhibit_bs
+0 0 0 
+MyGroup inhibit_evap
+0 0 0 
+MyGroup Kstorage
+0 0 0 
+MyGroup Lag
+0 0 0 
+MyGroup lapse_rate
+0.75 0.75 0.75 
+MyGroup Major
+5 5 5 
+MyGroup nfactor
+0 0 0 
+MyGroup obs_elev
+637 637 637 
+MyGroup order
+1 1 1 
+MyGroup PriorInfiltration
+1 1 1 
+MyGroup rs
+0.000579 0.000579 0.000579 
+MyGroup soil2gw_max
+0 0 0 
+MyGroup soil_moist_init
+187 187 187 
+MyGroup soil_moist_max
+375 375 375 
+MyGroup soil_rechr_init
+30 30 30 
+MyGroup soil_rechr_max
+60 60 60 
+MyGroup soil_type
+2 2 2 
+MyGroup tfactor
+0 0 0 
+MyGroup tmax_allrain
+0 0 0 
+MyGroup tmax_allsnow
+0 0 0 
+MyGroup transp_limited
+0 0 0 
+MyGroup whereto
+0 0 0 
+MyGroup Zref
+1.5 1.5 1.5 
+MyGroup Zwind
+10 10 10 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+MyGroup SWE@A 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+ 
+(mm)
+ 
+ 
+ 
+######

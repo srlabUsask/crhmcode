@@ -1,0 +1,41 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\Crhm\simulationX.obs
+######
+Modules:
+######
+######
+Dates:
+######
+2001 1 1
+2001 1 5
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+
+######
+Display_Observation:
+######
+obs P 1 _obs
+obs P1 1 _obs
+obs Q 1 _obs
+obs Q1 1 _obs
+obs R 1 _obs
+obs R1 1 _obs
+obs S 1 _obs
+obs S1 1 _obs
+######

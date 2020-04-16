@@ -1,0 +1,47 @@
+Description - to be added
+###### Version: DLL 1.09  Creation: 1/12/2004 10:16
+Dimensions:
+######
+nhru 1
+nlay 4
+nobs 6
+######
+Observations:
+######
+TSSM_2002.obs
+C:\CRHM\GB402_TB.obs
+######
+Dates:
+######
+2002 4 27
+2002 8 29
+######
+Modules:
+######
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+obs p 1 _obs
+obs sm -1 _obs -2_obs -3_obs -4_obs -5_obs -6_obs
+obs t 1 _obs
+obs tg 1 _obs 2_obs 3_obs 4_obs 5_obs 6_obs
+obs ts 1 _obs
+######
+TChart:
+######
+ 
+(m)
+ 
+
+ 
+ 
+######

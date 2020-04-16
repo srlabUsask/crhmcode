@@ -1,0 +1,83 @@
+Description - to be added
+###### Version: CRHM_NEW 1.66  Creation: 3/21/2006 09:18
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Macro1'
+'declreadobs, t, NOBS, description, (units)'
+'declvar, OutVar, NHRU, description, (units)'
+'command'
+'OutVar[hh]=t[1]'
+'end'
+'XMacroX'
+'declvar, Y, NHRU, description, (units)'
+'declgetvar, Macro1, OutVar'
+'command'
+' Y[hh] = OutVar[hh]'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1973 12 31
+######
+Modules:
+######
+obs CRHM new 05/03/05
+Macro1 Macro 09/14/05
+XMacroX Macro 09/14/05
+######
+Parameters:
+######
+obs basin_area
+1 
+obs catchadjust
+1 
+obs hru_area
+1 
+obs hru_elev
+637 
+obs lapse_rate
+0.75 
+obs obs_elev
+637 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Macro1 OutVar 1
+XMacroX Y 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+junk.prj
+ 
+(units)
+ 
+ 
+ 
+######

@@ -1,0 +1,43 @@
+Description - to be added
+###### Version: DLL 1.09  Creation: 1/13/2004 11:14
+Dimensions:
+######
+nhru 1
+nlay 4
+nobs 6
+######
+Observations:
+######
+C:\CRHM\SM_2001.obs
+######
+Dates:
+######
+2001 7 20
+2001 9 9
+######
+Modules:
+######
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+obs sm 1 _obs 2_obs 3_obs 4_obs 5_obs 6_obs
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\TSSM_2001.prj
+ 
+
+ 
+ 
+######

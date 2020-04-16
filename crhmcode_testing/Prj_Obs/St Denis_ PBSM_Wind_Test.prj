@@ -1,0 +1,130 @@
+Description - to be added
+###### Version: CRHM_DLL 1.8  Creation: 09/21/06 15:41
+Dimensions:
+######
+nhru 20
+nlay 1
+nobs 1
+######
+AKAs:
+######
+VARG pbsm hru_u hru_Uadjust wind_adjust
+######
+Macros:
+######
+######
+Observations:
+######
+c:/junk/St Denis MetData2006 New.obs
+######
+Dates:
+######
+2005 10 31
+2006 5 10
+######
+DLLs:
+######
+c:/junk/NEWMODULES_WIND.DLL
+######
+Modules:
+######
+basin CRHM 06/22/06
+obs CRHM 05/25/06
+intcp CRHM 07/08/05
+wind_adjust c:/junk/NEWMODULES_WIND.DLL 09/18/06
+pbsm CRHM 09/19/06
+######
+Parameters:
+######
+basin basin_area
+4 
+basin basin_name
+'St Denis NWA' 
+basin hru_area
+0.1 0.1 0.1 0.1 0.8 0.1 0.1 0.1 0.1 0.1 
+0.1 0.1 0.1 0.6 0.1 0.1 0.1 0.1 0.7 0.3 
+basin hru_ASL
+180 180 0 0 0 0 0 0 0 180 
+180 0 0 0 0 0 0 0 0 0 
+basin hru_elev
+550 548 550 548 555 565 563 540 542 550 
+548 550 548 555 565 563 540 542 552 552 
+basin hru_GSL
+15 7 15 7 0 15 7 15 7 15 
+7 15 7 0 15 7 15 7 0 0 
+basin hru_lat
+52.2 52.2 52.2 52.2 52.2 52.2 52.2 52.2 52.2 52.2 
+52.2 52.2 52.2 52.2 52.2 52.2 52.2 52.2 52.2 52.2 
+basin hru_names
+'stubble_south steep slope' 'stubble_south gentle slope' 'stubble_north steep slope' 'stubble_north gentle slope' 'stubble_level' 'stubble_hilltop_with steep slope' 'stubble_hilltop with gentle slope' 'stubble_valley with steep slope' 'stubble_valley with gentle slope' 'grass_south steep slope' 
+'grass_south gentle slope' 'grass_north steep slope' 'grass_north gentle slope' 'grass_level' 'grass_hilltop with steep slope' 'grass_hilltop with gentle slope' 'grass_valley with steep slope' 'grass_valley with gentle slope' 'slough_short tree' 'slough_tall tree' 
+basin obs_elev
+554 554 554 554 554 554 554 554 554 554 
+554 554 554 554 554 554 554 554 554 554 
+basin RUN_ID
+1 
+obs catchadjust
+1 1 1 1 1 1 1 1 1 1 
+1 1 1 1 1 1 1 1 1 0 
+obs HRU_OBS
+1 1 1 1 1 1 1 1 1 1 
+1 1 1 1 1 1 1 1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 
+0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 
+obs tmax_allrain
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+obs tmax_allsnow
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+pbsm distrib
+1 1 1 1 1 1 1 1 1 0.5 
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.1 0.1 
+pbsm fetch
+1000 1000 1000 1000 1000 1000 1000 1000 1000 1500 
+1500 1500 1500 1500 1500 1500 1500 1500 2000 2000 
+pbsm Ht
+0.2 0.2 0.2 0.2 3 0.25 0.25 0.25 0.25 0.65 
+0.65 0.65 0.65 0.7 0.7 0.7 0.7 0.7 2.5 7 
+pbsm inhibit_bs
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+pbsm inhibit_evap
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+wind_adjust A
+3.5 3.5 3.5 3.5 0 3 3 3 3 3.5 
+3.5 3.5 3.5 0 3 3 3 3 3 3 
+wind_adjust B
+1.55 1.55 1.55 1.55 0 2 2 2 2 1.55 
+1.55 1.55 1.55 0 2 2 2 2 2 2 
+wind_adjust L
+40 100 40 100 40 40 60 40 60 40 
+60 40 60 40 40 60 40 60 40 40 
+wind_adjust Zwind
+2 2 2 2 2 2 2 2 2 2 
+2 2 2 2 2 2 2 2 2 2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+obs cumhru_snow 1
+wind_adjust hru_Uchange 1 10 11 12 13 14 15 16 17 18 19 2 20 3 4 5 6 7 8 9
+pbsm SWE 1 10 11 12 13 14 15 16 17 18 19 2 20 3 4 5 6 7 8 9
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+ 
+(mm)
+ 
+ 
+ 
+######

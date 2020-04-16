@@ -1,0 +1,131 @@
+Description - to be added
+###### Version: DLL 1.10  Creation: 2/2/2004 14:12
+Dimensions:
+######
+nhru 8
+nlay 3
+nobs 1
+######
+Observations:
+######
+GB403_TB_NO_t.obs
+Qsim_t_2003.obs
+######
+Dates:
+######
+2003 5 19
+2003 6 30
+######
+DLLs:
+######
+QuintonDLL.dll
+######
+Modules:
+######
+Qmelt QuintonDLL.dll 04/10/03
+Qdrift QuintonDLL.dll 02/28/03
+Quinton QuintonDLL.dll 10/19/03
+######
+Parameters:
+######
+basin catchadjust
+1 1 1 1 1 1 1 1 
+basin DrainTo
+2 3 4 5 6 7 8 0 
+basin length
+27 14 14 14 14 14 14 14 
+basin Type
+1 2 2 2 2 2 2 2 
+Qdrift InitSWE
+100 0 0 0 0 0 0 0 
+Qdrift meltLag
+0 0 0 0 0 0 0 0 
+Qdrift meltstorage
+0 0 0 0 0 0 0 0 
+Qmelt TIa0Mn
+0 0 0 0 0 0 0 0 
+Qmelt TIa1Mn
+0.8844 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Qmelt TIs0Mn
+0 0 0 0 0 0 0 0 
+Qmelt TIs1Mn
+0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Quinton a
+25 25 25 25 25 25 25 25 
+15 15 15 15 15 15 15 15 
+15 15 15 15 15 15 15 15 
+Quinton d
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+Quinton Drained
+0 0 0 0 0 0 0 0 
+Quinton flowLag
+0 0 0 0 0 0 0 0 
+Quinton flowstorage
+0 0 0 0 0 0 0 0 
+Quinton FrozenTo
+0 0 0 0 0 0 0 0 
+Quinton k_range
+0 0 0 0 0 0 0 0 
+Quinton n
+2 2 2 2 2 2 2 2 
+1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 
+1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 
+Quinton Pors
+0.96 
+0.9 
+0.87 
+0.43 
+0.43 
+Quinton Residual
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 
+0.9 0.8 0.8 0.8 0.8 0.8 0.8 0.8 
+Quinton runoffLag
+0 0 0 0 0 0 0 0 
+Quinton runoffstorage
+0 0 0 0 0 0 0 0 
+Quinton slope
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+Quinton soil_type
+0 0 0 0 0 0 0 0 
+2 1 1 1 1 1 1 1 
+2 2 2 2 2 2 2 2 
+Quinton tinit
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Quinton capillary 2,1
+Quinton d_surface 2
+Quinton dmelt 2
+Qdrift driftmelt 1
+Quinton flow 2
+Quinton layerwater 2,1
+Quinton runoff 2
+Qdrift SWE 1
+Quinton tension 2,1
+Quinton theta 2,1
+######
+Display_Observation:
+######
+obs p -1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\QUINTONDRIFT2003_8.ovly.PRJ
+ 
+(m)
+ 
+ 
+######

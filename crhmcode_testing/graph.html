@@ -1,0 +1,34 @@
+
+<html>
+	&nbsp;
+	<script>
+		function line (ax, ay, bx, by)
+		{
+			if (ay == by)
+			{
+				var length = bx - ax;
+				document.body.innerHTML += "<div style='position:absolute;top:"+(ay)+"px;left:"+(ax)+"px;width:"+length+"px;border-top: 1px solid #000 !important;'></div>";
+			}
+			if (ax == bx)
+			{
+				var length = by - ay;
+				document.body.innerHTML += "<div style='position:absolute;top:"+(ay)+"px;left:"+(ax)+"px;background-color:black;height:"+length+"px;width:1px;'></div>";
+			}
+		}
+		function rectangle (ax, ay, bx, by)
+		{
+			line (ax, ay, bx, ay);
+			line (ax, ay, ax, by);
+			line (ax, by, bx, by);
+			line (bx, ay, bx, by);
+		}
+		function drawString (str, ax, ay)
+		{
+			document.body.innerHTML += "<div style='position:absolute;font-size:10px;top:"+(ay)+"px;left:"+(ax)+"px;'>"+str+"</div>";
+		}
+rectangle (400,50,450,95);
+drawString ('Display',400,100);
+line (450, 65,850,65);
+drawString ('Above',470,53);
+line (450, 80,850,80);
+drawString ('Below',470,68);</script></html>

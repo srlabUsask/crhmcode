@@ -1,0 +1,215 @@
+Description - to be added
+###### Version: CRHM 2.02  Creation: 07/31/07 15:40
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Snobal_Input'
+'    declgetvar, *, Qdflat,  NHRU, "short-wave", "(W/m^2)"'
+'    declgetvar, *, Long,  NHRU, "incoming longwave", "(W/m^2)"'
+'    declgetvar, *, hru_t,  NHRU, "air temperature", "(°C)"'
+'    declgetvar, *,Albedo,  NHRU, "albedo", "()"'
+'    declvar, hru_S_n,  NHRU, "net solar radiation", "(W/m^2)"'
+'    declvar, hru_I_lw, NHRU, "incoming longwave (thermal) rad ", "(W/m^2)"'
+'    declvar, hru_T_g,  NHRU, "soil temp at depth z_g", "(°C)"'
+'    declvar, hru_rho_snow, NHRU, "density of snowfall", "(kg/m^2)"'
+'    declvar, hru_T_pp, NHRU, "precip temp", "(°C)"'
+'    declreadobs, T_g_Obs, NOBS, "soil temp at depth z_g", "(C)"'
+'command'
+'  hru_S_n[hh] = Qdflat[hh]*(1.0 - Albedo[hh])'
+'  hru_I_lw[hh] = Long[hh]'
+'  hru_T_g[hh] = T_g_Obs[hh]'
+'  hru_rho_snow[hh] =100'
+'  hru_T_pp[hh] = hru_t[hh]'
+'end'
+'GroupRichard'
+'  declgroup'
+'    global'
+'    obs'
+'    intcp'
+'    long'
+'    Snobal_Input'
+'    pbsmSnobal'
+'    albedo_Richard'
+'    Snobal'
+'command'
+'end'
+'GroupBaker'
+'  declgroup'
+'    global'
+'    obs'
+'    intcp'
+'    long'
+'    Snobal_Input'
+'    pbsmSnobal'
+'    albedo_Baker'
+'    Snobal'
+'command'
+'end'
+'GroupSnobal'
+'  declgroup'
+'    global'
+'    obs'
+'    intcp'
+'    long'
+'    Snobal_Input'
+'    pbsmSnobal'
+'    albedo_Snobal'
+'    Snobal'
+'command'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+C:\CRHM\Bad1974_Tg.obs
+######
+Dates:
+######
+1973 10 1
+1974 5 1
+######
+Modules:
+######
+global CRHM 07/12/07
+obs CRHM 06/06/07
+intcp CRHM 11/15/06
+long CRHM 07/12/05
+Snobal_Input Macro 04/20/06
+pbsmSnobal CRHM 04/03/07
+albedo CRHM 07/30/07
+Snobal CRHM 04/10/07
+GroupRichard Macro 04/20/06
+GroupBaker Macro 04/20/06
+GroupSnobal Macro 04/20/06
+######
+Parameters:
+######
+albedo Albedo_bare
+0.17 0.17 0.17 
+albedo Albedo_snow
+0.85 0.85 0.85 
+basin Albedo_Bare
+0.17 0.17 0.17 
+basin Albedo_Snow
+0.85 0.85 0.85 
+basin basin_area
+3 
+basin catchadjust
+1 1 1 
+basin distrib
+0 1 1 
+basin fetch
+1000 1000 1000 
+basin hru_area
+1 1 1 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin HRU_OBS
+1 1 1 
+basin Ht
+0.1 0.25 1 
+basin inhibit_bs
+0 0 0 
+basin inhibit_evap
+0 0 0 
+basin lapse_rate
+0.75 0.75 0.75 
+basin max_h2o_vol
+0.01 0.01 0.01 
+basin max_z_s_0
+0.25 0.25 0.25 
+basin obs_elev
+637 637 637 
+basin relative_hts
+0 0 0 
+basin Time_Offset
+0 0 0 
+basin tmax_allrain
+0 0 0 
+basin tmax_allsnow
+0 0 0 
+basin z_0
+0.001 0.001 0.001 
+basin z_g
+0.1 0.1 0.1 
+basin z_T
+1 1 1 
+basin z_u
+1 1 1 
+GroupBaker hru_group
+2 0 0 
+GroupBaker refresh
+1 1 1 
+GroupRichard a1
+1.08E7 1.08E7 1.08E7 
+GroupRichard a2
+7.2E5 7.2E5 7.2E5 
+GroupRichard amax
+0.84 0.84 0.84 
+GroupRichard amin
+0.5 0.5 0.5 
+GroupRichard hru_group
+1 0 0 
+GroupRichard smin
+10 10 10 
+GroupSnobal Albedo_Snow_max
+0.88 0.88 0.88 
+GroupSnobal Albedo_Snow_min
+0.5 0.5 0.5 
+GroupSnobal hru_group
+3 0 0 
+pbsmSnobal Ht
+0.01 0.1 1 
+Snobal max_z_s_0
+0.1 0.1 0.1 
+Snobal z_g
+0.2 0.2 0.2 
+Snobal z_T
+1.5 1.5 1.5 
+Snobal z_u
+10 10 10 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+albedo Albedo 1
+GroupRichard Albedo@A 1
+GroupBaker Albedo@B 1
+GroupSnobal Albedo@C 1
+Snobal h2o 1
+Snobal h2o_total 1
+obs hru_p 1
+Snobal melt_int 1
+Snobal SWE 1 2 3
+Snobal z_s 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+ 
+()
+ 
+ 
+ 
+######

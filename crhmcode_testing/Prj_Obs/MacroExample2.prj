@@ -1,0 +1,125 @@
+Description - to be added
+###### Version: CRHM 2.35  Creation: 02/06/08 15:18
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Evaporation'
+'declparam, A, NHRU, 0.023, 0.0, 1.0, description, (mm/d)'
+'declparam, B, NHRU,17.8, 0.0, 100.0, description, (°C)'
+'declparam, Zref, NHRU,1.5, 0.001, 100.0, Zref, (m)'
+'declparam, Zwind, NHRU,10,  0.001, 100.0, Zwinf, (m)'
+'declparam, Z0, NHRU,0.001,  0.001, 100.0, Zo, (m)'
+'declvar, EvapAlg, NHRU, evaporation_algorithm, (MJ/(m^2*d))'
+'declvar,cumAlg, NHRU, cum_evaporation_algorithm, (mm)'
+'declvar,Ra, NHRU,Ra, (s/m)'
+'declgetvar, obs, hru_tmean, (°C)'
+'declgetvar, obs, hru_tmin, (°C)'
+'declgetvar, obs, hru_tmax, (°C)'
+'declgetvar, obs, hru_u, (m/s)'
+'command'
+'var U U=max(hru_u[0],  0.2)'
+'Ra[hh] = log(Zref[hh]/Z0[hh])* log(Zwind[hh]/Z0[hh])/0.4^2*U'
+'EvapAlg[hh] =-A[hh]*( hru_tmean[1] - B[hh])*Ra[hh]*( hru_tmax[1] - hru_tmin[1])^0.5*1/(245*2.501)'
+'cumAlg[hh] =   cumAlg[hh]  +   EvapAlg[hh]/FREQ'
+'end'
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1974 5 1
+1974 6 1
+######
+Modules:
+######
+albedo_param CRHM 11/22/05
+global CRHM 02/04/08
+obs CRHM 06/06/07
+calcsun CRHM 02/05/08
+Evaporation Macro 04/20/06
+netall CRHM 11/22/06
+evap CRHM 02/05/08
+######
+Parameters:
+######
+albedo_param Albedo_Value
+0.17 
+basin basin_area
+1 
+basin hru_area
+1 
+basin hru_elev
+637 
+evap evap_type
+0 
+evap F_Qg
+0.2 
+evap Ht
+0.1 
+evap inhibit_evap
+0 
+Evaporation A
+0.023 
+Evaporation B
+17.8 
+Evaporation Z0
+0.001 
+Evaporation Zref
+1.5 
+Evaporation Zwind
+10 
+global hru_ASL
+0 
+global hru_GSL
+0 
+global hru_lat
+51.32 
+global Time_Offset
+0 
+obs catchadjust
+1 
+obs HRU_OBS
+1 
+obs lapse_rate
+0.75 
+obs obs_elev
+637 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Evaporation cumAlg 1
+Evaporation EvapAlg 1
+evap hru_cum_evap 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2005
+ 
+MacroExample2.prj
+ 
+(mm)
+ 
+ 
+ 
+######

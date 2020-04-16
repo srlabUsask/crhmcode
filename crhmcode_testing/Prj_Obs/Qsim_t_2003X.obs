@@ -1,0 +1,10 @@
+Simulation test (01/23/04)
+$$ comment
+$Sim(06/10/03, 06/21/2003, 0.5) simulation
+$Sine sine(1.0 0.0 06/10/03 06/20/03)
+$t missing0(Sine, 0, 2)
+$Pulse pulse(06/10/03, 06/15/2003)
+$t2 mulO(Sine, Pulse)
+$t3 mulO(Sine, Sine)
+$t mul(t, 40)
+############################################

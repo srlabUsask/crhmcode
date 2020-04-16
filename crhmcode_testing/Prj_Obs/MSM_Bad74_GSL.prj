@@ -1,0 +1,122 @@
+Description - to be added
+###### Version: CRHM_NEW 1.49  Creation: 9/6/2005 09:32
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Slope_Qsi'
+'declobs, Qsi#, NHRU, "Created short-wave", (W/m2)'
+'declreadobs, Qsi, NOBS, "measured short-wave", (W/m2)'
+'declgetvar, global, Qdro'
+'declgetvar, global, Qdfo'
+'declgetvar, global, Qdflat'
+'declvar, Short, NHRU, "short-wave", (W/m2)'
+'declvar, ShortC, NHRU, "corrected short-wave for slope", (W/m2)'
+'setpeer, Qdro'
+'command'
+'Short[hh] = Qdro[hh] + Qdfo[hh]'
+'if(Qdflat[hh] > 1.0)'
+'  ShortC[hh] = Qsi[hh]/Qdflat[hh]*Short[hh]'
+'  Qsi#[hh] = ShortC[hh]'
+'else'
+'  Qsi#[hh] = 0'
+'endif'
+'end'
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+global CRHM new 08/10/05
+obs CRHM new 05/03/05
+long CRHM new 07/12/05
+Slope_Qsi Modules 04/12/05
+intcp CRHM new 07/08/05
+NO_pbsm CRHM new 12/06/04
+MSM CRHM new 07/11/05
+######
+Parameters:
+######
+basin basin_area
+11.39 
+basin hru_area
+4.67 5.04 1.68 
+basin hru_elev
+637 637 637 
+global hru_ASL
+0 0 0 
+global hru_GSL
+0 -20 20 
+global hru_lat
+45 51.32 51.32 
+global Time_Offset
+0 0 0 
+MSM a1
+1.08E7 1.08E7 1.08E7 
+MSM a2
+7.2E5 7.2E5 7.2E5 
+MSM amax
+0.84 0.84 0.84 
+MSM amin
+0.5 0.5 0.5 
+MSM hru_elev
+1380 1380 1380 
+MSM smin
+10 10 10 
+MSM Z0snow
+0.01 0.01 0.01 
+MSM Zref
+2 2 2 
+NO_pbsm inhibit_evap
+0 0 0 
+obs catchadjust
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+NO_pbsm cumSno 1
+MSM cumsnowmelt 1 2 3
+NO_pbsm SWE 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+Log_Last
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\CRHM\badlakeflow7374.prj
+ 
+(mm)
+ 
+ 
+ 
+######

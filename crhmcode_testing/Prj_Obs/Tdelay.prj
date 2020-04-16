@@ -1,0 +1,39 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\Crhm\pulse.obs
+######
+Modules:
+######
+delay Quinton model 06/22/02
+######
+Dates:
+######
+2001 1 1
+2001 1 5
+######
+Parameters:
+######
+delay Kstorage
+0.5 
+delay Lag
+6 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+delay Tdelay 1
+######
+Display_Observation:
+######
+obs t 1 _obs
+######

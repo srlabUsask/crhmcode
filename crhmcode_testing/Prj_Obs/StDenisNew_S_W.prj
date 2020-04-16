@@ -1,0 +1,79 @@
+Description - to be added
+###### Version: CRHM_NEW 1.82  Creation: 10/05/06 15:05
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\Robs StDenis_Comp of excel and CRHM\StDenis_Rob\Obs\StDenis.obs
+C:\CRHM\SW_Evap.obs
+######
+Dates:
+######
+2006 5 20
+2006 5 31
+######
+Modules:
+######
+obs CRHM 05/25/06
+ShuttleWallace CRHM 10/05/06
+######
+Parameters:
+######
+basin basin_area
+1 
+basin hru_area
+1 
+basin hru_elev
+637 
+obs catchadjust
+1 
+obs HRU_OBS
+1 
+obs lapse_rate
+0.75 
+obs obs_elev
+637 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+ShuttleWallace Cr
+0.5 
+ShuttleWallace Ht
+0.1 
+ShuttleWallace inhibit_evap
+0 
+ShuttleWallace LAI
+0.2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+ShuttleWallace hru_cum_evap 1
+ShuttleWallace hru_evapD 1
+######
+Display_Observation:
+######
+obs hru_cum_evap(1) 1 _obs
+obs hru_evapD(1) 1 _obs
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\StDenisNewDaily.prj
+ 
+
+ 
+ 
+ 
+######

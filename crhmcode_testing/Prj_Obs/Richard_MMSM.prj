@@ -1,0 +1,132 @@
+Description - to be added
+###### Version: NON-DLL 5.44  Creation: 5/31/2005 10:31
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 3
+######
+Macros:
+######
+######
+Observations:
+######
+Winter1974@.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+basin CRHM new 11/25/04
+global CRHM new 05/03/05
+long CRHM new 05/18/05
+obs CRHM new 05/03/05
+calcsun CRHM new 05/03/05
+SimpleSnow CRHM new 05/31/05
+intcp CRHM new 01/01/02
+NO_pbsm CRHM new 12/06/04
+albedo CRHM new 05/11/05
+NeedleLeaf CRHM new 05/27/05
+netall CRHM new 05/11/05
+ebsm CRHM new 05/11/05
+######
+Parameters:
+######
+basin Albedo
+0.17 0.17 0.17 
+basin basin_area
+1 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 1 1 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin hru_names
+'HRU' 'HRU2' 'HRU3' 
+basin RUN_ID
+1 
+basin Z0
+0.001 0.001 0.001 
+ebsm delay_melt
+0 0 0 
+ebsm nfactor
+0 0 0 
+ebsm tfactor
+2 2 2 
+global Time_Offset
+0 0 0 
+long tau
+0.75 0.75 0.75 
+NeedleLeaf Albedo
+1 0 0 
+NeedleLeaf Ht
+0.1 0.1 0.1 
+NeedleLeaf LAI
+2.2 2.2 2.2 
+NeedleLeaf Vf
+0.5 0.5 0.5 
+NeedleLeaf Zref
+1.5 1.5 1.5 
+NeedleLeaf Zwind
+10 10 10 
+NO_pbsm inhibit_evap
+0 0 0 
+obs catchadjust
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+SimpleSnow a1
+1.08E7 1.08E7 1.08E7 
+SimpleSnow a2
+7.2E5 7.2E5 7.2E5 
+SimpleSnow amax
+0.84 0.84 0.84 
+SimpleSnow amin
+0.5 0.5 0.5 
+SimpleSnow Ps
+84 84 84 
+SimpleSnow smin
+10 10 10 
+SimpleSnow Zref
+2 2 2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2005
+ 
+C:\CRHM\Richard_mmsm.prj
+ 
+()
+ 
+ 
+ 
+######

@@ -1,0 +1,75 @@
+Description - to be added
+###### Version: DLL 1.37  Creation: 12/22/2004 13:17
+Dimensions:
+######
+nhru 2
+nlay 1
+nobs 1
+######
+Observations:
+######
+GB400_TB.obs
+C:\CRHM\2000Qsi.obs
+######
+Dates:
+######
+2000 6 6
+2000 6 8
+######
+DLLs:
+######
+QuintonDLL.dll
+######
+Modules:
+######
+global2 CRHM basic 12/06/04
+QmeltX QuintonDLL.dll 06/03/03
+######
+Parameters:
+######
+global2 hru_ASL
+0 0 
+global2 hru_elev
+637 637 
+global2 hru_GSL
+0 -30 
+global2 hru_lat
+60.52 60.52 
+global2 Time_Offset
+2 2 
+QmeltX TIa0Mn
+0 0 
+QmeltX TIa1Mn
+0 0 
+QmeltX TIs0Mn
+0 0 
+QmeltX TIs1Mn
+0 0 
+QmeltX TShort
+0.2 0.2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+global2 Qdro 1 2
+QmeltX QsiAdj 1 2
+######
+Display_Observation:
+######
+obs Qsi 1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\QuintonDrift2000_8_ovly_Radiation.prj
+ 
+(W/m2)
+ 
+ 
+ 
+######

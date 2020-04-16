@@ -1,0 +1,145 @@
+Description - to be added
+###### Version: CRHM DLL 1.48  Creation: 8/11/2005 15:44
+Dimensions:
+######
+nhru 8
+nlay 3
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+GB402_TB.obs
+WL_116 - 2002.obs
+######
+Dates:
+######
+2002 5 19
+2002 8 26
+######
+DLLs:
+######
+QuintonDLL.dll
+######
+Modules:
+######
+Qmelt QuintonDLL.dll 04/10/03
+global C:\CRHM\NewModulesDLL.dll 08/10/05
+Qdrift QuintonDLL.dll 02/28/03
+Quinton QuintonDLL.dll 05/06/05
+######
+Parameters:
+######
+global hru_ASL
+0 0 0 0 0 0 0 0 
+global hru_elev
+637 637 637 637 637 637 637 637 
+global hru_GSL
+0 0 0 0 0 0 0 0 
+global hru_lat
+51.32 51.32 51.32 51.32 51.32 51.32 51.32 51.32 
+global Time_Offset
+0 0 0 0 0 0 0 0 
+Qdrift catchadjust
+1 1 1 1 1 1 1 1 
+Qdrift DrainTo
+0 0 0 0 0 0 0 0 
+Qdrift InitSWE
+0 0 0 0 0 0 0 0 
+Qdrift length
+1 1 1 1 1 1 1 1 
+Qdrift meltLag
+0 0 0 0 0 0 0 0 
+Qdrift meltstorage
+0 0 0 0 0 0 0 0 
+Qdrift Type
+0 0 0 0 0 0 0 0 
+Qmelt TIa0Mn
+0 0 0 0 0 0 0 0 
+Qmelt TIa1Mn
+0.8844 0 0 0 0 0 0 0 
+Qmelt TIs0Mn
+0 0 0 0 0 0 0 0 
+Qmelt TIs1Mn
+0 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Quinton a
+25 25 25 25 25 25 25 25 
+15 15 15 15 15 15 15 15 
+15 15 15 15 15 15 15 15 
+Quinton catchadjust
+1 1 1 1 1 1 1 1 
+Quinton d
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+Quinton Drained
+0 0 0 0 0 0 0 0 
+Quinton DrainTo
+0 0 0 0 0 0 0 0 
+Quinton flowLag
+0 0 0 0 0 0 0 0 
+Quinton flowstorage
+0 0 0 0 0 0 0 0 
+Quinton FrozenTo
+0 0 0 0 0 0 0 0 
+Quinton K_a
+0.011 0.011 0.011 0.011 0.011 0.011 0.011 0.011 
+Quinton K_b
+-4.218 -4.218 -4.218 -4.218 -4.218 -4.218 -4.218 -4.218 
+Quinton length
+1 1 1 1 1 1 1 1 
+Quinton n
+2 2 2 2 2 2 2 2 
+1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 
+1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 
+Quinton Pors
+0.96 
+0.9 
+0.87 
+0.43 
+0.43 
+Quinton Residual
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 
+0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 
+Quinton runoffLag
+0 0 0 0 0 0 0 0 
+Quinton runoffstorage
+0 0 0 0 0 0 0 0 
+Quinton slope
+0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 
+Quinton soil_type
+0 1 2 2 2 2 2 2 
+0 1 2 2 2 2 2 2 
+0 1 2 2 2 2 2 2 
+Quinton tinit
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+Quinton Type
+0 0 0 0 0 0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+global Qdro 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+ 
+(m)
+ 
+(W/m2)
+ 
+ 
+ 
+######

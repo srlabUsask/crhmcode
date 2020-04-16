@@ -1,0 +1,137 @@
+Description - to be added
+###### Version: NON-DLL 5.31  Creation: 11/3/2004 16:23
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Observations:
+######
+Winter1975.obs
+C:\CRHM\basinflow75.obs
+######
+Dates:
+######
+1975 4 25
+1975 6 1
+######
+Modules:
+######
+basin CRHM basic 07/29/04
+global CRHM basic 02/21/02
+calcsun CRHM basic 01/01/02
+obs CRHM basic 07/22/04
+intcp CRHM basic 01/01/02
+netall CRHM basic 10/05/04
+pbsm CRHM basic 05/126/04
+net_rn CRHM basic 10/05/04
+albedo CRHM basic 07/27/04
+evap CRHM basic 10/05/04
+ebsm CRHM basic 02/20/02
+crack CRHM basic 05/18/04
+srunoff CRHM basic 03/06/02
+smbal CRHM basic 09/22/04
+route CRHM basic 05/31/04
+######
+Parameters:
+######
+basin basin_area
+11.39 
+basin basin_name
+'Creighton' 
+basin hru_area
+3.58 6.13 1.68 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin hru_names
+'fallow' 'stubble' 'brush' 
+basin Ht
+0.01 0.2 0.25 
+crack fallstat
+45 54 44 
+crack Major
+5 5 5 
+ebsm delay_melt
+100 100 100 
+ebsm nfactor
+0 0 0 
+ebsm tfactor
+0 0 0 
+evap evap_type
+1 1 1 
+evap Zref
+1.5 1.5 1.5 
+evap Zwind
+10 10 10 
+global Time_Offset
+0 0 0 
+netall hru_alb
+0.17 0.17 0.17 
+net_rn F_Qg
+0.2 0.2 0.2 
+obs catchadjust
+0 0 0 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+pbsm distrib
+1 1 1 
+pbsm fetch
+1000 1000 1000 
+route Kstorage
+0 0 1 
+route Lag
+0.5 0.5 2 
+route order
+1 2 3 
+route whereto
+3 3 0 
+smbal cov_type
+0 1 1 
+smbal soil2gw_max
+0 0 0 
+smbal soil_moist_init
+375 375 375 
+smbal soil_moist_max
+375 375 375 
+smbal soil_rechr_init
+60 60 60 
+smbal soil_rechr_max
+60 60 60 
+smbal soil_type
+2 2 2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+netall cum_net 1
+route cumbasinflow 1
+obs cumhru_rain 1
+evap hru_cum_evap 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\Program Files\CRHM\Examples\badlakeflow7475.prj
+ 
+(MJ/m2)
+ 
+ 
+ 
+######

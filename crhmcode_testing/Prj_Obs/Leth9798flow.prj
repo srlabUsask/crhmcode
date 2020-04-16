@@ -1,0 +1,118 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 4
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\Leth9798.obs
+######
+Modules:
+######
+global
+calcsun
+obs
+intcp
+pbsm
+albedo
+netall
+ebsm
+crack
+net_rn
+evap
+srunoff
+smbal
+route
+######
+Dates:
+######
+1998 5 1
+1998 10 1
+######
+Parameters:
+######
+crack fallstat
+46 54 44 50 
+ebsm nfactor
+0 0 0 0 
+ebsm tfactor
+2 2 2 2 
+evap Ht
+0.00999999977648258 0.150000005960464 0.25 1 
+evap Zref
+1.5 1.5 1.5 1.5 
+evap Zwind
+10 10 10 10 
+evap evap_type
+0 0 0 0 
+evap hru_elev
+940 940 940 940 
+global hru_ASL
+0 0 90 0 
+global hru_GSL
+0 0 20 0 
+global hru_elev
+940 940 940 940 
+global hru_lat
+50.1130981445313 50.1130981445313 50.1130981445313 50.1130981445313 
+net_rn F_Qg
+0.200000002980232 0.200000002980232 0.200000002980232 0.200000002980232 
+netall hru_alb
+0.200000002980232 0.170000001788139 0.25 0.189999997615814 
+obs catchadjust
+0 0 0 0 
+obs tmax_allrain
+0 0 0 0 
+obs tmax_allsnow
+0 0 0 0 
+pbsm basin_area
+127.349998474121 
+pbsm distrib
+1 1 1 1 
+pbsm fetch
+1000 1000 1000 300 
+pbsm hru_area
+15.5100002288818 21.3999996185303 79.5599975585938 10.8800001144409 
+pbsm Ht
+0.00999999977648258 0.150000005960464 0.25 1 
+route Kstorage
+0 0 0 1 
+route Lag
+0.5 0.5 1 2 
+route basin_area
+127.349998474121 
+route hru_area
+15.5100002288818 21.3999996185303 79.5599975585938 10.8800001144409 
+route order
+1 2 3 4 
+route whereto
+2 3 4 0 
+smbal cov_type
+0 1 1 2 
+smbal soil2gw_max
+0 0 0 0 
+smbal soil_moist_init
+189.399993896484 187 183.399993896484 187 
+smbal soil_moist_max
+375 375 375 375 
+smbal soil_rechr_init
+32.4000015258789 27.6000003814697 26.3999996185303 30 
+smbal soil_rechr_max
+60 60 60 60 
+smbal soil_type
+2 2 2 2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+evap hru_cum_evapD 1 2 3 4
+######
+Display_Observation:
+######
+
+######

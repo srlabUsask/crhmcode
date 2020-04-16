@@ -1,0 +1,89 @@
+Description - to be added
+###### Version: NON-DLL 5.29  Creation: 10/4/2004 13:44
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+Leth98.obs
+######
+Dates:
+######
+1998 5 1
+1998 8 31
+######
+Modules:
+######
+global2 CRHM basic 02/19/03
+calcsun CRHM basic 01/01/02
+obs CRHM basic 07/22/04
+netall2 CRHM basic 11/28/02
+evap2 CRHM basic 07/27/04
+######
+Parameters:
+######
+evap2 basin_area
+11.39 
+evap2 evap_type
+0 
+evap2 F_Qg
+0.2 
+evap2 hru_area
+4.67 
+evap2 hru_elev
+637 
+evap2 Ht
+1 
+evap2 Zref
+1.5 
+evap2 Zwind
+10 
+global2 hru_ASL
+0 
+global2 hru_elev
+637 
+global2 hru_GSL
+0 
+global2 hru_lat
+51.32 
+global2 Time_Offset
+0 
+netall2 hru_alb
+0.17 
+obs basin_area
+11.39 
+obs catchadjust
+0 
+obs hru_area
+4.67 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+evap2 hru_cum_evap 1
+evap2 hru_cum_evap2 1
+evap2 hru_cum_evapD 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2002
+ 
+C:\Crhm\Evaptest.prj
+ 
+(mm)
+ 
+ 
+ 
+######

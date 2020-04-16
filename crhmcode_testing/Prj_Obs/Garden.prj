@@ -1,0 +1,69 @@
+Description - to be added
+###### Version: DLL 1.30  Creation: 10/25/2004 11:06
+Dimensions:
+######
+nhru 2
+nlay 5
+nobs 1
+######
+Observations:
+######
+C:\CRHM\garden.obs
+C:\CRHM\gardenOutput.obs
+######
+Dates:
+######
+2004 2 16
+2004 3 18
+######
+DLLs:
+######
+C:\CRHM\April2004DLL.dll
+######
+Modules:
+######
+Garden C:\CRHM\April2004DLL.dll 10/23/04
+######
+Parameters:
+######
+Garden emiss
+0.985 0.985 
+Garden hru_elev
+500 500 
+Garden k
+0.2 0.2 
+Garden Z0
+0.0004 0.0004 
+Garden Zref
+2 2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Garden Lstar 1,1 1,2 1,3 1,4 1,5
+Garden qstar 1,1 1,2 1,3 1,4 1,5
+Garden Ti 1,1 1,2 1,3 1,4 1,5
+######
+Display_Observation:
+######
+obs O1Lstar 1 _obs
+obs O1qstar 1 _obs
+obs O1Ti_n 1 _obs
+obs O2Lstar 1 _obs
+obs O2qstar 1 _obs
+obs O2Ti_n 1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+TChart
+ 
+ 
+(W/m2)
+ 
+ 
+ 
+######

@@ -1,0 +1,103 @@
+Description - to be added
+###### Version: CRHM 1.93  Creation: 01/09/07 13:27
+Dimensions:
+######
+nhru 3
+nlay 3
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+C:\Crhm\D73.obs
+######
+Dates:
+######
+1973 11 1
+1974 4 1
+######
+Modules:
+######
+obs CRHM 05/25/06
+intcp CRHM 11/15/06
+pbsm CRHM 09/27/06
+frostdepth CRHM 02/07/06
+######
+Parameters:
+######
+basin basin_area
+1 
+basin hru_area
+1 1 1 
+frostdepth d
+0.5 0.5 0.5 
+0.5 0.5 0.5 
+0.5 0.5 0.5 
+frostdepth por
+0.5 0.5 0.5 
+0.5 0.5 0.5 
+0.5 0.5 0.5 
+frostdepth soil_type
+2 2 2 
+2 2 2 
+2 2 2 
+frostdepth Ta
+10 0 0 
+frostdepth theta
+0.5 0.5 0.5 
+0.5 0.5 0.5 
+0.5 0.5 0.5 
+obs catchadjust
+0 0 0 
+obs hru_elev
+637 637 637 
+obs HRU_OBS
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+pbsm basin_area
+11.39 
+pbsm distrib
+1 1 1 
+pbsm fetch
+1000 1000 1000 
+pbsm hru_area
+4.67 5.04 1.68 
+pbsm Ht
+0.01 0.25 1 
+pbsm inhibit_bs
+0 0 0 
+pbsm inhibit_evap
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+frostdepth frostdepth 1 2 3
+######
+Display_Observation:
+######
+obs d(1) 1 _obs
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\FDepth33_73.prj
+ 
+(m)
+ 
+ 
+ 
+######

@@ -1,0 +1,46 @@
+Description - to be added
+###### Version DLL 1.04
+Dimensions:
+######
+nhru 8
+nlay 3
+nobs 6
+######
+Observations:
+######
+C:\CRHM\SM_2002.obs
+C:\CRHM\SM_2002u.obs
+######
+Modules:
+######
+######
+Dates:
+######
+2002 4 27
+2002 8 29
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+obs sm 1 _obs 2_obs 3_obs 4_obs 5_obs 6_obs
+obs sm_u 1 _obs 2_obs 3_obs 4_obs 5_obs 6_obs
+######
+Auto_Run
+######
+TChart:
+######
+(m)
+ 
+ 
+
+ 
+ 
+######

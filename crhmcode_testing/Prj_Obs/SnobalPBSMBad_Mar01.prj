@@ -1,0 +1,151 @@
+Description - to be added
+###### Version: CRHM 1.96  Creation: 04/04/07 09:30
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Snobal_Input'
+'    declgetvar, *, Qdflat,  NHRU, "short-wave", "(W/m^2)"'
+'    declgetvar, *, Long,  NHRU, "incoming longwave", "(W/m^2)"'
+'    declgetvar, *, hru_t,  NHRU, "air temperature", "(°C)"'
+'    declparam, Albedo, NHRU, 0.8, 0.0, 1.0, description, ()'
+'    declvar, hru_S_n,  NHRU, "net solar radiation", "(W/m^2)"'
+'    declvar, hru_I_lw, NHRU, "incoming longwave (thermal) rad ", "(W/m^2)"'
+'    declvar, hru_T_g,  NHRU, "soil temp at depth z_g", "(°C)"'
+'    declvar, hru_rho_snow, NHRU, "density of snowfall", "(kg/m^2)"'
+'    declvar, hru_T_pp, NHRU, "precip temp", "(°C)"'
+'    declreadobs, T_g_Obs, NOBS, "soil temp at depth z_g", "(C)"'
+'command'
+'  hru_S_n[hh] = Qdflat[hh]*(1.0 - Albedo[hh])'
+'  hru_I_lw[hh] = Long[hh]'
+'  hru_T_g[hh] = T_g_Obs[hh]'
+'  hru_rho_snow[hh] =100'
+'  hru_T_pp[hh] = hru_t[hh]'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+C:\CRHM\Bad1974_Tg.obs
+######
+Dates:
+######
+1974 3 1
+1974 6 1
+######
+Modules:
+######
+basin CRHM 06/22/06
+global CRHM 08/28/06
+obs CRHM 04/03/07
+long CRHM 07/12/05
+intcp CRHM 11/15/06
+Snobal_Input Macro 04/20/06
+pbsmSnobal CRHM 04/03/07
+Snobal CRHM 04/03/07
+######
+Parameters:
+######
+basin basin_area
+3 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 1 1 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin hru_names
+'HRU' 'HRU2' 'HRU3' 
+basin RUN_ID
+1 
+global Time_Offset
+0 0 0 
+obs catchadjust
+0 0 0 
+obs HRU_OBS
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+pbsmSnobal distrib
+0 1 1 
+pbsmSnobal fetch
+1000 1000 1000 
+pbsmSnobal Ht
+0.1 0.25 3 
+pbsmSnobal inhibit_bs
+0 0 0 
+pbsmSnobal inhibit_evap
+0 0 0 
+Snobal Init_h2o_sat
+0.01 0.01 0.01 
+Snobal Init_rho
+200 200 200 
+Snobal Init_T_s
+-3 -3 -3 
+Snobal Init_T_s_0
+-3 -3 -3 
+Snobal Init_T_s_l
+-3 -3 -3 
+Snobal Init_z_s
+0 0 0 
+Snobal max_h2o_vol
+0.01 0.01 0.01 
+Snobal max_z_s_0
+0.25 0.25 0.25 
+Snobal relative_hts
+0 0 0 
+Snobal run_no_snow
+0 0 0 
+Snobal z_0
+0.001 0.001 0.001 
+Snobal z_g
+0.2 0.2 0.2 
+Snobal z_T
+1 1 1 
+Snobal z_u
+10 10 10 
+Snobal_Input Albedo
+0.8 0.8 0.8 
+######
+Initial_State
+######
+C:\CRHM\SnobalPBSMBad.int
+######
+Display_Variable:
+######
+Snobal m_s 1 2 3
+Snobal snowmelt_int 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+ 
+(kg/m^2)
+ 
+ 
+ 
+######

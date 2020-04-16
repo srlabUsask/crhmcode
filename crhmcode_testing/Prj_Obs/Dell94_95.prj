@@ -1,0 +1,38 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+cd9495B.obs
+######
+Modules:
+######
+Dell
+######
+Dates:
+######
+1994 12 1
+1995 5 1
+######
+Parameters:
+######
+Dell ZeroCount
+0.2840 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Dell P 1
+######
+Display_Observation:
+######
+obs nipher 1  _Tot
+obs p 1  _Tot
+######

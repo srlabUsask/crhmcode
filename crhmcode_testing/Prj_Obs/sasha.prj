@@ -1,0 +1,87 @@
+Description - to be added
+###### Version: DLL 1.12  Creation: 3/18/2004 09:16
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\METEO.obs
+######
+Dates:
+######
+1966 11 1
+1966 11 4
+######
+DLLs:
+######
+C:\CRHM\March2004DLL.dll
+######
+Modules:
+######
+Sasha C:\CRHM\March2004DLL.dll 03/17/04
+######
+Parameters:
+######
+Sasha canopyalbedo
+0.12 
+Sasha CMAX
+3.8 
+Sasha forest
+0 
+Sasha fraction
+0 
+Sasha hru_lat
+52 
+Sasha HSF
+0 
+Sasha hydr
+0 
+Sasha intialcanopystorage
+1.86 
+Sasha KMELT
+1 
+Sasha LAI
+3.4 
+Sasha opt
+1 
+Sasha plantarea
+0.65 
+Sasha RATIO
+1 
+Sasha redv
+0.15 
+Sasha ronew
+0.07 
+Sasha ROSF
+0 
+Sasha snowalbedo
+0.75 
+Sasha spcval
+5.9 
+Sasha transmittance
+0.01 
+Sasha treeheight
+27 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Sasha Qsi 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+TChart
+ 
+ 
+()
+ 
+ 
+######

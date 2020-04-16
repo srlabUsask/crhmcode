@@ -1,0 +1,136 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 8
+nlay 3
+nobs 1
+######
+Observations:
+######
+GB400_TB.obs
+Water table 2000.obs
+C:\DELL\Granger\2000\Gb200_01.obs
+######
+DLLs:
+######
+QuintonDLL.dll
+######
+Modules:
+######
+global CRHM basic 02/19/03
+Qmelt QuintonDLL.dll 02/28/03
+Qdrift QuintonDLL.dll 02/28/03
+Quinton QuintonDLL.dll 02/26/03
+######
+Dates:
+######
+2000 6 6
+2000 8 26
+######
+Parameters:
+######
+basin catchadjust
+1 1 1 1 1 1 1 1 
+basin DrainTo
+2 3 4 5 6 7 8 0 
+basin length
+27 14 14 14 14 14 14 14 
+basin Type
+1 2 2 2 2 2 2 2 
+global hru_ASL
+0 0 0 0 0 0 0 0 
+global hru_elev
+637 637 637 637 637 637 637 637 
+global hru_GSL
+0 0 0 0 0 0 0 0 
+global hru_lat
+60.52 60.52 60.52 60.52 60.52 60.52 60.52 60.52 
+global Time_Offset
+2 0 0 0 0 0 0 0 
+Qdrift InitSWE
+400 0 0 0 0 0 0 0 
+Qdrift meltLag
+0 0 0 0 0 0 0 0 
+Qdrift meltstorage
+0 0 0 0 0 0 0 0 
+Qmelt TIa0Mn
+0 0 0 0 0 0 0 0 
+Qmelt TIa1Mn
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+Qmelt TIs0Mn
+0 0 0 0 0 0 0 0 
+Qmelt TIs1Mn
+0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Quinton C_a0
+-8322 -8322 -8322 -8322 -8322 -8322 -8322 -8322 
+Quinton C_a1
+9.159E4 9.159E4 9.159E4 9.159E4 9.159E4 9.159E4 9.159E4 9.159E4 
+Quinton d
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+Quinton Drained
+0 0.075 0 0 0 0 0 0 
+Quinton flowLag
+0 0 0 0 0 0 0 0 
+Quinton flowstorage
+0 0 0 0 0 0 0 0 
+Quinton Pore_a0
+1.771 1.771 1.771 1.771 1.771 1.771 1.771 1.771 
+Quinton Pore_a1
+-4.759 -4.759 -4.759 -4.759 -4.759 -4.759 -4.759 -4.759 
+Quinton Pors
+0.96 
+0.9 
+0.87 
+0.43 
+0.43 
+Quinton Residual
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 
+0.9 0.9 0.9 0.9 0.9 0.9 0.9 0.9 
+Quinton runoffLag
+0 0 0 0 0 0 0 0 
+Quinton runoffstorage
+0 0 0 0 0 0 0 0 
+Quinton slope
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+Quinton soil_type
+0 0 0 0 0 0 0 0 
+2 1 1 1 1 1 1 1 
+2 2 2 2 2 2 2 2 
+Quinton tinit
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Qmelt cum_Qg 1
+Qmelt cum_Qm 1
+Quinton d_surface 2 8
+Quinton Depth 2 8
+Quinton dmelt 2 8
+Qmelt Qg 1
+Qmelt Qm 1
+Qdrift SWE 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\QuintonDrift2000_8_ovly_Radiation.prj
+ 
+(MJ/m2)
+ 
+ 
+######

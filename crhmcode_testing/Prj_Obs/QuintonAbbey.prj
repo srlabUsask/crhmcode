@@ -1,0 +1,99 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 2
+nlay 3
+nobs 1
+######
+Observations:
+######
+C:\Dell\Granger\2002\GB402_TB.obs
+######
+Modules:
+######
+QmeltA Quinton model 12/10/02
+######
+Dates:
+######
+2002 6 1
+2002 8 26
+######
+Parameters:
+######
+QmeltA Qg0
+1048 1048 
+QmeltA Qg1
+1.889 1.889 
+QmeltA Ta0
+0 -8.459 
+QmeltA Ta1
+0.0061 0.0061 
+QmeltA Ta2
+9E-8 9E-8 
+QmeltA Td0
+32.5 32.5 
+QmeltA Td1
+7.97 5.11 
+QmeltA Td2
+-0.0049 -0.0013 
+QmeltA TIa0
+0 0 
+QmeltA TIa0Mn
+0 0 
+QmeltA TIa0Mx
+0 0 
+QmeltA TIa1
+0.004 0.004 
+QmeltA TIa1Mn
+0.1 0.1 
+QmeltA TIa1Mx
+0.1 0.1 
+QmeltA TIs0
+0 0 
+QmeltA TIs0Mn
+0 0 
+QmeltA TIs0Mx
+0 0 
+QmeltA TIs1
+0.004 0.004 
+QmeltA TIs1Mn
+0.1 0.1 
+QmeltA TIs1Mx
+0.1 0.1 
+QmeltA Tq0
+1048 1048 
+QmeltA Tq1
+1.889 1.889 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+QmeltA cum_Qd 1 2
+QmeltA cum_Qg 1
+QmeltA cum_QIa 1
+QmeltA cum_QIaMn 1
+QmeltA cum_QIaMx 1
+QmeltA cum_QIs 1
+QmeltA cum_QIsMn 1
+QmeltA cum_QIsMx 1
+QmeltA cum_Qm 1
+QmeltA cum_Qq 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2002
+ 
+C:\Crhm\QuintonDrift2002.prj
+ 
+(MJ/m2)
+ 
+ 
+######

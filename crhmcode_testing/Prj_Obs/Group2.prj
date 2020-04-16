@@ -1,0 +1,173 @@
+Description - to be added
+###### Version: CRHM 2.01  Creation: 06/11/07 15:40
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'MyGroup1'
+'  declgroup'
+'    obs'
+'    calcsun'
+'command'
+'end'
+'MyGroup2'
+'  declgroup'
+'    intcp'
+'    pbsm'
+'    albedo'
+'    netall'
+'    ebsm'
+'    evap'
+'command'
+'end'
+'MyGroup3'
+'  declgroup'
+'    crack'
+'    smbal'
+'    route'
+'command'
+'end'
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+global CRHM 08/28/06
+MyGroup1 Macro 04/20/06
+MyGroup2 Macro 04/20/06
+MyGroup3 Macro 04/20/06
+######
+Parameters:
+######
+basin basin_area
+1 
+basin hru_area
+1 1 1 
+basin hru_elev
+637 637 637 
+basin soil_type
+2 2 2 
+global hru_ASL
+0 0 0 
+global hru_GSL
+0 0 0 
+global hru_lat
+51.32 51.32 51.32 
+global Time_Offset
+0 0 0 
+MyGroup1 catchadjust
+1 1 1 
+MyGroup1 hru_group
+1 0 0 
+MyGroup1 HRU_OBS
+1 1 1 
+MyGroup1 lapse_rate
+0.75 0.75 0.75 
+MyGroup1 obs_elev
+637 637 637 
+MyGroup1 tmax_allrain
+0 0 0 
+MyGroup1 tmax_allsnow
+0 0 0 
+MyGroup2 Albedo_bare
+0.17 0.17 0.17 
+MyGroup2 delay_melt
+0 0 0 
+MyGroup2 distrib
+1 1 1 
+MyGroup2 evap_type
+0 0 0 
+MyGroup2 fetch
+1000 1000 1000 
+MyGroup2 F_Qg
+0.2 0.2 0.2 
+MyGroup2 hru_group
+2 0 0 
+MyGroup2 Ht
+0.1 0.1 0.1 
+MyGroup2 Htmax
+0.1 0.1 0.1 
+MyGroup2 inhibit_bs
+0 0 0 
+MyGroup2 inhibit_evap
+0 0 0 
+MyGroup2 LAImax
+3 3 3 
+MyGroup2 LAImin
+0 0 0 
+MyGroup2 nfactor
+0 0 0 
+MyGroup2 PM_method
+0 0 0 
+MyGroup2 rcs
+25 25 25 
+MyGroup2 s
+1 1 1 
+MyGroup2 Soil_Moist
+0.5 0.5 0.5 
+MyGroup2 tfactor
+0 0 0 
+MyGroup2 Zwind
+10 10 10 
+MyGroup3 cov_type
+3 3 3 
+MyGroup3 fallstat
+50 50 50 
+MyGroup3 hru_group
+3 0 0 
+MyGroup3 Kstorage
+0 0 0 
+MyGroup3 Lag
+0 0 0 
+MyGroup3 Major
+5 5 5 
+MyGroup3 order
+1 1 1 
+MyGroup3 PriorInfiltration
+1 1 1 
+MyGroup3 soil2gw_max
+0 0 0 
+MyGroup3 soil_moist_init
+187 187 187 
+MyGroup3 soil_moist_max
+375 375 375 
+MyGroup3 soil_rechr_init
+30 30 30 
+MyGroup3 soil_rechr_max
+60 60 60 
+MyGroup3 transp_limited
+0 0 0 
+MyGroup3 whereto
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+MyGroup2 SWE@B 1 2 3
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+ 
+(mm)
+ 
+ 
+ 
+######

@@ -1,0 +1,43 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 7
+nobs 7
+######
+Observations:
+######
+C:\Crhm\SOTE1973_75.obs
+######
+Modules:
+######
+Depth
+######
+Dates:
+######
+1973 10 1
+1975 6 1
+######
+Parameters:
+######
+Depth Depths
+0.0500 
+0.0100 
+0.2000 
+0.5000 
+1.0000 
+1.5000 
+3.0000 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Depth d 1
+######
+Display_Observation:
+######
+
+######

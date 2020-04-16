@@ -1,0 +1,70 @@
+<html>
+	test
+	<script>
+		function onLoad()
+		{
+			var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext("2d");
+			ctx.fillStyle = "#FF0000";
+			ctx.fillRect(0, 0, 150, 75);
+		}
+		if(window.addEventListener)
+		{
+			//window.addEventListener("load",onLoad,false);
+		}
+		else if(window.attachEvent)
+		{
+			//window.attachEvent("onload",onLoad);
+		}
+
+		function linedraw(ax,ay,bx,by, lid)
+		{
+			if(ay>by)
+			{
+				bx=ax+bx;
+				ax=bx-ax;
+				bx=bx-ax;
+				by=ay+by;
+				ay=by-ay;
+				by=by-ay;
+			}
+			var calc=Math.atan((ay-by)/(bx-ax));
+			calc=calc*180/Math.PI;
+			var length=Math.sqrt((ax-bx)*(ax-bx)+(ay-by)*(ay-by));
+			document.body.innerHTML += "<div id='line"+lid+"' style='height:" + length + "px;width:1px;background-color:black;position:absolute;top:" + (ay) + "px;left:" + (ax) + "px;transform:rotate(" + calc + "deg);-ms-transform:rotate(" + calc + "deg);transform-origin:0% 0%;-moz-transform:rotate(" + calc + "deg);-moz-transform-origin:0% 0%;-webkit-transform:rotate(" + calc  + "deg);-webkit-transform-origin:0% 0%;-o-transform:rotate(" + calc + "deg);-o-transform-origin:0% 0%;'></div>"
+			//document.body.innerHTML += "<div id='line"+lid+"' style='height:" + length + "px;width:1px;background-color:black;position:absolute;top:" + (ay) + "px;left:" + (ax) + "px;transform:rotate(" + calc + "deg);-ms-transform:rotate(" + calc + "deg);transform-origin:0% 0%;-moz-transform:rotate(" + calc + "deg);-moz-transform-origin:0% 0%;-webkit-transform:rotate(" + calc  + "deg);-webkit-transform-origin:0% 0%;-o-transform:rotate(" + calc + "deg);-o-transform-origin:0% 0%;'></div>"
+		}
+
+
+		function line (ax, ay, bx, by)
+		{
+			if (ay == by)
+			{
+				var length = bx - ax;
+				document.body.innerHTML += "<div style='position:absolute;top:"+(ay)+"px;left:"+(ax)+"px;width:"+length+"px;border-top: 1px solid #000 !important;'></div>";
+			}
+			if (ax == bx)
+			{
+				var length = by - ay;
+				document.body.innerHTML += "<div style='position:absolute;top:"+(ay)+"px;left:"+(ax)+"px;background-color:black;height:"+length+"px;width:1px;'></div>";
+			}
+		}
+		function rectangle (ax, ay, bx, by)
+		{
+			line (ax, ay, bx, ay);
+			line (ax, ay, ax, by);
+			line (ax, by, bx, by);
+			line (bx, ay, bx, by);
+		}
+		function drawString (str, ax, ay)
+		{
+			document.body.innerHTML += "<div style='position:absolute;top:"+(ay)+"px;left:"+(ax)+"px;'>"+str+"</div>";
+		}
+
+		line (100,500, 2000, 500);
+		line (100,500, 100, 700);
+		rectangle (10, 10, 200, 200);
+		drawString ("basin", 10,205);
+
+	</script>
+</html>

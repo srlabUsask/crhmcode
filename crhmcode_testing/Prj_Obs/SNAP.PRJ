@@ -1,0 +1,71 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\SNAP\MET97.obs
+C:\SNAP\Snapoutput.obs
+######
+Modules:
+######
+Snap CRHM basic 03/16/03
+######
+Dates:
+######
+1997 3 25
+1997 4 28
+######
+Parameters:
+######
+Snap n
+3.3 
+Snap PHIE
+0.65 
+Snap raintemp
+0.5 
+Snap SD
+84.05 
+Snap SWI
+0.03 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Snap a 1
+Snap at 1
+Snap balerror 1
+Snap cum_p 1
+Snap cum_v 1
+Snap maxwet 1
+Snap phie 1
+Snap sd 1
+Snap swe 1
+Snap swi 1
+Snap waves 1
+######
+Display_Observation:
+######
+obs SnapMaxwet 1 _obs
+obs Snapphie 1 _obs
+obs SnapSD 1 _obs
+obs Snapswe 1 _obs
+obs Snapswi 1 _obs
+obs Snapwaves 1 _obs
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+snap.prj
+ 
+(cm)
+ 
+ 
+######

@@ -1,0 +1,66 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\metdata95a.obs
+######
+DLLs:
+######
+C:\Crhm\JasonDLL.dll
+######
+Modules:
+######
+obsPSP C:\Crhm\JasonDLL.dll 01/01/02
+PSP C:\Crhm\JasonDLL.dll 01/01/02
+######
+Dates:
+######
+1995 2 9
+1995 2 15
+######
+Parameters:
+######
+PSP Biomass
+30 
+PSP Ht
+20 
+PSP InitN
+6 
+PSP LAI
+2.2 
+PSP Sbar
+6.6 
+PSP Zcan
+16 
+PSP Zref
+27 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+PSP SnowLoad 1
+######
+Display_Observation:
+######
+obs Lnot 1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\Jason.prj
+ 
+(kg/m2)
+ 
+ 
+######

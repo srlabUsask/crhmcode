@@ -1,0 +1,4 @@
+Simulate theta data
+$Sim(6/6/00 9/12/00 0.5)
+$test ramp(2.0 0.0 0.0 6/8/00)
+######

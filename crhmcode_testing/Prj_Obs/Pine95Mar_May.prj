@@ -1,0 +1,61 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\Crhm\pine95Mar_May.obs
+######
+Modules:
+######
+global
+calcsun
+obs
+long
+######
+Dates:
+######
+1995 4 1
+1995 5 1
+######
+Parameters:
+######
+global hru_ASL
+0.0000 
+global hru_GSL
+0.0000 
+global hru_elev
+637.0000 
+global hru_lat
+51.3170 
+long Acan
+0.1200 
+long Asnow
+0.8000 
+long LAI
+2.2000 
+obs catchadjust
+0 
+obs tmax_allrain
+0.0000 
+obs tmax_allsnow
+0.0000 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+long Long 1
+long LongD 1
+long MeasLong 1
+long MeasLongD 1
+######
+Display_Observation:
+######
+
+######

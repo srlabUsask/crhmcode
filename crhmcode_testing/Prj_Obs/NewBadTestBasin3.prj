@@ -1,0 +1,123 @@
+Description - to be added
+###### Version: NON-DLL 5.41  Creation: 5/5/2005 15:07
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 3
+######
+Macros:
+######
+'SicartLong'
+'declreadobs, t, NOBS, "temp", (C)'
+'declreadobs, ea, NOBS, "vapour pressure", (kPa)'
+'declreadobs, rh, NOBS, "relative humidity", (fraction)'
+'declparam, tau, NHRU, [0.75], 0.0, 1.0, "atmospheric transmittance", ()'
+'declvar,Qlong, NHRU, "Sicart long", (W/m2)'
+'declobs,QlongObs, NHRU, "observation long", (W/m2)'
+'command'
+'Qlong[hh] = 1.24*((ea[0]*10)/(t[0]+273.15))^(1/7)*(1 + 0.44*rh[0]/100 - 0.18*tau[hh])*5.67E-8*(t[0]+273.15)^4'
+'QlongObs[hh] = Qlong[hh]'
+'end'
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+SicartLong Modules 04/12/05
+basin CRHM new 11/25/04
+global CRHM new 05/03/05
+long CRHM new 05/04/05
+obs CRHM new 05/03/05
+calcsun CRHM new 05/03/05
+Radiation CRHM new 05/04/05
+intcp CRHM new 01/01/02
+NO_pbsm CRHM new 12/06/04
+albedo CRHM new 07/27/04
+ebsm CRHM new 05/05/05
+######
+Parameters:
+######
+basin basin_area
+3 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 1 1 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin hru_names
+'HRU1' 'HRU2' 'HRU3' 
+basin RUN_ID
+1 
+basin tau
+0.75 0.75 0.75 
+ebsm delay_melt
+0 0 0 
+ebsm nfactor
+0 0 0 
+ebsm tfactor
+0 0 0 
+global Time_Offset
+0 0 0 
+netall hru_alb
+0.17 0.17 0.17 
+NO_pbsm inhibit_evap
+0 0 0 
+obs catchadjust
+0 0 0 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+537 537 537 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+Radiation Z0
+0.0004 0.0004 0.0004 
+Radiation Zref
+1.5 1.5 1.5 
+Radiation Zwind
+10 10 10 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+ebsm Qn_ebsm 1
+Radiation Ts 1
+######
+Display_Observation:
+######
+obs t 1 _obs
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\CRHM\badlakeflow7374.prj
+ 
+(°C)
+ 
+ 
+ 
+######

@@ -1,0 +1,89 @@
+Description - to be added
+###### Version: NON-DLL 5.41  Creation: 5/3/2005 10:32
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+global CRHM new 12/16/04
+calcsun CRHM new 01/01/02
+obs CRHM new 05/03/05
+intcp CRHM new 01/01/02
+netall CRHM new 10/05/04
+NO_pbsm CRHM new 12/06/04
+albedo CRHM new 07/27/04
+ebsm CRHM new 05/03/05
+######
+Parameters:
+######
+basin basin_area
+1 
+basin hru_area
+1 1 1 
+ebsm delay_melt
+0 0 0 
+ebsm nfactor
+0 0 0 
+ebsm tfactor
+0 0 0 
+global hru_ASL
+0 0 0 
+global hru_elev
+637 637 637 
+global hru_GSL
+0 0 0 
+global hru_lat
+51.32 51.32 51.32 
+global Time_Offset
+0 0 0 
+netall hru_alb
+0.17 0.17 0.17 
+NO_pbsm inhibit_evap
+0 0 0 
+obs catchadjust
+0 0 0 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+NO_pbsm SWE 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\CRHM\badlakeflow7374.prj
+ 
+(mm)
+ 
+ 
+ 
+######

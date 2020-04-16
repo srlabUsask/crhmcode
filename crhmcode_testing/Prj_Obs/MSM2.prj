@@ -1,0 +1,112 @@
+Description - to be added
+###### Version: CRHM_NEW 1.49  Creation: 9/7/2005 10:25
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'MyTest'
+'declvar, Step, NHRU, "Step number", ()'
+'declvar, Step2, NHRU, "Step number", ()'
+'command'
+'var v var y'
+'if(8 != 7) v=1 y = 11 else v=2 y = 12 endif'
+'Step[hh] = v'
+'Step2[hh] = y'
+'end'
+######
+Observations:
+######
+test_in2.obs
+test_out.obs
+######
+Dates:
+######
+1996 10 6
+1997 6 11
+######
+Modules:
+######
+global CRHM new 08/10/05
+obs CRHM new 05/03/05
+long CRHM new 07/12/05
+intcp CRHM new 07/08/05
+NO_pbsm CRHM new 12/06/04
+MSM CRHM new 07/11/05
+######
+Parameters:
+######
+basin basin_area
+3 
+basin hru_area
+1 1 1 
+basin hru_elev
+1340 1340 1340 
+global hru_ASL
+0 0 0 
+global hru_GSL
+0 0 0 
+global hru_lat
+45.3 45.3 45.3 
+global Time_Offset
+1 1 1 
+MSM a1
+1.08E7 1.08E7 1.08E7 
+MSM a2
+7.2E5 7.2E5 7.2E5 
+MSM amax
+0.84 0.84 0.84 
+MSM amin
+0.5 0.5 0.5 
+MSM hru_elev
+1380 1380 1380 
+MSM smin
+10 10 10 
+MSM Z0snow
+0.01 0.01 0.01 
+MSM Zref
+2 2 2 
+NO_pbsm inhibit_evap
+0 0 0 
+obs catchadjust
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+1340 1340 1340 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+obs Qli 1
+NO_pbsm SWE 1
+######
+Display_Observation:
+######
+obs QliX 1 _obs
+obs SWE0 1 _obs
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\CRHM\badlakeflow7374.prj
+ 
+(W/m2)
+ 
+ 
+ 
+######

@@ -1,0 +1,87 @@
+Description - to be added
+###### Version: CRHM_NEW 1.49  Creation: 9/14/2005 15:12
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Display'
+'declreadobs, t, NOBS, "temperature", (degrees)'
+'declvar, Above, NHRU, "Temperature above zero", (degrees)'
+'declvar, Below, NHRU, "Temperature below zero", (degrees)'
+'command'
+'if(t[hh] > 0.0)'
+'  Above[hh] = t[hh]'
+'  Below[hh] =  NO_DISPLAY'
+'else'
+'   Above[hh] = NO_DISPLAY'
+'   Below[hh] = t[hh]'
+'endif'
+'end'
+######
+Observations:
+######
+Winter1974.obs
+C:\CRHM\NO_DISPLAY_Above.obs
+C:\CRHM\NO_DISPLAY_Below.obs
+######
+Dates:
+######
+1973 12 31
+1974 6 1
+######
+Modules:
+######
+Display Macro 04/12/05
+obs CRHM new 05/03/05
+######
+Parameters:
+######
+obs basin_area
+3 
+obs catchadjust
+1 1 1 
+obs hru_area
+1 1 1 
+obs hru_elev
+637 637 637 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Display Above 1
+Display Below 1
+######
+Display_Observation:
+######
+obs Above(1) 1 _obs
+obs Below(1) 1 _obs
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\CRHM\badlakeflow7374.prj
+ 
+
+ 
+ 
+ 
+######

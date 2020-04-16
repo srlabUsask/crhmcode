@@ -1,0 +1,44 @@
+Description - to be added
+###### Version: NON-DLL 5.08  Creation: 12/16/2003 16:13
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\Quinton\C R H M Nov2003\Nov 03 - data sent to TB\Soil pit\Soil Pit\IR SENSOR\IR-Granger 2002.obs
+C:\CRHM\GB402_TB.obs
+######
+Dates:
+######
+2002 5 8
+2002 8 29
+######
+Modules:
+######
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+obs ts 1 _obs
+obs tsp 1 _obs
+######
+TChart:
+######
+TChart
+ 
+ 
+
+ 
+ 
+######

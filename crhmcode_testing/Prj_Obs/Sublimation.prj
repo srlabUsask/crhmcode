@@ -1,0 +1,60 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\Test.obs
+######
+Modules:
+######
+global
+calcsun
+obs
+sublimation
+######
+Dates:
+######
+1974 2 1
+1974 4 1
+######
+Parameters:
+######
+global hru_ASL
+0 
+global hru_GSL
+0 
+global hru_elev
+637 
+global hru_lat
+51.3170013427734 
+obs catchadjust
+0 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+sublimation brushHt
+2 
+sublimation brushZcan
+1 
+sublimation brushZref
+2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+sublimation brushsubl 1
+sublimation cumbrushsubl 1
+sublimation spherecoeff 1
+######
+Display_Observation:
+######
+
+######
