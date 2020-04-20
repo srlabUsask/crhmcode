@@ -109,7 +109,7 @@ void ClassModule::initbase(void) {
 		Par_loop_lay_table = NULL;
 		Par_loop_lay_value = NULL;
 	}
-	
+
 	//Common::Message("test 6", "test 6");
 
 	Var_NDEFN_cnt = 0;
@@ -2986,10 +2986,10 @@ bool ClassModule::ReadAheadObs(long inc) {
 		return false;
 
 	long CurrentDTindx = Global::DTindx;
-	//TDateTime CurrentDTnow = Global::DTnow;
+	TDateTime CurrentDTnow = Global::DTnow;
 
 	Global::DTindx += inc;
-	//Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
 
 	long p = 0;
 
@@ -3011,7 +3011,7 @@ bool ClassModule::ReadAheadObs(long inc) {
 	}
 
 	Global::DTindx = CurrentDTindx;
-	//Global::DTnow = CurrentDTnow;
+	Global::DTnow = CurrentDTnow;
 
 	return true;
 }
@@ -3028,7 +3028,7 @@ bool ClassModule::ReadAheadObsMacro(long inc) {
 	long **Save_HRU_obs = Global::HRU_OBS;
 
 	Global::DTindx += inc;
-	//Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
 
 	long p = 0;
 
