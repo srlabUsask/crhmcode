@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 4/15/2020 18:20
+###### Version NON DLL 4.02  Creation: 4/20/2020 3:47
 Dimensions:
 ######
 nhru 3
@@ -276,9 +276,12 @@ Final_State
 Display_Variable:
 ######
 pbsm SWE 1 2 3
+Soil cum_infil_act 1
 ######
 Display_Observation:
 ######
+obs Qsi 1 _obs
+obs Qso 1 _obs
 ######
 TChart:
 ######

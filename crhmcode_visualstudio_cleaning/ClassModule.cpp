@@ -567,7 +567,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("variable not found: " + ' ' + S, TERMINATE);
+			CRHMException Except("variable not found: " + S, TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -2977,10 +2977,10 @@ bool ClassModule::ReadAheadObs(long inc) {
 		return false;
 
 	long CurrentDTindx = Global::DTindx;
-	//TDateTime CurrentDTnow = Global::DTnow;
+	TDateTime CurrentDTnow = Global::DTnow;
 
 	Global::DTindx += inc;
-	//Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
 
 	long p = 0;
 
@@ -3002,7 +3002,7 @@ bool ClassModule::ReadAheadObs(long inc) {
 	}
 
 	Global::DTindx = CurrentDTindx;
-	//Global::DTnow = CurrentDTnow;
+	Global::DTnow = CurrentDTnow;
 
 	return true;
 }
@@ -3019,7 +3019,7 @@ bool ClassModule::ReadAheadObsMacro(long inc) {
 	long **Save_HRU_obs = Global::HRU_OBS;
 
 	Global::DTindx += inc;
-	//Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
 
 	long p = 0;
 
@@ -4339,6 +4339,10 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 		long ii = Global::OurModulesList->IndexOf(newPar->basemodule.c_str());
 		return    (long)Global::OurModulesList->array[ii].Object;
 	}
+
+	CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+	LogError(Except);
+	throw Except; // does not return
 }
 //---------------------------------------------------------------------------
 long ClassModule::declputparam(string source, string param, string units, long **ivalue, long ***ilayvalue) {

@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 4/15/2020 16:22
+###### Version NON DLL 4.02  Creation: 4/20/2020 3:49
 Dimensions:
 ######
 nhru 3
@@ -8,18 +8,28 @@ nobs 1
 ######
 Macros:
 ######
-'Display displays Above  t >= 0,  Below < 0. 09/02/11'
-'declreadobs, t, NOBS, "temperature", (°C)'
-'declvar, Above, NHRU, "Temperature above zero", (°C)'
-'declvar, Below, NHRU, "Temperature below zero", (°C)'
+'T_mean_GrpA'
+'declgroup 0'
+'basin'
+'global'
 'command'
-'if(t[hh] >= 0.0)'
-'Above[hh] = t[hh]'
-'Below[hh] =  NO_DISPLAY'
-'else'
-'Above[hh] = NO_DISPLAY'
-'Below[hh] = t[hh]'
-'endif'
+'end'
+'BadLake1974-1975_GrpB'
+'declgroup 0'
+'basin'
+'global'
+'obs'
+'calcsun'
+'intcp'
+'pbsm'
+'albedo'
+'ebsm'
+'netall'
+'crack'
+'evap'
+'Soil'
+'Netroute'
+'command'
 'end'
 ######
 Observations:
@@ -33,10 +43,197 @@ Dates:
 ######
 Modules:
 ######
-Display Macro 04/20/06
+BadLake1974-1975_GrpB Macro 04/20/06
+ +basin CRHM 04/20/06
+ +global CRHM 04/20/06
+ +obs CRHM 04/20/06
+ +calcsun CRHM 04/20/06
+ +intcp CRHM 04/20/06
+ +pbsm CRHM 04/20/06
+ +albedo CRHM 04/20/06
+ +ebsm CRHM 04/20/06
+ +netall CRHM 04/20/06
+ +crack CRHM 04/20/06
+ +evap CRHM 04/20/06
+ +Soil CRHM 04/20/06
+ +Netroute CRHM 04/20/06
 ######
 Parameters:
 ###### 'basin' parameters always first
+BadLake1974-1975_GrpB Albedo_bare <0 to 1>
+0.17 0.17 0.17 
+BadLake1974-1975_GrpB Albedo_snow <0 to 1>
+0.85 0.85 0.85 
+BadLake1974-1975_GrpB A_S <0 to 2>
+0.003 0.003 0.003 
+BadLake1974-1975_GrpB basin_area <1e-06 to 1e+09>
+3 
+BadLake1974-1975_GrpB basin_name
+'Basin' 
+BadLake1974-1975_GrpB catchadjust <0 to 3>
+0 0 0 
+BadLake1974-1975_GrpB ClimChng_flag <0 to 1>
+0 0 0 
+BadLake1974-1975_GrpB ClimChng_precip <0 to 10>
+1 1 1 
+BadLake1974-1975_GrpB ClimChng_t <-50 to 50>
+0 0 0 
+BadLake1974-1975_GrpB cov_type <0 to 2>
+1 1 1 
+BadLake1974-1975_GrpB delay_melt <0 to 366>
+0 0 0 
+BadLake1974-1975_GrpB distrib <-10 to 10>
+0 1 1 
+BadLake1974-1975_GrpB ElevChng_flag <0 to 1>
+0 0 0 
+BadLake1974-1975_GrpB evap_type <0 to 2>
+0 0 0 
+BadLake1974-1975_GrpB fallstat <-1 to 100>
+50 50 50 
+BadLake1974-1975_GrpB fetch <300 to 1e+04>
+1000 1000 1000 
+BadLake1974-1975_GrpB F_Qg <0 to 1>
+0.1 0.1 0.1 
+BadLake1974-1975_GrpB gwKstorage <0 to 200>
+0 0 0 
+BadLake1974-1975_GrpB gwLag <0 to 1e+04>
+0 0 0 
+BadLake1974-1975_GrpB gwwhereto <-1000 to 1000>
+0 0 0 
+BadLake1974-1975_GrpB gw_init <0 to 5000>
+187 187 187 
+BadLake1974-1975_GrpB gw_K <0 to 100>
+0 0 0 
+BadLake1974-1975_GrpB gw_max <0 to 5000>
+375 375 375 
+BadLake1974-1975_GrpB hru_area <1e-06 to 1e+09>
+1 1 1 
+BadLake1974-1975_GrpB hru_ASL <0 to 360>
+0 0 0 
+BadLake1974-1975_GrpB hru_elev <0 to 1e+05>
+637 637 637 
+BadLake1974-1975_GrpB hru_GSL <0 to 90>
+0 0 0 
+BadLake1974-1975_GrpB hru_lat <-90 to 90>
+51.32 51.32 51.32 
+BadLake1974-1975_GrpB hru_names
+'HRU' 'HRU2' 'HRU3' 
+BadLake1974-1975_GrpB HRU_OBS <1 to 100>
+1 2 3 
+1 2 3 
+1 2 3 
+1 2 3 
+1 2 3 
+BadLake1974-1975_GrpB Ht <0.001 to 100>
+0.1 0.25 1 
+BadLake1974-1975_GrpB inhibit_bs <0 to 1>
+0 0 0 
+BadLake1974-1975_GrpB inhibit_evap <0 to 1>
+0 0 0 
+BadLake1974-1975_GrpB inhibit_subl <0 to 1>
+0 0 0 
+BadLake1974-1975_GrpB INIT_STATE
+'' 
+BadLake1974-1975_GrpB Kstorage <0 to 200>
+0 0 0 
+BadLake1974-1975_GrpB Lag <0 to 1e+04>
+0 0 0 
+BadLake1974-1975_GrpB lapse_rate <0 to 2>
+0.75 0.75 0.75 
+BadLake1974-1975_GrpB Loop_to
+' ' ' ' 
+BadLake1974-1975_GrpB lower_ssr_K <0 to 100>
+0 0 0 
+BadLake1974-1975_GrpB Major <1 to 100>
+5 5 5 
+BadLake1974-1975_GrpB nfactor <0 to 10>
+0 0 0 
+BadLake1974-1975_GrpB N_S <1 to 500>
+320 320 320 
+BadLake1974-1975_GrpB obs_elev <0 to 1e+05>
+0 0 0 
+0 0 0 
+BadLake1974-1975_GrpB order <1 to 1000>
+1 2 3 
+BadLake1974-1975_GrpB ppt_daily_distrib <0 to 1>
+1 1 1 
+BadLake1974-1975_GrpB precip_elev_adj <-1 to 1>
+0 0 0 
+BadLake1974-1975_GrpB preferential_flow <0 to 1>
+0 0 0 
+BadLake1974-1975_GrpB PriorInfiltration <0 to 1>
+1 1 1 
+BadLake1974-1975_GrpB Qe_subl_from_SWE <0 to 1>
+0 0 0 
+BadLake1974-1975_GrpB RapidAdvance_to
+' ' 
+BadLake1974-1975_GrpB rechr_ssr_K <0 to 100>
+0 0 0 
+BadLake1974-1975_GrpB rs <0 to 0.01>
+0 0 0 
+BadLake1974-1975_GrpB runKstorage <0 to 200>
+0 0 0 
+BadLake1974-1975_GrpB runLag <0 to 1e+04>
+0 0 0 
+BadLake1974-1975_GrpB RUN_END <0 to 1e+05>
+0 
+BadLake1974-1975_GrpB RUN_ID <-1e+08 to 1e+08>
+1 
+BadLake1974-1975_GrpB RUN_START <0 to 1e+05>
+0 
+BadLake1974-1975_GrpB Sdinit <0 to 5000>
+0 0 0 
+BadLake1974-1975_GrpB Sdmax <0 to 5000>
+0 0 0 
+BadLake1974-1975_GrpB Sd_ByPass <0 to 1>
+0 0 0 
+BadLake1974-1975_GrpB Sd_gw_K <0 to 100>
+0 0 0 
+BadLake1974-1975_GrpB Sd_ssr_K <0 to 100>
+0 0 0 
+BadLake1974-1975_GrpB snow_rain_determination <0 to 2>
+0 0 0 
+BadLake1974-1975_GrpB soil_gw_K <0 to 100>
+0 0 0 
+BadLake1974-1975_GrpB soil_moist_init <0 to 5000>
+187 187 187 
+BadLake1974-1975_GrpB soil_moist_max <0 to 5000>
+375 375 375 
+BadLake1974-1975_GrpB soil_rechr_ByPass <0 to 1>
+1 1 1 
+BadLake1974-1975_GrpB soil_rechr_init <0 to 250>
+30 30 30 
+BadLake1974-1975_GrpB soil_rechr_max <0 to 350>
+60 60 60 
+BadLake1974-1975_GrpB soil_ssr_runoff <0 to 1>
+1 1 1 
+BadLake1974-1975_GrpB soil_withdrawal <1 to 4>
+3 3 3 
+3 3 3 
+BadLake1974-1975_GrpB ssrKstorage <0 to 200>
+0 0 0 
+BadLake1974-1975_GrpB ssrLag <0 to 1e+04>
+0 0 0 
+BadLake1974-1975_GrpB StateVars_to_Update
+' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 
+BadLake1974-1975_GrpB tfactor <0 to 10>
+0 0 0 
+BadLake1974-1975_GrpB Time_Offset <-12 to 12>
+0 0 0 
+BadLake1974-1975_GrpB tmax_allrain <-10 to 10>
+4 4 4 
+BadLake1974-1975_GrpB tmax_allsnow <-10 to 10>
+0 0 0 
+BadLake1974-1975_GrpB TraceVars
+' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 
+BadLake1974-1975_GrpB transp_limited <0 to 1>
+0 0 0 
+BadLake1974-1975_GrpB Use_QnD <0 to 1>
+0 0 0 
+BadLake1974-1975_GrpB whereto <0 to 1000>
+0 0 0 
+BadLake1974-1975_GrpB Zwind <0.01 to 100>
+10 10 10 
 ######
 Initial_State
 ######
@@ -46,11 +243,14 @@ Final_State
 ######
 Display_Variable:
 ######
-Display Above 1
-Display Below 1
+BadLake1974-1975_GrpB QdflatE@B 1
+BadLake1974-1975_GrpB QdflatD@B 1
+BadLake1974-1975_GrpB Albedo@B 1
 ######
 Display_Observation:
 ######
+obs Qsi 1 _obs
+obs Qso 1 _obs
 ######
 TChart:
 ######

@@ -313,7 +313,11 @@ try {
 			getline(DataFile, S);
 
 			while (S[0] != '#') {
-				string sub = S.substr(1, S.length() - 2);
+				//string sub = S.substr(1, S.length() - 2);
+				string sub = "";
+				size_t pos = 1; // start at 1 since first character on macro line should be a single quote
+				while (pos<S.length() && S[pos] != '\'') sub.push_back(S[pos++]); // build token until next single quote
+
 				Global::MacroModulesList->Add(sub);
 				getline(DataFile, S);
 			}
@@ -846,7 +850,7 @@ try {
 								TSeries * cdSeries = new TSeries(((int)(Dif * thisVar->FileData->Freq))*thisVar->FileData->ModN);
 
 								//move inside to avoid null ptr exception - Matt
-								cdSeries->Tag = (long)thisVar;
+								cdSeries->Tag = thisVar;
 
 								cdSeries->Title = SS;
 							}
@@ -1976,7 +1980,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 		thisVar = (ClassVar *)(ListBox3->Objects[ii]);
 
-		cdSeries[ii]->Tag = (long)thisVar;
+		cdSeries[ii]->Tag = thisVar;
 
 		string S = ListBox3->Strings[ii];
 		cdSeries[ii]->Title = S;
@@ -2481,7 +2485,7 @@ void  CRHMmain::RunClick(void) {
 
 		thisVar = (ClassVar *)(ListBox3->Objects[ii]);
 
-		cdSeries[ii]->Tag = (int)thisVar;
+		cdSeries[ii]->Tag = thisVar;
 
 		string S = ListBox3->Strings[ii];
 		cdSeries[ii]->Title = S;
@@ -3954,6 +3958,7 @@ string CRHMmain::GetObservationName(string vname)
 			return str;
 		}
 	}
+	return "";
 }
 
 string  CRHMmain::ExtractHruLayFunct(string S, long &Hru, long &Lay, string &Funct, string &FullName) {

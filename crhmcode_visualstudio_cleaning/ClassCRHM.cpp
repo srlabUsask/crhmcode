@@ -1961,7 +1961,8 @@ bool ClassData::DataReadFile(void) {
 	{
 		for (int j = 0; j < DataCnt + FilterCnt; j++)
 		{
-			Data[j][i] = 35.93;//-999999; //Changed by Manishankar to make it look like the original graph.
+			//Data[j][i] = 35.93;//-999999; //Changed by Manishankar to make it look like the original graph.
+			Data[j][i] = -999999;
 		}
 	}
 
