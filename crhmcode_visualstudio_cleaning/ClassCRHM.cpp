@@ -5902,3 +5902,15 @@ ClassData & ClassData::operator=(const ClassData & Cl) { //
 	else
 		Times = NULL;
 }
+
+
+void   LogDebug(const char* S) {
+
+	string SS = S;
+	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
+}
+void   LogDebug(const string S) {
+
+	string SS = S;
+	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
+}

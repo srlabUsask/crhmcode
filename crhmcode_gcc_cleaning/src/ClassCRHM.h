@@ -941,4 +941,8 @@ public:
 
 };
 string extract_units(string& Comment);
+
+void   LogDebug(const char *S);
+void   LogDebug(const string S);
+
 #endif
