@@ -320,10 +320,10 @@ string static FormatString(double DT, string) {
 };
 
 
-void static LogDebug(const string S) {
+//void static LogDebug(const string S) {
 
-	string SS = S;
-	cout << SS << endl;
-}
+//	string SS = S;
+//	cout << SS << endl;
+//}
 
 #endif

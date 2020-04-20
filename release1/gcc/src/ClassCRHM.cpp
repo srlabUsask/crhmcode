@@ -5374,7 +5374,7 @@ Multiplier_Info Convert::Multipliers[] = {
 	Multiplier_Info('c',	"cent",    1e-2) ,
 	Multiplier_Info('m',	"mili",    1e-3) ,
 	Multiplier_Info('u',	"micro",   1e-6) ,
-	Multiplier_Info('\B5',        "micro",   1e-6) ,
+	//Multiplier_Info('\B5',        "micro",   1e-6) ,
 	Multiplier_Info('n',	"nano",    1e-9) ,
 	Multiplier_Info('p',	"pico",    1e-12) ,
 	Multiplier_Info('f',	"femto",   1e-15) ,
@@ -5910,3 +5910,15 @@ ClassData & ClassData::operator=(const ClassData & Cl) { //
 	else
 		Times = NULL;
 }
+
+void   LogDebug(const char* S) {
+
+	string SS = S;
+	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
+}
+void   LogDebug(const string S) {
+
+	string SS = S;
+	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
+}
+
