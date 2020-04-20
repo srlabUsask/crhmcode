@@ -450,7 +450,7 @@ public:
 					break;
 			}
 
-		long Fix = (Dttime - Decade_Offsets[indx][1])*86400.0;
+		long Fix = roundl((Dttime - Decade_Offsets[indx][1])*86400.0);
 		time_t rawtime = (time_t)Fix;
 
 		tm *timeinfo = gmtime(&rawtime);

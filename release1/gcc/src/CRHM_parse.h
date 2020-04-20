@@ -1095,6 +1095,7 @@ struct execVindexVget : public execbase {
 			Lvar->Ihh = (int)eval.top() - 1;  // set by re-arrange in execbase
 			if (Lvar->Ihh < 0) Lvar->Ihh = 0;
 			eval.pop(); // remove element index
+		default: break;
 		}
 
 		eval.pop(); // remove variable not indexed

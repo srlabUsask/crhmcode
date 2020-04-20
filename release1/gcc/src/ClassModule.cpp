@@ -1,4 +1,4 @@
-#pragma once
+
 
 //#include "stdafx.h"
 #include <stdio.h>
@@ -591,7 +591,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("variable not found: " + ' ' + S, TERMINATE);
+			CRHMException Except("variable not found: " + S, TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -672,7 +672,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("variable not found: " + ' ' + S, TERMINATE);
+			CRHMException Except("variable not found: " + S, TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -4348,6 +4348,10 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 		long ii = Global::OurModulesList->IndexOf(newPar->basemodule.c_str());
 		return    (long)Global::OurModulesList->array[ii].Object;
 	}
+
+	CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+	LogError(Except);
+	throw Except; // does not return
 }
 //---------------------------------------------------------------------------
 long ClassModule::declputparam(string source, string param, string units, long **ivalue, long ***ilayvalue) {
