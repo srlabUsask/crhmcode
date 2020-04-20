@@ -1,4 +1,4 @@
-#pragma once
+
 
 //#include "stdafx.h"
 #include <stdio.h>
@@ -87,7 +87,7 @@ std::string StandardConverterUtility::GetDateTimeInStringForOutput(double dateti
 	if (hour < 10) { shour = "0" + std::to_string(hour); }
 	if (minute < 10) { sminute = "0" + std::to_string(minute); }*/
 
-	if (min == 59 && h != 23) { h = h+1; min = 0; } //added by Manishankar to round the minutes into the next hour.
+	//if (min == 59 && h != 23) { h = h+1; min = 0; } //added by Manishankar to round the minutes into the next hour.
 
 	std::string stime = std::to_string(y) + " " + std::to_string(m) + " " + std::to_string(d) + " " + std::to_string(h) + " " + std::to_string(min);
 

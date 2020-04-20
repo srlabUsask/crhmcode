@@ -19,7 +19,7 @@ class TSeries {
 public:
 	double *XValues;
 	float *YValues;
-	int Tag;
+	ClassVar *Tag;
 	int MaxCnt;
 	int Used;
 	string Title;

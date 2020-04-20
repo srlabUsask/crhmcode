@@ -1,4 +1,4 @@
-#pragma once
+
 
 //#include "stdafx.h"
 #include <stdio.h>
@@ -981,7 +981,7 @@ void ClassWQ_Hype::soil_pool_transformations(const long calcN, long long calcP, 
 			new_concentration(DONpool[1], water_lay[1][hh], &conc_bottom_lay[i_on][hh]);
 
 		if (thickness_lay[2][hh] > 0.0)
-			new_concentration(DONpool[3], water_lay[2][hh], &conc_below_lay[i_on][hh]);
+			new_concentration(DONpool[2], water_lay[2][hh], &conc_below_lay[i_on][hh]);
 	}
 
 	// Transformation of fastP to dissolved organic P (DOP/PP)

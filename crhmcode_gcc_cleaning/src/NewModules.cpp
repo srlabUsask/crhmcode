@@ -1,6 +1,6 @@
 // 01/25/18
 //---------------------------------------------------------------------------
-#pragma once
+
 
 //#include "stdafx.h"
 #include <stdio.h>
@@ -1001,8 +1001,8 @@ void Classobs::run(void) {
 		hru_rh[hh] = rhday_intvls[tt][hh];
 
 
-		//added by Manishankar. Possibly, needs to be removed. eaday_intvls[tt][hh] was not be assigned the appropriate value. It was having the default value which is a negative and very big.
-		eaday_intvls[tt][hh] = Common::estar(hru_t[hh])*hru_rh[hh] / 100.0;
+		//added by Manishankar. Possibly, needs to be removed. eaday_intvls[tt][hh] was not being assigned the appropriate value. It was having the default value which is a negative and very big.
+		//eaday_intvls[tt][hh] = Common::estar(hru_t[hh])*hru_rh[hh] / 100.0;
 
 
 
@@ -2537,7 +2537,7 @@ void Classebsm::run(void) {
 						{
 							//Manishankar. Need to uncomment the following line.
 
-							//Qn_ebsm[hh] = -0.53 + 0.47*(QdroD[hh] + QdfoD[hh])*(0.52 + 0.52*sunact[hh] / sunmax[hh])*(1.0 - Albedo[hh]);
+							Qn_ebsm[hh] = -0.53 + 0.47*(QdroD[hh] + QdfoD[hh])*(0.52 + 0.52*sunact[hh] / sunmax[hh])*(1.0 - Albedo[hh]);
 
 						}
 
@@ -15524,7 +15524,7 @@ void ClassHMSA::run(void) {
 
 				}
 				f[hh] /= Cum_d_lay[I_Avg - 1][hh];
-				if (Alpha_ID >0)
+				if (Alpha_ID[hh] >0)
 					Cum_Thaw[hh] = Thaw_D[hh] * Thaw_D[hh] * Rho_Ice*f[hh] * Water_Ice / (2.0*86400.0); // reverse of Eq. 4 (and 86400 is for daily totals - needs changing for timestep)
 				else
 					Cum_Thaw[hh] = Thaw_D[hh] * Thaw_D[hh] / (Alpha_T[hh] * Alpha_T[hh] * 86400.0); // reverse of Eq. (4) //daily value
@@ -15545,7 +15545,7 @@ void ClassHMSA::run(void) {
 					if (Frozen_D[hh] < Cum_d_lay[nn][hh]) break;
 				}
 				f[hh] /= I_Avg;
-				if (Alpha_ID >0)
+				if (Alpha_ID[hh] >0)
 					Cum_Frozen[hh] = Frozen_D[hh] * Frozen_D[hh] * Rho_Water*f[hh] * Water_Ice / (2.0*86400.0); // reverse of Eq. (4)
 				else
 					Cum_Frozen[hh] = Frozen_D[hh] * Frozen_D[hh] / (Alpha_F[hh] * Alpha_F[hh] * 86400.0); // reverse of Eq. (4) //daily value
@@ -15589,7 +15589,7 @@ void ClassHMSA::run(void) {
 				}
 				f[hh] /= Cum_d_lay[I_Avg - 1][hh];
 				Lamda_b[hh] = Cum_d_lay[I_Avg - 1][hh] / Lamda_b[hh];
-				if (Alpha_ID >0)
+				if (Alpha_ID[hh] >0)
 					Alpha = sqrt(2.0 / (Rho_Ice*f[hh] * Water_Ice));
 				else
 					Alpha = Alpha_T[hh];
@@ -15637,7 +15637,7 @@ void ClassHMSA::run(void) {
 				}
 				f[hh] /= Cum_d_lay[I_Avg - 1][hh];
 				Lamda_b[hh] = Cum_d_lay[I_Avg - 1][hh] / Lamda_b[hh];
-				if (Alpha_ID >0)
+				if (Alpha_ID[hh] >0)
 					Alpha = sqrt(2.0 / (Rho_Water*f[hh] * Water_Ice));
 				else
 					Alpha = Alpha_F[hh];
