@@ -9,6 +9,7 @@
 #include <string>
 #include <limits>
 #include <direct.h> 
+#include "ClassCRHM.h"
 
 
 
@@ -203,15 +204,27 @@ void TStringList::Delete(int Index) {
 }
 
 string &TStrings::operator[](int ii) {
-	string result = "";
-	if (ii < 0) { return result; }
-	if (ii >= StringList->Count) { return result; }
+	//string result = "";
+	if (ii < 0 || ii >= StringList->Count)
+	{ 
+		//added by Manishankar.
+		CRHMException Except("Array index out of bounds.", TERMINATE);
+		LogError(Except);
+		throw CRHMException(Except);
+	}
+	//if (ii >= StringList->Count) { return result; }
 	return StringList->array[ii].Name;
 }
 
 TObject* &TObjects::operator[](int ii) {
-	TObject * to ;
-	if (ii < 0) { return to; }
+	//TObject * to ;
+	if (ii < 0 || ii >= StringList->Count)
+	{ 
+		//added by Manishankar.
+		CRHMException Except("Array index out of bounds.", TERMINATE);
+		LogError(Except);
+		throw CRHMException(Except);
+	}
 	return StringList->array[ii].Object;
 }
 
