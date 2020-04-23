@@ -4573,7 +4573,7 @@ public:
 	void finish(bool good);
 
 	Classglacier* klone(string name) const;
-	float Classglacier::DepthofSnow(float SWE);
+	float DepthofSnow(float SWE);
 };
 
 class ClassXG : public ClassModule {
@@ -5165,7 +5165,7 @@ public:
 	void init(void);
 	void run(void);
 
-	void Classalbedoobs2::albedo(long jday, float Qnc);
+	void albedo(long jday, float Qnc);
 
 	Classalbedoobs2* klone(string name) const;
 };
