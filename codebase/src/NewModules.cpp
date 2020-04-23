@@ -1012,7 +1012,8 @@ void Classobs::run(void) {
 	long tt = Global::DTindx%Global::Freq;
 
 	//DTnow[0] = std::stod(getTimeGG());
-	DTnow[0] = Common::DateTimeDt();
+	//DTnow[0] = Common::DateTimeDt();
+	DTnow[0] = (double) Global::DTnow; //added by Manishankar to solve the output difference problem.
 	DTindx[0] = Global::DTindx;
 
 	for (hh = 0; chkStruct(); ++hh) {

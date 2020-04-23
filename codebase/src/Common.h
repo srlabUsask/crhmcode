@@ -17,7 +17,7 @@
 #define GetCurrentDir _getcwd
 #endif
 
-#if defined(__linux__)
+#if defined(__linux__) || defined(__APPLE__)
 #include <unistd.h>
 #define GetCurrentDir getcwd
 #endif

@@ -1775,7 +1775,7 @@ MMSData *  CRHMmain::RunClick2Start()
 #if defined(_WIN32)
 		AfxMessageBox(_T("First observation day - not an entire day"));
 #endif
-#if defined(__linux__)
+#if defined(__linux__)|| defined(__APPLE__)
 		string message = "First observation day - not an entire day";
 		LogMessageX(message.c_str());
 #endif
@@ -1787,7 +1787,7 @@ MMSData *  CRHMmain::RunClick2Start()
 #if defined(_WIN32)
 		AfxMessageBox(_T("No model output selected"));
 #endif
-#if defined(__linux__)
+#if defined(__linux__)|| defined(__APPLE__)
 		string message = "No model output selected";
 		LogMessageX(message.c_str());
 #endif
@@ -2293,7 +2293,7 @@ void  CRHMmain::RunClick(void) {
 #if defined(_WIN32)
 		AfxMessageBox(_T("First observation day - not an entire day"));
 #endif
-#if defined(__linux__)
+#if defined(__linux__)|| defined(__APPLE__)
 		string message = "First observation day - not an entire day";
 		LogMessageX(message.c_str());
 #endif
@@ -2304,7 +2304,7 @@ void  CRHMmain::RunClick(void) {
 #if defined(_WIN32)
 		AfxMessageBox(_T("No model output selected"));
 #endif
-#if defined(__linux__)
+#if defined(__linux__)|| defined(__APPLE__)
 		string message = "No model output selected";
 		LogMessageX(message.c_str());
 #endif
@@ -3471,7 +3471,7 @@ string CRHMmain::GetCaptionFromAboutBox()
 	CRHMAboutBox aboutbox;
 	return aboutbox.versionstring;
 #endif
-#if defined(__linux__)
+#if defined(__linux__)|| defined(__APPLE__)
 	return "";
 #endif
 }

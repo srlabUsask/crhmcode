@@ -1138,7 +1138,10 @@ void Defdeclgetvar::CallDecl() {
 
 	GetUnit = Macro->FindWildVarFloat(name, thisVar); // chnaged folowwing 2018 , false, true); // just find name
 
-	if (thisVar != NULL && thisVar->varType == CRHM::Int)
+
+	//if (thisVar != NULL && thisVar->varType == CRHM::Int) //Manishankar did this to fix output differences
+	if (Global::thisVar != NULL && ((ClassVar*)Global::thisVar)->varType == CRHM::Int)
+	
 		Int = true;
 	else
 		Int = false;
@@ -1164,7 +1167,8 @@ void Defdeclgetvar::CallDecl() {
 		FP->second.Me = Macro;
 
 		if (Int) {
-			if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) {
+			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
+			if (((ClassVar*)Global::thisVar)->varType == CRHM::NDEF || ((ClassVar*)Global::thisVar)->varType == CRHM::NDEFN) {
 				FP->second.kind = VarCHRM::CRHMint2;
 				FP->second.ivalue2 = const_cast<long **> (fix2_long_const);
 			}
@@ -1174,7 +1178,8 @@ void Defdeclgetvar::CallDecl() {
 			}
 		}
 		else {
-			if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) {
+			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
+			if (((ClassVar*)Global::thisVar)->varType == CRHM::NDEF || ((ClassVar*)Global::thisVar)->varType == CRHM::NDEFN) {
 				FP->second.kind = VarCHRM::CRHM2;
 				FP->second.value2 = const_cast<float **> (fix2_const);
 			}
@@ -1193,7 +1198,8 @@ void Defdeclputvar::CallDecl() {
 
 	GetUnit = Macro->FindWildVarFloat(name, thisVar);//, false, true); // just find name
 
-	if (thisVar != NULL && thisVar->varType == CRHM::Int)
+	//if (thisVar != NULL && thisVar->varType == CRHM::Int) //Manishankar did this to fix output differences
+	if (Global::thisVar != NULL && ((ClassVar*)Global::thisVar)->varType == CRHM::Int)
 		Int = true;
 	else
 		Int = false;
@@ -1222,7 +1228,8 @@ void Defdeclputvar::CallDecl() {
 			FP->second.kind = VarCHRM::CRHMint;
 			FP->second.ivalue = const_cast<long *> (fix_long);
 		}
-		else if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) {
+		//else if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences.
+		else if (((ClassVar*)Global::thisVar)->varType == CRHM::NDEF || ((ClassVar*)Global::thisVar)->varType == CRHM::NDEFN) {
 			FP->second.kind = VarCHRM::CRHM2;
 			FP->second.value2 = const_cast<float **> (fix2);
 		}
