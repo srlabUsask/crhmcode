@@ -4330,24 +4330,24 @@ public:
 	float parametric_contrib_frac_subtract(void);
 	float parametric_contrib_frac_add(const float contrib_frac_slice, const float delta_Sd);
 
-	float ClassSoilPrairie::parametric_Sd_add(const float applied_depth);
-	float ClassSoilPrairie::parametric_Sd_subtract(const float applied_depth);
+	float parametric_Sd_add(const float applied_depth);
+	float parametric_Sd_subtract(const float applied_depth);
 
-	float ClassSoilPrairie::parametric_area_frac(const float vol_frac);
+	float parametric_area_frac(const float vol_frac);
 	void calc_total_evap(const float actual_evap, const float precip);
 
 	// functions for variation 1
-	float ClassSoilPrairie::PCM_area_frac(float maxarea, float volume, float S, float h);
-	void ClassSoilPrairie::PCM_calc_h_and_S(float maxvolume, float maxarea, float &S, float &h);
-	float ClassSoilPrairie::PCM_wetland_drainage_area(float maxarea);
-	void ClassSoilPrairie::PCM_evap(float evap);
-	void ClassSoilPrairie::PCM_set_Sd();
-	void ClassSoilPrairie::PCM_rain();
-	void ClassSoilPrairie::PCM_runoff();
-	float ClassSoilPrairie::PCM_route_excess();
+	float PCM_area_frac(float maxarea, float volume, float S, float h);
+	void PCM_calc_h_and_S(float maxvolume, float maxarea, float &S, float &h);
+	float PCM_wetland_drainage_area(float maxarea);
+	void PCM_evap(float evap);
+	void PCM_set_Sd();
+	void PCM_rain();
+	void PCM_runoff();
+	float PCM_route_excess();
 
 	// functions for variation 2
-	float ClassSoilPrairie::PDMROF_add_subtract(float deltaSd);
+	float PDMROF_add_subtract(float deltaSd);
 
 
 	ClassSoilPrairie* klone(string name) const;
