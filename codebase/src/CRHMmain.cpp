@@ -3415,7 +3415,7 @@ void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
 	else
 		ID = thisPar->ivalues[0];
 
-	OpenNameReport = ProjectDirectory + "/CRHM_output";
+	OpenNameReport = ProjectDirectory + "/CRHM_output"; //manishankar updated this line to make it suitable for both windows and linux.s
 	if (ID >= 0) {
 		if (ID > 0) {
 			OpenNameReport += "_";
