@@ -144,7 +144,7 @@ void TStringList::CommaText(string s) { //used to read "AnnandaleX, calcsunX, ca
 	} // for
 }
 
-void TStringList::SaveToFile(string FileName) {
+void TStringList::SaveToFile(string FileName) {	
 	ofstream file;
 	file.open(FileName.c_str());
 

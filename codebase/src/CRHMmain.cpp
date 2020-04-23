@@ -2983,7 +2983,7 @@ ClassPar *ParFind(string name) { // where name is concatenation of MODULE and NA
 
 
 void  CRHMmain::AllRprt(void)
-{
+{	
 	TStringList *LogList = new TStringList;
 
 	RprtHeader(LogList, SeriesCnt);
@@ -3000,7 +3000,7 @@ void  CRHMmain::AllRprt(void)
 		for (int vv = 0; vv < SeriesCnt; ++vv) {
 			if (cdSeries[0]->Count() == cdSeries[vv]->Count()) { // has to equal first series length
 				ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
-				int prec = 7;
+				int prec = 7;				
 				//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
 				/*
 				if (thisVar->varType == CRHM::Int || thisVar->varType == CRHM::ReadI)
@@ -3012,7 +3012,7 @@ void  CRHMmain::AllRprt(void)
 		}
 
 		LogList->Add(Sx);
-	}
+	}	
 
 	LogList->SaveToFile(OpenNameReport);
 
@@ -3415,7 +3415,7 @@ void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
 	else
 		ID = thisPar->ivalues[0];
 
-	OpenNameReport = ProjectDirectory + "\\CRHM_output";
+	OpenNameReport = ProjectDirectory + "/CRHM_output";
 	if (ID >= 0) {
 		if (ID > 0) {
 			OpenNameReport += "_";
