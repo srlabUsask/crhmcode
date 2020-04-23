@@ -1,0 +1,148 @@
+Description - to be added
+###### Version: CRHM_NEW 1.84  Creation: 11/01/06 15:56
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+AKAs:
+######
+OBSR Convert_Qnsn_QnD Qnsn Qnsn# NeedleLeaf
+OBSR NeedleLeaf Qli Qli# long
+OBSR ebsm QnD QnD# Convert_Qnsn_QnD
+######
+Macros:
+######
+'Convert_Qnsn_QnD'
+'declreadobs, Qnsn, NOBS, description, (W/m^2)'
+'declobs,QnD#, NHRU, description, (W/m^2)'
+'command'
+'if(STEP%FREQ == 1) QnD#[hh] = Qnsn[hh]*0.0864 else QnD#[hh] = QnD#[hh] + Qnsn[hh]*0.0864 endif'
+'end'
+######
+Observations:
+######
+Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+basin CRHM 06/22/06
+global CRHM 08/28/06
+obs CRHM 05/25/06
+interception CRHM 11/01/06
+Slope_Qsi CRHM 07/06/06
+calcsun CRHM 06/09/05
+long CRHM 07/12/05
+pbsm CRHM 09/27/06
+albedo CRHM 12/15/05
+NeedleLeaf CRHM 07/21/05
+Convert_Qnsn_QnD Macro 04/20/06
+ebsm CRHM 02/21/06
+######
+Parameters:
+######
+albedo Albedo_bare
+0.17 0.17 0.17 
+basin Albedo
+0.17 0.17 0.17 
+basin basin_area
+3 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 1 1 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin hru_names
+'HRU' 'HRU2' 'HRU3' 
+basin Ht
+0.1 0.1 0.1 
+basin LAI
+2.2 2.2 2.2 
+basin RUN_ID
+1 
+ebsm delay_melt
+0 0 0 
+ebsm nfactor
+0 0 0 
+ebsm tfactor
+0 0 0 
+global Time_Offset
+0 0 0 
+interception k
+0.0113 0.0113 0.0113 
+interception Sbar
+6.6 6.6 6.6 
+interception WidthJ
+75 75 75 
+NeedleLeaf Vf
+0.5 0.5 0.5 
+NeedleLeaf Z0snow
+0.01 0.01 0.01 
+NeedleLeaf Zref
+1.5 1.5 1.5 
+NeedleLeaf Zwind
+10 10 10 
+obs catchadjust
+0 0 0 
+obs HRU_OBS
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+pbsm distrib
+1 1 1 
+pbsm fetch
+1000 1000 1000 
+pbsm inhibit_bs
+0 0 0 
+pbsm inhibit_evap
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+obs hru_snow 1
+obs hru_u 1
+interception net_snow 1
+interception SI_Subl 1
+pbsm SWE 1
+interception v 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+badlakeflow7374.prj
+ 
+(mm/int)
+ 
+ 
+ 
+######

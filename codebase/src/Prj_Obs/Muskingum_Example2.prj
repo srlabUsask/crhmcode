@@ -1,0 +1,104 @@
+Description - to be added
+###### Version: CRHM 2.39  Creation: 04/03/08 13:25
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Example_RB'
+'declreadobs,Inflow, NOBS, "Inflows", (m^3/int)'
+'declvar, basinflow, BASIN, "basin inflow", (m^3/int)'
+'declvar, basingw, BASIN, "basin ground water", (m^3/int)'
+'declparam, RB_Dummy, NHRU,[0.0], 0.0, 1.0, "Dummy_parameter", (1/s)'
+'command'
+'  basinflow[1] = Inflow[1]'
+'end'
+'RB_Grp'
+'declgroup'
+'Example_RB'
+'command'
+'end'
+'REW_Grp'
+'declgroup'
+'REW_route'
+'command'
+'end'
+######
+Observations:
+######
+C:\CRHM\Muskingum_Example2.obs
+######
+Dates:
+######
+1973 10 1
+1973 10 2
+######
+Modules:
+######
+RB_Grp Macro 04/20/06
+REW_Grp Macro 04/20/06
+######
+Parameters:
+######
+RB_Grp RB_Dummy <0 to 1>
+0 
+REW_Grp Channel_shp <0 to 2>
+0 
+REW_Grp RB_area <1E-6 to 1E9>
+1 
+REW_Grp route_H <0.01 to 1000>
+2 
+REW_Grp route_L <0.01 to 1E5>
+3.69 
+REW_Grp route_n <0.016 to 0.2>
+0.025 
+REW_Grp route_R <0.01 to 1E4>
+0.5 
+REW_Grp watershed_area <1E-6 to 1E9>
+1 
+REW_Grp WS_gwLag <0 to 1E4>
+0 
+REW_Grp WS_gworder <1 to 1000>
+1 
+REW_Grp WS_gwwhereto <0 to 1000>
+0 
+REW_Grp WS_gwX_M <0 to 0.5>
+0.25 
+REW_Grp WS_Lag <0 to 1E4>
+0 
+REW_Grp WS_order <1 to 1000>
+1 
+REW_Grp WS_whereto <0 to 1000>
+0 
+REW_Grp WS_X_M <0 to 0.5>
+0.25 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+REW_Grp WS_outflow@B 1
+######
+Display_Observation:
+######
+obs Inflow 1 _obs
+obs Outflow_example 1 _obs
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+ 
+
+ 
+ 
+ 
+######

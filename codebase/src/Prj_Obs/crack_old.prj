@@ -1,0 +1,105 @@
+Description - to be added
+###### Version: CRHM 1.62  Creation: 2/8/2006 13:47
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+C:\CRHM\junk_snowmeltD_new.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+basin CRHM basic 11/25/04
+global CRHM basic 12/01/05
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/14/05
+intcp CRHM basic 01/01/02
+netall CRHM basic 12/01/04
+NO_pbsm CRHM basic 12/06/04
+albedo CRHM basic 07/27/04
+ebsm CRHM basic 01/20/06
+crack CRHM basic 02/08/06
+srunoff CRHM basic 03/06/02
+######
+Parameters:
+######
+basin basin_area
+1 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 
+basin hru_ASL
+0 
+basin hru_elev
+1380 
+basin hru_GSL
+0 
+basin hru_lat
+60.5 
+basin hru_names
+'PLT' 
+basin RUN_ID
+1 
+crack fallstat
+50 
+crack Major
+5 
+ebsm delay_melt
+0 
+ebsm nfactor
+0 
+ebsm tfactor
+0 
+global Time_Offset
+2 
+netall hru_alb
+0.17 
+NO_pbsm inhibit_evap
+0 
+obs catchadjust
+1 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+ebsm snowmeltD 1
+NO_pbsm SWE 1
+######
+Display_Observation:
+######
+obs snowmeltD_new 1 _obs
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2005
+ 
+EBSM_PLT1_2002.prj
+ 
+
+ 
+ 
+ 
+######

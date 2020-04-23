@@ -1,0 +1,107 @@
+Description - to be added
+###### Version: NON-DLL 5.45  Creation: 6/24/2005 11:55
+Dimensions:
+######
+nhru 4
+nlay 4
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\CRHM\PLT1_2002.obs
+######
+Dates:
+######
+2002 4 9
+2002 7 1
+######
+Modules:
+######
+basin CRHM new 11/25/04
+global CRHM new 05/31/05
+obs CRHM new 05/03/05
+long CRHM new 06/23/05
+intcp CRHM new 01/01/02
+NO_pbsm CRHM new 12/06/04
+MSM CRHM new 06/24/05
+######
+Parameters:
+######
+basin basin_area
+8 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+4 1.5 1.5 1 
+basin hru_ASL
+0 0 0 0 
+basin hru_elev
+1450 1380 1380 1300 
+basin hru_GSL
+0 0 0 0 
+basin hru_lat
+60 60 60 60 
+basin hru_names
+'PLT' 'NF' 'SF' 'Valley' 
+basin RUN_ID
+1 
+global Extra
+0 0 0 0 
+global Time_Offset
+0 0 0 0 
+MSM a1
+1.08E7 1.08E7 1.08E7 1.08E7 
+MSM a2
+7.2E5 7.2E5 7.2E5 7.2E5 
+MSM amax
+0.84 0.84 0.84 0.84 
+MSM amin
+0.5 0.5 0.5 0.5 
+MSM smin
+10 10 10 10 
+MSM Z0snow
+0.01 0.01 0.01 0.01 
+MSM Zref
+2 2 2 2 
+NO_pbsm inhibit_evap
+0 0 0 0 
+obs catchadjust
+1 1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 0.75 
+obs obs_elev
+637 637 637 637 
+obs tmax_allrain
+0 0 0 0 
+obs tmax_allsnow
+0 0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+MSM snowmeltD 1
+NO_pbsm SWE 1
+MSM T0 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+TChart
+ 
+ 
+(mm)
+ 
+ 
+ 
+######

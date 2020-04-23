@@ -1,0 +1,62 @@
+Description - to be added
+###### Version: NON-DLL 5.04  Creation: 5/6/03 16:11
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 5
+######
+Observations:
+######
+C:\CRHM\TestFirstFile.obs
+C:\CRHM\TestDaily.obs
+C:\CRHM\TestDaily2.obs
+C:\CRHM\TestSparse.obs
+C:\CRHM\TestDailyShort.obs
+C:\CRHM\TestFirst2.obs
+C:\CRHM\TestFirstFileShort.obs
+######
+Modules:
+######
+Sparse CRHM basic 05/02/03
+######
+Dates:
+######
+1998 4 11
+1998 6 1
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Sparse OurD1 1
+Sparse OurD1s 1
+Sparse OurD2 1
+Sparse OurS1 1
+Sparse OurS2 1
+Sparse Ourt 1
+Sparse Ourt2 1
+Sparse Ourt2mean 1
+Sparse Ourtmean 1
+Sparse Ourtshort 1
+Sparse Ourtshortmean 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\TestFiles.prj
+ 
+()
+ 
+ 
+######

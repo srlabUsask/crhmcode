@@ -1,0 +1,166 @@
+Description - to be added
+###### Version: CRHM 2.03  Creation: 09/07/07 14:39
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Pond_Sim'
+'declvar, hru_actet, NHRU, "actual evaporation", (mm/int)'
+'declvar, hru_cum_actet, NHRU, "cumulativeactual evaporation", (mm)'
+'declvar, hru_evap, NHRU, "calculated evaporation", (mm/int)'
+'declvar, intcp_evap, NHRU, "canopy evaporation", (mm/int)'
+'declvar, infil, NHRU, "infiltration", (mm/int)'
+'declvar, snowinfil, NHRU, "infiltration from snow", (mm/int)'
+'declvar, runoff, NHRU, "runoff", (mm/int)'
+'declvar, meltrunoff, NHRU, "melt runoff", (mm/int)'
+'command'
+'  if(MONTH == 5)'
+'    hru_evap[hh] = .01'
+'  else'
+'    if(MONTH == 9)'
+'      hru_evap[hh] = 0'
+'    endif'
+'  endif'
+'  if(MONTH == 4 && DAY == 10)'
+'      snowinfil[hh] = 1'
+'  else'
+'  if(MONTH == 4 && DAY == 11)'
+'      snowinfil[hh] = 0'
+'  endif'
+'  endif'
+'    if(MONTH == 4 && DAY == 25)'
+'      meltrunoff[hh] = 1'
+'  else'
+'  if(MONTH == 4 && DAY == 26)'
+'       meltrunoff[hh] = 0'
+'  endif'
+'  endif'
+'  if(MONTH == 7 && DAY == 3)'
+'      infil[hh] = 1'
+'  else'
+'  if(MONTH == 7 && DAY == 4)'
+'       infil[hh]  = 0'
+'  endif'
+'  endif'
+'if(MONTH == 7 && DAY == 23)'
+'      runoff[hh] = 1'
+'  else'
+'  if(MONTH == 7 && DAY == 24)'
+'       runoff[hh]  = 0'
+'  endif'
+'  endif'
+'end'
+######
+Observations:
+######
+######
+Dates:
+######
+1974 4 1 24
+1974 10 1
+######
+Modules:
+######
+Pond_Sim Macro 04/20/06
+Soil CRHM 06/04/07
+Netroute CRHM 06/04/07
+######
+Parameters:
+######
+basin basin_area
+1 
+basin hru_area
+1 1 1 
+basin Sdmax
+10 40 20 
+Netroute Kstorage
+0 0 0 
+Netroute Lag
+0 0 0 
+Netroute order
+1 2 3 
+Netroute runKstorage
+0 0 0 
+Netroute runLag
+0 0 0 
+Netroute Sd_ByPass
+0 0 0 
+Netroute soil_rechr_ByPass
+1 1 1 
+Netroute soil_rechr_max
+60 0 60 
+Netroute ssrKstorage
+0 0 0 
+Netroute ssrLag
+0 0 0 
+Netroute whereto
+2 0 0 
+Soil cov_type
+1 1 1 
+Soil rechr_ssr_K
+1 1 1 
+Soil Sdinit
+5 30 10 
+Soil Sd_gw_K
+0 0.1 0.1 
+Soil Sd_ssr_K
+0 0 0 
+Soil soil_gw_K
+0 0 0 
+Soil soil_moist_init
+187 0 187 
+Soil soil_moist_max
+375 0 375 
+Soil soil_rechr_init
+30 0 30 
+Soil soil_rechr_max
+60 0 60 
+Soil soil_type
+2 2 2 
+Soil transp_limited
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Netroute cum_to_Sd 1 2 3
+Pond_Sim hru_cum_actet 1 2 3
+Pond_Sim hru_evap 1
+Pond_Sim infil 1 2 3
+Netroute inflow 1 2 3
+Pond_Sim meltrunoff 1 2 3
+Netroute outflow 1 2 3
+Netroute runinflow 1 2 3
+Pond_Sim runoff 1 2 3
+Soil Sd 1 2 3
+Pond_Sim snowinfil 1 2 3
+Soil soil_moist 1 2 3
+Soil soil_rechr 1 2 3
+Soil soil_runoff 1 2 3
+Soil soil_ssr 1 2 3
+Netroute ssrcuminflow 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\BadSummer74Y.prj
+ 
+(mm)
+ 
+ 
+ 
+######

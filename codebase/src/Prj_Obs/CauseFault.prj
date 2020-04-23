@@ -1,0 +1,49 @@
+Description - to be added
+###### Version: DLL 1.12  Creation: 3/8/2004 14:37
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\BadWin74.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+DLLs:
+######
+C:\CRHM\March2004DLL.dll
+######
+Modules:
+######
+CauseFault C:\CRHM\March2004DLL.dll 03/08/04
+######
+Parameters:
+######
+CauseFault FaultType
+3 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+CauseFault a 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+TChart
+ 
+ 
+
+ 
+ 
+######

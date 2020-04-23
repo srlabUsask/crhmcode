@@ -1,0 +1,80 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\Pine95.obs
+######
+Modules:
+######
+global
+calcsun
+obs
+canopymelt
+######
+Dates:
+######
+1995 2 1
+1995 3 21
+######
+Parameters:
+######
+canopymelt Acan
+0.12 
+canopymelt Asnow
+0.8 
+canopymelt Exta0
+6.429 
+canopymelt Exta1
+-0.768 
+canopymelt Extb0
+-2.881 
+canopymelt Extb1
+2.342 
+canopymelt LAI
+2.2 
+canopymelt Longa0
+-5.143 
+canopymelt Longa1
+0.1405 
+canopymelt Longa2
+-0.0007 
+canopymelt Longa3
+1E-6 
+canopymelt Longkx0
+0.991 
+canopymelt Longkx1
+-0.747 
+global hru_ASL
+0 
+global hru_GSL
+0 
+global hru_elev
+637 
+global hru_lat
+51.32 
+obs catchadjust
+0 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+canopymelt Cumsnowmelt 1
+canopymelt snowmelt 1
+canopymelt subcanopyall 1
+######
+Display_Observation:
+######
+
+######

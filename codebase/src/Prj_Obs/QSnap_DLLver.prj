@@ -1,0 +1,76 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 2
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\SNAP\MET97.obs
+C:\SNAP\Snapoutput.obs
+######
+DLLs:
+######
+QuintonDLL.dll
+######
+Modules:
+######
+QSnap QuintonDLL.dll 03/16/03
+######
+Dates:
+######
+1997 3 25
+1997 4 28
+######
+Parameters:
+######
+QSnap n
+3.3 3.3 
+QSnap PHIE
+0.65 0.65 
+QSnap raintemp
+0.5 0.5 
+QSnap SD
+0 0 
+QSnap SWI
+0.03 0.03 
+QSnap TIa
+0.886 0.886 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+QSnap a 1 2
+QSnap at 1 2
+QSnap maxwet 1 2
+QSnap phie 1 2
+QSnap sd 1 2
+QSnap swe 1 2
+QSnap swi 1 2
+QSnap waves 1 2
+######
+Display_Observation:
+######
+obs SnapMaxwet 1 _obs
+obs Snapphie 1 _obs
+obs SnapSD 1 _obs
+obs Snapswe 1 _obs
+obs Snapswi 1 _obs
+obs Snapwaves 1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\QSnap_DLLver.prj
+ 
+(cm)
+ 
+ 
+######

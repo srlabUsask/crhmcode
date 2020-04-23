@@ -1,0 +1,132 @@
+Description - to be added
+###### Version: CRHM 2.40  Creation: 04/17/08 15:35
+Dimensions:
+######
+nhru 10
+nlay 3
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+GB401_TB.obs
+C:\CRHM\Quinton_output.obs
+######
+Dates:
+######
+2001 6 6
+2001 8 26
+######
+Modules:
+######
+Qmelt2 CRHM 04/10/03
+Qdrift2 CRHM 02/28/03
+Quinton2 CRHM 04/08/08
+######
+Parameters:
+######
+basin catchadjust <0 to 2>
+1 1 1 1 1 1 1 1 1 1 
+Qdrift2 InitSWE <0 to 1000>
+400 0 0 0 0 0 0 0 0 0 
+Qdrift2 lengthsnow <0 to 1E4>
+27 0 0 0 0 0 0 0 0 0 
+Qdrift2 meltLag <0 to 48>
+0 0 0 0 0 0 0 0 0 0 
+Qdrift2 meltstorage <0 to 20>
+0 0 0 0 0 0 0 0 0 0 
+Qmelt2 TIa0Mn <-10 to 10>
+0 0 0 0 0 0 0 0 0 0 
+Qmelt2 TIa1Mn <0 to 10>
+0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Qmelt2 TIs0Mn <-10 to 10>
+0 0 0 0 0 0 0 0 0 0 
+Qmelt2 TIs1Mn <0 to 10>
+0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Quinton2 a <0 to 50>
+25 25 25 25 25 25 25 25 25 25 
+15 15 15 15 15 15 15 15 15 15 
+15 15 15 15 15 15 15 15 15 15 
+Quinton2 d <0 to 100>
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+Quinton2 Drained <0 to 1>
+0.075 0 0 0 0 0 0 0 0 0 
+Quinton2 DrainTo <0 to 20>
+2 3 4 5 6 7 8 9 10 0 
+Quinton2 DriftDrainTo <1 to 20>
+1 2 3 4 5 6 7 8 9 10 
+Quinton2 flowLag <-1 to 192>
+0 0 0 0 0 0 0 0 0 0 
+Quinton2 flowstorage <0 to 20>
+0 0 0 0 0 0 0 0 0 0 
+Quinton2 FrozenTo <0 to 1>
+0 0 0 0 0 0 0 0 0 0 
+Quinton2 K_a <0 to 0.1>
+0.011 0.011 0.011 0.011 0.011 0.011 0.011 0.011 0.011 0.011 
+Quinton2 K_b <-10 to -0.1>
+-4.218 -4.218 -4.218 -4.218 -4.218 -4.218 -4.218 -4.218 -4.218 -4.218 
+Quinton2 length <0 to 1E4>
+14 14 14 14 14 14 14 14 14 14 
+Quinton2 n <0 to 10>
+2 2 2 2 2 2 2 2 2 2 
+1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 
+1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 
+Quinton2 Pors <0 to 1>
+0.96 
+0.9 
+0.87 
+0.43 
+0.43 
+Quinton2 Residual <0 to 1>
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 
+0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 
+Quinton2 runoffLag <0 to 48>
+0 0 0 0 0 0 0 0 0 0 
+Quinton2 runoffstorage <0 to 20>
+0 0 0 0 0 0 0 0 0 0 
+Quinton2 slope <0 to 1>
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+Quinton2 soil_type <0 to 4>
+0 0 0 0 0 0 0 0 0 0 
+1 1 1 1 1 1 1 1 1 1 
+2 2 2 2 2 2 2 2 2 2 
+Quinton2 tinit <-40 to 10>
+-8 -8 -8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 -8 -8 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Quinton2 Depth 1
+Quinton2 dmelt 1
+Qdrift2 driftmelt 1
+######
+Display_Observation:
+######
+obs d_surface(2) 1 _obs
+obs d_surface(8) 1 _obs
+obs Depth(2) 1 _obs
+obs Depth(8) 1 _obs
+obs dmelt(2) 1 _obs
+obs dmelt(8) 1 _obs
+######
+Auto_Run
+######
+TChart:
+######
+(m)
+ 
+ 
+(m)
+ 
+ 
+ 
+######

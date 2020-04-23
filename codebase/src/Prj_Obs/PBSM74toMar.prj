@@ -1,0 +1,67 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Observations:
+######
+Winter1974.obs
+######
+Modules:
+######
+basin
+global
+calcsun
+obs
+intcp
+pbsm
+######
+Dates:
+######
+1973 10 1
+1974 3 1
+######
+Parameters:
+######
+basin basin_area
+11.3900
+basin hru_ASL
+0.0000 0.0000 0.0000
+basin hru_GSL
+0.0000 0.0000 0.0000
+basin hru_area
+4.6700 5.0400 1.6800
+basin hru_elev
+637.0000 637.0000 637.0000
+basin hru_lat
+51.3170 51.3170 51.3170
+obs catchadjust
+0 0 0
+obs tmax_allrain
+0.0000 0.0000 0.0000
+obs tmax_allsnow
+0.0000 0.0000 0.0000
+pbsm distrib
+1.0000 1.0000 1.0000
+pbsm fetch
+1000.0000 1000.0000 1000.0000
+pbsm Ht
+0.0100 0.2500 1.0000
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+pbsm cumDrift 1 2 3
+pbsm cumSno 1
+pbsm cumSubl 1 2 3
+pbsm SWE 1 2 3
+######
+Display_Observation:
+######
+
+######

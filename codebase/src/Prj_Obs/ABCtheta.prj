@@ -1,0 +1,107 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 8
+nlay 3
+nobs 1
+######
+Observations:
+######
+C:\Program Files\CRHM\Examples\GB402_TB.obs
+######
+Modules:
+######
+Qmelt Quinton model 12/09/02
+Qdrift Quinton model 12/10/02
+Quinton Quinton model 12/16/02
+######
+Dates:
+######
+2002 5 19
+2002 8 26
+######
+Parameters:
+######
+basin catchadjust
+1 1 1 1 1 1 1 1
+basin DrainTo
+2 3 4 5 6 7 8 0
+basin length
+27 14 14 14 14 14 14 14
+basin Type
+1 2 2 2 2 2 2 2
+Qdrift InitSWE
+400 0 0 0 0 0 0 0
+Qdrift meltLag
+0 0 0 0 0 0 0 0
+Qdrift meltstorage
+0 0 0 0 0 0 0 0
+Qmelt Tg0
+1048 1048 1048 1048 1048 1048 1048 1048
+Qmelt Tg1
+1.889 1.889 1.889 1.889 1.889 1.889 1.889 1.889
+Qmelt Tm0
+127 127 127 127 127 127 127 127
+Qmelt Tm1
+7.97 7.97 7.97 7.97 7.97 7.97 7.97 7.97
+Qmelt Tm2
+-0.0049 -0.0049 -0.0049 -0.0049 -0.0049 -0.0049 -0.0049 -0.0049
+Quinton C_a0
+-8322 -8322 -8322 -8322 -8322 -8322 -8322 -8322
+Quinton C_a1
+9.159E4 9.159E4 9.159E4 9.159E4 9.159E4 9.159E4 9.159E4 9.159E4
+Quinton d
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1
+Quinton Drained
+0 0.2 0 0 0 0 0 0
+Quinton flowLag
+0 0 0 0 0 0 0 0
+Quinton flowstorage
+0 0 0 0 0 0 0 0
+Quinton Pore_a0
+1.771 1.771 1.771 1.771 1.771 1.771 1.771 1.771
+Quinton Pore_a1
+-4.759 -4.759 -4.759 -4.759 -4.759 -4.759 -4.759 -4.759
+Quinton Residual
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5
+0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8
+0.9 0.9 0.9 0.9 0.9 0.9 0.9 0.9
+Quinton runoffLag
+0 0 0 0 0 0 0 0
+Quinton runoffstorage
+0 0 0 0 0 0 0 0
+Quinton slope
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15
+Quinton soil_type
+0 0 0 0 0 0 0 0
+2 1 1 1 1 1 1 1
+2 2 2 2 2 2 2 2
+Quinton tinit
+-8 -8 -8 -8 -8 -8 -8 -8
+-8 -8 -8 -8 -8 -8 -8 -8
+-8 -8 -8 -8 -8 -8 -8 -8
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Quinton theta 2,1 2,2 2,3 8,1 8,2 8,3
+Quinton wDrained 2
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+
+
+(m3/m3)
+
+
+######

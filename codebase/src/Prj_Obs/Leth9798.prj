@@ -1,0 +1,153 @@
+Description - to be added
+###### Version: DLL 1.37  Creation: 1/27/2005 15:16
+Dimensions:
+######
+nhru 4
+nlay 1
+nobs 1
+######
+Observations:
+######
+Leth9798.obs
+######
+Dates:
+######
+1997 9 1
+1998 5 1
+######
+Modules:
+######
+basin CRHM basic 11/25/04
+global CRHM basic 12/16/04
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/14/05
+intcp CRHM basic 01/01/02
+netall CRHM basic 12/06/04
+pbsm CRHM basic 05/12/04
+net_rn CRHM basic 12/03/04
+albedo CRHM basic 07/27/04
+evap CRHM basic 12/08/04
+ebsm CRHM basic 12/03/04
+crack CRHM basic 05/18/04
+srunoff CRHM basic 03/06/02
+smbal CRHM basic 09/22/04
+route CRHM basic 01/17/05
+######
+Parameters:
+######
+basin basin_area
+4 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 1 1 1 
+basin hru_ASL
+0 0 0 0 
+basin hru_elev
+637 637 637 637 
+basin hru_GSL
+0 0 0 0 
+basin hru_lat
+51.32 51.32 51.32 51.32 
+basin hru_names
+'HRU' 'HRU2' 'HRU3' 'HRU4' 
+basin inhibit_evap
+0 0 0 0 
+basin RUN_ID
+1 
+crack fallstat
+50 50 50 50 
+crack Major
+5 5 5 5 
+ebsm delay_melt
+0 0 0 0 
+ebsm nfactor
+0 0 0 0 
+ebsm tfactor
+2 2 2 2 
+evap evap_type
+0 0 0 0 
+evap hru_elev
+894.6 894.6 894.6 894.6 
+evap Ht
+0.01 0.25 0.5 1 
+evap Zref
+1.5 1.5 1.5 1.5 
+evap Zwind
+10 10 10 10 
+global hru_elev
+894.5 894.5 894.5 894.5 
+global hru_lat
+50.11 50.11 50.11 50.11 
+global Time_Offset
+0 0 0 0 
+netall hru_alb
+0.17 0.17 0.17 0.17 
+net_rn F_Qg
+0.2 0.2 0.2 0.2 
+obs catchadjust
+1 1 1 1 
+obs tmax_allrain
+0 0 0 0 
+obs tmax_allsnow
+0 0 0 0 
+pbsm distrib
+1 1 1 1 
+pbsm fetch
+1000 1000 1000 1000 
+pbsm Ht
+0.01 0.25 1 1 
+pbsm inhibit_bs
+0 0 0 0 
+route Kstorage
+0 0 1 1 
+route Lag
+0.5 0.5 2 2 
+route order
+1 2 3 4 
+route whereto
+3 3 0 0 
+smbal cov_type
+3 3 3 3 
+smbal soil2gw_max
+0 0 0 0 
+smbal soil_moist_init
+187 187 187 187 
+smbal soil_moist_max
+375 375 375 375 
+smbal soil_rechr_init
+30 30 30 30 
+smbal soil_rechr_max
+60 60 60 60 
+smbal soil_type
+2 2 2 2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+pbsm cumDrift 1 2 3 4
+pbsm cumSno 1
+pbsm cumSubl 1 2 3 4
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+Log_All
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2004
+ 
+C:\CRHM\Leth9798.prj
+ 
+(mm)
+ 
+ 
+ 
+######

@@ -1,0 +1,115 @@
+Description - to be added
+###### Version: CRHM 1.99  Creation: 05/14/07 14:00
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'netall_from_Qn_Qg'
+'declreadobs,Qn_g, NOBS, "Qn observation", (W/m^2)'
+'declobsfunc,Qn_g, QnDT, DTOT'
+'declobsfunc,Qn_g, QnPOS, POS'
+'declvar, RnD,  NHRU, "all-wave net", "(mm/m^2*d)"'
+'declvar, Rn,  NHRU, "all-wave net", "(mm/m^2*int)"'
+'declvar, RnD_POS,  NHRU, "all-wave net", "(mm/m^2*d)"'
+'declgetvar obs, hru_t, "(°C)"'
+'declgetvar obs, hru_tmean, "(°C)"'
+'command'
+'  var L, L2'
+'     L= 86.4/(2501 - 2.361*hru_t[hh]) // W to mm/d'
+'     L2 = 86.4/(2501 - 2.361*hru_tmean[hh]) // W to mm/d'
+'     Rn[hh] = Qn_g[hh]*L/FREQ'
+'     RnD_POS[hh] = QnPOS[hh]*L2/FREQ'
+'     RnD[hh] = QnDT[hh]*L2/FREQ // mm/m2'
+'end'
+######
+Observations:
+######
+C:\Robs StDenis_Comp of excel and CRHM\StDenis_Rob\Obs\StDenis.obs
+######
+Dates:
+######
+2006 5 20
+2006 5 21
+######
+Modules:
+######
+obs CRHM 04/03/07
+netall_from_Qn_Qg Macro 04/20/06
+evap CRHM 05/03/07
+######
+Parameters:
+######
+basin basin_area
+1 
+basin hru_area
+1 1 1 
+basin hru_elev
+637 637 637 
+evap evap_type
+0 1 2 
+evap F_Qg
+0 0 0 
+evap Ht
+0.1 0.1 0.1 
+evap Htmax
+0.1 0.1 0.1 
+evap inhibit_evap
+0 0 0 
+evap LAImax
+3 3 3 
+evap LAImin
+0 0 0 
+evap PM_method
+0 0 0 
+evap rcs
+25 25 25 
+evap s
+1 1 1 
+evap Soil_Moist
+0.5 0.5 0.5 
+evap soil_type
+2 2 2 
+evap Zwind
+10 10 10 
+obs catchadjust
+1 1 1 
+obs HRU_OBS
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+evap hru_evap 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\StDenisNew.prj
+ 
+(mm/int)
+ 
+ 
+ 
+######

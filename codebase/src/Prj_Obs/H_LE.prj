@@ -1,0 +1,47 @@
+Description - to be added
+###### Version: CRHM 1.95  Creation: 4/19/2007 08:50
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+LE_.H.obs
+######
+Dates:
+######
+1999 1 2
+2005 1 1
+######
+Modules:
+######
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+######
+TChart:
+######
+Current Date: 4/19/2007 08:49
+
+F:\Rob\PHD_Thesis_Work\Conferences\CGU\Ameriflux\Evap\LE_.H.obs Last modified: 4/19/2007 08:49
+Description: Lethbridge_Ameriflux_Site_1999-2004_evap_param
+
+
+
+
+
+######

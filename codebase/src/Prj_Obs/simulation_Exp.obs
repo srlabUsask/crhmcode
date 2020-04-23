@@ -1,0 +1,20 @@
+Simulation test (04/27/01)
+$$ comment
+$Sim(01/01/01, 01/05/2001, 1) simulation
+$exp exp(01/01/01, 01/05/2001, -1)
+$log log(01/01/01, 01/05/2001, -1)
+$log mul(log 7)
+$pow pow(01/01/01, 01/05/2001, 2)
+$sine sine(1.0 0.0 01/01/01 01/05/01)
+$ramp ramp(32.0 0.0 01/01/01 01/05/01)
+$poly poly(01/01/01, 01/05/2001, 1, 1, 1, 1, 0)
+$V const(5)
+$powv powv(V 3)
+$logv logv(V 3)
+$expv expv(V 3)
+$polyv polyv(V 3 7 0 0 0)
+$x time(1)
+$x2 powv(x 2)
+$x3 powv(x 3)
+$j julian(0)
+############################################

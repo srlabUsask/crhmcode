@@ -1,0 +1,124 @@
+Description - to be added
+###### Version: CRHM_NEW 1.62  Creation: 2/15/2006 15:57
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+basin CRHM new 11/25/04
+global CRHM new 08/10/05
+obs CRHM new 05/03/05
+calcsun CRHM new 05/03/05
+intcp CRHM new 07/08/05
+NO_pbsm CRHM new 12/06/04
+albedo CRHM new 12/15/05
+frostdepth CRHM new 02/07/06
+ebsm CRHM new 02/03/06
+frozen CRHM new 02/07/06
+######
+Parameters:
+######
+basin basin_area
+1 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+1 
+basin hru_ASL
+0 
+basin hru_elev
+1380 
+basin hru_GSL
+0 
+basin hru_lat
+60.5 
+basin hru_names
+'PLT' 
+basin RUN_ID
+1 
+ebsm Albedo
+0.17 
+ebsm delay_melt
+0 
+ebsm nfactor
+0 
+ebsm tfactor
+0 
+ebsm U_ebsm
+0 
+frostdepth d
+2 
+frostdepth por
+0.5 
+frostdepth soil_type
+2 
+frostdepth Ta
+10 
+frostdepth theta
+0.5 
+frozen C
+1 
+frozen hru_tsoil
+269.1 
+frozen Parametric
+1 
+frozen porosity
+0.4 
+frozen S0
+0.8 
+frozen Si
+0.5 
+global Time_Offset
+2 
+NO_pbsm inhibit_evap
+0 
+obs catchadjust
+1 
+obs lapse_rate
+0.75 
+obs obs_elev
+1380 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2005
+ 
+EBSM_PLT1_2002.prj
+ 
+(mm)
+ 
+ 
+ 
+######

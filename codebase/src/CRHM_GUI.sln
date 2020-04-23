@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CRHM_GUI", "CRHM_GUI.vcxproj", "{A8C55449-0939-47A7-B52C-BDB9ABB5E450}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{262CF2CF-6469-457A-83D6-2F3136E6CDF5}"
+	ProjectSection(SolutionItems) = preProject
+		Console_CRHM_Visual_Studio.exe = Console_CRHM_Visual_Studio.exe
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Debug|x64.ActiveCfg = Debug|x64
+		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Debug|x64.Build.0 = Debug|x64
+		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Debug|x86.ActiveCfg = Debug|Win32
+		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Debug|x86.Build.0 = Debug|Win32
+		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Release|x64.ActiveCfg = Release|x64
+		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Release|x64.Build.0 = Release|x64
+		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Release|x86.ActiveCfg = Release|Win32
+		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A42AA37A-2D15-4908-B009-FA191B434B08}
+	EndGlobalSection
+EndGlobal

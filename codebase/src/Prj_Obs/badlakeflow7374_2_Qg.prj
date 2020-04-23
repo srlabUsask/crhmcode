@@ -1,0 +1,178 @@
+Description - to be added
+###### Version: CRHM_NEW 1.8  Creation: 09/28/06 10:24
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+'netall_from_Qn_Qg'
+'declreadobs,Qn_g, NOBS, "Qn observation", (W/m^2)'
+'declobsfunc,Qn_g, QnDT, DTOT'
+'declobsfunc,Qn_g, QnPOS, POS'
+'declvar, RnD,  NHRU, "all-wave net", "(mm/m^2*d)"'
+'declvar, Rn,  NHRU, "all-wave net", "(mm/m^2*int)"'
+'declvar, RnD_POS,  NHRU, "all-wave net", "(mm/m^2*d)"'
+'declgetvar obs, hru_t, "(°C)"'
+'declgetvar obs, hru_tmean, "(°C)"'
+'setpeer hru_t 0'
+'command'
+'  var L, L2'
+'     L= 86.4/(2501 - 2.361*hru_t[hh]) // W to mm/d'
+'     L2 = 86.4/(2501 - 2.361*hru_tmean[hh]) // W to mm/d'
+'     Rn[hh] = Qn_g[hh]*L/FREQ'
+'     RnD_POS[hh] = QnPOS[hh]*L2/FREQ'
+'     RnD[hh] = QnDT[hh]*L2/FREQ // mm/m2'
+'end'
+######
+Observations:
+######
+Winter1974.obs
+C:\CRHM\Bad_Sim_Qn_Qg.obs
+######
+Dates:
+######
+1973 10 1
+1974 6 1
+######
+Modules:
+######
+global CRHM 08/28/06
+obs CRHM 05/25/06
+calcsun CRHM 06/09/05
+intcp CRHM 07/08/05
+netall_from_Qn_Qg Macro 04/20/06
+pbsm CRHM 09/27/06
+evap CRHM 09/20/06
+albedo CRHM 12/15/05
+ebsm CRHM 02/21/06
+crack CRHM 06/29/06
+Soil CRHM 09/25/06
+Netroute CRHM 08/18/06
+######
+Parameters:
+######
+albedo Albedo_bare
+0.17 0.17 0.17 
+basin basin_area
+1 
+basin hru_area
+1 1 1 
+basin hru_elev
+637 637 637 
+basin Ht
+0.1 0.1 0.1 
+basin inhibit_evap
+0 0 0 
+crack fallstat
+50 50 50 
+crack Major
+5 5 5 
+crack PriorInfiltration
+0 0 0 
+ebsm Albedo
+0.17 0.17 0.17 
+ebsm delay_melt
+0 0 0 
+ebsm nfactor
+0 0 0 
+ebsm tfactor
+0 0 0 
+evap evap_type
+0 0 0 
+evap F_Qg
+0.2 0.2 0.2 
+evap GrangerRatio
+0 0 0 
+evap rs
+0.000579 0.000579 0.000579 
+evap Zref
+1.5 1.5 1.5 
+evap Zwind
+10 10 10 
+global hru_ASL
+0 0 0 
+global hru_GSL
+0 0 0 
+global hru_lat
+51.32 51.32 51.32 
+global Time_Offset
+0 0 0 
+Netroute Kstorage
+0 0 0 
+Netroute Lag
+0 0 0 
+Netroute order
+1 2 3 
+Netroute runKstorage
+0 0 0 
+Netroute runLag
+0 0 0 
+Netroute ssrKstorage
+0 0 0 
+Netroute ssrLag
+0 0 0 
+Netroute whereto
+0 0 0 
+obs catchadjust
+0 0 0 
+obs HRU_OBS
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+pbsm distrib
+1 1 1 
+pbsm fetch
+1000 1000 1000 
+pbsm inhibit_bs
+0 0 0 
+Soil cov_type
+3 3 3 
+Soil soil_gw_max
+0 0 0 
+Soil soil_moist_init
+187 187 187 
+Soil soil_moist_max
+375 375 375 
+Soil soil_rechr_init
+30 30 30 
+Soil soil_rechr_max
+60 60 60 
+Soil soil_ssr_K
+0 0 0 
+Soil soil_type
+2 2 2 
+Soil transp_limited
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+evap hru_evap 1 2 3
+######
+Display_Observation:
+######
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\badlakeflow7374.prj
+ 
+(mm/int)
+ 
+ 
+ 
+######

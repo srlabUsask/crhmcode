@@ -1,0 +1,59 @@
+Description - to be added
+###### Version: DLL 1.04  Creation: 9/19/03 09:56
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\GarthSim.obs
+######
+DLLs:
+######
+C:\CRHM\GarthDLL.dll
+######
+Modules:
+######
+TidePred C:\CRHM\GarthDLL.dll 09/19/03
+######
+Dates:
+######
+1994 9 1
+1994 9 5
+######
+Parameters:
+######
+TidePred azimuth
+0
+TidePred elev
+700
+TidePred Kind
+8
+TidePred lat
+52.17
+TidePred long
+41.68
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+TidePred OutVar 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+TChart
+
+
+(variable)
+
+
+######

@@ -1,0 +1,46 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 4
+nobs 6
+######
+Observations:
+######
+TSSM_2002.obs
+GB402_TB.obs
+######
+Modules:
+######
+######
+Dates:
+######
+2002 4 27
+2002 8 29
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+######
+Display_Observation:
+######
+obs p -1 _obs
+obs sm 1 _obs 2_obs 3_obs 4_obs 5_obs 6_obs
+obs t -1 _obs
+obs ts -1 _obs -1 _Avg -1 _Pos -2_obs -2 _Avg -2 _Pos -3_obs -3 _Avg -3 _Pos -4_obs -4 _Avg -4 _Pos -5_obs -5 _Avg -5 _Pos -6_obs -6 _Avg -6 _Pos
+######
+TChart:
+######
+ 
+(m)
+ 
+
+ 
+ 
+######

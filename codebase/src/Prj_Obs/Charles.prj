@@ -1,0 +1,114 @@
+Description - to be added
+###### Version: NON-DLL 5.40  Creation: 4/11/2005 16:18
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Evaporation'
+'declparam, A, NHRU, 0.023, 0.0, 1.0, description, (mm/day)'
+'declparam, B, NHRU,17.8, 0.0, 100.0, description, (°C)'
+'declparam, Zref, NHRU,1.5, 0.001, 100.0, Zref, (m)'
+'declparam, Zwind, NHRU,10,  0.001, 100.0, Zwinf, (m)'
+'declparam, Z0, NHRU,0.001,  0.001, 100.0, Zo, (m)'
+'declvar, EvapAlg, NHRU, evaporation_algorithm, (MJ/(m2/day))'
+'declvar,cum, NHRU, cum_evaporation_algorithm, (mm)'
+'declvar,Ra, NHRU,Ra, (s/m)'
+'declgetvar, obs, hru_tmean'
+'declgetvar, obs,hru_tmin'
+'declgetvar, obs,hru_tmax'
+'declgetvar, obs,u'
+'command'
+'var U U=max(u[0],  0.2)'
+'Ra[hh] = log(Zref[hh]/Z0[hh])* log(Zwind[hh]/Z0[hh])/0.4^2*U'
+'EvapAlg[hh] =-A[hh]*( hru_tmean[1] - B[hh])*Ra[hh]*( hru_tmax[1] - hru_tmin[1])^0.5*1/(245*2.501)'
+'cum[hh] =   cum[hh]  +   EvapAlg[hh]'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1974 5 1
+1974 6 1
+######
+Modules:
+######
+global CRHM basic 12/16/04
+calcsun CRHM basic 01/01/02
+obs CRHM basic 01/14/05
+Evaporation Modules 04/07/05
+netall CRHM basic 12/06/04
+net_rn CRHM basic 12/03/04
+evap CRHM basic 12/08/04
+######
+Parameters:
+######
+basin basin_area
+1 
+basin hru_area
+1 
+basin hru_elev
+637 
+basin Zref
+1.5 
+basin Zwind
+10 
+evap evap_type
+0 
+evap Ht
+0.1 
+evap inhibit_evap
+0 
+Evaporation A
+0.023 
+Evaporation B
+17.8 
+Evaporation Z0
+1 
+global hru_ASL
+0 
+global hru_GSL
+0 
+global hru_lat
+51.32 
+global Time_Offset
+0 
+netall hru_alb
+0.17 
+net_rn F_Qg
+0.2 
+obs catchadjust
+1 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Evaporation cum 1
+evap hru_cum_evapD 1
+Evaporation Ra 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+TChart
+ 
+ 
+(mm)
+ 
+ 
+ 
+######

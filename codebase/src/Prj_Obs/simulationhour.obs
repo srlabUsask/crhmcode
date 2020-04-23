@@ -1,0 +1,11 @@
+Simulation test (04/04/01)
+$$ comment
+$Sim(01/01/01, 01/03/2001, 1) simulation
+$t const(-0.2) my constant
+$rh const(60) my constant
+$C2 const(01/02/02) my constant
+$ea ea(t, rh) vapour pressure
+$Qsi const(100)
+$ppt const(0)
+$u const(1)
+############################################

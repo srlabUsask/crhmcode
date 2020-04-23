@@ -1,0 +1,182 @@
+starting module run-ahead to determine future variables
+######
+Time:
+1975 3 17
+######
+DTindx:
+19319
+######
+CurrentModuleRun:
+14
+######
+Dimension:
+3 2
+######
+Netroute HRU_cumbasinflow
+554.0859 951.4426 261.4925 
+######
+Netroute cum_preferential_flow_to_gw
+0 0 0 
+######
+Netroute cum_to_Sd
+0 0 0 
+######
+Netroute cum_to_soil_rechr
+0 0 0 
+######
+Netroute cumbasinflow
+1767022 0 0 
+######
+Netroute cumbasingw
+0 0 0 
+######
+Netroute cuminflow
+554.0859 951.4426 261.4925 
+######
+Netroute cumoutflow
+554.0859 951.4426 261.4925 
+######
+Netroute cumoutflow_diverted
+0 0 0 
+######
+Netroute gwcuminflow
+0 0 0 
+######
+Netroute gwcumoutflow
+0 0 0 
+######
+Netroute gwcumoutflow_diverted
+0 0 0 
+######
+Netroute runcuminflow
+554.6987 951.5889 261.4925 
+######
+Netroute runcumoutflow
+554.0859 951.4426 261.4925 
+######
+Netroute ssrcuminflow
+0 0 0 
+######
+Netroute ssrcumoutflow
+0 0 0 
+######
+Soil Sd
+0 0 0 
+######
+Soil cum_gw_flow
+0 0 0 
+######
+Soil cum_rechr_ssr
+0 0 0 
+######
+Soil cum_redirected_residual
+0 0 0 
+######
+Soil cum_runoff_to_Sd
+0 0 0 
+######
+Soil cum_soil_gw
+0 0 0 
+######
+Soil cum_soil_runoff
+154.9438 155.2342 155.6497 
+######
+Soil cum_soil_ssr
+0 0 0 
+######
+Soil gw
+187 187 187 
+######
+Soil soil_moist
+375 375 375 
+######
+Soil soil_rechr
+60 60 60 
+######
+albedo Albedo
+0.6100002 0.6100002 0.7220002 
+######
+ebsm LW_ebsm
+1.774022 2.892095 0 
+######
+ebsm u_ebsm
+0 0 -0.2715384 
+######
+evap hru_cum_actet
+0 0 0 
+######
+evap hru_cum_evap
+0 0 0 
+######
+frostdepth Cacc
+1.91363 1.838154 1.795832 
+######
+frostdepth Findex
+3297.178 3297.178 3297.178 
+######
+frostdepth Kacc
+1.31041 1.228233 1.18651 
+######
+frostdepth Lacc
+70.67535 66.93495 64.83757 
+######
+frostdepth Tfreeze
+126 288 288 
+######
+frostdepth frostdepth
+1.553662 1.545665 1.49268 
+######
+frozen cuminfil
+331.1663 331.1663 331.1663 
+######
+frozen cummeltrunoff
+7.328414 9.506199 9.766518 
+######
+frozen cumrunoff
+0 0 0 
+######
+frozen cumsnowinfil
+4.449874 2.562878 2.718107 
+######
+intcp cumnet_rain
+331.1663 331.1663 331.1663 
+######
+intcp cumnet_snow
+205.4317 205.4317 205.4317 
+######
+netall cum_net
+-nan(ind) -nan(ind) -nan(ind) 
+######
+obs cumhru_rain
+859.1671 859.1671 859.1671 
+######
+obs cumhru_snow
+309.1356 309.1356 309.1356 
+######
+obs cumhru_snow_meas
+309.1356 309.1356 309.1356 
+######
+pbsm SWE
+29.59851 54.3769 69.20969 
+######
+pbsm SnowAge
+0 0 0 
+######
+pbsm cumBasinSnowGain
+28.15307 0 0 
+######
+pbsm cumBasinSnowLoss
+18.54246 0 0 
+######
+pbsm cumDrift
+89.57092 35.79279 49.21566 
+######
+pbsm cumDriftIn
+89.57092 18.28979 155.5434 
+######
+pbsm cumSno
+309.1356 309.1356 309.1356 
+######
+pbsm cumSubl
+143.895 62.09098 34.60833 
+######

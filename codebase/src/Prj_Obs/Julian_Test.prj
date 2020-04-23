@@ -1,0 +1,57 @@
+Description - to be added
+###### Version: CRHM 2.02  Creation: 06/14/07 16:10
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Julian_Test'
+'declvar, Julian_Var, NHRU, "Julian variable", ()'
+'command'
+'    Julian_Var[hh] = JULIAN'
+' end'
+######
+Observations:
+######
+C:\Ellis\Expand_3.obs
+######
+Dates:
+######
+2002 11 1
+2003 7 1
+######
+Modules:
+######
+Julian_Test Macro 04/20/06
+######
+Parameters:
+######
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Julian_Test Julian_Var 1
+######
+Display_Observation:
+######
+obs J0 1 _obs
+obs J1 1 _obs
+obs J2 1 _obs
+######
+TChart:
+######
+Current Date: 06/14/07 16:02
+ 
+C:\CRHM\Winter1974Julian.obs Last modified: 06/14/07 14:18
+Description: Winter 1973 - 1974  11/10/00
+ 
+()
+ 
+ 
+ 
+######

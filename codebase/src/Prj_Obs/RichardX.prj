@@ -1,0 +1,83 @@
+Description - to be added
+###### Version: DLL 1.41  Creation: 5/4/2005 13:15
+Dimensions:
+######
+nhru 6
+nlay 2
+nobs 7
+######
+Macros:
+######
+'Myobs'
+'declgetvar,Sicart, Lw'
+'declobs,LWin, NOBS, "long wave", (W/m2)'
+'declvar, LWinVar, NHRU, "fred description", (W/m2)'
+'command'
+'LWin[1] =Lw[1]'
+'LWinVar[hh] =Lw[1]'
+'end'
+'SicartLong'
+'declreadobs, t, NOBS, "temp", (C)'
+'declreadobs, ea, NOBS, "vapour pressure", (kPa)'
+'declreadobs, rh, NOBS, "relative humidity", (fraction)'
+'declvar,Qlong, NHRU, "Sicart long", (W/m2)'
+'command'
+'var tau tau = 0.75'
+'Qlong[hh] = 1.24*((ea[0]*10)/(t[0]+273.15))^(1/7)*(1 + 0.44*rh[0]/100 - 0.18*tau)*5.67E-8*(t[0]+273.15)^4'
+'end'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 12 1
+1974 2 1
+######
+DLLs:
+######
+C:\CRHM\April2004DLL.dll
+######
+Modules:
+######
+Sicart C:\CRHM\April2004DLL.dll 04/26/04
+SicartLong Modules 04/12/05
+Myobs Modules 04/12/05
+Richard2 C:\CRHM\April2004DLL.dll 04/05/05
+######
+Parameters:
+######
+Richard2 hru_elev
+500 500 500 500 500 500 
+Richard2 Z0
+0.0004 0.0004 0.0004 0.0004 0.0004 0.0004 
+Richard2 Zref
+1.5 1.5 1.5 1.5 1.5 1.5 
+Richard2 Zwind
+10 10 10 10 10 10 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Sicart Lw 1
+SicartLong Qlong 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\Faro\Faro6HRU9798.prj
+ 
+(W/m2)
+ 
+ 
+ 
+######

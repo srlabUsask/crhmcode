@@ -1,0 +1,114 @@
+Description - to be added
+###### Version DLL 1.04
+Dimensions:
+######
+nhru 8
+nlay 3
+nobs 1
+######
+Observations:
+######
+GB402_TB.obs
+WL_116 - 2002.obs
+######
+DLLs:
+######
+QuintonDLL.dll
+######
+Modules:
+######
+Qmelt QuintonDLL.dll 04/10/03
+Qdrift QuintonDLL.dll 02/28/03
+Quinton QuintonDLL.dll 04/10/03
+######
+Dates:
+######
+2002 7 18
+2002 7 20
+######
+Parameters:
+######
+basin catchadjust
+1 1 1 1 1 1 1 1 
+basin DrainTo
+2 3 4 5 6 7 8 0 
+basin length
+27 14 14 14 14 14 14 14 
+basin Type
+1 2 2 2 2 2 2 2 
+Qdrift InitSWE
+0 0 0 0 0 0 0 0 
+Qdrift meltLag
+0 0 0 0 0 0 0 0 
+Qdrift meltstorage
+0 0 0 0 0 0 0 0 
+Qmelt TIa0Mn
+0 0 0 0 0 0 0 0 
+Qmelt TIa1Mn
+1 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Qmelt TIs0Mn
+0 0 0 0 0 0 0 0 
+Qmelt TIs1Mn
+0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 
+Quinton d
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+Quinton Drained
+0 0 0 0 0 0 0 0 
+Quinton flowLag
+0 0 0 0 0 0 0 0 
+Quinton flowstorage
+0 0 0 0 0 0 0 0 
+Quinton FrozenTo
+0 0 0 0 0 0 0 0 
+Quinton Pors
+0.96 
+0.9 
+0.87 
+0.43 
+0.43 
+Quinton Residual
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 
+0.9 0.9 0.9 0.9 0.9 0.9 0.9 0.9 
+Quinton runoffLag
+0 0 0 0 0 0 0 0 
+Quinton runoffstorage
+0 0 0 0 0 0 0 0 
+Quinton slope
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+Quinton soil_type
+0 0 0 0 0 0 0 0 
+2 1 1 1 1 1 1 1 
+2 2 2 2 2 2 2 2 
+Quinton tinit
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+-8 -8 -8 -8 -8 -8 -8 -8 
+######
+Initial_State
+######
+C:\CRHM\Sean_2002.int
+######
+Display_Variable:
+######
+Quinton d_surface 2 8
+Quinton Depth 2 8
+Quinton dmelt 2 8
+Qdrift SWE 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+TChart:
+######
+ 
+(m)
+ 
+(m)
+ 
+ 
+######

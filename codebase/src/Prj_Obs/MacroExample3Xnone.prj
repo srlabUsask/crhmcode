@@ -1,0 +1,114 @@
+Description - to be added
+###### Version: CRHM_DLL_NONE 1.67  Creation: 3/24/2006 15:22
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+'Macro1// comment'
+'declparam, param, NHRU, 0.2, 0.0, 1.0, description, (units) // comment'
+'// comment'
+'declreadobs, t, NOBS, description, (units) // comment'
+'// comment'
+'declvar, OutVar, NHRU, description, (units) // comment'
+'// comment'
+'declvar, XOutVar, NHRU, description, (units) // comment'
+'// comment'
+'declgetvar, obs, hru_t   // comment'
+'command // comment'
+'// comment'
+'OutVar[1]=param[1]*t[1]  OutVar[2]=param[2]*t[1]  // comment'
+'// comment'
+'var i i=i+1 XOutVar= sin(i) var j j=i+180 XOutVar[2] = sin(j) // comment'
+'end // comment'
+'XMacroX // comment'
+'declparam, param2, NHRU, 0.2, 0.0, 1.0, description, (units)'
+'declreadobs, t, NOBS, description, (units) // comment'
+'declvar, Z, NHRU, description, (units) // comment'
+'declvar, Y, NHRU, description, (units) // comment'
+'declgetvar, Macro1, OutVar // comment'
+'command // comment '
+'Z[hh]=param2[hh]*t[1] Y[hh] = param2[hh]*OutVar[hh] // comment'
+'end // comment'
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1973 12 31
+######
+DLLs:
+######
+C:\CRHM\NewModulesDLL.dll
+######
+Modules:
+######
+global C:\CRHM\NewModulesDLL.dll 08/10/05
+obs C:\CRHM\NewModulesDLL.dll 05/03/05
+Macro1 Macro 09/14/05
+XMacroX Macro 09/14/05
+######
+Parameters:
+######
+basin hru_elev
+637 
+global hru_ASL
+0 
+global hru_GSL
+0 
+global hru_lat
+51.32 
+global Time_Offset
+0 
+Macro1 param
+0.2 
+obs basin_area
+1 
+obs catchadjust
+1 
+obs hru_area
+1 
+obs lapse_rate
+0.75 
+obs obs_elev
+637 
+obs tmax_allrain
+0 
+obs tmax_allsnow
+0 
+XMacroX param2
+0.2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Macro1 XOutVar 1
+XMacroX Y 1
+XMacroX Z 1
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\MacroExample3X.prj
+ 
+(units)
+ 
+ 
+ 
+######

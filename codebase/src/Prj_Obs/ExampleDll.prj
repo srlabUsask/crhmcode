@@ -1,0 +1,82 @@
+Description - to be added
+###### Version: CRHM_DLL 2.40  Creation: 04/29/08 14:36
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\CRHM\Winter1974.obs
+######
+Dates:
+######
+1973 10 1
+1973 12 31
+######
+DLLs:
+######
+C:\CRHM\EXAMPLEDLL.DLL
+######
+Modules:
+######
+global CRHM 02/04/08
+calcsun CRHM 02/05/08
+obs CRHM 02/25/08
+Example C:\CRHM\EXAMPLEDLL.DLL 07/10/06
+######
+Parameters:
+######
+basin hru_elev <0 to 1E5>
+637 
+Example par <0 to 1>
+0.2 
+global hru_ASL <-360 to 360>
+0 
+global hru_GSL <-90 to 90>
+0 
+global hru_lat <-90 to 90>
+51.32 
+global Time_Offset <-12 to 12>
+0 
+obs basin_area <1E-6 to 1E9>
+1 
+obs catchadjust <0 to 1>
+1 
+obs hru_area <1E-6 to 1E9>
+1 
+obs HRU_OBS <1 to 100>
+1 
+obs lapse_rate <0 to 2>
+0.75 
+obs obs_elev <0 to 1E5>
+637 
+obs tmax_allrain <-10 to 10>
+0 
+obs tmax_allsnow <-10 to 10>
+0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Example OutVar 1
+######
+Display_Observation:
+######
+obs t 1 _obs
+######
+TChart:
+######
+ 
+ 
+(°C)
+ 
+ 
+ 
+######

@@ -1,0 +1,85 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 1
+######
+Observations:
+######
+C:\CRHM\BadJul74.obs
+######
+Modules:
+######
+global
+calcsun
+obs
+intcp
+netall
+net_rn
+evap
+smbal
+Greencrack
+######
+Dates:
+######
+1973 7 1
+1973 9 1
+######
+Parameters:
+######
+basin hru_elev
+637.0000
+basin soil_moist_init
+187.0000
+basin soil_moist_max
+375.0000
+evap Ht
+0.0100
+evap Zref
+1.5000
+evap Zwind
+10.0000
+evap evap_type
+0
+global hru_ASL
+0.0000
+global hru_GSL
+0.0000
+global hru_lat
+51.3170
+greenampt soiltype
+4
+net_rn F_Qg
+0.2000
+netall hru_alb
+0.1700
+obs catchadjust
+0
+obs tmax_allrain
+0.0000
+obs tmax_allsnow
+0.0000
+smbal cov_type
+3
+smbal soil2gw_max
+0.0000
+smbal soil_rechr_init
+30.0000
+smbal soil_rechr_max
+60.0000
+smbal soil_type
+2
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+calcsun CalcHr 1
+######
+Display_Observation:
+######
+
+######

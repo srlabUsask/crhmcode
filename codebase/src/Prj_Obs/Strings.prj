@@ -1,0 +1,61 @@
+Description - to be added
+###### Version: NON-DLL 5.13  Creation: 4/13/2004 15:38
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Observations:
+######
+######
+Dates:
+######
+2004 4 7 48
+2004 4 8
+######
+Modules:
+######
+basin CRHM basic 04/08/04
+global2 CRHM basic 02/19/03
+######
+Parameters:
+######
+basin basin_area
+11.39 
+basin basin_name
+'CRHM Basin Model' 
+basin hru_area
+4.67 5.04 1.68 
+basin hru_ASL
+0 0 0 
+basin hru_elev
+637 637 637 
+basin hru_GSL
+0 0 0 
+basin hru_lat
+51.32 51.32 51.32 
+basin hru_names
+'One' 'Two' 'Three' 
+global2 Time_Offset
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+global2 Qdro 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+TChart
+ 
+ 
+(W/m2)
+ 
+ 
+######

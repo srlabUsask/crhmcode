@@ -1,0 +1,64 @@
+Description - to be added
+###### Version: DLL 1.34  Creation: 11/15/2004 14:02
+Dimensions:
+######
+nhru 1
+nlay 1
+nobs 10
+######
+Observations:
+######
+C:\CRHM\ForestRadiometerArray.obs
+######
+Dates:
+######
+2003 4 9
+2003 4 29
+######
+Modules:
+######
+global CRHM basic 11/10/04
+######
+Parameters:
+######
+global hru_ASL
+0 
+global hru_elev
+637 
+global hru_GSL
+0 
+global hru_lat
+51.32 
+global Time_Offset
+2 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+global Qdro 1
+######
+Display_Observation:
+######
+obs K 1 _obs 10_obs 2_obs 3_obs 4_obs 5_obs 6_obs 7_obs 8_obs 9_obs
+obs L 1 _obs
+######
+Auto_Run
+######
+Auto_Exit
+######
+Log_Last
+######
+TChart:
+######
+Current Date: 11/10/2004 10:25
+ 
+C:\CRHM\ForestRadiometerArray.obs Last modified: 11/10/2004 10:21
+Description:
+ 
+(W/m2)
+ 
+ 
+ 
+######

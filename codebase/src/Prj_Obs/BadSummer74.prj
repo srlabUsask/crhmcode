@@ -1,0 +1,176 @@
+Description - to be added
+###### Version: CRHM 1.99  Creation: 05/14/07 10:21
+Dimensions:
+######
+nhru 3
+nlay 1
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+C:\CRHM\Badlake73_76.obs
+######
+Dates:
+######
+1974 6 1
+1974 9 1
+######
+Modules:
+######
+global CRHM 08/28/06
+obs CRHM 04/03/07
+calcsun CRHM 06/09/05
+intcp CRHM 11/15/06
+NO_pbsm CRHM 11/15/06
+albedo CRHM 12/15/05
+netall CRHM 11/22/06
+ebsm CRHM 02/21/06
+evap CRHM 05/03/07
+Soil CRHM 05/11/07
+Greencrack CRHM 06/21/06
+Netroute CRHM 05/02/07
+######
+Parameters:
+######
+albedo Albedo_bare
+0.17 0.17 0.17 
+basin basin_area
+1 
+basin hru_area
+1 1 1 
+basin hru_elev
+637 637 637 
+basin inhibit_evap
+0 0 0 
+basin Sdmax
+0 0 0 
+basin soil_moist_init
+200 200 200 
+basin soil_moist_max
+200 200 200 
+basin soil_type
+2 2 2 
+ebsm delay_melt
+0 0 0 
+ebsm nfactor
+0 0 0 
+ebsm tfactor
+0 0 0 
+evap evap_type
+0 0 0 
+evap F_Qg
+0.2 0.2 0.2 
+evap Ht
+0.1 0.1 0.1 
+evap Htmax
+0.1 0.1 0.1 
+evap LAImax
+3 3 3 
+evap LAImin
+0 0 0 
+evap PM_method
+0 0 0 
+evap rcs
+25 25 25 
+evap s
+1 1 1 
+evap Soil_Moist
+0.5 0.5 0.5 
+evap Zwind
+10 10 10 
+global hru_ASL
+0 0 0 
+global hru_GSL
+0 0 0 
+global hru_lat
+51.32 51.32 51.32 
+global Time_Offset
+0 0 0 
+Greencrack fallstat
+50 50 50 
+Greencrack Major
+5 5 5 
+Greencrack PriorInfiltration
+1 1 1 
+Greencrack soiltype
+11 11 11 
+Netroute Kstorage
+0 0 0 
+Netroute Lag
+0 0 0 
+Netroute order
+1 2 3 
+Netroute runKstorage
+0 0 0 
+Netroute runLag
+0 0 0 
+Netroute Sd_ByPass
+0 0 0 
+Netroute ssrKstorage
+0 0 0 
+Netroute ssrLag
+0 0 0 
+Netroute whereto
+0 0 0 
+obs catchadjust
+0 0 0 
+obs HRU_OBS
+1 1 1 
+obs lapse_rate
+0.75 0.75 0.75 
+obs obs_elev
+637 637 637 
+obs tmax_allrain
+0 0 0 
+obs tmax_allsnow
+0 0 0 
+Soil cov_type
+1 1 1 
+Soil rechr_ssr_K
+0 0 0 
+Soil Sdinit
+0 0 0 
+Soil Sd_gw_K
+0 0 0 
+Soil Sd_ssr_K
+0 0 0 
+Soil soil_gw_K
+0 0 0 
+Soil soil_rechr_init
+0.1 0.1 0.1 
+Soil soil_rechr_max
+0.1 0.1 0.1 
+Soil transp_limited
+0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Greencrack cuminfil 1
+Greencrack cumrunoff 1
+Soil soil_moist 1
+######
+Display_Observation:
+######
+obs ppt 1 _obs
+######
+Auto_Run
+######
+Auto_Exit
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\Bad_DLL_7374_pasture.prj
+ 
+(mm)
+ 
+ 
+ 
+######

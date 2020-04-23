@@ -1,0 +1,81 @@
+Description - to be added
+######
+Dimensions:
+######
+nhru 2
+nlay 1
+nobs 1
+######
+Observations:
+######
+GB400_TB.obs
+C:\CRHM\Dly_2000.obs
+######
+DLLs:
+######
+QuintonDLL.dll
+######
+Modules:
+######
+global2 CRHM basic 02/19/03
+QSnap QuintonDLL.dll 03/16/03
+######
+Dates:
+######
+2000 6 6
+2000 9 1
+######
+Parameters:
+######
+global2 hru_ASL
+0 0 
+global2 hru_elev
+0 0 
+global2 hru_GSL
+0 0 
+global2 hru_lat
+60.52 60.52 
+global2 Time_Offset
+0 0 
+QSnap n
+3.3 3.3 
+QSnap PHIE
+0.65 0.65 
+QSnap raintemp
+0.5 0.5 
+QSnap SD
+133.3 133.3 
+QSnap SWI
+0.03 0.03 
+QSnap TIa
+6.58 6.58 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+QSnap cum_p 1
+QSnap cum_v 1
+QSnap dly 1
+QSnap swe 1
+QSnap v 1
+QSnap waves 1
+######
+Display_Observation:
+######
+obs dly(1) 1  _Min
+obs t 1  _Avg
+######
+Auto_Run
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2003
+ 
+C:\CRHM\QSnap_DLLver.prj
+ 
+(°C)
+ 
+ 
+######

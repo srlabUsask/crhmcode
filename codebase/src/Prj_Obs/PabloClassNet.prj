@@ -1,0 +1,84 @@
+Description - to be added
+###### Version: CRHM_NEW 1.75  Creation: 08/18/2006 10:31
+Dimensions:
+######
+nhru 5
+nlay 1
+nobs 1
+######
+Macros:
+######
+'ReadClass'
+'declreadobs, meltrun, NOBS, description,(mm/int)'
+'declreadobs, soilrun, NOBS, description,(mm/int)'
+'declreadobs, gw, NOBS, description,(mm/int)'
+'declreadobs, ssr, NOBS, description,(mm/int)'
+'declvar, meltrunoff, NHRU, description, (mm/int)'
+'declvar, soil_runoff_D, NHRU, description, (mm/int)'
+'declvar, soil_gw_D, NHRU, description, (mm/int)'
+'declvar, soil_ssr_D, NHRU, description, (mm/int)'
+'command'
+'meltrunoff[hh] = meltrun[hh]'
+'soil_runoff_D[hh] = soilrun[hh]'
+'soil_gw_D[hh] = gw[hh]'
+'soil_ssr_D[hh] = ssr[hh]'
+'end'
+######
+Observations:
+######
+PabloClassSimNet.obs
+######
+Dates:
+######
+2001 1 1
+2001 1 24
+######
+Modules:
+######
+ReadClass Macro 04/20/06
+Netroute CRHM 08/18/06
+######
+Parameters:
+######
+Netroute basin_area
+1 
+Netroute hru_area
+1 1 1 1 1 
+Netroute Kstorage
+1 1 1 1 1 
+Netroute Lag
+0 0 0 0 0 
+Netroute order
+1 2 3 4 5 
+Netroute runKstorage
+0 0 0 0 0 
+Netroute runLag
+0 0 0 0 0 
+Netroute ssrKstorage
+0 0 0 0 0 
+Netroute ssrLag
+0 0 0 0 0 
+Netroute whereto
+0 0 0 0 0 
+######
+Initial_State
+######
+######
+Display_Variable:
+######
+Netroute basinflow 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform 2006
+ 
+C:\CRHM\PabloClassTestNet.prj
+ 
+(m^3/int)
+ 
+ 
+ 
+######
