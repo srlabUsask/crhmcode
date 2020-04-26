@@ -1,5 +1,5 @@
 CC=g++
-BOOST = boost_1_34_1 
+BOOST = boost_1_72_0 
 IDIR = src
 ODIR = obj
 SDIR = src
