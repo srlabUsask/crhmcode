@@ -632,7 +632,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					long cnt = Global::MapPars.size();
 					DataFile.clear();
 				} // while
-				  //SqueezeParams();  // converts identical parameters to shared parameters
+				SqueezeParams();  // converts identical parameters to shared parameters
 			}
 
 
