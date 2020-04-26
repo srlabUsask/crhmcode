@@ -6,7 +6,7 @@
 #include "CRHM_parse.h"
 #include "ClassModule.h"
 #include <string>
-#include "boost/spirit/core/basics.hpp"
+//#include "boost/spirit/core/basics.hpp"
 
 #ifndef MacroUnitH
 #define MacroUnitH

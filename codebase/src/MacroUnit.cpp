@@ -14,7 +14,7 @@
 //---------------------------------------------------------------------------
 
 //#include "CRHM_parse.h"
-#include "boost/spirit/error_handling/exceptions.hpp"
+#include <boost/spirit/include/classic_exceptions.hpp>
 //#include "CRHMmain.h"
 
 extern double xLimit;
@@ -221,9 +221,9 @@ void ClassMacro::init(void) {
 
 		string SS;
 		if (isGroup)
-			SS = "Group: '" + string(NameRoot + string("' ->"));
+			SS = "Group: '" + NameRoot + "' ->";
 		else
-			SS = "Struct: '" + string(NameRoot + string("' ->"));
+			SS = "Struct: '" + NameRoot + "' ->";
 
 		for (int ii = 0; ii < GrpStringList->Count; ++ii)
 			SS += " " + GrpStringList->Strings[ii];
@@ -483,7 +483,7 @@ void ClassMacro::init(void) {
 			str += " \n" + Global::MacroModulesList->Strings[jj];
 	}
 
-	str = str + " \n"; //updated by Manishankar for solving the parsing problem.
+	//str = str + " \n"; //updated by Manishankar for solving the parsing problem.
 
 	execbase::Index = 0;
 	string::iterator first = str.begin();
