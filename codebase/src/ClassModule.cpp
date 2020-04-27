@@ -2214,9 +2214,11 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 			return(-1);
 		}
 
-		newVar = new ClassVar(Name, variable, nhru,
-			obsVar->help + " <" + Fstrings[typeFun] + "> ",
-			obsVar->units, CRHM::Float);
+		//Manishankar. Fstrings[typeFun] was getting out of index.
+		//string help = obsVar->help + " <" + Fstrings[typeFun] + "> ";
+		string help = obsVar->help + " <" + "> ";
+
+		newVar = new ClassVar(Name, variable, nhru, help, obsVar->units, CRHM::Float);
 
 		newVar->dimMax = nhru; // added 04/16/13 (replacing t obs faulty)
 
