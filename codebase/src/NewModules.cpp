@@ -44,6 +44,7 @@
 #include <ctime>
 //#include <atltime.h>
 #include <sstream>
+#include "StandardConverterUtility.h"
 
 std::string Convert(float number) {
 	std::ostringstream buff;
@@ -9026,8 +9027,9 @@ int ClassSnobalBase::hle1(
 
 					// heights must be positive
 	if (z0 <= 0 || zq <= z0 || zu <= z0 || za <= z0) {
-	 string D = getTimeGG() + "hle1: height not positive ";
-	 string SS = D + "hru " + std::to_string(hh + 1);			//use Convert() function for "hh + 1" ???
+	 //string D = getTimeGG() + "hle1: height not positive ";
+	string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow) + "hle1: height not positive ";
+	string SS = D + "hru " + std::to_string(hh + 1);			//use Convert() function for "hh + 1" ???
 		SS = SS + "  ta: " + Convert(ta - CRHM_constants::Tm) +
 			", z0: " + Convert(z0) +
 			", zq: " + Convert(zq) +
@@ -9051,7 +9053,7 @@ int ClassSnobalBase::hle1(
 	// pressures must be positive
 	if (ea <= 0 || es <= 0 || press <= 0 || ea >= press || es >= press) {
 
-	 string D = getTimeGG();
+	 string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 	 string SS = D + "hh " + Convert(hh) + " 'hle1' " + ". H: " + Convert(h) + " le: " + Convert(xlh * e);
 		SS = SS + " ta: " + Convert(ta - CRHM_constants::Tm) +
 			", ts: " + Convert(ts - CRHM_constants::Tm) +
@@ -9174,7 +9176,7 @@ int ClassSnobalBase::hle1(
 	 string Flag = "iters" + std::to_string(iter);
 		/*LastDTnow = Global::DTnow;*/
 
-	 string D = getTimeGG();
+	 string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 	 string SS = D + "hh " + Convert(hh) + " 'hle1' " + Flag + ". H: " + Convert(h) + " le: " + Convert(xlh * e);
 		SS = SS + " ta: " + Convert(ta - CRHM_constants::Tm) +
 			", ts: " + Convert(ts - CRHM_constants::Tm) +
@@ -17831,7 +17833,7 @@ void Classlake::run(void) {
 		} // for
 
 		for (hh = 0; chkStruct(); ++hh) {
-			if (std::stod(getTimeGG()) + 0.01 >= start_open_day[hh] && (std::stod(getTimeGG()) - 0.01 <= end_open_day[hh])) {
+			if (Global::DTnow + 0.01 >= start_open_day[hh] && (Global::DTnow - 0.01 <= end_open_day[hh])) {
 				//DaysMonth = MonthDaysCnt(getTimeGG());
 				DoMean = true;
 				Ahead = true;
@@ -17862,7 +17864,7 @@ void Classlake::run(void) {
 			hru_actet[hh] = 0.0;
 			hru_evap[hh] = 0.0;
 
-			if (std::stod(getTimeGG()) + 0.01 >= start_open_day[hh] && std::stod(getTimeGG()) - 0.01 <= end_open_day[hh]) {
+			if (Global::DTnow + 0.01 >= start_open_day[hh] && Global::DTnow - 0.01 <= end_open_day[hh]) {
 				hru_evap[hh] = lake_evap_month[hh] / N_intervals;
 				hru_cum_evap[hh] += hru_evap[hh];
 			} // if
@@ -22867,7 +22869,7 @@ void ClassMod_Exec::run(void) {
 		statusInit[0] = LoadUserInit(this->Name.c_str(), this->GroupCnt, nhru, S_Vars.c_str(), Vars_Cnt, VarArray, S_Pars.c_str(), Pars_Cnt, ParArray);
 	}
 
-	double Fix = std::stod(getTimeGG());
+	double Fix = Global::DTnow;
 	statusStep[0] = LoadUserStep(Fix);
 }
 

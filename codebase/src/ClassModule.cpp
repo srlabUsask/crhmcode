@@ -44,7 +44,8 @@ string AKAstrings[] = { "VARG", "OBSR", "VARD", "OBSD", "PARD", "OBSF" };
 //---------------------------------------------------------------------------
 double ClassModule::Now(void) {
 
-	return std::stod(getTimeGG());
+	//return std::stod(getTimeGG());
+	return Global::DTnow;
 }
 
 //---------------------------------------------------------------------------
