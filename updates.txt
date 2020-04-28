@@ -2,4 +2,5 @@
 2. Changed thisVar to Global::thisVar looking at Peter's code.
 3. Fixed the issues related to substr.
 4. Our code now works with the newest boost. I looked at Peter's code for making this change.
-5. Cleaned some commented code.
+5. Introspection issue has been resolved for linux and apple.
+6. Cleaned some commented code.

@@ -17,6 +17,11 @@
 #include <boost/spirit/include/classic_exceptions.hpp>
 //#include "CRHMmain.h"
 
+#if defined(__linux__) || defined(__APPLE__) //added for resolving the introspection issue. Manishankar
+#include <cxxabi.h>
+#endif
+
+
 extern double xLimit;
 
 float Fday() { // used for variable DAY
@@ -127,8 +132,17 @@ void ClassMacro::decl(void) {
 
 			std::weak_ptr<ClassModule> MG(Test);
 
+
+#if defined(_WIN32)
+
 			string S1 = typeid(*Mod).name();
 			string S2 = typeid(*Test).name();
+#endif
+#if defined(__linux__) || defined(__APPLE__) //introspection issue resolved for linux and apple. Manishankar
+			int demangle_status = 0;
+			string S1 = abi::__cxa_demangle(typeid(*Mod).name(), 0, 0, &demangle_status);
+			string S2 = abi::__cxa_demangle(typeid(*Test).name(), 0, 0, &demangle_status);
+#endif
 
 			if (S2 == "ClassMacro")
 				Test->ID = S;
