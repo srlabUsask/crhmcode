@@ -1036,8 +1036,7 @@ public:
 
 		Lvar = &FP->second;
 
-		string SS(e, e + 1); // !!! wrong ???
-							 //if (SS == " ") { SS = ""; } //manishankar. I have fixed the problem.
+		string SS(e, e + 1); // !!! wrong ???							 
 		if (SS != " ")
 		{
 			string::size_type eq = SS.find_first_not_of(" \t\n");

@@ -228,58 +228,6 @@ string static Trim(string str)
 	return result;
 };
 
-//Changed by Manishankar 2018/09/12
-//void static DecodeDate(double date, int * year, int * month, int * day)
-//{
-//	CTime time = CTime(1999, 12, 31, 0, 0, 0);
-//	long days = (long)date;
-//	long seconds = 86400 * (date - days);
-//
-//	CTimeSpan timeDelta = CTimeSpan(days, 0, 0, seconds);
-//	time = time + timeDelta;
-//	*year = time.GetYear();
-//	*month = time.GetMonth();
-//	*day = time.GetDay();
-//};
-
-//---------------------------------------------------------------------------
-
-//Changed by Manishankar 2018/09/12
-//double static EncodeDate(int year, int month, int day)
-//{
-//	CTime time = CTime(1999, 12, 31, 0, 0, 0);
-//	CTime time2 = CTime(year, month, day + 1, 0, 0, 0);
-//	CTimeSpan timeSpan = time2 - time;
-//	return timeSpan.GetDays();
-//};
-
-//---------------------------------------------------------------------------
-
-//Changed by Manishankar 2018/09/12
-
-//void static DecodeTime(double date, int * hour, int * minute, int * second)
-//{
-//	CTime time = CTime(1999, 12, 31, 0, 0, 0);
-//	long days = (long)date;
-//	long seconds = 86400 * (date - days);
-//
-//	CTimeSpan timeDelta = CTimeSpan(days, 0, 0, seconds);
-//	time = time + timeDelta;
-//	*hour = time.GetHour();
-//	*minute = time.GetMinute();
-//	*second = time.GetSecond();
-//};
-
-//---------------------------------------------------------------------------
-
-//Changed by Manishankar 2018/09/12
-//double static EncodeTime(int hour, int minute, int second, int millisecond)
-//{
-//	double seconds = hour * 60 * 60 + minute * 60 + second;
-//	double result = seconds / 86400;
-//	return result;
-//};
-
 //---------------------------------------------------------------------------
 
 long static Strtolong(string s) {
