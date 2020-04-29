@@ -430,6 +430,7 @@ public:
 		timeinfo.tm_mday = 1;
 		timeinfo.tm_mon = 0;
 		timeinfo.tm_year = 70;
+		timeinfo.tm_isdst = -1;
 
 		time_t Current = mktime(&timeinfo); // determine ???
 
