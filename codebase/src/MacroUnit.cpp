@@ -138,16 +138,18 @@ void ClassMacro::decl(void) {
 			string S1 = typeid(*Mod).name();
 			string S2 = typeid(*Test).name();
 #endif
-#if defined(__linux__) || defined(__APPLE__) //introspection issue resolved for linux and apple. Manishankar
+#if defined(__linux__) || defined(__APPLE__) //introspection issue resolved for linux and apple as was suggested by Dr. Kevin. Manishankar
 			int demangle_status = 0;
 			string S1 = abi::__cxa_demangle(typeid(*Mod).name(), 0, 0, &demangle_status);
-			string S2 = abi::__cxa_demangle(typeid(*Test).name(), 0, 0, &demangle_status);
+			auto Test_raw = Test.get(); //Dr. Kevin's edit for removing an warning.
+			string S2 = abi::__cxa_demangle(typeid(*Test_raw).name(), 0, 0, &demangle_status);
 #endif
 
 			if (S2 == "ClassMacro")
 				Test->ID = S;
 			else {
-				Test->ID = typeid(*Test).name();
+				auto Test_raw = Test.get(); //Dr. Kevin's edit for removing an warning.
+				Test->ID = typeid(*Test_raw).name();
 				if (S2 == "Classobs")
 					this->ObsModule = (ClassModule*)Test.get(); // causes HRU_OBS etc. update
 			}
