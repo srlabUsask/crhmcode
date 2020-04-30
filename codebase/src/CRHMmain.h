@@ -192,6 +192,7 @@ public:
 	void RunClick2Middle(MMSData * mmsdata, long startdate, long enddate);
 	void RunClick2End(MMSData * mmsdata);
 	void RunClick(void);
+	void RunClickOld(void);
 	void AllRprt();
 	void  ControlReadState(bool MainLoop, ClassPar * VarPar);
 	void  LastRprt(void);

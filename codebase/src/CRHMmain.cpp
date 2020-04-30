@@ -2034,6 +2034,14 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 
 
 void  CRHMmain::RunClick(void) {
+	MMSData * mmsdata = CRHMmain::RunClick2Start();
+	CRHMmain::RunClick2Middle(mmsdata, Global::DTmin, Global::DTmax);
+	CRHMmain::RunClick2End(mmsdata);
+}
+
+
+//Manishankar. We need to remove this old code. But, I am keeping it for some days to see if the new one "RunClick ()" makes any problem.
+void  CRHMmain::RunClickOld(void) {
 
 	ClassVar *thisVar;
 	float **mmsData;
