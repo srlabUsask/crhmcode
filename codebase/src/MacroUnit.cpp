@@ -26,19 +26,19 @@ extern double xLimit;
 
 float Fday() { // used for variable DAY
 	int year, month, day, h, m;
-	Common::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
+	StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
 	return day;
 }
 
 float Fmonth() { // used for variable MONTH
 	int year, month, day, h, m;
-	Common::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
+	StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
 	return month;
 }
 
 float Fyear() { // used for variable YEAR
 	int year, month, day, h, m;
-	Common::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
+	StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
 	return year;
 }
 

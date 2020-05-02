@@ -355,7 +355,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 				for (int ii = 0; ii < 3; ii++)
 					DataFile >> D[ii];
 
-				DT = Common::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0); // check
+				DT = StandardConverterUtility::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0); // check
 				Picker1 = DT;
 
 				int c;
@@ -374,7 +374,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 				for (int ii = 0; ii < 3; ii++)
 					DataFile >> D[ii];
 
-				DT = Common::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0);
+				DT = StandardConverterUtility::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0);
 				Picker2 = DT;
 
 				DataFile >> S;
@@ -1579,7 +1579,7 @@ MMSData *  CRHMmain::RunClick2Start()
 		LogMessageX(" ");
 	}
 
-	double Dt = Common::DateTimeDt();
+	double Dt = StandardConverterUtility::DateTimeDt();
 	Message = string("Time of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
 	LogMessageX(Message.c_str());
 
@@ -2003,7 +2003,7 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 	long ** mmsDataL = mmsdata->mmsDataL;
 	bool GoodRun = mmsdata->GoodRun;
 
-	double Dt = Common::DateTimeDt();
+	double Dt = StandardConverterUtility::DateTimeDt();
 	string Message = string("End of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
 	LogMessageX(Message.c_str());
 
@@ -2105,7 +2105,7 @@ void  CRHMmain::RunClickOld(void) {
 		LogMessageX(" ");
 	}
 
-	double Dt = Common::DateTimeDt();
+	double Dt = StandardConverterUtility::DateTimeDt();
 	Message = string("Time of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
 	LogMessageX(Message.c_str());
 
@@ -2514,7 +2514,7 @@ void  CRHMmain::RunClickOld(void) {
 	GoodRun = false;
 	}*/
 
-	Dt = Common::DateTimeDt();
+	Dt = StandardConverterUtility::DateTimeDt();
 	Message = string("End of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
 	LogMessageX(Message.c_str());
 
@@ -2681,7 +2681,7 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 	DataFile.getline(Line, 80); // read "TIME:"
 	int D[3];
 	DataFile >> D[0] >> D[1] >> D[2];
-	double DT = Common::EncodeDateTime(D[0], D[1], D[2], 0, 0); // ????
+	double DT = StandardConverterUtility::EncodeDateTime(D[0], D[1], D[2], 0, 0); // ????
 
 	DataFile.getline(Descrip, 80);
 	DataFile.ignore(80, '#');

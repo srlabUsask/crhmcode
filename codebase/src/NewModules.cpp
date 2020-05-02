@@ -28391,7 +28391,7 @@ void ClassHt_Change_Julian::run()
 		
 		
 		int year, month, day, h, m;
-		Common::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
+		StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
 
 		if (month == 5 && day == 27 && getstep() % Global::Freq == 1)
 		{

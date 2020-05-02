@@ -22,6 +22,7 @@
 #include "stddef.h"
 #include "GlobalDll.h"
 #include "Common.h"
+#include "StandardConverterUtility.h"
 
 //---------------------------------------------------------------------------
 //#pragma package(smart_init)
@@ -1628,9 +1629,9 @@ double ClassData::Encode24(int D[]) {
 
 	try {
 		if (D[3] == 24) // handle 24:00
-			return  Common::EncodeDateTime(D[0], D[1], D[2], 0, D[4]) + 1;
+			return  StandardConverterUtility::EncodeDateTime(D[0], D[1], D[2], 0, D[4]) + 1;
 		else
-			return  Common::EncodeDateTime(D[0], D[1], D[2], D[3], D[4]);
+			return  StandardConverterUtility::EncodeDateTime(D[0], D[1], D[2], D[3], D[4]);
 	}
 	catch (...)
 	{
@@ -2346,18 +2347,18 @@ long julian(string when) {
 	// calendar
 
 	if (when == "start") {
-		Common::DecodeDateTime(Global::DTstart, &Y, &M, &D, &H, &Min);
-		DtBegin = Common::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
+		StandardConverterUtility::DecodeDateTime(Global::DTstart, &Y, &M, &D, &H, &Min);
+		DtBegin = StandardConverterUtility::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
 		return  INT(Global::DTstart - DtBegin);  // -0.999/Global::Freq
 	}
 	else if (when == "end") {
-		Common::DecodeDateTime(Global::DTend, &Y, &M, &D, &H, &Min);
-		DtBegin = Common::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
+		StandardConverterUtility::DecodeDateTime(Global::DTend, &Y, &M, &D, &H, &Min);
+		DtBegin = StandardConverterUtility::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
 		return  INT(Global::DTend - DtBegin);
 	}
 	else { // now
-		Common::DecodeDateTime(Global::DTnow, &Y, &M, &D, &H, &Min);
-		DtBegin = Common::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
+		StandardConverterUtility::DecodeDateTime(Global::DTnow, &Y, &M, &D, &H, &Min);
+		DtBegin = StandardConverterUtility::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
 		return  INT(Global::DTnow - DtBegin);
 	}
 }
@@ -2433,8 +2434,8 @@ long julian(double DT) {
 	int Y, M, D, H, Min;
 	double DtBegin;
 
-	Common::DecodeDateTime(DT, &Y, &M, &D, &H, &Min);
-	DtBegin = Common::EncodeDateTime(Y - 1, 12, 31, 0, 0);
+	StandardConverterUtility::DecodeDateTime(DT, &Y, &M, &D, &H, &Min);
+	DtBegin = StandardConverterUtility::EncodeDateTime(Y - 1, 12, 31, 0, 0);
 	return  INT(DT - DtBegin);
 }
 
@@ -2461,7 +2462,7 @@ long MonthDaysCnt(double DT) {
 	int Y, M, D, H, Min;
 	double DTNext;
 
-	Common::DecodeDateTime(DT, &Y, &M, &D, &H, &Min);
+	StandardConverterUtility::DecodeDateTime(DT, &Y, &M, &D, &H, &Min);
 	++M;
 
 	if (M > 12) { // next year
@@ -2469,7 +2470,7 @@ long MonthDaysCnt(double DT) {
 		++Y;
 	}
 
-	DTNext = Common::EncodeDateTime((Word)Y, (Word)M, (Word)D, 0, 0);
+	DTNext = StandardConverterUtility::EncodeDateTime((Word)Y, (Word)M, (Word)D, 0, 0);
 	return  INT(DTNext - DT);
 }
 
@@ -2506,18 +2507,18 @@ float Julian(string when) {
 	// calendar
 
 	if (when == "start") {
-		Common::DecodeDateTime(Global::DTstart, &Y, &M, &D, &H, &Min);
-		DtBegin = Common::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
+		StandardConverterUtility::DecodeDateTime(Global::DTstart, &Y, &M, &D, &H, &Min);
+		DtBegin = StandardConverterUtility::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
 		return  (float)(Global::DTstart - DtBegin);  // -0.999/Global::Freq
 	}
 	else if (when == "end") {
-		Common::DecodeDateTime(Global::DTend, &Y, &M, &D, &H, &Min);
-		DtBegin = Common::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
+		StandardConverterUtility::DecodeDateTime(Global::DTend, &Y, &M, &D, &H, &Min);
+		DtBegin = StandardConverterUtility::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
 		return  (float)(Global::DTend - DtBegin);
 	}
 	else { // now
-		Common::DecodeDateTime(Global::DTnow, &Y, &M, &D, &H, &Min);
-		DtBegin = Common::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
+		StandardConverterUtility::DecodeDateTime(Global::DTnow, &Y, &M, &D, &H, &Min);
+		DtBegin = StandardConverterUtility::EncodeDateTime((Word)Y - 1, (Word)12, (Word)31, 0, 0);
 		return  float((double)Global::DTnow - DtBegin);
 	}
 }
@@ -2564,15 +2565,15 @@ void dattim(string type, long *itime) { // dimension itime[6]
 	int Year, Month, Day, H, Min, Sec = 0, MSec;
 
 	if (type == "start") {
-		Common::DecodeDateTime(Global::DTstart, &Year, &Month, &Day, &H, &Min);
+		StandardConverterUtility::DecodeDateTime(Global::DTstart, &Year, &Month, &Day, &H, &Min);
 		//DecodeTime(Global::DTstart, &H, &Min, &Sec);
 	}
 	else if (type == "end") {
-		Common::DecodeDateTime(Global::DTend, &Year, &Month, &Day, &H, &Min);
+		StandardConverterUtility::DecodeDateTime(Global::DTend, &Year, &Month, &Day, &H, &Min);
 		//DecodeTime(Global::DTend, &Hour, &Min, &Sec);
 	}
 	else {
-		Common::DecodeDateTime(Global::DTnow, &Year, &Month, &Day, &H, &Min);
+		StandardConverterUtility::DecodeDateTime(Global::DTnow, &Year, &Month, &Day, &H, &Min);
 		//DecodeTime(Global::DTnow, &Hour, &Min, &Sec);
 	}
 	itime[0] = Year;
@@ -2612,7 +2613,7 @@ itime[5] = Sec;
 void dattim(double DT, long *itime) { // dimension itime[6]
 	int Year, Month, Day, H, Min, Sec = 0, MSec;
 
-	Common::DecodeDateTime(DT, &Year, &Month, &Day, &H, &Min);
+	StandardConverterUtility::DecodeDateTime(DT, &Year, &Month, &Day, &H, &Min);
 	//DecodeTime(DT, &Hour, &Min, &Sec);
 
 	itime[0] = Year;
@@ -5004,10 +5005,10 @@ void Convert::CheckUnitsObs(string Vunits, string Munits, string declaration) { 
 //---------------------------------------------------------------------------
 long julian_month(long Year, long julian) {
 	int Y, Month, Day, H, Min;
-	double DT = Common::EncodeDateTime((Word)Year - 1, (Word)12, (Word)31, 0, 0);
+	double DT = StandardConverterUtility::EncodeDateTime((Word)Year - 1, (Word)12, (Word)31, 0, 0);
 
 	DT += (double)julian;
-	Common::DecodeDateTime(DT, &Y, &Month, &Day, &H, &Min);
+	StandardConverterUtility::DecodeDateTime(DT, &Y, &Month, &Day, &H, &Min);
 	return Month;
 }
 

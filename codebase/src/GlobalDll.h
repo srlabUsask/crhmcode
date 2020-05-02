@@ -12,6 +12,7 @@
 #include <ctime>
 //#include <atltime.h>
 #include "Common.h"
+#include "StandardConverterUtility.h"
 #include "TStringList.h"
 
 #include <map>
@@ -245,7 +246,7 @@ double static StrToDate(string date) {
 	int Day = Strtolong(date.substr(3, 2));
 	int Year = Strtolong(date.substr(6, 4));
 
-	return Common::EncodeDateTime(Year, Month, Day, 0, 0);
+	return StandardConverterUtility::EncodeDateTime(Year, Month, Day, 0, 0);
 };
 
 double static StrToTime(string time) {
@@ -253,7 +254,7 @@ double static StrToTime(string time) {
 	int hour = Strtolong(time.substr(0, 2));
 	int min = Strtolong(time.substr(3, 2));
 
-	return Common::EncodeDateTime(0, 0, 0, hour + 24, min);
+	return StandardConverterUtility::EncodeDateTime(0, 0, 0, hour + 24, min);
 };
 
 string static FormatString(double DT, string) {
@@ -261,7 +262,7 @@ string static FormatString(double DT, string) {
 	temp.width(2);
 	int Y = 0, M = 0, D = 0, H = 0, Min = 0;
 
-	Common::DecodeDateTime(DT, &Y, &M, &D, &H, &Min);
+	StandardConverterUtility::DecodeDateTime(DT, &Y, &M, &D, &H, &Min);
 	temp << Y << " " << M << " " << D;
 
 	return temp.str();

@@ -496,7 +496,7 @@ void  ClassWQ_Hype::crop_sources(const long calcN, const long calcP, const float
 	} // for
 
 	int Y, M, D, H, Min;
-	Common::DecodeDateTime(Global::DTnow, &Y, &M, &D, &H, &Min);
+	StandardConverterUtility::DecodeDateTime(Global::DTnow, &Y, &M, &D, &H, &Min);
 	//Y = Global::DTnow.GetYear();
 	//M = Global::DTnow.GetMonth();
 	//D = Global::DTnow.GetDay();
