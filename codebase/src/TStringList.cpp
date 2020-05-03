@@ -33,6 +33,9 @@ string TStringList::CommaText(void) {
 
 }
 
+//this functions are already implemented in Common.h and Common.cpp. Manishankar
+
+/*
 string  TStringList::trim(string& str) {
 
 	trimleft(str);
@@ -65,6 +68,7 @@ string TStringList::trimright(string& str) //
 
 	return str;
 }
+*/
 
 void TStringList::DelimitedText(string s) {
 
@@ -72,7 +76,7 @@ void TStringList::DelimitedText(string s) {
 	bool quoted = false;
 	long pos, here, last_quote, done_to = 0;
 	Clear();
-	trim(s);
+	Common::trim(s);
 	if (s.size() == 0)
 		return;
 
@@ -118,7 +122,7 @@ void TStringList::CommaText(string s) { //used to read "AnnandaleX, calcsunX, ca
 	string in_quote;
 	string::size_type pos, here, last_quote, done_to = 0;
 	array.clear();
-	trim(s);
+	Common::trim(s);
 	s.append(",");
 	for (pos = 0; pos < s.size(); ++pos) {
 		here = s.find_first_of("' ,", pos);

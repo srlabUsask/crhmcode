@@ -164,9 +164,10 @@ public:
 	void CommaText(string s);
 	string CommaText(void);
 
-	string trim(string & str);
-	string trimright(string & str);
-	string trimleft(string & str);
+	//this functions are already implemented in Common.h and Common.cpp. Manishankar
+	//string trim(string & str);
+	//string trimright(string & str);
+	//string trimleft(string & str);
 
 	void SaveToFile(string FileName);
 	void InsertObject(int ii, string name, TObject * object);
