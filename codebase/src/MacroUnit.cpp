@@ -834,9 +834,11 @@ CRHM::TFun DefCRHM::getTFunc(string D) {
 		"DTOT",
 		"POS",
 		"TOT",
-		"TOT_INT",
 		"FIRST",
-		"LAST"
+		"LAST",
+		"CNT",
+		"CNT0",
+		"INTVL"
 	};
 
 	for (long ii = 1; ii < 11; ++ii)
