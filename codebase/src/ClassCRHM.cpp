@@ -1180,7 +1180,7 @@ ClassPar *ClassParFindPar(string name) { // where name is parameter
 //---------------------------------------------------------------------------
 long ClassParFindParBld(ClassPar *thisPar) { // where parameter is BasinMapPars
 	Mapstr::iterator itPar;                   // creates individual module parameters
-	ClassPar *newPar;
+	//ClassPar *newPar;
 	string sparam, smodule;
 	long Count = 0;
 
@@ -1981,7 +1981,7 @@ bool ClassData::DataReadFile(void) {
 	Dt1 = floor(Dt1);
 
 	//    try{
-	char c;
+	//char c;
 	double DeltaH = Interval * 1.5;
 
 
@@ -4968,7 +4968,7 @@ bool Convert::CheckUnitsTable()
 
 void Convert::CheckUnitsString(string Name, string variable, string units)
 {
-	string::size_type Idx;
+	//string::size_type Idx;
 	string temp(units);
 
 	units = tcsSqueeze(units);
@@ -4991,7 +4991,7 @@ void Convert::CheckUnitsString(string Name, string variable, string units)
 }
 
 void Convert::CheckUnitsObs(string Vunits, string Munits, string declaration) { // check original observation units
-	string::size_type Idx;
+	//string::size_type Idx;
 	double d;
 
 	if (!Vunits.empty()) {
