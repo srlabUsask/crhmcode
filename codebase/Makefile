@@ -39,7 +39,14 @@ clean:
 $(ODIR):
 	mkdir $(ODIR)
         
-        
-        
+%.obs: %.prj crhm
+	time ./crhm $<
+	cp CRHM_output_1.obs $*.obs
 
-
+%.diff: %.prj crhm
+	time ./crhm $<
+	cp CRHM_output_1.obs $*_1.obs
+	time ./crhm $*.prj
+	cp CRHM_output_1.obs $*_2.obs
+	diff $*_1.obs $*_2.obs > $@
+	wc -l $@
