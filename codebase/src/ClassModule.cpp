@@ -1340,7 +1340,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 				}
 				thisVar->values = new float[cnt];     // CHECK ???
 			}
-			thisVar->dimen == dimen;
+			thisVar->dimen = dimen;  //warning resolved by Manishankar
 
 			thisVar->DLLName = DLLName.c_str();
 			thisVar->root = ID.c_str();
@@ -1504,7 +1504,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		}
 
 		string::size_type indx; // indicates if declared obs
-		if (itVar == Global::MapVars.end() || !newVar->cnt && newVar->DLLName.empty()) { // look for with/without #
+		if (itVar == Global::MapVars.end() || (!newVar->cnt && newVar->DLLName.empty())) { // look for with/without #  //warning resolved by Manishankar
 			string variable2;
 
 			indx = variable.find('#');
@@ -1632,7 +1632,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 						newVar->ilayvalues[ii] = new long[newVar->dimMax];
 				}
 
-				if (newVar->varType == CRHM::Read || newVar->varType == CRHM::ReadF && nhru > newVar->dimMax) {
+				if (newVar->varType == CRHM::Read || (newVar->varType == CRHM::ReadF && nhru > newVar->dimMax)) {  //warning resolved by Manishankar
 					if (newVar->ivalues != NULL)
 						delete[] newVar->ivalues;
 					else {
@@ -1688,7 +1688,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 		if ((itVar = Global::MapVars.find(declModule + variable)) != Global::MapVars.end()) { // look for in declModule
 			newVar = (*itVar).second;
 
-			if (itVar == Global::MapVars.end() || !newVar->cnt && newVar->DLLName.empty()) { // look for iwith/without #
+			if (itVar == Global::MapVars.end() || (!newVar->cnt && newVar->DLLName.empty())) { // look for iwith/without #   //warning resolved by Manishankar
 				string variable2;
 
 				string::size_type indx = variable.find('#');
@@ -1997,7 +1997,7 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 				newVar->HRU_OBS_indexed = obsVar->HRU_OBS_indexed;
 				if (newVar->FunKind == CRHM::FOBS)
 					addtoreadlist(newVar);
-				else if (Global::RH_EA_obs == -1 && obs == "rh" || Global::RH_EA_obs == -1 && obs == "ea" || Global::OBS_AS_IS || !(obs == "ea" || obs == "rh"))
+				else if ((Global::RH_EA_obs == -1 && obs == "rh") || (Global::RH_EA_obs == -1 && obs == "ea") || Global::OBS_AS_IS || !(obs == "ea" || obs == "rh"))  //warning resolved by Manishankar
 					addtofunctlist(newVar);
 				return(obsVar->cnt - 1);
 			}
@@ -2783,7 +2783,7 @@ void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
 				newVar->CustomFunctName = "do_t";
 			}
 		}
-		else if (!GroupCnt && newVar->name == "p" || GroupCnt && root_var == "p") {
+		else if ((!GroupCnt && newVar->name == "p") || (GroupCnt && root_var == "p")) {  //warning resolved by Manishankar
 			if (AnyOne(Global::Warming_p, nhru, 1.0)) {
 				newVar->CustomFunct = &ClassVar::do_p_Clim;
 				newVar->CustomFunctName = "do_p_Clim";
@@ -3019,10 +3019,16 @@ void Administer::Accept(int Result) {
 	}
 
 	if (Global::OurHelpList)
+	{
 		if (Global::OurHelpList->IndexOf(HelpFile) < 0)  // No duplicates
+		{
 			Global::OurHelpList->AddObject(HelpFile, (TObject*)1);
+		}
 		else
+		{
 			Global::OurHelpList->AddObject(HelpFile, (TObject*)0);
+		}
+	}
 
 	Global::PendingDLLModuleList->Clear(); // clear
 }
@@ -3243,7 +3249,7 @@ void Myparser::eval_exp5(float &result)
 	register char  op;
 
 	op = 0;
-	if ((tok_type == DELIMITER) && *token == '+' || *token == '-') {
+	if (((tok_type == DELIMITER) && *token == '+') || *token == '-') {  //warning resolved by Manishankar
 		op = *token;
 		get_token();
 	}
@@ -3254,7 +3260,7 @@ void Myparser::eval_exp5(float &result)
 // Process a parenthesized expression.
 void Myparser::eval_exp6(float &result)
 {
-	if ((*token == '(')) {
+	if (*token == '(') {  //warning resolved by Manishankar
 		repeatset = true;
 		get_token();
 		eval_exp2(result);
@@ -3342,7 +3348,7 @@ void Myparser::get_token()
 // Return true if c is a delimiter.
 int Myparser::isdelim(char c)
 {
-	if ((*exp_ptr) && strchr(" +-/*%^=(),[]", c) || c == 9 || c == '\r' || c == 0)  // added ','
+	if (((*exp_ptr) && strchr(" +-/*%^=(),[]", c)) || c == 9 || c == '\r' || c == 0)  // added ','  //warning resolved by Manishankar
 		return 1;
 	return 0;
 }
@@ -3746,8 +3752,8 @@ TAKA AKAtype(string type) {
 //---------------------------------------------------------------------------
 bool ClassModule::Variation_Skip(void) {
 
-	if (Global::BuildFlag == CRHM::BUILD && variation == 0 ||                    // for Build screen
-		(variation_set & 2048) != 0 && variation == 0 ||                        // handles VARIATION_0
+	if ((Global::BuildFlag == CRHM::BUILD && variation == 0) ||                    // for Build screen   //warning resolved by Manishankar
+		((variation_set & 2048) != 0 && variation == 0) ||                        // handles VARIATION_0
 		(variation_set & 4096) != 0 ||                        // handles VARIATION_0
 		(variation_set == 0) ||                                                // handles VARIATION_ORG
 		(variation_set & variation) != 0)                                       // handles #1, #2, #4 etc.
@@ -3863,6 +3869,8 @@ long ClassModule::declputparam(string source, string param, string units, float 
 	} // case
 
 	} // switch
+
+	return 0;  //warning resolved by Manishankar
 }
 
 //---------------------------------------------------------------------------
@@ -3933,6 +3941,7 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 	} // case
 
 	} // switch
+	return 0;  //warning resolved by Manishankar
 }
 //---------------------------------------------------------------------------
 long ClassModule::FindModule_from_parameter(string source, string param) {
@@ -4082,6 +4091,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 		}
 	} // case
 	} // switch
+	return 0; //warning resolved by Manishankar
 }
 
 //---------------------------------------------------------------------------

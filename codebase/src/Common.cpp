@@ -268,9 +268,12 @@ float Common::KyValue(float probability, float guess) {
 		TempP = (exp(-Ky * Ky / 2) / sqrt(2 * M_PI)) * (a1*t + a2 * t*t + a3 * t*t*t);
 
 		if (fabs(TempP - probability) <= tolerance)
+		{
 			done = true;
+		}
 		else {
 			if (TempP > (probability + tolerance))
+			{
 				if (direction == -1) {
 					dKy = dKy / 2;
 					direction = 1;
@@ -279,8 +282,9 @@ float Common::KyValue(float probability, float guess) {
 					dKy = dKy / 2;
 					direction = -1;
 				}
+			}
 
-				Ky = Ky + dKy * direction;
+			Ky = Ky + dKy * direction;
 		}
 	} // while
 
@@ -319,7 +323,7 @@ bool Common::Variation_Decide(int Variation_set, long Variation) {
 
 	long variations = V.GetV(); // & 2047;
 
-	if ((variations & 2048) != 0 && Variation_set == 0 || // handles VARIATION_0
+	if (((variations & 2048) != 0 && Variation_set == 0) || // handles VARIATION_0   //warning resolved by Manishankar
 		(variations & 4096) != 0 ||                        // handles VARIATION_0
 		(variations == 0) ||                               // handles VARIATION_ORG
 		(variations & Variation_set) != 0)                 // handles #1, #2, #4 etc.

@@ -1112,8 +1112,10 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 	if (varType == CRHM::Float)
 	{
 		for (int jj = 0; jj < lay; jj++)
+		{
 			for (int ii = 0; ii < dim; ii++)
 				layvalues[jj][ii] = p.layvalues[jj][ii];
+		}
 	}
 	else if (varType == CRHM::Int)
 	{

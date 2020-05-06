@@ -1,2 +1,12 @@
 src/ClassCRHM.cpp:1646:1: warning: control may reach end of non-void function [-Wreturn-type]
 src/ClassCRHM.cpp:5132:1: warning: control may reach end of non-void function [-Wreturn-type]
+
+src/ClassModule.cpp:1055:19: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+src/ClassModule.cpp:3849:20: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+src/ClassModule.cpp:3921:20: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+src/ClassModule.cpp:3959:19: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+src/ClassModule.cpp:4069:20: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+src/ClassModule.cpp:4143:20: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+
+src/CRHM_parse.h:149:31: warning: implicit conversion of NULL constant to 'float' [-Wnull-conversion]
+src/CRHM_parse.h:149:31: warning: implicit conversion of NULL constant to 'float' [-Wnull-conversion]
