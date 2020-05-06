@@ -2176,7 +2176,7 @@ void Classalbedo::run(void) {
 
 		for (hh = 0; chkStruct(); ++hh) {
 			float hemisphere = (hru_lat[hh] < 0.0);
-			if ((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[hh] > 5.0) {  // changed
+			if (((!hemisphere && (jday > 300 || jday < 2)) || (hemisphere && (jday > 117 || jday < 185))) && SWE[hh] > 5.0) {  // changed
 				winter[hh] = 1;
 				Albedo[hh] = Albedo_snow[hh];
 			}
@@ -2226,8 +2226,8 @@ void Classalbedo::run(void) {
 					}
 					float MT = -0.064*jday + 6.69;
 
-					if (hru_tmin[hh] > -4.0 || Qnc > 1.0 && hru_tmax[hh] > 0.0 ||
-						hru_tmax[hh] > MT && Qnc > -0.5) {
+					if (hru_tmin[hh] > -4.0 || (Qnc > 1.0 && hru_tmax[hh] > 0.0) ||
+						(hru_tmax[hh] > MT && Qnc > -0.5)) {
 						Albedo[hh] = Albedo[hh] - DR;
 
 						if (Albedo[hh] < Albedo_bare[hh])
@@ -4261,7 +4261,7 @@ void ClassKevin::run(void) {
 
 	long jday = julian("now");
 	float hemisphere = (hru_lat[0] < 0.0); // use hru #1
-	if ((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[0] > 5.0 && nstep == 1) // use hru #1
+	if (((!hemisphere && (jday > 300 || jday < 2)) || (hemisphere && (jday > 117 || jday < 185))) && SWE[0] > 5.0 && nstep == 1) // use hru #1
 		for (hh = 0; chkStruct(); ++hh) {
 			winter[hh] = 1;
 			albedo[hh] = Asnow1[hh];
@@ -4902,7 +4902,7 @@ void Classfrostdepth::run(void) {
 
 	long jday = julian("now");
 	float hemisphere = (hru_lat[0] < 0.0); // use hru #1
-	if ((!hemisphere && (jday < 300) || hemisphere && (jday < 117)) && Tfreeze[0] == 0) return; // use hru #1
+	if (((!hemisphere && (jday < 300)) || (hemisphere && (jday < 117))) && Tfreeze[0] == 0) return; // use hru #1
 
 	for (hh = 0; chkStruct(); ++hh) {
 
@@ -5142,7 +5142,7 @@ void Classfrozen::run(void) {
 		float snowmelt = snowmeltD[hh] / Global::Freq;
 
 		if (nstep == 1 && hh == 0) {
-			if (t0_Julian[0] == julian("now") || t0_Julian[0] == 0 && SWE_sum / nhru > 10 && snowmeltD[hh] > 2.0 && !Julian_lockout[0]) {
+			if (t0_Julian[0] == julian("now") || (t0_Julian[0] == 0 && SWE_sum / nhru > 10 && snowmeltD[hh] > 2.0 && !Julian_lockout[0])) {
 				Update_infil = true;
 				if (t0[0] <= 0) {
 					Julian_window[0] = 1;
@@ -12715,7 +12715,7 @@ void ClassVolumetric::run(void) {
 
 		Volumetric[hh] = (soil_moist[hh] / soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1]) / 1000.0;
 
-		if (nstep == 0 && set_fallstat[hh] == Julian || (getstep() == 1 && Julian > set_fallstat[hh])) {
+		if ((nstep == 0 && set_fallstat[hh] == Julian) || (getstep() == 1 && Julian > set_fallstat[hh])) {
 			if (Si) {
 				float X = 1.0;
 				if (SetSoilproperties[soil_type[hh]][3] > 0.0) {
@@ -13187,7 +13187,7 @@ void ClassHeating::run(void) {
 			H2_temp_trunk[hh] = H2_temp_trunk[hh] + H2_temp_trans_trunk[hh]; // (from previous timestep)
 
 			if (Loops[hh] % 20 == 1) LogMessage(Loops[hh], "", Last_Temp_branch, Temp_branch[hh], Wnet_branch[hh], TT); // ---------- End of iterative loop
-		} while (++Loops[hh] < 900 || (fabs(Last_Temp_branch - Temp_branch[hh]) > 0.0001 || fabs(Last_Temp_trunk - Temp_trunk[hh]) > 0.0001) && ++Loops[hh] < 1000);
+		} while (++Loops[hh] < 900 || ((fabs(Last_Temp_branch - Temp_branch[hh]) > 0.0001 || fabs(Last_Temp_trunk - Temp_trunk[hh]) > 0.0001) && ++Loops[hh] < 1000)); //warning fixed by Manishankar.
 
 		float Prob_forest = exp(-(LAI[hh] + (opl_eff_slope[hh] * LAI[hh] - LAI[hh])));
 		float Prob_branch = w[hh] * exp(-(LAI[hh] + (opl_eff_slope[hh] * LAI[hh] - LAI[hh])*(1 - qt[hh])));
@@ -15182,7 +15182,7 @@ void ClassfrozenAyers::run(void) {
 		float snowmelt = snowmeltD[hh] / Global::Freq;
 
 		if (nstep == 1 && hh == 0) {
-			if (t0_Julian[0] == julian("now") || t0_Julian[0] == 0 && SWE_sum / nhru > 10 && snowmeltD[hh] > 2.0 && !Julian_lockout[0]) {
+			if (t0_Julian[0] == julian("now") || (t0_Julian[0] == 0 && SWE_sum / nhru > 10 && snowmeltD[hh] > 2.0 && !Julian_lockout[0])) {  //warning fixed by Manishankar.
 				Update_infil = true;
 				if (t0[0] < 0) {
 					Julian_window[0] = 1;
@@ -20437,11 +20437,12 @@ void Classglacier::run(void) {
 		else {
 			GlacierMode[hh] = 1;
 
-			if (SWE[hh] <= 0.0 || ice_Albedo[hh] > Albedo[hh])
+			if (SWE[hh] <= 0.0 || ice_Albedo[hh] > Albedo[hh]) {  //warning fixed by Manishankar.
 				if (firn[hh] > 0.0)
-					Albedo[hh] = firn_Albedo[hh];
+				{Albedo[hh] = firn_Albedo[hh];}
 				else
-					Albedo[hh] = ice_Albedo[hh]; // must be ice[hh] >= 0.0
+				{Albedo[hh] = ice_Albedo[hh];}
+			}// must be ice[hh] >= 0.0
 		}
 
 		net_rain_org[hh] = net_rain[hh];
@@ -24082,7 +24083,7 @@ void Classalbedoobs2::run(void) {
 
 		for (hh = 0; chkStruct(); ++hh) {
 			float hemisphere = (hru_lat[hh] < 0.0);
-			if ((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[hh] > 5.0) {  // changed
+			if (((!hemisphere && (jday > 300 || jday < 2)) || (hemisphere && (jday > 117 || jday < 185))) && SWE[hh] > 5.0) {  // changed  warning fixed by Manishankar.
 				winter[hh] = 1;
 				Albedo[hh] = Albedo_snow[hh];
 			}
@@ -24108,7 +24109,7 @@ void Classalbedoobs2::run(void) {
 
 				if (hru_tmax[hh] < -6.0 && Qnc < 1.0) {
 					winter[hh] = 1;
-					if (hru_tmin[hh] > -4.0 || Qnc > 1.0 && hru_tmax[hh] > 0.0 || hru_tmax[hh] > MT && Qnc > -0.5)
+					if (hru_tmin[hh] > -4.0 || (Qnc > 1.0 && hru_tmax[hh] > 0.0) || (hru_tmax[hh] > MT && Qnc > -0.5))  //warning fixed by Manishankar.
 						meltflag[hh] = 1;
 				}
 
@@ -24151,8 +24152,8 @@ void Classalbedoobs2::albedo(long jday, float Qnc) {
 		else {
 			float MT = -0.064*jday + 6.69;
 
-			if (hru_tmin[hh] > -4.0 || Qnc > 1.0 && hru_tmax[hh] > 0.0 ||
-				hru_tmax[hh] > MT && Qnc > -0.5) {
+			if (hru_tmin[hh] > -4.0 || (Qnc > 1.0 && hru_tmax[hh] > 0.0) ||
+				(hru_tmax[hh] > MT && Qnc > -0.5)) {  //warning fixed by Manishankar.
 				Albedo[hh] = Albedo[hh] - DR;
 
 			}
@@ -24213,7 +24214,7 @@ void Classwinter_meltflag::run(void) {
 
 		for (hh = 0; chkStruct(); ++hh) {
 			float hemisphere = (hru_lat[hh] < 0.0);
-			if ((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[hh] > 5.0) {  // changed
+			if (((!hemisphere && (jday > 300 || jday < 2)) || (hemisphere && (jday > 117 || jday < 185))) && SWE[hh] > 5.0) {  // changed  warning fixed by Manishankar.
 				winter[hh] = 1;
 			}
 			continue;
@@ -24236,7 +24237,7 @@ void Classwinter_meltflag::run(void) {
 				if (winter[hh] == 1) {
 					float MT = -0.064*jday + 6.69;
 
-					if (hru_tmin[hh] > -4.0 || Qnc > 1.0 && hru_tmax[hh] > 0.0 || hru_tmax[hh] > MT && Qnc > -0.5) {
+					if (hru_tmin[hh] > -4.0 || (Qnc > 1.0 && hru_tmax[hh] > 0.0) || (hru_tmax[hh] > MT && Qnc > -0.5)) {  //warning fixed by Manishankar.
 						meltflag[hh] = 1;
 					}
 				}
@@ -25261,12 +25262,17 @@ void Classquinton::run(void) {
 			}
 		} // for
 
-		if (variation == VARIATION_ORG)
+		if (variation == VARIATION_ORG)  //warning fixed by Manishankar.
+		{
 			if (p != NULL)
+			{
 				flowin[hh] += p[0];
+			}
 			else if (variation == VARIATION_1)
+			{
 				flowin[hh] += hru_p[0];
-
+			}
+		}
 		//Added after to get rid of errors 
 		float MINFLOAT = 0.00;
 

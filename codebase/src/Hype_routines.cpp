@@ -308,9 +308,9 @@ void ClassWQ_Hype::init(void) {
 			fastN_lay[ll][hh] = fastN_init_lay[ll][hh];
 			fastP_lay[ll][hh] = fastP_init_lay[ll][hh];
 			fastC_lay[ll][hh] = fastC_init_lay[ll][hh];
-			partP_lay[ll][hh];
-			PPrelpool_lay[ll][hh];
-			denitrification_lay[ll][hh];
+			//partP_lay[ll][hh];    //these three lines were commented by Manishankar for resolving some warnings.
+			//PPrelpool_lay[ll][hh];
+			//denitrification_lay[ll][hh];
 		}
 
 		for (long ll = 0; ll < numsubstances; ++ll) {

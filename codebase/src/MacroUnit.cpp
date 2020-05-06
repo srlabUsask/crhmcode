@@ -631,7 +631,8 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 		//Common::Message ("test", "test 14");
 
 		string::size_type Indx;
-		if (Indx = Global::MacroModulesList->Strings[ii].find("//") != string::npos) {
+		Indx = Global::MacroModulesList->Strings[ii].find("//");  //Manishankar did this to resolve a warning.
+		if (Indx != string::npos) {
 			string temp = Global::MacroModulesList->Strings[ii].substr(0, Indx - 1);
 			temp = Common::trimright(temp);
 			DefCRHM::DefStringList->DelimitedText(Add_Quote(temp));

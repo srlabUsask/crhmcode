@@ -298,7 +298,7 @@ void ClassWQ_River::denitrification_water(const long watertype, const float area
 	denitri_water[0] = denpar * area * concfcn * tmpfcn;   // kg
 	denitri_water[0] = min <float>(maxdenitriwater*inorganicNpool[0], denitri_water[0]);    // max 50% kan be denitrified
 	retention_pool(pooldim, inorganicNpool, denitri_water);
-	if (water_r[hh] > 0.0);
+	if (water_r[hh] > 0.0) { };
 	new_concentration(inorganicNpool[0], vol, &conc_lay[(int)i_in[hh] - 1][hh]); // rivers  !!!FIX
 
 } // denitrification_water
@@ -396,7 +396,7 @@ void ClassWQ_River::production_mineralisation(const long watertype, const float 
 			if (conductN[hh])  new_concentration(INpool[0], vol, &conc_lay[(int)i_in[hh] - 1][hh]);
 			if (conductN[hh])  new_concentration(ONpool[0], vol, &conc_lay[(int)i_on[hh] - 1][hh]);
 			if (conductP[hh])  new_concentration(SRPpool[0], vol, &conc_lay[(int)i_sp[hh] - 1][hh]);
-			if (conductP[hh])  (PPpool[0], vol, conc_lay[(long)&i_pp[hh] - 1][hh]);
+			if (conductP[hh])  new_concentration(PPpool[0], vol, conc_lay[(long)&i_pp[hh] - 1][hh]); //Manishankar updated this statement to fix a warning.
 		}
 	}
 

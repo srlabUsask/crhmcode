@@ -3417,14 +3417,24 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 					S = "";
 					for (int ii = 0; ii < thisPar->dim; ii++) {
 						if (thisPar->varType == CRHM::Float)
+						{
 							S = S + FloatToStrF(thisPar->layvalues[jj][ii], ffGeneral, 4, 0) + " ";
+						}
 						else if (thisPar->varType == CRHM::Int)
+						{
 							S = S + FloatToStrF(thisPar->ilayvalues[jj][ii], ffFixed, 8, 0) + " ";
+						}
 						else if (thisPar->varType == CRHM::Txt)
+						{
 							if (thisPar->Strings->Count > ii)
+							{
 								S = S + "'" + thisPar->Strings->Strings[ii] + "' ";
+							}
 							else
+							{
 								S = "''"; // handle null string
+							}
+						}
 
 						if (ii % 16 == 15) {
 							ProjectList->Add(S);

@@ -138,40 +138,69 @@ void ClassVar::ReadVar(void) {
 			}
 		}
 		else if (varType == CRHM::ReadI)
+		{
 			if (dimen == CRHM::NHRU)
+			{
 				for (long ii = 0; ii < dim; ++ii)
+				{
 					ivalues[ii] = int(FileData->Data
 						[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][Global::DTindx / FileData->ModN - FileData->IndxMin] + 0.5);
+				}
+			}
 			else {
 				bool exists = (Global::DTindx / FileData->ModN >= FileData->IndxMin) && (Global::DTindx / FileData->ModN <= FileData->IndxMax);
 				for (long ii = 0; ii < cnt; ++ii)
+				{
 					if (exists)
+					{
 						ivalues[ii] = int(FileData->Data
 							[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][Global::DTindx / FileData->ModN - FileData->IndxMin] + 0.5);
+					}
 					else
+					{
 						ivalues[ii] = lLimit;
+					}
+				}
 			}
+		}
 	}
 	else if (FileData->GoodInterval) { // sparse data
 		if (varType == CRHM::ReadF || varType == CRHM::Read)
+		{
 			if (dimen == CRHM::NHRU)
+			{
 				for (long ii = 0; ii < dim; ++ii)
 					values[ii] = FileData->Data
 					[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx];
+			}
 			else
+			{
 				for (long ii = 0; ii < cnt; ++ii)
+				{
 					values[ii] = FileData->Data
-					[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx];
-
+						[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx];
+				}
+			}
+		}
 		else if (varType == CRHM::ReadI)
+		{
 			if (dimen == CRHM::NHRU)
+			{
 				for (long ii = 0; ii < dim; ++ii)
+				{
 					ivalues[ii] = int(FileData->Data
 						[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] + 0.5);
+				}
+			}
 			else
+			{
 				for (long ii = 0; ii < cnt; ++ii)
+				{
 					ivalues[ii] = int(FileData->Data
 						[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] + 0.5);
+				}
+			}
+		}
 	}
 	else {
 		float doN = dim;
@@ -192,36 +221,57 @@ void ClassVar::WriteVar(void) {
 
 	if (FileData->Times == NULL) {
 		if (varType == CRHM::ReadF || varType == CRHM::Read)
+		{
 			if (dimen == CRHM::NHRU)
+			{
 				for (long ii = 0; ii < dim; ++ii)
 					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][Global::DTindx / FileData->ModN - FileData->IndxMin] = values[ii];
+			}
 			else
+			{
 				for (long ii = 0; ii < cnt; ++ii)
 					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][Global::DTindx / FileData->ModN - FileData->IndxMin] = values[ii];
+			}
+		}
 
 		else if (varType == CRHM::ReadI)
+		{
 			for (long ii = 0; ii < dim; ++ii)
 				FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][Global::DTindx / FileData->ModN - FileData->IndxMin] = ivalues[ii];
+		}
 		else
+		{
 			for (long ii = 0; ii < cnt; ++ii)
 				FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][Global::DTindx / FileData->ModN - FileData->IndxMin] = ivalues[ii];
+		}
 	}
 	else if (FileData->GoodInterval) { // sparse data
 		if (varType == CRHM::ReadF || varType == CRHM::Read)
+		{
 			if (dimen == CRHM::NHRU)
+			{
 				for (long ii = 0; ii < dim; ++ii)
 					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = values[ii];
+			}
 			else
+			{
 				for (long ii = 0; ii < cnt; ++ii)
 					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = values[ii];
-
+			}
+		}
 		else if (varType == CRHM::ReadI)
+		{
 			if (dimen == CRHM::NHRU)
+			{
 				for (long ii = 0; ii < dim; ++ii)
 					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = ivalues[ii];
+			}
 			else
+			{
 				for (long ii = 0; ii < cnt; ++ii)
 					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = ivalues[ii];
+			}
+		}
 	}
 }
 
@@ -1060,15 +1110,23 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 	}
 
 	if (varType == CRHM::Float)
-		for (int jj = 0; jj<lay; jj++)
-			for (int ii = 0; ii<dim; ii++)
+	{
+		for (int jj = 0; jj < lay; jj++)
+			for (int ii = 0; ii < dim; ii++)
 				layvalues[jj][ii] = p.layvalues[jj][ii];
+	}
 	else if (varType == CRHM::Int)
-		for (int jj = 0; jj<lay; jj++)
-			for (int ii = 0; ii<dim; ii++)
+	{
+		for (int jj = 0; jj < lay; jj++)
+		{
+			for (int ii = 0; ii < dim; ii++)
 				ilayvalues[jj][ii] = p.ilayvalues[jj][ii];
+		}
+	}
 	else if (varType == CRHM::Txt)
+	{
 		Strings->Assign(p.Strings);
+	}
 
 }
 
@@ -1877,7 +1935,7 @@ bool ClassData::DataReadFile(void) {
 			}
 			double mid = floor(Dt1) + Interval;
 			float range = 0.00002;
-			if (Dt1 > mid + range || Dt1 < mid - range && Interval < 1.0) { // ensure data starts at first interval
+			if (Dt1 > mid + range || (Dt1 < mid - range && Interval < 1.0)) { // ensure data starts at first interval  //warning resolved by Manishankar
 																			/*          CRHMException Except("Observation file WARNING " + DataFileName, ERR);
 																			Message(Except.Message.c_str(),
 																			"First interval must start at midnight + interval! ", mbOK);
@@ -2155,7 +2213,7 @@ bool ClassData::DataReadFile(void) {
 			delete[] Times;
 			Times = NULL;
 
-			if (ForceInterval == 96 && Freq == 144 || ForceInterval == 144 && Freq == 96) { // cannot convert 10 minute to 15 minute or vice versa
+			if ((ForceInterval == 96 && Freq == 144) || (ForceInterval == 144 && Freq == 96)) { // cannot convert 10 minute to 15 minute or vice versa  //warning resolved by Manishankar.
 																							/*          string S = string("cannot convert 10 minute interval to 15 minute or vice versa") + string(" in observation file ");
 																							CRHMException Except(S + DataFileName, ERR);
 																							Message(Except.Message.c_str(), "Project observation file", mbOK);
@@ -3889,7 +3947,7 @@ void ClassSmear::doFunc(long Obs, long Line) {
 	if (now0 > -delta && now0 < delta) {  // end of day
 		float value = Data[0][Obs][Line - MyObs->Freq + 1] / MyObs->Freq;
 
-		if (now > Constants[0] && now < Constants[1] && (Minus && value < 0.0 || !Minus)) {
+		if (now > Constants[0] && now < Constants[1] && ((Minus && value < 0.0) || !Minus)) {   //warning resolved by Manishankar.
 
 			if (value < 0.0)
 				value = -value;
@@ -5068,9 +5126,9 @@ ClassData::ClassData(const ClassData & Cl) { //
 	for (int jj = 0; jj < DataCnt + FilterCnt; ++jj)
 		Data[jj] = new float[Lines];
 
-	for (int jj = 0; jj < DataCnt + FilterCnt; ++jj)
-		for (int kk = 0; kk < Lines; ++kk)
-			Data[jj][kk];
+	//for (int jj = 0; jj < DataCnt + FilterCnt; ++jj)  //warning resolved by Manishankar
+	//	for (int kk = 0; kk < Lines; ++kk)
+	//		Data[jj][kk];
 
 	if (Cl.Times) {
 		Times = new double[Lines];
@@ -5116,9 +5174,9 @@ ClassData & ClassData::operator=(const ClassData & Cl) { //
 	for (int jj = 0; jj < DataCnt + FilterCnt; ++jj)
 		Data[jj] = new float[Lines];
 
-	for (int jj = 0; jj < DataCnt + FilterCnt; ++jj)
-		for (int kk = 0; kk < Lines; ++kk)
-			Data[jj][kk];
+	//for (int jj = 0; jj < DataCnt + FilterCnt; ++jj)  //warning resolved by Manishankar
+	//	for (int kk = 0; kk < Lines; ++kk)
+	//		Data[jj][kk];
 
 	if (Cl.Times) {
 		Times = new double[Lines];

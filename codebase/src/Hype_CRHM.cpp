@@ -640,6 +640,7 @@ void ClassWQ_Soil::run(void) {
 			float s2gw_k = soil_gw_K[hh] / Global::Freq;
 
 			if (excs > s2gw_k)
+			{
 				if (excs >= s2gw_k) { // to gw 03/04/10 changed from >
 					soil_gw[hh] = s2gw_k; // soil_gw[hh] = s2gw_k;
 					soil_gw_conc[hh] = s2gw_k / excs * excs_mWQ;
@@ -652,15 +653,15 @@ void ClassWQ_Soil::run(void) {
 					excs = 0.0;
 					excs_mWQ = 0.0;
 				}
+			}
+			//  Handle excess to interflow or runoff
 
-				//  Handle excess to interflow or runoff
-
-				if (!soil_ssr_runoff[hh] && excs > 0.0) { // to interflow
-					soil_ssr[hh] += excs;
-					soil_ssr_conc[hh] += excs_mWQ;
-					excs = 0.0;
-					excs_mWQ = 0.0;
-				}
+			if (!soil_ssr_runoff[hh] && excs > 0.0) { // to interflow
+				soil_ssr[hh] += excs;
+				soil_ssr_conc[hh] += excs_mWQ;
+				excs = 0.0;
+				excs_mWQ = 0.0;
+			}
 		}
 		else { // soil_moist_max <= 0.0, i.e. Pond
 			excs = infil[hh] + snowinfil_buf[hh] + condense;
