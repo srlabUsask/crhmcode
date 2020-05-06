@@ -1700,6 +1700,7 @@ double ClassData::Encode24(int D[]) {
 
 		//    Message(S.c_str(), string("Observation File: " + DataFileName).c_str(), mbOK);
 		//    throw;
+		return 0.0;
 	}
 }
 
@@ -5187,6 +5188,8 @@ ClassData & ClassData::operator=(const ClassData & Cl) { //
 	}
 	else
 		Times = NULL;
+
+	return *this;
 }
 
 void   LogDebug(const char* S) {

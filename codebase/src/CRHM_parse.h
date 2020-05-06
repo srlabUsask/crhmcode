@@ -146,7 +146,7 @@ class ClassMacro;
 
 class VarCHRM {
 public:
-	VarCHRM() : kind(LOCAL), val(NULL), value(NULL), ivalue(NULL), value2(NULL), ivalue2(NULL),
+	VarCHRM() : kind(LOCAL), val(0.0), value(NULL), ivalue(NULL), value2(NULL), ivalue2(NULL),
 		Ihh(0), Ill(0), IndexMax(0), IndexMaxLay(0), name("Undefined"), Me(NULL) {};
 	VarCHRM(const VarCHRM & Cl); // copy constructor
 	VarCHRM &operator=(const VarCHRM & Cl);

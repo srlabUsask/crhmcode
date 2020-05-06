@@ -902,7 +902,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			newPar = (*itPar).second;
 			*value = newPar->values;
 		}
-		else if (newPar = ClassParFindPar(param)) {
+		else if ((newPar = ClassParFindPar(param))) {
 			*value = newPar->values;
 		}
 		else {
@@ -1052,7 +1052,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 				*ilayvalue = (const long **)newPar->ilayvalues;
 			return;
 		}
-		else if (newPar = ClassParFindPar(param)) {
+		else if ((newPar = ClassParFindPar(param))) {
 			*ivalue = newPar->ivalues;
 			if ((dimen == CRHM::NLAY && ilayvalue != NULL) || (dimen == CRHM::NDEF && ilayvalue != NULL) || (dimen == CRHM::NDEFN && ilayvalue != NULL))
 				*ilayvalue = (const long **)newPar->ilayvalues;
@@ -3852,7 +3852,7 @@ long ClassModule::declputparam(string source, string param, string units, float 
 						(*layvalue) = newPar->layvalues;  //const_cast<float **> (*layvalue) = newPar->layvalues;
 				}
 			}
-			else if (newPar = ClassParFindPar(param)) {
+			else if ((newPar = ClassParFindPar(param))) {
 				if (newPar->Inhibit_share != 2) { // 2 means no declare, ie not used.
 					*value = newPar->values;
 					if (layvalue != NULL)
@@ -3926,7 +3926,7 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 				if (layvalue != NULL)
 					*layvalue = (const float **)newPar->layvalues;
 			}
-			else if (newPar = ClassParFindPar(param)) {
+			else if ((newPar = ClassParFindPar(param))) {
 				*value = newPar->values;
 				if (layvalue != NULL)
 					*layvalue = (const float **)newPar->layvalues;
@@ -3965,7 +3965,7 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 		else if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 		}
-		else if (newPar = ClassParFindPar(param)) {
+		else if ((newPar = ClassParFindPar(param))) {
 		}
 		else {
 			CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
@@ -4075,7 +4075,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 						(*ilayvalue) = newPar->ilayvalues;  //const_cast<long **> (*ilayvalue) = newPar->ilayvalues;
 				}
 			}
-			else if (newPar = ClassParFindPar(param)) { // handles other module
+			else if ((newPar = ClassParFindPar(param))) { // handles other module
 				if (newPar->Inhibit_share != 2) { // 2 means no declare, ie not used.
 					*ivalue = newPar->ivalues;
 					if (ilayvalue != NULL)
@@ -4150,7 +4150,7 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 					*ilayvalue = (const long **)newPar->ilayvalues;
 				return;
 			}
-			else if (newPar = ClassParFindPar(param)) { // handles other module
+			else if ((newPar = ClassParFindPar(param))) { // handles other module
 				*ivalue = newPar->ivalues;
 				if (ilayvalue != NULL)
 					*ilayvalue = (const long **)newPar->ilayvalues;
