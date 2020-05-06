@@ -63,11 +63,11 @@ enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll
 
 
 
-//static double xLimit = numeric_limits<float>::max();
-//static long lLimit = numeric_limits<long>::max();
+static double xLimit = (numeric_limits<float>::max)();
+static long lLimit = (numeric_limits<long>::max)();
 
-static double xLimit = 3.14E20;
-static long lLimit = 2147483647;
+//static double xLimit = 3.14E20;
+//static long lLimit = 2147483647;
 
 
 
