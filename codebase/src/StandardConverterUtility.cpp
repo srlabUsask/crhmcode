@@ -143,6 +143,31 @@ double StandardConverterUtility::DateTimeDt(void) {  //Manishankar: in CRHMmain.
 
 
 
+//this function is being used CRHMmain.cpp. Added by Manishankar.
+std::string StandardConverterUtility::FormatDateTime(std::string fmt, double datetime) {
+	int y, m, d, h, min, s;
+	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
+
+	string m1 = to_string(m), d1 = to_string(d), h1 = to_string(h), min1 = to_string(min);
+	if (m < 10) { m1 = "0" + m1; }
+	if (d < 10) { d1 = "0" + d1; }
+	if (h < 10) { h1 = "0" + h1; }
+	if (min < 10) { min1 = "0" + min1; }
+
+	if (fmt == "mm/dd/yyyy hh:mm ")
+	{
+		return m1 + "/" + d1 + "/" + to_string(y) + " " + h1 + ":" + min1+" ";
+	}
+	else if (fmt == "yyyy-mm-dd hh:mm ")
+	{
+		return to_string(y) + "-" + m1 + "-" + d1 + " " + h1 + ":" + min1;
+	}
+
+	return "";
+}
+
+
+
 
 //CString StandardConverterUtility::GetCStringFromStandardString(string str)
 //{

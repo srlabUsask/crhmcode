@@ -2751,7 +2751,20 @@ void  CRHMmain::AllRprt(void)
 	for (int nn = 0; nn < cdSeries[0]->Count(); ++nn) {
 
 		//Sx = FloatToStrF(cdSeries[0]->XValue(nn), ffGeneral, 10, 0);
-		Sx = StandardConverterUtility::GetDateTimeInStringForOutput(cdSeries[0]->XValue(nn));
+		//Sx = StandardConverterUtility::GetDateTimeInStringForOutput(cdSeries[0]->XValue(nn));
+
+		//added this switch statement according to Peter's code.
+		switch (Global::TimeFormat) {
+		case CRHM::MS:
+			Sx = FloatToStrF(cdSeries[0]->XValue(nn), ffGeneral, 10, 0);
+			break;
+		case CRHM::MMDDYYYY:
+			Sx = StandardConverterUtility::FormatDateTime("mm/dd/yyyy hh:mm ", cdSeries[0]->XValue(nn));
+			break;
+		case CRHM::YYYYMMDD:
+			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn));
+			break;
+		}
 
 
 

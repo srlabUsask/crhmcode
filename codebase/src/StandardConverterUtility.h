@@ -14,6 +14,7 @@ public:
 	double static EncodeDateTime(int Year, int Month, int Day, int hour, int min);
 	void static DecodeDateTime(double Dttime, int *Year, int *Month, int *Day, int *Hour, int *Min);
 	double static DateTimeDt(void);
+	std::string static FormatDateTime(std::string fmt, double datetime);
 
 
 	StandardConverterUtility();
