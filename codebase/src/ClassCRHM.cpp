@@ -29,7 +29,7 @@
 
 //---------------------------------------------------------------------------
 
-# define M_PI           3.14159265358979323846  /* pi */
+//#define M_PI           3.14159265358979323846  /* pi */
 
 using namespace std;
 
@@ -1158,15 +1158,23 @@ void ClassPar::Change(ClassPar &p) {  // changes parameter data to 'p'
 				long ii0 = min<long>(ii, p.dim - 1);
 				if (Bang && ii0 < ii) {
 					if (varType == CRHM::Float)
+					{
 						layvalues[jj][ii] = layvalues[jj][ii - 1] + 1;
+					}
 					else if (varType == CRHM::Int)
+					{
 						ilayvalues[jj][ii] = ilayvalues[jj][ii - 1] + 1;
+					}
 				}
 				else {
 					if (varType == CRHM::Float)
+					{
 						layvalues[jj][ii] = p.layvalues[jj0][ii0];
+					}
 					else if (varType == CRHM::Int)
+					{
 						ilayvalues[jj][ii] = p.ilayvalues[jj0][ii0];
+					}
 				}
 			}
 		}

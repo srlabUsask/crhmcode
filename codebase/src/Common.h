@@ -111,7 +111,10 @@ namespace CRHM {
 #define MAXLAY 101
 #define WtoMJ_D 86400/1E6
 #define MJ_DtoW 1E6/86400
+
+#ifndef M_PI
 #define M_PI	3.14159265358979323846  /* pi */
+#endif
 
 const float a1 = 0.4361836;   //constants of approximation
 const float a2 = -0.1201676;

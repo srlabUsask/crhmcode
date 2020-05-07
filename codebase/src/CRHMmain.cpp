@@ -1381,7 +1381,8 @@ void  CRHMmain::ObsFileClose(void)
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
-		if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::VARIABLE)
+		//if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::VARIABLE) //changed by Manishankar.
+		if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::USUAL)
 			if (Common::IndexOf(ListBox1, (*itVar).second->name) == -1)
 				ListBox1->AddObject((*itVar).second->name, (TObject*)(*itVar).second);
 	}
