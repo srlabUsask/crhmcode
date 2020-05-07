@@ -21,11 +21,7 @@ crhm: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(DFLAGS) $(LIBS)
 
 crhm_test: crhm
-	./crhm BadLake1974-1975.prj
-
-smithcreek.obs:  crhm
-	./crhm smithcreek.prj
-	cp CRHM_output_1.obs smithcreek.obs
+	time ./crhm BadLake1974-1975.prj
 
 $(ODIR)/main.o: $(SDIR)/main.cpp | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
