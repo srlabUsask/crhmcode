@@ -148,7 +148,7 @@ public:
 
 	TStringList(const TStringList &p); // copy constructor
 
-	TStringList & operator=(const TStringList & p); //
+	TStringList & operator=(const TStringList & p) = delete;//updated by Manishankar for resolving a warning.
 
 	int IndexOf(string s);
 	void Add(string s);

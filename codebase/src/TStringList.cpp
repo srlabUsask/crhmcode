@@ -213,11 +213,11 @@ TStringList::TStringList(const TStringList &p) { // copy constructor
 	Count = 0;
 }
 
-TStringList & TStringList::operator=(const TStringList & p) {
-
-	if (this == &p) return *this;
-
-}
+//TStringList & TStringList::operator=(const TStringList & p) {
+//
+//	if (this == &p) return *this;
+//
+//}
 
 void TStringList::LoadFromFile(string filename)
 {
