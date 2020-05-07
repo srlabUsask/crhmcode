@@ -4441,12 +4441,13 @@ Unit_Info Convert::Infos[] = {
 	//Unit_Info("\B0F", "DegreesFahrenheit", 1.0 / 1.8, "K"),
 	//Unit_Info("\B0R", "DegreesRankine", 1.0 / 1.8, "K"),
 	//Unit_Info("\B5", "Micron", 1e-6, "m"),
+	//Unit_Info("\C5", "Angstrom", 1e-10, "m"),
 	Unit_Info("\0xB", "Degree", 1.74532925199e-2, "r"),
 	Unit_Info("\0xB0C", "DegreeCelsius", 1.0, "K") ,
 	Unit_Info("\0xB0F", "DegreesFahrenheit", 1.0 / 1.8, "K") ,
 	Unit_Info("\0xB0R", "DegreesRankine", 1.0 / 1.8, "K") ,
 	Unit_Info("\0xB5", "Micron", 1e-6, "m") ,
-	Unit_Info("\C5", "Angstrom", 1e-10, "m") ,
+	Unit_Info("\0xC5", "Angstrom", 1e-10, "m") ,
 	Unit_Info("", "", 0, "") };
 
 
@@ -4492,7 +4493,8 @@ string tcsSqueeze(string pszIn) {
 
 	string::size_type Idx;
 	//  char const Misc[] = {"( )%\BA\B0\t"};
-	char const Misc[] = { "( )%\BA\t" };
+	//char const Misc[] = { "( )%\BA\t" };
+	char const Misc[] = { "( )%\0xBA\t" };
 
 	Idx = pszIn.find_first_of(Misc);
 	while (Idx != string::npos) {
