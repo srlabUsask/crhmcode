@@ -1187,7 +1187,7 @@ void Defdeclgetvar::CallDecl() {
 
 		if (Int) {
 			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
-			if (((ClassVar*)Global::thisVar)->varType == CRHM::NDEF || ((ClassVar*)Global::thisVar)->varType == CRHM::NDEFN) {
+			if (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN) {
 				FP->second.kind = VarCHRM::CRHMint2;
 				FP->second.ivalue2 = const_cast<long **> (fix2_long_const);
 			}
@@ -1198,7 +1198,7 @@ void Defdeclgetvar::CallDecl() {
 		}
 		else {
 			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
-			if (((ClassVar*)Global::thisVar)->varType == CRHM::NDEF || ((ClassVar*)Global::thisVar)->varType == CRHM::NDEFN) {
+			if (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN) {
 				FP->second.kind = VarCHRM::CRHM2;
 				FP->second.value2 = const_cast<float **> (fix2_const);
 			}
@@ -1248,7 +1248,7 @@ void Defdeclputvar::CallDecl() {
 			FP->second.ivalue = const_cast<long *> (fix_long);
 		}
 		//else if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences.
-		else if (((ClassVar*)Global::thisVar)->varType == CRHM::NDEF || ((ClassVar*)Global::thisVar)->varType == CRHM::NDEFN) {
+		else if (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN) {
 			FP->second.kind = VarCHRM::CRHM2;
 			FP->second.value2 = const_cast<float **> (fix2);
 		}
@@ -1295,7 +1295,7 @@ void Defdeclputparam::CallDecl() {
 			FP->second.kind = VarCHRM::CRHMint;
 			FP->second.ivalue = const_cast<long *> (fix_long);
 		}
-		else if (thisPar->varType == CRHM::NDEF || thisPar->varType == CRHM::NDEFN) {
+		else if (thisPar->dimen == CRHM::NDEF || thisPar->dimen == CRHM::NDEFN) {
 			FP->second.kind = VarCHRM::CRHM2;
 			FP->second.value2 = const_cast<float **> (fix2);
 		}
