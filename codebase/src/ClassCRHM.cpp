@@ -2595,6 +2595,8 @@ void ModVarRemove(MapVar & MapVars) {
 		case CRHM::Int:
 		case CRHM::Float:
 			exit(1); // should never happen
+		default:
+			break;
 		}
 	}
 	// No modules - No parameters !
@@ -3551,7 +3553,9 @@ void Classjulian::doFunc(long Obs, long Line) {
 	switch (option) {
 	case 0: Data[Vs - 1][Obs][Line] = julian("now"); break;
 	case 1: Data[Vs - 1][Obs][Line] = julian("start"); break;
-	case 2: Data[Vs - 1][Obs][Line] = julian("end");
+	case 2: Data[Vs - 1][Obs][Line] = julian("end"); break;
+	default:
+		break;
 	}
 }
 
@@ -4044,6 +4048,8 @@ void   LogMessage(const char *S, float V, TExtra Opt) {
 		break;
 	case TT:
 		D = FormatString(Global::DTnow, "hh nn ");
+	default:
+		break;
 	}
 
 	if (Opt == BLANK)
@@ -4069,6 +4075,8 @@ void   LogMessage(const char *S, long V, TExtra Opt) {
 		break;
 	case TT:
 		D = FormatString(Global::DTnow, "hh nn ");
+	default:
+		break;
 	}
 
 	if (Opt == BLANK)
@@ -4094,6 +4102,8 @@ void   LogMessage(const char *S, TExtra Opt) {
 		break;
 	case TT:
 		D = FormatString(Global::DTnow, "hh nn ");
+	default:
+		break;
 	}
 
 	if (Opt == BLANK)
@@ -4120,6 +4130,8 @@ void   LogMessage(long hh, const char *S, float V, TExtra Opt) {
 		break;
 	case TT:
 		D = FormatString(Global::DTnow, "hh nn ");
+	default:
+		break;
 	}
 
 	string SS = A + D + S + FloatToStrF(V, "ffFixed", 10, 4);
@@ -4142,6 +4154,8 @@ void   LogMessage(long hh, const char *S, long V, TExtra Opt) {
 		break;
 	case TT:
 		D = FormatString(Global::DTnow, "hh nn ");
+	default:
+		break;
 	}
 
 	string SS = A + D + S + to_string(V);
@@ -4164,6 +4178,8 @@ void   LogMessage(long hh, const char *S, TExtra Opt) {
 		break;
 	case TT:
 		D = FormatString(Global::DTnow, "hh nn ");
+	default:
+		break;
 	}
 
 	string SS = A + D + S;

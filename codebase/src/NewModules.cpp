@@ -1081,6 +1081,8 @@ void Classobs::run(void) {
 				hru_eamean[hh] = hru_ea[hh]; // daily - only one value
 				hru_rhmean[hh] = hru_rh[hh]; // daily - only one value
 				break;
+			default:
+				break;
 			} // switch
 		}
 
@@ -2578,6 +2580,8 @@ void Classebsm::run(void) {
 					case VARIATION_3:
 						Qn_ebsm[hh] = QnD[hh]; // already in (MJ/m^2*d)
 						break;
+					default:
+						break;
 					} // switch
 
 				Qh_ebsm[hh] = -0.92 + 0.076*umean[hh] + 0.19*tmax[hh];
@@ -2763,6 +2767,8 @@ void ClassTs::run(void) { // executed every interval
 		case VARIATION_1:
 			Qli_[hh] = Qli[hh];
 			break;
+		default:
+			break;
 		} // switch
 
 		float T1 = hru_t[hh] + CRHM_constants::Tm;
@@ -2917,6 +2923,8 @@ void ClassNeedle::run(void) { // executed every interval
 		case VARIATION_4:
 			Qsi_ = QsiA_Var[hh];
 			Qli_ = QliVt_Var[hh];
+			break;
+		default:
 			break;
 		} // switch
 
@@ -3394,6 +3402,8 @@ void Classevap::run(void) {
 				evap[hh] = 0.0;
 
 			break;
+		default:
+			break;
 
 		} // switch
 
@@ -3559,6 +3569,8 @@ void ClassevapD::run(void) {
 				else
 					evapD[hh] = 0.0;
 
+				break;
+			default:
 				break;
 			} // switch
 
@@ -4404,6 +4416,8 @@ void ClassKevin::run(void) {
 				SnowStat[hh] = MATURE;
 				SWElast[hh] = SWE[hh];
 			}
+			break;
+		default:
 			break;
 		} // switch
 
@@ -6920,6 +6934,8 @@ void ClassSnobalCRHM::run(void) { // executed every interval
 		case VARIATION_3:
 			input_rec2[hh].S_n = QsiS_Var[hh] * (1.0 - Albedo[hh]);
 			input_rec2[hh].I_lw = QliVt_Var[hh];
+			break;
+		default:
 			break;
 		}
 
@@ -10801,6 +10817,8 @@ void ClassLongVt::run(void) {
 				case VARIATION_2:
 					tau[hh] = QsiD_Var[hh] * 86400 / 1E6 / QdroDext[hh]; // 03/29/07
 					break;
+				default:
+					break;
 				}
 			}
 			else
@@ -12847,6 +12865,8 @@ void ClassAnnan::run(void) {
 			QsiA_Var[hh] = QsiAT;
 			QsiS_Var[hh] = QsiST;
 			QsiD_Var[hh] = QsiDT;
+		default:
+			break;
 		} // switch
 	} // for
 }
@@ -13286,6 +13306,8 @@ void Classcalcsun::init(void) {
 			CRHMException TExcept(string("'" + Name + " (calcsun)' QsiD_Obs daily observation missing.").c_str(), TERMINATE);
 			LogError(TExcept);
 		}
+	default:
+		break;
 	} // switch
 }
 
@@ -13883,6 +13905,8 @@ void ClassCRHMCanopy::run(void) {
 		case VARIATION_4:
 			Qsi_ = QsiA_Var[hh];
 			Qli_ = QliVt_Var[hh];
+			break;
+		default:
 			break;
 		} // switch
 
@@ -14925,6 +14949,8 @@ void ClassSlope_Qsi::run(void) {
 			if (nstep == 1)
 				QsiD_Var[hh] = QsiD[hh]; // move mean from variable to declared observation
 			break;
+		default:
+			break;
 		} // switch
 
 	}
@@ -15490,6 +15516,8 @@ void ClassHMSA::run(void) {
 		case VARIATION_1:
 			Tsurface[hh] = Tsurf_obs[hh]; // variable
 			break;
+		default:
+			break;
 		} // switch
 
 		  // Calculate accumulative depth of each layers
@@ -15856,6 +15884,8 @@ void ClassHMSA::Get_Heat_Param_Soil(float Soil_Temp, long nn) {
 	case 5:   //Chad
 
 		Get_Heat_Chad(nn);
+	default:
+		break;
 	}
 }
 
@@ -16509,6 +16539,8 @@ void ClassSoil::run(void) {
 			case 4: //******organic soil
 					//         use default above etr = avail_evap;
 				break;
+			default:
+				break;
 			} // recharge switch
 
 			if (etr > avail_evap) {
@@ -16535,6 +16567,8 @@ void ClassSoil::run(void) {
 				break;
 			case 4: //******organic soil
 					//         use default above etl = avail_evap - etr;
+				break;
+			default:
 				break;
 			} // lower switch
 
@@ -16583,6 +16617,8 @@ void ClassSoil::run(void) {
 					else
 						soil_rechr[hh] = soil_rechr[hh] - etr;
 				}
+				break;
+			default:
 				break;
 			} // switch
 
@@ -16828,6 +16864,8 @@ void Classevap_Resist::run(void) {
 		case VARIATION_2:
 			Qsi_ = QsiA_Var[hh];
 			break;
+		default:
+			break;
 		} // switch
 
 		  // calculated every interval
@@ -16936,6 +16974,8 @@ void Classevap_Resist::run(void) {
 				evap[hh] = 1.26*delta(hru_t[hh])*Q / (delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh])); // restored amount to ground flux 11/21/16
 			else
 				evap[hh] = 0.0;
+			break;
+		default:
 			break;
 
 		} // switch
@@ -17179,6 +17219,8 @@ void ClassevapD_Resist::run(void) {
 
 				evapD[hh] = RHOa(hru_tmean[hh], hru_eamean[hh], Pa[hh])*(qs - q) / ((ra + rc[hh]) / 86400);
 				break;
+			//default:
+				//break;
 
 			} // switch
 
@@ -18335,6 +18377,8 @@ void ClassevapX::run(void) {
 			}
 
 			break;
+		default:
+			break;
 
 		} // switch
 
@@ -19232,6 +19276,8 @@ void ClassSoilPrairie::run(void) {
 			case 4: //******organic soil
 					//         use default above etr = avail_evap;
 				break;
+			default:
+				break;
 			} // recharge switch
 
 			if (etr > avail_evap) {
@@ -19306,6 +19352,8 @@ void ClassSoilPrairie::run(void) {
 					else
 						soil_rechr[hh] = soil_rechr[hh] - etr;
 				}
+				break;
+			default:
 				break;
 			} // switch
 
@@ -20525,6 +20573,8 @@ void Classglacier::run(void) {
 							break;
 						case VARIATION_3:
 							Qn_ebsm[hh] = QnD[hh]; // already (MJ/m^2*d)
+							break;
+						default:
 							break;
 						} // switch
 
@@ -22577,6 +22627,8 @@ void ClassSoilX::run(void) {
 			case 4: //******organic soil
 					//         use default above etr = avail_evap;
 				break;
+			default:
+				break;
 			} // recharge switch
 
 			if (etr > avail_evap) {
@@ -22603,6 +22655,8 @@ void ClassSoilX::run(void) {
 				break;
 			case 4: //******organic soil
 					//         use default above etl = avail_evap - etr;
+				break;
+			default:
 				break;
 			} // lower switch
 
@@ -22651,6 +22705,8 @@ void ClassSoilX::run(void) {
 					else
 						soil_rechr[hh] = soil_rechr[hh] - etr;
 				}
+				break;
+			default:
 				break;
 			} // switch
 
@@ -23840,6 +23896,8 @@ void ClassSoilDS::run(void) {
 			case 4: //******organic soil
 					//         use default above etr = avail_evap;
 				break;
+			default:
+				break;
 			} // recharge switch
 
 			if (etr > avail_evap) {
@@ -23866,6 +23924,8 @@ void ClassSoilDS::run(void) {
 				break;
 			case 4: //******organic soil
 					//         use default above etl = avail_evap - etr;
+				break;
+			default:
 				break;
 			} // lower switch
 
@@ -23914,6 +23974,8 @@ void ClassSoilDS::run(void) {
 					else
 						soil_rechr[hh] = soil_rechr[hh] - etr;
 				}
+				break;
+			default:
 				break;
 			} // switch
 
@@ -25965,6 +26027,8 @@ void ClassCRHMCanopyClearing::run(void) {
 			Qsi_ = QsiA_Var[hh];
 			Qli_ = QliVt_Var[hh];
 			break;
+		default:
+			break;
 		} // switch
 
 		net_rain[hh] = 0.0;
@@ -26556,6 +26620,8 @@ void ClassCRHMCanopyClearingGap::run(void) {
 			Qsi_ = QsiA_Var[hh];
 			Qli_ = QliVt_Var[hh];
 			break;
+		default:
+			break;
 		} // switch
 
 		net_rain[hh] = 0.0;
@@ -26706,6 +26772,8 @@ void ClassCRHMCanopyClearingGap::run(void) {
 			Qnsn_Var[hh] = Qnsn[hh];
 
 			break;
+		//default:
+			//break;
 		} // switch
 
 		switch (CanopyClearing[hh]) {

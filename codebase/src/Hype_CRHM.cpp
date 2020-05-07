@@ -903,6 +903,8 @@ void ClassWQ_Soil::run(void) {
 			case 4: //******organic soil
 					//         use default above etr = avail_evap;
 				break;
+			default:
+				break;
 			} // recharge switch
 
 			if (etr > avail_evap) {
@@ -929,6 +931,8 @@ void ClassWQ_Soil::run(void) {
 				break;
 			case 4: //******organic soil
 					//         use default above etl = avail_evap - etr;
+				break;
+			default:
 				break;
 			} // lower switch
 
@@ -977,6 +981,8 @@ void ClassWQ_Soil::run(void) {
 					else
 						soil_rechr[hh] = soil_rechr[hh] - etr;
 				}
+				break;
+			default:
 				break;
 			} // switch
 

@@ -74,3 +74,9 @@ src/MacroUnit.cpp:1298:63: warning: result of comparison of constant 'NDEFN' (19
 4. rewrite the readme 
 
 5. delete the boost library.
+
+
+Problem in switch
+-------------------
+
+NewModules.cpp: 26711

@@ -224,6 +224,8 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 	return -1;
 }
@@ -418,6 +420,8 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 }
 
@@ -515,6 +519,8 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 }
 
@@ -596,6 +602,8 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 }
 
@@ -677,6 +685,8 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 }
 
@@ -770,6 +780,8 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 	return (TStringList*)NULL;
 }
@@ -916,6 +928,8 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			Par_loop_lay_value[Par_NDEFN_cnt++] = newPar->values; // save for lay loop
 		}
 	} // case
+	default:
+		break;
 	} // switch
 }
 
@@ -1061,6 +1075,8 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			throw Except;
 		}
 	} // case
+	default:
+		break;
 	} // switch
 }
 
@@ -1207,6 +1223,8 @@ long ClassModule::declgetvar(string source, string name, string units, const flo
 			}
 		}
 	} // case
+	default:
+		break;
 	} // switch
 	return(-1);
 }
@@ -1283,6 +1301,8 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 			}
 		}
 	} // case
+	default:
+		break;
 	} // switch
 	return(-1);
 }
@@ -1384,6 +1404,8 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 	return(-1);
 }
@@ -1574,6 +1596,8 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		else
 			return(newVar->dim - 1);  // declared obs
 	}
+	default:
+		break;
 	}
 	return(-1);
 }
@@ -1771,6 +1795,8 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 		else
 			return(newVar->dim - 1);  // declared obs
 	}
+	default:
+		break;
 	}
 	return(-1);
 }
@@ -1987,6 +2013,8 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 
 					*layvalue = newVar->layvalues;
 					break;
+				default:
+					break;
 				}
 
 				*value = newVar->values;
@@ -2171,6 +2199,8 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 				newVar->UserFunct = &ClassVar::Pos;
 				newVar->FunKind = CRHM::POS;
 				break;
+			default:
+				break;
 			}
 
 			*value = newVar->ivalues;
@@ -2185,6 +2215,8 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 	return(-1);
 }
@@ -2255,6 +2287,8 @@ long ClassModule::declputvar(string source, string name, string units, float **v
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 	return(-1);
 }
@@ -2326,6 +2360,8 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 	return(-1);
 }
@@ -2509,6 +2545,8 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 	case IgnoreVar: // VARG
 		LogMessage(string(ID + "*** AKA warning, not changed to *** " + source + "->" + Try).c_str());
 		break;
+	default:
+		break;
 	} // switch
 
 	if (Global::ReportList && Outcome != None) {
@@ -2533,6 +2571,8 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 		case IgnoreVar: // VARG
 			source = (ID + " AKA warning, not changed to " + source + "-> " + Try).c_str();
 			reason = " *** source module AKA variable redirection would loop output to input";
+			break;
+		default:
 			break;
 		} // switch
 
@@ -3005,6 +3045,8 @@ void Administer::Accept(int Result) {
 		case mbNo:
 		case mbNoToAll:
 			continue;
+		default:
+			break;
 		}
 	}
 
@@ -3190,6 +3232,8 @@ void Myparser::eval_exp2(float &result)
 		case '+':
 			result = result + temp;
 			break;
+		default:
+			break;
 		}
 	}
 }
@@ -3220,6 +3264,8 @@ void Myparser::eval_exp3(float &result)
 			break;
 		case '%':
 			result = (int)result % (int)temp;
+			break;
+		default:
 			break;
 		}
 	}
@@ -3867,7 +3913,8 @@ long ClassModule::declputparam(string source, string param, string units, float 
 			return 0;
 		}
 	} // case
-
+	default:
+		break;
 	} // switch
 
 	return 0;  //warning resolved by Manishankar
@@ -3939,7 +3986,8 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 			return 0;
 		}
 	} // case
-
+	default:
+		break;
 	} // switch
 	return 0;  //warning resolved by Manishankar
 }
@@ -4090,6 +4138,8 @@ long ClassModule::declputparam(string source, string param, string units, long *
 			return 0;
 		}
 	} // case
+	default:
+		break;
 	} // switch
 	return 0; //warning resolved by Manishankar
 }
@@ -4163,6 +4213,8 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 			}
 		}
 	} // case
+	default:
+		break;
 	} // switch
 }
 

@@ -77,6 +77,8 @@ void TStringList::DelimitedText(string s) {
 
 			in_quote = "";
 			quoted = false;
+		default:
+			break;
 		} // switch
 	} // for
 }
@@ -107,6 +109,8 @@ void TStringList::CommaText(string s) { //used to read "AnnandaleX, calcsunX, ca
 				pos = done_to;
 				in_quote = "";
 			}
+		default:
+			break;
 		} // switch
 	} // for
 }

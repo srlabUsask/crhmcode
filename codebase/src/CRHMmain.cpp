@@ -2764,6 +2764,8 @@ void  CRHMmain::AllRprt(void)
 		case CRHM::YYYYMMDD:
 			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn));
 			break;
+		default:
+			break;
 		}
 
 

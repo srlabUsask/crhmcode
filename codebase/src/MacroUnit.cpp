@@ -1505,6 +1505,8 @@ long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string he
 			throw Except;
 		}
 	}
+	default:
+		break;
 	}
 	return 0; // Check
 }

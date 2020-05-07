@@ -30,6 +30,8 @@ VarCHRM::~VarCHRM() {
 			delete[] value2;
 			value2 = NULL;
 			break;
+		default:
+			break;
 		}
 	}
 };
@@ -91,6 +93,8 @@ void VarCHRM::put(float val_) {
 		else
 			val = !Me->WriteAheadObsMacro(val_);
 		break;
+	default:
+		break;
 	}
 	// NOP falls through
 }
@@ -111,6 +115,8 @@ float VarCHRM::get(void) {
 		return (*pget)();
 	case FUNobs:
 		return (val);
+	default:
+		break;
 	}
 	return -999;
 }
