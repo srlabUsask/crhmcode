@@ -3173,7 +3173,7 @@ next:
 // Add or subtract two terms.
 void Myparser::eval_exp2(float &result)
 {
-	register char op;
+	char op; //removed register keyword to fix warning. Manishankar
 	float temp;
 
 	eval_exp3(result);
@@ -3194,7 +3194,7 @@ void Myparser::eval_exp2(float &result)
 // Multiply or divide two factors.
 void Myparser::eval_exp3(float &result)
 {
-	register char op;
+	char op; //removed register keyword to fix warning. Manishankar
 	float temp;
 
 	eval_exp4(result);
@@ -3226,7 +3226,7 @@ void Myparser::eval_exp3(float &result)
 void Myparser::eval_exp4(float &result)
 {
 	float temp, ex;
-	register int t;
+	int t; //removed register keyword to fix warning. Manishankar
 
 	eval_exp5(result);
 	if (*token == '^') {
@@ -3243,7 +3243,7 @@ void Myparser::eval_exp4(float &result)
 // Evaluate a unary + or -.
 void Myparser::eval_exp5(float &result)
 {
-	register char  op;
+	char  op; //removed register keyword to fix warning. Manishankar
 
 	op = 0;
 	if (((tok_type == DELIMITER) && *token == '+') || *token == '-') {  //warning resolved by Manishankar
@@ -3304,7 +3304,7 @@ void Myparser::serror(int error)
 // Obtain the next token.
 void Myparser::get_token()
 {
-	register char *temp;
+	char *temp;  //removed register keyword to fix warning. Manishankar
 
 	tok_type = 0;
 	temp = token;

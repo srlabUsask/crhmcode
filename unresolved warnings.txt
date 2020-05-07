@@ -1,10 +1,4 @@
-//double xLimit = numeric_limits<float>::max();
-//long lLimit = numeric_limits<long>::max();
 
-static double xLimit = 3.14E20;
-static long lLimit = 2147483647;
 
-TO
+I also get these warnings in linux.
 
-static double xLimit = numeric_limits<float>::max();
-static long lLimit = numeric_limits<long>::max();
