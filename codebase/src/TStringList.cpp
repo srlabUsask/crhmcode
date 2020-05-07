@@ -33,43 +33,6 @@ string TStringList::CommaText(void) {
 
 }
 
-//this functions are already implemented in Common.h and Common.cpp. Manishankar
-
-/*
-string  TStringList::trim(string& str) {
-
-	trimleft(str);
-	trimright(str);
-
-	return str;
-}
-
-string TStringList::trimleft(string& str) {
-
-	string::size_type pos = str.find_first_not_of(" \t");
-
-	if (pos != string::npos)
-		if (pos > 0)
-			str.erase(0, pos);
-
-	return str;
-}
-
-string TStringList::trimright(string& str) //
-{
-	if (!str.empty()) {
-
-		string::size_type pos = str.find_last_not_of(" \t");
-
-		if (pos != string::npos)
-			if (pos < str.length() - 1)
-				str.erase(++pos);
-	}
-
-	return str;
-}
-*/
-
 void TStringList::DelimitedText(string s) {
 
 	string in_quote;

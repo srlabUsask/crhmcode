@@ -1898,18 +1898,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				//ts->addTime("ReadObs", tdiff);
 
 				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {
-
-					//time stamp
-
-					//clock_t begintime = clock();///////////////////////////////////////////////////////////////////////////////////////
-
 					p->run();
-
-					//float timediff = float(clock() - begintime) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
-					//ts->addTime(p->Name, timediff);
-
-					//time stamp
-
 				}
 
 				// module flag loop
@@ -2406,16 +2395,7 @@ void  CRHMmain::RunClickOld(void) {
 
 				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {
 
-					//time stamp
-
-					//clock_t begintime = clock();///////////////////////////////////////////////////////////////////////////////////////
-
 					p->run();
-
-					//float timediff = float(clock() - begintime) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
-					//ts->addTime(p->Name, timediff);
-
-					//time stamp
 
 				}
 

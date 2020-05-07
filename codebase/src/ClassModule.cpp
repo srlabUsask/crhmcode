@@ -61,38 +61,35 @@ string ClassModule::Var_name(ClassModule* thisModule, string S) {
 //---------------------------------------------------------------------------
 void ClassModule::initbase(void) {
 
-	//Common::Message("test 4", "test 4");
 
-	//Common::Message("test 4-0", "test 4-0");
 
 	Global::BuildFlag = CRHM::INIT;
 
-	//Common::Message("test 4-0-1", "test 4-0-1");
 
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
-	//Common::Message("test 4-0-1", std::to_string(Var_NDEFN_cnt));
+
 
 	if (Var_NDEFN_cnt) {
-		//Common::Message("test 4-1", std::to_string(Var_NDEFN_cnt));
+		
 		Var_loop_lay_table = new float**[Var_NDEFN_cnt]; // define [#Var][#layers]
-														 //Common::Message("test 4-1-2", "test 4-1-2");
+														 
 		for (long jj = 0; jj < Var_NDEFN_cnt; ++jj) {
 			Var_loop_lay_table[jj] = new float*[nlay];
 		}
-		//Common::Message("test 4-1-1", "test 4-1-1");
+		
 		Var_loop_lay_value = new float*[Var_NDEFN_cnt]; // define [#Var]
 		for (long jj = 0; jj < Var_NDEFN_cnt; ++jj)
 			Var_loop_lay_value[jj] = new float[nhru];
 	}
 	else {
-		//Common::Message("test 4-2", "test 4-2");
+		
 		Var_loop_lay_table = NULL;
 		Var_loop_lay_value = NULL;
 	}
 
-	//Common::Message("test 5", "test 5");
+	
 
 	if (Par_NDEFN_cnt) {
 		Par_loop_lay_table = new float**[Par_NDEFN_cnt];
@@ -113,19 +110,19 @@ void ClassModule::initbase(void) {
 		Par_loop_lay_value = NULL;
 	}
 
-	//Common::Message("test 6", "test 6");
+	
 
 	Var_NDEFN_cnt = 0;
 	Par_NDEFN_cnt = 0;
 
 
-	//Common::Message("test 7", "test 7");
+	
 
 	decl();  // executes the INIT portion of the declvar/declparam etc. routines
 
 	init();  // executes the module init() routine
 
-			 //Common::Message("test 8", "test 8");
+			 
 
 }
 

@@ -781,33 +781,6 @@ ClassPar::ClassPar(string module, string param, CRHM::TDim dimen,
 			Strings->Add(Strings->Strings[0] + std::to_string(ii + 1));
 		}
 }
-//---------------------------------------------------------------------------
-//ClassPar::ClassPar(string module, string param, CRHM::TDim dimen,
-// string CommaText, string help, CRHM::TVar varType, int Grpdim)
-//	: module(module), basemodule(""), param(param), varType(varType), dimen(dimen), help(help),
-//	units(""), valstr(""), minVal(0), maxVal(0), Inhibit_share(0),
-//	values(NULL), ivalues(NULL), layvalues(NULL), ilayvalues(NULL), Identical(NULL), Strings(NULL),
-//	layvaluesBkup(NULL), ilayvaluesBkup(NULL), StringsBkup(NULL), lay(1) {
-//
-//	if (Grpdim == 0 && dimen >= CRHM::NHRU)
-//		Grpdim = Global::nhru;
-//
-//	if (dimen < CRHM::NHRU)
-//		dim = getdim(dimen); // handle cases of 'ONE, TWO, ...
-//	else
-//		dim = Grpdim;
-//
-//	Strings = new TStringList;
-//	Strings->QuoteChar = '\'';
-//	Strings->DelimitedText = CommaText.c_str();
-//	if (Strings->Count == 0) // handle case of newly added string parameter. Only handles 'BASIN'
-//		Strings->Add("");
-//
-//	if (dimen == CRHM::NHRU)
-//		for (int ii = Strings->Count; ii < dim; ++ii) {
-//			Strings->Add(Strings->Strings[0] + std::to_string(ii + 1));
-//		}
-//}
 
 //---------------------------------------------------------------------------
 void ClassPar::ExpandShrink(long new_dim) {
@@ -1663,27 +1636,6 @@ void ClassVar::review_HRU_OBS(void) {
 		HRU_OBS_indexed = 4;
 }
 
-//---------------------------------------------------------------------------
-//double ClassData::Encode24(int D[]) {
-//
-//	try {
-//		if (D[3] == 24) // handle 24:00
-//			return  Common::EncodeDateTime((Word)0, (Word)D[4], (Word)0, (Word)0, 0) +
-//			Common::EncodeDateTime((Word)D[0], (Word)D[1], (Word)D[2], 0, 0) + 1.0;
-//		else
-//			return  Common::EncodeDateTime((Word)D[3], (Word)D[4], (Word)0, (Word)0, 0) +
-//			Common::EncodeDateTime((Word)D[0], (Word)D[1], (Word)D[2], 0, 0);
-//	}
-//	catch (...)
-//	{
-//	 string S;
-//		printf("Invalid Date: \"%5u %3u %3u %3u %3u\" at line: %u", D[0], D[1], D[2], D[3], D[4], Position + 1);
-//
-//		//Application->MessageBox(S.c_str(), string("Observation File: " + DataFileName).c_str(), MB_OK);
-//		throw;
-//	}
-//}
-
 
 double ClassData::Encode24(int D[]) {
 
@@ -2424,65 +2376,7 @@ long julian(string when) {
 	}
 }
 
-//Changed by Manishankar 2018/09/10
 
-/*long julian (char *when) {
-Word Y, M, D;
-
-CTime DtBegin;
-
-if (!strcmp(when, "start")) {
-Y = Global::DTstart.GetYear();
-M = Global::DTstart.GetMonth();
-D = Global::DTstart.GetDay();
-
-DtBegin = CTime(Y-1, 12, 31);
-CTimeSpan timeSpan = Global::DTstart - DtBegin;
-return  INT(timeSpan.GetDays());  // -0.999/Global::Freq
-}
-else if (!strcmp(when, "end")) {
-Y = Global::DTend.GetYear();
-M = Global::DTend.GetMonth();
-D = Global::DTend.GetDay();
-DtBegin = CTime(Y - 1, 12, 31);
-CTimeSpan timeSpan = Global::DTend - DtBegin;
-return  INT(timeSpan.GetDays());
-}
-else { // now
-Y = Global::DTnow.GetYear();
-M = Global::DTnow.GetMonth();
-D = Global::DTnow.GetDay();
-DtBegin = CTime(Y - 1, 12, 31, 0, 0, 0);
-CTimeSpan timeSpan = Global::DTnow - DtBegin;
-return  INT(timeSpan.GetDays());
-}
-}*/
-
-//Changed by Manishankar 2018/09/10
-
-/*long julian(char *when) {
-Word Y, M, D;
-
-CTime DtBegin, DtNow;
-
-if (!strcmp(when, "start")) {
-DtNow = Global::DTstart;
-}
-else if (!strcmp(when, "end")) {
-DtNow = Global::DTend;
-}
-else { // now
-DtNow = Global::DTnow;
-}
-
-Y = DtNow.GetYear();
-M = DtNow.GetMonth();
-D = DtNow.GetDay();
-
-DtBegin = CTime(Y - 1, 12, 31, 0, 0, 0);
-CTimeSpan timeSpan = DtNow - DtBegin;
-return  INT(timeSpan.GetDays());  // -0.999/Global::Freq
-}*/
 
 
 
@@ -2500,21 +2394,6 @@ long julian(double DT) {
 	return  INT(DT - DtBegin);
 }
 
-//Changed by Manishankar 2018/09/10
-
-/*long julian(CTime DtNow) {
-Word Y, M, D;
-CTime DtBegin;
-
-Y = DtNow.GetYear();
-M = DtNow.GetMonth();
-D = DtNow.GetDay();
-
-DtBegin = CTime(Y - 1, 12, 31, 0, 0, 0);
-
-CTimeSpan timeSpan = DtNow - DtBegin;
-return  INT(timeSpan.GetDays());  // -0.999/Global::Freq
-}*/
 
 //---------------------------------------------------------------------------
 //Changed by Manishankar 2018/09/10
@@ -2535,28 +2414,6 @@ long MonthDaysCnt(double DT) {
 	return  INT(DTNext - DT);
 }
 
-//Changed by Manishankar 2018/09/10
-
-/*long MonthDaysCnt(CTime DT) {
-Word Y, M, D;
-CTime DTNext;
-
-Y = DT.GetYear();
-M = DT.GetMonth();
-D = DT.GetDay();
-
-++M;
-
-if (M > 12) { // next year
-M = 1;
-++Y;
-}
-
-DTNext = CTime(Y, M, D, 0, 0, 0);
-
-CTimeSpan timeSpan = DTNext - DT;
-return  INT(timeSpan.GetDays());  // -0.999/Global::Freq
-}*/
 
 //---------------------------------------------------------------------------
 //Changed by Manishankar 2018/09/10
@@ -2584,31 +2441,6 @@ float Julian(string when) {
 	}
 }
 
-//Changed by Manishankar 2018/09/10
-
-/*float Julian(char *when) {
-Word Y, M, D;
-
-CTime DtBegin, DtNow;
-
-if (!strcmp(when, "start")) {
-DtNow = Global::DTstart;
-}
-else if (!strcmp(when, "end")) {
-DtNow = Global::DTend;
-}
-else { // now
-DtNow = Global::DTnow;
-}
-
-Y = DtNow.GetYear();
-M = DtNow.GetMonth();
-D = DtNow.GetDay();
-
-DtBegin = CTime(Y - 1, 12, 31, 0, 0, 0);
-CTimeSpan timeSpan = DtNow - DtBegin;
-return  (float)timeSpan.GetDays();  // -0.999/Global::Freq
-}*/
 
 //---------------------------------------------------------------------------
 bool last_timestep(void) {
@@ -2645,30 +2477,7 @@ void dattim(string type, long *itime) { // dimension itime[6]
 	itime[5] = Sec;
 }
 
-//Changed by Manishankar. 2018/09/11
 
-/*void dattim(char *type, long *itime) { // dimension itime[6]
-Word Year, Month, Day, Hour, Min, Sec, MSec;
-CTime DTNow;
-
-if (type == "start") { DTNow = Global::DTstart; }
-else if (type == "end") { DTNow = Global::DTend; }
-else { DTNow = Global::DTnow; }
-
-Year = DTNow.GetYear();
-Month = DTNow.GetMonth();
-Day = DTNow.GetDay();
-Hour = DTNow.GetHour();
-Min = DTNow.GetMinute();
-Sec = DTNow.GetSecond();
-
-itime[0] = Year;
-itime[1] = Month;
-itime[2] = Day;
-itime[3] = Hour;
-itime[4] = Min;
-itime[5] = Sec;
-}*/
 
 //---------------------------------------------------------------------------
 void dattim(double DT, long *itime) { // dimension itime[6]
