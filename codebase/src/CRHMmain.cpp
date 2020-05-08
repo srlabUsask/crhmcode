@@ -1248,9 +1248,6 @@ string CRHMmain::DeclObsName(ClassVar *thisVar) {
 
 bool  CRHMmain::OpenObsFile(string FileName)
 {
-	Common::writefile("openobsfile");
-
-
 	ClassData  * FileData;
 
 	if (ObsFilesList->IndexOf(FileName.c_str()) != -1)
