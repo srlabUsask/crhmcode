@@ -1,21 +1,18 @@
-Please execute the following instructions in order to run the GCC version of CRHM on a project.
+To build the GCC version of CRHM using the supplied Makefile:
 
-1. Let us assume that this readme.txt file and all other contents are residing in a folder called 'codebase'.
+1. Download chrmcode from github.
+2.Download the boost_1_73_0 library and place it in the crhmcode/codebase/ directory.
+3. Using a terminal program change to the crhmcode/codebase/ directory.
+4. Enter ‘make’ or ‘make crhm’ and the crhm executable will be created by compiling and linking the code.
 
-2. I guess you already have the latest boost library folder 'boost_1_73_0'. Put this boost library folder in the 'codebase' folder. If you do not have the boost library folder, you can get it from the following link.
+Running the GCC version of CRHM:
 
-   https://www.boost.org/users/history/version_1_73_0.html
+1. Using a terminal program change to the directory with the crhm executable and the project file. 
+2. To run a project, enter ‘./crhm filename.prj’ and 'CRHM_output_1.obs’ will be created. 
+For example entering './crhm badlake.prj will run crhm and the output will be in ‘CRHM_output_1.obs'
 
-3. If you want to run a project, you need to put the project file (.prj file) in the 'codebase' folder.
+Running the GCC version of CRHM using the supplied Makefile:
 
-4. Make sure the necessary observation files are at the required locations.
-
-5. Go into the 'codebase' folder using a terminal.
-
-6. Run the Makefile using the command "make".
-
-7. The executable "crhm" has now been generated. Now execute the following command for running the project 'badlake.prj'.
-
-./crhm badlake.prj
-
-8. After successful execution, an output file 'CRHM_output_1.obs' will be generated in the 'codebase' folder.
+1. Using a terminal program change to the crhmcode/codebase/ directory (or a directory that has the crhm executable, the project file and the Makefile). 
+2. Run a project by entering ‘make filename.obs’ and crhm will be run on filename.prj and the output will be found in filename.obs. 
+For example, entering ‘make badlake.obs’ will run crhm on badlake.prj and create badlake.obs as output.
