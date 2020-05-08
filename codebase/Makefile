@@ -22,13 +22,6 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 crhm: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(DFLAGS) $(LIBS)
 
-crhm_test: crhm
-	./crhm BadLake1974-1975.prj
-
-smithcreek.obs:  crhm
-	./crhm smithcreek.prj
-	cp CRHM_output_1.obs smithcreek.obs
-
 $(ODIR)/main.o: $(SDIR)/main.cpp | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
@@ -40,3 +33,15 @@ clean:
 
 $(ODIR):
 	mkdir $(ODIR)
+	
+%.obs: %.prj crhm
+	time ./crhm $<
+	cp CRHM_output_1.obs $*.obs
+
+%.diff: %.prj crhm
+	time ./crhm $<
+	cp CRHM_output_1.obs $*_1.obs
+	time ./crhm $*.prj
+	cp CRHM_output_1.obs $*_2.obs
+	diff $*_1.obs $*_2.obs > $@
+	wc -l $@	
