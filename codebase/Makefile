@@ -8,7 +8,7 @@ DFLAGS = -g -O0 -fPIC -mstack-arg-probe -fstack-protector-all -fstack-check -fno
 CFLAGS = -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses -Wno-c++11-extra-semi -Wno-dangling-else -Wno-null-conversion -Wno-pragma-once-outside-header -Wno-string-plus-int -Wno-string-plus-char
 #CFLAGS = -I$(BOOST) -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses -Wno-c++11-extra-semi -Wno-dangling-else -Wno-null-conversion -Wno-pragma-once-outside-header -Wno-string-plus-int -Wno-string-plus-char -Wno-return-stack-address -Wno-null-arithmetic -Wno-return-stack-address -Wno-macro-redefined -Wno-unused-value -Wno-tautological-constant-out-of-range-compare -Wno-enum-compare -Wno-empty-body -Wno-parentheses -Wno-unknown-escape-sequence -Wno-return-type -Wno-return-type -Wno-int-to-void-pointer-cast
 #CFLAGS = -I$(BOOST) -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses -Wno-c++11-extra-semi -Wno-dangling-else -Wno-null-conversion -Wno-pragma-once-outside-header -Wno-string-plus-int -Wno-string-plus-char -Wno-null-arithmetic -Wno-return-stack-address -Wno-macro-redefined -Wno-unused-value -Wno-tautological-constant-out-of-range-compare -Wno-enum-compare -Wno-empty-body -Wno-parentheses -Wno-unknown-escape-sequence -Wno-return-type -Wno-int-to-void-pointer-cast -Wno-invalid-source-encoding
-CFLAGS = -I$(BOOST) -stdc++11
+CFLAGS = -I$(BOOST) -std=c++11
 #DFLAGS = -ggdb -O0 -fPIC -mstack-arg-probe -fstack-protector-all -fstack-check -fno-omit-frame-pointer -fsanitize=address
 DFLAGS = -fsanitize=address
 
