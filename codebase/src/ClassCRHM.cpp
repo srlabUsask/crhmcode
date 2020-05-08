@@ -1110,11 +1110,16 @@ bool ClassPar::Same(ClassPar &p) {  // compares parameter data
 
 	if (varType == p.varType && dim == p.dim && param == p.param) {
 		if (Inhibit_share != 0 || p.Inhibit_share != 0) // declputparam
+		{
 			if (Global::GroupCntTrk)
+			{
 				return(false);  // never share group declputparam
+			}
 			else
+			{
 				return(true); // always share simple project declputparam parameters
-
+			}
+		}
 		if (dim == p.dim) {
 			if (varType == CRHM::Txt) {
 				if (!Strings && !p.Strings) return true;

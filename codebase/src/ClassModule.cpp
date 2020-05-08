@@ -2040,6 +2040,8 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 			//do nothing.
 		}
 	}
+	default:
+		break;
 	}
 	return(-1);
 }
