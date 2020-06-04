@@ -1502,9 +1502,6 @@
     <ClCompile Include="CWebBrowser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CWebBrowser2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gui\CRHMmainDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

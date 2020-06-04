@@ -684,7 +684,6 @@
     <ClCompile Include="core\TStringList.cpp" />
     <ClCompile Include="CTChart.cpp" />
     <ClCompile Include="CWebBrowser.cpp" />
-    <ClCompile Include="CWebBrowser2.cpp" />
     <ClCompile Include="FlowDiagramDlg.cpp" />
     <ClCompile Include="gui\CExport.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
