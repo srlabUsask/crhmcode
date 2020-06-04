@@ -1472,13 +1472,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainFrm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CTChart.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CWebBrowser.cpp">
@@ -1566,6 +1560,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\ResourceDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\MainFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
