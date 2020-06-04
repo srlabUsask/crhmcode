@@ -682,14 +682,14 @@
     <ClCompile Include="core\GlobalDll.cpp" />
     <ClCompile Include="core\StandardConverterUtility.cpp" />
     <ClCompile Include="core\TStringList.cpp" />
-    <ClCompile Include="CParameters.cpp" />
-    <ClCompile Include="CReport.cpp" />
     <ClCompile Include="CTChart.cpp" />
     <ClCompile Include="CWebBrowser.cpp" />
     <ClCompile Include="CWebBrowser2.cpp" />
     <ClCompile Include="FlowDiagramDlg.cpp" />
     <ClCompile Include="gui\CExport.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
+    <ClCompile Include="gui\CParameters.cpp" />
+    <ClCompile Include="gui\CReport.cpp" />
     <ClCompile Include="gui\CRHMAboutBox.cpp" />
     <ClCompile Include="gui\CRHMmainDlg.cpp" />
     <ClCompile Include="gui\CRHM_GUI.cpp" />

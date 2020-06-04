@@ -1484,12 +1484,6 @@
     <ClCompile Include="ResourceDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CReport.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CParameters.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CConstruct.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1572,6 +1566,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\COptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\CParameters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\CReport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
