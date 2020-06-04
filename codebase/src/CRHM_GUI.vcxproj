@@ -680,7 +680,6 @@
     <ClCompile Include="core\GlobalDll.cpp" />
     <ClCompile Include="core\StandardConverterUtility.cpp" />
     <ClCompile Include="core\TStringList.cpp" />
-    <ClCompile Include="core\utils.cpp" />
     <ClCompile Include="CTChart.cpp" />
     <ClCompile Include="CWebBrowser.cpp" />
     <ClCompile Include="gui\CConstruct.cpp" />
