@@ -675,8 +675,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CConstruct.cpp" />
-    <ClCompile Include="CExport.cpp" />
-    <ClCompile Include="COptions.cpp" />
     <ClCompile Include="core\ClassCRHM.cpp" />
     <ClCompile Include="core\ClassModule.cpp" />
     <ClCompile Include="core\Common.cpp" />
@@ -686,15 +684,17 @@
     <ClCompile Include="core\TStringList.cpp" />
     <ClCompile Include="CParameters.cpp" />
     <ClCompile Include="CReport.cpp" />
-    <ClCompile Include="CRHM_GUI.cpp" />
-    <ClCompile Include="CRHM_GUIDoc.cpp" />
-    <ClCompile Include="CRHM_GUIView.cpp" />
     <ClCompile Include="CTChart.cpp" />
     <ClCompile Include="CWebBrowser.cpp" />
     <ClCompile Include="CWebBrowser2.cpp" />
     <ClCompile Include="FlowDiagramDlg.cpp" />
+    <ClCompile Include="gui\CExport.cpp" />
+    <ClCompile Include="gui\COptions.cpp" />
     <ClCompile Include="gui\CRHMAboutBox.cpp" />
     <ClCompile Include="gui\CRHMmainDlg.cpp" />
+    <ClCompile Include="gui\CRHM_GUI.cpp" />
+    <ClCompile Include="gui\CRHM_GUIDoc.cpp" />
+    <ClCompile Include="gui\CRHM_GUIView.cpp" />
     <ClCompile Include="MacroEntryDlg.cpp" />
     <ClCompile Include="macro\CRHM_parse.cpp" />
     <ClCompile Include="macro\MacroUnit.cpp" />
