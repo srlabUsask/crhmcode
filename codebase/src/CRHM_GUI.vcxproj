@@ -654,7 +654,6 @@
     <ClInclude Include="GlobalCommon.h" />
     <ClInclude Include="GlobalDll.h" />
     <ClInclude Include="Header.h" />
-    <ClInclude Include="CConstructCore.h" />
     <ClInclude Include="Hype_CRHM.h" />
     <ClInclude Include="Hype_lake.h" />
     <ClInclude Include="Hype_river.h" />
@@ -674,7 +673,6 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CConstruct.cpp" />
     <ClCompile Include="core\ClassCRHM.cpp" />
     <ClCompile Include="core\ClassModule.cpp" />
     <ClCompile Include="core\Common.cpp" />
@@ -684,7 +682,7 @@
     <ClCompile Include="core\TStringList.cpp" />
     <ClCompile Include="CTChart.cpp" />
     <ClCompile Include="CWebBrowser.cpp" />
-    <ClCompile Include="FlowDiagramDlg.cpp" />
+    <ClCompile Include="gui\CConstruct.cpp" />
     <ClCompile Include="gui\CExport.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
     <ClCompile Include="gui\CParameters.cpp" />
@@ -694,17 +692,18 @@
     <ClCompile Include="gui\CRHM_GUI.cpp" />
     <ClCompile Include="gui\CRHM_GUIDoc.cpp" />
     <ClCompile Include="gui\CRHM_GUIView.cpp" />
-    <ClCompile Include="MacroEntryDlg.cpp" />
+    <ClCompile Include="gui\FlowDiagramDlg.cpp" />
+    <ClCompile Include="gui\MacroEntryDlg.cpp" />
+    <ClCompile Include="gui\OutputWnd.cpp" />
+    <ClCompile Include="gui\ResourceDlg.cpp" />
     <ClCompile Include="macro\CRHM_parse.cpp" />
     <ClCompile Include="macro\MacroUnit.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="OutputWnd.cpp" />
     <ClCompile Include="plugins\Hype_CRHM.cpp" />
     <ClCompile Include="plugins\Hype_lake.cpp" />
     <ClCompile Include="plugins\Hype_river.cpp" />
     <ClCompile Include="plugins\Hype_routines.cpp" />
     <ClCompile Include="plugins\NewModules.cpp" />
-    <ClCompile Include="ResourceDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
