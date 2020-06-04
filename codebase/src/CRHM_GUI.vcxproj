@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins;D:\postdoc\CRHM\GIT\crhmcode\codebase\src</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996;1083</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins;D:\postdoc\CRHM\GIT\crhmcode\codebase\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -676,42 +676,42 @@
   <ItemGroup>
     <ClCompile Include="CConstruct.cpp" />
     <ClCompile Include="CExport.cpp" />
-    <ClCompile Include="ClassCRHM.cpp" />
-    <ClCompile Include="ClassModule.cpp" />
-    <ClCompile Include="Common.cpp" />
     <ClCompile Include="COptions.cpp" />
+    <ClCompile Include="core\ClassCRHM.cpp" />
+    <ClCompile Include="core\ClassModule.cpp" />
+    <ClCompile Include="core\Common.cpp" />
+    <ClCompile Include="core\CRHMmain.cpp" />
+    <ClCompile Include="core\GlobalDll.cpp" />
+    <ClCompile Include="core\StandardConverterUtility.cpp" />
+    <ClCompile Include="core\TStringList.cpp" />
     <ClCompile Include="CParameters.cpp" />
     <ClCompile Include="CReport.cpp" />
-    <ClCompile Include="CRHMAboutBox.cpp" />
-    <ClCompile Include="CRHMmain.cpp" />
-    <ClCompile Include="CRHMmainDlg.cpp" />
     <ClCompile Include="CRHM_GUI.cpp" />
     <ClCompile Include="CRHM_GUIDoc.cpp" />
     <ClCompile Include="CRHM_GUIView.cpp" />
-    <ClCompile Include="CRHM_parse.cpp" />
     <ClCompile Include="CTChart.cpp" />
     <ClCompile Include="CWebBrowser.cpp" />
     <ClCompile Include="CWebBrowser2.cpp" />
     <ClCompile Include="FlowDiagramDlg.cpp" />
-    <ClCompile Include="GlobalDll.cpp" />
-    <ClCompile Include="Hype_CRHM.cpp" />
-    <ClCompile Include="Hype_lake.cpp" />
-    <ClCompile Include="Hype_river.cpp" />
-    <ClCompile Include="Hype_routines.cpp" />
+    <ClCompile Include="gui\CRHMAboutBox.cpp" />
+    <ClCompile Include="gui\CRHMmainDlg.cpp" />
     <ClCompile Include="MacroEntryDlg.cpp" />
-    <ClCompile Include="MacroUnit.cpp" />
+    <ClCompile Include="macro\CRHM_parse.cpp" />
+    <ClCompile Include="macro\MacroUnit.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="NewModules.cpp" />
     <ClCompile Include="OutputWnd.cpp" />
+    <ClCompile Include="plugins\Hype_CRHM.cpp" />
+    <ClCompile Include="plugins\Hype_lake.cpp" />
+    <ClCompile Include="plugins\Hype_river.cpp" />
+    <ClCompile Include="plugins\Hype_routines.cpp" />
+    <ClCompile Include="plugins\NewModules.cpp" />
     <ClCompile Include="ResourceDlg.cpp" />
-    <ClCompile Include="StandardConverterUtility.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TStringList.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
