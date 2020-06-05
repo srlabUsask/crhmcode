@@ -681,7 +681,6 @@
     <ClCompile Include="core\StandardConverterUtility.cpp" />
     <ClCompile Include="core\TStringList.cpp" />
     <ClCompile Include="CTChart.cpp" />
-    <ClCompile Include="CWebBrowser.cpp" />
     <ClCompile Include="gui\CConstruct.cpp" />
     <ClCompile Include="gui\CExport.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
@@ -692,6 +691,7 @@
     <ClCompile Include="gui\CRHM_GUI.cpp" />
     <ClCompile Include="gui\CRHM_GUIDoc.cpp" />
     <ClCompile Include="gui\CRHM_GUIView.cpp" />
+    <ClCompile Include="gui\CWebBrowser.cpp" />
     <ClCompile Include="gui\FlowDiagramDlg.cpp" />
     <ClCompile Include="gui\MacroEntryDlg.cpp" />
     <ClCompile Include="gui\MainFrm.cpp" />

@@ -126,11 +126,15 @@ void StandardConverterUtility::DecodeDateTime(double Dttime, int *Year, int *Mon
 
 	tm *timeinfo = gmtime(&rawtime);
 
-	*Year = timeinfo->tm_year - Decade_Offsets[indx][0] + 1900;
-	*Month = timeinfo->tm_mon + 1;
-	*Day = timeinfo->tm_mday;
-	*Hour = timeinfo->tm_hour;
-	*Min = timeinfo->tm_min;
+	//Manishankar added this if condition
+	if (timeinfo != NULL)
+	{
+		*Year = timeinfo->tm_year - Decade_Offsets[indx][0] + 1900;
+		*Month = timeinfo->tm_mon + 1;
+		*Day = timeinfo->tm_mday;
+		*Hour = timeinfo->tm_hour;
+		*Min = timeinfo->tm_min;
+	}
 }
 
 double StandardConverterUtility::DateTimeDt(void) {  //Manishankar: in CRHMmain.cpp and NewModules.cpp.
