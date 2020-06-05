@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 6/4/2020 18:43
+###### Version NON DLL 4.02  Creation: 6/4/2020 19:5
 Dimensions:
 ######
 nhru 1
@@ -21,26 +21,24 @@ Dates:
 Modules:
 ######
 basin CRHM 02/24/12
-obs CRHM 11/28/17
-intcp CRHM 02/24/15
-pbsm CRHM 11/20/17
+global CRHM 04/19/13
 ######
 Parameters:
 ###### 'basin' parameters always first
-Shared basin_area <1e-06 to 1e+09>
+Shared hru_ASL <0 to 360>
+0 
+Shared hru_elev <0 to 1e+05>
+637 
+Shared hru_GSL <0 to 90>
+0 
+Shared hru_lat <-90 to 90>
+51.32 
+basin basin_area <1e-06 to 1e+09>
 3 
-Shared hru_area <1e-06 to 1e+09>
-1 
 basin basin_name
 ''
-basin hru_ASL <0 to 360>
-0 
-basin hru_elev <0 to 1e+05>
-637 
-basin hru_GSL <0 to 90>
-0 
-basin hru_lat <-90 to 90>
-51.32 
+basin hru_area <1e-06 to 1e+09>
+1 
 basin hru_names
 ''
 basin INIT_STATE
@@ -59,55 +57,8 @@ basin StateVars_to_Update
 ''
 basin TraceVars
 ''
-obs catchadjust <0 to 3>
+global Time_Offset <-12 to 12>
 0 
-obs ClimChng_flag <0 to 1>
-0 
-obs ClimChng_precip <0 to 10>
-1 
-obs ClimChng_t <-50 to 50>
-0 
-obs ElevChng_flag <0 to 1>
-0 
-obs hru_elev <0 to 1e+05>
-0 
-obs HRU_OBS <1 to 100>
-1 
-2 
-3 
-3 
-3 
-obs lapse_rate <0 to 2>
-0.75 
-obs obs_elev <0 to 1e+05>
-0 
-0 
-obs ppt_daily_distrib <0 to 1>
-1 
-obs precip_elev_adj <-1 to 1>
-0 
-obs snow_rain_determination <0 to 2>
-0 
-obs tmax_allrain <-10 to 10>
-4 
-obs tmax_allsnow <-10 to 10>
-0 
-pbsm A_S <0 to 2>
-0.003 
-pbsm distrib <-10 to 10>
-0 
-pbsm fetch <300 to 1e+04>
-1000 
-pbsm Ht <0.001 to 100>
-0.1 
-pbsm inhibit_bs <0 to 1>
-0 
-pbsm inhibit_evap <0 to 1>
-0 
-pbsm inhibit_subl <0 to 1>
-0 
-pbsm N_S <1 to 500>
-320 
 ######
 Initial_State
 ######
@@ -117,8 +68,7 @@ Final_State
 ######
 Display_Variable:
 ######
-obs hru_p 1
-obs hru_rain 1
+global QdflatE 1
 ######
 Display_Observation:
 ######
