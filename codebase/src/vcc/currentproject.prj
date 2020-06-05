@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 6/4/2020 19:5
+###### Version NON DLL 4.02  Creation: 6/5/2020 11:46
 Dimensions:
 ######
 nhru 1
@@ -68,7 +68,7 @@ Final_State
 ######
 Display_Variable:
 ######
-global QdflatE 1
+global QdflatD 1
 ######
 Display_Observation:
 ######

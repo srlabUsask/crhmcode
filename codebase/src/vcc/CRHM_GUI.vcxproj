@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\tchart</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\tchart</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996;1083</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\tchart</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\tchart</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -673,13 +673,20 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core\ClassCRHM.cpp" />
-    <ClCompile Include="core\ClassModule.cpp" />
-    <ClCompile Include="core\Common.cpp" />
-    <ClCompile Include="core\CRHMmain.cpp" />
-    <ClCompile Include="core\GlobalDll.cpp" />
-    <ClCompile Include="core\StandardConverterUtility.cpp" />
-    <ClCompile Include="core\TStringList.cpp" />
+    <ClCompile Include="..\core\ClassCRHM.cpp" />
+    <ClCompile Include="..\core\ClassModule.cpp" />
+    <ClCompile Include="..\core\Common.cpp" />
+    <ClCompile Include="..\core\CRHMmain.cpp" />
+    <ClCompile Include="..\core\GlobalDll.cpp" />
+    <ClCompile Include="..\core\StandardConverterUtility.cpp" />
+    <ClCompile Include="..\core\TStringList.cpp" />
+    <ClCompile Include="..\macro\CRHM_parse.cpp" />
+    <ClCompile Include="..\macro\MacroUnit.cpp" />
+    <ClCompile Include="..\plugins\hype\Hype_CRHM.cpp" />
+    <ClCompile Include="..\plugins\hype\Hype_lake.cpp" />
+    <ClCompile Include="..\plugins\hype\Hype_river.cpp" />
+    <ClCompile Include="..\plugins\hype\Hype_routines.cpp" />
+    <ClCompile Include="..\plugins\newmodules\NewModules.cpp" />
     <ClCompile Include="gui\CConstruct.cpp" />
     <ClCompile Include="gui\CExport.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
@@ -697,13 +704,6 @@
     <ClCompile Include="gui\MainFrm.cpp" />
     <ClCompile Include="gui\OutputWnd.cpp" />
     <ClCompile Include="gui\ResourceDlg.cpp" />
-    <ClCompile Include="macro\CRHM_parse.cpp" />
-    <ClCompile Include="macro\MacroUnit.cpp" />
-    <ClCompile Include="plugins\hype\Hype_CRHM.cpp" />
-    <ClCompile Include="plugins\hype\Hype_lake.cpp" />
-    <ClCompile Include="plugins\hype\Hype_river.cpp" />
-    <ClCompile Include="plugins\hype\Hype_routines.cpp" />
-    <ClCompile Include="plugins\newmodules\NewModules.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -1475,34 +1475,7 @@
     <ClCompile Include="gui\CRHMmainDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\CRHMmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\Common.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gui\CRHMAboutBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\GlobalDll.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\ClassCRHM.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\ClassModule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\StandardConverterUtility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="macro\CRHM_parse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="macro\MacroUnit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\TStringList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\CRHM_GUI.cpp">
@@ -1544,25 +1517,52 @@
     <ClCompile Include="gui\MainFrm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="plugins\hype\Hype_CRHM.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="plugins\hype\Hype_lake.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="plugins\hype\Hype_river.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="plugins\hype\Hype_routines.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="plugins\newmodules\NewModules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gui\CWebBrowser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\CTChart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassCRHM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\Common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\CRHMmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\GlobalDll.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\StandardConverterUtility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\TStringList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\macro\CRHM_parse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\macro\MacroUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\hype\Hype_CRHM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\hype\Hype_lake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\hype\Hype_river.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\hype\Hype_routines.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\newmodules\NewModules.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
