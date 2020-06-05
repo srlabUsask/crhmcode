@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\tchart</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996;1083</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\tchart</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
