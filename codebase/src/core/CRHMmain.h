@@ -14,6 +14,16 @@
 #include<list>
 
 
+class MMSData
+{
+public:
+	float ** mmsData;
+	long ** mmsDataL;
+	bool GoodRun;
+	ClassModule *obs_preset;
+	string S;
+};
+
 
 
 class TSeries {

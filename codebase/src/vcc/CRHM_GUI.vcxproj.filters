@@ -1550,19 +1550,13 @@
     <ClCompile Include="..\macro\MacroUnit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\hype\Hype_CRHM.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\hype\Hype_lake.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\hype\Hype_river.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\hype\Hype_routines.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\plugins\newmodules\NewModules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\waterquality\WQ_CRHM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\waterquality\WQ_Soil_NPCcycling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

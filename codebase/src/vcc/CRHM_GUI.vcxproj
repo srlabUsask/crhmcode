@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\tchart</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\tchart;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\waterquality</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996;1083</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\tchart</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\tchart;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\waterquality</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -682,11 +682,12 @@
     <ClCompile Include="..\core\TStringList.cpp" />
     <ClCompile Include="..\macro\CRHM_parse.cpp" />
     <ClCompile Include="..\macro\MacroUnit.cpp" />
-    <ClCompile Include="..\plugins\hype\Hype_CRHM.cpp" />
-    <ClCompile Include="..\plugins\hype\Hype_lake.cpp" />
-    <ClCompile Include="..\plugins\hype\Hype_river.cpp" />
-    <ClCompile Include="..\plugins\hype\Hype_routines.cpp" />
-    <ClCompile Include="..\plugins\newmodules\NewModules.cpp" />
+    <ClCompile Include="..\plugins\newmodules\NewModules.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\waterquality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\waterquality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\plugins\waterquality\WQ_CRHM.cpp" />
+    <ClCompile Include="..\plugins\waterquality\WQ_Soil_NPCcycling.cpp" />
     <ClCompile Include="gui\CConstruct.cpp" />
     <ClCompile Include="gui\CExport.cpp" />
     <ClCompile Include="gui\COptions.cpp" />

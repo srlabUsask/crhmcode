@@ -58,7 +58,6 @@ ClassPar *ParFind(string name);
 
 string Version = "Version: 4.7_16";
 
-
 CRHMmain* CRHMmain::instance = 0;
 
 CRHMmain* CRHMmain::getInstance()
@@ -1538,6 +1537,9 @@ MMSData *  CRHMmain::RunClick2Start()
 	Global::WQ_prj = false;
 
 
+	if (Global::IndxMin != 0) { Global::IndxMin = 0; }
+
+
 	if (Global::IndxMin != 0) {
 #if defined(_WIN32)
 		AfxMessageBox(_T("First observation day - not an entire day"));
@@ -1811,9 +1813,24 @@ MMSData *  CRHMmain::RunClick2Start()
 	Global::ModuleBitSet.reset();
 
 
+	/////////////////// Manishankar added this from Diogo's code.
+	ClassModule* Obs_preset; // used to call preset for simple projects
+
+	int jj = Global::OurModulesList->IndexOf("obs");
+
+	if (jj == -1)
+		Obs_preset = NULL;
+	else
+		Obs_preset = (ClassModule*)Global::OurModulesList->Objects[jj];
+
+	if (Global::LoopCnt && ((double)Global::RapidAdvanceTo == 0.0 || (double)Global::RapidAdvanceTo <= DTstartR))
+		Global::RapidAdvanceTo = DTstartR + 1;
+	////////////////////
+
 	mmsdata->mmsData = mmsData;
 	mmsdata->mmsDataL = mmsDataL;
 	mmsdata->GoodRun = GoodRun;
+	mmsdata->obs_preset = Obs_preset;
 	mmsdata->S = S;
 	return mmsdata;
 }
@@ -1824,6 +1841,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 	long ** mmsDataL = mmsdata->mmsDataL;
 	bool GoodRun = mmsdata->GoodRun;
 	string S = mmsdata->S;
+	ClassModule* Obs_preset = mmsdata->obs_preset;
 
 	bool First = true;
 	try
@@ -1879,6 +1897,10 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 			//--------------------------------------------------------------------------------------------------
 			bool Reset = true;
+
+			if (Obs_preset) // for simple prj, set up elev etc.
+				Obs_preset->pre_run();
+
 			for (Global::CurrentModuleRun = 0; Global::CurrentModuleRun < Global::OurModulesList->Count; Global::CurrentModuleRun++) {
 
 				long Last = Global::CRHMControlSaveCnt;
@@ -1889,6 +1911,9 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 				//clock_t btime = clock(); //////////////////////////////////////////////////////////////////////////////////////////////
 
+				if (p->GroupCnt && ((ClassMacro*)p)->ObsModule) // only execute if group has an obs module
+					((ClassMacro*)p)->ObsModule->pre_run();
+
 				p->ReadObs(Reset);
 				Reset = false;
 
@@ -1896,7 +1921,18 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				//ts->addTime("ReadObs", tdiff);
 
 				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {
-					p->run();
+					
+					try
+					{
+
+						//Common::writefile("p = "+p->Name+", p nameroot = "+p->NameRoot);
+						//if (!(p->Name == "WQ_Soil_BGC"))
+						p->run();
+					}
+					catch (...)
+					{
+
+					}
 				}
 
 				// module flag loop

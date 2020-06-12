@@ -264,15 +264,6 @@ public:
 	void static writefile(string content);
 };
 
-class MMSData
-{
-public:
-	float ** mmsData;
-	long ** mmsDataL;
-	bool GoodRun;
-	string S;
-};
-
 
 
 

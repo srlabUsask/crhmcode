@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 6/5/2020 13:33
+###### Version NON DLL 4.02  Creation: 6/9/2020 3:5
 Dimensions:
 ######
 nhru 52
@@ -665,6 +665,11 @@ Shared set_fallstat <0 to 366>
 305 305 305 305 305 305 305 305 305 305 305 305 305 305 305 305 
 305 305 305 305 305 305 305 305 305 305 305 305 305 305 305 305 
 305 305 305 305 
+Shared Si <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 
 Shared Si_correction <0 to 1>
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
@@ -788,6 +793,11 @@ Shared Walmsley_Ht <-1000 to 1000>
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 
+Shared Wetlands_scaling_factor <-1 to 1>
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 
+-1 -1 -1 -1 
 Shared Z0snow <0.0001 to 0.01>
 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 
 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 0.002 
@@ -808,13 +818,6 @@ Shared Zwind <0 to 100>
 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 
 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 
 10 10 10 10 
-REW_Grp RB_area <1e-06 to 1e+09>
-234.3 51.7 58.5 37.9 11 11 11 11 11 11 11 11 11 11 11 11 
-11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 
-11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 
-11 11 11 11 
-REW_Grp watershed_area <1e-06 to 1e+09>
-393.4 
 REW_Grp WS_Channel_shp <0 to 2>
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
@@ -1126,11 +1129,6 @@ SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpA Sdmax <0 to 5000>
 261.7 310.9 243.1 340.1 267 252.4 1313 244.4 245.8 405.2 253.7 362.7 1052 253.7 486.2 1016 
 360 269.7 248.4 244.4 279 433.1 284.3 348.1 286.9 313.5 245.8 373.3 251.1 345.4 312.2 294.9 
 283 397.2 252.4 465 
-SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpA Si <0 to 0>
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 
 SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpA Walmsley_Ht <-1000 to 1000>
 15 15 5 -1 0 0 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
@@ -1382,11 +1380,6 @@ SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpB Sdmax <0 to 5000>
 354.6 414.8 375.1 398.4 319 265.6 918.7 391.6 313.5 416.2 254.7 1114 1038 299.8 458.6 1154 
 361.4 413.5 391.6 424.4 256 299.8 386.1 980.3 327.2 423 564.1 269.7 364.2 283.4 277.9 261.5 
 364.2 364.2 445 265.6 
-SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpB Si <0 to 0>
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 
 SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpB Walmsley_Ht <-1000 to 1000>
 15 15 5 -1 0 0 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
@@ -1638,11 +1631,6 @@ SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpC Sdmax <0 to 5000>
 312.4 236.1 974.8 347.6 956 493.3 877.3 296 473.3 424 362.9 276 1070 391.1 896.1 414.6 
 381.7 344.1 974.8 386.4 542.6 305.4 315.9 461.6 278.4 1096 846.8 395.8 361.7 327.7 293.6 941.9 
 1064 415.8 319.5 886.7 
-SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpC Si <0 to 0>
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 
 SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpD basin_area <1e-06 to 1e+09>
 5.456 
 SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpD distrib_Route <-1e+06 to 1e+06>
@@ -1889,11 +1877,6 @@ SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpD Sdmax <0 to 5000>
 494.8 611.3 415.2 406 295.7 422.8 485.7 341.6 525.5 433.6 1042 424.4 318.7 528.5 409.1 632.7 
 307.9 346.2 314.1 347.8 594.4 409.1 427.4 372.3 445.8 412.1 409.1 412.1 412.1 307.9 288 386.1 
 369.2 508.6 1319 444.3 
-SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpD Si <0 to 0>
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 
 SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpE basin_area <1e-06 to 1e+09>
 1.599 
 SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpE distrib_Route <-1e+06 to 1e+06>
@@ -2140,11 +2123,6 @@ SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpE Sdmax <0 to 5000>
 247.4 263.1 203 242.4 285.8 200 291.7 181.3 297.6 289.7 293.7 299.6 256.2 181.3 203 367.6 
 188.2 403.1 216.8 299.6 301.6 255.2 274 197.1 234.5 202 201 350.8 262.1 204 333.1 198.1 
 342.9 366.6 243.4 246.4 
-SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpE Si <0 to 0>
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 
 ######
 Initial_State
 ######
