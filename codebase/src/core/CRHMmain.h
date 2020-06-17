@@ -203,6 +203,7 @@ public:
 	void RunClick2End(MMSData * mmsdata);
 	void RunClick(void);
 	void RunClickOld(void);
+	void CheckBlankModule();
 	void AllRprt();
 	void  ControlReadState(bool MainLoop, ClassPar * VarPar);
 	void  LastRprt(void);

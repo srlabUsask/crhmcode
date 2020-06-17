@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 6/5/2020 11:46
+###### Version NON DLL 4.02  Creation: 6/12/2020 23:58
 Dimensions:
 ######
 nhru 1
@@ -11,7 +11,7 @@ Macros:
 ######
 Observations:
 ######
-D:\code\Badlake73_76.obs
+obs/Badlake73_76.obs
 ######
 Dates:
 ######

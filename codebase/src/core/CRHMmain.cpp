@@ -1920,8 +1920,9 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				//float tdiff = float(clock() - btime) / CLOCKS_PER_SEC; ///////////////////////////////////////////////////////////////
 				//ts->addTime("ReadObs", tdiff);
 
-				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {
-					
+				CheckBlankModule();
+
+				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {					
 					try
 					{
 
@@ -1934,6 +1935,8 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 					}
 				}
+
+				CheckBlankModule();
 
 				// module flag loop
 
@@ -2053,6 +2056,18 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 
 	//ts->writeStatistics();
 
+}
+
+
+void CRHMmain::CheckBlankModule() {
+
+	MapVar::iterator itVar;
+	ClassVar * thisVar;
+
+	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
+		thisVar = (*itVar).second;
+		string s = thisVar->name;
+	}
 }
 
 
