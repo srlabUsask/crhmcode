@@ -1,5 +1,5 @@
 #if defined(_WIN32)
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "CRHMAboutBox.h"
 #endif
 

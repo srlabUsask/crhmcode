@@ -1472,91 +1472,91 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CRHMmainDlg.cpp">
+    <ClCompile Include="CConstruct.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CRHMAboutBox.cpp">
+    <ClCompile Include="CExport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CRHM_GUI.cpp">
+    <ClCompile Include="ClassCRHM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CRHM_GUIDoc.cpp">
+    <ClCompile Include="ClassModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CRHM_GUIView.cpp">
+    <ClCompile Include="Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CExport.cpp">
+    <ClCompile Include="COptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\COptions.cpp">
+    <ClCompile Include="CParameters.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CParameters.cpp">
+    <ClCompile Include="CReport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CReport.cpp">
+    <ClCompile Include="CRHM_GUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CConstruct.cpp">
+    <ClCompile Include="CRHM_GUIDoc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\FlowDiagramDlg.cpp">
+    <ClCompile Include="CRHM_GUIView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\MacroEntryDlg.cpp">
+    <ClCompile Include="CRHM_parse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\OutputWnd.cpp">
+    <ClCompile Include="CRHMAboutBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\ResourceDlg.cpp">
+    <ClCompile Include="CRHMmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\MainFrm.cpp">
+    <ClCompile Include="CRHMmainDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CWebBrowser.cpp">
+    <ClCompile Include="CTChart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CTChart.cpp">
+    <ClCompile Include="CWebBrowser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM.cpp">
+    <ClCompile Include="FlowDiagramDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassModule.cpp">
+    <ClCompile Include="GlobalDll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\Common.cpp">
+    <ClCompile Include="MacroEntryDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\CRHMmain.cpp">
+    <ClCompile Include="MacroUnit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\GlobalDll.cpp">
+    <ClCompile Include="MainFrm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\StandardConverterUtility.cpp">
+    <ClCompile Include="NewModules.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\TStringList.cpp">
+    <ClCompile Include="OutputWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\macro\CRHM_parse.cpp">
+    <ClCompile Include="ResourceDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\macro\MacroUnit.cpp">
+    <ClCompile Include="StandardConverterUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\newmodules\NewModules.cpp">
+    <ClCompile Include="TStringList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\waterquality\WQ_CRHM.cpp">
+    <ClCompile Include="WQ_CRHM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\waterquality\WQ_Soil_NPCcycling.cpp">
+    <ClCompile Include="WQ_Soil_NPCcycling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
