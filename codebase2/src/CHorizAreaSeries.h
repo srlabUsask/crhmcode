@@ -1,0 +1,302 @@
+// Machine generated IDispatch wrapper class(es) created with Add Class from Typelib Wizard
+
+//#import "C:\\Program Files (x86)\\Steema Software\\TeeChart Pro v2018 ActiveX Evaluation\\TeeChart2018.ocx" no_namespace
+// CHorizAreaSeries wrapper class
+
+class CHorizAreaSeries : public COleDispatchDriver
+{
+public:
+	CHorizAreaSeries() {} // Calls COleDispatchDriver default constructor
+	CHorizAreaSeries(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
+	CHorizAreaSeries(const CHorizAreaSeries& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
+
+	// Attributes
+public:
+
+	// Operations
+public:
+
+
+	// IHorizAreaSeries methods
+public:
+	LPDISPATCH get_Pointer()
+	{
+		LPDISPATCH result;
+		InvokeHelper(0x641, DISPATCH_PROPERTYGET, VT_DISPATCH, (void*)&result, nullptr);
+		return result;
+	}
+	BOOL get_Stairs()
+	{
+		BOOL result;
+		InvokeHelper(0x642, DISPATCH_PROPERTYGET, VT_BOOL, (void*)&result, nullptr);
+		return result;
+	}
+	void put_Stairs(BOOL newValue)
+	{
+		static BYTE parms[] = VTS_BOOL;
+		InvokeHelper(0x642, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	BOOL get_InvertedStairs()
+	{
+		BOOL result;
+		InvokeHelper(0x643, DISPATCH_PROPERTYGET, VT_BOOL, (void*)&result, nullptr);
+		return result;
+	}
+	void put_InvertedStairs(BOOL newValue)
+	{
+		static BYTE parms[] = VTS_BOOL;
+		InvokeHelper(0x643, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	LPDISPATCH get_LinePen()
+	{
+		LPDISPATCH result;
+		InvokeHelper(0x644, DISPATCH_PROPERTYGET, VT_DISPATCH, (void*)&result, nullptr);
+		return result;
+	}
+	long get_LineBrush()
+	{
+		long result;
+		InvokeHelper(0x645, DISPATCH_PROPERTYGET, VT_I4, (void*)&result, nullptr);
+		return result;
+	}
+	void put_LineBrush(long newValue)
+	{
+		static BYTE parms[] = VTS_I4;
+		InvokeHelper(0x645, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	BOOL get_ClickableLine()
+	{
+		BOOL result;
+		InvokeHelper(0x646, DISPATCH_PROPERTYGET, VT_BOOL, (void*)&result, nullptr);
+		return result;
+	}
+	void put_ClickableLine(BOOL newValue)
+	{
+		static BYTE parms[] = VTS_BOOL;
+		InvokeHelper(0x646, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	long get_LineHeight()
+	{
+		long result;
+		InvokeHelper(0x647, DISPATCH_PROPERTYGET, VT_I4, (void*)&result, nullptr);
+		return result;
+	}
+	void put_LineHeight(long newValue)
+	{
+		static BYTE parms[] = VTS_I4;
+		InvokeHelper(0x647, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	BOOL get_Dark3D()
+	{
+		BOOL result;
+		InvokeHelper(0x648, DISPATCH_PROPERTYGET, VT_BOOL, (void*)&result, nullptr);
+		return result;
+	}
+	void put_Dark3D(BOOL newValue)
+	{
+		static BYTE parms[] = VTS_BOOL;
+		InvokeHelper(0x648, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	LPDISPATCH get_Brush()
+	{
+		LPDISPATCH result;
+		InvokeHelper(0x649, DISPATCH_PROPERTYGET, VT_DISPATCH, (void*)&result, nullptr);
+		return result;
+	}
+	BOOL get_ColorEachLine()
+	{
+		BOOL result;
+		InvokeHelper(0x64a, DISPATCH_PROPERTYGET, VT_BOOL, (void*)&result, nullptr);
+		return result;
+	}
+	void put_ColorEachLine(BOOL newValue)
+	{
+		static BYTE parms[] = VTS_BOOL;
+		InvokeHelper(0x64a, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	LPDISPATCH get_Outline()
+	{
+		LPDISPATCH result;
+		InvokeHelper(0x64b, DISPATCH_PROPERTYGET, VT_DISPATCH, (void*)&result, nullptr);
+		return result;
+	}
+	long get_Transparency()
+	{
+		long result;
+		InvokeHelper(0x64c, DISPATCH_PROPERTYGET, VT_I4, (void*)&result, nullptr);
+		return result;
+	}
+	void put_Transparency(long newValue)
+	{
+		static BYTE parms[] = VTS_I4;
+		InvokeHelper(0x64c, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	LPDISPATCH get_Shadow()
+	{
+		LPDISPATCH result;
+		InvokeHelper(0x64d, DISPATCH_PROPERTYGET, VT_DISPATCH, (void*)&result, nullptr);
+		return result;
+	}
+	long get_TreatNulls()
+	{
+		long result;
+		InvokeHelper(0x64e, DISPATCH_PROPERTYGET, VT_I4, (void*)&result, nullptr);
+		return result;
+	}
+	void put_TreatNulls(long newValue)
+	{
+		static BYTE parms[] = VTS_I4;
+		InvokeHelper(0x64e, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	BOOL get_Smoothed()
+	{
+		BOOL result;
+		InvokeHelper(0x64f, DISPATCH_PROPERTYGET, VT_BOOL, (void*)&result, nullptr);
+		return result;
+	}
+	void put_Smoothed(BOOL newValue)
+	{
+		static BYTE parms[] = VTS_BOOL;
+		InvokeHelper(0x64f, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	long get_ClickTolerance()
+	{
+		long result;
+		InvokeHelper(0x650, DISPATCH_PROPERTYGET, VT_I4, (void*)&result, nullptr);
+		return result;
+	}
+	void put_ClickTolerance(long newValue)
+	{
+		static BYTE parms[] = VTS_I4;
+		InvokeHelper(0x650, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	long get_DrawStyle()
+	{
+		long result;
+		InvokeHelper(0x651, DISPATCH_PROPERTYGET, VT_I4, (void*)&result, nullptr);
+		return result;
+	}
+	void put_DrawStyle(long newValue)
+	{
+		static BYTE parms[] = VTS_I4;
+		InvokeHelper(0x651, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	BOOL get_InflateMargins()
+	{
+		BOOL result;
+		InvokeHelper(0xc9, DISPATCH_PROPERTYGET, VT_BOOL, (void*)&result, nullptr);
+		return result;
+	}
+	void put_InflateMargins(BOOL newValue)
+	{
+		static BYTE parms[] = VTS_BOOL;
+		InvokeHelper(0xc9, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	BOOL get_PointerBehind()
+	{
+		BOOL result;
+		InvokeHelper(0xca, DISPATCH_PROPERTYGET, VT_BOOL, (void*)&result, nullptr);
+		return result;
+	}
+	void put_PointerBehind(BOOL newValue)
+	{
+		static BYTE parms[] = VTS_BOOL;
+		InvokeHelper(0xca, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	long get_AreaBrush()
+	{
+		long result;
+		InvokeHelper(0x14, DISPATCH_PROPERTYGET, VT_I4, (void*)&result, nullptr);
+		return result;
+	}
+	void put_AreaBrush(long newValue)
+	{
+		static BYTE parms[] = VTS_I4;
+		InvokeHelper(0x14, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	LPDISPATCH get_AreaPen()
+	{
+		LPDISPATCH result;
+		InvokeHelper(0x15, DISPATCH_PROPERTYGET, VT_DISPATCH, (void*)&result, nullptr);
+		return result;
+	}
+	long get_MultiArea()
+	{
+		long result;
+		InvokeHelper(0x16, DISPATCH_PROPERTYGET, VT_I4, (void*)&result, nullptr);
+		return result;
+	}
+	void put_MultiArea(long newValue)
+	{
+		static BYTE parms[] = VTS_I4;
+		InvokeHelper(0x16, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	long GetOriginPos(long AValueIndex)
+	{
+		long result;
+		static BYTE parms[] = VTS_I4;
+		InvokeHelper(0x17, DISPATCH_METHOD, VT_I4, (void*)&result, parms, AValueIndex);
+		return result;
+	}
+	BOOL get_UseYOrigin()
+	{
+		BOOL result;
+		InvokeHelper(0x8, DISPATCH_PROPERTYGET, VT_BOOL, (void*)&result, nullptr);
+		return result;
+	}
+	void put_UseYOrigin(BOOL newValue)
+	{
+		static BYTE parms[] = VTS_BOOL;
+		InvokeHelper(0x8, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	double get_YOrigin()
+	{
+		double result;
+		InvokeHelper(0xa, DISPATCH_PROPERTYGET, VT_R8, (void*)&result, nullptr);
+		return result;
+	}
+	void put_YOrigin(double newValue)
+	{
+		static BYTE parms[] = VTS_R8;
+		InvokeHelper(0xa, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	LPDISPATCH get_Gradient()
+	{
+		LPDISPATCH result;
+		InvokeHelper(0xc, DISPATCH_PROPERTYGET, VT_DISPATCH, (void*)&result, nullptr);
+		return result;
+	}
+	unsigned long get_AreaColor()
+	{
+		unsigned long result;
+		InvokeHelper(0x12d, DISPATCH_PROPERTYGET, VT_UI4, (void*)&result, nullptr);
+		return result;
+	}
+	void put_AreaColor(unsigned long newValue)
+	{
+		static BYTE parms[] = VTS_UI4;
+		InvokeHelper(0x12d, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+	LPDISPATCH get_AreaChartBrush()
+	{
+		LPDISPATCH result;
+		InvokeHelper(0x12e, DISPATCH_PROPERTYGET, VT_DISPATCH, (void*)&result, nullptr);
+		return result;
+	}
+	long get_StackGroup()
+	{
+		long result;
+		InvokeHelper(0x12f, DISPATCH_PROPERTYGET, VT_I4, (void*)&result, nullptr);
+		return result;
+	}
+	void put_StackGroup(long newValue)
+	{
+		static BYTE parms[] = VTS_I4;
+		InvokeHelper(0x12f, DISPATCH_PROPERTYPUT, VT_EMPTY, nullptr, parms, newValue);
+	}
+
+	// IHorizAreaSeries properties
+public:
+
+};
+
