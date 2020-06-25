@@ -468,7 +468,7 @@ void ClassWQ_SoilBGC::run(void) {
     } // for hh */
 
     for(hh = 0; chkStruct(); ++hh){
-      soil_np_processes();  //Manishankar commented this to avoid a buffer overrun error.
+      soil_np_processes();
     }
 }
 
@@ -536,25 +536,18 @@ void ClassWQ_SoilBGC::finish(bool good) {
     if(i_no3n >= 0)
       cropuptake[hh] = sink_lay[i_no3n][hh];
 
-   if(calcN[hh]){
-	   
-
+   if(calcN[hh]){	   
       denitrification_surfsoil[hh] = 0.0;
       denitrification_lay[0][hh] = 0.0;
       denitrification_lay[1][hh] = 0.0;
-     
-	  
-      if(water_lay[0][hh] > 0.0)
-        soil_denitrification(0);
-        denitrification_lay[0][hh] = sink_lay[i_no3n][hh];
-		
-	  
-	  //Manishankar did this to avoid stack buffer overrun error.
-      //if(water_lay[1][hh] > 0.0)
-		//soil_denitrification(1);
-
-        denitrification_lay[1][hh] = sink_lay[i_no3n][hh];
-		
+     	  
+	  if (water_lay[0][hh] > 0.0)
+		  soil_denitrification(0);
+		  denitrification_lay[0][hh] = sink_lay[i_no3n][hh];
+			  
+	  if (water_lay[1][hh] > 0.0)
+		  soil_denitrification(1);
+		  denitrification_lay[1][hh] = sink_lay[i_no3n][hh];		
     }
    
   } // soil_np_processes
@@ -1343,7 +1336,7 @@ Argument declarations
 //    float sink(numsubstances)   <sink of nutrient in this subroutine (kg/km2)
 
 // Local variables
-    float denitr[1];
+    float denitr[2]; //Manishankar did this to solve the problem of stack buffer overflow error. Previously this declaration was "float denitr[1]". I have just made this "float denitr[2]"
     float denitr_surfsoil;
     float smfcn, concfcn ;
     float tmpfcn = 0.0;
@@ -1388,26 +1381,8 @@ Argument declarations
 
 	
 	
-    denitr[soil_layer] = pardenN[hh] * NO3_Npool_lay[soil_layer][hh] * tmpfcn * smfcn * concfcn;
-	 
-	//Manishankar did this to solve the buffer overrun problem.
-	/*
-	retention_pool(long n, long hh, float **pool, float *sink) was being called. I have just written the function inline here. This solved the problem.
-	*/
-	//retention_pool(1, hh, NO3_Npool_lay, denitr); // denitr may change in retention_pool and NO3_Npool
-	//retention_pool(long n, long hh, float **pool, float *sink)
-	float a;
-	for (long k = 0; k < 1; ++k) { // layers
-		a = NO3_Npool_lay[k][hh] - denitr[k];
-		if (a >= 0.0)
-			NO3_Npool_lay[k][hh] = a;
-		else {
-			denitr[k] = NO3_Npool_lay[k][hh];
-			NO3_Npool_lay[k][hh] = 0.0;
-		}
-	}    
-	
-
+    denitr[soil_layer] = pardenN[hh] * NO3_Npool_lay[soil_layer][hh] * tmpfcn * smfcn * concfcn;	 
+	retention_pool(1, hh, NO3_Npool_lay, denitr); // denitr may change in retention_pool and NO3_Npool	
 	
 // Set the sink (kg/km2)
     sink_lay[soil_layer][hh] = denitr[0];
