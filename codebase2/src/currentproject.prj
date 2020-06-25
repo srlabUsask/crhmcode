@@ -1,0 +1,78 @@
+Description - to be added
+###### Version NON DLL 4.02  Creation: 6/12/2020 23:58
+Dimensions:
+######
+nhru 1
+nlay 2
+nobs 1
+######
+Macros:
+######
+######
+Observations:
+######
+obs/Badlake73_76.obs
+######
+Dates:
+######
+1973 1 1
+1976 1 1
+######
+Modules:
+######
+basin CRHM 02/24/12
+global CRHM 04/19/13
+######
+Parameters:
+###### 'basin' parameters always first
+Shared hru_ASL <0 to 360>
+0 
+Shared hru_elev <0 to 1e+05>
+637 
+Shared hru_GSL <0 to 90>
+0 
+Shared hru_lat <-90 to 90>
+51.32 
+basin basin_area <1e-06 to 1e+09>
+3 
+basin basin_name
+''
+basin hru_area <1e-06 to 1e+09>
+1 
+basin hru_names
+''
+basin INIT_STATE
+''
+basin Loop_to
+''
+basin RapidAdvance_to
+''
+basin RUN_END <0 to 1e+05>
+0 
+basin RUN_ID <-1e+08 to 1e+08>
+1 
+basin RUN_START <0 to 1e+05>
+0 
+basin StateVars_to_Update
+''
+basin TraceVars
+''
+global Time_Offset <-12 to 12>
+0 
+######
+Initial_State
+######
+######
+Final_State
+######
+######
+Display_Variable:
+######
+global QdflatD 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+######
