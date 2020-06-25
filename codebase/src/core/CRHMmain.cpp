@@ -1,5 +1,5 @@
 #if defined(_WIN32)
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "CRHMAboutBox.h"
 #endif
 
@@ -1923,17 +1923,19 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				CheckBlankModule();
 
 				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {					
-					try
-					{
-
-						//Common::writefile("p = "+p->Name+", p nameroot = "+p->NameRoot);
-						//if (!(p->Name == "WQ_Soil_BGC"))
-						p->run();
-					}
-					catch (...)
-					{
-
-					}
+					//try
+					//{
+					//Common::writefile("d:/test.txt","p = "+p->Name+", p nameroot = "+p->NameRoot);
+					//if (!(p->Name == "WQ_Soil_BGC"))
+					p->run();
+					//}
+					//catch (...)
+					//{
+					//	
+					//	std::exception_ptr eptr;
+					//	eptr = std::current_exception(); // capture
+					//	Common::writefile("d:/test.txt", "error in p = " + p->Name + ", p nameroot = " + p->NameRoot+" ");
+					//}
 				}
 
 				CheckBlankModule();

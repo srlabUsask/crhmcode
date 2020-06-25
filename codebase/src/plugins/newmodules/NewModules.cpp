@@ -8971,7 +8971,9 @@ int ClassSnobalBase::hle1(
                 CRHMException TExcept2(SS.c_str(), WARNING);
                 LogError(TExcept2);
 
-                CRHMException TExcept("hle1: pressures must be positive", TERMINATE);
+				//Manishankar made this change to keep the program running.
+                //CRHMException TExcept("hle1: pressures must be positive", TERMINATE);
+				CRHMException TExcept("hle1: pressures must be positive", WARNING);
                 LogError(TExcept);
 
 		ier = -2;
