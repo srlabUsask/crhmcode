@@ -549,9 +549,9 @@ void ClassWQ_SoilBGC::finish(bool good) {
         denitrification_lay[0][hh] = sink_lay[i_no3n][hh];
 		
 	  
-	  //Manishankar did this to avoid buffer overrun error.
-      if(water_lay[1][hh] > 0.0)
-		soil_denitrification(1);
+	  //Manishankar did this to avoid stack buffer overrun error.
+      //if(water_lay[1][hh] > 0.0)
+		//soil_denitrification(1);
 
         denitrification_lay[1][hh] = sink_lay[i_no3n][hh];
 		

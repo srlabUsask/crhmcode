@@ -332,10 +332,10 @@ bool Common::Variation_Decide(int Variation_set, long Variation) {
 		return false;
 }
 
-void Common::writefile(string content)
+void Common::writefile(string filepath, string content)
 {
 	ofstream myfile;
-	myfile.open("testfile.txt", ios::app);
+	myfile.open(filepath, ios::app);
 	myfile << "\n" << content;
 	myfile.close();
 }

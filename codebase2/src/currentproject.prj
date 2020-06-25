@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 6/12/2020 23:58
+###### Version NON DLL 4.02  Creation: 6/25/2020 10:33
 Dimensions:
 ######
 nhru 1
@@ -8,6 +8,19 @@ nobs 1
 ######
 Macros:
 ######
+'Display displays Above  t >= 0,  Below < 0. 09/02/11'
+'declreadobs, t, NOBS, "temperature", (°C)'
+'declvar, Above, NHRU, "Temperature above zero", (°C)'
+'declvar, Below, NHRU, "Temperature below zero", (°C)'
+'command'
+'if(t[hh] >= 0.0)'
+'Above[hh] = t[hh]'
+'Below[hh] =  NO_DISPLAY'
+'else'
+'Above[hh] = NO_DISPLAY'
+'Below[hh] = t[hh]'
+'endif'
+'end'
 ######
 Observations:
 ######
@@ -20,45 +33,10 @@ Dates:
 ######
 Modules:
 ######
-basin CRHM 02/24/12
-global CRHM 04/19/13
+Display Macro 04/20/06
 ######
 Parameters:
 ###### 'basin' parameters always first
-Shared hru_ASL <0 to 360>
-0 
-Shared hru_elev <0 to 1e+05>
-637 
-Shared hru_GSL <0 to 90>
-0 
-Shared hru_lat <-90 to 90>
-51.32 
-basin basin_area <1e-06 to 1e+09>
-3 
-basin basin_name
-''
-basin hru_area <1e-06 to 1e+09>
-1 
-basin hru_names
-''
-basin INIT_STATE
-''
-basin Loop_to
-''
-basin RapidAdvance_to
-''
-basin RUN_END <0 to 1e+05>
-0 
-basin RUN_ID <-1e+08 to 1e+08>
-1 
-basin RUN_START <0 to 1e+05>
-0 
-basin StateVars_to_Update
-''
-basin TraceVars
-''
-global Time_Offset <-12 to 12>
-0 
 ######
 Initial_State
 ######
@@ -68,7 +46,7 @@ Final_State
 ######
 Display_Variable:
 ######
-global QdflatD 1
+Display Above 1
 ######
 Display_Observation:
 ######
