@@ -21,8 +21,6 @@
 
 #include <time.h>
 
-//manishankar testing
-
 //string ApplicationDir = ExtractFilePath(AnsiReplaceStr(Application->ExeName, "/", "\\"));
 
 
