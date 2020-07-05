@@ -93,7 +93,7 @@ public:
 
 	TStringList *ListBox1;
 	TStringList *ListBox2;
-	TStringList *ListBox3;
+	TStringList *SelectedVariables; //manishankar used this meaningful variable name instead of ListBox3.
 	TStringList *ListBox4;
 	TStringList *queryResult;
 

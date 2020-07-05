@@ -105,12 +105,12 @@ void CRHMmain::setEndDate(double edate)
 
 TStringList* CRHMmain::getSelectedVariables()
 {
-	return ListBox3;
+	return SelectedVariables;
 }
 
 void CRHMmain::setSelectedVariables(TStringList * t)
 {
-	ListBox3 = t;
+	SelectedVariables = t;
 }
 
 TStringList* CRHMmain::getSelectedObservations()
@@ -662,8 +662,8 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 							}
 
 							//int index = IndexOf(ListBox3, SS);
-							if (Common::IndexOf(ListBox3, SS) == -1 && Index <= thisVar->dim)
-								ListBox3->AddObject(SS, (TObject*)thisVar);
+							if (Common::IndexOf(SelectedVariables, SS) == -1 && Index <= thisVar->dim)
+								SelectedVariables->AddObject(SS, (TObject*)thisVar);
 						} // for
 					}
 					else {
@@ -857,7 +857,7 @@ void CRHMmain::FormCreate(void) {
 
 	ListBox1 = new TStringList;
 	ListBox2 = new TStringList;
-	ListBox3 = new TStringList;
+	SelectedVariables = new TStringList;
 	ListBox4 = new TStringList;
 
 	MoveModulesToGlobal();
@@ -1113,14 +1113,14 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 
 
 	if (SeriesCnt <= 0)
-		ListBox3->Clear();
+		SelectedVariables->Clear();
 	else {
 		int indx;
 		string serTitle;
 		int jj;
 
 		//Initialize the cdSeries variable in case it has not been yet - Matt
-		SeriesCnt = ListBox3->Count;
+		SeriesCnt = SelectedVariables->Count;
 		cdSeries = new TSeries*[SeriesCnt];
 		int Cnt = Global::DTmax - Global::DTmin;
 		for (int ii = 0; ii < SeriesCnt; ++ii)
@@ -1128,8 +1128,8 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 
 		for (jj = 0; jj < SeriesCnt; jj++)
 			serTitle = cdSeries[jj]->Title;
-		if (indx = ListBox3->IndexOf(serTitle), indx > -1) {
-			thisVar = (ClassVar *)ListBox3->Objects[indx];
+		if (indx = SelectedVariables->IndexOf(serTitle), indx > -1) {
+			thisVar = (ClassVar *)SelectedVariables->Objects[indx];
 			if (thisVar->DLLName == "Macro") { // delete only macros
 											   //cdSeries[jj]->ParentChart = NULL;
 											   //cdSeries[jj]->Clear();
@@ -1137,7 +1137,7 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 				for (int kk = jj + 1; kk < SeriesCnt; ++kk)
 					cdSeries[kk - 1] = cdSeries[kk];
 
-				ListBox3->Delete(indx);
+				SelectedVariables->Delete(indx);
 				SeriesCnt--; // no need to increment
 			}
 			//else
@@ -1297,10 +1297,10 @@ bool  CRHMmain::OpenObsFile(string FileName)
 		}
 
 		// remove entries that are in observation ListBox3
-		for (int ii = 0; ii < ListBox3->Count; ii++) {
-			thisVar = (ClassVar *)ListBox3->Objects[ii];
+		for (int ii = 0; ii < SelectedVariables->Count; ii++) {
+			thisVar = (ClassVar *)SelectedVariables->Objects[ii];
 			if (thisVar && thisVar->varType >= CRHM::Read) {
-				ListBox3->Delete(ii);
+				SelectedVariables->Delete(ii);
 				ii = 0;
 			}
 		}
@@ -1403,7 +1403,7 @@ void  CRHMmain::FormDestroy(void)
 
 	delete ListBox1;
 	delete ListBox2;
-	delete ListBox3;
+	delete SelectedVariables;
 	delete ListBox4;
 
 	delete Global::OurModulesList;
@@ -1551,7 +1551,7 @@ MMSData *  CRHMmain::RunClick2Start()
 		return mmsdata;  // do not run
 	}
 
-	if (ListBox3->Count == 0) {
+	if (SelectedVariables->Count == 0) {
 #if defined(_WIN32)
 		AfxMessageBox(_T("No model output selected"));
 #endif
@@ -1752,7 +1752,7 @@ MMSData *  CRHMmain::RunClick2Start()
 	Global::BuildFlag = CRHM::RUN;
 	Global::DTmax = (int)((DTendR - Global::DTstart)* Global::Freq);
 
-	SeriesCnt = ListBox3->Count;
+	SeriesCnt = SelectedVariables->Count;
 
 	int Cnt = Global::DTmax - Global::DTmin;
 	cdSeries = new TSeries*[SeriesCnt];
@@ -1763,13 +1763,13 @@ MMSData *  CRHMmain::RunClick2Start()
 	mmsData = new float*[SeriesCnt];
 	mmsDataL = new long*[SeriesCnt];
 
-	for (int ii = 0; ii < ListBox3->Count; ii++) {
+	for (int ii = 0; ii < SelectedVariables->Count; ii++) {
 
-		thisVar = (ClassVar *)(ListBox3->Objects[ii]);
+		thisVar = (ClassVar *)(SelectedVariables->Objects[ii]);
 
 		cdSeries[ii]->Tag = thisVar;
 
-		string S = ListBox3->Strings[ii];
+		string S = SelectedVariables->Strings[ii];
 		cdSeries[ii]->Title = S;
 
 		long lay, dim;
@@ -2116,7 +2116,7 @@ void  CRHMmain::RunClickOld(void) {
 		return;  // do not run
 	}
 
-	if (ListBox3->Count == 0) {
+	if (SelectedVariables->Count == 0) {
 #if defined(_WIN32)
 		AfxMessageBox(_T("No model output selected"));
 #endif
@@ -2318,7 +2318,7 @@ void  CRHMmain::RunClickOld(void) {
 	Global::BuildFlag = CRHM::RUN;
 	Global::DTmax = (int)((DTendR - Global::DTstart)* Global::Freq);
 
-	SeriesCnt = ListBox3->Count;
+	SeriesCnt = SelectedVariables->Count;
 
 	int Cnt = Global::DTmax - Global::DTmin;
 	cdSeries = new TSeries*[SeriesCnt];
@@ -2329,13 +2329,13 @@ void  CRHMmain::RunClickOld(void) {
 	mmsData = new float*[SeriesCnt];
 	mmsDataL = new long*[SeriesCnt];
 
-	for (int ii = 0; ii < ListBox3->Count; ii++) {
+	for (int ii = 0; ii < SelectedVariables->Count; ii++) {
 
-		thisVar = (ClassVar *)(ListBox3->Objects[ii]);
+		thisVar = (ClassVar *)(SelectedVariables->Objects[ii]);
 
 		cdSeries[ii]->Tag = thisVar;
 
-		string S = ListBox3->Strings[ii];
+		string S = SelectedVariables->Strings[ii];
 		cdSeries[ii]->Title = S;
 
 		long lay, dim;
@@ -3567,14 +3567,14 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 	int c = ListBox1->Count;
 
-	for (int ii = 0; ii < ListBox3->Count; ++ii) {
+	for (int ii = 0; ii < SelectedVariables->Count; ++ii) {
 
 		long lay, dim;
 
-		ExtractHruLay(ListBox3->Strings[ii], dim, lay);
+		ExtractHruLay(SelectedVariables->Strings[ii], dim, lay);
 
 		//need to modify possibly
-		ClassVar *thisVar = (ClassVar *)ListBox3->Objects[ii]; //previous code
+		ClassVar *thisVar = (ClassVar *)SelectedVariables->Objects[ii]; //previous code
 															   //ClassVar *thisVar = (ClassVar *)ii; //Manishankar's code
 
 
@@ -3646,9 +3646,9 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		if (!thisVar || !thisVar->FileData) {  // VarObsFunct
 			if (!thisVar) {
-				long Indx = ListBox3->IndexOf(FullName);
+				long Indx = SelectedVariables->IndexOf(FullName);
 				if (Indx > -1)
-					thisVar = (ClassVar *)ListBox3->Objects[Indx];
+					thisVar = (ClassVar *)SelectedVariables->Objects[Indx];
 				else
 					thisVar = VarFind(string(string("obs ") + Name.c_str()));
 			}
@@ -3888,7 +3888,7 @@ void CRHMmain::ClearModules(bool All) {
 	}
 
 	ListBox1->Clear();
-	ListBox3->Clear();
+	SelectedVariables->Clear();
 
 	if (cdSeries) {
 		//for (int ii = 0; ii < SeriesCnt; ii++)
