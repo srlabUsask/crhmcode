@@ -115,12 +115,12 @@ void CRHMmain::setSelectedVariables(TStringList * t)
 
 TStringList* CRHMmain::getSelectedObservations()
 {
-	return ListBox4;
+	return SelectedObservations;
 }
 
 void CRHMmain::setSelectedObservatoions(TStringList *t)
 {
-	ListBox4 = t;
+	SelectedObservations = t;
 }
 
 
@@ -700,7 +700,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 							if (Kind == "_obs") Kind = "";
 							SS = thisVar->name + "(" + Common::longtoStr(labs(Index)) + ")" + Kind;
-							if (Common::IndexOf(ListBox4, SS) == -1) {
+							if (Common::IndexOf(SelectedObservations, SS) == -1) {
 
 								TSeries *cdSeries = NULL;
 								if (thisVar->FileData->Times == NULL) {
@@ -714,7 +714,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 									cdSeries->Title = SS;
 								}
 
-								ListBox4->AddObject(SS, (TObject *)cdSeries);
+								SelectedObservations->AddObject(SS, (TObject *)cdSeries);
 								//                AddObsPlot((ClassVar *) thisVar, cdSeries, SS,
 								//                FindObservationType(Kind.c_str()));
 							}
@@ -855,10 +855,10 @@ void CRHMmain::FormCreate(void) {
 
 	Global::DeclRootList = new TStringList;
 
-	ListBox1 = new TStringList;
-	ListBox2 = new TStringList;
+	AllVariables = new TStringList;
+	AllObservations = new TStringList;
 	SelectedVariables = new TStringList;
-	ListBox4 = new TStringList;
+	SelectedObservations = new TStringList;
 
 	MoveModulesToGlobal();
 	((ClassModule*)Global::PendingDLLModuleList->Objects[0])->OurAdmin->Accept(mbYesToAll);
@@ -920,16 +920,16 @@ void  CRHMmain::Label4Click(void) {
 	MapVar::iterator itVar;
 	string Newname;
 
-	ListBox1->Clear();
+	AllVariables->Clear();
 
-	ListBox1->Sorted = true;
+	AllVariables->Sorted = true;
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::USUAL && thisVar->dimen != CRHM::NREB) {
 			Newname = DeclObsName(thisVar);
-			if (Common::IndexOf(ListBox1, Newname) == -1)
-				ListBox1->AddObject(Newname, (TObject*)thisVar);
+			if (Common::IndexOf(AllVariables, Newname) == -1)
+				AllVariables->AddObject(Newname, (TObject*)thisVar);
 		}
 	}
 }
@@ -1095,7 +1095,7 @@ void CRHMmain::MacroClick(void)
 	}
 
 	//need to activate this line.
-	ListBoxMacroClear(); // clears ListBox1 & ListBox2
+	ListBoxMacroClear(); // clears AllVariables & AllObservations
 
 	AdminMacro.MacroClear();
 
@@ -1145,10 +1145,10 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		}
 	}
 
-	for (int ii = 0; ii < ListBox1->Count; ii++) {
-		thisVar = (ClassVar *)ListBox1->Objects[ii];
+	for (int ii = 0; ii < AllVariables->Count; ii++) {
+		thisVar = (ClassVar *)AllVariables->Objects[ii];
 		if (thisVar != NULL && thisVar->DLLName == "Macro") {
-			ListBox1->Delete(ii);
+			AllVariables->Delete(ii);
 			ii = 0;
 		}
 	}
@@ -1287,11 +1287,11 @@ bool  CRHMmain::OpenObsFile(string FileName)
 		MapVar::iterator itVar;
 		ClassVar * thisVar;
 
-		// always starts with this display// remove entries that are in observation ListBox1
-		for (int ii = 0; ii < ListBox1->Count; ii++) {
-			thisVar = (ClassVar *)ListBox1->Objects[ii];
+		// always starts with this display// remove entries that are in observation AllVariables
+		for (int ii = 0; ii < AllVariables->Count; ii++) {
+			thisVar = (ClassVar *)AllVariables->Objects[ii];
 			if (thisVar && thisVar->varType >= CRHM::Read) {
-				ListBox1->Delete(ii);
+				AllVariables->Delete(ii);
 				ii = 0;
 			}
 		}
@@ -1305,13 +1305,13 @@ bool  CRHMmain::OpenObsFile(string FileName)
 			}
 		}
 
-		ListBox2->Clear();
+		AllObservations->Clear();
 
 		for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 			thisVar = (*itVar).second;
 			if (thisVar && thisVar->varType >= CRHM::Read)
-				if (Common::IndexOf(ListBox2, thisVar->name) == -1)
-					ListBox2->AddObject(thisVar->name, (TObject*)thisVar);
+				if (Common::IndexOf(AllObservations, thisVar->name) == -1)
+					AllObservations->AddObject(thisVar->name, (TObject*)thisVar);
 		}
 
 		ObsFilesList->AddObject(OpenNameObs, (TObject *)FileData);
@@ -1332,7 +1332,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 
 void  CRHMmain::ObsCloseClick(void) {
 
-	ListBox2->Clear();
+	AllObservations->Clear();
 
 
 	for (int ii = 0; ii < ObsFilesList->Count; ii++) {
@@ -1360,7 +1360,7 @@ void  CRHMmain::ObsFileClose(void)
 		return;
 	}
 
-	ListBox2->Clear();
+	AllObservations->Clear();
 
 	ClassData * FileData = (ClassData *)ObsFilesList->Objects[Pos];
 	delete FileData;   // delete ClassData instance
@@ -1369,8 +1369,8 @@ void  CRHMmain::ObsFileClose(void)
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		if (thisVar->varType >= CRHM::Read)
-			if (Common::IndexOf(ListBox2, (*itVar).second->name) == -1)
-				ListBox2->AddObject((*itVar).second->name,
+			if (Common::IndexOf(AllObservations, (*itVar).second->name) == -1)
+				AllObservations->AddObject((*itVar).second->name,
 				(TObject*)(*itVar).second);
 	}
 
@@ -1378,8 +1378,8 @@ void  CRHMmain::ObsFileClose(void)
 		thisVar = (*itVar).second;
 		//if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::VARIABLE) //changed by Manishankar.
 		if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::USUAL)
-			if (Common::IndexOf(ListBox1, (*itVar).second->name) == -1)
-				ListBox1->AddObject((*itVar).second->name, (TObject*)(*itVar).second);
+			if (Common::IndexOf(AllVariables, (*itVar).second->name) == -1)
+				AllVariables->AddObject((*itVar).second->name, (TObject*)(*itVar).second);
 	}
 
 	delete cdSeries;
@@ -1401,10 +1401,10 @@ void  CRHMmain::FormDestroy(void)
 
 	delete ProjectList;
 
-	delete ListBox1;
-	delete ListBox2;
+	delete AllVariables;
+	delete AllObservations;
 	delete SelectedVariables;
-	delete ListBox4;
+	delete SelectedObservations;
 
 	delete Global::OurModulesList;
 
@@ -3145,7 +3145,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 		for (int ii = 0; ii < TraceVarPar->Strings->Count; ++ii) {
 			string Trimmed = Common::trim(TraceVarPar->Strings->Strings[ii]);
 			if (!Trimmed.empty()) {
-				int jj = ListBox1->IndexOf(Trimmed);
+				int jj = AllVariables->IndexOf(Trimmed);
 				if (jj > -1) {
 					for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
 						ClassVar * thisVar = VarFind(string(Global::OurModulesList->Strings[ii]) + ' ' + TraceVarPar->Strings->Strings[0]);
@@ -3153,7 +3153,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 							break;
 					} // for
 
-					thisVar = (ClassVar*)ListBox1->Objects[jj];
+					thisVar = (ClassVar*)AllVariables->Objects[jj];
 					if (thisVar) {
 						Sx += ("\t" + string(Trimmed));
 						Sy = "";
@@ -3195,7 +3195,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 
 TStringList* CRHMmain::getObservations()
 {
-	return ListBox2;
+	return AllObservations;
 }
 
 
@@ -3207,7 +3207,7 @@ TStringList* CRHMmain::getAllmodules()
 
 TStringList* CRHMmain::getVariables()
 {
-	return ListBox1;
+	return AllVariables;
 }
 
 
@@ -3565,7 +3565,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//if (HruNames)
 	//HruNameClick(Sender);
 
-	int c = ListBox1->Count;
+	int c = AllVariables->Count;
 
 	for (int ii = 0; ii < SelectedVariables->Count; ++ii) {
 
@@ -3615,24 +3615,24 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	string kind, lastkind;
 	Output = "";
 
-	for (int ii = 0; ii < ListBox4->Count; ii++) {
+	for (int ii = 0; ii < SelectedObservations->Count; ii++) {
 
-		string S = ListBox4->Strings[ii];
+		string S = SelectedObservations->Strings[ii];
 		string FullName;
 		long dim = 0, lay = 0;
 		kind = "_obs";
 
 
 		//need to modify
-		//string Name = ExtractHruLayFunct(ListBox4->Strings[ii], dim, lay, kind, FullName);
-		string Name = GetObservationName(ListBox4->Strings[ii]);
-		ExtractHruLay(ListBox4->Strings[ii], dim, lay);
+		//string Name = ExtractHruLayFunct(SelectedObservations->Strings[ii], dim, lay, kind, FullName);
+		string Name = GetObservationName(SelectedObservations->Strings[ii]);
+		ExtractHruLay(SelectedObservations->Strings[ii], dim, lay);
 		//string Name = "";
 
 
 		//need to modify
-		//TLineSeries *cdSeries = (TLineSeries *)ListBox4->Objects[ii];
-		TSeries *cdSeries = (TSeries *)ListBox4->Objects[ii];
+		//TLineSeries *cdSeries = (TLineSeries *)SelectedObservations->Objects[ii];
+		TSeries *cdSeries = (TSeries *)SelectedObservations->Objects[ii];
 
 		ClassVar *thisVar;
 		thisVar = NULL;
@@ -3640,8 +3640,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		//need to modify
 		thisVar = (ClassVar *)cdSeries->Tag; // always OK for observation
 
-		thisVar = (ClassVar *)ListBox4->Objects[ii]; //added by Manishankar for testing.
-													 //Name = ListBox4->Strings[ii];
+		thisVar = (ClassVar *)SelectedObservations->Objects[ii]; //added by Manishankar for testing.
+													 //Name = SelectedObservations->Strings[ii];
 
 
 		if (!thisVar || !thisVar->FileData) {  // VarObsFunct
@@ -3691,10 +3691,10 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		//long lay, dim;
 
-		//ExtractHruLay(ListBox4->Strings[ii], dim, lay);
+		//ExtractHruLay(SelectedObservations->Strings[ii], dim, lay);
 
 		////need to modify possibly
-		//ClassVar *thisVar = (ClassVar *)ListBox4->Objects[ii]; //previous code
+		//ClassVar *thisVar = (ClassVar *)SelectedObservations->Objects[ii]; //previous code
 		//													   //ClassVar *thisVar = (ClassVar *)ii; //Manishankar's code
 		//if (thisVar != NULL)
 		//{
@@ -3818,9 +3818,9 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 string CRHMmain::GetObservationName(string vname)
 {
-	for (int i = 0; i < ListBox2->Count; i++)
+	for (int i = 0; i < AllObservations->Count; i++)
 	{
-		string str = ListBox2->Strings[i];
+		string str = AllObservations->Strings[i];
 
 		int ind = vname.find(str);
 
@@ -3887,7 +3887,7 @@ void CRHMmain::ClearModules(bool All) {
 		//SaveDialogPrj->FileName = "";
 	}
 
-	ListBox1->Clear();
+	AllVariables->Clear();
 	SelectedVariables->Clear();
 
 	if (cdSeries) {

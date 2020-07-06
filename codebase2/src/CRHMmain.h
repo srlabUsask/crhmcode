@@ -91,10 +91,10 @@ public:
 	//	string ProjectDirectory;
 	string ApplicationDir;
 
-	TStringList *ListBox1;
-	TStringList *ListBox2;
+	TStringList *AllVariables; //manishankar used this meaningful variable name instead of ListBox1.
+	TStringList *AllObservations; //manishankar used this meaningful variable name instead of ListBox2.
 	TStringList *SelectedVariables; //manishankar used this meaningful variable name instead of ListBox3.
-	TStringList *ListBox4;
+	TStringList *SelectedObservations; //manishankar used this meaningful variable name instead of ListBox4.
 	TStringList *queryResult;
 
 
