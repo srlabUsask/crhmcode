@@ -83,23 +83,23 @@ CRHMmain::~CRHMmain()
 
 double CRHMmain::GetStartDate()
 {
-	return Picker1;
+	return StartDatePicker;
 }
 
 void CRHMmain::setStartDate(double sdate)
 {
-	Picker1 = sdate;
+	StartDatePicker = sdate;
 }
 
 
 double CRHMmain::GetEndDate()
 {
-	return Picker2;
+	return EndDatePicker;
 }
 
 void CRHMmain::setEndDate(double edate)
 {
-	Picker2 = edate;
+	EndDatePicker = edate;
 }
 
 
@@ -354,7 +354,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					DataFile >> D[ii];
 
 				DT = StandardConverterUtility::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0); // check
-				Picker1 = DT;
+				StartDatePicker = DT;
 
 				int c;
 				while ((c = DataFile.peek(), c == 32)) {
@@ -373,7 +373,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					DataFile >> D[ii];
 
 				DT = StandardConverterUtility::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0);
-				Picker2 = DT;
+				EndDatePicker = DT;
 
 				DataFile >> S;
 			}
@@ -705,7 +705,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 								TSeries *cdSeries = NULL;
 								if (thisVar->FileData->Times == NULL) {
 									//                  cdSeries = new TSeries(Global::DTmax - Global::DTmin);
-									double Dif = Picker2 - Picker1;
+									double Dif = EndDatePicker - StartDatePicker;
 									TSeries * cdSeries = new TSeries(((int)(Dif * thisVar->FileData->Freq))*thisVar->FileData->ModN);
 
 									//move inside to avoid null ptr exception - Matt
@@ -1614,8 +1614,8 @@ MMSData *  CRHMmain::RunClick2Start()
 								   // clears storage for observation read and function lists
 	((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
 
-	double DTstartR = Picker1;
-	double DTendR = Picker2;
+	double DTstartR = StartDatePicker;
+	double DTendR = EndDatePicker;
 
 	ClassPar *thisPar;
 

@@ -98,8 +98,8 @@ public:
 	TStringList *queryResult;
 
 
-	double Picker1; // replaces graphic controls
-	double Picker2;
+	double StartDatePicker; // replaces graphic controls. manishankar Picker1 was replaced by StartDatePicker
+	double EndDatePicker; //manishankar Picker2 was replaced by EndDatePicker
 
 
 
