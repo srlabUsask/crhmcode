@@ -2,7 +2,7 @@
 //
 
 #if defined(_WIN32)
-#include "../stdafx.h"
+#include "stdafx.h"
 #include <Windows.h>
 #include <direct.h>
 #endif

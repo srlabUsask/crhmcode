@@ -261,7 +261,7 @@ public:
 	float static K(float Ky, float LogStDev);
 	string static GetCurrentPath(void);
 	bool static Variation_Decide(int Variation_set, long Variation);
-	void static writefile(string content);
+	void static writefile(string filepath, string content);
 };
 
 

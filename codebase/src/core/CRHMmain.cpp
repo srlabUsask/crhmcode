@@ -21,7 +21,6 @@
 
 #include <time.h>
 
-
 //string ApplicationDir = ExtractFilePath(AnsiReplaceStr(Application->ExeName, "/", "\\"));
 
 
@@ -84,44 +83,44 @@ CRHMmain::~CRHMmain()
 
 double CRHMmain::GetStartDate()
 {
-	return Picker1;
+	return StartDatePicker;
 }
 
 void CRHMmain::setStartDate(double sdate)
 {
-	Picker1 = sdate;
+	StartDatePicker = sdate;
 }
 
 
 double CRHMmain::GetEndDate()
 {
-	return Picker2;
+	return EndDatePicker;
 }
 
 void CRHMmain::setEndDate(double edate)
 {
-	Picker2 = edate;
+	EndDatePicker = edate;
 }
 
 
 TStringList* CRHMmain::getSelectedVariables()
 {
-	return ListBox3;
+	return SelectedVariables;
 }
 
 void CRHMmain::setSelectedVariables(TStringList * t)
 {
-	ListBox3 = t;
+	SelectedVariables = t;
 }
 
 TStringList* CRHMmain::getSelectedObservations()
 {
-	return ListBox4;
+	return SelectedObservations;
 }
 
 void CRHMmain::setSelectedObservatoions(TStringList *t)
 {
-	ListBox4 = t;
+	SelectedObservations = t;
 }
 
 
@@ -355,7 +354,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					DataFile >> D[ii];
 
 				DT = StandardConverterUtility::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0); // check
-				Picker1 = DT;
+				StartDatePicker = DT;
 
 				int c;
 				while ((c = DataFile.peek(), c == 32)) {
@@ -374,7 +373,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					DataFile >> D[ii];
 
 				DT = StandardConverterUtility::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0);
-				Picker2 = DT;
+				EndDatePicker = DT;
 
 				DataFile >> S;
 			}
@@ -663,8 +662,8 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 							}
 
 							//int index = IndexOf(ListBox3, SS);
-							if (Common::IndexOf(ListBox3, SS) == -1 && Index <= thisVar->dim)
-								ListBox3->AddObject(SS, (TObject*)thisVar);
+							if (Common::IndexOf(SelectedVariables, SS) == -1 && Index <= thisVar->dim)
+								SelectedVariables->AddObject(SS, (TObject*)thisVar);
 						} // for
 					}
 					else {
@@ -701,12 +700,12 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 							if (Kind == "_obs") Kind = "";
 							SS = thisVar->name + "(" + Common::longtoStr(labs(Index)) + ")" + Kind;
-							if (Common::IndexOf(ListBox4, SS) == -1) {
+							if (Common::IndexOf(SelectedObservations, SS) == -1) {
 
 								TSeries *cdSeries = NULL;
 								if (thisVar->FileData->Times == NULL) {
 									//                  cdSeries = new TSeries(Global::DTmax - Global::DTmin);
-									double Dif = Picker2 - Picker1;
+									double Dif = EndDatePicker - StartDatePicker;
 									TSeries * cdSeries = new TSeries(((int)(Dif * thisVar->FileData->Freq))*thisVar->FileData->ModN);
 
 									//move inside to avoid null ptr exception - Matt
@@ -715,7 +714,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 									cdSeries->Title = SS;
 								}
 
-								ListBox4->AddObject(SS, (TObject *)cdSeries);
+								SelectedObservations->AddObject(SS, (TObject *)cdSeries);
 								//                AddObsPlot((ClassVar *) thisVar, cdSeries, SS,
 								//                FindObservationType(Kind.c_str()));
 							}
@@ -856,10 +855,10 @@ void CRHMmain::FormCreate(void) {
 
 	Global::DeclRootList = new TStringList;
 
-	ListBox1 = new TStringList;
-	ListBox2 = new TStringList;
-	ListBox3 = new TStringList;
-	ListBox4 = new TStringList;
+	AllVariables = new TStringList;
+	AllObservations = new TStringList;
+	SelectedVariables = new TStringList;
+	SelectedObservations = new TStringList;
 
 	MoveModulesToGlobal();
 	((ClassModule*)Global::PendingDLLModuleList->Objects[0])->OurAdmin->Accept(mbYesToAll);
@@ -921,16 +920,16 @@ void  CRHMmain::Label4Click(void) {
 	MapVar::iterator itVar;
 	string Newname;
 
-	ListBox1->Clear();
+	AllVariables->Clear();
 
-	ListBox1->Sorted = true;
+	AllVariables->Sorted = true;
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::USUAL && thisVar->dimen != CRHM::NREB) {
 			Newname = DeclObsName(thisVar);
-			if (Common::IndexOf(ListBox1, Newname) == -1)
-				ListBox1->AddObject(Newname, (TObject*)thisVar);
+			if (Common::IndexOf(AllVariables, Newname) == -1)
+				AllVariables->AddObject(Newname, (TObject*)thisVar);
 		}
 	}
 }
@@ -1096,7 +1095,7 @@ void CRHMmain::MacroClick(void)
 	}
 
 	//need to activate this line.
-	ListBoxMacroClear(); // clears ListBox1 & ListBox2
+	ListBoxMacroClear(); // clears AllVariables & AllObservations
 
 	AdminMacro.MacroClear();
 
@@ -1114,14 +1113,14 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 
 
 	if (SeriesCnt <= 0)
-		ListBox3->Clear();
+		SelectedVariables->Clear();
 	else {
 		int indx;
 		string serTitle;
 		int jj;
 
 		//Initialize the cdSeries variable in case it has not been yet - Matt
-		SeriesCnt = ListBox3->Count;
+		SeriesCnt = SelectedVariables->Count;
 		cdSeries = new TSeries*[SeriesCnt];
 		int Cnt = Global::DTmax - Global::DTmin;
 		for (int ii = 0; ii < SeriesCnt; ++ii)
@@ -1129,8 +1128,8 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 
 		for (jj = 0; jj < SeriesCnt; jj++)
 			serTitle = cdSeries[jj]->Title;
-		if (indx = ListBox3->IndexOf(serTitle), indx > -1) {
-			thisVar = (ClassVar *)ListBox3->Objects[indx];
+		if (indx = SelectedVariables->IndexOf(serTitle), indx > -1) {
+			thisVar = (ClassVar *)SelectedVariables->Objects[indx];
 			if (thisVar->DLLName == "Macro") { // delete only macros
 											   //cdSeries[jj]->ParentChart = NULL;
 											   //cdSeries[jj]->Clear();
@@ -1138,7 +1137,7 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 				for (int kk = jj + 1; kk < SeriesCnt; ++kk)
 					cdSeries[kk - 1] = cdSeries[kk];
 
-				ListBox3->Delete(indx);
+				SelectedVariables->Delete(indx);
 				SeriesCnt--; // no need to increment
 			}
 			//else
@@ -1146,10 +1145,10 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		}
 	}
 
-	for (int ii = 0; ii < ListBox1->Count; ii++) {
-		thisVar = (ClassVar *)ListBox1->Objects[ii];
+	for (int ii = 0; ii < AllVariables->Count; ii++) {
+		thisVar = (ClassVar *)AllVariables->Objects[ii];
 		if (thisVar != NULL && thisVar->DLLName == "Macro") {
-			ListBox1->Delete(ii);
+			AllVariables->Delete(ii);
 			ii = 0;
 		}
 	}
@@ -1288,31 +1287,31 @@ bool  CRHMmain::OpenObsFile(string FileName)
 		MapVar::iterator itVar;
 		ClassVar * thisVar;
 
-		// always starts with this display// remove entries that are in observation ListBox1
-		for (int ii = 0; ii < ListBox1->Count; ii++) {
-			thisVar = (ClassVar *)ListBox1->Objects[ii];
+		// always starts with this display// remove entries that are in observation AllVariables
+		for (int ii = 0; ii < AllVariables->Count; ii++) {
+			thisVar = (ClassVar *)AllVariables->Objects[ii];
 			if (thisVar && thisVar->varType >= CRHM::Read) {
-				ListBox1->Delete(ii);
+				AllVariables->Delete(ii);
 				ii = 0;
 			}
 		}
 
 		// remove entries that are in observation ListBox3
-		for (int ii = 0; ii < ListBox3->Count; ii++) {
-			thisVar = (ClassVar *)ListBox3->Objects[ii];
+		for (int ii = 0; ii < SelectedVariables->Count; ii++) {
+			thisVar = (ClassVar *)SelectedVariables->Objects[ii];
 			if (thisVar && thisVar->varType >= CRHM::Read) {
-				ListBox3->Delete(ii);
+				SelectedVariables->Delete(ii);
 				ii = 0;
 			}
 		}
 
-		ListBox2->Clear();
+		AllObservations->Clear();
 
 		for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 			thisVar = (*itVar).second;
 			if (thisVar && thisVar->varType >= CRHM::Read)
-				if (Common::IndexOf(ListBox2, thisVar->name) == -1)
-					ListBox2->AddObject(thisVar->name, (TObject*)thisVar);
+				if (Common::IndexOf(AllObservations, thisVar->name) == -1)
+					AllObservations->AddObject(thisVar->name, (TObject*)thisVar);
 		}
 
 		ObsFilesList->AddObject(OpenNameObs, (TObject *)FileData);
@@ -1333,7 +1332,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 
 void  CRHMmain::ObsCloseClick(void) {
 
-	ListBox2->Clear();
+	AllObservations->Clear();
 
 
 	for (int ii = 0; ii < ObsFilesList->Count; ii++) {
@@ -1361,7 +1360,7 @@ void  CRHMmain::ObsFileClose(void)
 		return;
 	}
 
-	ListBox2->Clear();
+	AllObservations->Clear();
 
 	ClassData * FileData = (ClassData *)ObsFilesList->Objects[Pos];
 	delete FileData;   // delete ClassData instance
@@ -1370,8 +1369,8 @@ void  CRHMmain::ObsFileClose(void)
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		if (thisVar->varType >= CRHM::Read)
-			if (Common::IndexOf(ListBox2, (*itVar).second->name) == -1)
-				ListBox2->AddObject((*itVar).second->name,
+			if (Common::IndexOf(AllObservations, (*itVar).second->name) == -1)
+				AllObservations->AddObject((*itVar).second->name,
 				(TObject*)(*itVar).second);
 	}
 
@@ -1379,8 +1378,8 @@ void  CRHMmain::ObsFileClose(void)
 		thisVar = (*itVar).second;
 		//if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::VARIABLE) //changed by Manishankar.
 		if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::USUAL)
-			if (Common::IndexOf(ListBox1, (*itVar).second->name) == -1)
-				ListBox1->AddObject((*itVar).second->name, (TObject*)(*itVar).second);
+			if (Common::IndexOf(AllVariables, (*itVar).second->name) == -1)
+				AllVariables->AddObject((*itVar).second->name, (TObject*)(*itVar).second);
 	}
 
 	delete cdSeries;
@@ -1402,10 +1401,10 @@ void  CRHMmain::FormDestroy(void)
 
 	delete ProjectList;
 
-	delete ListBox1;
-	delete ListBox2;
-	delete ListBox3;
-	delete ListBox4;
+	delete AllVariables;
+	delete AllObservations;
+	delete SelectedVariables;
+	delete SelectedObservations;
 
 	delete Global::OurModulesList;
 
@@ -1552,7 +1551,7 @@ MMSData *  CRHMmain::RunClick2Start()
 		return mmsdata;  // do not run
 	}
 
-	if (ListBox3->Count == 0) {
+	if (SelectedVariables->Count == 0) {
 #if defined(_WIN32)
 		AfxMessageBox(_T("No model output selected"));
 #endif
@@ -1615,8 +1614,8 @@ MMSData *  CRHMmain::RunClick2Start()
 								   // clears storage for observation read and function lists
 	((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
 
-	double DTstartR = Picker1;
-	double DTendR = Picker2;
+	double DTstartR = StartDatePicker;
+	double DTendR = EndDatePicker;
 
 	ClassPar *thisPar;
 
@@ -1753,7 +1752,7 @@ MMSData *  CRHMmain::RunClick2Start()
 	Global::BuildFlag = CRHM::RUN;
 	Global::DTmax = (int)((DTendR - Global::DTstart)* Global::Freq);
 
-	SeriesCnt = ListBox3->Count;
+	SeriesCnt = SelectedVariables->Count;
 
 	int Cnt = Global::DTmax - Global::DTmin;
 	cdSeries = new TSeries*[SeriesCnt];
@@ -1764,13 +1763,13 @@ MMSData *  CRHMmain::RunClick2Start()
 	mmsData = new float*[SeriesCnt];
 	mmsDataL = new long*[SeriesCnt];
 
-	for (int ii = 0; ii < ListBox3->Count; ii++) {
+	for (int ii = 0; ii < SelectedVariables->Count; ii++) {
 
-		thisVar = (ClassVar *)(ListBox3->Objects[ii]);
+		thisVar = (ClassVar *)(SelectedVariables->Objects[ii]);
 
 		cdSeries[ii]->Tag = thisVar;
 
-		string S = ListBox3->Strings[ii];
+		string S = SelectedVariables->Strings[ii];
 		cdSeries[ii]->Title = S;
 
 		long lay, dim;
@@ -1847,7 +1846,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 	try
 	{
 		int iter = 0;
-		//for (Global::DTindx = Global::DTmin; Global::DTindx < Global::DTmax; Global::DTindx++) 
+		//for (Global::DTindx = Global::DTmin; Global::DTindx < Global::DTmax; Global::DTindx++)
 		for (Global::DTindx = startdate; Global::DTindx < enddate; Global::DTindx++)
 		{
 
@@ -1922,7 +1921,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 				CheckBlankModule();
 
-				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {					
+				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {
 					//try
 					//{
 					//Common::writefile("d:/test.txt","p = "+p->Name+", p nameroot = "+p->NameRoot);
@@ -1931,7 +1930,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 					//}
 					//catch (...)
 					//{
-					//	
+					//
 					//	std::exception_ptr eptr;
 					//	eptr = std::current_exception(); // capture
 					//	Common::writefile("d:/test.txt", "error in p = " + p->Name + ", p nameroot = " + p->NameRoot+" ");
@@ -2078,502 +2077,6 @@ void  CRHMmain::RunClick(void) {
 	CRHMmain::RunClick2Middle(mmsdata, Global::DTmin, Global::DTmax);
 	CRHMmain::RunClick2End(mmsdata);
 }
-
-
-//Manishankar. We need to remove this old code. But, I am keeping it for some days to see if the new one "RunClick ()" makes any problem.
-void  CRHMmain::RunClickOld(void) {
-
-	ClassVar *thisVar;
-	float **mmsData;
-	long **mmsDataL;
-	bool GoodRun = true;
-
-	//TimingStatistics * ts = new TimingStatistics();
-
-	clock_t begintime2 = clock();
-
-
-	//Classobs test("obs","undefined", CRHM::PROTO);
-	//test.decl();
-
-	MapVar::iterator itVar;
-	//PlotControl->IntervalControl = 0;
-	//PlotControl->IntervalLength = 3; // make default
-	Global::ModuleBitSet.reset();
-
-	Global::HRU_OBS = Global::HRU_OBS_DIRECT; // always correct? Not set by macro project?
-	Global::OBS_AS_IS = false;
-	Global::WQ_prj = false;
-
-
-	if (Global::IndxMin != 0) {
-#if defined(_WIN32)
-		AfxMessageBox(_T("First observation day - not an entire day"));
-#endif
-#if defined(__linux__)|| defined(__APPLE__)
-		string message = "First observation day - not an entire day";
-		LogMessageX(message.c_str());
-#endif
-		return;  // do not run
-	}
-
-	if (ListBox3->Count == 0) {
-#if defined(_WIN32)
-		AfxMessageBox(_T("No model output selected"));
-#endif
-#if defined(__linux__)|| defined(__APPLE__)
-		string message = "No model output selected";
-		LogMessageX(message.c_str());
-#endif
-
-		return;  // nothing selected
-	}
-
-	string Message = "Project file: " + OpenProjectPath;
-	LogMessageX(Message.c_str());
-	LogMessageX(" ");
-
-	for (int ii = 0; ii < ObsFilesList->Count; ii++) {
-		Message = "Observation file: " + ObsFilesList->Strings[ii];
-		LogMessageX(Message.c_str());
-	}
-	LogMessageX(" ");
-
-	if (OpenStateFlag) {
-		Message = "State file: " + OpenNameState;
-		LogMessageX(Message.c_str());
-		LogMessageX(" ");
-	}
-
-	double Dt = StandardConverterUtility::DateTimeDt();
-	Message = string("Time of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
-	LogMessageX(Message.c_str());
-
-	string S = string("Module List \"");
-	for (int ii = 0; ii < Global::OurModulesList->Count; ++ii) {
-		ClassModule* thisModule = (ClassModule*)Global::OurModulesList->Objects[ii];
-		S += Global::OurModulesList->Strings[ii];
-		if (thisModule->variation != 0) {
-			string AA("#0");
-			AA[1] += log(thisModule->variation) / log(2) + 1;
-			S += AA;
-		}
-
-		if (ii == Global::OurModulesList->Count - 1)
-			S += ".\"";
-		else
-			S += ", ";
-	}
-
-	if (!Global::MapAKA.empty()) {
-		Mapstr2::iterator it;
-		LogMessageX("Linkage modifications (AKAs)");
-		for (it = Global::MapAKA.begin(); it != Global::MapAKA.end(); ++it) {
-
-			Message = string((*it).first.c_str()) + " " + string((*it).second.c_str());
-			LogMessageX(Message.c_str());
-		}
-		LogMessageX(" ");
-	}
-
-	Global::DeclRootList->Clear(); // used by AKA to stop looping
-
-								   // clears storage for observation read and function lists
-	((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
-
-	double DTstartR = Picker1;
-	double DTendR = Picker2;
-
-	ClassPar *thisPar;
-
-
-	double P;
-	thisPar = ParFind("basin RUN_START");
-	if (thisPar) {
-		if (thisPar->ivalues[0] > 0)
-			P = thisPar->ivalues[0];
-	}
-	else {
-		MapPar::iterator itPar;
-
-		for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
-			thisPar = (*itPar).second;
-			if (thisPar->param == "RUN_START" && thisPar->ivalues[0] > 0) {
-				P = thisPar->ivalues[0];
-				break;
-			}
-		}
-	}
-
-	thisPar = ParFind("basin RUN_END");
-	if (thisPar) {
-		if (thisPar->ivalues[0] > 0)
-			P = thisPar->ivalues[0];
-	}
-	else {
-		MapPar::iterator itPar;
-
-		for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
-			thisPar = (*itPar).second;
-			if (thisPar->param == "RUN_END" && thisPar->ivalues[0] > 0) {
-				P = thisPar->ivalues[0];
-				break;
-			}
-		}
-	}
-
-
-	Global::DTmin = (int)((DTstartR - Global::DTstart)* Global::Freq);
-	Global::DTindx = Global::DTmin;
-	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
-
-	int Modii = 0;
-	Global::MapVarsGet.clear();
-	Global::MapVarsPut.clear();
-	Global::MapObsGet.clear();
-
-
-
-	try {
-		for (Modii = 0; Modii < Global::OurModulesList->Count; Modii++)
-			((ClassModule*)(Global::OurModulesList->Objects[Modii]))->initbase();
-	}
-
-	catch (CRHMException Except) { // serious error - program had to stop immediately
-		LogMessageX(Except.Message.c_str()); // , "Initialisation of module - "); // + string((ClassModule*) Global::OurModulesList->Objects[Modii])->Name)
-		GoodRun = false;
-		//GoodRun = true;
-	}
-
-	catch (exception &E) {
-		//ShowMessage(E.Message + " in Initialisation of " + ((ClassModule*) Global::OurModulesList->Objects[Modii])->Name);
-		LogMessageX(E.what());
-		GoodRun = false;
-	}
-
-	catch (...) {
-		LogMessageX("Unknown error");
-		GoodRun = false;
-	}
-
-	if (DTstartR >= DTendR) {
-		LogMessageX("Start Time >= EndTime");
-		GoodRun = false;
-	}
-
-
-	ClassData * FileData = NULL;
-	if (ObsFilesList->Count > 0)
-	{
-		FileData = (ClassData *)ObsFilesList->Objects[0];
-	}
-
-	if (DTstartR < FileData->Dt1) {
-		LogMessageX("Start Time before first Observation");
-		GoodRun = false;
-	}
-
-	if (DTendR > FileData->Dt2) {
-		LogMessageX("End Time after last Observation");
-		GoodRun = false;
-	}
-
-	if (GoodRun) {
-		if (!OpenStateFlag) {
-			thisPar = ParFind("basin INIT_STATE");
-			if (thisPar && thisPar->Strings->Count && !thisPar->Strings->Strings[0].empty()) {
-				OpenNameState = thisPar->Strings->Strings[0];
-				OpenStateFlag = true;
-			}
-			else {
-				MapPar::iterator itPar;
-
-				for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
-					thisPar = (*itPar).second;
-					if (thisPar->param == "INIT_STATE" && thisPar->Strings->Count && !thisPar->Strings->Strings[0].empty()) {
-						OpenNameState = thisPar->Strings->Strings[0];
-						OpenStateFlag = true;
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	if (OpenStateFlag)
-		ReadStateFile(GoodRun);
-
-	if (!GoodRun) { //cleanup memory before returning
-
-					// deletes storage for observation read list
-		((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
-
-		// deletes module allocated storage
-		for (int ii = 0; ii < Modii; ii++)
-			((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(false);
-
-		Global::BuildFlag = CRHM::DECL;
-		return;
-	}
-
-	Global::BuildFlag = CRHM::RUN;
-	Global::DTmax = (int)((DTendR - Global::DTstart)* Global::Freq);
-
-	SeriesCnt = ListBox3->Count;
-
-	int Cnt = Global::DTmax - Global::DTmin;
-	cdSeries = new TSeries*[SeriesCnt];
-
-	for (int ii = 0; ii < SeriesCnt; ++ii)
-		cdSeries[ii] = new TSeries(Cnt);
-
-	mmsData = new float*[SeriesCnt];
-	mmsDataL = new long*[SeriesCnt];
-
-	for (int ii = 0; ii < ListBox3->Count; ii++) {
-
-		thisVar = (ClassVar *)(ListBox3->Objects[ii]);
-
-		cdSeries[ii]->Tag = thisVar;
-
-		string S = ListBox3->Strings[ii];
-		cdSeries[ii]->Title = S;
-
-		long lay, dim;
-
-		S = ExtractHruLay(S, dim, lay);
-
-		if (thisVar->varType == CRHM::Float) {
-			mmsDataL[ii] = NULL;
-			if (thisVar->lay == 0) {
-				mmsData[ii] = thisVar->values + (dim - 1);
-			}
-			else {
-				mmsData[ii] = (thisVar->layvalues[lay - 1]) + (dim - 1);
-			}
-		}
-		else if (thisVar->varType == CRHM::Int) {
-			mmsData[ii] = NULL;
-			if (thisVar->lay == 0) {
-				mmsDataL[ii] = thisVar->ivalues + (dim - 1);
-			}
-			else {
-				mmsDataL[ii] = (thisVar->ilayvalues[lay - 1]) + (dim - 1);
-			}
-		}
-	}
-
-	bool First = true;
-
-	LogMessageX(" ");
-	S = string("timestep ") + DttoStr(Global::Interval * 24) + " hr.";
-	LogDebug(S.c_str());
-
-	LogDebugT("\"start of run\".");
-	LogMessageX(" ");
-
-	Global::CRHMControlSaveCnt = 0; // set by module
-	Global::CRHMStatus = 0; // module status; module control = 1 , main control = 2 and Finished = 4. Both inhibit output.
-	Global::LoopCntDown = -1;
-	StatePar = NULL;
-	Global::ModuleBitSet.reset();
-
-	try {
-		int iter = 0;
-		for (Global::DTindx = Global::DTmin; Global::DTindx < Global::DTmax; Global::DTindx++) {
-
-			iter++;
-
-
-			if (Global::Freq == 1)
-				Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx);
-			else
-				Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
-
-			if ((double)Global::RapidAdvanceTo > 0.0 && !(Global::CRHMStatus & 4)) {
-				if (Global::DTnow < Global::RapidAdvanceTo)
-					Global::CRHMStatus |= 2; // set module control and inhibit display
-
-				else if (Global::DTnow == Global::RapidAdvanceTo + Global::Interval && !Global::LoopCnt) { // reached RapidAdvanceTo and NO looping.
-					Global::CRHMStatus &= 125; // clear status == 2 (main control) and resume display
-					LogMessage("Terminate fast loop aheadMain", DD);
-				}
-				else if (Global::DTnow == Global::RapidAdvanceTo && Global::LoopCnt) { // reached RapidAdvanceTo with looping.
-					if (Global::LoopCntDown == -1) { // first time
-						Global::LoopCntDown = Global::LoopCnt;
-						StatePar = ParFind("basin StateVars_to_Update");
-						ControlSaveState(true, StatePar, Global::RunUpBitSet); // save this position
-						LogMessage("Initialise LoopTo Main", DD);
-					}
-				}
-				else if (Global::DTnow == Global::LoopTo && Global::LoopCnt) { // reached LoopTo position
-					ControlReadState(true, StatePar); // return to earlier position
-					--Global::LoopCntDown; // after above ReadState
-					LogMessage("Reached loop Main", DD);
-					if (Global::LoopCntDown <= 0) {
-						ResetLoopList();
-						Global::CRHMStatus &= 125; // remove status == 2 (inhibit display)
-						Global::CRHMStatus |= 4; // flag done
-						Global::LoopCntDown = -1;
-						LogMessage("Terminate LoopTo Main", DD);
-						continue;
-					}
-				}
-			} // end of RapidAdvanceTo logic
-
-			  // determine which obervation files have good data
-			DoObsStatus(First);
-			// reads observations for current interval
-
-
-			//--------------------------------------------------------------------------------------------------
-			bool Reset = true;
-			for (Global::CurrentModuleRun = 0; Global::CurrentModuleRun < Global::OurModulesList->Count; Global::CurrentModuleRun++) {
-
-				long Last = Global::CRHMControlSaveCnt;
-
-				ClassModule *p = (ClassModule*)Global::OurModulesList->Objects[Global::CurrentModuleRun];
-				// Simple project for module obs. For group always when !CRHMStatus otherwise only selected groups
-
-
-				//clock_t btime = clock(); //////////////////////////////////////////////////////////////////////////////////////////////
-
-				p->ReadObs(Reset);
-				Reset = false;
-
-				//float tdiff = float(clock() - btime) / CLOCKS_PER_SEC; ///////////////////////////////////////////////////////////////
-				//ts->addTime("ReadObs", tdiff);
-
-				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {
-
-					p->run();
-
-				}
-
-				// module flag loop
-
-				if (Last != Global::CRHMControlSaveCnt) // means last module/group
-					Global::ModuleBitSet.set(Global::CurrentModuleRun);
-			} // end for
-			  //--------------------------------------------------------------------------------------------------
-
-			  // module loop control
-
-
-			if (Global::CRHMControlSaveCnt && !(Global::CRHMStatus & 1)) { // Set module mode. Save current position.
-				ControlSaveState(false, StatePar, Global::ModuleBitSet);
-				Global::CRHMStatus |= 1; // set module control bit and inhibit display.
-				LogMessage("Start save Main", DD);
-			}
-
-			// module loop control reset
-			bool DoOutput = true;
-			if ((Global::CRHMStatus & 1) && (!Global::CRHMControlSaveCnt || Global::DTindx >= Global::DTmax - 1)) { // handles daily + last day of run
-				ControlReadState(false, NULL); // restore all
-				Global::CRHMStatus &= 126; // reset module mode.
-				Global::CRHMControlSaveCnt = 0; // required for Global::DTindx >= Global::DTmax-1 condition
-				LogMessage("End save Main", DD);
-				LogDebug(" ");
-
-				if (Global::Freq == 1) {
-					Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx);
-					Global::DTindx -= 1;
-				}
-				else {
-					Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
-					Global::DTindx -= 1;
-				}
-
-				DoOutput = false;
-			}
-
-
-			if (!(Global::CRHMStatus & 7) && !(Global::CRHMControlSaveCnt) && DoOutput) { // display if not module or main controlled. why?
-
-				double xx;
-				for (int ii = 0; ii < SeriesCnt; ii++) {
-					if (mmsData[ii] != NULL) {
-						xx = *mmsData[ii];
-
-						if (xx < xLimit)
-						{
-							cdSeries[ii]->AddXY(Global::DTnow, xx);
-						}
-						else
-						{
-							cdSeries[ii]->AddXY(Global::DTnow, -9999);
-						}
-					}
-					else {
-						xx = (*mmsDataL[ii]);
-						if (xx < lLimit)
-						{
-							cdSeries[ii]->AddXY(Global::DTnow, xx);
-						}
-						else
-						{
-							cdSeries[ii]->AddXY(Global::DTnow, -9999);
-						}
-					}
-
-				}
-			}
-
-		} // end for
-
-		int d = iter;
-		Global::BuildFlag = CRHM::DECL;
-
-
-	}
-
-	catch (exception &E) {
-		//    string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
-		//    ShowMessage(S);
-		LogError(S + " (" + FloatToStrF(Global::DTnow, ffGeneral, 10, 0) + ")", ERR);
-		GoodRun = false;
-	}
-
-
-
-	/*
-	catch (CRHMException Except){
-	string S = Except.Message + string("at ") +
-	FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
-	Message(S.c_str(), string("").c_str();
-	LogError(S + " (" + FloatToStrF(Global::DTnow, ffGeneral	, 10, 0) + ")", ERR);
-	GoodRun = false;
-	}*/
-
-	Dt = StandardConverterUtility::DateTimeDt();
-	Message = string("End of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
-	LogMessageX(Message.c_str());
-
-	delete[] mmsData;
-	delete[] mmsDataL;
-
-	// deletes storage for observation read list
-	((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
-
-	// deletes module allocated storage
-	//for (int ii = 0; ii < Global::OurModulesList->Count; ii++)
-	//	((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(true);
-
-	if (GoodRun) {
-		//    LogDebugT("\"end of run\".");
-		if (ReportAll)
-			AllRprt();
-		else
-			LastRprt();
-	}
-
-	float timediff2 = float(clock() - begintime2) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
-	//ts->addTime("totaltime", timediff2);
-
-	//ts->writeStatistics();
-
-}
-//---------------------------------------------------------------------------
 
 
 //---------------------------------------------------------------------------
@@ -2791,7 +2294,7 @@ ClassPar *ParFind(string name) { // where name is concatenation of MODULE and NA
 
 
 void  CRHMmain::AllRprt(void)
-{	
+{
 	TStringList *LogList = new TStringList;
 
 	RprtHeader(LogList, SeriesCnt);
@@ -2823,7 +2326,7 @@ void  CRHMmain::AllRprt(void)
 		for (int vv = 0; vv < SeriesCnt; ++vv) {
 			if (cdSeries[0]->Count() == cdSeries[vv]->Count()) { // has to equal first series length
 				ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
-				int prec = 7;				
+				int prec = 7;
 				//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
 				/*
 				if (thisVar->varType == CRHM::Int || thisVar->varType == CRHM::ReadI)
@@ -2835,7 +2338,7 @@ void  CRHMmain::AllRprt(void)
 		}
 
 		LogList->Add(Sx);
-	}	
+	}
 
 	LogList->SaveToFile(OpenNameReport);
 
@@ -3146,7 +2649,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 		for (int ii = 0; ii < TraceVarPar->Strings->Count; ++ii) {
 			string Trimmed = Common::trim(TraceVarPar->Strings->Strings[ii]);
 			if (!Trimmed.empty()) {
-				int jj = ListBox1->IndexOf(Trimmed);
+				int jj = AllVariables->IndexOf(Trimmed);
 				if (jj > -1) {
 					for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
 						ClassVar * thisVar = VarFind(string(Global::OurModulesList->Strings[ii]) + ' ' + TraceVarPar->Strings->Strings[0]);
@@ -3154,7 +2657,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 							break;
 					} // for
 
-					thisVar = (ClassVar*)ListBox1->Objects[jj];
+					thisVar = (ClassVar*)AllVariables->Objects[jj];
 					if (thisVar) {
 						Sx += ("\t" + string(Trimmed));
 						Sy = "";
@@ -3196,7 +2699,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 
 TStringList* CRHMmain::getObservations()
 {
-	return ListBox2;
+	return AllObservations;
 }
 
 
@@ -3208,7 +2711,7 @@ TStringList* CRHMmain::getAllmodules()
 
 TStringList* CRHMmain::getVariables()
 {
-	return ListBox1;
+	return AllVariables;
 }
 
 
@@ -3566,16 +3069,16 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//if (HruNames)
 	//HruNameClick(Sender);
 
-	int c = ListBox1->Count;
+	int c = AllVariables->Count;
 
-	for (int ii = 0; ii < ListBox3->Count; ++ii) {
+	for (int ii = 0; ii < SelectedVariables->Count; ++ii) {
 
 		long lay, dim;
 
-		ExtractHruLay(ListBox3->Strings[ii], dim, lay);
+		ExtractHruLay(SelectedVariables->Strings[ii], dim, lay);
 
 		//need to modify possibly
-		ClassVar *thisVar = (ClassVar *)ListBox3->Objects[ii]; //previous code
+		ClassVar *thisVar = (ClassVar *)SelectedVariables->Objects[ii]; //previous code
 															   //ClassVar *thisVar = (ClassVar *)ii; //Manishankar's code
 
 
@@ -3616,24 +3119,24 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	string kind, lastkind;
 	Output = "";
 
-	for (int ii = 0; ii < ListBox4->Count; ii++) {
+	for (int ii = 0; ii < SelectedObservations->Count; ii++) {
 
-		string S = ListBox4->Strings[ii];
+		string S = SelectedObservations->Strings[ii];
 		string FullName;
 		long dim = 0, lay = 0;
 		kind = "_obs";
 
 
 		//need to modify
-		//string Name = ExtractHruLayFunct(ListBox4->Strings[ii], dim, lay, kind, FullName);
-		string Name = GetObservationName(ListBox4->Strings[ii]);
-		ExtractHruLay(ListBox4->Strings[ii], dim, lay);
+		//string Name = ExtractHruLayFunct(SelectedObservations->Strings[ii], dim, lay, kind, FullName);
+		string Name = GetObservationName(SelectedObservations->Strings[ii]);
+		ExtractHruLay(SelectedObservations->Strings[ii], dim, lay);
 		//string Name = "";
 
 
 		//need to modify
-		//TLineSeries *cdSeries = (TLineSeries *)ListBox4->Objects[ii];
-		TSeries *cdSeries = (TSeries *)ListBox4->Objects[ii];
+		//TLineSeries *cdSeries = (TLineSeries *)SelectedObservations->Objects[ii];
+		TSeries *cdSeries = (TSeries *)SelectedObservations->Objects[ii];
 
 		ClassVar *thisVar;
 		thisVar = NULL;
@@ -3641,15 +3144,15 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		//need to modify
 		thisVar = (ClassVar *)cdSeries->Tag; // always OK for observation
 
-		thisVar = (ClassVar *)ListBox4->Objects[ii]; //added by Manishankar for testing.
-													 //Name = ListBox4->Strings[ii];
+		thisVar = (ClassVar *)SelectedObservations->Objects[ii]; //added by Manishankar for testing.
+													 //Name = SelectedObservations->Strings[ii];
 
 
 		if (!thisVar || !thisVar->FileData) {  // VarObsFunct
 			if (!thisVar) {
-				long Indx = ListBox3->IndexOf(FullName);
+				long Indx = SelectedVariables->IndexOf(FullName);
 				if (Indx > -1)
-					thisVar = (ClassVar *)ListBox3->Objects[Indx];
+					thisVar = (ClassVar *)SelectedVariables->Objects[Indx];
 				else
 					thisVar = VarFind(string(string("obs ") + Name.c_str()));
 			}
@@ -3692,10 +3195,10 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		//long lay, dim;
 
-		//ExtractHruLay(ListBox4->Strings[ii], dim, lay);
+		//ExtractHruLay(SelectedObservations->Strings[ii], dim, lay);
 
 		////need to modify possibly
-		//ClassVar *thisVar = (ClassVar *)ListBox4->Objects[ii]; //previous code
+		//ClassVar *thisVar = (ClassVar *)SelectedObservations->Objects[ii]; //previous code
 		//													   //ClassVar *thisVar = (ClassVar *)ii; //Manishankar's code
 		//if (thisVar != NULL)
 		//{
@@ -3819,9 +3322,9 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 string CRHMmain::GetObservationName(string vname)
 {
-	for (int i = 0; i < ListBox2->Count; i++)
+	for (int i = 0; i < AllObservations->Count; i++)
 	{
-		string str = ListBox2->Strings[i];
+		string str = AllObservations->Strings[i];
 
 		int ind = vname.find(str);
 
@@ -3888,8 +3391,8 @@ void CRHMmain::ClearModules(bool All) {
 		//SaveDialogPrj->FileName = "";
 	}
 
-	ListBox1->Clear();
-	ListBox3->Clear();
+	AllVariables->Clear();
+	SelectedVariables->Clear();
 
 	if (cdSeries) {
 		//for (int ii = 0; ii < SeriesCnt; ii++)

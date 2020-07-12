@@ -91,15 +91,15 @@ public:
 	//	string ProjectDirectory;
 	string ApplicationDir;
 
-	TStringList *ListBox1;
-	TStringList *ListBox2;
-	TStringList *ListBox3;
-	TStringList *ListBox4;
+	TStringList *AllVariables; //manishankar used this meaningful variable name instead of ListBox1.
+	TStringList *AllObservations; //manishankar used this meaningful variable name instead of ListBox2.
+	TStringList *SelectedVariables; //manishankar used this meaningful variable name instead of ListBox3.
+	TStringList *SelectedObservations; //manishankar used this meaningful variable name instead of ListBox4.
 	TStringList *queryResult;
 
 
-	double Picker1; // replaces graphic controls
-	double Picker2;
+	double StartDatePicker; // replaces graphic controls. manishankar Picker1 was replaced by StartDatePicker
+	double EndDatePicker; //manishankar Picker2 was replaced by EndDatePicker
 
 
 
@@ -202,7 +202,6 @@ public:
 	void RunClick2Middle(MMSData * mmsdata, long startdate, long enddate);
 	void RunClick2End(MMSData * mmsdata);
 	void RunClick(void);
-	void RunClickOld(void);
 	void CheckBlankModule();
 	void AllRprt();
 	void  ControlReadState(bool MainLoop, ClassPar * VarPar);
