@@ -7,7 +7,9 @@
 
 #include "Common.h"
 
-#include <math.h>
+//#include <math.h>
+#include <cmath>
+
 #include <algorithm>
 #include <limits>
 

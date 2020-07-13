@@ -6,7 +6,8 @@
 #include "GlobalDll.h"
 #include <sstream>
 
-#include <math.h>
+//#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
