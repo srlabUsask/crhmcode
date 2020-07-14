@@ -54,6 +54,7 @@ void finish(bool good);
 ClassNOP* klone(string name) const;
 };
 
+/*
 class Classbasin : public ClassModule {
 public:
 
@@ -88,6 +89,7 @@ void init(void);
 
 Classbasin* klone(string name) const;
 };
+*/
 
 class Classglobal : public ClassModule {
 public:

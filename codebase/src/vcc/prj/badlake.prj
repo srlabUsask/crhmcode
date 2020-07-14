@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 7/13/2020 12:32
+###### Version NON DLL 4.02  Creation: 7/14/2020 1:55
 Dimensions:
 ######
 nhru 3
@@ -11,7 +11,7 @@ Macros:
 ######
 Observations:
 ######
-obs/Badlake73_76.obs
+D:\CRHM\DemoMacroTesting\observations\Badlake73_76.obs
 ######
 Dates:
 ######
@@ -227,6 +227,7 @@ pbsm SWE 1 2 3
 ######
 Display_Observation:
 ######
+obs SunAct 1 _obs
 obs rh 1 _obs
 obs t 1 _obs
 obs u 1 _obs

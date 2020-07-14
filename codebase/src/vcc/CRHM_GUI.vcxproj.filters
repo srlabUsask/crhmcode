@@ -1559,6 +1559,9 @@
     <ClCompile Include="..\plugins\waterquality\WQ_Soil_NPCcycling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\plugins\newmodules\Basin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CRHMGUI.rc">

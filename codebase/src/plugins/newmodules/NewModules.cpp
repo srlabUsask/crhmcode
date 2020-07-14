@@ -19,6 +19,8 @@
 #include <fstream>
 #include <bitset>
 
+#include "Basin.h" //added by Manishankar Mondal
+
 //---------------------------------------------------------------------------
 
 #pragma package(smart_init)
@@ -275,6 +277,7 @@ void ClassNOP::finish(bool good) {
   LogDebug(" ");
 }
 
+/*
 Classbasin* Classbasin::klone(string name) const{
   return new Classbasin(name);
 }
@@ -370,6 +373,7 @@ void Classbasin::init(void) {
     Global::LoopCnt = 0;
   }
 }
+*/
 
 Classglobal* Classglobal::klone(string name) const{
   return new Classglobal(name);
