@@ -219,7 +219,9 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	ifstream DataFile;
 	long Variation;
 
-	char module[80], param[80], Descrip[80], Line[80], name[80];
+	const int CharLength = 180;
+	char module[CharLength], param[CharLength], Descrip[CharLength], Line[CharLength], name[CharLength];
+	//string module, param, Descrip, Line, name;
 	string S, s;
 	string SS;
 
@@ -250,9 +252,9 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 	bool Prj = Common::lowercase(OpenNamePrj).find(".prj") != string::npos;
 
-	DataFile.getline(Descrip, 80);
-	DataFile.ignore(80, '#');
-	DataFile.getline(Line, 80);
+	DataFile.getline(Descrip, CharLength);
+	DataFile.ignore(CharLength, '#');
+	DataFile.getline(Line, CharLength);
 
 	Global::MacroModulesList->Clear();
 
@@ -284,8 +286,8 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 			DataFile >> S;
 			if (DataFile.eof()) break;
 
-			DataFile.ignore(80, '#');
-			DataFile.getline(Line, 80);
+			DataFile.ignore(CharLength, '#');
+			DataFile.getline(Line, CharLength);
 
 			if (S == "AKAs:") {
 				string module, type, name, alias, source;
@@ -471,7 +473,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 					if (DataFile.eof()) return; // final exit
 
-					DataFile.ignore(80, '\n'); // need for character input, why?
+					DataFile.ignore(CharLength, '\n'); // need for character input, why?
 					S = "";
 
 					do { // determine # columns
@@ -744,7 +746,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					else
 						OpenNameState = "";
 
-					DataFile.ignore(80, '#');
+					DataFile.ignore(CharLength, '#');
 					DataFile >> S;
 				}
 			}
