@@ -219,7 +219,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	ifstream DataFile;
 	long Variation;
 
-	const int CharLength = 180;
+	const int CharLength = 180; //added by Manishankar.
 	char module[CharLength], param[CharLength], Descrip[CharLength], Line[CharLength], name[CharLength];
 	//string module, param, Descrip, Line, name;
 	string S, s;

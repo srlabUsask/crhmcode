@@ -1559,7 +1559,16 @@
     <ClCompile Include="..\plugins\waterquality\WQ_Soil_NPCcycling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\newmodules\Basin.cpp">
+    <ClCompile Include="..\plugins\newmodules\ClassBasin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\newmodules\ClassGlobal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\newmodules\ClassObs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\newmodules\ClassIntcp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

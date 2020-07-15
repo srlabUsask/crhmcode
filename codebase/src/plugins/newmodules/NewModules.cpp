@@ -19,7 +19,10 @@
 #include <fstream>
 #include <bitset>
 
-#include "Basin.h" //added by Manishankar Mondal
+#include "ClassBasin.h" //added by Manishankar Mondal
+#include "ClassGlobal.h" //added by Manishankar Mondal
+#include "ClassObs.h" //added by Manishankar Mondal
+#include "ClassIntcp.h" //added by Manishankar Mondal
 
 //---------------------------------------------------------------------------
 
@@ -277,1014 +280,1014 @@ void ClassNOP::finish(bool good) {
   LogDebug(" ");
 }
 
-/*
-Classbasin* Classbasin::klone(string name) const{
-  return new Classbasin(name);
-}
 
-void Classbasin::decl(void) {
-
-  Description = "'Holds commonly used physical and control parameters.'";
-
-  decldiagparam("RUN_ID", BASIN, "1", "-1E8", "+1E8", "run identification. If RUN_ID > 0 then the log file default name 'CRHM_output' with extensions .sum, .log OR .txt is expanded to 'CRHM_output_ID'.", "()", &RUN_ID);
-
-  decldiagparam("RUN_START", BASIN, "0", "0", "+1E5", "run start time (Automation)", "(d)", &RUN_START);
-
-  decldiagparam("RUN_END", BASIN, "0", "0", "+1E5", "run end time (Automation)", "(d)", &RUN_END);
-
-  INIT_STATE = decldiagparam("INIT_STATE", BASIN, "", "Initial state file (Automation)", INIT_STATE);
-
-
-  declvar("run_ID", BASIN, "run identification", "()", &run_ID);
-
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
-
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
-
-  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(Â°)", &hru_lat);
-
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
-
-  declparam("hru_GSL", NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(Â°)", &hru_GSL);
-
-  declparam("hru_ASL", NHRU, "0.0", "0.0", "360.0", "aspect, 0/90/180/270 - north/east/south/west facing for positive GSL.", "(Â°)", &hru_ASL);
-
-
-  hru_names = declparam("hru_names", NHRU, "'HRU'", "HRU names", hru_names);
-
-  basin_name = declparam("basin_name", BASIN, "Basin", "Basin name", basin_name);
-
-  RapidAdvance_to = decldiagparam("RapidAdvance_to", ONE, "' ', ' ', ' '", "Rapid advance to this date formatted as 'mm/dd/yyyy'", RapidAdvance_to);
-
-  Loop_to = decldiagparam("Loop_to", TWO, "' ', ' '", "loop to this date formatted as 'mm/dd/yyyy', 0 - # loops", Loop_to);
-
-  StateVars_to_Update = decldiagparam("StateVars_to_Update", TEN, "' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '", "run up these state variables.",  StateVars_to_Update);
-
-  TraceVars = decldiagparam("TraceVars", TEN, "' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '", "Trace these variables at end of loop during run up.",  TraceVars);
-}
-
-void Classbasin::init(void) {
-
-  run_ID[0] = RUN_ID[0];  // transfer run identification
-
-  float totarea = 0;
-  nhru = getdim(NHRU);
-
-  for(hh = 0; hh < nhru; ++hh)
-    totarea += hru_area[hh];
-
-  if(fabs((totarea-basin_area[0])/basin_area[0]) > 1e-3){
-    const_cast<float *>  (basin_area)[0] = totarea;
-    CRHMException TExcept(string(string("Sum of HRU's area <> Basin area, Basin area made = ") + FloatToStrF(totarea, ffGeneral, 3, 0)).c_str(), WARNING);
-    LogError(TExcept);
-  }
-
-  Global::RapidAdvanceTo = 0;
-  Global::LoopTo = 0;
-  Global::LoopCnt = 0;
-
-  try{
-	  if (RapidAdvance_to->Count > 0)
-	  {
-		  if (RapidAdvance_to->Strings[0].length() > 0) {
-			  RapidAdvance_to->Strings[0] = Common::trim(RapidAdvance_to->Strings[0]);
-			  if (RapidAdvance_to->Strings[0].length() > 0)
-				  Global::RapidAdvanceTo = StrToDate(RapidAdvance_to->Strings[0]);
-		  }
-	  }
-	  if (Loop_to->Count > 0)
-	  {
-		  if (Loop_to->Strings[0].length() > 0) {
-			  Loop_to->Strings[0] = Common::trim(Loop_to->Strings[0]);
-			  Loop_to->Strings[1] = Common::trim(Loop_to->Strings[1]);
-			  if (Loop_to->Strings[0].length() > 0)
-				  Global::LoopTo = StrToDate(Loop_to->Strings[0]);
-			  if (Loop_to->Strings[1].length() > 0)
-				  Global::LoopCnt = Strtolong(Loop_to->Strings[1]);
-		  }
-	  }
-  }
-
-  catch (...){
-    CRHMException TExcept("Error in 'RapidAdvance_to' or 'Loop_to' parameters", TERMINATE);
-    LogError(TExcept);
-    Global::RapidAdvanceTo = 0;
-    Global::LoopTo = 0;
-    Global::LoopCnt = 0;
-  }
-}
-*/
-
-Classglobal* Classglobal::klone(string name) const{
-  return new Classglobal(name);
-}
-
-void Classglobal::decl(void) {
-
-  Description = "'Calculate theoretical short_wave radiation using method proposed by Garnier and Ohmura (1970).'";
-
-  declvar("QdroD", NHRU, "daily clear-sky direct", "(MJ/m^2*d)", &QdroD);
-
-  declvar("QdroDext", NHRU, "daily ExtraTerrestrial direct", "(MJ/m^2*d)", &QdroDext);
-
-  declvar("QdfoD", NHRU, "daily average clear-sky diffuse", "(MJ/m^2*d)", &QdfoD);
-
-  declvar("Qdro", NHRU, "clear-sky direct", "(W/m^2)", &Qdro);
-
-  declvar("Qdfo", NHRU, "clear-sky diffuse", "(W/m^2)", &Qdfo);
-
-  declvar("Qdflat", NHRU, "clear-sky 'Qdro + Qdfo' on horizontal surface", "(W/m^2)", &Qdflat);
-
-  declvar("QdflatE", NHRU, "'Qdro' on horizontal surface, no atmosheric attenuation", "(W/m^2)", &QdflatE);
-
-  declvar("QdflatD", NHRU, "daily clear-sky Qdro (with diffuse) on horizontal surface", "(MJ/m^2*d)", &QdflatD);
-
-  declvar("SolAng", NHRU, "Solar Angle", "(r)", &SolAng);
-
-  declvar("SunMax", NHRU, "maximum sunshine hours", "(h)", &SunMax);
-
-  declvar("cosxs", NHRU, "cosine of the angle of incidence on the slope", "()", &cosxs);
-
-  declvar("cosxsflat", NHRU, "cosine of the angle of incidence on the horizontal", "()", &cosxsflat);
-
-  declvar("pQdro", NFREQ, "clear-sky direct", "(MJ/m^2*int)", &pQdro, &pQdro_FREQ, 0, true, false, CRHM::PRIVATE);
-
-  declvar("pQdfo", NFREQ, "clear-sky diffuse", "(MJ/m^2*int)", &pQdfo, &pQdfo_FREQ, 0, true, false, CRHM::PRIVATE);
-
-  declvar("pQdflat", NFREQ, "Qdro + Qdfo on horizontal surface", "(MJ/m^2*int)", &pQdflat, &pQdflat_FREQ, 0, true, false, CRHM::PRIVATE);
-
-  declvar("pQdflatE", NFREQ, "Qdro on horizontal surface with no atmospheric attenuation", "(MJ/m^2*int)", &pQdflatE, &pQdflatE_FREQ, 0, true, false, CRHM::PRIVATE);
-
-  declvar("pSol", NFREQ, "Solar Angle", "(r)", &pSol, &pSol_FREQ, 0, true, false, CRHM::PRIVATE);
-
-  declvar("pCosxs", NFREQ, "Cos(x^s)", "(r)", &pCosxs, &pCosxs_FREQ, 0, true, false, CRHM::PRIVATE);
-
-  declvar("pCosxs0", NFREQ, "Cos(x^s) on the horizontal", "(r)", &pCosxs0, &pCosxs0_FREQ, 0, true, false, CRHM::PRIVATE);
-
-
-// parameters
-
-  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(Â°)", &hru_lat);
-
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
-
-  declparam("hru_GSL", NHRU, "0.0", "-90.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(Â°)", &hru_GSL);
-
-  declparam("hru_ASL", NHRU, "0.0", "-360.0", "360.0","aspect, 0/90/180/270 - north/east/south/west facing for positive GSL.", "(Â°)", &hru_ASL);
-
-  declparam("Time_Offset", NHRU, "0.0", "-12.0", "12.0","solar time offset from local time", "(h)", &Time_Offset);
-
-}
-
-const float DEGtoRAD = M_PI/180.0;
-const float DEGtoRAD365 = 2*M_PI/365.0;
-const long CalcFreq = 288;
-const float RADxxMIN = 2.0*M_PI/CalcFreq;
-const float MINS_int = 24.0*60.0/CalcFreq;
-
-void Classglobal::init(void) {
-
-  nhru = getdim(NHRU);
-
-  int Integer = CalcFreq/Global::Freq;
-
-  int Remainder = CalcFreq%Global::Freq;
-
-  if(Remainder != 0 || Integer < 1){
-    CRHMException TExcept("\"288/(first observation frequency)\" must be an integer > one!", TERMINATE);
-    LogError(TExcept);
-  }
-
-}
-
-void Classglobal::air_mass (const float czen, float &oam){
-
-  float diff;
-
-  float Z = acos(czen);
-  oam = fabs(1.0f/(czen + 0.50572f*pow(96.07995f-Z, -1.6364f)));       // oam by cosecant approx.
-
-  if(oam < 2.9)                          // zenith < 70 deg
-    return;
-  else if(oam < 16.38) {                 // zenith < 86.5 deg
-    diff = pow(10.0f, 2.247f*log10(oam) - 2.104f);
-    oam = oam - diff;
-    return;
-    }
-  else if(oam <= 114.6){                 // zenith < 89.5 deg
-	diff = pow(10.0f, 1.576f*log10(oam) - 1.279f);
-    oam = oam - diff;
-    return;
-  }
-
-  oam = 30.0;                             // computed oam >114.6
-}
-
-void Classglobal::run(void) {
-
-/*   calculate daily incoming short wave radiation
-
-     calculate direct and diffuse solar radiation on a slope in mj/m^2*d
-          for a surface at given slope and azimuth
-          for any given day and transmissivity
-          account cloud cover empirically
-
-      written by Pat Landine
-                 Division of Hydrology
-                 University of Sask.
-
-            ref. B.J. Garnier and Atsuma Ohmura
-                 A method of calculating the direct shortwave
-                 radiation income of slopes
-                 Jour. of Applied Meteorology vol.7 1968
-
-      incident shortwave radiation
-
-         id = (sol/rad_vec**2)*integral{(trans**oam)*cos(x^s)*dh}
-
-              sol      = solar constant
-              rad_vec  = radius vector of the earth'S orbit
-              trans    = mean transmissivity of the atmosphere
-              oam      = optical air mass
-              cos(x^s) = cosine of the angle of incidence  of the
-                         sun'S rays on the slope (x is a unit normal
-                         vector pointing away from the surface and
-                         s is the unit vector expressing the sun'S
-                         position.
-              h        = hour angle measured from solar noon.
-                         (15 deg./hour or pi/12 rad/hour)
-
-                integration is performed as an addition of a series of
-                MINS_int minute intervals
-
-       diffuse clear sky radiation
-
-           Qdfo = 0.5*[(1 - aw - ao)*it - id]*(cos(gslope/2))**2
-
-              aw     = radiation absorbed by water vapour (assumed = 7%
-              aw     = radiation absorbed by ozone (assumed = 2%)
-              gslope = gradient of slope
-
-              it = (sol/rad_vec**2)*integral{czen*dh}
-
-                 czen = cosine of the sun'S zenith angle
-
-       cloud cover adjustment
-
-           ig = (id + Qdfo)
-
-       variable description
-
-           aslope = azimuth of the slope
-           dec    = declination of the sun above or below the equator
-           day = day of the calendar year
-
-      use phys_constants
-*/
-
-  long Period, Day;
-
-  float Trans, Dec, Rad_vec, Sol, Clat, Slat, Cdec, Sdec, Hr_Ang;
-  float Czen, t1, t2, x, y, z, Oam;
-  float cosxsL, cosxs0, t10, t20;
-  float It, Id, diffuse, Sum_Id, Sum_Diff, Sum_Sol, Sum_cosxs, Sum_cosxs0, Sum_Ext, Sum_Flatd, Sum_Flatf;
-
-  Period = (getstep()-1)%Global::Freq;
-
-  if(Period == 0 || getstep() == 1){
-
-    for (hh = 0; hh < nhru; ++hh) {
-
-      Day = julian("now");
-      if(Global::Freq <= 1) --Day;  // if daily 00:00 is the next day
-
-      Trans = 0.818;
-
-      Dec = sin((Day - 81) * DEGtoRAD365) * 0.40928;     // Declination
-
-      Rad_vec = .01676*cos(M_PI-0.017262*(Day-3))+1.0;   // radius vector
-      Sol = 0.0819/(Rad_vec*Rad_vec);                    // solar constant  mj/m**2*min or 117.936 mj/m**2*day
-
-// calculate sines and cosines
-
-      Clat = cos(hru_lat[hh]*DEGtoRAD);
-      Slat = sin(hru_lat[hh]*DEGtoRAD);
-      Cdec = cos(Dec);
-      Sdec = sin(Dec);
-
-// set constants and initial values
-
-      SunMax[hh] = 0.0;                 // no. of sunshine hours in 10ths.
-      QdroD[hh] = 0.0;
-      QdroDext[hh] = 0.0;
-      QdfoD[hh] = 0.0;
-      QdflatD[hh] = 0.0;
-      Sum_Id = 0.0;
-      Sum_Diff = 0.0;
-      Sum_Sol = 0.0;
-      Sum_cosxs = 0.0;
-      Sum_cosxs0 = 0.0;
-      Sum_Ext = 0.0;
-      Sum_Flatd = 0.0;
-      Sum_Flatf = 0.0;
-
-/*     cos(x^s) = [(Slat * cos(Hr_Ang) * (-cos(ASL) * sin(GSL))
-                    - sin(Hr_Ang) * (sin(ASL) * sin(GSL))
-                    + (Clat * cos(Hr_Ang)) * cos(GSL)] * Cdec
-                    + [Clat * (cos(ASL) * sin(GSL))
-                    + Slat * cos(GSL)] * Sdec */
-
-      x = -cos(hru_ASL[hh]*DEGtoRAD) * sin(hru_GSL[hh]*DEGtoRAD);
-      y = sin(hru_ASL[hh]*DEGtoRAD) * sin(hru_GSL[hh]*DEGtoRAD);   //  compute constant
-      z = cos(hru_GSL[hh]*DEGtoRAD);                               //  components of cos(x^s)
-      t1 = (x*Slat + z*Clat)* Cdec;
-      t2 = (-x*Clat + z*Slat)* Sdec;
-
-      t10 = Clat* Cdec;
-      t20 = Slat* Sdec;
-
-      Hr_Ang = -M_PI*(1.0 + Time_Offset[hh]/12.0);
-
-      for(long jj = 0; jj < CalcFreq; ++jj, Hr_Ang+=RADxxMIN){ // CalcFreq periods/day
-
-        Czen = Cdec*Clat*cos(Hr_Ang) + Sdec*Slat;  // cos of zenith angle
-        diffuse = 0.0;
-
-        if(Czen > 0.0) {
-          Sum_Sol = Sum_Sol + M_PI/2.0f - acos(Czen);
-
-          SunMax[hh] = SunMax[hh] + MINS_int; // sum sunshine minutes
-          It = MINS_int*Sol*Czen;           // extra-ter. rad for MINS_int minute interval
-
-          cosxs0 = t10*cos(Hr_Ang);
-          cosxs0 = cosxs0 + t20;
-// horzontal
-          if(cosxs0 > 0.0){      // not in shadow
-            Sum_cosxs0 += cosxs0;
-
-            air_mass (Czen, Oam); // get optical air mass
-	    Oam = Oam*pow((288.0f-0.0065f*hru_elev[hh])/288.0f, 5.256f);  // correction
-
-            Id = MINS_int*Sol*cosxs0; // direct rad. for MINS_int minute interval
-            Sum_Ext += Id;
-
-            Id = Id*pow(Trans, Oam); // direct rad. for MINS_int minute interval
-
-// List (1968) diffuse = 0.5((1-aw-ac)Qa - Id) where
-// aw = radiation absorbed by water vapour (7%)
-// ac = radiation absorbed by ozone (2%)
-
-            diffuse = 0.5f*(0.91f*It-Id);      // Diffuse radiation on horizontal
-            Sum_Flatf += diffuse;
-            Sum_Flatd += Id;
-          }
-
-          cosxsL = -y*sin(Hr_Ang)*Cdec + t1*cos(Hr_Ang);
-          cosxsL = cosxsL + t2;
-
-          if(cosxsL > 0.0) {       // slope not in shadow
-            Sum_cosxs += cosxsL;
-
-            air_mass (Czen, Oam); // get optical air mass
-            Oam = Oam*pow((288.0f-0.0065f*hru_elev[hh])/288.0f, 5.256f);  // correction
-
-            Id = MINS_int*Sol*cosxsL;     // direct rad. for MINS_int minute interval
-            Id = Id*pow(Trans, Oam);
-
-            Sum_Id += Id;
-          }
-
-          diffuse = diffuse*sqr(cos(hru_GSL[hh]/2.0)); // on slope
-
-          Sum_Diff += diffuse;
-
-        } // end if
-
-        if (!((jj+1) % (CalcFreq/Global::Freq))) {
-
-          int kk = jj/(CalcFreq/Global::Freq);
-          pQdro_FREQ[kk][hh] = Sum_Id;     // direct radiation
-          pQdfo_FREQ[kk][hh] = Sum_Diff;   // diffuse radiation
-          pQdflat_FREQ[kk][hh] = (Sum_Flatd + Sum_Flatf); // level direct + diffuse radiation
-          pQdflatE_FREQ[kk][hh] = Sum_Ext; // level direct no atmospheric attenuation
-          pSol_FREQ[kk][hh] = Sum_Sol/(CalcFreq/Global::Freq);  // solar angle
-          pCosxs_FREQ[kk][hh] = Sum_cosxs/(CalcFreq/Global::Freq);  // solar angle
-          pCosxs0_FREQ[kk][hh] = Sum_cosxs0/(CalcFreq/Global::Freq);  // solar angle
-
-          QdroD[hh]    += Sum_Id;   // direct radiation
-          QdroDext[hh] += Sum_Ext;  // ExtraTerrestrial radiation
-          QdfoD[hh]    += Sum_Diff; // diffuse radiation
-          QdflatD[hh]  += Sum_Flatd + Sum_Flatf; // level direct
-
-          Sum_Id = 0.0;
-          Sum_Diff = 0.0;
-          Sum_Sol = 0.0;
-          Sum_cosxs = 0.0;
-          Sum_cosxs0 = 0.0;
-          Sum_Ext = 0.0;
-          Sum_Flatd = 0.0;
-          Sum_Flatf = 0.0;
-        }
-
-      } // end for
-      SunMax[hh] = SunMax[hh]/60.0;        // convert to hours*10
-
-      Hr_Ang = 0.0;
-    } // end for hh
-  } // end if - Entire day calculated
-
-  for (hh = 0; hh < nhru; ++hh) {
-    Qdro[hh] =    pQdro_FREQ[Period][hh]*1E6/86400*Global::Freq; // MJ/m^2.int to W/m^2
-    Qdfo[hh] =    pQdfo_FREQ[Period][hh]*1E6/86400*Global::Freq; // MJ/m^2.int to W/m^2
-    Qdflat[hh] =  pQdflat_FREQ[Period][hh]*1E6/86400*Global::Freq; // MJ/m^2.int to W/m^2
-    QdflatE[hh] = pQdflatE_FREQ[Period][hh]*1E6/86400*Global::Freq; // MJ/m^2.int to W/m^2
-    SolAng[hh] =  pSol_FREQ[Period][hh];
-    cosxs[hh] =   pCosxs_FREQ[Period][hh];
-    cosxsflat[hh] =   pCosxs0_FREQ[Period][hh];
-  } // end if
-}
-
-Classobs* Classobs::klone(string name) const{
-  return new Classobs(name, "07/05/06");
-}
-
-void Classobs::decl(void) {
-
-  Description = "'Converts measurement observations to HRU variables with corrections,' \
-                 'original interval version,' \
-                 'daily interval version for Annandale (additional inputs are observations t_min and t_max),' \
-                 'inputs rain and snow observations (p and ppt not used)).'";
-
-  variation_set = VARIATION_ORG;
-
-  if(Global::nlay < 2){
-    Global::nlay = 2;
-    Global::maxlay = 2;
-  }
-
-  decldiagparam("HRU_OBS", NDEFN, "[1, 2, 3!]", "1", "100", "observation indirection table ([1] - t, rh and ea, [2] - p and ppt, [3] - u, [4] - Q, [5] - misc)", "()", &HRU_OBS, &HRU_OBS_Tables, 5);
-
-  declparam("obs_elev", NDEFN, "[0]", "0.0", "100000.0", "observation measurement altitude table ([1] - t, rh and ea, [2] - p and ppt", "(m)", &obs_elev, &obs_elev_Tables, 2);
-
-  declparam("hru_elev", NHRU, "[0]", "0.0", "100000.0", "HRU altitude", "(m)", &hru_elev);
-
-  declparam("lapse_rate", NHRU, "[0.75]", "0", "2", "temperature lapse rate", "(Â°C/100m)", &lapse_rate);
-
-  decldiagparam("precip_elev_adj", NHRU, "[0.0]", "-1.0", "1.0", "precipitation height adjustment {adjusted p(or ppt) = p(or ppt)*(1.0 + precip_elev_adj*elev_difference/100)}", "(1/100m)", &precip_elev_adj);
-
-  decldiagparam("ElevChng_flag", NHRU, "[0]", "0", "1", "Elevation change control; 0 - maintain RH, 1 - keep Vp within Vsat maximum", "()", &ElevChng_flag);
-
-  decldiagparam("ClimChng_flag", NHRU, "[0]", "0", "1", "Climate change control; 0 - maintain RH, 1 - keep Vp within Vsat maximum", "()", &ClimChng_flag);
-
-  decldiagparam("ClimChng_t", NHRU, "[0]", "-50", "+50", "Climate change additive temperature change.", "(Â°C)", &ClimChng_t);
-
-  decldiagparam("ClimChng_precip", NHRU, "[1]", "0.0", "10", "Climate change multiplative p/ppt change.", "()", &ClimChng_precip);
-
-  Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
-
-  Global::Warming_t = const_cast<float *> (this->ClimChng_t); // must be here to load do_t_day etc.
-
-  Global::Warming_p = const_cast<float *> (this->ClimChng_precip); // must be here to load do_p etc.
-
-
-  declreadobs("u", NHRU, "wind velocity", "(m/s)", &u, HRU_OBS_u);
-
-  declreadobs("ppt", NHRU, "daily precipitation", "(mm/d)", &ppt, HRU_OBS_p_ppt, true);
-
-  declreadobs("p", NHRU, "interval precipitation", "(mm/int)", &p, HRU_OBS_p_ppt, true);
-
-
-  decldiag("t_obs", NFREQ, "observation temperature before modification by lapse rate and global warning", "(Â°C)", &t_obs, &t_obs_lay);
-
-
-  declvar("hru_t", NHRU, "temperature", "(Â°C)", &hru_t);
-
-  declvar("hru_rh", NHRU, "relative humidity", "(%)", &hru_rh);
-
-  declvar("hru_ea", NHRU, "HRU vapour pressure", "(kPa)", &hru_ea);
-
-  decldiag("hru_estar", NHRU, "HRU saturation vapour pressure", "(kPa)", &hru_estar);
-
-  declvar("hru_u", NHRU, "wind velocity", "(m/s)", &hru_u);
-
-  declvar("hru_p", NHRU, "total precip (includes snow catch adjustment", "(mm/int)", &hru_p);
-
-  declvar("hru_rain", NHRU, "rain", "(mm/int)", &hru_rain);
-
-  declvar("Pa", NHRU, "average surface pressure", "(kPa)", &Pa);
-
-  decllocal("DTindx", ONE, "main loop Index", "()", &DTindx);
-
-  decllocal("DTnow", ONE, "main loop Time", "()", &DTnow);
-
-  declstatdiag("cumhru_rain", NHRU, "cumulative HRU rain", "(mm)", &cumhru_rain);
-
-  declvar("hru_snow", NHRU, "snow", "(mm/int)", &hru_snow);
-
-  declstatdiag("cumhru_snow", NHRU, "cumulative HRU snow", "(mm)", &cumhru_snow);
-
-  declstatdiag("cumhru_snow_meas", NHRU, "cumulative HRU snow catch adjustment", "(mm)", &cumhru_snow_meas);
-
-  declvar("hru_tmax", NHRU, "max daily temp", "(Â°C)", &hru_tmax);
-
-  declvar("hru_tmin", NHRU, "min daily temp", "(Â°C)", &hru_tmin);
-
-  declvar("hru_tmean", NHRU, "mean daily temp", "(Â°C)", &hru_tmean);
-
-  declvar("hru_eamean", NHRU, "mean daily vapour pressure", "(kPa)", &hru_eamean);
-
-  declvar("hru_umean", NHRU, "mean daily wind", "(m/s)", &hru_umean);
-
-  declvar("hru_rhmean", NHRU,"daily mean relative humidity", "(%)", &hru_rhmean);
-
-  declvar("hru_newsnow", NHRU, "new snow on HRU - 0=no, 1=yes", "()", &hru_newsnow);
-
-
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
-
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
-
-  Global::RH_EA_obs = -1;
-
-  decldiag("Tday", NFREQ, "observation t unavailable", "(Â°C)", &NotUsed, &tday_intvls);
-  Exist = declobsfunc("t", "Tday", &NotUsed, INTVL, &tday_intvls);
-
-  decldiag("RHday", NFREQ, "observation rh unavailable", "(kPa)", &NotUsed, &rhday_intvls);
-  Exist = declobsfunc("rh", "RHday", &NotUsed, INTVL, &rhday_intvls, true);
-
-  if(Exist >= 0)
-    Global::RH_EA_obs = 0;
-
-  decldiag("EAday", NFREQ, "observation ea unavailable", "(kPa)", &NotUsed, &eaday_intvls);
-  Exist = declobsfunc("ea", "EAday", &NotUsed, INTVL, &eaday_intvls, true);
-
-  if(Exist >= 0)
-    if(Global::RH_EA_obs < 0){
-      Global::RH_EA_obs = 1;
-      CRHMException TExcept("The obs module is using the observation ea instead of RH. This is not yet implemented.\
-      An optioin is to use the filter '$rh rh(t, ea)' in the observarion file before the separator line,\
-      '########################################'", TERMINATE);
-      LogError(TExcept);
-    }
-
-  declobsfunc("u", "Umean", &umean, AVG);
-
-  declobsfunc("ppt", "pptD", &pptD, FIRST, NULL, true);
-
-  declobsfunc("p", "p", const_cast<float **> (&p), FOBS, NULL, true);
-
-
-  variation_set = VARIATION_0 + VARIATION_1;
-
-  declparam("catchadjust", NHRU, "[0]", "0", "3", "none - 0/Nipher - 1/MacDonald-Alter - 2 (not recommended)/Smith-Alter - 3", "()", &catchadjust);
-
-  decldiagparam("ppt_daily_distrib", NHRU, "[1]", "0", "1", "0 - daily precip in first interval, 1 - equally divided over the day", "()", &ppt_daily_distrib);
-
-  declparam("snow_rain_determination", NHRU, "[0]", "0", "2", "snow/rain determination: 0 - air temperature, 1 - ice bulb temperature, 2 - Harder", "()", &snow_rain_determination);
-
-  decldiagparam("tmax_allrain", NHRU, "[4.0]", "-10", "10", "precip all rain if HRU air/ice bulb temperature above or equal to this value. Not used in Harder method.",
-    "(Â°C)", &tmax_allrain);
-
-  decldiagparam("tmax_allsnow", NHRU, "[0.0]", "-10", "10", "precip all snow if HRU air/ice bulb temperature below this value. Not used in Harder method",
-    "(Â°C)", &tmax_allsnow);
-
-
-  variation_set = VARIATION_1;
-
-  declreadobs("t_max", NHRU, " daily maximum temperature", "(Â°C)", &t_max, HRU_OBS_t_rh_ea);
-
-  declreadobs("t_min", NHRU, " daily minimumn temperature", "(Â°C)", &t_min, HRU_OBS_t_rh_ea);
-
-
-  variation_set = VARIATION_2;
-
-  declreadobs("obs_snow", NHRU, "snow observation", "(mm)", &obs_snow, HRU_OBS_Q);
-
-  declreadobs("obs_rain", NHRU, "rain observation", "(mm)", &obs_rain, HRU_OBS_Q);
-
-
-  variation_set = VARIATION_ORG;
-}
-
-void Classobs::init(void) {
-
-  if(this->GroupCnt < 2){ // display for simple project and first group
-
-    if(ppt == NULL && p == NULL && variation != VARIATION_2){
-      CRHMException TExcept("No precipitation data.  Both p and ppt not available!", TERMINATE);
-      LogError(TExcept);
-    }
-
-    if(ppt){
-      CRHMException TExcept("using daily precipitation (ppt) observation.", WARNING);
-      LogError(TExcept);
-    }
-
-    if(p){
-      CRHMException TExcept("using interval precipitation (p) observation.", WARNING);
-      LogError(TExcept);
-    }
-
-    if(variation == VARIATION_1 && Global::Freq != 1){
-      CRHMException TExcept("obs#1 (using daily maximun/minimum temperatures) only works with daily data", TERMINATE);
-      LogError(TExcept);
-    }
-
-    if(Global::RH_EA_obs == -1){
-      CRHMException TExcept("No psychrometric data.  Both relative humidity (rh) and vapour pressure (ea) observations not available.", TERMINATE);
-      LogError(TExcept);
-    }
-    else if(Global::RH_EA_obs == 1){
-      CRHMException TExcept("using vapour pressure (ea) observation.", WARNING);
-      LogError(TExcept);
-    }
-    else if(Global::RH_EA_obs == 0){
-      CRHMException TExcept("using relative humidity (rh) observation.", WARNING);
-      LogError(TExcept);
-    }
-  }
-
-  nhru = getdim(NHRU);
-  nobs = getdim(NOBS);
-
-  for(hh = 0; hh < nhru; ++hh) {
-    cumhru_rain[hh] = 0.0;
-    cumhru_snow[hh] = 0.0;
-    cumhru_snow_meas[hh] = 0.0;
-
-    Pa[hh] = 101.3f*pow((293.0f-0.0065f*hru_elev[hh])/293.0f, 5.26f);  // kPa
-
-    DTnow[0] = 0.0;
-    DTindx[0] = 0;
-  }
-
-  Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
-
-}
-
-void Classobs::pre_run(void) {
-
-  Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
-
-  Global::OBS_ELEV = const_cast<float **> (obs_elev_Tables);
-
-  Global::obs_t = const_cast<float **> (this->tday_intvls);
-
-  Global::obs_ea = const_cast<float **> (this->eaday_intvls);
-
-  Global::obs_rh = const_cast<float **> (this->rhday_intvls);
-
-  Global::obs_t_obs = this->t_obs_lay;
-
-
-  Global::Warming_t = const_cast<float *> (this->ClimChng_t); // must be here to switch for groups.
-
-  Global::Warming_p = const_cast<float *> (this->ClimChng_precip); // must be here to switch for groups.
-
-  Global::hru_elev = const_cast<float *> (this->hru_elev);
-
-  Global::lapse_rate = const_cast<float *> (this->lapse_rate);
-
-  Global::ppt_adj = const_cast<float *> (this->precip_elev_adj);
-
-  Global::RH_VP_flag = const_cast<long *> (this->ElevChng_flag);
-
-  Global::RH_VP_flag2 = const_cast<long *> (this->ClimChng_flag);
-
-  
-}
-
-void Classobs::run(void) {
-
-float catchratio;
-float Tmean, Tmax, Tmin, RHmean, EAmean;
-
-long  nstep = getstep()%Global::Freq;
-long tt = Global::DTindx%Global::Freq;
-
-DTnow[0] = (double) Global::DTnow;
-DTindx[0] = Global::DTindx;
-
-  for (hh = 0; chkStruct(); ++hh) {
-
-    hru_t[hh] = tday_intvls[tt][hh];
-
-    hru_rh[hh] = rhday_intvls[tt][hh];
-
-    hru_ea[hh] = eaday_intvls[tt][hh];
-
-    hru_estar[hh] = Common::estar(hru_t[hh]);
-
-    hru_u[hh]  = max<float> (u[hh], 5.0e-2);
-
-    if(nstep == 1 || Global::Freq == 1){
-      hru_umean[hh]  = umean[hh];
-
-      switch (variation){
-        case VARIATION_ORG:
-        case VARIATION_2:
-          Tmean = 0.0;
-          Tmax = -999.0;
-          Tmin = 999.0;
-          RHmean = 0.0;
-          EAmean = 0.0;
-          for(long tt = 0; tt < Global::Freq; ++tt){
-            Tmean += tday_intvls[tt][hh];
-            if(tday_intvls[tt][hh] > Tmax)
-              Tmax = tday_intvls[tt][hh];
-            if(tday_intvls[tt][hh] < Tmin)
-              Tmin = tday_intvls[tt][hh];
-            RHmean += rhday_intvls[tt][hh];
-            EAmean += eaday_intvls[tt][hh];
-          }
-
-          hru_tmean[hh]  = Tmean/Global::Freq;
-          hru_tmax[hh]   = Tmax;
-          hru_tmin[hh]   = Tmin;
-          hru_eamean[hh] = EAmean/Global::Freq;
-          hru_rhmean[hh] = RHmean/Global::Freq;
-
-          break;
-        case VARIATION_1:
-          hru_tmax[hh] = t_max[hh]; // To get same results in different compilers
-          hru_tmin[hh] = t_min[hh]; // To get same results in different compilers
-          hru_tmean[hh]  = (hru_tmax[hh] + hru_tmin[hh])/2.0;
-          hru_eamean[hh] = hru_ea[hh]; // daily - only one value
-          hru_rhmean[hh] = hru_rh[hh]; // daily - only one value
-          break;
-        } // switch
-    }
-
-    float umean = hru_umean[hh];
-    if(umean > 8.0) umean = 8;
-
-    if(variation != VARIATION_2){
-
-      switch(catchadjust[hh]) {  //
-
-
-        case 1:  // Nipher
-          catchratio = 0.01*(-0.387*sqr(umean)-2.022*umean+100.0);
-          if(catchratio < 0.3) catchratio = 0.3;
-
-        break;
-
-        case 2:  // MacDonald-Alter (not correct, use Smith-Alter)
-          catchratio = 1.01*exp(-0.09*umean);
-
-          if(catchratio > 1.0) catchratio = 1.0;
-
-        break;
-
-        case 3:  // Smith-Alter
-          if(p != NULL)
-            catchratio = 1.18*exp(-0.18*hru_u[hh]);  // for hourly observed wind and precipitation
-          if(ppt != NULL)
-            catchratio = exp(-0.2*umean);  // for daily observed wind and precipitation
-
-          if(catchratio > 1.0) catchratio = 1.0;
-
-        break;
-
-        default: // none
-
-          catchratio = 1.0;
-
-      } // end switch
-
-      if(p != NULL) // insert p
-        hru_p[hh]    = p[hh];
-      else
-        hru_p[hh] = 0.0;
-
-      if(ppt != NULL){ // merge ppt
-        if(!ppt_daily_distrib[hh] && tmax_allsnow[hh] >= hru_tmax[hh]){
-          if(getstep()%Global::Freq == 1) // only for snow and option to add all first interval
-            hru_p[hh]    += pptD[hh];
-          else
-            hru_p[hh]    += 0.0;
-        }
-        else // distribute over day
-          hru_p[hh]    += pptD[hh]/Global::Freq;
-      }
-
-      hru_snow[hh] = 0.0;
-      hru_rain[hh] = 0.0;
-      hru_newsnow[hh] = 0;
-
-      if(snow_rain_determination[hh] == 2){ // Harder
-        Harder();
-        if(hru_snow[hh] > 0.0){
-          cumhru_snow_meas[hh] += hru_snow[hh];
-          hru_snow[hh] /= catchratio;
-          hru_newsnow[hh] = 1;
-
-          if(hru_rain[hh] > 0.0)
-            hru_p[hh] = hru_rain[hh] + hru_snow[hh];
-          else
-            hru_p[hh] = hru_snow[hh];
-        }
-      }
-      else{
-        float Use;
-        if(snow_rain_determination[hh])
-          Use = Common::Ice_Bulb(hru_t[hh], hru_rh[hh], Pa[hh]);
-        else
-          Use = hru_t[hh];
-
-        if(hru_p[hh] > 0.0) { //rain or snow determined by temperature
-          if(Use >= tmax_allrain[hh]) { // all rain
-            hru_rain[hh] = hru_p[hh];
-          }
-          else if(Use <= tmax_allsnow[hh]) { // all snow
-            cumhru_snow_meas[hh] += hru_p[hh];
-            hru_snow[hh] = hru_p[hh]/catchratio;
-            hru_p[hh] = hru_snow[hh];
-            hru_newsnow[hh] = 1;
-          }
-          else { // mixed
-            hru_rain[hh] = hru_p[hh]*(tmax_allrain[hh] - Use)/(tmax_allrain[hh] - tmax_allsnow[hh]);
-            cumhru_snow_meas[hh] += (hru_p[hh] - hru_rain[hh]);
-            hru_snow[hh] = (hru_p[hh] - hru_rain[hh])/catchratio;
-            hru_p[hh] = hru_rain[hh] + hru_snow[hh];
-            hru_newsnow[hh] = 1;
-          }
-        }
-      } // end if
-    }
-    else{
-      hru_rain[hh] = obs_rain[hh];
-      hru_snow[hh] = obs_snow[hh];
-      hru_p[hh] = hru_rain[hh] + hru_snow[hh];
-      if(hru_snow[hh] > 0.0)
-        hru_newsnow[hh] = 1;
-      else
-        hru_newsnow[hh] = 0;
-
-      cumhru_snow_meas[hh] += hru_snow[hh];
-    }
-
-    cumhru_rain[hh] += hru_rain[hh];
-    cumhru_snow[hh] += hru_snow[hh];
-  }
-}
-
-void Classobs::Harder(void) {
-
-  float Tk, D, lamda, pta, L, Ti1, Ti2, crit, crit1, T1, T2, a, b, c, ratio, hru_icebulb;
-
-  Tk = hru_t[hh] + CRHM_constants::Tm;
-
-  D = 0.0000206*pow(Tk/CRHM_constants::Tm, 1.75);
-
-  lamda = 0.000063*Tk + 0.00673;
-
-  pta = 18.01528*((hru_rh[hh]/100.0)*0.611*exp((17.3*hru_t[hh])/(237.3 + hru_t[hh])))/(0.00831441*(hru_t[hh] + CRHM_constants::Tm))/1000.0;
-
-  if(hru_t[hh] > 0.0)
-
-    L = 1000*(2501.0 - (2.361*hru_t[hh]));
-
-  else
-
-    L = 1000.0*(2834.1 - 0.29*hru_t[hh] - 0.004*hru_t[hh]*hru_t[hh]);
-
-  Ti1 = 250.0;
-
-  crit = 9999.0;
-
-  while(crit > 0.0001){ //Iteration solution optimised by using the newton-raphston method
-
-    T1 = Ti1 + 0.001*Ti1;
-
-    T2 = Ti1 - 0.001*Ti1;
-
-    a = (-Ti1 + Tk + (L*D/lamda)*(pta - (18.01528*(0.611*exp((17.3*(Ti1 - CRHM_constants::Tm))/(237.3 + (Ti1 - CRHM_constants::Tm))))/(0.00831441*Ti1)/1000)));
-
-    b = (-T1  + Tk + (L*D/lamda)*(pta - (18.01528*(0.611*exp((17.3*(T1 - CRHM_constants::Tm))/(237.3 + (T1 - CRHM_constants::Tm))))/(0.00831441*T1)/1000)));
-
-    c =(-T2 + Tk + (L*D/lamda)*(pta - (18.01528*(0.611*exp((17.3*(T2 - CRHM_constants::Tm))/(237.3 + (T2 - CRHM_constants::Tm))))/(0.00831441*T2)/1000)));
-
-    Ti2 = Ti1 - (a/((b - c)/(0.002*Ti1)));
-
-    crit1 = Ti1 - Ti2;
-
-    if(crit1 < 0.0)
-
-      crit = -crit1;
-
-    else
-
-      crit = crit1;
-
-    Ti1 = Ti2;
-
-  } // end while
-
-  hru_icebulb = Ti1 - CRHM_constants::Tm;
-
-  if(hru_icebulb < -10.0) //Eoverflow if ratio calculated with icebulb < -39C
-
-    ratio = 0.0;
-
-  else
-
-    ratio = 1.0/(1.0 + 2.50286*pow(0.125006, hru_icebulb));
-
-  hru_snow[hh] = 0.0;
-
-  hru_rain[hh] = 0.0;
-
-  if(hru_p[hh] > 0.0) //rain or snow determined by ice bulb ratio
-
-    hru_rain[hh] = hru_p[hh]*ratio;
-
-  hru_snow[hh] = hru_p[hh]*(1.0-ratio);
-}
-
-void Classobs::finish(bool good) {
-
-  float Allcumhru_rain = 0.0;
-  float Allcumhru_snow = 0.0;
-
-  for(hh = 0; chkStruct(); ++hh) {
-    LogMessageA(hh, string("'" + Name + " (obs)'  cumhru_rain      (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumhru_rain[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (obs)'  cumhru_snow (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumhru_snow[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (obs)'  cumhru_snow_meas (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumhru_snow_meas[hh], hru_area[hh], basin_area[0]);
-    LogDebug(" ");
-
-    Allcumhru_rain += cumhru_rain[hh]*hru_area[hh];
-    Allcumhru_snow += cumhru_snow[hh]*hru_area[hh];
-    LogDebug(" ");
-  }
-
-  LogMessage(string("'" + Name + " (obs)' Allcumhru_rain (mm*basin): ").c_str(), Allcumhru_rain);
-  LogMessage(string("'" + Name + " (obs)' Allcumhru_snow (mm*basin): ").c_str(), Allcumhru_snow, "*** adjusted snowfall");
-  LogMessage(string("'" + Name + " (obs)' Allcumhru_ppt  (mm*basin): ").c_str(), Allcumhru_rain + Allcumhru_snow, "*** rainfall + adjusted snowfall");
-  LogDebug(" ");
-}
-
-Classintcp* Classintcp::klone(string name) const{
-  return new Classintcp(name);
-}
-
-void Classintcp::decl(void) {
-
-  Description = "'Substitutes for canopy in open environment - implements variable name change. hru_snow --> net_snow, hru_rain --> net_rain.'";
-
-  declvar("net_rain", NHRU, "hru_rain minus interception", "(mm/int)", &net_rain);
-
-  declstatdiag("cumnet_rain", NHRU, "cumulative hru_rain minus interception", "(mm)", &cumnet_rain);
-
-  declvar("net_snow", NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
-
-  declstatdiag("cumnet_snow", NHRU, "cumulative hru_snow minus interception", "(mm)", &cumnet_snow);
-
-  declvar("net_p", NHRU, "hru_precipitation (rain and/or snow) less interception", "(mm/int)", &net_p);
-
-  declvar("intcp_evap", NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
-
-
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
-
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
-
-  declgetvar("*", "hru_rain", "(mm/int)", &hru_rain);
-  declgetvar("*", "hru_snow", "(mm/int)", &hru_snow);
-  declgetvar("*", "hru_p", "(mm/int)",  &hru_p);
-
-}
-
-void Classintcp::init(void) {
-
-  nhru = getdim(NHRU);
-  for(hh = 0; hh < nhru; ++hh) {
-    cumnet_rain[hh] = 0.0;
-    cumnet_snow[hh] = 0.0;
-  }
-}
-
-void Classintcp::run(void) {
-
-  for(hh = 0; chkStruct(); ++hh) {
-    net_p[hh] = hru_p[hh];
-    net_snow[hh] = hru_snow[hh];
-    net_rain[hh] = hru_rain[hh];
-    cumnet_rain[hh] += net_rain[hh];
-    cumnet_snow[hh] += net_snow[hh];
-    intcp_evap[hh] = 0.0;
-  }
-}
-
-void Classintcp::finish(bool good) {
-
-  for(hh = 0; chkStruct(); ++hh) {
-    LogMessageA(hh, string("'" + Name + " (intcp)'  cumnetrain  (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumnet_rain[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (intcp)'  cumnetsnow  (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumnet_snow[hh], hru_area[hh], basin_area[0]);
-    LogDebug(" ");
-  }
-  LogDebug(" ");
-}
+//Classbasin* Classbasin::klone(string name) const{
+//  return new Classbasin(name);
+//}
+//
+//void Classbasin::decl(void) {
+//
+//  Description = "'Holds commonly used physical and control parameters.'";
+//
+//  decldiagparam("RUN_ID", BASIN, "1", "-1E8", "+1E8", "run identification. If RUN_ID > 0 then the log file default name 'CRHM_output' with extensions .sum, .log OR .txt is expanded to 'CRHM_output_ID'.", "()", &RUN_ID);
+//
+//  decldiagparam("RUN_START", BASIN, "0", "0", "+1E5", "run start time (Automation)", "(d)", &RUN_START);
+//
+//  decldiagparam("RUN_END", BASIN, "0", "0", "+1E5", "run end time (Automation)", "(d)", &RUN_END);
+//
+//  INIT_STATE = decldiagparam("INIT_STATE", BASIN, "", "Initial state file (Automation)", INIT_STATE);
+//
+//
+//  declvar("run_ID", BASIN, "run identification", "()", &run_ID);
+//
+//  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+//
+//  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+//
+//  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(Â°)", &hru_lat);
+//
+//  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+//
+//  declparam("hru_GSL", NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(Â°)", &hru_GSL);
+//
+//  declparam("hru_ASL", NHRU, "0.0", "0.0", "360.0", "aspect, 0/90/180/270 - north/east/south/west facing for positive GSL.", "(Â°)", &hru_ASL);
+//
+//
+//  hru_names = declparam("hru_names", NHRU, "'HRU'", "HRU names", hru_names);
+//
+//  basin_name = declparam("basin_name", BASIN, "Basin", "Basin name", basin_name);
+//
+//  RapidAdvance_to = decldiagparam("RapidAdvance_to", ONE, "' ', ' ', ' '", "Rapid advance to this date formatted as 'mm/dd/yyyy'", RapidAdvance_to);
+//
+//  Loop_to = decldiagparam("Loop_to", TWO, "' ', ' '", "loop to this date formatted as 'mm/dd/yyyy', 0 - # loops", Loop_to);
+//
+//  StateVars_to_Update = decldiagparam("StateVars_to_Update", TEN, "' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '", "run up these state variables.",  StateVars_to_Update);
+//
+//  TraceVars = decldiagparam("TraceVars", TEN, "' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '", "Trace these variables at end of loop during run up.",  TraceVars);
+//}
+//
+//void Classbasin::init(void) {
+//
+//  run_ID[0] = RUN_ID[0];  // transfer run identification
+//
+//  float totarea = 0;
+//  nhru = getdim(NHRU);
+//
+//  for(hh = 0; hh < nhru; ++hh)
+//    totarea += hru_area[hh];
+//
+//  if(fabs((totarea-basin_area[0])/basin_area[0]) > 1e-3){
+//    const_cast<float *>  (basin_area)[0] = totarea;
+//    CRHMException TExcept(string(string("Sum of HRU's area <> Basin area, Basin area made = ") + FloatToStrF(totarea, ffGeneral, 3, 0)).c_str(), WARNING);
+//    LogError(TExcept);
+//  }
+//
+//  Global::RapidAdvanceTo = 0;
+//  Global::LoopTo = 0;
+//  Global::LoopCnt = 0;
+//
+//  try{
+//	  if (RapidAdvance_to->Count > 0)
+//	  {
+//		  if (RapidAdvance_to->Strings[0].length() > 0) {
+//			  RapidAdvance_to->Strings[0] = Common::trim(RapidAdvance_to->Strings[0]);
+//			  if (RapidAdvance_to->Strings[0].length() > 0)
+//				  Global::RapidAdvanceTo = StrToDate(RapidAdvance_to->Strings[0]);
+//		  }
+//	  }
+//	  if (Loop_to->Count > 0)
+//	  {
+//		  if (Loop_to->Strings[0].length() > 0) {
+//			  Loop_to->Strings[0] = Common::trim(Loop_to->Strings[0]);
+//			  Loop_to->Strings[1] = Common::trim(Loop_to->Strings[1]);
+//			  if (Loop_to->Strings[0].length() > 0)
+//				  Global::LoopTo = StrToDate(Loop_to->Strings[0]);
+//			  if (Loop_to->Strings[1].length() > 0)
+//				  Global::LoopCnt = Strtolong(Loop_to->Strings[1]);
+//		  }
+//	  }
+//  }
+//
+//  catch (...){
+//    CRHMException TExcept("Error in 'RapidAdvance_to' or 'Loop_to' parameters", TERMINATE);
+//    LogError(TExcept);
+//    Global::RapidAdvanceTo = 0;
+//    Global::LoopTo = 0;
+//    Global::LoopCnt = 0;
+//  }
+//}
+
+
+//Classglobal* Classglobal::klone(string name) const{
+//  return new Classglobal(name);
+//}
+
+//void Classglobal::decl(void) {
+//
+//  Description = "'Calculate theoretical short_wave radiation using method proposed by Garnier and Ohmura (1970).'";
+//
+//  declvar("QdroD", NHRU, "daily clear-sky direct", "(MJ/m^2*d)", &QdroD);
+//
+//  declvar("QdroDext", NHRU, "daily ExtraTerrestrial direct", "(MJ/m^2*d)", &QdroDext);
+//
+//  declvar("QdfoD", NHRU, "daily average clear-sky diffuse", "(MJ/m^2*d)", &QdfoD);
+//
+//  declvar("Qdro", NHRU, "clear-sky direct", "(W/m^2)", &Qdro);
+//
+//  declvar("Qdfo", NHRU, "clear-sky diffuse", "(W/m^2)", &Qdfo);
+//
+//  declvar("Qdflat", NHRU, "clear-sky 'Qdro + Qdfo' on horizontal surface", "(W/m^2)", &Qdflat);
+//
+//  declvar("QdflatE", NHRU, "'Qdro' on horizontal surface, no atmosheric attenuation", "(W/m^2)", &QdflatE);
+//
+//  declvar("QdflatD", NHRU, "daily clear-sky Qdro (with diffuse) on horizontal surface", "(MJ/m^2*d)", &QdflatD);
+//
+//  declvar("SolAng", NHRU, "Solar Angle", "(r)", &SolAng);
+//
+//  declvar("SunMax", NHRU, "maximum sunshine hours", "(h)", &SunMax);
+//
+//  declvar("cosxs", NHRU, "cosine of the angle of incidence on the slope", "()", &cosxs);
+//
+//  declvar("cosxsflat", NHRU, "cosine of the angle of incidence on the horizontal", "()", &cosxsflat);
+//
+//  declvar("pQdro", NFREQ, "clear-sky direct", "(MJ/m^2*int)", &pQdro, &pQdro_FREQ, 0, true, false, CRHM::PRIVATE);
+//
+//  declvar("pQdfo", NFREQ, "clear-sky diffuse", "(MJ/m^2*int)", &pQdfo, &pQdfo_FREQ, 0, true, false, CRHM::PRIVATE);
+//
+//  declvar("pQdflat", NFREQ, "Qdro + Qdfo on horizontal surface", "(MJ/m^2*int)", &pQdflat, &pQdflat_FREQ, 0, true, false, CRHM::PRIVATE);
+//
+//  declvar("pQdflatE", NFREQ, "Qdro on horizontal surface with no atmospheric attenuation", "(MJ/m^2*int)", &pQdflatE, &pQdflatE_FREQ, 0, true, false, CRHM::PRIVATE);
+//
+//  declvar("pSol", NFREQ, "Solar Angle", "(r)", &pSol, &pSol_FREQ, 0, true, false, CRHM::PRIVATE);
+//
+//  declvar("pCosxs", NFREQ, "Cos(x^s)", "(r)", &pCosxs, &pCosxs_FREQ, 0, true, false, CRHM::PRIVATE);
+//
+//  declvar("pCosxs0", NFREQ, "Cos(x^s) on the horizontal", "(r)", &pCosxs0, &pCosxs0_FREQ, 0, true, false, CRHM::PRIVATE);
+//
+//
+//// parameters
+//
+//  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(Â°)", &hru_lat);
+//
+//  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+//
+//  declparam("hru_GSL", NHRU, "0.0", "-90.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(Â°)", &hru_GSL);
+//
+//  declparam("hru_ASL", NHRU, "0.0", "-360.0", "360.0","aspect, 0/90/180/270 - north/east/south/west facing for positive GSL.", "(Â°)", &hru_ASL);
+//
+//  declparam("Time_Offset", NHRU, "0.0", "-12.0", "12.0","solar time offset from local time", "(h)", &Time_Offset);
+//
+//}
+//
+//const float DEGtoRAD = M_PI/180.0;
+//const float DEGtoRAD365 = 2*M_PI/365.0;
+//const long CalcFreq = 288;
+//const float RADxxMIN = 2.0*M_PI/CalcFreq;
+//const float MINS_int = 24.0*60.0/CalcFreq;
+
+//void Classglobal::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  int Integer = CalcFreq/Global::Freq;
+//
+//  int Remainder = CalcFreq%Global::Freq;
+//
+//  if(Remainder != 0 || Integer < 1){
+//    CRHMException TExcept("\"288/(first observation frequency)\" must be an integer > one!", TERMINATE);
+//    LogError(TExcept);
+//  }
+//
+//}
+//
+//void Classglobal::air_mass (const float czen, float &oam){
+//
+//  float diff;
+//
+//  float Z = acos(czen);
+//  oam = fabs(1.0f/(czen + 0.50572f*pow(96.07995f-Z, -1.6364f)));       // oam by cosecant approx.
+//
+//  if(oam < 2.9)                          // zenith < 70 deg
+//    return;
+//  else if(oam < 16.38) {                 // zenith < 86.5 deg
+//    diff = pow(10.0f, 2.247f*log10(oam) - 2.104f);
+//    oam = oam - diff;
+//    return;
+//    }
+//  else if(oam <= 114.6){                 // zenith < 89.5 deg
+//	diff = pow(10.0f, 1.576f*log10(oam) - 1.279f);
+//    oam = oam - diff;
+//    return;
+//  }
+//
+//  oam = 30.0;                             // computed oam >114.6
+//}
+//
+//void Classglobal::run(void) {
+//
+///*   calculate daily incoming short wave radiation
+//
+//     calculate direct and diffuse solar radiation on a slope in mj/m^2*d
+//          for a surface at given slope and azimuth
+//          for any given day and transmissivity
+//          account cloud cover empirically
+//
+//      written by Pat Landine
+//                 Division of Hydrology
+//                 University of Sask.
+//
+//            ref. B.J. Garnier and Atsuma Ohmura
+//                 A method of calculating the direct shortwave
+//                 radiation income of slopes
+//                 Jour. of Applied Meteorology vol.7 1968
+//
+//      incident shortwave radiation
+//
+//         id = (sol/rad_vec**2)*integral{(trans**oam)*cos(x^s)*dh}
+//
+//              sol      = solar constant
+//              rad_vec  = radius vector of the earth'S orbit
+//              trans    = mean transmissivity of the atmosphere
+//              oam      = optical air mass
+//              cos(x^s) = cosine of the angle of incidence  of the
+//                         sun'S rays on the slope (x is a unit normal
+//                         vector pointing away from the surface and
+//                         s is the unit vector expressing the sun'S
+//                         position.
+//              h        = hour angle measured from solar noon.
+//                         (15 deg./hour or pi/12 rad/hour)
+//
+//                integration is performed as an addition of a series of
+//                MINS_int minute intervals
+//
+//       diffuse clear sky radiation
+//
+//           Qdfo = 0.5*[(1 - aw - ao)*it - id]*(cos(gslope/2))**2
+//
+//              aw     = radiation absorbed by water vapour (assumed = 7%
+//              aw     = radiation absorbed by ozone (assumed = 2%)
+//              gslope = gradient of slope
+//
+//              it = (sol/rad_vec**2)*integral{czen*dh}
+//
+//                 czen = cosine of the sun'S zenith angle
+//
+//       cloud cover adjustment
+//
+//           ig = (id + Qdfo)
+//
+//       variable description
+//
+//           aslope = azimuth of the slope
+//           dec    = declination of the sun above or below the equator
+//           day = day of the calendar year
+//
+//      use phys_constants
+//*/
+//
+//  long Period, Day;
+//
+//  float Trans, Dec, Rad_vec, Sol, Clat, Slat, Cdec, Sdec, Hr_Ang;
+//  float Czen, t1, t2, x, y, z, Oam;
+//  float cosxsL, cosxs0, t10, t20;
+//  float It, Id, diffuse, Sum_Id, Sum_Diff, Sum_Sol, Sum_cosxs, Sum_cosxs0, Sum_Ext, Sum_Flatd, Sum_Flatf;
+//
+//  Period = (getstep()-1)%Global::Freq;
+//
+//  if(Period == 0 || getstep() == 1){
+//
+//    for (hh = 0; hh < nhru; ++hh) {
+//
+//      Day = julian("now");
+//      if(Global::Freq <= 1) --Day;  // if daily 00:00 is the next day
+//
+//      Trans = 0.818;
+//
+//      Dec = sin((Day - 81) * DEGtoRAD365) * 0.40928;     // Declination
+//
+//      Rad_vec = .01676*cos(M_PI-0.017262*(Day-3))+1.0;   // radius vector
+//      Sol = 0.0819/(Rad_vec*Rad_vec);                    // solar constant  mj/m**2*min or 117.936 mj/m**2*day
+//
+//// calculate sines and cosines
+//
+//      Clat = cos(hru_lat[hh]*DEGtoRAD);
+//      Slat = sin(hru_lat[hh]*DEGtoRAD);
+//      Cdec = cos(Dec);
+//      Sdec = sin(Dec);
+//
+//// set constants and initial values
+//
+//      SunMax[hh] = 0.0;                 // no. of sunshine hours in 10ths.
+//      QdroD[hh] = 0.0;
+//      QdroDext[hh] = 0.0;
+//      QdfoD[hh] = 0.0;
+//      QdflatD[hh] = 0.0;
+//      Sum_Id = 0.0;
+//      Sum_Diff = 0.0;
+//      Sum_Sol = 0.0;
+//      Sum_cosxs = 0.0;
+//      Sum_cosxs0 = 0.0;
+//      Sum_Ext = 0.0;
+//      Sum_Flatd = 0.0;
+//      Sum_Flatf = 0.0;
+//
+///*     cos(x^s) = [(Slat * cos(Hr_Ang) * (-cos(ASL) * sin(GSL))
+//                    - sin(Hr_Ang) * (sin(ASL) * sin(GSL))
+//                    + (Clat * cos(Hr_Ang)) * cos(GSL)] * Cdec
+//                    + [Clat * (cos(ASL) * sin(GSL))
+//                    + Slat * cos(GSL)] * Sdec */
+//
+//      x = -cos(hru_ASL[hh]*DEGtoRAD) * sin(hru_GSL[hh]*DEGtoRAD);
+//      y = sin(hru_ASL[hh]*DEGtoRAD) * sin(hru_GSL[hh]*DEGtoRAD);   //  compute constant
+//      z = cos(hru_GSL[hh]*DEGtoRAD);                               //  components of cos(x^s)
+//      t1 = (x*Slat + z*Clat)* Cdec;
+//      t2 = (-x*Clat + z*Slat)* Sdec;
+//
+//      t10 = Clat* Cdec;
+//      t20 = Slat* Sdec;
+//
+//      Hr_Ang = -M_PI*(1.0 + Time_Offset[hh]/12.0);
+//
+//      for(long jj = 0; jj < CalcFreq; ++jj, Hr_Ang+=RADxxMIN){ // CalcFreq periods/day
+//
+//        Czen = Cdec*Clat*cos(Hr_Ang) + Sdec*Slat;  // cos of zenith angle
+//        diffuse = 0.0;
+//
+//        if(Czen > 0.0) {
+//          Sum_Sol = Sum_Sol + M_PI/2.0f - acos(Czen);
+//
+//          SunMax[hh] = SunMax[hh] + MINS_int; // sum sunshine minutes
+//          It = MINS_int*Sol*Czen;           // extra-ter. rad for MINS_int minute interval
+//
+//          cosxs0 = t10*cos(Hr_Ang);
+//          cosxs0 = cosxs0 + t20;
+//// horzontal
+//          if(cosxs0 > 0.0){      // not in shadow
+//            Sum_cosxs0 += cosxs0;
+//
+//            air_mass (Czen, Oam); // get optical air mass
+//	    Oam = Oam*pow((288.0f-0.0065f*hru_elev[hh])/288.0f, 5.256f);  // correction
+//
+//            Id = MINS_int*Sol*cosxs0; // direct rad. for MINS_int minute interval
+//            Sum_Ext += Id;
+//
+//            Id = Id*pow(Trans, Oam); // direct rad. for MINS_int minute interval
+//
+//// List (1968) diffuse = 0.5((1-aw-ac)Qa - Id) where
+//// aw = radiation absorbed by water vapour (7%)
+//// ac = radiation absorbed by ozone (2%)
+//
+//            diffuse = 0.5f*(0.91f*It-Id);      // Diffuse radiation on horizontal
+//            Sum_Flatf += diffuse;
+//            Sum_Flatd += Id;
+//          }
+//
+//          cosxsL = -y*sin(Hr_Ang)*Cdec + t1*cos(Hr_Ang);
+//          cosxsL = cosxsL + t2;
+//
+//          if(cosxsL > 0.0) {       // slope not in shadow
+//            Sum_cosxs += cosxsL;
+//
+//            air_mass (Czen, Oam); // get optical air mass
+//            Oam = Oam*pow((288.0f-0.0065f*hru_elev[hh])/288.0f, 5.256f);  // correction
+//
+//            Id = MINS_int*Sol*cosxsL;     // direct rad. for MINS_int minute interval
+//            Id = Id*pow(Trans, Oam);
+//
+//            Sum_Id += Id;
+//          }
+//
+//          diffuse = diffuse*sqr(cos(hru_GSL[hh]/2.0)); // on slope
+//
+//          Sum_Diff += diffuse;
+//
+//        } // end if
+//
+//        if (!((jj+1) % (CalcFreq/Global::Freq))) {
+//
+//          int kk = jj/(CalcFreq/Global::Freq);
+//          pQdro_FREQ[kk][hh] = Sum_Id;     // direct radiation
+//          pQdfo_FREQ[kk][hh] = Sum_Diff;   // diffuse radiation
+//          pQdflat_FREQ[kk][hh] = (Sum_Flatd + Sum_Flatf); // level direct + diffuse radiation
+//          pQdflatE_FREQ[kk][hh] = Sum_Ext; // level direct no atmospheric attenuation
+//          pSol_FREQ[kk][hh] = Sum_Sol/(CalcFreq/Global::Freq);  // solar angle
+//          pCosxs_FREQ[kk][hh] = Sum_cosxs/(CalcFreq/Global::Freq);  // solar angle
+//          pCosxs0_FREQ[kk][hh] = Sum_cosxs0/(CalcFreq/Global::Freq);  // solar angle
+//
+//          QdroD[hh]    += Sum_Id;   // direct radiation
+//          QdroDext[hh] += Sum_Ext;  // ExtraTerrestrial radiation
+//          QdfoD[hh]    += Sum_Diff; // diffuse radiation
+//          QdflatD[hh]  += Sum_Flatd + Sum_Flatf; // level direct
+//
+//          Sum_Id = 0.0;
+//          Sum_Diff = 0.0;
+//          Sum_Sol = 0.0;
+//          Sum_cosxs = 0.0;
+//          Sum_cosxs0 = 0.0;
+//          Sum_Ext = 0.0;
+//          Sum_Flatd = 0.0;
+//          Sum_Flatf = 0.0;
+//        }
+//
+//      } // end for
+//      SunMax[hh] = SunMax[hh]/60.0;        // convert to hours*10
+//
+//      Hr_Ang = 0.0;
+//    } // end for hh
+//  } // end if - Entire day calculated
+//
+//  for (hh = 0; hh < nhru; ++hh) {
+//    Qdro[hh] =    pQdro_FREQ[Period][hh]*1E6/86400*Global::Freq; // MJ/m^2.int to W/m^2
+//    Qdfo[hh] =    pQdfo_FREQ[Period][hh]*1E6/86400*Global::Freq; // MJ/m^2.int to W/m^2
+//    Qdflat[hh] =  pQdflat_FREQ[Period][hh]*1E6/86400*Global::Freq; // MJ/m^2.int to W/m^2
+//    QdflatE[hh] = pQdflatE_FREQ[Period][hh]*1E6/86400*Global::Freq; // MJ/m^2.int to W/m^2
+//    SolAng[hh] =  pSol_FREQ[Period][hh];
+//    cosxs[hh] =   pCosxs_FREQ[Period][hh];
+//    cosxsflat[hh] =   pCosxs0_FREQ[Period][hh];
+//  } // end if
+//}
+
+//Classobs* Classobs::klone(string name) const{
+//  return new Classobs(name, "07/05/06");
+//}
+//
+//void Classobs::decl(void) {
+//
+//  Description = "'Converts measurement observations to HRU variables with corrections,' \
+//                 'original interval version,' \
+//                 'daily interval version for Annandale (additional inputs are observations t_min and t_max),' \
+//                 'inputs rain and snow observations (p and ppt not used)).'";
+//
+//  variation_set = VARIATION_ORG;
+//
+//  if(Global::nlay < 2){
+//    Global::nlay = 2;
+//    Global::maxlay = 2;
+//  }
+//
+//  decldiagparam("HRU_OBS", NDEFN, "[1, 2, 3!]", "1", "100", "observation indirection table ([1] - t, rh and ea, [2] - p and ppt, [3] - u, [4] - Q, [5] - misc)", "()", &HRU_OBS, &HRU_OBS_Tables, 5);
+//
+//  declparam("obs_elev", NDEFN, "[0]", "0.0", "100000.0", "observation measurement altitude table ([1] - t, rh and ea, [2] - p and ppt", "(m)", &obs_elev, &obs_elev_Tables, 2);
+//
+//  declparam("hru_elev", NHRU, "[0]", "0.0", "100000.0", "HRU altitude", "(m)", &hru_elev);
+//
+//  declparam("lapse_rate", NHRU, "[0.75]", "0", "2", "temperature lapse rate", "(Â°C/100m)", &lapse_rate);
+//
+//  decldiagparam("precip_elev_adj", NHRU, "[0.0]", "-1.0", "1.0", "precipitation height adjustment {adjusted p(or ppt) = p(or ppt)*(1.0 + precip_elev_adj*elev_difference/100)}", "(1/100m)", &precip_elev_adj);
+//
+//  decldiagparam("ElevChng_flag", NHRU, "[0]", "0", "1", "Elevation change control; 0 - maintain RH, 1 - keep Vp within Vsat maximum", "()", &ElevChng_flag);
+//
+//  decldiagparam("ClimChng_flag", NHRU, "[0]", "0", "1", "Climate change control; 0 - maintain RH, 1 - keep Vp within Vsat maximum", "()", &ClimChng_flag);
+//
+//  decldiagparam("ClimChng_t", NHRU, "[0]", "-50", "+50", "Climate change additive temperature change.", "(Â°C)", &ClimChng_t);
+//
+//  decldiagparam("ClimChng_precip", NHRU, "[1]", "0.0", "10", "Climate change multiplative p/ppt change.", "()", &ClimChng_precip);
+//
+//  Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
+//
+//  Global::Warming_t = const_cast<float *> (this->ClimChng_t); // must be here to load do_t_day etc.
+//
+//  Global::Warming_p = const_cast<float *> (this->ClimChng_precip); // must be here to load do_p etc.
+//
+//
+//  declreadobs("u", NHRU, "wind velocity", "(m/s)", &u, HRU_OBS_u);
+//
+//  declreadobs("ppt", NHRU, "daily precipitation", "(mm/d)", &ppt, HRU_OBS_p_ppt, true);
+//
+//  declreadobs("p", NHRU, "interval precipitation", "(mm/int)", &p, HRU_OBS_p_ppt, true);
+//
+//
+//  decldiag("t_obs", NFREQ, "observation temperature before modification by lapse rate and global warning", "(Â°C)", &t_obs, &t_obs_lay);
+//
+//
+//  declvar("hru_t", NHRU, "temperature", "(Â°C)", &hru_t);
+//
+//  declvar("hru_rh", NHRU, "relative humidity", "(%)", &hru_rh);
+//
+//  declvar("hru_ea", NHRU, "HRU vapour pressure", "(kPa)", &hru_ea);
+//
+//  decldiag("hru_estar", NHRU, "HRU saturation vapour pressure", "(kPa)", &hru_estar);
+//
+//  declvar("hru_u", NHRU, "wind velocity", "(m/s)", &hru_u);
+//
+//  declvar("hru_p", NHRU, "total precip (includes snow catch adjustment", "(mm/int)", &hru_p);
+//
+//  declvar("hru_rain", NHRU, "rain", "(mm/int)", &hru_rain);
+//
+//  declvar("Pa", NHRU, "average surface pressure", "(kPa)", &Pa);
+//
+//  decllocal("DTindx", ONE, "main loop Index", "()", &DTindx);
+//
+//  decllocal("DTnow", ONE, "main loop Time", "()", &DTnow);
+//
+//  declstatdiag("cumhru_rain", NHRU, "cumulative HRU rain", "(mm)", &cumhru_rain);
+//
+//  declvar("hru_snow", NHRU, "snow", "(mm/int)", &hru_snow);
+//
+//  declstatdiag("cumhru_snow", NHRU, "cumulative HRU snow", "(mm)", &cumhru_snow);
+//
+//  declstatdiag("cumhru_snow_meas", NHRU, "cumulative HRU snow catch adjustment", "(mm)", &cumhru_snow_meas);
+//
+//  declvar("hru_tmax", NHRU, "max daily temp", "(Â°C)", &hru_tmax);
+//
+//  declvar("hru_tmin", NHRU, "min daily temp", "(Â°C)", &hru_tmin);
+//
+//  declvar("hru_tmean", NHRU, "mean daily temp", "(Â°C)", &hru_tmean);
+//
+//  declvar("hru_eamean", NHRU, "mean daily vapour pressure", "(kPa)", &hru_eamean);
+//
+//  declvar("hru_umean", NHRU, "mean daily wind", "(m/s)", &hru_umean);
+//
+//  declvar("hru_rhmean", NHRU,"daily mean relative humidity", "(%)", &hru_rhmean);
+//
+//  declvar("hru_newsnow", NHRU, "new snow on HRU - 0=no, 1=yes", "()", &hru_newsnow);
+//
+//
+//  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+//
+//  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+//
+//  Global::RH_EA_obs = -1;
+//
+//  decldiag("Tday", NFREQ, "observation t unavailable", "(Â°C)", &NotUsed, &tday_intvls);
+//  Exist = declobsfunc("t", "Tday", &NotUsed, INTVL, &tday_intvls);
+//
+//  decldiag("RHday", NFREQ, "observation rh unavailable", "(kPa)", &NotUsed, &rhday_intvls);
+//  Exist = declobsfunc("rh", "RHday", &NotUsed, INTVL, &rhday_intvls, true);
+//
+//  if(Exist >= 0)
+//    Global::RH_EA_obs = 0;
+//
+//  decldiag("EAday", NFREQ, "observation ea unavailable", "(kPa)", &NotUsed, &eaday_intvls);
+//  Exist = declobsfunc("ea", "EAday", &NotUsed, INTVL, &eaday_intvls, true);
+//
+//  if(Exist >= 0)
+//    if(Global::RH_EA_obs < 0){
+//      Global::RH_EA_obs = 1;
+//      CRHMException TExcept("The obs module is using the observation ea instead of RH. This is not yet implemented.\
+//      An optioin is to use the filter '$rh rh(t, ea)' in the observarion file before the separator line,\
+//      '########################################'", TERMINATE);
+//      LogError(TExcept);
+//    }
+//
+//  declobsfunc("u", "Umean", &umean, AVG);
+//
+//  declobsfunc("ppt", "pptD", &pptD, FIRST, NULL, true);
+//
+//  declobsfunc("p", "p", const_cast<float **> (&p), FOBS, NULL, true);
+//
+//
+//  variation_set = VARIATION_0 + VARIATION_1;
+//
+//  declparam("catchadjust", NHRU, "[0]", "0", "3", "none - 0/Nipher - 1/MacDonald-Alter - 2 (not recommended)/Smith-Alter - 3", "()", &catchadjust);
+//
+//  decldiagparam("ppt_daily_distrib", NHRU, "[1]", "0", "1", "0 - daily precip in first interval, 1 - equally divided over the day", "()", &ppt_daily_distrib);
+//
+//  declparam("snow_rain_determination", NHRU, "[0]", "0", "2", "snow/rain determination: 0 - air temperature, 1 - ice bulb temperature, 2 - Harder", "()", &snow_rain_determination);
+//
+//  decldiagparam("tmax_allrain", NHRU, "[4.0]", "-10", "10", "precip all rain if HRU air/ice bulb temperature above or equal to this value. Not used in Harder method.",
+//    "(Â°C)", &tmax_allrain);
+//
+//  decldiagparam("tmax_allsnow", NHRU, "[0.0]", "-10", "10", "precip all snow if HRU air/ice bulb temperature below this value. Not used in Harder method",
+//    "(Â°C)", &tmax_allsnow);
+//
+//
+//  variation_set = VARIATION_1;
+//
+//  declreadobs("t_max", NHRU, " daily maximum temperature", "(Â°C)", &t_max, HRU_OBS_t_rh_ea);
+//
+//  declreadobs("t_min", NHRU, " daily minimumn temperature", "(Â°C)", &t_min, HRU_OBS_t_rh_ea);
+//
+//
+//  variation_set = VARIATION_2;
+//
+//  declreadobs("obs_snow", NHRU, "snow observation", "(mm)", &obs_snow, HRU_OBS_Q);
+//
+//  declreadobs("obs_rain", NHRU, "rain observation", "(mm)", &obs_rain, HRU_OBS_Q);
+//
+//
+//  variation_set = VARIATION_ORG;
+//}
+//
+//void Classobs::init(void) {
+//
+//  if(this->GroupCnt < 2){ // display for simple project and first group
+//
+//    if(ppt == NULL && p == NULL && variation != VARIATION_2){
+//      CRHMException TExcept("No precipitation data.  Both p and ppt not available!", TERMINATE);
+//      LogError(TExcept);
+//    }
+//
+//    if(ppt){
+//      CRHMException TExcept("using daily precipitation (ppt) observation.", WARNING);
+//      LogError(TExcept);
+//    }
+//
+//    if(p){
+//      CRHMException TExcept("using interval precipitation (p) observation.", WARNING);
+//      LogError(TExcept);
+//    }
+//
+//    if(variation == VARIATION_1 && Global::Freq != 1){
+//      CRHMException TExcept("obs#1 (using daily maximun/minimum temperatures) only works with daily data", TERMINATE);
+//      LogError(TExcept);
+//    }
+//
+//    if(Global::RH_EA_obs == -1){
+//      CRHMException TExcept("No psychrometric data.  Both relative humidity (rh) and vapour pressure (ea) observations not available.", TERMINATE);
+//      LogError(TExcept);
+//    }
+//    else if(Global::RH_EA_obs == 1){
+//      CRHMException TExcept("using vapour pressure (ea) observation.", WARNING);
+//      LogError(TExcept);
+//    }
+//    else if(Global::RH_EA_obs == 0){
+//      CRHMException TExcept("using relative humidity (rh) observation.", WARNING);
+//      LogError(TExcept);
+//    }
+//  }
+//
+//  nhru = getdim(NHRU);
+//  nobs = getdim(NOBS);
+//
+//  for(hh = 0; hh < nhru; ++hh) {
+//    cumhru_rain[hh] = 0.0;
+//    cumhru_snow[hh] = 0.0;
+//    cumhru_snow_meas[hh] = 0.0;
+//
+//    Pa[hh] = 101.3f*pow((293.0f-0.0065f*hru_elev[hh])/293.0f, 5.26f);  // kPa
+//
+//    DTnow[0] = 0.0;
+//    DTindx[0] = 0;
+//  }
+//
+//  Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
+//
+//}
+//
+//void Classobs::pre_run(void) {
+//
+//  Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
+//
+//  Global::OBS_ELEV = const_cast<float **> (obs_elev_Tables);
+//
+//  Global::obs_t = const_cast<float **> (this->tday_intvls);
+//
+//  Global::obs_ea = const_cast<float **> (this->eaday_intvls);
+//
+//  Global::obs_rh = const_cast<float **> (this->rhday_intvls);
+//
+//  Global::obs_t_obs = this->t_obs_lay;
+//
+//
+//  Global::Warming_t = const_cast<float *> (this->ClimChng_t); // must be here to switch for groups.
+//
+//  Global::Warming_p = const_cast<float *> (this->ClimChng_precip); // must be here to switch for groups.
+//
+//  Global::hru_elev = const_cast<float *> (this->hru_elev);
+//
+//  Global::lapse_rate = const_cast<float *> (this->lapse_rate);
+//
+//  Global::ppt_adj = const_cast<float *> (this->precip_elev_adj);
+//
+//  Global::RH_VP_flag = const_cast<long *> (this->ElevChng_flag);
+//
+//  Global::RH_VP_flag2 = const_cast<long *> (this->ClimChng_flag);
+//
+//  
+//}
+//
+//void Classobs::run(void) {
+//
+//float catchratio;
+//float Tmean, Tmax, Tmin, RHmean, EAmean;
+//
+//long  nstep = getstep()%Global::Freq;
+//long tt = Global::DTindx%Global::Freq;
+//
+//DTnow[0] = (double) Global::DTnow;
+//DTindx[0] = Global::DTindx;
+//
+//  for (hh = 0; chkStruct(); ++hh) {
+//
+//    hru_t[hh] = tday_intvls[tt][hh];
+//
+//    hru_rh[hh] = rhday_intvls[tt][hh];
+//
+//    hru_ea[hh] = eaday_intvls[tt][hh];
+//
+//    hru_estar[hh] = Common::estar(hru_t[hh]);
+//
+//    hru_u[hh]  = max<float> (u[hh], 5.0e-2);
+//
+//    if(nstep == 1 || Global::Freq == 1){
+//      hru_umean[hh]  = umean[hh];
+//
+//      switch (variation){
+//        case VARIATION_ORG:
+//        case VARIATION_2:
+//          Tmean = 0.0;
+//          Tmax = -999.0;
+//          Tmin = 999.0;
+//          RHmean = 0.0;
+//          EAmean = 0.0;
+//          for(long tt = 0; tt < Global::Freq; ++tt){
+//            Tmean += tday_intvls[tt][hh];
+//            if(tday_intvls[tt][hh] > Tmax)
+//              Tmax = tday_intvls[tt][hh];
+//            if(tday_intvls[tt][hh] < Tmin)
+//              Tmin = tday_intvls[tt][hh];
+//            RHmean += rhday_intvls[tt][hh];
+//            EAmean += eaday_intvls[tt][hh];
+//          }
+//
+//          hru_tmean[hh]  = Tmean/Global::Freq;
+//          hru_tmax[hh]   = Tmax;
+//          hru_tmin[hh]   = Tmin;
+//          hru_eamean[hh] = EAmean/Global::Freq;
+//          hru_rhmean[hh] = RHmean/Global::Freq;
+//
+//          break;
+//        case VARIATION_1:
+//          hru_tmax[hh] = t_max[hh]; // To get same results in different compilers
+//          hru_tmin[hh] = t_min[hh]; // To get same results in different compilers
+//          hru_tmean[hh]  = (hru_tmax[hh] + hru_tmin[hh])/2.0;
+//          hru_eamean[hh] = hru_ea[hh]; // daily - only one value
+//          hru_rhmean[hh] = hru_rh[hh]; // daily - only one value
+//          break;
+//        } // switch
+//    }
+//
+//    float umean = hru_umean[hh];
+//    if(umean > 8.0) umean = 8;
+//
+//    if(variation != VARIATION_2){
+//
+//      switch(catchadjust[hh]) {  //
+//
+//
+//        case 1:  // Nipher
+//          catchratio = 0.01*(-0.387*sqr(umean)-2.022*umean+100.0);
+//          if(catchratio < 0.3) catchratio = 0.3;
+//
+//        break;
+//
+//        case 2:  // MacDonald-Alter (not correct, use Smith-Alter)
+//          catchratio = 1.01*exp(-0.09*umean);
+//
+//          if(catchratio > 1.0) catchratio = 1.0;
+//
+//        break;
+//
+//        case 3:  // Smith-Alter
+//          if(p != NULL)
+//            catchratio = 1.18*exp(-0.18*hru_u[hh]);  // for hourly observed wind and precipitation
+//          if(ppt != NULL)
+//            catchratio = exp(-0.2*umean);  // for daily observed wind and precipitation
+//
+//          if(catchratio > 1.0) catchratio = 1.0;
+//
+//        break;
+//
+//        default: // none
+//
+//          catchratio = 1.0;
+//
+//      } // end switch
+//
+//      if(p != NULL) // insert p
+//        hru_p[hh]    = p[hh];
+//      else
+//        hru_p[hh] = 0.0;
+//
+//      if(ppt != NULL){ // merge ppt
+//        if(!ppt_daily_distrib[hh] && tmax_allsnow[hh] >= hru_tmax[hh]){
+//          if(getstep()%Global::Freq == 1) // only for snow and option to add all first interval
+//            hru_p[hh]    += pptD[hh];
+//          else
+//            hru_p[hh]    += 0.0;
+//        }
+//        else // distribute over day
+//          hru_p[hh]    += pptD[hh]/Global::Freq;
+//      }
+//
+//      hru_snow[hh] = 0.0;
+//      hru_rain[hh] = 0.0;
+//      hru_newsnow[hh] = 0;
+//
+//      if(snow_rain_determination[hh] == 2){ // Harder
+//        Harder();
+//        if(hru_snow[hh] > 0.0){
+//          cumhru_snow_meas[hh] += hru_snow[hh];
+//          hru_snow[hh] /= catchratio;
+//          hru_newsnow[hh] = 1;
+//
+//          if(hru_rain[hh] > 0.0)
+//            hru_p[hh] = hru_rain[hh] + hru_snow[hh];
+//          else
+//            hru_p[hh] = hru_snow[hh];
+//        }
+//      }
+//      else{
+//        float Use;
+//        if(snow_rain_determination[hh])
+//          Use = Common::Ice_Bulb(hru_t[hh], hru_rh[hh], Pa[hh]);
+//        else
+//          Use = hru_t[hh];
+//
+//        if(hru_p[hh] > 0.0) { //rain or snow determined by temperature
+//          if(Use >= tmax_allrain[hh]) { // all rain
+//            hru_rain[hh] = hru_p[hh];
+//          }
+//          else if(Use <= tmax_allsnow[hh]) { // all snow
+//            cumhru_snow_meas[hh] += hru_p[hh];
+//            hru_snow[hh] = hru_p[hh]/catchratio;
+//            hru_p[hh] = hru_snow[hh];
+//            hru_newsnow[hh] = 1;
+//          }
+//          else { // mixed
+//            hru_rain[hh] = hru_p[hh]*(tmax_allrain[hh] - Use)/(tmax_allrain[hh] - tmax_allsnow[hh]);
+//            cumhru_snow_meas[hh] += (hru_p[hh] - hru_rain[hh]);
+//            hru_snow[hh] = (hru_p[hh] - hru_rain[hh])/catchratio;
+//            hru_p[hh] = hru_rain[hh] + hru_snow[hh];
+//            hru_newsnow[hh] = 1;
+//          }
+//        }
+//      } // end if
+//    }
+//    else{
+//      hru_rain[hh] = obs_rain[hh];
+//      hru_snow[hh] = obs_snow[hh];
+//      hru_p[hh] = hru_rain[hh] + hru_snow[hh];
+//      if(hru_snow[hh] > 0.0)
+//        hru_newsnow[hh] = 1;
+//      else
+//        hru_newsnow[hh] = 0;
+//
+//      cumhru_snow_meas[hh] += hru_snow[hh];
+//    }
+//
+//    cumhru_rain[hh] += hru_rain[hh];
+//    cumhru_snow[hh] += hru_snow[hh];
+//  }
+//}
+//
+//void Classobs::Harder(void) {
+//
+//  float Tk, D, lamda, pta, L, Ti1, Ti2, crit, crit1, T1, T2, a, b, c, ratio, hru_icebulb;
+//
+//  Tk = hru_t[hh] + CRHM_constants::Tm;
+//
+//  D = 0.0000206*pow(Tk/CRHM_constants::Tm, 1.75);
+//
+//  lamda = 0.000063*Tk + 0.00673;
+//
+//  pta = 18.01528*((hru_rh[hh]/100.0)*0.611*exp((17.3*hru_t[hh])/(237.3 + hru_t[hh])))/(0.00831441*(hru_t[hh] + CRHM_constants::Tm))/1000.0;
+//
+//  if(hru_t[hh] > 0.0)
+//
+//    L = 1000*(2501.0 - (2.361*hru_t[hh]));
+//
+//  else
+//
+//    L = 1000.0*(2834.1 - 0.29*hru_t[hh] - 0.004*hru_t[hh]*hru_t[hh]);
+//
+//  Ti1 = 250.0;
+//
+//  crit = 9999.0;
+//
+//  while(crit > 0.0001){ //Iteration solution optimised by using the newton-raphston method
+//
+//    T1 = Ti1 + 0.001*Ti1;
+//
+//    T2 = Ti1 - 0.001*Ti1;
+//
+//    a = (-Ti1 + Tk + (L*D/lamda)*(pta - (18.01528*(0.611*exp((17.3*(Ti1 - CRHM_constants::Tm))/(237.3 + (Ti1 - CRHM_constants::Tm))))/(0.00831441*Ti1)/1000)));
+//
+//    b = (-T1  + Tk + (L*D/lamda)*(pta - (18.01528*(0.611*exp((17.3*(T1 - CRHM_constants::Tm))/(237.3 + (T1 - CRHM_constants::Tm))))/(0.00831441*T1)/1000)));
+//
+//    c =(-T2 + Tk + (L*D/lamda)*(pta - (18.01528*(0.611*exp((17.3*(T2 - CRHM_constants::Tm))/(237.3 + (T2 - CRHM_constants::Tm))))/(0.00831441*T2)/1000)));
+//
+//    Ti2 = Ti1 - (a/((b - c)/(0.002*Ti1)));
+//
+//    crit1 = Ti1 - Ti2;
+//
+//    if(crit1 < 0.0)
+//
+//      crit = -crit1;
+//
+//    else
+//
+//      crit = crit1;
+//
+//    Ti1 = Ti2;
+//
+//  } // end while
+//
+//  hru_icebulb = Ti1 - CRHM_constants::Tm;
+//
+//  if(hru_icebulb < -10.0) //Eoverflow if ratio calculated with icebulb < -39C
+//
+//    ratio = 0.0;
+//
+//  else
+//
+//    ratio = 1.0/(1.0 + 2.50286*pow(0.125006, hru_icebulb));
+//
+//  hru_snow[hh] = 0.0;
+//
+//  hru_rain[hh] = 0.0;
+//
+//  if(hru_p[hh] > 0.0) //rain or snow determined by ice bulb ratio
+//
+//    hru_rain[hh] = hru_p[hh]*ratio;
+//
+//  hru_snow[hh] = hru_p[hh]*(1.0-ratio);
+//}
+//
+//void Classobs::finish(bool good) {
+//
+//  float Allcumhru_rain = 0.0;
+//  float Allcumhru_snow = 0.0;
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    LogMessageA(hh, string("'" + Name + " (obs)'  cumhru_rain      (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumhru_rain[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (obs)'  cumhru_snow (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumhru_snow[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (obs)'  cumhru_snow_meas (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumhru_snow_meas[hh], hru_area[hh], basin_area[0]);
+//    LogDebug(" ");
+//
+//    Allcumhru_rain += cumhru_rain[hh]*hru_area[hh];
+//    Allcumhru_snow += cumhru_snow[hh]*hru_area[hh];
+//    LogDebug(" ");
+//  }
+//
+//  LogMessage(string("'" + Name + " (obs)' Allcumhru_rain (mm*basin): ").c_str(), Allcumhru_rain);
+//  LogMessage(string("'" + Name + " (obs)' Allcumhru_snow (mm*basin): ").c_str(), Allcumhru_snow, "*** adjusted snowfall");
+//  LogMessage(string("'" + Name + " (obs)' Allcumhru_ppt  (mm*basin): ").c_str(), Allcumhru_rain + Allcumhru_snow, "*** rainfall + adjusted snowfall");
+//  LogDebug(" ");
+//}
+
+//Classintcp* Classintcp::klone(string name) const{
+//  return new Classintcp(name);
+//}
+//
+//void Classintcp::decl(void) {
+//
+//  Description = "'Substitutes for canopy in open environment - implements variable name change. hru_snow --> net_snow, hru_rain --> net_rain.'";
+//
+//  declvar("net_rain", NHRU, "hru_rain minus interception", "(mm/int)", &net_rain);
+//
+//  declstatdiag("cumnet_rain", NHRU, "cumulative hru_rain minus interception", "(mm)", &cumnet_rain);
+//
+//  declvar("net_snow", NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
+//
+//  declstatdiag("cumnet_snow", NHRU, "cumulative hru_snow minus interception", "(mm)", &cumnet_snow);
+//
+//  declvar("net_p", NHRU, "hru_precipitation (rain and/or snow) less interception", "(mm/int)", &net_p);
+//
+//  declvar("intcp_evap", NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
+//
+//
+//  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+//
+//  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+//
+//  declgetvar("*", "hru_rain", "(mm/int)", &hru_rain);
+//  declgetvar("*", "hru_snow", "(mm/int)", &hru_snow);
+//  declgetvar("*", "hru_p", "(mm/int)",  &hru_p);
+//
+//}
+//
+//void Classintcp::init(void) {
+//
+//  nhru = getdim(NHRU);
+//  for(hh = 0; hh < nhru; ++hh) {
+//    cumnet_rain[hh] = 0.0;
+//    cumnet_snow[hh] = 0.0;
+//  }
+//}
+//
+//void Classintcp::run(void) {
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    net_p[hh] = hru_p[hh];
+//    net_snow[hh] = hru_snow[hh];
+//    net_rain[hh] = hru_rain[hh];
+//    cumnet_rain[hh] += net_rain[hh];
+//    cumnet_snow[hh] += net_snow[hh];
+//    intcp_evap[hh] = 0.0;
+//  }
+//}
+//
+//void Classintcp::finish(bool good) {
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    LogMessageA(hh, string("'" + Name + " (intcp)'  cumnetrain  (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumnet_rain[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (intcp)'  cumnetsnow  (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumnet_snow[hh], hru_area[hh], basin_area[0]);
+//    LogDebug(" ");
+//  }
+//  LogDebug(" ");
+//}
 
 Classpbsm* Classpbsm::klone(string name) const{
   return new Classpbsm(name);
