@@ -241,6 +241,10 @@ public:
 	void BldModelClick();
 	void MacroClick(void);
 	void ListBoxMacroClear();
+
+	TObject * GetObjectOfVariable(string vname); //added this function from CRHMmainDlg.cpp file.
+	TObject * GetObjectOfObservation(string vname); //added this function from CRHMmainDlg.cpp file.
+
 };
 
 

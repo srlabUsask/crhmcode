@@ -10,7 +10,6 @@
 
 #include "GlobalCommon.h"
 #include <ctime>
-//#include <atltime.h>
 #include "Common.h"
 #include "StandardConverterUtility.h"
 #include "TStringList.h"

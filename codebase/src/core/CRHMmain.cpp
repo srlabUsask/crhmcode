@@ -124,6 +124,44 @@ void CRHMmain::setSelectedObservatoions(TStringList *t)
 }
 
 
+//manishankar added this function from CRHMmainDlg.cpp file.
+TObject * CRHMmain::GetObjectOfVariable(string vname)
+{
+	for (int i = 0; i < AllVariables->Count; i++)
+	{
+		string str = AllVariables->Strings[i];
+
+		int ind = vname.find(str + "(");
+
+		if (ind > -1)
+		{
+			TObject * obj = AllVariables->Objects[i];
+			return obj;
+		}
+	}
+}
+
+//manishankar added this function from CRHMmainDlg.cpp file.
+TObject * CRHMmain::GetObjectOfObservation(string vname)
+{
+	for (int i = 0; i < AllObservations->Count; i++)
+	{
+		string str = AllObservations->Strings[i];
+
+		int ind = vname.find(str + "(");
+
+		if (ind > -1)			
+		{
+			ClassVar * thisVar;;
+			thisVar = (ClassVar *)AllObservations->Objects[i];
+			TObject * obj = (TObject*)thisVar;
+			return obj;
+		}
+	}
+}
+
+
+
 
 void CRHMmain::BldModelClick()
 {
