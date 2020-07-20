@@ -950,11 +950,11 @@ void  CRHMmain::InitModules(void) {
 		((ClassModule*)Global::OurModulesList->Objects[ii])->nhru = Global::nhru;
 		((ClassModule*)Global::OurModulesList->Objects[ii])->decl();
 	}
-	Label4Click();
+	GetAllVariables();
 }
 
 
-void  CRHMmain::Label4Click(void) {
+void  CRHMmain::GetAllVariables(void) {
 
 	ClassVar *thisVar;
 	MapVar::iterator itVar;

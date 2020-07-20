@@ -151,7 +151,7 @@ public:
 
 	void InitModules(void);
 
-	void Label4Click(void);
+	void GetAllVariables(void);
 
 	CRHM::TFun FindObservationType(string Kind);
 
