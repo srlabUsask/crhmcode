@@ -9,7 +9,6 @@
 #include "WQ_Soil_NPCcycling.h"
 #include "GlobalDll.h"
 #include <algorithm>
-#include "Common.h"
 #include "ClassCRHM.h"
 
 #include "SnobalDefines.h"

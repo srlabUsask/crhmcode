@@ -4,9 +4,6 @@
 #include <math.h>
 #include "StandardConverterUtility.h"
 #include "TStringList.h"
-//#include "Common.h"
-//#include <atlstr.h>
-
 
 StandardConverterUtility::StandardConverterUtility()
 {

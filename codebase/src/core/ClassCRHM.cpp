@@ -21,8 +21,6 @@
 #include "NewModules.h"
 #include "stddef.h"
 #include "GlobalDll.h"
-//#include "Common.h"
-//#include "StandardConverterUtility.h"
 
 //---------------------------------------------------------------------------
 //#pragma package(smart_init)

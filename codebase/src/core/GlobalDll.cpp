@@ -12,8 +12,6 @@
 
 
 #include "GlobalDll.h"
-#include "GlobalCommon.h"
-//#include "GlobalDll.h"
 
 //---------------------------------------------------------------------------
 

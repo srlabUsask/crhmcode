@@ -12,12 +12,9 @@
 #include <time.h>
 //#include "boost/shared_ptr.hpp"
 #include "GlobalDll.h"
-//#include "ClassCRHM.h"
 #include "ClassModule.h"
 #include "NewModules.h"
 #include "MacroUnit.h"
-#include "Common.h"
-#include "StandardConverterUtility.h"
 
 #include <time.h>
 
@@ -2112,7 +2109,7 @@ void CRHMmain::CheckBlankModule() {
 }
 
 
-void  CRHMmain::RunClick(void) {
+void  CRHMmain::RunClick(void) {	
 	MMSData * mmsdata = CRHMmain::RunClick2Start();
 	CRHMmain::RunClick2Middle(mmsdata, Global::DTmin, Global::DTmax);
 	CRHMmain::RunClick2End(mmsdata);
