@@ -36,7 +36,11 @@ public:
 	string Title;
 	TSeries(int Cnt) { MaxCnt = Cnt; XValues = new double[MaxCnt]; YValues = new float[MaxCnt]; Used = 0; };
 	~TSeries() { delete[] XValues; delete[] YValues; };
-	void AddXY(double X, float Y) { XValues[Used] = X; YValues[Used++] = Y; };
+	void AddXY(double X, float Y) 
+	{ 
+		XValues[Used] = X; 
+		YValues[Used++] = Y; 
+	};
 	int Count(void) { return Used; };
 	double XValue(int nn) { return XValues[nn]; };
 	float YValue(int nn) { return YValues[nn]; };

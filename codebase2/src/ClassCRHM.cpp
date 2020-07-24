@@ -2106,6 +2106,11 @@ bool ClassData::DataReadFile(void) {
 			if (DataFile.peek() != '\n') // gobbles up rest of line
 				DataFile.ignore(256, '\n');
 
+
+			//manishankar. The condition "Times[Position] >= Times[Position - 1] + DeltaH" was being true and thus the SparseFlag was being set.
+			//However, I checked the data and saw that the date entries are not really sparse although this condition was being true.
+			//I have thus commented this out.
+			/*
 			if (Position != 0 && Times[Position] >= Times[Position - 1] + DeltaH)
 			{
 				if (!SparseFlag)
@@ -2113,18 +2118,18 @@ bool ClassData::DataReadFile(void) {
 					SparseFlag = true;
 					if (FirstFile)
 					{
-						/*                string S;
-						if(DecimalTime)
-						S.sprintf("Discontinuous Date: \"%5f\" at line: %u", Times[Position], Position + HdrLen + 1);
-						else
-						S.sprintf("Discontinuous Date: \"%5u %3u %3u %3u %3u\" at line: %u", D[0], D[1], D[2], D[3], D[4], HdrLen + Position + 1);
+						//string S;
+						//if(DecimalTime)
+						//S.sprintf("Discontinuous Date: \"%5f\" at line: %u", Times[Position], Position + HdrLen + 1);
+						//else
+						//S.sprintf("Discontinuous Date: \"%5u %3u %3u %3u %3u\" at line: %u", D[0], D[1], D[2], D[3], D[4], HdrLen + Position + 1);
 
-						Message(S.c_str(), string("Warning Sparse Observation File: " + DataFileName).c_str(), mbOK);
-						}*/
+						//Message(S.c_str(), string("Warning Sparse Observation File: " + DataFileName).c_str(), mbOK);
 					}
+				}
 
-				} // if !Simulation
-			}
+			} // if !Simulation			
+			}*/
 
 			myMacro->execute(Position);
 		} //end if
@@ -2670,6 +2675,7 @@ ClassVar *declread(string module, string name, long cnt, long offset,
 
 	thisVar = new ClassVar(module, name, cnt, offset, FileData);
 
+
 	if (thisVar->name == "p" || thisVar->name == "ppt") // must be NHRU for routine "ReadVar" when obs file loaded after modules.
 		thisVar->dimen = CRHM::NHRU;
 
@@ -2943,6 +2949,7 @@ void Classmacro::addfilter(string Line) {
 		++Interpolation;
 	}
 	else if (Filter == "ea") NewFilter = (Classfilter*) new Classea(File, ToVar, FilterStuff);
+	else if (Filter == "rh") NewFilter = (Classfilter*) new Classrh(File, ToVar, FilterStuff);  //I have added this from the borland version.
 	else if (Filter == "RH_WtoI") NewFilter = (Classfilter*) new ClassRH_WtoI(File, ToVar, FilterStuff);
 	else if (Filter == "add") NewFilter = (Classfilter*) new Classadd(File, ToVar, FilterStuff);
 	else if (Filter == "sub") NewFilter = (Classfilter*) new Classsub(File, ToVar, FilterStuff);
@@ -2955,6 +2962,9 @@ void Classmacro::addfilter(string Line) {
 	else if (Filter == "refwind") NewFilter = (Classfilter*) new Classrefwind(File, ToVar, FilterStuff);
 	else if (Filter == "const") NewFilter = (Classfilter*) new Classconst(File, ToVar, FilterStuff);
 	else if (Filter == "sine") NewFilter = (Classfilter*) new Classsin(File, ToVar, FilterStuff);
+	else if (Filter == "sin") NewFilter = (Classfilter*) new Classsin(File, ToVar, FilterStuff); //I have added this from the borland version.
+	else if (Filter == "cos") NewFilter = (Classfilter*) new Classcos(File, ToVar, FilterStuff); //I have added this from the borland version.
+	else if (Filter == "abs") NewFilter = (Classfilter*) new Classabs(File, ToVar, FilterStuff); //I have added this from the borland version.
 	else if (Filter == "square") NewFilter = (Classfilter*) new Classsquare(File, ToVar, FilterStuff);
 	else if (Filter == "ramp") NewFilter = (Classfilter*) new Classramp(File, ToVar, FilterStuff);
 	else if (Filter == "pulse") NewFilter = (Classfilter*) new Classpulse(File, ToVar, FilterStuff);
@@ -2973,6 +2983,7 @@ void Classmacro::addfilter(string Line) {
 	else if (Filter == "FtoC") NewFilter = (Classfilter*) new ClassFtoC(File, ToVar, FilterStuff);
 	else if (Filter == "KtoC") NewFilter = (Classfilter*) new ClassKtoC(File, ToVar, FilterStuff);
 	else if (Filter == "CtoK") NewFilter = (Classfilter*) new ClassCtoK(File, ToVar, FilterStuff);
+	else if (Filter == "replace") NewFilter = (Classfilter*) new ClassReplace(File, ToVar, FilterStuff); //I have added this from the borland version.
 	else {
 		string Mess = "Filter: '" + Filter + "' name not recognised";
 		/*    CRHMException Except(Mess.c_str(), ERR);
