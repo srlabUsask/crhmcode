@@ -1912,8 +1912,9 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 				//clock_t btime = clock(); //////////////////////////////////////////////////////////////////////////////////////////////
 
-				if (p->GroupCnt && ((ClassMacro*)p)->ObsModule) // only execute if group has an obs module
-					((ClassMacro*)p)->ObsModule->pre_run();
+				//manishankar. This if condition is creating address sanitizing error.
+				//if (p->GroupCnt && ((ClassMacro*)p)->ObsModule) // only execute if group has an obs module
+					//((ClassMacro*)p)->ObsModule->pre_run();
 
 				p->ReadObs(Reset);
 				Reset = false;
