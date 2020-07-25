@@ -10,7 +10,7 @@
 
 //#include <vcl.h>
 #include <string>
-#include <math.h>
+#include <cmath>
 
 #if defined(_WIN32)
 #include <direct.h>

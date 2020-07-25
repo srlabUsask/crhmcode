@@ -13,7 +13,7 @@
 
 #include "TStringList.h"
 #include <time.h>
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 #include <string>
 #include <limits>

@@ -13,7 +13,7 @@
 #include "ClassCRHM.h"
 
 #include "SnobalDefines.h"
-#include <math.h>
+#include <cmath>
 #include <assert.h>
 #include <iostream>
 #include <fstream>

@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 7/25/2020 3:44
+###### Version NON DLL 4.02  Creation: 7/25/2020 4:36
 Dimensions:
 ######
 nhru 52
@@ -2133,6 +2133,7 @@ Final_State
 Display_Variable:
 ######
 SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpA hru_t@A 1
+SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpA hru_tmax@A 1
 ######
 Display_Observation:
 ######

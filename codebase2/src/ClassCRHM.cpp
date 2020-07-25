@@ -13,7 +13,7 @@
 #include <fstream>
 #include <iomanip>
 #include <bitset>
-#include <math.h>
+#include <cmath>
 #include <cmath>
 
 

@@ -10,7 +10,7 @@
 #include "GlobalCommon.h"
 #include "GlobalDll.h"
 #include "ClassCRHM.h"
-#include <math.h>
+#include <cmath>
 #include <string>
 #include <time.h>
 
