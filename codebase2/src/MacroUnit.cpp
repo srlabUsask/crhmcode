@@ -526,6 +526,41 @@ void ClassMacro::init(void) {
 	}
 }
 
+//added by Manishankar to solve the address issue.
+void ClassMacro::run2(float ** lvalues) { // executed every interval
+
+	if (isGroup || isStruct) {
+		list<ModulePtr> ::iterator iter;
+		iter = Modules.begin();
+		while (iter != Modules.end()) {
+			ModulePtr Op = (*iter);
+			Op->t_layvalues = lvalues;
+			(*iter)->pre_run();
+			(*iter)->run();
+			++iter;
+		}
+
+		return;
+	}
+
+	for (hh = 1; chkStructOff(hh, nhru + 1); ++hh) { // note offset range
+
+		PCiter = Operations.begin();
+		while (PCiter != Operations.end()) {
+			execbase Op = (*(*PCiter));
+			float X = (*(*PCiter))(); // run instruction
+			++PCiter;
+			int Cnt = eval.size();
+		}
+	}
+
+	int Cnt = eval.size();
+	assert(eval.empty());
+	assert(LastVar.empty());
+	assert(LastVas.empty());
+}
+
+
 void ClassMacro::run(void) { // executed every interval
 
 	if (isGroup || isStruct) {
@@ -533,6 +568,7 @@ void ClassMacro::run(void) { // executed every interval
 		iter = Modules.begin();
 		while (iter != Modules.end()) {
 			ModulePtr Op = (*iter);
+			Op->t_layvalues = Global::t_layvalues;
 			(*iter)->pre_run();
 			(*iter)->run();
 			++iter;

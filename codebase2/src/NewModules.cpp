@@ -961,6 +961,8 @@ long tt = Global::DTindx%Global::Freq;
 DTnow[0] = (double) Global::DTnow;
 DTindx[0] = Global::DTindx;
 
+tday_intvls = this->t_layvalues; //added by Manishankar to solve the address issue.
+
   for (hh = 0; chkStruct(); ++hh) {
 
     hru_t[hh] = tday_intvls[tt][hh];

@@ -2620,7 +2620,13 @@ void ClassModule::ReadObs(bool Reset) {
 			P->dim = nhru; // check if necessary. Group?
 
 			if (P->FunctVar->FileData->GoodDay)
+			{
 				(P->*(P->UserFunct))();
+				if (P->name == "t")
+				{
+					this->t_layvalues = P->layvalues;
+				}
+			}
 
 			if (P->CustomFunct) // execute any extra features except for nfreq observations   && !P->nfreq
 				(P->*(P->CustomFunct))(this); // do_t_day, do_rh_day, do_ea_day, do_t, do_p,  do_ppt or Nothing

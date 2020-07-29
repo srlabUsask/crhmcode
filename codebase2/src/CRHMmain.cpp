@@ -1929,6 +1929,10 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 					//{
 					//Common::writefile("d:/test.txt","p = "+p->Name+", p nameroot = "+p->NameRoot);
 					//if (!(p->Name == "WQ_Soil_BGC"))
+
+
+					
+					Global::t_layvalues = p->t_layvalues; //manishankar added this for resolving the address related issue.
 					p->run();
 					//}
 					//catch (...)

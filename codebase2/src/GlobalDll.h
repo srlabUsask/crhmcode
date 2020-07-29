@@ -126,6 +126,10 @@ public:
 	static float ** obs_t_obs; // used for array observations adjustments
 
 	static TObject *thisVar;
+
+
+	static float ** t_layvalues; //manishankar. this is used for resolving the address related issue.
+
 };
 
 

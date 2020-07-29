@@ -61,6 +61,10 @@ public:
 	long Var_NDEFN_cnt = 0;
 	long Par_NDEFN_cnt = 0;
 
+	//added by Manishankar to solve the address issue.
+	float ** t_layvalues;
+
+
 	// long Using_RH_EA_obs;
 
 	ClassModule(string Name, string Version, CRHM::LMODULE Lvl = CRHM::PROTO, long PeerRank = 1000, string PeerVar = "")
@@ -77,6 +81,7 @@ public:
 	void initbase(void);
 	virtual void init(void) {};
 	virtual void run(void) {};
+	virtual void run2(float **) {}; //added by Manishankar to solve the address issue.
 	virtual void pre_run(void) {};
 	virtual void finish(bool good) {};
 	ClassModule* link(string Module);

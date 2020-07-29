@@ -63,6 +63,8 @@ public:
 
 	virtual void run(void);
 
+	virtual void run2(float **); //added by Manishankar to solve the address issue.
+
 	virtual void finish(bool good);
 
 	ClassMacro* klone(string name) const;

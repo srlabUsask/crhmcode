@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 7/25/2020 3:49
+###### Version NON DLL 4.02  Creation: 7/29/2020 11:28
 Dimensions:
 ######
 nhru 52
@@ -2132,7 +2132,7 @@ Final_State
 ######
 Display_Variable:
 ######
-REW_Grp WS_outflow@F 1 2 3 4 5
+SmithCreekBasin_GroupTemplate_Modified_20Oct_GrpA hru_t@A 1
 ######
 Display_Observation:
 ######
