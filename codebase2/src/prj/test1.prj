@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 7/29/2020 1:12
+###### Version NON DLL 4.02  Creation: 8/5/2020 11:13
 Dimensions:
 ######
 nhru 1
@@ -11,13 +11,12 @@ Macros:
 ######
 Observations:
 ######
-obs/Yorkton_hourly_t,rh,u_1Jan1953-30Oct2007.obs
-obs/SmithCreek_compiled_daily_ppt_1Jan1953-30Oct2007.obs
+D:\postdoc\CRHM\GIT\crhmcode\codebase2\src\obs\Badlake73_76.obs
 ######
 Dates:
 ######
-1953 1 1
-1953 1 2
+1973 1 1
+1976 1 1
 ######
 Modules:
 ######

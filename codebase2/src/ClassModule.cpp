@@ -2622,9 +2622,15 @@ void ClassModule::ReadObs(bool Reset) {
 			if (P->FunctVar->FileData->GoodDay)
 			{
 				(P->*(P->UserFunct))();
+
+				//manishankar. this is used for resolving the address related issue.
 				if (P->name == "t")
 				{
 					this->t_layvalues = P->layvalues;
+				}
+				else if (P->name == "rh")
+				{
+					this->rh_layvalues = P->layvalues;
 				}
 			}
 
@@ -3723,7 +3729,7 @@ void ClassMuskingum::DoMuskingum() {
 	}
 }
 
-void ClassMuskingum::DoMuskingum(const long hh) {
+void ClassMuskingum::DoMuskingum(const long hh) {	
 
 	LagArray[hh][ulag[hh]] = inVar[hh];
 

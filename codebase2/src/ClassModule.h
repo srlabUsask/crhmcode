@@ -63,6 +63,7 @@ public:
 
 	//added by Manishankar to solve the address issue.
 	float ** t_layvalues;
+	float ** rh_layvalues;
 
 
 	// long Using_RH_EA_obs;
@@ -390,6 +391,7 @@ public:
 	float* c0; // storage constant from K
 	float* c1; // storage constant from K
 	float* c2; // storage constant from K
+	double prevdate;
 
 private:
 	const float* kstorage;

@@ -961,7 +961,11 @@ long tt = Global::DTindx%Global::Freq;
 DTnow[0] = (double) Global::DTnow;
 DTindx[0] = Global::DTindx;
 
-tday_intvls = this->t_layvalues; //added by Manishankar to solve the address issue.
+
+//added by Manishankar to solve the address issue.
+tday_intvls = this->t_layvalues; 
+rhday_intvls = this->rh_layvalues;
+
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -12302,7 +12306,7 @@ void ClassNetroute_M_D::run(void) {
   basingw_s[0] = basingw[0]*Global::Freq/86400.0;
 
   cumbasinflow[0] += basinflow[0];
-  cumbasingw[0] += basingw[0];
+  cumbasingw[0] += basingw[0];  
 }
 
 void ClassNetroute_M_D::finish(bool good) {
@@ -18481,15 +18485,21 @@ void ClassREWroute::run(void) {
 
     int hh = WS_order[jj] - 1;
 
-    if(rew[hh])
-      inflow[hh] = inflow_All[hh][0]; // add this HRU runoff and subsurface flow
-    else
-      inflow[hh] = 0; // add this HRU runoff and subsurface flow
+	if(rew[hh])
+	{
+		inflow[hh] = inflow_All[hh][0]; // add this HRU runoff and subsurface flow
+	}
+	else
+	{
+		inflow[hh] = 0; // add this HRU runoff and subsurface flow
+	}
 
     for(long hhh = 0; chkStruct(hhh); ++hhh) {
       if(WS_whereto[hhh]-1 == hh && outflow[hhh] > 0.0){
-        if(outflow[hhh] > 0.0)
-          inflow[hh] += outflow[hhh];
+		  if(outflow[hhh] > 0.0)
+		  {
+			  inflow[hh] += outflow[hhh];
+		  }
       }
     }
 

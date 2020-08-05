@@ -568,7 +568,11 @@ void ClassMacro::run(void) { // executed every interval
 		iter = Modules.begin();
 		while (iter != Modules.end()) {
 			ModulePtr Op = (*iter);
-			Op->t_layvalues = Global::t_layvalues;
+
+			//manishankar did this for resolving the address related issue.
+			Op->t_layvalues = Global::t_layvalues; 
+			Op->rh_layvalues = Global::rh_layvalues;
+
 			(*iter)->pre_run();
 			(*iter)->run();
 			++iter;

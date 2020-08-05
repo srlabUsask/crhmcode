@@ -117,4 +117,7 @@ float  **Global::obs_t_obs; // used for array observations adjustments
 
 TObject *Global::thisVar;
 
-float **Global::t_layvalues; //manishankar. this is used for resolving the address related issue.
+
+//manishankar. this is used for resolving the address related issue.
+float **Global::t_layvalues; 
+float **Global::rh_layvalues;
