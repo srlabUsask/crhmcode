@@ -153,7 +153,7 @@ public:
 	~VarCHRM();
 
 	void put(float val_);
-	float get(void);
+	double get(void);
 
 	enum TV { CRHM, CRHMint, LOCAL, FUNget, FUNobs, CRHM2, CRHMint2, NOP };
 
@@ -282,7 +282,7 @@ public:
 	float RHOa(float t, float ea, float Pa) const // atmospheric density (kg/m^3)
 	{
 		const float R = 2870;
-		return (1E4*Pa / (R*(273.15 + t))*(1.0 - 0.379*(ea / Pa))); //
+		return (float)(1E4*Pa / (R*(273.15 + t))*(1.0 - 0.379*(ea / Pa))); //
 	}
 };
 
@@ -985,7 +985,7 @@ struct execVindex : public execbase { // used by execVset
 		default:
 			Lvar->Ihh = 0;
 		}
-		return Lvar->Ihh;
+		return (float)Lvar->Ihh;
 	}
 private:
 	stack<VarCHRM*>& LastVas;
@@ -1051,7 +1051,7 @@ public:
 	float operator()() const {
 		Lvar->Ihh = 0;
 
-		float X = Lvar->get(); // in case there is no array element [n]
+		float X = (float)Lvar->get(); // in case there is no array element [n]
 		eval.push(X);
 		return X;
 	}
@@ -1099,7 +1099,7 @@ struct execVindexVget : public execbase {
 
 		eval.pop(); // remove variable not indexed
 
-		float X = Lvar->get();
+		float X = (float)Lvar->get();
 		eval.push(X); // push indexed variable to stack
 		int Cnt = eval.size();
 		return X;

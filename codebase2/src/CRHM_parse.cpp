@@ -99,7 +99,7 @@ void VarCHRM::put(float val_) {
 	// NOP falls through
 }
 
-float VarCHRM::get(void) {
+double VarCHRM::get(void) {
 	switch (kind) {
 	case LOCAL:
 		return val;

@@ -12302,8 +12302,8 @@ void ClassNetroute_M_D::run(void) {
   ssrDelay->DoClark();
   gwDelay->DoClark();
 
-  basinflow_s[0] = basinflow[0]*Global::Freq/86400.0;
-  basingw_s[0] = basingw[0]*Global::Freq/86400.0;
+  basinflow_s[0] = basinflow[0]*(int)Global::Freq/(float)86400.0;
+  basingw_s[0] = basingw[0]*(int)Global::Freq/(float)86400.0;
 
   cumbasinflow[0] += basinflow[0];
   cumbasingw[0] += basingw[0];  

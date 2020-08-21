@@ -116,10 +116,10 @@ namespace CRHM {
 #define M_PI	3.14159265358979323846  /* pi */
 #endif
 
-const float a1 = 0.4361836;   //constants of approximation
-const float a2 = -0.1201676;
-const float a3 = 0.937298;
-const float little_p = 0.33267;
+const float a1 = (float)0.4361836;   //constants of approximation
+const float a2 = (float)-0.1201676;
+const float a3 = (float)0.937298;
+const float little_p = (float)0.33267;
 
 
 enum TFloatFormat { ffGeneral, ffExponent, ffFixed, ffNumber, ffCurrency };
@@ -170,57 +170,57 @@ namespace CRHM_constants {
 	const float Cs = 1.28E+06; // (J/m3/K) volumetric heat capacity of soil
 	const float Cp = 1005;     // (J/kg/K) volumetric heat capacity of dry air
 	const float Rgas = 287.0;  // Gas constant for dry air (J/kg/K)
-	const float Tm = 273.15;   // Melting point (K)
+	const float Tm = (float)273.15;   // Melting point (K)
 
 	const float Ls = 2.845e6;  // Latent heat of sublimation (J/kg)
 	const float Lv = 2.50e6;  // Latent heat of vaporization (J/kg)
 	const float Lf = 0.334e6;  // Latent heat of fusion (J/kg)
-	const float kappa = 0.4;
+	const float kappa = (float)0.4;
 
-	const float sbc = 5.67E-8; // Stephan-Boltzmann constant W/m^2/k4
-	const float SB = 4.899e-09; // Stephan-Boltzmann constant MJ/m^2-d
+	const float sbc = (float)5.67E-8; // Stephan-Boltzmann constant W/m^2/k4
+	const float SB = (float)4.899e-09; // Stephan-Boltzmann constant MJ/m^2-d
 
-	const float emiss = 0.985; // emissivity of the atmosphere and snowpack
-	const float emiss_c = 0.96; // emissivity of the canopy
-	const float em = 0.622;     //
+	const float emiss = (float)0.985; // emissivity of the atmosphere and snowpack
+	const float emiss_c = (float)0.96; // emissivity of the canopy
+	const float em = (float)0.622;     //
 }
 
 //     define constants for equations
 
 namespace PBSM_constants {
 
-	const float rho = 1.23;     // (kg/m3) density of dry air
+	const float rho = (float)1.23;     // (kg/m3) density of dry air
 	const float Qstar = 120;    //{Solar Radiation Input}
-	const float M = 18.01;      //{molecular weight of water (kg/kmole)}
+	const float M = (float)18.01;      //{molecular weight of water (kg/kmole)}
 	const float R = 8313;       //{universal gas constant (J/(kmole K))}
 	const float LATH = 2.838E6; //{latent heat of sublimation (J/kg) List 1949}
 	const float DICE = 900;     //{density of ice, assumed equal to blowing snow part (kg/m3)}
-	const float ZD = 0.3;       //{height of boundary-layer at xd (m) Takeuchi (1980)}
+	const float ZD = (float)0.3;       //{height of boundary-layer at xd (m) Takeuchi (1980)}
 	const float XD = 300;       //{Fetch to develop b-l to ZD (m)}
-	const float g = 9.80;       //{m/s2}
+	const float g = (float)9.80;       //{m/s2}
 	const float Beta = 170;     // Beta ratio of element to surface drag for vegetation Cr/Cs
-	const float C1 = 2.8;       //{2.3}
-	const float C2 = 1.6;
-	const float C3 = 4.2;       //{3.25} {e = 1/(C3*Ustar)}
-	const float KARMAN = 0.4;
-	const float KARMAN2 = 0.16;
+	const float C1 = (float)2.8;       //{2.3}
+	const float C2 = (float)1.6;
+	const float C3 = (float)4.2;       //{3.25} {e = 1/(C3*Ustar)}
+	const float KARMAN = (float)0.4;
+	const float KARMAN2 = (float)0.16;
 }
 
 namespace CHAD_constants {
 	// Constants:
-	const float emm = 0.985; 		// emissivity [ ]
-	const float sbc = 5.67e-8; 		//Stephan-Boltzmann constant [W m-2 K-4]
+	const float emm = (float)0.985; 		// emissivity [ ]
+	const float sbc = (float)5.67e-8; 		//Stephan-Boltzmann constant [W m-2 K-4]
 	const float solarconst = 1367; 	// solar constant [W m-2]
 	const float ca = 1013;  		//specific heat of air [J kg-1 K-1]
 	const float cf = 2470;  		//specific heat of forest biomass [J kg-1 K-1]
-	const float pa = 1.22;  		//typical air density [kg m-3]
+	const float pa = (float)1.22;  		//typical air density [kg m-3]
 	const float pf = 686;   		//typical forest biomass density [kg m-3]
-	const float kf = 0.17;		//typical thermal conductivity of wood biomass [J m-1 K-1]
-	const float dv = 1.983e-5;  		//dynamic viscosity of air (typical value for 300K) [kg m-1 s-1]
-	const float kv = 1.88e-5;  		//kinematic viscosity of air (typical value for Sask.) [m2 s-1]
-	const float dh = 2.216e-5; 		//thermal diffusivity of air (1 atm; 300 K) [m2 s-1]
-	const float tca = 0.024;              //typical thermal conductivity of air (at 25ï¿½C) [J m-1 K-1]
-	const float DTOR = 3.1416 / 180.0;
+	const float kf = (float)0.17;		//typical thermal conductivity of wood biomass [J m-1 K-1]
+	const float dv = (float)1.983e-5;  		//dynamic viscosity of air (typical value for 300K) [kg m-1 s-1]
+	const float kv = (float)1.88e-5;  		//kinematic viscosity of air (typical value for Sask.) [m2 s-1]
+	const float dh = (float)2.216e-5; 		//thermal diffusivity of air (1 atm; 300 K) [m2 s-1]
+	const float tca = (float)0.024;              //typical thermal conductivity of air (at 25ï¿½C) [J m-1 K-1]
+	const float DTOR = (float)3.1416 / (float)180.0;
 }
 
 

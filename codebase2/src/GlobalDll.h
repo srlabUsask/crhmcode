@@ -35,25 +35,25 @@ public:
 	static long GroupCntTrk;
 	static long StructCntTrk;
 
-	static long Freq;
+	static int Freq;
 
-	static long DTindx;
-	static long DTmin;
-	static long DTmax;
-	static long IndxMin;
-	static long IndxMax;
+	static int DTindx;
+	static int DTmin;
+	static int DTmax;
+	static int IndxMin;
+	static int IndxMax;
 
-	static long maxobs;
-	static long maxlay;
-	static long maxhru;
+	static int maxobs;
+	static int maxlay;
+	static int maxhru;
 
-	static long nobs;
-	static long nlay;
-	static long nhru;
+	static int nobs;
+	static int nlay;
+	static int nhru;
 
-	static long CRHMStatus;
-	static long CurrentModuleRun;
-	static long CRHMControlSaveCnt;
+	static int CRHMStatus;
+	static int CurrentModuleRun;
+	static int CRHMControlSaveCnt;
 
 	static BitSet RunUpBitSet; // determines modules executed during looping.
 	static BitSet ModuleBitSet; // determines modules executed during calculating ahead.
@@ -178,6 +178,21 @@ string static FloatToStrF(double X, TFloatFormat Format, int Prec, int Digits) {
 }
 
 string static FloatToStrF(long L, TFloatFormat Format, int Prec, int Digits) {
+	ostringstream temp;
+	if (Format == ffFixed) {
+		temp.precision(Prec);
+		temp.width(Digits);
+		temp << L;
+	}
+	else { // assume ffGeneral
+		temp.precision(Prec);
+		temp.width(Digits);
+		temp << L;
+	}
+	return temp.str();
+}
+
+string static FloatToStrF(int L, TFloatFormat Format, int Prec, int Digits) {
 	ostringstream temp;
 	if (Format == ffFixed) {
 		temp.precision(Prec);

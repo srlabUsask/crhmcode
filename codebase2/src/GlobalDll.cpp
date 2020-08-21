@@ -27,25 +27,25 @@ bool Global::LOGVARLOAD;
 long Global::GroupCntTrk;
 long Global::StructCntTrk;
 
-long Global::Freq;     // set by first observation file.
+int Global::Freq;     // set by first observation file.
 
-long Global::DTindx;  // current index during model run and observation display.  Set in main.
-long Global::DTmin;   // minimum index during model run and observation display.  Set in main.
-long Global::DTmax;   // maximum index during model run and observation display.  Set in main.
-long Global::IndxMin; // minimum index of the first file.
-long Global::IndxMax; // maximum index of the first file.
+int Global::DTindx;  // current index during model run and observation display.  Set in main.
+int Global::DTmin;   // minimum index during model run and observation display.  Set in main.
+int Global::DTmax;   // maximum index during model run and observation display.  Set in main.
+int Global::IndxMin; // minimum index of the first file.
+int Global::IndxMax; // maximum index of the first file.
 
-long Global::maxobs;
-long Global::maxlay;
-long Global::maxhru;
+int Global::maxobs;
+int Global::maxlay;
+int Global::maxhru;
 
-long Global::nobs;
-long Global::nlay;
-long Global::nhru;
+int Global::nobs;
+int Global::nlay;
+int Global::nhru;
 
-long Global::CRHMStatus;  // module status; module control = 1 , main control = 2 and Finished = 4. Both inhibit output.
-long Global::CurrentModuleRun;  // currently executing module index
-long Global::CRHMControlSaveCnt; // NewModules input
+int Global::CRHMStatus;  // module status; module control = 1 , main control = 2 and Finished = 4. Both inhibit output.
+int Global::CurrentModuleRun;  // currently executing module index
+int Global::CRHMControlSaveCnt; // NewModules input
 
 BitSet Global::RunUpBitSet; // determines modules executed during looping.
 BitSet Global::ModuleBitSet; // determines modules executed during calculating ahead.
