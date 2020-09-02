@@ -24,16 +24,16 @@ snowcover::snowcover(float SWEmean, float cv) {  //Manishankar: this is only bei
 	data = new float[N];
 
 	for (int ii = 0; ii < N; ii++) {
-		x = SWEmean * 2.0*(ii + 1) / N;
-		float K = (x - SWEmean) / (SWEmean*cv);
+		x = SWEmean * 2.0f * (ii + 1) / N;
+		float K = (x - SWEmean) / (SWEmean * cv);
 
-		float Sy = sqrt(log(cv*cv + 1.0));
+		float Sy = sqrt(log(cv * cv + 1.0f));
 
-		float Ky = (log(K*sqrt(exp(Sy*Sy) - 1.0) + 1.0) + Sy * Sy / 2.0) / Sy;
+		float Ky = (log(K * sqrt(exp(Sy * Sy) - 1.0f) + 1.0f) + Sy * Sy / 2.0f) / Sy;
 
 		float t = 1 / (1 + little_p * Ky);
 
-		float P = (exp(-Ky * Ky / 2) / sqrt(2 * M_PI)) * (a1*t + a2 * pow(t, 2) + a3 * pow(t, 3));
+		float P = (exp(-Ky * Ky / 2) / (float) sqrt(2 * M_PI)) * (a1 * t + a2 * pow(t, 2) + a3 * pow(t, 3));
 
 		data[ii] = P;
 	}
@@ -42,12 +42,12 @@ snowcover::snowcover(float SWEmean, float cv) {  //Manishankar: this is only bei
 
 // Saturation vapour pressure (kPa)
 // Saturation humidity (kg/kg) Over ice and water
-double Common::estar(float t) /* Saturation vapour pressure kPa*/
+float Common::estar(float t) /* Saturation vapour pressure kPa*/
 {
-	if (t > 0.0)
-		return 0.611 * exp(17.27*t / (t + 237.3));
+	if (t > 0.0f)
+		return 0.611f * exp(17.27f * t / (t + 237.3f));
 	else
-		return 0.611 * exp(21.88*t / (t + 265.5));
+		return 0.611f * exp(21.88f * t / (t + 265.5f));
 }
 
 float Common::Qs(float P, float tc) { // P (KPa)  //Manishankar: this function is only being used in NewModules.cpp.
@@ -55,11 +55,11 @@ float Common::Qs(float P, float tc) { // P (KPa)  //Manishankar: this function i
 	float es; // Vapour pressure (Pa)
 
 	if (tc >= 0)
-		es = 0.611213*exp(17.5043*tc / (241.3 + tc));
+		es = 0.611213f * exp(17.5043f * tc / (241.3f + tc));
 	else
-		es = 0.611213*exp(22.4422*tc / (272.186 + tc));
+		es = 0.611213f * exp(22.4422f * tc / (272.186f + tc));
 
-	return(0.622*es / P);
+	return(0.622f * es / P);
 }
 
 // Saturation humidity (kg/kg) Over water
@@ -67,9 +67,9 @@ float Common::Qswater(float P, float tc) { // P (KPa)
 
 	float es; // Vapour pressure (KPa)
 
-	es = 0.611213*exp(17.5043*tc / (241.3 + tc));
+	es = 0.611213f * exp(17.5043f * tc / (241.3f + tc));
 
-	return(0.622*es / P);
+	return(0.622f * es / P);
 }
 
 float Common::DepthofSnow(float SWE)
@@ -78,35 +78,35 @@ float Common::DepthofSnow(float SWE)
 	Calculates Snow Depth(m) from SWE(mm) */
 	float Snow_Depth;
 
-	if (SWE > 2.05) {
-		if (SWE <= 145.45) /* SWE 145.45 mm equivalent to 60 cm*/
-			Snow_Depth = (SWE - 2.05) / 2.39;
+	if (SWE > 2.05f) {
+		if (SWE <= 145.45f) /* SWE 145.45f mm equivalent to 60 cm*/
+			Snow_Depth = (SWE - 2.05f) / 2.39f;
 		else
-			Snow_Depth = (SWE + 128.06) / 4.5608;
+			Snow_Depth = (SWE + 128.06f) / 4.5608f;
 	}
 	else
 		Snow_Depth = 0;
 
-	return Snow_Depth / 100.0;
+	return Snow_Depth / 100.0f;
 } /* DepthofSnow*/
 
 float Common::SWE_prob(float SWEmean, float SWE, float CV) { //Manishankar: This function is only being used in NewModules.cpp
 
-	if (SWE <= 0.01) return 0.0; // handle log(0) error
-	if (SWE >= SWEmean) return 1.0; //
+	if (SWE <= 0.01f) return 0.0f; // handle log(0) error
+	if (SWE >= SWEmean) return 1.0f; //
 
-	float K = -SWE / (SWEmean*CV);
+	float K = -SWE / (SWEmean * CV);
 
-	float Sy = sqrt(log(1.0 + CV * CV));
+	float Sy = sqrt(log(1.0f + CV * CV));
 
-	float Ky = log(1.0 + K * CV) / Sy + Sy / 2.0;
+	float Ky = log(1.0f + K * CV) / Sy + Sy / 2.0f;
 
 	float t = 1 / (1 + little_p * Ky);
 
-	float P = (exp(-Ky * Ky / 2) / sqrt(2 * M_PI)) * (a1*t + a2 * t*t + a3 * t*t*t);
+	float P = (exp(-Ky * Ky / 2) / (float) sqrt(2 * M_PI)) * (a1 * t + a2 * t * t + a3 * t * t * t);
 
-	if (P > 1.0 || P < 0.001) // handle discontinuity
-		P = 1.0;
+	if (P > 1.0f || P < 0.001f) // handle discontinuity
+		P = 1.0f;
 
 	return P;
 }
@@ -114,12 +114,12 @@ float Common::SWE_prob(float SWEmean, float SWE, float CV) { //Manishankar: This
 float Common::SVDens(float Temp)
 
 {
-	return 1.324*exp(22.452*Temp / (Temp + 273.15)) / (Temp + 273.15);
+	return 1.324f * exp(22.452f * Temp / (Temp + 273.15f)) / (Temp + 273.15f);
 }
 // outputs sat. vapor density, kg/m^3
 
 
-void Common::GroupEnding(string &AA, int Cnt) {
+void Common::GroupEnding(string& AA, int Cnt) {
 
 	int alphas = Cnt / 26;
 	int letter = Cnt % 26;
@@ -140,27 +140,27 @@ float Common::Ice_Bulb(float Tc, float RH, float Pa) {
 
 	float Tk = Tc + CRHM_constants::Tm;
 
-	float D = 0.0000206*pow(Tk / CRHM_constants::Tm, 1.75);
+	float D = 0.0000206f * pow(Tk / CRHM_constants::Tm, 1.75f);
 
-	float RHO = Pa * 1000.0 / (CRHM_constants::Rgas*Tk);
+	float RHO = Pa * 1000.0f / (CRHM_constants::Rgas * Tk);
 
-	float qt = CRHM_constants::em / (Pa*1000.0)*611.213*exp(22.4422*Tc / (CRHM_constants::Tm + Tc));
+	float qt = CRHM_constants::em / (Pa * 1000.0f) * 611.213f * exp(22.4422f * Tc / (CRHM_constants::Tm + Tc));
 
-	float lamda = 0.000076843*Tk + 0.003130762;
+	float lamda = 0.000076843f * Tk + 0.003130762f;
 
 	float L;
-	if (Tc > 0.0)
+	if (Tc > 0.0f)
 		L = CRHM_constants::Lv;
 	else
 		L = CRHM_constants::Ls;
 
-	float delta = CRHM_constants::em*L*qt / (CRHM_constants::Rgas*sqr(Tk));
+	float delta = CRHM_constants::em * L * qt / (CRHM_constants::Rgas * sqr(Tk));
 
-	return Tc - L * (1.0 - RH / 100.0)*qt / (CRHM_constants::Cp + L * delta) *(RHO*CRHM_constants::Cp*D / lamda);
+	return Tc - L * (1.0f - RH / 100.0f) * qt / (CRHM_constants::Cp + L * delta) * (RHO * CRHM_constants::Cp * D / lamda);
 } // returns ice bulb temperature, Pa (kPa), RH(%).
 
 
-void Common::Message(const char *s1, const char *s2) {
+void Common::Message(const char* s1, const char* s2) {
 
 	cout << s1 << ", " << s2 << endl;
 }
@@ -170,7 +170,7 @@ void Common::Message(const string s1, const string s2) {
 	cout << s1 << ", " << s2 << endl;
 }
 
-string Common::lowercase(string &s) {  //Manishankar: in CRHMmain.cpp, utils.cpp, CRHMmainDlg.cpp
+string Common::lowercase(string& s) {  //Manishankar: in CRHMmain.cpp, utils.cpp, CRHMmainDlg.cpp
 
 	transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
 	return s;
@@ -178,7 +178,7 @@ string Common::lowercase(string &s) {  //Manishankar: in CRHMmain.cpp, utils.cpp
 
 
 
-int Common::IndexOf(TStringList *Box, const string S) { //Manishankar: being used in different places in different ways.
+int Common::IndexOf(TStringList* Box, const string S) { //Manishankar: being used in different places in different ways.
 	for (int ii = 0; ii < Box->Count; ++ii) {
 		if (Box->Strings[ii] == S)
 			return ii;
@@ -256,8 +256,8 @@ float Common::KyValue(float probability, float guess) {
 	float Ky, TempP, t;
 	bool  done = false;
 	float direction = -1;       // increasing
-	float tolerance = 0.0001;
-	float dKy = 0.1;      // increment
+	float tolerance = 0.0001f;
+	float dKy = 0.1f;      // increment
 	long  iterations = 0;
 
 	Ky = guess;        // start value
@@ -265,7 +265,7 @@ float Common::KyValue(float probability, float guess) {
 	while (!done) {
 		iterations++;
 		t = 1 / (1 + little_p * Ky);
-		TempP = (exp(-Ky * Ky / 2) / sqrt(2 * M_PI)) * (a1*t + a2 * t*t + a3 * t*t*t);
+		TempP = (exp(-Ky * Ky / 2) / (float) sqrt(2 * M_PI)) * (a1 * t + a2 * t * t + a3 * t * t * t);
 
 		if (fabs(TempP - probability) <= tolerance)
 		{
@@ -293,13 +293,13 @@ float Common::KyValue(float probability, float guess) {
 
 float Common::K(float Ky, float LogStDev) {
 
-	return (exp(LogStDev*Ky - (sqr(LogStDev) / 2)) - 1) / (sqrt(exp(sqr(LogStDev)) - 1));
+	return (exp(LogStDev * Ky - (sqr(LogStDev) / 2)) - 1) / (sqrt(exp(sqr(LogStDev)) - 1));
 }
 
 
 string Common::GetCurrentPath(void) {
 
-	const char *buffer;
+	const char* buffer;
 
 	//getcwd(buffer, _MAX_PATH);
 	/*
@@ -349,4 +349,3 @@ bool static isdigit(char ch)
 }
 
 /////////////////////////////////////////
-
