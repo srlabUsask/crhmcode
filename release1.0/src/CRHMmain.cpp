@@ -1999,7 +1999,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 						if (xx < xLimit)
 						{
-							cdSeries[ii]->AddXY(Global::DTnow, xx);
+							cdSeries[ii]->AddXY(Global::DTnow, (float) xx);
 						}
 						else
 						{
@@ -2010,7 +2010,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 						xx = (*mmsDataL[ii]);
 						if (xx < lLimit)
 						{
-							cdSeries[ii]->AddXY(Global::DTnow, xx);
+							cdSeries[ii]->AddXY(Global::DTnow, (float)xx);
 						}
 						else
 						{
@@ -3538,7 +3538,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 			tokencount++;
 			token = strtok(NULL, " \t");
 		}
-		obsvalue = atof(tokens[tokencount - obscount + obsindex - 1]);
+		obsvalue = (float) atof(tokens[tokencount - obscount + obsindex - 1]);
 
 		dateelements = tokencount - obscount;
 		if (dateelements == 1) { ddate = atof(tokens[0]); }
