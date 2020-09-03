@@ -26,9 +26,9 @@
 
 using namespace std;
 
-TStringList *ReadListN = new TStringList;
+TStringList* ReadListN = new TStringList;
 
-TStringList *FunctListN = new TStringList;
+TStringList* FunctListN = new TStringList;
 
 string Fstrings[] = { "Observation", "VP_saturated", "W_to_MJ/Int", "MJ/Int_to_W", "Average", "Minimum", "Maximum", "Daily Sum", "Positive",
 "Total", "First", "Last", "Peak", "Count", "Count0", "Intvl" };
@@ -67,38 +67,38 @@ void ClassModule::initbase(void) {
 
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	ClassPar* newPar;
 
 
 
 	if (Var_NDEFN_cnt) {
-		
-		Var_loop_lay_table = new float**[Var_NDEFN_cnt]; // define [#Var][#layers]
-														 
+
+		Var_loop_lay_table = new float** [Var_NDEFN_cnt]; // define [#Var][#layers]
+
 		for (long jj = 0; jj < Var_NDEFN_cnt; ++jj) {
-			Var_loop_lay_table[jj] = new float*[nlay];
+			Var_loop_lay_table[jj] = new float* [nlay];
 		}
-		
-		Var_loop_lay_value = new float*[Var_NDEFN_cnt]; // define [#Var]
+
+		Var_loop_lay_value = new float* [Var_NDEFN_cnt]; // define [#Var]
 		for (long jj = 0; jj < Var_NDEFN_cnt; ++jj)
 			Var_loop_lay_value[jj] = new float[nhru];
 	}
 	else {
-		
+
 		Var_loop_lay_table = NULL;
 		Var_loop_lay_value = NULL;
 	}
 
-	
+
 
 	if (Par_NDEFN_cnt) {
-		Par_loop_lay_table = new float**[Par_NDEFN_cnt];
+		Par_loop_lay_table = new float** [Par_NDEFN_cnt];
 		for (long jj = 0; jj < Par_NDEFN_cnt; ++jj) {
-			Par_loop_lay_table[jj] = new float*[nlay];
+			Par_loop_lay_table[jj] = new float* [nlay];
 			for (long ll = 0; ll < nlay; ++ll)
-				Par_loop_lay_table[ll] = new float*[nhru];
+				Par_loop_lay_table[ll] = new float* [nhru];
 		}
-		Par_loop_lay_value = new float*[Par_NDEFN_cnt];
+		Par_loop_lay_value = new float* [Par_NDEFN_cnt];
 		for (long jj = 0; jj < Par_NDEFN_cnt; ++jj) {
 			Par_loop_lay_value[jj] = new float[nlay];
 			for (long ll = 0; ll < nlay; ++ll)
@@ -110,28 +110,28 @@ void ClassModule::initbase(void) {
 		Par_loop_lay_value = NULL;
 	}
 
-	
+
 
 	Var_NDEFN_cnt = 0;
 	Par_NDEFN_cnt = 0;
 
 
-	
+
 
 	decl();  // executes the INIT portion of the declvar/declparam etc. routines
 
 	init();  // executes the module init() routine
 
-			 
+
 
 }
 
 //---------------------------------------------------------------------------
 int ClassModule::declgrpvar(string variable, string queryvar, string help,
-	string units, float **value, float ***layvalue, bool PointPlot) {
+	string units, float** value, float*** layvalue, bool PointPlot) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 
 	if (Variation_Skip()) {
 		*value = NULL;
@@ -232,14 +232,14 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 
 //---------------------------------------------------------------------------
 void ClassModule::decldiag(string variable, CRHM::TDim dimen,
-	string help, string units, float **value, float ***layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, float** value, float*** layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, false, Local);
 }
 //---------------------------------------------------------------------------
 
 void ClassModule::decldiag(string variable, CRHM::TDim dimen,
-	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, long** value, long*** ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, false, Local);
 
@@ -247,7 +247,7 @@ void ClassModule::decldiag(string variable, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 
 void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
-	string help, string units, float **value, float ***layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, float** value, float*** layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, true, Local);
 
@@ -264,7 +264,7 @@ void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
-	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, long** value, long*** ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, true, Local);
 
@@ -281,7 +281,7 @@ void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
-	string help, string units, float **value, float ***layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, float** value, float*** layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, true, Local);
 
@@ -298,7 +298,7 @@ void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
-	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, long** value, long*** ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, true, Local);
 
@@ -316,9 +316,9 @@ void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 
 void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
-	string units, float **value, float ***layvalue, const int dim, bool PointPlot, bool StatVar, CRHM::TVISIBLE Local) {
+	string units, float** value, float*** layvalue, const int dim, bool PointPlot, bool StatVar, CRHM::TVISIBLE Local) {
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 	string Orgvariable = variable;
 
 	if (Variation_Skip()) {
@@ -390,7 +390,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 					newVar->nfreq = true;
 					newVar->lay = Global::Freq;
 					newVar->ReleaseM(true);
-					newVar->layvalues = new float *[newVar->lay];
+					newVar->layvalues = new float* [newVar->lay];
 					for (int ii = 0; ii < newVar->lay; ii++)
 						newVar->layvalues[ii] = new float[newVar->dim];
 				}
@@ -427,10 +427,10 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 //---------------------------------------------------------------------------
 void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
-	string units, long **ivalue, long ***ilayvalue, const int dim, bool PointPlot, bool StatVar, CRHM::TVISIBLE Local) {
+	string units, long** ivalue, long*** ilayvalue, const int dim, bool PointPlot, bool StatVar, CRHM::TVISIBLE Local) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 	string Orgvariable = variable;
 
 	if (Variation_Skip()) {
@@ -498,7 +498,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 					newVar->ReleaseM(true);
 					newVar->lay = Global::Freq;
 					newVar->nfreq = true;
-					newVar->ilayvalues = new long *[newVar->lay];
+					newVar->ilayvalues = new long* [newVar->lay];
 					for (int ii = 0; ii < newVar->lay; ii++)
 						newVar->ilayvalues[ii] = new long[newVar->dim];
 				}
@@ -526,10 +526,10 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 //---------------------------------------------------------------------------
 void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
-	string units, float **value, float ***layvalue, const int dim) {
+	string units, float** value, float*** layvalue, const int dim) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 
 	if (Variation_Skip()) {
 		*value = NULL;
@@ -585,7 +585,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 					newVar->ReleaseM(true);
 					newVar->lay = Global::Freq;
 					newVar->nfreq = true;
-					newVar->layvalues = new float *[newVar->lay];
+					newVar->layvalues = new float* [newVar->lay];
 					for (int ii = 0; ii < newVar->lay; ii++)
 						newVar->layvalues[ii] = new float[newVar->dim];
 				}
@@ -609,10 +609,10 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 //---------------------------------------------------------------------------
 void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
-	string units, long **value, long ***layvalue, const int dim) {
+	string units, long** value, long*** layvalue, const int dim) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 
 	if (Variation_Skip()) {
 		*value = NULL;
@@ -668,7 +668,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 					newVar->ReleaseM(true);
 					newVar->lay = Global::Freq;
 					newVar->nfreq = true;
-					newVar->ilayvalues = new long *[newVar->lay];
+					newVar->ilayvalues = new long* [newVar->lay];
 					for (int ii = 0; ii < newVar->lay; ii++)
 						newVar->ilayvalues[ii] = new long[newVar->dim];
 				}
@@ -692,7 +692,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 //---------------------------------------------------------------------------
 TStringList* ClassModule::decldiagparam(string param, CRHM::TDim dimen,
-	string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local) {
+	string Texts, string help, TStringList* stringsList, CRHM::TVISIBLE Local) {
 
 	TStringList* fix = declparam(param, dimen, Texts, help, stringsList, Local);
 	return fix;
@@ -700,7 +700,7 @@ TStringList* ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 TStringList* ClassModule::decllocalparam(string param, CRHM::TDim dimen,
-	string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local) {
+	string Texts, string help, TStringList* stringsList, CRHM::TVISIBLE Local) {
 
 	TStringList* fix = declparam(param, dimen, Texts, help, stringsList, Local);
 	return fix;
@@ -708,9 +708,9 @@ TStringList* ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
-	string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local) {
+	string Texts, string help, TStringList* stringsList, CRHM::TVISIBLE Local) {
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	ClassPar* newPar;
 
 	if (Variation_Skip()) {
 		return (TStringList*)NULL;
@@ -789,7 +789,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const float **value, const float ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const float** value, const float*** layvalue, const int dim, CRHM::TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
@@ -797,7 +797,7 @@ void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const float **value, const float ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const float** value, const float*** layvalue, const int dim, CRHM::TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
@@ -805,9 +805,9 @@ void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::declparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const float **value, const float ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const float** value, const float*** layvalue, const int dim, CRHM::TVISIBLE Local) {
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	ClassPar* newPar;
 
 	if (Variation_Skip()) {
 		*value = NULL;
@@ -849,8 +849,8 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 					newPar->visibility = Local;
 					newPar->Inhibit_share = 1;
 					newPar->valstr = valstr;
-					newPar->minVal = atof(minstr.c_str());
-					newPar->maxVal = atof(maxstr.c_str());
+					newPar->minVal = (float) atof(minstr.c_str());
+					newPar->maxVal = (float) atof(maxstr.c_str());
 					newPar->help = help;
 				}
 				return;
@@ -936,7 +936,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const long **value, const long ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const long** value, const long*** layvalue, const int dim, CRHM::TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
@@ -944,7 +944,7 @@ void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const long **value, const long ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const long** value, const long*** layvalue, const int dim, CRHM::TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
@@ -952,10 +952,10 @@ void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::declparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const long **ivalue, const long ***ilayvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const long** ivalue, const long*** ilayvalue, const int dim, CRHM::TVISIBLE Local) {
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	ClassPar* newPar;
 
 	if (Variation_Skip()) {
 		*ivalue = NULL;
@@ -996,8 +996,8 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 					newPar->visibility = Local;
 					newPar->Inhibit_share = 1;
 					newPar->valstr = valstr;
-					newPar->minVal = atof(minstr.c_str());
-					newPar->maxVal = atof(maxstr.c_str());
+					newPar->minVal = (float) atof(minstr.c_str());
+					newPar->maxVal = (float) atof(maxstr.c_str());
 					newPar->help = help;
 				}
 				return;
@@ -1053,20 +1053,20 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			newPar = (*itPar).second;
 			*ivalue = newPar->ivalues;
 			if ((dimen == CRHM::NLAY && ilayvalue != NULL) || (dimen == CRHM::NDEF && ilayvalue != NULL) || (dimen == CRHM::NDEFN && ilayvalue != NULL))
-				*ilayvalue = (const long **)newPar->ilayvalues;
+				*ilayvalue = (const long**)newPar->ilayvalues;
 			return;
 		}
 		else if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			*ivalue = newPar->ivalues;
 			if ((dimen == CRHM::NLAY && ilayvalue != NULL) || (dimen == CRHM::NDEF && ilayvalue != NULL) || (dimen == CRHM::NDEFN && ilayvalue != NULL))
-				*ilayvalue = (const long **)newPar->ilayvalues;
+				*ilayvalue = (const long**)newPar->ilayvalues;
 			return;
 		}
 		else if ((newPar = ClassParFindPar(param))) {
 			*ivalue = newPar->ivalues;
 			if ((dimen == CRHM::NLAY && ilayvalue != NULL) || (dimen == CRHM::NDEF && ilayvalue != NULL) || (dimen == CRHM::NDEFN && ilayvalue != NULL))
-				*ilayvalue = (const long **)newPar->ilayvalues;
+				*ilayvalue = (const long**)newPar->ilayvalues;
 			return;
 		}
 		else {
@@ -1081,7 +1081,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::FindWildVarFloat(string name, ClassVar* &newVar, bool OnceFlag) {
+long ClassModule::FindWildVarFloat(string name, ClassVar*& newVar, bool OnceFlag) {
 
 	string spacename = " " + name;;
 	string Var;
@@ -1122,7 +1122,7 @@ long ClassModule::FindWildVarFloat(string name, ClassVar* &newVar, bool OnceFlag
 	return -1;
 }
 //---------------------------------------------------------------------------
-long ClassModule::FindWildParFloat(string name, ClassPar* &newPar, bool Trunc = false, bool Root = true) {
+long ClassModule::FindWildParFloat(string name, ClassPar*& newPar, bool Trunc = false, bool Root = true) {
 
 	string spacename;
 	if (!Trunc)
@@ -1155,10 +1155,10 @@ long ClassModule::FindWildParFloat(string name, ClassPar* &newPar, bool Trunc = 
 	return -1;
 }
 //---------------------------------------------------------------------------
-long ClassModule::declgetvar(string source, string name, string units, const float **value, const float ***layvalue) {
+long ClassModule::declgetvar(string source, string name, string units, const float** value, const float*** layvalue) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 
 	if (Variation_Skip()) {
 		*value = NULL;
@@ -1170,7 +1170,7 @@ long ClassModule::declgetvar(string source, string name, string units, const flo
 	AKAhook(VARG, Name, name, name, source, ID);
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	ClassPar* newPar;
 	long GetUnit;
 
 	switch (Global::BuildFlag) {
@@ -1195,7 +1195,7 @@ long ClassModule::declgetvar(string source, string name, string units, const flo
 		if ((itVar = Global::MapVars.find(source + " " + name)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			*value = newVar->values;
-			if (layvalue != NULL) *layvalue = (const float **)newVar->layvalues;
+			if (layvalue != NULL) *layvalue = (const float**)newVar->layvalues;
 
 			PairVar Item = PairVar(Name + " " + name, newVar);
 			Global::MapVarsGet.insert(Item);
@@ -1205,7 +1205,7 @@ long ClassModule::declgetvar(string source, string name, string units, const flo
 			(itVar = Global::MapVars.find(source + " " + name.substr(0, indx2))) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			*value = newVar->values;
-			if (layvalue != NULL) *layvalue = (const float **)newVar->layvalues;
+			if (layvalue != NULL) *layvalue = (const float**)newVar->layvalues;
 
 			PairVar Item = PairVar(Name + " " + name, newVar);
 			Global::MapVarsGet.insert(Item);
@@ -1215,7 +1215,7 @@ long ClassModule::declgetvar(string source, string name, string units, const flo
 			GetUnit = FindWildVarFloat(name, newVar); // name
 			if (GetUnit > -1) {
 				*value = newVar->values;
-				if (layvalue != NULL) *layvalue = (const float **)newVar->layvalues;
+				if (layvalue != NULL) *layvalue = (const float**)newVar->layvalues;
 
 				PairVar Item = PairVar(Name + " " + name, newVar);
 				Global::MapVarsGet.insert(Item);
@@ -1230,10 +1230,10 @@ long ClassModule::declgetvar(string source, string name, string units, const flo
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declgetvar(string source, string name, string units, const long **value, const long ***layvalue) {
+long ClassModule::declgetvar(string source, string name, string units, const long** value, const long*** layvalue) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 
 	if (Variation_Skip()) {
 		*value = NULL;
@@ -1245,7 +1245,7 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 	AKAhook(VARG, Name, name, name, source, ID);
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	ClassPar* newPar;
 	long GetUnit;
 
 	switch (Global::BuildFlag) {
@@ -1273,7 +1273,7 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 		if ((itVar = Global::MapVars.find(source + " " + name)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			*value = newVar->ivalues;
-			if (layvalue != NULL) *layvalue = (const long **)newVar->ilayvalues;
+			if (layvalue != NULL) *layvalue = (const long**)newVar->ilayvalues;
 
 			PairVar Item = PairVar(Name + " " + name, newVar);
 			Global::MapVarsGet.insert(Item);
@@ -1283,7 +1283,7 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 			(itVar = Global::MapVars.find(source + " " + name.substr(0, indx2))) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			*value = newVar->ivalues;
-			if (layvalue != NULL) *layvalue = (const long **)newVar->ilayvalues;
+			if (layvalue != NULL) *layvalue = (const long**)newVar->ilayvalues;
 
 			PairVar Item = PairVar(Name + " " + name, newVar);
 			Global::MapVarsGet.insert(Item);
@@ -1293,7 +1293,7 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 			GetUnit = FindWildVarFloat(name, newVar); // name
 			if (GetUnit > -1) {
 				*value = newVar->ivalues;
-				if (layvalue != NULL) *layvalue = (const long **)newVar->ilayvalues;
+				if (layvalue != NULL) *layvalue = (const long**)newVar->ilayvalues;
 
 				PairVar Item = PairVar(Name + " " + name, newVar);
 				Global::MapVarsGet.insert(Item);
@@ -1308,11 +1308,11 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string units, float **value) {
+long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string units, float** value) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
-	ClassVar *thisVar;
+	ClassVar* newVar;
+	ClassVar* thisVar;
 
 	if (Variation_Skip()) {
 		*value = NULL;
@@ -1352,7 +1352,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 				thisVar->ReleaseM(); // releases everything
 				thisVar->dim = cnt;
 				if (thisVar->lay > 0) {
-					thisVar->layvalues = new float *[thisVar->lay];
+					thisVar->layvalues = new float* [thisVar->lay];
 					for (int ii = 0; ii < thisVar->lay; ii++) thisVar->layvalues[ii] = new float[cnt];
 				}
 				thisVar->values = new float[cnt];     // CHECK ???
@@ -1414,7 +1414,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 long ClassModule::getdimObs(string variable) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 
 	if ((itVar = Global::MapVars.find("obs " + variable)) != Global::MapVars.end()) {
 		newVar = (*itVar).second;
@@ -1426,10 +1426,10 @@ long ClassModule::getdimObs(string variable) {
 
 //---------------------------------------------------------------------------
 long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
-	string help, string units, const float **value, long HRU_index, bool optional, const float ***layvalue) {
+	string help, string units, const float** value, long HRU_index, bool optional, const float*** layvalue) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 	PairVar Item;
 	string declModule = "obs ";
 
@@ -1604,10 +1604,10 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updating. Is it ever used.
-	string help, string units, const long **value, long HRU_index, bool optional, const long ***layvalue) {
+	string help, string units, const long** value, long HRU_index, bool optional, const long*** layvalue) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 	PairVar Item;
 	string declModule = "obs ";
 
@@ -1648,7 +1648,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 					newVar->dimMax = newVar->dim;
 					newVar->lay = Global::Freq;
 					newVar->nfreq = true;
-					newVar->ilayvalues = new long *[newVar->lay];
+					newVar->ilayvalues = new long* [newVar->lay];
 					for (int ii = 0; ii < newVar->lay; ++ii)
 						newVar->ilayvalues[ii] = new long[newVar->dimMax];
 				}
@@ -1682,7 +1682,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 				newVar->ReleaseM(true);
 				newVar->lay = Global::Freq;
 				newVar->nfreq = true;
-				newVar->ilayvalues = new long *[newVar->lay];
+				newVar->ilayvalues = new long* [newVar->lay];
 				for (int ii = 0; ii < newVar->lay; ii++)
 					newVar->ilayvalues[ii] = new long[newVar->dim];
 			}
@@ -1765,12 +1765,12 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 				newVar->ReleaseM(true);
 				newVar->lay = Global::Freq;
 				newVar->nfreq = true;
-				newVar->ilayvalues = new long *[newVar->lay];
+				newVar->ilayvalues = new long* [newVar->lay];
 				for (int ii = 0; ii < newVar->lay; ii++)
 					newVar->ilayvalues[ii] = new long[newVar->dim];
 			}
 
-			*layvalue = (const long **)newVar->ilayvalues;
+			*layvalue = (const long**)newVar->ilayvalues;
 			newVar->UserFunct = &ClassVar::Intvl;
 			newVar->FunKind = CRHM::INTVL;
 			newVar->FunctVar = newVar;
@@ -1803,10 +1803,10 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 //---------------------------------------------------------------------------
 
-long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::TFun typeFun, float ***layvalue, bool optional) {
+long ClassModule::declobsfunc(string obs, string variable, float** value, CRHM::TFun typeFun, float*** layvalue, bool optional) {
 
 	MapVar::iterator itVar;
-	ClassVar *obsVar, *newVar;
+	ClassVar* obsVar, * newVar;
 	PairVar Item;
 	string declModule = "obs ";
 
@@ -1938,7 +1938,7 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 					newVar->dimMax = max<long>(newVar->dim, newVar->dimMax);
 					newVar->lay = Global::Freq;
 
-					newVar->layvalues = new float *[newVar->lay];
+					newVar->layvalues = new float* [newVar->lay];
 					*layvalue = newVar->layvalues;
 
 					for (int ii = 0; ii < newVar->lay; ++ii)
@@ -2047,10 +2047,10 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::TFun typeFun, bool optional) {
+long ClassModule::declobsfunc(string obs, string variable, long** value, CRHM::TFun typeFun, bool optional) {
 
 	MapVar::iterator itVar;
-	ClassVar *obsVar, *newVar;
+	ClassVar* obsVar, * newVar;
 	PairVar Item;
 	string declModule = "obs ";
 
@@ -2226,10 +2226,10 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 //---------------------------------------------------------------------------
 
 
-long ClassModule::declputvar(string source, string name, string units, float **value, float ***layvalue) {
+long ClassModule::declputvar(string source, string name, string units, float** value, float*** layvalue) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 	long GetUnit;
 
 	if (Variation_Skip()) {
@@ -2296,10 +2296,10 @@ long ClassModule::declputvar(string source, string name, string units, float **v
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declputvar(string source, string name, string units, long **value, long ***layvalue) {
+long ClassModule::declputvar(string source, string name, string units, long** value, long*** layvalue) {
 
 	MapVar::iterator itVar;
-	ClassVar *newVar;
+	ClassVar* newVar;
 	long GetUnit;
 
 	if (Variation_Skip()) {
@@ -2369,7 +2369,7 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & NewName) { // OBSD, PARD, VARD
+void ClassModule::AKAhook(TAKA type, string module, string OrgName, string& NewName) { // OBSD, PARD, VARD
 
 	Mapstr2::iterator it; // holds NewName
 	string ID = AKAstrings[type] + ' ' + module + ' ' + OrgName;
@@ -2431,7 +2431,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & NewName, string & source, string base) { // OBSR, OBSF, VARG
+void ClassModule::AKAhook(TAKA type, string module, string OrgName, string& NewName, string& source, string base) { // OBSR, OBSF, VARG
 
 	Mapstr2::iterator it; // holds NewName AND source
 
@@ -2608,14 +2608,14 @@ void ClassModule::ReadObs(bool Reset) {
 		LastGroup = -1;
 	}
 
-	if (Global::DTindx%Global::Freq == 0) { // only at start of day
+	if (Global::DTindx % Global::Freq == 0) { // only at start of day
 		while (pN != FunctListN->Count && FunctListN->Strings[pN] == Name.c_str()) {
 
 			/*TStringList test1 = FunctListN->Objects[pN];
 			auto *test2 = &test1;
 			ClassVar *P = (ClassVar*)test2;*/
 
-			ClassVar *P = (ClassVar*)FunctListN->array[pN].Object;
+			ClassVar* P = (ClassVar*)FunctListN->array[pN].Object;
 
 			P->dim = nhru; // check if necessary. Group?
 
@@ -2642,7 +2642,7 @@ void ClassModule::ReadObs(bool Reset) {
 	}
 
 	while (p < ReadListN->Count && ((ReadListN->Strings[p] == Name.c_str()) || GroupCnt == 0)) { //  && ReadListN->strings[p] == "obs"
-		ClassVar *P = (ClassVar*)ReadListN->array[p].Object;
+		ClassVar* P = (ClassVar*)ReadListN->array[p].Object;
 		P->dim = nhru; // check if necessary. Group?
 
 		if (P->module == "obs" || (GroupCnt && !P->No_ReadVar))
@@ -2667,21 +2667,21 @@ bool ClassModule::ReadAheadObs(long inc) {
 	TDateTime CurrentDTnow = Global::DTnow;
 
 	Global::DTindx += inc;
-	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval * (Global::DTindx + 1);
 
 	long p = 0;
 
 	while (p < ReadListN->Count) {
-		ClassVar *P = (ClassVar*)ReadListN->array[p].Object;
+		ClassVar* P = (ClassVar*)ReadListN->array[p].Object;
 		if (P->FileData->GoodInterval)
 			P->ReadVar();
 		++p;
 	}
 
-	if (Global::DTindx%Global::Freq == 0) {
+	if (Global::DTindx % Global::Freq == 0) {
 		p = 0;
 		while (p < FunctListN->Count && FunctListN->Strings[p] == Name.c_str()) {
-			ClassVar *P = (ClassVar*)FunctListN->array[p].Object;
+			ClassVar* P = (ClassVar*)FunctListN->array[p].Object;
 			if (P->FunctVar->FileData->GoodDay)
 				(P->*(P->UserFunct))();
 			++p;
@@ -2703,24 +2703,24 @@ bool ClassModule::ReadAheadObsMacro(long inc) {
 		return false;
 
 	long CurrentDTindx = Global::DTindx;
-	long **Save_HRU_obs = Global::HRU_OBS;
+	long** Save_HRU_obs = Global::HRU_OBS;
 
 	Global::DTindx += inc;
-	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval * (Global::DTindx + 1);
 
 	long p = 0;
 
 	while (p < ReadListN->Count) {
-		ClassVar *P = (ClassVar*)ReadListN->array[p].Object;
+		ClassVar* P = (ClassVar*)ReadListN->array[p].Object;
 		if (P->FileData->GoodInterval)
 			P->ReadVar();
 		++p;
 	}
 
-	if (Global::DTindx%Global::Freq == 0) {
+	if (Global::DTindx % Global::Freq == 0) {
 		p = 0;
 		while (p < FunctListN->Count) {
-			ClassVar *P = (ClassVar*)FunctListN->array[p].Object;
+			ClassVar* P = (ClassVar*)FunctListN->array[p].Object;
 			if (P->FunctVar->FileData->GoodDay)
 				(P->*(P->UserFunct))();
 			++p;
@@ -2749,7 +2749,7 @@ bool ClassModule::WriteAheadObsMacro(long inc) {
 	long p = 0;
 
 	while (p < ReadListN->Count) {
-		ClassVar *P = (ClassVar*)ReadListN->array[p].Object;
+		ClassVar* P = (ClassVar*)ReadListN->array[p].Object;
 		if (P->FileData->GoodInterval)
 			P->WriteVar();
 		++p;
@@ -2770,7 +2770,7 @@ void ClassModule::DelReadObs(void) {
 }
 
 //---------------------------------------------------------------------------
-bool ClassModule::AnyOne(float *Data, int Cnt, float Val) {
+bool ClassModule::AnyOne(float* Data, int Cnt, float Val) {
 
 	if (Data == NULL) // remove later!
 		return false;
@@ -2789,12 +2789,12 @@ bool ClassModule::UsingObservations(void) {
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
+void ClassModule::addtoreadlist(ClassVar* newVar) { // BuildFlag = crhm::init
 
 													// called by ClassModule::declreadobs INIT to add observation
 
 	long p = 0;
-	ClassVar *P;
+	ClassVar* P;
 	string::size_type indx;
 
 	while (p < ReadListN->Count && GroupCnt == 0) { // duplicates possible in simple projects
@@ -2825,7 +2825,7 @@ void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
 			root_var = newVar->name.substr(0, idx);
 
 		if (newVar->name == "t_max" || newVar->name == "t_min") {
-			if (AnyOne(Global::Warming_t, nhru, 0.0)) {
+			if (AnyOne(Global::Warming_t, nhru, 0.0f)) {
 				newVar->CustomFunct = &ClassVar::do_t_Clim;
 				newVar->CustomFunctName = "do_t_Clim";
 			}
@@ -2835,7 +2835,7 @@ void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
 			}
 		}
 		else if ((!GroupCnt && newVar->name == "p") || (GroupCnt && root_var == "p")) {  //warning resolved by Manishankar
-			if (AnyOne(Global::Warming_p, nhru, 1.0)) {
+			if (AnyOne(Global::Warming_p, nhru, 1.0f)) {
 				newVar->CustomFunct = &ClassVar::do_p_Clim;
 				newVar->CustomFunctName = "do_p_Clim";
 			}
@@ -2848,12 +2848,12 @@ void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::addtofunctlist(ClassVar *newVar) {
+void ClassModule::addtofunctlist(ClassVar* newVar) {
 
 	// called by ClassModule::declobsfunc INIT to add observation function
 
 	long p = 0;
-	ClassVar *P;
+	ClassVar* P;
 	string::size_type indx;
 
 	while (p < FunctListN->Count) {
@@ -2877,7 +2877,7 @@ void ClassModule::addtofunctlist(ClassVar *newVar) {
 
 		if (!Global::OBS_AS_IS) {
 			if (RootName == "Tday") {
-				if (AnyOne(Global::Warming_t, nhru, 0.0)) {
+				if (AnyOne(Global::Warming_t, nhru, 0.0f)) {
 					newVar->CustomFunct = &ClassVar::do_t_day_Clim;
 					newVar->CustomFunctName = "do_t_day_Clim";
 				}
@@ -2887,7 +2887,7 @@ void ClassModule::addtofunctlist(ClassVar *newVar) {
 				}
 			}
 			else if (RootName == "RHday") {
-				if (AnyOne(Global::Warming_t, nhru, 0.0)) {
+				if (AnyOne(Global::Warming_t, nhru, 0.0f)) {
 					newVar->CustomFunct = &ClassVar::do_rh_day_Clim;
 					newVar->CustomFunctName = "do_rh_day_Clim";
 				}
@@ -2897,13 +2897,13 @@ void ClassModule::addtofunctlist(ClassVar *newVar) {
 				}
 			}
 			else if (RootName == "EAday") {
-				if (!AnyOne(Global::Warming_t, nhru, 0.0)) {
+				if (!AnyOne(Global::Warming_t, nhru, 0.0f)) {
 					newVar->CustomFunct = &ClassVar::do_ea_day;
 					newVar->CustomFunctName = "do_ea_day";
 				}
 			}
 			else if (RootName == "t_min" || newVar->name == "t_max") {
-				if (AnyOne(Global::Warming_t, nhru, 0.0)) {
+				if (AnyOne(Global::Warming_t, nhru, 0.0f)) {
 					newVar->CustomFunct = &ClassVar::do_t_Clim;
 					newVar->CustomFunctName = "do_t_Clim";
 				}
@@ -2913,7 +2913,7 @@ void ClassModule::addtofunctlist(ClassVar *newVar) {
 				}
 			}
 			else if (RootName.substr(0, 4) == "pptD") {
-				if (AnyOne(Global::Warming_p, nhru, 1.0)) {
+				if (AnyOne(Global::Warming_p, nhru, 1.0f)) {
 					newVar->CustomFunct = &ClassVar::do_ppt_Clim;
 					newVar->CustomFunctName = "do_ppt_Clim";
 				}
@@ -2985,7 +2985,7 @@ void Administer::MacroUpdate() {
 }
 
 //---------------------------------------------------------------------------
-void Administer::AddModule(ClassModule *Module) {
+void Administer::AddModule(ClassModule* Module) {
 
 	Module->OurAdmin = this;
 	DLLModuleList->AddObject((Module)->Name.c_str(), (TObject*)Module);
@@ -3066,9 +3066,9 @@ void Administer::Accept(int Result) {
 
 	for (int ii = 0; ii < DLLModelList->Count; ++ii) {
 
-		// when sorted index used to access ModelModulesList		
+		// when sorted index used to access ModelModulesList
 		long _object = ii;
-		Global::AllModelsList->AddObject(DLLModelList->Strings[ii], (TObject*)_object);		
+		Global::AllModelsList->AddObject(DLLModelList->Strings[ii], (TObject*)_object);
 
 		// Administer object used to find which DLL loaded model
 		Global::ModelModulesList->AddObject(DLLModelModuleList->Strings[ii], (TObject*)this);
@@ -3096,7 +3096,7 @@ Myparser::Myparser() // parser constructor
 }
 
 // Parser entry point.
-void Myparser::eval_exp(ClassPar *Par)
+void Myparser::eval_exp(ClassPar* Par)
 {
 	LocalPar = Par;
 	float result, Last;
@@ -3119,7 +3119,7 @@ next:
 	get_token();
 
 	if (*token == '[')
-		result = 0.0;
+		result = 0.0f;
 	else if (*token) {
 		eval_exp2(result);
 		if (result > Par->maxVal) result = Par->maxVal;
@@ -3127,7 +3127,7 @@ next:
 		Last = result;
 	}
 	else
-		result = 0.0;
+		result = 0.0f;
 
 	bool end = !*exp_ptr;
 
@@ -3154,9 +3154,9 @@ next:
 			else {
 				for (int ii = col; ii < Par->dim; ++ii)
 					if (Par->varType == CRHM::Float)
-						Par->layvalues[ll][ii] = 0.0;
+						Par->layvalues[ll][ii] = 0.0f;
 					else if (Par->varType == CRHM::Int)
-						Par->ilayvalues[ll][ii] = 0.0;
+						Par->ilayvalues[ll][ii] = 0.0f;
 			}
 
 			col = 0;;
@@ -3230,7 +3230,7 @@ next:
 }
 
 // Add or subtract two terms.
-void Myparser::eval_exp2(float &result)
+void Myparser::eval_exp2(float& result)
 {
 	char op; //removed register keyword to fix warning. Manishankar
 	float temp;
@@ -3253,7 +3253,7 @@ void Myparser::eval_exp2(float &result)
 }
 
 // Multiply or divide two factors.
-void Myparser::eval_exp3(float &result)
+void Myparser::eval_exp3(float& result)
 {
 	char op; //removed register keyword to fix warning. Manishankar
 	float temp;
@@ -3286,7 +3286,7 @@ void Myparser::eval_exp3(float &result)
 }
 
 // Process an exponent
-void Myparser::eval_exp4(float &result)
+void Myparser::eval_exp4(float& result)
 {
 	float temp, ex;
 	int t; //removed register keyword to fix warning. Manishankar
@@ -3295,8 +3295,8 @@ void Myparser::eval_exp4(float &result)
 	if (*token == '^') {
 		get_token();
 		eval_exp4(temp);
-		if (temp == 0.0) {
-			result = 1.0;
+		if (temp == 0.0f) {
+			result = 1.0f;
 			return;
 		}
 		result = pow(result, temp);
@@ -3304,7 +3304,7 @@ void Myparser::eval_exp4(float &result)
 }
 
 // Evaluate a unary + or -.
-void Myparser::eval_exp5(float &result)
+void Myparser::eval_exp5(float& result)
 {
 	char  op; //removed register keyword to fix warning. Manishankar
 
@@ -3318,7 +3318,7 @@ void Myparser::eval_exp5(float &result)
 }
 
 // Process a parenthesized expression.
-void Myparser::eval_exp6(float &result)
+void Myparser::eval_exp6(float& result)
 {
 	if (*token == '(') {  //warning resolved by Manishankar
 		repeatset = true;
@@ -3332,11 +3332,11 @@ void Myparser::eval_exp6(float &result)
 }
 
 // Get the value of a number.
-void Myparser::atom(float &result)
+void Myparser::atom(float& result)
 {
 	switch (tok_type) {
 	case NUMBER:
-		result = atof(token);
+		result = (float) atof(token);
 		get_token();
 		return;
 	default:
@@ -3358,7 +3358,7 @@ void Myparser::serror(int error)
 	for (int ll = row; ll < LocalPar->lay; ++ll) { // reset remainder of parameter values to 0
 		for (int ii = col; ii < LocalPar->dim; ++ii)
 			if (LocalPar->varType == CRHM::Float)
-				LocalPar->layvalues[ll][ii] = 0.0;
+				LocalPar->layvalues[ll][ii] = 0.0f;
 			else if (LocalPar->varType == CRHM::Int)
 				LocalPar->ilayvalues[ll][ii] = 0;
 	}
@@ -3367,7 +3367,7 @@ void Myparser::serror(int error)
 // Obtain the next token.
 void Myparser::get_token()
 {
-	char *temp;  //removed register keyword to fix warning. Manishankar
+	char* temp;  //removed register keyword to fix warning. Manishankar
 
 	tok_type = 0;
 	temp = token;
@@ -3432,10 +3432,10 @@ ClassClark::ClassClark(const float* inVar, float* outVar, const float* kstorage,
 
 	for (long hh = 0; hh < nhru; hh++) {
 
-		c01[hh] = Global::Interval*0.5 / (kstorage[hh] + Global::Interval*0.5);  // units of Global::Interval (days)
-		c2[hh] = (kstorage[hh] - Global::Interval*0.5) / (kstorage[hh] + Global::Interval*0.5); // units of kstorage (days)
+		c01[hh] = Global::Interval * 0.5f / (kstorage[hh] + Global::Interval * 0.5f);  // units of Global::Interval (days)
+		c2[hh] = (kstorage[hh] - Global::Interval * 0.5f) / (kstorage[hh] + Global::Interval * 0.5f); // units of kstorage (days)
 
-		ilag[hh] = max<float>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+		ilag[hh] = max<float>(lag[hh], 0.0f) / 24.0f * Global::Freq + 1.1f; // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)
 			maxlag[hh] = ilag[hh] + 1; // Quick fix
@@ -3444,17 +3444,17 @@ ClassClark::ClassClark(const float* inVar, float* outVar, const float* kstorage,
 
 		ulag[hh] = 0;
 
-		LastIn[hh] = 0.0; // zero initial conditions
-		LastOut[hh] = 0.0; // zero initial conditions
-		NO_lag_release[hh] = 0.0; // released from storage
+		LastIn[hh] = 0.0f; // zero initial conditions
+		LastOut[hh] = 0.0f; // zero initial conditions
+		NO_lag_release[hh] = 0.0f; // released from storage
 	}
 
-	LagArray = new float*[nhru];   // create lag array
+	LagArray = new float* [nhru];   // create lag array
 
 	for (long hh = 0; hh < nhru; hh++) {
 		LagArray[hh] = new float[maxlag[hh]];
 		for (long jj = 0; jj < maxlag[hh]; jj++)
-			LagArray[hh][jj] = 0.0;
+			LagArray[hh][jj] = 0.0f;
 	}
 }
 
@@ -3478,29 +3478,29 @@ float ClassClark::ChangeStorage(const float* kstorage, const long hh)
 	float Last_c01 = c01[hh];
 	float Last_c2 = c2[hh];
 
-	if (c2[hh] >= 1.0) // handles case of NO delay
-		return 0.0;
+	if (c2[hh] >= 1.0f) // handles case of NO delay
+		return 0.0f;
 
-	float Sstorage = (1.0 / (1.0 - c2[hh]))*(c01[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
+	float Sstorage = (1.0f / (1.0f - c2[hh])) * (c01[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
 
-	c01[hh] = Global::Interval*0.5 / (kstorage[hh] + Global::Interval*0.5);  // units of Global::Interval (days)
-	c2[hh] = (kstorage[hh] - Global::Interval*0.5) / (kstorage[hh] + Global::Interval*0.5); // units of kstorage (days)
+	c01[hh] = Global::Interval * 0.5f / (kstorage[hh] + Global::Interval * 0.5f);  // units of Global::Interval (days)
+	c2[hh] = (kstorage[hh] - Global::Interval * 0.5f) / (kstorage[hh] + Global::Interval * 0.5f); // units of kstorage (days)
 
-	if (Sstorage <= 0.0 || Last_c01 == c01[hh]) return 0.0;
+	if (Sstorage <= 0.0f || Last_c01 == c01[hh]) return 0.0f;
 
-	LastOut[hh] = (Sstorage*(1.0 - c2[hh]) - c01[hh] * LastIn[hh]) / c2[hh];
+	LastOut[hh] = (Sstorage * (1.0f - c2[hh]) - c01[hh] * LastIn[hh]) / c2[hh];
 
-	//    Sstorage = (1.0/(1.0 - c2[hh]))*(c01[hh]*LastIn[hh] + c2[hh]*LastOut[hh]); // debug line
+	//    Sstorage = (1.0f/(1.0f - c2[hh]))*(c01[hh]*LastIn[hh] + c2[hh]*LastOut[hh]); // debug line
 
 	return Sstorage;
 }
 
-float ClassClark::ChangeLag(const float *newlag, const long hh) {
+float ClassClark::ChangeLag(const float* newlag, const long hh) {
 
 	float LastValue;
-	float Lag_storage = 0.0;
+	float Lag_storage = 0.0f;
 
-	long newilag = max<float>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+	long newilag = max<float>(newlag[hh], 0.0f) / 24.0f * Global::Freq + 1.1f; // =1 for lag of zero
 
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		Lag_storage += LagArray[hh][(ulag[hh] + ii) % ilag[hh]];
@@ -3510,11 +3510,11 @@ float ClassClark::ChangeLag(const float *newlag, const long hh) {
 	}
 
 	float* AccArray = new float[ilag[hh]]; // work area for ChangeLag
-	AccArray[0] = 0.0;
+	AccArray[0] = 0.0f;
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		AccArray[ii] = AccArray[ii - 1] + LagArray[hh][(ulag[hh] + ii) % ilag[hh]]; // accumulate storage
 
-	NO_lag_release[hh] = 0.0;
+	NO_lag_release[hh] = 0.0f;
 
 	delete[] LagArray[hh]; // delete previous length
 
@@ -3524,17 +3524,17 @@ float ClassClark::ChangeLag(const float *newlag, const long hh) {
 	LagArray[hh][ulag[hh]] = 0; //
 
 	for (int ii = 1; ii < newilag; ++ii) // clear remainder
-		LagArray[hh][ii] = 0.0;
+		LagArray[hh][ii] = 0.0f;
 
 	if (newilag == 1) { // all storage is released
 		NO_lag_release[hh] = AccArray[ilag[hh] - 1];
 	}
-	else if (ilag[hh] > 1 && AccArray[ilag[hh] - 1] > 0.0) {
-		LastValue = 0.0;
+	else if (ilag[hh] > 1 && AccArray[ilag[hh] - 1] > 0.0f) {
+		LastValue = 0.0f;
 
 		for (int mm = 1; mm < newilag - 1; ++mm) {
-			float Y = float(mm) / (newilag - 1)*(ilag[hh] - 1);
-			int Yint = Y + 0.0001;
+			float Y = float(mm) / (newilag - 1) * (ilag[hh] - 1);
+			int Yint = Y + 0.0001f;
 			float Ydif = Y - Yint;
 			float NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
 
@@ -3560,7 +3560,7 @@ void ClassClark::DoClark() {
 	for (long hh = 0; hh < nhru; hh++) {
 
 		LagArray[hh][ulag[hh]] = inVar[hh] + NO_lag_release[hh];
-		NO_lag_release[hh] = 0.0;
+		NO_lag_release[hh] = 0.0f;
 
 		ulag[hh] = ++ulag[hh] % ilag[hh];
 
@@ -3575,7 +3575,7 @@ void ClassClark::DoClark() {
 void ClassClark::DoClark(const long hh) {
 
 	LagArray[hh][ulag[hh]] = inVar[hh] + NO_lag_release[hh];
-	NO_lag_release[hh] = 0.0;
+	NO_lag_release[hh] = 0.0f;
 
 	ulag[hh] = ++ulag[hh] % ilag[hh];  // now points to fully delayed value
 
@@ -3593,9 +3593,9 @@ float ClassClark::Left(int hh) {
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		Slag += LagArray[hh][(ulag[hh] + ii) % ilag[hh]];
 
-	if (c2[hh] >= 1.0) return 0.0; // handles case of NO delay
+	if (c2[hh] >= 1.0f) return 0.0f; // handles case of NO delay
 
-	float Sstorage = (1.0 / (1.0 - c2[hh]))*(c01[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
+	float Sstorage = (1.0f / (1.0f - c2[hh])) * (c01[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
 
 	return Slag + Sstorage;
 }
@@ -3623,16 +3623,16 @@ ClassMuskingum::ClassMuskingum(const float* inVar, float* outVar, const float* k
 
 	for (long hh = 0; hh < nhru; hh++) {
 
-		c0[hh] = (Global::Interval - 2.0*k[hh] * X_M[hh]) /
-			(2.0*k[hh] * (1.0 - X_M[hh]) + Global::Interval);  // units of Global::Interval (days)
+		c0[hh] = (Global::Interval - 2.0f * k[hh] * X_M[hh]) /
+			(2.0f * k[hh] * (1.0f - X_M[hh]) + Global::Interval);  // units of Global::Interval (days)
 
-		c1[hh] = (Global::Interval + 2.0*k[hh] * X_M[hh]) /
-			(2.0*k[hh] * (1.0 - X_M[hh]) + Global::Interval); // units of kstorage (days)
+		c1[hh] = (Global::Interval + 2.0f * k[hh] * X_M[hh]) /
+			(2.0f * k[hh] * (1.0f - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
-		c2[hh] = (2.0*k[hh] * (1.0 - X_M[hh]) - Global::Interval) /
-			(2.0*k[hh] * (1.0 - X_M[hh]) + Global::Interval); // units of kstorage (days)
+		c2[hh] = (2.0f * k[hh] * (1.0f - X_M[hh]) - Global::Interval) /
+			(2.0f * k[hh] * (1.0f - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
-		ilag[hh] = max<float>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+		ilag[hh] = max<float>(lag[hh], 0.0f) / 24.0f * Global::Freq + 1.1f; // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)
 			maxlag[hh] = ilag[hh];
@@ -3641,19 +3641,19 @@ ClassMuskingum::ClassMuskingum(const float* inVar, float* outVar, const float* k
 
 		ulag[hh] = 0;
 
-		LastIn[hh] = 0.0; // zero initial conditions
+		LastIn[hh] = 0.0f; // zero initial conditions
 
-		LastOut[hh] = 0.0; // zero initial conditions
+		LastOut[hh] = 0.0f; // zero initial conditions
 
 		if (maxlag[hh] > Biggest) Biggest = maxlag[hh];
 	}
 
-	LagArray = new float*[nhru];   // create lag array
+	LagArray = new float* [nhru];   // create lag array
 
 	for (long hh = 0; hh < nhru; hh++) {
 		LagArray[hh] = new float[maxlag[hh]];
 		for (long jj = 0; jj < maxlag[hh]; jj++)
-			LagArray[hh][jj] = 0.0;
+			LagArray[hh][jj] = 0.0f;
 	}
 }
 
@@ -3672,16 +3672,16 @@ ClassMuskingum::~ClassMuskingum() {
 	delete[] LagArray;
 }
 
-void ClassMuskingum::ChangeLag(const float *newlag, const long hh)
+void ClassMuskingum::ChangeLag(const float* newlag, const long hh)
 {
 
-	long newilag = max<float>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+	long newilag = max<float>(newlag[hh], 0.0f) / 24.0f * Global::Freq + 1.1f; // =1 for lag of zero
 
 	if (newilag == ilag[hh]) return;
 
 	float* AccArray = new float[ilag[hh]]; // work area for ChangeLag
 
-	AccArray[0] = 0.0;
+	AccArray[0] = 0.0f;
 
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		AccArray[ii] = AccArray[ii - 1] + LagArray[hh][(ulag[hh] + ii) % ilag[hh]]; // accumulate storage
@@ -3691,13 +3691,13 @@ void ClassMuskingum::ChangeLag(const float *newlag, const long hh)
 	LagArray[hh] = new float[newilag]; // create new length
 
 	ulag[hh] = 0; // next input value save here.
-	LagArray[hh][0] = 0.0; // looks better
+	LagArray[hh][0] = 0.0f; // looks better
 
-	float LastValue = 0.0;
+	float LastValue = 0.0f;
 
 	for (int mm = 1; mm < newilag - 1; ++mm) {
-		float Y = float(mm) / (newilag - 1)*(ilag[hh] - 1);
-		int Yint = Y + 0.0001;
+		float Y = float(mm) / (newilag - 1) * (ilag[hh] - 1);
+		int Yint = Y + 0.0001f;
 		float Ydif = Y - Yint;
 		float NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
 
@@ -3729,7 +3729,7 @@ void ClassMuskingum::DoMuskingum() {
 	}
 }
 
-void ClassMuskingum::DoMuskingum(const long hh) {	
+void ClassMuskingum::DoMuskingum(const long hh) {
 
 	LagArray[hh][ulag[hh]] = inVar[hh];
 
@@ -3749,7 +3749,7 @@ float ClassMuskingum::Left(int hh) {
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		Slag += LagArray[hh][(ulag[hh] + ii) % ilag[hh]];
 
-	float Sstorage = (1.0 / (1.0 - c2[hh]))*(c1[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
+	float Sstorage = (1.0f / (1.0f - c2[hh])) * (c1[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
 
 	return Slag + Sstorage;
 }
@@ -3823,10 +3823,10 @@ bool ClassModule::Variation_Skip(void) {
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declputparam(string source, string param, string units, float **value, float ***layvalue) {
+long ClassModule::declputparam(string source, string param, string units, float** value, float*** layvalue) {
 
 	MapPar::iterator itPar;
-	ClassPar *newPar = NULL;
+	ClassPar* newPar = NULL;
 
 	if (Variation_Skip()) {
 		*value = NULL;
@@ -3935,10 +3935,10 @@ long ClassModule::declputparam(string source, string param, string units, float 
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declgetparam(string source, string param, string units, const float **value, const float ***layvalue) {
+long ClassModule::declgetparam(string source, string param, string units, const float** value, const float*** layvalue) {
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	ClassPar* newPar;
 
 	if (Variation_Skip()) {
 		*value = NULL;
@@ -3971,26 +3971,26 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 				newPar = (*itPar).second;
 				*value = newPar->values;
 				if (layvalue != NULL)
-					*layvalue = (const float **)newPar->layvalues;
+					*layvalue = (const float**)newPar->layvalues;
 			}
 		}
 		else {
 			if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
-				*value = (const float *)newPar->values;
+				*value = (const float*)newPar->values;
 				if (layvalue != NULL)
-					*layvalue = (const float **)newPar->layvalues;
+					*layvalue = (const float**)newPar->layvalues;
 			}
 			else if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
-				*value = (const float *)newPar->values;
+				*value = (const float*)newPar->values;
 				if (layvalue != NULL)
-					*layvalue = (const float **)newPar->layvalues;
+					*layvalue = (const float**)newPar->layvalues;
 			}
 			else if ((newPar = ClassParFindPar(param))) {
 				*value = newPar->values;
 				if (layvalue != NULL)
-					*layvalue = (const float **)newPar->layvalues;
+					*layvalue = (const float**)newPar->layvalues;
 			}
 			else {
 				CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
@@ -4009,7 +4009,7 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 long ClassModule::FindModule_from_parameter(string source, string param) {
 
 	MapPar::iterator itPar;
-	ClassPar *newPar = NULL;
+	ClassPar* newPar = NULL;
 
 	variation_max = variation_max | variation_set;
 
@@ -4052,10 +4052,10 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 	throw Except; // does not return
 }
 //---------------------------------------------------------------------------
-long ClassModule::declputparam(string source, string param, string units, long **ivalue, long ***ilayvalue) {
+long ClassModule::declputparam(string source, string param, string units, long** ivalue, long*** ilayvalue) {
 
 	MapPar::iterator itPar;
-	ClassPar *newPar = NULL;
+	ClassPar* newPar = NULL;
 
 	if (Variation_Skip()) {
 		*ivalue = NULL;
@@ -4159,10 +4159,10 @@ long ClassModule::declputparam(string source, string param, string units, long *
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declgetparam(string source, string param, string units, const long **ivalue, const long ***ilayvalue) {
+void ClassModule::declgetparam(string source, string param, string units, const long** ivalue, const long*** ilayvalue) {
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	ClassPar* newPar;
 
 	if (Variation_Skip()) {
 		*ivalue = NULL;
@@ -4195,29 +4195,29 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 				newPar = (*itPar).second;
 				*ivalue = newPar->ivalues;
 				if (ilayvalue != NULL)
-					*ilayvalue = (const long **)newPar->ilayvalues;
+					*ilayvalue = (const long**)newPar->ilayvalues;
 				return;
 			}
 		}
 		else {
 			if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
-				*ivalue = (const long *)newPar->ivalues;
+				*ivalue = (const long*)newPar->ivalues;
 				if (ilayvalue != NULL)
-					*ilayvalue = (const long **)newPar->ilayvalues;
+					*ilayvalue = (const long**)newPar->ilayvalues;
 				return;
 			}
 			else if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
 				*ivalue = newPar->ivalues;
 				if (ilayvalue != NULL)
-					*ilayvalue = (const long **)newPar->ilayvalues;
+					*ilayvalue = (const long**)newPar->ilayvalues;
 				return;
 			}
 			else if ((newPar = ClassParFindPar(param))) { // handles other module
 				*ivalue = newPar->ivalues;
 				if (ilayvalue != NULL)
-					*ilayvalue = (const long **)newPar->ilayvalues;
+					*ilayvalue = (const long**)newPar->ilayvalues;
 				return;
 			}
 			else {
