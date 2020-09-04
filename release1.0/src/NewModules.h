@@ -812,11 +812,11 @@ void finish(bool good);
 
 Classevap* klone(string name) const;
 
-float gamma(float Pa, float t);         // Psychrometric constant
+double gamma(float Pa, float t);         // Psychrometric constant
 float lambda(float t);                   // Latent heat of vaporization
-float delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
 float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-float fdaily(float u, float Ht);        // Drying power f(u) - interval
+double fdaily(float u, float Ht);        // Drying power f(u) - interval
 };
 
 class ClassevapD : public ClassModule {
@@ -863,11 +863,11 @@ void finish(bool good);
 
 ClassevapD* klone(string name) const;
 
-float gamma(float Pa, float t);         // Psychrometric constant
+double gamma(float Pa, float t);         // Psychrometric constant
 float lambda(float t);                   // Latent heat of vaporization
-float delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
 float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-float fdaily(float u, float Ht);        // Drying power f(u) - interval
+double fdaily(float u, float Ht);        // Drying power f(u) - interval
 };
 
 class Classsbsm : public ClassModule {
@@ -2927,8 +2927,8 @@ void init(void);
 void run(void);
 void finish(bool good);
 
-float delta(float t); // Slope of sat vap p vs t, kPa/°C
-float gamma(float Pa, float t); // Psychrometric constant (kPa/°C)
+double delta(float t); // Slope of sat vap p vs t, kPa/°C
+double gamma(float Pa, float t); // Psychrometric constant (kPa/°C)
 float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
 float lambda(float t); // Latent heat of vaporization (mJ/(kg °C))
 
@@ -3443,9 +3443,9 @@ void finish(bool good);
 
 Classevap_Resist* klone(string name) const;
 
-float gamma(float Pa, float t);         // Psychrometric constant
+double gamma(float Pa, float t);         // Psychrometric constant
 float lambda(float t);                   // Latent heat of vaporization
-float delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
 float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
 double fdaily(float u, float Ht);        // Drying power f(u) - interval
 };
@@ -3509,9 +3509,9 @@ void finish(bool good);
 
 ClassevapD_Resist* klone(string name) const;
 
-float gamma(float Pa, float t);         // Psychrometric constant
+double gamma(float Pa, float t);         // Psychrometric constant
 float lambda(float t);                   // Latent heat of vaporization
-float delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
 float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
 double fdaily(float u, float Ht);        // Drying power f(u) - interval
 };
@@ -3583,9 +3583,9 @@ void finish(bool good);
 ClassShutWall* klone(string name) const;
 
 float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-float gamma(float Pa, float t);         // Psychrometric constant
+double gamma(float Pa, float t);         // Psychrometric constant
 float lambda(float t);                   // Latent heat of vaporization
-float delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
 };
 
 class ClassShutWallD : public ClassModule {
@@ -3654,9 +3654,9 @@ void finish(bool good);
 ClassShutWallD* klone(string name) const;
 
 float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-float gamma(float Pa, float t);         // Psychrometric constant
+double gamma(float Pa, float t);         // Psychrometric constant
 float lambda(float t);                   // Latent heat of vaporization
-float delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
 };
 
 class ClassIceBulb : public ClassModule {
@@ -3922,11 +3922,11 @@ void finish(bool good);
 
 ClassevapX* klone(string name) const;
 
-float gamma(float Pa, float t);         // Psychrometric constant
+double gamma(float Pa, float t);         // Psychrometric constant
 float lambda(float t);                   // Latent heat of vaporization
-float delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
 float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-float fdaily(float u, float Ht);        // Drying power f(u) - interval
+double fdaily(float u, float Ht);        // Drying power f(u) - interval
 };
 
 class Class3D_param : public ClassModule {
@@ -5037,8 +5037,8 @@ void init(void);
 void run(void);
 void finish(bool good);
 
-float delta(float t); // Slope of sat vap p vs t, kPa/°C
-float gamma(float Pa, float t); // Psychrometric constant (kPa/°C)
+double delta(float t); // Slope of sat vap p vs t, kPa/°C
+double gamma(float Pa, float t); // Psychrometric constant (kPa/°C)
 float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
 float lambda(float t); // Latent heat of vaporization (mJ/(kg °C))
 
@@ -5155,8 +5155,8 @@ void init(void);
 void run(void);
 void finish(bool good);
 
-float delta(float t); // Slope of sat vap p vs t, kPa/°C
-float gamma(float Pa, float t); // Psychrometric constant (kPa/°C)
+double delta(float t); // Slope of sat vap p vs t, kPa/°C
+double gamma(float Pa, float t); // Psychrometric constant (kPa/°C)
 float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
 float lambda(float t); // Latent heat of vaporization (mJ/(kg °C))
 
