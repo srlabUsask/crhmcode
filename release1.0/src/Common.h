@@ -238,7 +238,7 @@ string static GetCurrentDir(void) {
 class Common
 {
 public:
-	float static estar(float t);
+	double static estar(float t);
 	static float Qs(float P, float tc);
 	float static Qswater(float P, float tc);
 	float static DepthofSnow(float SWE);
