@@ -881,8 +881,8 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			return;
 		}
 
-		float minval = (float) atof(minstr.c_str());
-		float maxval = (float) atof(maxstr.c_str());
+		float minval = atof(minstr.c_str());
+		float maxval = atof(maxstr.c_str());
 
 		newPar = new ClassPar(string(Name.c_str()), string(param), dimen,
 			valstr, minval, maxval, help, units, CRHM::Float, dim, nhru);
@@ -1027,8 +1027,8 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			return;
 		}
 
-		float minval = (float) atof(minstr.c_str());
-		float maxval = (float) atof(maxstr.c_str());
+		float minval = atof(minstr.c_str());
+		float maxval = atof(maxstr.c_str());
 
 		newPar = new ClassPar(string(Name.c_str()), string(param), dimen,
 			valstr, minval, maxval, help, units, CRHM::Int, dim, nhru);
@@ -3432,8 +3432,8 @@ ClassClark::ClassClark(const float* inVar, float* outVar, const float* kstorage,
 
 	for (long hh = 0; hh < nhru; hh++) {
 
-		c01[hh] = (float) Global::Interval * 0.5f / (kstorage[hh] + (float) Global::Interval * 0.5f);  // units of Global::Interval (days)
-		c2[hh] = (kstorage[hh] - (float) Global::Interval * 0.5f) / (kstorage[hh] + (float)Global::Interval * 0.5f); // units of kstorage (days)
+		c01[hh] = Global::Interval * 0.5f / (kstorage[hh] + Global::Interval * 0.5f);  // units of Global::Interval (days)
+		c2[hh] = (kstorage[hh] - Global::Interval * 0.5f) / (kstorage[hh] + Global::Interval * 0.5f); // units of kstorage (days)
 
 		ilag[hh] = max<float>(lag[hh], 0.0f) / 24.0f * Global::Freq + 1.1f; // =1 for lag of zero
 
@@ -3483,8 +3483,8 @@ float ClassClark::ChangeStorage(const float* kstorage, const long hh)
 
 	float Sstorage = (1.0f / (1.0f - c2[hh])) * (c01[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
 
-	c01[hh] = (float) Global::Interval * 0.5f / (kstorage[hh] + (float) Global::Interval * 0.5f);  // units of Global::Interval (days)
-	c2[hh] = (kstorage[hh] - (float) Global::Interval * 0.5f) / (kstorage[hh] + (float) Global::Interval * 0.5f); // units of kstorage (days)
+	c01[hh] = Global::Interval * 0.5f / (kstorage[hh] + Global::Interval * 0.5f);  // units of Global::Interval (days)
+	c2[hh] = (kstorage[hh] - Global::Interval * 0.5f) / (kstorage[hh] + Global::Interval * 0.5f); // units of kstorage (days)
 
 	if (Sstorage <= 0.0f || Last_c01 == c01[hh]) return 0.0f;
 
@@ -3623,16 +3623,16 @@ ClassMuskingum::ClassMuskingum(const float* inVar, float* outVar, const float* k
 
 	for (long hh = 0; hh < nhru; hh++) {
 
-		c0[hh] = ((float) Global::Interval - 2.0f * k[hh] * X_M[hh]) /
-			(2.0f * k[hh] * (1.0f - X_M[hh]) + (float) Global::Interval);  // units of Global::Interval (days)
+		c0[hh] = (Global::Interval - 2.0f * k[hh] * X_M[hh]) /
+			(2.0f * k[hh] * (1.0f - X_M[hh]) + Global::Interval);  // units of Global::Interval (days)
 
-		c1[hh] = ((float) Global::Interval + 2.0f * k[hh] * X_M[hh]) /
-			(2.0f * k[hh] * (1.0f - X_M[hh]) + (float) Global::Interval); // units of kstorage (days)
+		c1[hh] = (Global::Interval + 2.0f * k[hh] * X_M[hh]) /
+			(2.0f * k[hh] * (1.0f - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
-		c2[hh] = (2.0f * k[hh] * (1.0f - X_M[hh]) - (float) Global::Interval) /
-			(2.0f * k[hh] * (1.0f - X_M[hh]) + (float) Global::Interval); // units of kstorage (days)
+		c2[hh] = (2.0f * k[hh] * (1.0f - X_M[hh]) - Global::Interval) /
+			(2.0f * k[hh] * (1.0f - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
-		ilag[hh] = max<float>(lag[hh], 0.0f) / 24.0f * (float) Global::Freq + 1.1f; // =1 for lag of zero
+		ilag[hh] = max<float>(lag[hh], 0.0f) / 24.0f * Global::Freq + 1.1f; // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)
 			maxlag[hh] = ilag[hh];
