@@ -7,17 +7,17 @@
 /*
 *  molecular weight of air (kg / kmole)
 */
-#define MOL_AIR         28.9644
+#define MOL_AIR         28.9644f
 
 /*
 *  molecular weight of water vapor (kg / kmole)
 */
-#define MOL_H2O         18.0153
+#define MOL_H2O         18.0153f
 
 /*
 *  gas constant (J / kmole / deg)
 */
-#define RGAS            8.31432e3
+#define RGAS            8.31432e3f
 
 /*
 *  specific humidity
@@ -46,26 +46,26 @@
 *	pa = air pressure (Pa)
 *	ts = layer temperature (K)
 */
-#define DIFFUS(pa,ts)   ( (0.65*(SEA_LEVEL/(pa)) * \
-                        pow(((ts)/FREEZE),14.0)) * (0.01*0.01) )
+#define DIFFUS(pa,ts)   ( (0.65f*(SEA_LEVEL/(pa)) * \
+                        pow(((ts)/FREEZE),14.0f)) * (0.01f*0.01f) )
 /*
 *  latent heat of vaporization
 *
 *	t = temperature (K)
 */
-#define LH_VAP(t)               (2.5e6 - 2.95573e3 *((t) - FREEZE))
+#define LH_VAP(t)               (2.5e6f - 2.95573e3f *((t) - FREEZE))
 
 /*
 *  latent heat of fusion
 *
 *	t = temperature (K)
 */
-#define LH_FUS(t)               (3.336e5 + 1.6667e2 * (FREEZE - (t)))
+#define LH_FUS(t)               (3.336e5f + 1.6667e2f * (FREEZE - (t)))
 
 /*
 *  specific heat of water at 0C (J / (kg K))
 */
-#define CP_W0   	4217.7
+#define CP_W0   	4217.7f
 
 /*
 *  specific heat of water (J/(kg K))
@@ -74,7 +74,7 @@
 *
 *	t = temperature (K)
 */
-#define CP_WATER(t)     ( CP_W0 - 2.55*((t)-FREEZE) )
+#define CP_WATER(t)     ( CP_W0 - 2.55f*((t)-FREEZE) )
 
 /*
 *  specific heat of ice (J/(kg K))
@@ -82,55 +82,55 @@
 *
 *	t = temperature (K)
 */
-#define CP_ICE(t)       ( CAL_TO_J(0.024928 + (0.00176*(t))) / G_TO_KG(1) )
+#define CP_ICE(t)       ( CAL_TO_J(0.024928f + (0.00176f*(t))) / G_TO_KG(1) )
 
 /*
 *  standard sea level pressure (Pa)
 */
-#define SEA_LEVEL       1.013246e5
+#define SEA_LEVEL       1.013246e5f
 
 /*  thermal conductivity of wet sand (J/(m sec K))
 *    (from Oke, 1978, pg. 38)
 */
-#define KT_WETSAND      2.2
-#define KT_MOISTSAND    1.65
+#define KT_WETSAND      2.2f
+#define KT_MOISTSAND    1.65f
 
 /*
 *  density of water at 0C (kg/m^3)
 *    (from CRC handbook pg F-11)
 */
-#define RHO_W0  	999.87
+#define RHO_W0  	999.87f
 
 /*  density of ice - no air (kg/m^3)
 *    (from CRC handbook pg F-1)
 */
-#define RHO_ICE 	917.0
+#define RHO_ICE 	917.0f
 
 /*
 *  triple point of water at standard pressure (deg K)
 */
-#define FREEZE          2.7316e2
-#define BOIL            3.7315e2
+#define FREEZE          2.7316e2f
+#define BOIL            3.7315e2f
 
 /*
 *  Stefan-Boltzmann constant (W / m^2 / deg^4)
 */
-#define STEF_BOLTZ      5.67032e-8
+#define STEF_BOLTZ      5.67032e-8f
 
 /*
 *  Convert calories to Joules
 */
-#define CAL_TO_J(c)		((c) * 4.186798188)
+#define CAL_TO_J(c)		((c) * 4.186798188f)
 
 /*
 *  Convert grams to kilograms.
 */
-#define G_TO_KG(g)		((g) * 0.001)
+#define G_TO_KG(g)		((g) * 0.001f)
 
 /*
 *  thermal emissivity of snow
 */
-#define SNOW_EMISSIVITY		0.99 // changed from 0.98 03/27/15
+#define SNOW_EMISSIVITY		0.99f // changed from 0.98 03/27/15
 
 /*
 *  Macros
@@ -158,7 +158,7 @@
 *
 *	rho = snow density (kg/m^3)
 */
-#define KTS(rho)        CAL_TO_J(0.0077*((rho)/1000.0)*((rho)/1000.0))
+#define KTS(rho)        CAL_TO_J(0.0077f*((rho)/1000.0f)*((rho)/1000.0f))
 
 /*
 *  melt (kg/m^2)
@@ -244,17 +244,17 @@
 /*
 *  specific heat of air at constant pressure (J / kg / deg)
 */
-#define CP_AIR          1.005e3
+#define CP_AIR          1.005e3f
 
 /*
 *  gravitational acceleration at reference latitude 45d 32m 33s (m/s^2)
 */
-#define GRAVITY		9.80665
+#define GRAVITY		9.80665f
 
 /*
 *  Von Karman constant
 */
-#define VON_KARMAN      3.5e-1
+#define VON_KARMAN      3.5e-1f
 
 /*
 *  virtual temperature, i.e. the fictitious temperature that air must
