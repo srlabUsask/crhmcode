@@ -1,0 +1,285 @@
+Description - to be added
+###### Version NON DLL 4.02  Creation: 7/20/2020 14:49
+Dimensions:
+######
+nhru 1
+nlay 2
+nobs 1
+######
+Macros:
+######
+'BadLake1974-1975_GrpA'
+'declgroup 0'
+'basin'
+'global'
+'obs'
+'calcsun'
+'intcp'
+'pbsm'
+'albedo'
+'ebsm'
+'netall'
+'crack'
+'evap'
+'Soil'
+'Netroute'
+'command'
+'end'
+'BadLake1974-1975_Annandale estimated Qsi_GrpB'
+'declgroup 0'
+'basin'
+'global'
+'obs'
+'Annandale#1'
+'intcp'
+'pbsm'
+'albedo'
+'ebsm'
+'netall'
+'crack'
+'evap'
+'Soil'
+'Netroute'
+'command'
+'end'
+######
+Observations:
+######
+obs/Badlake73_76.obs
+######
+Dates:
+######
+1973 1 1
+1976 1 1
+######
+Modules:
+######
+BadLake1974-1975_GrpA Macro 04/20/06
+ +basin CRHM 04/20/06
+ +global CRHM 04/20/06
+ +obs CRHM 04/20/06
+ +calcsun CRHM 04/20/06
+ +intcp CRHM 04/20/06
+ +pbsm CRHM 04/20/06
+ +albedo CRHM 04/20/06
+ +ebsm CRHM 04/20/06
+ +netall CRHM 04/20/06
+ +crack CRHM 04/20/06
+ +evap CRHM 04/20/06
+ +Soil CRHM 04/20/06
+ +Netroute CRHM 04/20/06
+BadLake1974-1975_Annandale Macro 04/20/06
+ +basin CRHM 04/20/06
+ +global CRHM 04/20/06
+ +obs CRHM 04/20/06
+ +Annandale#1 CRHM 04/20/06
+ +intcp CRHM 04/20/06
+ +pbsm CRHM 04/20/06
+ +albedo CRHM 04/20/06
+ +ebsm CRHM 04/20/06
+ +netall CRHM 04/20/06
+ +crack CRHM 04/20/06
+ +evap CRHM 04/20/06
+ +Soil CRHM 04/20/06
+ +Netroute CRHM 04/20/06
+######
+Parameters:
+###### 'basin' parameters always first
+Shared Albedo_bare <0 to 1>
+0.17 
+Shared Albedo_snow <0 to 1>
+0.85 
+Shared A_S <0 to 2>
+0.003 
+Shared basin_area <1e-06 to 1e+09>
+1 
+Shared basin_name
+''
+Shared catchadjust <0 to 3>
+0 
+Shared ClimChng_flag <0 to 1>
+0 
+Shared ClimChng_precip <0 to 10>
+1 
+Shared ClimChng_t <-50 to 50>
+0 
+Shared cov_type <0 to 2>
+1 
+Shared delay_melt <0 to 366>
+0 
+Shared distrib <-10 to 10>
+0 
+Shared ElevChng_flag <0 to 1>
+0 
+Shared evap_type <0 to 2>
+0 
+Shared fallstat <-1 to 100>
+50 
+Shared fetch <300 to 1e+04>
+1000 
+Shared F_Qg <0 to 1>
+0.1 
+Shared gwKstorage <0 to 200>
+0 
+Shared gwLag <0 to 1e+04>
+0 
+Shared gwwhereto <-1000 to 1000>
+0 
+Shared gw_init <0 to 5000>
+187 
+Shared gw_K <0 to 100>
+0 
+Shared gw_max <0 to 5000>
+375 
+Shared hru_area <1e-06 to 1e+09>
+1 
+Shared hru_ASL <0 to 360>
+0 
+Shared hru_elev <0 to 1e+05>
+637 
+Shared hru_GSL <0 to 90>
+0 
+Shared hru_lat <-90 to 90>
+51.32 
+Shared hru_names
+''
+Shared HRU_OBS <1 to 100>
+1 
+2 
+3 
+3 
+3 
+Shared Ht <0.001 to 100>
+0.1 
+Shared inhibit_bs <0 to 1>
+0 
+Shared inhibit_evap <0 to 1>
+1 
+Shared inhibit_evap_User <0 to 1>
+0 
+Shared inhibit_subl <0 to 1>
+0 
+Shared INIT_STATE
+''
+Shared Kstorage <0 to 200>
+0 
+Shared Lag <0 to 1e+04>
+0 
+Shared lapse_rate <0 to 2>
+0.75 
+Shared Loop_to
+''
+Shared lower_ssr_K <0 to 100>
+0 
+Shared Major <1 to 100>
+5 
+Shared nfactor <0 to 10>
+0 
+Shared N_S <1 to 500>
+320 
+Shared obs_elev <0 to 1e+05>
+0 
+0 
+Shared order <1 to 1000>
+1 
+Shared ppt_daily_distrib <0 to 1>
+1 
+Shared precip_elev_adj <-1 to 1>
+0 
+Shared preferential_flow <0 to 1>
+0 
+Shared PriorInfiltration <0 to 1>
+1 
+Shared Qe_subl_from_SWE <0 to 1>
+0 
+Shared RapidAdvance_to
+''
+Shared rechr_ssr_K <0 to 100>
+0 
+Shared rs <0 to 0.01>
+0 
+Shared runKstorage <0 to 200>
+0 
+Shared runLag <0 to 1e+04>
+0 
+Shared RUN_END <0 to 1e+05>
+0 
+Shared RUN_ID <-1e+08 to 1e+08>
+1 
+Shared RUN_START <0 to 1e+05>
+0 
+Shared Sdinit <0 to 5000>
+0 
+Shared Sdmax <0 to 5000>
+0 
+Shared Sd_ByPass <0 to 1>
+0 
+Shared Sd_gw_K <0 to 100>
+0 
+Shared Sd_ssr_K <0 to 100>
+0 
+Shared snow_rain_determination <0 to 2>
+0 
+Shared soil_gw_K <0 to 100>
+0 
+Shared soil_moist_init <0 to 5000>
+187 
+Shared soil_moist_max <0 to 5000>
+375 
+Shared soil_rechr_ByPass <0 to 1>
+1 
+Shared soil_rechr_init <0 to 250>
+30 
+Shared soil_rechr_max <0 to 350>
+60 
+Shared soil_ssr_runoff <0 to 1>
+1 
+Shared soil_withdrawal <1 to 4>
+3 
+3 
+Shared ssrKstorage <0 to 200>
+0 
+Shared ssrLag <0 to 1e+04>
+0 
+Shared StateVars_to_Update
+''
+Shared tfactor <0 to 10>
+0 
+Shared Time_Offset <-12 to 12>
+0 
+Shared tmax_allrain <-10 to 10>
+4 
+Shared tmax_allsnow <-10 to 10>
+0 
+Shared TraceVars
+''
+Shared transp_limited <0 to 1>
+0 
+Shared Use_QnD <0 to 1>
+0 
+Shared Wetlands_scaling_factor <-1 to 1>
+-1 
+Shared whereto <0 to 1000>
+0 
+Shared Zwind <0.01 to 100>
+10 
+BadLake1974-1975_Annandale krs <0.15 to 0.2>
+0.16 
+######
+Initial_State
+######
+######
+Final_State
+######
+######
+Display_Variable:
+######
+BadLake1974-1975_Annandale Qdflat@B 1
+BadLake1974-1975_Annandale QdflatD@B 1
+######
+Display_Observation:
+######
+######
+TChart:
+######
+######
