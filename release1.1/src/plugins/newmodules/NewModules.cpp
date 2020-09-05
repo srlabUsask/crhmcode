@@ -12,7 +12,7 @@
 #include "ClassCRHM.h"
 
 #include "SnobalDefines.h"
-#include <math.h>
+#include <cmath>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
@@ -22,6 +22,13 @@
 #include "ClassGlobal.h" //added by Manishankar Mondal
 #include "ClassObs.h" //added by Manishankar Mondal
 #include "ClassIntcp.h" //added by Manishankar Mondal
+#include "Classpbsm.h" //added by Manishankar Mondal
+#include "ClassNO_pbsm.h" //added by Manishankar Mondal
+#include "Classtsurface.h" //added by Manishankar Mondal 
+#include "Classalbedo.h" //added by Manishankar Mondal 
+#include "Classnetall.h" //added by Manishankar Mondal 
+#include "Classebsm.h" //added by Manishankar Mondal
+#include "ClassTs.h" //added by Manishankar Mondal
 
 //---------------------------------------------------------------------------
 
@@ -1288,1408 +1295,1409 @@ void ClassNOP::finish(bool good) {
 //  LogDebug(" ");
 //}
 
-Classpbsm* Classpbsm::klone(string name) const{
-  return new Classpbsm(name);
-}
-
-void Classpbsm::decl(void) {
-
-  Description = "'calculates snow transport and sublimation (Pomeroy and Li, 1999).' \
-                 'original version using hru_u,' \
-                 'uses hru_Uadjust from walmsley_wind instead of hru_u,' \
-                 'using hru_u and a regression to use daily windspeed,' \
-                 'uses hru_Uadjust from walmsley_wind instead of hru_u and a regression to use daily windspeed.'";
-
-  variation_set = VARIATION_0 + VARIATION_2;
-
-  declgetvar("*", "hru_u", "(m/s)", &hru_u);
-
-
-  variation_set = VARIATION_1 + VARIATION_3;
-
-  declgetvar("*", "hru_Uadjust", "(m/s)", &hru_Uadjust);
-
-
-  variation_set = VARIATION_2 + VARIATION_3;
-
-  declparam("u_D", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed correction", "()", &u_D);
-
-  declparam("Drift_offset", NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed drift offset correction", "()", &Drift_offset);
-
-  declparam("Drift_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed drift slope correction", "()", &Drift_slope);
-
-  declparam("Subl_offset", NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed sublimation offset correction", "()", &Subl_offset);
-
-  declparam("Subl_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed sublimation slope correction", "()", &Subl_slope);
-
-
-  variation_set = VARIATION_ORG;
-
-
-  declstatvar("SWE", NHRU, "snow water equivalent", "(mm)", &SWE);
-
-  declvar("Subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
-
-  declvar("Drift", NHRU, "interval transport", "(mm/int)", &Drift);
-
-  decldiag("DriftH", NHRU, "interval transport", "(mm/int)", &DriftH);
-
-  decldiag("SublH", NHRU, "interval sublimation", "(mm/int)", &SublH);
-
-  decldiag("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
-
-  declstatdiag("cumSubl", NHRU, "cumulative sublimation", "(mm)", &cumSubl);
-
-  declstatdiag("cumDrift", NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
-
-  declstatdiag("cumBasinSnowLoss", BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
-
-  declstatdiag("cumBasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
-
-  declstatdiag("cumDriftIn", NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
-
-  decllocal("hru_basin", NHRU, "conversion factor", "()", &hru_basin);
-
-  decldiag("DrySnow", NHRU, "DrySnow", "()", &DrySnow);
-
-  declstatdiag("SnowAge", NHRU, "SnowAge", "()", &SnowAge);
-
-  declstatdiag("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
-
-  declvar("Prob", NHRU, "Probability", "()", &Prob);
-
-  declvar("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
-
-  declvar("rain_on_snow", NHRU, "mass of rain falling on snowcover", "(mm/int)", &rain_on_snow);
-
-  declvar("cumrain_on_snow", NHRU, "cumulative rain on snow", "(mm)", &cumrain_on_snow);
-
-  decllocal("SWE_Init", NHRU, "initial SWE", "(mm)", &SWE_Init);
-
-/* parameters */
-
-  declparam("fetch", NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
-
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
-
-  declparam("distrib", NHRU, "[0.0, 1.0]", "-10.0", "10.0", "distribution fractions - can sum to 1", "()", &distrib);
-
-  decldiagparam("N_S", NHRU, "[320]", "1", "500", "vegetation number density", "(1/m^2)", &N_S);
-
-  decldiagparam("A_S", NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
-
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
-
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
-
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporatation(System use only), 1 -> inhibit", "()", &inhibit_evap);
-
-  decldiagparam("inhibit_bs", NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
-
-  decldiagparam("inhibit_subl", NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
-
-  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
-  declgetvar("*", "hru_rh", "(%)", &hru_rh);
-  declgetvar("*", "hru_newsnow", "()", &hru_newsnow);
-  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
-  declgetvar("*", "net_rain", "(mm/int)", &net_rain);
-
-}
-
-void Classpbsm::init(void) {
-
-  nhru = getdim(NHRU);
-
-  cumBasinSnowLoss[0] = 0.0;
-  cumBasinSnowGain[0] = 0.0;
-
-  for (hh = 0; hh < nhru; ++hh) {
-    SWE[hh] = 0.0;
-    cumDrift[hh] = 0.0;
-    cumDriftIn[hh] = 0.0;
-    cumSubl[hh] = 0.0;
-    cumSno[hh] = 0.0;
-    SnowAge[hh] = 0.0;
-    DrySnow[hh] = 0;
-    snowdepth[hh] = 0.0;
-    rain_on_snow[hh] = 0.0;
-    cumrain_on_snow[hh] = 0.0;;
-
-    if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
-      CRHMException TExcept(string("'" + Name + " (pbsm)' vegetation heights not in ascending order.").c_str(), WARNING);
-      LogError(TExcept);
-    }
-  }
-
-  for (hh = 0; hh < nhru; ++hh)
-    hru_basin[hh] = hru_area[hh]/basin_area[0];
-}
-
-/*****************************
-  PBSMrun - PBSM module run function
-  10/28/99 (tb) 06/11/99
-
-******************************/
-
- // DepthofSnow
-
-float SWEfromDepth(float Snow_Depth){ // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
-
-  float SWE;
-
-  if (Snow_Depth > 0.6)
-    SWE = 4.5608*Snow_Depth*100.0-128.06;
-  else if (Snow_Depth > 0.0205)
-    SWE = 2.39*Snow_Depth*100.0+2.05;
-  else
-    SWE = Snow_Depth;
-
-  return SWE;
-} // SWEfromDepth
-
-void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probability, float & Threshold,
-                             long Snow, float & SnowAge, long & DrySnow){
-
-//Probability of blowing snow occurrence and threshold wind speeds determined by ambient air temperature and snow age
-
-   float Wind, Mean, Variance, c;
-
-        Wind = 0.0;
-        Probability = 0.0;
-
-   if(SWE <= 0.0) {   //no snow available
-        DrySnow = false;
-        SnowAge = 0.0;
-        Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); // (m/s)
-   }
-
-   else if((Snow == true) && (t < 0.0))
-   {
-// with concurrent snowfall: new dry snow
-        DrySnow = true;
-        SnowAge = 24.0/Global::Freq;
-
-        Mean = 0.365 * t + 0.00706 * sqr(t)
-              + 0.91 * log((float)SnowAge) + 11.0;
-        Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
-
-        while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
-// Wind < 3 m/s too weak for dry snow transport
-
-           Wind = Wind + 0.1;
-
-           c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
-
-           Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
-        } // {while do}
-        Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); // (m/s)
-   } // {if}
-
-   else if((t < 0.0) && DrySnow)
-   {
-// {without concurrent snowfall: old dry snow}
-        SnowAge = SnowAge + 24.0/Global::Freq;
-
-        Mean = 0.365 * t + 0.00706 * sqr(t)
-              + 0.91 * log((float)SnowAge) + 11.0;
-        Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
-
-        while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
-// Wind < 3 m/s too weak for dry snow transport
-           Wind = Wind + 0.1;
-
-           c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
-
-           Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
-         } // while do
-
-       Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); //(m/s)
-   } // if
-   else if ((t >= 0.0)  || !DrySnow)
-   {
-        DrySnow = false;             // or wet snow remains on the ground
-        SnowAge = 0.0;
-        Mean = 21.0;
-        Variance = 7.0;
-
-        while ((Wind <= Uten_Prob) && (Uten_Prob >7.0)) {    // loop to calculate P.
-// wind < 7 m/s too weak for wet snow transport
-            Wind = Wind + 0.1;
-            c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
-            Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
-        } // while do
-        Threshold = 9.9;     // (m/s)
-   } //if
-
-} // Probability_threshold procedure
-
-void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH){
-
-// total sublimation
-
-   if  ((SBsum + SBsalt) >= 0.0)
-     SublH = 0.0;
-   else
-     SublH = (SBsum + SBsalt)*(-1E+3); // -mgmm2s to mg/m^2/s to g/m^2/s
-
-   DriftH = (TQsalt + TQsusp); // kg/m-width/s
-// Convert to interval values
-
-   SublH = SublH * Global::Interval*3600*24/1000.0; // g/m^2/s to mm/m^2/interval
-   DriftH = DriftH * Global::Interval*3600*24;      // kg/m-width/s to kg/m-width/interval
-
-} // sum procedure
-
-void Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
-           float t, float u, float rh, float Fetch, long N_S, float A_S)
-{
-
-/*   Modified Calculations for Mean Particle Mass in this version
-     program to calculate blowing snow horizontal flux, sublimation rate
-     and latent heat flux due to snow sublimation for a variety of windspeeds,
-     boundary layers and surface conditions.
-
-     All variable and constants entered into the programme are in SI and
-     use Canadian Atmospheric Environement Service Meteorological data
-     format.  Snow transport is in kg per square meter per half hour
-     from the surface to 5 metres height.  Sublimation is totaled to the top
-     of the boundary layer for diffusion, based on the meteorological
-     Fetch and is expressed in millimeters of blowing snow lost over
-     a square meter of snow surface per half hour  */
-
-  float   A,      Alpha,  B,      Bd,     Bound,  C,
-  Diff,   DmDt,   Es,     H,
-  Htran,  Hsalt,  Inc,    Lamb,   Lambda, Lb,
-  Mpm,    Mpr,    Nh,     Nsalt,
-  Nz,     Nuss,   Omega,  TQsalt,
-  TQsum,  Qz,     RauTerm,Temp,
-  Reyn,   SBsalt, Sbz,    SBsum,
-  SigmaZ, Sigma2, SvDens, Usthr,  Ustar,
-  UstarZ, Uz,     Vs,     Vsalt,  Sigma,
-  Vsusp,  Z,      Zr,     Zstb;
-
-//Compute stubble coefficients
-
-   Zstb = 0.005*N_S*A_S*E_StubHt*100.0;      // Lettau, used for susp Z0''
-   Lambda = N_S*A_S*E_StubHt;         // Raupach Eq. 1
-   Sigma = (M_PI*A_S)/(4.0*E_StubHt); // Raupach Eq. 4
-
-// Calculate the flux for interval
-   TQsalt = 0.0;                      // Total saltation flux
-   TQsum = 0.0;                       // Total Suspension
-   SBsalt = 0.0;
-   SBsum = 0.0;
-   DriftH = 0.0;
-   SublH = 0.0;
-
-   Temp  = t + 273.0;                 // Convert to Deg. K
-
-// Check for data errors    Fluxes set to zero for the interval
-   if((Temp < 0.0) || (u < 1.0) || (rh < 0.01)) {return;}
-
-   if(rh >= 1.0) rh = rh/100.0;       // handle %rh
-
-   Lamb = 0.000076843*Temp + 0.003130762;   // therm. cond. of atm. (J/(msK))
-   Diff = 2.06e-5f*pow(Temp/273.0f, 1.75f); // diffus. of w.vap. atmos. (m^2/s
-   B = PBSM_constants::LATH * PBSM_constants::M/(PBSM_constants::R * Temp) - 1.0;
-
-// find undersaturation of w. vapour at 2 metres
-   Es = 611.15f * exp(22.452f*(Temp - 273.0f)/Temp);  //{sat pressure}
-   SvDens = (Es*PBSM_constants::M)/(PBSM_constants::R*Temp);                       //{sat density}
-   Sigma2 = rh - 1.0;                              //{undersaturation at 2 m}
-
-   if(u > Uthr) {
-
-// define saltation parameters and calculate saltation
-//    rate using 10/1987 MODEL OF BLOWING SNOW EQUATIONS
-
-      Usthr = 0.03697f*Uthr;                                  //{Eq. 6.3}
-      Ustar = 0.02264f*pow(u, 1.295f);
-      if(E_StubHt > 0.0001)                         //{Eq. 6.2 rev}
-        RauTerm  = 1.0/((1.0-Sigma*Lambda)*(1.0+PBSM_constants::Beta*Lambda)); //{Raupach}
-      else
-        RauTerm  = 1.0;
-
-      Hsalt = PBSM_constants::C2/(2.0f*PBSM_constants::g)*sqr(Ustar);                         //{Eq. 4.13}
-      Nsalt = 2.0*PBSM_constants::rho/(PBSM_constants::C2*PBSM_constants::C3*Ustar)*(RauTerm - sqr(Usthr)/sqr(Ustar)); //{Eq. 4.14 updated}
-
-      if(Nsalt <= 0.0) {
-         Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-         return;
-      }
-
-      TQsalt = PBSM_constants::C1*PBSM_constants::rho*Usthr/(PBSM_constants::g*PBSM_constants::C3*Ustar)*(sqr(Ustar)*RauTerm - sqr(Usthr)); // Eq. 4.20
-
-// calculate sublimation rate in the saltation layer
-
-      Mpr= 100E-6;
-      Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
-      Alpha = 5.0;
-
-      SigmaZ = Sigma2 * (1.019 + 0.027 * log(Hsalt)); // Eq. 6.20, Revised in May. 1997
-      if(SigmaZ > -0.01) {SigmaZ = -0.01;}
-      Vsalt = 0.6325 * Ustar + 2.3 * Usthr;          // Eq. 6.25
-      Reyn = (2.0 * Mpr * Vsalt)/1.88E-5;            // Eq. 6.22
-      Nuss = 1.79 + 0.606 * sqrt(Reyn);              // Eq. 6.21
-      A = Lamb * Temp * Nuss;
-      C = 1.0/(Diff * SvDens * Nuss);
-      DmDt = ((2.0 * M_PI * Mpr * SigmaZ) - (Htran * B/A))/((PBSM_constants::LATH * B/A) + C);
-
-      //{Eq. 6.16} {Gamma Dist. Corr.}
-      Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Mpr*sqr(Mpr) *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
-
-      Vs = DmDt/Mpm;                // Sublimation rate coefficient Eq. 6.13
-      SBsalt = Vs * Nsalt * Hsalt;  // Eq. 6.11
-
-// calculate mass flux in the suspended layers and the sublimation
-//     rate for layers of height Inc from height r to b
-
-      Zr = 0.05628 * Ustar;         // Eq. 5.27
-      Alpha = 15.0;
-      Inc = 0.0001;
-
-// Loop to find the first suspended drift density level, r
-//     from the reference level Zr
-//     To preserve continuity with saltation the first suspended
-//     level drift density is less than or equal to Nsalt.
-
-      TQsum = 0;
-      SBsum = 0;
-
-      Z = Zr + Inc;
-      while (Z <= 0.15) {
-         Nz = 0.8 * exp(-1.55*(pow(0.05628f*Ustar, -0.544f) - pow(Z, -0.544f)));
-
-// Eq. 5.26, Revised in Dec. 1995
-         if(Nz <= Nsalt) {goto Ten;}
-         Z = Z + Inc;
-      } //while
-Ten:  Lb = Z + Inc;
-      Z = Lb;
-      Inc = 0.001;
-
-// find height of fully-developed boundary layer for turbulent
-//     diffusion using a form of Pasquills plume dispersion eq.
-//     iterate towards Bound
-
-      Bd = 1.0;
-      Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
-        sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));          // Eq. 6.9
-      while (fabs(Bound - Bd) > 0.001) {
-         Bd = Bound;
-         Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
-            sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));      // Eq. 6.9
-      } //while
-
-
-// Loop to calculate the suspended mass flux up to 5 metres
-//     and the total sublimation rate to the top of the boundary layer
-//   at increments of 1 mm to 50cm & increments of 10 cm to  b
-
-Twenty: H = Z + Inc;
-      while (H <= Bound) {
-         Nh = 0.8 * exp(-1.55f*(pow(0.05628f*Ustar, -0.544f) - pow(H, -0.544f)));
-         Nz = Nh;
-         UstarZ = Ustar * pow(1.2f/(1.2f + Nz), 0.5f);                  // Eq. 5.17a
-         Uz = (UstarZ/PBSM_constants::KARMAN) *log(H/((0.00613f *sqr(Ustar)) + Zstb));// Eq. 4.17r
-         if(Uz > 0) {
-	   Mpr = 4.6e-5 * pow(H, -0.258f);                            // Eq. 6.15
-           if(H >= 5.0) {Mpr = 30E-6f;}
-
-           Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
-           Alpha = 4.08 + 12.6 * H;                                  // Eq. 6.14
-           if(H >= 1.5) {Alpha = 25.0;}
-
-           SigmaZ = Sigma2 * (1.019 + 0.027 * log(H));  // Eq. 6.20, Revised in May. 1997
-           if(SigmaZ > -0.01) {SigmaZ = -0.01;}
-	   Omega = 1.1e7f * pow(Mpr, 1.8f);               // Eq. 5.18
-	   Vsusp = Omega + 0.0106f * pow(Uz, 1.36f);
-           Reyn = (2.0f * Mpr * Vsusp)/1.88e-5f;          // Eq. 6.22
-           Nuss = 1.79f + 0.606f * sqrt(Reyn);            // Eq. 6.21
-           A = Lamb * Temp * Nuss;
-           C = 1.0/(Diff * SvDens * Nuss);
-           DmDt = ((2.0f*M_PI * Mpr * SigmaZ) - (Htran*B/A))/((PBSM_constants::LATH*B/A) + C);
-           Mpm = 1.333f * M_PI * PBSM_constants::DICE * sqr(Mpr)*Mpr *   // Eq. 6.16
-              (1.0f + 3.0f/Alpha + 2.0f/sqr(Alpha));       // Gamma Dist. Corr.
-           Vs = DmDt/Mpm;                               // Eq. 6.13
-           Sbz = Vs * Nz * Inc;                         // mg
-           SBsum = SBsum + Sbz;                         // Eq. 6.12
-           Qz = Nz * Uz * Inc;                          // Eq. 5.4
-	   if(H >= 5.0) {Qz = 0.0;}
-           TQsum = TQsum + Qz;                          // Eq. 5.5
-	   if(Nz >= 1e-5) {
-              if(((H-Inc) >= 0.5) && (H < 0.6)) {
-                Inc = 0.1;
-                Z = 0.5;
-                goto Twenty;                            // re start the loop
-              } //{if}
-           }
-           else {
-              Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-              return;
-           } // if
-         }
-         else {
-            TQsalt = 0.0;
-            TQsum = 0.0;
-            SBsalt = 0.0;
-            SBsum = 0.0;
-            Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-            return;
-         } // if
-         H = H + Inc;
-      } // while
-   } // if
-   Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-} //PBSM procedure}
-
-void Classpbsm::run(void) {
-
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float SumDrift, total, SWE_Max, transport;
-  long step = getstep();
-
-  if(step == 1)
-    for (hh = 0; chkStruct(); ++hh)
-      SWE_Init[hh] = SWE[hh];
-
-  for (hh = 0; chkStruct(); ++hh) {
-
-    if(net_snow[hh] > 0.0) {
-      SWE[hh] = SWE[hh] + net_snow[hh];
-      cumSno[hh] = cumSno[hh] + net_snow[hh];
-    }
-
-   if(variation == VARIATION_ORG || variation == VARIATION_2)
-     hru_u_ = hru_u[hh];
-   else
-     hru_u_ = hru_Uadjust[hh];
-
-   if(variation == VARIATION_2 || variation == VARIATION_3)
-     hru_u_ = u_D[hh]*hru_u_;
-
-   Drift[hh] = 0.0;
-   Subl[hh] = 0.0;
-   DriftH[hh] = 0.0;
-   SublH[hh] = 0.0;
-   Prob[hh] = 0.0;
-
-   if(SWE[hh] > 0.0 && net_rain[hh] > 0.0){
-     rain_on_snow[hh] = net_rain[hh];
-     cumrain_on_snow[hh] += net_rain[hh];
-   }
-   if(SWE[hh] > 0.0 && !inhibit_bs[hh]) {
-
-     E_StubHt = Ht[hh] - Common::DepthofSnow(SWE[hh]); // depths(m) SWE(mm)
-     if(E_StubHt < 0.0001) E_StubHt = 0.0001;
-
-     Ustar = 0.02264*pow(hru_u_, 1.295f); // Eq. 6.2 rev.,  Ustar over fallow
-
-     if (E_StubHt > 0.01) {
-       Znod = (sqr(Ustar)/163.3f)+0.5*N_S[hh]*E_StubHt*A_S[hh]; // Eq. 29, Snowcover Book
-       Lambda = N_S[hh]*A_S[hh]*E_StubHt;  // Raupach Eq. 1
-
-       Ustn  = Ustar*sqrt((PBSM_constants::Beta*Lambda)/(1.0+PBSM_constants::Beta*Lambda));
-
-       Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *min <float> (0.0, Ustar-Ustn);
-     }
-     else
-     {
-       Uten_Prob = hru_u_;
-     } // end if
-
-
-     ProbabilityThresholdNew(SWE[hh], hru_t[hh], Uten_Prob, Prob[hh], Ut, hru_newsnow[hh], SnowAge[hh], DrySnow[hh]);
-
-     if (Prob[hh] > 0.001) {
-       Ut = Ut * 0.8;
-
-       Pbsm(E_StubHt, Ut, DriftH[hh], SublH[hh], hru_t[hh], hru_u_, hru_rh[hh], fetch[hh], N_S[hh], A_S[hh]);
-
-       if(variation == VARIATION_2 || variation == VARIATION_3){
-         DriftH[hh] = Drift_offset[hh] + DriftH[hh]*Drift_slope[hh];
-         SublH[hh] = Subl_offset[hh] + SublH[hh]*Subl_slope[hh];
-       }
-
-       Drift[hh] = DriftH[hh]*Prob[hh]/fetch[hh];
-       if(!inhibit_subl[hh])
-         Subl[hh] = SublH[hh]*Prob[hh];
-
-// handle insufficient snow pack
-
-       if(Drift[hh] + Subl[hh] > SWE[hh]) {
-         Subl[hh] = SWE[hh] * Subl[hh]/(Subl[hh] + Drift[hh]);
-         Drift[hh] = SWE[hh] - Subl[hh];
-       } // end if
-
-       cumDrift[hh] = cumDrift[hh] + Drift[hh];
-       cumSubl[hh] = cumSubl[hh] + Subl[hh];
-
-       SWE[hh] = SWE[hh] - Subl[hh] - Drift[hh];
-     }
-   } // end if
- } // end for (hh)
-
- // distribute drift
-
-  if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
-    float Drft = Drift[0]*distrib[0];
-    SWE[0] += Drft;
-    cumDriftIn[0] += Drft;
-    cumBasinSnowGain[0] += Drft*hru_basin[0];  // **** hru_basin = hru_area/basin_area ****
-  }
-
-  BasinSnowLoss[0] = 0.0;
-  long LastN = 0;
-
-  if(!inhibit_bs[0]&& nhru == 1){
-    BasinSnowLoss[0] = Drift[0];
-    cumBasinSnowLoss[0] += BasinSnowLoss[0];
-  }
-
-  for (long nn = LastN; chkStruct(nn); ++nn) {
-    if(distrib[nn] >= 0.0 && nn+1 < nhru) // skip till last HRU or -ve distribution
-      continue;
-
-    SumDrift = 0.0;
-    for (long hhh = LastN; chkStruct(hhh, nn); ++hhh) // sum drift over range
-      SumDrift += Drift[hhh]*hru_basin[hhh];
-
-    if(SumDrift > 0.0){ // drift has occurred!
-      for (long hh = LastN + 1; chkStruct(hh, nn+1); ++hh) {
-        SWE_Max = SWEfromDepth(Ht[hh]);
-
-        if(hh == nn) { // handle last HRU
-          if(distrib[nn] > 0){
-            float In = SumDrift/hru_basin[hh]; // remaining drift
-            if(SWE_Max > SWE[hh] + In){ // fill snowpack, remainder leaves basin
-              SWE[hh]  += In; // can handle all
-              cumDriftIn[hh] += In;
-              transport = 0.0;
-            }
-            else if(SWE_Max > SWE[hh]){ // cannot handle all
-              cumDriftIn[hh] += (SWE_Max - SWE[hh]);
-              transport -= (In -(SWE_Max - SWE[hh]))*hru_basin[hh];
-              SWE[hh]  += SWE_Max - SWE[hh]; //  has to come last
-            }
-            else // zero or -ve - happens during melt??
-              transport = SumDrift;
-          }
-          else if(distrib[nn] < 0){ // all drift deposited
-              SWE[hh]  += SumDrift/hru_basin[hh]; // can handle all
-              cumDriftIn[hh] += SumDrift/hru_basin[hh];
-              transport = 0.0;
-          }
-          else // distrib[nn] == 0 -> all excess drift leaves basin
-              transport = SumDrift;
-
-          BasinSnowLoss[0] += (transport + Drift[hh]*hru_basin[hh]);
-          cumBasinSnowLoss[0] += (transport + Drift[hh]*hru_basin[hh]);
-        }
-        else if(SWE_Max > SWE[hh] &&  distrib[hh] > 0.0) {
-// handle intermediate HRUs with available storage and distrib > 0
-          total = 0.0;
-          for (long jj = hh; chkStruct(jj, nn+1); jj++) // calculate denominator        !!!! nn+1
-            total += fabs(distrib[jj]);
-// determine contribution and scale
-          transport = SumDrift*fabs(distrib[hh])/total/hru_basin[hh];
-          if(SWE_Max > SWE[hh] + transport) // sufficient capacity
-            SWE[hh] += transport;
-          else {
-            transport = SWE_Max - SWE[hh];  // insufficient capacity
-            SWE[hh] = SWE_Max;
-          }
-          SumDrift -= transport*hru_basin[hh]; // remove drift used from total available
-          cumDriftIn[hh] += transport;
-        } // end if
-      } // end for (hh)
-    } // end if
-    LastN = nn+1;
-  } // end for (nn)
-
-    for (hh = 0; chkStruct(); ++hh) { // snow cover inhibits evaporation
-
-      if(SWE[hh] > 0.0){
-        const_cast<long*> (inhibit_evap)[hh] = 1;
-        snowdepth[hh] = Common::DepthofSnow(SWE[hh]);
-      }
-      else{
-        const_cast<long*> (inhibit_evap)[hh] = 0;
-        snowdepth[hh] = 0.0;
-      }
-    } // end for (hh)
-}
-
-void Classpbsm::finish(bool good) {
-
-  if(!good) return;
-
-  float AllcumSubl = 0.0;
-  float AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
-
-  for(hh = 0; chkStruct(); ++hh) {
-    LogMessageA(hh, string("'" + Name + " (pbsm)' cumSno     (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsm)' cumDrift   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDrift[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsm)' cumDriftIn (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDriftIn[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsm)' cumSubl    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSubl[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsm)' cumCover   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh]+cumDriftIn[hh]-cumDrift[hh]-cumSubl[hh], hru_area[hh], basin_area[0], "*** SWE just before melt");
-    LogMessageA(hh, string("'" + Name + " (pbsm)' SWE        (mm) (mm*hru) (mm*hru/basin): ").c_str(), SWE[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsm)' SWE_change (mm) (mm*hru) (mm*hru/basin): ").c_str(), SWE[hh] - SWE_Init[hh], hru_area[hh], basin_area[0]);
-    LogDebug(" ");
-
-    AllcumSubl += cumSubl[hh]*hru_area[hh];
-    AllcumCover += (cumSno[hh]+cumDriftIn[hh]-cumDrift[hh]-cumSubl[hh])*hru_area[hh];
-  }
-
-  LogMessage(string("'" + Name + " (pbsm)' AllcumSubl  (mm*basin): ").c_str(), AllcumSubl, "*** cumulative sum of all HRUs cumSubl");
-  LogMessage(string("'" + Name + " (pbsm)' AllcumCover (mm*basin): ").c_str(), AllcumCover, "*** SWE just before melt cumulative sum of all HRUs cumCover");
-  LogDebug(" ");
-  LogMessage("'pbsm' cumBasinSnowLoss (mm): ", cumBasinSnowLoss[0]);
-  LogMessage("'pbsm' cumBasinSnowGain (mm): ", cumBasinSnowGain[0]);
-  LogDebug(" ");
-
-}
-
-ClassNO_pbsm* ClassNO_pbsm::klone(string name) const{
-  return new ClassNO_pbsm(name);
-}
-
-void ClassNO_pbsm::decl(void) {
-
-  Description = "'Substitute for pbsm when there is no transport and sublimation.  Alternatve is \"pbsm\" with parameter \"inhibit_bs\" = 1.'";
-
-  declstatvar("SWE", NHRU, "snow water equivalent", "(mm)", &SWE);
-
-  declstatdiag("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
-
-  declvar("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
-
-
-/* parameters */
-
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
-
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
-
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
-
-  declgetvar("*", "hru_newsnow", "()", &hru_newsnow);
-  declgetvar("*",   "net_snow", "(mm/int)", &net_snow);
-
-}
-
-void ClassNO_pbsm::init(void) {
-
-  nhru = getdim(NHRU);
-
-  hru_basin = new float[nhru];
-
-  for (hh = 0; hh < nhru; ++hh) {
-    SWE[hh] = 0.0;
-    cumSno[hh] = 0.0;
-    hru_basin[hh] = hru_area[hh]/basin_area[0];
-    snowdepth[hh] = 0.0;
-  }
-}
-
-void ClassNO_pbsm::run(void) {
-
-  for (hh = 0; chkStruct(); ++hh) {
-
-    if(net_snow[hh] > 0.0) {
-      SWE[hh] = SWE[hh] + net_snow[hh];
-      cumSno[hh] = cumSno[hh] + net_snow[hh];
-    }
-
-    if(SWE[hh] > 0.0){
-      const_cast<long*> (inhibit_evap)[hh] = 1;
-      snowdepth[hh] = Common::DepthofSnow(SWE[hh]);
-    }
-    else{
-      const_cast<long*> (inhibit_evap)[hh] = 0;
-      snowdepth[hh] = 0;
-    }
-  }
-}
-
-void ClassNO_pbsm::finish(bool good) {
-
-  for(hh = 0; chkStruct(); ++hh) {
-    LogMessageA(hh, string("'" + Name + " (NO_pbsm)' cumSno     (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh], hru_area[hh], basin_area[0]);
-  }
-  LogDebug(" ");
-}
-
-Classalbedo* Classalbedo::klone(string name) const{
-  return new Classalbedo(name);
-}
-
-void Classalbedo::decl(void) {
-
-  Description = "'Estimates the snow albedo during the winter and the melt period. Use with \"ebsm\".'";
-
-  declstatvar("Albedo", NHRU, "Albedo()", "()", &Albedo);
-
-  declvar("meltflag", NHRU, "meltflag = 1 - melt true", "()", &meltflag);
-
-  declvar("winter", NHRU, "winter = 1 - true", "()", &winter);
-
-  declvar("net_snowD", NHRU, "daily snow fall", "(mm/d)", &net_snowD);
-
-  declvar("newsnowcnt", NHRU, "snow age count", "()", &newsnowcnt);
-
-
-  decldiagparam("Albedo_bare", NHRU, "[0.17]", "0.0", "1.0", "albedo for bare ground", "()", &Albedo_bare); // pseudo
-  decldiagparam("Albedo_snow", NHRU, "[0.85]", "0.0", "1.0", "albedo for fresh snow covered ground", "()", &Albedo_snow); // pseudo
-
-  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(Â°)", &hru_lat);
-
-  declgetvar("*",    "hru_tmax", "(Â°C)", &hru_tmax);
-  declgetvar("*",    "hru_tmin", "(Â°C)", &hru_tmin);
-  declgetvar("*",    "hru_newsnow", "()", &hru_newsnow);
-  declgetvar("*",    "SWE", "(mm)", &SWE);
-  declgetvar("*",    "QdroD", "(MJ/m^2*d)", &QdroD);
-  declgetvar("*",    "net_snow", "(mm/int)", &net_snow);
-}
-
-void Classalbedo::init(void) {
-
-  nhru = getdim(NHRU);
-
-  for(hh = 0; hh < nhru; ++hh) {
-    if(SWE[hh] > 5.0) {
-      Albedo[hh]    = Albedo_snow[hh];
-      winter[hh]    = 1;
-    }
-    else{
-      Albedo[hh]    = Albedo_bare[hh];
-      winter[hh]    = 0;
-    }
-    net_snowD[hh] = 0.0;
-    meltflag[hh]  = 0;
-    newsnowcnt[hh] = 0;
-  }
-}
-
-void Classalbedo::run(void) {
-
-  long nstep, jday;
-
-  nstep = getstep()%Global::Freq;
-
-  for(hh = 0; chkStruct(); ++hh){ // calculate daily snow accumulation
-
-    if(nstep == 1 || Global::Freq == 1) // beginning of every day
-      net_snowD[hh] = net_snow[hh];
-    else
-      net_snowD[hh]+= net_snow[hh];
-  }
-
-  if(nstep == 0 || Global::Freq == 1){ // end of every day
-
-    jday = julian("now");
-
-      for(hh = 0; chkStruct(); ++hh) {
-        float hemisphere = (hru_lat[hh] < 0.0);
-        if((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[hh] > 5.0) {  // changed
-          winter[hh] = 1;
-          Albedo[hh] = Albedo_snow[hh];
-        }
-      continue;
-    }
-
-    for(hh = 0; chkStruct(); ++hh) {
-      meltflag[hh] = 0;
-      if(hru_newsnow[hh] > 0)
-        newsnowcnt[hh] = 0;
-      else
-        newsnowcnt[hh] = newsnowcnt[hh]+1;
-
-      if(SWE[hh] <= 0.0) {
-        Albedo[hh] = Albedo_bare[hh];
-        winter[hh] = 0;
-        meltflag[hh] = 0;
-      }
-      else { // SWE[hh] > 0.0
-        float DR = 0.071;
-
-        if(SWE[hh] > 60.0 && Albedo[hh] > 0.65)
-          DR = 0.015;
-
-        if(SWE[hh] > 60.0 && Albedo[hh] < 0.65)
-          DR = 0.001;
-
-        if(net_snowD[hh] > 0.25) { // SF = SWE*2 if density 0.005 (0.5cm)
-          Albedo[hh] = Albedo[hh] + net_snowD[hh]*0.1*2.0; // daily value
-          if(Albedo[hh] > Albedo_snow[hh])
-            Albedo[hh] = Albedo_snow[hh];
-          continue;
-        }
-
-        float Qnc = -0.371 + 5.22*QdroD[hh]*(1 - Albedo[hh]);
-
-        if(hru_tmax[hh] < -6.0 && Qnc < 1.0)
-          winter[hh] = 1;
-
-        if(Albedo[hh] <= Albedo_bare[hh])
-          winter[hh] = 0;
-
-        if(winter[hh] == 1) {
-          if(newsnowcnt[hh] < 3) {
-            Albedo[hh] = Albedo[hh] - 0.05;
-            continue;
-          }
-          float MT = -0.064*jday + 6.69;
-
-          if(hru_tmin[hh] > -4.0 || Qnc > 1.0 && hru_tmax[hh] > 0.0 ||
-                  hru_tmax[hh] > MT && Qnc > -0.5) {
-            Albedo[hh] = Albedo[hh] - DR;
-
-            if(Albedo[hh] < Albedo_bare[hh])
-              Albedo[hh] = Albedo_bare[hh];
-
-            meltflag[hh] = 1;
-          }
-          else
-            if(Albedo[hh] > 0.65)
-              Albedo[hh] = Albedo[hh] - 0.006;
-        }
-        else {
-          Albedo[hh] = Albedo[hh] - 0.02;
-          if(Albedo[hh] < Albedo_bare[hh])
-            Albedo[hh] = Albedo_bare[hh];
-          meltflag[hh] = 1;
-        }
-
-      } // SWE > 0.0
-    } // for HRU
-  } //end of every day
-}
-
-Classnetall* Classnetall::klone(string name) const{
-  return new Classnetall(name);
-}
-
-void Classnetall::decl(void) {
-
-  Description = "'Models net all-wave radiation (Rn, RnD and RnD_POS) from sunshine hours, temperature and humidity using Brunt.'";
-
-  declvar("net", NHRU, "all-wave net", "(MJ/m^2*int)", &net);
-
-  decldiag("Rn", NHRU, "all-wave net", "(mm/m^2*int)", &Rn);
-
-  declvar("netD", NHRU, "all-wave net", "(MJ/m^2*d)", &netD);
-
-  declvar("RnD", NHRU, "all-wave net", "(mm/m^2*d)", &RnD);
-
-  decldiag("RnD_POS", NHRU, "Sum of Positive all-wave net", "(mm/m^2*d)", &RnD_POS);
-
-  declstatdiag("cum_net", NHRU, "cumulative all-wave net", "(MJ/m^2)", &cum_net);
-
-
-  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
-  declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
-  declgetvar("*", "hru_SunAct", "(h)", &hru_SunAct);
-
-  declgetvar("*", "Tday", "(Â°C)",   &NotUsed, &tday_intvls); // from obs
-  declgetvar("*", "EAday", "(kPa)", &NotUsed, &eaday_intvls); // from obs
-
-  declgetvar("*", "SunMax", "(h)", &SunMax);
-  declgetvar("*", "Qdro", "(W/m^2)",   &Qdro); // clear-sky direct (W/m^2)
-  declgetvar("*", "Qdfo", "(W/m^2)",   &Qdfo); // clear-sky diffuse (W/m^2)
-  declgetvar("*", "Albedo", "()", &Albedo);
-
-  declgetvar("*", "pQdro", "(MJ/m^2*int)",  &pQdro, &pQdro_FREQ); // clear-sky direct (MJ/m^2/int)
-  declgetvar("*", "pQdfo", "(MJ/m^2*int)",  &pQdfo, &pQdfo_FREQ); // clear-sky diffuse (MJ/m^2/int)
-}
-
-void Classnetall::init(void) {
-
-  nhru = getdim(NHRU);
-
-  for (hh = 0; hh < nhru; ++hh)
-    cum_net[hh] = 0.0;
-}
-
-void Classnetall::run(void) {
-
-  float netlong, shortw;
-
-  long nstep = getstep() % Global::Freq;
-
-  if(nstep == 1 || Global::Freq == 1){ // beginning of every day
-
-    for (hh = 0; chkStruct(); ++hh) {
-      netD[hh] = 0.0;
-      RnD[hh] = 0.0;
-      RnD_POS[hh] = 0.0;
-
-      for (int ff = 0; ff < Global::Freq; ++ff) {
-        if(SunMax[hh] > 0.0)
-          netlong = -0.85 + 0.97*CRHM_constants::SB*pow(tday_intvls[ff][hh]+273.0f, 4)*(-0.39f+0.093f*sqrt(eaday_intvls[ff][hh]))*
-                                    (0.26f+0.81f*(hru_SunAct[hh]/SunMax[hh]));
-        else
-          netlong = -0.85;
-
-        if(hru_SunAct[hh] > 0.0 && SunMax[hh] > 0.0)
-          shortw = (0.024f+0.974f*pow(hru_SunAct[hh]/SunMax[hh], 1.35f))*pQdro_FREQ[ff][hh] +
-            (2.68f+2.2f*(hru_SunAct[hh]/SunMax[hh])-3.85f*sqr(hru_SunAct[hh]/SunMax[hh]))*pQdfo_FREQ[ff][hh];
-        else
-          shortw = (0.024f*pQdro_FREQ[ff][hh] + 2.68f*pQdfo_FREQ[ff][hh]);
-
-        float Net = (shortw*(1.0f-Albedo[hh]) + netlong/Global::Freq); // MJ/interval
-        netD[hh] +=  Net;
-
-        Net = Net/(2.501f-0.002361f*tday_intvls[ff][hh]); // MJ/m^2 to mm/m^2
-
-        RnD[hh] += Net;
-        if(Net > 0.0) RnD_POS[hh] += Net;
-
-      } // Interval loop
-    } // HRU loop
-  } // if first interval
-
-  for (hh = 0; chkStruct(); ++hh) {
-
-// t Kelvin degrees, ea bar
-
-    if(SunMax[hh] > 0.0)
-      netlong = -0.85f + 0.97*CRHM_constants::SB*pow(hru_t[hh]+273.0f, 4.0f)*(-0.39f+0.093f*sqrt(hru_ea[hh]))*
-                                (0.26f+0.81f*(hru_SunAct[hh]/SunMax[hh]));
-    else
-      netlong = -0.85;
-
-    if(hru_SunAct[hh] > 0.0 && SunMax[hh] > 0.0)
-      shortw = (0.024f+0.974f*pow(hru_SunAct[hh]/SunMax[hh], 1.35f))*Qdro[hh]*WtoMJ_D +
-        (2.68f+2.2f*(hru_SunAct[hh]/SunMax[hh])-3.85f*sqr(hru_SunAct[hh]/SunMax[hh]))*Qdfo[hh]*WtoMJ_D;
-    else
-      shortw = (0.024f*Qdro[hh] + 2.68f*Qdfo[hh])*WtoMJ_D;
-
-    net[hh] = (shortw*(1.0f-Albedo[hh]) + netlong)/Global::Freq; // MJ/day to MJ/interval
-    Rn[hh] = net[hh]/(2.501f-0.002361f*hru_t[hh]); // MJ/interval to mm/interval
-
-    cum_net [hh] += net[hh]; // mm/interval
-
-  } // HRU loop
-}
-
-Classebsm* Classebsm::klone(string name) const{
-  return new Classebsm(name);
-}
-
-void Classebsm::decl(void) {
-
-  Description = "'Energy-budget snowmelt model for the Canadian Prairies', \
-                 'ebsm using Brunt et al', \
-                 'ebsm using input variable Qnsn_Var (W/m^2*int) from CanopyClearing etc.', \
-                 'ebsm using input observation Qnsn (W/m^2*int)', \
-                 'ebsm using input observation QnD (MJ/m^2*d)'";
-
-  variation_set = VARIATION_ORG;
-
-  declvar("snowmeltD", NHRU, "daily snowmelt", "(mm/d)", &snowmeltD);
-
-  declvar("cumsnowmelt", NHRU, "cumulative melt", "(mm)", &cumsnowmelt);
-
-  declstatvar("LW_ebsm", NHRU, "liquid water in snowpack", "(mm)", &LW_ebsm, NULL, 1, false, CRHM::PRIVATE);
-
-  declstatvar("u_ebsm", NHRU, "snowpack energy deficit", "(MJ)", &u_ebsm, NULL, 1, false, CRHM::PRIVATE);
-
-  declvar("Qmelt", NHRU, "Qmelt = Qn+Qh+Qe+Qp", "(MJ/d)", &Qmelt);
-
-  declvar("Qn_ebsm", NHRU, "net radiation", "(MJ/d)", &Qn_ebsm);
-
-  declvar("Qh_ebsm", NHRU, "sensible heat", "(MJ/d)", &Qh_ebsm);
-
-  declvar("Qe_ebsm", NHRU, "latent heat", "(MJ/d)", &Qe_ebsm);
-
-  declvar("Qe_subl", NHRU, "latent heat sublimation", "(mm/d)", &Qe_subl);
-
-  declvar("cumQe_subl", NHRU, "cumulative latent heat sublimation", "(mm)", &cumQe_subl);
-
-  declvar("Qp_ebsm", NHRU, "input from rainfall", "(MJ/d)", &Qp_ebsm);
-
-
-  decldiag("LWmax", NHRU, "maximum liquid water in snowpack", "(mm)", &LWmax);
-
-  declvar("net_rainD", NHRU, "daily net rain", "(mm/d)", &net_rainD);
-
-
-  decldiagparam("delay_melt", NHRU, "[0]", "0","366", "inhibit melt until this Julian date. Default incorrect for the Southern Hemisphere", "()", &delay_melt);
-
-  decldiagparam("Qe_subl_from_SWE", NHRU, "[0]", "0", "1", "0 - add to 'Qmelt' (original version), 1 - take Qe_subl from SWE ", "()", &Qe_subl_from_SWE);
-
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
-
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
-
-
-  declgetvar("*", "SunMax", "(h)",       &sunmax);
-  declgetvar("*", "QdroD", "(MJ/m^2*d)", &QdroD);
-  declgetvar("*", "QdfoD", "(MJ/m^2*d)", &QdfoD);
-  declgetvar("*", "hru_tmean", "(Â°C)",  &tmean);
-  declgetvar("*", "hru_tmax", "(Â°C)",   &tmax);
-  declgetvar("*", "hru_tmin", "(Â°C)",   &tmin);
-  declgetvar("*", "hru_umean", "(m/s)",  &umean);
-  declgetvar("*", "hru_rhmean", "(%)", &rhmean);
-  declgetvar("*", "hru_SunAct", "(h)", &sunact);
-  declgetvar("*", "meltflag", "()",   &meltflag);
-  declgetvar("*", "Albedo", "()",     &Albedo);
-  declputvar("*", "SWE", "(mm)",        &SWE);
-  declgetvar("*", "net_rain", "(mm/int)", &net_rain);
-
-
-  variation_set = VARIATION_0;
-
-  decldiagparam("tfactor", NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*Â°C)", &tfactor);
-
-  decldiagparam("nfactor", NHRU, "[0.0]", "0.0","10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
-
-  decldiagparam("Use_QnD", NHRU, "[0]", "0","1", "1 - Use QnD if available", "()", &Use_QnD);
-
-
-  variation_set = VARIATION_0 + VARIATION_3;
-
-  declreadobs("QnD", NHRU, "net radiation", "(MJ/m^2*d)", &QnD, HRU_OBS_Q, true); // must check for NULL
-
-
-  variation_set = VARIATION_1 + VARIATION_2;
-
-  declstatvar("Qnsn_Acc", NHRU, "accumulator for Qnsn_Var/Qnsn", "(W/m^2)", &Qnsn_Acc); // daily value
-
-
-  variation_set = VARIATION_1;
-
-  declgetvar("*",  "Qnsn_Var", "(W/m^2*int)", &Qnsn_Var); // interval value
-
-  variation_set = VARIATION_2;
-
-
-  declreadobs("Qnsn", NHRU, "net radiation", "(W/m^2*int)", &Qnsn, HRU_OBS_Q);
-
-  variation_set = VARIATION_ORG;
-}
-
-void Classebsm::init(void) {
-
-  nhru = getdim(NHRU);
-
-  for(hh = 0; hh < nhru; ++hh) {
-    snowmeltD[hh] = 0.0;
-    cumsnowmelt[hh] = 0.0;
-    LW_ebsm[hh] = 0.0;
-    u_ebsm[hh] = 0.0;
-    Qmelt[hh] = 0.0;
-    Qn_ebsm[hh] = 0.0;
-    Qh_ebsm[hh] = 0.0;
-    Qe_ebsm[hh] = 0.0;
-    Qe_subl[hh] = 0.0;
-    cumQe_subl[hh] = 0.0;
-    Qp_ebsm[hh] = 0.0;
-
-    if(variation == VARIATION_ORG)
-      if(nfactor[hh] != 0.0 && QnD == NULL){
-        CRHMException TExcept("ebsm: nfactor > 0.0 with observation 'QnD' not defined!", TERMINATE);
-        LogError(TExcept);
-      }
-  }
-}
-
-void Classebsm::run(void) {
-
-      float umin, ref, melt;
-
-      long  nstep = getstep()%Global::Freq;
-
-      for(hh = 0; chkStruct(); ++hh){
-        if(nstep == 1 || Global::Freq == 1){ // beginning of every day
-          net_rainD[hh] = net_rain[hh];
-          if(variation == VARIATION_1)
-            Qnsn_Acc[hh] = Qnsn_Var[hh];
-          else if(variation == VARIATION_2)
-            Qnsn_Acc[hh] = Qnsn[hh];
-        }
-        else{
-          net_rainD[hh] += net_rain[hh];
-          if(variation == VARIATION_1)
-            Qnsn_Acc[hh] += Qnsn_Var[hh];
-          else if(variation == VARIATION_2)
-            Qnsn_Acc[hh] += Qnsn[hh];
-        }
-      }
-
-      if(nstep == 0 || Global::Freq == 1){ // end of every day
-
-        for(hh = 0; chkStruct(); ++hh) {
-
-          snowmeltD[hh] = 0.0;
-          Qmelt[hh] = 0.0;
-          Qn_ebsm[hh] = 0.0;
-          Qh_ebsm[hh] = 0.0;
-          Qe_ebsm[hh] = 0.0;
-          Qe_subl[hh] = 0.0;
-          Qp_ebsm[hh] = 0.0;
-
-          if(SWE[hh] <= 0.0) { // bare ground
-            LW_ebsm[hh] = 0.0;
-            u_ebsm[hh] = 0.0;
-          }
-          else if(variation == VARIATION_ORG && (tfactor[hh] > 0.0 || nfactor[hh] > 0.0) && meltflag[hh] == 1) {
-            if(delay_melt[hh] <= julian("now")) {
-
-              if(QnD){ // observation available (MJ/m^2*d)
-                if(QnD[hh] > 0.0)
-                  Qn_ebsm[hh] = QnD[hh]*nfactor[hh];
-              }
-
-              Qh_ebsm[hh] = tmax[hh]*tfactor[hh];
-
-              Qmelt[hh] = Qn_ebsm[hh] + Qh_ebsm[hh];
-              snowmeltD[hh] = Qmelt[hh];
-              if (snowmeltD[hh] <= 0.0)
-                snowmeltD[hh] = 0.0;
-              else {
-                if(SWE[hh] > snowmeltD[hh])
-                  SWE[hh] = SWE[hh] - snowmeltD[hh];
-                else {
-                  snowmeltD[hh] = SWE[hh];
-                  SWE[hh] = 0.0;
-                }
-                cumsnowmelt[hh] = cumsnowmelt[hh] + snowmeltD[hh];
-              }
-            }
-          }
-          else if(meltflag[hh] == 1 && delay_melt[hh] <= julian("now")) {
-            float eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;\
-            switch (variation) {
-
-              case VARIATION_ORG :
-                if(QnD != NULL && Use_QnD[hh]){ // observation available (MJ/m^2*d)
-                  if(QnD[hh] > 0.0)
-                    Qn_ebsm[hh] = QnD[hh];
-                }
-                else
-                  Qn_ebsm[hh] = -0.53+0.47*(QdroD[hh] + QdfoD[hh])*(0.52+0.52*sunact[hh]/sunmax[hh])*(1.0-Albedo[hh]);
-
-                break;
-              case VARIATION_1 :
-                Qn_ebsm[hh] = Qnsn_Acc[hh]*0.0864/Global::Freq; // convert to (MJ/m^2*d)
-              break;
-              case VARIATION_2 :
-                Qn_ebsm[hh] = Qnsn_Acc[hh]*0.0864/Global::Freq; // convert to (MJ/m^2*d)
-              break;
-              case VARIATION_3 :
-                Qn_ebsm[hh] = QnD[hh]; // already in (MJ/m^2*d)
-              break;
-            } // switch
-
-            Qh_ebsm[hh] = -0.92+0.076*umean[hh]+0.19*tmax[hh];
-            Qe_ebsm[hh] = 0.08*(0.18+0.098*umean[hh])*(6.11-eamean*10.0);
-
-            Qe_subl[hh] = Qe_ebsm[hh]/2.83; // Lv = 2.83 mJ/Kg
-
-            if(Qe_subl_from_SWE[hh]){
-              if(Qe_subl[hh] > SWE[hh])
-                Qe_subl[hh] = SWE[hh];
-              cumQe_subl[hh] += Qe_subl[hh];
-              SWE[hh] = SWE[hh] - Qe_subl[hh];
-            }
-
-            if(net_rainD[hh] > 0.0)
-              Qp_ebsm[hh] = net_rainD[hh]*tmean[hh]*4.2/1000.0;
-            else
-              Qp_ebsm[hh] = 0.0;
-
-            if(Qe_subl_from_SWE[hh])
-              Qmelt[hh] = Qn_ebsm[hh] + Qh_ebsm[hh] + Qp_ebsm[hh]; // Qe_ebsm already taken from SWE
-            else
-              Qmelt[hh] = Qn_ebsm[hh] + Qh_ebsm[hh] + Qe_ebsm[hh] + Qp_ebsm[hh];
-
-            u_ebsm[hh] = u_ebsm[hh] + Qmelt[hh];
-
-            LWmax[hh] = SWE[hh]*0.05;
-
-            float t_minus = tmin[hh];
-            if(t_minus > 0.0)
-              t_minus = 0.0;
-
-            umin = SWE[hh]*(2.115+0.00779*t_minus)*t_minus/1000.0;
-
-            if(umin > u_ebsm[hh])
-              u_ebsm[hh] = umin;
-
-            if(u_ebsm[hh] > 0.0) {
-              melt = u_ebsm[hh]/316.8*1000.0; // thermal quality B=0.95. 316.8 = 333.5*0.95 (kJ/kg)
-              if(melt + LW_ebsm[hh] > LWmax[hh]) {
-                snowmeltD[hh] = melt - (LWmax[hh] - LW_ebsm[hh]);
-                if(snowmeltD[hh] > SWE[hh]) {
-                  snowmeltD[hh] = SWE[hh] + LW_ebsm[hh];
-                  SWE[hh] = 0.0;
-                  LW_ebsm[hh] = 0.0;
-                }
-                else if(SWE[hh] > melt){
-                  SWE[hh] = SWE[hh] - melt;
-                  LW_ebsm[hh] = LWmax[hh];
-                }
-                else {
-                  snowmeltD[hh] = SWE[hh] + LW_ebsm[hh];
-                  SWE[hh] = 0.0;
-                  LW_ebsm[hh] = 0.0;
-                }
-                cumsnowmelt[hh] = cumsnowmelt[hh] + snowmeltD[hh];
-              }
-              else { // melt retained in snowpack
-                LW_ebsm[hh] = LW_ebsm[hh] + melt;
-                SWE[hh] = SWE[hh] - melt;
-                snowmeltD[hh] = 0.0;
-              }
-              u_ebsm[hh] = 0.0;
-            }
-            else { // no melt - convert liquid water to ice - reduce u_ebsm accordingly
-              Qmelt[hh] = 0.0;
-              snowmeltD[hh] = 0.0;
-
-              if(u_ebsm[hh] < 0.0){
-                ref = -u_ebsm[hh]/333.5*1000.0;
-                if(LW_ebsm[hh] > ref) {
-                  u_ebsm[hh] = 0.0;
-                  SWE[hh] = SWE[hh] + ref;
-                  LW_ebsm[hh] = LW_ebsm[hh] - ref;
-                }
-                else {
-                  u_ebsm[hh] = u_ebsm[hh] + LW_ebsm[hh]*333.5/1000.0;
-                  SWE[hh] = SWE[hh] + LW_ebsm[hh];
-                  LW_ebsm[hh] = 0.0;
-                }
-              }
-            } // no melt
-          } // if
-          else { // meltflag[hh] == 0. TB addition 02/02/06
-            if(tmin[hh] < 0.0)
-              u_ebsm[hh] = SWE[hh]*(2.115+0.00779*tmin[hh])*tmin[hh]/1000.0;
-            if(LW_ebsm[hh] > 0.0){
-              u_ebsm[hh] = u_ebsm[hh] + LW_ebsm[hh]*333.5/1000.0;
-              SWE[hh] = SWE[hh] + LW_ebsm[hh];
-            }
-            LW_ebsm[hh] = 0.0;
-          }
-        } // end for HRUs
-      } // end if (end of day)
-}
-
-void Classebsm::finish(bool good) {
-
-  if(!good) return;
-
-  float Allcumsnowmelt = 0.0;
-
-  for(hh = 0; chkStruct(); ++hh) {
-    LogMessageA(hh, string("'" + Name + " (ebsm)' cumQe_subl   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumQe_subl[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (ebsm)' cumsnowmelt   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumsnowmelt[hh], hru_area[hh], basin_area[0]);
-
-    Allcumsnowmelt += cumsnowmelt[hh]*hru_area[hh];
-  }
-  LogDebug(" ");
-  LogMessage(string("'" + Name + " (ebsm)' Allcumsnowmelt (mm*basin): ").c_str(), Allcumsnowmelt);
-  LogDebug(" ");
-}
-
-ClassTs* ClassTs::klone(string name) const{
-  return new ClassTs(name);
-}
-
-void ClassTs::decl(void) {
-
-  Description = "'Estimates snow surface temperature from HRU inputs.' \
-                 'Tsnow using variable QliVt_Var (W/m^2),' \
-                 'Tsnow using observation Qli (W/m^2).'";
-
-  variation_set = VARIATION_ORG;
-
-  declvar("hru_Ts", NHRU, "snow surface temperature", "(Â°C)", &hru_Ts);
-
-
-  declobs("Ts", NHRU, "snow surface temperature", "(Â°C)", &Ts);
-
-
-  decllocal("Pa", NHRU, "average surface pressure", "(kPa)", &Pa);
-
-  decllocal("ra", NHRU, "", "(s/m)", &ra);
-
-  decllocal("Qli_", NHRU, "", "(W/m^2)", &Qli_);
-
-
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
-
-  declparam("Z0snow", NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
-
-  decldiagparam("Zref", NHRU, "[1.5]", "0.01", "100.0", "temperature measurement height", "(m)", &Zref);
-
-  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
-
-
-  declgetvar("*",  "hru_t", "(Â°C)", &hru_t);
-
-  declgetvar("*",  "hru_rh", "()", &hru_rh);
-
-  declgetvar("*",  "hru_u", "(m/s)", &hru_u);
-
-  variation_set = VARIATION_0;
-
-  declgetvar("*",  "QliVt_Var", "(W/m^2)", &QliVt_Var);
-
-  variation_set = VARIATION_1;
-
-  declreadobs("Qli", NHRU, "incident long-wave for a flat horizon with vt = 0", "(W/m^2)", &Qli, HRU_OBS_Q);
-
-
-}
-
-void ClassTs::init(void) {
-
-  nhru = getdim(NHRU); // transfers current # of HRUs to module
-
-  for (hh = 0; hh < nhru; ++hh) {
-    Pa[hh] = 101.3f*pow((293.0f-0.0065f*hru_elev[hh])/293.0f, 5.26f);  // kPa
-  }
-
-}
-
-void ClassTs::run(void) { // executed every interval
-
-  for (hh = 0; chkStruct(); ++hh) {
-
-    switch (variation) {
-      case VARIATION_ORG:
-      Qli_[hh] =  QliVt_Var[hh];
-      break;
-      case VARIATION_1:
-      Qli_[hh] =  Qli[hh];
-      break;
-    } // switch
-
-    float T1 = hru_t[hh] + CRHM_constants::Tm;
-
-    float rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
-
-    float U1 = max<float> (hru_u[hh], 1.0e-3); // Wind speed (m/s)
-
-    ra[hh] = (log(Zref[hh]/Z0snow[hh])*log(Zwind[hh]/Z0snow[hh]))/sqr(CRHM_constants::kappa)/U1;
-
-    float delta = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
-
-    float q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1);
-
-    Ts[hh] = T1 + (CRHM_constants::emiss*(Qli_[hh] - CRHM_constants::sbc*pow(T1, 4.0f)) + CRHM_constants::Ls*(q - Common::Qs(Pa[hh], T1))*rho/ra[hh])/
-             (4.0f*CRHM_constants::emiss*CRHM_constants::sbc*pow(T1, 3.0f) + (CRHM_constants::Cp + CRHM_constants::Ls*delta)*rho/ra[hh]);
-
-    Ts[hh] -= CRHM_constants::Tm;
-
-    if(Ts[hh] > 0.0) Ts[hh] = 0.0;
-
-    hru_Ts[hh] = Ts[hh];
-  } // HRU loop
-}
+//Classpbsm* Classpbsm::klone(string name) const{
+//  return new Classpbsm(name);
+//}
+//
+//void Classpbsm::decl(void) {
+//
+//  Description = "'calculates snow transport and sublimation (Pomeroy and Li, 1999).' \
+//                 'original version using hru_u,' \
+//                 'uses hru_Uadjust from walmsley_wind instead of hru_u,' \
+//                 'using hru_u and a regression to use daily windspeed,' \
+//                 'uses hru_Uadjust from walmsley_wind instead of hru_u and a regression to use daily windspeed.'";
+//
+//  variation_set = VARIATION_0 + VARIATION_2;
+//
+//  declgetvar("*", "hru_u", "(m/s)", &hru_u);
+//
+//
+//  variation_set = VARIATION_1 + VARIATION_3;
+//
+//  declgetvar("*", "hru_Uadjust", "(m/s)", &hru_Uadjust);
+//
+//
+//  variation_set = VARIATION_2 + VARIATION_3;
+//
+//  declparam("u_D", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed correction", "()", &u_D);
+//
+//  declparam("Drift_offset", NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed drift offset correction", "()", &Drift_offset);
+//
+//  declparam("Drift_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed drift slope correction", "()", &Drift_slope);
+//
+//  declparam("Subl_offset", NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed sublimation offset correction", "()", &Subl_offset);
+//
+//  declparam("Subl_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed sublimation slope correction", "()", &Subl_slope);
+//
+//
+//  variation_set = VARIATION_ORG;
+//
+//
+//  declstatvar("SWE", NHRU, "snow water equivalent", "(mm)", &SWE);
+//
+//  declvar("Subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
+//
+//  declvar("Drift", NHRU, "interval transport", "(mm/int)", &Drift);
+//
+//  decldiag("DriftH", NHRU, "interval transport", "(mm/int)", &DriftH);
+//
+//  decldiag("SublH", NHRU, "interval sublimation", "(mm/int)", &SublH);
+//
+//  decldiag("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
+//
+//  declstatdiag("cumSubl", NHRU, "cumulative sublimation", "(mm)", &cumSubl);
+//
+//  declstatdiag("cumDrift", NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
+//
+//  declstatdiag("cumBasinSnowLoss", BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
+//
+//  declstatdiag("cumBasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
+//
+//  declstatdiag("cumDriftIn", NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
+//
+//  decllocal("hru_basin", NHRU, "conversion factor", "()", &hru_basin);
+//
+//  decldiag("DrySnow", NHRU, "DrySnow", "()", &DrySnow);
+//
+//  declstatdiag("SnowAge", NHRU, "SnowAge", "()", &SnowAge);
+//
+//  declstatdiag("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
+//
+//  declvar("Prob", NHRU, "Probability", "()", &Prob);
+//
+//  declvar("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
+//
+//  declvar("rain_on_snow", NHRU, "mass of rain falling on snowcover", "(mm/int)", &rain_on_snow);
+//
+//  declvar("cumrain_on_snow", NHRU, "cumulative rain on snow", "(mm)", &cumrain_on_snow);
+//
+//  decllocal("SWE_Init", NHRU, "initial SWE", "(mm)", &SWE_Init);
+//
+///* parameters */
+//
+//  declparam("fetch", NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
+//
+//  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
+//
+//  declparam("distrib", NHRU, "[0.0, 1.0]", "-10.0", "10.0", "distribution fractions - can sum to 1", "()", &distrib);
+//
+//  decldiagparam("N_S", NHRU, "[320]", "1", "500", "vegetation number density", "(1/m^2)", &N_S);
+//
+//  decldiagparam("A_S", NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
+//
+//  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+//
+//  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+//
+//  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporatation(System use only), 1 -> inhibit", "()", &inhibit_evap);
+//
+//  decldiagparam("inhibit_bs", NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
+//
+//  decldiagparam("inhibit_subl", NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
+//
+//  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
+//  declgetvar("*", "hru_rh", "(%)", &hru_rh);
+//  declgetvar("*", "hru_newsnow", "()", &hru_newsnow);
+//  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
+//  declgetvar("*", "net_rain", "(mm/int)", &net_rain);
+//
+//}
+//
+//void Classpbsm::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  cumBasinSnowLoss[0] = 0.0;
+//  cumBasinSnowGain[0] = 0.0;
+//
+//  for (hh = 0; hh < nhru; ++hh) {
+//    SWE[hh] = 0.0;
+//    cumDrift[hh] = 0.0;
+//    cumDriftIn[hh] = 0.0;
+//    cumSubl[hh] = 0.0;
+//    cumSno[hh] = 0.0;
+//    SnowAge[hh] = 0.0;
+//    DrySnow[hh] = 0;
+//    snowdepth[hh] = 0.0;
+//    rain_on_snow[hh] = 0.0;
+//    cumrain_on_snow[hh] = 0.0;;
+//
+//    if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
+//      CRHMException TExcept(string("'" + Name + " (pbsm)' vegetation heights not in ascending order.").c_str(), WARNING);
+//      LogError(TExcept);
+//    }
+//  }
+//
+//  for (hh = 0; hh < nhru; ++hh)
+//    hru_basin[hh] = hru_area[hh]/basin_area[0];
+//}
+//
+///*****************************
+//  PBSMrun - PBSM module run function
+//  10/28/99 (tb) 06/11/99
+//
+//******************************/
+//
+// // DepthofSnow
+//
+//float SWEfromDepth(float Snow_Depth){ // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
+//
+//  float SWE;
+//
+//  if (Snow_Depth > 0.6)
+//    SWE = 4.5608*Snow_Depth*100.0-128.06;
+//  else if (Snow_Depth > 0.0205)
+//    SWE = 2.39*Snow_Depth*100.0+2.05;
+//  else
+//    SWE = Snow_Depth;
+//
+//  return SWE;
+//} // SWEfromDepth
+//
+//void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probability, float & Threshold,
+//                             long Snow, float & SnowAge, long & DrySnow){
+//
+////Probability of blowing snow occurrence and threshold wind speeds determined by ambient air temperature and snow age
+//
+//   float Wind, Mean, Variance, c;
+//
+//        Wind = 0.0;
+//        Probability = 0.0;
+//
+//   if(SWE <= 0.0) {   //no snow available
+//        DrySnow = false;
+//        SnowAge = 0.0;
+//        Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); // (m/s)
+//   }
+//
+//   else if((Snow == true) && (t < 0.0))
+//   {
+//// with concurrent snowfall: new dry snow
+//        DrySnow = true;
+//        SnowAge = 24.0/Global::Freq;
+//
+//        Mean = 0.365 * t + 0.00706 * sqr(t)
+//              + 0.91 * log((float)SnowAge) + 11.0;
+//        Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
+//
+//        while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
+//// Wind < 3 m/s too weak for dry snow transport
+//
+//           Wind = Wind + 0.1;
+//
+//           c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
+//
+//           Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
+//        } // {while do}
+//        Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); // (m/s)
+//   } // {if}
+//
+//   else if((t < 0.0) && DrySnow)
+//   {
+//// {without concurrent snowfall: old dry snow}
+//        SnowAge = SnowAge + 24.0/Global::Freq;
+//
+//        Mean = 0.365 * t + 0.00706 * sqr(t)
+//              + 0.91 * log((float)SnowAge) + 11.0;
+//        Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
+//
+//        while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
+//// Wind < 3 m/s too weak for dry snow transport
+//           Wind = Wind + 0.1;
+//
+//           c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
+//
+//           Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
+//         } // while do
+//
+//       Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); //(m/s)
+//   } // if
+//   else if ((t >= 0.0)  || !DrySnow)
+//   {
+//        DrySnow = false;             // or wet snow remains on the ground
+//        SnowAge = 0.0;
+//        Mean = 21.0;
+//        Variance = 7.0;
+//
+//        while ((Wind <= Uten_Prob) && (Uten_Prob >7.0)) {    // loop to calculate P.
+//// wind < 7 m/s too weak for wet snow transport
+//            Wind = Wind + 0.1;
+//            c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
+//            Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
+//        } // while do
+//        Threshold = 9.9;     // (m/s)
+//   } //if
+//
+//} // Probability_threshold procedure
+//
+//void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH){
+//
+//// total sublimation
+//
+//   if  ((SBsum + SBsalt) >= 0.0)
+//     SublH = 0.0;
+//   else
+//     SublH = (SBsum + SBsalt)*(-1E+3); // -mgmm2s to mg/m^2/s to g/m^2/s
+//
+//   DriftH = (TQsalt + TQsusp); // kg/m-width/s
+//// Convert to interval values
+//
+//   SublH = SublH * Global::Interval*3600*24/1000.0; // g/m^2/s to mm/m^2/interval
+//   DriftH = DriftH * Global::Interval*3600*24;      // kg/m-width/s to kg/m-width/interval
+//
+//} // sum procedure
+//
+//void Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
+//           float t, float u, float rh, float Fetch, long N_S, float A_S)
+//{
+//
+///*   Modified Calculations for Mean Particle Mass in this version
+//     program to calculate blowing snow horizontal flux, sublimation rate
+//     and latent heat flux due to snow sublimation for a variety of windspeeds,
+//     boundary layers and surface conditions.
+//
+//     All variable and constants entered into the programme are in SI and
+//     use Canadian Atmospheric Environement Service Meteorological data
+//     format.  Snow transport is in kg per square meter per half hour
+//     from the surface to 5 metres height.  Sublimation is totaled to the top
+//     of the boundary layer for diffusion, based on the meteorological
+//     Fetch and is expressed in millimeters of blowing snow lost over
+//     a square meter of snow surface per half hour  */
+//
+//  float   A,      Alpha,  B,      Bd,     Bound,  C,
+//  Diff,   DmDt,   Es,     H,
+//  Htran,  Hsalt,  Inc,    Lamb,   Lambda, Lb,
+//  Mpm,    Mpr,    Nh,     Nsalt,
+//  Nz,     Nuss,   Omega,  TQsalt,
+//  TQsum,  Qz,     RauTerm,Temp,
+//  Reyn,   SBsalt, Sbz,    SBsum,
+//  SigmaZ, Sigma2, SvDens, Usthr,  Ustar,
+//  UstarZ, Uz,     Vs,     Vsalt,  Sigma,
+//  Vsusp,  Z,      Zr,     Zstb;
+//
+////Compute stubble coefficients
+//
+//   Zstb = 0.005*N_S*A_S*E_StubHt*100.0;      // Lettau, used for susp Z0''
+//   Lambda = N_S*A_S*E_StubHt;         // Raupach Eq. 1
+//   Sigma = (M_PI*A_S)/(4.0*E_StubHt); // Raupach Eq. 4
+//
+//// Calculate the flux for interval
+//   TQsalt = 0.0;                      // Total saltation flux
+//   TQsum = 0.0;                       // Total Suspension
+//   SBsalt = 0.0;
+//   SBsum = 0.0;
+//   DriftH = 0.0;
+//   SublH = 0.0;
+//
+//   Temp  = t + 273.0;                 // Convert to Deg. K
+//
+//// Check for data errors    Fluxes set to zero for the interval
+//   if((Temp < 0.0) || (u < 1.0) || (rh < 0.01)) {return;}
+//
+//   if(rh >= 1.0) rh = rh/100.0;       // handle %rh
+//
+//   Lamb = 0.000076843*Temp + 0.003130762;   // therm. cond. of atm. (J/(msK))
+//   Diff = 2.06e-5f*pow(Temp/273.0f, 1.75f); // diffus. of w.vap. atmos. (m^2/s
+//   B = PBSM_constants::LATH * PBSM_constants::M/(PBSM_constants::R * Temp) - 1.0;
+//
+//// find undersaturation of w. vapour at 2 metres
+//   Es = 611.15f * exp(22.452f*(Temp - 273.0f)/Temp);  //{sat pressure}
+//   SvDens = (Es*PBSM_constants::M)/(PBSM_constants::R*Temp);                       //{sat density}
+//   Sigma2 = rh - 1.0;                              //{undersaturation at 2 m}
+//
+//   if(u > Uthr) {
+//
+//// define saltation parameters and calculate saltation
+////    rate using 10/1987 MODEL OF BLOWING SNOW EQUATIONS
+//
+//      Usthr = 0.03697f*Uthr;                                  //{Eq. 6.3}
+//      Ustar = 0.02264f*pow(u, 1.295f);
+//      if(E_StubHt > 0.0001)                         //{Eq. 6.2 rev}
+//        RauTerm  = 1.0/((1.0-Sigma*Lambda)*(1.0+PBSM_constants::Beta*Lambda)); //{Raupach}
+//      else
+//        RauTerm  = 1.0;
+//
+//      Hsalt = PBSM_constants::C2/(2.0f*PBSM_constants::g)*sqr(Ustar);                         //{Eq. 4.13}
+//      Nsalt = 2.0*PBSM_constants::rho/(PBSM_constants::C2*PBSM_constants::C3*Ustar)*(RauTerm - sqr(Usthr)/sqr(Ustar)); //{Eq. 4.14 updated}
+//
+//      if(Nsalt <= 0.0) {
+//         Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//         return;
+//      }
+//
+//      TQsalt = PBSM_constants::C1*PBSM_constants::rho*Usthr/(PBSM_constants::g*PBSM_constants::C3*Ustar)*(sqr(Ustar)*RauTerm - sqr(Usthr)); // Eq. 4.20
+//
+//// calculate sublimation rate in the saltation layer
+//
+//      Mpr= 100E-6;
+//      Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
+//      Alpha = 5.0;
+//
+//      SigmaZ = Sigma2 * (1.019 + 0.027 * log(Hsalt)); // Eq. 6.20, Revised in May. 1997
+//      if(SigmaZ > -0.01) {SigmaZ = -0.01;}
+//      Vsalt = 0.6325 * Ustar + 2.3 * Usthr;          // Eq. 6.25
+//      Reyn = (2.0 * Mpr * Vsalt)/1.88E-5;            // Eq. 6.22
+//      Nuss = 1.79 + 0.606 * sqrt(Reyn);              // Eq. 6.21
+//      A = Lamb * Temp * Nuss;
+//      C = 1.0/(Diff * SvDens * Nuss);
+//      DmDt = ((2.0 * M_PI * Mpr * SigmaZ) - (Htran * B/A))/((PBSM_constants::LATH * B/A) + C);
+//
+//      //{Eq. 6.16} {Gamma Dist. Corr.}
+//      Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Mpr*sqr(Mpr) *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
+//
+//      Vs = DmDt/Mpm;                // Sublimation rate coefficient Eq. 6.13
+//      SBsalt = Vs * Nsalt * Hsalt;  // Eq. 6.11
+//
+//// calculate mass flux in the suspended layers and the sublimation
+////     rate for layers of height Inc from height r to b
+//
+//      Zr = 0.05628 * Ustar;         // Eq. 5.27
+//      Alpha = 15.0;
+//      Inc = 0.0001;
+//
+//// Loop to find the first suspended drift density level, r
+////     from the reference level Zr
+////     To preserve continuity with saltation the first suspended
+////     level drift density is less than or equal to Nsalt.
+//
+//      TQsum = 0;
+//      SBsum = 0;
+//
+//      Z = Zr + Inc;
+//      while (Z <= 0.15) {
+//         Nz = 0.8 * exp(-1.55*(pow(0.05628f*Ustar, -0.544f) - pow(Z, -0.544f)));
+//
+//// Eq. 5.26, Revised in Dec. 1995
+//         if(Nz <= Nsalt) {goto Ten;}
+//         Z = Z + Inc;
+//      } //while
+//Ten:  Lb = Z + Inc;
+//      Z = Lb;
+//      Inc = 0.001;
+//
+//// find height of fully-developed boundary layer for turbulent
+////     diffusion using a form of Pasquills plume dispersion eq.
+////     iterate towards Bound
+//
+//      Bd = 1.0;
+//      Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
+//        sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));          // Eq. 6.9
+//      while (fabs(Bound - Bd) > 0.001) {
+//         Bd = Bound;
+//         Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
+//            sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));      // Eq. 6.9
+//      } //while
+//
+//
+//// Loop to calculate the suspended mass flux up to 5 metres
+////     and the total sublimation rate to the top of the boundary layer
+////   at increments of 1 mm to 50cm & increments of 10 cm to  b
+//
+//Twenty: H = Z + Inc;
+//      while (H <= Bound) {
+//         Nh = 0.8 * exp(-1.55f*(pow(0.05628f*Ustar, -0.544f) - pow(H, -0.544f)));
+//         Nz = Nh;
+//         UstarZ = Ustar * pow(1.2f/(1.2f + Nz), 0.5f);                  // Eq. 5.17a
+//         Uz = (UstarZ/PBSM_constants::KARMAN) *log(H/((0.00613f *sqr(Ustar)) + Zstb));// Eq. 4.17r
+//         if(Uz > 0) {
+//	   Mpr = 4.6e-5 * pow(H, -0.258f);                            // Eq. 6.15
+//           if(H >= 5.0) {Mpr = 30E-6f;}
+//
+//           Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
+//           Alpha = 4.08 + 12.6 * H;                                  // Eq. 6.14
+//           if(H >= 1.5) {Alpha = 25.0;}
+//
+//           SigmaZ = Sigma2 * (1.019 + 0.027 * log(H));  // Eq. 6.20, Revised in May. 1997
+//           if(SigmaZ > -0.01) {SigmaZ = -0.01;}
+//	   Omega = 1.1e7f * pow(Mpr, 1.8f);               // Eq. 5.18
+//	   Vsusp = Omega + 0.0106f * pow(Uz, 1.36f);
+//           Reyn = (2.0f * Mpr * Vsusp)/1.88e-5f;          // Eq. 6.22
+//           Nuss = 1.79f + 0.606f * sqrt(Reyn);            // Eq. 6.21
+//           A = Lamb * Temp * Nuss;
+//           C = 1.0/(Diff * SvDens * Nuss);
+//           DmDt = ((2.0f*M_PI * Mpr * SigmaZ) - (Htran*B/A))/((PBSM_constants::LATH*B/A) + C);
+//           Mpm = 1.333f * M_PI * PBSM_constants::DICE * sqr(Mpr)*Mpr *   // Eq. 6.16
+//              (1.0f + 3.0f/Alpha + 2.0f/sqr(Alpha));       // Gamma Dist. Corr.
+//           Vs = DmDt/Mpm;                               // Eq. 6.13
+//           Sbz = Vs * Nz * Inc;                         // mg
+//           SBsum = SBsum + Sbz;                         // Eq. 6.12
+//           Qz = Nz * Uz * Inc;                          // Eq. 5.4
+//	   if(H >= 5.0) {Qz = 0.0;}
+//           TQsum = TQsum + Qz;                          // Eq. 5.5
+//	   if(Nz >= 1e-5) {
+//              if(((H-Inc) >= 0.5) && (H < 0.6)) {
+//                Inc = 0.1;
+//                Z = 0.5;
+//                goto Twenty;                            // re start the loop
+//              } //{if}
+//           }
+//           else {
+//              Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//              return;
+//           } // if
+//         }
+//         else {
+//            TQsalt = 0.0;
+//            TQsum = 0.0;
+//            SBsalt = 0.0;
+//            SBsum = 0.0;
+//            Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//            return;
+//         } // if
+//         H = H + Inc;
+//      } // while
+//   } // if
+//   Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//} //PBSM procedure}
+//
+//void Classpbsm::run(void) {
+//
+//  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+//  float SumDrift, total, SWE_Max, transport;
+//  long step = getstep();
+//
+//  if(step == 1)
+//    for (hh = 0; chkStruct(); ++hh)
+//      SWE_Init[hh] = SWE[hh];
+//
+//  for (hh = 0; chkStruct(); ++hh) {
+//
+//    if(net_snow[hh] > 0.0) {
+//      SWE[hh] = SWE[hh] + net_snow[hh];
+//      cumSno[hh] = cumSno[hh] + net_snow[hh];
+//    }
+//
+//   if(variation == VARIATION_ORG || variation == VARIATION_2)
+//     hru_u_ = hru_u[hh];
+//   else
+//     hru_u_ = hru_Uadjust[hh];
+//
+//   if(variation == VARIATION_2 || variation == VARIATION_3)
+//     hru_u_ = u_D[hh]*hru_u_;
+//
+//   Drift[hh] = 0.0;
+//   Subl[hh] = 0.0;
+//   DriftH[hh] = 0.0;
+//   SublH[hh] = 0.0;
+//   Prob[hh] = 0.0;
+//
+//   if(SWE[hh] > 0.0 && net_rain[hh] > 0.0){
+//     rain_on_snow[hh] = net_rain[hh];
+//     cumrain_on_snow[hh] += net_rain[hh];
+//   }
+//   if(SWE[hh] > 0.0 && !inhibit_bs[hh]) {
+//
+//     E_StubHt = Ht[hh] - Common::DepthofSnow(SWE[hh]); // depths(m) SWE(mm)
+//     if(E_StubHt < 0.0001) E_StubHt = 0.0001;
+//
+//     Ustar = 0.02264*pow(hru_u_, 1.295f); // Eq. 6.2 rev.,  Ustar over fallow
+//
+//     if (E_StubHt > 0.01) {
+//       Znod = (sqr(Ustar)/163.3f)+0.5*N_S[hh]*E_StubHt*A_S[hh]; // Eq. 29, Snowcover Book
+//       Lambda = N_S[hh]*A_S[hh]*E_StubHt;  // Raupach Eq. 1
+//
+//       Ustn  = Ustar*sqrt((PBSM_constants::Beta*Lambda)/(1.0+PBSM_constants::Beta*Lambda));
+//
+//       Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *min <float> (0.0, Ustar-Ustn);
+//     }
+//     else
+//     {
+//       Uten_Prob = hru_u_;
+//     } // end if
+//
+//
+//     ProbabilityThresholdNew(SWE[hh], hru_t[hh], Uten_Prob, Prob[hh], Ut, hru_newsnow[hh], SnowAge[hh], DrySnow[hh]);
+//
+//     if (Prob[hh] > 0.001) {
+//       Ut = Ut * 0.8;
+//
+//       Pbsm(E_StubHt, Ut, DriftH[hh], SublH[hh], hru_t[hh], hru_u_, hru_rh[hh], fetch[hh], N_S[hh], A_S[hh]);
+//
+//       if(variation == VARIATION_2 || variation == VARIATION_3){
+//         DriftH[hh] = Drift_offset[hh] + DriftH[hh]*Drift_slope[hh];
+//         SublH[hh] = Subl_offset[hh] + SublH[hh]*Subl_slope[hh];
+//       }
+//
+//       Drift[hh] = DriftH[hh]*Prob[hh]/fetch[hh];
+//       if(!inhibit_subl[hh])
+//         Subl[hh] = SublH[hh]*Prob[hh];
+//
+//// handle insufficient snow pack
+//
+//       if(Drift[hh] + Subl[hh] > SWE[hh]) {
+//         Subl[hh] = SWE[hh] * Subl[hh]/(Subl[hh] + Drift[hh]);
+//         Drift[hh] = SWE[hh] - Subl[hh];
+//       } // end if
+//
+//       cumDrift[hh] = cumDrift[hh] + Drift[hh];
+//       cumSubl[hh] = cumSubl[hh] + Subl[hh];
+//
+//       SWE[hh] = SWE[hh] - Subl[hh] - Drift[hh];
+//     }
+//   } // end if
+// } // end for (hh)
+//
+// // distribute drift
+//
+//  if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
+//    float Drft = Drift[0]*distrib[0];
+//    SWE[0] += Drft;
+//    cumDriftIn[0] += Drft;
+//    cumBasinSnowGain[0] += Drft*hru_basin[0];  // **** hru_basin = hru_area/basin_area ****
+//  }
+//
+//  BasinSnowLoss[0] = 0.0;
+//  long LastN = 0;
+//
+//  if(!inhibit_bs[0]&& nhru == 1){
+//    BasinSnowLoss[0] = Drift[0];
+//    cumBasinSnowLoss[0] += BasinSnowLoss[0];
+//  }
+//
+//  for (long nn = LastN; chkStruct(nn); ++nn) {
+//    if(distrib[nn] >= 0.0 && nn+1 < nhru) // skip till last HRU or -ve distribution
+//      continue;
+//
+//    SumDrift = 0.0;
+//    for (long hhh = LastN; chkStruct(hhh, nn); ++hhh) // sum drift over range
+//      SumDrift += Drift[hhh]*hru_basin[hhh];
+//
+//    if(SumDrift > 0.0){ // drift has occurred!
+//      for (long hh = LastN + 1; chkStruct(hh, nn+1); ++hh) {
+//        SWE_Max = SWEfromDepth(Ht[hh]);
+//
+//        if(hh == nn) { // handle last HRU
+//          if(distrib[nn] > 0){
+//            float In = SumDrift/hru_basin[hh]; // remaining drift
+//            if(SWE_Max > SWE[hh] + In){ // fill snowpack, remainder leaves basin
+//              SWE[hh]  += In; // can handle all
+//              cumDriftIn[hh] += In;
+//              transport = 0.0;
+//            }
+//            else if(SWE_Max > SWE[hh]){ // cannot handle all
+//              cumDriftIn[hh] += (SWE_Max - SWE[hh]);
+//              transport -= (In -(SWE_Max - SWE[hh]))*hru_basin[hh];
+//              SWE[hh]  += SWE_Max - SWE[hh]; //  has to come last
+//            }
+//            else // zero or -ve - happens during melt??
+//              transport = SumDrift;
+//          }
+//          else if(distrib[nn] < 0){ // all drift deposited
+//              SWE[hh]  += SumDrift/hru_basin[hh]; // can handle all
+//              cumDriftIn[hh] += SumDrift/hru_basin[hh];
+//              transport = 0.0;
+//          }
+//          else // distrib[nn] == 0 -> all excess drift leaves basin
+//              transport = SumDrift;
+//
+//          BasinSnowLoss[0] += (transport + Drift[hh]*hru_basin[hh]);
+//          cumBasinSnowLoss[0] += (transport + Drift[hh]*hru_basin[hh]);
+//        }
+//        else if(SWE_Max > SWE[hh] &&  distrib[hh] > 0.0) {
+//// handle intermediate HRUs with available storage and distrib > 0
+//          total = 0.0;
+//          for (long jj = hh; chkStruct(jj, nn+1); jj++) // calculate denominator        !!!! nn+1
+//            total += fabs(distrib[jj]);
+//// determine contribution and scale
+//          transport = SumDrift*fabs(distrib[hh])/total/hru_basin[hh];
+//          if(SWE_Max > SWE[hh] + transport) // sufficient capacity
+//            SWE[hh] += transport;
+//          else {
+//            transport = SWE_Max - SWE[hh];  // insufficient capacity
+//            SWE[hh] = SWE_Max;
+//          }
+//          SumDrift -= transport*hru_basin[hh]; // remove drift used from total available
+//          cumDriftIn[hh] += transport;
+//        } // end if
+//      } // end for (hh)
+//    } // end if
+//    LastN = nn+1;
+//  } // end for (nn)
+//
+//    for (hh = 0; chkStruct(); ++hh) { // snow cover inhibits evaporation
+//
+//      if(SWE[hh] > 0.0){
+//        const_cast<long*> (inhibit_evap)[hh] = 1;
+//        snowdepth[hh] = Common::DepthofSnow(SWE[hh]);
+//      }
+//      else{
+//        const_cast<long*> (inhibit_evap)[hh] = 0;
+//        snowdepth[hh] = 0.0;
+//      }
+//    } // end for (hh)
+//}
+//
+//void Classpbsm::finish(bool good) {
+//
+//  if(!good) return;
+//
+//  float AllcumSubl = 0.0;
+//  float AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    LogMessageA(hh, string("'" + Name + " (pbsm)' cumSno     (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsm)' cumDrift   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDrift[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsm)' cumDriftIn (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDriftIn[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsm)' cumSubl    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSubl[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsm)' cumCover   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh]+cumDriftIn[hh]-cumDrift[hh]-cumSubl[hh], hru_area[hh], basin_area[0], "*** SWE just before melt");
+//    LogMessageA(hh, string("'" + Name + " (pbsm)' SWE        (mm) (mm*hru) (mm*hru/basin): ").c_str(), SWE[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsm)' SWE_change (mm) (mm*hru) (mm*hru/basin): ").c_str(), SWE[hh] - SWE_Init[hh], hru_area[hh], basin_area[0]);
+//    LogDebug(" ");
+//
+//    AllcumSubl += cumSubl[hh]*hru_area[hh];
+//    AllcumCover += (cumSno[hh]+cumDriftIn[hh]-cumDrift[hh]-cumSubl[hh])*hru_area[hh];
+//  }
+//
+//  LogMessage(string("'" + Name + " (pbsm)' AllcumSubl  (mm*basin): ").c_str(), AllcumSubl, "*** cumulative sum of all HRUs cumSubl");
+//  LogMessage(string("'" + Name + " (pbsm)' AllcumCover (mm*basin): ").c_str(), AllcumCover, "*** SWE just before melt cumulative sum of all HRUs cumCover");
+//  LogDebug(" ");
+//  LogMessage("'pbsm' cumBasinSnowLoss (mm): ", cumBasinSnowLoss[0]);
+//  LogMessage("'pbsm' cumBasinSnowGain (mm): ", cumBasinSnowGain[0]);
+//  LogDebug(" ");
+//
+//}
+
+//ClassNO_pbsm* ClassNO_pbsm::klone(string name) const{
+//  return new ClassNO_pbsm(name);
+//}
+//
+//void ClassNO_pbsm::decl(void) {
+//
+//  Description = "'Substitute for pbsm when there is no transport and sublimation.  Alternatve is \"pbsm\" with parameter \"inhibit_bs\" = 1.'";
+//
+//  declstatvar("SWE", NHRU, "snow water equivalent", "(mm)", &SWE);
+//
+//  declstatdiag("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
+//
+//  declvar("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
+//
+//
+///* parameters */
+//
+//  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+//
+//  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+//
+//  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
+//
+//  declgetvar("*", "hru_newsnow", "()", &hru_newsnow);
+//  declgetvar("*",   "net_snow", "(mm/int)", &net_snow);
+//
+//}
+//
+//void ClassNO_pbsm::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  hru_basin = new float[nhru];
+//
+//  for (hh = 0; hh < nhru; ++hh) {
+//    SWE[hh] = 0.0;
+//    cumSno[hh] = 0.0;
+//    hru_basin[hh] = hru_area[hh]/basin_area[0];
+//    snowdepth[hh] = 0.0;
+//  }
+//}
+//
+//void ClassNO_pbsm::run(void) {
+//
+//  for (hh = 0; chkStruct(); ++hh) {
+//
+//    if(net_snow[hh] > 0.0) {
+//      SWE[hh] = SWE[hh] + net_snow[hh];
+//      cumSno[hh] = cumSno[hh] + net_snow[hh];
+//    }
+//
+//    if(SWE[hh] > 0.0){
+//      const_cast<long*> (inhibit_evap)[hh] = 1;
+//      snowdepth[hh] = Common::DepthofSnow(SWE[hh]);
+//    }
+//    else{
+//      const_cast<long*> (inhibit_evap)[hh] = 0;
+//      snowdepth[hh] = 0;
+//    }
+//  }
+//}
+//
+//void ClassNO_pbsm::finish(bool good) {
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    LogMessageA(hh, string("'" + Name + " (NO_pbsm)' cumSno     (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh], hru_area[hh], basin_area[0]);
+//  }
+//  LogDebug(" ");
+//}
+//
+
+//Classalbedo* Classalbedo::klone(string name) const{
+//  return new Classalbedo(name);
+//}
+//
+//void Classalbedo::decl(void) {
+//
+//  Description = "'Estimates the snow albedo during the winter and the melt period. Use with \"ebsm\".'";
+//
+//  declstatvar("Albedo", NHRU, "Albedo()", "()", &Albedo);
+//
+//  declvar("meltflag", NHRU, "meltflag = 1 - melt true", "()", &meltflag);
+//
+//  declvar("winter", NHRU, "winter = 1 - true", "()", &winter);
+//
+//  declvar("net_snowD", NHRU, "daily snow fall", "(mm/d)", &net_snowD);
+//
+//  declvar("newsnowcnt", NHRU, "snow age count", "()", &newsnowcnt);
+//
+//
+//  decldiagparam("Albedo_bare", NHRU, "[0.17]", "0.0", "1.0", "albedo for bare ground", "()", &Albedo_bare); // pseudo
+//  decldiagparam("Albedo_snow", NHRU, "[0.85]", "0.0", "1.0", "albedo for fresh snow covered ground", "()", &Albedo_snow); // pseudo
+//
+//  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(Â°)", &hru_lat);
+//
+//  declgetvar("*",    "hru_tmax", "(Â°C)", &hru_tmax);
+//  declgetvar("*",    "hru_tmin", "(Â°C)", &hru_tmin);
+//  declgetvar("*",    "hru_newsnow", "()", &hru_newsnow);
+//  declgetvar("*",    "SWE", "(mm)", &SWE);
+//  declgetvar("*",    "QdroD", "(MJ/m^2*d)", &QdroD);
+//  declgetvar("*",    "net_snow", "(mm/int)", &net_snow);
+//}
+//
+//void Classalbedo::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  for(hh = 0; hh < nhru; ++hh) {
+//    if(SWE[hh] > 5.0) {
+//      Albedo[hh]    = Albedo_snow[hh];
+//      winter[hh]    = 1;
+//    }
+//    else{
+//      Albedo[hh]    = Albedo_bare[hh];
+//      winter[hh]    = 0;
+//    }
+//    net_snowD[hh] = 0.0;
+//    meltflag[hh]  = 0;
+//    newsnowcnt[hh] = 0;
+//  }
+//}
+//
+//void Classalbedo::run(void) {
+//
+//  long nstep, jday;
+//
+//  nstep = getstep()%Global::Freq;
+//
+//  for(hh = 0; chkStruct(); ++hh){ // calculate daily snow accumulation
+//
+//    if(nstep == 1 || Global::Freq == 1) // beginning of every day
+//      net_snowD[hh] = net_snow[hh];
+//    else
+//      net_snowD[hh]+= net_snow[hh];
+//  }
+//
+//  if(nstep == 0 || Global::Freq == 1){ // end of every day
+//
+//    jday = julian("now");
+//
+//      for(hh = 0; chkStruct(); ++hh) {
+//        float hemisphere = (hru_lat[hh] < 0.0);
+//        if((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[hh] > 5.0) {  // changed
+//          winter[hh] = 1;
+//          Albedo[hh] = Albedo_snow[hh];
+//        }
+//      continue;
+//    }
+//
+//    for(hh = 0; chkStruct(); ++hh) {
+//      meltflag[hh] = 0;
+//      if(hru_newsnow[hh] > 0)
+//        newsnowcnt[hh] = 0;
+//      else
+//        newsnowcnt[hh] = newsnowcnt[hh]+1;
+//
+//      if(SWE[hh] <= 0.0) {
+//        Albedo[hh] = Albedo_bare[hh];
+//        winter[hh] = 0;
+//        meltflag[hh] = 0;
+//      }
+//      else { // SWE[hh] > 0.0
+//        float DR = 0.071;
+//
+//        if(SWE[hh] > 60.0 && Albedo[hh] > 0.65)
+//          DR = 0.015;
+//
+//        if(SWE[hh] > 60.0 && Albedo[hh] < 0.65)
+//          DR = 0.001;
+//
+//        if(net_snowD[hh] > 0.25) { // SF = SWE*2 if density 0.005 (0.5cm)
+//          Albedo[hh] = Albedo[hh] + net_snowD[hh]*0.1*2.0; // daily value
+//          if(Albedo[hh] > Albedo_snow[hh])
+//            Albedo[hh] = Albedo_snow[hh];
+//          continue;
+//        }
+//
+//        float Qnc = -0.371 + 5.22*QdroD[hh]*(1 - Albedo[hh]);
+//
+//        if(hru_tmax[hh] < -6.0 && Qnc < 1.0)
+//          winter[hh] = 1;
+//
+//        if(Albedo[hh] <= Albedo_bare[hh])
+//          winter[hh] = 0;
+//
+//        if(winter[hh] == 1) {
+//          if(newsnowcnt[hh] < 3) {
+//            Albedo[hh] = Albedo[hh] - 0.05;
+//            continue;
+//          }
+//          float MT = -0.064*jday + 6.69;
+//
+//          if(hru_tmin[hh] > -4.0 || Qnc > 1.0 && hru_tmax[hh] > 0.0 ||
+//                  hru_tmax[hh] > MT && Qnc > -0.5) {
+//            Albedo[hh] = Albedo[hh] - DR;
+//
+//            if(Albedo[hh] < Albedo_bare[hh])
+//              Albedo[hh] = Albedo_bare[hh];
+//
+//            meltflag[hh] = 1;
+//          }
+//          else
+//            if(Albedo[hh] > 0.65)
+//              Albedo[hh] = Albedo[hh] - 0.006;
+//        }
+//        else {
+//          Albedo[hh] = Albedo[hh] - 0.02;
+//          if(Albedo[hh] < Albedo_bare[hh])
+//            Albedo[hh] = Albedo_bare[hh];
+//          meltflag[hh] = 1;
+//        }
+//
+//      } // SWE > 0.0
+//    } // for HRU
+//  } //end of every day
+//}
+
+//Classnetall* Classnetall::klone(string name) const{
+//  return new Classnetall(name);
+//}
+//
+//void Classnetall::decl(void) {
+//
+//  Description = "'Models net all-wave radiation (Rn, RnD and RnD_POS) from sunshine hours, temperature and humidity using Brunt.'";
+//
+//  declvar("net", NHRU, "all-wave net", "(MJ/m^2*int)", &net);
+//
+//  decldiag("Rn", NHRU, "all-wave net", "(mm/m^2*int)", &Rn);
+//
+//  declvar("netD", NHRU, "all-wave net", "(MJ/m^2*d)", &netD);
+//
+//  declvar("RnD", NHRU, "all-wave net", "(mm/m^2*d)", &RnD);
+//
+//  decldiag("RnD_POS", NHRU, "Sum of Positive all-wave net", "(mm/m^2*d)", &RnD_POS);
+//
+//  declstatdiag("cum_net", NHRU, "cumulative all-wave net", "(MJ/m^2)", &cum_net);
+//
+//
+//  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
+//  declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
+//  declgetvar("*", "hru_SunAct", "(h)", &hru_SunAct);
+//
+//  declgetvar("*", "Tday", "(Â°C)",   &NotUsed, &tday_intvls); // from obs
+//  declgetvar("*", "EAday", "(kPa)", &NotUsed, &eaday_intvls); // from obs
+//
+//  declgetvar("*", "SunMax", "(h)", &SunMax);
+//  declgetvar("*", "Qdro", "(W/m^2)",   &Qdro); // clear-sky direct (W/m^2)
+//  declgetvar("*", "Qdfo", "(W/m^2)",   &Qdfo); // clear-sky diffuse (W/m^2)
+//  declgetvar("*", "Albedo", "()", &Albedo);
+//
+//  declgetvar("*", "pQdro", "(MJ/m^2*int)",  &pQdro, &pQdro_FREQ); // clear-sky direct (MJ/m^2/int)
+//  declgetvar("*", "pQdfo", "(MJ/m^2*int)",  &pQdfo, &pQdfo_FREQ); // clear-sky diffuse (MJ/m^2/int)
+//}
+//
+//void Classnetall::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  for (hh = 0; hh < nhru; ++hh)
+//    cum_net[hh] = 0.0;
+//}
+//
+//void Classnetall::run(void) {
+//
+//  float netlong, shortw;
+//
+//  long nstep = getstep() % Global::Freq;
+//
+//  if(nstep == 1 || Global::Freq == 1){ // beginning of every day
+//
+//    for (hh = 0; chkStruct(); ++hh) {
+//      netD[hh] = 0.0;
+//      RnD[hh] = 0.0;
+//      RnD_POS[hh] = 0.0;
+//
+//      for (int ff = 0; ff < Global::Freq; ++ff) {
+//        if(SunMax[hh] > 0.0)
+//          netlong = -0.85 + 0.97*CRHM_constants::SB*pow(tday_intvls[ff][hh]+273.0f, 4)*(-0.39f+0.093f*sqrt(eaday_intvls[ff][hh]))*
+//                                    (0.26f+0.81f*(hru_SunAct[hh]/SunMax[hh]));
+//        else
+//          netlong = -0.85;
+//
+//        if(hru_SunAct[hh] > 0.0 && SunMax[hh] > 0.0)
+//          shortw = (0.024f+0.974f*pow(hru_SunAct[hh]/SunMax[hh], 1.35f))*pQdro_FREQ[ff][hh] +
+//            (2.68f+2.2f*(hru_SunAct[hh]/SunMax[hh])-3.85f*sqr(hru_SunAct[hh]/SunMax[hh]))*pQdfo_FREQ[ff][hh];
+//        else
+//          shortw = (0.024f*pQdro_FREQ[ff][hh] + 2.68f*pQdfo_FREQ[ff][hh]);
+//
+//        float Net = (shortw*(1.0f-Albedo[hh]) + netlong/Global::Freq); // MJ/interval
+//        netD[hh] +=  Net;
+//
+//        Net = Net/(2.501f-0.002361f*tday_intvls[ff][hh]); // MJ/m^2 to mm/m^2
+//
+//        RnD[hh] += Net;
+//        if(Net > 0.0) RnD_POS[hh] += Net;
+//
+//      } // Interval loop
+//    } // HRU loop
+//  } // if first interval
+//
+//  for (hh = 0; chkStruct(); ++hh) {
+//
+//// t Kelvin degrees, ea bar
+//
+//    if(SunMax[hh] > 0.0)
+//      netlong = -0.85f + 0.97*CRHM_constants::SB*pow(hru_t[hh]+273.0f, 4.0f)*(-0.39f+0.093f*sqrt(hru_ea[hh]))*
+//                                (0.26f+0.81f*(hru_SunAct[hh]/SunMax[hh]));
+//    else
+//      netlong = -0.85;
+//
+//    if(hru_SunAct[hh] > 0.0 && SunMax[hh] > 0.0)
+//      shortw = (0.024f+0.974f*pow(hru_SunAct[hh]/SunMax[hh], 1.35f))*Qdro[hh]*WtoMJ_D +
+//        (2.68f+2.2f*(hru_SunAct[hh]/SunMax[hh])-3.85f*sqr(hru_SunAct[hh]/SunMax[hh]))*Qdfo[hh]*WtoMJ_D;
+//    else
+//      shortw = (0.024f*Qdro[hh] + 2.68f*Qdfo[hh])*WtoMJ_D;
+//
+//    net[hh] = (shortw*(1.0f-Albedo[hh]) + netlong)/Global::Freq; // MJ/day to MJ/interval
+//    Rn[hh] = net[hh]/(2.501f-0.002361f*hru_t[hh]); // MJ/interval to mm/interval
+//
+//    cum_net [hh] += net[hh]; // mm/interval
+//
+//  } // HRU loop
+//}
+
+//Classebsm* Classebsm::klone(string name) const{
+//  return new Classebsm(name);
+//}
+//
+//void Classebsm::decl(void) {
+//
+//  Description = "'Energy-budget snowmelt model for the Canadian Prairies', \
+//                 'ebsm using Brunt et al', \
+//                 'ebsm using input variable Qnsn_Var (W/m^2*int) from CanopyClearing etc.', \
+//                 'ebsm using input observation Qnsn (W/m^2*int)', \
+//                 'ebsm using input observation QnD (MJ/m^2*d)'";
+//
+//  variation_set = VARIATION_ORG;
+//
+//  declvar("snowmeltD", NHRU, "daily snowmelt", "(mm/d)", &snowmeltD);
+//
+//  declvar("cumsnowmelt", NHRU, "cumulative melt", "(mm)", &cumsnowmelt);
+//
+//  declstatvar("LW_ebsm", NHRU, "liquid water in snowpack", "(mm)", &LW_ebsm, NULL, 1, false, CRHM::PRIVATE);
+//
+//  declstatvar("u_ebsm", NHRU, "snowpack energy deficit", "(MJ)", &u_ebsm, NULL, 1, false, CRHM::PRIVATE);
+//
+//  declvar("Qmelt", NHRU, "Qmelt = Qn+Qh+Qe+Qp", "(MJ/d)", &Qmelt);
+//
+//  declvar("Qn_ebsm", NHRU, "net radiation", "(MJ/d)", &Qn_ebsm);
+//
+//  declvar("Qh_ebsm", NHRU, "sensible heat", "(MJ/d)", &Qh_ebsm);
+//
+//  declvar("Qe_ebsm", NHRU, "latent heat", "(MJ/d)", &Qe_ebsm);
+//
+//  declvar("Qe_subl", NHRU, "latent heat sublimation", "(mm/d)", &Qe_subl);
+//
+//  declvar("cumQe_subl", NHRU, "cumulative latent heat sublimation", "(mm)", &cumQe_subl);
+//
+//  declvar("Qp_ebsm", NHRU, "input from rainfall", "(MJ/d)", &Qp_ebsm);
+//
+//
+//  decldiag("LWmax", NHRU, "maximum liquid water in snowpack", "(mm)", &LWmax);
+//
+//  declvar("net_rainD", NHRU, "daily net rain", "(mm/d)", &net_rainD);
+//
+//
+//  decldiagparam("delay_melt", NHRU, "[0]", "0","366", "inhibit melt until this Julian date. Default incorrect for the Southern Hemisphere", "()", &delay_melt);
+//
+//  decldiagparam("Qe_subl_from_SWE", NHRU, "[0]", "0", "1", "0 - add to 'Qmelt' (original version), 1 - take Qe_subl from SWE ", "()", &Qe_subl_from_SWE);
+//
+//  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+//
+//  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+//
+//
+//  declgetvar("*", "SunMax", "(h)",       &sunmax);
+//  declgetvar("*", "QdroD", "(MJ/m^2*d)", &QdroD);
+//  declgetvar("*", "QdfoD", "(MJ/m^2*d)", &QdfoD);
+//  declgetvar("*", "hru_tmean", "(Â°C)",  &tmean);
+//  declgetvar("*", "hru_tmax", "(Â°C)",   &tmax);
+//  declgetvar("*", "hru_tmin", "(Â°C)",   &tmin);
+//  declgetvar("*", "hru_umean", "(m/s)",  &umean);
+//  declgetvar("*", "hru_rhmean", "(%)", &rhmean);
+//  declgetvar("*", "hru_SunAct", "(h)", &sunact);
+//  declgetvar("*", "meltflag", "()",   &meltflag);
+//  declgetvar("*", "Albedo", "()",     &Albedo);
+//  declputvar("*", "SWE", "(mm)",        &SWE);
+//  declgetvar("*", "net_rain", "(mm/int)", &net_rain);
+//
+//
+//  variation_set = VARIATION_0;
+//
+//  decldiagparam("tfactor", NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*Â°C)", &tfactor);
+//
+//  decldiagparam("nfactor", NHRU, "[0.0]", "0.0","10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
+//
+//  decldiagparam("Use_QnD", NHRU, "[0]", "0","1", "1 - Use QnD if available", "()", &Use_QnD);
+//
+//
+//  variation_set = VARIATION_0 + VARIATION_3;
+//
+//  declreadobs("QnD", NHRU, "net radiation", "(MJ/m^2*d)", &QnD, HRU_OBS_Q, true); // must check for NULL
+//
+//
+//  variation_set = VARIATION_1 + VARIATION_2;
+//
+//  declstatvar("Qnsn_Acc", NHRU, "accumulator for Qnsn_Var/Qnsn", "(W/m^2)", &Qnsn_Acc); // daily value
+//
+//
+//  variation_set = VARIATION_1;
+//
+//  declgetvar("*",  "Qnsn_Var", "(W/m^2*int)", &Qnsn_Var); // interval value
+//
+//  variation_set = VARIATION_2;
+//
+//
+//  declreadobs("Qnsn", NHRU, "net radiation", "(W/m^2*int)", &Qnsn, HRU_OBS_Q);
+//
+//  variation_set = VARIATION_ORG;
+//}
+//
+//void Classebsm::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  for(hh = 0; hh < nhru; ++hh) {
+//    snowmeltD[hh] = 0.0;
+//    cumsnowmelt[hh] = 0.0;
+//    LW_ebsm[hh] = 0.0;
+//    u_ebsm[hh] = 0.0;
+//    Qmelt[hh] = 0.0;
+//    Qn_ebsm[hh] = 0.0;
+//    Qh_ebsm[hh] = 0.0;
+//    Qe_ebsm[hh] = 0.0;
+//    Qe_subl[hh] = 0.0;
+//    cumQe_subl[hh] = 0.0;
+//    Qp_ebsm[hh] = 0.0;
+//
+//    if(variation == VARIATION_ORG)
+//      if(nfactor[hh] != 0.0 && QnD == NULL){
+//        CRHMException TExcept("ebsm: nfactor > 0.0 with observation 'QnD' not defined!", TERMINATE);
+//        LogError(TExcept);
+//      }
+//  }
+//}
+//
+//void Classebsm::run(void) {
+//
+//      float umin, ref, melt;
+//
+//      long  nstep = getstep()%Global::Freq;
+//
+//      for(hh = 0; chkStruct(); ++hh){
+//        if(nstep == 1 || Global::Freq == 1){ // beginning of every day
+//          net_rainD[hh] = net_rain[hh];
+//          if(variation == VARIATION_1)
+//            Qnsn_Acc[hh] = Qnsn_Var[hh];
+//          else if(variation == VARIATION_2)
+//            Qnsn_Acc[hh] = Qnsn[hh];
+//        }
+//        else{
+//          net_rainD[hh] += net_rain[hh];
+//          if(variation == VARIATION_1)
+//            Qnsn_Acc[hh] += Qnsn_Var[hh];
+//          else if(variation == VARIATION_2)
+//            Qnsn_Acc[hh] += Qnsn[hh];
+//        }
+//      }
+//
+//      if(nstep == 0 || Global::Freq == 1){ // end of every day
+//
+//        for(hh = 0; chkStruct(); ++hh) {
+//
+//          snowmeltD[hh] = 0.0;
+//          Qmelt[hh] = 0.0;
+//          Qn_ebsm[hh] = 0.0;
+//          Qh_ebsm[hh] = 0.0;
+//          Qe_ebsm[hh] = 0.0;
+//          Qe_subl[hh] = 0.0;
+//          Qp_ebsm[hh] = 0.0;
+//
+//          if(SWE[hh] <= 0.0) { // bare ground
+//            LW_ebsm[hh] = 0.0;
+//            u_ebsm[hh] = 0.0;
+//          }
+//          else if(variation == VARIATION_ORG && (tfactor[hh] > 0.0 || nfactor[hh] > 0.0) && meltflag[hh] == 1) {
+//            if(delay_melt[hh] <= julian("now")) {
+//
+//              if(QnD){ // observation available (MJ/m^2*d)
+//                if(QnD[hh] > 0.0)
+//                  Qn_ebsm[hh] = QnD[hh]*nfactor[hh];
+//              }
+//
+//              Qh_ebsm[hh] = tmax[hh]*tfactor[hh];
+//
+//              Qmelt[hh] = Qn_ebsm[hh] + Qh_ebsm[hh];
+//              snowmeltD[hh] = Qmelt[hh];
+//              if (snowmeltD[hh] <= 0.0)
+//                snowmeltD[hh] = 0.0;
+//              else {
+//                if(SWE[hh] > snowmeltD[hh])
+//                  SWE[hh] = SWE[hh] - snowmeltD[hh];
+//                else {
+//                  snowmeltD[hh] = SWE[hh];
+//                  SWE[hh] = 0.0;
+//                }
+//                cumsnowmelt[hh] = cumsnowmelt[hh] + snowmeltD[hh];
+//              }
+//            }
+//          }
+//          else if(meltflag[hh] == 1 && delay_melt[hh] <= julian("now")) {
+//            float eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;\
+//            switch (variation) {
+//
+//              case VARIATION_ORG :
+//                if(QnD != NULL && Use_QnD[hh]){ // observation available (MJ/m^2*d)
+//                  if(QnD[hh] > 0.0)
+//                    Qn_ebsm[hh] = QnD[hh];
+//                }
+//                else
+//                  Qn_ebsm[hh] = -0.53+0.47*(QdroD[hh] + QdfoD[hh])*(0.52+0.52*sunact[hh]/sunmax[hh])*(1.0-Albedo[hh]);
+//
+//                break;
+//              case VARIATION_1 :
+//                Qn_ebsm[hh] = Qnsn_Acc[hh]*0.0864/Global::Freq; // convert to (MJ/m^2*d)
+//              break;
+//              case VARIATION_2 :
+//                Qn_ebsm[hh] = Qnsn_Acc[hh]*0.0864/Global::Freq; // convert to (MJ/m^2*d)
+//              break;
+//              case VARIATION_3 :
+//                Qn_ebsm[hh] = QnD[hh]; // already in (MJ/m^2*d)
+//              break;
+//            } // switch
+//
+//            Qh_ebsm[hh] = -0.92+0.076*umean[hh]+0.19*tmax[hh];
+//            Qe_ebsm[hh] = 0.08*(0.18+0.098*umean[hh])*(6.11-eamean*10.0);
+//
+//            Qe_subl[hh] = Qe_ebsm[hh]/2.83; // Lv = 2.83 mJ/Kg
+//
+//            if(Qe_subl_from_SWE[hh]){
+//              if(Qe_subl[hh] > SWE[hh])
+//                Qe_subl[hh] = SWE[hh];
+//              cumQe_subl[hh] += Qe_subl[hh];
+//              SWE[hh] = SWE[hh] - Qe_subl[hh];
+//            }
+//
+//            if(net_rainD[hh] > 0.0)
+//              Qp_ebsm[hh] = net_rainD[hh]*tmean[hh]*4.2/1000.0;
+//            else
+//              Qp_ebsm[hh] = 0.0;
+//
+//            if(Qe_subl_from_SWE[hh])
+//              Qmelt[hh] = Qn_ebsm[hh] + Qh_ebsm[hh] + Qp_ebsm[hh]; // Qe_ebsm already taken from SWE
+//            else
+//              Qmelt[hh] = Qn_ebsm[hh] + Qh_ebsm[hh] + Qe_ebsm[hh] + Qp_ebsm[hh];
+//
+//            u_ebsm[hh] = u_ebsm[hh] + Qmelt[hh];
+//
+//            LWmax[hh] = SWE[hh]*0.05;
+//
+//            float t_minus = tmin[hh];
+//            if(t_minus > 0.0)
+//              t_minus = 0.0;
+//
+//            umin = SWE[hh]*(2.115+0.00779*t_minus)*t_minus/1000.0;
+//
+//            if(umin > u_ebsm[hh])
+//              u_ebsm[hh] = umin;
+//
+//            if(u_ebsm[hh] > 0.0) {
+//              melt = u_ebsm[hh]/316.8*1000.0; // thermal quality B=0.95. 316.8 = 333.5*0.95 (kJ/kg)
+//              if(melt + LW_ebsm[hh] > LWmax[hh]) {
+//                snowmeltD[hh] = melt - (LWmax[hh] - LW_ebsm[hh]);
+//                if(snowmeltD[hh] > SWE[hh]) {
+//                  snowmeltD[hh] = SWE[hh] + LW_ebsm[hh];
+//                  SWE[hh] = 0.0;
+//                  LW_ebsm[hh] = 0.0;
+//                }
+//                else if(SWE[hh] > melt){
+//                  SWE[hh] = SWE[hh] - melt;
+//                  LW_ebsm[hh] = LWmax[hh];
+//                }
+//                else {
+//                  snowmeltD[hh] = SWE[hh] + LW_ebsm[hh];
+//                  SWE[hh] = 0.0;
+//                  LW_ebsm[hh] = 0.0;
+//                }
+//                cumsnowmelt[hh] = cumsnowmelt[hh] + snowmeltD[hh];
+//              }
+//              else { // melt retained in snowpack
+//                LW_ebsm[hh] = LW_ebsm[hh] + melt;
+//                SWE[hh] = SWE[hh] - melt;
+//                snowmeltD[hh] = 0.0;
+//              }
+//              u_ebsm[hh] = 0.0;
+//            }
+//            else { // no melt - convert liquid water to ice - reduce u_ebsm accordingly
+//              Qmelt[hh] = 0.0;
+//              snowmeltD[hh] = 0.0;
+//
+//              if(u_ebsm[hh] < 0.0){
+//                ref = -u_ebsm[hh]/333.5*1000.0;
+//                if(LW_ebsm[hh] > ref) {
+//                  u_ebsm[hh] = 0.0;
+//                  SWE[hh] = SWE[hh] + ref;
+//                  LW_ebsm[hh] = LW_ebsm[hh] - ref;
+//                }
+//                else {
+//                  u_ebsm[hh] = u_ebsm[hh] + LW_ebsm[hh]*333.5/1000.0;
+//                  SWE[hh] = SWE[hh] + LW_ebsm[hh];
+//                  LW_ebsm[hh] = 0.0;
+//                }
+//              }
+//            } // no melt
+//          } // if
+//          else { // meltflag[hh] == 0. TB addition 02/02/06
+//            if(tmin[hh] < 0.0)
+//              u_ebsm[hh] = SWE[hh]*(2.115+0.00779*tmin[hh])*tmin[hh]/1000.0;
+//            if(LW_ebsm[hh] > 0.0){
+//              u_ebsm[hh] = u_ebsm[hh] + LW_ebsm[hh]*333.5/1000.0;
+//              SWE[hh] = SWE[hh] + LW_ebsm[hh];
+//            }
+//            LW_ebsm[hh] = 0.0;
+//          }
+//        } // end for HRUs
+//      } // end if (end of day)
+//}
+//
+//void Classebsm::finish(bool good) {
+//
+//  if(!good) return;
+//
+//  float Allcumsnowmelt = 0.0;
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    LogMessageA(hh, string("'" + Name + " (ebsm)' cumQe_subl   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumQe_subl[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (ebsm)' cumsnowmelt   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumsnowmelt[hh], hru_area[hh], basin_area[0]);
+//
+//    Allcumsnowmelt += cumsnowmelt[hh]*hru_area[hh];
+//  }
+//  LogDebug(" ");
+//  LogMessage(string("'" + Name + " (ebsm)' Allcumsnowmelt (mm*basin): ").c_str(), Allcumsnowmelt);
+//  LogDebug(" ");
+//}
+
+//ClassTs* ClassTs::klone(string name) const{
+//  return new ClassTs(name);
+//}
+//
+//void ClassTs::decl(void) {
+//
+//  Description = "'Estimates snow surface temperature from HRU inputs.' \
+//                 'Tsnow using variable QliVt_Var (W/m^2),' \
+//                 'Tsnow using observation Qli (W/m^2).'";
+//
+//  variation_set = VARIATION_ORG;
+//
+//  declvar("hru_Ts", NHRU, "snow surface temperature", "(Â°C)", &hru_Ts);
+//
+//
+//  declobs("Ts", NHRU, "snow surface temperature", "(Â°C)", &Ts);
+//
+//
+//  decllocal("Pa", NHRU, "average surface pressure", "(kPa)", &Pa);
+//
+//  decllocal("ra", NHRU, "", "(s/m)", &ra);
+//
+//  decllocal("Qli_", NHRU, "", "(W/m^2)", &Qli_);
+//
+//
+//  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+//
+//  declparam("Z0snow", NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
+//
+//  decldiagparam("Zref", NHRU, "[1.5]", "0.01", "100.0", "temperature measurement height", "(m)", &Zref);
+//
+//  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
+//
+//
+//  declgetvar("*",  "hru_t", "(Â°C)", &hru_t);
+//
+//  declgetvar("*",  "hru_rh", "()", &hru_rh);
+//
+//  declgetvar("*",  "hru_u", "(m/s)", &hru_u);
+//
+//  variation_set = VARIATION_0;
+//
+//  declgetvar("*",  "QliVt_Var", "(W/m^2)", &QliVt_Var);
+//
+//  variation_set = VARIATION_1;
+//
+//  declreadobs("Qli", NHRU, "incident long-wave for a flat horizon with vt = 0", "(W/m^2)", &Qli, HRU_OBS_Q);
+//
+//
+//}
+//
+//void ClassTs::init(void) {
+//
+//  nhru = getdim(NHRU); // transfers current # of HRUs to module
+//
+//  for (hh = 0; hh < nhru; ++hh) {
+//    Pa[hh] = 101.3f*pow((293.0f-0.0065f*hru_elev[hh])/293.0f, 5.26f);  // kPa
+//  }
+//
+//}
+//
+//void ClassTs::run(void) { // executed every interval
+//
+//  for (hh = 0; chkStruct(); ++hh) {
+//
+//    switch (variation) {
+//      case VARIATION_ORG:
+//      Qli_[hh] =  QliVt_Var[hh];
+//      break;
+//      case VARIATION_1:
+//      Qli_[hh] =  Qli[hh];
+//      break;
+//    } // switch
+//
+//    float T1 = hru_t[hh] + CRHM_constants::Tm;
+//
+//    float rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
+//
+//    float U1 = max<float> (hru_u[hh], 1.0e-3); // Wind speed (m/s)
+//
+//    ra[hh] = (log(Zref[hh]/Z0snow[hh])*log(Zwind[hh]/Z0snow[hh]))/sqr(CRHM_constants::kappa)/U1;
+//
+//    float delta = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
+//
+//    float q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1);
+//
+//    Ts[hh] = T1 + (CRHM_constants::emiss*(Qli_[hh] - CRHM_constants::sbc*pow(T1, 4.0f)) + CRHM_constants::Ls*(q - Common::Qs(Pa[hh], T1))*rho/ra[hh])/
+//             (4.0f*CRHM_constants::emiss*CRHM_constants::sbc*pow(T1, 3.0f) + (CRHM_constants::Cp + CRHM_constants::Ls*delta)*rho/ra[hh]);
+//
+//    Ts[hh] -= CRHM_constants::Tm;
+//
+//    if(Ts[hh] > 0.0) Ts[hh] = 0.0;
+//
+//    hru_Ts[hh] = Ts[hh];
+//  } // HRU loop
+//}
 
 ClassNeedle* ClassNeedle::klone(string name) const{
   return new ClassNeedle(name);
@@ -21937,210 +21945,210 @@ void Class_z_s_rho::run(void) {
   }
 }
 
-Classtsurface* Classtsurface::klone(string name) const{
-  return new Classtsurface(name);
-}
-
-void Classtsurface::decl(void) {
-
-  Description = "'Module to calculate ground surface temperature ' \
-    'use hru_t for surface temperature during snowcover period; use Radiative-Conductive-Convective approach to estimate surface temperature(Williams et al, 2015) during snow free periods.' \
-    'use hru_t for surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57).' \
-    'use previous daily mean snowpack temperature with thermal conductivity and energy of snowpack (***Snobal*** case) to estimate surface temperature during snowcover period; use Radiative-Conductive-Convective approach to estimate surface temperature(Williams et al, 2015) during snow free periods.' \
-    'use previous daily mean hru_t with thermal conductivity and energy of snowpack (***ebsm*** case) to estimate surface temperature during snowcover period; use Radiative-Conductive-Convective approach to estimate surface temperature(Williams et al, 2015) during snow free periods.' \
-    'use previous daily mean snowpack temperature with thermal conductivity and energy of snowpack (***Snobal*** case) to estimate surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57).' \
-    'use previous daily mean hru_t with thermal conductivity and energy of snowpack (***ebsm*** case) to estimate surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57). '";
-
-  declvar("hru_tsf", NHRU, "surface/skin temperature", "(Â°C)", &hru_tsf);
-
-  declvar("hru_tsf_D", NHRU, "mean daily surface/skin temperature", "(Â°C)", &hru_tsf_D);
-
-  decldiag("hru_tsf_acc", NHRU, "mean daily surface/skin temperature", "(Â°C)", &hru_tsf_acc);
-
-  declgetvar("*", "SWE", "(m)", &SWE);
-
-  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
-
-
-  variation_set = VARIATION_2 + VARIATION_4; // Snobal
-
-  decllocal("hru_T_s_D", NHRU, "mean daily surface/skin temperature", "(Â°C)", &hru_T_s_D);
-
-  decllocal("hru_T_s_acc", NHRU, "sum interval air temperature from previous day", "(Â°C)", &hru_T_s_acc);
-
-  declgetvar("*", "z_s", "(m)", &z_s);
-
-  declgetvar("*", "rho", "(kg/m^3)", &rho);
-
-  declgetvar("*", "T_s", "( Â°C)", &T_s);
-
-  declgetvar("*", "G", "(W/m^2)", &G);
-
-
-  variation_set = VARIATION_3 + VARIATION_5; // ebsm
-
-  decllocal("hru_t_D", NHRU, "mean daily snowpack temperature from previous day", "(Â°C)", &hru_t_D);
-
-  decllocal("hru_t_acc", NHRU, "sum interval air temperature from previous day", "(Â°C)", &hru_t_acc);
-
-  declgetvar("*", "hru_tmin", "(Â°C)",   &tmin);
-
-  declgetvar("*", "snowdepth", "(m)", &snowdepth);
-
-
-  variation_set = VARIATION_0 + VARIATION_2 + VARIATION_3;
-
-  decllocal("Zdt_last", NHRU, "Last value of thaw depth", "(m)", &Zdt_last);
-
-  declparam("W_a", NHRU, "[0.77]", "0.0", "1.5", "empirical constant for air temperature", "()", &W_a);
-
-  declparam("W_b", NHRU, "[0.02]", "0.0", "0.1", "empirical constant for net radiation at ground surface", "()", &W_b);
-
-  declparam("W_c", NHRU, "[7.0]", "0.0", "10.0", "empirical constant for frost table", "()", &W_c);
-
-  declparam("W_d", NHRU, "[0.03]", "0.0", "0.1", "empirical constant for frost table", "()", &W_d);
-
-  declgetvar("*", "netD", "(MJ/m^2*d)", &netD);
-
-  declputvar("*", "Zdt", "(m)", &Zdt); // used as a get but allows Classtsurface to load before ClassXG
-
-
-  variation_set = VARIATION_1 + VARIATION_4 + VARIATION_5;
-
-  declparam("n_factor_a", NHRU, "[1.0]", "0", "1.2", "a constant in n_factor = n_factor_a - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_a);
-
-  declparam("n_factor_b", NHRU, "[0.0]", "0.0", "1.0", "a constant in n_factor = n_factor_b - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_b);
-
-  declparam("n_factor_c", NHRU, "[0.0]", "0.0", "0.1", "a constant in n_factor = n_factor_c - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_c);
-
-  decllocal("n_factor_T", NHRU, "Days after the start of thaw", "()", &n_factor_T);
-
-  decllocal("n_factor", NHRU, "Calculated value of n_factor from parameters", "()", &n_factor);
-
-
-  variation_set = VARIATION_2 + VARIATION_3 + VARIATION_4 + VARIATION_5;
-
-  declvar("SWE_tc", NHRU, "SWE thermal conductivity", "(W/(m*K)", &SWE_tc);
-
-  declvar("SWE_density", NHRU, "SWE density", "( kg/m^3)", &SWE_density);
-
-
-  variation_set = VARIATION_ORG;
-}
-
-void Classtsurface::init(void) {
-
-  nhru = getdim(NHRU);
-
-  for (hh = 0; chkStruct(); ++hh){
-    hru_tsf_D[hh] = 0.0;
-    hru_tsf_acc[hh] = 0.0;
-
-    if(variation == VARIATION_3 || variation == VARIATION_5){ // ebsm
-      hru_t_D[hh] = 0.0;
-      hru_t_acc[hh] = 0.0;
-    }
-
-    if(variation == VARIATION_2 || variation == VARIATION_4){ // Snobal
-      hru_T_s_D[hh] = 0.0;
-      hru_T_s_acc[hh] = 0.0;
-    }
-
-    if(variation == VARIATION_2 || variation == VARIATION_3 || variation == VARIATION_4 || variation == VARIATION_5){
-      SWE_tc[hh] = 0.0;
-      SWE_density[hh] = 0.0;
-    }
-  }
-}
-
-void Classtsurface::run(void) {
-
-  long nstep = getstep() % Global::Freq;
-
-  for(hh = 0; chkStruct(); ++hh) {
-
-    if(SWE[hh] <= 0.0){ // bare ground
-      if(variation == VARIATION_ORG || variation == VARIATION_2 || variation == VARIATION_3){
-        if(Zdt[hh] > Zdt_last[hh])
-          Zdt_last[hh] = Zdt[hh];
-        float Qn = netD[hh]*1E6/86400; // MJ/m^2*d to W/m^2
-        hru_tsf[hh] = (W_a[hh]*hru_t[hh] + W_b[hh]*Qn)*atan(W_c[hh]*(Zdt_last[hh] + W_d[hh]))*2.0/M_PI;
-      }
-      else if(variation == VARIATION_1 || variation == VARIATION_4 || variation == VARIATION_5){
-         n_factor_T[hh] += 1.0/Global::Freq;
-
-        n_factor[hh] = n_factor_a[hh] - n_factor_b[hh]*exp(-n_factor_c[hh]*n_factor_T[hh]);
-
-        if(n_factor[hh] >= 0.0)
-          hru_tsf[hh] = hru_t[hh]*n_factor[hh];
-        else
-          hru_tsf[hh] = 0.0;
-      }
-    }
-    else{ // has snowcover
-      if(variation == VARIATION_1)
-        n_factor_T[hh] = 0.0;
-      if(variation == VARIATION_2 || variation == VARIATION_4) { // SnobalCRHM case
-        SWE_density[hh] = rho[hh];
-        if(SWE_density[hh] < 156)  // Sturm et al. 1997. The thermal conductivity of seasonal snow
-          SWE_tc[hh] = 0.023 - 1.01* SWE_density[hh]/1000.0 + 0.234*sqr(SWE_density[hh]/1000.0);
-       else
-         SWE_tc[hh] = 0.138 - 1.01* SWE_density[hh]/1000.0 + 3.233*sqr(SWE_density[hh]/1000.0);
-       hru_tsf[hh] = hru_T_s_D[hh] - G[hh]*0.5*z_s[hh]/SWE_tc[hh];
-      }
-
-      if(variation == VARIATION_3 || variation == VARIATION_5){ // ebsm case
-        if(snowdepth[hh] > 0.0)
-          SWE_density[hh] = SWE[hh]/snowdepth[hh];
-        else
-          SWE_density[hh] = 0.0;
-
-        if(SWE_density[hh] < 156)  // Sturm et al. 1997. The thermal conductivity of seasonal snow
-          SWE_tc[hh] = 0.023 - 1.01* SWE_density[hh]/1000.0 + 0.234*sqr(SWE_density[hh]/1000.0);
-        else
-          SWE_tc[hh] = 0.138 - 1.01* SWE_density[hh]/1000.0 + 3.233*sqr(SWE_density[hh]/1000.0);
-
-        float t_minus = tmin[hh];
-
-        if(tmin[hh] >= 0.0)
-          t_minus = 0.0;
-
-        float umin = SWE[hh]*(2.115+0.00779*t_minus)*t_minus/1000.0;
-
-        hru_tsf[hh] = hru_t_D[hh] - (umin*1E6/86400)*snowdepth[hh]/SWE_tc[hh]; // 1E6/86400 is conversion: MJ/m^2*d to W/m^2
-      }
-
-      if(hru_t[hh] > 0.0) // ignore plus temperatures when snow covered
-        hru_tsf[hh] = 0.0;
-      else
-        hru_tsf[hh] = hru_t[hh];
-    }
-
-    if(nstep == 0){
-      hru_tsf_D[hh] = hru_tsf_acc[hh]/Global::Freq;
-      hru_tsf_acc[hh] = 0.0;
-
-      if(variation == VARIATION_3 || variation == VARIATION_5){ // ebsm
-          hru_t_D[hh] = hru_t_acc[hh]/Global::Freq;
-          hru_t_acc[hh] = 0.0;
-      }
-
-      if(variation == VARIATION_2 || variation == VARIATION_4){ // Snobal
-        hru_T_s_D[hh] = hru_T_s_acc[hh]/Global::Freq;
-        hru_T_s_acc[hh] = 0.0;
-      }
-    }
-
-    hru_tsf_acc[hh] += hru_tsf[hh];
-
-    if(variation == VARIATION_3 || variation == VARIATION_5) // ebsm
-      hru_t_acc[hh] += hru_t[hh];
-
-    if(variation == VARIATION_2 || variation == VARIATION_4) // Snobal
-      hru_T_s_acc[hh] += T_s[hh];
-
-  } // for
-}
+//Classtsurface* Classtsurface::klone(string name) const{
+//  return new Classtsurface(name);
+//}
+//
+//void Classtsurface::decl(void) {
+//
+//  Description = "'Module to calculate ground surface temperature ' \
+//    'use hru_t for surface temperature during snowcover period; use Radiative-Conductive-Convective approach to estimate surface temperature(Williams et al, 2015) during snow free periods.' \
+//    'use hru_t for surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57).' \
+//    'use previous daily mean snowpack temperature with thermal conductivity and energy of snowpack (***Snobal*** case) to estimate surface temperature during snowcover period; use Radiative-Conductive-Convective approach to estimate surface temperature(Williams et al, 2015) during snow free periods.' \
+//    'use previous daily mean hru_t with thermal conductivity and energy of snowpack (***ebsm*** case) to estimate surface temperature during snowcover period; use Radiative-Conductive-Convective approach to estimate surface temperature(Williams et al, 2015) during snow free periods.' \
+//    'use previous daily mean snowpack temperature with thermal conductivity and energy of snowpack (***Snobal*** case) to estimate surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57).' \
+//    'use previous daily mean hru_t with thermal conductivity and energy of snowpack (***ebsm*** case) to estimate surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57). '";
+//
+//  declvar("hru_tsf", NHRU, "surface/skin temperature", "(Â°C)", &hru_tsf);
+//
+//  declvar("hru_tsf_D", NHRU, "mean daily surface/skin temperature", "(Â°C)", &hru_tsf_D);
+//
+//  decldiag("hru_tsf_acc", NHRU, "mean daily surface/skin temperature", "(Â°C)", &hru_tsf_acc);
+//
+//  declgetvar("*", "SWE", "(m)", &SWE);
+//
+//  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
+//
+//
+//  variation_set = VARIATION_2 + VARIATION_4; // Snobal
+//
+//  decllocal("hru_T_s_D", NHRU, "mean daily surface/skin temperature", "(Â°C)", &hru_T_s_D);
+//
+//  decllocal("hru_T_s_acc", NHRU, "sum interval air temperature from previous day", "(Â°C)", &hru_T_s_acc);
+//
+//  declgetvar("*", "z_s", "(m)", &z_s);
+//
+//  declgetvar("*", "rho", "(kg/m^3)", &rho);
+//
+//  declgetvar("*", "T_s", "( Â°C)", &T_s);
+//
+//  declgetvar("*", "G", "(W/m^2)", &G);
+//
+//
+//  variation_set = VARIATION_3 + VARIATION_5; // ebsm
+//
+//  decllocal("hru_t_D", NHRU, "mean daily snowpack temperature from previous day", "(Â°C)", &hru_t_D);
+//
+//  decllocal("hru_t_acc", NHRU, "sum interval air temperature from previous day", "(Â°C)", &hru_t_acc);
+//
+//  declgetvar("*", "hru_tmin", "(Â°C)",   &tmin);
+//
+//  declgetvar("*", "snowdepth", "(m)", &snowdepth);
+//
+//
+//  variation_set = VARIATION_0 + VARIATION_2 + VARIATION_3;
+//
+//  decllocal("Zdt_last", NHRU, "Last value of thaw depth", "(m)", &Zdt_last);
+//
+//  declparam("W_a", NHRU, "[0.77]", "0.0", "1.5", "empirical constant for air temperature", "()", &W_a);
+//
+//  declparam("W_b", NHRU, "[0.02]", "0.0", "0.1", "empirical constant for net radiation at ground surface", "()", &W_b);
+//
+//  declparam("W_c", NHRU, "[7.0]", "0.0", "10.0", "empirical constant for frost table", "()", &W_c);
+//
+//  declparam("W_d", NHRU, "[0.03]", "0.0", "0.1", "empirical constant for frost table", "()", &W_d);
+//
+//  declgetvar("*", "netD", "(MJ/m^2*d)", &netD);
+//
+//  declputvar("*", "Zdt", "(m)", &Zdt); // used as a get but allows Classtsurface to load before ClassXG
+//
+//
+//  variation_set = VARIATION_1 + VARIATION_4 + VARIATION_5;
+//
+//  declparam("n_factor_a", NHRU, "[1.0]", "0", "1.2", "a constant in n_factor = n_factor_a - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_a);
+//
+//  declparam("n_factor_b", NHRU, "[0.0]", "0.0", "1.0", "a constant in n_factor = n_factor_b - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_b);
+//
+//  declparam("n_factor_c", NHRU, "[0.0]", "0.0", "0.1", "a constant in n_factor = n_factor_c - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_c);
+//
+//  decllocal("n_factor_T", NHRU, "Days after the start of thaw", "()", &n_factor_T);
+//
+//  decllocal("n_factor", NHRU, "Calculated value of n_factor from parameters", "()", &n_factor);
+//
+//
+//  variation_set = VARIATION_2 + VARIATION_3 + VARIATION_4 + VARIATION_5;
+//
+//  declvar("SWE_tc", NHRU, "SWE thermal conductivity", "(W/(m*K)", &SWE_tc);
+//
+//  declvar("SWE_density", NHRU, "SWE density", "( kg/m^3)", &SWE_density);
+//
+//
+//  variation_set = VARIATION_ORG;
+//}
+//
+//void Classtsurface::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  for (hh = 0; chkStruct(); ++hh){
+//    hru_tsf_D[hh] = 0.0;
+//    hru_tsf_acc[hh] = 0.0;
+//
+//    if(variation == VARIATION_3 || variation == VARIATION_5){ // ebsm
+//      hru_t_D[hh] = 0.0;
+//      hru_t_acc[hh] = 0.0;
+//    }
+//
+//    if(variation == VARIATION_2 || variation == VARIATION_4){ // Snobal
+//      hru_T_s_D[hh] = 0.0;
+//      hru_T_s_acc[hh] = 0.0;
+//    }
+//
+//    if(variation == VARIATION_2 || variation == VARIATION_3 || variation == VARIATION_4 || variation == VARIATION_5){
+//      SWE_tc[hh] = 0.0;
+//      SWE_density[hh] = 0.0;
+//    }
+//  }
+//}
+//
+//void Classtsurface::run(void) {
+//
+//  long nstep = getstep() % Global::Freq;
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//
+//    if(SWE[hh] <= 0.0){ // bare ground
+//      if(variation == VARIATION_ORG || variation == VARIATION_2 || variation == VARIATION_3){
+//        if(Zdt[hh] > Zdt_last[hh])
+//          Zdt_last[hh] = Zdt[hh];
+//        float Qn = netD[hh]*1E6/86400; // MJ/m^2*d to W/m^2
+//        hru_tsf[hh] = (W_a[hh]*hru_t[hh] + W_b[hh]*Qn)*atan(W_c[hh]*(Zdt_last[hh] + W_d[hh]))*2.0/M_PI;
+//      }
+//      else if(variation == VARIATION_1 || variation == VARIATION_4 || variation == VARIATION_5){
+//         n_factor_T[hh] += 1.0/Global::Freq;
+//
+//        n_factor[hh] = n_factor_a[hh] - n_factor_b[hh]*exp(-n_factor_c[hh]*n_factor_T[hh]);
+//
+//        if(n_factor[hh] >= 0.0)
+//          hru_tsf[hh] = hru_t[hh]*n_factor[hh];
+//        else
+//          hru_tsf[hh] = 0.0;
+//      }
+//    }
+//    else{ // has snowcover
+//      if(variation == VARIATION_1)
+//        n_factor_T[hh] = 0.0;
+//      if(variation == VARIATION_2 || variation == VARIATION_4) { // SnobalCRHM case
+//        SWE_density[hh] = rho[hh];
+//        if(SWE_density[hh] < 156)  // Sturm et al. 1997. The thermal conductivity of seasonal snow
+//          SWE_tc[hh] = 0.023 - 1.01* SWE_density[hh]/1000.0 + 0.234*sqr(SWE_density[hh]/1000.0);
+//       else
+//         SWE_tc[hh] = 0.138 - 1.01* SWE_density[hh]/1000.0 + 3.233*sqr(SWE_density[hh]/1000.0);
+//       hru_tsf[hh] = hru_T_s_D[hh] - G[hh]*0.5*z_s[hh]/SWE_tc[hh];
+//      }
+//
+//      if(variation == VARIATION_3 || variation == VARIATION_5){ // ebsm case
+//        if(snowdepth[hh] > 0.0)
+//          SWE_density[hh] = SWE[hh]/snowdepth[hh];
+//        else
+//          SWE_density[hh] = 0.0;
+//
+//        if(SWE_density[hh] < 156)  // Sturm et al. 1997. The thermal conductivity of seasonal snow
+//          SWE_tc[hh] = 0.023 - 1.01* SWE_density[hh]/1000.0 + 0.234*sqr(SWE_density[hh]/1000.0);
+//        else
+//          SWE_tc[hh] = 0.138 - 1.01* SWE_density[hh]/1000.0 + 3.233*sqr(SWE_density[hh]/1000.0);
+//
+//        float t_minus = tmin[hh];
+//
+//        if(tmin[hh] >= 0.0)
+//          t_minus = 0.0;
+//
+//        float umin = SWE[hh]*(2.115+0.00779*t_minus)*t_minus/1000.0;
+//
+//        hru_tsf[hh] = hru_t_D[hh] - (umin*1E6/86400)*snowdepth[hh]/SWE_tc[hh]; // 1E6/86400 is conversion: MJ/m^2*d to W/m^2
+//      }
+//
+//      if(hru_t[hh] > 0.0) // ignore plus temperatures when snow covered
+//        hru_tsf[hh] = 0.0;
+//      else
+//        hru_tsf[hh] = hru_t[hh];
+//    }
+//
+//    if(nstep == 0){
+//      hru_tsf_D[hh] = hru_tsf_acc[hh]/Global::Freq;
+//      hru_tsf_acc[hh] = 0.0;
+//
+//      if(variation == VARIATION_3 || variation == VARIATION_5){ // ebsm
+//          hru_t_D[hh] = hru_t_acc[hh]/Global::Freq;
+//          hru_t_acc[hh] = 0.0;
+//      }
+//
+//      if(variation == VARIATION_2 || variation == VARIATION_4){ // Snobal
+//        hru_T_s_D[hh] = hru_T_s_acc[hh]/Global::Freq;
+//        hru_T_s_acc[hh] = 0.0;
+//      }
+//    }
+//
+//    hru_tsf_acc[hh] += hru_tsf[hh];
+//
+//    if(variation == VARIATION_3 || variation == VARIATION_5) // ebsm
+//      hru_t_acc[hh] += hru_t[hh];
+//
+//    if(variation == VARIATION_2 || variation == VARIATION_4) // Snobal
+//      hru_T_s_acc[hh] += T_s[hh];
+//
+//  } // for
+//}
 //---------------------------------------------------------------------------
 
 Classqdrift* Classqdrift::klone(string name) const{

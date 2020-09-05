@@ -270,345 +270,345 @@ Classglobal* klone(string name) const;
 //Classintcp* klone(string name) const;
 //};
 
-class Classpbsm : public ClassModule {
-public:
-
-Classpbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
-
-float hru_u_;
-
-// declared variables
-
-float *SWE;
-float *Subl;
-float *Drift;
-float *SublH;
-float *DriftH;
-float *cumSubl;
-float *cumDrift;
-float *cumDriftIn;
-float *cumSno;
-float *Prob;
-float *snowdepth;
-float *BasinSnowLoss;
-float *cumBasinSnowLoss;
-float *cumBasinSnowGain;
-float *SnowAge;
-float *SWE_Init;
-float *rain_on_snow;
-float *cumrain_on_snow;
-long  *DrySnow;
-
-// declared parameters
-const float *fetch;
-const float *Ht;
-const float *distrib;
-const float *basin_area;
-const float *hru_area;
-const float *A_S;
-const float *u_D;
-const float *Drift_offset;
-const float *Drift_slope;
-const float *Subl_offset;
-const float *Subl_slope;
-const float *N_S;
-const long *inhibit_evap;
-const long *inhibit_bs;
-const long *inhibit_subl;
-
-// variable inputs
-const float *hru_t;
-const float *hru_rh;
-const float *hru_u;
-const float *hru_Uadjust;
-const float *net_snow;
-const float *net_rain;
-const long  *hru_newsnow;
-
-// local allocated arrays
-float *hru_basin;
-
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-Classpbsm* klone(string name) const;
-};
-
-class ClassNO_pbsm : public ClassModule {
-public:
-
-ClassNO_pbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
-                                  hru_basin(NULL) {};
-// declared variables
-float *SWE;
-float *cumSno;
-float *snowdepth;
-
-// declared parameters
-const float *basin_area;
-const float *hru_area;
-const long *inhibit_evap;
-
-// variable inputs
-const float *net_snow;
-const long  *hru_newsnow;
-
-// local allocated arrays
-float *hru_basin;
-
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-ClassNO_pbsm* klone(string name) const;
-};
-
-class Classtsurface : public ClassModule {
-public:
-
-Classtsurface(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared variables
-float *hru_tsf;
-float *hru_tsf_D;
-float *hru_tsf_acc;
-float *n_factor;
-float *n_factor_T;
-float *Zdt_last;
-float *SWE_tc;
-float *SWE_density;
-float *hru_t_D;
-float *hru_T_s_D;
-float *hru_t_acc;
-float *hru_T_s_acc;
-
-// put inputs
-float *Zdt; // not used as put. Allows Classtsurface to load before ClassXG
-
-// declared parameters
-const float *W_a; // Williams
-const float *W_b;
-const float *W_c;
-const float *W_d;
-
-const float *n_factor_a; // Woo
-const float *n_factor_b;
-const float *n_factor_c;
-
-// variable inputs
-const float *SWE;
-const float *hru_t;
-const float *netD;
-const float *z_s;
-const float *rho;
-const float *T_s;
-const float *G;
-const float *tmin;
-const float *snowdepth;
-const float *xx;
-
-void decl(void);
-void init(void);
-void run(void);
-
-Classtsurface* klone(string name) const;
-};
-
-class Classalbedo : public ClassModule {
-public:
-
-Classalbedo(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared variables
-float *Albedo;
-float *net_snowD;  // daily value sum(newsnow)
-long *meltflag;
-long *winter;
-long  *newsnowcnt;
-
-// declared parameters
-const float *Albedo_bare;
-const float *Albedo_snow;
-const float *hru_lat;
-
-// variable inputs
-const float *hru_tmax;
-const float *hru_tmin;
-const float *QdroD;
-const float *SWE;
-const float *net_snow;
-const long  *hru_newsnow;
-
-void decl(void);
-void init(void);
-void run(void);
-
-Classalbedo* klone(string name) const;
-};
-
-class Classnetall : public ClassModule {
-public:
-
-Classnetall(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared observation variables
-const float *t;
-const float *ea;
-const float **tday_intvls;
-const float **eaday_intvls;
-const float *NotUsed;
-
-// declared variables
-float *net;
-float *Rn; // net converted to mm
-float *netD;
-float *RnD; // netD converted to mm
-float *RnD_POS;
-float *cum_net;
-
-// declared parameters
-
-// variable inputs
-const float *hru_t;
-const float *hru_ea;
-const float *Albedo;
-const float *hru_SunAct;
-const float *SunMax;
-const float *Qdro;
-const float *Qdfo;
-const float *pQdro;
-const float *pQdfo;
-const float **pQdro_FREQ;
-const float **pQdfo_FREQ;
-
-void decl(void);
-void init(void);
-void run(void);
-
-Classnetall* klone(string name) const;
-};
-
-class Classebsm : public ClassModule {
-public:
-
-Classebsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , Qnsn_Var, , "){};
-
-// declared observation variables
-const float *Qnsn;
-const float *QnD;
-
-// declared variables
-float *snowmeltD;
-float *cumsnowmelt;
-float *LW_ebsm;
-float *u_ebsm;
-float *Qmelt;
-float *Qn_ebsm;
-float *Qh_ebsm;
-float *Qe_ebsm;
-float *Qe_subl;
-float *cumQe_subl;
-float *Qp_ebsm;
-float *Qnsn_Acc;
-
-float *LWmax;
-float *net_rainD;
-
-// declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *tfactor;
-const float *nfactor;
-const float *Use_QnD;
-
-// variable inputs
-float *SWE;
-const float *tmean;
-const float *tmax;
-const float *tmin;
-const float *umean;
-const float *rhmean;
-const float *net_rain;
-const float *Albedo;
-const float *sunact;
-const float *QdroD;
-const float *QdfoD;
-const float *sunmax;
-const float *Qnsn_Var;
-
-const long  *meltflag;
-const long  *delay_melt;
-const long  *Qe_subl_from_SWE;
-
-// local allocated arrays
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-Classebsm* klone(string name) const;
-};
-
-class ClassTs : public ClassModule {
-
-    public:
-
-    ClassTs(string Name, string Version = "Radiation", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, "QliVt_Var, ") {};
-
-// declared observations
-    float *Ts;
-
-// declared observation variables
-
-    const float *hru_u;
-
-    const float *hru_t;
-
-    const float *hru_rh;
-
-    const float *Qli;
-
-    const float *QliVt_Var;
-
-// declared variables
-
-   float *hru_Ts;
-
-   float *Pa;
-
-   float *q;
-
-   float *ra;
-
-   float *Qli_;
-
-// declared parameters
-
-   const float *Ht;
-
-   const float *Zref;
-
-   const float *Zwind;
-
-   const float *hru_elev;
-
-   const float *Z0snow; // snow roughness length (m)
-
-// variable inputs
-
-
-    void decl(void);
-    void init(void);
-    void run(void);
-
-ClassTs* klone(string name) const;
-};
+//class Classpbsm : public ClassModule {
+//public:
+//
+//Classpbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
+//
+//float hru_u_;
+//
+//// declared variables
+//
+//float *SWE;
+//float *Subl;
+//float *Drift;
+//float *SublH;
+//float *DriftH;
+//float *cumSubl;
+//float *cumDrift;
+//float *cumDriftIn;
+//float *cumSno;
+//float *Prob;
+//float *snowdepth;
+//float *BasinSnowLoss;
+//float *cumBasinSnowLoss;
+//float *cumBasinSnowGain;
+//float *SnowAge;
+//float *SWE_Init;
+//float *rain_on_snow;
+//float *cumrain_on_snow;
+//long  *DrySnow;
+//
+//// declared parameters
+//const float *fetch;
+//const float *Ht;
+//const float *distrib;
+//const float *basin_area;
+//const float *hru_area;
+//const float *A_S;
+//const float *u_D;
+//const float *Drift_offset;
+//const float *Drift_slope;
+//const float *Subl_offset;
+//const float *Subl_slope;
+//const float *N_S;
+//const long *inhibit_evap;
+//const long *inhibit_bs;
+//const long *inhibit_subl;
+//
+//// variable inputs
+//const float *hru_t;
+//const float *hru_rh;
+//const float *hru_u;
+//const float *hru_Uadjust;
+//const float *net_snow;
+//const float *net_rain;
+//const long  *hru_newsnow;
+//
+//// local allocated arrays
+//float *hru_basin;
+//
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//Classpbsm* klone(string name) const;
+//};
+
+//class ClassNO_pbsm : public ClassModule {
+//public:
+//
+//ClassNO_pbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
+//                                  hru_basin(NULL) {};
+//// declared variables
+//float *SWE;
+//float *cumSno;
+//float *snowdepth;
+//
+//// declared parameters
+//const float *basin_area;
+//const float *hru_area;
+//const long *inhibit_evap;
+//
+//// variable inputs
+//const float *net_snow;
+//const long  *hru_newsnow;
+//
+//// local allocated arrays
+//float *hru_basin;
+//
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//ClassNO_pbsm* klone(string name) const;
+//};
+
+//class Classtsurface : public ClassModule {
+//public:
+//
+//Classtsurface(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared variables
+//float *hru_tsf;
+//float *hru_tsf_D;
+//float *hru_tsf_acc;
+//float *n_factor;
+//float *n_factor_T;
+//float *Zdt_last;
+//float *SWE_tc;
+//float *SWE_density;
+//float *hru_t_D;
+//float *hru_T_s_D;
+//float *hru_t_acc;
+//float *hru_T_s_acc;
+//
+//// put inputs
+//float *Zdt; // not used as put. Allows Classtsurface to load before ClassXG
+//
+//// declared parameters
+//const float *W_a; // Williams
+//const float *W_b;
+//const float *W_c;
+//const float *W_d;
+//
+//const float *n_factor_a; // Woo
+//const float *n_factor_b;
+//const float *n_factor_c;
+//
+//// variable inputs
+//const float *SWE;
+//const float *hru_t;
+//const float *netD;
+//const float *z_s;
+//const float *rho;
+//const float *T_s;
+//const float *G;
+//const float *tmin;
+//const float *snowdepth;
+//const float *xx;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//
+//Classtsurface* klone(string name) const;
+//};
+
+//class Classalbedo : public ClassModule {
+//public:
+//
+//Classalbedo(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared variables
+//float *Albedo;
+//float *net_snowD;  // daily value sum(newsnow)
+//long *meltflag;
+//long *winter;
+//long  *newsnowcnt;
+//
+//// declared parameters
+//const float *Albedo_bare;
+//const float *Albedo_snow;
+//const float *hru_lat;
+//
+//// variable inputs
+//const float *hru_tmax;
+//const float *hru_tmin;
+//const float *QdroD;
+//const float *SWE;
+//const float *net_snow;
+//const long  *hru_newsnow;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//
+//Classalbedo* klone(string name) const;
+//};
+
+//class Classnetall : public ClassModule {
+//public:
+//
+//Classnetall(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared observation variables
+//const float *t;
+//const float *ea;
+//const float **tday_intvls;
+//const float **eaday_intvls;
+//const float *NotUsed;
+//
+//// declared variables
+//float *net;
+//float *Rn; // net converted to mm
+//float *netD;
+//float *RnD; // netD converted to mm
+//float *RnD_POS;
+//float *cum_net;
+//
+//// declared parameters
+//
+//// variable inputs
+//const float *hru_t;
+//const float *hru_ea;
+//const float *Albedo;
+//const float *hru_SunAct;
+//const float *SunMax;
+//const float *Qdro;
+//const float *Qdfo;
+//const float *pQdro;
+//const float *pQdfo;
+//const float **pQdro_FREQ;
+//const float **pQdfo_FREQ;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//
+//Classnetall* klone(string name) const;
+//};
+
+//class Classebsm : public ClassModule {
+//public:
+//
+//Classebsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , Qnsn_Var, , "){};
+//
+//// declared observation variables
+//const float *Qnsn;
+//const float *QnD;
+//
+//// declared variables
+//float *snowmeltD;
+//float *cumsnowmelt;
+//float *LW_ebsm;
+//float *u_ebsm;
+//float *Qmelt;
+//float *Qn_ebsm;
+//float *Qh_ebsm;
+//float *Qe_ebsm;
+//float *Qe_subl;
+//float *cumQe_subl;
+//float *Qp_ebsm;
+//float *Qnsn_Acc;
+//
+//float *LWmax;
+//float *net_rainD;
+//
+//// declared parameters
+//const float *basin_area;   // [BASIN]
+//const float *hru_area;
+//const float *tfactor;
+//const float *nfactor;
+//const float *Use_QnD;
+//
+//// variable inputs
+//float *SWE;
+//const float *tmean;
+//const float *tmax;
+//const float *tmin;
+//const float *umean;
+//const float *rhmean;
+//const float *net_rain;
+//const float *Albedo;
+//const float *sunact;
+//const float *QdroD;
+//const float *QdfoD;
+//const float *sunmax;
+//const float *Qnsn_Var;
+//
+//const long  *meltflag;
+//const long  *delay_melt;
+//const long  *Qe_subl_from_SWE;
+//
+//// local allocated arrays
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//Classebsm* klone(string name) const;
+//};
+
+//class ClassTs : public ClassModule {
+//
+//    public:
+//
+//    ClassTs(string Name, string Version = "Radiation", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, "QliVt_Var, ") {};
+//
+//// declared observations
+//    float *Ts;
+//
+//// declared observation variables
+//
+//    const float *hru_u;
+//
+//    const float *hru_t;
+//
+//    const float *hru_rh;
+//
+//    const float *Qli;
+//
+//    const float *QliVt_Var;
+//
+//// declared variables
+//
+//   float *hru_Ts;
+//
+//   float *Pa;
+//
+//   float *q;
+//
+//   float *ra;
+//
+//   float *Qli_;
+//
+//// declared parameters
+//
+//   const float *Ht;
+//
+//   const float *Zref;
+//
+//   const float *Zwind;
+//
+//   const float *hru_elev;
+//
+//   const float *Z0snow; // snow roughness length (m)
+//
+//// variable inputs
+//
+//
+//    void decl(void);
+//    void init(void);
+//    void run(void);
+//
+//ClassTs* klone(string name) const;
+//};
 
 class ClassNeedle : public ClassModule {
 
