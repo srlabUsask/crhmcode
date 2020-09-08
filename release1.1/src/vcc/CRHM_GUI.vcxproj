@@ -706,7 +706,9 @@
     <ClCompile Include="..\plugins\newmodules\ClassNeedle.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classnetall.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassNetroute.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClassNetroute_D.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassNetroute_M.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClassNetroute_M_D.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassNO_pbsm.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassObs.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classpbsm.cpp" />
