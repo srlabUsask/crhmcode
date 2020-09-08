@@ -3,13 +3,6 @@
 #include "ClassModule.h"
 
 
-const float DEGtoRAD = M_PI / 180.0;
-const float DEGtoRAD365 = 2 * M_PI / 365.0;
-const long CalcFreq = 288;
-const float RADxxMIN = 2.0*M_PI / CalcFreq;
-const float MINS_int = 24.0*60.0 / CalcFreq;
-
-
 
 class Classglobal : public ClassModule {
 public:

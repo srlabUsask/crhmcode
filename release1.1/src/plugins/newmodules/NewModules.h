@@ -2137,563 +2137,563 @@ class ClassSnobalX : public ClassSnobalBase {
     void finish(bool good); // delete local storage used
 };
 
-class ClasspbsmSnobal : public ClassModule {
-public:
-
-ClasspbsmSnobal(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust"), // setting PeerRank
-                                  hru_basin(NULL) {};
-float hru_u_;
-
-// declared variables
-float *Subl;
-float *Drift;     // HRU composite drift
-float *SublH;
-float *DriftH;
-float *Drift_out; // HRU drift out
-float *Drift_in;  // HRU drift in
-float *cumSubl;
-float *cumDrift;
-float *cumDriftIn;
-float *Prob;
-float *snowdepth;
-float *BasinSnowLoss;
-float *cumBasinSnowLoss;
-float *cumBasinSnowGain;
-float *SnowAge;
-long  *DrySnow;
-
-// declared parameters
-const float *fetch;
-const float *Ht;
-const float *distrib;
-const float *basin_area;
-const float *hru_area;
-const float *A_S;
-const float *N_S;
-const float *u_D;
-const float *Drift_offset;
-const float *Drift_slope;
-const float *Subl_offset;
-const float *Subl_slope;
-const long *inhibit_evap;
-const long *inhibit_bs;
-const long *inhibit_subl;
-
-// variable inputs
-const float *hru_t;
-const float *hru_ea;
-const float *hru_u;
-const float *hru_Uadjust;
-const float *net_snow;
-
-// put variable inputs
-float *SWE; // actually m_s
-float *z_s;
-float *rho;
-
-// local allocated arrays
-float *hru_basin;
-
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-ClasspbsmSnobal* klone(string name) const;
-
-};
-
-class ClassalbedoRichard : public ClassModule {
-public:
-
-ClassalbedoRichard(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// local class
-
-    float dt;
-
-// declared variables
-float *Albedo;
-
-// put variables:
-
-// get variables:
-
- const float *net_snow;
- const float *SWE;
-
-const float *T0;
-
-// declared parameters
-  const float *Albedo_Bare;
-  const float *Albedo_Snow;
-  const float *a1;       // Albedo decay time constant for cold snow (s)
-  const float *a2;       // Albedo decay time constant for melting snow (s)
-  const float *amin;     // Minimum albedo for aged snow
-  const float *amax;     // Maximum albedo for fresh snow
-  const float *smin;     // Minimum snowfall to refresh snow albedo (mm)
-
-void decl(void);
-void init(void);
-void run(void);
-
-ClassalbedoRichard* klone(string name) const;
-};
-
-class ClassalbedoBaker : public ClassModule {
-public:
-
-ClassalbedoBaker(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared variables
-  float *Albedo;
-  float *Ab_t;
-
-// get variables:
-
-
- const float *net_snow;
- const float *SWE;
-
-// put variables:
-
-// declared parameters
-  const float *Albedo_Bare;
-  const float *Albedo_Snow;
-  const float *refresh;
-
-void decl(void);
-void init(void);
-void run(void);
-
-ClassalbedoBaker* klone(string name) const;
-};
-
-class ClassHMSA : public ClassModule {
-public:
-
-ClassHMSA(string Name = "HMSA", string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " hru_t, "){};
-
-float Soil_Temp;
-
-long MaxFrontCnt;
-long Liqcnt;
-long Totcnt;
-
-// declared observation variables
-const float *Tsurf_obs;
-const float *LiqWat;
-const float *TotMoist;
-
-// variable inputs
-const float *Tsurf_var;
-const float *hru_t;
-
-//const float *theta;
-
-// declared variables
-float *Cum_Thaw;
-float *Cum_Frozen;
-float *Lamda_b;
-float *Frozen_D;
-float *Thaw_D;
-float *Last_Tsurf;
-
-float *C_K0;
-float *Total_Moisture;
-float **Total_Moisture_lay;
-float *Cum_d;
-float **Cum_d_lay;
-long *Frozen_ID;
-long **Frozen_ID_lay;
-float *FrntDepth;
-float **FrntDepth_array;
-float *ThawCum;
-float **ThawCum_array;
-float *FreezeCum;
-float **FreezeCum_array;
-long *FrntDepthType;
-long **FrntDepthType_array;
-long *FrontCnt;
-
-// local
-float *Tsurface;
-
-// declared parameters
-const float *Alpha_T;
-const float *Alpha_F;
-const float *d_lay;
-const float *BulkDensityLayer;
-const float *InitThaw_D;
-const float *InitFrozen_D;
-const float *D_Top;
-const float *TMPB_W;
-const float **TMPB_W_NDEF;
-const long *Alpha_ID;
-const long *Soil_ID;
-const long **Soil_ID_lay;
-
-const float *Soil_Depths;
-const float **Soil_depths_lay; // [nn][hh]
-const float *Organic;
-const float **Organic_lay; // [nn][hh]
-const float *Porosity;
-const float **Porosity_lay; // [nn][hh
-const float *BulkDensity;
-const float **BulkDensity_lay; // [nn][hh]
-float *f;
-float *Soil_Ice;
-float **Soil_Ice_lay;
-float *Soil_Water;
-float **Soil_Water_lay;
-
-const long *Soil_Layers;
-const long *Method_ID;
-
-void decl(void);
-void init(void);
-void run(void);
-void Get_Heat_Param_Soil(float Soil_temp, long nn);
-void Get_Heat_Chad(long nn);
-
-ClassHMSA* klone(string name) const;
-};
-
-class Classwalmsley_wind : public ClassModule {
-public:
-Classwalmsley_wind(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared variables
-float *hru_Uadjust;
-float *hru_Uchange;
-float *WR;
-
-// declared parameters
-const float *Zwind;
-const float *Ax;
-const float *Bx;
-const float *L;
-const float *Walmsley_Ht;
-
-// varaible inputs
-const float *hru_u;
-
-void decl(void);
-void init(void);
-void run(void);
-
-Classwalmsley_wind* klone(string name) const;
-};
-
-class ClassNetroute_M : public ClassModule {
-public:
-
-ClassNetroute_M(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-long meltrunoffDiv;
-long soil_ssrDiv;
-long soil_runoffDiv;
-long soil_gwDiv;
-
-// declared variables
-float *inflow;        // [nhru]
-float *cuminflow;     // [nhru]
-float *outflow;       // [nhru]
-float *outflow_diverted; // [nhru]
-float *cumoutflow_diverted; // [nhru]
-float *cumoutflow;    // [nhru]
-float *gwinflow;        // [nhru]
-
-float *ssrinflow;        // [nhru]
-float *ssrcuminflow;     // [nhru]
-float *ssroutflow;       // [nhru]
-float *ssrcumoutflow;    // [nhru]
-float *HRU_cumbasinflow; // [nhru]
-
-float *runinflow;        // [nhru]
-float *runcuminflow;     // [nhru]
-float *runoutflow;       // [nhru]
-float *runcumoutflow;    // [nhru]
-
-float *gwoutflow;       // [nhru]
-float *gwoutflow_diverted; // [nhru]
-float *gwcuminflow;     // [nhru]
-float *gwcumoutflow;    // [nhru]
-float *gwcumoutflow_diverted; // [nhru]
-
-float *basinflow;     // [BASIN] all HRUs
-float *basinflow_s;   // [BASIN] all HRUs
-float *cumbasinflow;  // [BASIN] all HRUs
-float *basingw;       // [BASIN} all HRUs
-float *basingw_s;     // [BASIN} all HRUs
-float *cumbasingw;    // [BASIN} all HRUs
-
-float *soil_ssr_Buf;    // buffered
-float *soil_runoff_Buf; // buffered
-float *soil_gw_Buf;     // buffered
-
-float *cum_to_Sd;         // [nhru]
-float *cum_to_soil_rechr; // [nhru]
-
-float *Ktravel;         // [nhru] Muskingum
-float *cum_preferential_flow_to_gw;
-
-ClassMuskingum *hruDelay;
-ClassClark *ssrDelay;
-ClassClark *runDelay;
-ClassClark *gwDelay;
-
-// declared parameters
-const float *route_n;         // [nhru]
-const float *route_R;         // [nhru]
-const float *route_S0;        // [nhru]
-const float *route_L;         // [nhru]
-const float *route_X_M;       // [nhru]
-const long  *route_Cshp;      // [nhru]
-
-const float *Lag;              // [nhru]
-const float *ssrKstorage;      // [nhru]
-const float *ssrLag;           // [nhru]
-const float *runKstorage;      // [nhru]
-const float *runLag;           // [nhru]
-const float *gwKstorage;       // [nhru]
-const float *gwLag;            // [nhru]
-
-const float *basin_area;        // [BASIN]
-const float *hru_area;          // [nhru]
-const long  *whereto;           // [nhru]
-const long  *gwwhereto;         // [nhru]
-const long  *order;             // [nhru]
-const float *Sdmax;             // [nhru]
-const float *soil_rechr_max;    // [nhru]
-const long  *Sd_ByPass;         // [nhru]
-const long  *soil_rechr_ByPass; // [nhru]
-const long  *preferential_flow; // [nhru]
-
-// variable inputs
-const float *soil_gw;     // [nhru]
-const float *soil_ssr;    // [nhru]
-const float *soil_runoff; // [nhru]
-
-// variable puts
-float *Sd;
-float *soil_moist;
-float *soil_rechr;
-float *redirected_residual;
-float *gw;
-
-// local allocated arrays
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-virtual float Function1(float *I, long hh);
-virtual float Function2(float *X, long hh);
-
-ClassNetroute_M* klone(string name) const;
-};
-
-class ClassREWroute2 : public ClassModule {
-public:
-
-ClassREWroute2(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 9999) {};
-
-long inflowCnt;
-long gwCnt;
-
-// declared variables
-float *rew;
-float *gwrew;
-
-float **inflow_All;
-float **gw_All;
-
-float *inflow;        // [nhru]
-float *cuminflow;     // [nhru]
-float *outflow;       // [nhru]
-float *cumoutflow;    // [nhru]
-
-float *gwinflow;        // [nhru]
-float *cumgwinflow;     // [nhru]
-float *gwoutflow;       // [nhru]
-float *cumgwoutflow;    // [nhru]
-
-float *flow;     // [BASIN] all HRUs
-float *flow_s;   // [BASIN] all HRUs
-float *cumflow;  // [BASIN] all HRUs
-
-float *gwflow;     // [BASIN] all HRUs
-float *gwflow_s;   // [BASIN] all HRUs
-float *cumgwflow;  // [BASIN] all HRUs
-
-float *WS_Ktravel_var;         // [nhru]
-float *WS_gwKtravel_var;         // [nhru]
-
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_over_Q;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
-
-ClassMuskingum *inflowDelay;
-ClassMuskingum *gwDelay;
-
-ClassClark *Clark_inflowDelay;
-ClassClark *Clark_gwDelay;
-
-// declared parameters
-
-const float *WS_route_n;         // [nhru]
-const float *WS_route_R;         // [nhru]
-const float *WS_route_S0;        // [nhru]
-const float *WS_route_L;         // [nhru]
-const long  *WS_Channel_shp;      // [nhru]
-
-const float *WS_Lag;             // [nhru]
-const float *WS_route_X_M;       // [nhru]
-const long  *WS_whereto;         // [nhru]
-const long  *WS_order;           // [nhru]
-
-const float *WS_gwLag;           // [nhru]
-const float *WS_gwroute_X_M;     // [nhru]
-const long  *WS_gwwhereto;       // [nhru]
-const long  *WS_gworder;         // [nhru]
-
-const float *WS_Kstorage;     // [nhru]
-const float *WS_gwKstorage;   // [nhru]
-
-const float *WS_channel_slope;
-const float *WS_side_slope;
-const float *WS_culvert_diam;
-const float *WS_culvert_water_Dmax;
-const float *WS_number_culverts;
-
-const long *WS_culvert_type;
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-void Culvert(long hh);
-
-ClassREWroute2* klone(string name) const;
-};
+//class ClasspbsmSnobal : public ClassModule {
+//public:
+//
+//ClasspbsmSnobal(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust"), // setting PeerRank
+//                                  hru_basin(NULL) {};
+//float hru_u_;
+//
+//// declared variables
+//float *Subl;
+//float *Drift;     // HRU composite drift
+//float *SublH;
+//float *DriftH;
+//float *Drift_out; // HRU drift out
+//float *Drift_in;  // HRU drift in
+//float *cumSubl;
+//float *cumDrift;
+//float *cumDriftIn;
+//float *Prob;
+//float *snowdepth;
+//float *BasinSnowLoss;
+//float *cumBasinSnowLoss;
+//float *cumBasinSnowGain;
+//float *SnowAge;
+//long  *DrySnow;
+//
+//// declared parameters
+//const float *fetch;
+//const float *Ht;
+//const float *distrib;
+//const float *basin_area;
+//const float *hru_area;
+//const float *A_S;
+//const float *N_S;
+//const float *u_D;
+//const float *Drift_offset;
+//const float *Drift_slope;
+//const float *Subl_offset;
+//const float *Subl_slope;
+//const long *inhibit_evap;
+//const long *inhibit_bs;
+//const long *inhibit_subl;
+//
+//// variable inputs
+//const float *hru_t;
+//const float *hru_ea;
+//const float *hru_u;
+//const float *hru_Uadjust;
+//const float *net_snow;
+//
+//// put variable inputs
+//float *SWE; // actually m_s
+//float *z_s;
+//float *rho;
+//
+//// local allocated arrays
+//float *hru_basin;
+//
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//ClasspbsmSnobal* klone(string name) const;
+//
+//};
+
+//class ClassalbedoRichard : public ClassModule {
+//public:
+//
+//ClassalbedoRichard(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// local class
+//
+//    float dt;
+//
+//// declared variables
+//float *Albedo;
+//
+//// put variables:
+//
+//// get variables:
+//
+// const float *net_snow;
+// const float *SWE;
+//
+//const float *T0;
+//
+//// declared parameters
+//  const float *Albedo_Bare;
+//  const float *Albedo_Snow;
+//  const float *a1;       // Albedo decay time constant for cold snow (s)
+//  const float *a2;       // Albedo decay time constant for melting snow (s)
+//  const float *amin;     // Minimum albedo for aged snow
+//  const float *amax;     // Maximum albedo for fresh snow
+//  const float *smin;     // Minimum snowfall to refresh snow albedo (mm)
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//
+//ClassalbedoRichard* klone(string name) const;
+//};
+
+//class ClassalbedoBaker : public ClassModule {
+//public:
+//
+//ClassalbedoBaker(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared variables
+//  float *Albedo;
+//  float *Ab_t;
+//
+//// get variables:
+//
+//
+// const float *net_snow;
+// const float *SWE;
+//
+//// put variables:
+//
+//// declared parameters
+//  const float *Albedo_Bare;
+//  const float *Albedo_Snow;
+//  const float *refresh;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//
+//ClassalbedoBaker* klone(string name) const;
+//};
+
+//class ClassHMSA : public ClassModule {
+//public:
+//
+//ClassHMSA(string Name = "HMSA", string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " hru_t, "){};
+//
+//float Soil_Temp;
+//
+//long MaxFrontCnt;
+//long Liqcnt;
+//long Totcnt;
+//
+//// declared observation variables
+//const float *Tsurf_obs;
+//const float *LiqWat;
+//const float *TotMoist;
+//
+//// variable inputs
+//const float *Tsurf_var;
+//const float *hru_t;
+//
+////const float *theta;
+//
+//// declared variables
+//float *Cum_Thaw;
+//float *Cum_Frozen;
+//float *Lamda_b;
+//float *Frozen_D;
+//float *Thaw_D;
+//float *Last_Tsurf;
+//
+//float *C_K0;
+//float *Total_Moisture;
+//float **Total_Moisture_lay;
+//float *Cum_d;
+//float **Cum_d_lay;
+//long *Frozen_ID;
+//long **Frozen_ID_lay;
+//float *FrntDepth;
+//float **FrntDepth_array;
+//float *ThawCum;
+//float **ThawCum_array;
+//float *FreezeCum;
+//float **FreezeCum_array;
+//long *FrntDepthType;
+//long **FrntDepthType_array;
+//long *FrontCnt;
+//
+//// local
+//float *Tsurface;
+//
+//// declared parameters
+//const float *Alpha_T;
+//const float *Alpha_F;
+//const float *d_lay;
+//const float *BulkDensityLayer;
+//const float *InitThaw_D;
+//const float *InitFrozen_D;
+//const float *D_Top;
+//const float *TMPB_W;
+//const float **TMPB_W_NDEF;
+//const long *Alpha_ID;
+//const long *Soil_ID;
+//const long **Soil_ID_lay;
+//
+//const float *Soil_Depths;
+//const float **Soil_depths_lay; // [nn][hh]
+//const float *Organic;
+//const float **Organic_lay; // [nn][hh]
+//const float *Porosity;
+//const float **Porosity_lay; // [nn][hh
+//const float *BulkDensity;
+//const float **BulkDensity_lay; // [nn][hh]
+//float *f;
+//float *Soil_Ice;
+//float **Soil_Ice_lay;
+//float *Soil_Water;
+//float **Soil_Water_lay;
+//
+//const long *Soil_Layers;
+//const long *Method_ID;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void Get_Heat_Param_Soil(float Soil_temp, long nn);
+//void Get_Heat_Chad(long nn);
+//
+//ClassHMSA* klone(string name) const;
+//};
+
+//class Classwalmsley_wind : public ClassModule {
+//public:
+//Classwalmsley_wind(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared variables
+//float *hru_Uadjust;
+//float *hru_Uchange;
+//float *WR;
+//
+//// declared parameters
+//const float *Zwind;
+//const float *Ax;
+//const float *Bx;
+//const float *L;
+//const float *Walmsley_Ht;
+//
+//// varaible inputs
+//const float *hru_u;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//
+//Classwalmsley_wind* klone(string name) const;
+//};
+
+//class ClassNetroute_M : public ClassModule {
+//public:
+//
+//ClassNetroute_M(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//long meltrunoffDiv;
+//long soil_ssrDiv;
+//long soil_runoffDiv;
+//long soil_gwDiv;
+//
+//// declared variables
+//float *inflow;        // [nhru]
+//float *cuminflow;     // [nhru]
+//float *outflow;       // [nhru]
+//float *outflow_diverted; // [nhru]
+//float *cumoutflow_diverted; // [nhru]
+//float *cumoutflow;    // [nhru]
+//float *gwinflow;        // [nhru]
+//
+//float *ssrinflow;        // [nhru]
+//float *ssrcuminflow;     // [nhru]
+//float *ssroutflow;       // [nhru]
+//float *ssrcumoutflow;    // [nhru]
+//float *HRU_cumbasinflow; // [nhru]
+//
+//float *runinflow;        // [nhru]
+//float *runcuminflow;     // [nhru]
+//float *runoutflow;       // [nhru]
+//float *runcumoutflow;    // [nhru]
+//
+//float *gwoutflow;       // [nhru]
+//float *gwoutflow_diverted; // [nhru]
+//float *gwcuminflow;     // [nhru]
+//float *gwcumoutflow;    // [nhru]
+//float *gwcumoutflow_diverted; // [nhru]
+//
+//float *basinflow;     // [BASIN] all HRUs
+//float *basinflow_s;   // [BASIN] all HRUs
+//float *cumbasinflow;  // [BASIN] all HRUs
+//float *basingw;       // [BASIN} all HRUs
+//float *basingw_s;     // [BASIN} all HRUs
+//float *cumbasingw;    // [BASIN} all HRUs
+//
+//float *soil_ssr_Buf;    // buffered
+//float *soil_runoff_Buf; // buffered
+//float *soil_gw_Buf;     // buffered
+//
+//float *cum_to_Sd;         // [nhru]
+//float *cum_to_soil_rechr; // [nhru]
+//
+//float *Ktravel;         // [nhru] Muskingum
+//float *cum_preferential_flow_to_gw;
+//
+//ClassMuskingum *hruDelay;
+//ClassClark *ssrDelay;
+//ClassClark *runDelay;
+//ClassClark *gwDelay;
+//
+//// declared parameters
+//const float *route_n;         // [nhru]
+//const float *route_R;         // [nhru]
+//const float *route_S0;        // [nhru]
+//const float *route_L;         // [nhru]
+//const float *route_X_M;       // [nhru]
+//const long  *route_Cshp;      // [nhru]
+//
+//const float *Lag;              // [nhru]
+//const float *ssrKstorage;      // [nhru]
+//const float *ssrLag;           // [nhru]
+//const float *runKstorage;      // [nhru]
+//const float *runLag;           // [nhru]
+//const float *gwKstorage;       // [nhru]
+//const float *gwLag;            // [nhru]
+//
+//const float *basin_area;        // [BASIN]
+//const float *hru_area;          // [nhru]
+//const long  *whereto;           // [nhru]
+//const long  *gwwhereto;         // [nhru]
+//const long  *order;             // [nhru]
+//const float *Sdmax;             // [nhru]
+//const float *soil_rechr_max;    // [nhru]
+//const long  *Sd_ByPass;         // [nhru]
+//const long  *soil_rechr_ByPass; // [nhru]
+//const long  *preferential_flow; // [nhru]
+//
+//// variable inputs
+//const float *soil_gw;     // [nhru]
+//const float *soil_ssr;    // [nhru]
+//const float *soil_runoff; // [nhru]
+//
+//// variable puts
+//float *Sd;
+//float *soil_moist;
+//float *soil_rechr;
+//float *redirected_residual;
+//float *gw;
+//
+//// local allocated arrays
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//virtual float Function1(float *I, long hh);
+//virtual float Function2(float *X, long hh);
+//
+//ClassNetroute_M* klone(string name) const;
+//};
+
+//class ClassREWroute2 : public ClassModule {
+//public:
+//
+//ClassREWroute2(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 9999) {};
+//
+//long inflowCnt;
+//long gwCnt;
+//
+//// declared variables
+//float *rew;
+//float *gwrew;
+//
+//float **inflow_All;
+//float **gw_All;
+//
+//float *inflow;        // [nhru]
+//float *cuminflow;     // [nhru]
+//float *outflow;       // [nhru]
+//float *cumoutflow;    // [nhru]
+//
+//float *gwinflow;        // [nhru]
+//float *cumgwinflow;     // [nhru]
+//float *gwoutflow;       // [nhru]
+//float *cumgwoutflow;    // [nhru]
+//
+//float *flow;     // [BASIN] all HRUs
+//float *flow_s;   // [BASIN] all HRUs
+//float *cumflow;  // [BASIN] all HRUs
+//
+//float *gwflow;     // [BASIN] all HRUs
+//float *gwflow_s;   // [BASIN] all HRUs
+//float *cumgwflow;  // [BASIN] all HRUs
+//
+//float *WS_Ktravel_var;         // [nhru]
+//float *WS_gwKtravel_var;         // [nhru]
+//
+//float *culvert_Q;
+//float *culvert_water_H;
+//float *culvert_water_A;
+//float *culvert_water_V;
+//float *culvert_over_Q;
+//float *culvert_evap;
+//float *cum_culvert;
+//float *cum_culvert_over;
+//float *HD;
+//
+//ClassMuskingum *inflowDelay;
+//ClassMuskingum *gwDelay;
+//
+//ClassClark *Clark_inflowDelay;
+//ClassClark *Clark_gwDelay;
+//
+//// declared parameters
+//
+//const float *WS_route_n;         // [nhru]
+//const float *WS_route_R;         // [nhru]
+//const float *WS_route_S0;        // [nhru]
+//const float *WS_route_L;         // [nhru]
+//const long  *WS_Channel_shp;      // [nhru]
+//
+//const float *WS_Lag;             // [nhru]
+//const float *WS_route_X_M;       // [nhru]
+//const long  *WS_whereto;         // [nhru]
+//const long  *WS_order;           // [nhru]
+//
+//const float *WS_gwLag;           // [nhru]
+//const float *WS_gwroute_X_M;     // [nhru]
+//const long  *WS_gwwhereto;       // [nhru]
+//const long  *WS_gworder;         // [nhru]
+//
+//const float *WS_Kstorage;     // [nhru]
+//const float *WS_gwKstorage;   // [nhru]
+//
+//const float *WS_channel_slope;
+//const float *WS_side_slope;
+//const float *WS_culvert_diam;
+//const float *WS_culvert_water_Dmax;
+//const float *WS_number_culverts;
+//
+//const long *WS_culvert_type;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//void Culvert(long hh);
+//
+//ClassREWroute2* klone(string name) const;
+//};
 
 
 float Farouki_a(float fract_por);
 
-class ClassLongVt : public ClassModule {
-public:
+//class ClassLongVt : public ClassModule {
+//public:
+//
+//ClassLongVt(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , , QsiD_Var, ") {};
+//
+//// declared observation variables
+//  const float *Qsi;
+//  const float *QsiD;
+//  const float *Qli;
+//
+//// declared observation functions
+//  float *QsiDavg;
+//
+//// declared observations
+//  float *Qli_out;
+//
+//// declared variables
+//  float *Qli_Var;
+//  float *QliVt_Var;
+//  float *tau;
+//
+//// declared parameters
+//  const float *Vt;
+//
+////  const float *epsilon_clear;
+//  const float *epsilon_s;
+//
+//// variable inputs
+//  const float *hru_t;
+//  const float *hru_ea;
+//  const float *hru_rh;
+//  const float *QdroDext;
+//  const float *QsiD_Var;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//
+//ClassLongVt* klone(string name) const;
+//};
 
-ClassLongVt(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , , QsiD_Var, ") {};
-
-// declared observation variables
-  const float *Qsi;
-  const float *QsiD;
-  const float *Qli;
-
-// declared observation functions
-  float *QsiDavg;
-
-// declared observations
-  float *Qli_out;
-
-// declared variables
-  float *Qli_Var;
-  float *QliVt_Var;
-  float *tau;
-
-// declared parameters
-  const float *Vt;
-
-//  const float *epsilon_clear;
-  const float *epsilon_s;
-
-// variable inputs
-  const float *hru_t;
-  const float *hru_ea;
-  const float *hru_rh;
-  const float *QdroDext;
-  const float *QsiD_Var;
-
-void decl(void);
-void init(void);
-void run(void);
-
-ClassLongVt* klone(string name) const;
-};
-
-class Classpbsm_M : public ClassModule {
-public:
-
-Classpbsm_M(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust"), // setting PeerRank
-                                  hru_basin(NULL) {};
-// declared variables
-float *SWE;
-float *Subl;
-float *Drift;
-float *cumSubl;
-float *cumDrift;
-float *cumDriftIn;
-float *cumSno;
-float *Prob;
-float *snowdepth;
-float *BasinSnowLoss;
-float *cumBasinSnowLoss;
-float *cumBasinSnowGain;
-float *SnowAge;
-float *this_distrib;
-float *Results;
-float **Results_lay;
-float *Q_leeslope;
-float *Q_valley;
-long  *DrySnow;
-
-// declared parameters
-const float *fetch;
-const float *Ht;
-const float *hru_Ht;
-const float *distrib;
-const float **distrib_hru;
-const float *basin_area;
-const float *hru_area;
-const float *A_S;
-const float *N_S;
-const float *Zwind;
-const float *hru_GSL;
-const float *Beta_M;
-const long *inhibit_evap;
-const long *inhibit_bs;
-const long *inhibit_subl;
-const long *eq_prof;
-
-// variable inputs
-const float *hru_t;
-const float *hru_rh;
-const float *hru_u;
-const float *net_snow;
-const long  *hru_newsnow;
-
-// local allocated arrays
-float *hru_basin;
-
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-Classpbsm_M* klone(string name) const;
-void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH);
-void Pbsm(float E_StubHt, float Uthr, float & DriftH, float & SublH, float t, float u, float rh, float Fetch,
-            long N_S, float A_S, float GSL, float height, float Beta_M, float & Qdist_leeslope, float & Qdist_valley);
-};
+//class Classpbsm_M : public ClassModule {
+//public:
+//
+//Classpbsm_M(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust"), // setting PeerRank
+//                                  hru_basin(NULL) {};
+//// declared variables
+//float *SWE;
+//float *Subl;
+//float *Drift;
+//float *cumSubl;
+//float *cumDrift;
+//float *cumDriftIn;
+//float *cumSno;
+//float *Prob;
+//float *snowdepth;
+//float *BasinSnowLoss;
+//float *cumBasinSnowLoss;
+//float *cumBasinSnowGain;
+//float *SnowAge;
+//float *this_distrib;
+//float *Results;
+//float **Results_lay;
+//float *Q_leeslope;
+//float *Q_valley;
+//long  *DrySnow;
+//
+//// declared parameters
+//const float *fetch;
+//const float *Ht;
+//const float *hru_Ht;
+//const float *distrib;
+//const float **distrib_hru;
+//const float *basin_area;
+//const float *hru_area;
+//const float *A_S;
+//const float *N_S;
+//const float *Zwind;
+//const float *hru_GSL;
+//const float *Beta_M;
+//const long *inhibit_evap;
+//const long *inhibit_bs;
+//const long *inhibit_subl;
+//const long *eq_prof;
+//
+//// variable inputs
+//const float *hru_t;
+//const float *hru_rh;
+//const float *hru_u;
+//const float *net_snow;
+//const long  *hru_newsnow;
+//
+//// local allocated arrays
+//float *hru_basin;
+//
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//Classpbsm_M* klone(string name) const;
+//void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH);
+//void Pbsm(float E_StubHt, float Uthr, float & DriftH, float & SublH, float t, float u, float rh, float Fetch,
+//            long N_S, float A_S, float GSL, float height, float Beta_M, float & Qdist_leeslope, float & Qdist_valley);
+//};
 
 class ClassNetroute_D : public ClassModule {
 public:

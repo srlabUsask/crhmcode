@@ -683,8 +683,10 @@
     <ClCompile Include="..\macro\CRHM_parse.cpp" />
     <ClCompile Include="..\macro\MacroUnit.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classalbedo.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClassalbedoBaker.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classalbedoobs.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classalbedoparam.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClassalbedoRichard.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassBasin.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classcrack.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classebsm.cpp" />
@@ -695,20 +697,27 @@
     <ClCompile Include="..\plugins\newmodules\ClassGlobal.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassGreenAmpt.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassGreencrack.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClassHMSA.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassHtobs.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassIntcp.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classinterception.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassKevin.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClassLongVt.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassNeedle.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classnetall.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassNetroute.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClassNetroute_M.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassNO_pbsm.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassObs.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classpbsm.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClasspbsmSnobal.cpp" />
+    <ClCompile Include="..\plugins\newmodules\Classpbsm_M.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClassREWroute2.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classsbsm.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassSimpleRichard.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassTs.cpp" />
     <ClCompile Include="..\plugins\newmodules\Classtsurface.cpp" />
+    <ClCompile Include="..\plugins\newmodules\Classwalmsley_wind.cpp" />
     <ClCompile Include="..\plugins\newmodules\NewModules.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\waterquality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\waterquality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

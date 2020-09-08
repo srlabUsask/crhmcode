@@ -45,6 +45,15 @@
 #include "Classalbedoparam.h" //added by Manishankar Mondal
 #include "Classalbedoobs.h" //added by Manishankar Mondal
 #include "ClassHtobs.h" //added by Manishankar Mondal
+#include "ClasspbsmSnobal.h" //added by Manishankar Mondal
+#include "ClassalbedoRichard.h" //added by Manishankar Mondal
+#include "ClassalbedoBaker.h" //added by Manishankar Mondal
+#include "ClassHMSA.h" //added by Manishankar Mondal
+#include "Classwalmsley_wind.h" //added by Manishankar Mondal
+#include "ClassNetroute_M.h" //added by Manishankar Mondal
+#include "ClassREWroute2.h" //added by Manishankar Mondal
+#include "ClassLongVt.h" //added by Manishankar Mondal
+#include "Classpbsm_M.h" //added by Manishankar Mondal
 
 //---------------------------------------------------------------------------
 
@@ -11332,461 +11341,461 @@ void ClassSnobalCRHM::finish(bool good) { // only required for local storage and
 //}
 /* ----------------------------------------------------------------------- */
 
-ClasspbsmSnobal* ClasspbsmSnobal::klone(string name) const{
-  return new ClasspbsmSnobal(name);
-}
-
-void ClasspbsmSnobal::decl(void) {
-
-  Description = "'Special \"pbsm\" module compatible with \"snobal\".' \
-                 'original version using hru_u,' \
-                 'uses hru_Uadjust from walmsley_wind instead of hru_u,' \
-                 'using hru_u and a regression to use daily windspeed,' \
-                 'uses hru_Uadjust from walmsley_wind instead of hru_u and a regression to use daily windspeed.'";
-
-  variation_set = VARIATION_0 + VARIATION_2;
-
-  declgetvar("*", "hru_u", "(m/s)", &hru_u);
-
-
-  variation_set = VARIATION_1 + VARIATION_3;
-
-  declgetvar("*", "hru_Uadjust", "(m/s)", &hru_Uadjust);
-
-
-  variation_set = VARIATION_2 + VARIATION_3;
-
-  declparam("u_D", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed correction", "()", &u_D);
-
-  declparam("Drift_offset", NHRU, "[0.0]", "-100.0", "100.0", "Daily windspeed drift offset correction", "()", &Drift_offset);
-
-  declparam("Drift_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed drift slope correction", "()", &Drift_slope);
-
-  declparam("Subl_offset", NHRU, "[0.0]", "-100.0", "100.0", "Daily windspeed sublimation offset correction", "()", &Subl_offset);
-
-  declparam("Subl_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed sublimation slope correction", "()", &Subl_slope);
-
-
-  variation_set = VARIATION_ORG;
-
-  declvar("hru_subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
-
-  declvar("hru_drift", NHRU, "interval composite transport", "(mm/int)", &Drift);
-
-  decldiag("DriftH", NHRU, "interval transport", "(mm/int)", &DriftH);
-
-  decldiag("SublH", NHRU, "interval sublimation", "(mm/int)", &SublH);
-
-  declvar("Drift_out", NHRU, "interval transport out", "(mm/int)", &Drift_out);
-
-  declvar("Drift_in", NHRU, "interval transport in", "(mm/int)", &Drift_in);
-
-  declvar("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
-
-  declstatdiag("cumSubl", NHRU, "cumulative sublimation", "(mm)", &cumSubl);
-
-  declstatdiag("cumDrift", NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
-
-  declstatdiag("cumBasinSnowLoss", BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
-
-  declstatdiag("cumBasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
-
-  declstatdiag("cumDriftIn", NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
-
-  decllocal("hru_basin", NHRU, "conversion factor", "()", &hru_basin);
-
-  decldiag("DrySnow", NHRU, "DrySnow", "()", &DrySnow);
-
-  declstatdiag("SnowAge", NHRU, "SnowAge", "()", &SnowAge);
-
-  decldiag("Prob", NHRU, "Probability", "()", &Prob);
-
-  decldiag("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
-
-/* parameters */
-
-  declparam("fetch", NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
-
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
-
-  declparam("distrib", NHRU, "[0.0, 1.0]", "-10.0", "10.0", "distribution fractions - can sum to 1", "()", &distrib);
-
-  decldiagparam("N_S", NHRU, "[320]", "1", "500", "vegetation number density", "(1/m^2)", &N_S);
-
-  decldiagparam("A_S", NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
-
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
-
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
-
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporatation, 1 -> inhibit", "()", &inhibit_evap);
-
-  declparam("inhibit_bs", NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
-
-  decldiagparam("inhibit_subl", NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
-
-  declputvar("*", "SWE", "(kg/m^2)", &SWE);
-  declputvar("*", "z_s", "(m)", &z_s);
-  declputvar("*", "rho", "(kg/m^3)", &rho);
-
-  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
-  declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
-  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
-
-}
-
-void ClasspbsmSnobal::init(void) {
-
-  nhru = getdim(NHRU);
-
-  cumBasinSnowLoss[0] = 0.0;
-  cumBasinSnowGain[0] = 0.0;
-
-  for (hh = 0; hh < nhru; ++hh) {
-    SWE[hh] = 0.0;
-    cumDrift[hh] = 0.0;
-    cumDriftIn[hh] = 0.0;
-    cumSubl[hh] = 0.0;
-    SnowAge[hh] = 0.0;
-    DrySnow[hh] = 0;
-    snowdepth[hh] = 0.0;
-
-    if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
-      CRHMException TExcept(string("'" + Name + " (pbsmSnobal)' vegetation heights not in ascending order.").c_str(), WARNING);
-      LogError(TExcept);
-    }
-  }
-
-  for (hh = 0; hh < nhru; ++hh)
-    hru_basin[hh] = hru_area[hh]/basin_area[0];
-}
-
-void ClasspbsmSnobal::run(void) {
-
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float SumDrift, total, SWE_Max, transport;
-
-  for (hh = 0; chkStruct(); ++hh) {
-
-   if(variation == VARIATION_ORG || variation == VARIATION_2)
-     hru_u_ = hru_u[hh];
-   else
-     hru_u_ = hru_Uadjust[hh];
-
-   if(variation == VARIATION_2 || variation == VARIATION_3)
-     hru_u_ = u_D[hh]*hru_u_;
-
-   Drift_out[hh] = 0.0;
-   Drift_in[hh] = 0.0;
-   Drift[hh] = 0.0;
-
-   Subl[hh] = 0.0;
-   Prob[hh] = 0.0;
-
-   if(SWE[hh] > 0.0 && !inhibit_bs[hh]) {
-
-     E_StubHt = Ht[hh] - z_s[hh];                      // depths(m)
-     if(E_StubHt < 0.0001) E_StubHt = 0.0001;
-
-     Ustar = 0.02264*pow(hru_u_, 1.295f);            // Eq. 6.2 rev.,  Ustar over fallow
-
-     if (E_StubHt > 0.01) {
-       Znod = (sqr(Ustar)/163.3f)+0.5*N_S[hh]*E_StubHt*A_S[hh]; // Eq. 29, Snowcover Book
-       Lambda = N_S[hh]*A_S[hh]*E_StubHt;                      // Raupach Eq. 1
-
-       Ustn  = Ustar*sqrt((PBSM_constants::Beta*Lambda)/(1.0+PBSM_constants::Beta*Lambda));
-
-       Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *sqrt(Ustar-Ustn);
-     }
-     else
-     {
-       Uten_Prob = hru_u_;
-     } // end if
-
-     bool newsnow = net_snow[hh];
-
-     ProbabilityThresholdNew(SWE[hh], hru_t[hh], Uten_Prob, Prob[hh], Ut, newsnow, SnowAge[hh], DrySnow[hh]);  // (mm)
-
-     if (Prob[hh] > 0.001) {
-       Ut = Ut * 0.8;
-
-       float RH = hru_ea[hh]/Common::estar(hru_t[hh]); // Snobal uses Pascals
-
-       Pbsm(E_StubHt, Ut, DriftH[hh], SublH[hh], hru_t[hh], hru_u_, RH, fetch[hh], N_S[hh], A_S[hh]);
-
-       if(variation == VARIATION_2 || variation == VARIATION_3){
-         DriftH[hh] = Drift_offset[hh] + DriftH[hh]*Drift_slope[hh];
-         SublH[hh] = Subl_offset[hh] + SublH[hh]*Subl_slope[hh];
-       }
-
-       Drift_out[hh] = DriftH[hh]*Prob[hh]/fetch[hh];
-
-       if(!inhibit_subl[hh])
-         Subl[hh] = SublH[hh]*Prob[hh];
-
-// handle insufficient snow pack
-
-       if(Drift_out[hh] + Subl[hh] > SWE[hh]){
-         if(Drift_out[hh] >= SWE[hh]){
-           Drift_out[hh] = SWE[hh];
-           Subl[hh] = 0.0;
-         }
-         else
-           Subl[hh] = SWE[hh] - Drift_out[hh];
-       }
-
-       cumDrift[hh] += Drift_out[hh];
-       cumSubl[hh] += Subl[hh];
-     }
-   } // end if
- } // end for (hh)
-
- // distribute drift
-
-  if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
-    float Drft = Drift_out[0]*distrib[0];
-    SWE[0] += Drft;
-    cumDriftIn[0] += Drft;
-    cumBasinSnowGain[0] += Drft*hru_basin[0];  // **** hru_basin = hru_area/basin_area ****
-  }
-
-  BasinSnowLoss[0] = 0.0;
-  long LastN = 0;
-
-  if(!inhibit_bs[0]&& nhru == 1){
-    BasinSnowLoss[0] = Drift_out[0];
-    cumBasinSnowLoss[0] += BasinSnowLoss[0];
-  }
-
-  for (long nn = LastN; chkStruct(nn); ++nn) {
-    if(distrib[nn] >= 0.0 && nn+1 < nhru) // skip till last HRU or -ve distribution
-      continue;
-
-    SumDrift = 0.0;
-    for (long hhh = LastN; chkStruct(hhh, nn); ++hhh) // sum drift over range
-        SumDrift += Drift_out[hhh]*hru_basin[hhh];
-
-    if(SumDrift > 0.0){ // drift has occurred!
-      for (long hh = LastN + 1; chkStruct(hh, nn+1); ++hh) {
-
-        if(Ht[hh] > z_s[hh])
-          SWE_Max = SWE[hh] + rho[hh]*(Ht[hh]-z_s[hh]); // not filled
-        else
-          SWE_Max = SWE[hh]; // filled or over filled. Wait for snow transport
-
-        if(SWE_Max <= 0.0)
-           SWE_Max = Ht[hh];
-
-        if(hh == nn) { // handle last HRU
-          if(distrib[nn] > 0){
-            float In = SumDrift/hru_basin[hh]; // remaining drift
-            if(SWE_Max > SWE[hh] + In){ // fill snowpack, remainder leaves basin
-              Drift_in[hh] = In; // can handle all
-              cumDriftIn[hh] += Drift_in[hh];
-              transport = 0.0;
-            }
-            else if(SWE_Max > SWE[hh]){ // cannot handle all
-              Drift_in[hh] = SWE_Max - SWE[hh];
-              cumDriftIn[hh] += Drift_in[hh];
-              transport -= (In -(SWE_Max - SWE[hh]))*hru_basin[hh];
-            }
-            else // zero or -ve - happens during melt??
-              transport = SumDrift;
-          }
-          else if(distrib[nn] < 0){ // all drift deposited
-              Drift_in[hh] = SumDrift/hru_basin[hh]; // can handle all
-              cumDriftIn[hh] += Drift_in[hh];
-              transport = 0.0;
-          }
-          else // distrib[nn] == 0 -> all excess drift leaves basin
-              transport = SumDrift;
-
-          BasinSnowLoss[0] += (transport + Drift_out[hh]*hru_basin[hh]);
-          cumBasinSnowLoss[0] += (transport + Drift_out[hh]*hru_basin[hh]);
-        }
-        else if(SWE_Max > SWE[hh] &&  distrib[hh] > 0.0) {
-// handle intermediate HRUs with available storage and distrib > 0
-          total = 0.0;
-          for (long jj = hh; chkStruct(jj, nn+1); jj++) // calculate denominator
-            total += fabs(distrib[jj]);
-// determine contribution and scale
-          transport = SumDrift*fabs(distrib[hh])/total/hru_basin[hh];
-          if(SWE_Max > SWE[hh] + transport) // sufficient capacity
-            Drift_in[hh] += transport;
-          else if(SWE_Max > SWE[hh]){
-            transport = SWE_Max - SWE[hh];  // insufficient capacity
-            Drift_in[hh] += transport;
-          }
-          else
-            transport = 0.0;
-
-          SumDrift -= transport*hru_basin[hh]; // remove drift used from total available
-          cumDriftIn[hh] += transport;
-        } // end if
-      } // end for (hh)
-      LastN = nn+1;
-    } // end if
-  } // end for (nn)
-
-  for (hh = 0; chkStruct(); ++hh) { // snow cover inhibits evaporation
-    Drift[hh] = Drift_in[hh] - Drift_out[hh];
-    if(SWE[hh] > 0.0){
-      const_cast<long*> (inhibit_evap)[hh] = 1;
-      snowdepth[hh] = Common::DepthofSnow(SWE[hh]);
-    }
-    else{
-      const_cast<long*> (inhibit_evap)[hh] = 0;
-      snowdepth[hh] = 0.0;
-    }
-  } // end for (hh)
-}
-
-void ClasspbsmSnobal::finish(bool good) {
-
-  for(hh = 0; chkStruct(); ++hh) {
-    LogMessageA(hh, string("'" + Name + " (pbsmSnobal)' cumDrift   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDrift[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsmSnobal)' cumDriftIn (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDriftIn[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsmSnobal)' cumSubl    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSubl[hh], hru_area[hh], basin_area[0]);
-    LogDebug(" ");
-  }
-
-  LogMessage("'pbsmSnobal' cumBasinSnowLoss (mm): ", cumBasinSnowLoss[0]); //
-  LogMessage("'pbsmSnobal' cumBasinSnowGain (mm): ", cumBasinSnowGain[0]); //
-  LogDebug(" ");
-}
+//ClasspbsmSnobal* ClasspbsmSnobal::klone(string name) const{
+//  return new ClasspbsmSnobal(name);
+//}
+//
+//void ClasspbsmSnobal::decl(void) {
+//
+//  Description = "'Special \"pbsm\" module compatible with \"snobal\".' \
+//                 'original version using hru_u,' \
+//                 'uses hru_Uadjust from walmsley_wind instead of hru_u,' \
+//                 'using hru_u and a regression to use daily windspeed,' \
+//                 'uses hru_Uadjust from walmsley_wind instead of hru_u and a regression to use daily windspeed.'";
+//
+//  variation_set = VARIATION_0 + VARIATION_2;
+//
+//  declgetvar("*", "hru_u", "(m/s)", &hru_u);
+//
+//
+//  variation_set = VARIATION_1 + VARIATION_3;
+//
+//  declgetvar("*", "hru_Uadjust", "(m/s)", &hru_Uadjust);
+//
+//
+//  variation_set = VARIATION_2 + VARIATION_3;
+//
+//  declparam("u_D", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed correction", "()", &u_D);
+//
+//  declparam("Drift_offset", NHRU, "[0.0]", "-100.0", "100.0", "Daily windspeed drift offset correction", "()", &Drift_offset);
+//
+//  declparam("Drift_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed drift slope correction", "()", &Drift_slope);
+//
+//  declparam("Subl_offset", NHRU, "[0.0]", "-100.0", "100.0", "Daily windspeed sublimation offset correction", "()", &Subl_offset);
+//
+//  declparam("Subl_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed sublimation slope correction", "()", &Subl_slope);
+//
+//
+//  variation_set = VARIATION_ORG;
+//
+//  declvar("hru_subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
+//
+//  declvar("hru_drift", NHRU, "interval composite transport", "(mm/int)", &Drift);
+//
+//  decldiag("DriftH", NHRU, "interval transport", "(mm/int)", &DriftH);
+//
+//  decldiag("SublH", NHRU, "interval sublimation", "(mm/int)", &SublH);
+//
+//  declvar("Drift_out", NHRU, "interval transport out", "(mm/int)", &Drift_out);
+//
+//  declvar("Drift_in", NHRU, "interval transport in", "(mm/int)", &Drift_in);
+//
+//  declvar("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
+//
+//  declstatdiag("cumSubl", NHRU, "cumulative sublimation", "(mm)", &cumSubl);
+//
+//  declstatdiag("cumDrift", NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
+//
+//  declstatdiag("cumBasinSnowLoss", BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
+//
+//  declstatdiag("cumBasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
+//
+//  declstatdiag("cumDriftIn", NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
+//
+//  decllocal("hru_basin", NHRU, "conversion factor", "()", &hru_basin);
+//
+//  decldiag("DrySnow", NHRU, "DrySnow", "()", &DrySnow);
+//
+//  declstatdiag("SnowAge", NHRU, "SnowAge", "()", &SnowAge);
+//
+//  decldiag("Prob", NHRU, "Probability", "()", &Prob);
+//
+//  decldiag("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
+//
+///* parameters */
+//
+//  declparam("fetch", NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
+//
+//  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
+//
+//  declparam("distrib", NHRU, "[0.0, 1.0]", "-10.0", "10.0", "distribution fractions - can sum to 1", "()", &distrib);
+//
+//  decldiagparam("N_S", NHRU, "[320]", "1", "500", "vegetation number density", "(1/m^2)", &N_S);
+//
+//  decldiagparam("A_S", NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
+//
+//  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+//
+//  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+//
+//  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporatation, 1 -> inhibit", "()", &inhibit_evap);
+//
+//  declparam("inhibit_bs", NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
+//
+//  decldiagparam("inhibit_subl", NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
+//
+//  declputvar("*", "SWE", "(kg/m^2)", &SWE);
+//  declputvar("*", "z_s", "(m)", &z_s);
+//  declputvar("*", "rho", "(kg/m^3)", &rho);
+//
+//  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
+//  declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
+//  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
+//
+//}
+//
+//void ClasspbsmSnobal::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  cumBasinSnowLoss[0] = 0.0;
+//  cumBasinSnowGain[0] = 0.0;
+//
+//  for (hh = 0; hh < nhru; ++hh) {
+//    SWE[hh] = 0.0;
+//    cumDrift[hh] = 0.0;
+//    cumDriftIn[hh] = 0.0;
+//    cumSubl[hh] = 0.0;
+//    SnowAge[hh] = 0.0;
+//    DrySnow[hh] = 0;
+//    snowdepth[hh] = 0.0;
+//
+//    if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
+//      CRHMException TExcept(string("'" + Name + " (pbsmSnobal)' vegetation heights not in ascending order.").c_str(), WARNING);
+//      LogError(TExcept);
+//    }
+//  }
+//
+//  for (hh = 0; hh < nhru; ++hh)
+//    hru_basin[hh] = hru_area[hh]/basin_area[0];
+//}
+//
+//void ClasspbsmSnobal::run(void) {
+//
+//  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+//  float SumDrift, total, SWE_Max, transport;
+//
+//  for (hh = 0; chkStruct(); ++hh) {
+//
+//   if(variation == VARIATION_ORG || variation == VARIATION_2)
+//     hru_u_ = hru_u[hh];
+//   else
+//     hru_u_ = hru_Uadjust[hh];
+//
+//   if(variation == VARIATION_2 || variation == VARIATION_3)
+//     hru_u_ = u_D[hh]*hru_u_;
+//
+//   Drift_out[hh] = 0.0;
+//   Drift_in[hh] = 0.0;
+//   Drift[hh] = 0.0;
+//
+//   Subl[hh] = 0.0;
+//   Prob[hh] = 0.0;
+//
+//   if(SWE[hh] > 0.0 && !inhibit_bs[hh]) {
+//
+//     E_StubHt = Ht[hh] - z_s[hh];                      // depths(m)
+//     if(E_StubHt < 0.0001) E_StubHt = 0.0001;
+//
+//     Ustar = 0.02264*pow(hru_u_, 1.295f);            // Eq. 6.2 rev.,  Ustar over fallow
+//
+//     if (E_StubHt > 0.01) {
+//       Znod = (sqr(Ustar)/163.3f)+0.5*N_S[hh]*E_StubHt*A_S[hh]; // Eq. 29, Snowcover Book
+//       Lambda = N_S[hh]*A_S[hh]*E_StubHt;                      // Raupach Eq. 1
+//
+//       Ustn  = Ustar*sqrt((PBSM_constants::Beta*Lambda)/(1.0+PBSM_constants::Beta*Lambda));
+//
+//       Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *sqrt(Ustar-Ustn);
+//     }
+//     else
+//     {
+//       Uten_Prob = hru_u_;
+//     } // end if
+//
+//     bool newsnow = net_snow[hh];
+//
+//     ProbabilityThresholdNew(SWE[hh], hru_t[hh], Uten_Prob, Prob[hh], Ut, newsnow, SnowAge[hh], DrySnow[hh]);  // (mm)
+//
+//     if (Prob[hh] > 0.001) {
+//       Ut = Ut * 0.8;
+//
+//       float RH = hru_ea[hh]/Common::estar(hru_t[hh]); // Snobal uses Pascals
+//
+//       Pbsm(E_StubHt, Ut, DriftH[hh], SublH[hh], hru_t[hh], hru_u_, RH, fetch[hh], N_S[hh], A_S[hh]);
+//
+//       if(variation == VARIATION_2 || variation == VARIATION_3){
+//         DriftH[hh] = Drift_offset[hh] + DriftH[hh]*Drift_slope[hh];
+//         SublH[hh] = Subl_offset[hh] + SublH[hh]*Subl_slope[hh];
+//       }
+//
+//       Drift_out[hh] = DriftH[hh]*Prob[hh]/fetch[hh];
+//
+//       if(!inhibit_subl[hh])
+//         Subl[hh] = SublH[hh]*Prob[hh];
+//
+//// handle insufficient snow pack
+//
+//       if(Drift_out[hh] + Subl[hh] > SWE[hh]){
+//         if(Drift_out[hh] >= SWE[hh]){
+//           Drift_out[hh] = SWE[hh];
+//           Subl[hh] = 0.0;
+//         }
+//         else
+//           Subl[hh] = SWE[hh] - Drift_out[hh];
+//       }
+//
+//       cumDrift[hh] += Drift_out[hh];
+//       cumSubl[hh] += Subl[hh];
+//     }
+//   } // end if
+// } // end for (hh)
+//
+// // distribute drift
+//
+//  if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
+//    float Drft = Drift_out[0]*distrib[0];
+//    SWE[0] += Drft;
+//    cumDriftIn[0] += Drft;
+//    cumBasinSnowGain[0] += Drft*hru_basin[0];  // **** hru_basin = hru_area/basin_area ****
+//  }
+//
+//  BasinSnowLoss[0] = 0.0;
+//  long LastN = 0;
+//
+//  if(!inhibit_bs[0]&& nhru == 1){
+//    BasinSnowLoss[0] = Drift_out[0];
+//    cumBasinSnowLoss[0] += BasinSnowLoss[0];
+//  }
+//
+//  for (long nn = LastN; chkStruct(nn); ++nn) {
+//    if(distrib[nn] >= 0.0 && nn+1 < nhru) // skip till last HRU or -ve distribution
+//      continue;
+//
+//    SumDrift = 0.0;
+//    for (long hhh = LastN; chkStruct(hhh, nn); ++hhh) // sum drift over range
+//        SumDrift += Drift_out[hhh]*hru_basin[hhh];
+//
+//    if(SumDrift > 0.0){ // drift has occurred!
+//      for (long hh = LastN + 1; chkStruct(hh, nn+1); ++hh) {
+//
+//        if(Ht[hh] > z_s[hh])
+//          SWE_Max = SWE[hh] + rho[hh]*(Ht[hh]-z_s[hh]); // not filled
+//        else
+//          SWE_Max = SWE[hh]; // filled or over filled. Wait for snow transport
+//
+//        if(SWE_Max <= 0.0)
+//           SWE_Max = Ht[hh];
+//
+//        if(hh == nn) { // handle last HRU
+//          if(distrib[nn] > 0){
+//            float In = SumDrift/hru_basin[hh]; // remaining drift
+//            if(SWE_Max > SWE[hh] + In){ // fill snowpack, remainder leaves basin
+//              Drift_in[hh] = In; // can handle all
+//              cumDriftIn[hh] += Drift_in[hh];
+//              transport = 0.0;
+//            }
+//            else if(SWE_Max > SWE[hh]){ // cannot handle all
+//              Drift_in[hh] = SWE_Max - SWE[hh];
+//              cumDriftIn[hh] += Drift_in[hh];
+//              transport -= (In -(SWE_Max - SWE[hh]))*hru_basin[hh];
+//            }
+//            else // zero or -ve - happens during melt??
+//              transport = SumDrift;
+//          }
+//          else if(distrib[nn] < 0){ // all drift deposited
+//              Drift_in[hh] = SumDrift/hru_basin[hh]; // can handle all
+//              cumDriftIn[hh] += Drift_in[hh];
+//              transport = 0.0;
+//          }
+//          else // distrib[nn] == 0 -> all excess drift leaves basin
+//              transport = SumDrift;
+//
+//          BasinSnowLoss[0] += (transport + Drift_out[hh]*hru_basin[hh]);
+//          cumBasinSnowLoss[0] += (transport + Drift_out[hh]*hru_basin[hh]);
+//        }
+//        else if(SWE_Max > SWE[hh] &&  distrib[hh] > 0.0) {
+//// handle intermediate HRUs with available storage and distrib > 0
+//          total = 0.0;
+//          for (long jj = hh; chkStruct(jj, nn+1); jj++) // calculate denominator
+//            total += fabs(distrib[jj]);
+//// determine contribution and scale
+//          transport = SumDrift*fabs(distrib[hh])/total/hru_basin[hh];
+//          if(SWE_Max > SWE[hh] + transport) // sufficient capacity
+//            Drift_in[hh] += transport;
+//          else if(SWE_Max > SWE[hh]){
+//            transport = SWE_Max - SWE[hh];  // insufficient capacity
+//            Drift_in[hh] += transport;
+//          }
+//          else
+//            transport = 0.0;
+//
+//          SumDrift -= transport*hru_basin[hh]; // remove drift used from total available
+//          cumDriftIn[hh] += transport;
+//        } // end if
+//      } // end for (hh)
+//      LastN = nn+1;
+//    } // end if
+//  } // end for (nn)
+//
+//  for (hh = 0; chkStruct(); ++hh) { // snow cover inhibits evaporation
+//    Drift[hh] = Drift_in[hh] - Drift_out[hh];
+//    if(SWE[hh] > 0.0){
+//      const_cast<long*> (inhibit_evap)[hh] = 1;
+//      snowdepth[hh] = Common::DepthofSnow(SWE[hh]);
+//    }
+//    else{
+//      const_cast<long*> (inhibit_evap)[hh] = 0;
+//      snowdepth[hh] = 0.0;
+//    }
+//  } // end for (hh)
+//}
+//
+//void ClasspbsmSnobal::finish(bool good) {
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    LogMessageA(hh, string("'" + Name + " (pbsmSnobal)' cumDrift   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDrift[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsmSnobal)' cumDriftIn (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDriftIn[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsmSnobal)' cumSubl    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSubl[hh], hru_area[hh], basin_area[0]);
+//    LogDebug(" ");
+//  }
+//
+//  LogMessage("'pbsmSnobal' cumBasinSnowLoss (mm): ", cumBasinSnowLoss[0]); //
+//  LogMessage("'pbsmSnobal' cumBasinSnowGain (mm): ", cumBasinSnowGain[0]); //
+//  LogDebug(" ");
+//}
 //==============================================================================
 
-ClassalbedoRichard* ClassalbedoRichard::klone(string name) const{
-  return new ClassalbedoRichard(name);
-}
+//ClassalbedoRichard* ClassalbedoRichard::klone(string name) const{
+//  return new ClassalbedoRichard(name);
+//}
+//
+//void ClassalbedoRichard::decl(void) {
+//
+//  Description = "'Calculates snow cover albedo from a method proposed by R.Essery.'";
+//
+//  declstatvar("Albedo", NHRU, "Albedo", "()", &Albedo);
+//
+//  decldiagparam("Albedo_Snow", NHRU, "[0.85]", "0.0", "1.0","Initial albedo for snow cover", "()", &Albedo_Snow);
+//
+//  decldiagparam("Albedo_Bare", NHRU, "[0.17]", "0.0", "1.0","Initial albedo for bare ground", "()", &Albedo_Bare);
+//
+//  decldiagparam("a1", NHRU, "[1.08e7]", "0.0", "1.0e8", "Albedo decay time constant for cold snow", "(s)", &a1);
+//
+//  decldiagparam("a2", NHRU, "[7.2e5]", "0.0", "1.0e8", "Albedo decay time constant for melting snow", "(s)", &a2);
+//
+//  decldiagparam("amin", NHRU, "[0.5]", "0.0", "1.0", "Minimum albedo for aged snow", "()", &amin);
+//
+//  decldiagparam("amax", NHRU, "[0.84]", "0.0", "1.0", "Maximum albedo for fresh snow", "()", &amax);
+//
+//  decldiagparam("smin", NHRU, "[10]", "0.0", "20", "Minimum snowfall to refresh snow albedo", "(mm/int)", &smin);
+//
+//  declgetvar("*", "hru_tmean", "(Â°C)", &T0);
+//
+//  declgetvar("*",  "SWE", "(mm)", &SWE);
+//
+//  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
+//}
+//
+//void ClassalbedoRichard::init(void) {
+//
+//  dt = 3600*24/Global::Freq;
+//
+//  nhru = getdim(NHRU);
+//
+//  for (hh = 0; hh < nhru; ++hh)
+//    if(SWE[hh] > 1.0)
+//      Albedo[hh] = Albedo_Snow[hh];
+//    else
+//      Albedo[hh] = Albedo_Bare[hh];
+//
+//}
+//
+//void ClassalbedoRichard::run(void) {
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    if(SWE[hh] > 1.0){
+//
+//      if (T0[hh] < 0) // cold snow
+//        Albedo[hh] = Albedo[hh] - dt/a1[hh];
+//      else            // melting snow
+//        Albedo[hh] = (Albedo[hh] - amin[hh])*exp(-dt/a2[hh]) + amin[hh];
+//
+//      Albedo[hh] = Albedo[hh] + (amax[hh] - Albedo[hh])*net_snow[hh]/smin[hh];
+//
+//      if (Albedo[hh] < amin[hh]) Albedo[hh] = amin[hh];
+//      if (Albedo[hh] > amax[hh]) Albedo[hh] = amax[hh];
+//    }
+//    else
+//      Albedo[hh] = Albedo_Bare[hh];
+//  }
+//}
 
-void ClassalbedoRichard::decl(void) {
-
-  Description = "'Calculates snow cover albedo from a method proposed by R.Essery.'";
-
-  declstatvar("Albedo", NHRU, "Albedo", "()", &Albedo);
-
-  decldiagparam("Albedo_Snow", NHRU, "[0.85]", "0.0", "1.0","Initial albedo for snow cover", "()", &Albedo_Snow);
-
-  decldiagparam("Albedo_Bare", NHRU, "[0.17]", "0.0", "1.0","Initial albedo for bare ground", "()", &Albedo_Bare);
-
-  decldiagparam("a1", NHRU, "[1.08e7]", "0.0", "1.0e8", "Albedo decay time constant for cold snow", "(s)", &a1);
-
-  decldiagparam("a2", NHRU, "[7.2e5]", "0.0", "1.0e8", "Albedo decay time constant for melting snow", "(s)", &a2);
-
-  decldiagparam("amin", NHRU, "[0.5]", "0.0", "1.0", "Minimum albedo for aged snow", "()", &amin);
-
-  decldiagparam("amax", NHRU, "[0.84]", "0.0", "1.0", "Maximum albedo for fresh snow", "()", &amax);
-
-  decldiagparam("smin", NHRU, "[10]", "0.0", "20", "Minimum snowfall to refresh snow albedo", "(mm/int)", &smin);
-
-  declgetvar("*", "hru_tmean", "(Â°C)", &T0);
-
-  declgetvar("*",  "SWE", "(mm)", &SWE);
-
-  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
-}
-
-void ClassalbedoRichard::init(void) {
-
-  dt = 3600*24/Global::Freq;
-
-  nhru = getdim(NHRU);
-
-  for (hh = 0; hh < nhru; ++hh)
-    if(SWE[hh] > 1.0)
-      Albedo[hh] = Albedo_Snow[hh];
-    else
-      Albedo[hh] = Albedo_Bare[hh];
-
-}
-
-void ClassalbedoRichard::run(void) {
-
-  for(hh = 0; chkStruct(); ++hh) {
-    if(SWE[hh] > 1.0){
-
-      if (T0[hh] < 0) // cold snow
-        Albedo[hh] = Albedo[hh] - dt/a1[hh];
-      else            // melting snow
-        Albedo[hh] = (Albedo[hh] - amin[hh])*exp(-dt/a2[hh]) + amin[hh];
-
-      Albedo[hh] = Albedo[hh] + (amax[hh] - Albedo[hh])*net_snow[hh]/smin[hh];
-
-      if (Albedo[hh] < amin[hh]) Albedo[hh] = amin[hh];
-      if (Albedo[hh] > amax[hh]) Albedo[hh] = amax[hh];
-    }
-    else
-      Albedo[hh] = Albedo_Bare[hh];
-  }
-}
-
-ClassalbedoBaker* ClassalbedoBaker::klone(string name) const{
-  return new ClassalbedoBaker(name);
-}
-
-void ClassalbedoBaker::decl(void) {
-
-  Description = "'Calculates snowcover albedo from a method proposed by Baker.'";
-
-  declstatvar("Albedo", NHRU, "Albedo", "()", &Albedo);
-
-  decllocal("Ab_t", NHRU, "timesteps since albedo refresh", "()", &Ab_t);
-
-  decldiagparam("Albedo_Snow", NHRU, "[0.85]", "0.0", "1.0","Initial albedo for snow cover", "()", &Albedo_Snow);
-
-  decldiagparam("Albedo_Bare", NHRU, "[0.17]", "0.0", "1.0","Initial albedo for bare ground", "()", &Albedo_Bare);
-
-  decldiagparam("refresh", NHRU, "[3.0]", "0.0", "50.0", "minimum sub-canopy snowfall to refresh albedo", "(mm)", &refresh);
-
-
-  declgetvar("*",  "SWE", "(mm)", &SWE);
-
-  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
-}
-
-void ClassalbedoBaker::init(void) {
-
-  nhru = getdim(NHRU);
-
-  for (hh = 0; hh < nhru; ++hh){
-    if(SWE[hh] > 1.0)
-      Albedo[hh] = Albedo_Snow[hh];
-    else
-      Albedo[hh] = Albedo_Bare[hh];
-
-    Ab_t[hh] = 0.0;
-  }
-}
-
-void ClassalbedoBaker::run(void) {
-
-  for(hh = 0; chkStruct(); ++hh) {
-    if(SWE[hh] > 1.0){
-
-// albedo routine:
-
-      if(net_snow[hh] >= refresh[hh])
-        Ab_t[hh] = 0;
-      else
-        Ab_t[hh] = Ab_t[hh] + 1;
-
-// albedo decay formulation after (Baker et al., 1990):
-
-        Albedo[hh] = 0.9 - 0.0473 * pow(Ab_t[hh]/Global::Freq, 0.1f);
-
-// Baker, D.G., Ruschy, D.L., Wall, D.B., 1990.
-//   The albedo decay of prairie snows. J. Appl. Meteor. 29 _2, 179-187
-
-// if albedo < Albedo_Bare or no snow albedo == Albedo_Bare
-
-       if(Albedo[hh] < Albedo_Bare[hh] || SWE[hh] <= 1.0)
-         Albedo[hh] = Albedo_Bare[hh];
-    }
-    else
-      Albedo[hh] = Albedo_Bare[hh];
-  }
-}
+//ClassalbedoBaker* ClassalbedoBaker::klone(string name) const{
+//  return new ClassalbedoBaker(name);
+//}
+//
+//void ClassalbedoBaker::decl(void) {
+//
+//  Description = "'Calculates snowcover albedo from a method proposed by Baker.'";
+//
+//  declstatvar("Albedo", NHRU, "Albedo", "()", &Albedo);
+//
+//  decllocal("Ab_t", NHRU, "timesteps since albedo refresh", "()", &Ab_t);
+//
+//  decldiagparam("Albedo_Snow", NHRU, "[0.85]", "0.0", "1.0","Initial albedo for snow cover", "()", &Albedo_Snow);
+//
+//  decldiagparam("Albedo_Bare", NHRU, "[0.17]", "0.0", "1.0","Initial albedo for bare ground", "()", &Albedo_Bare);
+//
+//  decldiagparam("refresh", NHRU, "[3.0]", "0.0", "50.0", "minimum sub-canopy snowfall to refresh albedo", "(mm)", &refresh);
+//
+//
+//  declgetvar("*",  "SWE", "(mm)", &SWE);
+//
+//  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
+//}
+//
+//void ClassalbedoBaker::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  for (hh = 0; hh < nhru; ++hh){
+//    if(SWE[hh] > 1.0)
+//      Albedo[hh] = Albedo_Snow[hh];
+//    else
+//      Albedo[hh] = Albedo_Bare[hh];
+//
+//    Ab_t[hh] = 0.0;
+//  }
+//}
+//
+//void ClassalbedoBaker::run(void) {
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    if(SWE[hh] > 1.0){
+//
+//// albedo routine:
+//
+//      if(net_snow[hh] >= refresh[hh])
+//        Ab_t[hh] = 0;
+//      else
+//        Ab_t[hh] = Ab_t[hh] + 1;
+//
+//// albedo decay formulation after (Baker et al., 1990):
+//
+//        Albedo[hh] = 0.9 - 0.0473 * pow(Ab_t[hh]/Global::Freq, 0.1f);
+//
+//// Baker, D.G., Ruschy, D.L., Wall, D.B., 1990.
+////   The albedo decay of prairie snows. J. Appl. Meteor. 29 _2, 179-187
+//
+//// if albedo < Albedo_Bare or no snow albedo == Albedo_Bare
+//
+//       if(Albedo[hh] < Albedo_Bare[hh] || SWE[hh] <= 1.0)
+//         Albedo[hh] = Albedo_Bare[hh];
+//    }
+//    else
+//      Albedo[hh] = Albedo_Bare[hh];
+//  }
+//}
 
 //#define MINALB  0.50    /* minimum possible albedo; Aguado, 1985 */
 //#define MAXALB  0.88    /* maximum snow albedo */
@@ -11796,996 +11805,986 @@ void ClassalbedoBaker::run(void) {
 #define Hf  334.4E3    // Latent heat of fusion, J/kg
 #define major 5.0      // threshold for major melt event(5 mm/d)
 
-float Farouki_a(float fract_por) {
 
-  float a = 0.0;
-  float nnew = 0.0;
-
-  while(fabs(fract_por - nnew) > 0.001) {
-    a += (fract_por - nnew)*0.25;
-    nnew = 3*a*a - 2*a*a*a;
-  }
-  return a;
-}
 
 //---------------------------------------------------------------------------
 
-ClassNetroute_M* ClassNetroute_M::klone(string name) const{
-  return new ClassNetroute_M(name);
-}
-
-float ClassNetroute_M::Function1(float *I, long hh) {
-  return runDelay->ChangeLag(I, hh);
-}
-
-float ClassNetroute_M::Function2(float *X, long hh) {
-  return runDelay->ChangeStorage(X, hh);
-}
-
-void ClassNetroute_M::decl(void) {
-
-  Description = "'Handles the routing of surface runoff, subsurface runoff and HRU routing using the lag and route and Muskingum method for \"outflow\".'";
-
-  declvar("inflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &inflow);
-
-  declstatdiag("cuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &cuminflow);
-
-  declvar("outflow", NHRU, "HRU outflow", "(mm*km^2/int)", &outflow);
-
-  declstatdiag("cumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &cumoutflow);
-
-  decldiag("outflow_diverted", NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
-
-  declstatdiag("cumoutflow_diverted", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm*km^2/int)", &cumoutflow_diverted);
-
-  declstatdiag("cum_to_Sd", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
-
-  declstatdiag("cum_to_soil_rechr", NHRU, "cumulative other HRU to soil_rechr of this HRU", "(mm)", &cum_to_soil_rechr);
-
-  declvar("gwinflow", NHRU, "ground water inflow", "(mm*km^2/int)", &gwinflow);
-
-  declstatdiag("gwcuminflow", NHRU, "cumulative gw inflow", "(mm*km^2)", &gwcuminflow);
-
-  declvar("gwoutflow", NHRU, "HRU gw outflow", "(mm*km^2/int)", &gwoutflow);
-
-  declstatdiag("gwcumoutflow", NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
-
-  decldiag("gwoutflow_diverted", NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
-
-  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
-
-  declvar("ssrinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
-
-  declstatdiag("ssrcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
-
-  declvar("ssroutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
-
-  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
-
-  declstatdiag("HRU_cumbasinflow", NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
-
-  declvar("runinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
-
-  declstatdiag("runcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
-
-  declvar("runoutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
-
-  declstatdiag("runcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
-
-  declstatdiag("cum_preferential_flow_to_gw", NHRU, "cumulative other HRU's runoff to gw of this HRU via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
-
-  declparam("preferential_flow", NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
-
-
-  declvar("basinflow", BASIN, "basin surface and sub-surface outflow", "(m^3/int)", &basinflow);
-
-  decldiag("basinflow_s", BASIN, "basin surface and sub-surface outflow", "(m^3/s)", &basinflow_s);
-
-  declstatdiag("cumbasinflow", BASIN, "cumulative basin surface and sub-surface outflow", "(m^3)", &cumbasinflow);
-
-  declvar("basingw", BASIN, "cumulative basin groundwater outflow", "(m^3/int)", &basingw);
-
-  decldiag("basingw_s", BASIN, "cumulative basin groundwater outflow", "(m^3/s)", &basingw_s);
-
-  declstatdiag("cumbasingw", BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
-
-  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
-
-  decllocal("soil_runoff_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
-
-  decllocal("soil_gw_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
-
-  decllocal("Ktravel", NHRU, "travel time", "(d)", &Ktravel);
-
-
-  declparam("basin_area", BASIN, "3", "1e-6", "1e09", "Total basin area", "(km^2)", &basin_area);
-
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e09", "HRU area", "(km^2)", &hru_area);
-
-  declparam("Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &Lag);
-
-  declparam("route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &route_n);
-
-  declparam("route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &route_R);
-
-  declparam("route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &route_S0);
-
-  declparam("route_L", NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
-
-  declparam("route_X_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &route_X_M);
-
-  declparam("ssrKstorage", NHRU, "[0.0]", "0.0","200.0", "subsurface runoff storage constant", "(d)", &ssrKstorage);
-
-  declparam("ssrLag", NHRU, "[0.0]", "0.0","1.0E4.0", "subsurface runoff lag delay", "(h)", &ssrLag);
-
-  declparam("runKstorage", NHRU, "[0.0]", "0.0","200.0", "runoff storage constant", "(d)", &runKstorage);
-
-  declparam("runLag", NHRU, "[0.0]", "0.0","1.0E4", "runoff lag delay", "(h)", &runLag);
-
-  declparam("gwKstorage", NHRU, "[0.0]", "0.0","200.0", "gw storage constant", "(d)", &gwKstorage);
-
-  declparam("gwLag", NHRU, "[0.0]", "0.0","1.0E4", "gw lag delay", "(h)", &gwLag);
-
-  declparam("whereto", NHRU, "[0]", "0", "1000", "send to; 0 - basin outflow, or HRU input", "()", &whereto);
-
-  declparam("order", NHRU, "[1,2,3,4,5!]", "1","1000", "HRU routing process order", "()", &order);
-
-  declparam("gwwhereto", NHRU, "[0]", "-1000", "1000", "send to: 0 - basingw, >0 - other HRU surface input <0 - other abs(-HRU) gw input, or (< -HRUmax or > +HRUmax) - surface basinflow", "()", &gwwhereto);
-
-  declparam("Sdmax", NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
-
-  declparam("soil_rechr_max", NHRU, "[60.0]", "0.0", "350.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
-
-  decldiagparam("Sd_ByPass", NHRU, "[0]", "0", "1","0 - normal, 1 - Bypass Pond/Depressional storage (i.e. Sd).", "()", &Sd_ByPass);
-
-  decldiagparam("soil_rechr_ByPass", NHRU, "[1]", "0", "1","0 - normal, 1 - Bypass recharge layer (i.e. soil_rechr).", "()", &soil_rechr_ByPass);
-
-  declparam("Channel_shp", NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
-
-
-  soil_gwDiv = declgetvar("*", "gw_flow", "(mm/int)", &soil_gw);
-
-  soil_ssrDiv = declgetvar("*", "soil_ssr", "(mm/int)", &soil_ssr);
-
-  soil_runoffDiv = declgetvar("*", "soil_runoff", "(mm/int)", &soil_runoff);
-
-
-  declputvar("*", "Sd", "(mm)", &Sd);
-
-  declputvar("*", "soil_moist", "(mm)", &soil_moist);
-
-  declputvar("*", "soil_rechr", "(mm)", &soil_rechr);
-
-  declputvar("*", "redirected_residual", "(mm*km^2/int)", &redirected_residual);
-
-  declputvar("*", "gw", "(mm)", &gw);
-}
-
-void ClassNetroute_M::init(void) {
-
-  nhru = getdim(NHRU);
-
-  if(soil_ssrDiv > 1){
-    string S = "Netroute_M:  \"soil_ssr\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
-    LogError(TExcept);
-  }
-
-  if(soil_runoffDiv > 1){
-    string S = "Netroute_M:  \"soil_runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
-    LogError(TExcept);
-  }
-
-  if(soil_gwDiv > 1){
-    string S = "Netroute_M:  \"gw_flow\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
-    LogError(TExcept);
-  }
-
-  const float Vw[3] = {1.67, 1.22, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
-
-  for(hh = 0; hh < nhru; ++hh){
-    float Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
-    Ktravel[hh] = route_L[hh]/(Vw[route_Cshp[hh]]*Vavg)/86400.0; // (d)
-  }
-
-  hruDelay = new ClassMuskingum(inflow, outflow, Ktravel, route_X_M, Lag, nhru);
-  ssrDelay = new ClassClark(ssrinflow, ssroutflow, ssrKstorage, ssrLag, nhru);
-  runDelay = new ClassClark(runinflow, runoutflow, runKstorage, runLag, nhru);
-  gwDelay = new ClassClark(gwinflow, gwoutflow, gwKstorage, gwLag, nhru);
-
-  for(hh = 0; hh < nhru; ++hh){
-    if(Ktravel[hh] >= (Global::Interval/(2.0*route_X_M[hh]))){
-      string S = string("'" + Name + " (Netroute_M) Muskingum coefficient negative in HRU ").c_str() + to_string(hh+1);
-      CRHMException TExcept(S.c_str(), WARNING);
-      LogError(TExcept);
-    }
-
-    if(Ktravel[hh] < (Global::Interval/(2.0*(1.0-route_X_M[hh])))){ //    if(hruDelay->c0[hh] < 0.0)
-      hruDelay->c0[hh] = 0.0;
-      hruDelay->c1[hh] = 1.0;
-      hruDelay->c2[hh] = 0.0;
-    }
-  }
-
-  basinflow[0] = 0.0;
-  basinflow_s[0] = 0.0;
-  cumbasinflow[0] = 0.0;
-  basingw[0] = 0.0;
-  basingw_s[0] = 0.0;
-  cumbasingw[0] = 0.0;
-
-  for(hh = 0; hh < nhru; ++hh) {
-    inflow[hh] = 0.0;
-    cuminflow[hh] = 0.0;
-    outflow[hh] = 0.0;
-    outflow_diverted[hh] = 0.0;
-    cumoutflow_diverted[hh] = 0.0;
-    cumoutflow[hh] = 0.0;
-    cum_to_Sd[hh] = 0.0;
-    cum_to_soil_rechr[hh] = 0.0;
-    cum_preferential_flow_to_gw[hh] = 0.0;
-
-    gwinflow[hh] = 0.0;
-    gwcuminflow[hh] = 0.0;
-    gwcumoutflow[hh] = 0.0;
-    gwcumoutflow_diverted[hh] = 0.0;
-    HRU_cumbasinflow[hh] = 0.0;
-
-    ssrinflow[hh] = 0.0;
-    ssrcuminflow[hh] = 0.0;
-    ssroutflow[hh] = 0.0;
-    ssrcumoutflow[hh] = 0.0;
-
-    runinflow[hh] = 0.0;
-    runcuminflow[hh] = 0.0;
-    runoutflow[hh] = 0.0;
-    runcumoutflow[hh] = 0.0;
-
-    soil_ssr_Buf[hh] = 0.0;
-    soil_runoff_Buf[hh] = 0.0;
-    soil_gw_Buf[hh] = 0.0;
-
-    bool OK = false;
-    for(long jj = 0; chkStruct(jj); ++jj)
-      if(order[jj] - 1 == hh){
-        OK = true;
-        break;
-      }
-
-    if(!OK){
-        string SS = string("'" + Name + " (Netroute_M)' the 'order' parameter does not have a unique value for each HRU");
-        CRHMException Except(SS.c_str() ,ERR);
-        LogError(Except);
-        throw Except;
-      }
-  }
-}
-
-void ClassNetroute_M::run(void) {
-
-  long nstep = getstep()% Global::Freq;
-
-  basinflow[0] = 0.0;
-  basingw[0] = 0.0;
-
-  for(long jj = 0; chkStruct(jj); ++jj) { // HRUs not in sequence
-
-    for(hh = 0; chkStruct(hh); ++hh)
-      if(order[hh] - 1 == jj)
-        break;
-
-    if(soil_gwDiv == 1) // interval value
-       soil_gw_Buf[hh] = soil_gw[hh];
-
-    gwinflow[hh] = soil_gw_Buf[hh]*hru_area[hh];
-
-    gwoutflow_diverted[hh] = 0.0;
-
-    float gw_amount = 0.0;
-
-    for(long hhh = 0; chkStruct(hhh); ++hhh) {
-      if(gwoutflow[hhh] > 0.0 && gwwhereto[hhh] && (abs(gwwhereto[hhh])-1 == hh || abs(gwwhereto[hhh]) > nhru)){ // handles "gwwhereto" <> 0
-        gwoutflow_diverted[hhh] = gwoutflow[hhh];
-        gw_amount = gwoutflow_diverted[hhh];
-        gwoutflow[hhh] = 0.0;
-        gwcumoutflow_diverted[hhh] += gwoutflow_diverted[hhh];
-
-        if(abs(gwwhereto[hhh]) <= nhru){
-          if(gwwhereto[hhh] > 0){ // direct to HRU surface
-            float free = soil_rechr_max[hh] - soil_rechr[hh];
-            if(free > 0.0 && !soil_rechr_ByPass[hh]){
-              if(free > gw_amount/hru_area[hh]){ // units (mm*km^2/int)
-                soil_rechr[hh] += gw_amount/hru_area[hh];
-
-                soil_moist[hh] += gw_amount/hru_area[hh];
-                cum_to_soil_rechr[hh] += gw_amount/hru_area[hh];
-                gw_amount = 0.0;
-              }
-              else {
-                gw_amount = (gw_amount/hru_area[hh] - free)*hru_area[hh];
-                cum_to_soil_rechr[hh] += free;
-                soil_moist[hh] += free;
-                soil_rechr[hh] = soil_rechr_max[hh];
-              }
-            }
-
-            free = Sdmax[hh] - Sd[hh];
-            if(free > 0.0 && gw_amount > 0.0 && !Sd_ByPass[hh]){
-              if(free > gw_amount/hru_area[hh]){ // outflow (mm*km^2/int)
-                Sd[hh] += gw_amount/hru_area[hh];
-                cum_to_Sd[hh] += gw_amount/hru_area[hh];
-                gw_amount = 0.0;
-              }
-              else {
-                gw_amount = (gw_amount/hru_area[hh] - free)*hru_area[hh];
-                cum_to_Sd[hh] += free;
-                Sd[hh] = Sdmax[hh];
-              }
-            }
-          } // hh > 0
-          else{ // hh < 0
-            gw[hh] +=  gw_amount/hru_area[hh];
-            gw_amount = 0.0;
-          }
-        } // is HRU
-        else{ // > nhru then put in basinflow
-          basinflow[0] += gw_amount*1000; // (m3)
-          HRU_cumbasinflow[hh] = gw_amount;
-          cumoutflow[hh] += gw_amount;
-          gw_amount = 0.0;
-        }
-      } // match hh
-    } // for hhh
-
-    gwcuminflow[hh] += gwinflow[hh];
-
-    if(soil_ssrDiv == 1) // interval value
-       soil_ssr_Buf[hh] = soil_ssr[hh];
-
-    if(soil_runoffDiv == 1) // interval value
-       soil_runoff_Buf[hh] = soil_runoff[hh];
-
-    runinflow[hh] = soil_runoff_Buf[hh]*hru_area[hh]; // includes melt and rain runoff
-    runcuminflow[hh] += runinflow[hh];
-
-    ssrinflow[hh] = soil_ssr_Buf[hh]*hru_area[hh]; // subsurface runoff
-    ssrcuminflow[hh] += ssrinflow[hh];
-
-    ssrcumoutflow[hh] += ssroutflow[hh];
-    runcumoutflow[hh] += runoutflow[hh];
-
-    inflow[hh] = (runoutflow[hh] + ssroutflow[hh] + gw_amount); // add this HRU runoff and subsurface flow
-
-    cuminflow[hh] += inflow[hh];
-
-    for(long hhh = 0; chkStruct(hhh); ++hhh) {
-      if(whereto[hhh]-1 == hh && outflow[hhh] > 0.0){
-        if(preferential_flow[hhh]) {
-          gw[hh] += outflow[hhh]/hru_area[hh];
-          cum_preferential_flow_to_gw[hh] += outflow[hhh]/hru_area[hh];
-          outflow[hhh] = 0.0;
-        }
-        else {
-          outflow_diverted[hhh] = outflow[hhh];
-          cumoutflow_diverted[hhh] += outflow_diverted[hhh];
-          float free = soil_rechr_max[hh] - soil_rechr[hh];
-          if(free > 0.0 && !soil_rechr_ByPass[hh]){
-            if(free > outflow[hhh]/hru_area[hh]){ // units (mm*km^2/int)
-              soil_rechr[hh] += outflow[hhh]/hru_area[hh];
-              soil_moist[hh] += outflow[hhh]/hru_area[hh];
-              cum_to_soil_rechr[hh] += outflow[hhh]/hru_area[hh];
-              outflow[hhh] = 0.0;
-            }
-            else {
-              outflow[hhh] = (outflow[hhh]/hru_area[hh] - free)*hru_area[hh];
-              cum_to_soil_rechr[hh] += free;
-              soil_moist[hh] += free;
-              soil_rechr[hh] = soil_rechr_max[hh];
-            }
-          }
-
-          free = Sdmax[hh] - Sd[hh];
-          if(free > 0.0 && !Sd_ByPass[hh] && outflow[hhh] > 0.0){
-            if(free > outflow[hhh]/hru_area[hh]){ // units (mm*km^2/int)
-              Sd[hh] += outflow[hhh]/hru_area[hh];
-              cum_to_Sd[hh] += outflow[hhh]/hru_area[hh];
-              outflow[hhh] = 0.0;
-            }
-            else {
-              outflow[hhh] = (outflow[hhh]/hru_area[hh] - free)*hru_area[hh];
-              cum_to_Sd[hh] += free;
-              Sd[hh] = Sdmax[hh];
-            } // if
-          } // if
-        } // else
-
-        if(outflow[hhh] > 0.0) // handle excess
-          redirected_residual[hh] +=  outflow[hhh]; // Return to module soil. Previously handled by Netroute. (mm*km^2/int)
-
-        outflow[hhh] = 0.0;
-      } // if
-    } // for hhh
-
-    hruDelay->DoMuskingum(hh); // need to update for later HRUs
-
-    if(whereto[hh] == 0) { // move to basinflow
-      basinflow[0] += outflow[hh]*1000; // (m3)
-      HRU_cumbasinflow[hh] += outflow[hh];
-      cumoutflow[hh] += outflow[hh];
-    }
-    if(gwwhereto[hh] == 0) { // move to basin gw
-      basingw[0] += gwoutflow[hh]*1000; // (m3) end of every day
-      gwcumoutflow[hh] += gwoutflow[hh];
-    }
-
-    if(nstep == 0){ // end of every day
-      if(soil_ssrDiv > 1) // daily value - ready for next day
-         soil_ssr_Buf[hh] = soil_ssr[hh]/soil_ssrDiv;
-
-      if(soil_runoffDiv > 1) // daily value - ready for next day
-         soil_runoff_Buf[hh] = soil_runoff[hh]/soil_runoffDiv;
-
-      if(soil_gwDiv > 1) // daily value - ready for next day
-         soil_gw_Buf[hh] = soil_gw[hh]/soil_gwDiv;
-    }  // end if
-
-
-} // for hh
-
-  runDelay->DoClark();
-  ssrDelay->DoClark();
-  gwDelay->DoClark();
-
-  basinflow_s[0] = basinflow[0]*Global::Freq/86400.0;
-  basingw_s[0] = basingw[0]*Global::Freq/86400.0;
-
-  cumbasinflow[0] += basinflow[0];
-  cumbasingw[0] += basingw[0];
-}
-
-void ClassNetroute_M::finish(bool good) {
-
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
-
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
-
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
-
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
-
-  for(hh = 0; chkStruct(); ++hh) {
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' cuminflow              (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' cumoutflow             (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' cumoutflow_diverted    (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow_diverted[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' hruDelay->Left         (mm) (mm*km^2) (mm*basin): ").c_str(), hruDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
-
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' ssrcuminflow           (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' ssrcumoutflow          (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' ssrDelay_in_storage    (mm) (mm*km^2) (mm*basin): ").c_str(), ssrDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
-
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' runoffcuminflow        (mm) (mm*km^2) (mm*basin): ").c_str(), runcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' runoffcumoutflow       (mm) (mm*km^2) (mm*basin): ").c_str(), runcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' runDelay_in_storage    (mm) (mm*km^2) (mm*basin): ").c_str(), runDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
-
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' gwcuminflow            (mm) (mm*km^2) (mm*basin): ").c_str(), gwcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' gwcumoutflow           (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' gwcumdiverted          (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow_diverted[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' gwDelay_in_storage     (mm) (mm*km^2) (mm*basin): ").c_str(), gwDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
-
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' cum_to_Sd              (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_Sd[hh], hru_area[hh], basin_area[0], " *** Added to this HRU Sd");
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' cum_to_soil_rechr      (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_soil_rechr[hh], hru_area[hh], basin_area[0], " *** Added to this HRU recharge");
-    LogMessageA(hh, string("'" + Name + " (Netroute_M)' HRU_cumbasinflow       (mm) (mm*km^2) (mm*basin): ").c_str(), HRU_cumbasinflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-    LogDebug(" ");
-
-    Allcuminflow += cuminflow[hh];
-    Allcumoutflow += cumoutflow[hh];
-    Allcumoutflowdiverted += cumoutflow_diverted[hh];
-
-    Allgwcuminflow += gwcuminflow[hh];
-    Allgwcumoutflow += gwcumoutflow[hh];
-    Allgwcumoutflowdiverted += gwcumoutflow_diverted[hh];
-
-    Allssrcumoutflow += ssrcumoutflow[hh];
-    Allssrcuminflow += ssrcuminflow[hh];
-    Allruncuminflow += runcuminflow[hh];
-    Allruncumoutflow += runcumoutflow[hh];
-
-    AllSdcuminflow += cum_to_Sd[hh]*hru_area[hh];
-    Allrechrcuminflow += cum_to_soil_rechr[hh]*hru_area[hh];
-  }
-
-  LogMessage(string("'" + Name + " (Netroute_M)' cumbasinflow (m^3): ").c_str(), cumbasinflow[0]);
-  LogMessage(string("'" + Name + " (Netroute_M)' cumbasingw   (m^3): ").c_str(), cumbasingw[0]);
-  LogDebug(" ");
-
-  LogMessage(string("'" + Name + " (Netroute_M)' Allgwcuminflow  (mm*basin): ").c_str(), Allgwcuminflow);
-  LogMessage(string("'" + Name + " (Netroute_M)' Allgwcumoutflow (mm*basin): ").c_str(), Allgwcumoutflow);
-  LogMessage(string("'" + Name + " (Netroute_M)' Allgwcumoutflowdiverted (mm*basin): ").c_str(), Allgwcumoutflowdiverted);
-  LogDebug(" ");
-
-  LogMessage(string("'" + Name + " (Netroute_M)' Allcuminflow    (mm*basin): ").c_str(), Allcuminflow);
-  LogMessage(string("'" + Name + " (Netroute_M)' Allcumoutflow   (mm*basin): ").c_str(), Allcumoutflow);
-  LogMessage(string("'" + Name + " (Netroute_M)' Allcumoutflowdiverted (mm*basin): ").c_str(), Allcumoutflowdiverted);
-  LogDebug(" ");
-
-  LogMessage(string("'" + Name + " (Netroute_M)' Allssrcuminflow  (mm*basin): ").c_str(), Allssrcuminflow);
-  LogMessage(string("'" + Name + " (Netroute_M)' Allssrcumoutflow (mm*basin): ").c_str(), Allssrcumoutflow);
-  LogDebug(" ");
-
-  LogMessage(string("'" + Name + " (Netroute_M)' Allruncuminflow) (mm*basin): ").c_str(), Allruncuminflow);
-  LogMessage(string("'" + Name + " (Netroute_M)' Allruncumoutflow (mm*basin): ").c_str(), Allruncumoutflow);
-  LogDebug(" ");
-
-  LogMessage(string("'" + Name + " (Netroute_M)' AllSdcuminflow    (mm*basin): ").c_str(), AllSdcuminflow);
-  LogMessage(string("'" + Name + " (Netroute_M)' Allrechrcuminflow (mm*basin): ").c_str(), Allrechrcuminflow);
-  LogDebug(" ");
-
-  delete hruDelay;
-  delete ssrDelay;
-  delete runDelay;
-  delete gwDelay;
-}
-
-ClassREWroute2* ClassREWroute2::klone(string name) const{
-  return new ClassREWroute2(name);
-}
-
-void ClassREWroute2::decl(void) {
-
-  Description = "'Handles the routing of surface and subsurface runoff from RBs (representative basins).' \
-                    'uses Muskingum,' \
-                    'uses Clark.' \
-                    'uses Muskingum and culverts,' \
-                    'uses Clark and culverts.'";
-
-  variation_set = VARIATION_ORG;
-
-  inflowCnt = declgrpvar("WS_ALL_inflow", "basinflow", "query variable = 'basinflow'", "(m^3/int)", &rew, &inflow_All);
-
-  declvar("WS_inflow", NHRU, "inflow from each RB", "(m^3/int)", &inflow);
-
-  declstatdiag("cum_WSinflow", NHRU, "cumulative inflow from each RB", "(m^3)", &cuminflow);
-
-  declvar("WS_outflow", NHRU, "outflow of each RB", "(m^3/int)", &outflow);
-
-  declstatdiag("cum_WSoutflow", NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutflow);
-
-  declvar("WS_flow", BASIN, "watershed surface and sub-surface outflow", "(m^3/int)", &flow);
-
-  declvar("WS_flow_s", BASIN, "watershed surface and sub-surface outflow", "(m^3/s)", &flow_s);
-
-  declstatdiag("cum_WSflow", BASIN, "cumulative watershed surface and sub-surface outflow", "(m^3)", &cumflow);
-
-
-  gwCnt = declgrpvar("WS_ALL_gwflow", "basingw", "query variable = 'basingw'", "(m^3/int)", &gwrew, &gw_All);
-
-  declvar("WS_gwinflow", NHRU, "inflow from each RB", "(m^3/int)", &gwinflow);
-
-  declstatdiag("cum_WSgwinflow", NHRU, "cumulative inflow from each RB", "(m^3)", &cumgwinflow);
-
-  declvar("WS_gwoutflow", NHRU, "outflow of each RB", "(m^3/int)", &gwoutflow);
-
-  declstatdiag("cum_WSgwoutflow", NHRU, "cumulative outflow of each RB", "(m^3)", &cumgwoutflow);
-
-  declvar("WS_gwflow", BASIN, "watershed ground water outflow", "(m^3/int)", &gwflow);
-
-  declvar("WS_gwflow_s", BASIN, "watershed ground water outflow", "(m^3/s)", &gwflow_s);
-
-  declstatdiag("cum_WSgwflow", BASIN, "cumulative watershed ground water outflow", "(m^3)", &cumgwflow);
-
-
-  declparam("WS_whereto", NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_whereto);
-
-  declparam("WS_order", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_order);
-
-  declparam("WS_gwwhereto", NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_gwwhereto);
-
-  declparam("WS_gworder", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_gworder);
-
-  declparam("WS_Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_Lag);
-
-  declparam("WS_gwLag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_gwLag);
-
-
-  variation_set = VARIATION_2 + VARIATION_3;
-
-  declvar("WS_culvert_Q", NHRU, "flow in culvert", "(m^3/s)", &culvert_Q);
-
-  declvar("WS_culvert_water_H", NHRU, "depth of pond at culvert inlet", "(m)", &culvert_water_H);
-
-  declvar("WS_culvert_water_A", NHRU, "surface area of culvert pond", "(m^2)", &culvert_water_A);
-
-  declvar("WS_culvert_water_V", NHRU, "volume of water in culvert pond", "(m^3)", &culvert_water_V);
-
-  declvar("WS_culvert_over_Q", NHRU, "flow over the road", "(m^3/s)", &culvert_over_Q);
-
-  declvar("WS_culvert_evap", NHRU, "Depth of water evaporating from culvert pond.", "(mm/int)", &culvert_evap);
-
-  declvar("WS_cum_culvert", NHRU, "Cumulative culvert HRU flow", "(m^3)", &cum_culvert);
-
-  declvar("WS_cum_culvert_over", NHRU, "Cumulative culvert HRU overflow", "(m^3)", &cum_culvert_over);
-
-  declstatdiag("WS_HD", NHRU, "ratio of depth of water at culvert/culvert diameter", "()", &HD);
-
-  declparam("WS_channel_slope", NHRU, "[0.002]", "0.0001", "0.01", "soil slope to culvert", "()", &WS_channel_slope);
-
-  declparam("WS_side_slope", NHRU, "[0.02]", "0.0001", "0.01", "side soil slope mormal to culvert slope", "()", &WS_side_slope);
-
-  declparam("WS_culvert_diam", NHRU, "[0.5]", "0.1", "5.0", "culvert diameter", "(m)", &WS_culvert_diam);
-
-  declparam("WS_culvert_water_Dmax", NHRU, "[2.0]", "0.1", "10.0", "maximum depth of pond at culvert inlet", "(m)", &WS_culvert_water_Dmax);
-
-  declparam("WS_number_culverts", NHRU, "[1.0]", "0.0", "10.0", "number of culverts and efficiency factor. Zero = no culvert", "()", &WS_number_culverts);
-
-  declparam("WS_culvert_type", NHRU, "[4]", "0", "4", "0- thin walled projection, 1- square edged (flush) inlet, 2- socket and concrete pipe, 3- 45 degree beveled inlet, 4- well-rounded (streamlined) inlet", "()", &WS_culvert_type);
-
-
-  variation_set = VARIATION_0 + VARIATION_2;
-
-  decldiag("WS_Ktravel_var", NHRU, "inflow storage constant", "(d)", &WS_Ktravel_var);
-
-  decldiag("WS_gwKtravel_var", NHRU, "gw storage constant", "(d)", &WS_gwKtravel_var);
-
-  declparam("WS_route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &WS_route_n);
-
-  declparam("WS_route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "()", &WS_route_R);
-
-  declparam("WS_route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &WS_route_S0);
-
-  declparam("WS_route_L", NHRU, "[3.69]", "0.01","1.0E10", "routing length", "(m)", &WS_route_L);
-
-  declparam("WS_Channel_shp", NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &WS_Channel_shp);
-
-  declparam("WS_X_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &WS_route_X_M);
-
-  declparam("WS_gwX_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &WS_gwroute_X_M);
-
-
-  variation_set = VARIATION_1 + VARIATION_3;
-
-  declparam("WS_Kstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_Kstorage);
-
-  declparam("WS_gwKstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_gwKstorage);
-
-
-  variation_set = VARIATION_ORG;
-}
-
-void ClassREWroute2::init(void) {
-
-  if(nhru < inflowCnt) {
-    CRHMException Except("Module REW route # of HRUs must be >= # of groups." ,TERMINATE);
-    LogError(Except);
-    throw Except;
-  }
-
-  if(WS_whereto[WS_order[nhru-1]-1] != 0) {
-    CRHMException Except("In module REW route 'whereto' for last RB must be zero." ,TERMINATE);
-    LogError(Except);
-    throw Except;
-  }
-
-  if(WS_gwwhereto[WS_gworder[nhru-1]-1] != 0) {
-    CRHMException Except("In module REW route 'gwwhereto' for last RB must be zero." ,TERMINATE);
-    LogError(Except);
-    throw Except;
-  }
-
-  if(variation == VARIATION_ORG || variation == VARIATION_2){
-    const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
-
-    for(hh = 0; hh < nhru; ++hh){
-      float Vavg = (1.0/WS_route_n[hh])*pow(WS_route_R[hh], 2.0f/3.0f)*pow(WS_route_S0[hh], 0.5f);
-
-      WS_gwKtravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
-      WS_Ktravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
-    }
-
-    inflowDelay = new ClassMuskingum(inflow, outflow, WS_Ktravel_var, WS_route_X_M, WS_Lag, nhru);
-    gwDelay = new ClassMuskingum(gwinflow, gwoutflow, WS_gwKtravel_var, WS_gwroute_X_M, WS_gwLag, nhru);
-
-    for(hh = 0; hh < nhru; ++hh){
-      if(WS_gwKtravel_var[hh] >= (Global::Interval/(2.0*WS_gwroute_X_M[hh]))){
-        string S = string("'" + Name + " (REW_route) GW Muskingum coefficient negative in HRU ").c_str();
-        CRHMException TExcept(S.c_str(), WARNING);
-        LogError(TExcept);
-      }
-
-      if(gwDelay->c0[hh] < 0.0){
-        gwDelay->c0[hh] = 0.0;
-        gwDelay->c1[hh] = 1.0;
-        gwDelay->c2[hh] = 0.0;
-      }
-
-      if(WS_Ktravel_var[hh] >= (Global::Interval/(2.0*WS_route_X_M[hh]))){
-        string S = string("'" + Name + " (REW_route) inflow Muskingum coefficient negative in HRU ").c_str();
-        CRHMException TExcept(S.c_str(), WARNING);
-        LogError(TExcept);
-      }
-
-      if(WS_Ktravel_var[hh] < (Global::Interval/(2.0*(1.0-WS_route_X_M[hh])))){ //inflowDelay->c0[hh] < 0.0
-        inflowDelay->c0[hh] = 0.0;
-        inflowDelay->c1[hh] = 1.0;
-        inflowDelay->c2[hh] = 0.0;
-      }
-    }
-  }
-  else if(variation == VARIATION_1 || variation == VARIATION_3){
-    Clark_inflowDelay = new ClassClark(inflow, outflow, WS_Kstorage, WS_Lag, nhru);
-    Clark_gwDelay = new ClassClark(inflow, outflow, WS_gwKstorage, WS_gwLag, nhru);
-  }
-
-  flow[0] = 0.0;
-  flow_s[0] = 0.0;
-  cumflow[0] = 0.0;
-
-  gwflow[0] = 0.0;
-  gwflow_s[0] = 0.0;
-  cumgwflow[0] = 0.0;
-
-  for(hh = 0; hh < nhru; ++hh) {
-    inflow[hh] = 0.0;
-    cuminflow[hh] = 0.0;
-    outflow[hh] = 0.0;
-    cumoutflow[hh] = 0.0;
-    gwinflow[hh] = 0.0;
-    cumgwinflow[hh] = 0.0;
-    gwoutflow[hh] = 0.0;
-    cumgwoutflow[hh] = 0.0;
-
-    if(variation == VARIATION_2 || variation == VARIATION_3){
-      culvert_water_V[hh] = 0.0;
-      culvert_water_H[hh] = 0.0;
-      culvert_water_A[hh] = 0.0;
-      culvert_over_Q[hh] = 0.0;
-      culvert_Q[hh] = 0.0;
-      HD[hh] = 0.0;
-      culvert_evap[hh] = 0.0;
-      cum_culvert[hh] = 0.0;
-      cum_culvert_over[hh] = 0.0;
-
-      if(WS_number_culverts[hh] > 0.0){
-        if(WS_culvert_water_Dmax[hh]/WS_culvert_diam[hh] > 2.5){
-          string S = "soil: " + string(Name.c_str()) +  " ratio of H/D > 2.5 in HRU " + to_string(hh+1);
-          CRHMException TExcept(S.c_str(), WARNING);
-          LogError(TExcept);
-        }
-      }
-    }
-  }
-}
-
-void ClassREWroute2::run(void) {
-
-  flow[0] = 0.0;
-  gwflow[0] = 0.0;
-
-  for(long jj = 0; jj < inflowCnt; ++jj) { // HRUs not in sequence
-
-    int hh = WS_order[jj] - 1;
-
-    if(rew[hh])
-      inflow[hh] = inflow_All[hh][0]; // add this HRU runoff and subsurface flow
-    else
-      inflow[hh] = 0; // add this HRU runoff and subsurface flow
-
-    for(long hhh = 0; chkStruct(hhh); ++hhh) {
-      if(WS_whereto[hhh]-1 == hh && outflow[hhh] > 0.0){
-        if(outflow[hhh] > 0.0)
-          inflow[hh] += outflow[hhh];
-      }
-    }
-
-    cuminflow[hh] += inflow[hh];
-
-    if(variation == VARIATION_2 || variation == VARIATION_3)
-      Culvert(hh);
-
-    if(variation == VARIATION_ORG || variation == VARIATION_2)
-      inflowDelay->DoMuskingum(hh); // need to update for later HRUs
-    else if(variation == VARIATION_1 || variation == VARIATION_3)
-      Clark_inflowDelay->DoClark(hh); // need to update for later HRUs
-
-    cumoutflow[hh] += outflow[hh];
-
-    if(WS_whereto[hh] == 0) {
-      flow[0] += outflow[hh]; // (already m^3)
-      flow_s[0] = flow[0]*Global::Freq/86400.0;
-    }
-} //end for
-
-  for(long jj = 0; jj < gwCnt; ++jj) { // HRUs not in sequence
-
-    int hh = WS_gworder[jj] - 1;
-
-    if(gwrew[hh])
-      gwinflow[hh] = gw_All[hh][0]; // add this HRU runoff and subsurface flow
-    else
-      gwinflow[hh] = 0; // add this HRU runoff and subsurface flow
-
-    for(long hhh = 0; chkStruct(hhh); ++hhh) {
-      if(WS_gwwhereto[hhh]-1 == hh && gwoutflow[hhh] > 0.0){
-        if(gwoutflow[hhh] > 0.0)
-          gwinflow[hh] += gwoutflow[hhh];
-      }
-    }
-
-    cumgwinflow[hh] += gwinflow[hh];
-
-  if(variation == VARIATION_ORG || variation == VARIATION_2)
-    gwDelay->DoMuskingum(hh); // need to update for later HRUs
-  else if(variation == VARIATION_1 || variation == VARIATION_3)
-    Clark_gwDelay->DoClark(hh); // need to update for later HRUs
-
-    cumgwoutflow[hh] += gwoutflow[hh];
-
-    if(WS_gwwhereto[hh] == 0) {
-      gwflow[0] += gwoutflow[hh]; // (already m^3)
-      gwflow_s[0] = gwflow[0]*Global::Freq/86400.0;
-    }
-} //end for
-
-  cumflow[0] += flow[0];
-  cumgwflow[0] += gwflow[0];
-}
-
-void ClassREWroute2::Culvert(long hh) {
-
-  float culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
-
-  culvert_water_A[hh] = 0.0;
-  culvert_water_H[hh] = 0.0;
-  culvert_over_Q[hh] = 0.0;
-  culvert_Q[hh] = 0.0;
-  HD[hh] = 0.0;
-  culvert_evap[hh] = 0.0;
-
-  if((inflow[hh] > 0.0 || culvert_water_V[hh] > 0.0) && WS_number_culverts[hh] > 0.0){
-    culvert_water_V[hh] += inflow[hh]; // m3 where inflow(m^3/int)
-    inflow[hh] = 0.0;
-
-    culvert_water_H[hh] = pow(3.0*culvert_water_V[hh]*WS_channel_slope[hh]*WS_side_slope[hh], 1.0/3.0); // (m)
-
-    if(culvert_water_H[hh] > 0.0){
-
-// calculate overflow if culvert level exceeds Dmax
-
-      culvert_water_H[hh] = pow(3.0*culvert_water_V[hh]*WS_channel_slope[hh]*WS_side_slope[hh], 1.0/3.0); // (m)
-
-      if(culvert_water_H[hh] > WS_culvert_water_Dmax[hh]){ // (m) overflow over road
-        culvert_water_H[hh] = WS_culvert_water_Dmax[hh]; // (m)
-        float maxVol = pow(WS_culvert_water_Dmax[hh], 3.0)/(3.0*WS_channel_slope[hh]*WS_side_slope[hh]); // (m3)
-
-        culvert_over_Q[hh] = (culvert_water_V[hh] - maxVol)/86400*Global::Freq; //  (m3) to (m3/int) - difference released over interval
-        culvert_water_V[hh] = maxVol; // (m3)
-
-        cum_culvert_over[hh] += culvert_over_Q[hh]; // (m3)
-        cum_culvert[hh] += culvert_Q[hh]*86400/Global::Freq; // (m3/s) to (m3)
-
-        inflow[hh] += culvert_over_Q[hh]*86400/Global::Freq; // (m3/int) to (m3)
-      }
-
-// calculate flow through culvert
-
-      HD[hh] = culvert_water_H[hh]/WS_culvert_diam[hh];
-
-      if(HD[hh] <= 0.0)
-        culvert_Q[hh] = 0.0;
-      else if(HD[hh] < 1.5)
-        culvert_Q[hh] = max <float>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
-             + 0.159413*HD[hh] + 0.00772254)*culvert_C[WS_culvert_type[hh]]*WS_number_culverts[hh]*pow(WS_culvert_diam[hh], 2.5), 0.0); // (m3/s)
-      else
-        culvert_Q[hh] = culvert_C[WS_culvert_type[hh]]*WS_number_culverts[hh]*0.785*pow(WS_culvert_diam[hh], 2.5)*sqrt(2.0*9.81*(HD[hh] - 0.5));
-
-      if(culvert_water_V[hh] > culvert_Q[hh]*86400/Global::Freq) // (m3/s) to (m3)
-        culvert_water_V[hh] -= culvert_Q[hh]*86400/Global::Freq; // (m3/s) to (m3)
-      else{ // all runs away
-        culvert_Q[hh] = culvert_water_V[hh]/86400*Global::Freq;  // (m3) to (m3/int) - difference released over interval
-        culvert_water_V[hh] = 0.0;
-      }
-
-      inflow[hh] += culvert_Q[hh]*86400/Global::Freq; // (m3/int)
-      cum_culvert[hh] += culvert_Q[hh]*86400/Global::Freq; // (m3/s) to (m3/int)
-
-      culvert_water_A[hh] = sqr(culvert_water_H[hh])/(WS_channel_slope[hh]*WS_side_slope[hh]); // used for evaporation
-    }
-  }
-}
-
-void ClassREWroute2::finish(bool good) {
-  for(hh = 0; hh < inflowCnt; ++hh) {
-    LogMessageA(hh, string("'" + Name + " (REW_route2)' cuminflow          (m^3) (m^3): ").c_str(), cuminflow[hh], 1.0);
-    LogMessageA(hh, string("'" + Name + " (REW_route2)' cumoutflow         (m^3) (m^3): ").c_str(), cumoutflow[hh], 1.0);
-    if(variation == VARIATION_ORG || variation == VARIATION_2)
-      LogMessageA(hh, string("'" + Name + " (REW_route2)' inflowDelay_in_storage (m^3) (m^3): ").c_str(), inflowDelay->Left(hh), 1.0);
-    else if(variation == VARIATION_1 || variation == VARIATION_3)
-      LogMessageA(hh, string("'" + Name + " (REW_route2)' Clark_inflowDelay_in_storage (m^3) (m^3): ").c_str(), Clark_inflowDelay->Left(hh), 1.0);
-
-    LogMessageA(hh, string("'" + Name + " (REW_route2)' cumgwinflow  (m^3) (m^3): ").c_str(), cumgwinflow[hh], 1.0);
-    LogMessageA(hh, string("'" + Name + " (REW_route2)' cumgwoutflow (m^3) (m^3): ").c_str(), cumgwoutflow[hh], 1.0);
-    if(variation == VARIATION_ORG || variation == VARIATION_2)
-      LogMessageA(hh, string("'" + Name + " (REW_route2)' gwDelay_in_storage (m^3) (m^3): ").c_str(), gwDelay->Left(hh), 1.0);
-    else if(variation == VARIATION_1 || variation == VARIATION_3)
-      LogMessageA(hh, string("'" + Name + " (REW_route2)' Clark_gwDelay_in_storage (m^3) (m^3): ").c_str(), Clark_gwDelay->Left(hh), 1.0);
-
-    LogDebug(" ");
-  }
-
-  LogMessage(string("'" + Name + " (REW_route2)' cumflow (m^3): ").c_str(), cumflow[0]);
-  LogMessage(string("'" + Name + " (REW_route2)' cumgwflow (m^3): ").c_str(), cumgwflow[0]);
-  LogDebug(" ");
-
-  if(variation == VARIATION_ORG || variation == VARIATION_2){
-    delete inflowDelay;
-    delete gwDelay;
-  }
-  else if(variation == VARIATION_1 || variation == VARIATION_3){
-    delete Clark_inflowDelay;
-    delete Clark_gwDelay;
-  }
-}
+//ClassNetroute_M* ClassNetroute_M::klone(string name) const{
+//  return new ClassNetroute_M(name);
+//}
+//
+//float ClassNetroute_M::Function1(float *I, long hh) {
+//  return runDelay->ChangeLag(I, hh);
+//}
+//
+//float ClassNetroute_M::Function2(float *X, long hh) {
+//  return runDelay->ChangeStorage(X, hh);
+//}
+//
+//void ClassNetroute_M::decl(void) {
+//
+//  Description = "'Handles the routing of surface runoff, subsurface runoff and HRU routing using the lag and route and Muskingum method for \"outflow\".'";
+//
+//  declvar("inflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &inflow);
+//
+//  declstatdiag("cuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &cuminflow);
+//
+//  declvar("outflow", NHRU, "HRU outflow", "(mm*km^2/int)", &outflow);
+//
+//  declstatdiag("cumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &cumoutflow);
+//
+//  decldiag("outflow_diverted", NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
+//
+//  declstatdiag("cumoutflow_diverted", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm*km^2/int)", &cumoutflow_diverted);
+//
+//  declstatdiag("cum_to_Sd", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
+//
+//  declstatdiag("cum_to_soil_rechr", NHRU, "cumulative other HRU to soil_rechr of this HRU", "(mm)", &cum_to_soil_rechr);
+//
+//  declvar("gwinflow", NHRU, "ground water inflow", "(mm*km^2/int)", &gwinflow);
+//
+//  declstatdiag("gwcuminflow", NHRU, "cumulative gw inflow", "(mm*km^2)", &gwcuminflow);
+//
+//  declvar("gwoutflow", NHRU, "HRU gw outflow", "(mm*km^2/int)", &gwoutflow);
+//
+//  declstatdiag("gwcumoutflow", NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
+//
+//  decldiag("gwoutflow_diverted", NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
+//
+//  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
+//
+//  declvar("ssrinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
+//
+//  declstatdiag("ssrcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
+//
+//  declvar("ssroutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
+//
+//  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
+//
+//  declstatdiag("HRU_cumbasinflow", NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
+//
+//  declvar("runinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
+//
+//  declstatdiag("runcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
+//
+//  declvar("runoutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
+//
+//  declstatdiag("runcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
+//
+//  declstatdiag("cum_preferential_flow_to_gw", NHRU, "cumulative other HRU's runoff to gw of this HRU via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
+//
+//  declparam("preferential_flow", NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
+//
+//
+//  declvar("basinflow", BASIN, "basin surface and sub-surface outflow", "(m^3/int)", &basinflow);
+//
+//  decldiag("basinflow_s", BASIN, "basin surface and sub-surface outflow", "(m^3/s)", &basinflow_s);
+//
+//  declstatdiag("cumbasinflow", BASIN, "cumulative basin surface and sub-surface outflow", "(m^3)", &cumbasinflow);
+//
+//  declvar("basingw", BASIN, "cumulative basin groundwater outflow", "(m^3/int)", &basingw);
+//
+//  decldiag("basingw_s", BASIN, "cumulative basin groundwater outflow", "(m^3/s)", &basingw_s);
+//
+//  declstatdiag("cumbasingw", BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
+//
+//  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
+//
+//  decllocal("soil_runoff_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
+//
+//  decllocal("soil_gw_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
+//
+//  decllocal("Ktravel", NHRU, "travel time", "(d)", &Ktravel);
+//
+//
+//  declparam("basin_area", BASIN, "3", "1e-6", "1e09", "Total basin area", "(km^2)", &basin_area);
+//
+//  declparam("hru_area", NHRU, "[1]", "1e-6", "1e09", "HRU area", "(km^2)", &hru_area);
+//
+//  declparam("Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &Lag);
+//
+//  declparam("route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &route_n);
+//
+//  declparam("route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &route_R);
+//
+//  declparam("route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &route_S0);
+//
+//  declparam("route_L", NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
+//
+//  declparam("route_X_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &route_X_M);
+//
+//  declparam("ssrKstorage", NHRU, "[0.0]", "0.0","200.0", "subsurface runoff storage constant", "(d)", &ssrKstorage);
+//
+//  declparam("ssrLag", NHRU, "[0.0]", "0.0","1.0E4.0", "subsurface runoff lag delay", "(h)", &ssrLag);
+//
+//  declparam("runKstorage", NHRU, "[0.0]", "0.0","200.0", "runoff storage constant", "(d)", &runKstorage);
+//
+//  declparam("runLag", NHRU, "[0.0]", "0.0","1.0E4", "runoff lag delay", "(h)", &runLag);
+//
+//  declparam("gwKstorage", NHRU, "[0.0]", "0.0","200.0", "gw storage constant", "(d)", &gwKstorage);
+//
+//  declparam("gwLag", NHRU, "[0.0]", "0.0","1.0E4", "gw lag delay", "(h)", &gwLag);
+//
+//  declparam("whereto", NHRU, "[0]", "0", "1000", "send to; 0 - basin outflow, or HRU input", "()", &whereto);
+//
+//  declparam("order", NHRU, "[1,2,3,4,5!]", "1","1000", "HRU routing process order", "()", &order);
+//
+//  declparam("gwwhereto", NHRU, "[0]", "-1000", "1000", "send to: 0 - basingw, >0 - other HRU surface input <0 - other abs(-HRU) gw input, or (< -HRUmax or > +HRUmax) - surface basinflow", "()", &gwwhereto);
+//
+//  declparam("Sdmax", NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
+//
+//  declparam("soil_rechr_max", NHRU, "[60.0]", "0.0", "350.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
+//
+//  decldiagparam("Sd_ByPass", NHRU, "[0]", "0", "1","0 - normal, 1 - Bypass Pond/Depressional storage (i.e. Sd).", "()", &Sd_ByPass);
+//
+//  decldiagparam("soil_rechr_ByPass", NHRU, "[1]", "0", "1","0 - normal, 1 - Bypass recharge layer (i.e. soil_rechr).", "()", &soil_rechr_ByPass);
+//
+//  declparam("Channel_shp", NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
+//
+//
+//  soil_gwDiv = declgetvar("*", "gw_flow", "(mm/int)", &soil_gw);
+//
+//  soil_ssrDiv = declgetvar("*", "soil_ssr", "(mm/int)", &soil_ssr);
+//
+//  soil_runoffDiv = declgetvar("*", "soil_runoff", "(mm/int)", &soil_runoff);
+//
+//
+//  declputvar("*", "Sd", "(mm)", &Sd);
+//
+//  declputvar("*", "soil_moist", "(mm)", &soil_moist);
+//
+//  declputvar("*", "soil_rechr", "(mm)", &soil_rechr);
+//
+//  declputvar("*", "redirected_residual", "(mm*km^2/int)", &redirected_residual);
+//
+//  declputvar("*", "gw", "(mm)", &gw);
+//}
+//
+//void ClassNetroute_M::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  if(soil_ssrDiv > 1){
+//    string S = "Netroute_M:  \"soil_ssr\". Converting to mm/int";
+//    CRHMException TExcept(S.c_str(), WARNING);
+//    LogError(TExcept);
+//  }
+//
+//  if(soil_runoffDiv > 1){
+//    string S = "Netroute_M:  \"soil_runoff\". Converting to mm/int";
+//    CRHMException TExcept(S.c_str(), WARNING);
+//    LogError(TExcept);
+//  }
+//
+//  if(soil_gwDiv > 1){
+//    string S = "Netroute_M:  \"gw_flow\". Converting to mm/int";
+//    CRHMException TExcept(S.c_str(), WARNING);
+//    LogError(TExcept);
+//  }
+//
+//  const float Vw[3] = {1.67, 1.22, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+//
+//  for(hh = 0; hh < nhru; ++hh){
+//    float Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
+//    Ktravel[hh] = route_L[hh]/(Vw[route_Cshp[hh]]*Vavg)/86400.0; // (d)
+//  }
+//
+//  hruDelay = new ClassMuskingum(inflow, outflow, Ktravel, route_X_M, Lag, nhru);
+//  ssrDelay = new ClassClark(ssrinflow, ssroutflow, ssrKstorage, ssrLag, nhru);
+//  runDelay = new ClassClark(runinflow, runoutflow, runKstorage, runLag, nhru);
+//  gwDelay = new ClassClark(gwinflow, gwoutflow, gwKstorage, gwLag, nhru);
+//
+//  for(hh = 0; hh < nhru; ++hh){
+//    if(Ktravel[hh] >= (Global::Interval/(2.0*route_X_M[hh]))){
+//      string S = string("'" + Name + " (Netroute_M) Muskingum coefficient negative in HRU ").c_str() + to_string(hh+1);
+//      CRHMException TExcept(S.c_str(), WARNING);
+//      LogError(TExcept);
+//    }
+//
+//    if(Ktravel[hh] < (Global::Interval/(2.0*(1.0-route_X_M[hh])))){ //    if(hruDelay->c0[hh] < 0.0)
+//      hruDelay->c0[hh] = 0.0;
+//      hruDelay->c1[hh] = 1.0;
+//      hruDelay->c2[hh] = 0.0;
+//    }
+//  }
+//
+//  basinflow[0] = 0.0;
+//  basinflow_s[0] = 0.0;
+//  cumbasinflow[0] = 0.0;
+//  basingw[0] = 0.0;
+//  basingw_s[0] = 0.0;
+//  cumbasingw[0] = 0.0;
+//
+//  for(hh = 0; hh < nhru; ++hh) {
+//    inflow[hh] = 0.0;
+//    cuminflow[hh] = 0.0;
+//    outflow[hh] = 0.0;
+//    outflow_diverted[hh] = 0.0;
+//    cumoutflow_diverted[hh] = 0.0;
+//    cumoutflow[hh] = 0.0;
+//    cum_to_Sd[hh] = 0.0;
+//    cum_to_soil_rechr[hh] = 0.0;
+//    cum_preferential_flow_to_gw[hh] = 0.0;
+//
+//    gwinflow[hh] = 0.0;
+//    gwcuminflow[hh] = 0.0;
+//    gwcumoutflow[hh] = 0.0;
+//    gwcumoutflow_diverted[hh] = 0.0;
+//    HRU_cumbasinflow[hh] = 0.0;
+//
+//    ssrinflow[hh] = 0.0;
+//    ssrcuminflow[hh] = 0.0;
+//    ssroutflow[hh] = 0.0;
+//    ssrcumoutflow[hh] = 0.0;
+//
+//    runinflow[hh] = 0.0;
+//    runcuminflow[hh] = 0.0;
+//    runoutflow[hh] = 0.0;
+//    runcumoutflow[hh] = 0.0;
+//
+//    soil_ssr_Buf[hh] = 0.0;
+//    soil_runoff_Buf[hh] = 0.0;
+//    soil_gw_Buf[hh] = 0.0;
+//
+//    bool OK = false;
+//    for(long jj = 0; chkStruct(jj); ++jj)
+//      if(order[jj] - 1 == hh){
+//        OK = true;
+//        break;
+//      }
+//
+//    if(!OK){
+//        string SS = string("'" + Name + " (Netroute_M)' the 'order' parameter does not have a unique value for each HRU");
+//        CRHMException Except(SS.c_str() ,ERR);
+//        LogError(Except);
+//        throw Except;
+//      }
+//  }
+//}
+//
+//void ClassNetroute_M::run(void) {
+//
+//  long nstep = getstep()% Global::Freq;
+//
+//  basinflow[0] = 0.0;
+//  basingw[0] = 0.0;
+//
+//  for(long jj = 0; chkStruct(jj); ++jj) { // HRUs not in sequence
+//
+//    for(hh = 0; chkStruct(hh); ++hh)
+//      if(order[hh] - 1 == jj)
+//        break;
+//
+//    if(soil_gwDiv == 1) // interval value
+//       soil_gw_Buf[hh] = soil_gw[hh];
+//
+//    gwinflow[hh] = soil_gw_Buf[hh]*hru_area[hh];
+//
+//    gwoutflow_diverted[hh] = 0.0;
+//
+//    float gw_amount = 0.0;
+//
+//    for(long hhh = 0; chkStruct(hhh); ++hhh) {
+//      if(gwoutflow[hhh] > 0.0 && gwwhereto[hhh] && (abs(gwwhereto[hhh])-1 == hh || abs(gwwhereto[hhh]) > nhru)){ // handles "gwwhereto" <> 0
+//        gwoutflow_diverted[hhh] = gwoutflow[hhh];
+//        gw_amount = gwoutflow_diverted[hhh];
+//        gwoutflow[hhh] = 0.0;
+//        gwcumoutflow_diverted[hhh] += gwoutflow_diverted[hhh];
+//
+//        if(abs(gwwhereto[hhh]) <= nhru){
+//          if(gwwhereto[hhh] > 0){ // direct to HRU surface
+//            float free = soil_rechr_max[hh] - soil_rechr[hh];
+//            if(free > 0.0 && !soil_rechr_ByPass[hh]){
+//              if(free > gw_amount/hru_area[hh]){ // units (mm*km^2/int)
+//                soil_rechr[hh] += gw_amount/hru_area[hh];
+//
+//                soil_moist[hh] += gw_amount/hru_area[hh];
+//                cum_to_soil_rechr[hh] += gw_amount/hru_area[hh];
+//                gw_amount = 0.0;
+//              }
+//              else {
+//                gw_amount = (gw_amount/hru_area[hh] - free)*hru_area[hh];
+//                cum_to_soil_rechr[hh] += free;
+//                soil_moist[hh] += free;
+//                soil_rechr[hh] = soil_rechr_max[hh];
+//              }
+//            }
+//
+//            free = Sdmax[hh] - Sd[hh];
+//            if(free > 0.0 && gw_amount > 0.0 && !Sd_ByPass[hh]){
+//              if(free > gw_amount/hru_area[hh]){ // outflow (mm*km^2/int)
+//                Sd[hh] += gw_amount/hru_area[hh];
+//                cum_to_Sd[hh] += gw_amount/hru_area[hh];
+//                gw_amount = 0.0;
+//              }
+//              else {
+//                gw_amount = (gw_amount/hru_area[hh] - free)*hru_area[hh];
+//                cum_to_Sd[hh] += free;
+//                Sd[hh] = Sdmax[hh];
+//              }
+//            }
+//          } // hh > 0
+//          else{ // hh < 0
+//            gw[hh] +=  gw_amount/hru_area[hh];
+//            gw_amount = 0.0;
+//          }
+//        } // is HRU
+//        else{ // > nhru then put in basinflow
+//          basinflow[0] += gw_amount*1000; // (m3)
+//          HRU_cumbasinflow[hh] = gw_amount;
+//          cumoutflow[hh] += gw_amount;
+//          gw_amount = 0.0;
+//        }
+//      } // match hh
+//    } // for hhh
+//
+//    gwcuminflow[hh] += gwinflow[hh];
+//
+//    if(soil_ssrDiv == 1) // interval value
+//       soil_ssr_Buf[hh] = soil_ssr[hh];
+//
+//    if(soil_runoffDiv == 1) // interval value
+//       soil_runoff_Buf[hh] = soil_runoff[hh];
+//
+//    runinflow[hh] = soil_runoff_Buf[hh]*hru_area[hh]; // includes melt and rain runoff
+//    runcuminflow[hh] += runinflow[hh];
+//
+//    ssrinflow[hh] = soil_ssr_Buf[hh]*hru_area[hh]; // subsurface runoff
+//    ssrcuminflow[hh] += ssrinflow[hh];
+//
+//    ssrcumoutflow[hh] += ssroutflow[hh];
+//    runcumoutflow[hh] += runoutflow[hh];
+//
+//    inflow[hh] = (runoutflow[hh] + ssroutflow[hh] + gw_amount); // add this HRU runoff and subsurface flow
+//
+//    cuminflow[hh] += inflow[hh];
+//
+//    for(long hhh = 0; chkStruct(hhh); ++hhh) {
+//      if(whereto[hhh]-1 == hh && outflow[hhh] > 0.0){
+//        if(preferential_flow[hhh]) {
+//          gw[hh] += outflow[hhh]/hru_area[hh];
+//          cum_preferential_flow_to_gw[hh] += outflow[hhh]/hru_area[hh];
+//          outflow[hhh] = 0.0;
+//        }
+//        else {
+//          outflow_diverted[hhh] = outflow[hhh];
+//          cumoutflow_diverted[hhh] += outflow_diverted[hhh];
+//          float free = soil_rechr_max[hh] - soil_rechr[hh];
+//          if(free > 0.0 && !soil_rechr_ByPass[hh]){
+//            if(free > outflow[hhh]/hru_area[hh]){ // units (mm*km^2/int)
+//              soil_rechr[hh] += outflow[hhh]/hru_area[hh];
+//              soil_moist[hh] += outflow[hhh]/hru_area[hh];
+//              cum_to_soil_rechr[hh] += outflow[hhh]/hru_area[hh];
+//              outflow[hhh] = 0.0;
+//            }
+//            else {
+//              outflow[hhh] = (outflow[hhh]/hru_area[hh] - free)*hru_area[hh];
+//              cum_to_soil_rechr[hh] += free;
+//              soil_moist[hh] += free;
+//              soil_rechr[hh] = soil_rechr_max[hh];
+//            }
+//          }
+//
+//          free = Sdmax[hh] - Sd[hh];
+//          if(free > 0.0 && !Sd_ByPass[hh] && outflow[hhh] > 0.0){
+//            if(free > outflow[hhh]/hru_area[hh]){ // units (mm*km^2/int)
+//              Sd[hh] += outflow[hhh]/hru_area[hh];
+//              cum_to_Sd[hh] += outflow[hhh]/hru_area[hh];
+//              outflow[hhh] = 0.0;
+//            }
+//            else {
+//              outflow[hhh] = (outflow[hhh]/hru_area[hh] - free)*hru_area[hh];
+//              cum_to_Sd[hh] += free;
+//              Sd[hh] = Sdmax[hh];
+//            } // if
+//          } // if
+//        } // else
+//
+//        if(outflow[hhh] > 0.0) // handle excess
+//          redirected_residual[hh] +=  outflow[hhh]; // Return to module soil. Previously handled by Netroute. (mm*km^2/int)
+//
+//        outflow[hhh] = 0.0;
+//      } // if
+//    } // for hhh
+//
+//    hruDelay->DoMuskingum(hh); // need to update for later HRUs
+//
+//    if(whereto[hh] == 0) { // move to basinflow
+//      basinflow[0] += outflow[hh]*1000; // (m3)
+//      HRU_cumbasinflow[hh] += outflow[hh];
+//      cumoutflow[hh] += outflow[hh];
+//    }
+//    if(gwwhereto[hh] == 0) { // move to basin gw
+//      basingw[0] += gwoutflow[hh]*1000; // (m3) end of every day
+//      gwcumoutflow[hh] += gwoutflow[hh];
+//    }
+//
+//    if(nstep == 0){ // end of every day
+//      if(soil_ssrDiv > 1) // daily value - ready for next day
+//         soil_ssr_Buf[hh] = soil_ssr[hh]/soil_ssrDiv;
+//
+//      if(soil_runoffDiv > 1) // daily value - ready for next day
+//         soil_runoff_Buf[hh] = soil_runoff[hh]/soil_runoffDiv;
+//
+//      if(soil_gwDiv > 1) // daily value - ready for next day
+//         soil_gw_Buf[hh] = soil_gw[hh]/soil_gwDiv;
+//    }  // end if
+//
+//
+//} // for hh
+//
+//  runDelay->DoClark();
+//  ssrDelay->DoClark();
+//  gwDelay->DoClark();
+//
+//  basinflow_s[0] = basinflow[0]*Global::Freq/86400.0;
+//  basingw_s[0] = basingw[0]*Global::Freq/86400.0;
+//
+//  cumbasinflow[0] += basinflow[0];
+//  cumbasingw[0] += basingw[0];
+//}
+//
+//void ClassNetroute_M::finish(bool good) {
+//
+//  float Allcuminflow = 0.0;
+//  float Allcumoutflow = 0.0;
+//  float Allcumoutflowdiverted = 0.0;
+//
+//  float Allgwcuminflow = 0.0;
+//  float Allgwcumoutflow = 0.0;
+//  float Allgwcumoutflowdiverted = 0.0;
+//
+//  float Allssrcuminflow = 0.0;
+//  float Allssrcumoutflow = 0.0;
+//  float Allruncuminflow = 0.0;
+//  float Allruncumoutflow = 0.0;
+//
+//  float AllSdcuminflow = 0.0;
+//  float Allrechrcuminflow = 0.0;
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' cuminflow              (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' cumoutflow             (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' cumoutflow_diverted    (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow_diverted[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' hruDelay->Left         (mm) (mm*km^2) (mm*basin): ").c_str(), hruDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
+//
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' ssrcuminflow           (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' ssrcumoutflow          (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' ssrDelay_in_storage    (mm) (mm*km^2) (mm*basin): ").c_str(), ssrDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
+//
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' runoffcuminflow        (mm) (mm*km^2) (mm*basin): ").c_str(), runcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' runoffcumoutflow       (mm) (mm*km^2) (mm*basin): ").c_str(), runcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' runDelay_in_storage    (mm) (mm*km^2) (mm*basin): ").c_str(), runDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
+//
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' gwcuminflow            (mm) (mm*km^2) (mm*basin): ").c_str(), gwcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' gwcumoutflow           (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' gwcumdiverted          (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow_diverted[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' gwDelay_in_storage     (mm) (mm*km^2) (mm*basin): ").c_str(), gwDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
+//
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' cum_to_Sd              (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_Sd[hh], hru_area[hh], basin_area[0], " *** Added to this HRU Sd");
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' cum_to_soil_rechr      (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_soil_rechr[hh], hru_area[hh], basin_area[0], " *** Added to this HRU recharge");
+//    LogMessageA(hh, string("'" + Name + " (Netroute_M)' HRU_cumbasinflow       (mm) (mm*km^2) (mm*basin): ").c_str(), HRU_cumbasinflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+//    LogDebug(" ");
+//
+//    Allcuminflow += cuminflow[hh];
+//    Allcumoutflow += cumoutflow[hh];
+//    Allcumoutflowdiverted += cumoutflow_diverted[hh];
+//
+//    Allgwcuminflow += gwcuminflow[hh];
+//    Allgwcumoutflow += gwcumoutflow[hh];
+//    Allgwcumoutflowdiverted += gwcumoutflow_diverted[hh];
+//
+//    Allssrcumoutflow += ssrcumoutflow[hh];
+//    Allssrcuminflow += ssrcuminflow[hh];
+//    Allruncuminflow += runcuminflow[hh];
+//    Allruncumoutflow += runcumoutflow[hh];
+//
+//    AllSdcuminflow += cum_to_Sd[hh]*hru_area[hh];
+//    Allrechrcuminflow += cum_to_soil_rechr[hh]*hru_area[hh];
+//  }
+//
+//  LogMessage(string("'" + Name + " (Netroute_M)' cumbasinflow (m^3): ").c_str(), cumbasinflow[0]);
+//  LogMessage(string("'" + Name + " (Netroute_M)' cumbasingw   (m^3): ").c_str(), cumbasingw[0]);
+//  LogDebug(" ");
+//
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allgwcuminflow  (mm*basin): ").c_str(), Allgwcuminflow);
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allgwcumoutflow (mm*basin): ").c_str(), Allgwcumoutflow);
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allgwcumoutflowdiverted (mm*basin): ").c_str(), Allgwcumoutflowdiverted);
+//  LogDebug(" ");
+//
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allcuminflow    (mm*basin): ").c_str(), Allcuminflow);
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allcumoutflow   (mm*basin): ").c_str(), Allcumoutflow);
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allcumoutflowdiverted (mm*basin): ").c_str(), Allcumoutflowdiverted);
+//  LogDebug(" ");
+//
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allssrcuminflow  (mm*basin): ").c_str(), Allssrcuminflow);
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allssrcumoutflow (mm*basin): ").c_str(), Allssrcumoutflow);
+//  LogDebug(" ");
+//
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allruncuminflow) (mm*basin): ").c_str(), Allruncuminflow);
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allruncumoutflow (mm*basin): ").c_str(), Allruncumoutflow);
+//  LogDebug(" ");
+//
+//  LogMessage(string("'" + Name + " (Netroute_M)' AllSdcuminflow    (mm*basin): ").c_str(), AllSdcuminflow);
+//  LogMessage(string("'" + Name + " (Netroute_M)' Allrechrcuminflow (mm*basin): ").c_str(), Allrechrcuminflow);
+//  LogDebug(" ");
+//
+//  delete hruDelay;
+//  delete ssrDelay;
+//  delete runDelay;
+//  delete gwDelay;
+//}
+
+//ClassREWroute2* ClassREWroute2::klone(string name) const{
+//  return new ClassREWroute2(name);
+//}
+//
+//void ClassREWroute2::decl(void) {
+//
+//  Description = "'Handles the routing of surface and subsurface runoff from RBs (representative basins).' \
+//                    'uses Muskingum,' \
+//                    'uses Clark.' \
+//                    'uses Muskingum and culverts,' \
+//                    'uses Clark and culverts.'";
+//
+//  variation_set = VARIATION_ORG;
+//
+//  inflowCnt = declgrpvar("WS_ALL_inflow", "basinflow", "query variable = 'basinflow'", "(m^3/int)", &rew, &inflow_All);
+//
+//  declvar("WS_inflow", NHRU, "inflow from each RB", "(m^3/int)", &inflow);
+//
+//  declstatdiag("cum_WSinflow", NHRU, "cumulative inflow from each RB", "(m^3)", &cuminflow);
+//
+//  declvar("WS_outflow", NHRU, "outflow of each RB", "(m^3/int)", &outflow);
+//
+//  declstatdiag("cum_WSoutflow", NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutflow);
+//
+//  declvar("WS_flow", BASIN, "watershed surface and sub-surface outflow", "(m^3/int)", &flow);
+//
+//  declvar("WS_flow_s", BASIN, "watershed surface and sub-surface outflow", "(m^3/s)", &flow_s);
+//
+//  declstatdiag("cum_WSflow", BASIN, "cumulative watershed surface and sub-surface outflow", "(m^3)", &cumflow);
+//
+//
+//  gwCnt = declgrpvar("WS_ALL_gwflow", "basingw", "query variable = 'basingw'", "(m^3/int)", &gwrew, &gw_All);
+//
+//  declvar("WS_gwinflow", NHRU, "inflow from each RB", "(m^3/int)", &gwinflow);
+//
+//  declstatdiag("cum_WSgwinflow", NHRU, "cumulative inflow from each RB", "(m^3)", &cumgwinflow);
+//
+//  declvar("WS_gwoutflow", NHRU, "outflow of each RB", "(m^3/int)", &gwoutflow);
+//
+//  declstatdiag("cum_WSgwoutflow", NHRU, "cumulative outflow of each RB", "(m^3)", &cumgwoutflow);
+//
+//  declvar("WS_gwflow", BASIN, "watershed ground water outflow", "(m^3/int)", &gwflow);
+//
+//  declvar("WS_gwflow_s", BASIN, "watershed ground water outflow", "(m^3/s)", &gwflow_s);
+//
+//  declstatdiag("cum_WSgwflow", BASIN, "cumulative watershed ground water outflow", "(m^3)", &cumgwflow);
+//
+//
+//  declparam("WS_whereto", NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_whereto);
+//
+//  declparam("WS_order", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_order);
+//
+//  declparam("WS_gwwhereto", NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_gwwhereto);
+//
+//  declparam("WS_gworder", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_gworder);
+//
+//  declparam("WS_Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_Lag);
+//
+//  declparam("WS_gwLag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_gwLag);
+//
+//
+//  variation_set = VARIATION_2 + VARIATION_3;
+//
+//  declvar("WS_culvert_Q", NHRU, "flow in culvert", "(m^3/s)", &culvert_Q);
+//
+//  declvar("WS_culvert_water_H", NHRU, "depth of pond at culvert inlet", "(m)", &culvert_water_H);
+//
+//  declvar("WS_culvert_water_A", NHRU, "surface area of culvert pond", "(m^2)", &culvert_water_A);
+//
+//  declvar("WS_culvert_water_V", NHRU, "volume of water in culvert pond", "(m^3)", &culvert_water_V);
+//
+//  declvar("WS_culvert_over_Q", NHRU, "flow over the road", "(m^3/s)", &culvert_over_Q);
+//
+//  declvar("WS_culvert_evap", NHRU, "Depth of water evaporating from culvert pond.", "(mm/int)", &culvert_evap);
+//
+//  declvar("WS_cum_culvert", NHRU, "Cumulative culvert HRU flow", "(m^3)", &cum_culvert);
+//
+//  declvar("WS_cum_culvert_over", NHRU, "Cumulative culvert HRU overflow", "(m^3)", &cum_culvert_over);
+//
+//  declstatdiag("WS_HD", NHRU, "ratio of depth of water at culvert/culvert diameter", "()", &HD);
+//
+//  declparam("WS_channel_slope", NHRU, "[0.002]", "0.0001", "0.01", "soil slope to culvert", "()", &WS_channel_slope);
+//
+//  declparam("WS_side_slope", NHRU, "[0.02]", "0.0001", "0.01", "side soil slope mormal to culvert slope", "()", &WS_side_slope);
+//
+//  declparam("WS_culvert_diam", NHRU, "[0.5]", "0.1", "5.0", "culvert diameter", "(m)", &WS_culvert_diam);
+//
+//  declparam("WS_culvert_water_Dmax", NHRU, "[2.0]", "0.1", "10.0", "maximum depth of pond at culvert inlet", "(m)", &WS_culvert_water_Dmax);
+//
+//  declparam("WS_number_culverts", NHRU, "[1.0]", "0.0", "10.0", "number of culverts and efficiency factor. Zero = no culvert", "()", &WS_number_culverts);
+//
+//  declparam("WS_culvert_type", NHRU, "[4]", "0", "4", "0- thin walled projection, 1- square edged (flush) inlet, 2- socket and concrete pipe, 3- 45 degree beveled inlet, 4- well-rounded (streamlined) inlet", "()", &WS_culvert_type);
+//
+//
+//  variation_set = VARIATION_0 + VARIATION_2;
+//
+//  decldiag("WS_Ktravel_var", NHRU, "inflow storage constant", "(d)", &WS_Ktravel_var);
+//
+//  decldiag("WS_gwKtravel_var", NHRU, "gw storage constant", "(d)", &WS_gwKtravel_var);
+//
+//  declparam("WS_route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &WS_route_n);
+//
+//  declparam("WS_route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "()", &WS_route_R);
+//
+//  declparam("WS_route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &WS_route_S0);
+//
+//  declparam("WS_route_L", NHRU, "[3.69]", "0.01","1.0E10", "routing length", "(m)", &WS_route_L);
+//
+//  declparam("WS_Channel_shp", NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &WS_Channel_shp);
+//
+//  declparam("WS_X_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &WS_route_X_M);
+//
+//  declparam("WS_gwX_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &WS_gwroute_X_M);
+//
+//
+//  variation_set = VARIATION_1 + VARIATION_3;
+//
+//  declparam("WS_Kstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_Kstorage);
+//
+//  declparam("WS_gwKstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_gwKstorage);
+//
+//
+//  variation_set = VARIATION_ORG;
+//}
+//
+//void ClassREWroute2::init(void) {
+//
+//  if(nhru < inflowCnt) {
+//    CRHMException Except("Module REW route # of HRUs must be >= # of groups." ,TERMINATE);
+//    LogError(Except);
+//    throw Except;
+//  }
+//
+//  if(WS_whereto[WS_order[nhru-1]-1] != 0) {
+//    CRHMException Except("In module REW route 'whereto' for last RB must be zero." ,TERMINATE);
+//    LogError(Except);
+//    throw Except;
+//  }
+//
+//  if(WS_gwwhereto[WS_gworder[nhru-1]-1] != 0) {
+//    CRHMException Except("In module REW route 'gwwhereto' for last RB must be zero." ,TERMINATE);
+//    LogError(Except);
+//    throw Except;
+//  }
+//
+//  if(variation == VARIATION_ORG || variation == VARIATION_2){
+//    const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+//
+//    for(hh = 0; hh < nhru; ++hh){
+//      float Vavg = (1.0/WS_route_n[hh])*pow(WS_route_R[hh], 2.0f/3.0f)*pow(WS_route_S0[hh], 0.5f);
+//
+//      WS_gwKtravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
+//      WS_Ktravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
+//    }
+//
+//    inflowDelay = new ClassMuskingum(inflow, outflow, WS_Ktravel_var, WS_route_X_M, WS_Lag, nhru);
+//    gwDelay = new ClassMuskingum(gwinflow, gwoutflow, WS_gwKtravel_var, WS_gwroute_X_M, WS_gwLag, nhru);
+//
+//    for(hh = 0; hh < nhru; ++hh){
+//      if(WS_gwKtravel_var[hh] >= (Global::Interval/(2.0*WS_gwroute_X_M[hh]))){
+//        string S = string("'" + Name + " (REW_route) GW Muskingum coefficient negative in HRU ").c_str();
+//        CRHMException TExcept(S.c_str(), WARNING);
+//        LogError(TExcept);
+//      }
+//
+//      if(gwDelay->c0[hh] < 0.0){
+//        gwDelay->c0[hh] = 0.0;
+//        gwDelay->c1[hh] = 1.0;
+//        gwDelay->c2[hh] = 0.0;
+//      }
+//
+//      if(WS_Ktravel_var[hh] >= (Global::Interval/(2.0*WS_route_X_M[hh]))){
+//        string S = string("'" + Name + " (REW_route) inflow Muskingum coefficient negative in HRU ").c_str();
+//        CRHMException TExcept(S.c_str(), WARNING);
+//        LogError(TExcept);
+//      }
+//
+//      if(WS_Ktravel_var[hh] < (Global::Interval/(2.0*(1.0-WS_route_X_M[hh])))){ //inflowDelay->c0[hh] < 0.0
+//        inflowDelay->c0[hh] = 0.0;
+//        inflowDelay->c1[hh] = 1.0;
+//        inflowDelay->c2[hh] = 0.0;
+//      }
+//    }
+//  }
+//  else if(variation == VARIATION_1 || variation == VARIATION_3){
+//    Clark_inflowDelay = new ClassClark(inflow, outflow, WS_Kstorage, WS_Lag, nhru);
+//    Clark_gwDelay = new ClassClark(inflow, outflow, WS_gwKstorage, WS_gwLag, nhru);
+//  }
+//
+//  flow[0] = 0.0;
+//  flow_s[0] = 0.0;
+//  cumflow[0] = 0.0;
+//
+//  gwflow[0] = 0.0;
+//  gwflow_s[0] = 0.0;
+//  cumgwflow[0] = 0.0;
+//
+//  for(hh = 0; hh < nhru; ++hh) {
+//    inflow[hh] = 0.0;
+//    cuminflow[hh] = 0.0;
+//    outflow[hh] = 0.0;
+//    cumoutflow[hh] = 0.0;
+//    gwinflow[hh] = 0.0;
+//    cumgwinflow[hh] = 0.0;
+//    gwoutflow[hh] = 0.0;
+//    cumgwoutflow[hh] = 0.0;
+//
+//    if(variation == VARIATION_2 || variation == VARIATION_3){
+//      culvert_water_V[hh] = 0.0;
+//      culvert_water_H[hh] = 0.0;
+//      culvert_water_A[hh] = 0.0;
+//      culvert_over_Q[hh] = 0.0;
+//      culvert_Q[hh] = 0.0;
+//      HD[hh] = 0.0;
+//      culvert_evap[hh] = 0.0;
+//      cum_culvert[hh] = 0.0;
+//      cum_culvert_over[hh] = 0.0;
+//
+//      if(WS_number_culverts[hh] > 0.0){
+//        if(WS_culvert_water_Dmax[hh]/WS_culvert_diam[hh] > 2.5){
+//          string S = "soil: " + string(Name.c_str()) +  " ratio of H/D > 2.5 in HRU " + to_string(hh+1);
+//          CRHMException TExcept(S.c_str(), WARNING);
+//          LogError(TExcept);
+//        }
+//      }
+//    }
+//  }
+//}
+//
+//void ClassREWroute2::run(void) {
+//
+//  flow[0] = 0.0;
+//  gwflow[0] = 0.0;
+//
+//  for(long jj = 0; jj < inflowCnt; ++jj) { // HRUs not in sequence
+//
+//    int hh = WS_order[jj] - 1;
+//
+//    if(rew[hh])
+//      inflow[hh] = inflow_All[hh][0]; // add this HRU runoff and subsurface flow
+//    else
+//      inflow[hh] = 0; // add this HRU runoff and subsurface flow
+//
+//    for(long hhh = 0; chkStruct(hhh); ++hhh) {
+//      if(WS_whereto[hhh]-1 == hh && outflow[hhh] > 0.0){
+//        if(outflow[hhh] > 0.0)
+//          inflow[hh] += outflow[hhh];
+//      }
+//    }
+//
+//    cuminflow[hh] += inflow[hh];
+//
+//    if(variation == VARIATION_2 || variation == VARIATION_3)
+//      Culvert(hh);
+//
+//    if(variation == VARIATION_ORG || variation == VARIATION_2)
+//      inflowDelay->DoMuskingum(hh); // need to update for later HRUs
+//    else if(variation == VARIATION_1 || variation == VARIATION_3)
+//      Clark_inflowDelay->DoClark(hh); // need to update for later HRUs
+//
+//    cumoutflow[hh] += outflow[hh];
+//
+//    if(WS_whereto[hh] == 0) {
+//      flow[0] += outflow[hh]; // (already m^3)
+//      flow_s[0] = flow[0]*Global::Freq/86400.0;
+//    }
+//} //end for
+//
+//  for(long jj = 0; jj < gwCnt; ++jj) { // HRUs not in sequence
+//
+//    int hh = WS_gworder[jj] - 1;
+//
+//    if(gwrew[hh])
+//      gwinflow[hh] = gw_All[hh][0]; // add this HRU runoff and subsurface flow
+//    else
+//      gwinflow[hh] = 0; // add this HRU runoff and subsurface flow
+//
+//    for(long hhh = 0; chkStruct(hhh); ++hhh) {
+//      if(WS_gwwhereto[hhh]-1 == hh && gwoutflow[hhh] > 0.0){
+//        if(gwoutflow[hhh] > 0.0)
+//          gwinflow[hh] += gwoutflow[hhh];
+//      }
+//    }
+//
+//    cumgwinflow[hh] += gwinflow[hh];
+//
+//  if(variation == VARIATION_ORG || variation == VARIATION_2)
+//    gwDelay->DoMuskingum(hh); // need to update for later HRUs
+//  else if(variation == VARIATION_1 || variation == VARIATION_3)
+//    Clark_gwDelay->DoClark(hh); // need to update for later HRUs
+//
+//    cumgwoutflow[hh] += gwoutflow[hh];
+//
+//    if(WS_gwwhereto[hh] == 0) {
+//      gwflow[0] += gwoutflow[hh]; // (already m^3)
+//      gwflow_s[0] = gwflow[0]*Global::Freq/86400.0;
+//    }
+//} //end for
+//
+//  cumflow[0] += flow[0];
+//  cumgwflow[0] += gwflow[0];
+//}
+//
+//void ClassREWroute2::Culvert(long hh) {
+//
+//  float culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
+//
+//  culvert_water_A[hh] = 0.0;
+//  culvert_water_H[hh] = 0.0;
+//  culvert_over_Q[hh] = 0.0;
+//  culvert_Q[hh] = 0.0;
+//  HD[hh] = 0.0;
+//  culvert_evap[hh] = 0.0;
+//
+//  if((inflow[hh] > 0.0 || culvert_water_V[hh] > 0.0) && WS_number_culverts[hh] > 0.0){
+//    culvert_water_V[hh] += inflow[hh]; // m3 where inflow(m^3/int)
+//    inflow[hh] = 0.0;
+//
+//    culvert_water_H[hh] = pow(3.0*culvert_water_V[hh]*WS_channel_slope[hh]*WS_side_slope[hh], 1.0/3.0); // (m)
+//
+//    if(culvert_water_H[hh] > 0.0){
+//
+//// calculate overflow if culvert level exceeds Dmax
+//
+//      culvert_water_H[hh] = pow(3.0*culvert_water_V[hh]*WS_channel_slope[hh]*WS_side_slope[hh], 1.0/3.0); // (m)
+//
+//      if(culvert_water_H[hh] > WS_culvert_water_Dmax[hh]){ // (m) overflow over road
+//        culvert_water_H[hh] = WS_culvert_water_Dmax[hh]; // (m)
+//        float maxVol = pow(WS_culvert_water_Dmax[hh], 3.0)/(3.0*WS_channel_slope[hh]*WS_side_slope[hh]); // (m3)
+//
+//        culvert_over_Q[hh] = (culvert_water_V[hh] - maxVol)/86400*Global::Freq; //  (m3) to (m3/int) - difference released over interval
+//        culvert_water_V[hh] = maxVol; // (m3)
+//
+//        cum_culvert_over[hh] += culvert_over_Q[hh]; // (m3)
+//        cum_culvert[hh] += culvert_Q[hh]*86400/Global::Freq; // (m3/s) to (m3)
+//
+//        inflow[hh] += culvert_over_Q[hh]*86400/Global::Freq; // (m3/int) to (m3)
+//      }
+//
+//// calculate flow through culvert
+//
+//      HD[hh] = culvert_water_H[hh]/WS_culvert_diam[hh];
+//
+//      if(HD[hh] <= 0.0)
+//        culvert_Q[hh] = 0.0;
+//      else if(HD[hh] < 1.5)
+//        culvert_Q[hh] = max <float>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
+//             + 0.159413*HD[hh] + 0.00772254)*culvert_C[WS_culvert_type[hh]]*WS_number_culverts[hh]*pow(WS_culvert_diam[hh], 2.5), 0.0); // (m3/s)
+//      else
+//        culvert_Q[hh] = culvert_C[WS_culvert_type[hh]]*WS_number_culverts[hh]*0.785*pow(WS_culvert_diam[hh], 2.5)*sqrt(2.0*9.81*(HD[hh] - 0.5));
+//
+//      if(culvert_water_V[hh] > culvert_Q[hh]*86400/Global::Freq) // (m3/s) to (m3)
+//        culvert_water_V[hh] -= culvert_Q[hh]*86400/Global::Freq; // (m3/s) to (m3)
+//      else{ // all runs away
+//        culvert_Q[hh] = culvert_water_V[hh]/86400*Global::Freq;  // (m3) to (m3/int) - difference released over interval
+//        culvert_water_V[hh] = 0.0;
+//      }
+//
+//      inflow[hh] += culvert_Q[hh]*86400/Global::Freq; // (m3/int)
+//      cum_culvert[hh] += culvert_Q[hh]*86400/Global::Freq; // (m3/s) to (m3/int)
+//
+//      culvert_water_A[hh] = sqr(culvert_water_H[hh])/(WS_channel_slope[hh]*WS_side_slope[hh]); // used for evaporation
+//    }
+//  }
+//}
+//
+//void ClassREWroute2::finish(bool good) {
+//  for(hh = 0; hh < inflowCnt; ++hh) {
+//    LogMessageA(hh, string("'" + Name + " (REW_route2)' cuminflow          (m^3) (m^3): ").c_str(), cuminflow[hh], 1.0);
+//    LogMessageA(hh, string("'" + Name + " (REW_route2)' cumoutflow         (m^3) (m^3): ").c_str(), cumoutflow[hh], 1.0);
+//    if(variation == VARIATION_ORG || variation == VARIATION_2)
+//      LogMessageA(hh, string("'" + Name + " (REW_route2)' inflowDelay_in_storage (m^3) (m^3): ").c_str(), inflowDelay->Left(hh), 1.0);
+//    else if(variation == VARIATION_1 || variation == VARIATION_3)
+//      LogMessageA(hh, string("'" + Name + " (REW_route2)' Clark_inflowDelay_in_storage (m^3) (m^3): ").c_str(), Clark_inflowDelay->Left(hh), 1.0);
+//
+//    LogMessageA(hh, string("'" + Name + " (REW_route2)' cumgwinflow  (m^3) (m^3): ").c_str(), cumgwinflow[hh], 1.0);
+//    LogMessageA(hh, string("'" + Name + " (REW_route2)' cumgwoutflow (m^3) (m^3): ").c_str(), cumgwoutflow[hh], 1.0);
+//    if(variation == VARIATION_ORG || variation == VARIATION_2)
+//      LogMessageA(hh, string("'" + Name + " (REW_route2)' gwDelay_in_storage (m^3) (m^3): ").c_str(), gwDelay->Left(hh), 1.0);
+//    else if(variation == VARIATION_1 || variation == VARIATION_3)
+//      LogMessageA(hh, string("'" + Name + " (REW_route2)' Clark_gwDelay_in_storage (m^3) (m^3): ").c_str(), Clark_gwDelay->Left(hh), 1.0);
+//
+//    LogDebug(" ");
+//  }
+//
+//  LogMessage(string("'" + Name + " (REW_route2)' cumflow (m^3): ").c_str(), cumflow[0]);
+//  LogMessage(string("'" + Name + " (REW_route2)' cumgwflow (m^3): ").c_str(), cumgwflow[0]);
+//  LogDebug(" ");
+//
+//  if(variation == VARIATION_ORG || variation == VARIATION_2){
+//    delete inflowDelay;
+//    delete gwDelay;
+//  }
+//  else if(variation == VARIATION_1 || variation == VARIATION_3){
+//    delete Clark_inflowDelay;
+//    delete Clark_gwDelay;
+//  }
+//}
 
 // Walmsley_Wind module that adjusts the wind speed due to topographic feature
 
-Classwalmsley_wind* Classwalmsley_wind::klone(string name) const{
-  return new Classwalmsley_wind(name);
-}
-
-void Classwalmsley_wind::decl(void) {
-
-  Description = "'A parametric version of the wind flow model (Mason and Sykes (1979)).'";
-
-  declvar("hru_Uadjust", NHRU, "adjusted wind speed due to topography", "(m/s)", &hru_Uadjust);
-
-  declvar("hru_Uchange", NHRU, "amount of change in wind speed due to topography", "(m/s)", &hru_Uchange);
-
-  decldiag("WR", NHRU, "wind ratio between adjusted wind speed and reference wind speed", "()", &WR);
-
-  declparam("Zwind", NHRU, "[10.0]", "0.0", "100.0", "wind instrument height", "(m)", &Zwind);
-
-  declparam("A", NHRU, "0.0", "0.0", "4.4", "coefficient for wind speed change due to topography, 0.0 = flat terrain, 2.5 = 2D escarpments, 3.0 = 2D hills, 3.5 = 2D rolling terrain, 4.0 = 3D hills, 4.4 = 3D rolling terrain",
-            "()", &Ax);
-
-  declparam("B", NHRU, "0.0", "0.0", "2.0", "coefficient for wind speed change due to topography, 0.0 = flat terrain, 0.8 = 2D escarpments, 1.1 = 3D rolling terrain, 1.55 = 2D rolling terrain, 1.6 = 3D hills, 2.0 = 2D hills",
-            "()", &Bx);
-
-  declparam("L", NHRU, "[1000.0]", "40.0", "1.0E6f", "upwind length at half height", "(m)", &L);
-
-  declparam("Walmsley_Ht", NHRU, "[0]", "-1000.0", "1000.0", "Walmsley height", "(m)", &Walmsley_Ht);
-
-  declgetvar("*",     "hru_u", "(m/s)", &hru_u);
-
-}
-
-void Classwalmsley_wind::init(void) {
-  nhru = getdim(NHRU);
-}
-
-void Classwalmsley_wind::run(void) {
-
-/*Walmsley, Talor and Salmon's simple guidelines for estimating wind speed variations
-due to topographic features*/
-
-  for (int hh = 0; hh < nhru; ++hh) {
-    double Smax = Bx[hh] * Walmsley_Ht[hh] / L[hh]; // maximum decay of fractional speed-up ratio
-    double S = Smax * exp(-Ax[hh]*Zwind[hh]/L[hh]); // the decay of fractional speed-up ratio
-
-    hru_Uchange[hh] = S * hru_u[hh];
-    hru_Uadjust[hh] = hru_Uchange[hh] + hru_u[hh];
-    WR[hh] = hru_Uadjust[hh] / hru_u[hh];
-  }
-
-}
+//Classwalmsley_wind* Classwalmsley_wind::klone(string name) const{
+//  return new Classwalmsley_wind(name);
+//}
+//
+//void Classwalmsley_wind::decl(void) {
+//
+//  Description = "'A parametric version of the wind flow model (Mason and Sykes (1979)).'";
+//
+//  declvar("hru_Uadjust", NHRU, "adjusted wind speed due to topography", "(m/s)", &hru_Uadjust);
+//
+//  declvar("hru_Uchange", NHRU, "amount of change in wind speed due to topography", "(m/s)", &hru_Uchange);
+//
+//  decldiag("WR", NHRU, "wind ratio between adjusted wind speed and reference wind speed", "()", &WR);
+//
+//  declparam("Zwind", NHRU, "[10.0]", "0.0", "100.0", "wind instrument height", "(m)", &Zwind);
+//
+//  declparam("A", NHRU, "0.0", "0.0", "4.4", "coefficient for wind speed change due to topography, 0.0 = flat terrain, 2.5 = 2D escarpments, 3.0 = 2D hills, 3.5 = 2D rolling terrain, 4.0 = 3D hills, 4.4 = 3D rolling terrain",
+//            "()", &Ax);
+//
+//  declparam("B", NHRU, "0.0", "0.0", "2.0", "coefficient for wind speed change due to topography, 0.0 = flat terrain, 0.8 = 2D escarpments, 1.1 = 3D rolling terrain, 1.55 = 2D rolling terrain, 1.6 = 3D hills, 2.0 = 2D hills",
+//            "()", &Bx);
+//
+//  declparam("L", NHRU, "[1000.0]", "40.0", "1.0E6f", "upwind length at half height", "(m)", &L);
+//
+//  declparam("Walmsley_Ht", NHRU, "[0]", "-1000.0", "1000.0", "Walmsley height", "(m)", &Walmsley_Ht);
+//
+//  declgetvar("*",     "hru_u", "(m/s)", &hru_u);
+//
+//}
+//
+//void Classwalmsley_wind::init(void) {
+//  nhru = getdim(NHRU);
+//}
+//
+//void Classwalmsley_wind::run(void) {
+//
+///*Walmsley, Talor and Salmon's simple guidelines for estimating wind speed variations
+//due to topographic features*/
+//
+//  for (int hh = 0; hh < nhru; ++hh) {
+//    double Smax = Bx[hh] * Walmsley_Ht[hh] / L[hh]; // maximum decay of fractional speed-up ratio
+//    double S = Smax * exp(-Ax[hh]*Zwind[hh]/L[hh]); // the decay of fractional speed-up ratio
+//
+//    hru_Uchange[hh] = S * hru_u[hh];
+//    hru_Uadjust[hh] = hru_Uchange[hh] + hru_u[hh];
+//    WR[hh] = hru_Uadjust[hh] / hru_u[hh];
+//  }
+//
+//}
 
 // TSANDCLAY{LOAM1, LOAM2, LOAM3, SAND, CLAY}
 
@@ -12798,707 +12797,707 @@ const float por_s[] = {0.96, 0.9, 0.87, 0.43, 0.43}; // ()  solids
 
 //---------------------------------------------------------------------------
 
-ClassLongVt* ClassLongVt::klone(string name) const{
-  return new ClassLongVt(name);
-}
-
- void ClassLongVt::decl(void) {
-
-  Description = "'LongVt: Calculates incoming long-wave radiation variable (QliVt_Var) (Sicart et al., 2005) using terrain view factor.' \
-                 'using input Qsi (W/m^2) to calculate daily average,' \
-                 'using input observation QsiDObs (W/m^2) for daily average,' \
-                 'using input variable QsiD_Var (W/m^2) from module Annandale for daily average,' \
-                 'using input observation Qli (W/m^2) for daily average.'";
-
-  variation_set = VARIATION_ORG;
-
-  declvar("tau", NHRU, "Atmospheric transmissivity = S/Sextra", "()", &tau);
-
-  declvar("Qli_Var", NHRU, "calculated incoming long", "(W/m^2)", &Qli_Var);
-
-  declvar("QliVt_Var", NHRU, "calculated incoming long in open environment", "(W/m^2)", &QliVt_Var);
-
-
-
-  declgetvar("*", "QdroDext", "(MJ/m^2*d)", &QdroDext);
-
-  declgetvar("*",  "hru_t", "(Â°C)", &hru_t);
-
-  declgetvar("*",  "hru_ea", "(kPa)", &hru_ea);
-
-  declgetvar("*",  "hru_rh", "()", &hru_rh);
-
-
-  declparam("Vt", NHRU, "[0.3]", "0.0", "1.0", "terrain view factor (equivalent to 1-Vf)", "()", &Vt);
-
-  decldiagparam("epsilon_s", NHRU, "[0.98]", "0.0", "1.0", "terrain emissivity", "()", &epsilon_s);
-
-
-  variation_set = VARIATION_0;
-
-  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
-
-  declobsfunc("Qsi", "QsiDavg", &QsiDavg, AVG, NULL, true); // must check for NULL
-
-
-  variation_set = VARIATION_1;
-
-  declreadobs("QsiDObs", NHRU, "incident short-wave", "(W/m^2)", &QsiD, HRU_OBS_Q);
-
-
-  variation_set = VARIATION_2;
-
-  declgetvar("*",  "QsiD_Var", "(W/m^2)", &QsiD_Var);
-
-
-  variation_set = VARIATION_3;
-
-  declreadobs("Qli", NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
-
-
-  variation_set = VARIATION_0 + VARIATION_1 + VARIATION_2;
-
-  declobs("Qli", NHRU, "incoming calculated long-wave", "(W/m^2)", &Qli_out);
-
-
-  variation_set = VARIATION_ORG;
-
-}
-
-void ClassLongVt::init(void) {
-  nhru = getdim(NHRU);
-
-  if(variation == VARIATION_ORG){
-      if(!QsiDavg){ // only exists if an actual file observation
-        CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi observation to calculate tau. Qsi appears to be a declared obs instead of read from a file.").c_str(), TERMINATE);
-        LogError(TExcept);
-      }
-      else{
-        CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi observation to calculate tau.").c_str(), WARNING);
-        LogError(TExcept);
-      }
-  }
-  else if(variation == VARIATION_1){
-      CRHMException TExcept(string("'" + Name + " (LongVt)' using QsiDObs observation to calculate tau.").c_str(), WARNING);
-      LogError(TExcept);
-  }
-  else if(variation == VARIATION_2){
-      CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi_Var variable to calculate tau.").c_str(), WARNING);
-      LogError(TExcept);
-  }
-  else if(variation == VARIATION_3){
-      CRHMException TExcept(string("'" + Name + " (LongVt)' using Qli observation to convert to QliVT_Var.").c_str(), WARNING);
-      LogError(TExcept);
-  }
-}
-
-void ClassLongVt::run(void) {
-
-  long hhmax;
-  long nstep = getstep() % Global::Freq;
-
-
-  for (hh = 0; chkStruct(); ++hh) {
-    if(nstep == 1 || Global::Freq == 1){ // beginning of every day
-      if(QdroDext[hh] >= 0.001) {    // 04/21/14
-        switch(variation){
-          case VARIATION_ORG:
-            tau[hh] =  QsiDavg[hh]*86400/1E6/QdroDext[hh]; // 03/29/07
-            break;
-          case VARIATION_1:
-            tau[hh] =  QsiD[hh]*86400/1E6/QdroDext[hh]; // 03/29/07
-            break;
-          case VARIATION_2:
-            tau[hh] =  QsiD_Var[hh]*86400/1E6/QdroDext[hh]; // 03/29/07
-            break;
-        }
-      }
-      else
-       tau[hh] = 0.8;     // 04/21/14
-    }
-
-    if(variation != VARIATION_3)
-      Qli_Var[hh] = 1.24f*pow((hru_ea[hh]*10.0f)/(hru_t[hh] + CRHM_constants::Tm), 1.0f/7.0f)*(1.0f + 0.44f*hru_rh[hh]/100.0f - 0.18f*tau[hh])*CRHM_constants::sbc*pow(hru_t[hh]+CRHM_constants::Tm, 4.0f);
-    else
-      Qli_Var[hh] = Qli[hh];
-
-    QliVt_Var[hh] = (1.0f - Vt[hh])*Qli_Var[hh] + Vt[hh]*epsilon_s[hh]*CRHM_constants::sbc*pow(hru_t[hh] + CRHM_constants::Tm, 4.0f);
-
-    if(variation != VARIATION_3)
-      Qli_out[hh] = QliVt_Var[hh];
-  }
-}
-
-Classpbsm_M* Classpbsm_M::klone(string name) const{
-  return new Classpbsm_M(name);
-}
-
-void Classpbsm_M::decl(void) {
-
-  Description = "'Calculates snow transport and sublimation (Pomeroy and Li, 1999). This module has enhanced transport distribution features.'";
-
-  declstatvar("SWE", NHRU, "snow water equivalent", "(mm)", &SWE);
-
-  declvar("Subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
-
-  declvar("Drift", NHRU, "interval transport", "(mm/int)", &Drift);
-
-  declvar("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
-
-  declstatvar("cumSubl", NHRU, "cumulative sublimation", "(mm)", &cumSubl);
-
-  declstatvar("cumDrift", NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
-
-  declstatvar("cumBasinSnowLoss", BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
-
-  declstatvar("cumBasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
-
-  decllocal("cumDriftIn", NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
-
-  decllocal("DrySnow", NHRU, "DrySnow", "()", &DrySnow);
-
-  decllocal("SnowAge", NHRU, "SnowAge", "()", &SnowAge);
-
-  decllocal("this_distrib", NHRU, "current step distribution", "()", &this_distrib);
-
-  declstatvar("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
-
-  declvar("Prob", NHRU, "Probability", "()", &Prob);
-
-  declstatvar("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
-
-  declvar("Q_leeslope", NHRU, "leeslope transport from HRU", "(mm)", &Q_leeslope);
-
-  declvar("Q_valley", NHRU, "valley transport from HRU", "(mm)", &Q_valley);
-
-  declvar("Results", NDEFN, "calulated distributions", "()", &Results, &Results_lay, nhru);
-
-/* parameters */
-
-  declparam("fetch", NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
-
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
-
-  declparam("distrib", NDEFN, "[0.0, 1.0, 1.0, 1.0]", "0.0", "99.0", "distribution array", "()", &distrib, &distrib_hru, nhru);
-
-  decldiagparam("N_S", NHRU, "[320]", "0.1", "500", "vegetation number density", "(1/m^2)", &N_S);
-
-  decldiagparam("A_S", NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
-
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
-
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
-
-  declparam("hru_GSL", NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(Â°)", &hru_GSL);
-
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
-
-  declparam("inhibit_bs", NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
-
-  decldiagparam("inhibit_subl", NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
-
-  declparam("eq_prof", NHRU, "[0]", "0", "1", "0: use vegetation height, 1: use equilibrium profile depth as SWE_Max",  "()", &eq_prof);
-
-  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
-
-  decldiagparam("Beta_M", NHRU, "[170.0]", "32.0", "170.0", "ratio of element to surface drag for vegetation; 170 for stalks, 320 for shrubs", "()", &Beta_M);
-
-  declparam("hru_Ht", NHRU, "[0.0]", "0.0", "1000.0", "HRU feature height(m)", "(m)", &hru_Ht);
-
-  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
-  declgetvar("*", "hru_rh", "(%)", &hru_rh);
-  declgetvar("*", "hru_u", "(m/s)", &hru_u);
-  declgetvar("*", "hru_newsnow", "()", &hru_newsnow);
-  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
-
-}
-
-void Classpbsm_M::init(void) {
-
-  nhru = getdim(NHRU);
-
-  cumBasinSnowLoss[0] = 0.0;
-  cumBasinSnowGain[0] = 0.0;
-
-  for (hh = 0; hh < nhru; ++hh) {
-    SWE[hh] = 0.0;
-    cumDrift[hh] = 0.0;
-    cumDriftIn[hh] = 0.0;
-    cumSubl[hh] = 0.0;
-    cumSno[hh] = 0.0;
-    SnowAge[hh] = 0.0;
-    DrySnow[hh] = 0;
-    snowdepth[hh] = 0.0;
-
-    if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
-         CRHMException TExcept("PBSM - vegetation heights not in ascending order", WARNING);
-         LogError(TExcept);
-//         throw TExcept;
-    }
-  }
-
-  hru_basin = new float[nhru];
-
-  for (hh = 0; hh < nhru; ++hh)
-    hru_basin[hh] = hru_area[hh]/basin_area[0];
-}
-
-void Classpbsm_M::run(void) {
-
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float DriftH, SublH, CurrentDrift, total, SWE_Max, transport;
-  float VB_distrib;
-
-  for (hh = 0; chkStruct(); ++hh) {
-
-    if(net_snow[hh] > 0.0) {
-      SWE[hh] = SWE[hh] + net_snow[hh];
-      cumSno[hh] = cumSno[hh] + net_snow[hh];
-    }
-
-   Drift[hh] = 0.0;
-   Subl[hh] = 0.0;
-   Prob[hh] = 0.0;
-   Q_leeslope[hh] = 0.0;
-   Q_valley[hh] = 0.0;
-
-   if(SWE[hh] > 0.0 && !inhibit_bs[hh]) {
-
-     E_StubHt = Ht[hh] - Common::DepthofSnow(SWE[hh]); // depths(m) SWE(mm)
-     if(E_StubHt < 0.0001)
-       E_StubHt = 0.0001;
-
-     float d = 2.0/3.0*E_StubHt;
-
-     float Z = 0.123*E_StubHt;
-
-     float Wind = hru_u[hh]*log((10.0 - d)/Z)/log((Zwind[hh] - d)/Z);
-
-     Ustar = 0.02264*pow(Wind, 1.295f); // Eq. 6.2 rev.,  Ustar over fallow
-
-     if (E_StubHt > 0.01) {
-       Znod = (sqr(Ustar)/163.3f)+0.5*N_S[hh]*E_StubHt*A_S[hh]; // Eq. 29, Snowcover Book
-       Lambda = N_S[hh]*A_S[hh]*E_StubHt;  // Raupach Eq. 1
-
-       Ustn  = Ustar*sqrt((Beta_M[hh]*Lambda)/(1.0+Beta_M[hh]*Lambda));
-
-       Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *sqrt(Ustar-Ustn);
-     }
-     else{
-       Uten_Prob = Wind;
-     } // end if
-
-     ProbabilityThresholdNew(SWE[hh], hru_t[hh], Uten_Prob, Prob[hh], Ut, hru_newsnow[hh], SnowAge[hh], DrySnow[hh]);
-
-     if (Prob[hh] > 0.001) {
-       Ut = Ut * 0.8;
-
-       Pbsm(E_StubHt, Ut, DriftH, SublH, hru_t[hh], Wind, hru_rh[hh], fetch[hh], N_S[hh], A_S[hh],
-              hru_GSL[hh], hru_Ht[hh], Beta_M[hh], Q_leeslope[hh], Q_valley[hh]);
-
-       Drift[hh] = DriftH*Prob[hh]/fetch[hh];
-       if(!inhibit_subl[hh])
-         Subl[hh] = SublH*Prob[hh];
-
-// handle insufficient snow pack
-
-       if(Drift[hh] + Subl[hh] > SWE[hh]) {
-         Subl[hh] = SWE[hh] * Subl[hh]/(Subl[hh] + Drift[hh]);
-         Drift[hh] = SWE[hh] - Subl[hh];
-       } // end if
-
-       cumDrift[hh] = cumDrift[hh] + Drift[hh];
-       cumSubl[hh] = cumSubl[hh] + Subl[hh];
-
-       SWE[hh] = SWE[hh] - Subl[hh] - Drift[hh];
-     }
-   } // end if
- } // end for (hh)
-
- // distribute drift
-
- for (long hh = 0; chkStruct(hh); ++hh) {
-    if(distrib_hru[hh][0] > 0.0) { // simulate transport entering basin using HRU 1
-      float Drft = Drift[hh]*distrib_hru[hh][0];
-      SWE[hh] += Drft;
-      cumDriftIn[hh] += Drft;
-      cumBasinSnowGain[0] += Drft*hru_basin[hh];  // **** hru_basin = hru_area/basin_area ****
-    }
-  }
-
-  BasinSnowLoss[0] = 0.0;
-  long LastN = 0;
-
-  for (long nn = LastN; chkStruct(nn); ++nn) {
-    if(distrib[nn] >= 0.0 && nn+1 < nhru) // skip till last HRU or -ve distribution
-      continue;
-
-    for (long cc = LastN; chkStruct(cc, hh-1); ++cc){ // handle drift over range
-      CurrentDrift = Drift[cc]*hru_basin[cc];
-
-      if(CurrentDrift > 0.0){ // drift has occurred!
-        for (long hh = LastN+1; chkStruct(hh, nn+1); ++hh) {
-          if(!eq_prof[hh]){ //use veg height to calculate SWE_Max
-            SWE_Max = SWEfromDepth(Ht[hh]);
-          }
-          else{
-            float tanEqSlope = (0.1818*100*tan(hru_GSL[cc]*DEGtoRAD) + 0.4309*100*tan(hru_GSL[hh]*DEGtoRAD) - 7.2887)/100;
-            float EqProfDepth = hru_Ht[hh]/2*(1 - (tan(hru_GSL[hh]*DEGtoRAD) - tanEqSlope)/(tan(hru_GSL[hh]*DEGtoRAD)*(1 + tan(hru_GSL[hh]*DEGtoRAD)*tanEqSlope)));
-            SWE_Max = SWEfromDepth(EqProfDepth);
-          }
-
-          if(hh == nn) { // handle last HRU
-            if(fabs(distrib_hru[cc][hh])+ distrib_hru[nhru-1][hh] > 0.0)
-              BasinSnowLoss[0] = CurrentDrift*distrib_hru[nhru-1][hh]/(fabs(distrib_hru[cc][hh])+ distrib_hru[nhru-1][hh]); // drift directly to basin loss
-            else
-              BasinSnowLoss[0] = 0;
-
-            CurrentDrift -= BasinSnowLoss[0];
-
-            SWE[hh] += CurrentDrift/hru_basin[hh];
-            cumDriftIn[hh] += CurrentDrift/hru_basin[hh];
-            if(SWE[hh] > SWE_Max){ // over filled!
-              if(SWE[hh] - SWE_Max >= Drift[hh]){ // drift less than excess
-                SWE[hh] -= Drift[hh];
-                BasinSnowLoss[0] += Drift[hh];
-              }
-              else{ // drift more than excess
-                BasinSnowLoss[0] += SWE[hh] - SWE_Max;
-                SWE[hh] = SWE_Max;
-              }
-              BasinSnowLoss[0] *= hru_basin[hh];
-              cumBasinSnowLoss[0] += BasinSnowLoss[0];
-            }
-          }
-		  else if(SWE_Max > SWE[hh] &&  distrib_hru[cc][hh] > 0.0) {
-  // handle intermediate HRUs with available storage and distrib > 0
-
-			float sum = distrib_hru[nhru-1][cc]; // always the very last HRU
-			for (long jj = hh; chkStruct(jj, nn+1); jj++) { // calculate denominator
-              Results_lay[cc][jj] = 0.0;
-              if(distrib_hru[cc][jj] != 88 && distrib_hru[cc][jj] != 99) {
-                sum += fabs(distrib_hru[cc][jj]);
-              }
-            }
-            if(distrib_hru[cc][hh] == 88 && Q_leeslope[hh] >= 0.0) { // leeward slope
-              if(Q_leeslope[hh] > 0.0)
-                this_distrib[hh] = (1 - sum)*Q_leeslope[hh]/(Q_leeslope[hh] + Q_valley[hh]);
-              else
-                this_distrib[hh] = 0.0;
-
-                Results_lay[cc][hh] = this_distrib[hh];
-//              sum += this_distrib[hh];
-			  for (long kk = hh+1; chkStruct(kk, nn+1); kk++) {
-				if(distrib_hru[cc][kk] == 99 && Q_valley[hh] >= 0.0){
-				  if(Q_valley[hh] > 0.0)
-					VB_distrib = (1 - sum)*Q_valley[hh]/(Q_leeslope[hh] + Q_valley[hh]);
-				  else
-					VB_distrib = 0.0;
-				} // if
-			  } // for kk
-			}
-			else if(distrib_hru[cc][hh] == 99){ //&& Q_valley[hh] >= 0.0) { // valley bottom
-//              if(Q_valley[hh] > 0.0)
-//				this_distrib[hh] = (1 - sum)*Q_valley[hh]/(Q_leeslope[hh] + Q_valley[hh]);
+//ClassLongVt* ClassLongVt::klone(string name) const{
+//  return new ClassLongVt(name);
+//}
+//
+// void ClassLongVt::decl(void) {
+//
+//  Description = "'LongVt: Calculates incoming long-wave radiation variable (QliVt_Var) (Sicart et al., 2005) using terrain view factor.' \
+//                 'using input Qsi (W/m^2) to calculate daily average,' \
+//                 'using input observation QsiDObs (W/m^2) for daily average,' \
+//                 'using input variable QsiD_Var (W/m^2) from module Annandale for daily average,' \
+//                 'using input observation Qli (W/m^2) for daily average.'";
+//
+//  variation_set = VARIATION_ORG;
+//
+//  declvar("tau", NHRU, "Atmospheric transmissivity = S/Sextra", "()", &tau);
+//
+//  declvar("Qli_Var", NHRU, "calculated incoming long", "(W/m^2)", &Qli_Var);
+//
+//  declvar("QliVt_Var", NHRU, "calculated incoming long in open environment", "(W/m^2)", &QliVt_Var);
+//
+//
+//
+//  declgetvar("*", "QdroDext", "(MJ/m^2*d)", &QdroDext);
+//
+//  declgetvar("*",  "hru_t", "(Â°C)", &hru_t);
+//
+//  declgetvar("*",  "hru_ea", "(kPa)", &hru_ea);
+//
+//  declgetvar("*",  "hru_rh", "()", &hru_rh);
+//
+//
+//  declparam("Vt", NHRU, "[0.3]", "0.0", "1.0", "terrain view factor (equivalent to 1-Vf)", "()", &Vt);
+//
+//  decldiagparam("epsilon_s", NHRU, "[0.98]", "0.0", "1.0", "terrain emissivity", "()", &epsilon_s);
+//
+//
+//  variation_set = VARIATION_0;
+//
+//  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
+//
+//  declobsfunc("Qsi", "QsiDavg", &QsiDavg, AVG, NULL, true); // must check for NULL
+//
+//
+//  variation_set = VARIATION_1;
+//
+//  declreadobs("QsiDObs", NHRU, "incident short-wave", "(W/m^2)", &QsiD, HRU_OBS_Q);
+//
+//
+//  variation_set = VARIATION_2;
+//
+//  declgetvar("*",  "QsiD_Var", "(W/m^2)", &QsiD_Var);
+//
+//
+//  variation_set = VARIATION_3;
+//
+//  declreadobs("Qli", NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
+//
+//
+//  variation_set = VARIATION_0 + VARIATION_1 + VARIATION_2;
+//
+//  declobs("Qli", NHRU, "incoming calculated long-wave", "(W/m^2)", &Qli_out);
+//
+//
+//  variation_set = VARIATION_ORG;
+//
+//}
+//
+//void ClassLongVt::init(void) {
+//  nhru = getdim(NHRU);
+//
+//  if(variation == VARIATION_ORG){
+//      if(!QsiDavg){ // only exists if an actual file observation
+//        CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi observation to calculate tau. Qsi appears to be a declared obs instead of read from a file.").c_str(), TERMINATE);
+//        LogError(TExcept);
+//      }
+//      else{
+//        CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi observation to calculate tau.").c_str(), WARNING);
+//        LogError(TExcept);
+//      }
+//  }
+//  else if(variation == VARIATION_1){
+//      CRHMException TExcept(string("'" + Name + " (LongVt)' using QsiDObs observation to calculate tau.").c_str(), WARNING);
+//      LogError(TExcept);
+//  }
+//  else if(variation == VARIATION_2){
+//      CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi_Var variable to calculate tau.").c_str(), WARNING);
+//      LogError(TExcept);
+//  }
+//  else if(variation == VARIATION_3){
+//      CRHMException TExcept(string("'" + Name + " (LongVt)' using Qli observation to convert to QliVT_Var.").c_str(), WARNING);
+//      LogError(TExcept);
+//  }
+//}
+//
+//void ClassLongVt::run(void) {
+//
+//  long hhmax;
+//  long nstep = getstep() % Global::Freq;
+//
+//
+//  for (hh = 0; chkStruct(); ++hh) {
+//    if(nstep == 1 || Global::Freq == 1){ // beginning of every day
+//      if(QdroDext[hh] >= 0.001) {    // 04/21/14
+//        switch(variation){
+//          case VARIATION_ORG:
+//            tau[hh] =  QsiDavg[hh]*86400/1E6/QdroDext[hh]; // 03/29/07
+//            break;
+//          case VARIATION_1:
+//            tau[hh] =  QsiD[hh]*86400/1E6/QdroDext[hh]; // 03/29/07
+//            break;
+//          case VARIATION_2:
+//            tau[hh] =  QsiD_Var[hh]*86400/1E6/QdroDext[hh]; // 03/29/07
+//            break;
+//        }
+//      }
+//      else
+//       tau[hh] = 0.8;     // 04/21/14
+//    }
+//
+//    if(variation != VARIATION_3)
+//      Qli_Var[hh] = 1.24f*pow((hru_ea[hh]*10.0f)/(hru_t[hh] + CRHM_constants::Tm), 1.0f/7.0f)*(1.0f + 0.44f*hru_rh[hh]/100.0f - 0.18f*tau[hh])*CRHM_constants::sbc*pow(hru_t[hh]+CRHM_constants::Tm, 4.0f);
+//    else
+//      Qli_Var[hh] = Qli[hh];
+//
+//    QliVt_Var[hh] = (1.0f - Vt[hh])*Qli_Var[hh] + Vt[hh]*epsilon_s[hh]*CRHM_constants::sbc*pow(hru_t[hh] + CRHM_constants::Tm, 4.0f);
+//
+//    if(variation != VARIATION_3)
+//      Qli_out[hh] = QliVt_Var[hh];
+//  }
+//}
+
+//Classpbsm_M* Classpbsm_M::klone(string name) const{
+//  return new Classpbsm_M(name);
+//}
+//
+//void Classpbsm_M::decl(void) {
+//
+//  Description = "'Calculates snow transport and sublimation (Pomeroy and Li, 1999). This module has enhanced transport distribution features.'";
+//
+//  declstatvar("SWE", NHRU, "snow water equivalent", "(mm)", &SWE);
+//
+//  declvar("Subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
+//
+//  declvar("Drift", NHRU, "interval transport", "(mm/int)", &Drift);
+//
+//  declvar("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
+//
+//  declstatvar("cumSubl", NHRU, "cumulative sublimation", "(mm)", &cumSubl);
+//
+//  declstatvar("cumDrift", NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
+//
+//  declstatvar("cumBasinSnowLoss", BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
+//
+//  declstatvar("cumBasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
+//
+//  decllocal("cumDriftIn", NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
+//
+//  decllocal("DrySnow", NHRU, "DrySnow", "()", &DrySnow);
+//
+//  decllocal("SnowAge", NHRU, "SnowAge", "()", &SnowAge);
+//
+//  decllocal("this_distrib", NHRU, "current step distribution", "()", &this_distrib);
+//
+//  declstatvar("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
+//
+//  declvar("Prob", NHRU, "Probability", "()", &Prob);
+//
+//  declstatvar("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
+//
+//  declvar("Q_leeslope", NHRU, "leeslope transport from HRU", "(mm)", &Q_leeslope);
+//
+//  declvar("Q_valley", NHRU, "valley transport from HRU", "(mm)", &Q_valley);
+//
+//  declvar("Results", NDEFN, "calulated distributions", "()", &Results, &Results_lay, nhru);
+//
+///* parameters */
+//
+//  declparam("fetch", NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
+//
+//  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
+//
+//  declparam("distrib", NDEFN, "[0.0, 1.0, 1.0, 1.0]", "0.0", "99.0", "distribution array", "()", &distrib, &distrib_hru, nhru);
+//
+//  decldiagparam("N_S", NHRU, "[320]", "0.1", "500", "vegetation number density", "(1/m^2)", &N_S);
+//
+//  decldiagparam("A_S", NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
+//
+//  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+//
+//  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+//
+//  declparam("hru_GSL", NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(Â°)", &hru_GSL);
+//
+//  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
+//
+//  declparam("inhibit_bs", NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
+//
+//  decldiagparam("inhibit_subl", NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
+//
+//  declparam("eq_prof", NHRU, "[0]", "0", "1", "0: use vegetation height, 1: use equilibrium profile depth as SWE_Max",  "()", &eq_prof);
+//
+//  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
+//
+//  decldiagparam("Beta_M", NHRU, "[170.0]", "32.0", "170.0", "ratio of element to surface drag for vegetation; 170 for stalks, 320 for shrubs", "()", &Beta_M);
+//
+//  declparam("hru_Ht", NHRU, "[0.0]", "0.0", "1000.0", "HRU feature height(m)", "(m)", &hru_Ht);
+//
+//  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
+//  declgetvar("*", "hru_rh", "(%)", &hru_rh);
+//  declgetvar("*", "hru_u", "(m/s)", &hru_u);
+//  declgetvar("*", "hru_newsnow", "()", &hru_newsnow);
+//  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
+//
+//}
+//
+//void Classpbsm_M::init(void) {
+//
+//  nhru = getdim(NHRU);
+//
+//  cumBasinSnowLoss[0] = 0.0;
+//  cumBasinSnowGain[0] = 0.0;
+//
+//  for (hh = 0; hh < nhru; ++hh) {
+//    SWE[hh] = 0.0;
+//    cumDrift[hh] = 0.0;
+//    cumDriftIn[hh] = 0.0;
+//    cumSubl[hh] = 0.0;
+//    cumSno[hh] = 0.0;
+//    SnowAge[hh] = 0.0;
+//    DrySnow[hh] = 0;
+//    snowdepth[hh] = 0.0;
+//
+//    if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
+//         CRHMException TExcept("PBSM - vegetation heights not in ascending order", WARNING);
+//         LogError(TExcept);
+////         throw TExcept;
+//    }
+//  }
+//
+//  hru_basin = new float[nhru];
+//
+//  for (hh = 0; hh < nhru; ++hh)
+//    hru_basin[hh] = hru_area[hh]/basin_area[0];
+//}
+//
+//void Classpbsm_M::run(void) {
+//
+//  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+//  float DriftH, SublH, CurrentDrift, total, SWE_Max, transport;
+//  float VB_distrib;
+//
+//  for (hh = 0; chkStruct(); ++hh) {
+//
+//    if(net_snow[hh] > 0.0) {
+//      SWE[hh] = SWE[hh] + net_snow[hh];
+//      cumSno[hh] = cumSno[hh] + net_snow[hh];
+//    }
+//
+//   Drift[hh] = 0.0;
+//   Subl[hh] = 0.0;
+//   Prob[hh] = 0.0;
+//   Q_leeslope[hh] = 0.0;
+//   Q_valley[hh] = 0.0;
+//
+//   if(SWE[hh] > 0.0 && !inhibit_bs[hh]) {
+//
+//     E_StubHt = Ht[hh] - Common::DepthofSnow(SWE[hh]); // depths(m) SWE(mm)
+//     if(E_StubHt < 0.0001)
+//       E_StubHt = 0.0001;
+//
+//     float d = 2.0/3.0*E_StubHt;
+//
+//     float Z = 0.123*E_StubHt;
+//
+//     float Wind = hru_u[hh]*log((10.0 - d)/Z)/log((Zwind[hh] - d)/Z);
+//
+//     Ustar = 0.02264*pow(Wind, 1.295f); // Eq. 6.2 rev.,  Ustar over fallow
+//
+//     if (E_StubHt > 0.01) {
+//       Znod = (sqr(Ustar)/163.3f)+0.5*N_S[hh]*E_StubHt*A_S[hh]; // Eq. 29, Snowcover Book
+//       Lambda = N_S[hh]*A_S[hh]*E_StubHt;  // Raupach Eq. 1
+//
+//       Ustn  = Ustar*sqrt((Beta_M[hh]*Lambda)/(1.0+Beta_M[hh]*Lambda));
+//
+//       Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *sqrt(Ustar-Ustn);
+//     }
+//     else{
+//       Uten_Prob = Wind;
+//     } // end if
+//
+//     ProbabilityThresholdNew(SWE[hh], hru_t[hh], Uten_Prob, Prob[hh], Ut, hru_newsnow[hh], SnowAge[hh], DrySnow[hh]);
+//
+//     if (Prob[hh] > 0.001) {
+//       Ut = Ut * 0.8;
+//
+//       Pbsm(E_StubHt, Ut, DriftH, SublH, hru_t[hh], Wind, hru_rh[hh], fetch[hh], N_S[hh], A_S[hh],
+//              hru_GSL[hh], hru_Ht[hh], Beta_M[hh], Q_leeslope[hh], Q_valley[hh]);
+//
+//       Drift[hh] = DriftH*Prob[hh]/fetch[hh];
+//       if(!inhibit_subl[hh])
+//         Subl[hh] = SublH*Prob[hh];
+//
+//// handle insufficient snow pack
+//
+//       if(Drift[hh] + Subl[hh] > SWE[hh]) {
+//         Subl[hh] = SWE[hh] * Subl[hh]/(Subl[hh] + Drift[hh]);
+//         Drift[hh] = SWE[hh] - Subl[hh];
+//       } // end if
+//
+//       cumDrift[hh] = cumDrift[hh] + Drift[hh];
+//       cumSubl[hh] = cumSubl[hh] + Subl[hh];
+//
+//       SWE[hh] = SWE[hh] - Subl[hh] - Drift[hh];
+//     }
+//   } // end if
+// } // end for (hh)
+//
+// // distribute drift
+//
+// for (long hh = 0; chkStruct(hh); ++hh) {
+//    if(distrib_hru[hh][0] > 0.0) { // simulate transport entering basin using HRU 1
+//      float Drft = Drift[hh]*distrib_hru[hh][0];
+//      SWE[hh] += Drft;
+//      cumDriftIn[hh] += Drft;
+//      cumBasinSnowGain[0] += Drft*hru_basin[hh];  // **** hru_basin = hru_area/basin_area ****
+//    }
+//  }
+//
+//  BasinSnowLoss[0] = 0.0;
+//  long LastN = 0;
+//
+//  for (long nn = LastN; chkStruct(nn); ++nn) {
+//    if(distrib[nn] >= 0.0 && nn+1 < nhru) // skip till last HRU or -ve distribution
+//      continue;
+//
+//    for (long cc = LastN; chkStruct(cc, hh-1); ++cc){ // handle drift over range
+//      CurrentDrift = Drift[cc]*hru_basin[cc];
+//
+//      if(CurrentDrift > 0.0){ // drift has occurred!
+//        for (long hh = LastN+1; chkStruct(hh, nn+1); ++hh) {
+//          if(!eq_prof[hh]){ //use veg height to calculate SWE_Max
+//            SWE_Max = SWEfromDepth(Ht[hh]);
+//          }
+//          else{
+//            float tanEqSlope = (0.1818*100*tan(hru_GSL[cc]*DEGtoRAD) + 0.4309*100*tan(hru_GSL[hh]*DEGtoRAD) - 7.2887)/100;
+//            float EqProfDepth = hru_Ht[hh]/2*(1 - (tan(hru_GSL[hh]*DEGtoRAD) - tanEqSlope)/(tan(hru_GSL[hh]*DEGtoRAD)*(1 + tan(hru_GSL[hh]*DEGtoRAD)*tanEqSlope)));
+//            SWE_Max = SWEfromDepth(EqProfDepth);
+//          }
+//
+//          if(hh == nn) { // handle last HRU
+//            if(fabs(distrib_hru[cc][hh])+ distrib_hru[nhru-1][hh] > 0.0)
+//              BasinSnowLoss[0] = CurrentDrift*distrib_hru[nhru-1][hh]/(fabs(distrib_hru[cc][hh])+ distrib_hru[nhru-1][hh]); // drift directly to basin loss
+//            else
+//              BasinSnowLoss[0] = 0;
+//
+//            CurrentDrift -= BasinSnowLoss[0];
+//
+//            SWE[hh] += CurrentDrift/hru_basin[hh];
+//            cumDriftIn[hh] += CurrentDrift/hru_basin[hh];
+//            if(SWE[hh] > SWE_Max){ // over filled!
+//              if(SWE[hh] - SWE_Max >= Drift[hh]){ // drift less than excess
+//                SWE[hh] -= Drift[hh];
+//                BasinSnowLoss[0] += Drift[hh];
+//              }
+//              else{ // drift more than excess
+//                BasinSnowLoss[0] += SWE[hh] - SWE_Max;
+//                SWE[hh] = SWE_Max;
+//              }
+//              BasinSnowLoss[0] *= hru_basin[hh];
+//              cumBasinSnowLoss[0] += BasinSnowLoss[0];
+//            }
+//          }
+//		  else if(SWE_Max > SWE[hh] &&  distrib_hru[cc][hh] > 0.0) {
+//  // handle intermediate HRUs with available storage and distrib > 0
+//
+//			float sum = distrib_hru[nhru-1][cc]; // always the very last HRU
+//			for (long jj = hh; chkStruct(jj, nn+1); jj++) { // calculate denominator
+//              Results_lay[cc][jj] = 0.0;
+//              if(distrib_hru[cc][jj] != 88 && distrib_hru[cc][jj] != 99) {
+//                sum += fabs(distrib_hru[cc][jj]);
+//              }
+//            }
+//            if(distrib_hru[cc][hh] == 88 && Q_leeslope[hh] >= 0.0) { // leeward slope
+//              if(Q_leeslope[hh] > 0.0)
+//                this_distrib[hh] = (1 - sum)*Q_leeslope[hh]/(Q_leeslope[hh] + Q_valley[hh]);
 //              else
 //                this_distrib[hh] = 0.0;
-			  this_distrib[hh] = VB_distrib;
-
-			  Results_lay[cc][hh] = this_distrib[hh];
-//              sum += this_distrib[hh];
-           }
-            else{
-			  this_distrib[hh] = distrib_hru[cc][hh];
-			}
-
-  // determine contribution and scale
-			transport = CurrentDrift*fabs(this_distrib[hh])/hru_basin[hh]/1;
-            if(SWE_Max > SWE[hh] + transport) // sufficient capacity
-              SWE[hh] += transport;
-            else {
-              transport = SWE_Max - SWE[hh];  // insufficient capacity
-              SWE[hh] = SWE_Max;
-            }
-            CurrentDrift -= transport*hru_basin[hh]; // remove drift used from total available
-            cumDriftIn[hh] += transport;
-          } // end if
-        } // end for (hh)
-      } // end if
-    } // end for
-    LastN = nn+1;
-  } // end for (nn)
-
-  for (hh = 0; chkStruct(); ++hh) { // snow cover inhibits evaporation
-
-    if(SWE[hh] > 0.0){
-      const_cast<long*> (inhibit_evap)[hh] = 1;
-      snowdepth[hh] = Common::DepthofSnow(SWE[hh]);
-    }
-    else{
-      const_cast<long*> (inhibit_evap)[hh] = 0;
-      snowdepth[hh] = 0.0;
-    }
-  } // end for (hh)
-}
-
-void Classpbsm_M::finish(bool good) {
-
-  for(hh = 0; chkStruct(); ++hh) {
-    LogMessageA(hh, string("'" + Name + " (pbsm_M)' cumSno     (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsm_M)' cumDrift   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDrift[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsm_M)' cumDriftIn (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDriftIn[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsm_M)' cumSubl    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSubl[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsm_M)' cumCover   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh]+cumDriftIn[hh]-cumDrift[hh]-cumSubl[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (pbsm_M)' SWE        (mm) (mm*hru) (mm*hru/basin): ").c_str(), SWE[hh],        hru_area[hh], basin_area[0]);
-    LogDebug(" ");
-  }
-
-  LogMessage("'pbsm_M' cumulative basin snow loss (mm): ", cumBasinSnowLoss[0]); //
-  LogMessage("'pbsm_M' cumulative basin snow gain (mm): ", cumBasinSnowGain[0]); //
-  LogDebug(" ");
-
-  delete[] hru_basin;
-  hru_basin = NULL;
-}
-
-void Classpbsm_M::Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH)
-{
-
-// total sublimation
-
-   if  ((SBsum + SBsalt) >= 0.0)
-     SublH = 0.0;
-   else
-     SublH = (SBsum + SBsalt)*(-1E+3); // -mgmm2s to mg/m^2/s to g/m^2/s
-
-   DriftH = (TQsalt + TQsusp); // kg/m-width/s
-// Convert to interval values
-
-   SublH = SublH * Global::Interval*3600*24/1000.0; // g/m^2/s to mm/m^2/interval
-   DriftH = DriftH * Global::Interval*3600*24;      // kg/m-width/s to kg/m-width/interval
-
-} // sum procedure
-
-void Classpbsm_M::Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
-           float t, float u, float rh, float Fetch,
-           long N_S, float A_S, float GSL, float height, float Beta_M, float & Qdist_leeslope, float & Qdist_valley)
-{
-
-/*   Modified Calculations for Mean Particle Mass in this version
-     program to calculate blowing snow horizontal flux, sublimation rate
-     and latent heat flux due to snow sublimation for a variety of windspeeds,
-     boundary layers and surface conditions.
-
-     All variable and constants entered into the programme are in SI and
-     use Canadian Atmospheric Environement Service Meteorological data
-     format.  Snow transport is in kg per square meter per half hour
-     from the surface to 5 metres height.  Sublimation is totaled to the top
-     of the boundary layer for diffusion, based on the meteorological
-     Fetch and is expressed in millimeters of blowing snow lost over
-     a square meter of snow surface per half hour  */
-
-  float   A,      Alpha,  B,      Bd,     Bound,  C,
-  Diff,   DmDt,   Es,     H,
-  Htran,  Hsalt,  Inc,    Lamb,   Lambda, Lb,
-  Mpm,    Mpr,    Nh,     Nsalt,
-  Nz,     Nuss,   Omega,  TQsalt,
-  TQsum,  Qz,     RauTerm,Temp,
-  Reyn,   SBsalt, Sbz,    SBsum,
-  SigmaZ, Sigma2, SvDens, Usthr,  Ustar,
-  UstarZ, Uz,     Vs,     Vsalt,  Sigma,
-  Vsusp,  Z,      Zr,     Zstb,
-  tX,     tH,     Qdist;
-
-//Compute stubble coefficients
-
-   Zstb = 0.005*N_S*A_S*E_StubHt*100.0;      // Lettau, used for susp Z0''
-   Lambda = N_S*A_S*E_StubHt;         // Raupach Eq. 1
-   Sigma = (M_PI*A_S)/(4.0*E_StubHt); // Raupach Eq. 4
-
-// Calculate the flux for interval
-   TQsalt = 0.0;                      // Total saltation flux
-   TQsum = 0.0;                       // Total Suspension
-   SBsalt = 0.0;
-   SBsum = 0.0;
-   DriftH = 0.0;
-   SublH = 0.0;
-
-   Temp  = t + 273.0;                 // Convert to Deg. K
-
-// Check for data errors    Fluxes set to zero for the interval
-   if((Temp < 0.0) || (u < 1.0) || (rh < 0.01)) {return;}
-
-   if(rh >= 1.0) rh = rh/100.0;       // handle %rh
-
-   Lamb = 0.000076843*Temp + 0.003130762;   // therm. cond. of atm. (J/(msK))
-   Diff = 2.06e-5f*pow(Temp/273.0f, 1.75f); // diffus. of w.vap. atmos. (m^2/s
-   B = PBSM_constants::LATH * PBSM_constants::M/(PBSM_constants::R * Temp) - 1.0;
-
-// find undersaturation of w. vapour at 2 metres
-   Es = 611.15f * exp(22.452f*(Temp - 273.0f)/Temp);  //{sat pressure}
-   SvDens = (Es*PBSM_constants::M)/(PBSM_constants::R*Temp);                       //{sat density}
-   Sigma2 = rh - 1.0;                              //{undersaturation at 2 m}
-
-   if(u > Uthr) {
-
-// define saltation parameters and calculate saltation
-//    rate using 10/1987 MODEL OF BLOWING SNOW EQUATIONS
-
-      Usthr = 0.03697f*Uthr;                                  //{Eq. 6.3}
-      Ustar = 0.02264f*pow(u, 1.295f);                         //{Eq. 6.2 rev}
-      if(E_StubHt > 0.0001)                         //{Eq. 6.2 rev}
-        RauTerm  = 1.0/((1.0-Sigma*Lambda)*(1.0+Beta_M*Lambda)); //{Raupach}
-      else
-        RauTerm  = 1.0;
-
-      Hsalt = PBSM_constants::C2/(2.0f*PBSM_constants::g)*sqr(Ustar);                         //{Eq. 4.13}
-      Nsalt = 2.0*PBSM_constants::rho/(PBSM_constants::C2*PBSM_constants::C3*Ustar)*(RauTerm - sqr(Usthr)/sqr(Ustar)); //{Eq. 4.14 updated}
-
-      if(Nsalt <= 0.0) {
-         Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-         return;
-      }
-
-      TQsalt = PBSM_constants::C1*PBSM_constants::rho*Usthr/(PBSM_constants::g*PBSM_constants::C3*Ustar)*(sqr(Ustar)*RauTerm - sqr(Usthr)); // Eq. 4.20
-
-// calculate sublimation rate in the saltation layer
-
-      Mpr= 100E-6;
-      Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
-      Alpha = 5.0;
-
-      SigmaZ = Sigma2 * (1.019 + 0.027 * log(Hsalt)); // Eq. 6.20, Revised in May. 1997
-      if(SigmaZ > -0.01) {SigmaZ = -0.01;}
-      Vsalt = 0.6325 * Ustar + 2.3 * Usthr;          // Eq. 6.25
-      Reyn = (2.0 * Mpr * Vsalt)/1.88E-5;            // Eq. 6.22
-      Nuss = 1.79 + 0.606 * sqrt(Reyn);              // Eq. 6.21
-      A = Lamb * Temp * Nuss;
-      C = 1.0/(Diff * SvDens * Nuss);
-      DmDt = ((2.0 * M_PI * Mpr * SigmaZ) - (Htran * B/A))/((PBSM_constants::LATH * B/A) + C);
-
-      //{Eq. 6.16} {Gamma Dist. Corr.}
-      Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Mpr*sqr(Mpr) *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
-
-      Vs = DmDt/Mpm;                // Sublimation rate coefficient Eq. 6.13
-      SBsalt = Vs * Nsalt * Hsalt;  // Eq. 6.11
-
-// calculate mass flux in the suspended layers and the sublimation
-//     rate for layers of height Inc from height r to b
-
-      Zr = 0.05628 * Ustar;         // Eq. 5.27
-      Alpha = 15.0;
-      Inc = 0.0001;
-
-// Loop to find the first suspended drift density level, r
-//     from the reference level Zr
-//     To preserve continuity with saltation the first suspended
-//     level drift density is less than or equal to Nsalt.
-
-      TQsum = 0;
-      SBsum = 0;
-
-      Z = Zr + Inc;
-      while (Z <= 0.15) {
-         Nz = 0.8 * exp(-1.55*(pow(0.05628f*Ustar, -0.544f) - pow(Z, -0.544f)));
-
-// Eq. 5.26, Revised in Dec. 1995
-         if(Nz <= Nsalt) {goto Ten;}
-         Z = Z + Inc;
-      } //while
-Ten:  Lb = Z + Inc;
-      Z = Lb;
-      Inc = 0.001;
-
-// find height of fully-developed boundary layer for turbulent
-//     diffusion using a form of Pasquills plume dispersion eq.
-//     iterate towards Bound
-
-      Bd = 1.0;
-      Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
-        sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));          // Eq. 6.9
-      while (fabs(Bound - Bd) > 0.001) {
-         Bd = Bound;
-         Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
-            sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));      // Eq. 6.9
-      } //while
-
-
-// Loop to calculate the suspended mass flux up to 5 metres
-//     and the total sublimation rate to the top of the boundary layer
-//   at increments of 1 mm to 50cm & increments of 10 cm to  b
-
-      Qdist_leeslope = 0;
-      Qdist_valley = 0;
-
-      Twenty: H = Z + Inc;
-      while (H <= Bound) {
-         Nh = 0.8 * exp(-1.55f*(pow(0.05628f*Ustar, -0.544f) - pow(H, -0.544f)));
-         Nz = Nh;
-         UstarZ = Ustar * pow(1.2f/(1.2f + Nz), 0.5f);                  // Eq. 5.17a
-         Uz = (UstarZ/PBSM_constants::KARMAN) *log(H/((0.00613f *sqr(Ustar)) + Zstb));// Eq. 4.17r
-	 if(Uz > 0) {
-	   if(height <= 0)
-	     tX = 0;
-	   else
-             tX = height/(Uz*tan(GSL*DEGtoRAD));
-
-	   Mpr = 4.6e-5 * pow(H, -0.258f);                            // Eq. 6.15
-           if(H >= 5.0) {Mpr = 30E-6f;}
-
-           Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
-           Alpha = 4.08 + 12.6 * H;                                  // Eq. 6.14
-           if(H >= 1.5) {Alpha = 25.0;}
-
-           SigmaZ = Sigma2 * (1.019 + 0.027 * log(H));  // Eq. 6.20, Revised in May. 1997
-           if(SigmaZ > -0.01) {SigmaZ = -0.01;}
-	   Omega = 1.1e7f * pow(Mpr, 1.8f);               // Eq. 5.18
-           tH = (height + H)/Omega;
-	   Vsusp = Omega + 0.0106f * pow(Uz, 1.36f);
-           Reyn = (2.0f * Mpr * Vsusp)/1.88e-5f;          // Eq. 6.22
-           Nuss = 1.79f + 0.606f * sqrt(Reyn);            // Eq. 6.21
-           A = Lamb * Temp * Nuss;
-           C = 1.0/(Diff * SvDens * Nuss);
-           DmDt = ((2.0f*M_PI * Mpr * SigmaZ) - (Htran*B/A))/((PBSM_constants::LATH*B/A) + C);
-           Mpm = 1.333f * M_PI * PBSM_constants::DICE * sqr(Mpr)*Mpr *   // Eq. 6.16
-              (1.0f + 3.0f/Alpha + 2.0f/sqr(Alpha));       // Gamma Dist. Corr.
-           Vs = DmDt/Mpm;                               // Eq. 6.13
-           Sbz = Vs * Nz * Inc;                         // mg
-           SBsum = SBsum + Sbz;                         // Eq. 6.12
-           Qz = Nz * Uz * Inc;
-
-           if(tH < tX)
-             Qdist_leeslope += Qz;
-           else
-             Qdist_valley += Qz;
-                                       // Eq. 5.4
-	   if(H >= 5.0) {Qz = 0.0;}
-           TQsum = TQsum + Qz;                          // Eq. 5.5
-	   if(Nz >= 1e-5) {
-              if(((H-Inc) >= 0.5) && (H < 0.6)) {
-                Inc = 0.1;
-                Z = 0.5;
-                goto Twenty;                            // re start the loop
-              } //{if}
-           }
-           else {
-              Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-              return;
-           } // if
-         }
-         else {
-            TQsalt = 0.0;
-            TQsum = 0.0;
-            SBsalt = 0.0;
-            SBsum = 0.0;
-            Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-            return;
-         } // if
-         H = H + Inc;
-      } // while
-   } // if
-
-   Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-} //PBSM procedure}
+//
+//                Results_lay[cc][hh] = this_distrib[hh];
+////              sum += this_distrib[hh];
+//			  for (long kk = hh+1; chkStruct(kk, nn+1); kk++) {
+//				if(distrib_hru[cc][kk] == 99 && Q_valley[hh] >= 0.0){
+//				  if(Q_valley[hh] > 0.0)
+//					VB_distrib = (1 - sum)*Q_valley[hh]/(Q_leeslope[hh] + Q_valley[hh]);
+//				  else
+//					VB_distrib = 0.0;
+//				} // if
+//			  } // for kk
+//			}
+//			else if(distrib_hru[cc][hh] == 99){ //&& Q_valley[hh] >= 0.0) { // valley bottom
+////              if(Q_valley[hh] > 0.0)
+////				this_distrib[hh] = (1 - sum)*Q_valley[hh]/(Q_leeslope[hh] + Q_valley[hh]);
+////              else
+////                this_distrib[hh] = 0.0;
+//			  this_distrib[hh] = VB_distrib;
+//
+//			  Results_lay[cc][hh] = this_distrib[hh];
+////              sum += this_distrib[hh];
+//           }
+//            else{
+//			  this_distrib[hh] = distrib_hru[cc][hh];
+//			}
+//
+//  // determine contribution and scale
+//			transport = CurrentDrift*fabs(this_distrib[hh])/hru_basin[hh]/1;
+//            if(SWE_Max > SWE[hh] + transport) // sufficient capacity
+//              SWE[hh] += transport;
+//            else {
+//              transport = SWE_Max - SWE[hh];  // insufficient capacity
+//              SWE[hh] = SWE_Max;
+//            }
+//            CurrentDrift -= transport*hru_basin[hh]; // remove drift used from total available
+//            cumDriftIn[hh] += transport;
+//          } // end if
+//        } // end for (hh)
+//      } // end if
+//    } // end for
+//    LastN = nn+1;
+//  } // end for (nn)
+//
+//  for (hh = 0; chkStruct(); ++hh) { // snow cover inhibits evaporation
+//
+//    if(SWE[hh] > 0.0){
+//      const_cast<long*> (inhibit_evap)[hh] = 1;
+//      snowdepth[hh] = Common::DepthofSnow(SWE[hh]);
+//    }
+//    else{
+//      const_cast<long*> (inhibit_evap)[hh] = 0;
+//      snowdepth[hh] = 0.0;
+//    }
+//  } // end for (hh)
+//}
+//
+//void Classpbsm_M::finish(bool good) {
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    LogMessageA(hh, string("'" + Name + " (pbsm_M)' cumSno     (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsm_M)' cumDrift   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDrift[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsm_M)' cumDriftIn (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumDriftIn[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsm_M)' cumSubl    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSubl[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsm_M)' cumCover   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh]+cumDriftIn[hh]-cumDrift[hh]-cumSubl[hh], hru_area[hh], basin_area[0]);
+//    LogMessageA(hh, string("'" + Name + " (pbsm_M)' SWE        (mm) (mm*hru) (mm*hru/basin): ").c_str(), SWE[hh],        hru_area[hh], basin_area[0]);
+//    LogDebug(" ");
+//  }
+//
+//  LogMessage("'pbsm_M' cumulative basin snow loss (mm): ", cumBasinSnowLoss[0]); //
+//  LogMessage("'pbsm_M' cumulative basin snow gain (mm): ", cumBasinSnowGain[0]); //
+//  LogDebug(" ");
+//
+//  delete[] hru_basin;
+//  hru_basin = NULL;
+//}
+//
+//void Classpbsm_M::Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH)
+//{
+//
+//// total sublimation
+//
+//   if  ((SBsum + SBsalt) >= 0.0)
+//     SublH = 0.0;
+//   else
+//     SublH = (SBsum + SBsalt)*(-1E+3); // -mgmm2s to mg/m^2/s to g/m^2/s
+//
+//   DriftH = (TQsalt + TQsusp); // kg/m-width/s
+//// Convert to interval values
+//
+//   SublH = SublH * Global::Interval*3600*24/1000.0; // g/m^2/s to mm/m^2/interval
+//   DriftH = DriftH * Global::Interval*3600*24;      // kg/m-width/s to kg/m-width/interval
+//
+//} // sum procedure
+//
+//void Classpbsm_M::Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
+//           float t, float u, float rh, float Fetch,
+//           long N_S, float A_S, float GSL, float height, float Beta_M, float & Qdist_leeslope, float & Qdist_valley)
+//{
+//
+///*   Modified Calculations for Mean Particle Mass in this version
+//     program to calculate blowing snow horizontal flux, sublimation rate
+//     and latent heat flux due to snow sublimation for a variety of windspeeds,
+//     boundary layers and surface conditions.
+//
+//     All variable and constants entered into the programme are in SI and
+//     use Canadian Atmospheric Environement Service Meteorological data
+//     format.  Snow transport is in kg per square meter per half hour
+//     from the surface to 5 metres height.  Sublimation is totaled to the top
+//     of the boundary layer for diffusion, based on the meteorological
+//     Fetch and is expressed in millimeters of blowing snow lost over
+//     a square meter of snow surface per half hour  */
+//
+//  float   A,      Alpha,  B,      Bd,     Bound,  C,
+//  Diff,   DmDt,   Es,     H,
+//  Htran,  Hsalt,  Inc,    Lamb,   Lambda, Lb,
+//  Mpm,    Mpr,    Nh,     Nsalt,
+//  Nz,     Nuss,   Omega,  TQsalt,
+//  TQsum,  Qz,     RauTerm,Temp,
+//  Reyn,   SBsalt, Sbz,    SBsum,
+//  SigmaZ, Sigma2, SvDens, Usthr,  Ustar,
+//  UstarZ, Uz,     Vs,     Vsalt,  Sigma,
+//  Vsusp,  Z,      Zr,     Zstb,
+//  tX,     tH,     Qdist;
+//
+////Compute stubble coefficients
+//
+//   Zstb = 0.005*N_S*A_S*E_StubHt*100.0;      // Lettau, used for susp Z0''
+//   Lambda = N_S*A_S*E_StubHt;         // Raupach Eq. 1
+//   Sigma = (M_PI*A_S)/(4.0*E_StubHt); // Raupach Eq. 4
+//
+//// Calculate the flux for interval
+//   TQsalt = 0.0;                      // Total saltation flux
+//   TQsum = 0.0;                       // Total Suspension
+//   SBsalt = 0.0;
+//   SBsum = 0.0;
+//   DriftH = 0.0;
+//   SublH = 0.0;
+//
+//   Temp  = t + 273.0;                 // Convert to Deg. K
+//
+//// Check for data errors    Fluxes set to zero for the interval
+//   if((Temp < 0.0) || (u < 1.0) || (rh < 0.01)) {return;}
+//
+//   if(rh >= 1.0) rh = rh/100.0;       // handle %rh
+//
+//   Lamb = 0.000076843*Temp + 0.003130762;   // therm. cond. of atm. (J/(msK))
+//   Diff = 2.06e-5f*pow(Temp/273.0f, 1.75f); // diffus. of w.vap. atmos. (m^2/s
+//   B = PBSM_constants::LATH * PBSM_constants::M/(PBSM_constants::R * Temp) - 1.0;
+//
+//// find undersaturation of w. vapour at 2 metres
+//   Es = 611.15f * exp(22.452f*(Temp - 273.0f)/Temp);  //{sat pressure}
+//   SvDens = (Es*PBSM_constants::M)/(PBSM_constants::R*Temp);                       //{sat density}
+//   Sigma2 = rh - 1.0;                              //{undersaturation at 2 m}
+//
+//   if(u > Uthr) {
+//
+//// define saltation parameters and calculate saltation
+////    rate using 10/1987 MODEL OF BLOWING SNOW EQUATIONS
+//
+//      Usthr = 0.03697f*Uthr;                                  //{Eq. 6.3}
+//      Ustar = 0.02264f*pow(u, 1.295f);                         //{Eq. 6.2 rev}
+//      if(E_StubHt > 0.0001)                         //{Eq. 6.2 rev}
+//        RauTerm  = 1.0/((1.0-Sigma*Lambda)*(1.0+Beta_M*Lambda)); //{Raupach}
+//      else
+//        RauTerm  = 1.0;
+//
+//      Hsalt = PBSM_constants::C2/(2.0f*PBSM_constants::g)*sqr(Ustar);                         //{Eq. 4.13}
+//      Nsalt = 2.0*PBSM_constants::rho/(PBSM_constants::C2*PBSM_constants::C3*Ustar)*(RauTerm - sqr(Usthr)/sqr(Ustar)); //{Eq. 4.14 updated}
+//
+//      if(Nsalt <= 0.0) {
+//         Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//         return;
+//      }
+//
+//      TQsalt = PBSM_constants::C1*PBSM_constants::rho*Usthr/(PBSM_constants::g*PBSM_constants::C3*Ustar)*(sqr(Ustar)*RauTerm - sqr(Usthr)); // Eq. 4.20
+//
+//// calculate sublimation rate in the saltation layer
+//
+//      Mpr= 100E-6;
+//      Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
+//      Alpha = 5.0;
+//
+//      SigmaZ = Sigma2 * (1.019 + 0.027 * log(Hsalt)); // Eq. 6.20, Revised in May. 1997
+//      if(SigmaZ > -0.01) {SigmaZ = -0.01;}
+//      Vsalt = 0.6325 * Ustar + 2.3 * Usthr;          // Eq. 6.25
+//      Reyn = (2.0 * Mpr * Vsalt)/1.88E-5;            // Eq. 6.22
+//      Nuss = 1.79 + 0.606 * sqrt(Reyn);              // Eq. 6.21
+//      A = Lamb * Temp * Nuss;
+//      C = 1.0/(Diff * SvDens * Nuss);
+//      DmDt = ((2.0 * M_PI * Mpr * SigmaZ) - (Htran * B/A))/((PBSM_constants::LATH * B/A) + C);
+//
+//      //{Eq. 6.16} {Gamma Dist. Corr.}
+//      Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Mpr*sqr(Mpr) *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
+//
+//      Vs = DmDt/Mpm;                // Sublimation rate coefficient Eq. 6.13
+//      SBsalt = Vs * Nsalt * Hsalt;  // Eq. 6.11
+//
+//// calculate mass flux in the suspended layers and the sublimation
+////     rate for layers of height Inc from height r to b
+//
+//      Zr = 0.05628 * Ustar;         // Eq. 5.27
+//      Alpha = 15.0;
+//      Inc = 0.0001;
+//
+//// Loop to find the first suspended drift density level, r
+////     from the reference level Zr
+////     To preserve continuity with saltation the first suspended
+////     level drift density is less than or equal to Nsalt.
+//
+//      TQsum = 0;
+//      SBsum = 0;
+//
+//      Z = Zr + Inc;
+//      while (Z <= 0.15) {
+//         Nz = 0.8 * exp(-1.55*(pow(0.05628f*Ustar, -0.544f) - pow(Z, -0.544f)));
+//
+//// Eq. 5.26, Revised in Dec. 1995
+//         if(Nz <= Nsalt) {goto Ten;}
+//         Z = Z + Inc;
+//      } //while
+//Ten:  Lb = Z + Inc;
+//      Z = Lb;
+//      Inc = 0.001;
+//
+//// find height of fully-developed boundary layer for turbulent
+////     diffusion using a form of Pasquills plume dispersion eq.
+////     iterate towards Bound
+//
+//      Bd = 1.0;
+//      Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
+//        sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));          // Eq. 6.9
+//      while (fabs(Bound - Bd) > 0.001) {
+//         Bd = Bound;
+//         Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
+//            sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));      // Eq. 6.9
+//      } //while
+//
+//
+//// Loop to calculate the suspended mass flux up to 5 metres
+////     and the total sublimation rate to the top of the boundary layer
+////   at increments of 1 mm to 50cm & increments of 10 cm to  b
+//
+//      Qdist_leeslope = 0;
+//      Qdist_valley = 0;
+//
+//      Twenty: H = Z + Inc;
+//      while (H <= Bound) {
+//         Nh = 0.8 * exp(-1.55f*(pow(0.05628f*Ustar, -0.544f) - pow(H, -0.544f)));
+//         Nz = Nh;
+//         UstarZ = Ustar * pow(1.2f/(1.2f + Nz), 0.5f);                  // Eq. 5.17a
+//         Uz = (UstarZ/PBSM_constants::KARMAN) *log(H/((0.00613f *sqr(Ustar)) + Zstb));// Eq. 4.17r
+//	 if(Uz > 0) {
+//	   if(height <= 0)
+//	     tX = 0;
+//	   else
+//             tX = height/(Uz*tan(GSL*DEGtoRAD));
+//
+//	   Mpr = 4.6e-5 * pow(H, -0.258f);                            // Eq. 6.15
+//           if(H >= 5.0) {Mpr = 30E-6f;}
+//
+//           Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
+//           Alpha = 4.08 + 12.6 * H;                                  // Eq. 6.14
+//           if(H >= 1.5) {Alpha = 25.0;}
+//
+//           SigmaZ = Sigma2 * (1.019 + 0.027 * log(H));  // Eq. 6.20, Revised in May. 1997
+//           if(SigmaZ > -0.01) {SigmaZ = -0.01;}
+//	   Omega = 1.1e7f * pow(Mpr, 1.8f);               // Eq. 5.18
+//           tH = (height + H)/Omega;
+//	   Vsusp = Omega + 0.0106f * pow(Uz, 1.36f);
+//           Reyn = (2.0f * Mpr * Vsusp)/1.88e-5f;          // Eq. 6.22
+//           Nuss = 1.79f + 0.606f * sqrt(Reyn);            // Eq. 6.21
+//           A = Lamb * Temp * Nuss;
+//           C = 1.0/(Diff * SvDens * Nuss);
+//           DmDt = ((2.0f*M_PI * Mpr * SigmaZ) - (Htran*B/A))/((PBSM_constants::LATH*B/A) + C);
+//           Mpm = 1.333f * M_PI * PBSM_constants::DICE * sqr(Mpr)*Mpr *   // Eq. 6.16
+//              (1.0f + 3.0f/Alpha + 2.0f/sqr(Alpha));       // Gamma Dist. Corr.
+//           Vs = DmDt/Mpm;                               // Eq. 6.13
+//           Sbz = Vs * Nz * Inc;                         // mg
+//           SBsum = SBsum + Sbz;                         // Eq. 6.12
+//           Qz = Nz * Uz * Inc;
+//
+//           if(tH < tX)
+//             Qdist_leeslope += Qz;
+//           else
+//             Qdist_valley += Qz;
+//                                       // Eq. 5.4
+//	   if(H >= 5.0) {Qz = 0.0;}
+//           TQsum = TQsum + Qz;                          // Eq. 5.5
+//	   if(Nz >= 1e-5) {
+//              if(((H-Inc) >= 0.5) && (H < 0.6)) {
+//                Inc = 0.1;
+//                Z = 0.5;
+//                goto Twenty;                            // re start the loop
+//              } //{if}
+//           }
+//           else {
+//              Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//              return;
+//           } // if
+//         }
+//         else {
+//            TQsalt = 0.0;
+//            TQsum = 0.0;
+//            SBsalt = 0.0;
+//            SBsum = 0.0;
+//            Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//            return;
+//         } // if
+//         H = H + Inc;
+//      } // while
+//   } // if
+//
+//   Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//} //PBSM procedure}
 
 ClassNetroute_D* ClassNetroute_D::klone(string name) const{
   return new ClassNetroute_D(name);
@@ -17064,525 +17063,525 @@ void ClassfrozenAyers::finish(bool good) {
   }
 }
 
-//Define HMSA constants:
-
-  const float rho_a =    1.2; // (kg/m3) air
-  const float rho_i =  920.0; // (kg/m3) ice
-
-  const float c_a = 1010.0; // (J/kg/K) air
-  const float c_i = 2120.0; // (J/kg/K) ice
-
-  const float Cv_a =    1212.0; // (J/m3/K) air
-  const float Cv_i = 1950400.0; // (J/m3/K) ice
-  const float Cv_w = 4185000.0; // (J/m3/K) water
-
-  const float lam_a = 0.025; // (W/m/K) air
-  const float lam_i = 2.24;  // (W/m/K) ice
-  const float lam_w = 0.57;  // (W/m/K) water
-
-  const float Rho_Organic = 1300.0; // (kg m-3)
-  const float Rho_Minerals = 2650.0; // (kg m-3)
-  const float Rho_Water = 1000.0; // (kg m-3)
-  const float Rho_Ice = 920.0; // (note: 890.0 on Hayashi's paper) (kg m-3)
-  const float Rho_Snow = 200.0; // (kg m-3)
-  const float Rho_Air = 1.2;  // (kg m-3)
-
-  //K_x: heat conductivity
-  const float K_Organic = 0.21;  // W/(m K)  //0.25
-  const float K_Minerals = 2.50;  // W/(m K)  //2.9
-  const float K_Air = 0.025; // W/(m K)
-  const float K_Ice = 2.24;  // W/(m K)
-  const float K_Water = 0.57;  // W/(m K)
-
-  //HC_x: specific heat capacity
-  const float HC_Minerals = 890.0; //745.1 // J/(kg.K)
-  const float HC_Water = 4185.0; // J/(kg.K)
-  const float HC_Air = 1010.0; // J/(kg.K)
-  const float HC_Organic = 1920.0; // J/(kg.K)
-  const float HC_Ice = 2120.0; // J/(kg.K)
-  const float Water_Ice = 334.0e3; // latent heat for fusion of water (J kg-1)
-  const float Max_Layers = 20;  // maximum layers allowed
-
-ClassHMSA* ClassHMSA::klone(string name) const{
-  return new ClassHMSA(name);
-}
-
-void ClassHMSA::decl(void) {
-
-  Description = "'Estimation of frost table (Masaki Hayashi 2007).' \
-                 'ebsm using variable hru_t (Â°C),' \
-                 'ebsm using observation Tsurf_obs (Â°C).'";
-
-  MaxFrontCnt = 10;
-
-  variation_set = VARIATION_ORG;
-
-// Variables:
-  declstatvar("Cum_Thaw", NHRU, "Cumulative thaw depth", "(m)", &Cum_Thaw);
-  declstatvar("Cum_Frozen", NHRU, "Cumulative frozen depth", "(m)", &Cum_Frozen);
-  declvar("Lamda_b", NHRU, "Thermal conductivity", "()", &Lamda_b); // (W/m.Â°C)
-  declvar("Thaw_D", NHRU, "thaw table depth below surface", "(m)", &Thaw_D);
-  declvar("Frozen_D", NHRU, "frost table depth below surface", "(m)", &Frozen_D);
-  declvar("C_K0", NHRU, "Conductivity", "()", &C_K0);
-  declvar("Last_Tsurf", NHRU, "last surface temperature", "(Â°C)", &Last_Tsurf);
-
-  declvar("f", NHRU, "Vol fraction of ice (or water)", "(m^3/m^3)", &f);
-  declvar("Soil_Ice", NLAY, "Ice fraction in soil", "()", &Soil_Ice, &Soil_Ice_lay);
-  declvar("Soil_Water", NLAY, "Liquid water fraction in soil", "()", &Soil_Water, &Soil_Water_lay);
-  declvar("Total_Moisture", NLAY, "layer moisture fraction", "()", &Total_Moisture, &Total_Moisture_lay);
-  declstatvar("Cum_d", NLAY, "cumulative layer depths", "(m)", &Cum_d, &Cum_d_lay);
-  declstatvar("Frozen_ID", NLAY, "cumulative layer depths", "(m)", &Frozen_ID, &Frozen_ID_lay);
-
-  declvar("FrntDepth", NDEFN, "Front depth", "(m)", &FrntDepth, &FrntDepth_array, MaxFrontCnt);
-  declstatvar("FreezeCum", NDEFN, "Front depth", "(m)", &FreezeCum, &FreezeCum_array, MaxFrontCnt);
-  declvar("ThawCum", NDEFN, "Front depth", "(m)", &ThawCum, &ThawCum_array, MaxFrontCnt);
-  declvar("FrntDepthType", NDEFN, "Front depth type > 0 thaw, < 0 freeze", "()", &FrntDepthType, &FrntDepthType_array, MaxFrontCnt);
-  declvar("FrontCnt", NHRU, "number of fronts", "()", &FrontCnt);
-
-// local variables
-  decllocal("Tsurface", NHRU, "soil surface temperature used in module", "()", &Tsurface);
-
-// Parameters (some are already defined in 'CRHMQuinton'):
-  declparam("Alpha_ID", NHRU, "1", "0", "1", "For ID=0 input Alpha values used, for ID=1 Alpha calculated in model", "()", &Alpha_ID);
-  declparam("Alpha_T", NHRU, "0.000118", "0.0", "1e2", "Thaw layer migration constant", "()", &Alpha_T); // (J^-1/2/m^3/2)
-  declparam("Alpha_F", NHRU, "0.000118", "0.0", "1e2", "Freeze layer migration constant", "()", &Alpha_F); //(J^-1/2/m^3/2)
-
-  declparam("Soil_depths_lay", NLAY, "[0.15] , [0.1], [0.1] ,[0.1]", "0.0", "100.0", "layer depths", "(m)", &Soil_Depths, &Soil_depths_lay);
-  declparam("Organic", NLAY, "0.10, 0.17, 0.24, 0.25, 0.25, 0.25", "0.0", "1.0", "Volume ratio of organic matter", "(m^3/m^3)", &Organic, &Organic_lay);
-  declparam("Porosity", NLAY, "0.90, 0.83, 0.76, 0.75, 0.75, 0.75", "0.0", "1.0", "Layer Porosity", "(m^3/m^3)", &Porosity, &Porosity_lay); // "Pors" in CRHMQuinton
-  declparam("Bulkdensity", NLAY, "90.0, 144.3, 200.0, 248.0, 248.0, 248.0", "0.0", "1e3", "Bulk density of layer", "(kg/m^3)", &BulkDensity, &BulkDensity_lay);
-  declparam("Soil_ID", NLAY, "0, 1, 2, 3, 3, 3", "0", "4", "Soil_ID", "(kg/m^3)", &Soil_ID, &Soil_ID_lay);
-
-  declparam("InitThaw_D", NHRU, "0.7", "0.0", "1e2", "Initial thaw table depth below surface", "(m)", &InitThaw_D);
-  declparam("InitFrozen_D", NHRU, "0.0", "0.0", "1e2", "Initial frost table depth below surface", "(m)", &InitFrozen_D);
-  declparam("Soil_Layers", NHRU, "6", "0.0", "100.0", "No. of soil layers", "()", &Soil_Layers);
-  declparam("D_Top", NHRU, "0.02", "0.0", "1e2", "Pos of upper bndry temp rel to grd surface", "(m)", &D_Top);
-  declparam("Method_ID", NHRU, "1", "1", "5", "SoilHeat method, 1/2/3/4/5 - Johansen Complete/Johansen  common/ De Vries as Hayashi/ De Vries as Farouki/ Chad", "()", &Method_ID);
-
-  declparam("TMPB_W", NDEF, "0.15, 0.18, 0.19, 0.19, 0.06", "0", "1.0", "Liquid water fraction in soil", "()", &TMPB_W, &TMPB_W_NDEF, 5);
-
-  variation_set = VARIATION_0;
-
-// driving variable:
-  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
-
-  variation_set = VARIATION_1;
-
-  Liqcnt = declreadobs("LiqWat", NOBS, "liquid water at depth observation", "()", &LiqWat, HRU_OBS_misc); // # layers
-  Totcnt = declreadobs("TotMoist", NOBS, "total moisture at depth observation", "()", &TotMoist, HRU_OBS_misc); // # layers
-  declreadobs("Tsurf_obs", NHRU, "soil surface temperature observation", "(Â°C)", &Tsurf_obs, HRU_OBS_misc);
-
-  variation_set = VARIATION_ORG;
-}
-
-void ClassHMSA::init(void) {
-
-  nhru = getdim(NHRU);
-  nlay = getdim(NLAY);
-
-float F_Dummy, Alpha, I_Avg, I_Dummy; // [Max_Layers]
-
-  for(hh = 0; chkStruct(); ++hh) {
-    if(Soil_Layers[hh] > nlay){
-      CRHMException TExcept("In module 'HMSA' Soil_Layers parameter must be <= number of layers (nlay)!", TERMINATE);
-      LogError(TExcept);
-    }
-
-    Thaw_D[hh] = InitThaw_D[hh];
-    Frozen_D[hh] = InitFrozen_D[hh];
-    FrontCnt[hh] = 0;
-
-    for(long nn = 0; nn < MaxFrontCnt; ++nn){
-      FrntDepthType_array[nn][hh] = 0;
-      FrntDepth_array[nn][hh] = 0.0;
-      FreezeCum_array[nn][hh] = 0.0;
-      ThawCum_array[nn][hh] = 0.0;
-    }
-  } // for
-}
-
-void ClassHMSA::run(void) {
-
-  long I_Avg;
-  float Alpha;
-
-  for(hh = 0; chkStruct(); ++hh) {
-
-    switch (variation) {
-      case VARIATION_ORG :
-        Tsurface[hh] = hru_t[hh]; // variable
-      break;
-      case VARIATION_1 :
-        Tsurface[hh] = Tsurf_obs[hh]; // variable
-      break;
-    } // switch
-
-        // Calculate accumulative depth of each layers
-      Cum_d_lay[0][hh] = Soil_depths_lay[0][hh];
-      for (long nn = 1; nn < Soil_Layers[hh]; ++nn)
-          Cum_d_lay[nn][hh] = Cum_d_lay[nn-1][hh] + Soil_depths_lay[nn][hh];
-
-    if (Thaw_D[hh] > 0.0) { //  Frozen_ID = 0 = thaw, = 1 = frozen
-        for (long nn = 0; nn < Soil_Layers[hh]; ++nn)
-          Frozen_ID_lay[nn][hh] = 1; // sets frozen
-        for (long nn = 0; nn < Soil_Layers[hh]; ++nn)   {
-            Frozen_ID_lay[nn][hh] = 0; // sets unfrozen
-            if( Thaw_D[hh] < Cum_d_lay[nn][hh]) break;
-        }
-    }
-    else  {
-        for (long nn = 0; nn < Soil_Layers[hh]; ++nn)
-          Frozen_ID_lay[nn][hh] = 0; // sets unfrozen
-        for (long nn = 0; nn < Soil_Layers[hh]; ++nn)   {
-            Frozen_ID_lay[nn][hh] = 1; // sets frozen
-            if( Frozen_D[hh] < Cum_d_lay[nn][hh]) break;
-        }
-    }
-
-    for(long nn = 0; nn < Soil_Layers[hh]; ++nn) {
-
-      if(variation == VARIATION_1){
-        Soil_Water_lay[nn][hh] = LiqWat[min<long>(nn, Liqcnt)];
-        Total_Moisture_lay[nn][hh] = TotMoist[min<long>(nn, Totcnt)];
-      }
-      else if(getstep() == 1){ // fix
-        Soil_Water_lay[nn][hh] = 0.0;
-        Total_Moisture_lay[nn][hh] = 0.5;
-      }
-
-     if(Frozen_ID_lay[nn][hh] == 1)
-          Soil_Water_lay[nn][hh] = TMPB_W[Soil_ID[hh]];
-     else
-         Soil_Water_lay[nn][hh] = Total_Moisture_lay[nn][hh];
-
-// Mass conservation checks:
-      if (Total_Moisture_lay[nn][hh] > Porosity_lay[nn][hh])
-        Total_Moisture_lay[nn][hh] = Porosity_lay[nn][hh];
-      if (Soil_Water_lay[nn][hh] > Total_Moisture_lay[nn][hh])
-        Soil_Water_lay[nn][hh] = Total_Moisture_lay[nn][hh];
-      Soil_Ice_lay[nn][hh] = Total_Moisture_lay[nn][hh] - Soil_Water_lay[nn][hh];
-      if (Soil_Ice_lay[nn][hh] < 0.0)
-        Soil_Ice_lay[nn][hh] = 0.0;
-    } // for nn
-
-// Start Hayashi's algorithm
-// For the 1st time step, calculate the initial values of Cum_Thaw & Cum_Frozen from initial Thaw_D & Frozen_D
-        if (getstep() == 1) { // first CRHM timestep
-            if (Thaw_D[hh] > 0.0) {
-                 f[hh] = 0.0;
-                 I_Avg = 0;
-                 for (long nn = 0; nn < Soil_Layers[hh]; ++nn) {
-                    ++I_Avg;
-                    f[hh] += Soil_Water_lay[nn][hh]*Soil_depths_lay[nn][hh];
-                    if(Thaw_D[hh] < Cum_d_lay[nn][hh]) break;
-
-                 }
-                 f[hh] /= Cum_d_lay[I_Avg-1][hh];
-                 if (Alpha_ID[hh] >0)
-                   Cum_Thaw[hh] = Thaw_D[hh]*Thaw_D[hh]*Rho_Ice*f[hh]*Water_Ice /(2.0*86400.0); // reverse of Eq. 4 (and 86400 is for daily totals - needs changing for timestep)
-                 else
-                   Cum_Thaw[hh] = Thaw_D[hh]*Thaw_D[hh]/(Alpha_T[hh]*Alpha_T[hh]*86400.0); // reverse of Eq. (4) //daily value
-
-                 Cum_Frozen[hh] = 0.0;
-                 Frozen_D[hh] = 0.0;
-
-                 FrntDepth_array[FrontCnt[hh]][hh] = Thaw_D[hh];
-                 ThawCum_array[FrontCnt[hh]][hh] = Cum_Thaw[hh];
-                 FrntDepthType_array[FrontCnt[hh]][hh] = 1;
-            }
-            else{ // i.e. Frozen_D[hh] > 0.0
-                 f[hh] = 0.0;
-                 I_Avg = 0;
-                 for (long nn=0 ;nn < Soil_Layers[hh]; ++nn) {
-                    I_Avg ++   ;
-                    f[hh] += Soil_Ice_lay[nn][hh];
-                    if(Frozen_D[hh] < Cum_d_lay[nn][hh]) break;
-                 }
-                 f[hh] /= I_Avg;
-                 if (Alpha_ID[hh] >0)
-                   Cum_Frozen[hh] = Frozen_D[hh]*Frozen_D[hh]*Rho_Water*f[hh]*Water_Ice/(2.0*86400.0); // reverse of Eq. (4)
-                 else
-                   Cum_Frozen[hh] = Frozen_D[hh]*Frozen_D[hh]/(Alpha_F[hh]*Alpha_F[hh]*86400.0); // reverse of Eq. (4) //daily value
-
-                 Cum_Thaw[hh] = 0.0;
-                 Thaw_D[hh] = 0.0;
-
-                 FrntDepth_array[FrontCnt[hh]][hh] = Frozen_D[hh];
-                 FreezeCum_array[FrontCnt[hh]][hh] = Cum_Frozen[hh];
-                 FrntDepthType_array[FrontCnt[hh]][hh] = -1;
-            }
-            ++FrontCnt[hh];  // no need to check
-         } // end of first time step
-         else {      // other time steps
-            if (Tsurface[hh] > 0.0 )    {  // surface thaw condition
-                if(Last_Tsurf[hh] < 0.0){ // save frozen front
-                  FrntDepth_array[FrontCnt[hh]][hh] = Frozen_D[hh];
-                  FreezeCum_array[FrontCnt[hh]][hh] = Cum_Frozen[hh];
-                  FrntDepthType_array[FrontCnt[hh]][hh] = -1;
-                  if(FrontCnt[hh] < MaxFrontCnt-1)
-                    ++FrontCnt[hh];
-                  else{
-                    CRHMException TExcept("Maximum # of fronts exceeded ", TERMINATE);
-                    LogError(TExcept);
-                    throw TExcept;
-                  }
-                  FrntDepthType_array[FrontCnt[hh]][hh] = 1;
-                }
-                Frozen_D[hh] = 0.0;
-                Cum_Frozen[hh] = 0.0;
-                Lamda_b[hh] = 0.0;
-                f[hh] = 0.0;
-                I_Avg = 0;
-            // calculate the thaw penetration
-                for (long nn = 0; nn < Soil_Layers[hh]; ++nn)    {
-                    f[hh] +=  Total_Moisture_lay[nn][hh]*Soil_depths_lay[nn][hh];
-                    ++I_Avg;
-                    Get_Heat_Param_Soil(1.0, nn);
-                    Lamda_b[hh] += (Soil_depths_lay[nn][hh]/C_K0[hh]);
-                    if(Thaw_D[hh] < Cum_d_lay[nn][hh]) break;
-                }
-                f[hh] /= Cum_d_lay[I_Avg-1][hh];
-                Lamda_b[hh] = Cum_d_lay[I_Avg-1][hh]/Lamda_b[hh];
-                if (Alpha_ID[hh] >0)
-                  Alpha = sqrt(2.0/(Rho_Ice*f[hh]*Water_Ice));
-                else
-                  Alpha = Alpha_T[hh];
-                Cum_Thaw[hh] += Lamda_b[hh]*Tsurface[hh];
-
-                Thaw_D[hh] = Alpha*sqrt(86400.0*Cum_Thaw[hh]); //daily value
-
-                FrntDepth_array[FrontCnt[hh]][hh] = Thaw_D[hh];
-                ThawCum_array[FrontCnt[hh]][hh] = Cum_Thaw[hh];
-
-                if(FrontCnt[hh] > 1 && FrntDepth_array[FrontCnt[hh]][hh] >= FrntDepth_array[FrontCnt[hh]-1][hh]){ // caught up ?
-                  FrntDepth_array[FrontCnt[hh]-1][hh] = 0.0;
-                  FrontCnt[hh] -= 2; // go back to earlier thaw front
-                  Cum_Thaw[hh] = sqr(FrntDepth_array[FrontCnt[hh]][hh]/Alpha)/86400.0;
-                }
-            } // end of surface thaw condition
-            else                 {   // surface frozen condition
-                  if(Last_Tsurf[hh] > 0.0){ // save thaw front
-                    FrntDepth_array[FrontCnt[hh]][hh] = Thaw_D[hh];
-                    ThawCum_array[FrontCnt[hh]][hh] = Cum_Thaw[hh];
-                    FrntDepthType_array[FrontCnt[hh]][hh] = 1;
-                    if(FrontCnt[hh] < MaxFrontCnt-1)
-                      ++FrontCnt[hh];
-                    else{
-                      CRHMException TExcept("Maximum # of fronts exceeded ", TERMINATE);
-                      LogError(TExcept);
-                      throw TExcept;
-                    }
-                    FrntDepthType_array[FrontCnt[hh]][hh] = -1;
-                  }
-                  Thaw_D[hh] = 0.0;
-                  Cum_Thaw[hh] = 0.0;
-                Lamda_b[hh] = 0.0;
-                f[hh] = 0.0;
-                I_Avg = 0.0;
-            // calculate the frost penetration
-                for (long nn = 0; nn < Soil_Layers[hh]; ++nn)    {
-                    f[hh] +=  Total_Moisture_lay[nn][hh]*Soil_depths_lay[nn][hh];
-                    if(Soil_Ice_lay[nn][hh] < 0.0)
-                      Soil_Ice_lay[nn][hh] = 0.0;
-                    Get_Heat_Param_Soil(-1.0, nn);
-                    Lamda_b[hh] += (Soil_depths_lay[nn][hh]/C_K0[hh]);
-                    I_Avg ++;
-                    if(Frozen_D[hh] < Cum_d_lay[nn][hh]) break;
-                }
-                f[hh] /= Cum_d_lay[I_Avg-1][hh];
-                Lamda_b[hh] = Cum_d_lay[I_Avg-1][hh]/Lamda_b[hh];
-                if (Alpha_ID[hh] >0)
-                  Alpha = sqrt(2.0/(Rho_Water*f[hh]*Water_Ice));
-                else
-                  Alpha = Alpha_F[hh];
-
-                Cum_Frozen[hh] += -1.0* Lamda_b[hh]*Tsurface[hh];
-                Frozen_D[hh] = Alpha*sqrt(86400.0*Cum_Frozen[hh]); //daily value
-
-                FrntDepth_array[FrontCnt[hh]][hh] = Frozen_D[hh];
-                FreezeCum_array[FrontCnt[hh]][hh] = Cum_Frozen[hh];
-
-                if(FrontCnt[hh] > 1 && FrntDepth_array[FrontCnt[hh]][hh] >= FrntDepth_array[FrontCnt[hh]-1][hh]){ // caught up ?
-                  FrntDepth_array[FrontCnt[hh]-1][hh] = 0.0;
-                  FrontCnt[hh] -= 2; // go back to earlier freeze front
-                  Cum_Frozen[hh] = sqr(FrntDepth_array[FrontCnt[hh]][hh]/Alpha)/86400.0;
-                }
-            } // end of surface frozen condition
-         } //end of other time step
-         Last_Tsurf[hh] = Tsurface[hh];
-
-        if(laststep()){
-            if(Tsurface[hh] > 0){
-              FrntDepth_array[FrontCnt[hh]][hh] = Thaw_D[hh];
-              ThawCum_array[FrontCnt[hh]][hh] = Cum_Frozen[hh];
-              FrntDepthType_array[FrontCnt[hh]][hh] = 1;
-            }
-            else{
-              FrntDepth_array[FrontCnt[hh]][hh] = Frozen_D[hh];
-              FreezeCum_array[FrontCnt[hh]][hh] = Cum_Frozen[hh];
-              FrntDepthType_array[FrontCnt[hh]][hh] = -1;
-            }
-            ++FrontCnt[hh]; // no need to check
-        }
-  } // for hh
-
-}
-
-void ClassHMSA::Get_Heat_Chad(long nn){
-
-   float Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
-
-   float x_a = K_Air;
-   float x_w = Soil_Water_lay[nn][hh];
-   float x_s = 1.0-Porosity_lay[nn][hh] + Soil_Ice_lay[nn][hh];
-   float lam_s;
-
-   if (Minerals < 0.1)     // Organic Soil
-     lam_s = K_Organic;
-   else if (Organic_lay[nn][hh] < 0.1 ) // Mineral Soil
-     lam_s = K_Minerals;
-   else   //mixed
-     lam_s = (Minerals*K_Minerals + Organic_lay[nn][hh]*K_Organic)/x_s;
-
-   float n = Porosity_lay[nn][hh];
-
-   float g_a;
-   if(x_w >= 0.09)
-     g_a = 0.333-x_a/n*(0.333-0.035);
-   else
-     g_a = 0.013 + 0.944*x_w;
-
-   float g_c = 1.0 - 2.0*g_a;
-
-   //float Fs = 1.0/3.0*(2.0/(1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.125)
-   //             + (1.0/((1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.75))));
-
-   //float Fa = 1.0/3.0*(2.0/(1 + (lam_a/lam_w-1.0)*ga) + (1.0/((1 + (lam_a/lam_w-1.0)*gc))));
-
-   float F_a = 1.0/3.0*(2.0/(1.0+(lam_a/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_a/lam_w-1.0)*g_c));
-   float F_s = 1.0/3.0*(2.0/(1.0+(lam_s/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_s/lam_w-1.0)*g_c));
-
-   //float a = Farouki_a(por_s[soil_type_lay[nn][hh]]);
-   float a = Farouki_a(Porosity_lay[nn][hh]);
-
- // Calculate thermal cond. (W/m/K) of each layer depending on thermal & saturation condition (C_K0 in HMSA):
- // if layer is saturated & frozen:
-       C_K0[hh]  = lam_i*a*a + lam_s*sqr(1.0-a)            // lamis_lay[nn][hh]
-                            + lam_s*lam_i*(2*a-2*sqr(a))
-                            /(lam_s*a+lam_i*(1.0-a));
- // if layer is satureated & UNfrozen:
-       C_K0[hh]  = lam_w*a*a + lam_s*sqr(1.0-a)
-                            + lam_s*lam_w*(2*a-2*sqr(a))   // lamws_lay[nn][hh]
-                            /(lam_s*a+lam_w*(1.0-a));
- // if layer is UNsaturated & UNfrozen:
-       C_K0[hh] = (x_w*lam_w + F_a*x_a*lam_a +F_s*x_s*lam_s) // lamwsa_lay[nn][hh]
-                             /(x_w + F_a*x_a + F_s*x_s);
-}
-
-void ClassHMSA::Get_Heat_Param_Soil(float Soil_Temp, long nn) {
-
-// Subroutine to calculate soil heat parameters (method to be chosen by user)
-// uses: int Method_ID, float bulkdensity, Porosity, Organic, Soil_Water, Soil_Ice.
-// parameters: Soil_Temp, layer.
-// returns: C_K0 = conductivity; C_K1 = specific  heat capacity
-
-float Air, Minerals; //repsective volumetric fractions of soil air and minerals
-float KersNumber, SoilDryCond, SoilSatCond; // for method 2
-float Sr, g_a, g_c, F_a, F_s, x_a, x_w,x_s, lam_a, lam_w,lam_s,F_i,x_i,lam_i, Solid; //for method 3
-
-    Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
-    if (Minerals < 0.0) Minerals = 0.0;
-    Air = Porosity_lay[nn][hh] - Soil_Water_lay[nn][hh] - Soil_Ice_lay[nn][hh];
-    if(Air < 0.0) Air = 0.0;
-//    Rho_Soil = BulkDensity_lay[nn][hh] / (1.0 - Porosity_lay[nn][hh]);
-    Sr = (Soil_Water_lay[nn][hh] + Soil_Ice_lay[nn][hh])/Porosity_lay[nn][hh];
-
-	switch(Method_ID[hh]) {
-        case 1:               //Johansen Complete
-            if(Soil_Temp < -0.5)    // frozen soil
-                KersNumber = Sr;
-            else if(Organic_lay[nn][hh] > Minerals)
-                KersNumber = Sr*Sr;
-            else
-                KersNumber = 0.7*log10(Sr)+1.0; //coarse mineral soil
-//              KersNumber = 1.0*log10(Sr)+1.0; //fine mineral soil
-
-            SoilSatCond = pow(K_Organic, Organic_lay[nn][hh])*pow(K_Minerals, Minerals)*pow(K_Ice, Soil_Ice_lay[nn][hh])
-                *pow(K_Water,(Soil_Water_lay[nn][hh] + Air));
-            if(Organic_lay[nn][hh] > Minerals) {
-                if(Soil_Temp > -0.5)
-                 SoilDryCond = 0.05;
-                else
-                 SoilDryCond = 0.55;
-                }
-            else
-                 SoilDryCond = (0.135*BulkDensity_lay[nn][hh] + 64.7)/(2700.0 - 0.947*BulkDensity_lay[nn][hh]);
-
-            if(Soil_Temp < -0.5 && Organic_lay[nn][hh] > Minerals)
-                C_K0[hh] = SoilDryCond*pow((SoilSatCond/SoilDryCond), KersNumber);
-            else
-                C_K0[hh] = KersNumber*(SoilSatCond - SoilDryCond) + SoilDryCond;
-        break;
-        case 2:   //Johansen  common
-            KersNumber = Sr; //TDSA
-            SoilSatCond = pow(K_Organic, Organic_lay[nn][hh]) * pow(K_Minerals, Minerals)*pow(K_Ice, Soil_Ice_lay[nn][hh])
-                *pow(K_Water,(Soil_Water_lay[nn][hh] + Air));
-            SoilDryCond = (0.135*BulkDensity_lay[nn][hh] + 64.7)/(2700.-0.947*BulkDensity_lay[nn][hh]);
-            C_K0[hh] = KersNumber*(SoilSatCond - SoilDryCond)  + SoilDryCond;
-        break;
-        case 3:   //De Vries as Hayashi,2007
-            if(Soil_Ice_lay[nn][hh] < 0.01)   {  // Ice free
-                lam_a =  K_Air;
-                x_a = Air;
-                x_w = Soil_Water_lay[nn][hh] + Soil_Ice_lay[nn][hh];
-            }
-            else {      // Mostly Ice
-                lam_a =  K_Ice;
-                x_a = Soil_Ice_lay[nn][hh];
-                x_w = Soil_Water_lay[nn][hh];
-            }
-            lam_w =  K_Water;
-            x_s = 1.0 - Porosity_lay[nn][hh];
-            if (Minerals < 0.1)     //Organic Soil
-                lam_s = K_Organic;
-            else if (Organic_lay[nn][hh] < 0.1 ) //Minreal Soil
-                lam_s = K_Minerals;
-            else   //mixed
-                lam_s = (Minerals*K_Minerals + Organic_lay[nn][hh]*K_Organic)/x_s;
-
-            g_a = 0.333 - x_a/Porosity[hh]*(0.333-0.035);
-            g_c = 1.0 - 2.0 * g_a;
-            F_a = 1.0/3.0*(2.0/(1.0+(lam_a/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_a/lam_w-1.0)*g_c));
-            F_s = 1.0/3.0*(2.0/(1.0+(lam_s/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_s/lam_w-1.0)*g_c));
-            C_K0[hh] = (x_w*lam_w+F_a*x_a*lam_a+F_s*x_s*lam_s) /(x_w+F_a*x_a+F_s*x_s);
-            break;
-          case 4:   //De Vries as Farouki, 1986_three soil materials used: Air, water and soild
-
-            x_a = Air;
-            x_w = Soil_Water_lay[nn][hh];
-            x_s = 1.0-Porosity_lay[nn][hh] + Soil_Ice_lay[nn][hh];
-
-            lam_w =  K_Water;
-            if (x_w > 0.09)
-                 lam_a =  K_Air + 0.0238*exp(0.0536*Soil_Temp); //estimated from fig. 91 in Farouki 1986.
-            else
-                 lam_a = (0.0615+1.96*x_w)*0.418; //from Farouki 1986 pp110.
-            lam_s = pow(K_Organic, Organic_lay[nn][hh]/x_s) * pow(K_Minerals, Minerals/x_s)*pow(K_Ice, Soil_Ice_lay[nn][hh]/x_s);
-            if(x_w > 0.09)
-                g_a = 0.333- x_a/Porosity[hh]*(0.333-0.035);
-            else
-                g_a = 0.013+0.944*x_w;
-
-            g_c = 1.0 - 2.0 * g_a;
-            F_a = 1.0/3.0*(2.0/(1.0+(lam_a/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_a/lam_w-1.0)*g_c));
-            F_s = 1.0/3.0*(2.0/(1.0+(lam_s/lam_w-1.0)*0.125) + 1.0/(1.0+(lam_s/lam_w-1.0)*0.75));
-            C_K0[hh] = (x_w*lam_w+F_a*x_a*lam_a+F_s*x_s*lam_s) /(x_w+F_a*x_a+F_s*x_s);
-            break;
-          case 5:   //Chad
-
-            Get_Heat_Chad(nn);
-        }
-}
+////Define HMSA constants:
+//
+//  const float rho_a =    1.2; // (kg/m3) air
+//  const float rho_i =  920.0; // (kg/m3) ice
+//
+//  const float c_a = 1010.0; // (J/kg/K) air
+//  const float c_i = 2120.0; // (J/kg/K) ice
+//
+//  const float Cv_a =    1212.0; // (J/m3/K) air
+//  const float Cv_i = 1950400.0; // (J/m3/K) ice
+//  const float Cv_w = 4185000.0; // (J/m3/K) water
+//
+//  const float lam_a = 0.025; // (W/m/K) air
+//  const float lam_i = 2.24;  // (W/m/K) ice
+//  const float lam_w = 0.57;  // (W/m/K) water
+//
+//  const float Rho_Organic = 1300.0; // (kg m-3)
+//  const float Rho_Minerals = 2650.0; // (kg m-3)
+//  const float Rho_Water = 1000.0; // (kg m-3)
+//  const float Rho_Ice = 920.0; // (note: 890.0 on Hayashi's paper) (kg m-3)
+//  const float Rho_Snow = 200.0; // (kg m-3)
+//  const float Rho_Air = 1.2;  // (kg m-3)
+//
+//  //K_x: heat conductivity
+//  const float K_Organic = 0.21;  // W/(m K)  //0.25
+//  const float K_Minerals = 2.50;  // W/(m K)  //2.9
+//  const float K_Air = 0.025; // W/(m K)
+//  const float K_Ice = 2.24;  // W/(m K)
+//  const float K_Water = 0.57;  // W/(m K)
+//
+//  //HC_x: specific heat capacity
+//  const float HC_Minerals = 890.0; //745.1 // J/(kg.K)
+//  const float HC_Water = 4185.0; // J/(kg.K)
+//  const float HC_Air = 1010.0; // J/(kg.K)
+//  const float HC_Organic = 1920.0; // J/(kg.K)
+//  const float HC_Ice = 2120.0; // J/(kg.K)
+//  const float Water_Ice = 334.0e3; // latent heat for fusion of water (J kg-1)
+//  const float Max_Layers = 20;  // maximum layers allowed
+
+//ClassHMSA* ClassHMSA::klone(string name) const{
+//  return new ClassHMSA(name);
+//}
+//
+//void ClassHMSA::decl(void) {
+//
+//  Description = "'Estimation of frost table (Masaki Hayashi 2007).' \
+//                 'ebsm using variable hru_t (Â°C),' \
+//                 'ebsm using observation Tsurf_obs (Â°C).'";
+//
+//  MaxFrontCnt = 10;
+//
+//  variation_set = VARIATION_ORG;
+//
+//// Variables:
+//  declstatvar("Cum_Thaw", NHRU, "Cumulative thaw depth", "(m)", &Cum_Thaw);
+//  declstatvar("Cum_Frozen", NHRU, "Cumulative frozen depth", "(m)", &Cum_Frozen);
+//  declvar("Lamda_b", NHRU, "Thermal conductivity", "()", &Lamda_b); // (W/m.Â°C)
+//  declvar("Thaw_D", NHRU, "thaw table depth below surface", "(m)", &Thaw_D);
+//  declvar("Frozen_D", NHRU, "frost table depth below surface", "(m)", &Frozen_D);
+//  declvar("C_K0", NHRU, "Conductivity", "()", &C_K0);
+//  declvar("Last_Tsurf", NHRU, "last surface temperature", "(Â°C)", &Last_Tsurf);
+//
+//  declvar("f", NHRU, "Vol fraction of ice (or water)", "(m^3/m^3)", &f);
+//  declvar("Soil_Ice", NLAY, "Ice fraction in soil", "()", &Soil_Ice, &Soil_Ice_lay);
+//  declvar("Soil_Water", NLAY, "Liquid water fraction in soil", "()", &Soil_Water, &Soil_Water_lay);
+//  declvar("Total_Moisture", NLAY, "layer moisture fraction", "()", &Total_Moisture, &Total_Moisture_lay);
+//  declstatvar("Cum_d", NLAY, "cumulative layer depths", "(m)", &Cum_d, &Cum_d_lay);
+//  declstatvar("Frozen_ID", NLAY, "cumulative layer depths", "(m)", &Frozen_ID, &Frozen_ID_lay);
+//
+//  declvar("FrntDepth", NDEFN, "Front depth", "(m)", &FrntDepth, &FrntDepth_array, MaxFrontCnt);
+//  declstatvar("FreezeCum", NDEFN, "Front depth", "(m)", &FreezeCum, &FreezeCum_array, MaxFrontCnt);
+//  declvar("ThawCum", NDEFN, "Front depth", "(m)", &ThawCum, &ThawCum_array, MaxFrontCnt);
+//  declvar("FrntDepthType", NDEFN, "Front depth type > 0 thaw, < 0 freeze", "()", &FrntDepthType, &FrntDepthType_array, MaxFrontCnt);
+//  declvar("FrontCnt", NHRU, "number of fronts", "()", &FrontCnt);
+//
+//// local variables
+//  decllocal("Tsurface", NHRU, "soil surface temperature used in module", "()", &Tsurface);
+//
+//// Parameters (some are already defined in 'CRHMQuinton'):
+//  declparam("Alpha_ID", NHRU, "1", "0", "1", "For ID=0 input Alpha values used, for ID=1 Alpha calculated in model", "()", &Alpha_ID);
+//  declparam("Alpha_T", NHRU, "0.000118", "0.0", "1e2", "Thaw layer migration constant", "()", &Alpha_T); // (J^-1/2/m^3/2)
+//  declparam("Alpha_F", NHRU, "0.000118", "0.0", "1e2", "Freeze layer migration constant", "()", &Alpha_F); //(J^-1/2/m^3/2)
+//
+//  declparam("Soil_depths_lay", NLAY, "[0.15] , [0.1], [0.1] ,[0.1]", "0.0", "100.0", "layer depths", "(m)", &Soil_Depths, &Soil_depths_lay);
+//  declparam("Organic", NLAY, "0.10, 0.17, 0.24, 0.25, 0.25, 0.25", "0.0", "1.0", "Volume ratio of organic matter", "(m^3/m^3)", &Organic, &Organic_lay);
+//  declparam("Porosity", NLAY, "0.90, 0.83, 0.76, 0.75, 0.75, 0.75", "0.0", "1.0", "Layer Porosity", "(m^3/m^3)", &Porosity, &Porosity_lay); // "Pors" in CRHMQuinton
+//  declparam("Bulkdensity", NLAY, "90.0, 144.3, 200.0, 248.0, 248.0, 248.0", "0.0", "1e3", "Bulk density of layer", "(kg/m^3)", &BulkDensity, &BulkDensity_lay);
+//  declparam("Soil_ID", NLAY, "0, 1, 2, 3, 3, 3", "0", "4", "Soil_ID", "(kg/m^3)", &Soil_ID, &Soil_ID_lay);
+//
+//  declparam("InitThaw_D", NHRU, "0.7", "0.0", "1e2", "Initial thaw table depth below surface", "(m)", &InitThaw_D);
+//  declparam("InitFrozen_D", NHRU, "0.0", "0.0", "1e2", "Initial frost table depth below surface", "(m)", &InitFrozen_D);
+//  declparam("Soil_Layers", NHRU, "6", "0.0", "100.0", "No. of soil layers", "()", &Soil_Layers);
+//  declparam("D_Top", NHRU, "0.02", "0.0", "1e2", "Pos of upper bndry temp rel to grd surface", "(m)", &D_Top);
+//  declparam("Method_ID", NHRU, "1", "1", "5", "SoilHeat method, 1/2/3/4/5 - Johansen Complete/Johansen  common/ De Vries as Hayashi/ De Vries as Farouki/ Chad", "()", &Method_ID);
+//
+//  declparam("TMPB_W", NDEF, "0.15, 0.18, 0.19, 0.19, 0.06", "0", "1.0", "Liquid water fraction in soil", "()", &TMPB_W, &TMPB_W_NDEF, 5);
+//
+//  variation_set = VARIATION_0;
+//
+//// driving variable:
+//  declgetvar("*", "hru_t", "(Â°C)", &hru_t);
+//
+//  variation_set = VARIATION_1;
+//
+//  Liqcnt = declreadobs("LiqWat", NOBS, "liquid water at depth observation", "()", &LiqWat, HRU_OBS_misc); // # layers
+//  Totcnt = declreadobs("TotMoist", NOBS, "total moisture at depth observation", "()", &TotMoist, HRU_OBS_misc); // # layers
+//  declreadobs("Tsurf_obs", NHRU, "soil surface temperature observation", "(Â°C)", &Tsurf_obs, HRU_OBS_misc);
+//
+//  variation_set = VARIATION_ORG;
+//}
+//
+//void ClassHMSA::init(void) {
+//
+//  nhru = getdim(NHRU);
+//  nlay = getdim(NLAY);
+//
+//float F_Dummy, Alpha, I_Avg, I_Dummy; // [Max_Layers]
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//    if(Soil_Layers[hh] > nlay){
+//      CRHMException TExcept("In module 'HMSA' Soil_Layers parameter must be <= number of layers (nlay)!", TERMINATE);
+//      LogError(TExcept);
+//    }
+//
+//    Thaw_D[hh] = InitThaw_D[hh];
+//    Frozen_D[hh] = InitFrozen_D[hh];
+//    FrontCnt[hh] = 0;
+//
+//    for(long nn = 0; nn < MaxFrontCnt; ++nn){
+//      FrntDepthType_array[nn][hh] = 0;
+//      FrntDepth_array[nn][hh] = 0.0;
+//      FreezeCum_array[nn][hh] = 0.0;
+//      ThawCum_array[nn][hh] = 0.0;
+//    }
+//  } // for
+//}
+//
+//void ClassHMSA::run(void) {
+//
+//  long I_Avg;
+//  float Alpha;
+//
+//  for(hh = 0; chkStruct(); ++hh) {
+//
+//    switch (variation) {
+//      case VARIATION_ORG :
+//        Tsurface[hh] = hru_t[hh]; // variable
+//      break;
+//      case VARIATION_1 :
+//        Tsurface[hh] = Tsurf_obs[hh]; // variable
+//      break;
+//    } // switch
+//
+//        // Calculate accumulative depth of each layers
+//      Cum_d_lay[0][hh] = Soil_depths_lay[0][hh];
+//      for (long nn = 1; nn < Soil_Layers[hh]; ++nn)
+//          Cum_d_lay[nn][hh] = Cum_d_lay[nn-1][hh] + Soil_depths_lay[nn][hh];
+//
+//    if (Thaw_D[hh] > 0.0) { //  Frozen_ID = 0 = thaw, = 1 = frozen
+//        for (long nn = 0; nn < Soil_Layers[hh]; ++nn)
+//          Frozen_ID_lay[nn][hh] = 1; // sets frozen
+//        for (long nn = 0; nn < Soil_Layers[hh]; ++nn)   {
+//            Frozen_ID_lay[nn][hh] = 0; // sets unfrozen
+//            if( Thaw_D[hh] < Cum_d_lay[nn][hh]) break;
+//        }
+//    }
+//    else  {
+//        for (long nn = 0; nn < Soil_Layers[hh]; ++nn)
+//          Frozen_ID_lay[nn][hh] = 0; // sets unfrozen
+//        for (long nn = 0; nn < Soil_Layers[hh]; ++nn)   {
+//            Frozen_ID_lay[nn][hh] = 1; // sets frozen
+//            if( Frozen_D[hh] < Cum_d_lay[nn][hh]) break;
+//        }
+//    }
+//
+//    for(long nn = 0; nn < Soil_Layers[hh]; ++nn) {
+//
+//      if(variation == VARIATION_1){
+//        Soil_Water_lay[nn][hh] = LiqWat[min<long>(nn, Liqcnt)];
+//        Total_Moisture_lay[nn][hh] = TotMoist[min<long>(nn, Totcnt)];
+//      }
+//      else if(getstep() == 1){ // fix
+//        Soil_Water_lay[nn][hh] = 0.0;
+//        Total_Moisture_lay[nn][hh] = 0.5;
+//      }
+//
+//     if(Frozen_ID_lay[nn][hh] == 1)
+//          Soil_Water_lay[nn][hh] = TMPB_W[Soil_ID[hh]];
+//     else
+//         Soil_Water_lay[nn][hh] = Total_Moisture_lay[nn][hh];
+//
+//// Mass conservation checks:
+//      if (Total_Moisture_lay[nn][hh] > Porosity_lay[nn][hh])
+//        Total_Moisture_lay[nn][hh] = Porosity_lay[nn][hh];
+//      if (Soil_Water_lay[nn][hh] > Total_Moisture_lay[nn][hh])
+//        Soil_Water_lay[nn][hh] = Total_Moisture_lay[nn][hh];
+//      Soil_Ice_lay[nn][hh] = Total_Moisture_lay[nn][hh] - Soil_Water_lay[nn][hh];
+//      if (Soil_Ice_lay[nn][hh] < 0.0)
+//        Soil_Ice_lay[nn][hh] = 0.0;
+//    } // for nn
+//
+//// Start Hayashi's algorithm
+//// For the 1st time step, calculate the initial values of Cum_Thaw & Cum_Frozen from initial Thaw_D & Frozen_D
+//        if (getstep() == 1) { // first CRHM timestep
+//            if (Thaw_D[hh] > 0.0) {
+//                 f[hh] = 0.0;
+//                 I_Avg = 0;
+//                 for (long nn = 0; nn < Soil_Layers[hh]; ++nn) {
+//                    ++I_Avg;
+//                    f[hh] += Soil_Water_lay[nn][hh]*Soil_depths_lay[nn][hh];
+//                    if(Thaw_D[hh] < Cum_d_lay[nn][hh]) break;
+//
+//                 }
+//                 f[hh] /= Cum_d_lay[I_Avg-1][hh];
+//                 if (Alpha_ID[hh] >0)
+//                   Cum_Thaw[hh] = Thaw_D[hh]*Thaw_D[hh]*Rho_Ice*f[hh]*Water_Ice /(2.0*86400.0); // reverse of Eq. 4 (and 86400 is for daily totals - needs changing for timestep)
+//                 else
+//                   Cum_Thaw[hh] = Thaw_D[hh]*Thaw_D[hh]/(Alpha_T[hh]*Alpha_T[hh]*86400.0); // reverse of Eq. (4) //daily value
+//
+//                 Cum_Frozen[hh] = 0.0;
+//                 Frozen_D[hh] = 0.0;
+//
+//                 FrntDepth_array[FrontCnt[hh]][hh] = Thaw_D[hh];
+//                 ThawCum_array[FrontCnt[hh]][hh] = Cum_Thaw[hh];
+//                 FrntDepthType_array[FrontCnt[hh]][hh] = 1;
+//            }
+//            else{ // i.e. Frozen_D[hh] > 0.0
+//                 f[hh] = 0.0;
+//                 I_Avg = 0;
+//                 for (long nn=0 ;nn < Soil_Layers[hh]; ++nn) {
+//                    I_Avg ++   ;
+//                    f[hh] += Soil_Ice_lay[nn][hh];
+//                    if(Frozen_D[hh] < Cum_d_lay[nn][hh]) break;
+//                 }
+//                 f[hh] /= I_Avg;
+//                 if (Alpha_ID[hh] >0)
+//                   Cum_Frozen[hh] = Frozen_D[hh]*Frozen_D[hh]*Rho_Water*f[hh]*Water_Ice/(2.0*86400.0); // reverse of Eq. (4)
+//                 else
+//                   Cum_Frozen[hh] = Frozen_D[hh]*Frozen_D[hh]/(Alpha_F[hh]*Alpha_F[hh]*86400.0); // reverse of Eq. (4) //daily value
+//
+//                 Cum_Thaw[hh] = 0.0;
+//                 Thaw_D[hh] = 0.0;
+//
+//                 FrntDepth_array[FrontCnt[hh]][hh] = Frozen_D[hh];
+//                 FreezeCum_array[FrontCnt[hh]][hh] = Cum_Frozen[hh];
+//                 FrntDepthType_array[FrontCnt[hh]][hh] = -1;
+//            }
+//            ++FrontCnt[hh];  // no need to check
+//         } // end of first time step
+//         else {      // other time steps
+//            if (Tsurface[hh] > 0.0 )    {  // surface thaw condition
+//                if(Last_Tsurf[hh] < 0.0){ // save frozen front
+//                  FrntDepth_array[FrontCnt[hh]][hh] = Frozen_D[hh];
+//                  FreezeCum_array[FrontCnt[hh]][hh] = Cum_Frozen[hh];
+//                  FrntDepthType_array[FrontCnt[hh]][hh] = -1;
+//                  if(FrontCnt[hh] < MaxFrontCnt-1)
+//                    ++FrontCnt[hh];
+//                  else{
+//                    CRHMException TExcept("Maximum # of fronts exceeded ", TERMINATE);
+//                    LogError(TExcept);
+//                    throw TExcept;
+//                  }
+//                  FrntDepthType_array[FrontCnt[hh]][hh] = 1;
+//                }
+//                Frozen_D[hh] = 0.0;
+//                Cum_Frozen[hh] = 0.0;
+//                Lamda_b[hh] = 0.0;
+//                f[hh] = 0.0;
+//                I_Avg = 0;
+//            // calculate the thaw penetration
+//                for (long nn = 0; nn < Soil_Layers[hh]; ++nn)    {
+//                    f[hh] +=  Total_Moisture_lay[nn][hh]*Soil_depths_lay[nn][hh];
+//                    ++I_Avg;
+//                    Get_Heat_Param_Soil(1.0, nn);
+//                    Lamda_b[hh] += (Soil_depths_lay[nn][hh]/C_K0[hh]);
+//                    if(Thaw_D[hh] < Cum_d_lay[nn][hh]) break;
+//                }
+//                f[hh] /= Cum_d_lay[I_Avg-1][hh];
+//                Lamda_b[hh] = Cum_d_lay[I_Avg-1][hh]/Lamda_b[hh];
+//                if (Alpha_ID[hh] >0)
+//                  Alpha = sqrt(2.0/(Rho_Ice*f[hh]*Water_Ice));
+//                else
+//                  Alpha = Alpha_T[hh];
+//                Cum_Thaw[hh] += Lamda_b[hh]*Tsurface[hh];
+//
+//                Thaw_D[hh] = Alpha*sqrt(86400.0*Cum_Thaw[hh]); //daily value
+//
+//                FrntDepth_array[FrontCnt[hh]][hh] = Thaw_D[hh];
+//                ThawCum_array[FrontCnt[hh]][hh] = Cum_Thaw[hh];
+//
+//                if(FrontCnt[hh] > 1 && FrntDepth_array[FrontCnt[hh]][hh] >= FrntDepth_array[FrontCnt[hh]-1][hh]){ // caught up ?
+//                  FrntDepth_array[FrontCnt[hh]-1][hh] = 0.0;
+//                  FrontCnt[hh] -= 2; // go back to earlier thaw front
+//                  Cum_Thaw[hh] = sqr(FrntDepth_array[FrontCnt[hh]][hh]/Alpha)/86400.0;
+//                }
+//            } // end of surface thaw condition
+//            else                 {   // surface frozen condition
+//                  if(Last_Tsurf[hh] > 0.0){ // save thaw front
+//                    FrntDepth_array[FrontCnt[hh]][hh] = Thaw_D[hh];
+//                    ThawCum_array[FrontCnt[hh]][hh] = Cum_Thaw[hh];
+//                    FrntDepthType_array[FrontCnt[hh]][hh] = 1;
+//                    if(FrontCnt[hh] < MaxFrontCnt-1)
+//                      ++FrontCnt[hh];
+//                    else{
+//                      CRHMException TExcept("Maximum # of fronts exceeded ", TERMINATE);
+//                      LogError(TExcept);
+//                      throw TExcept;
+//                    }
+//                    FrntDepthType_array[FrontCnt[hh]][hh] = -1;
+//                  }
+//                  Thaw_D[hh] = 0.0;
+//                  Cum_Thaw[hh] = 0.0;
+//                Lamda_b[hh] = 0.0;
+//                f[hh] = 0.0;
+//                I_Avg = 0.0;
+//            // calculate the frost penetration
+//                for (long nn = 0; nn < Soil_Layers[hh]; ++nn)    {
+//                    f[hh] +=  Total_Moisture_lay[nn][hh]*Soil_depths_lay[nn][hh];
+//                    if(Soil_Ice_lay[nn][hh] < 0.0)
+//                      Soil_Ice_lay[nn][hh] = 0.0;
+//                    Get_Heat_Param_Soil(-1.0, nn);
+//                    Lamda_b[hh] += (Soil_depths_lay[nn][hh]/C_K0[hh]);
+//                    I_Avg ++;
+//                    if(Frozen_D[hh] < Cum_d_lay[nn][hh]) break;
+//                }
+//                f[hh] /= Cum_d_lay[I_Avg-1][hh];
+//                Lamda_b[hh] = Cum_d_lay[I_Avg-1][hh]/Lamda_b[hh];
+//                if (Alpha_ID[hh] >0)
+//                  Alpha = sqrt(2.0/(Rho_Water*f[hh]*Water_Ice));
+//                else
+//                  Alpha = Alpha_F[hh];
+//
+//                Cum_Frozen[hh] += -1.0* Lamda_b[hh]*Tsurface[hh];
+//                Frozen_D[hh] = Alpha*sqrt(86400.0*Cum_Frozen[hh]); //daily value
+//
+//                FrntDepth_array[FrontCnt[hh]][hh] = Frozen_D[hh];
+//                FreezeCum_array[FrontCnt[hh]][hh] = Cum_Frozen[hh];
+//
+//                if(FrontCnt[hh] > 1 && FrntDepth_array[FrontCnt[hh]][hh] >= FrntDepth_array[FrontCnt[hh]-1][hh]){ // caught up ?
+//                  FrntDepth_array[FrontCnt[hh]-1][hh] = 0.0;
+//                  FrontCnt[hh] -= 2; // go back to earlier freeze front
+//                  Cum_Frozen[hh] = sqr(FrntDepth_array[FrontCnt[hh]][hh]/Alpha)/86400.0;
+//                }
+//            } // end of surface frozen condition
+//         } //end of other time step
+//         Last_Tsurf[hh] = Tsurface[hh];
+//
+//        if(laststep()){
+//            if(Tsurface[hh] > 0){
+//              FrntDepth_array[FrontCnt[hh]][hh] = Thaw_D[hh];
+//              ThawCum_array[FrontCnt[hh]][hh] = Cum_Frozen[hh];
+//              FrntDepthType_array[FrontCnt[hh]][hh] = 1;
+//            }
+//            else{
+//              FrntDepth_array[FrontCnt[hh]][hh] = Frozen_D[hh];
+//              FreezeCum_array[FrontCnt[hh]][hh] = Cum_Frozen[hh];
+//              FrntDepthType_array[FrontCnt[hh]][hh] = -1;
+//            }
+//            ++FrontCnt[hh]; // no need to check
+//        }
+//  } // for hh
+//
+//}
+//
+//void ClassHMSA::Get_Heat_Chad(long nn){
+//
+//   float Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
+//
+//   float x_a = K_Air;
+//   float x_w = Soil_Water_lay[nn][hh];
+//   float x_s = 1.0-Porosity_lay[nn][hh] + Soil_Ice_lay[nn][hh];
+//   float lam_s;
+//
+//   if (Minerals < 0.1)     // Organic Soil
+//     lam_s = K_Organic;
+//   else if (Organic_lay[nn][hh] < 0.1 ) // Mineral Soil
+//     lam_s = K_Minerals;
+//   else   //mixed
+//     lam_s = (Minerals*K_Minerals + Organic_lay[nn][hh]*K_Organic)/x_s;
+//
+//   float n = Porosity_lay[nn][hh];
+//
+//   float g_a;
+//   if(x_w >= 0.09)
+//     g_a = 0.333-x_a/n*(0.333-0.035);
+//   else
+//     g_a = 0.013 + 0.944*x_w;
+//
+//   float g_c = 1.0 - 2.0*g_a;
+//
+//   //float Fs = 1.0/3.0*(2.0/(1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.125)
+//   //             + (1.0/((1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.75))));
+//
+//   //float Fa = 1.0/3.0*(2.0/(1 + (lam_a/lam_w-1.0)*ga) + (1.0/((1 + (lam_a/lam_w-1.0)*gc))));
+//
+//   float F_a = 1.0/3.0*(2.0/(1.0+(lam_a/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_a/lam_w-1.0)*g_c));
+//   float F_s = 1.0/3.0*(2.0/(1.0+(lam_s/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_s/lam_w-1.0)*g_c));
+//
+//   //float a = Farouki_a(por_s[soil_type_lay[nn][hh]]);
+//   float a = Farouki_a(Porosity_lay[nn][hh]);
+//
+// // Calculate thermal cond. (W/m/K) of each layer depending on thermal & saturation condition (C_K0 in HMSA):
+// // if layer is saturated & frozen:
+//       C_K0[hh]  = lam_i*a*a + lam_s*sqr(1.0-a)            // lamis_lay[nn][hh]
+//                            + lam_s*lam_i*(2*a-2*sqr(a))
+//                            /(lam_s*a+lam_i*(1.0-a));
+// // if layer is satureated & UNfrozen:
+//       C_K0[hh]  = lam_w*a*a + lam_s*sqr(1.0-a)
+//                            + lam_s*lam_w*(2*a-2*sqr(a))   // lamws_lay[nn][hh]
+//                            /(lam_s*a+lam_w*(1.0-a));
+// // if layer is UNsaturated & UNfrozen:
+//       C_K0[hh] = (x_w*lam_w + F_a*x_a*lam_a +F_s*x_s*lam_s) // lamwsa_lay[nn][hh]
+//                             /(x_w + F_a*x_a + F_s*x_s);
+//}
+//
+//void ClassHMSA::Get_Heat_Param_Soil(float Soil_Temp, long nn) {
+//
+//// Subroutine to calculate soil heat parameters (method to be chosen by user)
+//// uses: int Method_ID, float bulkdensity, Porosity, Organic, Soil_Water, Soil_Ice.
+//// parameters: Soil_Temp, layer.
+//// returns: C_K0 = conductivity; C_K1 = specific  heat capacity
+//
+//float Air, Minerals; //repsective volumetric fractions of soil air and minerals
+//float KersNumber, SoilDryCond, SoilSatCond; // for method 2
+//float Sr, g_a, g_c, F_a, F_s, x_a, x_w,x_s, lam_a, lam_w,lam_s,F_i,x_i,lam_i, Solid; //for method 3
+//
+//    Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
+//    if (Minerals < 0.0) Minerals = 0.0;
+//    Air = Porosity_lay[nn][hh] - Soil_Water_lay[nn][hh] - Soil_Ice_lay[nn][hh];
+//    if(Air < 0.0) Air = 0.0;
+////    Rho_Soil = BulkDensity_lay[nn][hh] / (1.0 - Porosity_lay[nn][hh]);
+//    Sr = (Soil_Water_lay[nn][hh] + Soil_Ice_lay[nn][hh])/Porosity_lay[nn][hh];
+//
+//	switch(Method_ID[hh]) {
+//        case 1:               //Johansen Complete
+//            if(Soil_Temp < -0.5)    // frozen soil
+//                KersNumber = Sr;
+//            else if(Organic_lay[nn][hh] > Minerals)
+//                KersNumber = Sr*Sr;
+//            else
+//                KersNumber = 0.7*log10(Sr)+1.0; //coarse mineral soil
+////              KersNumber = 1.0*log10(Sr)+1.0; //fine mineral soil
+//
+//            SoilSatCond = pow(K_Organic, Organic_lay[nn][hh])*pow(K_Minerals, Minerals)*pow(K_Ice, Soil_Ice_lay[nn][hh])
+//                *pow(K_Water,(Soil_Water_lay[nn][hh] + Air));
+//            if(Organic_lay[nn][hh] > Minerals) {
+//                if(Soil_Temp > -0.5)
+//                 SoilDryCond = 0.05;
+//                else
+//                 SoilDryCond = 0.55;
+//                }
+//            else
+//                 SoilDryCond = (0.135*BulkDensity_lay[nn][hh] + 64.7)/(2700.0 - 0.947*BulkDensity_lay[nn][hh]);
+//
+//            if(Soil_Temp < -0.5 && Organic_lay[nn][hh] > Minerals)
+//                C_K0[hh] = SoilDryCond*pow((SoilSatCond/SoilDryCond), KersNumber);
+//            else
+//                C_K0[hh] = KersNumber*(SoilSatCond - SoilDryCond) + SoilDryCond;
+//        break;
+//        case 2:   //Johansen  common
+//            KersNumber = Sr; //TDSA
+//            SoilSatCond = pow(K_Organic, Organic_lay[nn][hh]) * pow(K_Minerals, Minerals)*pow(K_Ice, Soil_Ice_lay[nn][hh])
+//                *pow(K_Water,(Soil_Water_lay[nn][hh] + Air));
+//            SoilDryCond = (0.135*BulkDensity_lay[nn][hh] + 64.7)/(2700.-0.947*BulkDensity_lay[nn][hh]);
+//            C_K0[hh] = KersNumber*(SoilSatCond - SoilDryCond)  + SoilDryCond;
+//        break;
+//        case 3:   //De Vries as Hayashi,2007
+//            if(Soil_Ice_lay[nn][hh] < 0.01)   {  // Ice free
+//                lam_a =  K_Air;
+//                x_a = Air;
+//                x_w = Soil_Water_lay[nn][hh] + Soil_Ice_lay[nn][hh];
+//            }
+//            else {      // Mostly Ice
+//                lam_a =  K_Ice;
+//                x_a = Soil_Ice_lay[nn][hh];
+//                x_w = Soil_Water_lay[nn][hh];
+//            }
+//            lam_w =  K_Water;
+//            x_s = 1.0 - Porosity_lay[nn][hh];
+//            if (Minerals < 0.1)     //Organic Soil
+//                lam_s = K_Organic;
+//            else if (Organic_lay[nn][hh] < 0.1 ) //Minreal Soil
+//                lam_s = K_Minerals;
+//            else   //mixed
+//                lam_s = (Minerals*K_Minerals + Organic_lay[nn][hh]*K_Organic)/x_s;
+//
+//            g_a = 0.333 - x_a/Porosity[hh]*(0.333-0.035);
+//            g_c = 1.0 - 2.0 * g_a;
+//            F_a = 1.0/3.0*(2.0/(1.0+(lam_a/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_a/lam_w-1.0)*g_c));
+//            F_s = 1.0/3.0*(2.0/(1.0+(lam_s/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_s/lam_w-1.0)*g_c));
+//            C_K0[hh] = (x_w*lam_w+F_a*x_a*lam_a+F_s*x_s*lam_s) /(x_w+F_a*x_a+F_s*x_s);
+//            break;
+//          case 4:   //De Vries as Farouki, 1986_three soil materials used: Air, water and soild
+//
+//            x_a = Air;
+//            x_w = Soil_Water_lay[nn][hh];
+//            x_s = 1.0-Porosity_lay[nn][hh] + Soil_Ice_lay[nn][hh];
+//
+//            lam_w =  K_Water;
+//            if (x_w > 0.09)
+//                 lam_a =  K_Air + 0.0238*exp(0.0536*Soil_Temp); //estimated from fig. 91 in Farouki 1986.
+//            else
+//                 lam_a = (0.0615+1.96*x_w)*0.418; //from Farouki 1986 pp110.
+//            lam_s = pow(K_Organic, Organic_lay[nn][hh]/x_s) * pow(K_Minerals, Minerals/x_s)*pow(K_Ice, Soil_Ice_lay[nn][hh]/x_s);
+//            if(x_w > 0.09)
+//                g_a = 0.333- x_a/Porosity[hh]*(0.333-0.035);
+//            else
+//                g_a = 0.013+0.944*x_w;
+//
+//            g_c = 1.0 - 2.0 * g_a;
+//            F_a = 1.0/3.0*(2.0/(1.0+(lam_a/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_a/lam_w-1.0)*g_c));
+//            F_s = 1.0/3.0*(2.0/(1.0+(lam_s/lam_w-1.0)*0.125) + 1.0/(1.0+(lam_s/lam_w-1.0)*0.75));
+//            C_K0[hh] = (x_w*lam_w+F_a*x_a*lam_a+F_s*x_s*lam_s) /(x_w+F_a*x_a+F_s*x_s);
+//            break;
+//          case 5:   //Chad
+//
+//            Get_Heat_Chad(nn);
+//        }
+//}
 
 ClassSoil* ClassSoil::klone(string name) const{
   return new ClassSoil(name);
@@ -20013,7 +20012,7 @@ void ClassK_Estimate::init(void) {
 
 void ClassK_Estimate::run(void) {
 
-  const float  DEGtoRAD = M_PI/180.0;
+  
   const float den_water = 1000.0, acc_gravi = 9.8, dyna_visc_water = 0.001787;
 
   for(hh = 0; chkStruct(); ++hh){

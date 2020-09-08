@@ -173,301 +173,301 @@ void Classpbsm::init(void) {
 //  return SWE;
 //} // SWEfromDepth
 
-void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probability, float & Threshold,
-                             long Snow, float & SnowAge, long & DrySnow){
+//void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probability, float & Threshold,
+//                             long Snow, float & SnowAge, long & DrySnow){
+//
+////Probability of blowing snow occurrence and threshold wind speeds determined by ambient air temperature and snow age
+//
+//   float Wind, Mean, Variance, c;
+//
+//        Wind = 0.0;
+//        Probability = 0.0;
+//
+//   if(SWE <= 0.0) {   //no snow available
+//        DrySnow = false;
+//        SnowAge = 0.0;
+//        Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); // (m/s)
+//   }
+//
+//   else if((Snow == true) && (t < 0.0))
+//   {
+//// with concurrent snowfall: new dry snow
+//        DrySnow = true;
+//        SnowAge = 24.0/Global::Freq;
+//
+//        Mean = 0.365 * t + 0.00706 * sqr(t)
+//              + 0.91 * log((float)SnowAge) + 11.0;
+//        Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
+//
+//        while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
+//// Wind < 3 m/s too weak for dry snow transport
+//
+//           Wind = Wind + 0.1;
+//
+//           c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
+//
+//           Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
+//        } // {while do}
+//        Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); // (m/s)
+//   } // {if}
+//
+//   else if((t < 0.0) && DrySnow)
+//   {
+//// {without concurrent snowfall: old dry snow}
+//        SnowAge = SnowAge + 24.0/Global::Freq;
+//
+//        Mean = 0.365 * t + 0.00706 * sqr(t)
+//              + 0.91 * log((float)SnowAge) + 11.0;
+//        Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
+//
+//        while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
+//// Wind < 3 m/s too weak for dry snow transport
+//           Wind = Wind + 0.1;
+//
+//           c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
+//
+//           Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
+//         } // while do
+//
+//       Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); //(m/s)
+//   } // if
+//   else if ((t >= 0.0)  || !DrySnow)
+//   {
+//        DrySnow = false;             // or wet snow remains on the ground
+//        SnowAge = 0.0;
+//        Mean = 21.0;
+//        Variance = 7.0;
+//
+//        while ((Wind <= Uten_Prob) && (Uten_Prob >7.0)) {    // loop to calculate P.
+//// wind < 7 m/s too weak for wet snow transport
+//            Wind = Wind + 0.1;
+//            c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
+//            Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
+//        } // while do
+//        Threshold = 9.9;     // (m/s)
+//   } //if
+//
+//} // Probability_threshold procedure
 
-//Probability of blowing snow occurrence and threshold wind speeds determined by ambient air temperature and snow age
-
-   float Wind, Mean, Variance, c;
-
-        Wind = 0.0;
-        Probability = 0.0;
-
-   if(SWE <= 0.0) {   //no snow available
-        DrySnow = false;
-        SnowAge = 0.0;
-        Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); // (m/s)
-   }
-
-   else if((Snow == true) && (t < 0.0))
-   {
-// with concurrent snowfall: new dry snow
-        DrySnow = true;
-        SnowAge = 24.0/Global::Freq;
-
-        Mean = 0.365 * t + 0.00706 * sqr(t)
-              + 0.91 * log((float)SnowAge) + 11.0;
-        Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
-
-        while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
-// Wind < 3 m/s too weak for dry snow transport
-
-           Wind = Wind + 0.1;
-
-           c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
-
-           Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
-        } // {while do}
-        Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); // (m/s)
-   } // {if}
-
-   else if((t < 0.0) && DrySnow)
-   {
-// {without concurrent snowfall: old dry snow}
-        SnowAge = SnowAge + 24.0/Global::Freq;
-
-        Mean = 0.365 * t + 0.00706 * sqr(t)
-              + 0.91 * log((float)SnowAge) + 11.0;
-        Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
-
-        while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
-// Wind < 3 m/s too weak for dry snow transport
-           Wind = Wind + 0.1;
-
-           c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
-
-           Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
-         } // while do
-
-       Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); //(m/s)
-   } // if
-   else if ((t >= 0.0)  || !DrySnow)
-   {
-        DrySnow = false;             // or wet snow remains on the ground
-        SnowAge = 0.0;
-        Mean = 21.0;
-        Variance = 7.0;
-
-        while ((Wind <= Uten_Prob) && (Uten_Prob >7.0)) {    // loop to calculate P.
-// wind < 7 m/s too weak for wet snow transport
-            Wind = Wind + 0.1;
-            c = (-sqr(Wind - Mean))/(2.0*sqr(Variance));
-            Probability = Probability + (1.0/(Variance * 2.5055)) * (exp(c)) * 0.1;
-        } // while do
-        Threshold = 9.9;     // (m/s)
-   } //if
-
-} // Probability_threshold procedure
-
-void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH){
-
-// total sublimation
-
-   if  ((SBsum + SBsalt) >= 0.0)
-     SublH = 0.0;
-   else
-     SublH = (SBsum + SBsalt)*(-1E+3); // -mgmm2s to mg/m^2/s to g/m^2/s
-
-   DriftH = (TQsalt + TQsusp); // kg/m-width/s
-// Convert to interval values
-
-   SublH = SublH * Global::Interval*3600*24/1000.0; // g/m^2/s to mm/m^2/interval
-   DriftH = DriftH * Global::Interval*3600*24;      // kg/m-width/s to kg/m-width/interval
-
-} // sum procedure
-
-void Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
-           float t, float u, float rh, float Fetch, long N_S, float A_S)
-{
-
-/*   Modified Calculations for Mean Particle Mass in this version
-     program to calculate blowing snow horizontal flux, sublimation rate
-     and latent heat flux due to snow sublimation for a variety of windspeeds,
-     boundary layers and surface conditions.
-
-     All variable and constants entered into the programme are in SI and
-     use Canadian Atmospheric Environement Service Meteorological data
-     format.  Snow transport is in kg per square meter per half hour
-     from the surface to 5 metres height.  Sublimation is totaled to the top
-     of the boundary layer for diffusion, based on the meteorological
-     Fetch and is expressed in millimeters of blowing snow lost over
-     a square meter of snow surface per half hour  */
-
-  float   A,      Alpha,  B,      Bd,     Bound,  C,
-  Diff,   DmDt,   Es,     H,
-  Htran,  Hsalt,  Inc,    Lamb,   Lambda, Lb,
-  Mpm,    Mpr,    Nh,     Nsalt,
-  Nz,     Nuss,   Omega,  TQsalt,
-  TQsum,  Qz,     RauTerm,Temp,
-  Reyn,   SBsalt, Sbz,    SBsum,
-  SigmaZ, Sigma2, SvDens, Usthr,  Ustar,
-  UstarZ, Uz,     Vs,     Vsalt,  Sigma,
-  Vsusp,  Z,      Zr,     Zstb;
-
-//Compute stubble coefficients
-
-   Zstb = 0.005*N_S*A_S*E_StubHt*100.0;      // Lettau, used for susp Z0''
-   Lambda = N_S*A_S*E_StubHt;         // Raupach Eq. 1
-   Sigma = (M_PI*A_S)/(4.0*E_StubHt); // Raupach Eq. 4
-
-// Calculate the flux for interval
-   TQsalt = 0.0;                      // Total saltation flux
-   TQsum = 0.0;                       // Total Suspension
-   SBsalt = 0.0;
-   SBsum = 0.0;
-   DriftH = 0.0;
-   SublH = 0.0;
-
-   Temp  = t + 273.0;                 // Convert to Deg. K
-
-// Check for data errors    Fluxes set to zero for the interval
-   if((Temp < 0.0) || (u < 1.0) || (rh < 0.01)) {return;}
-
-   if(rh >= 1.0) rh = rh/100.0;       // handle %rh
-
-   Lamb = 0.000076843*Temp + 0.003130762;   // therm. cond. of atm. (J/(msK))
-   Diff = 2.06e-5f*pow(Temp/273.0f, 1.75f); // diffus. of w.vap. atmos. (m^2/s
-   B = PBSM_constants::LATH * PBSM_constants::M/(PBSM_constants::R * Temp) - 1.0;
-
-// find undersaturation of w. vapour at 2 metres
-   Es = 611.15f * exp(22.452f*(Temp - 273.0f)/Temp);  //{sat pressure}
-   SvDens = (Es*PBSM_constants::M)/(PBSM_constants::R*Temp);                       //{sat density}
-   Sigma2 = rh - 1.0;                              //{undersaturation at 2 m}
-
-   if(u > Uthr) {
-
-// define saltation parameters and calculate saltation
-//    rate using 10/1987 MODEL OF BLOWING SNOW EQUATIONS
-
-      Usthr = 0.03697f*Uthr;                                  //{Eq. 6.3}
-      Ustar = 0.02264f*pow(u, 1.295f);
-      if(E_StubHt > 0.0001)                         //{Eq. 6.2 rev}
-        RauTerm  = 1.0/((1.0-Sigma*Lambda)*(1.0+PBSM_constants::Beta*Lambda)); //{Raupach}
-      else
-        RauTerm  = 1.0;
-
-      Hsalt = PBSM_constants::C2/(2.0f*PBSM_constants::g)*sqr(Ustar);                         //{Eq. 4.13}
-      Nsalt = 2.0*PBSM_constants::rho/(PBSM_constants::C2*PBSM_constants::C3*Ustar)*(RauTerm - sqr(Usthr)/sqr(Ustar)); //{Eq. 4.14 updated}
-
-      if(Nsalt <= 0.0) {
-         Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-         return;
-      }
-
-      TQsalt = PBSM_constants::C1*PBSM_constants::rho*Usthr/(PBSM_constants::g*PBSM_constants::C3*Ustar)*(sqr(Ustar)*RauTerm - sqr(Usthr)); // Eq. 4.20
-
-// calculate sublimation rate in the saltation layer
-
-      Mpr= 100E-6;
-      Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
-      Alpha = 5.0;
-
-      SigmaZ = Sigma2 * (1.019 + 0.027 * log(Hsalt)); // Eq. 6.20, Revised in May. 1997
-      if(SigmaZ > -0.01) {SigmaZ = -0.01;}
-      Vsalt = 0.6325 * Ustar + 2.3 * Usthr;          // Eq. 6.25
-      Reyn = (2.0 * Mpr * Vsalt)/1.88E-5;            // Eq. 6.22
-      Nuss = 1.79 + 0.606 * sqrt(Reyn);              // Eq. 6.21
-      A = Lamb * Temp * Nuss;
-      C = 1.0/(Diff * SvDens * Nuss);
-      DmDt = ((2.0 * M_PI * Mpr * SigmaZ) - (Htran * B/A))/((PBSM_constants::LATH * B/A) + C);
-
-      //{Eq. 6.16} {Gamma Dist. Corr.}
-      Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Mpr*sqr(Mpr) *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
-
-      Vs = DmDt/Mpm;                // Sublimation rate coefficient Eq. 6.13
-      SBsalt = Vs * Nsalt * Hsalt;  // Eq. 6.11
-
-// calculate mass flux in the suspended layers and the sublimation
-//     rate for layers of height Inc from height r to b
-
-      Zr = 0.05628 * Ustar;         // Eq. 5.27
-      Alpha = 15.0;
-      Inc = 0.0001;
-
-// Loop to find the first suspended drift density level, r
-//     from the reference level Zr
-//     To preserve continuity with saltation the first suspended
-//     level drift density is less than or equal to Nsalt.
-
-      TQsum = 0;
-      SBsum = 0;
-
-      Z = Zr + Inc;
-      while (Z <= 0.15) {
-         Nz = 0.8 * exp(-1.55*(pow(0.05628f*Ustar, -0.544f) - pow(Z, -0.544f)));
-
-// Eq. 5.26, Revised in Dec. 1995
-         if(Nz <= Nsalt) {goto Ten;}
-         Z = Z + Inc;
-      } //while
-Ten:  Lb = Z + Inc;
-      Z = Lb;
-      Inc = 0.001;
-
-// find height of fully-developed boundary layer for turbulent
-//     diffusion using a form of Pasquills plume dispersion eq.
-//     iterate towards Bound
-
-      Bd = 1.0;
-      Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
-        sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));          // Eq. 6.9
-      while (fabs(Bound - Bd) > 0.001) {
-         Bd = Bound;
-         Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
-            sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));      // Eq. 6.9
-      } //while
-
-
-// Loop to calculate the suspended mass flux up to 5 metres
-//     and the total sublimation rate to the top of the boundary layer
-//   at increments of 1 mm to 50cm & increments of 10 cm to  b
-
-Twenty: H = Z + Inc;
-      while (H <= Bound) {
-         Nh = 0.8 * exp(-1.55f*(pow(0.05628f*Ustar, -0.544f) - pow(H, -0.544f)));
-         Nz = Nh;
-         UstarZ = Ustar * pow(1.2f/(1.2f + Nz), 0.5f);                  // Eq. 5.17a
-         Uz = (UstarZ/PBSM_constants::KARMAN) *log(H/((0.00613f *sqr(Ustar)) + Zstb));// Eq. 4.17r
-         if(Uz > 0) {
-	   Mpr = 4.6e-5 * pow(H, -0.258f);                            // Eq. 6.15
-           if(H >= 5.0) {Mpr = 30E-6f;}
-
-           Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
-           Alpha = 4.08 + 12.6 * H;                                  // Eq. 6.14
-           if(H >= 1.5) {Alpha = 25.0;}
-
-           SigmaZ = Sigma2 * (1.019 + 0.027 * log(H));  // Eq. 6.20, Revised in May. 1997
-           if(SigmaZ > -0.01) {SigmaZ = -0.01;}
-	   Omega = 1.1e7f * pow(Mpr, 1.8f);               // Eq. 5.18
-	   Vsusp = Omega + 0.0106f * pow(Uz, 1.36f);
-           Reyn = (2.0f * Mpr * Vsusp)/1.88e-5f;          // Eq. 6.22
-           Nuss = 1.79f + 0.606f * sqrt(Reyn);            // Eq. 6.21
-           A = Lamb * Temp * Nuss;
-           C = 1.0/(Diff * SvDens * Nuss);
-           DmDt = ((2.0f*M_PI * Mpr * SigmaZ) - (Htran*B/A))/((PBSM_constants::LATH*B/A) + C);
-           Mpm = 1.333f * M_PI * PBSM_constants::DICE * sqr(Mpr)*Mpr *   // Eq. 6.16
-              (1.0f + 3.0f/Alpha + 2.0f/sqr(Alpha));       // Gamma Dist. Corr.
-           Vs = DmDt/Mpm;                               // Eq. 6.13
-           Sbz = Vs * Nz * Inc;                         // mg
-           SBsum = SBsum + Sbz;                         // Eq. 6.12
-           Qz = Nz * Uz * Inc;                          // Eq. 5.4
-	   if(H >= 5.0) {Qz = 0.0;}
-           TQsum = TQsum + Qz;                          // Eq. 5.5
-	   if(Nz >= 1e-5) {
-              if(((H-Inc) >= 0.5) && (H < 0.6)) {
-                Inc = 0.1;
-                Z = 0.5;
-                goto Twenty;                            // re start the loop
-              } //{if}
-           }
-           else {
-              Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-              return;
-           } // if
-         }
-         else {
-            TQsalt = 0.0;
-            TQsum = 0.0;
-            SBsalt = 0.0;
-            SBsum = 0.0;
-            Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-            return;
-         } // if
-         H = H + Inc;
-      } // while
-   } // if
-   Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
-} //PBSM procedure}
+//void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH){
+//
+//// total sublimation
+//
+//   if  ((SBsum + SBsalt) >= 0.0)
+//     SublH = 0.0;
+//   else
+//     SublH = (SBsum + SBsalt)*(-1E+3); // -mgmm2s to mg/m^2/s to g/m^2/s
+//
+//   DriftH = (TQsalt + TQsusp); // kg/m-width/s
+//// Convert to interval values
+//
+//   SublH = SublH * Global::Interval*3600*24/1000.0; // g/m^2/s to mm/m^2/interval
+//   DriftH = DriftH * Global::Interval*3600*24;      // kg/m-width/s to kg/m-width/interval
+//
+//} // sum procedure
+//
+//void Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
+//           float t, float u, float rh, float Fetch, long N_S, float A_S)
+//{
+//
+///*   Modified Calculations for Mean Particle Mass in this version
+//     program to calculate blowing snow horizontal flux, sublimation rate
+//     and latent heat flux due to snow sublimation for a variety of windspeeds,
+//     boundary layers and surface conditions.
+//
+//     All variable and constants entered into the programme are in SI and
+//     use Canadian Atmospheric Environement Service Meteorological data
+//     format.  Snow transport is in kg per square meter per half hour
+//     from the surface to 5 metres height.  Sublimation is totaled to the top
+//     of the boundary layer for diffusion, based on the meteorological
+//     Fetch and is expressed in millimeters of blowing snow lost over
+//     a square meter of snow surface per half hour  */
+//
+//  float   A,      Alpha,  B,      Bd,     Bound,  C,
+//  Diff,   DmDt,   Es,     H,
+//  Htran,  Hsalt,  Inc,    Lamb,   Lambda, Lb,
+//  Mpm,    Mpr,    Nh,     Nsalt,
+//  Nz,     Nuss,   Omega,  TQsalt,
+//  TQsum,  Qz,     RauTerm,Temp,
+//  Reyn,   SBsalt, Sbz,    SBsum,
+//  SigmaZ, Sigma2, SvDens, Usthr,  Ustar,
+//  UstarZ, Uz,     Vs,     Vsalt,  Sigma,
+//  Vsusp,  Z,      Zr,     Zstb;
+//
+////Compute stubble coefficients
+//
+//   Zstb = 0.005*N_S*A_S*E_StubHt*100.0;      // Lettau, used for susp Z0''
+//   Lambda = N_S*A_S*E_StubHt;         // Raupach Eq. 1
+//   Sigma = (M_PI*A_S)/(4.0*E_StubHt); // Raupach Eq. 4
+//
+//// Calculate the flux for interval
+//   TQsalt = 0.0;                      // Total saltation flux
+//   TQsum = 0.0;                       // Total Suspension
+//   SBsalt = 0.0;
+//   SBsum = 0.0;
+//   DriftH = 0.0;
+//   SublH = 0.0;
+//
+//   Temp  = t + 273.0;                 // Convert to Deg. K
+//
+//// Check for data errors    Fluxes set to zero for the interval
+//   if((Temp < 0.0) || (u < 1.0) || (rh < 0.01)) {return;}
+//
+//   if(rh >= 1.0) rh = rh/100.0;       // handle %rh
+//
+//   Lamb = 0.000076843*Temp + 0.003130762;   // therm. cond. of atm. (J/(msK))
+//   Diff = 2.06e-5f*pow(Temp/273.0f, 1.75f); // diffus. of w.vap. atmos. (m^2/s
+//   B = PBSM_constants::LATH * PBSM_constants::M/(PBSM_constants::R * Temp) - 1.0;
+//
+//// find undersaturation of w. vapour at 2 metres
+//   Es = 611.15f * exp(22.452f*(Temp - 273.0f)/Temp);  //{sat pressure}
+//   SvDens = (Es*PBSM_constants::M)/(PBSM_constants::R*Temp);                       //{sat density}
+//   Sigma2 = rh - 1.0;                              //{undersaturation at 2 m}
+//
+//   if(u > Uthr) {
+//
+//// define saltation parameters and calculate saltation
+////    rate using 10/1987 MODEL OF BLOWING SNOW EQUATIONS
+//
+//      Usthr = 0.03697f*Uthr;                                  //{Eq. 6.3}
+//      Ustar = 0.02264f*pow(u, 1.295f);
+//      if(E_StubHt > 0.0001)                         //{Eq. 6.2 rev}
+//        RauTerm  = 1.0/((1.0-Sigma*Lambda)*(1.0+PBSM_constants::Beta*Lambda)); //{Raupach}
+//      else
+//        RauTerm  = 1.0;
+//
+//      Hsalt = PBSM_constants::C2/(2.0f*PBSM_constants::g)*sqr(Ustar);                         //{Eq. 4.13}
+//      Nsalt = 2.0*PBSM_constants::rho/(PBSM_constants::C2*PBSM_constants::C3*Ustar)*(RauTerm - sqr(Usthr)/sqr(Ustar)); //{Eq. 4.14 updated}
+//
+//      if(Nsalt <= 0.0) {
+//         Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//         return;
+//      }
+//
+//      TQsalt = PBSM_constants::C1*PBSM_constants::rho*Usthr/(PBSM_constants::g*PBSM_constants::C3*Ustar)*(sqr(Ustar)*RauTerm - sqr(Usthr)); // Eq. 4.20
+//
+//// calculate sublimation rate in the saltation layer
+//
+//      Mpr= 100E-6;
+//      Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
+//      Alpha = 5.0;
+//
+//      SigmaZ = Sigma2 * (1.019 + 0.027 * log(Hsalt)); // Eq. 6.20, Revised in May. 1997
+//      if(SigmaZ > -0.01) {SigmaZ = -0.01;}
+//      Vsalt = 0.6325 * Ustar + 2.3 * Usthr;          // Eq. 6.25
+//      Reyn = (2.0 * Mpr * Vsalt)/1.88E-5;            // Eq. 6.22
+//      Nuss = 1.79 + 0.606 * sqrt(Reyn);              // Eq. 6.21
+//      A = Lamb * Temp * Nuss;
+//      C = 1.0/(Diff * SvDens * Nuss);
+//      DmDt = ((2.0 * M_PI * Mpr * SigmaZ) - (Htran * B/A))/((PBSM_constants::LATH * B/A) + C);
+//
+//      //{Eq. 6.16} {Gamma Dist. Corr.}
+//      Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Mpr*sqr(Mpr) *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
+//
+//      Vs = DmDt/Mpm;                // Sublimation rate coefficient Eq. 6.13
+//      SBsalt = Vs * Nsalt * Hsalt;  // Eq. 6.11
+//
+//// calculate mass flux in the suspended layers and the sublimation
+////     rate for layers of height Inc from height r to b
+//
+//      Zr = 0.05628 * Ustar;         // Eq. 5.27
+//      Alpha = 15.0;
+//      Inc = 0.0001;
+//
+//// Loop to find the first suspended drift density level, r
+////     from the reference level Zr
+////     To preserve continuity with saltation the first suspended
+////     level drift density is less than or equal to Nsalt.
+//
+//      TQsum = 0;
+//      SBsum = 0;
+//
+//      Z = Zr + Inc;
+//      while (Z <= 0.15) {
+//         Nz = 0.8 * exp(-1.55*(pow(0.05628f*Ustar, -0.544f) - pow(Z, -0.544f)));
+//
+//// Eq. 5.26, Revised in Dec. 1995
+//         if(Nz <= Nsalt) {goto Ten;}
+//         Z = Z + Inc;
+//      } //while
+//Ten:  Lb = Z + Inc;
+//      Z = Lb;
+//      Inc = 0.001;
+//
+//// find height of fully-developed boundary layer for turbulent
+////     diffusion using a form of Pasquills plume dispersion eq.
+////     iterate towards Bound
+//
+//      Bd = 1.0;
+//      Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
+//        sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));          // Eq. 6.9
+//      while (fabs(Bound - Bd) > 0.001) {
+//         Bd = Bound;
+//         Bound = PBSM_constants::ZD + (PBSM_constants::KARMAN2 * (Fetch - PBSM_constants::XD) * pow(log(Bd * 162.926f/
+//            sqr(Ustar)) * log(PBSM_constants::ZD * 162.926f/sqr(Ustar)), -0.5f));      // Eq. 6.9
+//      } //while
+//
+//
+//// Loop to calculate the suspended mass flux up to 5 metres
+////     and the total sublimation rate to the top of the boundary layer
+////   at increments of 1 mm to 50cm & increments of 10 cm to  b
+//
+//Twenty: H = Z + Inc;
+//      while (H <= Bound) {
+//         Nh = 0.8 * exp(-1.55f*(pow(0.05628f*Ustar, -0.544f) - pow(H, -0.544f)));
+//         Nz = Nh;
+//         UstarZ = Ustar * pow(1.2f/(1.2f + Nz), 0.5f);                  // Eq. 5.17a
+//         Uz = (UstarZ/PBSM_constants::KARMAN) *log(H/((0.00613f *sqr(Ustar)) + Zstb));// Eq. 4.17r
+//         if(Uz > 0) {
+//	   Mpr = 4.6e-5 * pow(H, -0.258f);                            // Eq. 6.15
+//           if(H >= 5.0) {Mpr = 30E-6f;}
+//
+//           Htran = 0.9 * M_PI * sqr(Mpr) * PBSM_constants::Qstar;
+//           Alpha = 4.08 + 12.6 * H;                                  // Eq. 6.14
+//           if(H >= 1.5) {Alpha = 25.0;}
+//
+//           SigmaZ = Sigma2 * (1.019 + 0.027 * log(H));  // Eq. 6.20, Revised in May. 1997
+//           if(SigmaZ > -0.01) {SigmaZ = -0.01;}
+//	   Omega = 1.1e7f * pow(Mpr, 1.8f);               // Eq. 5.18
+//	   Vsusp = Omega + 0.0106f * pow(Uz, 1.36f);
+//           Reyn = (2.0f * Mpr * Vsusp)/1.88e-5f;          // Eq. 6.22
+//           Nuss = 1.79f + 0.606f * sqrt(Reyn);            // Eq. 6.21
+//           A = Lamb * Temp * Nuss;
+//           C = 1.0/(Diff * SvDens * Nuss);
+//           DmDt = ((2.0f*M_PI * Mpr * SigmaZ) - (Htran*B/A))/((PBSM_constants::LATH*B/A) + C);
+//           Mpm = 1.333f * M_PI * PBSM_constants::DICE * sqr(Mpr)*Mpr *   // Eq. 6.16
+//              (1.0f + 3.0f/Alpha + 2.0f/sqr(Alpha));       // Gamma Dist. Corr.
+//           Vs = DmDt/Mpm;                               // Eq. 6.13
+//           Sbz = Vs * Nz * Inc;                         // mg
+//           SBsum = SBsum + Sbz;                         // Eq. 6.12
+//           Qz = Nz * Uz * Inc;                          // Eq. 5.4
+//	   if(H >= 5.0) {Qz = 0.0;}
+//           TQsum = TQsum + Qz;                          // Eq. 5.5
+//	   if(Nz >= 1e-5) {
+//              if(((H-Inc) >= 0.5) && (H < 0.6)) {
+//                Inc = 0.1;
+//                Z = 0.5;
+//                goto Twenty;                            // re start the loop
+//              } //{if}
+//           }
+//           else {
+//              Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//              return;
+//           } // if
+//         }
+//         else {
+//            TQsalt = 0.0;
+//            TQsum = 0.0;
+//            SBsalt = 0.0;
+//            SBsum = 0.0;
+//            Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//            return;
+//         } // if
+//         H = H + Inc;
+//      } // while
+//   } // if
+//   Sum (TQsalt, TQsum, SBsum, SBsalt, DriftH, SublH);
+//} //PBSM procedure}
 
 void Classpbsm::run(void) {
 
