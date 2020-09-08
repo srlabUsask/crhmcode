@@ -274,4 +274,66 @@ string static FormatString(double DT, string) {
 //	cout << SS << endl;
 //}
 
+
+//taken from NewModules.cpp file.
+static float SWEfromDepth(float Snow_Depth) { // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
+
+	float SWE;
+
+	if (Snow_Depth > 0.6)
+		SWE = 4.5608 * Snow_Depth * 100.0 - 128.06;
+	else if (Snow_Depth > 0.0205)
+		SWE = 2.39 * Snow_Depth * 100.0 + 2.05;
+	else
+		SWE = Snow_Depth;
+
+	return SWE;
+} // SWEfromDepth
+
+
+//taken from NewModules.cpp file.
+static void infil_index(float Theta, float SWE, float& Index, float& Pot) {
+
+	Pot = 5 * (1 - Theta) * pow(SWE, 0.584f);
+	Index = Pot / SWE;
+	if (Index > 1.0) Index = 1;
+	Pot = Pot / 6;
+}
+
+
+static float soilproperties[][9] = {
+  { 0.0,  999.9, 0.000, 0.00, 1.100,  1.000,	0.000,	0.0,  4},  //      0  water
+  { 49.5, 117.8, 0.020, 0.10, 0.437,  0.395,	0.121,	4.05, 1},  //      1  sand
+  { 61.3,  29.9, 0.036, 0.16, 0.437,  0.41 ,	0.09,	4.38, 4},  //      2  loamsand
+  {110.1,  10.9, 0.041, 0.23, 0.453,  0.435,	0.218,	4.9,  2},  //      3  sandloam
+  { 88.9,   3.4, 0.029, 0.26, 0.463,  0.451,	0.478,	5.39, 2},  //      4  loam
+  {166.8,   6.5, 0.045, 0.38, 0.501,  0.485,	0.786,	5.3,  2},  //      5  siltloam
+  {218.5,   1.5, 0.068, 0.38, 0.398,  0.420,	0.299,	7.12, 3},  //      6  saclloam
+  {208.8,   1.0, 0.155, 0.39, 0.464,  0.476,	0.63,	8.52, 2},  //      7  clayloam
+  {273.3,   1.0, 0.039, 0.40, 0.471,  0.477,	0.356,	7.75, 2},  //      8  siclloam
+  {239.0,   0.6, 0.110, 0.41, 0.430,  0.426,	0.153,	10.4, 3},  //      9  sandclay
+  {292.2,   0.5, 0.056, 0.43, 0.479,  0.492,	0.49,	10.4, 3},  //      10 siltclay
+  {316.3,   0.3, 0.090, 0.46, 0.475,  0.482,	0.405,	11.4, 3},  //      11 clay
+  {  0.0,   0.0, 0.000, 0.00, 0.000,  0.000,	0.0,	 0.0, 4}   //      12 pavement. Values not used
+};
+
+static float SetSoilproperties[][4] = {
+	//  avail       wilt    field   pore
+	  {1000.0,	  0.0, 1000.0,  1000.0},          //      0  water
+	  {  84.0,	 40.0,	124.0,  395.0 },	  //      1  sand
+	  {  80.0,	 60.0,	140.0,  410.0 },	  //      2  loamsand
+	  { 130.0,	100.0,	230.0,  435.0 },	  //      3  sandloam
+	  { 157.0,	110.0,	267.0,  451.0 },	  //      4  loam
+	  { 162.0,	130.0,	292.0,  485.0 },	  //      5  siltloam
+	  { 170.0,	140.0,	310.0,  420.0 },	  //      6  saclloam
+	  { 167.0,	150.0,	317.0,  476.0 },	  //      7  clayloam
+	  { 150.0,	190.0,	340.0,  477.0 },	  //      8  siclloam
+	  { 150.0,	200.0,	350.0,  426.0 },	  //      9  sandclay
+	  { 150.0,	210.0,	360.0,  492.0 },	  //      10 siltclay
+	  { 145.0,	215.0,	360.0,  482.0 }, 	  //      11 clay
+	  {   0.0,     1000.0, 1000.0,    0.0 }           //      12 pavement
+};
+
+
+
 #endif

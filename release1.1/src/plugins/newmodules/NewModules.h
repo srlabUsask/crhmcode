@@ -7,6 +7,8 @@
 
 //#include "ClassModule.h"
 #include "ClassModule.h"
+//#include "ClassSnobalBase.h"
+
 //#include "WQ_CRHM.h"
 //#include "WQ_Soil_NPCcycling.h"
 #include <stack>
@@ -53,6 +55,318 @@ void finish(bool good);
 
 ClassNOP* klone(string name) const;
 };
+
+
+class TSTEP_REC { // time step information
+public:
+
+#define	DATA_TSTEP	   0
+#define	NORMAL_TSTEP	   1
+#define	MEDIUM_TSTEP	   2
+#define	SMALL_TSTEP	   3
+
+    // default for normal run timestep's threshold for a layer's mass (kg/m^2)
+
+#define	DEFAULT_NORMAL_THRESHOLD  60.0
+
+// default for medium run timestep's threshold for a layer's mass (kg/m^2)
+
+#define	DEFAULT_MEDIUM_THRESHOLD  10.0
+
+// default for small run timestep's threshold for a layer's mass (kg/m^2)
+
+#define	DEFAULT_SMALL_THRESHOLD  1.0
+
+
+    int level;	    // timestep's level
+
+    long time_step;   // length of timestep (seconds)
+
+    int intervals;    // # of these timestep that are in the previous-level's timestep (not used for level 0: data tstep)
+
+    float threshold;  // mass threshold for a layer to use this timestep (not used for level 0: data tstep)
+
+    TSTEP_REC() : level(0), time_step(24 * 3600 / Global::Freq), intervals(1), threshold(0.0) {};
+
+};
+
+class  INPUT_REC { // climate-data input records
+public:
+
+    float S_n;	// net solar radiation (W/m^2)
+    float I_lw;	// incoming longwave (thermal) rad (W/m^2)
+    float T_a;	// air temp (C)
+    float e_a;	// vapor pressure (Pa)
+    float u;	// wind speed (m/sec)
+    float T_g;	// soil temp at depth z_g (C)
+    float F_g;	// soil flux at depth z_g (W/m^2)
+};
+
+class  PRECIP_REC { // precip-data input records
+public:
+
+    float	  m_pp;		// total precipitation mass (kg/m^2)
+    float	  m_rain;	// mass of rain in precip   (kg/m^2)
+    float	  m_snow;	// mass of snow in precip   (kg/m^2)
+    float	  m_drift;	// mass of snow drift       (kg/m^2)
+    float	  m_subl;	// mass of snow drift       (kg/m^2)
+    float	  z_snow;	// depth of snow in precip  (m)
+};
+
+class ClassSnobalBase : public ClassModule {
+
+public:
+
+    ClassSnobalBase(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+
+    // declared variables
+
+    //   snowpack information
+
+    long* layer_count;    // number of layers in snowcover: 0, 1, or 2
+    float* z_s;            // total snowcover thickness (m)
+    float* z_s_0;          // active layer depth (m)
+    float* z_s_l;          // lower layer depth (m)
+    float* rho;            // average snowcover density (kg/m^3)
+    float* m_s;            // snowcover's specific mass (kg/m^2). Init by init_snow.
+    float* m_s_0;          // active layer specific mass (kg/m^2). Init by init_snow.
+    float* m_s_l;          // lower layer specific mass (kg/m^2). Init by init_snow.
+    float* T_s;            // average snowcover temp (K). Init by init_snow
+    float* T_s_0;          // active snow layer temp (K)
+    float* T_s_l;          // lower layer temp (C)
+    float* cc_s;           // snowcover's cold content (J/m^2). Init by init_snow.
+    float* cc_s_0;         // active layer cold content (J/m^2). Init by init_snow.
+    float* cc_s_l;         // lower layer cold content (J/m^2). Init by init_snow.
+    float* h2o_sat;        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
+//                                 to water that snowcover could hold at saturation)
+    float* h2o_vol;        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow
+    float* h2o;            // liquid h2o content as specific mass(kg/m^2)
+    float* h2o_max;        // max liquid h2o content as specific mass(kg/m^2)
+    float* h2o_total;      // total liquid h2o: includes h2o in snowcover, melt, and rainfall (kg/m^2)
+
+//   energy balance info for current timestep
+
+    float* R_n;            // net allwave radiation (W/m^2)
+    float* H;              // sensible heat xfr (W/m^2)
+    float* L_v_E;          // latent heat xfr (W/m^2)
+    float* G;              // heat xfr by conduction & diffusion from soil to snowcover (W/m^2)
+    float* G_0;            // heat xfr by conduction & diffusion from soil or lower layer to active layer (W/m^2)
+    float* M;              // advected heat from precip (W/m^2)
+    float* delta_Q;        // change in snowcover's energy (W/m^2)
+    float* delta_Q_0;      // change in active layer's energy (W/m^2)
+
+//   mass balance vars for current timestep
+
+    float* melt_direct_int;       // specific melt (kg/m^2 or m)
+    float* sum;       // specific melt (kg/m^2 or m)
+    float* SWE_change;       // interval change in SWE
+    float* E_int;	    // mass flux by evap into air from active layer (kg/m^2/s)
+    float* E_s_int;	    // mass of evap into air & soil from snowcover (kg/m^2)
+    float* snowmelt_int;   // predicted specific runoff (m/sec)
+    float* snowmeltD;      // daily predicted specific runoff (m/sec)
+    float* snowmeltD_acc;      // daily predicted specific runoff accumulator (m/sec)
+
+//   mass balance vars for variable timestep
+
+    float* melt;        // specific melt (kg/m^2 or m)
+    float* E;		 // mass flux by evap into air from active layer (kg/m^2/s)
+    float* E_s;	 // mass of evap into air & soil from snowcover (kg/m^2)
+    float* ro_predict;  // predicted specific runoff (m/sec)
+
+    float* E_s_0;        // mass of evaporation to air (kg/m^2)
+    float* E_s_l;        // mass of evaporation to soil (kg/m^2)
+    float* E_l;	  // mass flux by evap/cond to soil (kg/m^2/s)
+
+    float* E_s_0_int;        // mass of evaporation to air (kg/m^2)
+    float* E_s_l_int;        // mass of evaporation to soil (kg/m^2)
+    float* E_l_int;	  // mass flux by evap/cond to soil (kg/m^2/s)
+
+//   precipitation info adjusted for current run timestep
+
+    float* m_precip;	// specific mass of total precip (kg/m^2)
+    float* m_rain;	// specific mass of rain in precip (kg/m^2)
+    float* m_snow;	// specific mass in snow in precip (kg/m^2)
+    float* m_drift;	// specific mass in snow drift (kg/m^2)
+    float* m_subl;	// specific mass in snow sublimation (kg/m^2)
+    float* rho_snow;   // density of snowfall (kg/m^3)
+    float* T_pp;       // precip temp (K)
+    float* z_snow;	// depth of snow in precip (m)
+
+//   precipitation info for the current DATA timestep
+
+    long* precip_now;	// precipitation occur for current timestep?
+    float* T_rain;	// rain's temp (K)
+    float* T_snow;	// snowfall's temp (K)
+    float* h2o_sat_snow; // snowfall's % of liquid H2O saturation
+
+//   local climate-data values for the current run timestep
+    float* S_n;      // net solar radiation (W/m^2)
+    float* I_lw;     // incoming longwave (thermal) rad (W/m^2)
+    float* T_a;      // air temp (K)
+    float* e_a;      // vapor pressure (Pa)
+    float* u;        // wind speed (m/sec)
+    float* T_g;      // soil temp at depth z_g (C)
+    float* F_g;      // soil flux at depth z_g (W/m^2)
+
+    long* isothermal; // melting?
+    long* snowcover;  // snow on gnd at start of current timestep?
+    long* stop_no_snow;       //
+
+//   local variables
+    float* P_a;            // air pressure (Pa)
+    float* m_precip_cum;   //
+    float* m_rain_cum;     //
+    float* m_snow_cum;     //
+    float* m_drift_cum;    //
+    float* m_subl_cum;    //
+    float* E_s_cum;        //
+    float* cumsnowmelt;    //
+    float* melt_direct_cum;       //
+    float* Fault;       //
+
+// debug variables
+/*    float *Length;
+    float **Length_array;
+    float *Ustar;
+    float **Ustar_array;
+    float *e;
+    float **e_array;
+    float *h;
+    float **h_array;
+    long *ier;
+    long **ier_array;
+    long  *ArrayCnt; */
+
+    // declared parameters
+
+    //   measurement heights/depths
+
+    const float* hru_elev;    // HRU elevation
+    const float* basin_area;  // [BASIN]
+    const float* hru_area;
+    const float* KT_sand; // thermal conductivity of wet sand
+
+    const long* relative_hts; // true if measurements heights, z_T and z_u, are relative to snow surface
+                              // false if they are absolute heights above the ground
+    const float* T_g_or_G_flux;    // soil temp or ground flux option
+    const float* z_g;         // depth of soil temp meas (m)
+    const float* z_u;         // height of wind measurement (m)
+    const float* z_T;         // height of air temp & vapor pressure measurement (m)
+    const float* z_0;         // roughness length
+    const float* max_z_s_0;   // maximum active layer thickness (m)
+    const float* max_h2o_vol; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
+
+//    void decl(void);
+
+    void init(void);
+
+    //    void run(void);
+
+    void finish(bool good); // delete local storage used
+
+    void init_snow(void);
+
+    void _calc_layers(void);
+
+    void _layer_mass(void);
+
+    float _cold_content(float	temp, float	mass); // temperature of layer specific mass of layer
+
+    void do_data_tstep(void);
+
+    int _divide_tstep(TSTEP_REC* tstep); // record of timestep to be divided
+
+    int _below_thold(float threshold);	 // current timestep's threshold for a layer's mass
+
+    int _do_tstep(TSTEP_REC* tstep); // timestep's record
+
+    int _e_bal(void);
+
+    void _net_rad(void);
+
+    int _h_le(void);
+
+    float g_soil(
+        float	rho,	// snow layer's density (kg/m^3)
+        float	tsno,	// snow layer's temperature (K)
+        float	tg,	// soil temperature (K)
+        float	ds,	// snow layer's thickness (m)
+        float	dg,	// dpeth of soil temperature measurement (m)
+        float	pa);	// air pressure (Pa)
+
+    float g_snow(
+        float	rho1,	// upper snow layer's density (kg/m^3)
+        float	rho2,	// lower  "     "        "    (kg/m^3)
+        float	ts1,	// upper snow layer's temperature (K)
+        float	ts2,	// lower  "     "         "       (K)
+        float	ds1,	// upper snow layer's thickness (m)
+        float	ds2,	// lower  "     "         "     (m)
+        float	pa);	// air pressure (Pa)
+
+    void _advec(void);
+
+    void _mass_bal(void);
+
+    void _time_compact(void);
+
+    void _precip(void);
+
+    void _snowmelt(void);
+
+    void _drift(void);
+
+    void _new_density(void);
+
+    void _adj_snow(float delta_z_s, float delta_m_s); // change in snowcover's depth change is snowcover's mass
+
+    void _evap_cond(void);
+
+    void _h2o_compact(void);
+
+    void _adj_layers(void);
+
+    void _runoff(void);
+
+    float new_tsno(float spm, float t0, float ccon);
+
+    float heat_stor(float cp, float spm, float tdif);
+
+    float sati(float tk);
+
+    float ssxfr(float  k1, float  k2, float  t1, float  t2, float  d1, float  d2);
+
+    float efcon(float k, float t, float p);
+
+    int hle1(float press, float ta, float ts, float za, float ea, float es, float zq, float u, float zu,
+        float z0, float& h, float& le, float& e);
+
+    // time step information
+
+    TSTEP_REC** tstep_info; 	// array of info for each timestep [nhru] [4]:
+                                  //           0 : data timestep
+                                  //           1 : normal run timestep
+                                  //           2 : medium  "     "
+                                  //           3 : small   "     "
+
+    long* time_step;     // length current timestep (sec)
+    long* current_time;  // start time of current time step (sec)
+
+  // climate-data input records
+
+    INPUT_REC* input_rec1;	// input data for start of data timestep [nhru]
+    INPUT_REC* input_rec2;	//   "     "   "  end   "   "      "     [nhru]
+
+    INPUT_REC** input_deltas;	// deltas for climate-input parameters
+                                  //  over each timestep [nhru] [4]
+
+    PRECIP_REC** precip_info;	// array of precip info adjusted for
+                                  //  each timestep [nhru] [4]
+
+    int** computed;		// array of flags for each timestep;
+                                  //  true if computed values for input
+                                  //   deltas and precip arrays [nhru] [4]
+};
+
 
 /*
 class Classbasin : public ClassModule {
@@ -610,1180 +924,1180 @@ Classglobal* klone(string name) const;
 //ClassTs* klone(string name) const;
 //};
 
-class ClassNeedle : public ClassModule {
-
-    public:
-
-    ClassNeedle(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
-
-    float Qli_;
-
-    float Qsi_;
-
-// declared observations
-
-    float *Ts;
-
-    float *Qnsn;
-
-    float *Qsisn;
-
-    float *Qlisn;
-
-    float *Qlosn;
-
-// declared observation variables
-
-    const float *Qsi;
-
-    const float *Qli;
-
-    const float *QsiA_Var;
-
-    const float *QsiS_Var;
-
-    const float *QliVt_Var;
-
-// declared variables
-
-   float *Pa;
-
-   float *k;
-
-   float *Tauc;
-
-   float *ra;
-
-   float *Qnsn_Var;
-
-// declared parameters
-
-   const float *LAI;
-
-   const float *Ht;
-
-   const float *Zwind;
-
-   const float *Zref;
-
-   const float *hru_elev;
-
-   const float *Z0snow; // snow roughness length (m)
-
-
-// variable inputs
-
-    const float *beta;
-
-    const float *SWE;
-
-    const float *Albedo;
-
-    const float *hru_t;
-
-    const float *hru_u;
-
-    const float *hru_ea;
-
-    const float *hru_rh;
-
-
-    void decl(void);
-
-    void init(void);
-
-    void run(void);
-
-ClassNeedle* klone(string name) const;
-};
-
-class ClassSimpleRichard : public ClassModule {
-
-    public:
-
-    ClassSimpleRichard(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared observation variables
-
-    const float *Qsi;  // Downward shortwave radiation (W/m2)
-    const float *Qli;  // Downward longwave radiation (W/m2)
-    const float *snow; // Snowfall (kg/m2/s)
-    const float *t;    // Air temperature (°K)
-    const float *u;    // Wind speed (m/s)
-    const float *rh;   // Relative humidity (%)
-
-// declared variables
-
-    float *SWE;       // (kg/m2)
-    float *alb;       // Snow albedo
-    float *snowmelt;  // (kg/m2)
-    float *meltclark; // (kg/m2)
-    float *sursubl;   // (kg/m2)
-    float *T0;   // Surface temperature (°K)
-
-    float *LE;   // Latent heat flux (W/m^2)
-    float *H;    // Sensible heat flux (W/m^2)
-    float *Hsm;  // Snowmelt heat flux (W/m^2)
-    float *LWn;  // Net longwave radiation (W/m^2)
-    float *SWn;  // Net shortwave radiation (W/m^2)
-
-// declared parameters
-
-    const float *a1;   // Albedo decay time constant for cold snow (s)
-    const float *a2;   // Albedo decay time constant for melting snow (s)
-    const float *amin; // Minimum albedo for aged snow
-    const float *amax; // Maximum albedo for fresh snow
-    const float *smin; // Minimum snowfall to refresh snow albedo (mm)
-    const float *Ht;   // Roughness length
-    const float *Zref;   // Reference height
-    const float *Pa;   // Average surface pressure (KPa)
-    const float *Kstorage; // [nhru]
-    const float *Lag;      // [nhru]
-    const float *Z0snow;   // snow roughness length (m)
-
-// variable inputs
-
-    void decl(void);
-
-    void init(void);
-
-    void run(void);
-
-    void finish(bool good);
-
-    ClassSimpleRichard* klone(string name) const;
-
-    void EXCH(long hh, float Q1, float U1, float &CH);
-
-    void ALBEDO(long hh);
-
-    void SURF(long hh, float Q1, float U1);
-
-// local class
-
-    ClassClark *Delays;
-
-    float dt;
-};
-
-class Classevap : public ClassModule {
-public:
-
-Classevap(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evap;
-float *hru_evap_PT;
-float *evapD;
-float *cum_evap;
-float *evapGrangerD;
-float *G;
-float *D;
-
-// local allocated arrays
-float *Pa;
-
-// declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *Ht;
-const float *hru_elev;
-const float *F_Qg;
-const float *rs;
-const float *Zwind;
-
-const long *evap_type;
-const long *inhibit_evap;
-const long *inhibit_evap_User;
-
-// variable inputs
-const float *Rn;
-const float *RnD;
-const float *RnD_POS;
-const float *hru_t;
-const float *hru_u;
-const float *hru_ea;
-const float *hru_tmean;
-const float *hru_umean;
-const float *hru_eamean;
-
-// declared observations variable
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-Classevap* klone(string name) const;
-
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double fdaily(float u, float Ht);        // Drying power f(u) - interval
-};
-
-class ClassevapD : public ClassModule {
-public:
-
-ClassevapD(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evapD;
-float *cum_evap;
-float *G;
-float *D;
-
-// local allocated arrays
-float *Pa;
-
-
-// declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *Ht;
-const float *hru_elev;
-const float *F_Qg;
-
-const long *evap_type;
-const long *inhibit_evap;
-
-// variable inputs
-const float *RnD;
-const float *hru_tmean;
-const float *hru_umean;
-const float *hru_eamean;
-
-// variable puts
-
-// declared observations variable
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-ClassevapD* klone(string name) const;
-
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double fdaily(float u, float Ht);        // Drying power f(u) - interval
-};
-
-class Classsbsm : public ClassModule {
-public:
-
-Classsbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
-                                  hru_basin(NULL) {};
-float dt;
-
-// declared variables
-float *SWE;
-float *wet_snow;
-float *Subl;
-float *Drift;
-float *cumSubl;
-float *cumDrift;
-float *cumDriftIn;
-float *cumSno;
-float *Prob;
-float *snow_age;
-float *BasinSnowLoss;
-float *cumBasinSnowLoss;
-float *cumBasinSnowGain;
-float *snowdepth;
-
-// declared parameters
-const float *basin_area;
-const float *hru_area;
-const float *Ht;
-const float *zr;
-const float *distrib;
-const float *fetch;
-const long *inhibit_evap;
-const long *inhibit_subl;
-
-// variable inputs
-const float *hru_t;
-const float *hru_rh;
-const float *hru_u;
-const float *net_snow;
-const long  *hru_newsnow;
-
-// local allocated arrays
-float *hru_basin;
-
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-Classsbsm* klone(string name) const;
-
-float transport(void);
-float sublimation(void);
-float scale(void);
-void  prob(void);
-};
-
-class Classcrack : public ClassModule {
-public:
-
-Classcrack(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
-                                   Xinfil(NULL),
-                                   timer(NULL) {};
-// declared variables
-float *snowinfil;
-float *cumsnowinfil;
-float *infil;
-float *cuminfil;
-float *meltrunoff;
-float *cummeltrunoff;
-float *runoff;
-float *cumrunoff;
-float *RainOnSnow;
-float *RainOnSnowA;
-long  *crackstat;
-long  *crackon;
-
-// declared parameters
-const float *basin_area; // [BASIN]
-const float *hru_area;
-const float *fallstat;
-const float *Major;      // threshold for major melt event(default is 5 mm/day)
-const long  *PriorInfiltration;
-
-// variable inputs
-const float *hru_tmax;
-const float *snowmelt;
-const float *SWE;
-const float *net_rain;
-
-// local allocated arrays
-float **Xinfil; // [3] [nhru]
-long *timer;
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-Classcrack* klone(string name) const;
-};
-
-class ClassKevin : public ClassModule {
-public:
-
-ClassKevin(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
-                                   SWEpeak(NULL),
-                                   SWElast(NULL) {};
-// declared observation variables
-
-// declared variables
-float *albedo;
-float *sca;
-float *snowmelt;
-float *snowmeltD;
-float *cumsnowmelt;
-float *netLong;
-float *netShort;
-long  *winter;
-long  *SnowStat;
-
-// declared parameters
-const float *Asnow1;
-const float *Asnow2;
-const float *Asoil;
-const float *cv;
-const float *tfactor;
-const float *nfactor;
-const float *meltthresh;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_lat;
-
-// variable inputs
-float *SWE;
-const float *hru_t;
-const float *hru_tmean;
-const float *hru_eamean;
-const float *hru_Qn;
-const float *hru_SunAct;
-const float *Qdro;
-const float *Qdfo;
-const float *SunMax;
-
-// local allocated arrays
-float   *SWEpeak;
-float   *SWElast;
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-ClassKevin* klone(string name) const;
-};
-
-class ClassGreencrack : public ClassModule {
-public:
-
-ClassGreencrack(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
-                                   Xinfil(NULL),
-                                   timer(NULL) {};
-// declared variables
-float *infil;
-float *cuminfil;
-float *meltrunoff;
-float *cummeltrunoff;
-float *runoff;
-float *cumrunoff;
-float *snowinfil;
-float *cumsnowinfil;
-long  *crackstat;
-long  *crackon;
-float *RainOnSnow;
-float *RainOnSnowA;
-
-// local variables
-float *k;
-float *F0;
-float *f0;
-float *F1;
-float *f1;
-float *dthbot;
-float *psidthbot;
-long  *timer;
-
-// declared parameters
-const float *basin_area; // [BASIN]
-const float *hru_area;
-const float *fallstat;
-const float *Major;      // threshold for major melt event(default is 5 mm/day)
-const float *soil_moist_max;
-const float *soil_moist_init;
-const long  *soil_type;
-const long  *PriorInfiltration;
-
-// variable inputs
-const float *hru_tmax;
-const float *snowmelt;
-const float *SWE;
-const float *net_rain;
-float *soil_moist; // changed tp PUT
-
-// class allocated
-float garain;      // precipitation/int
-float intensity;   // precipitation/int converted to mm/h
-float pond;        // mm
-
-// class allocated arrays
-float **Xinfil; // [3] [nhru]
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-ClassGreencrack* klone(string name) const;
-
-void infiltrate(void);
-void ponding(void);
-void startponding(void);
-void howmuch(float F0, float dt);
-
-float calcf1(float F, float psidth);
-};
-
-class Classfrostdepth : public ClassModule {
-public:
-
-Classfrostdepth(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
-                                        k_lay(NULL),
-                                        L_lay(NULL),
-                                        c_lay(NULL),
-                                        Lacc(NULL),
-                                        Cacc(NULL),
-                                        Kacc(NULL) {};
-// declared variables
-float *Findex;   // freezing index (days * frost °C)
-long *Tfreeze;   // duration of freezing period in days
-float *frostdepth;
-
-// declared parameters
-const float *Ta;        // mean annual air temperature
-const float *d;         // depth of layer  m
-const float **d_lay;    // depth of layer  m
-const float *por;       // porosity m3/m3
-const float **por_lay;  // porosity m3/m3
-const float *theta;       // theta m3/m3  theta/porosity
-const float **theta_lay;  // theta m3/m3
-const long  *soil_type;
-const long  **soil_type_lay;
-const float *hru_lat;
-
-// variable inputs
-const float *hru_tmean;  // daily average temperature (°C)
-const float *SWE;
-const float *snowdepth;
-
-// local allocated arrays
-float **k_lay;    // J/(m.K.s)
-float **L_lay;    // MJ/m3
-float **c_lay;    // MJ/(m3 K)
-float *Lacc; // effective value
-float *Cacc; // effective value
-float *Kacc; // effective value
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-Classfrostdepth* klone(string name) const;
-};
-
-class Classfrozen : public ClassModule {
-public:
-
-Classfrozen(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
-                                    infiltype(NULL) {};
-bool SetOpportunityTime;
-bool Update_infil;
-
-// declared observation variables
-const float *t0_inhibit;   // (mm/day)
-
-// declared variables
-float *infil;         // unfrozen infiltration
-float *cuminfil;      // cumulative unfrozen infiltration
-float *snowinfil;     // frozen infiltration
-float *cumsnowinfil;  // cumulative frozen infiltration
-float *cummeltrunoff; // cumulative frozen melt runoff
-float *runoff;        // cumulative runoff
-float *cumrunoff;     // cumulative melt runoff
-float *t0_Acc;        // infiltration opportunity time accumulation
-float *t0_Var;        // infiltration opportunity value used in calculation
-float *INF;
-float *SWEPk;           //
-float *snowmeltD_last; //
-long  *Julian_window; // currently in Julian window.
-long  *Julian_lockout;    // Julian window end date.
-
-// variable put
-const float *soil_moist;    //
-float *meltrunoff;      // [nhru]
-
-// local variables
-long *infiltype;
-
-// declared parameters
-const float *basin_area;  // [BASIN]
-const float *hru_area;
-const float *S0;          // surface saturation (mm3/mm3)
-const float *Si;          // initial average soil saturation (mm3/mm3)
-const float *C;           // coefficient
-const float *hru_tsoil;   // soil temperature(°K) of 0-40cm soil layer at start of infiltration
-const float *t_ice_lens;   // overnight minimum to cause ice lens after major melt
-const float *t0;          // infiltration opportunity time. Set at end of calibration run.
-const float *soil_moist_max; // common to smbal to control maximum inflitration.
-const long  *t0_Julian;    // Julian date when t0 is primed. '0' value - never reset.
-
-// variable inputs
-const float *snowmeltD;   // (mm/day)
-const float *SWE;         // (mm)
-const float *frostdepth;
-const float *net_rain;
-const float *hru_tmin;
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-Classfrozen* klone(string name) const;
-};
-
-class ClassNetroute : public ClassModule {
-public:
-
-ClassNetroute(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-long meltrunoffDiv;
-long soil_ssrDiv;
-long soil_runoffDiv;
-long soil_gwDiv;
-
-// declared variables
-float *inflow;        // [nhru]
-float *cuminflow;     // [nhru]
-float *outflow;       // [nhru]
-float *outflow_diverted; // [nhru]
-float *cumoutflow_diverted; // [nhru]
-float *cumoutflow;    // [nhru]
-float *gwinflow;        // [nhru]
-float *gwoutflow_diverted; // [nhru]
-float *gwcumoutflow_diverted; // [nhru]
-float *HRU_cumbasinflow; // [nhru]
-
-float *ssrinflow;        // [nhru]
-float *ssrcuminflow;     // [nhru]
-float *ssroutflow;       // [nhru]
-float *ssrcumoutflow;    // [nhru]
-
-float *runinflow;        // [nhru]
-float *runcuminflow;     // [nhru]
-float *runoutflow;       // [nhru]
-float *runcumoutflow;    // [nhru]
-
-float *gwoutflow;       // [nhru]
-float *gwcuminflow;    // [nhru]
-float *gwcumoutflow;    // [nhru]
-
-float *basinflow;     // [BASIN] all HRUs
-float *basinflow_s;   // [BASIN] all HRUs
-float *cumbasinflow;  // [BASIN] all HRUs
-float *basingw;       // [BASIN} all HRUs
-float *basingw_s;     // [BASIN} all HRUs
-float *cumbasingw;    // [BASIN} all HRUs
-
-float *soil_ssr_Buf;    // buffered
-float *soil_runoff_Buf; // buffered
-float *soil_gw_Buf;     // buffered
-
-float *cum_to_Sd;         // [nhru]
-float *cum_to_soil_rechr; // [nhru]
-float *cum_preferential_flow_to_gw;
-
-ClassClark *hruDelay;
-ClassClark *ssrDelay;
-ClassClark *runDelay;
-ClassClark *gwDelay;
-
-// declared parameters
-const float *Kstorage;         // [nhru]
-const float *Lag;              // [nhru]
-const float *ssrKstorage;      // [nhru]
-const float *ssrLag;           // [nhru]
-const float *runKstorage;      // [nhru]
-const float *runLag;           // [nhru]
-const float *gwKstorage;      // [nhru]
-const float *gwLag;           // [nhru]
-
-const float *basin_area;        // [BASIN]
-const float *hru_area;          // [nhru]
-const long  *whereto;           // [nhru]
-const long  *order;             // [nhru]
-const long  *gwwhereto;             // [nhru]
-const float *Sdmax;             // [nhru]
-const float *soil_rechr_max;    // [nhru]
-
-const long  *Sd_ByPass;         // [nhru]
-const long  *soil_rechr_ByPass; // [nhru]
-const long  *preferential_flow; // [nhru]
-
-// variable inputs
-const float *soil_gw;   // [nhru]
-const float *soil_ssr;    // [nhru]
-const float *soil_runoff; // [nhru]
-
-// variable puts
-float *Sd;
-float *soil_moist;
-float *soil_rechr;
-float *redirected_residual;
-float *gw;
-
-// local allocated arrays
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-virtual float Function1(float *I, long hh);
-virtual float Function2(float *X, long hh);
-
-ClassNetroute* klone(string name) const;
-};
-
-class Classinterception : public ClassModule {
-public:
-
-Classinterception(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared observations
-const float *Qsi;
-
-// variable inputs
-const float *hru_t;
-const float *hru_snow;
-const float *hru_rain;
-const float *hru_u;
-const float *hru_rh;
-
-// declared variables
-float *SI_Lo;
-float *net_snow;
-float *net_rain;
-float *SI_Subl;
-float *Cum_Subl;
-float *Cum_net_snow;
-float *v;
-
-// declared parameters
-const float *Sbar;
-const float *LAI;
-const float *k;
-const float *velw;
-const float *Ht;
-const float *WidthJ;
-const float *basin_area;
-const float *hru_area;
-
-// variable inputs
-
-// local allocated arrays
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-Classinterception* klone(string name) const;
-};
-
-class ClassGreenAmpt : public ClassModule {
-public:
-
-ClassGreenAmpt(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-// declared variables
-float *infil;
-float *cuminfil;
-float *runoff;
-float *cumrunoff;
-float *snowinfil;
-float *cumsnowinfil;
-float *meltrunoff;
-float *cummeltrunoff;
-
-// local variables
-float *k;
-float *F0;
-float *f0;
-float *F1;
-float *f1;
-float *dthbot;
-float *psidthbot;
-
-// declared parameters
-const float *basin_area; // [BASIN]
-const float *hru_area;
-const float *soil_moist_max;
-const float *soil_moist_init;
-const long  *soil_type;
-
-// variable inputs
-const float *net_rain;
-const float *snowmelt;
-float *soil_moist; // changed to PUT
-
-// class allocated
-float garain;      // precipitation/int
-float intensity;   // precipitation/int converted to mm/h
-float pond;        // mm
-
-void decl(void);
-void init(void);
-void run(void);
-void finish(bool good);
-
-ClassGreenAmpt* klone(string name) const;
-
-void infiltrate(void);
-void ponding(void);
-void startponding(void);
-void howmuch(float F0, float dt);
-
-float calcf1(float F, float psidth);
-};
-
-class Classalbedoparam : public ClassModule {
-public:
-
-Classalbedoparam(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared variables
-float *Albedo;
-
-// declared parameters
-const float *Albedo_Value;
-
-void decl(void);
-void init(void);
-void run(void);
-
-Classalbedoparam* klone(string name) const;
-};
-
-class Classalbedoobs : public ClassModule {
-public:
-
-Classalbedoobs(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared variables
-float *Albedo;
-
-// declared observation variables
-const float *Albedo_obs;      // interval data
-
-// declared parameters
-const float *Albedo_Value;
-
-void decl(void);
-void init(void);
-void run(void);
-
-Classalbedoobs* klone(string name) const;
-};
-
-class ClassHtobs : public ClassModule {
-public:
-
-ClassHtobs(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared variables
-float *Ht_var;
-
-// declared observation variables
-const float *Ht_obs;      // interval data
-
-// declared parameters
-//const float *Ht;
-float *Ht;
-
-void decl(void);
-void init(void);
-void run(void);
-
-ClassHtobs* klone(string name) const;
-};
-
-class TSTEP_REC{ // time step information
-  public:
-
-#define	DATA_TSTEP	   0
-#define	NORMAL_TSTEP	   1
-#define	MEDIUM_TSTEP	   2
-#define	SMALL_TSTEP	   3
-
-// default for normal run timestep's threshold for a layer's mass (kg/m^2)
-
-#define	DEFAULT_NORMAL_THRESHOLD  60.0
-
-// default for medium run timestep's threshold for a layer's mass (kg/m^2)
-
-#define	DEFAULT_MEDIUM_THRESHOLD  10.0
-
-// default for small run timestep's threshold for a layer's mass (kg/m^2)
-
-#define	DEFAULT_SMALL_THRESHOLD  1.0
-
-
-  int level;	    // timestep's level
-
-  long time_step;   // length of timestep (seconds)
-
-  int intervals;    // # of these timestep that are in the previous-level's timestep (not used for level 0: data tstep)
-
-  float threshold;  // mass threshold for a layer to use this timestep (not used for level 0: data tstep)
-
-  TSTEP_REC() : level(0), time_step(24*3600/Global::Freq), intervals(1), threshold(0.0) {};
-
-};
-
-class  INPUT_REC{ // climate-data input records
-  public:
-
-  float S_n;	// net solar radiation (W/m^2)
-  float I_lw;	// incoming longwave (thermal) rad (W/m^2)
-  float T_a;	// air temp (C)
-  float e_a;	// vapor pressure (Pa)
-  float u;	// wind speed (m/sec)
-  float T_g;	// soil temp at depth z_g (C)
-  float F_g;	// soil flux at depth z_g (W/m^2)
-};
-
-class  PRECIP_REC{ // precip-data input records
-  public:
-
-  float	  m_pp;		// total precipitation mass (kg/m^2)
-  float	  m_rain;	// mass of rain in precip   (kg/m^2)
-  float	  m_snow;	// mass of snow in precip   (kg/m^2)
-  float	  m_drift;	// mass of snow drift       (kg/m^2)
-  float	  m_subl;	// mass of snow drift       (kg/m^2)
-  float	  z_snow;	// depth of snow in precip  (m)
-};
-
-class ClassSnobalBase : public ClassModule {
-
-    public:
-
-    ClassSnobalBase(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
-
-// declared variables
-
-//   snowpack information
-
-    long*   layer_count;    // number of layers in snowcover: 0, 1, or 2
-    float*  z_s;            // total snowcover thickness (m)
-    float*  z_s_0;          // active layer depth (m)
-    float*  z_s_l;          // lower layer depth (m)
-    float*  rho;            // average snowcover density (kg/m^3)
-    float*  m_s;            // snowcover's specific mass (kg/m^2). Init by init_snow.
-    float*  m_s_0;          // active layer specific mass (kg/m^2). Init by init_snow.
-    float*  m_s_l;          // lower layer specific mass (kg/m^2). Init by init_snow.
-    float*  T_s;            // average snowcover temp (K). Init by init_snow
-    float*  T_s_0;          // active snow layer temp (K)
-    float*  T_s_l;          // lower layer temp (C)
-    float*  cc_s;           // snowcover's cold content (J/m^2). Init by init_snow.
-    float*  cc_s_0;         // active layer cold content (J/m^2). Init by init_snow.
-    float*  cc_s_l;         // lower layer cold content (J/m^2). Init by init_snow.
-    float*  h2o_sat;        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
-//                                 to water that snowcover could hold at saturation)
-    float*  h2o_vol;        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow
-    float*  h2o;            // liquid h2o content as specific mass(kg/m^2)
-    float*  h2o_max;        // max liquid h2o content as specific mass(kg/m^2)
-    float*  h2o_total;      // total liquid h2o: includes h2o in snowcover, melt, and rainfall (kg/m^2)
-
-//   energy balance info for current timestep
-
-    float  *R_n;            // net allwave radiation (W/m^2)
-    float  *H;              // sensible heat xfr (W/m^2)
-    float  *L_v_E;          // latent heat xfr (W/m^2)
-    float  *G;              // heat xfr by conduction & diffusion from soil to snowcover (W/m^2)
-    float  *G_0;            // heat xfr by conduction & diffusion from soil or lower layer to active layer (W/m^2)
-    float  *M;              // advected heat from precip (W/m^2)
-    float  *delta_Q;        // change in snowcover's energy (W/m^2)
-    float  *delta_Q_0;      // change in active layer's energy (W/m^2)
-
-//   mass balance vars for current timestep
-
-    float  *melt_direct_int;       // specific melt (kg/m^2 or m)
-    float  *sum;       // specific melt (kg/m^2 or m)
-    float  *SWE_change;       // interval change in SWE
-    float  *E_int;	    // mass flux by evap into air from active layer (kg/m^2/s)
-    float  *E_s_int;	    // mass of evap into air & soil from snowcover (kg/m^2)
-    float  *snowmelt_int;   // predicted specific runoff (m/sec)
-    float  *snowmeltD;      // daily predicted specific runoff (m/sec)
-    float  *snowmeltD_acc;      // daily predicted specific runoff accumulator (m/sec)
-
-//   mass balance vars for variable timestep
-
-    float  *melt;        // specific melt (kg/m^2 or m)
-    float  *E;		 // mass flux by evap into air from active layer (kg/m^2/s)
-    float  *E_s;	 // mass of evap into air & soil from snowcover (kg/m^2)
-    float  *ro_predict;  // predicted specific runoff (m/sec)
-
-    float  *E_s_0;        // mass of evaporation to air (kg/m^2)
-    float  *E_s_l;        // mass of evaporation to soil (kg/m^2)
-    float  *E_l;	  // mass flux by evap/cond to soil (kg/m^2/s)
-
-    float  *E_s_0_int;        // mass of evaporation to air (kg/m^2)
-    float  *E_s_l_int;        // mass of evaporation to soil (kg/m^2)
-    float  *E_l_int;	  // mass flux by evap/cond to soil (kg/m^2/s)
-
-//   precipitation info adjusted for current run timestep
-
-    float  *m_precip;	// specific mass of total precip (kg/m^2)
-    float  *m_rain;	// specific mass of rain in precip (kg/m^2)
-    float  *m_snow;	// specific mass in snow in precip (kg/m^2)
-    float  *m_drift;	// specific mass in snow drift (kg/m^2)
-    float  *m_subl;	// specific mass in snow sublimation (kg/m^2)
-    float  *rho_snow;   // density of snowfall (kg/m^3)
-    float  *T_pp;       // precip temp (K)
-    float  *z_snow;	// depth of snow in precip (m)
-
-//   precipitation info for the current DATA timestep
-
-    long   *precip_now;	// precipitation occur for current timestep?
-    float  *T_rain;	// rain's temp (K)
-    float  *T_snow;	// snowfall's temp (K)
-    float  *h2o_sat_snow; // snowfall's % of liquid H2O saturation
-
-//   local climate-data values for the current run timestep
-    float  *S_n;      // net solar radiation (W/m^2)
-    float  *I_lw;     // incoming longwave (thermal) rad (W/m^2)
-    float  *T_a;      // air temp (K)
-    float  *e_a;      // vapor pressure (Pa)
-    float  *u;        // wind speed (m/sec)
-    float  *T_g;      // soil temp at depth z_g (C)
-    float  *F_g;      // soil flux at depth z_g (W/m^2)
-
-    long *isothermal; // melting?
-    long *snowcover;  // snow on gnd at start of current timestep?
-    long  *stop_no_snow;       //
-
-//   local variables
-    float  *P_a;            // air pressure (Pa)
-    float  *m_precip_cum;   //
-    float  *m_rain_cum;     //
-    float  *m_snow_cum;     //
-    float  *m_drift_cum;    //
-    float  *m_subl_cum;    //
-    float  *E_s_cum;        //
-    float  *cumsnowmelt;    //
-    float  *melt_direct_cum;       //
-    float  *Fault;       //
-
-// debug variables
-/*    float *Length;
-    float **Length_array;
-    float *Ustar;
-    float **Ustar_array;
-    float *e;
-    float **e_array;
-    float *h;
-    float **h_array;
-    long *ier;
-    long **ier_array;
-    long  *ArrayCnt; */
-
-// declared parameters
-
-//   measurement heights/depths
-
-    const float *hru_elev;    // HRU elevation
-    const float *basin_area;  // [BASIN]
-    const float *hru_area;
-    const float *KT_sand; // thermal conductivity of wet sand
-
-    const long *relative_hts; // true if measurements heights, z_T and z_u, are relative to snow surface
-                              // false if they are absolute heights above the ground
-    const float  *T_g_or_G_flux;    // soil temp or ground flux option
-    const float *z_g;         // depth of soil temp meas (m)
-    const float *z_u;         // height of wind measurement (m)
-    const float *z_T;         // height of air temp & vapor pressure measurement (m)
-    const float *z_0;         // roughness length
-    const float *max_z_s_0;   // maximum active layer thickness (m)
-    const float *max_h2o_vol; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
-
+//class ClassNeedle : public ClassModule {
+//
+//    public:
+//
+//    ClassNeedle(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
+//
+//    float Qli_;
+//
+//    float Qsi_;
+//
+//// declared observations
+//
+//    float *Ts;
+//
+//    float *Qnsn;
+//
+//    float *Qsisn;
+//
+//    float *Qlisn;
+//
+//    float *Qlosn;
+//
+//// declared observation variables
+//
+//    const float *Qsi;
+//
+//    const float *Qli;
+//
+//    const float *QsiA_Var;
+//
+//    const float *QsiS_Var;
+//
+//    const float *QliVt_Var;
+//
+//// declared variables
+//
+//   float *Pa;
+//
+//   float *k;
+//
+//   float *Tauc;
+//
+//   float *ra;
+//
+//   float *Qnsn_Var;
+//
+//// declared parameters
+//
+//   const float *LAI;
+//
+//   const float *Ht;
+//
+//   const float *Zwind;
+//
+//   const float *Zref;
+//
+//   const float *hru_elev;
+//
+//   const float *Z0snow; // snow roughness length (m)
+//
+//
+//// variable inputs
+//
+//    const float *beta;
+//
+//    const float *SWE;
+//
+//    const float *Albedo;
+//
+//    const float *hru_t;
+//
+//    const float *hru_u;
+//
+//    const float *hru_ea;
+//
+//    const float *hru_rh;
+//
+//
 //    void decl(void);
-
-  void init(void);
-
+//
+//    void init(void);
+//
 //    void run(void);
+//
+//ClassNeedle* klone(string name) const;
+//};
 
-  void finish(bool good); // delete local storage used
+//class ClassSimpleRichard : public ClassModule {
+//
+//    public:
+//
+//    ClassSimpleRichard(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared observation variables
+//
+//    const float *Qsi;  // Downward shortwave radiation (W/m2)
+//    const float *Qli;  // Downward longwave radiation (W/m2)
+//    const float *snow; // Snowfall (kg/m2/s)
+//    const float *t;    // Air temperature (°K)
+//    const float *u;    // Wind speed (m/s)
+//    const float *rh;   // Relative humidity (%)
+//
+//// declared variables
+//
+//    float *SWE;       // (kg/m2)
+//    float *alb;       // Snow albedo
+//    float *snowmelt;  // (kg/m2)
+//    float *meltclark; // (kg/m2)
+//    float *sursubl;   // (kg/m2)
+//    float *T0;   // Surface temperature (°K)
+//
+//    float *LE;   // Latent heat flux (W/m^2)
+//    float *H;    // Sensible heat flux (W/m^2)
+//    float *Hsm;  // Snowmelt heat flux (W/m^2)
+//    float *LWn;  // Net longwave radiation (W/m^2)
+//    float *SWn;  // Net shortwave radiation (W/m^2)
+//
+//// declared parameters
+//
+//    const float *a1;   // Albedo decay time constant for cold snow (s)
+//    const float *a2;   // Albedo decay time constant for melting snow (s)
+//    const float *amin; // Minimum albedo for aged snow
+//    const float *amax; // Maximum albedo for fresh snow
+//    const float *smin; // Minimum snowfall to refresh snow albedo (mm)
+//    const float *Ht;   // Roughness length
+//    const float *Zref;   // Reference height
+//    const float *Pa;   // Average surface pressure (KPa)
+//    const float *Kstorage; // [nhru]
+//    const float *Lag;      // [nhru]
+//    const float *Z0snow;   // snow roughness length (m)
+//
+//// variable inputs
+//
+//    void decl(void);
+//
+//    void init(void);
+//
+//    void run(void);
+//
+//    void finish(bool good);
+//
+//    ClassSimpleRichard* klone(string name) const;
+//
+//    void EXCH(long hh, float Q1, float U1, float &CH);
+//
+//    void ALBEDO(long hh);
+//
+//    void SURF(long hh, float Q1, float U1);
+//
+//// local class
+//
+//    ClassClark *Delays;
+//
+//    float dt;
+//};
 
-  void init_snow(void);
+//class Classevap : public ClassModule {
+//public:
+//
+//Classevap(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared variables
+//float *hru_actet;
+//float *hru_cum_actet;
+//float *evap;
+//float *hru_evap_PT;
+//float *evapD;
+//float *cum_evap;
+//float *evapGrangerD;
+//float *G;
+//float *D;
+//
+//// local allocated arrays
+//float *Pa;
+//
+//// declared parameters
+//const float *basin_area;   // [BASIN]
+//const float *hru_area;
+//const float *Ht;
+//const float *hru_elev;
+//const float *F_Qg;
+//const float *rs;
+//const float *Zwind;
+//
+//const long *evap_type;
+//const long *inhibit_evap;
+//const long *inhibit_evap_User;
+//
+//// variable inputs
+//const float *Rn;
+//const float *RnD;
+//const float *RnD_POS;
+//const float *hru_t;
+//const float *hru_u;
+//const float *hru_ea;
+//const float *hru_tmean;
+//const float *hru_umean;
+//const float *hru_eamean;
+//
+//// declared observations variable
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//Classevap* klone(string name) const;
+//
+//double gamma(float Pa, float t);         // Psychrometric constant
+//float lambda(float t);                   // Latent heat of vaporization
+//double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+//float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
+//double fdaily(float u, float Ht);        // Drying power f(u) - interval
+//};
 
-  void _calc_layers(void);
+//class ClassevapD : public ClassModule {
+//public:
+//
+//ClassevapD(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared variables
+//float *hru_actet;
+//float *hru_cum_actet;
+//float *evapD;
+//float *cum_evap;
+//float *G;
+//float *D;
+//
+//// local allocated arrays
+//float *Pa;
+//
+//
+//// declared parameters
+//const float *basin_area;   // [BASIN]
+//const float *hru_area;
+//const float *Ht;
+//const float *hru_elev;
+//const float *F_Qg;
+//
+//const long *evap_type;
+//const long *inhibit_evap;
+//
+//// variable inputs
+//const float *RnD;
+//const float *hru_tmean;
+//const float *hru_umean;
+//const float *hru_eamean;
+//
+//// variable puts
+//
+//// declared observations variable
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//ClassevapD* klone(string name) const;
+//
+//double gamma(float Pa, float t);         // Psychrometric constant
+//float lambda(float t);                   // Latent heat of vaporization
+//double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+//float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
+//double fdaily(float u, float Ht);        // Drying power f(u) - interval
+//};
 
-  void _layer_mass(void);
+//class Classsbsm : public ClassModule {
+//public:
+//
+//Classsbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
+//                                  hru_basin(NULL) {};
+//float dt;
+//
+//// declared variables
+//float *SWE;
+//float *wet_snow;
+//float *Subl;
+//float *Drift;
+//float *cumSubl;
+//float *cumDrift;
+//float *cumDriftIn;
+//float *cumSno;
+//float *Prob;
+//float *snow_age;
+//float *BasinSnowLoss;
+//float *cumBasinSnowLoss;
+//float *cumBasinSnowGain;
+//float *snowdepth;
+//
+//// declared parameters
+//const float *basin_area;
+//const float *hru_area;
+//const float *Ht;
+//const float *zr;
+//const float *distrib;
+//const float *fetch;
+//const long *inhibit_evap;
+//const long *inhibit_subl;
+//
+//// variable inputs
+//const float *hru_t;
+//const float *hru_rh;
+//const float *hru_u;
+//const float *net_snow;
+//const long  *hru_newsnow;
+//
+//// local allocated arrays
+//float *hru_basin;
+//
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//Classsbsm* klone(string name) const;
+//
+//float transport(void);
+//float sublimation(void);
+//float scale(void);
+//void  prob(void);
+//};
 
-  float _cold_content(float	temp, float	mass); // temperature of layer specific mass of layer
+//class Classcrack : public ClassModule {
+//public:
+//
+//Classcrack(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+//                                   Xinfil(NULL),
+//                                   timer(NULL) {};
+//// declared variables
+//float *snowinfil;
+//float *cumsnowinfil;
+//float *infil;
+//float *cuminfil;
+//float *meltrunoff;
+//float *cummeltrunoff;
+//float *runoff;
+//float *cumrunoff;
+//float *RainOnSnow;
+//float *RainOnSnowA;
+//long  *crackstat;
+//long  *crackon;
+//
+//// declared parameters
+//const float *basin_area; // [BASIN]
+//const float *hru_area;
+//const float *fallstat;
+//const float *Major;      // threshold for major melt event(default is 5 mm/day)
+//const long  *PriorInfiltration;
+//
+//// variable inputs
+//const float *hru_tmax;
+//const float *snowmelt;
+//const float *SWE;
+//const float *net_rain;
+//
+//// local allocated arrays
+//float **Xinfil; // [3] [nhru]
+//long *timer;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//Classcrack* klone(string name) const;
+//};
 
-  void do_data_tstep(void);
+//class ClassKevin : public ClassModule {
+//public:
+//
+//ClassKevin(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+//                                   SWEpeak(NULL),
+//                                   SWElast(NULL) {};
+//// declared observation variables
+//
+//// declared variables
+//float *albedo;
+//float *sca;
+//float *snowmelt;
+//float *snowmeltD;
+//float *cumsnowmelt;
+//float *netLong;
+//float *netShort;
+//long  *winter;
+//long  *SnowStat;
+//
+//// declared parameters
+//const float *Asnow1;
+//const float *Asnow2;
+//const float *Asoil;
+//const float *cv;
+//const float *tfactor;
+//const float *nfactor;
+//const float *meltthresh;
+//const float *basin_area;   // [BASIN]
+//const float *hru_area;
+//const float *hru_lat;
+//
+//// variable inputs
+//float *SWE;
+//const float *hru_t;
+//const float *hru_tmean;
+//const float *hru_eamean;
+//const float *hru_Qn;
+//const float *hru_SunAct;
+//const float *Qdro;
+//const float *Qdfo;
+//const float *SunMax;
+//
+//// local allocated arrays
+//float   *SWEpeak;
+//float   *SWElast;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//ClassKevin* klone(string name) const;
+//};
 
-  int _divide_tstep(TSTEP_REC *tstep); // record of timestep to be divided
+//class ClassGreencrack : public ClassModule {
+//public:
+//
+//ClassGreencrack(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+//                                   Xinfil(NULL),
+//                                   timer(NULL) {};
+//// declared variables
+//float *infil;
+//float *cuminfil;
+//float *meltrunoff;
+//float *cummeltrunoff;
+//float *runoff;
+//float *cumrunoff;
+//float *snowinfil;
+//float *cumsnowinfil;
+//long  *crackstat;
+//long  *crackon;
+//float *RainOnSnow;
+//float *RainOnSnowA;
+//
+//// local variables
+//float *k;
+//float *F0;
+//float *f0;
+//float *F1;
+//float *f1;
+//float *dthbot;
+//float *psidthbot;
+//long  *timer;
+//
+//// declared parameters
+//const float *basin_area; // [BASIN]
+//const float *hru_area;
+//const float *fallstat;
+//const float *Major;      // threshold for major melt event(default is 5 mm/day)
+//const float *soil_moist_max;
+//const float *soil_moist_init;
+//const long  *soil_type;
+//const long  *PriorInfiltration;
+//
+//// variable inputs
+//const float *hru_tmax;
+//const float *snowmelt;
+//const float *SWE;
+//const float *net_rain;
+//float *soil_moist; // changed tp PUT
+//
+//// class allocated
+//float garain;      // precipitation/int
+//float intensity;   // precipitation/int converted to mm/h
+//float pond;        // mm
+//
+//// class allocated arrays
+//float **Xinfil; // [3] [nhru]
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//ClassGreencrack* klone(string name) const;
+//
+//void infiltrate(void);
+//void ponding(void);
+//void startponding(void);
+//void howmuch(float F0, float dt);
+//
+//float calcf1(float F, float psidth);
+//};
 
-  int _below_thold(float threshold);	 // current timestep's threshold for a layer's mass
+//class Classfrostdepth : public ClassModule {
+//public:
+//
+//Classfrostdepth(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+//                                        k_lay(NULL),
+//                                        L_lay(NULL),
+//                                        c_lay(NULL),
+//                                        Lacc(NULL),
+//                                        Cacc(NULL),
+//                                        Kacc(NULL) {};
+//// declared variables
+//float *Findex;   // freezing index (days * frost °C)
+//long *Tfreeze;   // duration of freezing period in days
+//float *frostdepth;
+//
+//// declared parameters
+//const float *Ta;        // mean annual air temperature
+//const float *d;         // depth of layer  m
+//const float **d_lay;    // depth of layer  m
+//const float *por;       // porosity m3/m3
+//const float **por_lay;  // porosity m3/m3
+//const float *theta;       // theta m3/m3  theta/porosity
+//const float **theta_lay;  // theta m3/m3
+//const long  *soil_type;
+//const long  **soil_type_lay;
+//const float *hru_lat;
+//
+//// variable inputs
+//const float *hru_tmean;  // daily average temperature (°C)
+//const float *SWE;
+//const float *snowdepth;
+//
+//// local allocated arrays
+//float **k_lay;    // J/(m.K.s)
+//float **L_lay;    // MJ/m3
+//float **c_lay;    // MJ/(m3 K)
+//float *Lacc; // effective value
+//float *Cacc; // effective value
+//float *Kacc; // effective value
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//Classfrostdepth* klone(string name) const;
+//};
 
-  int _do_tstep(TSTEP_REC *tstep); // timestep's record
+//class Classfrozen : public ClassModule {
+//public:
+//
+//Classfrozen(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+//                                    infiltype(NULL) {};
+//bool SetOpportunityTime;
+//bool Update_infil;
+//
+//// declared observation variables
+//const float *t0_inhibit;   // (mm/day)
+//
+//// declared variables
+//float *infil;         // unfrozen infiltration
+//float *cuminfil;      // cumulative unfrozen infiltration
+//float *snowinfil;     // frozen infiltration
+//float *cumsnowinfil;  // cumulative frozen infiltration
+//float *cummeltrunoff; // cumulative frozen melt runoff
+//float *runoff;        // cumulative runoff
+//float *cumrunoff;     // cumulative melt runoff
+//float *t0_Acc;        // infiltration opportunity time accumulation
+//float *t0_Var;        // infiltration opportunity value used in calculation
+//float *INF;
+//float *SWEPk;           //
+//float *snowmeltD_last; //
+//long  *Julian_window; // currently in Julian window.
+//long  *Julian_lockout;    // Julian window end date.
+//
+//// variable put
+//const float *soil_moist;    //
+//float *meltrunoff;      // [nhru]
+//
+//// local variables
+//long *infiltype;
+//
+//// declared parameters
+//const float *basin_area;  // [BASIN]
+//const float *hru_area;
+//const float *S0;          // surface saturation (mm3/mm3)
+//const float *Si;          // initial average soil saturation (mm3/mm3)
+//const float *C;           // coefficient
+//const float *hru_tsoil;   // soil temperature(°K) of 0-40cm soil layer at start of infiltration
+//const float *t_ice_lens;   // overnight minimum to cause ice lens after major melt
+//const float *t0;          // infiltration opportunity time. Set at end of calibration run.
+//const float *soil_moist_max; // common to smbal to control maximum inflitration.
+//const long  *t0_Julian;    // Julian date when t0 is primed. '0' value - never reset.
+//
+//// variable inputs
+//const float *snowmeltD;   // (mm/day)
+//const float *SWE;         // (mm)
+//const float *frostdepth;
+//const float *net_rain;
+//const float *hru_tmin;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//Classfrozen* klone(string name) const;
+//};
 
-  int _e_bal(void);
+//class ClassNetroute : public ClassModule {
+//public:
+//
+//ClassNetroute(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//long meltrunoffDiv;
+//long soil_ssrDiv;
+//long soil_runoffDiv;
+//long soil_gwDiv;
+//
+//// declared variables
+//float *inflow;        // [nhru]
+//float *cuminflow;     // [nhru]
+//float *outflow;       // [nhru]
+//float *outflow_diverted; // [nhru]
+//float *cumoutflow_diverted; // [nhru]
+//float *cumoutflow;    // [nhru]
+//float *gwinflow;        // [nhru]
+//float *gwoutflow_diverted; // [nhru]
+//float *gwcumoutflow_diverted; // [nhru]
+//float *HRU_cumbasinflow; // [nhru]
+//
+//float *ssrinflow;        // [nhru]
+//float *ssrcuminflow;     // [nhru]
+//float *ssroutflow;       // [nhru]
+//float *ssrcumoutflow;    // [nhru]
+//
+//float *runinflow;        // [nhru]
+//float *runcuminflow;     // [nhru]
+//float *runoutflow;       // [nhru]
+//float *runcumoutflow;    // [nhru]
+//
+//float *gwoutflow;       // [nhru]
+//float *gwcuminflow;    // [nhru]
+//float *gwcumoutflow;    // [nhru]
+//
+//float *basinflow;     // [BASIN] all HRUs
+//float *basinflow_s;   // [BASIN] all HRUs
+//float *cumbasinflow;  // [BASIN] all HRUs
+//float *basingw;       // [BASIN} all HRUs
+//float *basingw_s;     // [BASIN} all HRUs
+//float *cumbasingw;    // [BASIN} all HRUs
+//
+//float *soil_ssr_Buf;    // buffered
+//float *soil_runoff_Buf; // buffered
+//float *soil_gw_Buf;     // buffered
+//
+//float *cum_to_Sd;         // [nhru]
+//float *cum_to_soil_rechr; // [nhru]
+//float *cum_preferential_flow_to_gw;
+//
+//ClassClark *hruDelay;
+//ClassClark *ssrDelay;
+//ClassClark *runDelay;
+//ClassClark *gwDelay;
+//
+//// declared parameters
+//const float *Kstorage;         // [nhru]
+//const float *Lag;              // [nhru]
+//const float *ssrKstorage;      // [nhru]
+//const float *ssrLag;           // [nhru]
+//const float *runKstorage;      // [nhru]
+//const float *runLag;           // [nhru]
+//const float *gwKstorage;      // [nhru]
+//const float *gwLag;           // [nhru]
+//
+//const float *basin_area;        // [BASIN]
+//const float *hru_area;          // [nhru]
+//const long  *whereto;           // [nhru]
+//const long  *order;             // [nhru]
+//const long  *gwwhereto;             // [nhru]
+//const float *Sdmax;             // [nhru]
+//const float *soil_rechr_max;    // [nhru]
+//
+//const long  *Sd_ByPass;         // [nhru]
+//const long  *soil_rechr_ByPass; // [nhru]
+//const long  *preferential_flow; // [nhru]
+//
+//// variable inputs
+//const float *soil_gw;   // [nhru]
+//const float *soil_ssr;    // [nhru]
+//const float *soil_runoff; // [nhru]
+//
+//// variable puts
+//float *Sd;
+//float *soil_moist;
+//float *soil_rechr;
+//float *redirected_residual;
+//float *gw;
+//
+//// local allocated arrays
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//virtual float Function1(float *I, long hh);
+//virtual float Function2(float *X, long hh);
+//
+//ClassNetroute* klone(string name) const;
+//};
 
-  void _net_rad(void);
+//class Classinterception : public ClassModule {
+//public:
+//
+//Classinterception(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared observations
+//const float *Qsi;
+//
+//// variable inputs
+//const float *hru_t;
+//const float *hru_snow;
+//const float *hru_rain;
+//const float *hru_u;
+//const float *hru_rh;
+//
+//// declared variables
+//float *SI_Lo;
+//float *net_snow;
+//float *net_rain;
+//float *SI_Subl;
+//float *Cum_Subl;
+//float *Cum_net_snow;
+//float *v;
+//
+//// declared parameters
+//const float *Sbar;
+//const float *LAI;
+//const float *k;
+//const float *velw;
+//const float *Ht;
+//const float *WidthJ;
+//const float *basin_area;
+//const float *hru_area;
+//
+//// variable inputs
+//
+//// local allocated arrays
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//Classinterception* klone(string name) const;
+//};
 
-  int _h_le(void);
+//class ClassGreenAmpt : public ClassModule {
+//public:
+//
+//ClassGreenAmpt(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//// declared variables
+//float *infil;
+//float *cuminfil;
+//float *runoff;
+//float *cumrunoff;
+//float *snowinfil;
+//float *cumsnowinfil;
+//float *meltrunoff;
+//float *cummeltrunoff;
+//
+//// local variables
+//float *k;
+//float *F0;
+//float *f0;
+//float *F1;
+//float *f1;
+//float *dthbot;
+//float *psidthbot;
+//
+//// declared parameters
+//const float *basin_area; // [BASIN]
+//const float *hru_area;
+//const float *soil_moist_max;
+//const float *soil_moist_init;
+//const long  *soil_type;
+//
+//// variable inputs
+//const float *net_rain;
+//const float *snowmelt;
+//float *soil_moist; // changed to PUT
+//
+//// class allocated
+//float garain;      // precipitation/int
+//float intensity;   // precipitation/int converted to mm/h
+//float pond;        // mm
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//void finish(bool good);
+//
+//ClassGreenAmpt* klone(string name) const;
+//
+//void infiltrate(void);
+//void ponding(void);
+//void startponding(void);
+//void howmuch(float F0, float dt);
+//
+//float calcf1(float F, float psidth);
+//};
 
-  float g_soil(
-  float	rho,	// snow layer's density (kg/m^3)
-  float	tsno,	// snow layer's temperature (K)
-  float	tg,	// soil temperature (K)
-  float	ds,	// snow layer's thickness (m)
-  float	dg,	// dpeth of soil temperature measurement (m)
-  float	pa);	// air pressure (Pa)
+//class Classalbedoparam : public ClassModule {
+//public:
+//
+//Classalbedoparam(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared variables
+//float *Albedo;
+//
+//// declared parameters
+//const float *Albedo_Value;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//
+//Classalbedoparam* klone(string name) const;
+//};
 
-  float g_snow(
-  float	rho1,	// upper snow layer's density (kg/m^3)
-  float	rho2,	// lower  "     "        "    (kg/m^3)
-  float	ts1,	// upper snow layer's temperature (K)
-  float	ts2,	// lower  "     "         "       (K)
-  float	ds1,	// upper snow layer's thickness (m)
-  float	ds2,	// lower  "     "         "     (m)
-  float	pa);	// air pressure (Pa)
+//class Classalbedoobs : public ClassModule {
+//public:
+//
+//Classalbedoobs(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared variables
+//float *Albedo;
+//
+//// declared observation variables
+//const float *Albedo_obs;      // interval data
+//
+//// declared parameters
+//const float *Albedo_Value;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//
+//Classalbedoobs* klone(string name) const;
+//};
 
-  void _advec(void);
+//class ClassHtobs : public ClassModule {
+//public:
+//
+//ClassHtobs(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared variables
+//float *Ht_var;
+//
+//// declared observation variables
+//const float *Ht_obs;      // interval data
+//
+//// declared parameters
+////const float *Ht;
+//float *Ht;
+//
+//void decl(void);
+//void init(void);
+//void run(void);
+//
+//ClassHtobs* klone(string name) const;
+//};
 
-  void _mass_bal(void);
-
-  void _time_compact(void);
-
-  void _precip(void);
-
-  void _snowmelt(void);
-
-  void _drift(void);
-
-  void _new_density(void);
-
-  void _adj_snow(float delta_z_s, float delta_m_s); // change in snowcover's depth change is snowcover's mass
-
-  void _evap_cond(void);
-
-  void _h2o_compact(void);
-
-  void _adj_layers(void);
-
-  void _runoff(void);
-
-  float new_tsno(float spm, float t0, float ccon);
-
-  float heat_stor(float cp, float spm, float tdif);
-
-  float sati(float tk);
-
-  float ssxfr(float  k1, float  k2, float  t1, float  t2, float  d1, float  d2);
-
-  float efcon(float k, float t, float p);
-
-  int hle1(float press, float ta, float ts, float za, float ea, float es, float zq, float u, float zu,
-                   float z0, float &h, float &le, float &e);
-
-// time step information
-
-  TSTEP_REC  **tstep_info; 	// array of info for each timestep [nhru] [4]:
-                                //           0 : data timestep
-                                //           1 : normal run timestep
-                                //           2 : medium  "     "
-                                //           3 : small   "     "
-
-  long *time_step;     // length current timestep (sec)
-  long *current_time;  // start time of current time step (sec)
-
-// climate-data input records
-
-  INPUT_REC  *input_rec1;	// input data for start of data timestep [nhru]
-  INPUT_REC  *input_rec2;	//   "     "   "  end   "   "      "     [nhru]
-
-  INPUT_REC **input_deltas;	// deltas for climate-input parameters
-                                //  over each timestep [nhru] [4]
-
-  PRECIP_REC **precip_info;	// array of precip info adjusted for
-                                //  each timestep [nhru] [4]
-
-  int **computed;		// array of flags for each timestep;
-                                //  true if computed values for input
-                                //   deltas and precip arrays [nhru] [4]
-};
+//class TSTEP_REC{ // time step information
+//  public:
+//
+//#define	DATA_TSTEP	   0
+//#define	NORMAL_TSTEP	   1
+//#define	MEDIUM_TSTEP	   2
+//#define	SMALL_TSTEP	   3
+//
+//// default for normal run timestep's threshold for a layer's mass (kg/m^2)
+//
+//#define	DEFAULT_NORMAL_THRESHOLD  60.0
+//
+//// default for medium run timestep's threshold for a layer's mass (kg/m^2)
+//
+//#define	DEFAULT_MEDIUM_THRESHOLD  10.0
+//
+//// default for small run timestep's threshold for a layer's mass (kg/m^2)
+//
+//#define	DEFAULT_SMALL_THRESHOLD  1.0
+//
+//
+//  int level;	    // timestep's level
+//
+//  long time_step;   // length of timestep (seconds)
+//
+//  int intervals;    // # of these timestep that are in the previous-level's timestep (not used for level 0: data tstep)
+//
+//  float threshold;  // mass threshold for a layer to use this timestep (not used for level 0: data tstep)
+//
+//  TSTEP_REC() : level(0), time_step(24*3600/Global::Freq), intervals(1), threshold(0.0) {};
+//
+//};
+//
+//class  INPUT_REC{ // climate-data input records
+//  public:
+//
+//  float S_n;	// net solar radiation (W/m^2)
+//  float I_lw;	// incoming longwave (thermal) rad (W/m^2)
+//  float T_a;	// air temp (C)
+//  float e_a;	// vapor pressure (Pa)
+//  float u;	// wind speed (m/sec)
+//  float T_g;	// soil temp at depth z_g (C)
+//  float F_g;	// soil flux at depth z_g (W/m^2)
+//};
+//
+//class  PRECIP_REC{ // precip-data input records
+//  public:
+//
+//  float	  m_pp;		// total precipitation mass (kg/m^2)
+//  float	  m_rain;	// mass of rain in precip   (kg/m^2)
+//  float	  m_snow;	// mass of snow in precip   (kg/m^2)
+//  float	  m_drift;	// mass of snow drift       (kg/m^2)
+//  float	  m_subl;	// mass of snow drift       (kg/m^2)
+//  float	  z_snow;	// depth of snow in precip  (m)
+//};
+//
+//class ClassSnobalBase : public ClassModule {
+//
+//    public:
+//
+//    ClassSnobalBase(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+//
+//// declared variables
+//
+////   snowpack information
+//
+//    long*   layer_count;    // number of layers in snowcover: 0, 1, or 2
+//    float*  z_s;            // total snowcover thickness (m)
+//    float*  z_s_0;          // active layer depth (m)
+//    float*  z_s_l;          // lower layer depth (m)
+//    float*  rho;            // average snowcover density (kg/m^3)
+//    float*  m_s;            // snowcover's specific mass (kg/m^2). Init by init_snow.
+//    float*  m_s_0;          // active layer specific mass (kg/m^2). Init by init_snow.
+//    float*  m_s_l;          // lower layer specific mass (kg/m^2). Init by init_snow.
+//    float*  T_s;            // average snowcover temp (K). Init by init_snow
+//    float*  T_s_0;          // active snow layer temp (K)
+//    float*  T_s_l;          // lower layer temp (C)
+//    float*  cc_s;           // snowcover's cold content (J/m^2). Init by init_snow.
+//    float*  cc_s_0;         // active layer cold content (J/m^2). Init by init_snow.
+//    float*  cc_s_l;         // lower layer cold content (J/m^2). Init by init_snow.
+//    float*  h2o_sat;        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
+////                                 to water that snowcover could hold at saturation)
+//    float*  h2o_vol;        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow
+//    float*  h2o;            // liquid h2o content as specific mass(kg/m^2)
+//    float*  h2o_max;        // max liquid h2o content as specific mass(kg/m^2)
+//    float*  h2o_total;      // total liquid h2o: includes h2o in snowcover, melt, and rainfall (kg/m^2)
+//
+////   energy balance info for current timestep
+//
+//    float  *R_n;            // net allwave radiation (W/m^2)
+//    float  *H;              // sensible heat xfr (W/m^2)
+//    float  *L_v_E;          // latent heat xfr (W/m^2)
+//    float  *G;              // heat xfr by conduction & diffusion from soil to snowcover (W/m^2)
+//    float  *G_0;            // heat xfr by conduction & diffusion from soil or lower layer to active layer (W/m^2)
+//    float  *M;              // advected heat from precip (W/m^2)
+//    float  *delta_Q;        // change in snowcover's energy (W/m^2)
+//    float  *delta_Q_0;      // change in active layer's energy (W/m^2)
+//
+////   mass balance vars for current timestep
+//
+//    float  *melt_direct_int;       // specific melt (kg/m^2 or m)
+//    float  *sum;       // specific melt (kg/m^2 or m)
+//    float  *SWE_change;       // interval change in SWE
+//    float  *E_int;	    // mass flux by evap into air from active layer (kg/m^2/s)
+//    float  *E_s_int;	    // mass of evap into air & soil from snowcover (kg/m^2)
+//    float  *snowmelt_int;   // predicted specific runoff (m/sec)
+//    float  *snowmeltD;      // daily predicted specific runoff (m/sec)
+//    float  *snowmeltD_acc;      // daily predicted specific runoff accumulator (m/sec)
+//
+////   mass balance vars for variable timestep
+//
+//    float  *melt;        // specific melt (kg/m^2 or m)
+//    float  *E;		 // mass flux by evap into air from active layer (kg/m^2/s)
+//    float  *E_s;	 // mass of evap into air & soil from snowcover (kg/m^2)
+//    float  *ro_predict;  // predicted specific runoff (m/sec)
+//
+//    float  *E_s_0;        // mass of evaporation to air (kg/m^2)
+//    float  *E_s_l;        // mass of evaporation to soil (kg/m^2)
+//    float  *E_l;	  // mass flux by evap/cond to soil (kg/m^2/s)
+//
+//    float  *E_s_0_int;        // mass of evaporation to air (kg/m^2)
+//    float  *E_s_l_int;        // mass of evaporation to soil (kg/m^2)
+//    float  *E_l_int;	  // mass flux by evap/cond to soil (kg/m^2/s)
+//
+////   precipitation info adjusted for current run timestep
+//
+//    float  *m_precip;	// specific mass of total precip (kg/m^2)
+//    float  *m_rain;	// specific mass of rain in precip (kg/m^2)
+//    float  *m_snow;	// specific mass in snow in precip (kg/m^2)
+//    float  *m_drift;	// specific mass in snow drift (kg/m^2)
+//    float  *m_subl;	// specific mass in snow sublimation (kg/m^2)
+//    float  *rho_snow;   // density of snowfall (kg/m^3)
+//    float  *T_pp;       // precip temp (K)
+//    float  *z_snow;	// depth of snow in precip (m)
+//
+////   precipitation info for the current DATA timestep
+//
+//    long   *precip_now;	// precipitation occur for current timestep?
+//    float  *T_rain;	// rain's temp (K)
+//    float  *T_snow;	// snowfall's temp (K)
+//    float  *h2o_sat_snow; // snowfall's % of liquid H2O saturation
+//
+////   local climate-data values for the current run timestep
+//    float  *S_n;      // net solar radiation (W/m^2)
+//    float  *I_lw;     // incoming longwave (thermal) rad (W/m^2)
+//    float  *T_a;      // air temp (K)
+//    float  *e_a;      // vapor pressure (Pa)
+//    float  *u;        // wind speed (m/sec)
+//    float  *T_g;      // soil temp at depth z_g (C)
+//    float  *F_g;      // soil flux at depth z_g (W/m^2)
+//
+//    long *isothermal; // melting?
+//    long *snowcover;  // snow on gnd at start of current timestep?
+//    long  *stop_no_snow;       //
+//
+////   local variables
+//    float  *P_a;            // air pressure (Pa)
+//    float  *m_precip_cum;   //
+//    float  *m_rain_cum;     //
+//    float  *m_snow_cum;     //
+//    float  *m_drift_cum;    //
+//    float  *m_subl_cum;    //
+//    float  *E_s_cum;        //
+//    float  *cumsnowmelt;    //
+//    float  *melt_direct_cum;       //
+//    float  *Fault;       //
+//
+//// debug variables
+///*    float *Length;
+//    float **Length_array;
+//    float *Ustar;
+//    float **Ustar_array;
+//    float *e;
+//    float **e_array;
+//    float *h;
+//    float **h_array;
+//    long *ier;
+//    long **ier_array;
+//    long  *ArrayCnt; */
+//
+//// declared parameters
+//
+////   measurement heights/depths
+//
+//    const float *hru_elev;    // HRU elevation
+//    const float *basin_area;  // [BASIN]
+//    const float *hru_area;
+//    const float *KT_sand; // thermal conductivity of wet sand
+//
+//    const long *relative_hts; // true if measurements heights, z_T and z_u, are relative to snow surface
+//                              // false if they are absolute heights above the ground
+//    const float  *T_g_or_G_flux;    // soil temp or ground flux option
+//    const float *z_g;         // depth of soil temp meas (m)
+//    const float *z_u;         // height of wind measurement (m)
+//    const float *z_T;         // height of air temp & vapor pressure measurement (m)
+//    const float *z_0;         // roughness length
+//    const float *max_z_s_0;   // maximum active layer thickness (m)
+//    const float *max_h2o_vol; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
+//
+////    void decl(void);
+//
+//  void init(void);
+//
+////    void run(void);
+//
+//  void finish(bool good); // delete local storage used
+//
+//  void init_snow(void);
+//
+//  void _calc_layers(void);
+//
+//  void _layer_mass(void);
+//
+//  float _cold_content(float	temp, float	mass); // temperature of layer specific mass of layer
+//
+//  void do_data_tstep(void);
+//
+//  int _divide_tstep(TSTEP_REC *tstep); // record of timestep to be divided
+//
+//  int _below_thold(float threshold);	 // current timestep's threshold for a layer's mass
+//
+//  int _do_tstep(TSTEP_REC *tstep); // timestep's record
+//
+//  int _e_bal(void);
+//
+//  void _net_rad(void);
+//
+//  int _h_le(void);
+//
+//  float g_soil(
+//  float	rho,	// snow layer's density (kg/m^3)
+//  float	tsno,	// snow layer's temperature (K)
+//  float	tg,	// soil temperature (K)
+//  float	ds,	// snow layer's thickness (m)
+//  float	dg,	// dpeth of soil temperature measurement (m)
+//  float	pa);	// air pressure (Pa)
+//
+//  float g_snow(
+//  float	rho1,	// upper snow layer's density (kg/m^3)
+//  float	rho2,	// lower  "     "        "    (kg/m^3)
+//  float	ts1,	// upper snow layer's temperature (K)
+//  float	ts2,	// lower  "     "         "       (K)
+//  float	ds1,	// upper snow layer's thickness (m)
+//  float	ds2,	// lower  "     "         "     (m)
+//  float	pa);	// air pressure (Pa)
+//
+//  void _advec(void);
+//
+//  void _mass_bal(void);
+//
+//  void _time_compact(void);
+//
+//  void _precip(void);
+//
+//  void _snowmelt(void);
+//
+//  void _drift(void);
+//
+//  void _new_density(void);
+//
+//  void _adj_snow(float delta_z_s, float delta_m_s); // change in snowcover's depth change is snowcover's mass
+//
+//  void _evap_cond(void);
+//
+//  void _h2o_compact(void);
+//
+//  void _adj_layers(void);
+//
+//  void _runoff(void);
+//
+//  float new_tsno(float spm, float t0, float ccon);
+//
+//  float heat_stor(float cp, float spm, float tdif);
+//
+//  float sati(float tk);
+//
+//  float ssxfr(float  k1, float  k2, float  t1, float  t2, float  d1, float  d2);
+//
+//  float efcon(float k, float t, float p);
+//
+//  int hle1(float press, float ta, float ts, float za, float ea, float es, float zq, float u, float zu,
+//                   float z0, float &h, float &le, float &e);
+//
+//// time step information
+//
+//  TSTEP_REC  **tstep_info; 	// array of info for each timestep [nhru] [4]:
+//                                //           0 : data timestep
+//                                //           1 : normal run timestep
+//                                //           2 : medium  "     "
+//                                //           3 : small   "     "
+//
+//  long *time_step;     // length current timestep (sec)
+//  long *current_time;  // start time of current time step (sec)
+//
+//// climate-data input records
+//
+//  INPUT_REC  *input_rec1;	// input data for start of data timestep [nhru]
+//  INPUT_REC  *input_rec2;	//   "     "   "  end   "   "      "     [nhru]
+//
+//  INPUT_REC **input_deltas;	// deltas for climate-input parameters
+//                                //  over each timestep [nhru] [4]
+//
+//  PRECIP_REC **precip_info;	// array of precip info adjusted for
+//                                //  each timestep [nhru] [4]
+//
+//  int **computed;		// array of flags for each timestep;
+//                                //  true if computed values for input
+//                                //   deltas and precip arrays [nhru] [4]
+//};
 
 class ClassSnobalX : public ClassSnobalBase {
 

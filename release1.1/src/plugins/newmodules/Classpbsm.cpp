@@ -159,19 +159,19 @@ void Classpbsm::init(void) {
 
  // DepthofSnow
 
-float SWEfromDepth(float Snow_Depth){ // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
-
-  float SWE;
-
-  if (Snow_Depth > 0.6)
-    SWE = 4.5608*Snow_Depth*100.0-128.06;
-  else if (Snow_Depth > 0.0205)
-    SWE = 2.39*Snow_Depth*100.0+2.05;
-  else
-    SWE = Snow_Depth;
-
-  return SWE;
-} // SWEfromDepth
+//float SWEfromDepth(float Snow_Depth){ // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
+//
+//  float SWE;
+//
+//  if (Snow_Depth > 0.6)
+//    SWE = 4.5608*Snow_Depth*100.0-128.06;
+//  else if (Snow_Depth > 0.0205)
+//    SWE = 2.39*Snow_Depth*100.0+2.05;
+//  else
+//    SWE = Snow_Depth;
+//
+//  return SWE;
+//} // SWEfromDepth
 
 void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probability, float & Threshold,
                              long Snow, float & SnowAge, long & DrySnow){
