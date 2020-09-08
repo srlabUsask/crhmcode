@@ -554,14 +554,14 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 								Cols = 0;
 								for (int ii = 0; ii < newPar->dim; ++ii) {
 									if (newPar->varType == CRHM::Float) {
-										float x;
+										double x;
 										instr >> x;
 										if (instr.fail())
 											break;
 										newPar->layvalues[jj][ii] = x;
 									}
 									else if (newPar->varType == CRHM::Int) {
-										float x;
+										double x;
 										instr >> x;
 										if (instr.fail())
 											break;
@@ -1515,7 +1515,7 @@ string  CRHMmain::ExtractHruLay(string S, long &Hru, long &Lay) {
 MMSData *  CRHMmain::RunClick2Start()
 {
 	ClassVar *thisVar;
-	float **mmsData;
+	double **mmsData;
 	long **mmsDataL;
 	bool GoodRun = true;
 	MMSData * mmsdata = new MMSData();
@@ -1762,7 +1762,7 @@ MMSData *  CRHMmain::RunClick2Start()
 	for (int ii = 0; ii < SeriesCnt; ++ii)
 		cdSeries[ii] = new TSeries(Cnt);
 
-	mmsData = new float*[SeriesCnt];
+	mmsData = new double*[SeriesCnt];
 	mmsDataL = new long*[SeriesCnt];
 
 	for (int ii = 0; ii < SelectedVariables->Count; ii++) {
@@ -1838,7 +1838,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 {
-	float **mmsData = mmsdata->mmsData;
+	double **mmsData = mmsdata->mmsData;
 	long ** mmsDataL = mmsdata->mmsDataL;
 	bool GoodRun = mmsdata->GoodRun;
 	string S = mmsdata->S;
@@ -1919,7 +1919,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				p->ReadObs(Reset);
 				Reset = false;
 
-				//float tdiff = float(clock() - btime) / CLOCKS_PER_SEC; ///////////////////////////////////////////////////////////////
+				//double tdiff = double(clock() - btime) / CLOCKS_PER_SEC; ///////////////////////////////////////////////////////////////
 				//ts->addTime("ReadObs", tdiff);
 
 				CheckBlankModule();
@@ -2039,7 +2039,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 void CRHMmain::RunClick2End(MMSData * mmsdata)
 {
-	float ** mmsData = mmsdata->mmsData;
+	double ** mmsData = mmsdata->mmsData;
 	long ** mmsDataL = mmsdata->mmsDataL;
 	bool GoodRun = mmsdata->GoodRun;
 
@@ -2065,7 +2065,7 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 			LastRprt();
 	}
 
-	//float timediff2 = float(clock() - begintime2) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
+	//double timediff2 = double(clock() - begintime2) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
 	//ts->addTime("totaltime", timediff2);
 
 	//ts->writeStatistics();
@@ -3523,7 +3523,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 	int obscount = j;
 	char tokens[50][50];
 	int tokencount = 0;
-	float obsvalue = 0.0;
+	double obsvalue = 0.0;
 	int dateelements = 0, year, month, day, hour, minute, second;
 	double ddate;
 

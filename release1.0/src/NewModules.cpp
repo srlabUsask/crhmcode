@@ -46,7 +46,7 @@ const long i_oc = 4; // (dissolved) organic carbon
 
 extern double xLimit;
 extern long lLimit;
-static float fLimit;
+static double fLimit;
 
 Administer DLLModules("08/25/08", "Modules_New");
 bool RELEASE = false;
@@ -206,7 +206,7 @@ void MoveModulesToGlobal(string DLLName){
 // psi, k(mm/h), wilt, fcap,  porG, porE, air entry, pore size ?? b, AVAIL
 // {PSI,  KSAT,  WILT,  FCAP, PORG,   PORE,     AIRENT, PORESZ ?? b, AVAIL}
 //  mm    mm/h
-float soilproperties[] [9] = {
+double soilproperties[] [9] = {
   { 0.0,  999.9, 0.000, 0.00, 1.100,  1.000,	0.000,	0.0,  4},  //      0  water
   { 49.5, 117.8, 0.020, 0.10, 0.437,  0.395,	0.121,	4.05, 1},  //    Â  1  sand
   { 61.3,  29.9, 0.036, 0.16, 0.437,  0.41 ,	0.09,	4.38, 4},  //    Â  2  loamsand
@@ -222,7 +222,7 @@ float soilproperties[] [9] = {
   {  0.0,   0.0, 0.000, 0.00, 0.000,  0.000,	0.0,	 0.0, 4}   //    Â  12 pavement. Values not used
 };
 
-float SetSoilproperties[] [4] = {
+double SetSoilproperties[] [4] = {
 //  avail       wilt    field   pore
   {1000.0,	  0.0, 1000.0,  1000.0},          //      0  water
   {  84.0,	 40.0,	124.0,  395.0 },	  //      1  sand
@@ -324,14 +324,14 @@ void Classbasin::init(void) {
 
   run_ID[0] = RUN_ID[0];  // transfer run identification
 
-  float totarea = 0;
+  double totarea = 0;
   nhru = getdim(NHRU);
 
   for(hh = 0; hh < nhru; ++hh)
     totarea += hru_area[hh];
 
   if(fabs((totarea-basin_area[0])/basin_area[0]) > 1e-3){
-    const_cast<float *>  (basin_area)[0] = totarea;
+    const_cast<double *>  (basin_area)[0] = totarea;
     CRHMException TExcept(string(string("Sum of HRU's area <> Basin area, Basin area made = ") + FloatToStrF(totarea, ffGeneral, 3, 0)).c_str(), WARNING);
     LogError(TExcept);
   }
@@ -432,11 +432,11 @@ void Classglobal::decl(void) {
 
 }
 
-const float DEGtoRAD = M_PI/180.0;
-const float DEGtoRAD365 = 2*M_PI/365.0;
+const double DEGtoRAD = M_PI/180.0;
+const double DEGtoRAD365 = 2*M_PI/365.0;
 const long CalcFreq = 288;
-const float RADxxMIN = 2.0*M_PI/CalcFreq;
-const float MINS_int = 24.0*60.0/CalcFreq;
+const double RADxxMIN = 2.0*M_PI/CalcFreq;
+const double MINS_int = 24.0*60.0/CalcFreq;
 
 void Classglobal::init(void) {
 
@@ -453,11 +453,11 @@ void Classglobal::init(void) {
 
 }
 
-void Classglobal::air_mass (const float czen, float &oam){
+void Classglobal::air_mass (const double czen, double &oam){
 
-  float diff;
+  double diff;
 
-  float Z = acos(czen);
+  double Z = acos(czen);
   oam = fabs(1.0f/(czen + 0.50572f*pow(96.07995f-Z, -1.6364f)));       // oam by cosecant approx.
 
   if(oam < 2.9)                          // zenith < 70 deg
@@ -540,10 +540,10 @@ void Classglobal::run(void) {
 
   long Period, Day;
 
-  float Trans, Dec, Rad_vec, Sol, Clat, Slat, Cdec, Sdec, Hr_Ang;
-  float Czen, t1, t2, x, y, z, Oam;
-  float cosxsL, cosxs0, t10, t20;
-  float It, Id, diffuse, Sum_Id, Sum_Diff, Sum_Sol, Sum_cosxs, Sum_cosxs0, Sum_Ext, Sum_Flatd, Sum_Flatf;
+  double Trans, Dec, Rad_vec, Sol, Clat, Slat, Cdec, Sdec, Hr_Ang;
+  double Czen, t1, t2, x, y, z, Oam;
+  double cosxsL, cosxs0, t10, t20;
+  double It, Id, diffuse, Sum_Id, Sum_Diff, Sum_Sol, Sum_cosxs, Sum_cosxs0, Sum_Ext, Sum_Flatd, Sum_Flatf;
 
   Period = (getstep()-1)%Global::Freq;
 
@@ -738,9 +738,9 @@ void Classobs::decl(void) {
 
   Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
 
-  Global::Warming_t = const_cast<float *> (this->ClimChng_t); // must be here to load do_t_day etc.
+  Global::Warming_t = const_cast<double *> (this->ClimChng_t); // must be here to load do_t_day etc.
 
-  Global::Warming_p = const_cast<float *> (this->ClimChng_precip); // must be here to load do_p etc.
+  Global::Warming_p = const_cast<double *> (this->ClimChng_precip); // must be here to load do_p etc.
 
 
   declreadobs("u", NHRU, "wind velocity", "(m/s)", &u, HRU_OBS_u);
@@ -827,7 +827,7 @@ void Classobs::decl(void) {
 
   declobsfunc("ppt", "pptD", &pptD, FIRST, NULL, true);
 
-  declobsfunc("p", "p", const_cast<float **> (&p), FOBS, NULL, true);
+  declobsfunc("p", "p", const_cast<double **> (&p), FOBS, NULL, true);
 
 
   variation_set = VARIATION_0 + VARIATION_1;
@@ -922,26 +922,26 @@ void Classobs::pre_run(void) {
 
   Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
 
-  Global::OBS_ELEV = const_cast<float **> (obs_elev_Tables);
+  Global::OBS_ELEV = const_cast<double **> (obs_elev_Tables);
 
-  Global::obs_t = const_cast<float **> (this->tday_intvls);
+  Global::obs_t = const_cast<double **> (this->tday_intvls);
 
-  Global::obs_ea = const_cast<float **> (this->eaday_intvls);
+  Global::obs_ea = const_cast<double **> (this->eaday_intvls);
 
-  Global::obs_rh = const_cast<float **> (this->rhday_intvls);
+  Global::obs_rh = const_cast<double **> (this->rhday_intvls);
 
   Global::obs_t_obs = this->t_obs_lay;
 
 
-  Global::Warming_t = const_cast<float *> (this->ClimChng_t); // must be here to switch for groups.
+  Global::Warming_t = const_cast<double *> (this->ClimChng_t); // must be here to switch for groups.
 
-  Global::Warming_p = const_cast<float *> (this->ClimChng_precip); // must be here to switch for groups.
+  Global::Warming_p = const_cast<double *> (this->ClimChng_precip); // must be here to switch for groups.
 
-  Global::hru_elev = const_cast<float *> (this->hru_elev);
+  Global::hru_elev = const_cast<double *> (this->hru_elev);
 
-  Global::lapse_rate = const_cast<float *> (this->lapse_rate);
+  Global::lapse_rate = const_cast<double *> (this->lapse_rate);
 
-  Global::ppt_adj = const_cast<float *> (this->precip_elev_adj);
+  Global::ppt_adj = const_cast<double *> (this->precip_elev_adj);
 
   Global::RH_VP_flag = const_cast<long *> (this->ElevChng_flag);
 
@@ -952,8 +952,8 @@ void Classobs::pre_run(void) {
 
 void Classobs::run(void) {
 
-float catchratio;
-float Tmean, Tmax, Tmin, RHmean, EAmean;
+double catchratio;
+double Tmean, Tmax, Tmin, RHmean, EAmean;
 
 long  nstep = getstep()%Global::Freq;
 long tt = Global::DTindx%Global::Freq;
@@ -977,7 +977,7 @@ rhday_intvls = this->rh_layvalues;
 
     hru_estar[hh] = Common::estar(hru_t[hh]);
 
-    hru_u[hh]  = max<float> (u[hh], 5.0e-2);
+    hru_u[hh]  = max<double> (u[hh], 5.0e-2);
 
     if(nstep == 1 || Global::Freq == 1){
       hru_umean[hh]  = umean[hh];
@@ -1017,7 +1017,7 @@ rhday_intvls = this->rh_layvalues;
         } // switch
     }
 
-    float umean = hru_umean[hh];
+    double umean = hru_umean[hh];
     if(umean > 8.0) umean = 8;
 
     if(variation != VARIATION_2){
@@ -1088,7 +1088,7 @@ rhday_intvls = this->rh_layvalues;
         }
       }
       else{
-        float Use;
+        double Use;
         if(snow_rain_determination[hh])
           Use = Common::Ice_Bulb(hru_t[hh], hru_rh[hh], Pa[hh]);
         else
@@ -1133,7 +1133,7 @@ rhday_intvls = this->rh_layvalues;
 
 void Classobs::Harder(void) {
 
-  float Tk, D, lamda, pta, L, Ti1, Ti2, crit, crit1, T1, T2, a, b, c, ratio, hru_icebulb;
+  double Tk, D, lamda, pta, L, Ti1, Ti2, crit, crit1, T1, T2, a, b, c, ratio, hru_icebulb;
 
   Tk = hru_t[hh] + CRHM_constants::Tm;
 
@@ -1206,8 +1206,8 @@ void Classobs::Harder(void) {
 
 void Classobs::finish(bool good) {
 
-  float Allcumhru_rain = 0.0;
-  float Allcumhru_snow = 0.0;
+  double Allcumhru_rain = 0.0;
+  double Allcumhru_snow = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (obs)'  cumhru_rain      (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumhru_rain[hh], hru_area[hh], basin_area[0]);
@@ -1433,9 +1433,9 @@ void Classpbsm::init(void) {
 
  // DepthofSnow
 
-float SWEfromDepth(float Snow_Depth){ // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
+double SWEfromDepth(double Snow_Depth){ // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
 
-  float SWE;
+  double SWE;
 
   if (Snow_Depth > 0.6)
     SWE = 4.5608*Snow_Depth*100.0-128.06;
@@ -1447,12 +1447,12 @@ float SWEfromDepth(float Snow_Depth){ // 3/5/98 Calculates SWE(mm) from Snow Dep
   return SWE;
 } // SWEfromDepth
 
-void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probability, float & Threshold,
-                             long Snow, float & SnowAge, long & DrySnow){
+void ProbabilityThresholdNew(double SWE, double t, double Uten_Prob, double & Probability, double & Threshold,
+                             long Snow, double & SnowAge, long & DrySnow){
 
 //Probability of blowing snow occurrence and threshold wind speeds determined by ambient air temperature and snow age
 
-   float Wind, Mean, Variance, c;
+   double Wind, Mean, Variance, c;
 
         Wind = 0.0;
         Probability = 0.0;
@@ -1470,7 +1470,7 @@ void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probab
         SnowAge = 24.0/Global::Freq;
 
         Mean = 0.365 * t + 0.00706 * sqr(t)
-              + 0.91 * log((float)SnowAge) + 11.0;
+              + 0.91 * log((double)SnowAge) + 11.0;
         Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
 
         while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
@@ -1491,7 +1491,7 @@ void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probab
         SnowAge = SnowAge + 24.0/Global::Freq;
 
         Mean = 0.365 * t + 0.00706 * sqr(t)
-              + 0.91 * log((float)SnowAge) + 11.0;
+              + 0.91 * log((double)SnowAge) + 11.0;
         Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
 
         while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
@@ -1523,7 +1523,7 @@ void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probab
 
 } // Probability_threshold procedure
 
-void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH){
+void Sum(double TQsalt, double TQsusp, double SBsum, double SBsalt, double & DriftH, double & SublH){
 
 // total sublimation
 
@@ -1540,8 +1540,8 @@ void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, 
 
 } // sum procedure
 
-void Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
-           float t, float u, float rh, float Fetch, long N_S, float A_S)
+void Pbsm (double E_StubHt, double Uthr, double & DriftH, double & SublH,
+           double t, double u, double rh, double Fetch, long N_S, double A_S)
 {
 
 /*   Modified Calculations for Mean Particle Mass in this version
@@ -1557,7 +1557,7 @@ void Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
      Fetch and is expressed in millimeters of blowing snow lost over
      a square meter of snow surface per half hour  */
 
-  float   A,      Alpha,  B,      Bd,     Bound,  C,
+  double   A,      Alpha,  B,      Bd,     Bound,  C,
   Diff,   DmDt,   Es,     H,
   Htran,  Hsalt,  Inc,    Lamb,   Lambda, Lb,
   Mpm,    Mpr,    Nh,     Nsalt,
@@ -1745,8 +1745,8 @@ Twenty: H = Z + Inc;
 
 void Classpbsm::run(void) {
 
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float SumDrift, total, SWE_Max, transport;
+  double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+  double SumDrift, total, SWE_Max, transport;
   long step = getstep();
 
   if(step == 1)
@@ -1791,7 +1791,7 @@ void Classpbsm::run(void) {
 
        Ustn  = Ustar*sqrt((PBSM_constants::Beta*Lambda)/(1.0+PBSM_constants::Beta*Lambda));
 
-       Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *min <float> (0.0, Ustar-Ustn);
+       Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *min <double> (0.0, Ustar-Ustn);
      }
      else
      {
@@ -1833,7 +1833,7 @@ void Classpbsm::run(void) {
  // distribute drift
 
   if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
-    float Drft = Drift[0]*distrib[0];
+    double Drft = Drift[0]*distrib[0];
     SWE[0] += Drft;
     cumDriftIn[0] += Drft;
     cumBasinSnowGain[0] += Drft*hru_basin[0];  // **** hru_basin = hru_area/basin_area ****
@@ -1861,7 +1861,7 @@ void Classpbsm::run(void) {
 
         if(hh == nn) { // handle last HRU
           if(distrib[nn] > 0){
-            float In = SumDrift/hru_basin[hh]; // remaining drift
+            double In = SumDrift/hru_basin[hh]; // remaining drift
             if(SWE_Max > SWE[hh] + In){ // fill snowpack, remainder leaves basin
               SWE[hh]  += In; // can handle all
               cumDriftIn[hh] += In;
@@ -1924,8 +1924,8 @@ void Classpbsm::finish(bool good) {
 
   if(!good) return;
 
-  float AllcumSubl = 0.0;
-  float AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
+  double AllcumSubl = 0.0;
+  double AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (pbsm)' cumSno     (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh], hru_area[hh], basin_area[0]);
@@ -1982,7 +1982,7 @@ void ClassNO_pbsm::init(void) {
 
   nhru = getdim(NHRU);
 
-  hru_basin = new float[nhru];
+  hru_basin = new double[nhru];
 
   for (hh = 0; hh < nhru; ++hh) {
     SWE[hh] = 0.0;
@@ -2090,7 +2090,7 @@ void Classalbedo::run(void) {
     jday = julian("now");
 
       for(hh = 0; chkStruct(); ++hh) {
-        float hemisphere = (hru_lat[hh] < 0.0);
+        double hemisphere = (hru_lat[hh] < 0.0);
         if((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[hh] > 5.0) {  // changed
           winter[hh] = 1;
           Albedo[hh] = Albedo_snow[hh];
@@ -2111,7 +2111,7 @@ void Classalbedo::run(void) {
         meltflag[hh] = 0;
       }
       else { // SWE[hh] > 0.0
-        float DR = 0.071;
+        double DR = 0.071;
 
         if(SWE[hh] > 60.0 && Albedo[hh] > 0.65)
           DR = 0.015;
@@ -2126,7 +2126,7 @@ void Classalbedo::run(void) {
           continue;
         }
 
-        float Qnc = -0.371 + 5.22*QdroD[hh]*(1 - Albedo[hh]);
+        double Qnc = -0.371 + 5.22*QdroD[hh]*(1 - Albedo[hh]);
 
         if(hru_tmax[hh] < -6.0 && Qnc < 1.0)
           winter[hh] = 1;
@@ -2139,7 +2139,7 @@ void Classalbedo::run(void) {
             Albedo[hh] = Albedo[hh] - 0.05;
             continue;
           }
-          float MT = -0.064*jday + 6.69;
+          double MT = -0.064*jday + 6.69;
 
           if(hru_tmin[hh] > -4.0 || Qnc > 1.0 && hru_tmax[hh] > 0.0 ||
                   hru_tmax[hh] > MT && Qnc > -0.5) {
@@ -2213,7 +2213,7 @@ void Classnetall::init(void) {
 
 void Classnetall::run(void) {
 
-  float netlong, shortw;
+  double netlong, shortw;
 
   long nstep = getstep() % Global::Freq;
 
@@ -2237,7 +2237,7 @@ void Classnetall::run(void) {
         else
           shortw = (0.024f*pQdro_FREQ[ff][hh] + 2.68f*pQdfo_FREQ[ff][hh]);
 
-        float Net = (shortw*(1.0f-Albedo[hh]) + netlong/Global::Freq); // MJ/interval
+        double Net = (shortw*(1.0f-Albedo[hh]) + netlong/Global::Freq); // MJ/interval
         netD[hh] +=  Net;
 
         Net = Net/(2.501f-0.002361f*tday_intvls[ff][hh]); // MJ/m^2 to mm/m^2
@@ -2397,7 +2397,7 @@ void Classebsm::init(void) {
 
 void Classebsm::run(void) {
 
-      float umin, ref, melt;
+      double umin, ref, melt;
 
       long  nstep = getstep()%Global::Freq;
 
@@ -2460,7 +2460,7 @@ void Classebsm::run(void) {
             }
           }
           else if(meltflag[hh] == 1 && delay_melt[hh] <= julian("now")) {
-            float eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;\
+            double eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;\
             switch (variation) {
 
               case VARIATION_ORG :
@@ -2509,7 +2509,7 @@ void Classebsm::run(void) {
 
             LWmax[hh] = SWE[hh]*0.05;
 
-            float t_minus = tmin[hh];
+            double t_minus = tmin[hh];
             if(t_minus > 0.0)
               t_minus = 0.0;
 
@@ -2581,7 +2581,7 @@ void Classebsm::finish(bool good) {
 
   if(!good) return;
 
-  float Allcumsnowmelt = 0.0;
+  double Allcumsnowmelt = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (ebsm)' cumQe_subl   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumQe_subl[hh], hru_area[hh], basin_area[0]);
@@ -2668,17 +2668,17 @@ void ClassTs::run(void) { // executed every interval
       break;
     } // switch
 
-    float T1 = hru_t[hh] + CRHM_constants::Tm;
+    double T1 = hru_t[hh] + CRHM_constants::Tm;
 
-    float rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
+    double rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
 
-    float U1 = max<float> (hru_u[hh], 1.0e-3); // Wind speed (m/s)
+    double U1 = max<double> (hru_u[hh], 1.0e-3); // Wind speed (m/s)
 
     ra[hh] = (log(Zref[hh]/Z0snow[hh])*log(Zwind[hh]/Z0snow[hh]))/sqr(CRHM_constants::kappa)/U1;
 
-    float delta = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
+    double delta = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
 
-    float q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1);
+    double q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1);
 
     Ts[hh] = T1 + (CRHM_constants::emiss*(Qli_[hh] - CRHM_constants::sbc*pow(T1, 4.0f)) + CRHM_constants::Ls*(q - Common::Qs(Pa[hh], T1))*rho/ra[hh])/
              (4.0f*CRHM_constants::emiss*CRHM_constants::sbc*pow(T1, 3.0f) + (CRHM_constants::Cp + CRHM_constants::Ls*delta)*rho/ra[hh]);
@@ -2835,16 +2835,16 @@ void ClassNeedle::run(void) { // executed every interval
       continue;
     }
 
-    float Exposure = Ht[hh] - Common::DepthofSnow(SWE[hh]); /* depths(m) SWE(mm) */
+    double Exposure = Ht[hh] - Common::DepthofSnow(SWE[hh]); /* depths(m) SWE(mm) */
     if(Exposure < 0.0) Exposure = 0.0;
 
-    float LAI_ = LAI[hh]*Exposure/Ht[hh];
+    double LAI_ = LAI[hh]*Exposure/Ht[hh];
 
-    float Vf = 0.45 - 0.29*log(LAI[hh]);
+    double Vf = 0.45 - 0.29*log(LAI[hh]);
 
-    float Vf_ = Vf + (1.0 - Vf)*sin((Ht[hh] - Exposure)/Ht[hh]*M_PI_2);
+    double Vf_ = Vf + (1.0 - Vf)*sin((Ht[hh] - Exposure)/Ht[hh]*M_PI_2);
 
-    float T1 = hru_t[hh] + CRHM_constants::Tm;
+    double T1 = hru_t[hh] + CRHM_constants::Tm;
 
     if(beta[hh] > 0.001) {
       k[hh] = 1.081*beta[hh]*cos(beta[hh])/sin(beta[hh]);
@@ -2866,15 +2866,15 @@ void ClassNeedle::run(void) { // executed every interval
     Qsisn[hh] = Qsi_*Tauc[hh];
 
 
-    float rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
+    double rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
 
-    float U1 = hru_u[hh]; // Wind speed (m/s)
+    double U1 = hru_u[hh]; // Wind speed (m/s)
 
     ra[hh] = (log(Zref[hh]/Z0snow[hh])*log(Zwind[hh]/Z0snow[hh]))/sqr(CRHM_constants::kappa)/U1;
 
-    float delta = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
+    double delta = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
 
-    float q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
+    double q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
 
 
     Ts[hh] = T1 + (CRHM_constants::emiss*(Qli_ - CRHM_constants::sbc*pow(T1, 4.0f)) + CRHM_constants::Ls*(q - Common::Qs(Pa[hh], T1))*rho/ra[hh])/
@@ -2987,8 +2987,8 @@ void ClassSimpleRichard::init(void) {
 void ClassSimpleRichard::run(void) { // executed every interval
 
     for (hh = 0; chkStruct(); ++hh) {
-        float Q1 = (rh[hh]/100.)*Common::Qs(Pa[hh], t[hh]); // Specific humidity (kg/kg)
-        float U1 = max<float> (u[hh], 1.0e-3);    // Wind speed (m/s)
+        double Q1 = (rh[hh]/100.)*Common::Qs(Pa[hh], t[hh]); // Specific humidity (kg/kg)
+        double U1 = max<double> (u[hh], 1.0e-3);    // Wind speed (m/s)
         SURF(hh, Q1, U1);
         U1 = 0;
     }
@@ -2997,7 +2997,7 @@ void ClassSimpleRichard::run(void) { // executed every interval
 
 // Calculate surface exchange coefficient, Richardson number formulation
 
-      void ClassSimpleRichard::EXCH(long hh, float Q1, float U1, float &CH) {
+      void ClassSimpleRichard::EXCH(long hh, double Q1, double U1, double &CH) {
 
 // Q1         ! Specific humidity (kg/kg)
 // T0         ! Surface temperature (C)
@@ -3010,7 +3010,7 @@ void ClassSimpleRichard::run(void) { // executed every interval
 // CH         ! Scalar exchange coefficient
 // Local variables
 
-  float CHn        // Neutral exchange coefficient
+  double CHn        // Neutral exchange coefficient
        ,RiB        // Bulk Richardson number
        ,fh         // Stability function
        ,fz         // Stability function
@@ -3053,7 +3053,7 @@ void ClassSimpleRichard::ALBEDO(long hh){
 
 // Surface energy balance and temperature
 
-void ClassSimpleRichard::SURF(long hh, float Q1, float U1) {
+void ClassSimpleRichard::SURF(long hh, double Q1, double U1) {
 // Arguments IN
 // LW         ! Longwave radiation (W/m^2)
 // Pa         ! Surface pressure (KPa)
@@ -3078,14 +3078,14 @@ void ClassSimpleRichard::SURF(long hh, float Q1, float U1) {
 // T0         ! Surface temperature (C)
 
 // Local variables
-  float A1;         // Penman-Monteith radiative term
-  float Ch;         // Surface exchange coefficient
-  float dQ1;        // Air humidity deficit
-  float D;          // dQs/dT
-  float R1;         // Net radiation for T0=t
-  float rho;        // Air density (kg/m^3)
-  float rKh;        // rho*Ch*U1
-  float rKPM;       // Penman-Monteith exchange term
+  double A1;         // Penman-Monteith radiative term
+  double Ch;         // Surface exchange coefficient
+  double dQ1;        // Air humidity deficit
+  double D;          // dQs/dT
+  double R1;         // Net radiation for T0=t
+  double rho;        // Air density (kg/m^3)
+  double rKh;        // rho*Ch*U1
+  double rKPM;       // Penman-Monteith exchange term
 
   EXCH(hh, Q1, U1, Ch);
 
@@ -3131,7 +3131,7 @@ void ClassSimpleRichard::SURF(long hh, float Q1, float U1) {
 
   SWE[hh] -= (snowmelt[hh] + sursubl[hh]);
 
-  SWE[hh] = max<float> (SWE[hh], 0.0);
+  SWE[hh] = max<double> (SWE[hh], 0.0);
 
   ALBEDO(hh);
 }
@@ -3220,7 +3220,7 @@ void Classevap::init(void) {
 
 void Classevap::run(void) {
 
-   float Q;
+   double Q;
 
    long nstep = getstep() % Global::Freq;
 
@@ -3284,11 +3284,11 @@ void Classevap::run(void) {
        case 2: // Penman-Monteith
          if(Q > 0.0) {
 
-           float Z0 = Ht[hh]/7.6;
-           float d  = Ht[hh]*0.67;
-           float ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*hru_u[hh]);
-           float RHOa = 1E3*Pa[hh] /(CRHM_constants::Rgas*(hru_t[hh] + CRHM_constants::Tm))*(1.0 - 0.379*hru_ea[hh]/Pa[hh]);
-           float Cp = 1.005; // (kJ/kg/K)
+           double Z0 = Ht[hh]/7.6;
+           double d  = Ht[hh]*0.67;
+           double ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*hru_u[hh]);
+           double RHOa = 1E3*Pa[hh] /(CRHM_constants::Rgas*(hru_t[hh] + CRHM_constants::Tm))*(1.0 - 0.379*hru_ea[hh]/Pa[hh]);
+           double Cp = 1.005; // (kJ/kg/K)
 
            evap[hh] = (delta(hru_t[hh])*Q*Global::Freq + (RHOa*Cp/
                         (lambda(hru_t[hh])*1e3)*(Common::estar(hru_t[hh]) - hru_ea[hh])/(ra/86400)))/
@@ -3312,8 +3312,8 @@ void Classevap::run(void) {
 
 void Classevap::finish(bool good) {
 
-  float Allcum_evap = 0.0;
-  float Allcum_actet = 0.0;
+  double Allcum_evap = 0.0;
+  double Allcum_actet = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
 
@@ -3332,17 +3332,17 @@ void Classevap::finish(bool good) {
 
 }
 
-double Classevap::gamma(float Pa, float t) // Psychrometric constant (kPa/Â°C)
+double Classevap::gamma(double Pa, double t) // Psychrometric constant (kPa/Â°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg Â°C))
 }
 
-float Classevap::lambda(float t) // Latent heat of vaporization (mJ/(kg Â°C))
+double Classevap::lambda(double t) // Latent heat of vaporization (mJ/(kg Â°C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double Classevap::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
+double Classevap::delta(double t) // Slope of sat vap p vs t, kPa/Â°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -3350,11 +3350,11 @@ double Classevap::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-double Classevap::fdaily(float u, float Ht){ // Drying power f(u) (mm/d/kPa)
+double Classevap::fdaily(double u, double Ht){ // Drying power f(u) (mm/d/kPa)
 
-   float Z0 = Ht*100.0/7.6;
-   float a = 8.19 + 0.22*Z0;
-   float b = 1.16 + 0.08*Z0;
+   double Z0 = Ht*100.0/7.6;
+   double a = 8.19 + 0.22*Z0;
+   double b = 1.16 + 0.08*Z0;
    return a + b*u;
 }
 
@@ -3419,7 +3419,7 @@ void ClassevapD::init(void) {
 
 void ClassevapD::run(void) {
 
-   float Q;
+   double Q;
 
    long nstep = getstep() % Global::Freq;
 
@@ -3483,18 +3483,18 @@ void ClassevapD::finish(bool good) {
   }
 }
 
-double ClassevapD::gamma(float Pa, float t) // Psychrometric constant (kPa/Â°C)
+double ClassevapD::gamma(double Pa, double t) // Psychrometric constant (kPa/Â°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg Â°C))
 }
 
 
-float ClassevapD::lambda(float t) // Latent heat of vaporization (mJ/(kg Â°C))
+double ClassevapD::lambda(double t) // Latent heat of vaporization (mJ/(kg Â°C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassevapD::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
+double ClassevapD::delta(double t) // Slope of sat vap p vs t, kPa/Â°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -3502,11 +3502,11 @@ double ClassevapD::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-double ClassevapD::fdaily(float u, float Ht){ // Drying power f(u) (mm/d/kPa)
+double ClassevapD::fdaily(double u, double Ht){ // Drying power f(u) (mm/d/kPa)
 
-   float Z0 = Ht*100.0/7.6;
-   float a = 8.19 + 0.22*Z0;
-   float b = 1.16 + 0.08*Z0;
+   double Z0 = Ht*100.0/7.6;
+   double a = 8.19 + 0.22*Z0;
+   double b = 1.16 + 0.08*Z0;
    return a + b*u;
 }
 
@@ -3577,7 +3577,7 @@ void Classsbsm::init(void) {
 
   nhru = getdim(NHRU);
 
-  hru_basin = new float[nhru];
+  hru_basin = new double[nhru];
 
   dt = 3600*24/Global::Freq;
 
@@ -3602,7 +3602,7 @@ void Classsbsm::init(void) {
 
 void Classsbsm::run(void) {
 
-  float SumDrift, total, SWE_Max, trans;
+  double SumDrift, total, SWE_Max, trans;
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -3618,7 +3618,7 @@ void Classsbsm::run(void) {
     if(hru_t[hh] >= 0.0)
       wet_snow[hh] = SWE[hh];
     else
-      wet_snow[hh] = min<float> (SWE[hh], wet_snow[hh]);
+      wet_snow[hh] = min<double> (SWE[hh], wet_snow[hh]);
 
     Drift[hh] = 0.0;
     Subl[hh]  = 0.0;
@@ -3628,7 +3628,7 @@ void Classsbsm::run(void) {
       prob();
 
       if(Prob[hh] > 0.0) {
-        float RH = hru_rh[hh];
+        double RH = hru_rh[hh];
         if(RH > 1.01)
           RH /= 100.0;
         Drift[hh] = Prob[hh]*transport()*dt/fetch[hh];
@@ -3654,7 +3654,7 @@ void Classsbsm::run(void) {
 
 
   if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
-    float Drft = Drift[0]*distrib[0];
+    double Drft = Drift[0]*distrib[0];
     SWE[0] += Drft;
     cumDriftIn[0] += Drft;
     cumBasinSnowGain[0] += Drft*hru_basin[0];
@@ -3748,29 +3748,29 @@ void Classsbsm::finish(bool good) {
 }
 
 //=======================================================================
-float Classsbsm::transport(void) {
+double Classsbsm::transport(void) {
 //=======================================================================
   return ((0.00096f*sqr(hru_t[hh]) + 0.5298f*hru_t[hh] + 666.82f)*pow(hru_u[hh]/25.0f, 4.0f))/1000.0f;
 }
 
 //=======================================================================
-float Classsbsm::sublimation(void){
+double Classsbsm::sublimation(void){
 //=======================================================================
   return  137.6f*pow(hru_u[hh]/25.0f, 5.0f)/1000.0f;
 }
 
 //=======================================================================
-float Classsbsm::scale(void){
+double Classsbsm::scale(void){
 //=======================================================================
-  float
+  double
    cond,       // Thermal conductivity of air (W/m/K)
    diff,       // Diffusivity of water vapour in air (m^2/s)
    rsat,       // Saturation density of water vapour (kg/m3)
    tk;         // Temperature (K)
 
-  float const ls = 2.838e6; // Latent heat of sublimation (J/kg)
-  float const m = 18.01;    // Molecular weight of water (kg/kmole)
-  float const r = 8313.0;   // Universal gas constant (J/kmole/K)
+  double const ls = 2.838e6; // Latent heat of sublimation (J/kg)
+  double const m = 18.01;    // Molecular weight of water (kg/kmole)
+  double const r = 8313.0;   // Universal gas constant (J/kmole/K)
 
     tk = hru_t[hh] + 273.0f;
     diff = 2.06e-5f*pow(tk/273.0f, 1.75f);
@@ -3783,15 +3783,15 @@ float Classsbsm::scale(void){
 void Classsbsm::prob(void){
 //=======================================================================
 
-  float
+  double
    mean        // Mean of cumulative normal distribution
   ,var         // Standard deviation
   ,rho         // Snow density (kg/m3)
   ,sd          // Snow depth (m)
   ,us;
 
-//  float const ht[] = { 0.01,  0.01,  0.08,  0.08,  1.0,   1.0,   3.   };// Vegetation height (m)
-//  float const zr[] = { 0.1,   0.1,   0.05,  0.05,  0.05,  0.05,  0.08 };// Ratio of aerodynamic roughness length to vegetation height
+//  double const ht[] = { 0.01,  0.01,  0.08,  0.08,  1.0,   1.0,   3.   };// Vegetation height (m)
+//  double const zr[] = { 0.1,   0.1,   0.05,  0.05,  0.05,  0.05,  0.08 };// Ratio of aerodynamic roughness length to vegetation height
 //     1 - water      2 - soil      3 - open tundra
 //     4 - sparse shrub tundra      5 - shrub tundra
 //     6 - dense shrub tundra       7 - sparse forest
@@ -3889,9 +3889,9 @@ void Classcrack::init(void) {
 
   try {
 
-    Xinfil = new float*[3];   // Data [3] [nhru]
+    Xinfil = new double*[3];   // Data [3] [nhru]
     for (int jj = 0; jj < 3; ++jj)
-      Xinfil[jj] = new float[nhru];
+      Xinfil[jj] = new double[nhru];
 
     timer = new long[nhru];
   }
@@ -3924,7 +3924,7 @@ void Classcrack::init(void) {
   }
 }
 
-void infil_index(float Theta, float SWE, float & Index, float & Pot) {
+void infil_index(double Theta, double SWE, double & Index, double & Pot) {
 
   Pot=5*(1-Theta)*pow(SWE, 0.584f);
   Index=Pot/SWE;
@@ -4137,8 +4137,8 @@ void ClassKevin::init(void) {
       LogError(TExcept);
     }
 
-  SWEpeak = new float[nhru];
-  SWElast = new float[nhru];
+  SWEpeak = new double[nhru];
+  SWElast = new double[nhru];
 
   for (hh = 0; hh < nhru; ++hh) {
     snowmelt[hh]   = 0.0;
@@ -4165,12 +4165,12 @@ void ClassKevin::init(void) {
 
 void ClassKevin::run(void) {
 
-  float melt, netlong, shortw, net;
+  double melt, netlong, shortw, net;
 
   long nstep = getstep() % Global::Freq;
 
   long jday = julian("now");
-  float hemisphere = (hru_lat[0] < 0.0); // use hru #1
+  double hemisphere = (hru_lat[0] < 0.0); // use hru #1
   if((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[0] > 5.0 && nstep == 1) // use hru #1
     for(hh = 0; chkStruct(); ++hh) {
       winter[hh] = 1;
@@ -4431,9 +4431,9 @@ void ClassGreencrack::init(void) {
 
   try {
 
-    Xinfil = new float*[3];   // Data [3] [nhru]
+    Xinfil = new double*[3];   // Data [3] [nhru]
     for (int jj = 0; jj < 3; ++jj)
-      Xinfil[jj] = new float[nhru];
+      Xinfil[jj] = new double[nhru];
   }
   catch (std::bad_alloc) {
     CRHMException Except("Could not allocate in module CRACK." ,TERMINATE);
@@ -4679,24 +4679,24 @@ void ClassGreencrack::ponding(void){
 
 void ClassGreencrack::startponding(void){ // ponding during interval
 
-  float Fp = k[hh]*psidthbot[hh]/(intensity - k[hh]); // (mm/h)
-  float dt = (Fp - F0[hh])/intensity;
+  double Fp = k[hh]*psidthbot[hh]/(intensity - k[hh]); // (mm/h)
+  double dt = (Fp - F0[hh])/intensity;
 
   howmuch(F0[hh], Global::Interval*24.0 - dt);
 
   pond = F0[hh] + garain - F1[hh];
 }
 
-void ClassGreencrack::howmuch(float F0, float dt) { // output is F1[hh]
+void ClassGreencrack::howmuch(double F0, double dt) { // output is F1[hh]
 
-  float LastF1;
+  double LastF1;
   do {
     LastF1 = F1[hh];
     F1[hh] = F0 + k[hh]*dt + psidthbot[hh]*log((F1[hh] + psidthbot[hh])/(F0 + psidthbot[hh]));
   } while(fabs(LastF1 - F1[hh]) > 0.01);
 }
 
-float ClassGreencrack::calcf1(float F, float psidth){ // calculates infitration rate
+double ClassGreencrack::calcf1(double F, double psidth){ // calculates infitration rate
 
   return k[hh]*(psidth/F + 1.0); // (mm/h)
 }
@@ -4743,34 +4743,34 @@ void Classfrostdepth::decl(void) {
   declgetvar("*",   "snowdepth", "(m)", &snowdepth);
 }
 
-const float ko = 0.21;  // W/(m K) organic material
-const float km = 2.50;  // W/(m K) mineral
-const float ka = 0.025; // W/(m K) air
-const float ki = 2.24;  // W/(m K) ice
-const float kw = 0.57;  // W/(m K) water
-const float Cm = 2.000; // MJ/(m3.K) mineral
-const float Cw = 4.185; // MJ/(m3.K) water
-const float Ca = 0.001; // MJ/(m3.K) air
-const float Co = 0.110; // MJ/(m3.K) organic
-const float Ci = 1.950; // MJ/(m3.K) ice
+const double ko = 0.21;  // W/(m K) organic material
+const double km = 2.50;  // W/(m K) mineral
+const double ka = 0.025; // W/(m K) air
+const double ki = 2.24;  // W/(m K) ice
+const double kw = 0.57;  // W/(m K) water
+const double Cm = 2.000; // MJ/(m3.K) mineral
+const double Cw = 4.185; // MJ/(m3.K) water
+const double Ca = 0.001; // MJ/(m3.K) air
+const double Co = 0.110; // MJ/(m3.K) organic
+const double Ci = 1.950; // MJ/(m3.K) ice
 
 void Classfrostdepth::init(void) {
 
   nlay = getdim(NLAY);
   nhru = getdim(NHRU);
 
-//  Lacc = new float[nhru];
-//  Cacc = new float[nhru];
-//  Kacc = new float[nhru];
+//  Lacc = new double[nhru];
+//  Cacc = new double[nhru];
+//  Kacc = new double[nhru];
 
-  k_lay = new float*[nlay];   // Array  [nlay][nhru]
-  L_lay = new float*[nlay];   // Array  [nlay][nhru]
-  c_lay = new float*[nlay];   // Array  [nlay][nhru]
+  k_lay = new double*[nlay];   // Array  [nlay][nhru]
+  L_lay = new double*[nlay];   // Array  [nlay][nhru]
+  c_lay = new double*[nlay];   // Array  [nlay][nhru]
 
   for (int nn = 0; nn < nlay; ++nn) {
-    k_lay[nn] = new float[nhru];
-    L_lay[nn] = new float[nhru];
-    c_lay[nn] = new float[nhru];
+    k_lay[nn] = new double[nhru];
+    L_lay[nn] = new double[nhru];
+    c_lay[nn] = new double[nhru];
   }
 
   for(hh = 0; hh < nhru; ++hh) {
@@ -4798,20 +4798,20 @@ void Classfrostdepth::init(void) {
 
 void Classfrostdepth::run(void) {
 
-  const float csnow = 0.25*Ci;       // MJ/(m3.Â°C)
-  const float ksnow = 0.25*ki+0.75*ka; // J/(m.K.s)
+  const double csnow = 0.25*Ci;       // MJ/(m3.Â°C)
+  const double ksnow = 0.25*ki+0.75*ka; // J/(m.K.s)
 
-  float FrozenD;     // depth frozen of next layer
+  double FrozenD;     // depth frozen of next layer
   long  FrozenL;     // last fully frozen layer
-  float dsum;        // soil and snow frozen depth
-  float dsoil;       // soil frozen depth
+  double dsum;        // soil and snow frozen depth
+  double dsoil;       // soil frozen depth
 
   long nstep = getstep()%Global::Freq;
 
   if(nstep != 0) return; // not end of day
 
   long jday = julian("now");
-  float hemisphere = (hru_lat[0] < 0.0); // use hru #1
+  double hemisphere = (hru_lat[0] < 0.0); // use hru #1
   if((!hemisphere && (jday < 300) || hemisphere && (jday < 117)) && Tfreeze[0] == 0) return; // use hru #1
 
   for(hh = 0; chkStruct(); ++hh) {
@@ -4824,7 +4824,7 @@ void Classfrostdepth::run(void) {
       continue;
     }
     else {
-      float Lastsnowdepth = snowdepth[hh];
+      double Lastsnowdepth = snowdepth[hh];
 //      snowdepth[hh] = SWE[hh]/250.0;
       if(snowdepth[hh] > Lastsnowdepth && Lastsnowdepth > 0.05) {
         Findex[hh] = (Lacc[hh]+Cacc[hh]*Ta[hh]*1.8)/
@@ -5010,7 +5010,7 @@ void Classfrozen::run(void) {
 
   long nstep = getstep() % Global::Freq;
 
-  float SWE_sum = 0.0;
+  double SWE_sum = 0.0;
 
   for(hh = 0; chkStruct(); ++hh)
     SWE_sum += SWE[hh]; // used to reset opportunity time
@@ -5049,7 +5049,7 @@ void Classfrozen::run(void) {
     if(Julian_lockout[0] == julian("now"))
       Julian_lockout[0] = 0;
 
-    float snowmelt = snowmeltD[hh]/Global::Freq;
+    double snowmelt = snowmeltD[hh]/Global::Freq;
 
     if(nstep == 1 && hh == 0){
       if(t0_Julian[0] == julian("now") || t0_Julian[0] == 0 && SWE_sum/nhru > 10 && snowmeltD[hh] > 2.0 && !Julian_lockout[0]){
@@ -5086,7 +5086,7 @@ void Classfrozen::run(void) {
       }
 
       if(!SetOpportunityTime){ // normal operation
-        float capacity;
+        double capacity;
         switch(infiltype[hh]) {
           case LIMITED :
 
@@ -5100,7 +5100,7 @@ void Classfrozen::run(void) {
               INF[hh] = C[hh]*pow(S0[hh], 2.92f)*pow(1.0f-Si[hh], 1.64f)*
                    pow((273.15f-hru_tsoil[hh])/273.15f, -0.45f)*pow(t0_Var[hh], 0.44f); // (mm)
 
-              float INF0 = INF[hh]/t0_Var[hh];
+              double INF0 = INF[hh]/t0_Var[hh];
 
               if(snowmelt <= INF0 && snowmelt <= capacity) {
                 snowinfil[hh] = snowmelt;
@@ -5207,11 +5207,11 @@ ClassNetroute* ClassNetroute::klone(string name) const{
   return new ClassNetroute(name);
 }
 
-float ClassNetroute::Function1(float *I, long hh) {
+double ClassNetroute::Function1(double *I, long hh) {
   return runDelay->ChangeLag(I, hh);
 }
 
-float ClassNetroute::Function2(float *X, long hh) {
+double ClassNetroute::Function2(double *X, long hh) {
   return runDelay->ChangeStorage(X, hh);
 }
 
@@ -5445,7 +5445,7 @@ void ClassNetroute::run(void) {
 
     gwoutflow_diverted[hh] = 0.0;
 
-    float gw_amount = 0.0;
+    double gw_amount = 0.0;
 
     for(long hhh = 0; chkStruct(hhh); ++hhh){
       if(gwoutflow[hhh] > 0.0 && gwwhereto[hhh] && (abs(gwwhereto[hhh])-1 == hh || abs(gwwhereto[hhh]) > nhru)){ // handles "gwwhereto" <> 0
@@ -5456,7 +5456,7 @@ void ClassNetroute::run(void) {
 
         if(abs(gwwhereto[hhh]) <= nhru){
           if(gwwhereto[hhh] > 0){ // direct to HRU surface
-            float free = soil_rechr_max[hh] - soil_rechr[hh];
+            double free = soil_rechr_max[hh] - soil_rechr[hh];
             if(free > 0.0 && !soil_rechr_ByPass[hh]){
               if(free > gw_amount/hru_area[hh]){ // units (mm*km^2/int)
                 soil_rechr[hh] += gw_amount/hru_area[hh];
@@ -5531,7 +5531,7 @@ void ClassNetroute::run(void) {
         else {
           outflow_diverted[hhh] = outflow[hhh];
           cumoutflow_diverted[hhh] += outflow_diverted[hhh];
-          float free = soil_rechr_max[hh] - soil_rechr[hh];
+          double free = soil_rechr_max[hh] - soil_rechr[hh];
           if(free > 0.0 && !soil_rechr_ByPass[hh]){
             if(free > outflow[hhh]/hru_area[hh]){ // units (mm*km^2/int)
               soil_rechr[hh] += outflow[hhh]/hru_area[hh];
@@ -5607,21 +5607,21 @@ void ClassNetroute::run(void) {
 
 void ClassNetroute::finish(bool good) {
 
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
+  double Allcuminflow = 0.0;
+  double Allcumoutflow = 0.0;
+  double Allcumoutflowdiverted = 0.0;
 
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
+  double Allgwcuminflow = 0.0;
+  double Allgwcumoutflow = 0.0;
+  double Allgwcumoutflowdiverted = 0.0;
 
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
+  double Allssrcuminflow = 0.0;
+  double Allssrcumoutflow = 0.0;
+  double Allruncuminflow = 0.0;
+  double Allruncumoutflow = 0.0;
 
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
+  double AllSdcuminflow = 0.0;
+  double Allrechrcuminflow = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (Netroute)' cuminflow              (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
@@ -5763,22 +5763,22 @@ void Classinterception::init(void) {
 
 void Classinterception::run(void) {
 
-const float Radius  = 0.0005;     /* Ice sphere radius, metres */
-const float R = 8313.0;          /* Universal gas constant, J/(mole*K) */
-const float M = 18.01;           /* Molecular weight of water */
-const float RhoI = 900.0;        /* Density of ice, kg/m^3 */
-//const float k1 = 0.0114;         /* Snow shape coefficient, Jackpine site */
-const float Fract = 0.4;         /* Fractal dimension */
-//const float SnowAlb = 0.8;       /* Albedo for snow */
-//const float CanAlb = 0.2;        /* Albedo for canopy */
-const float Hs = 2838000.0;      // Latent heat of sublimation, J/kg
+const double Radius  = 0.0005;     /* Ice sphere radius, metres */
+const double R = 8313.0;          /* Universal gas constant, J/(mole*K) */
+const double M = 18.01;           /* Molecular weight of water */
+const double RhoI = 900.0;        /* Density of ice, kg/m^3 */
+//const double k1 = 0.0114;         /* Snow shape coefficient, Jackpine site */
+const double Fract = 0.4;         /* Fractal dimension */
+//const double SnowAlb = 0.8;       /* Albedo for snow */
+//const double CanAlb = 0.2;        /* Albedo for canopy */
+const double Hs = 2838000.0;      // Latent heat of sublimation, J/kg
 
-const float Cc = 0.82;
-const float Viscosity = 1.88E-5;
-const float Albedo = 0.8; // particle albedo
+const double Cc = 0.82;
+const double Viscosity = 1.88E-5;
+const double Albedo = 0.8; // particle albedo
 
-  float RhoSat, RhoT, Nr, Nu, Sstar, A, B, J, D, Vs, Ce;
-  float I1, Unld, Istar, Cp, RhoS;
+  double RhoSat, RhoT, Nr, Nu, Sstar, A, B, J, D, Vs, Ce;
+  double I1, Unld, Istar, Cp, RhoS;
 
   for(hh = 0; chkStruct(); ++hh) {
 
@@ -5816,12 +5816,12 @@ const float Albedo = 0.8; // particle albedo
     RhoT = 0.00063*(hru_t[hh]+273.0) + 0.0673; // thermal conductivity of atmosphere
 
 
-    float n = 2.43*Cc + 2.97*(1.0-Cc);
-    float mx = 3.46*Cc + 3.2*(1.0-Cc);
-    float Is_CioncoA = n + mx*exp(-Ht[hh]);
-    float For_vent = velw[hh]*Ht[hh];
-    float Is_CioncoB = For_vent/Ht[hh] - 1.0;
-    float Is_CioncoAB = Is_CioncoA*Is_CioncoB;
+    double n = 2.43*Cc + 2.97*(1.0-Cc);
+    double mx = 3.46*Cc + 3.2*(1.0-Cc);
+    double Is_CioncoA = n + mx*exp(-Ht[hh]);
+    double For_vent = velw[hh]*Ht[hh];
+    double Is_CioncoB = For_vent/Ht[hh] - 1.0;
+    double Is_CioncoAB = Is_CioncoA*Is_CioncoB;
     v[hh] = hru_u[hh]*exp(Is_CioncoAB); // estimated windspeed z
 
     Nr = 2*Radius*v[hh]/Viscosity;
@@ -5961,8 +5961,8 @@ void ClassGreenAmpt::run(void) {
     snowinfil[hh] = 0.0;
     meltrunoff[hh] = 0.0;
 
-    float melt = snowmelt[hh]/Global::Freq;
-    float All = net_rain[hh] + melt;
+    double melt = snowmelt[hh]/Global::Freq;
+    double All = net_rain[hh] + melt;
 
     if(All > 0.0) {
 
@@ -6081,8 +6081,8 @@ void ClassGreenAmpt::ponding(void){
 
 void ClassGreenAmpt::startponding(void){
 
-  float Fp = k[hh]*psidthbot[hh]/(intensity - k[hh]);
-  float dt = (Fp - F0[hh])/intensity;
+  double Fp = k[hh]*psidthbot[hh]/(intensity - k[hh]);
+  double dt = (Fp - F0[hh])/intensity;
 
   howmuch(Fp, Global::Interval*24.0 - dt);
 
@@ -6090,9 +6090,9 @@ void ClassGreenAmpt::startponding(void){
 
 }
 
-void ClassGreenAmpt::howmuch(float F0, float dt) {
+void ClassGreenAmpt::howmuch(double F0, double dt) {
 
-  float LastF1;
+  double LastF1;
 
   do {
     LastF1 = F1[hh];
@@ -6100,7 +6100,7 @@ void ClassGreenAmpt::howmuch(float F0, float dt) {
   } while(fabs(LastF1 - F1[hh]) > 0.001);
 }
 
-float ClassGreenAmpt::calcf1(float F, float psidth){
+double ClassGreenAmpt::calcf1(double F, double psidth){
 
   return k[hh]*(psidth/F + 1.0);
 }
@@ -6198,10 +6198,10 @@ void ClassHtobs::init(void) {
 void ClassHtobs::run(void) {
   if(Ht_obs != NULL)
     for(hh = 0; chkStruct(); ++hh){
-      float H = Ht_obs[hh];
+      double H = Ht_obs[hh];
       if(H < 0.001)
         H = 0.001;
-//      const_cast<float *> (Ht) [hh] = H;
+//      const_cast<double *> (Ht) [hh] = H;
       Ht[hh] = H;
       Ht_var[hh] = Ht[hh];
     }
@@ -7016,7 +7016,7 @@ void ClassSnobalCRHM::finish(bool good) { // only required for local storage and
 
 void ClassSnobalBase::init_snow(void)
 {
-	float	rho_dry;	// snow density without H2O
+	double	rho_dry;	// snow density without H2O
 
 	m_s[hh] = rho[hh] * z_s[hh];
 
@@ -7174,10 +7174,10 @@ void ClassSnobalBase::_layer_mass(void)
 ** NAME
 **      _cold_content -- calculates cold content for a layer
 **
-**      float
+**      double
 **	_cold_content(
-**	    float  temp,		|* temperature of layer *|
-**	    float  mass)		|* specific mass of layer *|
+**	    double  temp,		|* temperature of layer *|
+**	    double  mass)		|* specific mass of layer *|
 **
 ** DESCRIPTION
 **      This routine calculates the cold content for a layer (i.e., the
@@ -7188,9 +7188,9 @@ void ClassSnobalBase::_layer_mass(void)
 **	The layer's cold content.
 */
 
-float ClassSnobalBase::_cold_content(
-	float	temp,		// temperature of layer
-	float	mass)		// specific mass of layer
+double ClassSnobalBase::_cold_content(
+	double	temp,		// temperature of layer
+	double	mass)		// specific mass of layer
 {
   if (temp < FREEZE)
     return heat_stor(CP_ICE(temp), mass, (temp - FREEZE));
@@ -7425,7 +7425,7 @@ int ClassSnobalBase::_divide_tstep(TSTEP_REC *tstep){  // record of timestep to 
 **
 **      int
 **	_below_thold(
-**	    float  threshold)	|* current timestep's threshold for a
+**	    double  threshold)	|* current timestep's threshold for a
 **				   layer's mass *|
 **
 ** DESCRIPTION
@@ -7446,7 +7446,7 @@ int ClassSnobalBase::_divide_tstep(TSTEP_REC *tstep){  // record of timestep to 
 ** GLOBAL VARIABLES MODIFIED
 */
 
-int ClassSnobalBase::_below_thold(float	threshold){ // current timestep's threshold for a layer's mass
+int ClassSnobalBase::_below_thold(double	threshold){ // current timestep's threshold for a layer's mass
 
   if (layer_count[hh] == 0)
     return 0;
@@ -7709,10 +7709,10 @@ void ClassSnobalBase::_net_rad(void)
 
 int ClassSnobalBase::_h_le(void){
 
-        float e_s, e_a_fix;
-	float sat_vp;
-	float rel_z_T; // relative z_T (temperature measurement height) above snow surface
-	float rel_z_u; // relative z_u (windspeed measurement height) above snow surface
+        double e_s, e_a_fix;
+	double sat_vp;
+	double rel_z_T; // relative z_T (temperature measurement height) above snow surface
+	double rel_z_u; // relative z_u (windspeed measurement height) above snow surface
 
 // calculate saturation vapor pressure
 
@@ -7723,7 +7723,7 @@ int ClassSnobalBase::_h_le(void){
 	sat_vp = sati(T_a[hh]);
 	if (e_a[hh] > sat_vp)
           e_a_fix = sat_vp;
-//		const_cast<float*> (e_a)[hh] = sat_vp;
+//		const_cast<double*> (e_a)[hh] = sat_vp;
         else
           e_a_fix = e_a[hh];
 
@@ -7748,18 +7748,18 @@ int ClassSnobalBase::_h_le(void){
   return 1;
 }
 
-float ClassSnobalBase::g_soil(
-	float	rho,	// snow layer's density (kg/m^3)
-	float	tsno,	// snow layer's temperature (K)
-	float	tg,	// soil temperature (K)
-	float	ds,	// snow layer's thickness (m)
-	float	dg,	// dpeth of soil temperature measurement (m)
-	float	pa)	// air pressure (Pa)
+double ClassSnobalBase::g_soil(
+	double	rho,	// snow layer's density (kg/m^3)
+	double	tsno,	// snow layer's temperature (K)
+	double	tg,	// soil temperature (K)
+	double	ds,	// snow layer's thickness (m)
+	double	dg,	// dpeth of soil temperature measurement (m)
+	double	pa)	// air pressure (Pa)
 {
-	float	k_g;
-	float	kcs;
-	float	k_s;
-	float	g;
+	double	k_g;
+	double	kcs;
+	double	k_s;
+	double	g;
 
 // check tsno
 	if (tsno > FREEZE) {
@@ -7780,20 +7780,20 @@ float ClassSnobalBase::g_soil(
 	return (g);
 }
 
-float ClassSnobalBase::g_snow(
-	float	rho1,	/* upper snow layer's density (kg/m^3)	*/
-	float	rho2,	/* lower  "     "        "    (kg/m^3)	*/
-	float	ts1,	/* upper snow layer's temperature (K)	*/
-	float	ts2,	/* lower  "     "         "       (K)	*/
-	float	ds1,	/* upper snow layer's thickness (m)	*/
-	float	ds2,	/* lower  "     "         "     (m)	*/
-	float	pa)	/* air pressure (Pa)			*/
+double ClassSnobalBase::g_snow(
+	double	rho1,	/* upper snow layer's density (kg/m^3)	*/
+	double	rho2,	/* lower  "     "        "    (kg/m^3)	*/
+	double	ts1,	/* upper snow layer's temperature (K)	*/
+	double	ts2,	/* lower  "     "         "       (K)	*/
+	double	ds1,	/* upper snow layer's thickness (m)	*/
+	double	ds2,	/* lower  "     "         "     (m)	*/
+	double	pa)	/* air pressure (Pa)			*/
 {
-	float	kcs1;
-	float	kcs2;
-	float	k_s1;
-	float	k_s2;
-	float	g;
+	double	kcs1;
+	double	kcs2;
+	double	k_s1;
+	double	k_s2;
+	double	g;
 
 
 //	calculate G
@@ -7953,10 +7953,10 @@ void ClassSnobalBase::_mass_bal(void){
 
 void ClassSnobalBase::_time_compact(void)
 {
-  const float A = 350; // Maximum density due to compaction by gravity (kg/m^2).
-  const float B = 86400;
+  const double A = 350; // Maximum density due to compaction by gravity (kg/m^2).
+  const double B = 86400;
 
-  float	time;	/* point on time axis corresponding to current density */
+  double	time;	/* point on time axis corresponding to current density */
 // If the snow is already at or above the maximum density due compaction by gravity, then just leave.
 
   if (!snowcover[hh] || rho[hh] > A || m_s[hh] <= 0.0)
@@ -8012,7 +8012,7 @@ if(rho[hh] > 349)
 
 void ClassSnobalBase::_precip(void)
 {
-  float	h2o_vol_snow;	// liquid water content of new snowfall as volume ratio
+  double	h2o_vol_snow;	// liquid water content of new snowfall as volume ratio
 
   if (precip_now[hh]) {
     if (snowcover[hh]) {
@@ -8085,11 +8085,11 @@ void ClassSnobalBase::_drift(void)
 
 void ClassSnobalBase::_snowmelt(void){
 
-        float  Q_0;            // energy available for surface melt
-        float  Q_l;	       // energy available for lower layer melt
-        float  Q_freeze;       // energy used for re-freezing
-        float  Q_left;         // energy left after re_freezing
-        float  h2o_refrozen;   // amount of liquid H2O that was refrozen
+        double  Q_0;            // energy available for surface melt
+        double  Q_l;	       // energy available for lower layer melt
+        double  Q_freeze;       // energy used for re-freezing
+        double  Q_left;         // energy left after re_freezing
+        double  h2o_refrozen;   // amount of liquid H2O that was refrozen
 
 // If no snow on ground at start of timestep, then just exit.
 
@@ -8251,8 +8251,8 @@ void ClassSnobalBase::_new_density(void){
 **
 **      void
 **	_adj_snow(
-**	    float delta_z_s,	|* change in snowcover's depth *|
-**	    float delta_m_s)	|* change is snowcover's mass *|
+**	    double delta_z_s,	|* change in snowcover's depth *|
+**	    double delta_m_s)	|* change is snowcover's mass *|
 **
 ** DESCRIPTION
 **      This routine adjusts the snowcover for a change in its depth or
@@ -8278,11 +8278,11 @@ void ClassSnobalBase::_new_density(void){
 */
 
 void ClassSnobalBase::_adj_snow(
-	float	delta_z_s,	// change in snowcover's depth
-	float	delta_m_s)	// change is snowcover's mass
+	double	delta_z_s,	// change in snowcover's depth
+	double	delta_m_s)	// change is snowcover's mass
 {
 
-  const float MAX_SNOW_DENSITY = 750; // Maximum snow density (kg/m^3)
+  const double MAX_SNOW_DENSITY = 750; // Maximum snow density (kg/m^3)
 
 // Update depth, mass, and then recompute density.
 	z_s[hh] += delta_z_s;
@@ -8344,18 +8344,18 @@ void ClassSnobalBase::_adj_snow(
 
 void ClassSnobalBase::_evap_cond(void){
 
-//        float  E_s_0;          // mass of evaporation to air (kg/m^2)
-//        float  E_s_l;          // mass of evaporation to soil (kg/m^2)
-        float  E_l;	       // mass flux by evap/cond to soil (kg/m^2/s)
-        float  e_g;            // soil vapor press
-        float  e_s_l;          // lower snow layer's vapor press
-        float  k;              // soil diffusion coef
-        float  prev_h2o_tot;   // previous value of h2o_total variable
-        float  q_delta;        // difference between snow & soil spec hum's
-        float  q_g;            // soil spec hum
-        float  q_s_l;          // lower snow layer's spec hum
-        float  rho_air;        // air density
-        float  T_bar;          // snow-soil mean temp
+//        double  E_s_0;          // mass of evaporation to air (kg/m^2)
+//        double  E_s_l;          // mass of evaporation to soil (kg/m^2)
+        double  E_l;	       // mass flux by evap/cond to soil (kg/m^2/s)
+        double  e_g;            // soil vapor press
+        double  e_s_l;          // lower snow layer's vapor press
+        double  k;              // soil diffusion coef
+        double  prev_h2o_tot;   // previous value of h2o_total variable
+        double  q_delta;        // difference between snow & soil spec hum's
+        double  q_g;            // soil spec hum
+        double  q_s_l;          // lower snow layer's spec hum
+        double  rho_air;        // air density
+        double  T_bar;          // snow-soil mean temp
 
 // calculate evaporation or condensation
 
@@ -8483,9 +8483,9 @@ void ClassSnobalBase::_evap_cond(void){
 void ClassSnobalBase::_h2o_compact(void)
 {
 
-  float Alocal;         // difference between maximum & currentdensities
+  double Alocal;         // difference between maximum & currentdensities
 
-  float	h2o_added;	// ratio of mass of liquid H2O added from melting and rain to mass of snowcover
+  double	h2o_added;	// ratio of mass of liquid H2O added from melting and rain to mass of snowcover
 
 // If the snow is already at or above the maximum density due compaction by liquid H2O, then just leave.
 
@@ -8644,8 +8644,8 @@ void ClassSnobalBase::_adj_layers(void){
 
 void ClassSnobalBase::_runoff(void){
 
-	float	m_s_dry;	/* snowcover's mass without liquid H2O */
-	float	rho_dry;	/* snow density without liquid H2O */
+	double	m_s_dry;	/* snowcover's mass without liquid H2O */
+	double	rho_dry;	/* snow density without liquid H2O */
 
 // calculate runoff
 
@@ -8683,8 +8683,8 @@ void ClassSnobalBase::_runoff(void){
 }
 /* ----------------------------------------------------------------------- */
 
-float satw(
-	float  tk){		/* air temperature (K)		*/
+double satw(
+	double  tk){		/* air temperature (K)		*/
 
         double  x;
 	double  l10;
@@ -8713,7 +8713,7 @@ float satw(
 }
 /* ----------------------------------------------------------------------- */
 
-float ClassSnobalBase::sati(float  tk){ //* air temperature (K)
+double ClassSnobalBase::sati(double  tk){ //* air temperature (K)
 
         double  l10;
         double  x;
@@ -8744,15 +8744,15 @@ float ClassSnobalBase::sati(float  tk){ //* air temperature (K)
 }
 /* ----------------------------------------------------------------------- */
 
-float ClassSnobalBase::ssxfr(
-	float	k1,	/* layer 1's thermal conductivity (J / (m K sec))  */
-	float	k2,	/* layer 2's    "         "                        */
-	float	t1,	/* layer 1's average layer temperature (K)	   */
-	float	t2,	/* layer 2's    "      "        "         	   */
-	float	d1,     /* layer 1's thickness (m)			   */
-	float	d2)     /* layer 2's    "       "			   */
+double ClassSnobalBase::ssxfr(
+	double	k1,	/* layer 1's thermal conductivity (J / (m K sec))  */
+	double	k2,	/* layer 2's    "         "                        */
+	double	t1,	/* layer 1's average layer temperature (K)	   */
+	double	t2,	/* layer 2's    "      "        "         	   */
+	double	d1,     /* layer 1's thickness (m)			   */
+	double	d2)     /* layer 2's    "       "			   */
 {
-	float	xfr;
+	double	xfr;
 
 	xfr = 2.0 * (k1 * k2 * (t2 - t1)) / ((k2 * d1) + (k1 * d2));
 
@@ -8760,12 +8760,12 @@ float ClassSnobalBase::ssxfr(
 }
 /* ----------------------------------------------------------------------- */
 
-float ClassSnobalBase::heat_stor(
-	float	cp,	/* specific heat of layer (J/kg K) */
-	float	spm,	/* layer specific mass (kg/m^2)    */
-	float	tdif)	/* temperature change (K)          */
+double ClassSnobalBase::heat_stor(
+	double	cp,	/* specific heat of layer (J/kg K) */
+	double	spm,	/* layer specific mass (kg/m^2)    */
+	double	tdif)	/* temperature change (K)          */
 {
-	float	stor;
+	double	stor;
 
 	stor = cp * spm * tdif;
 
@@ -8773,14 +8773,14 @@ float ClassSnobalBase::heat_stor(
 }
 /* ----------------------------------------------------------------------- */
 
-float ClassSnobalBase::new_tsno(
-	float	spm,	/* layer's specific mass (kg/m^2) 	 */
-	float	t0,	/* layer's last temperature (K) 	 */
-	float	ccon)	/* layer's adjusted cold content (J/m^2) */
+double ClassSnobalBase::new_tsno(
+	double	spm,	/* layer's specific mass (kg/m^2) 	 */
+	double	t0,	/* layer's last temperature (K) 	 */
+	double	ccon)	/* layer's adjusted cold content (J/m^2) */
 {
-	float	tsno;
-	float	cp;
-	float	tdif;
+	double	tsno;
+	double	cp;
+	double	tdif;
 
 	cp = CP_ICE(t0);
 
@@ -8798,10 +8798,10 @@ float ClassSnobalBase::new_tsno(
 }
 /* ----------------------------------------------------------------------- */
 
-float ClassSnobalBase::efcon(
-	float	k,	/* layer thermal conductivity (J/(m K sec)) */
-	float	t,	/* layer temperature (K)		    */
-	float	p)	/* air pressure (Pa)  			    */
+double ClassSnobalBase::efcon(
+	double	k,	/* layer thermal conductivity (J/(m K sec)) */
+	double	t,	/* layer temperature (K)		    */
+	double	p)	/* air pressure (Pa)  			    */
 {
 	double	etc;
 	double	de;
@@ -8889,22 +8889,22 @@ psi(double zeta,		// z/lo
 /* ----------------------------------------------------------------------- */
 
 int ClassSnobalBase::hle1(
-	float	press,	// aiFr pressure (Pa)
-	float	ta,	// air temperature (K) at height za
-	float	ts,	// surface temperature (K)
-	float	za,	// height of air temp measurement (m)
-	float	ea,	// vapor pressure (Pa) at height zq
-	float	es,	// vapor pressure (Pa) at surface
-	float	zq,	// height of spec hum measurement (m)
-	float	u,	// wind speed (m/s) at height zu
-	float	zu,	// height of wind speed measurement (m)
-	float	z0,	// roughness length (m)
+	double	press,	// aiFr pressure (Pa)
+	double	ta,	// air temperature (K) at height za
+	double	ts,	// surface temperature (K)
+	double	za,	// height of air temp measurement (m)
+	double	ea,	// vapor pressure (Pa) at height zq
+	double	es,	// vapor pressure (Pa) at surface
+	double	zq,	// height of spec hum measurement (m)
+	double	u,	// wind speed (m/s) at height zu
+	double	zu,	// height of wind speed measurement (m)
+	double	z0,	// roughness length (m)
 
 // output variables
 
-  float &CRHM_h,	// sens heat flux (+ to surf) (W/m^2)
-  float &CRHM_le,	// latent heat flux (+ to surf) (W/m^2)
-  float &CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
+  double &CRHM_h,	// sens heat flux (+ to surf) (W/m^2)
+  double &CRHM_le,	// latent heat flux (+ to surf) (W/m^2)
+  double &CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
 {
   double h = 0;	// sens heat flux (+ to surf) (W/m^2)
   double e = 0;	// mass flux (+ to surf) (kg/m^2/s)
@@ -9241,8 +9241,8 @@ void ClasspbsmSnobal::init(void) {
 
 void ClasspbsmSnobal::run(void) {
 
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float SumDrift, total, SWE_Max, transport;
+  double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+  double SumDrift, total, SWE_Max, transport;
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -9288,7 +9288,7 @@ void ClasspbsmSnobal::run(void) {
      if (Prob[hh] > 0.001) {
        Ut = Ut * 0.8;
 
-       float RH = hru_ea[hh]/Common::estar(hru_t[hh]); // Snobal uses Pascals
+       double RH = hru_ea[hh]/Common::estar(hru_t[hh]); // Snobal uses Pascals
 
        Pbsm(E_StubHt, Ut, DriftH[hh], SublH[hh], hru_t[hh], hru_u_, RH, fetch[hh], N_S[hh], A_S[hh]);
 
@@ -9322,7 +9322,7 @@ void ClasspbsmSnobal::run(void) {
  // distribute drift
 
   if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
-    float Drft = Drift_out[0]*distrib[0];
+    double Drft = Drift_out[0]*distrib[0];
     SWE[0] += Drft;
     cumDriftIn[0] += Drft;
     cumBasinSnowGain[0] += Drft*hru_basin[0];  // **** hru_basin = hru_area/basin_area ****
@@ -9357,7 +9357,7 @@ void ClasspbsmSnobal::run(void) {
 
         if(hh == nn) { // handle last HRU
           if(distrib[nn] > 0){
-            float In = SumDrift/hru_basin[hh]; // remaining drift
+            double In = SumDrift/hru_basin[hh]; // remaining drift
             if(SWE_Max > SWE[hh] + In){ // fill snowpack, remainder leaves basin
               Drift_in[hh] = In; // can handle all
               cumDriftIn[hh] += Drift_in[hh];
@@ -9574,10 +9574,10 @@ void ClassalbedoBaker::run(void) {
 #define Hf  334.4E3    // Latent heat of fusion, J/kg
 #define major 5.0      // threshold for major melt event(5 mm/d)
 
-float Farouki_a(float fract_por) {
+double Farouki_a(double fract_por) {
 
-  float a = 0.0;
-  float nnew = 0.0;
+  double a = 0.0;
+  double nnew = 0.0;
 
   while(fabs(fract_por - nnew) > 0.001) {
     a += (fract_por - nnew)*0.25;
@@ -9592,11 +9592,11 @@ ClassNetroute_M* ClassNetroute_M::klone(string name) const{
   return new ClassNetroute_M(name);
 }
 
-float ClassNetroute_M::Function1(float *I, long hh) {
+double ClassNetroute_M::Function1(double *I, long hh) {
   return runDelay->ChangeLag(I, hh);
 }
 
-float ClassNetroute_M::Function2(float *X, long hh) {
+double ClassNetroute_M::Function2(double *X, long hh) {
   return runDelay->ChangeStorage(X, hh);
 }
 
@@ -9761,10 +9761,10 @@ void ClassNetroute_M::init(void) {
     LogError(TExcept);
   }
 
-  const float Vw[3] = {1.67, 1.22, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+  const double Vw[3] = {1.67, 1.22, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
   for(hh = 0; hh < nhru; ++hh){
-    float Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
+    double Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
     Ktravel[hh] = route_L[hh]/(Vw[route_Cshp[hh]]*Vavg)/86400.0; // (d)
   }
 
@@ -9861,7 +9861,7 @@ void ClassNetroute_M::run(void) {
 
     gwoutflow_diverted[hh] = 0.0;
 
-    float gw_amount = 0.0;
+    double gw_amount = 0.0;
 
     for(long hhh = 0; chkStruct(hhh); ++hhh) {
       if(gwoutflow[hhh] > 0.0 && gwwhereto[hhh] && (abs(gwwhereto[hhh])-1 == hh || abs(gwwhereto[hhh]) > nhru)){ // handles "gwwhereto" <> 0
@@ -9872,7 +9872,7 @@ void ClassNetroute_M::run(void) {
 
         if(abs(gwwhereto[hhh]) <= nhru){
           if(gwwhereto[hhh] > 0){ // direct to HRU surface
-            float free = soil_rechr_max[hh] - soil_rechr[hh];
+            double free = soil_rechr_max[hh] - soil_rechr[hh];
             if(free > 0.0 && !soil_rechr_ByPass[hh]){
               if(free > gw_amount/hru_area[hh]){ // units (mm*km^2/int)
                 soil_rechr[hh] += gw_amount/hru_area[hh];
@@ -9948,7 +9948,7 @@ void ClassNetroute_M::run(void) {
         else {
           outflow_diverted[hhh] = outflow[hhh];
           cumoutflow_diverted[hhh] += outflow_diverted[hhh];
-          float free = soil_rechr_max[hh] - soil_rechr[hh];
+          double free = soil_rechr_max[hh] - soil_rechr[hh];
           if(free > 0.0 && !soil_rechr_ByPass[hh]){
             if(free > outflow[hhh]/hru_area[hh]){ // units (mm*km^2/int)
               soil_rechr[hh] += outflow[hhh]/hru_area[hh];
@@ -10025,21 +10025,21 @@ void ClassNetroute_M::run(void) {
 
 void ClassNetroute_M::finish(bool good) {
 
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
+  double Allcuminflow = 0.0;
+  double Allcumoutflow = 0.0;
+  double Allcumoutflowdiverted = 0.0;
 
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
+  double Allgwcuminflow = 0.0;
+  double Allgwcumoutflow = 0.0;
+  double Allgwcumoutflowdiverted = 0.0;
 
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
+  double Allssrcuminflow = 0.0;
+  double Allssrcumoutflow = 0.0;
+  double Allruncuminflow = 0.0;
+  double Allruncumoutflow = 0.0;
 
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
+  double AllSdcuminflow = 0.0;
+  double Allrechrcuminflow = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (Netroute_M)' cuminflow              (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
@@ -10260,10 +10260,10 @@ void ClassREWroute2::init(void) {
   }
 
   if(variation == VARIATION_ORG || variation == VARIATION_2){
-    const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+    const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
     for(hh = 0; hh < nhru; ++hh){
-      float Vavg = (1.0/WS_route_n[hh])*pow(WS_route_R[hh], 2.0f/3.0f)*pow(WS_route_S0[hh], 0.5f);
+      double Vavg = (1.0/WS_route_n[hh])*pow(WS_route_R[hh], 2.0f/3.0f)*pow(WS_route_S0[hh], 0.5f);
 
       WS_gwKtravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
       WS_Ktravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
@@ -10419,7 +10419,7 @@ void ClassREWroute2::run(void) {
 
 void ClassREWroute2::Culvert(long hh) {
 
-  float culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
+  double culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
 
   culvert_water_A[hh] = 0.0;
   culvert_water_H[hh] = 0.0;
@@ -10442,7 +10442,7 @@ void ClassREWroute2::Culvert(long hh) {
 
       if(culvert_water_H[hh] > WS_culvert_water_Dmax[hh]){ // (m) overflow over road
         culvert_water_H[hh] = WS_culvert_water_Dmax[hh]; // (m)
-        float maxVol = pow(WS_culvert_water_Dmax[hh], 3.0)/(3.0*WS_channel_slope[hh]*WS_side_slope[hh]); // (m3)
+        double maxVol = pow(WS_culvert_water_Dmax[hh], 3.0)/(3.0*WS_channel_slope[hh]*WS_side_slope[hh]); // (m3)
 
         culvert_over_Q[hh] = (culvert_water_V[hh] - maxVol)/86400*Global::Freq; //  (m3) to (m3/int) - difference released over interval
         culvert_water_V[hh] = maxVol; // (m3)
@@ -10460,7 +10460,7 @@ void ClassREWroute2::Culvert(long hh) {
       if(HD[hh] <= 0.0)
         culvert_Q[hh] = 0.0;
       else if(HD[hh] < 1.5)
-        culvert_Q[hh] = max <float>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
+        culvert_Q[hh] = max <double>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
              + 0.159413*HD[hh] + 0.00772254)*culvert_C[WS_culvert_type[hh]]*WS_number_culverts[hh]*pow(WS_culvert_diam[hh], 2.5), 0.0); // (m3/s)
       else
         culvert_Q[hh] = culvert_C[WS_culvert_type[hh]]*WS_number_culverts[hh]*0.785*pow(WS_culvert_diam[hh], 2.5)*sqrt(2.0*9.81*(HD[hh] - 0.5));
@@ -10567,12 +10567,12 @@ due to topographic features*/
 
 // TSANDCLAY{LOAM1, LOAM2, LOAM3, SAND, CLAY}
 
-const float rho_s[] = {41.1, 75.2, 91.4, 1300.0, 1300.0}; // (kg/m3) solids
-const float c_s[] =  {1920.0, 1920.0, 1920.0, 890.0, 890.0}; // (J/m3/K) solids
-const float Cv_s[] = {78912.0, 144384.0, 175392.0, 1157000.0, 1157000.0}; // (J/m3/K) solids
-const float lam_s[] = {0.21, 0.21, 0.21, 2.50, 2.50};  // (W/m/K) solids
-const float ks_s[] = {450.0, 154.0, 13.0, 5.0, 3.0}; // (m/day)  solids
-const float por_s[] = {0.96, 0.9, 0.87, 0.43, 0.43}; // ()  solids
+const double rho_s[] = {41.1, 75.2, 91.4, 1300.0, 1300.0}; // (kg/m3) solids
+const double c_s[] =  {1920.0, 1920.0, 1920.0, 890.0, 890.0}; // (J/m3/K) solids
+const double Cv_s[] = {78912.0, 144384.0, 175392.0, 1157000.0, 1157000.0}; // (J/m3/K) solids
+const double lam_s[] = {0.21, 0.21, 0.21, 2.50, 2.50};  // (W/m/K) solids
+const double ks_s[] = {450.0, 154.0, 13.0, 5.0, 3.0}; // (m/day)  solids
+const double por_s[] = {0.96, 0.9, 0.87, 0.43, 0.43}; // ()  solids
 
 //---------------------------------------------------------------------------
 
@@ -10815,7 +10815,7 @@ void Classpbsm_M::init(void) {
     }
   }
 
-  hru_basin = new float[nhru];
+  hru_basin = new double[nhru];
 
   for (hh = 0; hh < nhru; ++hh)
     hru_basin[hh] = hru_area[hh]/basin_area[0];
@@ -10823,9 +10823,9 @@ void Classpbsm_M::init(void) {
 
 void Classpbsm_M::run(void) {
 
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float DriftH, SublH, CurrentDrift, total, SWE_Max, transport;
-  float VB_distrib;
+  double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+  double DriftH, SublH, CurrentDrift, total, SWE_Max, transport;
+  double VB_distrib;
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -10846,11 +10846,11 @@ void Classpbsm_M::run(void) {
      if(E_StubHt < 0.0001)
        E_StubHt = 0.0001;
 
-     float d = 2.0/3.0*E_StubHt;
+     double d = 2.0/3.0*E_StubHt;
 
-     float Z = 0.123*E_StubHt;
+     double Z = 0.123*E_StubHt;
 
-     float Wind = hru_u[hh]*log((10.0 - d)/Z)/log((Zwind[hh] - d)/Z);
+     double Wind = hru_u[hh]*log((10.0 - d)/Z)/log((Zwind[hh] - d)/Z);
 
      Ustar = 0.02264*pow(Wind, 1.295f); // Eq. 6.2 rev.,  Ustar over fallow
 
@@ -10897,7 +10897,7 @@ void Classpbsm_M::run(void) {
 
  for (long hh = 0; chkStruct(hh); ++hh) {
     if(distrib_hru[hh][0] > 0.0) { // simulate transport entering basin using HRU 1
-      float Drft = Drift[hh]*distrib_hru[hh][0];
+      double Drft = Drift[hh]*distrib_hru[hh][0];
       SWE[hh] += Drft;
       cumDriftIn[hh] += Drft;
       cumBasinSnowGain[0] += Drft*hru_basin[hh];  // **** hru_basin = hru_area/basin_area ****
@@ -10920,8 +10920,8 @@ void Classpbsm_M::run(void) {
             SWE_Max = SWEfromDepth(Ht[hh]);
           }
           else{
-            float tanEqSlope = (0.1818*100*tan(hru_GSL[cc]*DEGtoRAD) + 0.4309*100*tan(hru_GSL[hh]*DEGtoRAD) - 7.2887)/100;
-            float EqProfDepth = hru_Ht[hh]/2*(1 - (tan(hru_GSL[hh]*DEGtoRAD) - tanEqSlope)/(tan(hru_GSL[hh]*DEGtoRAD)*(1 + tan(hru_GSL[hh]*DEGtoRAD)*tanEqSlope)));
+            double tanEqSlope = (0.1818*100*tan(hru_GSL[cc]*DEGtoRAD) + 0.4309*100*tan(hru_GSL[hh]*DEGtoRAD) - 7.2887)/100;
+            double EqProfDepth = hru_Ht[hh]/2*(1 - (tan(hru_GSL[hh]*DEGtoRAD) - tanEqSlope)/(tan(hru_GSL[hh]*DEGtoRAD)*(1 + tan(hru_GSL[hh]*DEGtoRAD)*tanEqSlope)));
             SWE_Max = SWEfromDepth(EqProfDepth);
           }
 
@@ -10951,7 +10951,7 @@ void Classpbsm_M::run(void) {
 		  else if(SWE_Max > SWE[hh] &&  distrib_hru[cc][hh] > 0.0) {
   // handle intermediate HRUs with available storage and distrib > 0
 
-			float sum = distrib_hru[nhru-1][cc]; // always the very last HRU
+			double sum = distrib_hru[nhru-1][cc]; // always the very last HRU
 			for (long jj = hh; chkStruct(jj, nn+1); jj++) { // calculate denominator
               Results_lay[cc][jj] = 0.0;
               if(distrib_hru[cc][jj] != 88 && distrib_hru[cc][jj] != 99) {
@@ -11039,7 +11039,7 @@ void Classpbsm_M::finish(bool good) {
   hru_basin = NULL;
 }
 
-void Classpbsm_M::Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH)
+void Classpbsm_M::Sum(double TQsalt, double TQsusp, double SBsum, double SBsalt, double & DriftH, double & SublH)
 {
 
 // total sublimation
@@ -11057,9 +11057,9 @@ void Classpbsm_M::Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, flo
 
 } // sum procedure
 
-void Classpbsm_M::Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
-           float t, float u, float rh, float Fetch,
-           long N_S, float A_S, float GSL, float height, float Beta_M, float & Qdist_leeslope, float & Qdist_valley)
+void Classpbsm_M::Pbsm (double E_StubHt, double Uthr, double & DriftH, double & SublH,
+           double t, double u, double rh, double Fetch,
+           long N_S, double A_S, double GSL, double height, double Beta_M, double & Qdist_leeslope, double & Qdist_valley)
 {
 
 /*   Modified Calculations for Mean Particle Mass in this version
@@ -11075,7 +11075,7 @@ void Classpbsm_M::Pbsm (float E_StubHt, float Uthr, float & DriftH, float & Subl
      Fetch and is expressed in millimeters of blowing snow lost over
      a square meter of snow surface per half hour  */
 
-  float   A,      Alpha,  B,      Bd,     Bound,  C,
+  double   A,      Alpha,  B,      Bd,     Bound,  C,
   Diff,   DmDt,   Es,     H,
   Htran,  Hsalt,  Inc,    Lamb,   Lambda, Lb,
   Mpm,    Mpr,    Nh,     Nsalt,
@@ -11282,11 +11282,11 @@ ClassNetroute_D* ClassNetroute_D::klone(string name) const{
   return new ClassNetroute_D(name);
 }
 
-float ClassNetroute_D::Function1(float *I, long hh) {
+double ClassNetroute_D::Function1(double *I, long hh) {
   return runDelay->ChangeLag(I, hh);
 }
 
-float ClassNetroute_D::Function2(float *X, long hh) {
+double ClassNetroute_D::Function2(double *X, long hh) {
   return runDelay->ChangeStorage(X, hh);
 }
 
@@ -11520,19 +11520,19 @@ void ClassNetroute_D::run(void) {
 
       for(long hhh = 0; chkStruct(hhh); ++hhh) { // do HRUs in sequence
         if(distrib_hru[hh][hhh] < 0.0)
-          const_cast<float **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
+          const_cast<double **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
         distrib_sum[hh] += distrib_hru[hh][hhh];
       }
 
       if(distrib_sum[hh] <= 0 && distrib_Basin[hh] <= 0.0){
-        const_cast<float *> (distrib_Basin) [hh] = 1;
+        const_cast<double *> (distrib_Basin) [hh] = 1;
       }
 
       distrib_sum[hh] += distrib_Basin[hh];
     }
   }
 
-  float gw_amount;
+  double gw_amount;
 
   for(long jj = 0; chkStruct(jj); ++jj) { // do HRUs in sequence
 
@@ -11559,7 +11559,7 @@ void ClassNetroute_D::run(void) {
 
         if(abs(gwwhereto[hhh]) <= nhru){
           if(gwwhereto[hhh] > 0){ // direct to HRU surface
-            float free = soil_rechr_max[hh] - soil_rechr[hh];
+            double free = soil_rechr_max[hh] - soil_rechr[hh];
             if(free > 0.0 && !soil_rechr_ByPass[hh]){
               if(free > gw_amount/hru_area[hh]){ // outflow (mm*km^2/int)
                 soil_rechr[hh] += gw_amount/hru_area[hh];
@@ -11630,7 +11630,7 @@ void ClassNetroute_D::run(void) {
 
     if(outflow[hh] > 0.0){
 
-      float Used = outflow[hh]*distrib_Basin[hh]/distrib_sum[hh];
+      double Used = outflow[hh]*distrib_Basin[hh]/distrib_sum[hh];
       if(distrib_Basin[hh] > 0.0){ // direct to basin
 
         basinflow[0] += Used*1000; // (m3)
@@ -11641,7 +11641,7 @@ void ClassNetroute_D::run(void) {
       for(long To = 0; chkStruct(To); ++To) { // distribute outflow of HRUs
 
         if(hh != To && distrib_hru[hh][To] > 0.0){
-          float Amount = (outflow[hh]-Used)/hru_area[To]*distrib_hru[hh][To]/(distrib_sum[hh]-distrib_Basin[hh]); // outflow (mm*km^2/int)
+          double Amount = (outflow[hh]-Used)/hru_area[To]*distrib_hru[hh][To]/(distrib_sum[hh]-distrib_Basin[hh]); // outflow (mm*km^2/int)
 
           if(preferential_flow[hh]) {
 	          gw[To] += Amount;
@@ -11649,7 +11649,7 @@ void ClassNetroute_D::run(void) {
 	          Amount = 0.0;
           }
           else {
-            float free = soil_rechr_max[To] - soil_rechr[To];
+            double free = soil_rechr_max[To] - soil_rechr[To];
             if(free > 0.0 && !soil_rechr_ByPass[To]){
               if(free > Amount){ // outflow (mm*km^2/int)
                 soil_rechr[To] += Amount;
@@ -11732,21 +11732,21 @@ void ClassNetroute_D::run(void) {
 
 void ClassNetroute_D::finish(bool good) {
 
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
+  double Allcuminflow = 0.0;
+  double Allcumoutflow = 0.0;
+  double Allcumoutflowdiverted = 0.0;
 
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
+  double Allgwcuminflow = 0.0;
+  double Allgwcumoutflow = 0.0;
+  double Allgwcumoutflowdiverted = 0.0;
 
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
+  double Allssrcuminflow = 0.0;
+  double Allssrcumoutflow = 0.0;
+  double Allruncuminflow = 0.0;
+  double Allruncumoutflow = 0.0;
 
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
+  double AllSdcuminflow = 0.0;
+  double Allrechrcuminflow = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
 
@@ -11828,11 +11828,11 @@ ClassNetroute_M_D* ClassNetroute_M_D::klone(string name) const{
   return new ClassNetroute_M_D(name);
 }
 
-float ClassNetroute_M_D::Function1(float *I, long hh) {
+double ClassNetroute_M_D::Function1(double *I, long hh) {
   return runDelay->ChangeLag(I, hh);
 }
 
-float ClassNetroute_M_D::Function2(float *X, long hh) {
+double ClassNetroute_M_D::Function2(double *X, long hh) {
   return runDelay->ChangeStorage(X, hh);
 }
 
@@ -12004,10 +12004,10 @@ void ClassNetroute_M_D::init(void) {
     LogError(TExcept);
   }
 
-  const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+  const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
   for(hh = 0; hh < nhru; ++hh){
-    float Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
+    double Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
     Ktravel[hh] = route_L[hh]/(Vw[route_Cshp[hh]]*Vavg)/86400.0; // (d)
   }
 
@@ -12099,19 +12099,19 @@ void ClassNetroute_M_D::run(void) {
 
       for(long hhh = 0; chkStruct(hhh); ++hhh) { // do HRUs in sequence
         if(distrib_hru[hh][hhh] < 0.0)
-          const_cast<float **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
+          const_cast<double **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
         distrib_sum[hh] += distrib_hru[hh][hhh];
       }
 
       if(distrib_sum[hh] <= 0 && distrib_Basin[hh] <= 0.0){
-        const_cast<float *> (distrib_Basin) [hh] = 1;
+        const_cast<double *> (distrib_Basin) [hh] = 1;
       }
 
       distrib_sum[hh] += distrib_Basin[hh];
     }
   }
 
-  float gw_amount;
+  double gw_amount;
 
   for(long jj = 0; chkStruct(jj); ++jj){ // do HRUs in sequence
 
@@ -12138,7 +12138,7 @@ void ClassNetroute_M_D::run(void) {
 
         if(abs(gwwhereto[hhh]) <= nhru){
           if(gwwhereto[hhh] > 0){ // direct to HRU surface
-            float free = soil_rechr_max[hh] - soil_rechr[hh];
+            double free = soil_rechr_max[hh] - soil_rechr[hh];
             if(free > 0.0 && !soil_rechr_ByPass[hh]){
               if(free > gw_amount/hru_area[hh]){ // outflow (mm*km^2/int)
                 soil_rechr[hh] += gw_amount/hru_area[hh];
@@ -12209,7 +12209,7 @@ void ClassNetroute_M_D::run(void) {
     
     if(outflow[hh] > 0.0){
 
-      float Used = outflow[hh]*distrib_Basin[hh]/distrib_sum[hh];
+      double Used = outflow[hh]*distrib_Basin[hh]/distrib_sum[hh];
       if(distrib_Basin[hh] > 0.0){ // direct to basin
 
         basinflow[0] += Used*1000; // (m3)
@@ -12220,7 +12220,7 @@ void ClassNetroute_M_D::run(void) {
       for(long To = 0; chkStruct(To); ++To) { // distribute outflow of HRUs
 
         if(hh != To && distrib_hru[hh][To] > 0.0){
-          float Amount = (outflow[hh]-Used)/hru_area[To]*distrib_hru[hh][To]/(distrib_sum[hh]-distrib_Basin[hh]); // outflow (mm*km^2/int)
+          double Amount = (outflow[hh]-Used)/hru_area[To]*distrib_hru[hh][To]/(distrib_sum[hh]-distrib_Basin[hh]); // outflow (mm*km^2/int)
 
           if(preferential_flow[hh]) {
 	          gw[To] += Amount;
@@ -12228,7 +12228,7 @@ void ClassNetroute_M_D::run(void) {
 	          Amount = 0.0;
           }
           else {
-            float free = soil_rechr_max[To] - soil_rechr[To];
+            double free = soil_rechr_max[To] - soil_rechr[To];
             if(free > 0.0 && !soil_rechr_ByPass[To]){
               if(free > Amount){ // outflow (mm*km^2/int)
                 soil_rechr[To] += Amount;
@@ -12302,8 +12302,8 @@ void ClassNetroute_M_D::run(void) {
   ssrDelay->DoClark();
   gwDelay->DoClark();
 
-  basinflow_s[0] = basinflow[0]*(int)Global::Freq/(float)86400.0;
-  basingw_s[0] = basingw[0]*(int)Global::Freq/(float)86400.0;
+  basinflow_s[0] = basinflow[0]*(int)Global::Freq/(double)86400.0;
+  basingw_s[0] = basingw[0]*(int)Global::Freq/(double)86400.0;
 
   cumbasinflow[0] += basinflow[0];
   cumbasingw[0] += basingw[0];  
@@ -12311,21 +12311,21 @@ void ClassNetroute_M_D::run(void) {
 
 void ClassNetroute_M_D::finish(bool good) {
 
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
+  double Allcuminflow = 0.0;
+  double Allcumoutflow = 0.0;
+  double Allcumoutflowdiverted = 0.0;
 
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
+  double Allgwcuminflow = 0.0;
+  double Allgwcumoutflow = 0.0;
+  double Allgwcumoutflowdiverted = 0.0;
 
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
+  double Allssrcuminflow = 0.0;
+  double Allssrcumoutflow = 0.0;
+  double Allruncuminflow = 0.0;
+  double Allruncumoutflow = 0.0;
 
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
+  double AllSdcuminflow = 0.0;
+  double Allrechrcuminflow = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
 
@@ -12482,14 +12482,14 @@ void ClassSetSoil::decl(void) {
 
 void ClassSetSoil::init(void) {
 
-  float totarea = 0;
+  double totarea = 0;
   nhru = getdim(NHRU);
 
   for(hh = 0; chkStruct(); ++hh)
     totarea += hru_area[hh];
 
   if(fabs((totarea-basin_area[0])/basin_area[0]) > 1e-3){
-    const_cast<float *>  (basin_area)[0] = totarea;
+    const_cast<double *>  (basin_area)[0] = totarea;
     CRHMException TExcept(string(string("Sum of HRU's area <> Basin area, Basin area made = ") + FloatToStrF(totarea, ffGeneral, 3, 0)).c_str(), WARNING);
     LogError(TExcept);
   }
@@ -12523,31 +12523,31 @@ void ClassSetSoil::init(void) {
   }
 
   for(hh = 0; chkStruct(); ++hh) {
-    float Fract = (Vol_h2o_content[hh]*1000 - SetSoilproperties[soiltype_rechr[hh]][1])/SetSoilproperties[soiltype_rechr[hh]][0];
+    double Fract = (Vol_h2o_content[hh]*1000 - SetSoilproperties[soiltype_rechr[hh]][1])/SetSoilproperties[soiltype_rechr[hh]][0];
     if(Fract > 1.0)
       Fract = 1.0;
     if(Fract < 0.0)
       Fract = 0.0;
 
-    const_cast<float *> (soil_rechr_init)[hh] = soil_Depth_rechr[hh]*Fract*SetSoilproperties[soiltype_rechr[hh]][0];
+    const_cast<double *> (soil_rechr_init)[hh] = soil_Depth_rechr[hh]*Fract*SetSoilproperties[soiltype_rechr[hh]][0];
 
-    const_cast<float *> (soil_rechr_max)[hh] = soil_Depth_rechr[hh]*SetSoilproperties[soiltype_rechr[hh]][0];
+    const_cast<double *> (soil_rechr_max)[hh] = soil_Depth_rechr[hh]*SetSoilproperties[soiltype_rechr[hh]][0];
 
-    float Fract2 = (Vol_h2o_content[hh]*1000 - SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][0];
+    double Fract2 = (Vol_h2o_content[hh]*1000 - SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][0];
     if(Fract2 > 1.0)
       Fract2 = 1.0;
     if(Fract2 < 0.0)
       Fract2 = 0.0;
 
-    const_cast<float *> (soil_moist_init)[hh] = soil_Depth[hh]*Fract2*SetSoilproperties[soil_type[hh]][0];
+    const_cast<double *> (soil_moist_init)[hh] = soil_Depth[hh]*Fract2*SetSoilproperties[soil_type[hh]][0];
 
-    const_cast<float *> (soil_moist_max)[hh] = soil_Depth[hh]*SetSoilproperties[soil_type[hh]][0];
+    const_cast<double *> (soil_moist_max)[hh] = soil_Depth[hh]*SetSoilproperties[soil_type[hh]][0];
 
     if(soil_rechr_init[hh] > soil_moist_init[hh]) // handles approximations
-      const_cast<float *> (soil_rechr_init)[hh] = soil_moist_init[hh];
+      const_cast<double *> (soil_rechr_init)[hh] = soil_moist_init[hh];
 
     if(soil_rechr_max[hh] > soil_moist_max[hh]) // handles approximations
-      const_cast<float *> (soil_rechr_max)[hh] = soil_moist_max[hh];
+      const_cast<double *> (soil_rechr_max)[hh] = soil_moist_max[hh];
   }
 }
 
@@ -12608,7 +12608,7 @@ void ClassVolumetric::run(void) {
 
     if(nstep == 0 && set_fallstat[hh] == Julian || (getstep() == 1 && Julian > set_fallstat[hh])){
       if(Si){
-        float X = 1.0;
+        double X = 1.0;
         if(SetSoilproperties[soil_type[hh]][3] > 0.0){
           X = Volumetric[hh]/SetSoilproperties[soil_type[hh]][3]*1000.0;
           X = X - Si_correction[hh];
@@ -12617,7 +12617,7 @@ void ClassVolumetric::run(void) {
           X = 0.0;
         else if(X > 1.0){
           X = 1.0;
-          const_cast<float *> (Si)[hh] = X;
+          const_cast<double *> (Si)[hh] = X;
           Si_V[hh] = Si[hh];
         }
       }
@@ -12684,7 +12684,7 @@ void ClassAnnan::init(void) {
 
 void ClassAnnan::run(void) {
 
-  float QsiAT, QsiST;
+  double QsiAT, QsiST;
 
   for (hh = 0; chkStruct(); ++hh){
     long nstep = getstep() % Global::Freq;
@@ -12711,8 +12711,8 @@ void ClassAnnan::run(void) {
       }
     }
 
-    float Ratio;
-    float Temp =  QsiDT*WtoMJ_D - QdfoD[hh]; // observed direct incoming  - QdfoD[hh]
+    double Ratio;
+    double Temp =  QsiDT*WtoMJ_D - QdfoD[hh]; // observed direct incoming  - QdfoD[hh]
     if(Temp <= 0.0 || QdflatD[hh] - QdfoD[hh] <= 0.0)
       Ratio = 0.0;
     else{
@@ -12812,7 +12812,7 @@ void Classcalcsun::init(void) {
 }
 
 void Classcalcsun::run(void) {
-float Temp, Ratio;
+double Temp, Ratio;
 
   long nstep = getstep() % Global::Freq;
 
@@ -12900,10 +12900,10 @@ void ClassObstoPar::init(void) {
 void ClassObstoPar::run(void) {
   if(Ht_obs != NULL)
     for(hh = 0; chkStruct(); ++hh){
-      float H = Ht_obs[hh];
+      double H = Ht_obs[hh];
       if(H < 0.001)
         H = 0.001;
-//      const_cast<float *> (Ht) [hh] = H;
+//      const_cast<double *> (Ht) [hh] = H;
       Ht[hh] = H;
       Ht_var[hh] = Ht[hh];
     }
@@ -12981,9 +12981,9 @@ void ClassPrairieInfil::init(void) {
 
   try {
 
-    Xinfil = new float*[3];   // Data [3] [nhru]
+    Xinfil = new double*[3];   // Data [3] [nhru]
     for (int jj = 0; jj < 3; ++jj)
-      Xinfil[jj] = new float[nhru];
+      Xinfil[jj] = new double[nhru];
 
     timer = new long[nhru];
   }
@@ -13016,7 +13016,7 @@ void ClassPrairieInfil::init(void) {
   }
 }
 
-float textureproperties[] [6] = { // mm/hour
+double textureproperties[] [6] = { // mm/hour
   {7.6, 12.7, 15.2, 17.8, 25.4, 76.2},  // coarse over coarse
   {2.5,  5.1,  7.6, 10.2, 12.7,  15.2}, // medium over medium
   {1.3,  1.8,  2.5,  3.8,  5.1,  6.4},  // medium/fine over fine
@@ -13036,7 +13036,7 @@ void ClassPrairieInfil::run(void) {
       if(crackon[hh])
         RainOnSnowA[hh] += net_rain[hh];
       else{
-        float maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
+        double maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
         if(maxinfil > net_rain[hh])
           infil[hh] = net_rain[hh];
         else{
@@ -13363,7 +13363,7 @@ void ClassCRHMCanopy::init(void) {
 
 void ClassCRHMCanopy::run(void) {
 
-  float Kstar_H;
+  double Kstar_H;
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -13403,17 +13403,17 @@ void ClassCRHMCanopy::run(void) {
 
 // Canopy temperature is approximated by the air temperature.
 
-    float T1 = hru_t[hh] + CRHM_constants::Tm;
+    double T1 = hru_t[hh] + CRHM_constants::Tm;
 
-    float Exposure = Ht[hh] - Common::DepthofSnow(SWE[hh]); // depths(m) SWE(mm)
+    double Exposure = Ht[hh] - Common::DepthofSnow(SWE[hh]); // depths(m) SWE(mm)
     if(Exposure < 0.0)
       Exposure = 0.0;
 
-    float LAI_ = LAI[hh]*Exposure/Ht[hh];
+    double LAI_ = LAI[hh]*Exposure/Ht[hh];
 
-    float Vf = 0.45 - 0.29*log(LAI[hh]);
+    double Vf = 0.45 - 0.29*log(LAI[hh]);
 
-    float Vf_ = Vf + (1.0 - Vf)*sin((Ht[hh] - Exposure)/Ht[hh]*M_PI_2);
+    double Vf_ = Vf + (1.0 - Vf)*sin((Ht[hh] - Exposure)/Ht[hh]*M_PI_2);
 
     if(SolAng[hh] > 0.001) {
       k[hh] = 1.081*SolAng[hh]*cos(SolAng[hh])/sin(SolAng[hh]);
@@ -13436,15 +13436,15 @@ void ClassCRHMCanopy::run(void) {
     Qsisn_Var[hh] = Qsisn[hh];
 
 
-    float rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
+    double rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
 
-    float U1 = hru_u[hh]; // Wind speed (m/s)
+    double U1 = hru_u[hh]; // Wind speed (m/s)
 
     ra[hh] = (log(Zref[hh]/Z0snow[hh])*log(Zwind[hh]/Z0snow[hh]))/sqr(CRHM_constants::kappa)/U1;
 
-    float deltaX = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
+    double deltaX = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
 
-    float q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
+    double q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
 
 
     Ts[hh] = T1 + (CRHM_constants::emiss*(Qli_ - CRHM_constants::sbc*pow(T1, 4.0f)) + CRHM_constants::Ls*(q - Common::Qs(Pa[hh], T1))*rho/ra[hh])/
@@ -13467,8 +13467,8 @@ void ClassCRHMCanopy::run(void) {
 // calculate maximum canopy snow load (L*):
 
     if(Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0){ // handle snow
-      float RhoS = 67.92 + 51.25* exp(hru_t[hh]/2.59);
-      float LStar = Sbar[hh]* (0.27 + 46.0/RhoS)* LAI[hh];
+      double RhoS = 67.92 + 51.25* exp(hru_t[hh]/2.59);
+      double LStar = Sbar[hh]* (0.27 + 46.0/RhoS)* LAI[hh];
 
       if(Snow_load[hh] > LStar){ // after increase in temperature
         direct_snow[hh] = Snow_load[hh] - LStar;
@@ -13504,33 +13504,33 @@ void ClassCRHMCanopy::run(void) {
 
   // calculate snow ventilation windspeed:
 
-      const float gamma = 1.15;
-      float xi2 = 1-Zvent[hh];
-      float windExt2 = (gamma * LAI[hh] * xi2);
+      const double gamma = 1.15;
+      double xi2 = 1-Zvent[hh];
+      double windExt2 = (gamma * LAI[hh] * xi2);
 
-      float uVent = u_FHt[hh] * exp(-1 * windExt2);
+      double uVent = u_FHt[hh] * exp(-1 * windExt2);
 
 //=============================================================================
-      const float AlbedoIce = 0.8;       // albedo of ideal ice sphere
-      const float Radius = 5.0e-4;       // radii of single 'ideal' ice sphere in, m)
-      const float KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
-      const float ks = 0.0114;           // snow shape coefficient for jack pine
-      const float Fract = 0.37;          // fractal dimension of intercepted snow
-      const float ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
-      const float Hs = 2.838e6;          // heat of sublimation (MJ/kg)
+      const double AlbedoIce = 0.8;       // albedo of ideal ice sphere
+      const double Radius = 5.0e-4;       // radii of single 'ideal' ice sphere in, m)
+      const double KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
+      const double ks = 0.0114;           // snow shape coefficient for jack pine
+      const double Fract = 0.37;          // fractal dimension of intercepted snow
+      const double ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
+      const double Hs = 2.838e6;          // heat of sublimation (MJ/kg)
 //==============================================================================
 
 // calculate sublimation of intercepted snow from ideal intercepted ice sphere (500 microns diameter):
 
-      float Alpha, A1, B1, C1, J, D, Lamb, Mpm, Nu, Nr, SStar, Sigma2;
+      double Alpha, A1, B1, C1, J, D, Lamb, Mpm, Nu, Nr, SStar, Sigma2;
 
-      float Es = 611.15f * exp(22.452f*hru_t[hh]/(hru_t[hh] + 273.0f));  // {sat pressure}
+      double Es = 611.15f * exp(22.452f*hru_t[hh]/(hru_t[hh] + 273.0f));  // {sat pressure}
 
-      float SvDens = Es*PBSM_constants::M/(PBSM_constants::R*(hru_t[hh] + 273.0f)); // {sat density}
+      double SvDens = Es*PBSM_constants::M/(PBSM_constants::R*(hru_t[hh] + 273.0f)); // {sat density}
 
       Lamb = 6.3e-4*(hru_t[hh]+273.0) + 0.0673;  // thermal conductivity of atmosphere
       Nr = 2.0 * Radius * uVent / KinVisc;  // Reynolds number
-      Nu = 1.79 + 0.606 * sqrt((float) Nr); // Nusselt number
+      Nu = 1.79 + 0.606 * sqrt((double) Nr); // Nusselt number
       SStar = M_PI * sqr(Radius) * (1.0f - AlbedoIce) * Qsi_;  // SW to snow particle !!!! changed
       A1 = Lamb * (hru_t[hh] + 273) * Nu;
       B1 = Hs * PBSM_constants::M /(PBSM_constants::R * (hru_t[hh] + 273.0f))- 1.0;
@@ -13544,11 +13544,11 @@ void ClassCRHMCanopy::run(void) {
 
 // sublimation rate of single 'ideal' ice sphere:
 
-      float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+      double Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
 
 // snow exposure coefficient (Ce):
 
-      float Ce;
+      double Ce;
       if ((Snow_load[hh]/LStar) <= 0.0)
         Ce = 0.07;
       else
@@ -13556,7 +13556,7 @@ void ClassCRHMCanopy::run(void) {
 
 // calculate 'potential' canopy sublimation:
 
-      float Vi = Vs*Ce;
+      double Vi = Vs*Ce;
 
   // limit sublimation to canopy snow available and take sublimated snow away from canopy snow at timestep start
 
@@ -13573,10 +13573,10 @@ void ClassCRHMCanopy::run(void) {
 
   // calculate 'ice-bulb' temperature of intercepted snow:
 
-          float IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
-          float Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
+          double IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
+          double Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
 
-          const float c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
+          const double c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
 
   // determine whether canopy snow is unloaded:
 
@@ -13615,7 +13615,7 @@ void ClassCRHMCanopy::run(void) {
     if(Cc[hh] <= 0.0)
       Cc[hh] = 0.0;
 
-    float smax = Cc[hh]*LAI[hh]*0.2;
+    double smax = Cc[hh]*LAI[hh]*0.2;
 
 //  Forest rain interception and evaporation model
 // 'sparse' Rutter interception model (i.e. Valente 1997):
@@ -13651,7 +13651,7 @@ void ClassCRHMCanopy::run(void) {
         }
       }
       else{ // use Priestley-Taylor when snowcover
-        float Q = Qsi_*86400/Global::Freq/1e6/lambda(hru_t[hh]); // convert w/m2 to mm/m^2/int
+        double Q = Qsi_*86400/Global::Freq/1e6/lambda(hru_t[hh]); // convert w/m2 to mm/m^2/int
 
         if(Qsi_ > 0.0)
           Pevap[hh] = 1.26*delta(hru_t[hh])*Q/(delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh]));
@@ -13693,7 +13693,7 @@ void ClassCRHMCanopy::finish(bool good) {
   }
 }
 
-double ClassCRHMCanopy::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
+double ClassCRHMCanopy::delta(double t) // Slope of sat vap p vs t, kPa/Â°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -13701,19 +13701,19 @@ double ClassCRHMCanopy::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-float ClassCRHMCanopy::lambda(float t) // Latent heat of vaporization (mJ/(kg Â°C))
+double ClassCRHMCanopy::lambda(double t) // Latent heat of vaporization (mJ/(kg Â°C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassCRHMCanopy::gamma(float Pa, float t) // Psychrometric constant (kPa/Â°C)
+double ClassCRHMCanopy::gamma(double Pa, double t) // Psychrometric constant (kPa/Â°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg Â°C))
 }
 
-float ClassCRHMCanopy::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double ClassCRHMCanopy::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R = 2870;
+  const double R = 2870;
    return (1E4*Pa /(R*( 273.15 + t))*(1.0 - 0.379*(ea/Pa)) ); //
 }
 
@@ -13771,8 +13771,8 @@ void ClassPSPnew::init(void) {
 
   nhru = getdim(NHRU);
 
-  T0CanSnow = new float[nhru];
-  T0biomass = new float[nhru];
+  T0CanSnow = new double[nhru];
+  T0biomass = new double[nhru];
 
   for(long hh = 0; hh < nhru; hh++) {
     Qsubl[hh] = 0.0;
@@ -13781,54 +13781,54 @@ void ClassPSPnew::init(void) {
   }
 }
 
-  float SatVP(float Temp) /* outputs sat. vapor pressure, Pa */
+  double SatVP(double Temp) /* outputs sat. vapor pressure, Pa */
     {if(Temp > 0.0)  return 611.0*exp(17.27*Temp/(Temp+237.3));
      else return 611.0*exp(21.88*Temp/(Temp+265.5));
   }
 
 void ClassPSPnew::run(void) {
 
-  const float GapFrac = 0.16;      /* Canopy gap fraction */
-  const float UpperGF = 0.58;      /* Mid-canopy level gap fraction */
-  const float Radius  = 0.0005;    /* Ice sphere radius, metres */
-  const float KinVisc = 1.88E-5;   /* Kinematic viscosity of air (Sask. avg. value) */
-  const float R = 8313.0;          /* Universal gas constant, J/(mole*K) */
-  const float M = 18.01;           /* Molecular weight of water */
-  const float RhoI = 900.0;        /* Density of ice, kg/m^3 */
-  const float k1 = 0.0114;         /* Snow shape coefficient, Jackpine site */
-  const float Fract = 0.4;         /* Fractal dimension */
-  const float SnowAlb = 0.8;       /* Albedo for snow */
-  const float CanAlb = 0.2;        /* Albedo for canopy */
-  const float KARMAN = 0.4;        /* Von Karman"s constant */
-  const float g = 9.8;             /* Gravitational acceleration, m/s^2 */
-  const float SBC = 5.67E-8;       /* Stephan-Boltzmann constant W/m2*/
-  const float SpHtAir = 1013.0;    /* Specific heat of air, J/(kg*K) */
-  const float SpHtIce = 2090.0;    /* Specific heat of ice, J/(kg*K) */
-  const float SpHtCan = 2700.0;    /* Specific heat of canopy (CLASS value), J/(kg*K) */
-  const float Hs = 2838000.0;      // Latent heat of sublimation, J/kg
+  const double GapFrac = 0.16;      /* Canopy gap fraction */
+  const double UpperGF = 0.58;      /* Mid-canopy level gap fraction */
+  const double Radius  = 0.0005;    /* Ice sphere radius, metres */
+  const double KinVisc = 1.88E-5;   /* Kinematic viscosity of air (Sask. avg. value) */
+  const double R = 8313.0;          /* Universal gas constant, J/(mole*K) */
+  const double M = 18.01;           /* Molecular weight of water */
+  const double RhoI = 900.0;        /* Density of ice, kg/m^3 */
+  const double k1 = 0.0114;         /* Snow shape coefficient, Jackpine site */
+  const double Fract = 0.4;         /* Fractal dimension */
+  const double SnowAlb = 0.8;       /* Albedo for snow */
+  const double CanAlb = 0.2;        /* Albedo for canopy */
+  const double KARMAN = 0.4;        /* Von Karman"s constant */
+  const double g = 9.8;             /* Gravitational acceleration, m/s^2 */
+  const double SBC = 5.67E-8;       /* Stephan-Boltzmann constant W/m2*/
+  const double SpHtAir = 1013.0;    /* Specific heat of air, J/(kg*K) */
+  const double SpHtIce = 2090.0;    /* Specific heat of ice, J/(kg*K) */
+  const double SpHtCan = 2700.0;    /* Specific heat of canopy (CLASS value), J/(kg*K) */
+  const double Hs = 2838000.0;      // Latent heat of sublimation, J/kg
 
   long   TItNum, RHItNum, TItNum2;       // Used in iteration loops
   bool   Tup, RHup, Tup2;
-  float I1, Cp, wtsubl, Unld;
+  double I1, Cp, wtsubl, Unld;
 
   double StepT, StepRH, StepT2;
   double DblRHcan, DblTbarCan, DblTCanSnow;
 
-  float RhoS, Lstar; // Hedstrom-Pomeroy, for L/L*
+  double RhoS, Lstar; // Hedstrom-Pomeroy, for L/L*
 
-  float SVDensC, SVDensS, LambdaT, CanVent, A, Nr, NuSh, D,
+  double SVDensC, SVDensS, LambdaT, CanVent, A, Nr, NuSh, D,
           Vs, Vhr, Ce, Vi; // Pomeroy-Schmidt components
 
-  float QTrans50, QTrUp50, CanSnowFrac; /* Radiation model components */
+  double QTrans50, QTrUp50, CanSnowFrac; /* Radiation model components */
 
-  float RhoAir, SVDensA, VPref, Ustar, Uh, Ra, Ri,
+  double RhoAir, SVDensA, VPref, Ustar, Uh, Ra, Ri,
          Stabil, Qe, Qh, dUdt; // CLASS components
 
   static long N;
-  static float Z0m, Z0h, Disp, CdragH, CdragE;
+  static double Z0m, Z0h, Disp, CdragH, CdragE;
 
-  const float Cc = 0.82;
-  const float Velw = 0.75;
+  const double Cc = 0.82;
+  const double Velw = 0.75;
 
   for(long hh = 0; hh < nhru; hh++) {
 
@@ -13876,7 +13876,7 @@ void ClassPSPnew::run(void) {
      break;
    }
 
-   float RHrefhh;
+   double RHrefhh;
    if(RHref[hh] > 1.5)
      RHrefhh = RHref[hh]/100.0;
    else
@@ -13904,9 +13904,9 @@ void ClassPSPnew::run(void) {
    NuSh = 1.79+0.606*sqrt(Nr);
 
    if (SolarAng[hh] > 0.001)  {
-     float Mu = LAI[hh]/(Ht[hh]-10)*(0.781*SolarAng[hh]*cos(SolarAng[hh])+0.0591);
+     double Mu = LAI[hh]/(Ht[hh]-10)*(0.781*SolarAng[hh]*cos(SolarAng[hh])+0.0591);
      QTrans50 = QsIn[hh]*exp(-Mu*(Ht[hh]-10)/2/sin(SolarAng[hh]));
-     float QTrans100 = QsIn[hh]*exp(-Mu*(Ht[hh]-10)/sin(SolarAng[hh]));
+     double QTrans100 = QsIn[hh]*exp(-Mu*(Ht[hh]-10)/sin(SolarAng[hh]));
      QTrUp50 = (1.0-SnowAlb)*QTrans100*exp(LAI[hh]/(Ht[hh]-10)*0.0591*(Ht[hh]-10)/2);
    }
    else {
@@ -13943,21 +13943,21 @@ void ClassPSPnew::run(void) {
                                        /(Biomass[hh]*SpHtCan);
          }
               /* Solve for longwave */
-         float QlwOut = SBC*(GapFrac*pow(TsnowG[0]+273.15,4.0) +
+         double QlwOut = SBC*(GapFrac*pow(TsnowG[0]+273.15,4.0) +
                      (1.0-GapFrac)*((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
                                  + CanSnowFrac*pow(DblTCanSnow+273.15,4.0)));
-//         float QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
-         float QlwIn = QsIn[hh]+QsOut[hh]+QlwOut;
+//         double QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
+         double QlwIn = QsIn[hh]+QsOut[hh]+QlwOut;
 
               /* Solve for particle net radiation*/
-         float QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-SnowAlb);
-         float QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-CanAlb);
-         float QlwUpStar = M_PI*Radius*Radius*QlwOut;
-         float QlwDnStar = M_PI*Radius*Radius*(QlwIn*UpperGF + SBC*(1.0-UpperGF)*
+         double QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-SnowAlb);
+         double QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-CanAlb);
+         double QlwUpStar = M_PI*Radius*Radius*QlwOut;
+         double QlwDnStar = M_PI*Radius*Radius*(QlwIn*UpperGF + SBC*(1.0-UpperGF)*
                               ((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
                                + (CanSnowFrac*pow(DblTCanSnow+273.15,4.0))));
-         float QradStar = 2*M_PI*Radius*Radius*SBC*pow(DblTCanSnow+273.15,4.0);
-         float QnetStar = QsDnStar+QsUpStar+QlwDnStar+QlwUpStar-QradStar;
+         double QradStar = 2*M_PI*Radius*Radius*SBC*pow(DblTCanSnow+273.15,4.0);
+         double QnetStar = QsDnStar+QsUpStar+QlwDnStar+QlwUpStar-QradStar;
 
          SVDensS = Common::SVDens(DblTCanSnow);
          Vs = (2.0*M_PI*D*Radius*(SVDensC*DblRHcan-SVDensS)*NuSh)*Hs;
@@ -14144,15 +14144,15 @@ void Classbrushintcp::init(void) {
 
 void Classbrushintcp::run(void) {
 
-  const float LATH = 2.838E6; // latent heat of sublimation (J/kg) List 1949
-  const float Qstar = 120;    // Solar Radiation Input
-  const float Mpr = 0.5E-3;
-  const float Cc = 0.82;
-  const float Velw = 0.75;
-  const float KARMAN = 0.4;
-  const float KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
-  const float M = 18.01;      //{molecular weight of water (kg/kmole)}
-  const float R = 8313;       //{universal gas constant (J/(kmole K))}
+  const double LATH = 2.838E6; // latent heat of sublimation (J/kg) List 1949
+  const double Qstar = 120;    // Solar Radiation Input
+  const double Mpr = 0.5E-3;
+  const double Cc = 0.82;
+  const double Velw = 0.75;
+  const double KARMAN = 0.4;
+  const double KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
+  const double M = 18.01;      //{molecular weight of water (kg/kmole)}
+  const double R = 8313;       //{universal gas constant (J/(kmole K))}
 
 
   for(hh = 0; chkStruct(); ++hh) {
@@ -14167,8 +14167,8 @@ void Classbrushintcp::run(void) {
       }
       else {
 
-        float RhoS = 67.92 + 51.25*exp(hru_t[hh]/2.59);
-        float Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
+        double RhoS = 67.92 + 51.25*exp(hru_t[hh]/2.59);
+        double Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
 
         if(Load[hh] > Lstar) { // after increase in temperature
           Thru[hh] = Load[hh] - Lstar;
@@ -14176,10 +14176,10 @@ void Classbrushintcp::run(void) {
         }
 
         if(hru_snow[hh] > 0.0) {
-          float Cp = Cc/(1.0 - (Cc*hru_u[hh]*Ht[hh])/(Velw*WidthJ[hh]));
+          double Cp = Cc/(1.0 - (Cc*hru_u[hh]*Ht[hh])/(Velw*WidthJ[hh]));
           if(Cp <= 0.0 || Cp > 1.0) Cp = 1.0;
 
-          float I1 = (Lstar-Load[hh])*(1 - exp(-Cp*hru_snow[hh]/Lstar));
+          double I1 = (Lstar-Load[hh])*(1 - exp(-Cp*hru_snow[hh]/Lstar));
 
           Load[hh] = Load[hh] + I1; // add new snowfall
           Thru[hh] = Thru[hh] + (hru_snow[hh] - I1); // remainder falls thru
@@ -14188,29 +14188,29 @@ void Classbrushintcp::run(void) {
 
         if(Load[hh] > 0.0) {
 
-          float Z0m = Ht[hh]/10.0;
-          float Disp = Ht[hh]*0.7;
-          float Ustar = hru_u[hh]*KARMAN/(log((Zref[hh]-Disp)/Z0m));
-          float Uh = Ustar*(log((Ht[hh]-Disp)/Z0m))/KARMAN;
+          double Z0m = Ht[hh]/10.0;
+          double Disp = Ht[hh]*0.7;
+          double Ustar = hru_u[hh]*KARMAN/(log((Zref[hh]-Disp)/Z0m));
+          double Uh = Ustar*(log((Ht[hh]-Disp)/Z0m))/KARMAN;
 
-          float CanVent = Uh*exp(brushAtten[hh]*(Zcan[hh]/Ht[hh]-1.0));  /* calculates canopy windspd  */
+          double CanVent = Uh*exp(brushAtten[hh]*(Zcan[hh]/Ht[hh]-1.0));  /* calculates canopy windspd  */
 
-          float Reyn = 2*Mpr*CanVent/KinVisc;
-          float Nuss = 1.79+0.606*sqrt(Reyn);
+          double Reyn = 2*Mpr*CanVent/KinVisc;
+          double Nuss = 1.79+0.606*sqrt(Reyn);
 
-          float Temp = hru_t[hh] + 273.15;
-          float Lamb = 0.00063*Temp + 0.0673;                // therm. cond. of atm. (J/(msK))
-          float Diff = 2.06E-5*pow(Temp/273.0, 1.75);        // diffus. of w.vap. atmos. (m2/s)
-          float Sigma2 = hru_rh[hh]/100.0 - 1.0;             // undersaturation at 2 m
-          float Htran = 0.9 * M_PI * sqr(Mpr) * Qstar;
+          double Temp = hru_t[hh] + 273.15;
+          double Lamb = 0.00063*Temp + 0.0673;                // therm. cond. of atm. (J/(msK))
+          double Diff = 2.06E-5*pow(Temp/273.0, 1.75);        // diffus. of w.vap. atmos. (m2/s)
+          double Sigma2 = hru_rh[hh]/100.0 - 1.0;             // undersaturation at 2 m
+          double Htran = 0.9 * M_PI * sqr(Mpr) * Qstar;
 
-          float SigmaZ = Sigma2 * (1.019 + 0.027 * log(Zcan[hh]));  // Eq. 6.20, Revised in May. 1997
+          double SigmaZ = Sigma2 * (1.019 + 0.027 * log(Zcan[hh]));  // Eq. 6.20, Revised in May. 1997
           if(SigmaZ > -0.01) {SigmaZ = -0.01;}
 
-          float A = Lamb * Temp * Nuss;
-          float B = LATH * M/(R * Temp) - 1.0;
-          float C = 1.0/(Diff * Common::SVDens(hru_t[hh]) * Nuss);
-          float DmDt = -((2.0*M_PI * Mpr * SigmaZ) - (Htran*B/A))/((LATH*B/A) + C);
+          double A = Lamb * Temp * Nuss;
+          double B = LATH * M/(R * Temp) - 1.0;
+          double C = 1.0/(Diff * Common::SVDens(hru_t[hh]) * Nuss);
+          double DmDt = -((2.0*M_PI * Mpr * SigmaZ) - (Htran*B/A))/((LATH*B/A) + C);
           DmDt *= 24.0*3600.0/Global::Freq; // convert to interval
 
           spherecoeff[hh] = 17.6*pow(cumbrushsubl[hh] + 0.001, -0.086);
@@ -14321,7 +14321,7 @@ void ClassAyers::run(void) {
     if(nstep == 0)
       melt_int[hh] = snowmeltD[hh]/Global::Freq;
 
-    float maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
+    double maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
 
     if(melt_int[hh] > 0.0){
         if(maxinfil > melt_int[hh])
@@ -14412,8 +14412,8 @@ void ClassSlope_Qsi::run(void) {
   long nstep = getstep() % Global::Freq;
 
   for (hh = 0; chkStruct(); ++hh){
-    float Short = Qdro[hh] + Qdfo[hh];
-    float ShortC = 0.0;
+    double Short = Qdro[hh] + Qdfo[hh];
+    double ShortC = 0.0;
     if(Qdflat[hh] > 1.0)
       ShortC = Qsi[hh]/Qdflat[hh]*Short;
 
@@ -14639,7 +14639,7 @@ void ClassfrozenAyers::run(void) {
 
   long nstep = getstep() % Global::Freq;
 
-  float SWE_sum = 0.0;
+  double SWE_sum = 0.0;
 
   for(hh = 0; chkStruct(); ++hh)
     SWE_sum += SWE[hh]; // used to reset opportunity time
@@ -14669,7 +14669,7 @@ void ClassfrozenAyers::run(void) {
     runoff[hh] = 0.0;
 
     if(net_rain[hh] > 0.0){
-      float maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
+      double maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
       if(maxinfil > net_rain[hh])
         infil[hh] = net_rain[hh];
       else{
@@ -14687,7 +14687,7 @@ void ClassfrozenAyers::run(void) {
     if(Julian_lockout[0] == julian("now"))
       Julian_lockout[0] = 0;
 
-    float snowmelt = snowmeltD[hh]/Global::Freq;
+    double snowmelt = snowmeltD[hh]/Global::Freq;
 
     if(nstep == 1 && hh == 0){
       if(t0_Julian[0] == julian("now") || t0_Julian[0] == 0 && SWE_sum/nhru > 10 && snowmeltD[hh] > 2.0 && !Julian_lockout[0]){
@@ -14724,7 +14724,7 @@ void ClassfrozenAyers::run(void) {
       }
 
       if(!SetOpportunityTime){ // normal operation
-        float capacity;
+        double capacity;
         switch(infiltype[hh]) {
           case LIMITED :
 
@@ -14738,7 +14738,7 @@ void ClassfrozenAyers::run(void) {
               INF[hh] = C[hh]*pow(S0[hh], 2.92f)*pow(1.0f-Si[hh], 1.64f)*
                    pow((273.15f-hru_tsoil[hh])/273.15f, -0.45f)*pow(t0_Var[hh], 0.44f); // (mm)
 
-              float INF0 = INF[hh]/t0_Var[hh];
+              double INF0 = INF[hh]/t0_Var[hh];
 
               if(snowmelt <= INF0 && snowmelt <= capacity) {
                 snowinfil[hh] = snowmelt;
@@ -14844,42 +14844,42 @@ void ClassfrozenAyers::finish(bool good) {
 
 //Define HMSA constants:
 
-  const float rho_a =    1.2; // (kg/m3) air
-  const float rho_i =  920.0; // (kg/m3) ice
+  const double rho_a =    1.2; // (kg/m3) air
+  const double rho_i =  920.0; // (kg/m3) ice
 
-  const float c_a = 1010.0; // (J/kg/K) air
-  const float c_i = 2120.0; // (J/kg/K) ice
+  const double c_a = 1010.0; // (J/kg/K) air
+  const double c_i = 2120.0; // (J/kg/K) ice
 
-  const float Cv_a =    1212.0; // (J/m3/K) air
-  const float Cv_i = 1950400.0; // (J/m3/K) ice
-  const float Cv_w = 4185000.0; // (J/m3/K) water
+  const double Cv_a =    1212.0; // (J/m3/K) air
+  const double Cv_i = 1950400.0; // (J/m3/K) ice
+  const double Cv_w = 4185000.0; // (J/m3/K) water
 
-  const float lam_a = 0.025; // (W/m/K) air
-  const float lam_i = 2.24;  // (W/m/K) ice
-  const float lam_w = 0.57;  // (W/m/K) water
+  const double lam_a = 0.025; // (W/m/K) air
+  const double lam_i = 2.24;  // (W/m/K) ice
+  const double lam_w = 0.57;  // (W/m/K) water
 
-  const float Rho_Organic = 1300.0; // (kg m-3)
-  const float Rho_Minerals = 2650.0; // (kg m-3)
-  const float Rho_Water = 1000.0; // (kg m-3)
-  const float Rho_Ice = 920.0; // (note: 890.0 on Hayashi's paper) (kg m-3)
-  const float Rho_Snow = 200.0; // (kg m-3)
-  const float Rho_Air = 1.2;  // (kg m-3)
+  const double Rho_Organic = 1300.0; // (kg m-3)
+  const double Rho_Minerals = 2650.0; // (kg m-3)
+  const double Rho_Water = 1000.0; // (kg m-3)
+  const double Rho_Ice = 920.0; // (note: 890.0 on Hayashi's paper) (kg m-3)
+  const double Rho_Snow = 200.0; // (kg m-3)
+  const double Rho_Air = 1.2;  // (kg m-3)
 
   //K_x: heat conductivity
-  const float K_Organic = 0.21;  // W/(m K)  //0.25
-  const float K_Minerals = 2.50;  // W/(m K)  //2.9
-  const float K_Air = 0.025; // W/(m K)
-  const float K_Ice = 2.24;  // W/(m K)
-  const float K_Water = 0.57;  // W/(m K)
+  const double K_Organic = 0.21;  // W/(m K)  //0.25
+  const double K_Minerals = 2.50;  // W/(m K)  //2.9
+  const double K_Air = 0.025; // W/(m K)
+  const double K_Ice = 2.24;  // W/(m K)
+  const double K_Water = 0.57;  // W/(m K)
 
   //HC_x: specific heat capacity
-  const float HC_Minerals = 890.0; //745.1 // J/(kg.K)
-  const float HC_Water = 4185.0; // J/(kg.K)
-  const float HC_Air = 1010.0; // J/(kg.K)
-  const float HC_Organic = 1920.0; // J/(kg.K)
-  const float HC_Ice = 2120.0; // J/(kg.K)
-  const float Water_Ice = 334.0e3; // latent heat for fusion of water (J kg-1)
-  const float Max_Layers = 20;  // maximum layers allowed
+  const double HC_Minerals = 890.0; //745.1 // J/(kg.K)
+  const double HC_Water = 4185.0; // J/(kg.K)
+  const double HC_Air = 1010.0; // J/(kg.K)
+  const double HC_Organic = 1920.0; // J/(kg.K)
+  const double HC_Ice = 2120.0; // J/(kg.K)
+  const double Water_Ice = 334.0e3; // latent heat for fusion of water (J kg-1)
+  const double Max_Layers = 20;  // maximum layers allowed
 
 ClassHMSA* ClassHMSA::klone(string name) const{
   return new ClassHMSA(name);
@@ -14958,7 +14958,7 @@ void ClassHMSA::init(void) {
   nhru = getdim(NHRU);
   nlay = getdim(NLAY);
 
-float F_Dummy, Alpha, I_Avg, I_Dummy; // [Max_Layers]
+double F_Dummy, Alpha, I_Avg, I_Dummy; // [Max_Layers]
 
   for(hh = 0; chkStruct(); ++hh) {
     if(Soil_Layers[hh] > nlay){
@@ -14982,7 +14982,7 @@ float F_Dummy, Alpha, I_Avg, I_Dummy; // [Max_Layers]
 void ClassHMSA::run(void) {
 
   long I_Avg;
-  float Alpha;
+  double Alpha;
 
   for(hh = 0; chkStruct(); ++hh) {
 
@@ -15208,12 +15208,12 @@ void ClassHMSA::run(void) {
 
 void ClassHMSA::Get_Heat_Chad(long nn){
 
-   float Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
+   double Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
 
-   float x_a = K_Air;
-   float x_w = Soil_Water_lay[nn][hh];
-   float x_s = 1.0-Porosity_lay[nn][hh] + Soil_Ice_lay[nn][hh];
-   float lam_s;
+   double x_a = K_Air;
+   double x_w = Soil_Water_lay[nn][hh];
+   double x_s = 1.0-Porosity_lay[nn][hh] + Soil_Ice_lay[nn][hh];
+   double lam_s;
 
    if (Minerals < 0.1)     // Organic Soil
      lam_s = K_Organic;
@@ -15222,26 +15222,26 @@ void ClassHMSA::Get_Heat_Chad(long nn){
    else   //mixed
      lam_s = (Minerals*K_Minerals + Organic_lay[nn][hh]*K_Organic)/x_s;
 
-   float n = Porosity_lay[nn][hh];
+   double n = Porosity_lay[nn][hh];
 
-   float g_a;
+   double g_a;
    if(x_w >= 0.09)
      g_a = 0.333-x_a/n*(0.333-0.035);
    else
      g_a = 0.013 + 0.944*x_w;
 
-   float g_c = 1.0 - 2.0*g_a;
+   double g_c = 1.0 - 2.0*g_a;
 
-   //float Fs = 1.0/3.0*(2.0/(1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.125)
+   //double Fs = 1.0/3.0*(2.0/(1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.125)
    //             + (1.0/((1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.75))));
 
-   //float Fa = 1.0/3.0*(2.0/(1 + (lam_a/lam_w-1.0)*ga) + (1.0/((1 + (lam_a/lam_w-1.0)*gc))));
+   //double Fa = 1.0/3.0*(2.0/(1 + (lam_a/lam_w-1.0)*ga) + (1.0/((1 + (lam_a/lam_w-1.0)*gc))));
 
-   float F_a = 1.0/3.0*(2.0/(1.0+(lam_a/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_a/lam_w-1.0)*g_c));
-   float F_s = 1.0/3.0*(2.0/(1.0+(lam_s/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_s/lam_w-1.0)*g_c));
+   double F_a = 1.0/3.0*(2.0/(1.0+(lam_a/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_a/lam_w-1.0)*g_c));
+   double F_s = 1.0/3.0*(2.0/(1.0+(lam_s/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_s/lam_w-1.0)*g_c));
 
-   //float a = Farouki_a(por_s[soil_type_lay[nn][hh]]);
-   float a = Farouki_a(Porosity_lay[nn][hh]);
+   //double a = Farouki_a(por_s[soil_type_lay[nn][hh]]);
+   double a = Farouki_a(Porosity_lay[nn][hh]);
 
  // Calculate thermal cond. (W/m/K) of each layer depending on thermal & saturation condition (C_K0 in HMSA):
  // if layer is saturated & frozen:
@@ -15257,16 +15257,16 @@ void ClassHMSA::Get_Heat_Chad(long nn){
                              /(x_w + F_a*x_a + F_s*x_s);
 }
 
-void ClassHMSA::Get_Heat_Param_Soil(float Soil_Temp, long nn) {
+void ClassHMSA::Get_Heat_Param_Soil(double Soil_Temp, long nn) {
 
 // Subroutine to calculate soil heat parameters (method to be chosen by user)
-// uses: int Method_ID, float bulkdensity, Porosity, Organic, Soil_Water, Soil_Ice.
+// uses: int Method_ID, double bulkdensity, Porosity, Organic, Soil_Water, Soil_Ice.
 // parameters: Soil_Temp, layer.
 // returns: C_K0 = conductivity; C_K1 = specific  heat capacity
 
-float Air, Minerals; //repsective volumetric fractions of soil air and minerals
-float KersNumber, SoilDryCond, SoilSatCond; // for method 2
-float Sr, g_a, g_c, F_a, F_s, x_a, x_w,x_s, lam_a, lam_w,lam_s,F_i,x_i,lam_i, Solid; //for method 3
+double Air, Minerals; //repsective volumetric fractions of soil air and minerals
+double KersNumber, SoilDryCond, SoilSatCond; // for method 2
+double Sr, g_a, g_c, F_a, F_s, x_a, x_w,x_s, lam_a, lam_w,lam_s,F_i,x_i,lam_i, Solid; //for method 3
 
     Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
     if (Minerals < 0.0) Minerals = 0.0;
@@ -15753,7 +15753,7 @@ void ClassSoil::init(void) {
 // find volume of weir pond at weir crest height.
 // iterate towards weir_crest_volume.
 
-      float H;
+      double H;
       weir_crest_volume[hh] = 10.0; // (m3)
       H = pow(weir_crest_volume[hh]*(1.0 + 2.0/lake_p[hh])/lake_S[hh], 1.0/(1.0 + 2.0/lake_p[hh]));
       while (fabs(weir_crest[hh] - H) > 0.001) {
@@ -15767,9 +15767,9 @@ void ClassSoil::init(void) {
 
 void ClassSoil::run(void) {
 
-  float soil_lower, excs, condense;
-  float et;
-  float interval_secs = 86400/Global::Freq;
+  double soil_lower, excs, condense;
+  double et;
+  double interval_secs = 86400/Global::Freq;
 
   long nstep = getstep();
   current_getstep[0] = nstep;
@@ -15856,7 +15856,7 @@ void ClassSoil::run(void) {
     if(soil_moist_max[hh] > 0.0){
       soil_lower = soil_moist[hh] - soil_rechr[hh];
 
-      float potential = infil[hh] + snowinfil_buf[hh] + condense;
+      double potential = infil[hh] + snowinfil_buf[hh] + condense;
 
       soil_rechr[hh] = soil_rechr[hh] + potential;
 
@@ -15895,7 +15895,7 @@ void ClassSoil::run(void) {
         cum_rechr_ssr[hh] += rechr_ssr[hh];
       }
 
-      float s2gw_k = soil_gw_K[hh]/Global::Freq;
+      double s2gw_k = soil_gw_K[hh]/Global::Freq;
 
 //  Handle excess to gw
 
@@ -15920,7 +15920,7 @@ void ClassSoil::run(void) {
       excs = infil[hh] + snowinfil_buf[hh] + condense;
     }
 
-    float runoff_to_Sd = 0.0;
+    double runoff_to_Sd = 0.0;
 
     soil_runoff[hh] = meltrunoff_buf[hh] + runoff_buf[hh] + excs + redirected_residual[hh]/hru_area[hh]; // last term (mm*km^2/int)
 
@@ -15929,10 +15929,10 @@ void ClassSoil::run(void) {
     redirected_residual[hh] = 0;
 
     if(soil_runoff[hh] > 0.0 && Sdmax[hh] > 0.0){
-      float Fix = -12.0;
+      double Fix = -12.0;
       if(soil_runoff[hh]/Sdmax[hh] < 12.0)
         Fix = -soil_runoff[hh]/Sdmax[hh];
-      float Ds = (Sdmax[hh] - Sd[hh])*(1 - exp(Fix));
+      double Ds = (Sdmax[hh] - Sd[hh])*(1 - exp(Fix));
 
       if(soil_moist_max[hh] <= 0.0) // handle pond
         Ds = Sdmax[hh] - Sd[hh];
@@ -15955,7 +15955,7 @@ void ClassSoil::run(void) {
 
     if(variation == VARIATION_1){ // For culvert the soil_runoff is put into stream
       if((soil_runoff[hh] > 0.0001 || culvert_water_V[hh] > 0.0) && number_culverts[hh] > 0.0){ // culvert addition. Inputs are in (mm)
-        float culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
+        double culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
         culvert_water_H[hh] = 0.0;
         culvert_water_A[hh] = 0.0;
         culvert_over_Q[hh] = 0.0;
@@ -15974,7 +15974,7 @@ void ClassSoil::run(void) {
 
           if(culvert_water_H[hh] > culvert_water_Dmax[hh]){ // (m) overflow over road
             culvert_water_H[hh] = culvert_water_Dmax[hh]; // (m)
-            float maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
+            double maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
 
             culvert_over_Q[hh] = (culvert_water_V[hh] - maxVol)/86400.0*Global::Freq; // (m3) to (m3/int)
             culvert_water_V[hh] = maxVol; // (m3)
@@ -15989,7 +15989,7 @@ void ClassSoil::run(void) {
           if(HD[hh] <= 0.0)
             culvert_Q[hh] = 0.0;
           else if(HD[hh] < 1.5)
-            culvert_Q[hh] = max <float>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
+            culvert_Q[hh] = max <double>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
                  + 0.159413*HD[hh] + 0.00772254)*culvert_C[culvert_type[hh]]*number_culverts[hh]*pow(culvert_diam[hh], 2.5), 0.0); // (m3/s)
           else
             culvert_Q[hh] = culvert_C[culvert_type[hh]]*number_culverts[hh]*0.785*pow(culvert_diam[hh], 2.5)*sqrt(2.0*9.81*(HD[hh] - 0.5));
@@ -16017,7 +16017,7 @@ void ClassSoil::run(void) {
     if(variation == VARIATION_2){
       stream_to_Sd[hh] = 0.0;
       if(stream[hh] > 0.0001 && stream_Sd[hh] > 0.0001){ // For weir the stream flow is put into Sd
-        float possible = stream[hh]*stream_Sd[hh]/hru_area[hh];
+        double possible = stream[hh]*stream_Sd[hh]/hru_area[hh];
         if(Sd[hh] + possible > Sdmax[hh])
           possible = Sdmax[hh] - Sd[hh];
 
@@ -16037,7 +16037,7 @@ void ClassSoil::run(void) {
 
     // calculate outflow
 
-          float diff = weir_water_h[hh] - weir_crest[hh];
+          double diff = weir_water_h[hh] - weir_crest[hh];
 
           if (diff > 0.0){
 
@@ -16088,7 +16088,7 @@ void ClassSoil::run(void) {
     cum_runoff_to_Sd[hh] += runoff_to_Sd;
 
     if(Sd[hh] > 0.0 && Sd_gw_K[hh] > 0.0){
-      float Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
+      double Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
       if(Sd2gw_k > Sd[hh])
         Sd2gw_k = Sd[hh];
 //      soil_gw[hh] += Sd2gw_k;
@@ -16110,7 +16110,7 @@ void ClassSoil::run(void) {
     }
 
     if(gw_max[hh] > 0.0){ // prevents divide by zero error
-      float spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
+      double spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
       gw[hh] -= spill;
       gw_flow[hh] += spill;
     }
@@ -16119,7 +16119,7 @@ void ClassSoil::run(void) {
     cum_gw_flow[hh] += gw_flow[hh];
 
     if(Sd[hh] > 0.0 && Sd_ssr_K[hh] > 0.0){
-      float Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
+      double Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
       if(Sd2ssr_k >= Sd[hh])
         Sd2ssr_k = Sd[hh];
       soil_ssr[hh] += Sd2ssr_k;
@@ -16128,9 +16128,9 @@ void ClassSoil::run(void) {
         Sd[hh] = 0.0;
     }
 
-    float s2ssr_k = lower_ssr_K[hh]/Global::Freq;
+    double s2ssr_k = lower_ssr_K[hh]/Global::Freq;
     if(s2ssr_k > 0.0){
-      float avail = soil_moist[hh] - soil_rechr[hh];
+      double avail = soil_moist[hh] - soil_rechr[hh];
       if(s2ssr_k >= avail)
         s2ssr_k = avail;
       soil_moist[hh] -= s2ssr_k;
@@ -16142,8 +16142,8 @@ void ClassSoil::run(void) {
 
 //******Compute actual evapotranspiration
 
-    float culvert_evapL = 0;
-    float culvert_pond =0;
+    double culvert_evapL = 0;
+    double culvert_pond =0;
 
     if(variation == VARIATION_1 && culvert_water_V[hh] > 0.0 && hru_evap_buf[hh] > 0.0){ // conditions for culvert evaporation
 
@@ -16158,8 +16158,8 @@ void ClassSoil::run(void) {
       culvert_water_V[hh] = (culvert_pond - culvert_evapL)*(hru_area[hh]*1000.0); // remove evaporation from culvert pond and convert to volume
     }
 
-    float weir_evapL = 0;
-    float weir_pond = 0;
+    double weir_evapL = 0;
+    double weir_pond = 0;
 
     if(variation == VARIATION_2 && weir_water_V[hh] > 0.0 && hru_evap_buf[hh] > 0.0){ // conditions for culvert evaporation
 
@@ -16174,7 +16174,7 @@ void ClassSoil::run(void) {
       weir_water_V[hh] = (weir_pond - weir_evapL)*(hru_area[hh]*1000.0); // remove evaporation from culvert pond and convert to volume
     }
 
-    float avail_evap = hru_evap_buf[hh] - culvert_evapL - weir_evapL;
+    double avail_evap = hru_evap_buf[hh] - culvert_evapL - weir_evapL;
 
     if(Sd[hh] + soil_moist[hh] + weir_pond > 0.0){
       if(Wetlands_scaling_factor[hh] < 0.0)
@@ -16205,7 +16205,7 @@ void ClassSoil::run(void) {
 
     if(avail_evap > 0.0 && soil_moist[hh] > 0.0 && cov_type[hh] > 0){
 
-      float pctl, pctr, etl, ets, etr;
+      double pctl, pctr, etl, ets, etr;
 
       if((soil_moist_max[hh] - soil_rechr_max[hh]) > 0.0)
         pctl = (soil_moist[hh] - soil_rechr[hh])/(soil_moist_max[hh] - soil_rechr_max[hh]);
@@ -16344,16 +16344,16 @@ void ClassSoil::run(void) {
 
 void ClassSoil::finish(bool good) {
 
-  float Allcum_soil_runoff = 0.0;
-  float Allcum_soil_ssr = 0.0;
-  float Allcum_rechr_ssr = 0.0;
-  float Allcum_soil_gw = 0.0;
-  float Allcum_gw_flow = 0.0;
-  float Allcum_infil_act = 0.0;
-  float Allcum_soil_moist_change = 0.0;
-  float Allcum_Sd_change = 0.0;
-  float Allcum_gw_change = 0.0;
-  float Allcum_stream_Grp_loss = 0.0;
+  double Allcum_soil_runoff = 0.0;
+  double Allcum_soil_ssr = 0.0;
+  double Allcum_rechr_ssr = 0.0;
+  double Allcum_soil_gw = 0.0;
+  double Allcum_gw_flow = 0.0;
+  double Allcum_infil_act = 0.0;
+  double Allcum_soil_moist_change = 0.0;
+  double Allcum_Sd_change = 0.0;
+  double Allcum_gw_change = 0.0;
+  double Allcum_stream_Grp_loss = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (Soil)' soil_rechr         (mm) (mm*hru) (mm*hru/basin): ").c_str(), soil_rechr[hh], hru_area[hh], basin_area[0], " *** information only - already included in 'soil_moist'.");
@@ -16545,12 +16545,12 @@ void Classevap_Resist::init(void) {
 
 void Classevap_Resist::run(void) {
 
-   float Q, rcstar, LAI, Z0, d, U, f1, f2, f3, f4, ra, ratio_rs_ra, p;
+   double Q, rcstar, LAI, Z0, d, U, f1, f2, f3, f4, ra, ratio_rs_ra, p;
 
-   const float Cp = 1.005; // (kJ/kg/K)
+   const double Cp = 1.005; // (kJ/kg/K)
 
   if(getstep() == 1 && rcs[0] < 0)
-    const_cast<float *> (rcs)[0] = -rcs[0];
+    const_cast<double *> (rcs)[0] = -rcs[0];
 
    long nstep = getstep() % Global::Freq;
 
@@ -16581,7 +16581,7 @@ void Classevap_Resist::run(void) {
 
      Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
 
-     float Soil_Moist = (soil_moist[hh]/soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3];
+     double Soil_Moist = (soil_moist[hh]/soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3];
 
      switch (evap_type[hh]){
 
@@ -16603,14 +16603,14 @@ void Classevap_Resist::run(void) {
 
            f1 = 1.0;
            if(Qsi_ > 0.0)
-             f1 = max <float> (1.0, 500.0/(Qsi_) - 1.5);
+             f1 = max <double> (1.0, 500.0/(Qsi_) - 1.5);
 
-           f2 = max <float> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
+           f2 = max <double> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
 
            p = soilproperties[soil_type[hh]][AIRENT]*
              pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]);
 
-           f3 = max <float> (1.0, p/40.0);
+           f3 = max <double> (1.0, p/40.0);
 
            f4 = 1.0;
            if(hru_t[hh] < 0.0 || hru_t[hh] > 40.0)
@@ -16648,14 +16648,14 @@ void Classevap_Resist::run(void) {
 
            f1 = 1.0;
            if(Qsi_ > 0.0)
-             f1 = max <float> (1.0, 500.0/(Qsi_) - 1.5);
+             f1 = max <double> (1.0, 500.0/(Qsi_) - 1.5);
 
-           f2 = max <float> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
+           f2 = max <double> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
 
            p = soilproperties[soil_type[hh]][AIRENT]*
              pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]);
 
-           f3 = max <float> (1.0, p/40.0);
+           f3 = max <double> (1.0, p/40.0);
 
            f4 = 1.0;
            if(hru_t[hh] < 5.0 || hru_t[hh] > 40.0)
@@ -16671,8 +16671,8 @@ void Classevap_Resist::run(void) {
                rc[hh] = 5000.0;
            }
 
-           float qs = 0.622*Common::estar(Ts[hh])/(Pa[hh] - Common::estar(Ts[hh])*0.378); // Specific humidity (kg/kg)
-           float q  = 0.622*hru_ea[hh]/(Pa[hh] - hru_ea[hh]*0.378);
+           double qs = 0.622*Common::estar(Ts[hh])/(Pa[hh] - Common::estar(Ts[hh])*0.378); // Specific humidity (kg/kg)
+           double q  = 0.622*hru_ea[hh]/(Pa[hh] - hru_ea[hh]*0.378);
 
            evap[hh] = RHOa(hru_t[hh], hru_ea[hh], Pa[hh])*(qs - q)/((ra + rc[hh])/86400)/Global::Freq;
          }
@@ -16707,17 +16707,17 @@ void Classevap_Resist::finish(bool good) {
   }
 }
 
-double Classevap_Resist::gamma(float Pa, float t) // Psychrometric constant (kPa/Â°C)
+double Classevap_Resist::gamma(double Pa, double t) // Psychrometric constant (kPa/Â°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg Â°C))
 }
 
-float Classevap_Resist::lambda(float t) // Latent heat of vaporization (mJ/(kg Â°C))
+double Classevap_Resist::lambda(double t) // Latent heat of vaporization (mJ/(kg Â°C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double Classevap_Resist::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
+double Classevap_Resist::delta(double t) // Slope of sat vap p vs t, kPa/Â°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -16725,9 +16725,9 @@ double Classevap_Resist::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-float Classevap_Resist::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double Classevap_Resist::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R0 = 2870;
+  const double R0 = 2870;
    return (1E4*Pa /(R0*( 273.15 + t))*(1.0 - 0.379*(ea/Pa))); //
 }
 
@@ -16827,9 +16827,9 @@ void ClassevapD_Resist::init(void) {
 
 void ClassevapD_Resist::run(void) {
 
-   float Q, rcstar, LAI, Z0, d, U, f1, f2, f3, f4, p, ra, ratio_rs_ra;
+   double Q, rcstar, LAI, Z0, d, U, f1, f2, f3, f4, p, ra, ratio_rs_ra;
 
-   const float Cp = 1.005; // (kJ/kg/K)
+   const double Cp = 1.005; // (kJ/kg/K)
 
    long nstep = getstep() % Global::Freq;
 
@@ -16847,7 +16847,7 @@ void ClassevapD_Resist::run(void) {
 
        Q = RnD[hh]*(1.0 - F_Qg[hh]); // daily value (mm/d)
 
-       float Soil_Moist = (soil_moist[hh]/soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3];
+       double Soil_Moist = (soil_moist[hh]/soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3];
 
        switch (evap_type[hh]){
 
@@ -16855,26 +16855,26 @@ void ClassevapD_Resist::run(void) {
 
            Z0 = Ht[hh]/7.6;
            d  = Ht[hh]*0.67;
-           U = max<float>(0.1, hru_umean[hh]);
+           U = max<double>(0.1, hru_umean[hh]);
            ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*U);
 
            rcstar = rcs[hh];
 
            if(PM_method[hh] == 1){
-             float LAI = Ht[hh]/Htmax[hh]*(LAImin[hh] + s[hh]*(LAImax[hh] - LAImin[hh]));
+             double LAI = Ht[hh]/Htmax[hh]*(LAImin[hh] + s[hh]*(LAImax[hh] - LAImin[hh]));
              rcstar = rcs[hh]*LAImax[hh]/LAI;
            }
 
-           f1 = max <float> (1.0, 500.0/(Qsi_mean[hh]) - 1.5);
+           f1 = max <double> (1.0, 500.0/(Qsi_mean[hh]) - 1.5);
 
-           f2 = max <float> (1.0, 2.0*(Common::estar(hru_tmean[hh]) - hru_eamean[hh]));
+           f2 = max <double> (1.0, 2.0*(Common::estar(hru_tmean[hh]) - hru_eamean[hh]));
            if(f2 < 0.0) // happens when hru_eamean[hh] > hru_tmean[hh] because of lapse rate adjustment with increased height
              f2 = 0.0;
 
            p = soilproperties[soil_type[hh]][AIRENT]*
              pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]); // /100.0
 
-           f3 = max <float> (1.0, p/40.0);
+           f3 = max <double> (1.0, p/40.0);
 
            f4 = 1.0;
            if(hru_tmean[hh] < 0.0 || hru_tmean[hh] > 40.0)
@@ -16895,23 +16895,23 @@ void ClassevapD_Resist::run(void) {
 
          Z0 = Ht[hh]/7.6;
          d  = Ht[hh]*0.67;
-         U = max<float>(0.1, hru_umean[hh]);
+         U = max<double>(0.1, hru_umean[hh]);
          ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*U);
 
          rcstar = rcs[hh]; // rc min
 
          f1 = 1.0;
          if(Qsi_mean[hh] > 0.0)
-           f1 = max <float> (1.0, 500.0/(Qsi_mean[hh]) - 1.5);
+           f1 = max <double> (1.0, 500.0/(Qsi_mean[hh]) - 1.5);
 
-         f2 = max <float> (1.0, 2.0*(Common::estar(hru_tmean[hh]) - hru_eamean[hh]));
+         f2 = max <double> (1.0, 2.0*(Common::estar(hru_tmean[hh]) - hru_eamean[hh]));
          if(f2 < 0.0) // happens when hru_eamean[hh] > hru_tmean[hh] because of lapse rate adjustment with increased height
            f2 = 0.0;
 
          p = soilproperties[soil_type[hh]][AIRENT]*
            pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]); // /100.0
 
-         f3 = max <float> (1.0, p/40.0);
+         f3 = max <double> (1.0, p/40.0);
 
          f4 = 1.0;
          if(hru_tmean[hh] < 5.0 || hru_tmean[hh] > 40.0)
@@ -16921,8 +16921,8 @@ void ClassevapD_Resist::run(void) {
          if(rc[hh] > 5000.0)
              rc[hh] = 5000.0;
 
-         float qs = 0.622*Common::estar(Tsmean[hh])/(Pa[hh] - Common::estar(Tsmean[hh])*0.378); // Specific humidity (kg/kg)
-         float q  = 0.622*hru_eamean[hh]/(Pa[hh] - hru_eamean[hh]*0.378);
+         double qs = 0.622*Common::estar(Tsmean[hh])/(Pa[hh] - Common::estar(Tsmean[hh])*0.378); // Specific humidity (kg/kg)
+         double q  = 0.622*hru_eamean[hh]/(Pa[hh] - hru_eamean[hh]*0.378);
 
          evapD[hh] = RHOa(hru_tmean[hh], hru_eamean[hh], Pa[hh])*(qs - q)/((ra + rc[hh])/86400);
          break;
@@ -16945,18 +16945,18 @@ void ClassevapD_Resist::finish(bool good) {
   }
 }
 
-double ClassevapD_Resist::gamma(float Pa, float t) // Psychrometric constant (kPa/Â°C)
+double ClassevapD_Resist::gamma(double Pa, double t) // Psychrometric constant (kPa/Â°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg Â°C))
 }
 
 
-float ClassevapD_Resist::lambda(float t) // Latent heat of vaporization (mJ/(kg Â°C))
+double ClassevapD_Resist::lambda(double t) // Latent heat of vaporization (mJ/(kg Â°C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassevapD_Resist::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
+double ClassevapD_Resist::delta(double t) // Slope of sat vap p vs t, kPa/Â°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -16964,9 +16964,9 @@ double ClassevapD_Resist::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-float ClassevapD_Resist::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double ClassevapD_Resist::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R0 = 2870;
+  const double R0 = 2870;
    return (1E4*Pa /(R0*( 273.15 + t))*(1.0 - 0.379*(ea/Pa)) ); //
 }
 
@@ -17064,7 +17064,7 @@ void ClassShutWall::init(void) {
 
 void ClassShutWall::run(void) {
 
-   const float Cp = 1.005; // (kj/kg/K)
+   const double Cp = 1.005; // (kj/kg/K)
 
    long nstep = getstep() % Global::Freq;
 
@@ -17090,13 +17090,13 @@ void ClassShutWall::run(void) {
 
      } //  beginning of every day
 
-     float U =hru_u[hh];
+     double U =hru_u[hh];
 
-     float Ustar = CRHM_constants::kappa*U/log((Zwind[hh] - d)/z0);
+     double Ustar = CRHM_constants::kappa*U/log((Zwind[hh] - d)/z0);
 
-     float kh = CRHM_constants::kappa*Ustar*(Ht[hh] - d);
+     double kh = CRHM_constants::kappa*Ustar*(Ht[hh] - d);
 
-     float rb = 100/n*sqrt(w[hh]/(0.1*U))/(1.0-exp(-n/2.0));
+     double rb = 100/n*sqrt(w[hh]/(0.1*U))/(1.0-exp(-n/2.0));
 
      raa[hh] = 1.0/(CRHM_constants::kappa*Ustar)*log((Zwind[hh]-d)/(Ht[hh] - d)) + Ht[hh]/(n*kh)*(exp(n*(1-(z0+d)/Ht[hh])) - 1.0);
      rca[hh] = rb*gammab[hh]/LAI[hh];
@@ -17104,11 +17104,11 @@ void ClassShutWall::run(void) {
      rsa[hh] = (Ht[hh]*exp(n)/(n*kh))*(exp(-n*z0g[hh]/Ht[hh])-exp(-n*(z0+d)/Ht[hh]));
      rss[hh] = 4000;
 
-     float Rn = Qn[hh] // Watts
+     double Rn = Qn[hh] // Watts
                  *86400/1e3/lambda(hru_t[hh]); // (mm/d)
-     float G =  Qg[hh] // Watts
+     double G =  Qg[hh] // Watts
                  *86400/1e3/lambda(hru_t[hh]); // (mm/d)
-     float Rsn = Rn*exp(-Cr[hh]*LAI[hh]);
+     double Rsn = Rn*exp(-Cr[hh]*LAI[hh]);
 
 
      Ra[hh] = (delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh]))*raa[hh];
@@ -17146,23 +17146,23 @@ void ClassShutWall::finish(bool good) {
   }
 }
 
-double ClassShutWall::gamma(float Pa, float t) // Psychrometric constant (kPa/Â°C)
+double ClassShutWall::gamma(double Pa, double t) // Psychrometric constant (kPa/Â°C)
 {
    return(1.63 * Pa / lambda(t)); // lambda (kJ/(kg Â°C))
 }
 
-float ClassShutWall::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double ClassShutWall::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R = 2870;
+  const double R = 2870;
    return (1E4*Pa /(R*( 273.15 + t))*(1.0 - 0.379*(ea/Pa)) ); //
 }
 
-float ClassShutWall::lambda(float t) // Latent heat of vaporization  (kJ/(kg Â°C))
+double ClassShutWall::lambda(double t) // Latent heat of vaporization  (kJ/(kg Â°C))
 {
    return( 2501.0 - 2.361 * t );
 }
 
-double ClassShutWall::delta(float t)  // Slope of sat vap p vs t, (kPa/Â°C)
+double ClassShutWall::delta(double t)  // Slope of sat vap p vs t, (kPa/Â°C)
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -17266,7 +17266,7 @@ void ClassShutWallD::init(void) {
 
 void ClassShutWallD::run(void) {
 
-   const float Cp = 1.005; // (kj/kg/K)
+   const double Cp = 1.005; // (kj/kg/K)
 
    long nstep = getstep() % Global::Freq;
 
@@ -17279,10 +17279,10 @@ void ClassShutWallD::run(void) {
 
        hru_actet[hh] = 0.0;
 
-       float z0 = 0.13*Ht[hh];
-       float d = 0.63*Ht[hh];
+       double z0 = 0.13*Ht[hh];
+       double d = 0.63*Ht[hh];
 
-       float n;
+       double n;
        if(Ht[hh] < 1.0)
          n = 2.5;
        else if(Ht[hh] < 10.0)
@@ -17290,13 +17290,13 @@ void ClassShutWallD::run(void) {
        else
          n = 4.25;
 
-       float U = max<float> (hru_umean[hh], 0.1);
+       double U = max<double> (hru_umean[hh], 0.1);
 
-       float Ustar = CRHM_constants::kappa*U/log((Zwind[hh]-d)/z0);
+       double Ustar = CRHM_constants::kappa*U/log((Zwind[hh]-d)/z0);
 
-       float kh = CRHM_constants::kappa*Ustar*(Ht[hh] - d);
+       double kh = CRHM_constants::kappa*Ustar*(Ht[hh] - d);
 
-       float rb = 100/n*sqrt(w[hh]/(0.1*U))/(1.0-exp(-n/2.0));
+       double rb = 100/n*sqrt(w[hh]/(0.1*U))/(1.0-exp(-n/2.0));
 
        raa[hh] = 1.0/(CRHM_constants::kappa*Ustar)*log((Zwind[hh]-d)/(Ht[hh]-d)) + Ht[hh]/(n*kh)*(exp(n*(1-(z0+d)/Ht[hh])) - 1.0);
        rca[hh] = rb*gammab[hh]/LAI[hh];
@@ -17304,11 +17304,11 @@ void ClassShutWallD::run(void) {
        rsa[hh] = (Ht[hh]*exp(n)/(n*kh))*(exp(-n*z0g[hh]/Ht[hh])-exp(-n*(z0+d)/Ht[hh]));
        rss[hh] = 4000;
 
-       float Rn = Qnmean[hh] // Watts
+       double Rn = Qnmean[hh] // Watts
                    *86400/1e3/lambda(hru_tmean[hh]); // (mm/d)
-       float G =  Qgmean[hh] // Watts
+       double G =  Qgmean[hh] // Watts
                    *86400/1e3/lambda(hru_tmean[hh]); // (mm/d)
-       float Rsn = Rn*exp(-Cr[hh]*LAI[hh]);
+       double Rsn = Rn*exp(-Cr[hh]*LAI[hh]);
 
 
        Ra[hh] = (delta(hru_tmean[hh]) + gamma(Pa[hh], hru_tmean[hh]))*raa[hh];
@@ -17345,23 +17345,23 @@ void ClassShutWallD::finish(bool good) {
   }
 }
 
-double ClassShutWallD::gamma(float Pa, float t) // Psychrometric constant (kPa/Â°C)
+double ClassShutWallD::gamma(double Pa, double t) // Psychrometric constant (kPa/Â°C)
 {
    return(1.63 * Pa / lambda(t)); // lambda (kJ/(kg Â°C))
 }
 
-float ClassShutWallD::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double ClassShutWallD::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R = 2870;
+  const double R = 2870;
    return (1E4*Pa /(R*( 273.15 + t))*(1.0 - 0.379*(ea/Pa)) ); //
 }
 
-float ClassShutWallD::lambda(float t) // Latent heat of vaporization  (kJ/(kg Â°C))
+double ClassShutWallD::lambda(double t) // Latent heat of vaporization  (kJ/(kg Â°C))
 {
    return( 2501.0 - 2.361 * t );
 }
 
-double ClassShutWallD::delta(float t)  // Slope of sat vap p vs t, (kPa/Â°C)
+double ClassShutWallD::delta(double t)  // Slope of sat vap p vs t, (kPa/Â°C)
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -17422,21 +17422,21 @@ void ClassIceBulb::run(void) {
   long nstep = getstep() % Global::Freq;
 
   for (hh = 0; chkStruct(); ++hh){
-    float Tk = hru_t[hh] + CRHM_constants::Tm;
-    float D = 0.0000206*pow(Tk/CRHM_constants::Tm, 1.75);
-    float RHO = Pa[hh]*1000.0/(CRHM_constants::Rgas*Tk);
+    double Tk = hru_t[hh] + CRHM_constants::Tm;
+    double D = 0.0000206*pow(Tk/CRHM_constants::Tm, 1.75);
+    double RHO = Pa[hh]*1000.0/(CRHM_constants::Rgas*Tk);
 
-    float qt = CRHM_constants::em/(Pa[hh]*1000.0)*611.213*exp(22.4422*hru_t[hh]/(CRHM_constants::Tm + hru_t[hh]));
+    double qt = CRHM_constants::em/(Pa[hh]*1000.0)*611.213*exp(22.4422*hru_t[hh]/(CRHM_constants::Tm + hru_t[hh]));
 
-    float lamda = 0.000076843*Tk + 0.003130762;
+    double lamda = 0.000076843*Tk + 0.003130762;
 
-    float L;
+    double L;
     if(hru_t[hh] > 0.0)
       L = CRHM_constants::Lv;
     else
       L = CRHM_constants::Ls;
 
-    float delta = CRHM_constants::em*L*qt/(CRHM_constants::Rgas*sqr(Tk));
+    double delta = CRHM_constants::em*L*qt/(CRHM_constants::Rgas*sqr(Tk));
 
     hru_icebulb[hh] = hru_t[hh] - L*(1.0 - hru_rh[hh]/100.0)*qt/(CRHM_constants::Cp + L*delta) *(RHO*CRHM_constants::Cp*D/lamda);
 
@@ -17659,7 +17659,7 @@ void Classlake::process(void) {
         if(hru_lat[hh] < 0.0) // Southern Hemisphere 6 months offset
           Index = (Index +6)%12;
 
-        float Tw = 0.6*hru_t_Mmean[hh] + Meyer_B[Index];
+        double Tw = 0.6*hru_t_Mmean[hh] + Meyer_B[Index];
 
         Vw[hh] = pow(10,(-7.903*(373.16/(Tw+273.16)-1)+(5.028*log10(373.16/(Tw+273.16)))
         -(0.0000001382*(pow(10, (11.34*(1-(373.16/(Tw+273.16)))))-1))
@@ -17790,21 +17790,21 @@ void ClassK_Estimate::init(void) {
 
 void ClassK_Estimate::run(void) {
 
-  const float  DEGtoRAD = M_PI/180.0;
-  const float den_water = 1000.0, acc_gravi = 9.8, dyna_visc_water = 0.001787;
+  const double  DEGtoRAD = M_PI/180.0;
+  const double den_water = 1000.0, acc_gravi = 9.8, dyna_visc_water = 0.001787;
 
   for(hh = 0; chkStruct(); ++hh){
     if(soil_rechr[hh] <= 0.0000001)
-      const_cast<float *>  (soil_rechr)[hh] = 0.0;
+      const_cast<double *>  (soil_rechr)[hh] = 0.0;
 
     if(soil_moist[hh] <= 0.0000001)
-      const_cast<float *>  (soil_moist)[hh] = 0.0;
+      const_cast<double *>  (soil_moist)[hh] = 0.0;
 
     if(gw[hh] <= 0.0000001)
-      const_cast<float *>  (gw)[hh] = 0.0;
+      const_cast<double *>  (gw)[hh] = 0.0;
 
     if(soil_rechr[hh] > soil_moist[hh])
-      const_cast<float *>  (soil_rechr)[hh] = soil_moist[hh];
+      const_cast<double *>  (soil_rechr)[hh] = soil_moist[hh];
 
     if(!(soil_rechr_max[hh] == 0.0 && soil_moist_max[hh] == 0.0)) {
       if(inhibit_evap[hh] == 1){
@@ -17966,9 +17966,9 @@ void ClassevapX::init(void) {
 
 void ClassevapX::run(void) {
 
-   const float Cp = 1.005; // (kJ/kg/K)
+   const double Cp = 1.005; // (kJ/kg/K)
 
-   float Q, Z0, d, U, ra, f1, f2, f3, f4, Soil_Moist, p, rcstar, LAI, D, G;
+   double Q, Z0, d, U, ra, f1, f2, f3, f4, Soil_Moist, p, rcstar, LAI, D, G;
 
    long nstep = getstep() % Global::Freq;
 
@@ -18051,9 +18051,9 @@ void ClassevapX::run(void) {
 
              f1 = 1.0;
              if(Qsi[hh] > 0.0)
-               f1 = max <float> (1.0, 500.0/(Qsi[hh]) - 1.5);
+               f1 = max <double> (1.0, 500.0/(Qsi[hh]) - 1.5);
 
-             f2 = max <float> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
+             f2 = max <double> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
 
              Soil_Moist = (soil_moist[hh]/soil_Depth[hh] +
                SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3];
@@ -18061,7 +18061,7 @@ void ClassevapX::run(void) {
              p = soilproperties[soil_type[hh]][AIRENT]*
                pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]);
 
-             f3 = max <float> (1.0, p/40.0);
+             f3 = max <double> (1.0, p/40.0);
 
              f4 = 1.0;
              if(hru_t[hh] < 5.0 || hru_t[hh] > 40.0)
@@ -18077,7 +18077,7 @@ void ClassevapX::run(void) {
                  rc[hh] = 5000.0;
              }
 
-             float ratio_rs_ra = rc[hh]/ra;
+             double ratio_rs_ra = rc[hh]/ra;
 
              evap[hh] = (delta(hru_t[hh])*Q*Global::Freq + (RHOa(hru_t[hh], hru_ea[hh], Pa[hh])
                      *Cp/(lambda(hru_t[hh])*1e3)*(Common::estar(hru_t[hh]) - hru_ea[hh])/(ra/86400)))
@@ -18095,8 +18095,8 @@ void ClassevapX::run(void) {
 
 void ClassevapX::finish(bool good) {
 
-  float Allcum_evap = 0.0;
-  float Allcum_actet = 0.0;
+  double Allcum_evap = 0.0;
+  double Allcum_actet = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
 
@@ -18115,17 +18115,17 @@ void ClassevapX::finish(bool good) {
 
 }
 
-double ClassevapX::gamma(float Pa, float t) // Psychrometric constant (kPa/Â°C)
+double ClassevapX::gamma(double Pa, double t) // Psychrometric constant (kPa/Â°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg Â°C))
 }
 
-float ClassevapX::lambda(float t) // Latent heat of vaporization (mJ/(kg Â°C))
+double ClassevapX::lambda(double t) // Latent heat of vaporization (mJ/(kg Â°C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassevapX::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
+double ClassevapX::delta(double t) // Slope of sat vap p vs t, kPa/Â°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -18133,17 +18133,17 @@ double ClassevapX::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-double ClassevapX::fdaily(float u, float Ht){ // Drying power f(u) (mm/d/kPa)
+double ClassevapX::fdaily(double u, double Ht){ // Drying power f(u) (mm/d/kPa)
 
-   float Z0 = Ht*100.0/7.6;
-   float a = 8.19 + 0.22*Z0;
-   float b = 1.16 + 0.08*Z0;
+   double Z0 = Ht*100.0/7.6;
+   double a = 8.19 + 0.22*Z0;
+   double b = 1.16 + 0.08*Z0;
    return a + b*u;
 }
 
-float ClassevapX::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double ClassevapX::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R0 = 2870;
+  const double R0 = 2870;
    return (1E4*Pa /(R0*( 273.15 + t))*(1.0 - 0.379*(ea/Pa))); //
 }
 
@@ -18413,10 +18413,10 @@ void ClassREWroute::init(void) {
   }
 
   if(variation == VARIATION_ORG){
-    const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+    const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
     for(hh = 0; hh < nhru; ++hh){
-      float Vavg = (1.0/WS_route_n[hh])*pow(WS_route_R[hh], 2.0f/3.0f)*pow(WS_route_S0[hh], 0.5f);
+      double Vavg = (1.0/WS_route_n[hh])*pow(WS_route_R[hh], 2.0f/3.0f)*pow(WS_route_S0[hh], 0.5f);
 
       WS_gwKtravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
       WS_Ktravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
@@ -18761,14 +18761,14 @@ void ClassXG::init(void) {
     t_trend[hh] = 0.0;
 
     if(Zpf_init[hh] <= 0.0)
-      const_cast<float *> (Zpf_init)[hh] = 2.0;
+      const_cast<double *> (Zpf_init)[hh] = 2.0;
 
     for(long ll = 0; ll < nlay; ++ll)
       Zd_front_array[ll][hh] = 0.0;
 
-    float rechrmax = soil_rechr_max[hh];
-    float soilmax = soil_moist_max[hh];
-    float profile_depth = 0.0;
+    double rechrmax = soil_rechr_max[hh];
+    double soilmax = soil_moist_max[hh];
+    double profile_depth = 0.0;
 
     XG_rechr_d[hh] = 0.0;
     XG_moist_d[hh] = 0.0;
@@ -18788,11 +18788,11 @@ void ClassXG::init(void) {
            rechrmax -= XG_max_lay[ll][hh];
          }
          else{
-           float amount = rechrmax/XG_max_lay[ll][hh];
+           double amount = rechrmax/XG_max_lay[ll][hh];
            rechr_fract_lay[ll][hh] = rechrmax/XG_max_lay[ll][hh];
 
            XG_rechr_d[hh] += depths_lay[ll][hh]*amount;
-           float left = 1.0 - amount;
+           double left = 1.0 - amount;
            if(soilmax >= XG_max_lay[ll][hh]*left){ // layer all used
              moist_fract_lay[ll][hh] = left;
              soilmax -= XG_max_lay[ll][hh]*left;
@@ -18800,7 +18800,7 @@ void ClassXG::init(void) {
            }
            else { // layer partly used
              moist_fract_lay[ll][hh] = (soilmax - rechrmax)/XG_max_lay[ll][hh];
-             float used = rechr_fract_lay[ll][hh] + moist_fract_lay[ll][hh];
+             double used = rechr_fract_lay[ll][hh] + moist_fract_lay[ll][hh];
              default_fract_lay[ll][hh] = 1.0 - used;
              XG_moist_d[hh] += (XG_rechr_d[hh] + depths_lay[ll][hh]*used);
              soilmax = 0.0;
@@ -18815,11 +18815,11 @@ void ClassXG::init(void) {
            soilmax -= XG_max_lay[ll][hh];
         }
         else{
-          float amount = soilmax/XG_max_lay[ll][hh];
+          double amount = soilmax/XG_max_lay[ll][hh];
           XG_moist_d[hh] += depths_lay[ll][hh]*amount;
           moist_fract_lay[ll][hh] = amount;
 
-          float left = 1.0 - amount;
+          double left = 1.0 - amount;
           if(left) // adjust last layer depth
             default_fract_lay[ll][hh] = left;
           soilmax = 0.0;
@@ -18922,14 +18922,14 @@ void ClassXG::init(void) {
 
 void ClassXG::run(void) {
 
-  float Za, X, X1;
-  float L = 335000;// the latent heat of fusion of ice(J/kg);
+  double Za, X, X1;
+  double L = 335000;// the latent heat of fusion of ice(J/kg);
   long  nstep = getstep();
 
   for(hh = 0; chkStruct(); ++hh) {
 
     if(nstep == 1){
-      const_cast<float *> (depths_lay[N_Soil_layers[hh]-1])[hh] = 100.0; // ensure stays in last layer. Must be here to be restored
+      const_cast<double *> (depths_lay[N_Soil_layers[hh]-1])[hh] = 100.0; // ensure stays in last layer. Must be here to be restored
       if(Zdf_init[hh] > 0.0 && Bfr[hh] <= 0.0) // not set by state file
         find_freeze_D(Zdf_init[hh]); // initialises Bfr and Zdf from Zdf_init
       if(Zdt_init[hh] && Zdt_init[hh] < Zpf_init[hh] && Bth[hh] <= 0.0) // not set by state file
@@ -19063,11 +19063,11 @@ void ClassXG::run(void) {
 // check for thaw front
           if(Zdt[hh] > 0.0 && Zdf[hh] >= Zdt[hh]){
             if(nfront[hh] > 0){
-              float Last = last_front();
+              double Last = last_front();
               if(Last < 0.0){ // frozen front
                 Zdf[hh] = pop_front();
                 find_freeze_D(Zdf[hh]);
-                float Last = last_front();
+                double Last = last_front();
                 if(Last > 0.0){ // thaw front
                   Zdt[hh] = pop_front();
                   find_thaw_D(Zdf[hh]);
@@ -19138,7 +19138,7 @@ void ClassXG::run(void) {
 // check for freeze front
           if(Zdf[hh] > 0.0 && Zdt[hh] >= Zdf[hh]){
             if(nfront[hh] > 0){
-              float Last = last_front();
+              double Last = last_front();
               if(Last > 0.0){ // thaw front
                 Zdt[hh] = pop_front();
                 find_thaw_D(Zdt[hh]);
@@ -19197,12 +19197,12 @@ void ClassXG::run(void) {
 void ClassXG::freeze(void) { // XG-Algorithm - Freezing
 
   long lay = 1;
-  float Za;
-  float L = 335000; // the latent heat of fusion of ice(3.35Ã105J/kg);
+  double Za;
+  double L = 335000; // the latent heat of fusion of ice(3.35Ã105J/kg);
 
   Zdf[hh] = 0.0;
 
-  float ftc;
+  double ftc;
   if(k_update[hh] == 2)
     ftc = Interpolated_ftc_lay(Zdf[hh], lay);
   else
@@ -19234,12 +19234,12 @@ void ClassXG::freeze(void) { // XG-Algorithm - Freezing
 void ClassXG::thaw(void) { // XG-Algorithm - Thawing
 
   long lay = 1;
-  float Za;
-  float L = 335000;// the latent heat of fusion of ice(3.35Ã105J/kg);
+  double Za;
+  double L = 335000;// the latent heat of fusion of ice(3.35Ã105J/kg);
 
   Zdt[hh] = 0.0;
 
-  float ttc;
+  double ttc;
   if(k_update[hh] == 2)
     ttc = Interpolated_ttc_lay(Zdf[hh], lay);
   else
@@ -19268,39 +19268,39 @@ void ClassXG::thaw(void) { // XG-Algorithm - Thawing
     Zdt[hh] = Zpf_init[hh];
 }
 
-float ClassXG::Interpolated_ttc_lay(float Za, long lay) { //
+double ClassXG::Interpolated_ttc_lay(double Za, long lay) { //
 
   if(!thaw_ki_kw_update[hh])
     return (ttc_lay[lay-1][hh]);
 
-  float split = (Za - Zdt[hh])/depths_lay[lay-1][hh];
+  double split = (Za - Zdt[hh])/depths_lay[lay-1][hh];
   if(split >= 1.0)
     split = 1.0;
 
-  float combination = ttc_lay[lay-1][hh] - split*(ttc_lay[lay-1][hh] - ftc_lay[lay-1][hh]); // thawed(18k) to frozen (4k)
+  double combination = ttc_lay[lay-1][hh] - split*(ttc_lay[lay-1][hh] - ftc_lay[lay-1][hh]); // thawed(18k) to frozen (4k)
 
   tc_composite2_lay[lay-1][hh] = combination;
 
   return (combination);
 }
 
-float ClassXG::Interpolated_ftc_lay(float Za, long lay) { //
+double ClassXG::Interpolated_ftc_lay(double Za, long lay) { //
 
   if(!freeze_kw_ki_update[hh])
     return (ftc_lay[lay-1][hh]);
 
-  float split = (Za - Zdf[hh])/depths_lay[lay-1][hh];
+  double split = (Za - Zdf[hh])/depths_lay[lay-1][hh];
   if(split >= 1.0)
     split = 1.0;
 
-  float combination = ftc_lay[lay-1][hh] + split*(ttc_lay[lay-1][hh] - ftc_lay[lay-1][hh]); // frozen (4k) to thawed(18k)
+  double combination = ftc_lay[lay-1][hh] + split*(ttc_lay[lay-1][hh] - ftc_lay[lay-1][hh]); // frozen (4k) to thawed(18k)
 
   tc_composite2_lay[lay-1][hh] = combination;
 
   return (combination);
 }
 
-void ClassXG::find_thaw_D(float dt) { // XG-Algorithm - Thawing - used by init
+void ClassXG::find_thaw_D(double dt) { // XG-Algorithm - Thawing - used by init
 // solve for Bth from Zdt using Bisection method
 
   if(dt == 0)
@@ -19320,7 +19320,7 @@ void ClassXG::find_thaw_D(float dt) { // XG-Algorithm - Thawing - used by init
 }
 
 
-void ClassXG::find_freeze_D(float df) { // XG-Algorithm - Thawing - used by init
+void ClassXG::find_freeze_D(double df) { // XG-Algorithm - Thawing - used by init
 // solve for Bfr from Zdt using Bisection method
 
   if(df == 0)
@@ -19339,7 +19339,7 @@ void ClassXG::find_freeze_D(float df) { // XG-Algorithm - Thawing - used by init
   throw TExcept;
 }
 
-void ClassXG::push_front(float D) {
+void ClassXG::push_front(double D) {
 
   if(nfront[hh] >= front_size-3){ // space to allocate plus Zdf/Zdt(2 slots) plus top of stack indicator
     string S = string("'") + Name + " (XG)' too many fronts in hru = " + to_string(hh+1).c_str();
@@ -19355,9 +19355,9 @@ void ClassXG::push_front(float D) {
   Zd_front_array[2][hh] = D; // add new entry
 }
 
-float ClassXG::pop_front(void) {
+double ClassXG::pop_front(void) {
 
-float D = fabs(Zd_front_array[2][hh]); // always positive
+double D = fabs(Zd_front_array[2][hh]); // always positive
 
   for(long ii = 2; ii < nfront[hh]+1; ++ii) // move contents down
     Zd_front_array[ii][hh] = Zd_front_array[ii+1][hh];
@@ -19369,7 +19369,7 @@ float D = fabs(Zd_front_array[2][hh]); // always positive
   return D;
 }
 
-float ClassXG::last_front(void){
+double ClassXG::last_front(void){
 
   if(!nfront[hh])
     return 0.0;
@@ -19377,11 +19377,11 @@ float ClassXG::last_front(void){
     return (Zd_front_array[2][hh]);
 }
 
-/*float ClassXG::SWE_to_rho(float SWE) { // Pomeroy et al (1998)
+/*double ClassXG::SWE_to_rho(double SWE) { // Pomeroy et al (1998)
 
 // solve for desity from SWE using Bisection method
 
-  float h1 = 0.6, h2 = 8.00, e, h, rho;
+  double h1 = 0.6, h2 = 8.00, e, h, rho;
   long iter_max = 0;
   do {
     h = (h1 + h2)/2.0; // m
@@ -19406,7 +19406,7 @@ void ClassXG::finish(bool good) {
   LogDebug(" ");
 }
 
-float ClassXG::get_ftc_lay(long lay){ // unfrozen(thawed) soil to be frozen
+double ClassXG::get_ftc_lay(long lay){ // unfrozen(thawed) soil to be frozen
   if(calc_coductivity[hh]){
     return (soil_solid_km_ki_lay[lay][hh] - soil_solid_km_lay[lay][hh])*sqr(h2o_lay[lay][hh]/(1000.0*por_lay[lay][hh])) + soil_solid_km_lay[lay][hh];
   }
@@ -19414,7 +19414,7 @@ float ClassXG::get_ftc_lay(long lay){ // unfrozen(thawed) soil to be frozen
     return (1.0 - por_lay[lay][hh])*soil_solid_km_lay[lay][hh] + h2o_lay[lay][hh]/1000.0*kw + (por_lay[lay][hh] - h2o_lay[lay][hh]/1000.0)*ka;
 }
 
-float ClassXG::get_ttc_lay(long lay){ // frozen soil to be unfrozen(thawed)
+double ClassXG::get_ttc_lay(long lay){ // frozen soil to be unfrozen(thawed)
   if(calc_coductivity[hh]){
     return  soil_solid_km_lay[lay][hh]*pow(soil_solid_km_ki_lay[lay][hh]/soil_solid_km_lay[lay][hh], h2o_lay[lay][hh]/(1000.0*por_lay[lay][hh]));
   }
@@ -19491,12 +19491,12 @@ void Classcontribution::run(void) {
 
       for(long hhh = 0; chkStruct(hhh); ++hhh) { // do HRUs in sequence
         if(distrib_hru[hh][hhh] < 0.0)
-          const_cast<float **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
+          const_cast<double **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
         distrib_sum[hh] += distrib_hru[hh][hhh];
       }
 
       if(distrib_sum[hh] <= 0 && distrib_Basin[hh] <= 0.0){
-        const_cast<float *> (distrib_Basin) [hh] = 1;
+        const_cast<double *> (distrib_Basin) [hh] = 1;
     }
 
     distrib_sum[hh] += distrib_Basin[hh];
@@ -19537,7 +19537,7 @@ void Classcontribution::run(void) {
     }
   } // hh
 
-  float sum2 = 0;
+  double sum2 = 0;
   for(long hh = 6; chkStruct(hh); ++hh) {
     sum2 += contrib_area[hh];
   } // hh
@@ -19922,9 +19922,9 @@ void ClassSoilX::init(void) {
 
 void ClassSoilX::run(void) {
 
-  float soil_lower, excs, condense, Dss;
-  float et;
-  float runoff_to_Sd = 0.0;
+  double soil_lower, excs, condense, Dss;
+  double et;
+  double runoff_to_Sd = 0.0;
 
   long nstep = getstep();
 
@@ -19967,8 +19967,8 @@ void ClassSoilX::run(void) {
 
       if(soil_moist_max[hh] > 0.0 && !NO_Freeze[hh] && Zd_front_array[0][hh] > 0.0){
 
-        float layer_start = 0.0; // start of current layer
-        float layer_end = 0.0; // end of current layer
+        double layer_start = 0.0; // start of current layer
+        double layer_end = 0.0; // end of current layer
         long ll = 0;
 
         while(ll < depths_size && Zdt[hh] > 0.0){
@@ -20017,9 +20017,9 @@ void ClassSoilX::run(void) {
     if(soil_moist_max[hh] > 0.0){
       soil_lower = soil_moist[hh] - soil_rechr[hh];
 
-      float potential = infil[hh] + snowinfil_buf[hh] + condense;
+      double potential = infil[hh] + snowinfil_buf[hh] + condense;
 
-      float possible = thaw_layers_lay[0][hh]*(soil_rechr_max[hh] - soil_rechr[hh]);
+      double possible = thaw_layers_lay[0][hh]*(soil_rechr_max[hh] - soil_rechr[hh]);
 
       if(possible > potential || NO_Freeze[hh])
         possible = potential;
@@ -20063,7 +20063,7 @@ void ClassSoilX::run(void) {
         cum_rechr_ssr[hh] += rechr_ssr[hh];
       }
 
-      float s2gw_k = soil_gw_K[hh]/Global::Freq*thaw_layers_lay[1][hh]; // regulate by amount of unfrozen lower layer
+      double s2gw_k = soil_gw_K[hh]/Global::Freq*thaw_layers_lay[1][hh]; // regulate by amount of unfrozen lower layer
 
 //  Handle excess to gw
       if(excs > 0.0 && s2gw_k > 0.0){
@@ -20088,7 +20088,7 @@ void ClassSoilX::run(void) {
       excs = infil[hh] + snowinfil_buf[hh] + condense;
     }
 
-    float runoff_to_Sd = 0.0;
+    double runoff_to_Sd = 0.0;
 
     soil_runoff[hh] += (meltrunoff_buf[hh] + runoff_buf[hh] + excs + redirected_residual[hh]/hru_area[hh]); // last term (mm*km^2/int)
 
@@ -20128,7 +20128,7 @@ void ClassSoilX::run(void) {
      Dts_runoff_K[hh] = Dts_organic_runoff_K[hh];
 
    if(Dts[hh] > 0.0 && Dts_runoff_K[hh] > 0.0){
-     float Dss2runoff_k = Dts_runoff_K[hh]/Global::Freq;
+     double Dss2runoff_k = Dts_runoff_K[hh]/Global::Freq;
      if(Dss2runoff_k >= Dts[hh])
        Dss2runoff_k = Dts[hh];
      soil_runoff[hh] += Dss2runoff_k;
@@ -20139,7 +20139,7 @@ void ClassSoilX::run(void) {
      Dts[hh] = 0.0;
 
    if(soil_runoff[hh] > 0.0 && Sdmax[hh] > 0.0){
-     float Fix = -12.0;
+     double Fix = -12.0;
      if(soil_runoff[hh]/Sdmax[hh] < 12.0)
        Fix = -soil_runoff[hh]/Sdmax[hh];
       Dss = (Sdmax[hh] - Sd[hh])*(1 - exp(Fix));
@@ -20165,7 +20165,7 @@ void ClassSoilX::run(void) {
 
     if(variation == VARIATION_1){
 
-      float culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
+      double culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
 
       culvert_water_H[hh] = 0.0;
       culvert_water_A[hh] = 0.0;
@@ -20187,7 +20187,7 @@ void ClassSoilX::run(void) {
 
           if(culvert_water_H[hh] > culvert_water_Dmax[hh]){ // (m) overflow over road
             culvert_water_H[hh] = culvert_water_Dmax[hh]; // (m)
-            float maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
+            double maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
 
             culvert_over_Q[hh] = (culvert_water_V[hh] - maxVol)/86400.0*Global::Freq; // (m3) to (m3/int)
             culvert_water_V[hh] = maxVol; // (m3)
@@ -20202,7 +20202,7 @@ void ClassSoilX::run(void) {
           if(HD[hh] <= 0.0)
             culvert_Q[hh] = 0.0;
           else if(HD[hh] < 1.5)
-            culvert_Q[hh] = max <float>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
+            culvert_Q[hh] = max <double>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
                  + 0.159413*HD[hh] + 0.00772254)*culvert_C[culvert_type[hh]]*number_culverts[hh]*pow(culvert_diam[hh], 2.5), 0.0); // (m3/s)
           else
             culvert_Q[hh] = culvert_C[culvert_type[hh]]*number_culverts[hh]*0.785*pow(culvert_diam[hh], 2.5)*sqrt(2.0*9.81*(HD[hh] - 0.5));
@@ -20226,7 +20226,7 @@ void ClassSoilX::run(void) {
     cum_runoff_to_Sd[hh] += runoff_to_Sd;
 
     if(Sd[hh] > 0.0 && Sd_gw_K[hh] > 0.0){
-      float Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
+      double Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
       if(Sd2gw_k > Sd[hh])
         Sd2gw_k = Sd[hh];
       soil_gw[hh] += Sd2gw_k;
@@ -20246,7 +20246,7 @@ void ClassSoilX::run(void) {
     }
 
     if(gw_max[hh] > 0.0){ // prevents divide by zero error
-      float spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
+      double spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
       gw[hh] -= spill;
       gw_flow[hh] += spill;
     }
@@ -20255,7 +20255,7 @@ void ClassSoilX::run(void) {
     cum_gw_flow[hh] += gw_flow[hh];
 
     if(Sd[hh] > 0.0 && Sd_ssr_K[hh] > 0.0){
-      float Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
+      double Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
       if(Sd2ssr_k >= Sd[hh])
         Sd2ssr_k = Sd[hh];
       soil_ssr[hh] += Sd2ssr_k;
@@ -20265,8 +20265,8 @@ void ClassSoilX::run(void) {
     }
 
     if(lower_ssr_K[hh] > 0.0){
-      float s2ssr_k = lower_ssr_K[hh]/Global::Freq*thaw_layers_lay[1][hh]; // regulate by amount of unfrozen lower layer
-      float avail = soil_moist[hh] - soil_rechr[hh];
+      double s2ssr_k = lower_ssr_K[hh]/Global::Freq*thaw_layers_lay[1][hh]; // regulate by amount of unfrozen lower layer
+      double avail = soil_moist[hh] - soil_rechr[hh];
       if(s2ssr_k >= avail)
         s2ssr_k = avail;
       soil_moist[hh] -= s2ssr_k;
@@ -20278,9 +20278,9 @@ void ClassSoilX::run(void) {
 
 //******Compute actual evapotranspiration
 
-    float culvert_pond = 0.0; // convert m3 to mm
+    double culvert_pond = 0.0; // convert m3 to mm
 
-    float culvert_evapL = 0;
+    double culvert_evapL = 0;
 
     if(variation == VARIATION_1 && culvert_water_V[hh] > 0.0 && hru_evap_buf[hh] > 0.0){ // conditions for culvert evaporation
       culvert_pond = culvert_water_V[hh]/(hru_area[hh]*1000.0); // convert m3 to mm over HRU area
@@ -20294,7 +20294,7 @@ void ClassSoilX::run(void) {
       culvert_water_V[hh] = (culvert_pond - culvert_evapL)*(hru_area[hh]*1000.0); // remove evaporation from culvert pond and convert to volume
     }
 
-    float avail_evap = hru_evap_buf[hh] - culvert_evapL;
+    double avail_evap = hru_evap_buf[hh] - culvert_evapL;
     if(Sd[hh] + soil_moist[hh] + culvert_pond > 0.0)
       avail_evap *= (Sd[hh]/(Sd[hh] + soil_moist[hh]));
     else
@@ -20319,7 +20319,7 @@ void ClassSoilX::run(void) {
 
     if(avail_evap > 0.0 && soil_moist[hh] > 0.0 && cov_type[hh] > 0){
 
-      float pctl, pctr, etl, ets, etr;
+      double pctl, pctr, etl, ets, etr;
 
       if((soil_moist_max[hh] - soil_rechr_max[hh]) > 0.0)
         pctl = (soil_moist[hh] - soil_rechr[hh])/(soil_moist_max[hh] - soil_rechr_max[hh]);
@@ -20450,15 +20450,15 @@ void ClassSoilX::run(void) {
 
 void ClassSoilX::finish(bool good) {
 
-  float Allcum_soil_runoff = 0.0;
-  float Allcum_soil_ssr = 0.0;
-  float Allcum_rechr_ssr = 0.0;
-  float Allcum_soil_gw = 0.0;
-  float Allcum_gw_flow = 0.0;
-  float Allcum_infil_act = 0.0;
-  float Allcum_soil_moist_change = 0.0;
-  float Allcum_Sd_change = 0.0;
-  float Allcum_gw_change = 0.0;
+  double Allcum_soil_runoff = 0.0;
+  double Allcum_soil_ssr = 0.0;
+  double Allcum_rechr_ssr = 0.0;
+  double Allcum_soil_gw = 0.0;
+  double Allcum_gw_flow = 0.0;
+  double Allcum_infil_act = 0.0;
+  double Allcum_soil_moist_change = 0.0;
+  double Allcum_Sd_change = 0.0;
+  double Allcum_gw_change = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (SoilX)' soil_rechr        (mm) (mm*hru) (mm*hru/basin): ").c_str(), soil_rechr[hh], hru_area[hh], basin_area[0], " *** information only - already included in 'soil_moist'.");
@@ -20564,7 +20564,7 @@ void ClassMod_Exec::init(void) {
   long  GetUnit;
 
   if(trk_Vars->Count){
-    VarArray = new float *[trk_Vars->Count];
+    VarArray = new double *[trk_Vars->Count];
 
     for(long ii = 0; ii < trk_Vars->Count; ++ii){
       S = Common::trim(trk_Vars->Strings[ii]);
@@ -20579,7 +20579,7 @@ void ClassMod_Exec::init(void) {
   }
 
   if(chg_Pars->Count){
-    ParArray = new float *[chg_Pars->Count];
+    ParArray = new double *[chg_Pars->Count];
 
     for(long ii = 0; ii < chg_Pars->Count; ++ii){
       S = Common::trim(chg_Pars->Strings[ii]);
@@ -20742,7 +20742,7 @@ void ClassFlowInSnow::init(void) {
 }
 
 void ClassFlowInSnow::run(void) {
-  const float UnitWidth =1.0, UnitArea = 1.1;
+  const double UnitWidth =1.0, UnitArea = 1.1;
   for(hh = 0.0; chkStruct(); ++hh) {
     if(rho[hh] > 0){
       if(T_s_l[hh] >= t_inhibit_flow[hh] && h2o_sat[hh] > Sr[hh]){
@@ -21109,8 +21109,8 @@ void ClassSoilDS::init(void) {
 
 void ClassSoilDS::run(void) {
 
-  float soil_lower, excs, condense,Dss;
-  float et;
+  double soil_lower, excs, condense,Dss;
+  double et;
 
   long nstep = getstep();
 
@@ -21170,7 +21170,7 @@ void ClassSoilDS::run(void) {
     if(soil_moist_max[hh] > 0.0){
       soil_lower = soil_moist[hh] - soil_rechr[hh];
 
-      float potential = infil[hh] + snowinfil_buf[hh] + condense;
+      double potential = infil[hh] + snowinfil_buf[hh] + condense;
 
       soil_rechr[hh] = soil_rechr[hh] + potential;
 
@@ -21209,7 +21209,7 @@ void ClassSoilDS::run(void) {
         cum_rechr_ssr[hh] += rechr_ssr[hh];
       }
 
-      float s2gw_k = soil_gw_K[hh]/Global::Freq;
+      double s2gw_k = soil_gw_K[hh]/Global::Freq;
 
 //  Handle excess to gw
 
@@ -21233,7 +21233,7 @@ void ClassSoilDS::run(void) {
       excs = infil[hh] + snowinfil_buf[hh] + condense;
     }
 
-    float runoff_to_Sd = 0.0;
+    double runoff_to_Sd = 0.0;
 
     soil_runoff[hh] = meltrunoff_buf[hh] + runoff_buf[hh] + excs + redirected_residual[hh]/hru_area[hh]; // last term (mm*km^2/int)
 
@@ -21272,7 +21272,7 @@ void ClassSoilDS::run(void) {
        Dts_runoff_K[hh] = Dts_organic_runoff_K[hh];
 
      if(Dts[hh] > 0.0 && Dts_runoff_K[hh] > 0.0){
-       float Dss2runoff_k = Dts_runoff_K[hh]/Global::Freq;
+       double Dss2runoff_k = Dts_runoff_K[hh]/Global::Freq;
        if(Dss2runoff_k >= Dts[hh])
          Dss2runoff_k = Dts[hh];
        soil_runoff[hh] += Dss2runoff_k;
@@ -21283,7 +21283,7 @@ void ClassSoilDS::run(void) {
        Dts[hh] = 0.0;
 
      if(soil_runoff[hh] > 0.0 && Sdmax[hh] > 0.0){
-       float Fix = -12.0;
+       double Fix = -12.0;
        if(soil_runoff[hh]/Sdmax[hh] < 12.0)
          Fix = -soil_runoff[hh]/Sdmax[hh];
         Dss = (Sdmax[hh] - Sd[hh])*(1 - exp(Fix));
@@ -21309,7 +21309,7 @@ void ClassSoilDS::run(void) {
 
     if(variation == VARIATION_1){
 
-      float culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
+      double culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
 
       culvert_water_H[hh] = 0.0;
       culvert_water_A[hh] = 0.0;
@@ -21331,7 +21331,7 @@ void ClassSoilDS::run(void) {
 
           if(culvert_water_H[hh] > culvert_water_Dmax[hh]){ // (m) overflow over road
             culvert_water_H[hh] = culvert_water_Dmax[hh]; // (m)
-            float maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
+            double maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
 
             culvert_over_Q[hh] = (culvert_water_V[hh] - maxVol)/86400.0*Global::Freq; // (m3) to (m3/int)
             culvert_water_V[hh] = maxVol; // (m3)
@@ -21346,7 +21346,7 @@ void ClassSoilDS::run(void) {
           if(HD[hh] <= 0.0)
             culvert_Q[hh] = 0.0;
           else if(HD[hh] < 1.5)
-            culvert_Q[hh] = max <float>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
+            culvert_Q[hh] = max <double>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
                  + 0.159413*HD[hh] + 0.00772254)*culvert_C[culvert_type[hh]]*number_culverts[hh]*pow(culvert_diam[hh], 2.5), 0.0); // (m3/s)
           else
             culvert_Q[hh] = culvert_C[culvert_type[hh]]*number_culverts[hh]*0.785*pow(culvert_diam[hh], 2.5)*sqrt(2.0*9.81*(HD[hh] - 0.5));
@@ -21370,7 +21370,7 @@ void ClassSoilDS::run(void) {
     cum_runoff_to_Sd[hh] += runoff_to_Sd;
 
     if(Sd[hh] > 0.0 && Sd_gw_K[hh] > 0.0){
-      float Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
+      double Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
       if(Sd2gw_k > Sd[hh])
         Sd2gw_k = Sd[hh];
       soil_gw[hh] += Sd2gw_k;
@@ -21390,7 +21390,7 @@ void ClassSoilDS::run(void) {
     }
 
     if(gw_max[hh] > 0.0){ // prevents divide by zero error
-      float spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
+      double spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
       gw[hh] -= spill;
       gw_flow[hh] += spill;
     }
@@ -21399,7 +21399,7 @@ void ClassSoilDS::run(void) {
     cum_gw_flow[hh] += gw_flow[hh];
 
     if(Sd[hh] > 0.0 && Sd_ssr_K[hh] > 0.0){
-      float Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
+      double Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
       if(Sd2ssr_k >= Sd[hh])
         Sd2ssr_k = Sd[hh];
       soil_ssr[hh] += Sd2ssr_k;
@@ -21408,9 +21408,9 @@ void ClassSoilDS::run(void) {
         Sd[hh] = 0.0;
     }
 
-    float s2ssr_k = lower_ssr_K[hh]/Global::Freq;
+    double s2ssr_k = lower_ssr_K[hh]/Global::Freq;
     if(s2ssr_k > 0.0){
-      float avail = soil_moist[hh] - soil_rechr[hh];
+      double avail = soil_moist[hh] - soil_rechr[hh];
       if(s2ssr_k >= avail)
         s2ssr_k = avail;
       soil_moist[hh] -= s2ssr_k;
@@ -21422,9 +21422,9 @@ void ClassSoilDS::run(void) {
 
 //******Compute actual evapotranspiration
 
-    float culvert_pond = 0.0; // convert m3 to mm
+    double culvert_pond = 0.0; // convert m3 to mm
 
-    float culvert_evapL = 0;
+    double culvert_evapL = 0;
 
     if(variation == VARIATION_1 && culvert_water_V[hh] > 0.0 && hru_evap_buf[hh] > 0.0){ // conditions for culvert evaporation
       culvert_pond = culvert_water_V[hh]/(hru_area[hh]*1000.0); // convert m3 to mm over HRU area
@@ -21438,7 +21438,7 @@ void ClassSoilDS::run(void) {
       culvert_water_V[hh] = (culvert_pond - culvert_evapL)*(hru_area[hh]*1000.0); // remove evaporation from culvert pond and convert to volume
     }
 
-    float avail_evap = hru_evap_buf[hh] - culvert_evapL;
+    double avail_evap = hru_evap_buf[hh] - culvert_evapL;
     if(Sd[hh] + soil_moist[hh] + culvert_pond > 0.0)
       avail_evap *= (Sd[hh]/(Sd[hh] + soil_moist[hh]));
     else
@@ -21463,7 +21463,7 @@ void ClassSoilDS::run(void) {
 
     if(avail_evap > 0.0 && soil_moist[hh] > 0.0 && cov_type[hh] > 0){
 
-      float pctl, pctr, etl, ets, etr;
+      double pctl, pctr, etl, ets, etr;
 
       if((soil_moist_max[hh] - soil_rechr_max[hh]) > 0.0)
         pctl = (soil_moist[hh] - soil_rechr[hh])/(soil_moist_max[hh] - soil_rechr_max[hh]);
@@ -21594,15 +21594,15 @@ void ClassSoilDS::run(void) {
 
 void ClassSoilDS::finish(bool good) {
 
-  float Allcum_soil_runoff = 0.0;
-  float Allcum_soil_ssr = 0.0;
-  float Allcum_rechr_ssr = 0.0;
-  float Allcum_soil_gw = 0.0;
-  float Allcum_gw_flow = 0.0;
-  float Allcum_infil_act = 0.0;
-  float Allcum_soil_moist_change = 0.0;
-  float Allcum_Sd_change = 0.0;
-  float Allcum_gw_change = 0.0;
+  double Allcum_soil_runoff = 0.0;
+  double Allcum_soil_ssr = 0.0;
+  double Allcum_rechr_ssr = 0.0;
+  double Allcum_soil_gw = 0.0;
+  double Allcum_gw_flow = 0.0;
+  double Allcum_infil_act = 0.0;
+  double Allcum_soil_moist_change = 0.0;
+  double Allcum_Sd_change = 0.0;
+  double Allcum_gw_change = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (SoilDS)' soil_rechr         (mm) (mm*hru) (mm*hru/basin): ").c_str(), soil_rechr[hh], hru_area[hh], basin_area[0], " *** information only - already included in 'soil_moist'.");
@@ -21737,7 +21737,7 @@ void Classalbedoobs2::run(void) {
     jday = julian("now");
 
     for(hh = 0; chkStruct(); ++hh) {
-      float hemisphere = (hru_lat[hh] < 0.0);
+      double hemisphere = (hru_lat[hh] < 0.0);
       if((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[hh] > 5.0) {  // changed
         winter[hh] = 1;
         Albedo[hh] = Albedo_snow[hh];
@@ -21758,9 +21758,9 @@ void Classalbedoobs2::run(void) {
       }
       else { // SWE[hh] > 0.0
 
-        float Qnc = -0.371 + 5.22*QdroD[hh]*(1 - Albedo[hh]);
+        double Qnc = -0.371 + 5.22*QdroD[hh]*(1 - Albedo[hh]);
 
-        float MT = -0.064*jday + 6.69;
+        double MT = -0.064*jday + 6.69;
 
         if(hru_tmax[hh] < -6.0 && Qnc < 1.0){
           winter[hh] = 1;
@@ -21783,9 +21783,9 @@ void Classalbedoobs2::run(void) {
   } //end of every day
 }
 
-void Classalbedoobs2::albedo(long jday, float Qnc) {
+void Classalbedoobs2::albedo(long jday, double Qnc) {
 
-  float DR = 0.071;
+  double DR = 0.071;
 
   if(SWE[hh] > 60.0 && Albedo[hh] > 0.65)
     DR = 0.015;
@@ -21805,7 +21805,7 @@ void Classalbedoobs2::albedo(long jday, float Qnc) {
       Albedo[hh] = Albedo[hh] - 0.05;
     }
     else{
-      float MT = -0.064*jday + 6.69;
+      double MT = -0.064*jday + 6.69;
 
       if(hru_tmin[hh] > -4.0 || Qnc > 1.0 && hru_tmax[hh] > 0.0 ||
               hru_tmax[hh] > MT && Qnc > -0.5) {
@@ -21868,7 +21868,7 @@ void Classwinter_meltflag::run(void) {
     jday = julian("now");
 
       for(hh = 0; chkStruct(); ++hh) {
-        float hemisphere = (hru_lat[hh] < 0.0);
+        double hemisphere = (hru_lat[hh] < 0.0);
         if((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[hh] > 5.0) {  // changed
           winter[hh] = 1;
         }
@@ -21884,13 +21884,13 @@ void Classwinter_meltflag::run(void) {
       }
       else { // SWE[hh] > 0.0
 
-        float Qnc = -0.371 + 5.22*QdroD[hh]*(1 - Albedo[hh]);
+        double Qnc = -0.371 + 5.22*QdroD[hh]*(1 - Albedo[hh]);
 
         if(hru_tmax[hh] < -6.0 && Qnc < 1.0)
           winter[hh] = 1;
 
         if(winter[hh] == 1) {
-          float MT = -0.064*jday + 6.69;
+          double MT = -0.064*jday + 6.69;
 
           if(hru_tmin[hh] > -4.0 || Qnc > 1.0 && hru_tmax[hh] > 0.0 || hru_tmax[hh] > MT && Qnc > -0.5) {
             meltflag[hh] = 1;
@@ -21932,7 +21932,7 @@ void Class_z_s_rho::init(void) {
 
 void Class_z_s_rho::run(void) {
 
-  float SWE_Max;
+  double SWE_Max;
 
   for (hh = 0; chkStruct(); ++hh){
     z_s[hh] = Common::DepthofSnow(SWE[hh]); // returns zero if SWE <= 2.05 mm
@@ -22069,7 +22069,7 @@ void Classtsurface::run(void) {
       if(variation == VARIATION_ORG || variation == VARIATION_2 || variation == VARIATION_3){
         if(Zdt[hh] > Zdt_last[hh])
           Zdt_last[hh] = Zdt[hh];
-        float Qn = netD[hh]*1E6/86400; // MJ/m^2*d to W/m^2
+        double Qn = netD[hh]*1E6/86400; // MJ/m^2*d to W/m^2
         hru_tsf[hh] = (W_a[hh]*hru_t[hh] + W_b[hh]*Qn)*atan(W_c[hh]*(Zdt_last[hh] + W_d[hh]))*2.0/M_PI;
       }
       else if(variation == VARIATION_1 || variation == VARIATION_4 || variation == VARIATION_5){
@@ -22106,12 +22106,12 @@ void Classtsurface::run(void) {
         else
           SWE_tc[hh] = 0.138 - 1.01* SWE_density[hh]/1000.0 + 3.233*sqr(SWE_density[hh]/1000.0);
 
-        float t_minus = tmin[hh];
+        double t_minus = tmin[hh];
 
         if(tmin[hh] >= 0.0)
           t_minus = 0.0;
 
-        float umin = SWE[hh]*(2.115+0.00779*t_minus)*t_minus/1000.0;
+        double umin = SWE[hh]*(2.115+0.00779*t_minus)*t_minus/1000.0;
 
         hru_tsf[hh] = hru_t_D[hh] - (umin*1E6/86400)*snowdepth[hh]/SWE_tc[hh]; // 1E6/86400 is conversion: MJ/m^2*d to W/m^2
       }
@@ -22226,7 +22226,7 @@ void Classqdrift::init(void) {
     if(variation == VARIATION_0 && Type[hh] != DRIFT)
       continue;  // drift
 
-    float c = 0.0;
+    double c = 0.0;
     if(SWE[hh] > 0.0)
       c = length[hh]*InitSWE[hh]/1E3;
     LogMessageA(hh, "(Drift  ) - water content (m^3) (m/m^2): ", c, length[hh]);
@@ -22247,7 +22247,7 @@ void Classqdrift::run(void) {
     if(SWE[hh] > 0.0) { // still drift
 
       if(Qm[hh] > 0.0) {
-        float melt = Qm[hh]/334.4*1E3;
+        double melt = Qm[hh]/334.4*1E3;
 
         if(melt > SWE[hh]){
           melt = SWE[hh];
@@ -22256,7 +22256,7 @@ void Classqdrift::run(void) {
         else
           SWE[hh] -= melt;
 
-        float lastcumdriftmelt = cumdriftmelt[hh];  // following avoids round off error
+        double lastcumdriftmelt = cumdriftmelt[hh];  // following avoids round off error
         cumdriftmelt[hh] = length[hh]*InitSWE[hh]*(1.0 - sqr(SWE[hh]/InitSWE[hh])); // (mm.l)
         driftmelt[hh] = (cumdriftmelt[hh] - lastcumdriftmelt)/1E3; // (m3/Int)
       }
@@ -22291,7 +22291,7 @@ void Classqdrift::finish(bool good) {
     if(variation == VARIATION_ORG && Type[hh] != DRIFT)
       continue;  // drift
 
-    float c = 0.0;
+    double c = 0.0;
     if(SWE[hh] > 0.0)
       c = length[hh]*InitSWE[hh]*sqr(SWE[hh]/InitSWE[hh])/1E3;
     LogMessageA(hh, "(Drift  ) - water content (m^3) (m/m^2): ", c, length[hh]);
@@ -22539,7 +22539,7 @@ void Classquinton::init(void) {
 
   for (int nn = 0; nn <= CLAY; ++nn)
     if(Pors_def[nn][0] > 0.0)
-      const_cast<float*> (por_s) [nn] = Pors_def[nn][0];
+      const_cast<double*> (por_s) [nn] = Pors_def[nn][0];
 
   for(hh = 0; chkStruct(); ++hh) {
 
@@ -22559,7 +22559,7 @@ void Classquinton::init(void) {
     transit[hh] = 0.0;
     dmelt[hh] = FrozenTo[hh];
 
-    float DrainD = Drained[hh];
+    double DrainD = Drained[hh];
     bool AsWater = FrozenTo[hh] > Drained[hh]; // frost table below drained table
 
     if(!AsWater) // pre-thaw
@@ -22567,7 +22567,7 @@ void Classquinton::init(void) {
     else
       wDrained[hh] = 0.0;
 
-    float d_cum = 0.0; // top of layer
+    double d_cum = 0.0; // top of layer
 
     for (int nn = 0; nn < nlay; ++nn) {
 
@@ -22620,10 +22620,10 @@ void Classquinton::init(void) {
 
     if(Type[hh] != HUMMOCK) continue;  // drift
 
-    float c = 0.0;
+    double c = 0.0;
     d_cum = 0.0; // bottom of layer
-    float Top; // residual depth above Drained - residual
-    float Bot; // residual depth below Drained - saturated
+    double Top; // residual depth above Drained - residual
+    double Bot; // residual depth below Drained - saturated
 
     DrainD = Drained[hh];
 
@@ -22672,26 +22672,26 @@ void Classquinton::run(void) {
                             + Cv_s[soil_type_lay[nn][hh]]*(1.0-por_s[soil_type_lay[nn][hh]])
                             + Cv_a*(por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh]);
 
-      float Xs = 1.0 - por_s[soil_type_lay[nn][hh]];
-      float Xw = por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh];
-      float Xa = 1.0 - Xs - Xw; // also equals PR
+      double Xs = 1.0 - por_s[soil_type_lay[nn][hh]];
+      double Xw = por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh];
+      double Xa = 1.0 - Xs - Xw; // also equals PR
 
-      float n = por_s[soil_type_lay[nn][hh]];
+      double n = por_s[soil_type_lay[nn][hh]];
 
-      float ga;
+      double ga;
       if(Xw >= 0.09)
         ga = 0.333-Xa/n*(0.333-0.035);
       else
         ga = 0.013 + 0.944*Xw;
 
-      float gc = 1.0 - 2.0*ga;
+      double gc = 1.0 - 2.0*ga;
 
-      float Fs = 1.0/3.0*(2.0/(1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.125)
+      double Fs = 1.0/3.0*(2.0/(1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.125)
                    + (1.0/((1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.75))));
 
-      float Fa = 1.0/3.0*(2.0/(1 + (lam_a/lam_w-1.0)*ga) + (1.0/((1 + (lam_a/lam_w-1.0)*gc))));
+      double Fa = 1.0/3.0*(2.0/(1 + (lam_a/lam_w-1.0)*ga) + (1.0/((1 + (lam_a/lam_w-1.0)*gc))));
 
-      float a = Farouki_a(por_s[soil_type_lay[nn][hh]]);
+      double a = Farouki_a(por_s[soil_type_lay[nn][hh]]);
 
       lamis_lay[nn][hh]  = lam_i*a*a + lam_s[soil_type_lay[nn][hh]]*sqr(1.0-a)
                            + lam_s[soil_type_lay[nn][hh]]*lam_i*(2*a-2*sqr(a))
@@ -22705,14 +22705,14 @@ void Classquinton::run(void) {
                              /(Xw + Fa*Xa + Fs*Xs);
     } // for layers
 
-    float d_cum = 0.0; // bottom of layer
-    float Top; // residual depth above Drained - residual
-    float Bot; // residual depth below Drained - saturated
-    float DrainD = wDrained[hh]; // zero if unfrozen
+    double d_cum = 0.0; // bottom of layer
+    double Top; // residual depth above Drained - residual
+    double Bot; // residual depth below Drained - saturated
+    double DrainD = wDrained[hh]; // zero if unfrozen
 
     if(Qg[hh] > 0.0) {
 
-      float Energy = Qg[hh]*1.0E6; // work in Joules
+      double Energy = Qg[hh]*1.0E6; // work in Joules
 
       for (int nn = 0; nn < nlay; ++nn) {
 
@@ -22734,16 +22734,16 @@ void Classquinton::run(void) {
         if(Top > 0.0 && dmelt[hh] < d_cum - Bot) {  // handle residual in top layer
 // Calculate the melt depth for this interval and this layer
 
-          float d = Energy/(-tlayer_lay[nn][hh]*Cvisa_lay[nn][hh] +
+          double d = Energy/(-tlayer_lay[nn][hh]*Cvisa_lay[nn][hh] +
                       Hf*1e3*Residual_lay[nn][hh]); // (m)
 
           if((d + dmelt[hh]) > d_cum) { // all layer melted
 
   // actual volume of water melted m.m2
-            float dif = d_cum - dmelt[hh];
+            double dif = d_cum - dmelt[hh];
 
   // energy used to melt remaining ice in this layer
-            float used = (-tlayer_lay[nn][hh]*Cvisa_lay[nn][hh]
+            double used = (-tlayer_lay[nn][hh]*Cvisa_lay[nn][hh]
                            + Hf*1e3*Residual_lay[nn][hh])*dif; // (m)
             Energy -= used;
             dmelt[hh] = d_cum;
@@ -22759,16 +22759,16 @@ void Classquinton::run(void) {
 
         if(Bot > 0.0) { // handle saturated bottom
 
-          float d = Energy/(-tlayer_lay[nn][hh]*Cvis_lay[nn][hh]
+          double d = Energy/(-tlayer_lay[nn][hh]*Cvis_lay[nn][hh]
                       + Hf*1e3*por_s[soil_type_lay[nn][hh]]); // (m)
 
           if((d + dmelt[hh]) > d_cum) { // all layer melted
 
   // actual volume of water melted m.m2
-            float dif = d_cum - dmelt[hh];
+            double dif = d_cum - dmelt[hh];
 
   // energy used to melt remaining ice in this layer
-            float used = (-tlayer_lay[nn][hh]*Cvis_lay[nn][hh]
+            double used = (-tlayer_lay[nn][hh]*Cvis_lay[nn][hh]
                            + Hf*1e3*por_s[soil_type_lay[nn][hh]])*dif; // (m)
             Energy -= used;
             dmelt[hh] = d_cum;
@@ -22802,24 +22802,24 @@ void Classquinton::run(void) {
 
       if(n_const_lay[nn][hh] > 0.001){ // use Van Genuchten
 
-        float m = 1.0-1.0/n_const_lay[nn][hh];
-        float alph = a_const_lay[nn][hh]*m - 1.0;
+        double m = 1.0-1.0/n_const_lay[nn][hh];
+        double alph = a_const_lay[nn][hh]*m - 1.0;
 // bubbling pressure = 1/alph
-        float fieldtheta = (por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh])*pow(2.0f, -m);
-        float thawedthislayer = dmelt[hh] - (d_cum - d_lay[nn][hh]);
+        double fieldtheta = (por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh])*pow(2.0f, -m);
+        double thawedthislayer = dmelt[hh] - (d_cum - d_lay[nn][hh]);
 
         if(thawedthislayer > d_lay[nn][hh])
           thawedthislayer = d_lay[nn][hh];
 
         if(capillary_lay[nn][hh]/thawedthislayer > fieldtheta) {
-          float drain = (capillary_lay[nn][hh] - thawedthislayer*fieldtheta);
+          double drain = (capillary_lay[nn][hh] - thawedthislayer*fieldtheta);
           if(drain > capillary_lay[nn][hh]) drain = capillary_lay[nn][hh];
           layerwater_lay[nn][hh] += drain;
           capillary_lay[nn][hh] -= drain;
         }
 
         if(capillary_lay[nn][hh] > 0.0) {
-          float tension;
+          double tension;
           if(d_surface[hh] > d_cum) // water table below layer
             tension = (d_surface[hh] - d_cum) + d_lay[nn][hh]; //
           else if(d_surface[hh] > d_cum - d_lay[nn][hh])// in layer
@@ -22830,9 +22830,9 @@ void Classquinton::run(void) {
           tension_lay[nn][hh] = tension;
 
           if(tension > 1.0/alph){ // greater than bubbling pressure
-            float theta = (por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh])
+            double theta = (por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh])
                           *pow(1.0f + pow(alph*tension, n_const_lay[nn][hh]), -m);
-            float excess = capillary_lay[nn][hh]
+            double excess = capillary_lay[nn][hh]
                              - theta*d_lay[nn][hh]/por_s[soil_type_lay[nn][hh]]; // (m)
 
             if(excess > 0.0){
@@ -22867,13 +22867,13 @@ void Classquinton::run(void) {
       d_surface[hh] = 0.001;
 
     if(Depth[hh] > 0.0) {
-      float Y = log(Kbtm[hh]) + (log(Ktop[hh]) - log(Kbtm[hh]))/(1.0f + pow(d_surface[hh]/ztrn[hh], 4.3f));
-      float YY = exp(Y);
+      double Y = log(Kbtm[hh]) + (log(Ktop[hh]) - log(Kbtm[hh]))/(1.0f + pow(d_surface[hh]/ztrn[hh], 4.3f));
+      double YY = exp(Y);
       k[hh] = exp(Y);
 
-      float kd = k[hh]; // m/day
+      double kd = k[hh]; // m/day
 
-      float lasttransit = transit[hh]; // unit of hours
+      double lasttransit = transit[hh]; // unit of hours
 
       transit[hh] = length[hh]*24.0/kd; // unit of hours
 
@@ -22886,7 +22886,7 @@ void Classquinton::run(void) {
       for (int nn = 0; nn < nlay; ++nn) {
 
         if(layerwater_lay[nn][hh] > 0.0) {
-          float available = layerwater_lay[nn][hh]*(por_s[soil_type_lay[nn][hh]]
+          double available = layerwater_lay[nn][hh]*(por_s[soil_type_lay[nn][hh]]
                                - Residual_lay[nn][hh]);
           if(available > Loss) {
             layerwater_lay[nn][hh] -= Loss/(por_s[soil_type_lay[nn][hh]]
@@ -22924,7 +22924,7 @@ void Classquinton::run(void) {
       flowin[hh] += hru_p[0];
 
 	//Added after to get rid of errors 
-	float MINFLOAT = 0.00;
+	double MINFLOAT = 0.00;
 
     if(flowin[hh] > MINFLOAT*2) cumflowin[hh] += flowin[hh];
     flowinm3[hh] = flowin[hh]*length[hh];
@@ -22933,8 +22933,8 @@ void Classquinton::run(void) {
 
     if(flowin[hh] > 0.0) {  // infiltrate surface excess water into layers
 
-      float maxdepth;
-      float frozmaxdepth;
+      double maxdepth;
+      double frozmaxdepth;
 
       runoff[hh] = flowin[hh];
 
@@ -22966,7 +22966,7 @@ void Classquinton::run(void) {
         }
 
         if(frozmaxdepth > 1e-6) {
-          float froztopup = frozmaxdepth*(por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh]);
+          double froztopup = frozmaxdepth*(por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh]);
 
           if(runoff[hh] > froztopup) { // top up frozen drained area first
 //            wDrained[hh] -= frozmaxdepth;
@@ -22984,7 +22984,7 @@ void Classquinton::run(void) {
         } // if(frozmaxdepth > 1e-6)
 
         if(maxdepth > 1e-6) {
-          float topup = (maxdepth - (layerwater_lay[nn][hh] + capillary_lay[nn][hh]))
+          double topup = (maxdepth - (layerwater_lay[nn][hh] + capillary_lay[nn][hh]))
                           *(por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh]);
 
           if(runoff[hh] > topup) {
@@ -23067,10 +23067,10 @@ void Classquinton::finish(bool good) {
 
     if(Type[hh] != HUMMOCK) continue;  // drift
 
-    float c = 0.0;
-    float d_cum = 0.0; // bottom of layer
-    float Top, Bot;
-    float DrainD = wDrained[hh];
+    double c = 0.0;
+    double d_cum = 0.0; // bottom of layer
+    double Top, Bot;
+    double DrainD = wDrained[hh];
 
     for (int nn = 0; nn < nlay; ++nn) {
       d_cum += d_lay[nn][hh];
@@ -23190,7 +23190,7 @@ void ClassXGAyers::run(void) {
     runoff[hh] = 0.0;
 
     if(net_rain[hh] > 0.0){
-      float maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
+      double maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
       if(maxinfil > net_rain[hh])
         infil[hh] = net_rain[hh];
       else{
@@ -23416,7 +23416,7 @@ void ClassCRHMCanopyClearing::init(void) {
 
 void ClassCRHMCanopyClearing::run(void) {
 
-  float Kstar_H;
+  double Kstar_H;
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -23455,19 +23455,19 @@ void ClassCRHMCanopyClearing::run(void) {
     Subl_Cpy[hh] = 0.0;
 
 // Canopy temperature is approximated by the air temperature.
-    float T1 = hru_t[hh] + CRHM_constants::Tm;
+    double T1 = hru_t[hh] + CRHM_constants::Tm;
 
     if(CanopyClearing[hh] == 0){
 
-      float Exposure = Ht[hh] - Common::DepthofSnow(SWE[hh]); /* depths(m) SWE(mm) */
+      double Exposure = Ht[hh] - Common::DepthofSnow(SWE[hh]); /* depths(m) SWE(mm) */
       if(Exposure < 0.0)
         Exposure = 0.0;
 
-      float LAI_ = LAI[hh]*Exposure/Ht[hh];
+      double LAI_ = LAI[hh]*Exposure/Ht[hh];
 
-      float Vf = 0.45 - 0.29*log(LAI[hh]);
+      double Vf = 0.45 - 0.29*log(LAI[hh]);
 
-      float Vf_ = Vf + (1.0 - Vf)*sin((Ht[hh] - Exposure)/Ht[hh]*M_PI_2);
+      double Vf_ = Vf + (1.0 - Vf)*sin((Ht[hh] - Exposure)/Ht[hh]*M_PI_2);
 
       if(SolAng[hh] > 0.001) {
         k[hh] = 1.081*SolAng[hh]*cos(SolAng[hh])/sin(SolAng[hh]);
@@ -23500,15 +23500,15 @@ void ClassCRHMCanopyClearing::run(void) {
     }
 
 
-    float rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
+    double rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
 
-    float U1 = hru_u[hh]; // Wind speed (m/s)
+    double U1 = hru_u[hh]; // Wind speed (m/s)
 
     ra[hh] = (log(Zref[hh]/Z0snow[hh])*log(Zwind[hh]/Z0snow[hh]))/sqr(CRHM_constants::kappa)/U1;
 
-    float deltaX = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
+    double deltaX = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
 
-    float q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
+    double q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
 
 
     Ts[hh] = T1 + (CRHM_constants::emiss*(Qli_ - CRHM_constants::sbc*pow(T1, 4.0f)) + CRHM_constants::Ls*(q - Common::Qs(Pa[hh], T1))*rho/ra[hh])/
@@ -23534,8 +23534,8 @@ void ClassCRHMCanopyClearing::run(void) {
       if(Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0){ // handle snow interception
 
         if(Sbar[hh] >= 0.0){
-          float RhoS = 67.92 + 51.25* exp(hru_t[hh]/2.59);
-          float LStar = Sbar[hh]* (0.27 + 46.0/RhoS)* LAI[hh];
+          double RhoS = 67.92 + 51.25* exp(hru_t[hh]/2.59);
+          double LStar = Sbar[hh]* (0.27 + 46.0/RhoS)* LAI[hh];
 
           if(Snow_load[hh] > LStar){ // after increase in temperature
             direct_snow[hh] = Snow_load[hh] - LStar;
@@ -23572,33 +23572,33 @@ void ClassCRHMCanopyClearing::run(void) {
   // calculate snow ventilation windspeed:
 
   //=============================================================================
-          const float gamma = 1.15;
-          const float AlbedoIce = 0.8;       // albedo of ideal ice sphere
-          const float Radius = 5.0e-4;       // radii of single 'ideal' ice sphere in, m)
-          const float KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
-          const float ks = 0.0114;           // snow shape coefficient for jack pine
-          const float Fract = 0.37;          // fractal dimension of intercepted snow
-          const float ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
-          const float Hs = 2.838e6;          // heat of sublimation (MJ/kg)
+          const double gamma = 1.15;
+          const double AlbedoIce = 0.8;       // albedo of ideal ice sphere
+          const double Radius = 5.0e-4;       // radii of single 'ideal' ice sphere in, m)
+          const double KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
+          const double ks = 0.0114;           // snow shape coefficient for jack pine
+          const double Fract = 0.37;          // fractal dimension of intercepted snow
+          const double ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
+          const double Hs = 2.838e6;          // heat of sublimation (MJ/kg)
   //==============================================================================
 
-          float xi2 = 1-Zvent[hh];
-          float windExt2 = (gamma * LAI[hh] * xi2);
+          double xi2 = 1-Zvent[hh];
+          double windExt2 = (gamma * LAI[hh] * xi2);
 
-          float uVent = u_FHt[hh] * exp(-1 * windExt2);
+          double uVent = u_FHt[hh] * exp(-1 * windExt2);
 
 
   // calculate sublimation of intercepted snow from ideal intercepted ice sphere (500 microns diameter):
 
-          float Alpha, A1, B1, C1, J, D, Lamb, Mpm, Nu, Nr, SStar, Sigma2;
+          double Alpha, A1, B1, C1, J, D, Lamb, Mpm, Nu, Nr, SStar, Sigma2;
 
-          float Es = 611.15f * exp(22.452f*hru_t[hh]/(hru_t[hh] + 273.0f));  // {sat pressure}
+          double Es = 611.15f * exp(22.452f*hru_t[hh]/(hru_t[hh] + 273.0f));  // {sat pressure}
 
-          float SvDens = Es*PBSM_constants::M/(PBSM_constants::R*(hru_t[hh] + 273.0f)); // {sat density}
+          double SvDens = Es*PBSM_constants::M/(PBSM_constants::R*(hru_t[hh] + 273.0f)); // {sat density}
 
           Lamb = 6.3e-4*(hru_t[hh]+273.0) + 0.0673;  // thermal conductivity of atmosphere
           Nr = 2.0 * Radius * uVent / KinVisc;  // Reynolds number
-          Nu = 1.79 + 0.606 * sqrt((float) Nr); // Nusselt number
+          Nu = 1.79 + 0.606 * sqrt((double) Nr); // Nusselt number
           SStar = M_PI * sqr(Radius) * (1.0f - AlbedoIce) * Qsi_;  // SW to snow particle !!!! changed
           A1 = Lamb * (hru_t[hh] + 273) * Nu;
           B1 = Hs * PBSM_constants::M /(PBSM_constants::R * (hru_t[hh] + 273.0f))- 1.0;
@@ -23612,11 +23612,11 @@ void ClassCRHMCanopyClearing::run(void) {
 
   // sublimation rate of single 'ideal' ice sphere:
 
-          float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+          double Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
 
   // snow exposure coefficient (Ce):
 
-          float Ce;
+          double Ce;
           if ((Snow_load[hh]/LStar) <= 0.0)
             Ce = 0.07;
           else
@@ -23624,7 +23624,7 @@ void ClassCRHMCanopyClearing::run(void) {
 
   // calculate 'potential' canopy sublimation:
 
-          float Vi = Vs*Ce;
+          double Vi = Vs*Ce;
 
   // limit sublimation to canopy snow available and take sublimated snow away from canopy snow at timestep start
 
@@ -23641,10 +23641,10 @@ void ClassCRHMCanopyClearing::run(void) {
 
   // calculate 'ice-bulb' temperature of intercepted snow:
 
-          float IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
-          float Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
+          double IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
+          double Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
 
-          const float c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
+          const double c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
 
   // determine whether canopy snow is unloaded:
 
@@ -23695,7 +23695,7 @@ void ClassCRHMCanopyClearing::run(void) {
       if(Cc[hh] <= 0.0)
         Cc[hh] = 0.0;
 
-      float smax = Cc[hh]*LAI[hh]*0.2;
+      double smax = Cc[hh]*LAI[hh]*0.2;
 
 //  Forest rain interception and evaporation model
 // 'sparse' Rutter interception model (i.e. Valente 1997):
@@ -23731,7 +23731,7 @@ void ClassCRHMCanopyClearing::run(void) {
           }
         }
         else{ // use Priestley-Taylor when snowcover
-          float Q = Qsi_*86400/Global::Freq/1e6/lambda(hru_t[hh]); // convert w/m2 to mm/m2/int
+          double Q = Qsi_*86400/Global::Freq/1e6/lambda(hru_t[hh]); // convert w/m2 to mm/m2/int
 
           if(Qsi_ > 0.0)
            Pevap[hh] = 1.26*delta(hru_t[hh])*Q/(delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh]));
@@ -23776,7 +23776,7 @@ void ClassCRHMCanopyClearing::finish(bool good) {
   }
 }
 
-double ClassCRHMCanopyClearing::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
+double ClassCRHMCanopyClearing::delta(double t) // Slope of sat vap p vs t, kPa/Â°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -23784,19 +23784,19 @@ double ClassCRHMCanopyClearing::delta(float t) // Slope of sat vap p vs t, kPa/�
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-float ClassCRHMCanopyClearing::lambda(float t) // Latent heat of vaporization (mJ/(kg Â°C))
+double ClassCRHMCanopyClearing::lambda(double t) // Latent heat of vaporization (mJ/(kg Â°C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassCRHMCanopyClearing::gamma(float Pa, float t) // Psychrometric constant (kPa/Â°C)
+double ClassCRHMCanopyClearing::gamma(double Pa, double t) // Psychrometric constant (kPa/Â°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg Â°C))
 }
 
-float ClassCRHMCanopyClearing::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double ClassCRHMCanopyClearing::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R = 2870;
+  const double R = 2870;
    return (1E4*Pa /(R*( 273.15 + t))*(1.0 - 0.379*(ea/Pa)) ); //
 }
 
@@ -24007,7 +24007,7 @@ void ClassCRHMCanopyClearingGap::init(void) {
 
 void ClassCRHMCanopyClearingGap::run(void){
 
-  float Exposure, LAI_, Vf, Vf_, Tau, Kstar_H, Kd;
+  double Exposure, LAI_, Vf, Vf_, Tau, Kstar_H, Kd;
 
   for (hh = 0; chkStruct(); ++hh){
 
@@ -24047,17 +24047,17 @@ void ClassCRHMCanopyClearingGap::run(void){
 
 // Canopy temperature is approximated by the air temperature.
 
-    float T1 = hru_t[hh] + CRHM_constants::Tm;
+    double T1 = hru_t[hh] + CRHM_constants::Tm;
 
-    float rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
+    double rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
 
-    float U1 = hru_u[hh]; // Wind speed (m/s)
+    double U1 = hru_u[hh]; // Wind speed (m/s)
 
     ra[hh] = (log(Zref[hh]/Z0snow[hh])*log(Zwind[hh]/Z0snow[hh]))/sqr(CRHM_constants::kappa)/U1;
 
-    float deltaX = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
+    double deltaX = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
 
-    float q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
+    double q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
 
     Ts[hh] = T1 + (CRHM_constants::emiss*(Qli_ - CRHM_constants::sbc*pow(T1, 4.0f)) + CRHM_constants::Ls*(q - Common::Qs(Pa[hh], T1))*rho/ra[hh])/
              (4*CRHM_constants::emiss*CRHM_constants::sbc*pow(T1, 3.0f) + (CRHM_constants::Cp + CRHM_constants::Ls*deltaX)*rho/ra[hh]);
@@ -24082,7 +24082,7 @@ void ClassCRHMCanopyClearingGap::run(void){
 
         if(SolAng[hh] > 0.001 && cosxs[hh] > 0.001 && cosxsflat[hh] > 0.001) {
           k[hh] = 1.081*SolAng[hh]*cos(SolAng[hh])/sin(SolAng[hh]);
-          float limit = cosxsflat[hh]/cosxs[hh];
+          double limit = cosxsflat[hh]/cosxs[hh];
           if(limit > 2.0)
             limit = 2.0;
           Tauc[hh] = exp(-k[hh]*LAI_*limit);
@@ -24135,17 +24135,17 @@ void ClassCRHMCanopyClearingGap::run(void){
 
         Vf = 0.45 - 0.29*log(LAI[hh]);
 
-        float Tau_d = Vf + (1.0 - Vf)*sin((Surrounding_Ht[hh] - Exposure)/Surrounding_Ht[hh]*M_PI_2); // previously Vf_
+        double Tau_d = Vf + (1.0 - Vf)*sin((Surrounding_Ht[hh] - Exposure)/Surrounding_Ht[hh]*M_PI_2); // previously Vf_
 
 // calculate forest clearing sky view factor (Vgap) via Reifsnyder and LullÂs (1965) expression:
 
-        float Vgap = sqr(sin(atan2(Gap_diameter[hh], 2.0*Surrounding_Ht[hh])));
+        double Vgap = sqr(sin(atan2(Gap_diameter[hh], 2.0*Surrounding_Ht[hh])));
 
 // calculate beam pathlength correction (variable ÂGap_beam_corrÂ) for gap:
 
-        float Gap_beam_corr = 0;
+        double Gap_beam_corr = 0;
         if(Qsi_ > 0.0 && SolAng[hh] > 0.001){
-          float cosxsLim = 3;
+          double cosxsLim = 3;
           if(cosxs[hh] >  0.33)
             cosxsLim = 1.0/cosxs[hh];
 
@@ -24157,11 +24157,11 @@ void ClassCRHMCanopyClearingGap::run(void){
         }
 // calculate beam shortwave transmittance of the gap:
 
-        float product = LAI[hh]*Gap_beam_corr;
+        double product = LAI[hh]*Gap_beam_corr;
         if(product > 50)
           product = 50;
 
-        float Tau_b_gap = exp(-product);
+        double Tau_b_gap = exp(-product);
 
         Kd = Qsi_*(1.0 - Alpha_c[hh] - Tau_b_gap*(1.0 - Albedo[hh]));
 
@@ -24194,8 +24194,8 @@ void ClassCRHMCanopyClearingGap::run(void){
       if(Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0){ // handle snow interception
 
         if(Sbar[hh] >= 0.0){
-          float RhoS = 67.92 + 51.25* exp(hru_t[hh]/2.59);
-          float LStar = Sbar[hh]* (0.27 + 46.0/RhoS)* LAI[hh];
+          double RhoS = 67.92 + 51.25* exp(hru_t[hh]/2.59);
+          double LStar = Sbar[hh]* (0.27 + 46.0/RhoS)* LAI[hh];
 
           if(Snow_load[hh] > LStar){ // after increase in temperature
             direct_snow[hh] = Snow_load[hh] - LStar;
@@ -24232,31 +24232,31 @@ void ClassCRHMCanopyClearingGap::run(void){
 // calculate snow ventilation windspeed:
 
 //=============================================================================
-        const float gamma = 1.15;
-        const float AlbedoIce = 0.8;       // albedo of ideal ice sphere
-        const float Radius = 5.0e-4;       // radii of single 'ideal' ice sphere in, m)
-        const float KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
-        const float ks = 0.0114;           // snow shape coefficient for jack pine
-        const float Fract = 0.37;          // fractal dimension of intercepted snow
-        const float ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
-        const float Hs = 2.838e6;          // heat of sublimation (MJ/kg)
+        const double gamma = 1.15;
+        const double AlbedoIce = 0.8;       // albedo of ideal ice sphere
+        const double Radius = 5.0e-4;       // radii of single 'ideal' ice sphere in, m)
+        const double KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
+        const double ks = 0.0114;           // snow shape coefficient for jack pine
+        const double Fract = 0.37;          // fractal dimension of intercepted snow
+        const double ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
+        const double Hs = 2.838e6;          // heat of sublimation (MJ/kg)
 //==============================================================================
 
-          float xi2 = 1-Zvent[hh];
-          float windExt2 = (gamma * LAI[hh] * xi2);
-          float uVent = u_FHt[hh] * exp(-1 * windExt2);
+          double xi2 = 1-Zvent[hh];
+          double windExt2 = (gamma * LAI[hh] * xi2);
+          double uVent = u_FHt[hh] * exp(-1 * windExt2);
 
 // calculate sublimation of intercepted snow from ideal intercepted ice sphere (500 microns diameter):
 
-          float Alpha, A1, B1, C1, J, D, Lamb, Mpm, Nu, Nr, SStar, Sigma2;
+          double Alpha, A1, B1, C1, J, D, Lamb, Mpm, Nu, Nr, SStar, Sigma2;
 
-          float Es = 611.15f * exp(22.452f*hru_t[hh]/(hru_t[hh] + 273.0f));  // {sat pressure}
+          double Es = 611.15f * exp(22.452f*hru_t[hh]/(hru_t[hh] + 273.0f));  // {sat pressure}
 
-          float SvDens = Es*PBSM_constants::M/(PBSM_constants::R*(hru_t[hh] + 273.0f)); // {sat density}
+          double SvDens = Es*PBSM_constants::M/(PBSM_constants::R*(hru_t[hh] + 273.0f)); // {sat density}
 
           Lamb = 6.3e-4*(hru_t[hh]+273.0) + 0.0673;  // thermal conductivity of atmosphere
           Nr = 2.0 * Radius * uVent / KinVisc;  // Reynolds number
-          Nu = 1.79 + 0.606 * sqrt((float) Nr); // Nusselt number
+          Nu = 1.79 + 0.606 * sqrt((double) Nr); // Nusselt number
           SStar = M_PI * sqr(Radius) * (1.0f - AlbedoIce) * Qsi_;  // SW to snow particle !!!! changed
           A1 = Lamb * (hru_t[hh] + 273) * Nu;
           B1 = Hs * PBSM_constants::M /(PBSM_constants::R * (hru_t[hh] + 273.0f))- 1.0;
@@ -24270,11 +24270,11 @@ void ClassCRHMCanopyClearingGap::run(void){
 
 // sublimation rate of single 'ideal' ice sphere:
 
-          float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+          double Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
 
 // snow exposure coefficient (Ce):
 
-          float Ce;
+          double Ce;
           if ((Snow_load[hh]/LStar) <= 0.0)
             Ce = 0.07;
           else
@@ -24282,7 +24282,7 @@ void ClassCRHMCanopyClearingGap::run(void){
 
 // calculate 'potential' canopy sublimation:
 
-          float Vi = Vs*Ce;
+          double Vi = Vs*Ce;
 
 // limit sublimation to canopy snow available and take sublimated snow away from canopy snow at timestep start
 
@@ -24299,10 +24299,10 @@ void ClassCRHMCanopyClearingGap::run(void){
 
 // calculate 'ice-bulb' temperature of intercepted snow:
 
-          float IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
-          float Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
+          double IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
+          double Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
 
-          const float c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
+          const double c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
 
   // determine whether canopy snow is unloaded:
 
@@ -24346,7 +24346,7 @@ void ClassCRHMCanopyClearingGap::run(void){
 
 // calculate horizontal canopy-coverage (Cc):
 
-    float smax, Q; // cannot be in switch structure
+    double smax, Q; // cannot be in switch structure
 
      switch(CanopyClearing[hh]){
 
@@ -24438,7 +24438,7 @@ void ClassCRHMCanopyClearingGap::finish(bool good) {
   }
 }
 
-double ClassCRHMCanopyClearingGap::delta(float t) // Slope of sat vap p vs t, kPa/Â°C
+double ClassCRHMCanopyClearingGap::delta(double t) // Slope of sat vap p vs t, kPa/Â°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -24446,19 +24446,19 @@ double ClassCRHMCanopyClearingGap::delta(float t) // Slope of sat vap p vs t, kP
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-float ClassCRHMCanopyClearingGap::lambda(float t) // Latent heat of vaporization (mJ/(kg Â°C))
+double ClassCRHMCanopyClearingGap::lambda(double t) // Latent heat of vaporization (mJ/(kg Â°C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassCRHMCanopyClearingGap::gamma(float Pa, float t) // Psychrometric constant (kPa/Â°C)
+double ClassCRHMCanopyClearingGap::gamma(double Pa, double t) // Psychrometric constant (kPa/Â°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg Â°C))
 }
 
-float ClassCRHMCanopyClearingGap::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double ClassCRHMCanopyClearingGap::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R = 2870;
+  const double R = 2870;
    return (1E4*Pa /(R*( 273.15 + t))*(1.0 - 0.379*(ea/Pa)) ); //
 }
 
@@ -24501,9 +24501,9 @@ void ClassGrow_Crop::run(void) {
     JULIAN = julian("now");
     for(hh = 0; chkStruct(); ++hh) {
       if(JULIAN >= JCrop_Start[hh] && JULIAN < JCrop_Mature[hh] && Crop_Grow_Rate[hh] > 0.0)
-        const_cast<float*> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate[hh];
+        const_cast<double*> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate[hh];
       else if(JULIAN == JCrop_Harvest[hh])
-        const_cast<float*> (Ht)[hh] = Init_Crop_Ht[hh];
+        const_cast<double*> (Ht)[hh] = Init_Crop_Ht[hh];
 
       Crop_Ht[hh] = Ht[hh];
     }
@@ -24594,10 +24594,10 @@ void ClassREWroute_stream::init(void) {
   }
 
   if(variation == VARIATION_ORG){
-    const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+    const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
     for(hh = 0; hh < nhru; ++hh){
-      float Vavg = (1.0/WS_stream_route_n[hh])*pow(WS_stream_route_R[hh], 2.0f/3.0f)*pow(WS_stream_route_S0[hh], 0.5f);
+      double Vavg = (1.0/WS_stream_route_n[hh])*pow(WS_stream_route_R[hh], 2.0f/3.0f)*pow(WS_stream_route_S0[hh], 0.5f);
 
       WS_stream_Ktravel_var[hh] = WS_stream_route_L[hh]/(Vw[WS_stream_Channel_shp[hh]]*Vavg)/86400.0; // (d)
     }
@@ -24780,11 +24780,11 @@ void ClassICEflow::init(void) {
 
 void ClassICEflow::run(void) {
 
-  const float ice_dens = 917;
-  const float g = 9.81;
-  const float n_Glen = 3;  // Glen's flow parameter
-  const float alpha = M_PI/180.0;  // degrees to radians
-  const float water_dens = 1000;  // kg/m^3
+  const double ice_dens = 917;
+  const double g = 9.81;
+  const double n_Glen = 3;  // Glen's flow parameter
+  const double alpha = M_PI/180.0;  // degrees to radians
+  const double water_dens = 1000;  // kg/m^3
 
   long nstep = getstep()% Global::Freq;
 
@@ -24815,18 +24815,18 @@ void ClassICEflow::run(void) {
         if(test_option[hh] >= 0.0) // use user value for ice flow
           Utot[hh] = test_option[hh];
         else{
-          float ICE = ice[hh] + firn[hh];
+          double ICE = ice[hh] + firn[hh];
           if(channel_option[hh] == 0) // channel flow
             Ux[hh] = 2*Arrhenius_const[hh]*pow(slip_sf[hh]*ice_dens*g*sin(hru_GSL[hh]*alpha), n_Glen)*pow(radius_glacier[hh], n_Glen+1)/(n_Glen+2);
           else // by default slab flow
             Ux[hh] = 2*Arrhenius_const[hh]*pow(ice_dens*g*sin(hru_GSL[hh]*alpha), n_Glen)*pow(ICE/ice_dens, n_Glen+1)/(n_Glen+2);
 
-	        float ice_thickness = ICE/ice_dens; //ICE is in mm water equivalent, and ice_dens is in kg/m3, therefore, ice_thickness is in m
-          float Iw = ice_dens*g*ice_thickness;
-          float tau_b = slip_sf[hh]*ice_dens*g*ice_thickness*sin(hru_GSL[hh]*alpha);
+	        double ice_thickness = ICE/ice_dens; //ICE is in mm water equivalent, and ice_dens is in kg/m3, therefore, ice_thickness is in m
+          double Iw = ice_dens*g*ice_thickness;
+          double tau_b = slip_sf[hh]*ice_dens*g*ice_thickness*sin(hru_GSL[hh]*alpha);
 
           if(basal_option[hh] == 1){
-            float Pw = water_dens*g*cumulative_net_rain[hh]/1000.0; // (mm) > (m)
+            double Pw = water_dens*g*cumulative_net_rain[hh]/1000.0; // (mm) > (m)
             Ub[hh] = slip_c[hh]*pow(tau_b, slip_m[hh])/(Iw - Pw);
           }
           else{ // by default option 2
@@ -24841,7 +24841,7 @@ void ClassICEflow::run(void) {
           for(long To = 0; chkStruct(To); ++To) { // distribute ice outflow of HRU
 
             if(hh != To && Utot[hh] > 0.0 && distrib_hru[hh][To] > 0.0){
-              float Amount = Utot[hh]*distrib_hru[hh][To];
+              double Amount = Utot[hh]*distrib_hru[hh][To];
               Ice_out[hh] = Amount;
               cumIce_out[hh] += Amount;
               ice[hh] -= Amount;
@@ -25184,7 +25184,7 @@ void Classglacier::init(void) {
 void Classglacier::run(void){
 
   long nstep;
-  float umin, ref, rho;
+  double umin, ref, rho;
 
   nstep = getstep();
 
@@ -25281,7 +25281,7 @@ void Classglacier::run(void){
           }
         }
         else if(delay_melt[hh] <= julian("now")) {
-          float eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;\
+          double eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;\
           switch (variation) {
             case VARIATION_ORG :
               if(QnD != NULL && Use_QnD[hh]){ // observation available (MJ/m^2*d)
@@ -25326,7 +25326,7 @@ void Classglacier::run(void){
       if(firn[hh] > 0.0 || ice[hh] > 0.0){
 
         if(nfirn[hh] > 0 && Qmelt[hh] > 0.0 && !inhibit_firnmelt[hh]){ // melt firn
-          float h2o;
+          double h2o;
           while(nfirn[hh] > 0 && Qmelt[hh] > 0.0){
             h2o = firn_dens_array[0][hh]*firn_h_array[0][hh]/1000.0;
             if(Qmelt[hh] < h2o){ // melt some firn
@@ -25380,14 +25380,14 @@ void Classglacier::run(void){
 
 // Update glacier at end of summer
 
-        const float R = 8.314; // (J/(K.mol)
-        const float RHOi = 917; // (kg/m3)
+        const double R = 8.314; // (J/(K.mol)
+        const double RHOi = 917; // (kg/m3)
 
         long Julian = julian("now"); // same as "decday"
         if(SWE_to_firn_Julian[hh] == Julian){ // use fixed date - end of day    !!!!
 
-          float k0 = 11.0*exp(-10160.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
-          float k1 = 575.0*exp(-21400.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
+          double k0 = 11.0*exp(-10160.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
+          double k1 = 575.0*exp(-21400.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
 
 // Check if bottom layer of firn becomes ice
           if(nfirn[hh] && firn_dens_array[nfirn[hh] - 1][hh] >= 830.0){ // transfer
@@ -25408,7 +25408,7 @@ void Classglacier::run(void){
 
           if(SWE[hh] > 0.0){
             if(nfirn[hh] == nlay){ // combine last two entries
-              float mean_d = (firn_dens_array[nlay-2][hh] + firn_dens_array[nlay-1][hh])/2.0;
+              double mean_d = (firn_dens_array[nlay-2][hh] + firn_dens_array[nlay-1][hh])/2.0;
               firn_h_array[nlay-2][hh] = (firn_h_array[nlay-2][hh]*firn_dens_array[nlay-2][hh] + firn_h_array[nlay-1][hh]*firn_dens_array[nlay-1][hh])/mean_d;
               firn_dens_array[nlay-2][hh] = mean_d;
               --nfirn[hh]; // remove layer from SWE
@@ -25429,7 +25429,7 @@ void Classglacier::run(void){
 
 // solve for density from SWE using Bisection method
 
-            float h1 = 0.6, h2 = 8.00, e, h;
+            double h1 = 0.6, h2 = 8.00, e, h;
             long iter_max = 0;
             do {
               h = (h1 + h2)/2.0; // (m)
@@ -25462,7 +25462,7 @@ void Classglacier::run(void){
           firn[hh] = firn_dens_array[0][hh]*firn_h_array[0][hh]/1000.0; // (mm)
           if(nfirn[hh] > 0)
           for(long nn = 1; nn < nfirn[hh]; ++nn){
-            float old_firn = firn_dens_array[nn][hh]*firn_h_array[nn][hh]/1000.0;
+            double old_firn = firn_dens_array[nn][hh]*firn_h_array[nn][hh]/1000.0;
 
             if(old_firn == 0.0){
               old_firn = hh*100 + nn;
@@ -25474,23 +25474,23 @@ void Classglacier::run(void){
               CRHMException TExcept(SS.c_str(), WARNING);
               LogError(TExcept);
             }
-            float h550 = 1000.0/(RHOi*k0)*(log(550.0/(RHOi - 550.0)) - log(rho/(RHOi - rho))); // rho is current SWE density      Densification
+            double h550 = 1000.0/(RHOi*k0)*(log(550.0/(RHOi - 550.0)) - log(rho/(RHOi - rho))); // rho is current SWE density      Densification
             if(Densification[hh] != 0){
               if(firn_dens_array[nn][hh] < 550.0){ // density < 550
-                float Z0 = exp(RHOi*k0*firn_depth[hh]/10e6 + log(firn_dens_array[nn][hh]/(RHOi - firn_dens_array[nn][hh])));
-                float New = RHOi*Z0/(1.0 + Z0);
+                double Z0 = exp(RHOi*k0*firn_depth[hh]/10e6 + log(firn_dens_array[nn][hh]/(RHOi - firn_dens_array[nn][hh])));
+                double New = RHOi*Z0/(1.0 + Z0);
                 if(New > firn_dens_array[nn][hh])
                   firn_dens_array[nn][hh] = New;
                 firn_h_array[nn][hh] = old_firn/firn_dens_array[nn][hh]*1000.0;
                 firn_yr_array[nn][hh] = 1.0/(k0*SWEAA[hh])*log((RHOi - rho)/(RHOi - 550));
               }
               else{ // density >= 550
-                float Z1 = exp(RHOi*k1*(firn_depth[hh]/1000.0-h550)/1000.0/sqrt(SWEAA[hh])+log(550.0/(RHOi-550.0)));
-                float New = RHOi*Z1/(1.0 + Z1);
+                double Z1 = exp(RHOi*k1*(firn_depth[hh]/1000.0-h550)/1000.0/sqrt(SWEAA[hh])+log(550.0/(RHOi-550.0)));
+                double New = RHOi*Z1/(1.0 + Z1);
                 if(firn_dens_array[nn][hh] > New)
                   firn_dens_array[nn][hh] = New;
                 firn_h_array[nn][hh] = old_firn/firn_dens_array[nn][hh]*1000.0;
-                float t550 = 1.0/(k0*SWEAA[hh])*(log((RHOi - rho)/(RHOi - 550))); // units years
+                double t550 = 1.0/(k0*SWEAA[hh])*(log((RHOi - rho)/(RHOi - 550))); // units years
                 firn_yr_array[nn][hh] = 1.0/(k1*sqrt(SWEAA[hh]))*log((RHOi - 550)/(RHOi - firn_dens_array[nn][hh])) + t550;
               }
             }
@@ -25539,19 +25539,19 @@ void Classglacier::run(void){
 
 void Classglacier::finish(bool good) {
 
-  float Glacier_All = 0.0;
-  float SWE_All = 0.0;
-  float firn_All = 0.0;
-  float ice_All = 0.0;
-  float firn_init_All = 0.0;
-  float ice_init_All = 0.0;
-  float firn_change_All = 0.0;
-  float ice_change_All = 0.0;
-  float cumfirnmelt_All = 0.0;
-  float cumSWE_2firn_All = 0.0;
-  float cumicemelt_All = 0.0;
-  float cumfirn_2ice_All = 0.0;
-  float cumnet_rain_glacier_All = 0.0;
+  double Glacier_All = 0.0;
+  double SWE_All = 0.0;
+  double firn_All = 0.0;
+  double ice_All = 0.0;
+  double firn_init_All = 0.0;
+  double ice_init_All = 0.0;
+  double firn_change_All = 0.0;
+  double ice_change_All = 0.0;
+  double cumfirnmelt_All = 0.0;
+  double cumSWE_2firn_All = 0.0;
+  double cumicemelt_All = 0.0;
+  double cumfirn_2ice_All = 0.0;
+  double cumnet_rain_glacier_All = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (glacier)' firn_init    (mm) (mm*hru) (mm*hru/basin): ").c_str(), firn_init[hh], hru_area[hh], basin_area[0]);
@@ -25608,10 +25608,10 @@ void Classglacier::finish(bool good) {
   delete iceDelay;
 }
 
-float Classglacier::DepthofSnow(float SWE){ // (mm)
+double Classglacier::DepthofSnow(double SWE){ // (mm)
 
 // Tabler et al. (1990b) Calculates Snow Depth(mm) from SWE(mm)
-  float rho;
+  double rho;
 
   if (SWE > 1.0) {
     rho = 522.0 - 204700/SWE*(1.0 - exp(-SWE/673.0)); // converted from original cm to mm
@@ -26024,20 +26024,20 @@ void Classglacier_debris::run(void){
 
 // used by debris
 
-  const float Cp_air = 1006;
-  const float MOL_wt_ratio_h2o_to_air = 0.622;
-  const float Lv = 2.5e6;
-  const float Ts_glacier = 273.15;
-  const float e_s = 0.6113;
-  const float Pr = 5;
-  const float Katabatic = 0.0004;
-  const float g = 9.8;
-  const float Cp_W0 = 4217.7;
-  const float rho_h2o =  1000.0;
-  const float lapse_rate = 0.005;
+  const double Cp_air = 1006;
+  const double MOL_wt_ratio_h2o_to_air = 0.622;
+  const double Lv = 2.5e6;
+  const double Ts_glacier = 273.15;
+  const double e_s = 0.6113;
+  const double Pr = 5;
+  const double Katabatic = 0.0004;
+  const double g = 9.8;
+  const double Cp_W0 = 4217.7;
+  const double rho_h2o =  1000.0;
+  const double lapse_rate = 0.005;
 
   long nstep;
-  float umin, ref, rho;
+  double umin, ref, rho;
 
   nstep = getstep();
 
@@ -26101,7 +26101,7 @@ void Classglacier_debris::run(void){
       Qp_ebsm[hh] = 0.0;  */
     }
 
-float TF, SRF;
+double TF, SRF;
     if(variation == VARIATION_5){
       if(debris_h[hh] <= 0.0){
         TF = 0.0; SRF = 0.0;
@@ -26225,7 +26225,7 @@ float TF, SRF;
           }
         }
         else if(delay_melt[hh] <= julian("now")){
-          float eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;
+          double eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;
 
           switch (variation) {
             case VARIATION_ORG :
@@ -26277,7 +26277,7 @@ float TF, SRF;
       if(firn[hh] > 0.0 || ice[hh] > 0.0){
 
         if(nfirn[hh] > 0 && Qmelt[hh] > 0.0 && !inhibit_firnmelt[hh]){ // melt firn
-          float h2o;
+          double h2o;
           while(nfirn[hh] > 0 && Qmelt[hh] > 0.0){
             h2o = firn_dens_array[0][hh]*firn_h_array[0][hh]/1000.0;
             if(Qmelt[hh] < h2o){ // melt some firn
@@ -26331,14 +26331,14 @@ float TF, SRF;
 
 // Update glacier at end of summer
 
-        const float R = 8.314; // (J/(K.mol)
-        const float RHOi = 917; // (kg/m3)
+        const double R = 8.314; // (J/(K.mol)
+        const double RHOi = 917; // (kg/m3)
 
         long Julian = julian("now"); // same as "decday"
         if(SWE_to_firn_Julian[hh] == Julian){ // use fixed date - end of day    !!!!
 
-          float k0 = 11.0*exp(-10160.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
-          float k1 = 575.0*exp(-21400.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
+          double k0 = 11.0*exp(-10160.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
+          double k1 = 575.0*exp(-21400.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
 
 // Check if bottom layer of firn becomes ice
           if(nfirn[hh] && firn_dens_array[nfirn[hh] - 1][hh] >= 830.0){ // transfer
@@ -26359,7 +26359,7 @@ float TF, SRF;
 
           if(SWE[hh] > 0.0){
             if(nfirn[hh] == nlay){ // combine last two entries
-              float mean_d = (firn_dens_array[nlay-2][hh] + firn_dens_array[nlay-1][hh])/2.0;
+              double mean_d = (firn_dens_array[nlay-2][hh] + firn_dens_array[nlay-1][hh])/2.0;
               firn_h_array[nlay-2][hh] = (firn_h_array[nlay-2][hh]*firn_dens_array[nlay-2][hh] + firn_h_array[nlay-1][hh]*firn_dens_array[nlay-1][hh])/mean_d;
               firn_dens_array[nlay-2][hh] = mean_d;
               --nfirn[hh]; // remove layer from SWE
@@ -26380,7 +26380,7 @@ float TF, SRF;
 
 // solve for density from SWE using Bisection method
 
-            float h1 = 0.6, h2 = 8.00, e, h;
+            double h1 = 0.6, h2 = 8.00, e, h;
             long iter_max = 0;
             do {
               h = (h1 + h2)/2.0; // (m)
@@ -26413,7 +26413,7 @@ float TF, SRF;
           firn[hh] = firn_dens_array[0][hh]*firn_h_array[0][hh]/1000.0; // (mm)
           if(nfirn[hh] > 0)
           for(long nn = 1; nn < nfirn[hh]; ++nn){
-            float old_firn = firn_dens_array[nn][hh]*firn_h_array[nn][hh]/1000.0;
+            double old_firn = firn_dens_array[nn][hh]*firn_h_array[nn][hh]/1000.0;
 
             if(old_firn == 0.0){
               old_firn = hh*100 + nn;
@@ -26425,23 +26425,23 @@ float TF, SRF;
               CRHMException TExcept(SS.c_str(), WARNING);
               LogError(TExcept);
             }
-            float h550 = 1000.0/(RHOi*k0)*(log(550.0/(RHOi - 550.0)) - log(rho/(RHOi - rho))); // rho is current SWE density      Densification
+            double h550 = 1000.0/(RHOi*k0)*(log(550.0/(RHOi - 550.0)) - log(rho/(RHOi - rho))); // rho is current SWE density      Densification
             if(Densification[hh] != 0){
               if(firn_dens_array[nn][hh] < 550.0){ // density < 550
-                float Z0 = exp(RHOi*k0*firn_depth[hh]/10e6 + log(firn_dens_array[nn][hh]/(RHOi - firn_dens_array[nn][hh])));
-                float New = RHOi*Z0/(1.0 + Z0);
+                double Z0 = exp(RHOi*k0*firn_depth[hh]/10e6 + log(firn_dens_array[nn][hh]/(RHOi - firn_dens_array[nn][hh])));
+                double New = RHOi*Z0/(1.0 + Z0);
                 if(New > firn_dens_array[nn][hh])
                   firn_dens_array[nn][hh] = New;
                 firn_h_array[nn][hh] = old_firn/firn_dens_array[nn][hh]*1000.0;
                 firn_yr_array[nn][hh] = 1.0/(k0*SWEAA[hh])*log((RHOi - rho)/(RHOi - 550));
               }
               else{ // density >= 550
-                float Z1 = exp(RHOi*k1*(firn_depth[hh]/1000.0-h550)/1000.0/sqrt(SWEAA[hh])+log(550.0/(RHOi-550.0)));
-                float New = RHOi*Z1/(1.0 + Z1);
+                double Z1 = exp(RHOi*k1*(firn_depth[hh]/1000.0-h550)/1000.0/sqrt(SWEAA[hh])+log(550.0/(RHOi-550.0)));
+                double New = RHOi*Z1/(1.0 + Z1);
                 if(firn_dens_array[nn][hh] > New)
                   firn_dens_array[nn][hh] = New;
                 firn_h_array[nn][hh] = old_firn/firn_dens_array[nn][hh]*1000.0;
-                float t550 = 1.0/(k0*SWEAA[hh])*(log((RHOi - rho)/(RHOi - 550))); // units years
+                double t550 = 1.0/(k0*SWEAA[hh])*(log((RHOi - rho)/(RHOi - 550))); // units years
                 firn_yr_array[nn][hh] = 1.0/(k1*sqrt(SWEAA[hh]))*log((RHOi - 550)/(RHOi - firn_dens_array[nn][hh])) + t550;
               }
             }
@@ -26490,19 +26490,19 @@ float TF, SRF;
 
 void Classglacier_debris::finish(bool good) {
 
-  float Glacier_All = 0.0;
-  float SWE_All = 0.0;
-  float firn_All = 0.0;
-  float ice_All = 0.0;
-  float firn_init_All = 0.0;
-  float ice_init_All = 0.0;
-  float firn_change_All = 0.0;
-  float ice_change_All = 0.0;
-  float cumfirnmelt_All = 0.0;
-  float cumSWE_2firn_All = 0.0;
-  float cumicemelt_All = 0.0;
-  float cumfirn_2ice_All = 0.0;
-  float cumnet_rain_glacier_All = 0.0;
+  double Glacier_All = 0.0;
+  double SWE_All = 0.0;
+  double firn_All = 0.0;
+  double ice_All = 0.0;
+  double firn_init_All = 0.0;
+  double ice_init_All = 0.0;
+  double firn_change_All = 0.0;
+  double ice_change_All = 0.0;
+  double cumfirnmelt_All = 0.0;
+  double cumSWE_2firn_All = 0.0;
+  double cumicemelt_All = 0.0;
+  double cumfirn_2ice_All = 0.0;
+  double cumnet_rain_glacier_All = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (glacier_debris)' firn_init    (mm) (mm*hru) (mm*hru/basin): ").c_str(), firn_init[hh], hru_area[hh], basin_area[0]);
@@ -26559,10 +26559,10 @@ void Classglacier_debris::finish(bool good) {
   delete iceDelay;
 }
 
-float Classglacier_debris::DepthofSnow(float SWE){ // (mm)
+double Classglacier_debris::DepthofSnow(double SWE){ // (mm)
 
 // Tabler et al. (1990b) Calculates Snow Depth(mm) from SWE(mm)
-  float rho;
+  double rho;
 
   if (SWE > 1.0) {
     rho = 522.0 - 204700/SWE*(1.0 - exp(-SWE/673.0)); // converted from original cm to mm
@@ -26650,7 +26650,7 @@ void ClassSWEslope::run(void) {
     hh = order[hhh] - 1; // do HRUs in the desired sequence
 
     if(hru_GSL[hh] > 25.0){
-      float den_snow;
+      double den_snow;
       if (use_rho[hh])
         den_snow = rho[hh];
       else
@@ -26660,8 +26660,8 @@ void ClassSWEslope::run(void) {
 
       if(Hd[hh] > Hd_min[hh] && SWE[hh] > Hd[hh]){
 
-        float Used, total = 0.0;
-        float Amount = SWE[hh];
+        double Used, total = 0.0;
+        double Amount = SWE[hh];
 
         for(long To = 0; chkStruct(To); ++To) // distribute SWE flow of this HRU
           total += distrib_hru[hh][To]; // includes itself

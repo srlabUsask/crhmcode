@@ -52,18 +52,18 @@ public:
 
 	long Dummy;
 
-	float **Var_loop_lay_value;
-	float **Par_loop_lay_value;
+	double **Var_loop_lay_value;
+	double **Par_loop_lay_value;
 
-	float ***Var_loop_lay_table;
-	float ***Par_loop_lay_table;
+	double ***Var_loop_lay_table;
+	double ***Par_loop_lay_table;
 
 	long Var_NDEFN_cnt = 0;
 	long Par_NDEFN_cnt = 0;
 
 	//added by Manishankar to solve the address issue.
-	float ** t_layvalues;
-	float ** rh_layvalues;
+	double ** t_layvalues;
+	double ** rh_layvalues;
 
 
 	// long Using_RH_EA_obs;
@@ -82,13 +82,13 @@ public:
 	void initbase(void);
 	virtual void init(void) {};
 	virtual void run(void) {};
-	virtual void run2(float **) {}; //added by Manishankar to solve the address issue.
+	virtual void run2(double **) {}; //added by Manishankar to solve the address issue.
 	virtual void pre_run(void) {};
 	virtual void finish(bool good) {};
 	ClassModule* link(string Module);
 	double Now(void);
-	virtual float Function1(long *I, long hh) { return 0.0; };
-	virtual float Function2(float *X, long hh) { return 0.0; };
+	virtual double Function1(long *I, long hh) { return 0.0; };
+	virtual double Function2(double *X, long hh) { return 0.0; };
 	virtual void reset(void) {
 
 		nhru = 0;
@@ -155,10 +155,10 @@ public:
 	void AKAhook(TAKA type, string module, string OrgName, string & NewName, string & source, string base);
 
 	int declgrpvar(string variable, string queryvar,
-		string help, string units, float **value, float ***layvalue, bool PointPlot = false);
+		string help, string units, double **value, double ***layvalue, bool PointPlot = false);
 
 	void declvar(string variable, CRHM::TDim dimen,
-		string help, string units, float **value, float ***layvalue = NULL, const int dim = 1,
+		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
 		bool PointPlot = false, bool StatVar = false, CRHM::TVISIBLE Local = CRHM::USUAL);
 
 	void declvar(string variable, CRHM::TDim dimen,
@@ -166,11 +166,11 @@ public:
 		bool PointPlot = false, bool StatVar = false, CRHM::TVISIBLE Local = CRHM::USUAL);
 
 	void decldiag(string variable, CRHM::TDim dimen,
-		string help, string units, float **value, float ***layvalue = NULL, const int dim = 1,
+		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
 		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
 
 	void declstatdiag(string variable, CRHM::TDim dimen,
-		string help, string units, float **value, float ***layvalue = NULL, const int dim = 1,
+		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
 		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
 
 	void decldiag(string variable, CRHM::TDim dimen,
@@ -182,7 +182,7 @@ public:
 		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
 
 	void declstatvar(string variable, CRHM::TDim dimen,
-		string help, string units, float **value, float ***layvalue = NULL, const int dim = 1,
+		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
 		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::USUAL);
 
 	void declstatvar(string variable, CRHM::TDim dimen,
@@ -190,15 +190,15 @@ public:
 		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::USUAL);
 
 	void decllocal(string variable, CRHM::TDim dimen,
-		string help, string units, float **value, float ***layvalue = NULL, const int dim = 1);
+		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1);
 
 	void decllocal(string variable, CRHM::TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1);
 
 	void declparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
-		string help, string units, const float **value,
-		const float ***layvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::USUAL);
+		string help, string units, const double **value,
+		const double ***layvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::USUAL);
 
 	void declparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
@@ -209,8 +209,8 @@ public:
 
 	void decldiagparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
-		string help, string units, const float **value,
-		const float ***layvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
+		string help, string units, const double **value,
+		const double ***layvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
 
 	void decldiagparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
@@ -221,8 +221,8 @@ public:
 
 	void decllocalparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
-		string help, string units, const float **value,
-		const float ***layvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::PRIVATE);
+		string help, string units, const double **value,
+		const double ***layvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::PRIVATE);
 
 	void decllocalparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
@@ -231,29 +231,29 @@ public:
 
 	TStringList* decllocalparam(string param, CRHM::TDim dimen, string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local = CRHM::PRIVATE);
 
-	long declgetvar(string source, string name, string units, const float **value, const float ***layvalue = NULL);
+	long declgetvar(string source, string name, string units, const double **value, const double ***layvalue = NULL);
 
 	long declgetvar(string source, string name, string units, const long **value, const long ***layvalue = NULL);
 
 	long declreadobs(string variable, CRHM::TDim dimen, string help, string units,
-		const float **value, long HRU_index = CRHM::HRU_OBS_t_rh_ea, bool optional = false, const float ***layvalue = NULL);
+		const double **value, long HRU_index = CRHM::HRU_OBS_t_rh_ea, bool optional = false, const double ***layvalue = NULL);
 
 	long declreadobs(string variable, CRHM::TDim dimen, string help, string units,
 		const long **value, long HRU_index = 0, bool optional = false, const long ***layvalue = NULL);
 
-	long declobs(string name, CRHM::TDim dimen, string help, string units, float **value);
+	long declobs(string name, CRHM::TDim dimen, string help, string units, double **value);
 
-	long declobsfunc(string obs, string variable, float **value, CRHM::TFun typeFun, float ***layvalue = NULL, bool optional = false);
+	long declobsfunc(string obs, string variable, double **value, CRHM::TFun typeFun, double ***layvalue = NULL, bool optional = false);
 
 	long declobsfunc(string obs, string variable, long **value, CRHM::TFun typeFun, bool optional = false);
 
-	long declputvar(string source, string name, string units, float **value, float ***layvalue = NULL);
+	long declputvar(string source, string name, string units, double **value, double ***layvalue = NULL);
 
 	long declputvar(string source, string name, string units, long **value, long ***layvalue = NULL);
 
-	long declputparam(string source, string name, string units, float **value, float ***layvalue = NULL);
+	long declputparam(string source, string name, string units, double **value, double ***layvalue = NULL);
 
-	long declgetparam(string source, string name, string units, const float **value, const float ***layvalue = NULL);
+	long declgetparam(string source, string name, string units, const double **value, const double ***layvalue = NULL);
 
 	long declputparam(string source, string name, string units, long **value, long ***layvalue = NULL);
 
@@ -283,7 +283,7 @@ public:
 
 	bool Variation_Skip(void);
 
-	bool AnyOne(float *Data, int Cnt, float Val);
+	bool AnyOne(double *Data, int Cnt, double Val);
 
 	bool UsingObservations(void);
 
@@ -330,12 +330,12 @@ class Myparser {
 	bool repeatset;
 	ClassPar *LocalPar;
 
-	void eval_exp2(float &result);
-	void eval_exp3(float &result);
-	void eval_exp4(float &result);
-	void eval_exp5(float &result);
-	void eval_exp6(float &result);
-	void atom(float &result);
+	void eval_exp2(double &result);
+	void eval_exp3(double &result);
+	void eval_exp4(double &result);
+	void eval_exp5(double &result);
+	void eval_exp6(double &result);
+	void atom(double &result);
 	void get_token();
 	void serror(int error);
 	int isdelim(char c);
@@ -347,27 +347,27 @@ public:
 class   ClassClark {
 
 public:
-	ClassClark(const float* inVar, float* outVar, const float* kstorage, const float* lag, const long nhru, const float setlag = -1);
+	ClassClark(const double* inVar, double* outVar, const double* kstorage, const double* lag, const long nhru, const double setlag = -1);
 	~ClassClark();
 	void DoClark();
 	void DoClark(const long hh);
-	float ChangeStorage(const float* kstorage, const long hh);
-	float ChangeLag(const float *newlag, const long hh);
-	float Left(int hh);
+	double ChangeStorage(const double* kstorage, const long hh);
+	double ChangeLag(const double *newlag, const long hh);
+	double Left(int hh);
 
 private:
-	const float* kstorage;
-	const  float* inVar;
-	float* outVar;
+	const double* kstorage;
+	const  double* inVar;
+	double* outVar;
 
-	float** LagArray;
+	double** LagArray;
 
-	float* LastIn; //
-	float* LastOut; //
+	double* LastIn; //
+	double* LastOut; //
 
-	float* c01; // storage constant from K
-	float* c2;  // storage constant from K
-	float* NO_lag_release;  // released from storage when lag set to zero
+	double* c01; // storage constant from K
+	double* c2;  // storage constant from K
+	double* NO_lag_release;  // released from storage when lag set to zero
 
 	long nhru;
 	long* maxlag; // maximum lag - i.e. storage
@@ -380,28 +380,28 @@ private:
 class   ClassMuskingum {
 
 public:
-	ClassMuskingum(const float* inVar, float* outVar, const float* kstorage, const float* route_X_M, const float* lag, const long nhru, const float setlag = -1);
+	ClassMuskingum(const double* inVar, double* outVar, const double* kstorage, const double* route_X_M, const double* lag, const long nhru, const double setlag = -1);
 	~ClassMuskingum();
 	void DoMuskingum();
 	void DoMuskingum(const long hh);
-	void ChangeLag(const float *newlag, const long hh);
-	float Left(int hh);
+	void ChangeLag(const double *newlag, const long hh);
+	double Left(int hh);
 
 
-	float* c0; // storage constant from K
-	float* c1; // storage constant from K
-	float* c2; // storage constant from K
+	double* c0; // storage constant from K
+	double* c1; // storage constant from K
+	double* c2; // storage constant from K
 	double prevdate;
 
 private:
-	const float* kstorage;
-	const  float* inVar;
-	float* outVar;
+	const double* kstorage;
+	const  double* inVar;
+	double* outVar;
 
-	float** LagArray;
+	double** LagArray;
 
-	float* LastIn; //
-	float* LastOut; //
+	double* LastIn; //
+	double* LastOut; //
 
 	long nhru;
 	long* maxlag; // maximum lag - i.e. storage

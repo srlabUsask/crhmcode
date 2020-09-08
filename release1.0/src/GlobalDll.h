@@ -103,14 +103,14 @@ public:
 											  //static HWND crhmMain;
 											  //static HWND crhmLog;
 
-	static float * lapse_rate; // used for array observations adjustments
-	static float * ppt_adj; // used for array observations adjustments
-	static float * hru_elev; // used for array observations adjustments
-	static float * obs_elev;
-	static float ** OBS_ELEV; // used for array observations adjustments
+	static double * lapse_rate; // used for array observations adjustments
+	static double * ppt_adj; // used for array observations adjustments
+	static double * hru_elev; // used for array observations adjustments
+	static double * obs_elev;
+	static double ** OBS_ELEV; // used for array observations adjustments
 
-	static float * Warming_t; // used for climate warming
-	static float * Warming_p; // used for climate warming
+	static double * Warming_t; // used for climate warming
+	static double * Warming_p; // used for climate warming
 	static long  * RH_VP_flag; // used for elevation change. -> 0 maintain rh, 1 -> maintain ea
 	static long  * RH_VP_flag2; // used for climate warming. -> 0 maintain rh, 1 -> maintain ea
 	static long   RH_EA_flag; // used for climate warming
@@ -120,26 +120,26 @@ public:
 
 	static long  ** HRU_OBS; // used for array observations
 	static long  ** HRU_OBS_DIRECT; // used for array observations
-	static float ** obs_t; // used for array observations adjustments
-	static float ** obs_ea; // used for array observations adjustments
-	static float ** obs_rh; // used for array observations adjustments
-	static float ** obs_t_obs; // used for array observations adjustments
+	static double ** obs_t; // used for array observations adjustments
+	static double ** obs_ea; // used for array observations adjustments
+	static double ** obs_rh; // used for array observations adjustments
+	static double ** obs_t_obs; // used for array observations adjustments
 
 	static TObject *thisVar;
 
 
 	//manishankar. this is used for resolving the address related issue.
-	static float ** t_layvalues; 
-	static float ** rh_layvalues;
+	static double ** t_layvalues; 
+	static double ** rh_layvalues;
 };
 
 
 //Mani added this from TStringList.
 
-string static FloatToStrF(float value, string format, int precision, int digits) {
+string static FloatToStrF(double value, string format, int precision, int digits) {
 	stringstream stream;
 
-	//float minVal = 3000.14159265359;
+	//double minVal = 3000.14159265359;
 
 	if (strcmp(format.c_str(), "ffFixed"))
 		format = "fixed";
@@ -147,7 +147,9 @@ string static FloatToStrF(float value, string format, int precision, int digits)
 	return stream.str();
 };
 
-string static FloatToStrF(float X, TFloatFormat Format, int Prec, int Digits) {
+/**
+* Overload now redundent as single percison floats have been removed types have been removed (jhs507)
+string static FloatToStrF(double X, TFloatFormat Format, int Prec, int Digits) {
 	ostringstream temp;
 	if (Format == ffFixed) {
 		temp.precision(Prec);
@@ -161,7 +163,7 @@ string static FloatToStrF(float X, TFloatFormat Format, int Prec, int Digits) {
 	}
 	return temp.str();
 }
-
+**/
 string static FloatToStrF(double X, TFloatFormat Format, int Prec, int Digits) {
 	ostringstream temp;
 	if (Format == ffFixed) {

@@ -16,35 +16,35 @@
 using namespace std;
 using namespace CRHM;
 
-const float thetalow = 0.08;                     // Low(?) moisture coefficient (thetalow)
-const float thetaupp = 0.12;                     // high(?) moisture coefficient (thetaupp)
-const float satact = 0.6;
-const float thetapow = 2; // changed from original HYPE: just gives a slight curvature in the calculation of smfcn that is more realistic (not a major change)
-const float bulkdensity = 1300;
-const float sreroexp = 1.0; // genpar(float m_sreroexp); surface runoff erosion exponent
-const float filtPbuf  = 1.0; // landpar(float m_filtPbuf, long iluse);
-const float filtPother  = 1.0; // landpar(float m_filtPbuf, long iluse);
-const float filtPinner  = 1.0; // landpar(float m_filtPbuf, long iluse);
-const float pprelmax  = 1.0; // landpar(float m_filtPbuf, long iluse);
-const float pprelexp  = 1.0; // genpar(float m_filtPbuf, long iluse);
-const float Kfr = 1.0; // model parameter freundlich
-const float Nfr = 1.0; // model parameter freundlichmodel parameter freundlich
-const float Kadsdes = 1.0; // model parameter freundlich, adsorption or desportion rate (1/d)
+const double thetalow = 0.08;                     // Low(?) moisture coefficient (thetalow)
+const double thetaupp = 0.12;                     // high(?) moisture coefficient (thetaupp)
+const double satact = 0.6;
+const double thetapow = 2; // changed from original HYPE: just gives a slight curvature in the calculation of smfcn that is more realistic (not a major change)
+const double bulkdensity = 1300;
+const double sreroexp = 1.0; // genpar(double m_sreroexp); surface runoff erosion exponent
+const double filtPbuf  = 1.0; // landpar(double m_filtPbuf, long iluse);
+const double filtPother  = 1.0; // landpar(double m_filtPbuf, long iluse);
+const double filtPinner  = 1.0; // landpar(double m_filtPbuf, long iluse);
+const double pprelmax  = 1.0; // landpar(double m_filtPbuf, long iluse);
+const double pprelexp  = 1.0; // genpar(double m_filtPbuf, long iluse);
+const double Kfr = 1.0; // model parameter freundlich
+const double Nfr = 1.0; // model parameter freundlichmodel parameter freundlich
+const double Kadsdes = 1.0; // model parameter freundlich, adsorption or desportion rate (1/d)
 
-const float halfsatTPwater  = 0.05;    // half stauration concentration, production in water (mg P/L)
-const float maxprodwater    = 0.5;     // maximum part of IN/SRP pool that can be used for production per timestep
-const float maxdegradwater  = 0.5;     // maximum part of ON/PP/OC pool that can be degraded per timestep
-const float NPratio         = 1.0/7.2; // ratio for production/mineralisation in water
-const float NCratio         = 5.7;     // NC ratio for production/mineralisation in water (värde från BIOLA)
-const float maxdenitriwater = 999; // USE HYPEVARIABLES, ONLY
-const float halfsatINwater = 999; //USE HYPEVARIABLES, ONLY
+const double halfsatTPwater  = 0.05;    // half stauration concentration, production in water (mg P/L)
+const double maxprodwater    = 0.5;     // maximum part of IN/SRP pool that can be used for production per timestep
+const double maxdegradwater  = 0.5;     // maximum part of ON/PP/OC pool that can be degraded per timestep
+const double NPratio         = 1.0/7.2; // ratio for production/mineralisation in water
+const double NCratio         = 5.7;     // NC ratio for production/mineralisation in water (värde från BIOLA)
+const double maxdenitriwater = 999; // USE HYPEVARIABLES, ONLY
+const double halfsatINwater = 999; //USE HYPEVARIABLES, ONLY
 
-const float soilerod = 1.0;
-const float smfdenitlim = 0.1; // limitation parameter of moisturefactor (mm) (smfdenitlim)
-const float smfdenitpow = 1.0; // exponent of moisturefactor (smfdenitpow)
-const float halfsatINsoil = 1.0;
-const float ldprodpp = 1.0;
-const float ldprodsp = 1.0;
+const double soilerod = 1.0;
+const double smfdenitlim = 0.1; // limitation parameter of moisturefactor (mm) (smfdenitlim)
+const double smfdenitpow = 1.0; // exponent of moisturefactor (smfdenitpow)
+const double halfsatINsoil = 1.0;
+const double ldprodpp = 1.0;
+const double ldprodsp = 1.0;
 
 const long i_no3n = 0; // NO3-N
 const long i_nh4n = 1; // NH4-N
@@ -55,7 +55,7 @@ const long i_pp = 5; // particulate phosphorus
 const long i_oc = 6; // (dissolved) organic carbon
 const long maxsoilayers = 3; //
 
-const float minFlow_WQ = 0.001f;
+const double minFlow_WQ = 0.001f;
 
 ClassWQ_SoilBGC* ClassWQ_SoilBGC::klone(string name) const{
   return new ClassWQ_SoilBGC(name);
@@ -386,7 +386,7 @@ void ClassWQ_SoilBGC::init(void) {
       plant_uptk_SRP_mWQ_lay[ll][hh] = 0.0;
       denitrification_lay[ll][hh] = 0.0;
 
-      float max;
+      double max;
       if(ll == 0)
         max = soil_rechr_max[hh];
       else
@@ -419,36 +419,36 @@ void ClassWQ_SoilBGC::run(void) {
 
   if(step == 1){ // begining of run
     for(hh = 0; hh < nhru; ++hh) {
-      const_cast<float *>  (klh)[hh] /= Global::Freq; // Parameters are backed up after "init".
-      const_cast<float *>  (klo)[hh] /= Global::Freq; // Parameters may be modified.
-      const_cast<float *>  (kho)[hh] /= Global::Freq; // Parameters are restored after run
-      const_cast<float *>  (kof)[hh] /= Global::Freq;
-      const_cast<float *>  (parminfN)[hh] /= Global::Freq;
-      const_cast<float *>  (parminfP)[hh] /= Global::Freq;
-      const_cast<float *>  (pardegrhN)[hh] /= Global::Freq;
-      const_cast<float *>  (pardegrhP)[hh] /= Global::Freq;
-      const_cast<float *>  (pardisfN)[hh] /= Global::Freq;
-      const_cast<float *>  (pardisfP)[hh] /= Global::Freq;
-      const_cast<float *>  (pardishN)[hh] /= Global::Freq;
-      const_cast<float *>  (pardishP)[hh] /= Global::Freq;
+      const_cast<double *>  (klh)[hh] /= Global::Freq; // Parameters are backed up after "init".
+      const_cast<double *>  (klo)[hh] /= Global::Freq; // Parameters may be modified.
+      const_cast<double *>  (kho)[hh] /= Global::Freq; // Parameters are restored after run
+      const_cast<double *>  (kof)[hh] /= Global::Freq;
+      const_cast<double *>  (parminfN)[hh] /= Global::Freq;
+      const_cast<double *>  (parminfP)[hh] /= Global::Freq;
+      const_cast<double *>  (pardegrhN)[hh] /= Global::Freq;
+      const_cast<double *>  (pardegrhP)[hh] /= Global::Freq;
+      const_cast<double *>  (pardisfN)[hh] /= Global::Freq;
+      const_cast<double *>  (pardisfP)[hh] /= Global::Freq;
+      const_cast<double *>  (pardishN)[hh] /= Global::Freq;
+      const_cast<double *>  (pardishP)[hh] /= Global::Freq;
 
-      const_cast<float *>  (fertNamount_up)[hh] /= Global::Freq;
-      const_cast<float *>  (fertNamount_down)[hh] /= Global::Freq;
-      const_cast<float *>  (fertPamount_up)[hh] /= Global::Freq;
-      const_cast<float *>  (fertPamount_down)[hh] /= Global::Freq;
-      const_cast<float *>  (manNamount_up)[hh] /= Global::Freq;
-      const_cast<float *>  (manNamount_down)[hh] /= Global::Freq;
-      const_cast<float *>  (manPamount_up)[hh] /= Global::Freq;
-      const_cast<float *>  (manPamount_down)[hh] /= Global::Freq;
-      const_cast<float *>  (resNamount_up)[hh] /= Global::Freq;
-      const_cast<float *>  (resPamount_up)[hh] /= Global::Freq;
-      const_cast<float *>  (resCamount)[hh] /= Global::Freq;
-      const_cast<float *>  (resfast)[hh] /= Global::Freq;
-      //const_cast<float *>  (resdown)[hh] /= Global::Freq;
-      //const_cast<float *>  (fertdown1)[hh] /= Global::Freq;
-      //const_cast<float *>  (fertdown2)[hh] /= Global::Freq;
-      //const_cast<float *>  (mandown1)[hh] /= Global::Freq;
-      //const_cast<float *>  (mandown2)[hh] /= Global::Freq;
+      const_cast<double *>  (fertNamount_up)[hh] /= Global::Freq;
+      const_cast<double *>  (fertNamount_down)[hh] /= Global::Freq;
+      const_cast<double *>  (fertPamount_up)[hh] /= Global::Freq;
+      const_cast<double *>  (fertPamount_down)[hh] /= Global::Freq;
+      const_cast<double *>  (manNamount_up)[hh] /= Global::Freq;
+      const_cast<double *>  (manNamount_down)[hh] /= Global::Freq;
+      const_cast<double *>  (manPamount_up)[hh] /= Global::Freq;
+      const_cast<double *>  (manPamount_down)[hh] /= Global::Freq;
+      const_cast<double *>  (resNamount_up)[hh] /= Global::Freq;
+      const_cast<double *>  (resPamount_up)[hh] /= Global::Freq;
+      const_cast<double *>  (resCamount)[hh] /= Global::Freq;
+      const_cast<double *>  (resfast)[hh] /= Global::Freq;
+      //const_cast<double *>  (resdown)[hh] /= Global::Freq;
+      //const_cast<double *>  (fertdown1)[hh] /= Global::Freq;
+      //const_cast<double *>  (fertdown2)[hh] /= Global::Freq;
+      //const_cast<double *>  (mandown1)[hh] /= Global::Freq;
+      //const_cast<double *>  (mandown2)[hh] /= Global::Freq;
     }
   } // begining of run
 
@@ -492,30 +492,30 @@ void ClassWQ_SoilBGC::finish(bool good) {
     logical calcP                    // <Status of phosphorus simulation
     logical calcC                    // <Status of organic carbon simulation
     long    dayno                    // <day number of the year
-    float   area                     // <class area (km2)
-    float wp(10)                    // <water content at wilting point (mm)
-    float fc(10)                    // <water content at field capacity (mm)
-    float ep(10)                    // <water content in effective porosity (mm)
-    float commoplant_uptk_NO3N(2,2)       // <uptake by plants (kg NP/km2/timestep)
-    float thickness[maxsoillayers] // <thickness of soil layers
-    float ndays                    // <model parameter, days for fertilization
-    float ldays                    // <model parameter, days for litterfall
-    float source(numsubstances)    // <source of soil water nutrients through mineralization
-    float sink(numsubstances)      // <OBS: denitrification sink only
-    float nitrification            // <nitrification
-    float denitrification(maxsoillayers)  // <denitrification
-    float cropuptake                  // <crop uptake of IN
-    float sources(2,numsubstances)    // <loads of fertilizer and residuals (kg/timestep)
-    float pardisfN                  // <model parameter mineralisation labileN to dissolved ON
-    float pardisfP                  // <model parameter mineralisation labileP to dissolved OP
-    float pardishN                  // <model parameter mineralisation refractoryN to dissolved ON
-    float pardishP                  // <model parameter mineralisation refractoryP to dissolved OP
-    float parminfN                  // <model parameter mineralisation labileN
-    float parminfP                  // <model parameter mineralisation labileP
-    float pardegrhN                 // <model parameter degradation refractoryN
-    float pardenN                   // <model parameter denitrification in soil
-    float pardegrhP                 // <model parameter degradation refractoryP
-    float soilstate                 // <Soil states
+    double   area                     // <class area (km2)
+    double wp(10)                    // <water content at wilting point (mm)
+    double fc(10)                    // <water content at field capacity (mm)
+    double ep(10)                    // <water content in effective porosity (mm)
+    double commoplant_uptk_NO3N(2,2)       // <uptake by plants (kg NP/km2/timestep)
+    double thickness[maxsoillayers] // <thickness of soil layers
+    double ndays                    // <model parameter, days for fertilization
+    double ldays                    // <model parameter, days for litterfall
+    double source(numsubstances)    // <source of soil water nutrients through mineralization
+    double sink(numsubstances)      // <OBS: denitrification sink only
+    double nitrification            // <nitrification
+    double denitrification(maxsoillayers)  // <denitrification
+    double cropuptake                  // <crop uptake of IN
+    double sources(2,numsubstances)    // <loads of fertilizer and residuals (kg/timestep)
+    double pardisfN                  // <model parameter mineralisation labileN to dissolved ON
+    double pardisfP                  // <model parameter mineralisation labileP to dissolved OP
+    double pardishN                  // <model parameter mineralisation refractoryN to dissolved ON
+    double pardishP                  // <model parameter mineralisation refractoryP to dissolved OP
+    double parminfN                  // <model parameter mineralisation labileN
+    double parminfP                  // <model parameter mineralisation labileP
+    double pardegrhN                 // <model parameter degradation refractoryN
+    double pardenN                   // <model parameter denitrification in soil
+    double pardegrhP                 // <model parameter degradation refractoryP
+    double soilstate                 // <Soil states
 */
 // No substances modelled
 	  
@@ -565,23 +565,23 @@ void ClassWQ_SoilBGC::finish(bool good) {
     logical INTENT(IN) :: calcN    !<Status of nitrogen simulation
     logical INTENT(IN) :: calcP    !<Status of phosphorus simulation
     logical INTENT(IN) :: calcC    !<Status of organic carbon simulation
-    float ndays                    !<number of days to spread fertilizer
-    float ldays                    !<number of days to spread plant residuals
-    float area                     !<class area (km2)
-    float thickness(maxsoillayers) !<thickness of soil layers (m)
-    float soilstate !<Soil states
-    float sources(2,numsubstances) !<load from fertilizer and plant residues (kg/timestep) ****now sources_i_no3n_lay etc.***
+    double ndays                    !<number of days to spread fertilizer
+    double ldays                    !<number of days to spread plant residuals
+    double area                     !<class area (km2)
+    double thickness(maxsoillayers) !<thickness of soil layers (m)
+    double soilstate !<Soil states
+    double sources(2,numsubstances) !<load from fertilizer and plant residues (kg/timestep) ****now sources_i_no3n_lay etc.***
 */
 
 // Local variables
     long k,kcrop;
-    float common_nadd[maxsoillayers][2]; // kg/km2   where 0 - manureinogNfrac, 1 - manurelabileNfrac
-    float common_padd[maxsoillayers][2]; // kg/km2
-    float common_nres[maxsoillayers][2]; // kg/km2
-    float common_pres[maxsoillayers][2]; // kg/km2
-    float common_cres[maxsoillayers][2]; // kg/km2
+    double common_nadd[maxsoillayers][2]; // kg/km2   where 0 - manureinogNfrac, 1 - manurelabileNfrac
+    double common_padd[maxsoillayers][2]; // kg/km2
+    double common_nres[maxsoillayers][2]; // kg/km2
+    double common_pres[maxsoillayers][2]; // kg/km2
+    double common_cres[maxsoillayers][2]; // kg/km2
 
-    float littdays;
+    double littdays;
 
     for(long ll = 0; ll < numsubstances; ++ll) {
       src_mineral_fertman_surfsoil_lay[ll][hh] = 0.0f;
@@ -836,30 +836,30 @@ void ClassWQ_SoilBGC::finish(bool good) {
 Argument declarations
     logical calcN                  !<flag for nitrogen simulation
     logical calcP                  !<flag for phosphorus simulation
-    float wp(maxsoillayers)        !<water content at wilting point (mm)
-    float fc(maxsoillayers)        !<water content at field capacity (mm)
-    float ep(maxsoillayers)        !<water content: effectiv porosity (mm)
-    float thickness(maxsoillayers) !<thickness of soil layers
-    float source(numsubstances)    !<source of soil water nutrients through mineralization
-    float pardisfN            !<model parameter mineralisation labileN to dissolved ON
-    float pardisfP            !<model parameter mineralisation labileP to dissolved OP
-    float pardishN            !<model parameter mineralisation refractoryN to dissolved ON
-    float pardishP            !<model parameter mineralisation refractoryP to dissolved OP
-    float minfNpar            !<model parameter mineralisation labileN
-    float minfPpar            !<model parameter mineralisation labileP
-    float degrhNpar           !<model parameter degradation refractoryN
-    float degrhPpar           !<model parameter degradation refractoryP
-    float soilstate           !<Soil states
+    double wp(maxsoillayers)        !<water content at wilting point (mm)
+    double fc(maxsoillayers)        !<water content at field capacity (mm)
+    double ep(maxsoillayers)        !<water content: effectiv porosity (mm)
+    double thickness(maxsoillayers) !<thickness of soil layers
+    double source(numsubstances)    !<source of soil water nutrients through mineralization
+    double pardisfN            !<model parameter mineralisation labileN to dissolved ON
+    double pardisfP            !<model parameter mineralisation labileP to dissolved OP
+    double pardishN            !<model parameter mineralisation refractoryN to dissolved ON
+    double pardishP            !<model parameter mineralisation refractoryP to dissolved OP
+    double minfNpar            !<model parameter mineralisation labileN
+    double minfPpar            !<model parameter mineralisation labileP
+    double degrhNpar           !<model parameter degradation refractoryN
+    double degrhPpar           !<model parameter degradation refractoryP
+    double soilstate           !<Soil states
 */
 
 // Local variables
     long k;   // soillayer
-    float degradhN[maxsoillayers] ,transfminN[maxsoillayers], transfnitrN[maxsoillayers];
-    float transfP[maxsoillayers], degradhP[maxsoillayers];
-    float dissolfN[maxsoillayers], dissolfP[maxsoillayers];
-    float dissolhN[maxsoillayers], dissolhP[maxsoillayers];
-    float tmpfcn[maxsoillayers];
-    float smfcn[maxsoillayers]; // sm[maxsoillayers],
+    double degradhN[maxsoillayers] ,transfminN[maxsoillayers], transfnitrN[maxsoillayers];
+    double transfP[maxsoillayers], degradhP[maxsoillayers];
+    double dissolfN[maxsoillayers], dissolfP[maxsoillayers];
+    double dissolhN[maxsoillayers], dissolhP[maxsoillayers];
+    double tmpfcn[maxsoillayers];
+    double smfcn[maxsoillayers]; // sm[maxsoillayers],
 
     source[hh] = 0.0;
     
@@ -1142,25 +1142,25 @@ Argument declarations
 // Inorganic nitrogen and phosphorus is removed.
 // Reference ModelDescription Chapter Nitrogen and phosphorus in land routines (Soil processes - Vegetation nutrient uptake)
 // -------------------------------------------------------------------
-    void  ClassWQ_SoilBGC::plant_uptake(float **conc_soil_rechr_lay, float **conc_soil_lower_lay, float **sink_lay){
+    void  ClassWQ_SoilBGC::plant_uptake(double **conc_soil_rechr_lay, double **conc_soil_lower_lay, double **sink_lay){
 
 //    USE MODVAR, ONLY : numsubstances, maxsoillayers, i_no3n, i_srp
 
 // Argument declarations
 //    logical calcN                  !<flag for nitrogen simulation
 //    logical calcP                  !<flag for phosphorus simulation
-//    float commoplant_uptk_NO3N[2][2]      !<plant uptake (kg/km2/d), (N:P,sl1:sl2) [numsubstances(2)][maxsoillayers(2)]
-//    float wp[maxsoillayers]        !<water content at wilting point (mm)
-//    float thickness[maxsoillayers] !<thickness of soil layers
-//    float soil[maxsoillayers]      !<soil moisture (mm)
-//    float conc(numsubstances,maxsoillayers)  !<concentration in soil moisture (mg/L etc)
-//    float sink(numsubstances)      !<sink of nutrients in this subroutine (kg/km2)
+//    double commoplant_uptk_NO3N[2][2]      !<plant uptake (kg/km2/d), (N:P,sl1:sl2) [numsubstances(2)][maxsoillayers(2)]
+//    double wp[maxsoillayers]        !<water content at wilting point (mm)
+//    double thickness[maxsoillayers] !<thickness of soil layers
+//    double soil[maxsoillayers]      !<soil moisture (mm)
+//    double conc(numsubstances,maxsoillayers)  !<concentration in soil moisture (mg/L etc)
+//    double sink(numsubstances)      !<sink of nutrients in this subroutine (kg/km2)
 
 // Local variables
-    float maxpooluptake[maxsoillayers];
-    float tmpfcn[maxsoillayers];
-    float smfcn[maxsoillayers]; // sm[maxsoillayers],
-    float excess_pltup, plant_uptk_mWQ;
+    double maxpooluptake[maxsoillayers];
+    double tmpfcn[maxsoillayers];
+    double smfcn[maxsoillayers]; // sm[maxsoillayers],
+    double excess_pltup, plant_uptk_mWQ;
 
     plant_uptk_mWQ = 0.0f;
     excess_pltup = 0.0f;
@@ -1226,7 +1226,7 @@ Argument declarations
 
       
       //if(water_lay[1][hh] > 0.0)
-      //  plant_uptk_NO3N_mWQ[1] = min<float>(plant_uptk_NO3N_lay[1][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[1]*NO3_Npool_lay[1][hh]);
+      //  plant_uptk_NO3N_mWQ[1] = min<double>(plant_uptk_NO3N_lay[1][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[1]*NO3_Npool_lay[1][hh]);
 
       //if(water_lay[1][hh] > 0.0)
       //   retention_pool(2, hh, NO3_Npool_lay, plant_uptk_NO3N_mWQ); // uptake may change in retention_pool ?
@@ -1237,7 +1237,7 @@ Argument declarations
       plant_uptk_NO3N_mWQ_lay[1][hh] = excess_pltup;
 
       // for NH4
-      plant_uptk_mWQ = min <float>(plant_uptk_NH4N_lay[0][hh]* tmpfcn[0] * smfcn[0] * hru_area[hh], 
+      plant_uptk_mWQ = min <double>(plant_uptk_NH4N_lay[0][hh]* tmpfcn[0] * smfcn[0] * hru_area[hh], 
                     maxpooluptake[0]*(surfsoil_solub_mWQ_lay[i_nh4n][hh] + NH4_Npool_lay[0][hh]));
       if (plant_uptk_mWQ <= surfsoil_solub_mWQ_lay[i_nh4n][hh]){
         surfsoil_solub_mWQ_lay[i_nh4n][hh] -= plant_uptk_mWQ;
@@ -1248,9 +1248,9 @@ Argument declarations
         NH4_Npool_lay[0][hh] -= excess_pltup;
       }
 
-      //plant_uptk_NH4N_mWQ[0] = min <float>(plant_uptk_NH4N_lay[0][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[0]*NH4_Npool_lay[0][hh]);
+      //plant_uptk_NH4N_mWQ[0] = min <double>(plant_uptk_NH4N_lay[0][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[0]*NH4_Npool_lay[0][hh]);
       //if(water_lay[1][hh] > 0.0)
-      //  plant_uptk_NH4N_mWQ[1] = min<float>(plant_uptk_NH4N_lay[1][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[1]*NH4_Npool_lay[1][hh]);
+      //  plant_uptk_NH4N_mWQ[1] = min<double>(plant_uptk_NH4N_lay[1][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[1]*NH4_Npool_lay[1][hh]);
 
       //if(water_lay[1][hh] > 0.0)
       //   retention_pool(2, hh, NH4_Npool_lay, plant_uptk_NH4N_mWQ); // uptake may change in retention_pool ?
@@ -1262,7 +1262,7 @@ Argument declarations
     }
 
     if(calcP[hh]){
-      plant_uptk_mWQ = min <float>(plant_uptk_SRP_lay[0][hh]* tmpfcn[0] * smfcn[0] * hru_area[hh], 
+      plant_uptk_mWQ = min <double>(plant_uptk_SRP_lay[0][hh]* tmpfcn[0] * smfcn[0] * hru_area[hh], 
                     maxpooluptake[0]*(surfsoil_solub_mWQ_lay[i_srp][hh] + SRPpool_lay[0][hh]));
       if (plant_uptk_mWQ <= surfsoil_solub_mWQ_lay[i_srp][hh]){
         surfsoil_solub_mWQ_lay[i_srp][hh] -= plant_uptk_mWQ;
@@ -1273,9 +1273,9 @@ Argument declarations
         SRPpool_lay[0][hh] -= excess_pltup;
       }
 
-      //plant_uptk_SRP_mWQ[0] = min<float>(plant_uptk_SRP_lay[0][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[0]*SRPpool_lay[0][hh]); // ??? matrix multiplication
+      //plant_uptk_SRP_mWQ[0] = min<double>(plant_uptk_SRP_lay[0][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[0]*SRPpool_lay[0][hh]); // ??? matrix multiplication
       //if(water_lay[1][hh] > 0.0)
-      //  plant_uptk_SRP_mWQ[1] = min<float>(plant_uptk_SRP_lay[1][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[1]*SRPpool_lay[1][hh]); // ??? matrix multiplication
+      //  plant_uptk_SRP_mWQ[1] = min<double>(plant_uptk_SRP_lay[1][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[1]*SRPpool_lay[1][hh]); // ??? matrix multiplication
 
       //if(water_lay[1][hh] > 0.0)
       //   retention_pool(2, hh, SRPpool_lay, plant_uptk_SRP_mWQ);
@@ -1328,19 +1328,19 @@ Argument declarations
   void  ClassWQ_SoilBGC::soil_denitrification(const long soil_layer){
 
 // only handles two layers
-//    float maxwc                 <Maximum water content of soil (mm)
-//    float pardenN               <model parameter denitrification in soil
-//    float soil                  <soil water (mm) using water_lay
-//    float stemp                 <soil temperature (degree Celcius) !!! using temperature
+//    double maxwc                 <Maximum water content of soil (mm)
+//    double pardenN               <model parameter denitrification in soil
+//    double soil                  <soil water (mm) using water_lay
+//    double stemp                 <soil temperature (degree Celcius) !!! using temperature
 //    long numsubstances          <concentration of soil water
-//    float sink(numsubstances)   <sink of nutrient in this subroutine (kg/km2)
+//    double sink(numsubstances)   <sink of nutrient in this subroutine (kg/km2)
 
 // Local variables
-    float denitr[2]; //Manishankar did this to solve the problem of stack buffer overflow error. Previously this declaration was "float denitr[1]". I have just made this "float denitr[2]"
-    float denitr_surfsoil;
-    float smfcn, concfcn ;
-    float tmpfcn = 0.0;
-    float soil_max[2];
+    double denitr[2]; //Manishankar did this to solve the problem of stack buffer overflow error. Previously this declaration was "double denitr[1]". I have just made this "double denitr[2]"
+    double denitr_surfsoil;
+    double smfcn, concfcn ;
+    double tmpfcn = 0.0;
+    double soil_max[2];
 
 	
 
@@ -1406,10 +1406,10 @@ Argument declarations
 //
 // temperature Current temperature
 // --------------------------------------------------------------
-float ClassWQ_SoilBGC::tempfactor(float temperature){
+double ClassWQ_SoilBGC::tempfactor(double temperature){
 
 // Local variables
-    float fcn;
+    double fcn;
 
      if(temperature < 0.0)
        return 0.0;
@@ -1433,19 +1433,19 @@ float ClassWQ_SoilBGC::tempfactor(float temperature){
   // @param[in] thetalow Low(?) moisture coefficient (thetalow)
   // @param[in] thetaupp High(?) moisture coefficient (thetaupp)
   //-----------------------------------------------------------------------------
-  float ClassWQ_SoilBGC::moisturefactor(float sm, float wp, float satsmf, float thetapow, float thetalow, float thetaupp){
+  double ClassWQ_SoilBGC::moisturefactor(double sm, double wp, double satsmf, double thetapow, double thetalow, double thetaupp){
 /*
-    float  sm     !soil moisture fraction w.r.t soil_moist_max
-    float  wp     !wilting point pore wolume w.r.t soil_moist_max
-    float  pw     !total pore wolume w.r.t soil_moist_max
-    float  thickm !thickness of soil layer (m)
-    float  satsmf !saturated moisturefactor (satact)
-    float  exp    !exponent of moisturefactor (thetapow)
-    float  thetalow !low(?) moisture coefficient (thetalow)
-    float  thetaupp !high(?) moisture coefficient (thetaupp)
+    double  sm     !soil moisture fraction w.r.t soil_moist_max
+    double  wp     !wilting point pore wolume w.r.t soil_moist_max
+    double  pw     !total pore wolume w.r.t soil_moist_max
+    double  thickm !thickness of soil layer (m)
+    double  satsmf !saturated moisturefactor (satact)
+    double  exp    !exponent of moisturefactor (thetapow)
+    double  thetalow !low(?) moisture coefficient (thetalow)
+    double  thetaupp !high(?) moisture coefficient (thetaupp)
 */
 // Local variables
-    float smfcn;     // soil moisture dependence factor
+    double smfcn;     // soil moisture dependence factor
 
 // Caclulate soilmoisture function value
     if(sm >= 1)
@@ -1478,15 +1478,15 @@ float ClassWQ_SoilBGC::tempfactor(float temperature){
 /*
     USE MODVAR, ONLY : maxsoillayers
 
-    float  klh      !<transformation parameter
-    float  klo      !<rate of transformation
-    float  kho      !<rate of transformation
-    float  kof      !<rate of transformation
-    float  koflim   !<threshold for transformation
-    float  minc     !<fraction mineralisation to DIC (-)
-    float  soimf    !<saturation soilmoisture factor (-)
-    float  soimr    !<rate soilmoisture factor (-)
-    float  soilstate   !<Soil states
+    double  klh      !<transformation parameter
+    double  klo      !<rate of transformation
+    double  kho      !<rate of transformation
+    double  kof      !<rate of transformation
+    double  koflim   !<threshold for transformation
+    double  minc     !<fraction mineralisation to DIC (-)
+    double  soimf    !<saturation soilmoisture factor (-)
+    double  soimr    !<rate soilmoisture factor (-)
+    double  soilstate   !<Soil states
 */
 // Calculate the nutrient processes
 
@@ -1504,32 +1504,32 @@ float ClassWQ_SoilBGC::tempfactor(float temperature){
          thetapow,thetalow,thetaupp
 
     !Argument declaration
-    float wp(maxsoillayers)        !<water content at wilting point (mm)
-    float fc(maxsoillayers)        !<water content at field capacity (mm)
-    float pw(maxsoillayers)        !<water content: total porosity (mm)
-    float thickness(maxsoillayers) !<thickness of soil layers
-    float klh                      !<transformation rate of labileC to refractoryC (d-1)
-    float klo                      !<degradation labileC (d-1)
-    float kho                      !<degradation refractoryC (d-1)
-    float kof                      !<transformation to labileC (d-1)
-    float koflim                   !<threshold for transformation to labileC (-)
-    float minc                     !<fraction mineralisation to DIC (-)
-    float soimf                    !<satuaration soilmoisture factor (-)
-    float soimr                    !<rate soilmoisture factor (-)
-    float soilstate                !<Soil states
+    double wp(maxsoillayers)        !<water content at wilting point (mm)
+    double fc(maxsoillayers)        !<water content at field capacity (mm)
+    double pw(maxsoillayers)        !<water content: total porosity (mm)
+    double thickness(maxsoillayers) !<thickness of soil layers
+    double klh                      !<transformation rate of labileC to refractoryC (d-1)
+    double klo                      !<degradation labileC (d-1)
+    double kho                      !<degradation refractoryC (d-1)
+    double kof                      !<transformation to labileC (d-1)
+    double koflim                   !<threshold for transformation to labileC (-)
+    double minc                     !<fraction mineralisation to DIC (-)
+    double soimf                    !<satuaration soilmoisture factor (-)
+    double soimr                    !<rate soilmoisture factor (-)
+    double soilstate                !<Soil states
 */
 
 // Local variables
 
     long k;   // soillayer
-    float DOCpool[maxsoillayers];
-    float fasttorefractory[maxsoillayers];
-    float doctofast[maxsoillayers];
-    float transhC[maxsoillayers];
-    float transfC[maxsoillayers];
-    float tmpfcn[maxsoillayers], smfcn[maxsoillayers];
-    float real1temp[1];  // Local variableshelpvariable, needed for gfortran
-    float fracprod;
+    double DOCpool[maxsoillayers];
+    double fasttorefractory[maxsoillayers];
+    double doctofast[maxsoillayers];
+    double transhC[maxsoillayers];
+    double transfC[maxsoillayers];
+    double tmpfcn[maxsoillayers], smfcn[maxsoillayers];
+    double real1temp[1];  // Local variableshelpvariable, needed for gfortran
+    double fracprod;
 
     // Local variables Initialisation
 
@@ -1639,12 +1639,12 @@ float ClassWQ_SoilBGC::tempfactor(float temperature){
 
 // Subroutine add an amount of substance to a water body and recalculate the concentration
 // ----------------------------------------------------------------
-  void ClassWQ_SoilBGC::add_source_to_water(const float vol, const long n, float *conc, const float source){
+  void ClassWQ_SoilBGC::add_source_to_water(const double vol, const long n, double *conc, const double source){
 
-// float vol        !<water body (mm)
+// double vol        !<water body (mm)
 // long n           !<numsubstance = size of conc-array
-// float conc(n)    !<conc of water body (mg/l)
-// float source(n)  !<amount to be added (kg/km2)
+// double conc(n)    !<conc of water body (mg/l)
+// double source(n)  !<amount to be added (kg/km2)
 
     if(vol > 0.0)
        *conc = (*conc*vol + source)/ vol;
@@ -1653,12 +1653,12 @@ float ClassWQ_SoilBGC::tempfactor(float temperature){
 
 // Subroutine add an amount of substance to a water body and recalculate the concentration
 // ----------------------------------------------------------------
-  void ClassWQ_SoilBGC::add_source_to_water(const float vol, long n, float conc, float source){
+  void ClassWQ_SoilBGC::add_source_to_water(const double vol, long n, double conc, double source){
 
-// float vol        !<water body (mm)
+// double vol        !<water body (mm)
 // long  n          !<numsubstance = size of conc-array
-// float conc(n)    !<conc of water body (mg/l)
-// float source(n)  !<amount to be added (kg/km2)
+// double conc(n)    !<conc of water body (mg/l)
+// double source(n)  !<amount to be added (kg/km2)
 
     if(vol > 0.0)
        conc = (conc*vol + source)/ vol;
@@ -1675,15 +1675,15 @@ float ClassWQ_SoilBGC::tempfactor(float temperature){
   //  @param[in] exp    Exponent of moisturefactor (smfdenitpow)
 // -----------------------------------------------------------------------------
 
-    float ClassWQ_SoilBGC::exponential_moisturefactor(const float sm, const float pw, const float limpar, const float exp){
+    double ClassWQ_SoilBGC::exponential_moisturefactor(const double sm, const double pw, const double limpar, const double exp){
 
-//    float, INTENT(IN)  :: sm     !soil moisture (mm)
-//    float, INTENT(IN)  :: pw     !total pore wolume (mm)
-//    float, INTENT(IN)  :: limpar !limitation parameter of moisturefactor (mm) (smfdenitlim)
-//    float, INTENT(IN)  :: exp    !exponent of moisturefactor (smfdenitpow)
+//    double, INTENT(IN)  :: sm     !soil moisture (mm)
+//    double, INTENT(IN)  :: pw     !total pore wolume (mm)
+//    double, INTENT(IN)  :: limpar !limitation parameter of moisturefactor (mm) (smfdenitlim)
+//    double, INTENT(IN)  :: exp    !exponent of moisturefactor (smfdenitpow)
 
 // Local variables
-    float smfcn;      // soil moisture dependence factor
+    double smfcn;      // soil moisture dependence factor
 
 // Initiations
     smfcn = 0.0;
@@ -1704,23 +1704,23 @@ float ClassWQ_SoilBGC::tempfactor(float temperature){
 //  @param[in] conc Current concentration
 //  @param[in] par  Half saturation concentration
 // ----------------------------------------------------------------
-  float ClassWQ_SoilBGC::halfsatconcfactor(const float conc, const float par){
+  double ClassWQ_SoilBGC::halfsatconcfactor(const double conc, const double par){
 
 //  Local variables
-    float fcn;
+    double fcn;
 
     fcn = conc / (conc + par);
     return  fcn;
 
   } // halfsatconcfactor
 
-void ClassWQ_SoilBGC::retention_pool(long n, long hh, float **pool, float *sink){
+void ClassWQ_SoilBGC::retention_pool(long n, long hh, double **pool, double *sink){
 
 // long n        !<number of soillayers = size of pool-array
-// float pool(n) !<soil pool array
-// float sink(n) !<amount to be removed
+// double pool(n) !<soil pool array
+// double sink(n) !<amount to be removed
 
-  float a;
+  double a;
   for(long k = 0; k < n; ++k){ // layers
     a = pool[k][hh] - sink[k];
     if(a >= 0.0)
@@ -1732,13 +1732,13 @@ void ClassWQ_SoilBGC::retention_pool(long n, long hh, float **pool, float *sink)
   }
 } // retention_pool
 
-void ClassWQ_SoilBGC::retention_pool(long n, float *pool, float *sink){
+void ClassWQ_SoilBGC::retention_pool(long n, double *pool, double *sink){
 
 // long n        !<number of soillayers = size of pool-array
-// float pool(n) !<soil pool array
-// float sink(n) !<amount to be removed
+// double pool(n) !<soil pool array
+// double sink(n) !<amount to be removed
 
-  float a;
+  double a;
   for(long k = 0; k < n; ++k){ // layers
     a = pool[k] - sink[k];
     if(a >= 0.0)
@@ -1750,9 +1750,9 @@ void ClassWQ_SoilBGC::retention_pool(long n, float *pool, float *sink){
   }
 } // retention_pool
 
-void ClassWQ_SoilBGC::retention_pool(float &pool, float &sink){
+void ClassWQ_SoilBGC::retention_pool(double &pool, double &sink){
 
-  float a = pool - sink;
+  double a = pool - sink;
     if(a >= 0.0)
       pool = a;
     else{
@@ -1762,44 +1762,44 @@ void ClassWQ_SoilBGC::retention_pool(float &pool, float &sink){
 
 }
 
-  void ClassWQ_SoilBGC::production_pool(long n, long hh, float **pool, const float source[][2]){
+  void ClassWQ_SoilBGC::production_pool(long n, long hh, double **pool, const double source[][2]){
 
 //    long n           // <number of soillayers = size of pool-array
-//    float pool(n)   // <soil pool array (kg/km2) or (mg/m2)
-//    float source(n) // <amount to be added (kg/km2) or (mg/m2)
+//    double pool(n)   // <soil pool array (kg/km2) or (mg/m2)
+//    double source(n) // <amount to be added (kg/km2) or (mg/m2)
 
     for(long kk = 0; kk < maxsoillayers; ++kk)
       pool[kk][hh] = pool[kk][hh] + source[kk][n];
 
   }  // production_pool 
 
-  void ClassWQ_SoilBGC::production_pool(long n, long hh, float **pool, const float *source){
+  void ClassWQ_SoilBGC::production_pool(long n, long hh, double **pool, const double *source){
 
 //    long n           // <number of soillayers = size of pool-array
-//    float pool(n)   // <soil pool array (kg/km2) or (mg/m2)
-//    float source(n) // <amount to be added (kg/km2) or (mg/m2)
+//    double pool(n)   // <soil pool array (kg/km2) or (mg/m2)
+//    double source(n) // <amount to be added (kg/km2) or (mg/m2)
 
     for(long kk = 0; kk < n; ++kk)
       pool[kk][hh] = pool[kk][hh] + source[kk];
 
   }  // production_pool 
 
-  void ClassWQ_SoilBGC::production_pool(long n, float *pool, const float source){
+  void ClassWQ_SoilBGC::production_pool(long n, double *pool, const double source){
 
 //    long n          // <number of soillayers = size of pool-array
-//    float pool(n)   // <soil pool array (kg/km2) or (mg/m2)
-//    float source(n) // <amount to be added (kg/km2) or (mg/m2)
+//    double pool(n)   // <soil pool array (kg/km2) or (mg/m2)
+//    double source(n) // <amount to be added (kg/km2) or (mg/m2)
 
     for(long kk = 0; kk < n; ++kk)  // layers
       pool[kk] = pool[kk] + source;
 
   }  // production_pool 
 
-  void ClassWQ_SoilBGC::production_pool(long n, float pool, const float source){
+  void ClassWQ_SoilBGC::production_pool(long n, double pool, const double source){
 
 //    long n          // <number of soillayers = size of pool-array
-//    float pool(n)   // <soil pool array (kg/km2) or (mg/m2)
-//    float source(n) // <amount to be added (kg/km2) or (mg/m2)
+//    double pool(n)   // <soil pool array (kg/km2) or (mg/m2)
+//    double source(n) // <amount to be added (kg/km2) or (mg/m2)
 
       pool = pool + source;
 
@@ -1807,11 +1807,11 @@ void ClassWQ_SoilBGC::retention_pool(float &pool, float &sink){
 
 // Calculates concentration based on water volume and amount of one substance
 // ---------------------------------------------------------------------
-      void ClassWQ_SoilBGC::new_concentration(const float pool, const float vol, float *conc){ // return by reference
+      void ClassWQ_SoilBGC::new_concentration(const double pool, const double vol, double *conc){ // return by reference
 
-//    float pool !<amount          (kg/km2) or (mg/m2)
-//    float vol  !<volume          (mm)
-//    float conc !<concentation    (mg/L)
+//    double pool !<amount          (kg/km2) or (mg/m2)
+//    double vol  !<volume          (mm)
+//    double conc !<concentation    (mg/L)
 
     if(vol > 0.0)
       *conc = pool / vol;
@@ -1823,17 +1823,17 @@ void ClassWQ_SoilBGC::retention_pool(float &pool, float &sink){
 // Calculates concentration based on water volume and amount of one substance
 // ---------------------------------------------------------------------
 
-float ClassWQ_SoilBGC::SUM(float X[maxsoillayers][2], long part){
+double ClassWQ_SoilBGC::SUM(double X[maxsoillayers][2], long part){
 
-  float sum = 0.0;
+  double sum = 0.0;
   for(long ii = 0; ii < maxsoillayers; ++ii)
     sum += X[ii][part];
 
   return sum;
 }
 
-float ClassWQ_SoilBGC::SUM(float *X){
-  float sum = 0.0;
+double ClassWQ_SoilBGC::SUM(double *X){
+  double sum = 0.0;
   for(long ii = 0; ii < maxsoillayers; ++ii)
     sum += X[ii];
 
@@ -1859,25 +1859,25 @@ void ClassWQ_SoilBGC::runoff_pp_by_erosion(){
 
     int, INTENT(IN) :: isoil     // index of soil type
     int, INTENT(IN) :: iluse     // index of landuse
-    float, INTENT(IN)    :: prec      // precipitation (rainfall only)
-    float, INTENT(IN)    :: runoff   // surface runoff (mm/timestep)
-    float, INTENT(IN)    :: totflow     // total runoff (runoff, tilerunoff, soilrunoff layer 1-3)
-    float, INTENT(INOUT) :: soil_runoff_cWQ_lay    // PP concentration surface runoff (mg/L)
-    float, INTENT(INOUT) :: csoil1      // PP concentration soil runoff layer 1 (mg/L)
-    float, INTENT(INOUT) :: csoil2      // PP concentration soil runoff layer 2 (mg/L)
+    double, INTENT(IN)    :: prec      // precipitation (rainfall only)
+    double, INTENT(IN)    :: runoff   // surface runoff (mm/timestep)
+    double, INTENT(IN)    :: totflow     // total runoff (runoff, tilerunoff, soilrunoff layer 1-3)
+    double, INTENT(INOUT) :: soil_runoff_cWQ_lay    // PP concentration surface runoff (mg/L)
+    double, INTENT(INOUT) :: csoil1      // PP concentration soil runoff layer 1 (mg/L)
+    double, INTENT(INOUT) :: csoil2      // PP concentration soil runoff layer 2 (mg/L)
     TYPE(snowicestatetype),INTENT(INOUT)  :: frozenstate   // Snow and ice states
     TYPE(soilstatetype),INTENT(INOUT)  :: soilstate   // Soil states
 */
 // Local variables
-    float PPrel;         // PP released from delay pool
-    float srfilt;        // total filtration of surface runoff PP
-    float erodingflow;   // Flow eroding the surface
-    float erodedP;       // total eroded PP (kg/km2)
-    float fracminP;      // fraction of erodedP in mineral form (from partP)
-    float removePP[1];   // actually lost PP (kg/km2) [1][2]
-    float removeHP[1];   // actually lost refractoryP (kg/km2) [1][2]
-    float surfrppmass;   // variables to temporary hold PP-konc of macropores and runoff
-    float newppconc;     // PP concentration for PP released from delay pool
+    double PPrel;         // PP released from delay pool
+    double srfilt;        // total filtration of surface runoff PP
+    double erodingflow;   // Flow eroding the surface
+    double erodedP;       // total eroded PP (kg/km2)
+    double fracminP;      // fraction of erodedP in mineral form (from partP)
+    double removePP[1];   // actually lost PP (kg/km2) [1][2]
+    double removeHP[1];   // actually lost refractoryP (kg/km2) [1][2]
+    double surfrppmass;   // variables to temporary hold PP-konc of macropores and runoff
+    double newppconc;     // PP concentration for PP released from delay pool
 
     PPrel = 0.0f;
     srfilt = 0.0f;
@@ -1927,7 +1927,7 @@ void ClassWQ_SoilBGC::runoff_pp_by_erosion(){
     }
   } // runoff_pp_by_erosion
 
-void ClassWQ_SoilBGC::calculate_erosion(float& erodedP){
+void ClassWQ_SoilBGC::calculate_erosion(double& erodedP){
 /*  from "npc_soil_proc.f90" called from "soilmodel0.f90" definitions in "modvar.f90"
     USE HYPEVARIABLES, ONLY : bulkdensity
     USE MODVAR, ONLY : 10,     &
@@ -1937,25 +1937,25 @@ void ClassWQ_SoilBGC::calculate_erosion(float& erodedP){
          pi
 
 
-    float, INTENT(IN)      :: prec          // precipitation (rainfall only)
-    float, INTENT(IN)      :: thickness     // upper soillayer thickness (m)
-    float, INTENT(IN)      :: surfacerunoff // saturated overland flow and excess infiltration (mm)
-    float, INTENT(OUT)     :: erodedP       // eroded phosphorus (kg/km2)
-    float, INTENT(IN)      :: cohesion      // (kPa)
-    float, INTENT(IN)      :: erodibility   // (g/J)
-    float, INTENT(IN)      :: snow          // snow water (mm) i.e. snowmelt
-    float, INTENT(IN)      :: sreroexp      // surface runoff erosion exponent
-    float, INTENT(IN)      :: partP(maxsoillayers)       // partP pool (kg/km2)
-    float, INTENT(IN)      :: refractoryP(maxsoillayers) // refractoryP pool (kg/km2)
-    float, INTENT(OUT)     :: fracminP      // part[hh] of eroded P in mineral form
+    double, INTENT(IN)      :: prec          // precipitation (rainfall only)
+    double, INTENT(IN)      :: thickness     // upper soillayer thickness (m)
+    double, INTENT(IN)      :: surfacerunoff // saturated overland flow and excess infiltration (mm)
+    double, INTENT(OUT)     :: erodedP       // eroded phosphorus (kg/km2)
+    double, INTENT(IN)      :: cohesion      // (kPa)
+    double, INTENT(IN)      :: erodibility   // (g/J)
+    double, INTENT(IN)      :: snow          // snow water (mm) i.e. snowmelt
+    double, INTENT(IN)      :: sreroexp      // surface runoff erosion exponent
+    double, INTENT(IN)      :: partP(maxsoillayers)       // partP pool (kg/km2)
+    double, INTENT(IN)      :: refractoryP(maxsoillayers) // refractoryP pool (kg/km2)
+    double, INTENT(OUT)     :: fracminP      // part[hh] of eroded P in mineral form
 */
 
     // Local variables
     long kcrop, k;
-    float MobilisedSed, MobilisedP, Rainfall_energy, cropcover, groundcover;
-    float intensity;
-    float bd1, bd2, bd3, bd4, bd5;  // cultivation dates
-    float common_cropcover, common_groundcover, maxday1, maxday2;
+    double MobilisedSed, MobilisedP, Rainfall_energy, cropcover, groundcover;
+    double intensity;
+    double bd1, bd2, bd3, bd4, bd5;  // cultivation dates
+    double common_cropcover, common_groundcover, maxday1, maxday2;
 
     fracminP[hh] = 0.0f;
     erodedP = 0.0f;
@@ -1982,8 +1982,8 @@ void ClassWQ_SoilBGC::calculate_erosion(float& erodedP){
              groundcover = gcmax1[hh]; // during summer
           }
           else{                                          // spring, winter and row crops
-             maxday1 = float(int(bd2 + (bd3-bd2)/2.));   // day of maximum crop and ground cover in summer
-             maxday2 = float(int(bd5 + (365-bd5)/2.));   // day of maximum crop and ground cover for winter crops in autumn
+             maxday1 = double(int(bd2 + (bd3-bd2)/2.));   // day of maximum crop and ground cover in summer
+             maxday2 = double(int(bd5 + (365-bd5)/2.));   // day of maximum crop and ground cover for winter crops in autumn
              if(bd5 > 0){                                // winter crop
                 if(dayno < bd2){
                    cropcover   = ccmax2[hh];
@@ -2108,21 +2108,21 @@ groundcover = gcmax1[hh];
 // Reference ModelDescription Chapter Nitrogen and phosphorus in land routines (Vegetation
 // and soil surface processes - Erosion calculations)
 
-  void ClassWQ_SoilBGC::calculate_transport(const float flow, float& erodedP){
+  void ClassWQ_SoilBGC::calculate_transport(const double flow, double& erodedP){
 
-//    float, INTENT(IN)    :: flow      // Fast flow
-//    float, INTENT(INOUT) :: erodedP   // Mobilised P
+//    double, INTENT(IN)    :: flow      // Fast flow
+//    double, INTENT(INOUT) :: erodedP   // Mobilised P
 
 // Local variables
-    float transportfactor;
-    float enrichment;
+    double transportfactor;
+    double enrichment;
 
 // Local parameters
-    float max = 4.0;
-    float stab = 1.5;
-    float flowstab = 4.0;
-    float trans1 = 4.0;
-    float trans2 = 1.3;
+    double max = 4.0;
+    double stab = 1.5;
+    double flowstab = 4.0;
+    double trans1 = 4.0;
+    double trans2 = 1.3;
 
 // Enrichment - finer soil particles are more likely to be eroded and contain more P per weight unit
 

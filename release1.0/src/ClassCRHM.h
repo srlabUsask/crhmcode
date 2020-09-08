@@ -30,7 +30,7 @@ class ClassData {
 public:
 	string DataFileName;
 	string Description;
-	float **Data;
+	double **Data;
 	double *Times; // holds sparse times
 	double Dt1;
 	double Dt2;
@@ -55,7 +55,7 @@ public:
 	long TimeIndx; // sparse file ??
 	bool FirstFile;
 
-	float TimeShiftFilter; // used by Time shift filter
+	double TimeShiftFilter; // used by Time shift filter
 
 	ClassData(string DataFileName) : DataFileName(DataFileName), Data(NULL), myMacro(NULL),
 		DataCnt(0), FilterCnt(0), Simulation(false), FirstFile(false),
@@ -112,15 +112,15 @@ public:
 	CRHM::TFun FunKind;
 	bool Daily; // used by AddObsPlot to decide how to apply function to input obs/var
 
-	float * values;
+	double * values;
 	long  * ivalues;
 
-	float ** layvalues;
+	double ** layvalues;
 	long **ilayvalues;
 
 	// backup storage
 
-	float ** layvaluesBkup;
+	double ** layvaluesBkup;
 	long **ilayvaluesBkup;
 
 	long offset; // observation offset in ClassData FileData/Data
@@ -165,7 +165,7 @@ public:
 	ClassVar(const ClassVar & Cl);
 	ClassVar & operator=(const ClassVar & Cl);
 
-	float &operator[](int ii) { return values[ii]; }
+	double &operator[](int ii) { return values[ii]; }
 
 	virtual void ReleaseM(bool Keep = false);
 
@@ -265,15 +265,15 @@ public:
 	long lay;
 	long variation_set;
 
-	float *values;
+	double *values;
 	long *ivalues;
 
-	float ** layvalues;
+	double ** layvalues;
 	long **ilayvalues;
 
 	string valstr;
-	float minVal;
-	float maxVal;
+	double minVal;
+	double maxVal;
 
 	TStringList *Strings;
 
@@ -283,7 +283,7 @@ public:
 
 						// backup storage
 
-	float ** layvaluesBkup;
+	double ** layvaluesBkup;
 	long **ilayvaluesBkup;
 
 	ClassPar *Identical;
@@ -300,13 +300,13 @@ public:
 	ClassPar(string module, string param, CRHM::TDim dimen,  // strings
 		string CommaText, string help, CRHM::TVar varType, int Grpdim);
 
-	ClassPar(string module, string param, CRHM::TDim dimen,  // integer and float
-		string valstr, float minVal, float maxVal,
+	ClassPar(string module, string param, CRHM::TDim dimen,  // integer and double
+		string valstr, double minVal, double maxVal,
 		string help, string units, CRHM::TVar varType, int defdim = 0, int GrpN = 0);
 
 	ClassPar(ClassPar &p);  // copy constructor
 
-	float &operator[](int ii) { return values[ii]; }
+	double &operator[](int ii) { return values[ii]; }
 
 	virtual  ~ClassPar();
 
@@ -349,7 +349,7 @@ public:
 
 	long *DataIndx;    // Vs offsets
 	long *DataObsCnt;  // maximum number of observations
-	float ***Data;     // Data[Vs selection][Obs][line]
+	double ***Data;     // Data[Vs selection][Obs][line]
 	double *Constants; // constant data
 
 	ClassVar *thisVar; // last arg accessed
@@ -458,8 +458,8 @@ class Classexp : Classfilter {
 public:
 	long delay;
 	long duration;
-	float A;
-	float B;
+	double A;
+	double B;
 	Classexp(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -467,8 +467,8 @@ public:
 
 class Classexpv : Classfilter {
 public:
-	float A;
-	float B;
+	double A;
+	double B;
 	Classexpv(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -495,8 +495,8 @@ class Classlog : Classfilter {
 public:
 	long delay;
 	long duration;
-	float A;
-	float B;
+	double A;
+	double B;
 	Classlog(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -504,8 +504,8 @@ public:
 
 class Classlogv : Classfilter {
 public:
-	float A;
-	float B;
+	double A;
+	double B;
 	Classlogv(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -515,8 +515,8 @@ class Classpow : Classfilter {
 public:
 	long delay;
 	long duration;
-	float A;
-	float B;
+	double A;
+	double B;
 	Classpow(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -524,8 +524,8 @@ public:
 
 class Classpowv : Classfilter {
 public:
-	float A;
-	float B;
+	double A;
+	double B;
 	Classpowv(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -579,7 +579,7 @@ public:
 
 class Classrefwind : Classfilter {
 public:
-	float Const; // result log((Z2 - d)/Z)/log((Zm - d)/Z)
+	double Const; // result log((Z2 - d)/Z)/log((Zm - d)/Z)
 
 	Classrefwind(ClassData *MyObs, string ToVar, string args, string argtypes = "VCCC");
 
@@ -682,7 +682,7 @@ public:
 	ClassMissing(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 	~ClassMissing();
 
-	float *GoodData;
+	double *GoodData;
 
 	virtual void doFunc(long Obs, long Line);
 };
@@ -694,7 +694,7 @@ public:
 	~ClassMissingInter();
 
 	bool FirstTime;
-	float *GoodData;
+	double *GoodData;
 	long *LastGoodData;
 
 	virtual void doFunc(long Obs, long Line);
@@ -792,26 +792,26 @@ public:
 void   LogError(CRHMException Except);
 void   LogError(string S, TExcept Kind);
 
-void   LogMessage(const char *S, float V, TExtra Opt = BLANK);
-void   LogMessage(const char *S, float V, const char *S2, TExtra Opt = BLANK);
+void   LogMessage(const char *S, double V, TExtra Opt = BLANK);
+void   LogMessage(const char *S, double V, const char *S2, TExtra Opt = BLANK);
 void   LogMessage(const char *S, long V, TExtra Opt = BLANK);
 void   LogMessage(const char *S, TExtra Opt = BLANK);
 
-void   LogMessage(long hh, const char *S, float V, TExtra Opt = BLANK);
+void   LogMessage(long hh, const char *S, double V, TExtra Opt = BLANK);
 void   LogMessage(long hh, const char *S, long V, TExtra Opt = BLANK);
 void   LogMessage(long hh, const char *S, TExtra Opt = BLANK);
 
-void   LogMessage(long hh, const char *S, float V1, float V2, TExtra Opt = BLANK);
-void   LogMessage(long hh, const char *S, float V1, float V2, float V3, TExtra Opt = BLANK);
+void   LogMessage(long hh, const char *S, double V1, double V2, TExtra Opt = BLANK);
+void   LogMessage(long hh, const char *S, double V1, double V2, double V3, TExtra Opt = BLANK);
 
-void   LogMessageA(long hh, const char *S, float V1, TExtra Opt = BLANK);
-void   LogMessageA(long hh, const char *S, float V1, const char *S2, TExtra Opt = BLANK);
-void   LogMessageA(long hh, const char *S, float V1, const float HRU_area, const float Basin_area, TExtra Opt = BLANK);
-void   LogMessageA(long hh, const char *S, float V1, const float HRU_area, const float Basin_area, const char *S2, TExtra Opt = BLANK);
-void   LogMessageA(long hh, const char *S, float V1, const float Basin_area, TExtra Opt = BLANK);
-void   LogMessageA(long hh, const char *S, float V1, const float Basin_area, const char *S2, TExtra Opt = BLANK);
+void   LogMessageA(long hh, const char *S, double V1, TExtra Opt = BLANK);
+void   LogMessageA(long hh, const char *S, double V1, const char *S2, TExtra Opt = BLANK);
+void   LogMessageA(long hh, const char *S, double V1, const double HRU_area, const double Basin_area, TExtra Opt = BLANK);
+void   LogMessageA(long hh, const char *S, double V1, const double HRU_area, const double Basin_area, const char *S2, TExtra Opt = BLANK);
+void   LogMessageA(long hh, const char *S, double V1, const double Basin_area, TExtra Opt = BLANK);
+void   LogMessageA(long hh, const char *S, double V1, const double Basin_area, const char *S2, TExtra Opt = BLANK);
 
-void   LogDebug(long h, char *Text, float v);
+void   LogDebug(long h, char *Text, double v);
 void   LogDebug(char *S);
 void   LogDebugD(char *S);
 void   LogDebugT(string S);
@@ -842,7 +842,7 @@ long julian(string when);
 //
 //  long MonthDaysCnt(TDateTime DT);
 
-float Julian(string when);
+double Julian(string when);
 
 bool last_timestep(void);
 
@@ -869,7 +869,7 @@ ClassPar *ClassParFindRev(string module, string param);
 
 void ClassParSet(ClassPar *p);
 
-//float sqr(float x);
+//double sqr(double x);
 
 class Tresult {
 public:

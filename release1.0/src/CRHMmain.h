@@ -17,7 +17,7 @@
 class MMSData
 {
 public:
-	float ** mmsData;
+	double ** mmsData;
 	long ** mmsDataL;
 	bool GoodRun;
 	ClassModule *obs_preset;
@@ -29,21 +29,21 @@ public:
 class TSeries {
 public:
 	double *XValues;
-	float *YValues;
+	double *YValues;
 	ClassVar *Tag;
 	int MaxCnt;
 	int Used;
 	string Title;
-	TSeries(int Cnt) { MaxCnt = Cnt; XValues = new double[MaxCnt]; YValues = new float[MaxCnt]; Used = 0; };
+	TSeries(int Cnt) { MaxCnt = Cnt; XValues = new double[MaxCnt]; YValues = new double[MaxCnt]; Used = 0; };
 	~TSeries() { delete[] XValues; delete[] YValues; };
-	void AddXY(double X, float Y) 
+	void AddXY(double X, double Y) 
 	{ 
 		XValues[Used] = X; 
 		YValues[Used++] = Y; 
 	};
 	int Count(void) { return Used; };
 	double XValue(int nn) { return XValues[nn]; };
-	float YValue(int nn) { return YValues[nn]; };
+	double YValue(int nn) { return YValues[nn]; };
 };
 
 
