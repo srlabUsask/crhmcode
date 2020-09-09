@@ -113,7 +113,7 @@ public:
 	bool OpenStateFlag;
 
 	//double ProjectFileDate;
-	double Dt0; // used to ca
+	time_t Dt0; // used to ca
 
 
 	string ProjectDir;// = ApplicationDir;

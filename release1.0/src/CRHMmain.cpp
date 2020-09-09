@@ -397,7 +397,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 					idx = S.find('#');
 					if (idx != -1) {
-						Variation = pow(2, S[idx + 1] - char('1'));
+						Variation = (long)pow(2, S[idx + 1] - char('1'));
 						s = S.substr(0, idx);
 					}
 					else
@@ -561,7 +561,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 										newPar->layvalues[jj][ii] = x;
 									}
 									else if (newPar->varType == CRHM::Int) {
-										double x;
+										long x;
 										instr >> x;
 										if (instr.fail())
 											break;
@@ -819,7 +819,7 @@ void CRHMmain::FormCreate(void) {
 
 	cdSeries = NULL;
 
-	double Dt = time(NULL);
+	time_t Dt = time(NULL);
 	OpenStateFlag = false;
 
 	Global::nhru = Global::maxhru;
