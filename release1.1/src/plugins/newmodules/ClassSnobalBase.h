@@ -1,3 +1,6 @@
+#ifndef ClassSnobalBaseH
+#define ClassSnobalBaseH
+
 //created by Manishankar Mondal
 
 #include "ClassModule.h"
@@ -258,3 +261,5 @@ public:
                                   //  true if computed values for input
                                   //   deltas and precip arrays [nhru] [4]
 };
+
+#endif

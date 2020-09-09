@@ -1,3 +1,6 @@
+#ifndef TSTEP_RECH
+#define TSTEP_RECH
+
 class TSTEP_REC { // time step information
 public:
 
@@ -30,3 +33,5 @@ public:
     TSTEP_REC() : level(0), time_step(24 * 3600 / Global::Freq), intervals(1), threshold(0.0) {};
 
 };
+
+#endif

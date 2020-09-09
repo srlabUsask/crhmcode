@@ -1,3 +1,6 @@
+#ifndef PRECIP_RECH
+#define PRECIP_RECH
+
 class  PRECIP_REC { // precip-data input records
 public:
 
@@ -8,3 +11,5 @@ public:
     float	  m_subl;	// mass of snow drift       (kg/m^2)
     float	  z_snow;	// depth of snow in precip  (m)
 };
+
+#endif

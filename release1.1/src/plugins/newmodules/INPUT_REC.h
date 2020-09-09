@@ -1,3 +1,6 @@
+#ifndef INPUT_RECH
+#define INPUT_RECH
+
 class  INPUT_REC { // climate-data input records
 public:
 
@@ -9,3 +12,5 @@ public:
     float T_g;	// soil temp at depth z_g (C)
     float F_g;	// soil flux at depth z_g (W/m^2)
 };
+
+#endif
