@@ -3437,7 +3437,7 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 
 	while (fgets(line, sizeof line, obfile) != NULL) //reading the lines upto #############.
 	{
-		for (int i = 0; i < strlen(line); i++)
+		for (unsigned int i = 0; i < strlen(line); i++)
 		{
 			obsname[i] = line[i];
 			if (line[i] == ' ')
@@ -3491,7 +3491,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 
 	while (fgets(line, sizeof line, obfile) != NULL) //reading the lines upto #############.
 	{
-		for (int i = 0; i < strlen(line); i++)
+		for (unsigned int i = 0; i < strlen(line); i++)
 		{
 			obsname[i] = line[i];
 			if (line[i] == ' ')

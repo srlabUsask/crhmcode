@@ -2740,7 +2740,7 @@ void Classfilter::readargs() {
 	while (ee = args.find(','), ee > 0) args[ee] = ' ';
 
 	instr.str(args);
-	long Cnt;
+	unsigned long Cnt;
 	long IndexC = 0;
 	long IndexV = 0;
 	long pp, pp2;
@@ -2844,7 +2844,7 @@ Classfilter::Classfilter(ClassData *MyObs, string ToVar, string args, string arg
 	MyObs(MyObs), ToVar(ToVar), args(args), argtypes(argtypes),
 	Vs(0), Cs(0), Error(0), ObsCnt(0), TotalCnt(0), FirstTime(true) {
 
-	for (int ii = 1; ii < argtypes.length() + 1; ++ii) {
+	for (unsigned int ii = 1; ii < argtypes.length() + 1; ++ii) {
 		if (argtypes[ii] == 'V') Vs++;
 		else if (argtypes[ii] == 'C') Cs++;
 	}
