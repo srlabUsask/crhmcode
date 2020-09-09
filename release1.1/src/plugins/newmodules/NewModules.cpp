@@ -116,16 +116,10 @@
 
 #define numsubstances 5
 
-#ifndef M_PI
-#define M_PI   3.14159265358979323846
-#endif
-
 
 
 using namespace std;
 using namespace CRHM;
-
-
 
 const long i_no3n = 0; // inorganic nitrogen
 const long i_don = 1; // organic nitrogen
@@ -282,66 +276,3 @@ void MoveModulesToGlobal(string DLLName){
   DLLModules.LoadCRHM(DLLName);
 
 }
-// All these at 0% saturation from Chow pg 115 except fcap
-// Wilt = Chow's por-eff por, fcap from Floods in Canada
-// Soil curves of form K = Ks / (A*Psi^3 + 1 )
-// data from Clapp and Hornberger (1978). Original table appears In Dingman (2002)
-// porosity/air entry tension/pore size distribution
-// AVAIL ->     1 - Sand, at pcts < 0.25, limited to 0.25*pcts*avail_evap.
-//              2 - loam, at pcts < 0.5,  limited to 0.5*pcts*avail_evap.
-//              3 - clay, at pcts < 0.67 && pcts > 0.33, limited to pcts*avail_evap and
-//                        at pcts < 0.33 limited to 0.5*pcts*avail_evap
-//              4 organic, unlimted availability
-//              where pcts = (soil moist)/(soil moist max)
-// psi, k(mm/h), wilt, fcap,  porG, porE, air entry, pore size ?? b, AVAIL
-// {PSI,  KSAT,  WILT,  FCAP, PORG,   PORE,     AIRENT, PORESZ ?? b, AVAIL}
-//  mm    mm/h
-
-
-/*
-** DESCRIPTION
-**      This routine initializes the properties for the snowcover.  It
-**	determines the number of layers, their individual properties,
-**	the cold content for the snowcover and its layers, and the
-**	snowcover's water content.  The following global variables
-**	should be initialized before invoking this routine:
-**
-**		z_s	depth of snowcover (m)
-**		rho	density of snowcover (kg/m^3)
-**		T_s	average temperature of snowcover (K)
-**		T_s_0	temperature of surface layer of snowcover (K)
-**		T_s_l	temperature of lower layer of snowcover (K)
-**		h2o_sat	% of liquid h2o saturation (0 to 1.0)
-**
-**		max_h2o_vol	maximum liquid h2o[hh] content as volume ratio:
-**				    V_water/(V_snow - V_ice) (unitless)
-**
-** GLOBAL VARIABLES READ
-**	h2o_sat
-**	layer_count
-**	m_s_0
-**	m_s_l
-**	max_h2o_vol
-**	rho
-**	T_s
-**	T_s_0
-**	T_s_l
-**	z_s
-**
-** GLOBAL VARIABLES MODIFIED
-**	cc_s
-**	cc_s_0
-**	cc_s_l
-**	h2o
-**	h2o_max
-**	h2o_total
-**	h2o_vol
-**	m_s
-**	m_s_0
-**	m_s_l
-**	rho
-**	T_s
-**	T_s_0
-**	T_s_l
-**	(and those variables modified by "_calc_layer", "_layer_mass" and cold_content)
-*/
