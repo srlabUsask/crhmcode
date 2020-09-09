@@ -715,6 +715,7 @@
     <ClCompile Include="..\plugins\newmodules\ClassGlobal.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassGreenAmpt.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassGreencrack.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClassGrow_Crop.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassHMSA.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassHtobs.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassIceBulb.cpp" />
@@ -754,6 +755,7 @@
     <ClCompile Include="..\plugins\newmodules\ClassShutWallD.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassSimpleRichard.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassSlope_Qsi.cpp" />
+    <ClCompile Include="..\plugins\newmodules\ClassSnobalBase.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassSoil.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassSoilDS.cpp" />
     <ClCompile Include="..\plugins\newmodules\ClassSoilX.cpp" />

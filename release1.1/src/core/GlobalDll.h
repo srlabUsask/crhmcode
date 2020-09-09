@@ -719,4 +719,16 @@ static const float por_s[] = { 0.96, 0.9, 0.87, 0.43, 0.43 }; // ()  solids
 
 static float fLimit;
 
+#define AH		1.0	// ratio sensible/momentum phi func
+#define AV		1.0	// ratio latent/momentum phi func
+#define ITMAX		50	// max # iterations allowed
+#define PAESCHKE	7.35	// Paeschke's const (eq. 5.3)
+#define THRESH		1.e-5	// convergence threshold
+
+#define SM		0
+#define SH		1
+#define SV		2
+#define BETA_S		5.2
+#define BETA_U		16
+
 #endif
