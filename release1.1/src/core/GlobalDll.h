@@ -695,5 +695,28 @@ static const float RADxxMIN = 2.0 * M_PI / CalcFreq;
 static const float MINS_int = 24.0 * 60.0 / CalcFreq;
 
 
+static float textureproperties[][6] = { // mm/hour
+  {7.6, 12.7, 15.2, 17.8, 25.4, 76.2},  // coarse over coarse
+  {2.5,  5.1,  7.6, 10.2, 12.7,  15.2}, // medium over medium
+  {1.3,  1.8,  2.5,  3.8,  5.1,  6.4},  // medium/fine over fine
+  {0.5,  0.5,  0.5,  0.5,  0.5,  0.5}   // soil over shallow bedrock
+};
+
+#ifndef M_PI_2
+#define M_PI_2 1.57079632679489661923
+#endif
+
+static const float rho_s[] = { 41.1, 75.2, 91.4, 1300.0, 1300.0 }; // (kg/m3) solids
+static const float c_s[] = { 1920.0, 1920.0, 1920.0, 890.0, 890.0 }; // (J/m3/K) solids
+static const float Cv_s[] = { 78912.0, 144384.0, 175392.0, 1157000.0, 1157000.0 }; // (J/m3/K) solids
+static const float lam_s[] = { 0.21, 0.21, 0.21, 2.50, 2.50 };  // (W/m/K) solids
+static const float ks_s[] = { 450.0, 154.0, 13.0, 5.0, 3.0 }; // (m/day)  solids
+static const float por_s[] = { 0.96, 0.9, 0.87, 0.43, 0.43 }; // ()  solids
+
+#define Hf  334.4E3    // Latent heat of fusion, J/kg
+#define major 5.0      // threshold for major melt event(5 mm/d)
+
+
+static float fLimit;
 
 #endif
