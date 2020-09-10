@@ -579,7 +579,7 @@ public:
 
 class Classrefwind : Classfilter {
 public:
-	double Const; // result log((Z2 - d)/Z)/log((Zm - d)/Z)
+	double Const {0.0}; // result log((Z2 - d)/Z)/log((Zm - d)/Z)
 
 	Classrefwind(ClassData *MyObs, string ToVar, string args, string argtypes = "VCCC");
 
