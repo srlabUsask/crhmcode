@@ -418,10 +418,10 @@ public:
 
 class Classsin : Classfilter {
 public:
-	long period;
-	long phase;
-	long delay;
-	long duration;
+	long period {0};
+	long phase {0};
+	long delay {0};
+	long duration {0};
 	Classsin(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -429,10 +429,10 @@ public:
 
 class Classcos : Classfilter {
 public:
-	long period;
-	long phase;
-	long delay;
-	long duration;
+	long period {0};
+	long phase {0};
+	long delay {0};
+	long duration {0};
 	Classcos(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
