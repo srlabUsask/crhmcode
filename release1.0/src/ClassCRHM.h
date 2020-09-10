@@ -533,8 +533,8 @@ public:
 
 class Classtime : Classfilter {
 public:
-	double start;
-	int option;
+	double start {0.0};
+	int option {0};
 	Classtime(ClassData *MyObs, string ToVar, string args, string argtypes = "C");
 
 	virtual void doFunc(long Obs, long Line);
