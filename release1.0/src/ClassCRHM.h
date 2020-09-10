@@ -32,27 +32,27 @@ public:
 	string Description;
 	double **Data;
 	double *Times; // holds sparse times
-	double Dt1;
-	double Dt2;
-	double Interval; // days
-	long Lines;
-	long Freq;
-	long IndxMin;   // range of data available
-	long IndxMax;   // range of data available
+	double Dt1 {0.0};
+	double Dt2 {0.0};
+	double Interval {0.0}; // days
+	long Lines {0};
+	long Freq {0};
+	long IndxMin {0};   // range of data available
+	long IndxMax {0};   // range of data available
 	long ModN;      // divisor for data less frequent than basic interval
-	long HdrLen;    // length of file header
-	long Position;  // current line in file
+	long HdrLen {0};    // length of file header
+	long Position {0};  // current line in file
 	long DataCnt;
 	long FilterCnt;  // filter count
 
 	Classmacro *myMacro;
 	bool Simulation;
 	long ForceInterval;
-	bool GoodInterval;
-	bool GoodDay;
-	bool RunUsed;
-	bool Success;
-	long TimeIndx; // sparse file ??
+	bool GoodInterval {false};
+	bool GoodDay {false};
+	bool RunUsed {false};
+	bool Success {false};
+	long TimeIndx {0}; // sparse file ??
 	bool FirstFile;
 
 	double TimeShiftFilter; // used by Time shift filter
