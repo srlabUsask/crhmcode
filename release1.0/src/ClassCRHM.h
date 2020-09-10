@@ -447,8 +447,8 @@ public:
 
 class Classpulse : Classfilter {
 public:
-	long delay;
-	long duration;
+	long delay {0};
+	long duration {0};
 	Classpulse(ClassData *MyObs, string ToVar, string args, string argtypes = "CC");
 
 	virtual void doFunc(long Obs, long Line);
