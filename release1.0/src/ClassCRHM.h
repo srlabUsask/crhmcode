@@ -513,10 +513,10 @@ public:
 
 class Classpow : Classfilter {
 public:
-	long delay;
-	long duration;
-	double A;
-	double B;
+	long delay {0};
+	long duration {0};
+	double A {0.0};
+	double B {0.0};
 	Classpow(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -524,8 +524,8 @@ public:
 
 class Classpowv : Classfilter {
 public:
-	double A;
-	double B;
+	double A {0.0};
+	double B {0.0};
 	Classpowv(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 
 	virtual void doFunc(long Obs, long Line);
