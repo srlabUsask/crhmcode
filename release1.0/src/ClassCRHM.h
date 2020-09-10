@@ -99,7 +99,7 @@ public:
 	long dimMax; // used by observations
 	long lay;
 	long variation_set {0};
-	CRHM::TDim dimen;
+	CRHM::TDim dimen {CRHM::NREB};
 
 	CRHM::TVISIBLE visibility;
 	bool optional;
