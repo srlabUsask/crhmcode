@@ -693,7 +693,7 @@ public:
 	ClassMissingInter(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 	~ClassMissingInter();
 
-	bool FirstTime;
+	bool FirstTime {true};
 	double *GoodData;
 	long *LastGoodData;
 
