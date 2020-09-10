@@ -104,6 +104,7 @@
 #include "ClassSWEslope.h" //added by Manishankar Mondal
 #include "ClassTestSparse.h" //added by Manishankar Mondal
 #include "ClassGrow_Crop.h" //added by Manishankar Mondal
+#include "ClassSnobalBase.h"  //added by Manishankar Mondal
 #include "ClassSnobalX.h"  //added by Manishankar Mondal
 #include "ClassSnobalCRHM.h" //added by Manishankar Mondal
 #include "Classshared.h" //added by Manishankar Mondal
