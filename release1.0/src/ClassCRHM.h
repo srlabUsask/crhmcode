@@ -504,8 +504,8 @@ public:
 
 class Classlogv : Classfilter {
 public:
-	double A;
-	double B;
+	double A {0.0};
+	double B {0.0};
 	Classlogv(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 
 	virtual void doFunc(long Obs, long Line);
