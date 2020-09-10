@@ -263,7 +263,7 @@ public:
 
 	long dim;
 	long lay;
-	long variation_set;
+	long variation_set {0};
 
 	double *values;
 	long *ivalues;
@@ -277,7 +277,7 @@ public:
 
 	TStringList *Strings;
 
-	CRHM::TVISIBLE visibility;
+	CRHM::TVISIBLE visibility {CRHM::USUAL};
 
 	long Inhibit_share; // 0 - shared, 1 - linked to declparam, 2 - declputparam unlinked
 
@@ -288,7 +288,7 @@ public:
 
 	ClassPar *Identical;
 
-	TStringList* StringsBkup;
+	TStringList* StringsBkup {NULL};
 
 	ClassPar(string module = "none", string param = "none")
 		: module(module), param(param), dim(0), visibility(CRHM::USUAL), variation_set(0), varType(CRHM::none),
