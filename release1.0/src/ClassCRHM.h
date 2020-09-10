@@ -259,10 +259,10 @@ public:
 	string units;
 
 	CRHM::TVar varType;
-	CRHM::TDim dimen;
+	CRHM::TDim dimen {CRHM::NDEFNZ};
 
 	long dim;
-	long lay;
+	long lay {0};
 	long variation_set {0};
 
 	double *values;
@@ -272,10 +272,10 @@ public:
 	long **ilayvalues;
 
 	string valstr;
-	double minVal;
-	double maxVal;
+	double minVal {0.0};
+	double maxVal {0.0};
 
-	TStringList *Strings;
+	TStringList* Strings {NULL};
 
 	CRHM::TVISIBLE visibility {CRHM::USUAL};
 
@@ -283,8 +283,8 @@ public:
 
 						// backup storage
 
-	double ** layvaluesBkup;
-	long **ilayvaluesBkup;
+	double** layvaluesBkup {NULL};
+	long** ilayvaluesBkup {NULL};
 
 	ClassPar *Identical;
 
