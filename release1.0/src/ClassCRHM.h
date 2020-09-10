@@ -330,11 +330,11 @@ public:
 
 class Classfilter {
 public:
-	Classfilter(ClassData *MyObs, string ToVar, string args, string argtypes);
+	Classfilter(ClassData* MyObs, string ToVar, string args, string argtypes);
 
 	virtual ~Classfilter();
 
-	ClassData *MyObs;
+	ClassData* MyObs;
 
 	string ToVar;
 	string argtypes;
@@ -347,13 +347,13 @@ public:
 	long TotalCnt; // when created;
 	bool FirstTime;
 
-	long *DataIndx;    // Vs offsets
-	long *DataObsCnt;  // maximum number of observations
-	double ***Data;     // Data[Vs selection][Obs][line]
-	double *Constants; // constant data
+	long* DataIndx{ NULL };    // Vs offsets
+	long* DataObsCnt {NULL};  // maximum number of observations
+	double*** Data {NULL};     // Data[Vs selection][Obs][line]
+	double* Constants {NULL}; // constant data
 
-	ClassVar *thisVar; // last arg accessed
-	ClassVar *outVar; // ToVar
+	ClassVar* thisVar {NULL}; // last arg accessed
+	ClassVar* outVar {NULL}; // ToVar
 
 	virtual void readargs();
 	virtual void error(string Mess);
