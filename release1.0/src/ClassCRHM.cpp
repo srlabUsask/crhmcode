@@ -1943,7 +1943,7 @@ bool ClassData::DataReadFile(void) {
 
 		if (Global::DTend != 0.0 && Global::DTend < Dt2) Dt2 = Global::DTend;
 
-		Lines = (long)ceil((Dt2 - Dt1 + (double)1.0 / ((int)Freq * 2))* (int)Freq);
+		Lines = (long)ceil((Dt2 - Dt1 + 1.0 / (static_cast<long long>(Freq) * 2))* static_cast<long long>(Freq));
 
 		if (SparseFlag && Lines < Global::Freq) // handle short interval with lots of sparse points
 			Lines = Global::Freq;
@@ -2227,7 +2227,7 @@ bool ClassData::DataReadFile(void) {
 										Delta = (Data[jj][ii / NCnt] - Data[jj][ii / NCnt - 1])*Divisor;
 									}
 								}
-								NewData[ii] = Result + Delta * (ii%NCnt + 1) / NCnt;
+								NewData[ii] = Result + Delta * (static_cast<long long>(ii%NCnt) + 1) / NCnt;
 							}
 						}
 						else {
@@ -2473,7 +2473,8 @@ bool last_timestep(void) {
 //Changed by Manishankar. 2018/09/11
 
 void dattim(string type, long *itime) { // dimension itime[6]
-	int Year, Month, Day, H, Min, Sec = 0, MSec;
+	int Year, Month, Day, H, Min, Sec = 0;
+	//int MSec; (unreferenced commented out jhs507)
 
 	if (type == "start") {
 		StandardConverterUtility::DecodeDateTime(Global::DTstart, &Year, &Month, &Day, &H, &Min);
@@ -2499,7 +2500,8 @@ void dattim(string type, long *itime) { // dimension itime[6]
 
 //---------------------------------------------------------------------------
 void dattim(double DT, long *itime) { // dimension itime[6]
-	int Year, Month, Day, H, Min, Sec = 0, MSec;
+	int Year, Month, Day, H, Min, Sec = 0;
+	//int MSec; (unreferenced commented out jhs507)
 
 	StandardConverterUtility::DecodeDateTime(DT, &Year, &Month, &Day, &H, &Min);
 	//DecodeTime(DT, &Hour, &Min, &Sec);
@@ -3251,7 +3253,7 @@ void Classramp::doFunc(long Obs, long Line) {
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else {
 			Data[Vs - 1][Obs][Line] = 0.0;
-			double X = (double)fmod(double(Line - delay) / double(period)*2.0, 1.0);
+			double X = (double)fmod(double(static_cast<long long>(Line) - static_cast<long long>(delay)) / double(period)*2.0, 1.0);
 			if (((Line + phase - delay) % period) >= period / 2)
 				Data[Vs - 1][Obs][Line] = (double)1.0 - X;
 			else
@@ -3362,7 +3364,7 @@ void Classexp::doFunc(long Obs, long Line) {
 		if (Line <= delay || Line > duration)
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else
-			Data[Vs - 1][Obs][Line] = A * exp(B*(Line - delay - 1));
+			Data[Vs - 1][Obs][Line] = A * exp(B*(static_cast<long long>(Line) - static_cast<long long>(delay) - 1));
 	}
 }
 
@@ -3410,7 +3412,7 @@ void Classpoly::doFunc(long Obs, long Line) {
 		if (Line <= delay || Line > duration)
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else {
-			double x = (Line - delay - 1) / double(MyObs->Freq);
+			double x = (static_cast<long long>(Line) - static_cast<long long>(delay) - 1) / double(MyObs->Freq);
 			Data[Vs - 1][Obs][Line] = (double)(Constants[2] + Constants[3] * x + Constants[4] * x*x
 				+ Constants[5] * x*x*x + Constants[6] * x*x*x*x);
 		}
@@ -3464,7 +3466,7 @@ void Classlog::doFunc(long Obs, long Line) {
 		if (Line <= delay || Line > duration)
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else
-			Data[Vs - 1][Obs][Line] = A * log(B*double(Line - delay) / MyObs->Freq);
+			Data[Vs - 1][Obs][Line] = A * log(B*double(static_cast<long long>(Line) - static_cast<long long>(delay)) / MyObs->Freq);
 	}
 }
 
@@ -3514,7 +3516,7 @@ void Classpow::doFunc(long Obs, long Line) {
 		if (Line < delay || Line > duration)
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else
-			Data[Vs - 1][Obs][Line] = A * pow((Line - delay + 1) / double(MyObs->Freq), B);
+			Data[Vs - 1][Obs][Line] = A * pow((static_cast<long long>(Line) - static_cast<long long>(delay) + 1) / double(MyObs->Freq), B);
 	}
 }
 
@@ -3872,7 +3874,7 @@ void ClassMissingInter::doFunc(long Obs, long Line) {
 
 	if (Data[0][Obs][Line] > Constants[0] && Data[0][Obs][Line] < Constants[1]) {
 		if (Line - 1 > LastGoodData[Obs] && LastGoodData[Obs] != -1) {
-			double dif = (Data[0][Obs][Line] - GoodData[Obs]) / (Line - LastGoodData[Obs]);
+			double dif = (Data[0][Obs][Line] - GoodData[Obs]) / (static_cast<long long>(Line) - static_cast<long long>(LastGoodData[Obs]));
 			for (int ii = LastGoodData[Obs] + 1; ii < Line; ++ii)
 				Data[Vs - 1][Obs][ii] = Data[Vs - 1][Obs][ii - 1] + dif;
 		}
@@ -4567,7 +4569,7 @@ bool Convert::ConvertUnit(
 	try {
 		pszSrcUnit = ParseDivUnitExpr(pszSrcUnit, uSrcUnit);
 	}
-	catch (int i) {
+	catch (int i) { 
 		return false;
 	}
 

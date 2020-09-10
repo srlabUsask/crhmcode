@@ -288,7 +288,7 @@ public:
 
 	ClassPar *Identical;
 
-	TStringList * StringsBkup;
+	TStringList* StringsBkup;
 
 	ClassPar(string module = "none", string param = "none")
 		: module(module), param(param), dim(0), visibility(CRHM::USUAL), variation_set(0), varType(CRHM::none),
