@@ -38,9 +38,9 @@ public:
 	long nlay;
 	long hh;
 	long nn;
-	long variation;     // module operating variation
-	long variation_set; // current variation call variation level
-	long variation_max; // maximum - OR of all variation_set
+	unsigned short variation;     // module operating variation
+	unsigned short variation_set; // current variation call variation level
+	unsigned short variation_max; // maximum - OR of all variation_set
 
 	bool isGroup; // in declgroup macros
 	bool isStruct; // in declstruct macros
