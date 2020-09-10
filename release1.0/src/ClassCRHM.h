@@ -742,8 +742,8 @@ public:
 	};
 	~ClassMissingFlagAfter();
 
-	long First;
-	long Last;
+	long First {0};
+	long Last {0};
 
 	virtual void doFunc(long Obs, long Line);
 };
