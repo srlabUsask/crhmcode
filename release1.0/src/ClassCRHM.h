@@ -542,7 +542,7 @@ public:
 
 class Classjulian : Classfilter {
 public:
-	int option;
+	int option {0};
 	Classjulian(ClassData *MyObs, string ToVar, string args, string argtypes = "C");
 
 	virtual void doFunc(long Obs, long Line);
