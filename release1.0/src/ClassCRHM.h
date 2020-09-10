@@ -98,30 +98,30 @@ public:
 	long dim;
 	long dimMax; // used by observations
 	long lay;
-	long variation_set;
+	long variation_set {0};
 	CRHM::TDim dimen;
 
 	CRHM::TVISIBLE visibility;
 	bool optional;
 	bool PointPlot;
 	long TchrtOpt;
-	long VarFunct;
+	long VarFunct {0};
 	bool StatVar;
 	long InGroup;
 	bool nfreq;
 	CRHM::TFun FunKind;
-	bool Daily; // used by AddObsPlot to decide how to apply function to input obs/var
+	bool Daily {NULL}; // used by AddObsPlot to decide how to apply function to input obs/var
 
 	double * values;
 	long  * ivalues;
 
-	double ** layvalues;
-	long **ilayvalues;
+	double** layvalues;
+	long** ilayvalues;
 
 	// backup storage
 
-	double ** layvaluesBkup;
-	long **ilayvaluesBkup;
+	double** layvaluesBkup {NULL};
+	long** ilayvaluesBkup {NULL};
 
 	long offset; // observation offset in ClassData FileData/Data
 	long cnt;    // observation dimension
@@ -130,9 +130,9 @@ public:
 
 	long HRU_OBS_indexed; // used to access the HRU_OBS[HRU_OBS_indexed][HRU] table
 	ClassVar *FunctVar;
-	TLoopFunct LoopFunct;  // typedef void (ClassVar:: *SomeFunct) (long dim_n) used in ClassCRHM
-	TSomeFunct UserFunct;  // typedef void (ClassVar:: *SomeFunct) (void) used in ClassModule
-	TSomeFunct_ UserFunct_;  // typedef void (ClassVar:: *SomeFunct) (long dim_n) used in ClassCRHM
+	TLoopFunct LoopFunct {NULL};  // typedef void (ClassVar:: *SomeFunct) (long dim_n) used in ClassCRHM
+	TSomeFunct UserFunct {NULL};  // typedef void (ClassVar:: *SomeFunct) (void) used in ClassModule
+	TSomeFunct_ UserFunct_ {NULL};  // typedef void (ClassVar:: *SomeFunct) (long dim_n) used in ClassCRHM
 	TAccFunct CustomFunct; // typedef void (ClassVar:: *AccFunct) (ClassModule *) used in ClassModule
 	string CustomFunctName; // debug aid
 	long No_ReadVar; // do not read observation again in a group but use CustomFunct
