@@ -26,7 +26,7 @@ public:
 	string NameRoot; // When Macro gives Root
 	string DLLName; // CRHM, Macro or DLL name
 	string ID; // Class name. If macro is the macro name
-	Administer *OurAdmin;
+	Administer* OurAdmin {NULL};
 	string Version;
 	long PeerRank;
 	string PeerVar;
@@ -52,18 +52,18 @@ public:
 
 	long Dummy;
 
-	double **Var_loop_lay_value;
-	double **Par_loop_lay_value;
+	double** Var_loop_lay_value {NULL};
+	double** Par_loop_lay_value {NULL};
 
-	double ***Var_loop_lay_table;
-	double ***Par_loop_lay_table;
+	double*** Var_loop_lay_table {NULL};
+	double*** Par_loop_lay_table {NULL};
 
 	long Var_NDEFN_cnt = 0;
 	long Par_NDEFN_cnt = 0;
 
 	//added by Manishankar to solve the address issue.
-	double ** t_layvalues;
-	double ** rh_layvalues;
+	double** t_layvalues {NULL};
+	double** rh_layvalues {NULL};
 
 
 	// long Using_RH_EA_obs;
