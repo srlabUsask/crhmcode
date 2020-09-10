@@ -476,8 +476,8 @@ public:
 
 class Classpoly : Classfilter {
 public:
-	long delay;
-	long duration;
+	long delay {0};
+	long duration {0};
 	Classpoly(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCCCCC");
 
 	virtual void doFunc(long Obs, long Line);
