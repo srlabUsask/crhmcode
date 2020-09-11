@@ -19,8 +19,8 @@ using namespace std;
 
 snowcover::snowcover(double SWEmean, double cv) {  //Manishankar: this is only being used in NewModules.cpp
 	double x, sca;
-
-	const long N = 150;
+	N = 150;
+	//const long N = 150;
 	data = new double[N];
 
 	for (int ii = 0; ii < N; ii++) {
