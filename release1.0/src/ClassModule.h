@@ -392,10 +392,10 @@ public:
 	double* c0; // storage constant from K
 	double* c1; // storage constant from K
 	double* c2; // storage constant from K
-	double prevdate;
+	double prevdate {0.0};
 
 private:
-	const double* kstorage;
+	const double* kstorage {NULL};
 	const  double* inVar;
 	double* outVar;
 
