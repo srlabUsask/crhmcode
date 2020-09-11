@@ -3093,6 +3093,11 @@ void Administer::Accept(int Result) {
 Myparser::Myparser() // parser constructor
 {
 	exp_ptr = NULL;
+	
+	for (int i = 0; i < 80; i++) {
+		token[i] = '\0';
+	}
+
 }
 
 // Parser entry point.
