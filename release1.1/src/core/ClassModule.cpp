@@ -2624,14 +2624,14 @@ void ClassModule::ReadObs(bool Reset) {
 				(P->*(P->UserFunct))();
 
 				//manishankar. this is used for resolving the address related issue.
-				if (P->name == "t")
-				{
-					this->t_layvalues = P->layvalues;
-				}
-				else if (P->name == "rh")
-				{
-					this->rh_layvalues = P->layvalues;
-				}
+				//if (P->name == "t")
+				//{
+				//	this->t_layvalues = P->layvalues;
+				//}
+				//else if (P->name == "rh")
+				//{
+				//	this->rh_layvalues = P->layvalues;
+				//}
 			}
 
 			if (P->CustomFunct) // execute any extra features except for nfreq observations   && !P->nfreq

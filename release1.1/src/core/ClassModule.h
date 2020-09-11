@@ -62,8 +62,8 @@ public:
 	long Par_NDEFN_cnt = 0;
 
 	//added by Manishankar to solve the address issue.
-	float** t_layvalues;
-	float** rh_layvalues;
+	//float** t_layvalues;
+	//float** rh_layvalues;
 
 	// long Using_RH_EA_obs;
 

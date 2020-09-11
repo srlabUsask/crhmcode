@@ -128,8 +128,8 @@ public:
 
 
 	//manishankar. this is used for resolving the address related issue.
-	static float** t_layvalues;
-	static float** rh_layvalues;
+	//static float** t_layvalues;
+	//static float** rh_layvalues;
 };
 
 

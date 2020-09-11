@@ -1966,8 +1966,8 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 					//if (!(p->Name == "WQ_Soil_BGC"))
 
 					//manishankar added this for resolving the address related issue.
-					Global::t_layvalues = p->t_layvalues;
-					Global::rh_layvalues = p->rh_layvalues;
+					//Global::t_layvalues = p->t_layvalues;
+					//Global::rh_layvalues = p->rh_layvalues;
 
 					p->run();
 					//}
