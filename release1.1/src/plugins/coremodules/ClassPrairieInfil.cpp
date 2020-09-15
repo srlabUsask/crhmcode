@@ -76,9 +76,9 @@ void ClassPrairieInfil::init(void) {
 
   try {
 
-    Xinfil = new float*[3];   // Data [3] [nhru]
+    Xinfil = new double*[3];   // Data [3] [nhru]
     for (int jj = 0; jj < 3; ++jj)
-      Xinfil[jj] = new float[nhru];
+      Xinfil[jj] = new double[nhru];
 
     timer = new long[nhru];
   }
@@ -126,7 +126,7 @@ void ClassPrairieInfil::run(void) {
       if(crackon[hh])
         RainOnSnowA[hh] += net_rain[hh];
       else{
-        float maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
+        double maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
         if(maxinfil > net_rain[hh])
           infil[hh] = net_rain[hh];
         else{

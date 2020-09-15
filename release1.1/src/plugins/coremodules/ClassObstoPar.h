@@ -10,16 +10,16 @@ long Ht_obsCnt;
 ClassObstoPar(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *Ht_var;
+double *Ht_var;
 
 // declared observation variables
-const float *Ht_obs;      // interval data
+const double *Ht_obs;      // interval data
 
 // declared parameters
 TStringList *obs_name;
 TStringList *par_name;
 
-float *Ht;
+double *Ht;
 
 void decl(void);
 void init(void);

@@ -141,7 +141,7 @@ void Classtsurface::run(void) {
       if(variation == VARIATION_ORG || variation == VARIATION_2 || variation == VARIATION_3){
         if(Zdt[hh] > Zdt_last[hh])
           Zdt_last[hh] = Zdt[hh];
-        float Qn = netD[hh]*1E6/86400; // MJ/m^2*d to W/m^2
+        double Qn = netD[hh]*1E6/86400; // MJ/m^2*d to W/m^2
         hru_tsf[hh] = (W_a[hh]*hru_t[hh] + W_b[hh]*Qn)*atan(W_c[hh]*(Zdt_last[hh] + W_d[hh]))*2.0/M_PI;
       }
       else if(variation == VARIATION_1 || variation == VARIATION_4 || variation == VARIATION_5){
@@ -178,12 +178,12 @@ void Classtsurface::run(void) {
         else
           SWE_tc[hh] = 0.138 - 1.01* SWE_density[hh]/1000.0 + 3.233*sqr(SWE_density[hh]/1000.0);
 
-        float t_minus = tmin[hh];
+        double t_minus = tmin[hh];
 
         if(tmin[hh] >= 0.0)
           t_minus = 0.0;
 
-        float umin = SWE[hh]*(2.115+0.00779*t_minus)*t_minus/1000.0;
+        double umin = SWE[hh]*(2.115+0.00779*t_minus)*t_minus/1000.0;
 
         hru_tsf[hh] = hru_t_D[hh] - (umin*1E6/86400)*snowdepth[hh]/SWE_tc[hh]; // 1E6/86400 is conversion: MJ/m^2*d to W/m^2
       }

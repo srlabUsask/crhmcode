@@ -12,15 +12,15 @@ long *meltflag;
 long *winter;
 
 // declared parameters
-const float *hru_lat;
+const double *hru_lat;
 
 // variable inputs
-const float *hru_tmax;
-const float *hru_tmin;
-const float *QdroD;
-const float *SWE;
+const double *hru_tmax;
+const double *hru_tmin;
+const double *QdroD;
+const double *SWE;
 const long  *hru_newsnow;
-const float *Albedo;
+const double *Albedo;
 
 void decl(void);
 void init(void);

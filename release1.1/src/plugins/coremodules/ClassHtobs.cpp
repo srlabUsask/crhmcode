@@ -47,10 +47,10 @@ void ClassHtobs::init(void) {
 void ClassHtobs::run(void) {
   if(Ht_obs != NULL)
     for(hh = 0; chkStruct(); ++hh){
-      float H = Ht_obs[hh];
+      double H = Ht_obs[hh];
       if(H < 0.001)
         H = 0.001;
-//      const_cast<float *> (Ht) [hh] = H;
+//      const_cast<double *> (Ht) [hh] = H;
       Ht[hh] = H;
       Ht_var[hh] = Ht[hh];
     }

@@ -71,7 +71,7 @@ void ClassVolumetric::run(void) {
 
     if(nstep == 0 && set_fallstat[hh] == Julian || (getstep() == 1 && Julian > set_fallstat[hh])){
       if(Si){
-        float X = 1.0;
+        double X = 1.0;
         if(SetSoilproperties[soil_type[hh]][3] > 0.0){
           X = Volumetric[hh]/SetSoilproperties[soil_type[hh]][3]*1000.0;
           X = X - Si_correction[hh];
@@ -80,7 +80,7 @@ void ClassVolumetric::run(void) {
           X = 0.0;
         else if(X > 1.0){
           X = 1.0;
-          const_cast<float *> (Si)[hh] = X;
+          const_cast<double *> (Si)[hh] = X;
           Si_V[hh] = Si[hh];
         }
       }

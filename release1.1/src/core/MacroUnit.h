@@ -34,7 +34,7 @@ public:
 	list<Execbase> Operations; // shortened to 'oper' in CRHM_parse.h
 	TStringList *GrpStringList;// list of modules in group or struct
 	long Grpnhru;              // group actual nhru
-	stack<float> eval;         // execution stack for float values
+	stack<double> eval;         // execution stack for double values
 	symtab_t vars;             // symbol table
 	stack<VarCHRM*> LastVar;   // used to access variables in case they are nested
 	stack<VarCHRM*> LastVas;   // used to access assigned variables in case they are nested
@@ -49,13 +49,13 @@ public:
 	ClassModule *ObsModule;
 
 	// declared parameters
-	const float *HRU_group;
+	const double *HRU_group;
 
 	ClassMacro(string NameX, int ThisBegin = 0, string Version = "undefined", string Desc = "not available");  // , string Desc = "not available"
 
 	~ClassMacro();
 
-	long declobs(string module, string name, CRHM::TDim dimen, string help, string units, float **value);
+	long declobs(string module, string name, CRHM::TDim dimen, string help, string units, double **value);
 
 	virtual void decl(void);
 
@@ -84,11 +84,11 @@ protected:
 	CRHM::TFun getTFunc(string D);
 	ClassMacro *Macro;
 	symtab_t::iterator FP;
-	float *fix;
+	double *fix;
 	long *fix_long;
-	float **fix2;
-	const float *fix_const;
-	const float **fix2_const;
+	double **fix2;
+	const double *fix_const;
+	const double **fix2_const;
 	const long *fix_long_const;
 	const long **fix2_long_const;
 };

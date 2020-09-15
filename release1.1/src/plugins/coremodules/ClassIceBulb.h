@@ -8,23 +8,23 @@ public:
 ClassIceBulb(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *hru_icebulb;
-float *hru_rainI;
-float *cumhru_rainI;
-float *hru_snowI;
-float *cumhru_snowI;
-float *cumhru_pI;
-float *Pa;
+double *hru_icebulb;
+double *hru_rainI;
+double *cumhru_rainI;
+double *hru_snowI;
+double *cumhru_snowI;
+double *cumhru_pI;
+double *Pa;
 
 // variable inputs
-const float *hru_t;
-const float *hru_rh;
-const float *hru_p;
+const double *hru_t;
+const double *hru_rh;
+const double *hru_p;
 
 // declared parameters
-const float *hru_elev;
-const float *tmaxI_allrain;
-const float *tmaxI_allsnow;
+const double *hru_elev;
+const double *tmaxI_allrain;
+const double *tmaxI_allsnow;
 
 void decl(void);
 void init(void);

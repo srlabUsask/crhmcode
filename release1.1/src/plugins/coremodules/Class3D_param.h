@@ -8,10 +8,10 @@ public:
 Class3D_param(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *Var_3D;
+double *Var_3D;
 
 // declared parameters
-const float *Param_3D;
+const double *Param_3D;
 
 void decl(void);
 void init(void);

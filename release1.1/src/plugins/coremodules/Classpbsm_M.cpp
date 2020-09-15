@@ -124,7 +124,7 @@ void Classpbsm_M::init(void) {
     }
   }
 
-  hru_basin = new float[nhru];
+  hru_basin = new double[nhru];
 
   for (hh = 0; hh < nhru; ++hh)
     hru_basin[hh] = hru_area[hh]/basin_area[0];
@@ -132,9 +132,9 @@ void Classpbsm_M::init(void) {
 
 void Classpbsm_M::run(void) {
 
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float DriftH, SublH, CurrentDrift, total, SWE_Max, transport;
-  float VB_distrib;
+  double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+  double DriftH, SublH, CurrentDrift, total, SWE_Max, transport;
+  double VB_distrib;
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -155,11 +155,11 @@ void Classpbsm_M::run(void) {
      if(E_StubHt < 0.0001)
        E_StubHt = 0.0001;
 
-     float d = 2.0/3.0*E_StubHt;
+     double d = 2.0/3.0*E_StubHt;
 
-     float Z = 0.123*E_StubHt;
+     double Z = 0.123*E_StubHt;
 
-     float Wind = hru_u[hh]*log((10.0 - d)/Z)/log((Zwind[hh] - d)/Z);
+     double Wind = hru_u[hh]*log((10.0 - d)/Z)/log((Zwind[hh] - d)/Z);
 
      Ustar = 0.02264*pow(Wind, 1.295f); // Eq. 6.2 rev.,  Ustar over fallow
 
@@ -206,7 +206,7 @@ void Classpbsm_M::run(void) {
 
  for (long hh = 0; chkStruct(hh); ++hh) {
     if(distrib_hru[hh][0] > 0.0) { // simulate transport entering basin using HRU 1
-      float Drft = Drift[hh]*distrib_hru[hh][0];
+      double Drft = Drift[hh]*distrib_hru[hh][0];
       SWE[hh] += Drft;
       cumDriftIn[hh] += Drft;
       cumBasinSnowGain[0] += Drft*hru_basin[hh];  // **** hru_basin = hru_area/basin_area ****
@@ -229,8 +229,8 @@ void Classpbsm_M::run(void) {
             SWE_Max = SWEfromDepth(Ht[hh]);
           }
           else{
-            float tanEqSlope = (0.1818*100*tan(hru_GSL[cc]*DEGtoRAD) + 0.4309*100*tan(hru_GSL[hh]*DEGtoRAD) - 7.2887)/100;
-            float EqProfDepth = hru_Ht[hh]/2*(1 - (tan(hru_GSL[hh]*DEGtoRAD) - tanEqSlope)/(tan(hru_GSL[hh]*DEGtoRAD)*(1 + tan(hru_GSL[hh]*DEGtoRAD)*tanEqSlope)));
+            double tanEqSlope = (0.1818*100*tan(hru_GSL[cc]*DEGtoRAD) + 0.4309*100*tan(hru_GSL[hh]*DEGtoRAD) - 7.2887)/100;
+            double EqProfDepth = hru_Ht[hh]/2*(1 - (tan(hru_GSL[hh]*DEGtoRAD) - tanEqSlope)/(tan(hru_GSL[hh]*DEGtoRAD)*(1 + tan(hru_GSL[hh]*DEGtoRAD)*tanEqSlope)));
             SWE_Max = SWEfromDepth(EqProfDepth);
           }
 
@@ -260,7 +260,7 @@ void Classpbsm_M::run(void) {
 		  else if(SWE_Max > SWE[hh] &&  distrib_hru[cc][hh] > 0.0) {
   // handle intermediate HRUs with available storage and distrib > 0
 
-			float sum = distrib_hru[nhru-1][cc]; // always the very last HRU
+			double sum = distrib_hru[nhru-1][cc]; // always the very last HRU
 			for (long jj = hh; chkStruct(jj, nn+1); jj++) { // calculate denominator
               Results_lay[cc][jj] = 0.0;
               if(distrib_hru[cc][jj] != 88 && distrib_hru[cc][jj] != 99) {
@@ -348,7 +348,7 @@ void Classpbsm_M::finish(bool good) {
   hru_basin = NULL;
 }
 
-void Classpbsm_M::Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH)
+void Classpbsm_M::Sum(double TQsalt, double TQsusp, double SBsum, double SBsalt, double & DriftH, double & SublH)
 {
 
 // total sublimation
@@ -366,9 +366,9 @@ void Classpbsm_M::Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, flo
 
 } // sum procedure
 
-void Classpbsm_M::Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
-           float t, float u, float rh, float Fetch,
-           long N_S, float A_S, float GSL, float height, float Beta_M, float & Qdist_leeslope, float & Qdist_valley)
+void Classpbsm_M::Pbsm (double E_StubHt, double Uthr, double & DriftH, double & SublH,
+           double t, double u, double rh, double Fetch,
+           long N_S, double A_S, double GSL, double height, double Beta_M, double & Qdist_leeslope, double & Qdist_valley)
 {
 
 /*   Modified Calculations for Mean Particle Mass in this version
@@ -384,7 +384,7 @@ void Classpbsm_M::Pbsm (float E_StubHt, float Uthr, float & DriftH, float & Subl
      Fetch and is expressed in millimeters of blowing snow lost over
      a square meter of snow surface per half hour  */
 
-  float   A,      Alpha,  B,      Bd,     Bound,  C,
+  double   A,      Alpha,  B,      Bd,     Bound,  C,
   Diff,   DmDt,   Es,     H,
   Htran,  Hsalt,  Inc,    Lamb,   Lambda, Lb,
   Mpm,    Mpr,    Nh,     Nsalt,

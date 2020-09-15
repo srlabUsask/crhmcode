@@ -159,7 +159,7 @@ void Classquinton::init(void) {
 
   for (int nn = 0; nn <= CLAY; ++nn)
     if(Pors_def[nn][0] > 0.0)
-      const_cast<float*> (por_s) [nn] = Pors_def[nn][0];
+      const_cast<double*> (por_s) [nn] = Pors_def[nn][0];
 
   for(hh = 0; chkStruct(); ++hh) {
 
@@ -179,7 +179,7 @@ void Classquinton::init(void) {
     transit[hh] = 0.0;
     dmelt[hh] = FrozenTo[hh];
 
-    float DrainD = Drained[hh];
+    double DrainD = Drained[hh];
     bool AsWater = FrozenTo[hh] > Drained[hh]; // frost table below drained table
 
     if(!AsWater) // pre-thaw
@@ -187,7 +187,7 @@ void Classquinton::init(void) {
     else
       wDrained[hh] = 0.0;
 
-    float d_cum = 0.0; // top of layer
+    double d_cum = 0.0; // top of layer
 
     for (int nn = 0; nn < nlay; ++nn) {
 
@@ -240,10 +240,10 @@ void Classquinton::init(void) {
 
     if(Type[hh] != HUMMOCK) continue;  // drift
 
-    float c = 0.0;
+    double c = 0.0;
     d_cum = 0.0; // bottom of layer
-    float Top; // residual depth above Drained - residual
-    float Bot; // residual depth below Drained - saturated
+    double Top; // residual depth above Drained - residual
+    double Bot; // residual depth below Drained - saturated
 
     DrainD = Drained[hh];
 
@@ -292,26 +292,26 @@ void Classquinton::run(void) {
                             + Cv_s[soil_type_lay[nn][hh]]*(1.0-por_s[soil_type_lay[nn][hh]])
                             + Cv_a*(por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh]);
 
-      float Xs = 1.0 - por_s[soil_type_lay[nn][hh]];
-      float Xw = por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh];
-      float Xa = 1.0 - Xs - Xw; // also equals PR
+      double Xs = 1.0 - por_s[soil_type_lay[nn][hh]];
+      double Xw = por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh];
+      double Xa = 1.0 - Xs - Xw; // also equals PR
 
-      float n = por_s[soil_type_lay[nn][hh]];
+      double n = por_s[soil_type_lay[nn][hh]];
 
-      float ga;
+      double ga;
       if(Xw >= 0.09)
         ga = 0.333-Xa/n*(0.333-0.035);
       else
         ga = 0.013 + 0.944*Xw;
 
-      float gc = 1.0 - 2.0*ga;
+      double gc = 1.0 - 2.0*ga;
 
-      float Fs = 1.0/3.0*(2.0/(1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.125)
+      double Fs = 1.0/3.0*(2.0/(1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.125)
                    + (1.0/((1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.75))));
 
-      float Fa = 1.0/3.0*(2.0/(1 + (lam_a/lam_w-1.0)*ga) + (1.0/((1 + (lam_a/lam_w-1.0)*gc))));
+      double Fa = 1.0/3.0*(2.0/(1 + (lam_a/lam_w-1.0)*ga) + (1.0/((1 + (lam_a/lam_w-1.0)*gc))));
 
-      float a = Farouki_a(por_s[soil_type_lay[nn][hh]]);
+      double a = Farouki_a(por_s[soil_type_lay[nn][hh]]);
 
       lamis_lay[nn][hh]  = lam_i*a*a + lam_s[soil_type_lay[nn][hh]]*sqr(1.0-a)
                            + lam_s[soil_type_lay[nn][hh]]*lam_i*(2*a-2*sqr(a))
@@ -325,14 +325,14 @@ void Classquinton::run(void) {
                              /(Xw + Fa*Xa + Fs*Xs);
     } // for layers
 
-    float d_cum = 0.0; // bottom of layer
-    float Top; // residual depth above Drained - residual
-    float Bot; // residual depth below Drained - saturated
-    float DrainD = wDrained[hh]; // zero if unfrozen
+    double d_cum = 0.0; // bottom of layer
+    double Top; // residual depth above Drained - residual
+    double Bot; // residual depth below Drained - saturated
+    double DrainD = wDrained[hh]; // zero if unfrozen
 
     if(Qg[hh] > 0.0) {
 
-      float Energy = Qg[hh]*1.0E6; // work in Joules
+      double Energy = Qg[hh]*1.0E6; // work in Joules
 
       for (int nn = 0; nn < nlay; ++nn) {
 
@@ -354,16 +354,16 @@ void Classquinton::run(void) {
         if(Top > 0.0 && dmelt[hh] < d_cum - Bot) {  // handle residual in top layer
 // Calculate the melt depth for this interval and this layer
 
-          float d = Energy/(-tlayer_lay[nn][hh]*Cvisa_lay[nn][hh] +
+          double d = Energy/(-tlayer_lay[nn][hh]*Cvisa_lay[nn][hh] +
                       Hf*1e3*Residual_lay[nn][hh]); // (m)
 
           if((d + dmelt[hh]) > d_cum) { // all layer melted
 
   // actual volume of water melted m.m2
-            float dif = d_cum - dmelt[hh];
+            double dif = d_cum - dmelt[hh];
 
   // energy used to melt remaining ice in this layer
-            float used = (-tlayer_lay[nn][hh]*Cvisa_lay[nn][hh]
+            double used = (-tlayer_lay[nn][hh]*Cvisa_lay[nn][hh]
                            + Hf*1e3*Residual_lay[nn][hh])*dif; // (m)
             Energy -= used;
             dmelt[hh] = d_cum;
@@ -379,16 +379,16 @@ void Classquinton::run(void) {
 
         if(Bot > 0.0) { // handle saturated bottom
 
-          float d = Energy/(-tlayer_lay[nn][hh]*Cvis_lay[nn][hh]
+          double d = Energy/(-tlayer_lay[nn][hh]*Cvis_lay[nn][hh]
                       + Hf*1e3*por_s[soil_type_lay[nn][hh]]); // (m)
 
           if((d + dmelt[hh]) > d_cum) { // all layer melted
 
   // actual volume of water melted m.m2
-            float dif = d_cum - dmelt[hh];
+            double dif = d_cum - dmelt[hh];
 
   // energy used to melt remaining ice in this layer
-            float used = (-tlayer_lay[nn][hh]*Cvis_lay[nn][hh]
+            double used = (-tlayer_lay[nn][hh]*Cvis_lay[nn][hh]
                            + Hf*1e3*por_s[soil_type_lay[nn][hh]])*dif; // (m)
             Energy -= used;
             dmelt[hh] = d_cum;
@@ -422,24 +422,24 @@ void Classquinton::run(void) {
 
       if(n_const_lay[nn][hh] > 0.001){ // use Van Genuchten
 
-        float m = 1.0-1.0/n_const_lay[nn][hh];
-        float alph = a_const_lay[nn][hh]*m - 1.0;
+        double m = 1.0-1.0/n_const_lay[nn][hh];
+        double alph = a_const_lay[nn][hh]*m - 1.0;
 // bubbling pressure = 1/alph
-        float fieldtheta = (por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh])*pow(2.0f, -m);
-        float thawedthislayer = dmelt[hh] - (d_cum - d_lay[nn][hh]);
+        double fieldtheta = (por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh])*pow(2.0f, -m);
+        double thawedthislayer = dmelt[hh] - (d_cum - d_lay[nn][hh]);
 
         if(thawedthislayer > d_lay[nn][hh])
           thawedthislayer = d_lay[nn][hh];
 
         if(capillary_lay[nn][hh]/thawedthislayer > fieldtheta) {
-          float drain = (capillary_lay[nn][hh] - thawedthislayer*fieldtheta);
+          double drain = (capillary_lay[nn][hh] - thawedthislayer*fieldtheta);
           if(drain > capillary_lay[nn][hh]) drain = capillary_lay[nn][hh];
           layerwater_lay[nn][hh] += drain;
           capillary_lay[nn][hh] -= drain;
         }
 
         if(capillary_lay[nn][hh] > 0.0) {
-          float tension;
+          double tension;
           if(d_surface[hh] > d_cum) // water table below layer
             tension = (d_surface[hh] - d_cum) + d_lay[nn][hh]; //
           else if(d_surface[hh] > d_cum - d_lay[nn][hh])// in layer
@@ -450,9 +450,9 @@ void Classquinton::run(void) {
           tension_lay[nn][hh] = tension;
 
           if(tension > 1.0/alph){ // greater than bubbling pressure
-            float theta = (por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh])
+            double theta = (por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh])
                           *pow(1.0f + pow(alph*tension, n_const_lay[nn][hh]), -m);
-            float excess = capillary_lay[nn][hh]
+            double excess = capillary_lay[nn][hh]
                              - theta*d_lay[nn][hh]/por_s[soil_type_lay[nn][hh]]; // (m)
 
             if(excess > 0.0){
@@ -487,13 +487,13 @@ void Classquinton::run(void) {
       d_surface[hh] = 0.001;
 
     if(Depth[hh] > 0.0) {
-      float Y = log(Kbtm[hh]) + (log(Ktop[hh]) - log(Kbtm[hh]))/(1.0f + pow(d_surface[hh]/ztrn[hh], 4.3f));
-      float YY = exp(Y);
+      double Y = log(Kbtm[hh]) + (log(Ktop[hh]) - log(Kbtm[hh]))/(1.0f + pow(d_surface[hh]/ztrn[hh], 4.3f));
+      double YY = exp(Y);
       k[hh] = exp(Y);
 
-      float kd = k[hh]; // m/day
+      double kd = k[hh]; // m/day
 
-      float lasttransit = transit[hh]; // unit of hours
+      double lasttransit = transit[hh]; // unit of hours
 
       transit[hh] = length[hh]*24.0/kd; // unit of hours
 
@@ -506,7 +506,7 @@ void Classquinton::run(void) {
       for (int nn = 0; nn < nlay; ++nn) {
 
         if(layerwater_lay[nn][hh] > 0.0) {
-          float available = layerwater_lay[nn][hh]*(por_s[soil_type_lay[nn][hh]]
+          double available = layerwater_lay[nn][hh]*(por_s[soil_type_lay[nn][hh]]
                                - Residual_lay[nn][hh]);
           if(available > Loss) {
             layerwater_lay[nn][hh] -= Loss/(por_s[soil_type_lay[nn][hh]]
@@ -544,7 +544,7 @@ void Classquinton::run(void) {
       flowin[hh] += hru_p[0];
 
 	//Added after to get rid of errors 
-	float MINFLOAT = 0.00;
+	double MINFLOAT = 0.00;
 
     if(flowin[hh] > MINFLOAT*2) cumflowin[hh] += flowin[hh];
     flowinm3[hh] = flowin[hh]*length[hh];
@@ -553,8 +553,8 @@ void Classquinton::run(void) {
 
     if(flowin[hh] > 0.0) {  // infiltrate surface excess water into layers
 
-      float maxdepth;
-      float frozmaxdepth;
+      double maxdepth;
+      double frozmaxdepth;
 
       runoff[hh] = flowin[hh];
 
@@ -586,7 +586,7 @@ void Classquinton::run(void) {
         }
 
         if(frozmaxdepth > 1e-6) {
-          float froztopup = frozmaxdepth*(por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh]);
+          double froztopup = frozmaxdepth*(por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh]);
 
           if(runoff[hh] > froztopup) { // top up frozen drained area first
 //            wDrained[hh] -= frozmaxdepth;
@@ -604,7 +604,7 @@ void Classquinton::run(void) {
         } // if(frozmaxdepth > 1e-6)
 
         if(maxdepth > 1e-6) {
-          float topup = (maxdepth - (layerwater_lay[nn][hh] + capillary_lay[nn][hh]))
+          double topup = (maxdepth - (layerwater_lay[nn][hh] + capillary_lay[nn][hh]))
                           *(por_s[soil_type_lay[nn][hh]] - Residual_lay[nn][hh]);
 
           if(runoff[hh] > topup) {
@@ -687,10 +687,10 @@ void Classquinton::finish(bool good) {
 
     if(Type[hh] != HUMMOCK) continue;  // drift
 
-    float c = 0.0;
-    float d_cum = 0.0; // bottom of layer
-    float Top, Bot;
-    float DrainD = wDrained[hh];
+    double c = 0.0;
+    double d_cum = 0.0; // bottom of layer
+    double Top, Bot;
+    double DrainD = wDrained[hh];
 
     for (int nn = 0; nn < nlay; ++nn) {
       d_cum += d_lay[nn][hh];

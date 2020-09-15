@@ -8,43 +8,43 @@ public:
 Classtsurface(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *hru_tsf;
-float *hru_tsf_D;
-float *hru_tsf_acc;
-float *n_factor;
-float *n_factor_T;
-float *Zdt_last;
-float *SWE_tc;
-float *SWE_density;
-float *hru_t_D;
-float *hru_T_s_D;
-float *hru_t_acc;
-float *hru_T_s_acc;
+double *hru_tsf;
+double *hru_tsf_D;
+double *hru_tsf_acc;
+double *n_factor;
+double *n_factor_T;
+double *Zdt_last;
+double *SWE_tc;
+double *SWE_density;
+double *hru_t_D;
+double *hru_T_s_D;
+double *hru_t_acc;
+double *hru_T_s_acc;
 
 // put inputs
-float *Zdt; // not used as put. Allows Classtsurface to load before ClassXG
+double *Zdt; // not used as put. Allows Classtsurface to load before ClassXG
 
 // declared parameters
-const float *W_a; // Williams
-const float *W_b;
-const float *W_c;
-const float *W_d;
+const double *W_a; // Williams
+const double *W_b;
+const double *W_c;
+const double *W_d;
 
-const float *n_factor_a; // Woo
-const float *n_factor_b;
-const float *n_factor_c;
+const double *n_factor_a; // Woo
+const double *n_factor_b;
+const double *n_factor_c;
 
 // variable inputs
-const float *SWE;
-const float *hru_t;
-const float *netD;
-const float *z_s;
-const float *rho;
-const float *T_s;
-const float *G;
-const float *tmin;
-const float *snowdepth;
-const float *xx;
+const double *SWE;
+const double *hru_t;
+const double *netD;
+const double *z_s;
+const double *rho;
+const double *T_s;
+const double *G;
+const double *tmin;
+const double *snowdepth;
+const double *xx;
 
 void decl(void);
 void init(void);

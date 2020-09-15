@@ -9,36 +9,36 @@ ClassPrairieInfil(string Name, string Version = "undefined", CRHM::LMODULE Lvl =
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables
-float *snowinfil;
-float *cumsnowinfil;
-float *infil;
-float *cuminfil;
-float *meltrunoff;
-float *cummeltrunoff;
-float *runoff;
-float *cumrunoff;
-float *RainOnSnow;
-float *RainOnSnowA;
+double *snowinfil;
+double *cumsnowinfil;
+double *infil;
+double *cuminfil;
+double *meltrunoff;
+double *cummeltrunoff;
+double *runoff;
+double *cumrunoff;
+double *RainOnSnow;
+double *RainOnSnowA;
 long  *crackstat;
 long  *crackon;
 
 // declared parameters
-const float *basin_area; // [BASIN]
-const float *hru_area;
-const float *fallstat;
-const float *Major;      // threshold for major melt event(default is 5 mm/day)
+const double *basin_area; // [BASIN]
+const double *hru_area;
+const double *fallstat;
+const double *Major;      // threshold for major melt event(default is 5 mm/day)
 const long  *PriorInfiltration;
 const long  *texture;
 const long  *groundcover;
 
 // variable inputs
-const float *hru_tmax;
-const float *snowmelt;
-const float *SWE;
-const float *net_rain;
+const double *hru_tmax;
+const double *snowmelt;
+const double *SWE;
+const double *net_rain;
 
 // local allocated arrays
-float **Xinfil; // [3] [nhru]
+double **Xinfil; // [3] [nhru]
 long *timer;
 
 void decl(void);

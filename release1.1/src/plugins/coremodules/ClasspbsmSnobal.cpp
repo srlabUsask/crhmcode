@@ -146,8 +146,8 @@ void ClasspbsmSnobal::init(void) {
 
 void ClasspbsmSnobal::run(void) {
 
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float SumDrift, total, SWE_Max, transport;
+  double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+  double SumDrift, total, SWE_Max, transport;
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -193,7 +193,7 @@ void ClasspbsmSnobal::run(void) {
      if (Prob[hh] > 0.001) {
        Ut = Ut * 0.8;
 
-       float RH = hru_ea[hh]/Common::estar(hru_t[hh]); // Snobal uses Pascals
+       double RH = hru_ea[hh]/Common::estar(hru_t[hh]); // Snobal uses Pascals
 
        Pbsm(E_StubHt, Ut, DriftH[hh], SublH[hh], hru_t[hh], hru_u_, RH, fetch[hh], N_S[hh], A_S[hh]);
 
@@ -227,7 +227,7 @@ void ClasspbsmSnobal::run(void) {
  // distribute drift
 
   if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
-    float Drft = Drift_out[0]*distrib[0];
+    double Drft = Drift_out[0]*distrib[0];
     SWE[0] += Drft;
     cumDriftIn[0] += Drft;
     cumBasinSnowGain[0] += Drft*hru_basin[0];  // **** hru_basin = hru_area/basin_area ****
@@ -262,7 +262,7 @@ void ClasspbsmSnobal::run(void) {
 
         if(hh == nn) { // handle last HRU
           if(distrib[nn] > 0){
-            float In = SumDrift/hru_basin[hh]; // remaining drift
+            double In = SumDrift/hru_basin[hh]; // remaining drift
             if(SWE_Max > SWE[hh] + In){ // fill snowpack, remainder leaves basin
               Drift_in[hh] = In; // can handle all
               cumDriftIn[hh] += Drift_in[hh];

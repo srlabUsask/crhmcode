@@ -77,7 +77,7 @@ void ClassevapD::init(void) {
 
 void ClassevapD::run(void) {
 
-   float Q;
+   double Q;
 
    long nstep = getstep() % Global::Freq;
 
@@ -144,18 +144,18 @@ void ClassevapD::finish(bool good) {
   }
 }
 
-double ClassevapD::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
+double ClassevapD::gamma(double Pa, double t) // Psychrometric constant (kPa/°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
 }
 
 
-float ClassevapD::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+double ClassevapD::lambda(double t) // Latent heat of vaporization (mJ/(kg °C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassevapD::delta(float t) // Slope of sat vap p vs t, kPa/°C
+double ClassevapD::delta(double t) // Slope of sat vap p vs t, kPa/°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -163,10 +163,10 @@ double ClassevapD::delta(float t) // Slope of sat vap p vs t, kPa/°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-double ClassevapD::fdaily(float u, float Ht){ // Drying power f(u) (mm/d/kPa)
+double ClassevapD::fdaily(double u, double Ht){ // Drying power f(u) (mm/d/kPa)
 
-   float Z0 = Ht*100.0/7.6;
-   float a = 8.19 + 0.22*Z0;
-   float b = 1.16 + 0.08*Z0;
+   double Z0 = Ht*100.0/7.6;
+   double a = 8.19 + 0.22*Z0;
+   double b = 1.16 + 0.08*Z0;
    return a + b*u;
 }

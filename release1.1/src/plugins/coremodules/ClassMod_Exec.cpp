@@ -66,7 +66,7 @@ void ClassMod_Exec::init(void) {
   long  GetUnit;
 
   if(trk_Vars->Count){
-    VarArray = new float *[trk_Vars->Count];
+    VarArray = new double *[trk_Vars->Count];
 
     for(long ii = 0; ii < trk_Vars->Count; ++ii){
       S = Common::trim(trk_Vars->Strings[ii]);
@@ -81,7 +81,7 @@ void ClassMod_Exec::init(void) {
   }
 
   if(chg_Pars->Count){
-    ParArray = new float *[chg_Pars->Count];
+    ParArray = new double *[chg_Pars->Count];
 
     for(long ii = 0; ii < chg_Pars->Count; ++ii){
       S = Common::trim(chg_Pars->Strings[ii]);

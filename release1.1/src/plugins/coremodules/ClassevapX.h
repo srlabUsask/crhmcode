@@ -8,55 +8,55 @@ public:
 ClassevapX(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evap;
-float *evap_D;
-float *cum_evap;
-float *Granger_D;
-float *rc;
+double *hru_actet;
+double *hru_cum_actet;
+double *evap;
+double *evap_D;
+double *cum_evap;
+double *Granger_D;
+double *rc;
 
 // local allocated arrays
-float *Pa;
+double *Pa;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *Ht;
-const float *hru_elev;
-const float *F_Qg;
-const float *Zwind;
-const float *rcs;
-const float *Htmax;
-const float *LAImax;
-const float *LAImin;
-const float *s;
-const float *PM_method;
-const float *soil_Depth;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *Ht;
+const double *hru_elev;
+const double *F_Qg;
+const double *Zwind;
+const double *rcs;
+const double *Htmax;
+const double *LAImax;
+const double *LAImin;
+const double *s;
+const double *PM_method;
+const double *soil_Depth;
 
 const long *soil_type;
 const long *evap_type;
 const long *inhibit_evap;
 
 // variable inputs
-const float *soil_moist;
-const float *Rn;
-const float *RnD;
-const float *RnD_POS;
-const float *hru_t;
-const float *hru_u;
-const float *hru_ea;
-const float *hru_tmean;
-const float *hru_umean;
-const float *hru_eamean;
+const double *soil_moist;
+const double *Rn;
+const double *RnD;
+const double *RnD_POS;
+const double *hru_t;
+const double *hru_u;
+const double *hru_ea;
+const double *hru_tmean;
+const double *hru_umean;
+const double *hru_eamean;
 
 // declared observations variable
-const float *Qsi;
-const float *RnObs;
+const double *Qsi;
+const double *RnObs;
 
 // declared observation functions
-//float *Qsi_mean;
-float *Tsmean;
+//double *Qsi_mean;
+double *Tsmean;
 
 void decl(void);
 void init(void);
@@ -65,9 +65,9 @@ void finish(bool good);
 
 ClassevapX* klone(string name) const;
 
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double fdaily(float u, float Ht);        // Drying power f(u) - interval
+double gamma(double Pa, double t);         // Psychrometric constant
+double lambda(double t);                   // Latent heat of vaporization
+double delta(double t);                   // Slope of sat vap p vs t, kPa/°C
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double fdaily(double u, double Ht);        // Drying power f(u) - interval
 };

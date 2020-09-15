@@ -11,96 +11,96 @@ ClassClark *Delayrunoff;
 ClassClark *Delayflow;
 
 // declared observation variables
-const float *p;
+const double *p;
 
 // input variables
-const float *Qg;        // MJ/m2
-const float *driftmelt; // melt depth from upstream drift
-const float *hru_p;
+const double *Qg;        // MJ/m2
+const double *driftmelt; // melt depth from upstream drift
+const double *hru_p;
 
 // declared parameters
 const long *Type;           // NOTUSED, DRIFT or HUMMOCK
 //const long *k_range;        // normal, high or low
 const long *DrainTo;        // drain to HRU
-const float *slope;         // (m/m)
-const float *length;        // length normal to creek
-const float *Kbtm;         // bottom hydraulic conductivity (m/d)
-const float *Ktop;         // bottom hydraulic conductivity (m/d)
-const float *ztrn;         // transition depth (m)
-const float *Residual;      // Organic non-drainable porosity ()
-const float **Residual_lay; // Organic non-drainable porosity ()
-const float *n_const;       // Van Genutchen constant
-const float **n_const_lay;  // Van Genutchen constant
-const float *a_const;       // Van Genutchen constant
-const float **a_const_lay;  // Van Genutchen constant
-const float *Drained;       // depth of surface drained organic material (m)
-const float *FrozenTo;      // initial depth of frost table (m)
-const float *runoffstorage; // runoff parameter ()
-const float *runoffLag;     // runoff parameter ()
-const float *flowstorage;   // flow parameter ()
-const float *flowLag;       // flow parameter ()
+const double *slope;         // (m/m)
+const double *length;        // length normal to creek
+const double *Kbtm;         // bottom hydraulic conductivity (m/d)
+const double *Ktop;         // bottom hydraulic conductivity (m/d)
+const double *ztrn;         // transition depth (m)
+const double *Residual;      // Organic non-drainable porosity ()
+const double **Residual_lay; // Organic non-drainable porosity ()
+const double *n_const;       // Van Genutchen constant
+const double **n_const_lay;  // Van Genutchen constant
+const double *a_const;       // Van Genutchen constant
+const double **a_const_lay;  // Van Genutchen constant
+const double *Drained;       // depth of surface drained organic material (m)
+const double *FrozenTo;      // initial depth of frost table (m)
+const double *runoffstorage; // runoff parameter ()
+const double *runoffLag;     // runoff parameter ()
+const double *flowstorage;   // flow parameter ()
+const double *flowLag;       // flow parameter ()
 
-const float *d;             // depth of layer  (m)
-const float **d_lay;        // depth of layer  (m)
-const float *Pors;          // filler only gives first value
-const float **Pors_def;     // array of all values
+const double *d;             // depth of layer  (m)
+const double **d_lay;        // depth of layer  (m)
+const double *Pors;          // filler only gives first value
+const double **Pors_def;     // array of all values
 const long  *soil_type;
 const long  **soil_type_lay;
-const float *tinit;         // initial layer temperature (°C)
-const float **tinit_lay;    // initial layer temperature (°C)
+const double *tinit;         // initial layer temperature (°C)
+const double **tinit_lay;    // initial layer temperature (°C)
 
 // declared variables
-float *Depth;          // hydraulic conductivity (m/day)
-float *k;              // hydraulic conductivity (m/day)
-float *d_surface;      // debug
-float *watertable;     // water table depth (m)
-float *dmelt;          // melt depth (m)
-float *flowin;         // flowin depth (m/m2)
-float *flowinm3;       // flowin depth (m3)
-float *cumflowin;      // cumulative flowin depth (m)
-float *runoff;         // runoff ((m/m2)/int)
-float *runoffDly;      // runoff ((m/m2)/int)
-float *runoffm3Dly;    // runoff (m3/int)
-float *cumrunoff;      // cumulative runoff (m)
-float *flow;           // total flow (m/int)
-float *flowDly;        // total flow (m/int)
-float *flowm3Dly;      // total flow (m3/int)
-float *cumflow;        // cumulative total flow from all layers(m3/s)
-float *loss;           // total loss (m/int)
-float *transit;        // transit time through HRU (hr)
-float *theta;          // soil moisture (m3/m3)
-float **theta_lay;     // soil moisture (m3/m3)
-float *layerwater;      // thawed water depth in layer (m)
-float **layerwater_lay; // thawed water depth in layer (m)
-float *capillary;      // locked thawed water depth in layer (m)
-float **capillary_lay; // locked thawed water depth in layer (m)
-float *tension;        // capillary tension (m)
-float **tension_lay;   // capillary tension (m)
-float *wDrained;       // working depth of surface drained organic material (m)
+double *Depth;          // hydraulic conductivity (m/day)
+double *k;              // hydraulic conductivity (m/day)
+double *d_surface;      // debug
+double *watertable;     // water table depth (m)
+double *dmelt;          // melt depth (m)
+double *flowin;         // flowin depth (m/m2)
+double *flowinm3;       // flowin depth (m3)
+double *cumflowin;      // cumulative flowin depth (m)
+double *runoff;         // runoff ((m/m2)/int)
+double *runoffDly;      // runoff ((m/m2)/int)
+double *runoffm3Dly;    // runoff (m3/int)
+double *cumrunoff;      // cumulative runoff (m)
+double *flow;           // total flow (m/int)
+double *flowDly;        // total flow (m/int)
+double *flowm3Dly;      // total flow (m3/int)
+double *cumflow;        // cumulative total flow from all layers(m3/s)
+double *loss;           // total loss (m/int)
+double *transit;        // transit time through HRU (hr)
+double *theta;          // soil moisture (m3/m3)
+double **theta_lay;     // soil moisture (m3/m3)
+double *layerwater;      // thawed water depth in layer (m)
+double **layerwater_lay; // thawed water depth in layer (m)
+double *capillary;      // locked thawed water depth in layer (m)
+double **capillary_lay; // locked thawed water depth in layer (m)
+double *tension;        // capillary tension (m)
+double **tension_lay;   // capillary tension (m)
+double *wDrained;       // working depth of surface drained organic material (m)
 
-float *Cvis;         // frozen/saturated
-float **Cvis_lay;    // heat capacity (J/m3/K)
+double *Cvis;         // frozen/saturated
+double **Cvis_lay;    // heat capacity (J/m3/K)
 
-float *Cvisa;       // frozen/unsaturated
-float **Cvisa_lay;  // heat capacity (J/m3/K)
+double *Cvisa;       // frozen/unsaturated
+double **Cvisa_lay;  // heat capacity (J/m3/K)
 
-float *Cvws;        // unfrozen/saturated
-float **Cvws_lay;   // heat capacity (J/m3/K)
+double *Cvws;        // unfrozen/saturated
+double **Cvws_lay;   // heat capacity (J/m3/K)
 
-float *Cvwsa;       // unfrozen/unsaturated
-float **Cvwsa_lay;  // heat capacity (J/m3/K)
+double *Cvwsa;       // unfrozen/unsaturated
+double **Cvwsa_lay;  // heat capacity (J/m3/K)
 
-float *lamis;       // frozen/saturated
-float **lamis_lay;  // thermal conductivity (W/m/K)
+double *lamis;       // frozen/saturated
+double **lamis_lay;  // thermal conductivity (W/m/K)
 
-float *lamws;       // unfrozen/saturated
-float **lamws_lay;  // thermal conductivity (W/m/K)
+double *lamws;       // unfrozen/saturated
+double **lamws_lay;  // thermal conductivity (W/m/K)
 
-float *lamwsa;      // unfrozen/unsaturated
-float **lamwsa_lay; // thermal conductivity (W/m/K)
+double *lamwsa;      // unfrozen/unsaturated
+double **lamwsa_lay; // thermal conductivity (W/m/K)
 
-float *tlayer;         // layer temperature (°C)
-float **tlayer_lay;    // layer temperature (°C)
+double *tlayer;         // layer temperature (°C)
+double **tlayer_lay;    // layer temperature (°C)
 
 // local constants
 

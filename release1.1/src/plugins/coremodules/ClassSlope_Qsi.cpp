@@ -61,8 +61,8 @@ void ClassSlope_Qsi::run(void) {
   long nstep = getstep() % Global::Freq;
 
   for (hh = 0; chkStruct(); ++hh){
-    float Short = Qdro[hh] + Qdfo[hh];
-    float ShortC = 0.0;
+    double Short = Qdro[hh] + Qdfo[hh];
+    double ShortC = 0.0;
     if(Qdflat[hh] > 1.0)
       ShortC = Qsi[hh]/Qdflat[hh]*Short;
 

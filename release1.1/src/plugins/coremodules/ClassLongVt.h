@@ -9,33 +9,33 @@ public:
 ClassLongVt(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , , QsiD_Var, ") {};
 
 // declared observation variables
-  const float *Qsi;
-  const float *QsiD;
-  const float *Qli;
+  const double *Qsi;
+  const double *QsiD;
+  const double *Qli;
 
 // declared observation functions
-  float *QsiDavg;
+  double *QsiDavg;
 
 // declared observations
-  float *Qli_out;
+  double *Qli_out;
 
 // declared variables
-  float *Qli_Var;
-  float *QliVt_Var;
-  float *tau;
+  double *Qli_Var;
+  double *QliVt_Var;
+  double *tau;
 
 // declared parameters
-  const float *Vt;
+  const double *Vt;
 
-//  const float *epsilon_clear;
-  const float *epsilon_s;
+//  const double *epsilon_clear;
+  const double *epsilon_s;
 
 // variable inputs
-  const float *hru_t;
-  const float *hru_ea;
-  const float *hru_rh;
-  const float *QdroDext;
-  const float *QsiD_Var;
+  const double *hru_t;
+  const double *hru_ea;
+  const double *hru_rh;
+  const double *QdroDext;
+  const double *QsiD_Var;
 
 void decl(void);
 void init(void);

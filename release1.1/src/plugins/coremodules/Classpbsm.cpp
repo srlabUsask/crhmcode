@@ -159,9 +159,9 @@ void Classpbsm::init(void) {
 
  // DepthofSnow
 
-//float SWEfromDepth(float Snow_Depth){ // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
+//double SWEfromDepth(double Snow_Depth){ // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
 //
-//  float SWE;
+//  double SWE;
 //
 //  if (Snow_Depth > 0.6)
 //    SWE = 4.5608*Snow_Depth*100.0-128.06;
@@ -173,12 +173,12 @@ void Classpbsm::init(void) {
 //  return SWE;
 //} // SWEfromDepth
 
-//void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probability, float & Threshold,
-//                             long Snow, float & SnowAge, long & DrySnow){
+//void ProbabilityThresholdNew(double SWE, double t, double Uten_Prob, double & Probability, double & Threshold,
+//                             long Snow, double & SnowAge, long & DrySnow){
 //
 ////Probability of blowing snow occurrence and threshold wind speeds determined by ambient air temperature and snow age
 //
-//   float Wind, Mean, Variance, c;
+//   double Wind, Mean, Variance, c;
 //
 //        Wind = 0.0;
 //        Probability = 0.0;
@@ -196,7 +196,7 @@ void Classpbsm::init(void) {
 //        SnowAge = 24.0/Global::Freq;
 //
 //        Mean = 0.365 * t + 0.00706 * sqr(t)
-//              + 0.91 * log((float)SnowAge) + 11.0;
+//              + 0.91 * log((double)SnowAge) + 11.0;
 //        Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
 //
 //        while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
@@ -217,7 +217,7 @@ void Classpbsm::init(void) {
 //        SnowAge = SnowAge + 24.0/Global::Freq;
 //
 //        Mean = 0.365 * t + 0.00706 * sqr(t)
-//              + 0.91 * log((float)SnowAge) + 11.0;
+//              + 0.91 * log((double)SnowAge) + 11.0;
 //        Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
 //
 //        while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
@@ -249,7 +249,7 @@ void Classpbsm::init(void) {
 //
 //} // Probability_threshold procedure
 
-//void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH){
+//void Sum(double TQsalt, double TQsusp, double SBsum, double SBsalt, double & DriftH, double & SublH){
 //
 //// total sublimation
 //
@@ -266,8 +266,8 @@ void Classpbsm::init(void) {
 //
 //} // sum procedure
 //
-//void Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
-//           float t, float u, float rh, float Fetch, long N_S, float A_S)
+//void Pbsm (double E_StubHt, double Uthr, double & DriftH, double & SublH,
+//           double t, double u, double rh, double Fetch, long N_S, double A_S)
 //{
 //
 ///*   Modified Calculations for Mean Particle Mass in this version
@@ -283,7 +283,7 @@ void Classpbsm::init(void) {
 //     Fetch and is expressed in millimeters of blowing snow lost over
 //     a square meter of snow surface per half hour  */
 //
-//  float   A,      Alpha,  B,      Bd,     Bound,  C,
+//  double   A,      Alpha,  B,      Bd,     Bound,  C,
 //  Diff,   DmDt,   Es,     H,
 //  Htran,  Hsalt,  Inc,    Lamb,   Lambda, Lb,
 //  Mpm,    Mpr,    Nh,     Nsalt,
@@ -471,8 +471,8 @@ void Classpbsm::init(void) {
 
 void Classpbsm::run(void) {
 
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float SumDrift, total, SWE_Max, transport;
+  double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+  double SumDrift, total, SWE_Max, transport;
   long step = getstep();
 
   if(step == 1)
@@ -517,7 +517,7 @@ void Classpbsm::run(void) {
 
        Ustn  = Ustar*sqrt((PBSM_constants::Beta*Lambda)/(1.0+PBSM_constants::Beta*Lambda));
 
-       Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *min <float> (0.0, Ustar-Ustn);
+       Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *min <double> (0.0, Ustar-Ustn);
      }
      else
      {
@@ -559,7 +559,7 @@ void Classpbsm::run(void) {
  // distribute drift
 
   if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
-    float Drft = Drift[0]*distrib[0];
+    double Drft = Drift[0]*distrib[0];
     SWE[0] += Drft;
     cumDriftIn[0] += Drft;
     cumBasinSnowGain[0] += Drft*hru_basin[0];  // **** hru_basin = hru_area/basin_area ****
@@ -587,7 +587,7 @@ void Classpbsm::run(void) {
 
         if(hh == nn) { // handle last HRU
           if(distrib[nn] > 0){
-            float In = SumDrift/hru_basin[hh]; // remaining drift
+            double In = SumDrift/hru_basin[hh]; // remaining drift
             if(SWE_Max > SWE[hh] + In){ // fill snowpack, remainder leaves basin
               SWE[hh]  += In; // can handle all
               cumDriftIn[hh] += In;
@@ -650,8 +650,8 @@ void Classpbsm::finish(bool good) {
 
   if(!good) return;
 
-  float AllcumSubl = 0.0;
-  float AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
+  double AllcumSubl = 0.0;
+  double AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (pbsm)' cumSno     (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumSno[hh], hru_area[hh], basin_area[0]);

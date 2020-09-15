@@ -9,23 +9,23 @@ ClassSetSoil(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM
 
 // declared parameters
 
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_lat;
-const float *hru_elev;
-const float *hru_GSL;
-const float *hru_ASL;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *hru_lat;
+const double *hru_elev;
+const double *hru_GSL;
+const double *hru_ASL;
 const long *RUN_ID;
 const long *RUN_START;
 const long *RUN_END;
 
-const float *soil_Depth;
-const float *soil_Depth_rechr;
-const float *Vol_h2o_content;
-const float *soil_rechr_max;
-const float *soil_rechr_init;
-const float *soil_moist_max;
-const float *soil_moist_init;
+const double *soil_Depth;
+const double *soil_Depth_rechr;
+const double *Vol_h2o_content;
+const double *soil_rechr_max;
+const double *soil_rechr_init;
+const double *soil_moist_max;
+const double *soil_moist_init;
 
 const long *soil_type;
 const long *soiltype_rechr;

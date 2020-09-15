@@ -94,15 +94,15 @@ void Classbrushintcp::init(void) {
 
 void Classbrushintcp::run(void) {
 
-  const float LATH = 2.838E6; // latent heat of sublimation (J/kg) List 1949
-  const float Qstar = 120;    // Solar Radiation Input
-  const float Mpr = 0.5E-3;
-  const float Cc = 0.82;
-  const float Velw = 0.75;
-  const float KARMAN = 0.4;
-  const float KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
-  const float M = 18.01;      //{molecular weight of water (kg/kmole)}
-  const float R = 8313;       //{universal gas constant (J/(kmole K))}
+  const double LATH = 2.838E6; // latent heat of sublimation (J/kg) List 1949
+  const double Qstar = 120;    // Solar Radiation Input
+  const double Mpr = 0.5E-3;
+  const double Cc = 0.82;
+  const double Velw = 0.75;
+  const double KARMAN = 0.4;
+  const double KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
+  const double M = 18.01;      //{molecular weight of water (kg/kmole)}
+  const double R = 8313;       //{universal gas constant (J/(kmole K))}
 
 
   for(hh = 0; chkStruct(); ++hh) {
@@ -117,8 +117,8 @@ void Classbrushintcp::run(void) {
       }
       else {
 
-        float RhoS = 67.92 + 51.25*exp(hru_t[hh]/2.59);
-        float Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
+        double RhoS = 67.92 + 51.25*exp(hru_t[hh]/2.59);
+        double Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
 
         if(Load[hh] > Lstar) { // after increase in temperature
           Thru[hh] = Load[hh] - Lstar;
@@ -126,10 +126,10 @@ void Classbrushintcp::run(void) {
         }
 
         if(hru_snow[hh] > 0.0) {
-          float Cp = Cc/(1.0 - (Cc*hru_u[hh]*Ht[hh])/(Velw*WidthJ[hh]));
+          double Cp = Cc/(1.0 - (Cc*hru_u[hh]*Ht[hh])/(Velw*WidthJ[hh]));
           if(Cp <= 0.0 || Cp > 1.0) Cp = 1.0;
 
-          float I1 = (Lstar-Load[hh])*(1 - exp(-Cp*hru_snow[hh]/Lstar));
+          double I1 = (Lstar-Load[hh])*(1 - exp(-Cp*hru_snow[hh]/Lstar));
 
           Load[hh] = Load[hh] + I1; // add new snowfall
           Thru[hh] = Thru[hh] + (hru_snow[hh] - I1); // remainder falls thru
@@ -138,29 +138,29 @@ void Classbrushintcp::run(void) {
 
         if(Load[hh] > 0.0) {
 
-          float Z0m = Ht[hh]/10.0;
-          float Disp = Ht[hh]*0.7;
-          float Ustar = hru_u[hh]*KARMAN/(log((Zref[hh]-Disp)/Z0m));
-          float Uh = Ustar*(log((Ht[hh]-Disp)/Z0m))/KARMAN;
+          double Z0m = Ht[hh]/10.0;
+          double Disp = Ht[hh]*0.7;
+          double Ustar = hru_u[hh]*KARMAN/(log((Zref[hh]-Disp)/Z0m));
+          double Uh = Ustar*(log((Ht[hh]-Disp)/Z0m))/KARMAN;
 
-          float CanVent = Uh*exp(brushAtten[hh]*(Zcan[hh]/Ht[hh]-1.0));  /* calculates canopy windspd  */
+          double CanVent = Uh*exp(brushAtten[hh]*(Zcan[hh]/Ht[hh]-1.0));  /* calculates canopy windspd  */
 
-          float Reyn = 2*Mpr*CanVent/KinVisc;
-          float Nuss = 1.79+0.606*sqrt(Reyn);
+          double Reyn = 2*Mpr*CanVent/KinVisc;
+          double Nuss = 1.79+0.606*sqrt(Reyn);
 
-          float Temp = hru_t[hh] + 273.15;
-          float Lamb = 0.00063*Temp + 0.0673;                // therm. cond. of atm. (J/(msK))
-          float Diff = 2.06E-5*pow(Temp/273.0, 1.75);        // diffus. of w.vap. atmos. (m2/s)
-          float Sigma2 = hru_rh[hh]/100.0 - 1.0;             // undersaturation at 2 m
-          float Htran = 0.9 * M_PI * sqr(Mpr) * Qstar;
+          double Temp = hru_t[hh] + 273.15;
+          double Lamb = 0.00063*Temp + 0.0673;                // therm. cond. of atm. (J/(msK))
+          double Diff = 2.06E-5*pow(Temp/273.0, 1.75);        // diffus. of w.vap. atmos. (m2/s)
+          double Sigma2 = hru_rh[hh]/100.0 - 1.0;             // undersaturation at 2 m
+          double Htran = 0.9 * M_PI * sqr(Mpr) * Qstar;
 
-          float SigmaZ = Sigma2 * (1.019 + 0.027 * log(Zcan[hh]));  // Eq. 6.20, Revised in May. 1997
+          double SigmaZ = Sigma2 * (1.019 + 0.027 * log(Zcan[hh]));  // Eq. 6.20, Revised in May. 1997
           if(SigmaZ > -0.01) {SigmaZ = -0.01;}
 
-          float A = Lamb * Temp * Nuss;
-          float B = LATH * M/(R * Temp) - 1.0;
-          float C = 1.0/(Diff * Common::SVDens(hru_t[hh]) * Nuss);
-          float DmDt = -((2.0*M_PI * Mpr * SigmaZ) - (Htran*B/A))/((LATH*B/A) + C);
+          double A = Lamb * Temp * Nuss;
+          double B = LATH * M/(R * Temp) - 1.0;
+          double C = 1.0/(Diff * Common::SVDens(hru_t[hh]) * Nuss);
+          double DmDt = -((2.0*M_PI * Mpr * SigmaZ) - (Htran*B/A))/((LATH*B/A) + C);
           DmDt *= 24.0*3600.0/Global::Freq; // convert to interval
 
           spherecoeff[hh] = 17.6*pow(cumbrushsubl[hh] + 0.001, -0.086);

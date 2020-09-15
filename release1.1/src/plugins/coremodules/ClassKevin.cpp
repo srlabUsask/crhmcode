@@ -86,8 +86,8 @@ void ClassKevin::init(void) {
       LogError(TExcept);
     }
 
-  SWEpeak = new float[nhru];
-  SWElast = new float[nhru];
+  SWEpeak = new double[nhru];
+  SWElast = new double[nhru];
 
   for (hh = 0; hh < nhru; ++hh) {
     snowmelt[hh]   = 0.0;
@@ -114,12 +114,12 @@ void ClassKevin::init(void) {
 
 void ClassKevin::run(void) {
 
-  float melt, netlong, shortw, net;
+  double melt, netlong, shortw, net;
 
   long nstep = getstep() % Global::Freq;
 
   long jday = julian("now");
-  float hemisphere = (hru_lat[0] < 0.0); // use hru #1
+  double hemisphere = (hru_lat[0] < 0.0); // use hru #1
   if((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[0] > 5.0 && nstep == 1) // use hru #1
     for(hh = 0; chkStruct(); ++hh) {
       winter[hh] = 1;

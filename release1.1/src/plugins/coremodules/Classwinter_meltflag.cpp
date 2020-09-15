@@ -60,7 +60,7 @@ void Classwinter_meltflag::run(void) {
     jday = julian("now");
 
       for(hh = 0; chkStruct(); ++hh) {
-        float hemisphere = (hru_lat[hh] < 0.0);
+        double hemisphere = (hru_lat[hh] < 0.0);
         if((!hemisphere && (jday > 300 || jday < 2) || hemisphere && (jday > 117 || jday < 185)) && SWE[hh] > 5.0) {  // changed
           winter[hh] = 1;
         }
@@ -76,13 +76,13 @@ void Classwinter_meltflag::run(void) {
       }
       else { // SWE[hh] > 0.0
 
-        float Qnc = -0.371 + 5.22*QdroD[hh]*(1 - Albedo[hh]);
+        double Qnc = -0.371 + 5.22*QdroD[hh]*(1 - Albedo[hh]);
 
         if(hru_tmax[hh] < -6.0 && Qnc < 1.0)
           winter[hh] = 1;
 
         if(winter[hh] == 1) {
-          float MT = -0.064*jday + 6.69;
+          double MT = -0.064*jday + 6.69;
 
           if(hru_tmin[hh] > -4.0 || Qnc > 1.0 && hru_tmax[hh] > 0.0 || hru_tmax[hh] > MT && Qnc > -0.5) {
             meltflag[hh] = 1;

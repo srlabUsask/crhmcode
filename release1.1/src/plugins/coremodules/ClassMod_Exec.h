@@ -14,7 +14,7 @@ ClassMod_Exec(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRH
   long Vars_Cnt;
   long Pars_Cnt;
 
-  typedef  long LoadModuleTypeInit(const char *Grp, long GrpNo, long hru_cnt, const char *S_Vars, long VarsNo, float **V, const char *V_Pars, long ParsNo, float **P);
+  typedef  long LoadModuleTypeInit(const char *Grp, long GrpNo, long hru_cnt, const char *S_Vars, long VarsNo, double **V, const char *V_Pars, long ParsNo, double **P);
   typedef  long LoadModuleTypeStep(double DTnow); // time step. Zero at end of run.
 
   LoadModuleTypeInit *LoadUserInit;
@@ -22,12 +22,12 @@ ClassMod_Exec(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRH
 
 // Lingage arrays
 
-  float **VarArray;
-  float **ParArray;
+  double **VarArray;
+  double **ParArray;
 
 // declared variables
-float *Dummy;
-float *Dummy2;
+double *Dummy;
+double *Dummy2;
 long *statusInit;
 long *statusStep;
 

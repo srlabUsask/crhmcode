@@ -12,13 +12,13 @@ const long *RUN_ID;
 const long *RUN_START;
 const long *RUN_END;
 
-const float *Meyer_B;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_lat;
-const float *hru_elev;
-const float *hru_GSL;
-const float *hru_ASL;
+const double *Meyer_B;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *hru_lat;
+const double *hru_elev;
+const double *hru_GSL;
+const double *hru_ASL;
 
 TStringList *basin_name;
 TStringList *INIT_STATE;

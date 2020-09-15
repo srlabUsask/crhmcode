@@ -19,11 +19,11 @@ ClassNetroute* ClassNetroute::klone(string name) const{
   return new ClassNetroute(name);
 }
 
-float ClassNetroute::Function1(float *I, long hh) {
+double ClassNetroute::Function1(double *I, long hh) {
   return runDelay->ChangeLag(I, hh);
 }
 
-float ClassNetroute::Function2(float *X, long hh) {
+double ClassNetroute::Function2(double *X, long hh) {
   return runDelay->ChangeStorage(X, hh);
 }
 
@@ -257,7 +257,7 @@ void ClassNetroute::run(void) {
 
     gwoutflow_diverted[hh] = 0.0;
 
-    float gw_amount = 0.0;
+    double gw_amount = 0.0;
 
     for(long hhh = 0; chkStruct(hhh); ++hhh){
       if(gwoutflow[hhh] > 0.0 && gwwhereto[hhh] && (abs(gwwhereto[hhh])-1 == hh || abs(gwwhereto[hhh]) > nhru)){ // handles "gwwhereto" <> 0
@@ -268,7 +268,7 @@ void ClassNetroute::run(void) {
 
         if(abs(gwwhereto[hhh]) <= nhru){
           if(gwwhereto[hhh] > 0){ // direct to HRU surface
-            float free = soil_rechr_max[hh] - soil_rechr[hh];
+            double free = soil_rechr_max[hh] - soil_rechr[hh];
             if(free > 0.0 && !soil_rechr_ByPass[hh]){
               if(free > gw_amount/hru_area[hh]){ // units (mm*km^2/int)
                 soil_rechr[hh] += gw_amount/hru_area[hh];
@@ -343,7 +343,7 @@ void ClassNetroute::run(void) {
         else {
           outflow_diverted[hhh] = outflow[hhh];
           cumoutflow_diverted[hhh] += outflow_diverted[hhh];
-          float free = soil_rechr_max[hh] - soil_rechr[hh];
+          double free = soil_rechr_max[hh] - soil_rechr[hh];
           if(free > 0.0 && !soil_rechr_ByPass[hh]){
             if(free > outflow[hhh]/hru_area[hh]){ // units (mm*km^2/int)
               soil_rechr[hh] += outflow[hhh]/hru_area[hh];
@@ -419,21 +419,21 @@ void ClassNetroute::run(void) {
 
 void ClassNetroute::finish(bool good) {
 
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
+  double Allcuminflow = 0.0;
+  double Allcumoutflow = 0.0;
+  double Allcumoutflowdiverted = 0.0;
 
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
+  double Allgwcuminflow = 0.0;
+  double Allgwcumoutflow = 0.0;
+  double Allgwcumoutflowdiverted = 0.0;
 
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
+  double Allssrcuminflow = 0.0;
+  double Allssrcumoutflow = 0.0;
+  double Allruncuminflow = 0.0;
+  double Allruncumoutflow = 0.0;
 
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
+  double AllSdcuminflow = 0.0;
+  double Allrechrcuminflow = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (Netroute)' cuminflow              (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);

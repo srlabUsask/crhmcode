@@ -91,7 +91,7 @@ void Classqdrift::init(void) {
     if(variation == VARIATION_0 && Type[hh] != DRIFT)
       continue;  // drift
 
-    float c = 0.0;
+    double c = 0.0;
     if(SWE[hh] > 0.0)
       c = length[hh]*InitSWE[hh]/1E3;
     LogMessageA(hh, "(Drift  ) - water content (m^3) (m/m^2): ", c, length[hh]);
@@ -112,7 +112,7 @@ void Classqdrift::run(void) {
     if(SWE[hh] > 0.0) { // still drift
 
       if(Qm[hh] > 0.0) {
-        float melt = Qm[hh]/334.4*1E3;
+        double melt = Qm[hh]/334.4*1E3;
 
         if(melt > SWE[hh]){
           melt = SWE[hh];
@@ -121,7 +121,7 @@ void Classqdrift::run(void) {
         else
           SWE[hh] -= melt;
 
-        float lastcumdriftmelt = cumdriftmelt[hh];  // following avoids round off error
+        double lastcumdriftmelt = cumdriftmelt[hh];  // following avoids round off error
         cumdriftmelt[hh] = length[hh]*InitSWE[hh]*(1.0 - sqr(SWE[hh]/InitSWE[hh])); // (mm.l)
         driftmelt[hh] = (cumdriftmelt[hh] - lastcumdriftmelt)/1E3; // (m3/Int)
       }
@@ -156,7 +156,7 @@ void Classqdrift::finish(bool good) {
     if(variation == VARIATION_ORG && Type[hh] != DRIFT)
       continue;  // drift
 
-    float c = 0.0;
+    double c = 0.0;
     if(SWE[hh] > 0.0)
       c = length[hh]*InitSWE[hh]*sqr(SWE[hh]/InitSWE[hh])/1E3;
     LogMessageA(hh, "(Drift  ) - water content (m^3) (m/m^2): ", c, length[hh]);

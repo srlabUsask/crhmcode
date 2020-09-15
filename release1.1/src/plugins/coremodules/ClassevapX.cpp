@@ -106,9 +106,9 @@ void ClassevapX::init(void) {
 
 void ClassevapX::run(void) {
 
-   const float Cp = 1.005; // (kJ/kg/K)
+   const double Cp = 1.005; // (kJ/kg/K)
 
-   float Q, Z0, d, U, ra, f1, f2, f3, f4, Soil_Moist, p, rcstar, LAI, D, G;
+   double Q, Z0, d, U, ra, f1, f2, f3, f4, Soil_Moist, p, rcstar, LAI, D, G;
 
    long nstep = getstep() % Global::Freq;
 
@@ -191,9 +191,9 @@ void ClassevapX::run(void) {
 
              f1 = 1.0;
              if(Qsi[hh] > 0.0)
-               f1 = max <float> (1.0, 500.0/(Qsi[hh]) - 1.5);
+               f1 = max <double> (1.0, 500.0/(Qsi[hh]) - 1.5);
 
-             f2 = max <float> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
+             f2 = max <double> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
 
              Soil_Moist = (soil_moist[hh]/soil_Depth[hh] +
                SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3];
@@ -201,7 +201,7 @@ void ClassevapX::run(void) {
              p = soilproperties[soil_type[hh]][AIRENT]*
                pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]);
 
-             f3 = max <float> (1.0, p/40.0);
+             f3 = max <double> (1.0, p/40.0);
 
              f4 = 1.0;
              if(hru_t[hh] < 5.0 || hru_t[hh] > 40.0)
@@ -217,7 +217,7 @@ void ClassevapX::run(void) {
                  rc[hh] = 5000.0;
              }
 
-             float ratio_rs_ra = rc[hh]/ra;
+             double ratio_rs_ra = rc[hh]/ra;
 
              evap[hh] = (delta(hru_t[hh])*Q*Global::Freq + (RHOa(hru_t[hh], hru_ea[hh], Pa[hh])
                      *Cp/(lambda(hru_t[hh])*1e3)*(Common::estar(hru_t[hh]) - hru_ea[hh])/(ra/86400)))
@@ -235,8 +235,8 @@ void ClassevapX::run(void) {
 
 void ClassevapX::finish(bool good) {
 
-  float Allcum_evap = 0.0;
-  float Allcum_actet = 0.0;
+  double Allcum_evap = 0.0;
+  double Allcum_actet = 0.0;
 
   string Evap_names[] = { "Granger", "Priestley-Taylor", "Penman-Monteith", "Dalton Bulk transfer" };
 
@@ -257,17 +257,17 @@ void ClassevapX::finish(bool good) {
 
 }
 
-double ClassevapX::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
+double ClassevapX::gamma(double Pa, double t) // Psychrometric constant (kPa/°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
 }
 
-float ClassevapX::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+double ClassevapX::lambda(double t) // Latent heat of vaporization (mJ/(kg °C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassevapX::delta(float t) // Slope of sat vap p vs t, kPa/°C
+double ClassevapX::delta(double t) // Slope of sat vap p vs t, kPa/°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -275,16 +275,16 @@ double ClassevapX::delta(float t) // Slope of sat vap p vs t, kPa/°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-double ClassevapX::fdaily(float u, float Ht){ // Drying power f(u) (mm/d/kPa)
+double ClassevapX::fdaily(double u, double Ht){ // Drying power f(u) (mm/d/kPa)
 
-   float Z0 = Ht*100.0/7.6;
-   float a = 8.19 + 0.22*Z0;
-   float b = 1.16 + 0.08*Z0;
+   double Z0 = Ht*100.0/7.6;
+   double a = 8.19 + 0.22*Z0;
+   double b = 1.16 + 0.08*Z0;
    return a + b*u;
 }
 
-float ClassevapX::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double ClassevapX::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R0 = 2870;
+  const double R0 = 2870;
    return (1E4*Pa /(R0*( 273.15 + t))*(1.0 - 0.379*(ea/Pa))); //
 }

@@ -89,17 +89,17 @@ void ClassTs::run(void) { // executed every interval
       break;
     } // switch
 
-    float T1 = hru_t[hh] + CRHM_constants::Tm;
+    double T1 = hru_t[hh] + CRHM_constants::Tm;
 
-    float rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
+    double rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
 
-    float U1 = max<float> (hru_u[hh], 1.0e-3); // Wind speed (m/s)
+    double U1 = max<double> (hru_u[hh], 1.0e-3); // Wind speed (m/s)
 
     ra[hh] = (log(Zref[hh]/Z0snow[hh])*log(Zwind[hh]/Z0snow[hh]))/sqr(CRHM_constants::kappa)/U1;
 
-    float delta = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
+    double delta = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
 
-    float q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1);
+    double q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1);
 
     Ts[hh] = T1 + (CRHM_constants::emiss*(Qli_[hh] - CRHM_constants::sbc*pow(T1, 4.0f)) + CRHM_constants::Ls*(q - Common::Qs(Pa[hh], T1))*rho/ra[hh])/
              (4.0f*CRHM_constants::emiss*CRHM_constants::sbc*pow(T1, 3.0f) + (CRHM_constants::Cp + CRHM_constants::Ls*delta)*rho/ra[hh]);

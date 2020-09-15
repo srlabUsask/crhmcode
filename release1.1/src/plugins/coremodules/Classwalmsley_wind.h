@@ -7,19 +7,19 @@ public:
 Classwalmsley_wind(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *hru_Uadjust;
-float *hru_Uchange;
-float *WR;
+double *hru_Uadjust;
+double *hru_Uchange;
+double *WR;
 
 // declared parameters
-const float *Zwind;
-const float *Ax;
-const float *Bx;
-const float *L;
-const float *Walmsley_Ht;
+const double *Zwind;
+const double *Ax;
+const double *Bx;
+const double *L;
+const double *Walmsley_Ht;
 
 // varaible inputs
-const float *hru_u;
+const double *hru_u;
 
 void decl(void);
 void init(void);

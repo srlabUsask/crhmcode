@@ -23,34 +23,34 @@ long ObsCnt_fertperiod;
 long ObsCnt_litterperiod;
 
 // declared variables
-float *Fert_N_Var;
-float *Fert_P_Var;
-float *Man_N_Var;
-float *Man_P_Var;
-float *Res_N_Var;
-float *Res_P_Var;
-float *Fert_period_Var;
-float *Litter_period_Var;
+double *Fert_N_Var;
+double *Fert_P_Var;
+double *Man_N_Var;
+double *Man_P_Var;
+double *Res_N_Var;
+double *Res_P_Var;
+double *Fert_period_Var;
+double *Litter_period_Var;
 
 // declared parameters
 
 // put parameters
 
 // declared observation variables
-const float *Fert_N_up;
-const float *Fert_P_up;
-const float *Man_N_up;
-const float *Man_P_up;
-const float *Res_N_up;
-const float *Res_P_up;
-const float *Fert_N_down;
-const float *Fert_P_down;
-const float *Man_N_down;
-const float *Man_P_down;
-const float *Res_N_down;
-const float *Res_P_down;
-const float *Fert_period;
-const float *Litter_period;
+const double *Fert_N_up;
+const double *Fert_P_up;
+const double *Man_N_up;
+const double *Man_P_up;
+const double *Res_N_up;
+const double *Res_P_up;
+const double *Fert_N_down;
+const double *Fert_P_down;
+const double *Man_N_down;
+const double *Man_P_down;
+const double *Res_N_down;
+const double *Res_P_down;
+const double *Fert_period;
+const double *Litter_period;
 
 void decl(void);
 void init(void);

@@ -405,7 +405,7 @@ void ClassSoil::init(void) {
 // find volume of weir pond at weir crest height.
 // iterate towards weir_crest_volume.
 
-      float H;
+      double H;
       weir_crest_volume[hh] = 10.0; // (m3)
       H = pow(weir_crest_volume[hh]*(1.0 + 2.0/lake_p[hh])/lake_S[hh], 1.0/(1.0 + 2.0/lake_p[hh]));
       while (fabs(weir_crest[hh] - H) > 0.001) {
@@ -419,9 +419,9 @@ void ClassSoil::init(void) {
 
 void ClassSoil::run(void) {
 
-  float soil_lower, excs, condense;
-  float et;
-  float interval_secs = 86400/Global::Freq;
+  double soil_lower, excs, condense;
+  double et;
+  double interval_secs = 86400/Global::Freq;
 
   long nstep = getstep();
   current_getstep[0] = nstep;
@@ -508,7 +508,7 @@ void ClassSoil::run(void) {
     if(soil_moist_max[hh] > 0.0){
       soil_lower = soil_moist[hh] - soil_rechr[hh];
 
-      float potential = infil[hh] + snowinfil_buf[hh] + condense;
+      double potential = infil[hh] + snowinfil_buf[hh] + condense;
 
       soil_rechr[hh] = soil_rechr[hh] + potential;
 
@@ -547,7 +547,7 @@ void ClassSoil::run(void) {
         cum_rechr_ssr[hh] += rechr_ssr[hh];
       }
 
-      float s2gw_k = soil_gw_K[hh]/Global::Freq;
+      double s2gw_k = soil_gw_K[hh]/Global::Freq;
 
 //  Handle excess to gw
 
@@ -572,7 +572,7 @@ void ClassSoil::run(void) {
       excs = infil[hh] + snowinfil_buf[hh] + condense;
     }
 
-    float runoff_to_Sd = 0.0;
+    double runoff_to_Sd = 0.0;
 
     soil_runoff[hh] = meltrunoff_buf[hh] + runoff_buf[hh] + excs + redirected_residual[hh]/hru_area[hh]; // last term (mm*km^2/int)
 
@@ -581,10 +581,10 @@ void ClassSoil::run(void) {
     redirected_residual[hh] = 0;
 
     if(soil_runoff[hh] > 0.0 && Sdmax[hh] > 0.0){
-      float Fix = -12.0;
+      double Fix = -12.0;
       if(soil_runoff[hh]/Sdmax[hh] < 12.0)
         Fix = -soil_runoff[hh]/Sdmax[hh];
-      float Ds = (Sdmax[hh] - Sd[hh])*(1 - exp(Fix));
+      double Ds = (Sdmax[hh] - Sd[hh])*(1 - exp(Fix));
 
       if(soil_moist_max[hh] <= 0.0) // handle pond
         Ds = Sdmax[hh] - Sd[hh];
@@ -607,7 +607,7 @@ void ClassSoil::run(void) {
 
     if(variation == VARIATION_1){ // For culvert the soil_runoff is put into stream
       if((soil_runoff[hh] > 0.0001 || culvert_water_V[hh] > 0.0) && number_culverts[hh] > 0.0){ // culvert addition. Inputs are in (mm)
-        float culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
+        double culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
         culvert_water_H[hh] = 0.0;
         culvert_water_A[hh] = 0.0;
         culvert_over_Q[hh] = 0.0;
@@ -626,7 +626,7 @@ void ClassSoil::run(void) {
 
           if(culvert_water_H[hh] > culvert_water_Dmax[hh]){ // (m) overflow over road
             culvert_water_H[hh] = culvert_water_Dmax[hh]; // (m)
-            float maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
+            double maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
 
             culvert_over_Q[hh] = (culvert_water_V[hh] - maxVol)/86400.0*Global::Freq; // (m3) to (m3/int)
             culvert_water_V[hh] = maxVol; // (m3)
@@ -641,7 +641,7 @@ void ClassSoil::run(void) {
           if(HD[hh] <= 0.0)
             culvert_Q[hh] = 0.0;
           else if(HD[hh] < 1.5)
-            culvert_Q[hh] = max <float>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
+            culvert_Q[hh] = max <double>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
                  + 0.159413*HD[hh] + 0.00772254)*culvert_C[culvert_type[hh]]*number_culverts[hh]*pow(culvert_diam[hh], 2.5), 0.0); // (m3/s)
           else
             culvert_Q[hh] = culvert_C[culvert_type[hh]]*number_culverts[hh]*0.785*pow(culvert_diam[hh], 2.5)*sqrt(2.0*9.81*(HD[hh] - 0.5));
@@ -669,7 +669,7 @@ void ClassSoil::run(void) {
     if(variation == VARIATION_2){
       stream_to_Sd[hh] = 0.0;
       if(stream[hh] > 0.0001 && stream_Sd[hh] > 0.0001){ // For weir the stream flow is put into Sd
-        float possible = stream[hh]*stream_Sd[hh]/hru_area[hh];
+        double possible = stream[hh]*stream_Sd[hh]/hru_area[hh];
         if(Sd[hh] + possible > Sdmax[hh])
           possible = Sdmax[hh] - Sd[hh];
 
@@ -689,7 +689,7 @@ void ClassSoil::run(void) {
 
     // calculate outflow
 
-          float diff = weir_water_h[hh] - weir_crest[hh];
+          double diff = weir_water_h[hh] - weir_crest[hh];
 
           if (diff > 0.0){
 
@@ -740,7 +740,7 @@ void ClassSoil::run(void) {
     cum_runoff_to_Sd[hh] += runoff_to_Sd;
 
     if(Sd[hh] > 0.0 && Sd_gw_K[hh] > 0.0){
-      float Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
+      double Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
       if(Sd2gw_k > Sd[hh])
         Sd2gw_k = Sd[hh];
 //      soil_gw[hh] += Sd2gw_k;
@@ -762,7 +762,7 @@ void ClassSoil::run(void) {
     }
 
     if(gw_max[hh] > 0.0){ // prevents divide by zero error
-      float spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
+      double spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
       gw[hh] -= spill;
       gw_flow[hh] += spill;
     }
@@ -771,7 +771,7 @@ void ClassSoil::run(void) {
     cum_gw_flow[hh] += gw_flow[hh];
 
     if(Sd[hh] > 0.0 && Sd_ssr_K[hh] > 0.0){
-      float Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
+      double Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
       if(Sd2ssr_k >= Sd[hh])
         Sd2ssr_k = Sd[hh];
       soil_ssr[hh] += Sd2ssr_k;
@@ -780,9 +780,9 @@ void ClassSoil::run(void) {
         Sd[hh] = 0.0;
     }
 
-    float s2ssr_k = lower_ssr_K[hh]/Global::Freq;
+    double s2ssr_k = lower_ssr_K[hh]/Global::Freq;
     if(s2ssr_k > 0.0){
-      float avail = soil_moist[hh] - soil_rechr[hh];
+      double avail = soil_moist[hh] - soil_rechr[hh];
       if(s2ssr_k >= avail)
         s2ssr_k = avail;
       soil_moist[hh] -= s2ssr_k;
@@ -794,8 +794,8 @@ void ClassSoil::run(void) {
 
 //******Compute actual evapotranspiration
 
-    float culvert_evapL = 0;
-    float culvert_pond =0;
+    double culvert_evapL = 0;
+    double culvert_pond =0;
 
     if(variation == VARIATION_1 && culvert_water_V[hh] > 0.0 && hru_evap_buf[hh] > 0.0){ // conditions for culvert evaporation
 
@@ -810,8 +810,8 @@ void ClassSoil::run(void) {
       culvert_water_V[hh] = (culvert_pond - culvert_evapL)*(hru_area[hh]*1000.0); // remove evaporation from culvert pond and convert to volume
     }
 
-    float weir_evapL = 0;
-    float weir_pond = 0;
+    double weir_evapL = 0;
+    double weir_pond = 0;
 
     if(variation == VARIATION_2 && weir_water_V[hh] > 0.0 && hru_evap_buf[hh] > 0.0){ // conditions for culvert evaporation
 
@@ -826,7 +826,7 @@ void ClassSoil::run(void) {
       weir_water_V[hh] = (weir_pond - weir_evapL)*(hru_area[hh]*1000.0); // remove evaporation from culvert pond and convert to volume
     }
 
-    float avail_evap = hru_evap_buf[hh] - culvert_evapL - weir_evapL;
+    double avail_evap = hru_evap_buf[hh] - culvert_evapL - weir_evapL;
 
     if(Sd[hh] + soil_moist[hh] + weir_pond > 0.0){
       if(Wetlands_scaling_factor[hh] < 0.0)
@@ -857,7 +857,7 @@ void ClassSoil::run(void) {
 
     if(avail_evap > 0.0 && soil_moist[hh] > 0.0 && cov_type[hh] > 0){
 
-      float pctl, pctr, etl, ets, etr;
+      double pctl, pctr, etl, ets, etr;
 
       if((soil_moist_max[hh] - soil_rechr_max[hh]) > 0.0)
         pctl = (soil_moist[hh] - soil_rechr[hh])/(soil_moist_max[hh] - soil_rechr_max[hh]);
@@ -996,16 +996,16 @@ void ClassSoil::run(void) {
 
 void ClassSoil::finish(bool good) {
 
-  float Allcum_soil_runoff = 0.0;
-  float Allcum_soil_ssr = 0.0;
-  float Allcum_rechr_ssr = 0.0;
-  float Allcum_soil_gw = 0.0;
-  float Allcum_gw_flow = 0.0;
-  float Allcum_infil_act = 0.0;
-  float Allcum_soil_moist_change = 0.0;
-  float Allcum_Sd_change = 0.0;
-  float Allcum_gw_change = 0.0;
-  float Allcum_stream_Grp_loss = 0.0;
+  double Allcum_soil_runoff = 0.0;
+  double Allcum_soil_ssr = 0.0;
+  double Allcum_rechr_ssr = 0.0;
+  double Allcum_soil_gw = 0.0;
+  double Allcum_gw_flow = 0.0;
+  double Allcum_infil_act = 0.0;
+  double Allcum_soil_moist_change = 0.0;
+  double Allcum_Sd_change = 0.0;
+  double Allcum_gw_change = 0.0;
+  double Allcum_stream_Grp_loss = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (Soil)' soil_rechr         (mm) (mm*hru) (mm*hru/basin): ").c_str(), soil_rechr[hh], hru_area[hh], basin_area[0], " *** information only - already included in 'soil_moist'.");

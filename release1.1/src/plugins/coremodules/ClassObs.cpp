@@ -54,9 +54,9 @@ void Classobs::decl(void) {
 
   Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
 
-  Global::Warming_t = const_cast<float *> (this->ClimChng_t); // must be here to load do_t_day etc.
+  Global::Warming_t = const_cast<double *> (this->ClimChng_t); // must be here to load do_t_day etc.
 
-  Global::Warming_p = const_cast<float *> (this->ClimChng_precip); // must be here to load do_p etc.
+  Global::Warming_p = const_cast<double *> (this->ClimChng_precip); // must be here to load do_p etc.
 
 
   declreadobs("u", NHRU, "wind velocity", "(m/s)", &u, HRU_OBS_u);
@@ -143,7 +143,7 @@ void Classobs::decl(void) {
 
   declobsfunc("ppt", "pptD", &pptD, FIRST, NULL, true);
 
-  declobsfunc("p", "p", const_cast<float **> (&p), FOBS, NULL, true);
+  declobsfunc("p", "p", const_cast<double **> (&p), FOBS, NULL, true);
 
 
   variation_set = VARIATION_0 + VARIATION_1;
@@ -238,26 +238,26 @@ void Classobs::pre_run(void) {
 
   Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
 
-  Global::OBS_ELEV = const_cast<float **> (obs_elev_Tables);
+  Global::OBS_ELEV = const_cast<double **> (obs_elev_Tables);
 
-  Global::obs_t = const_cast<float **> (this->tday_intvls);
+  Global::obs_t = const_cast<double **> (this->tday_intvls);
 
-  Global::obs_ea = const_cast<float **> (this->eaday_intvls);
+  Global::obs_ea = const_cast<double **> (this->eaday_intvls);
 
-  Global::obs_rh = const_cast<float **> (this->rhday_intvls);
+  Global::obs_rh = const_cast<double **> (this->rhday_intvls);
 
   Global::obs_t_obs = this->t_obs_lay;
 
 
-  Global::Warming_t = const_cast<float *> (this->ClimChng_t); // must be here to switch for groups.
+  Global::Warming_t = const_cast<double *> (this->ClimChng_t); // must be here to switch for groups.
 
-  Global::Warming_p = const_cast<float *> (this->ClimChng_precip); // must be here to switch for groups.
+  Global::Warming_p = const_cast<double *> (this->ClimChng_precip); // must be here to switch for groups.
 
-  Global::hru_elev = const_cast<float *> (this->hru_elev);
+  Global::hru_elev = const_cast<double *> (this->hru_elev);
 
-  Global::lapse_rate = const_cast<float *> (this->lapse_rate);
+  Global::lapse_rate = const_cast<double *> (this->lapse_rate);
 
-  Global::ppt_adj = const_cast<float *> (this->precip_elev_adj);
+  Global::ppt_adj = const_cast<double *> (this->precip_elev_adj);
 
   Global::RH_VP_flag = const_cast<long *> (this->ElevChng_flag);
 
@@ -268,8 +268,8 @@ void Classobs::pre_run(void) {
 
 void Classobs::run(void) {
 
-float catchratio;
-float Tmean, Tmax, Tmin, RHmean, EAmean;
+double catchratio;
+double Tmean, Tmax, Tmin, RHmean, EAmean;
 
 long  nstep = getstep()%Global::Freq;
 long tt = Global::DTindx%Global::Freq;
@@ -291,7 +291,7 @@ DTindx[0] = Global::DTindx;
 
     hru_estar[hh] = Common::estar(hru_t[hh]);
 
-    hru_u[hh]  = max<float> (u[hh], 5.0e-2);
+    hru_u[hh]  = max<double> (u[hh], 5.0e-2);
 
     if(nstep == 1 || Global::Freq == 1){
       hru_umean[hh]  = umean[hh];
@@ -331,7 +331,7 @@ DTindx[0] = Global::DTindx;
         } // switch
     }
 
-    float umean = hru_umean[hh];
+    double umean = hru_umean[hh];
     if(umean > 8.0) umean = 8;
 
     if(variation != VARIATION_2){
@@ -402,7 +402,7 @@ DTindx[0] = Global::DTindx;
         }
       }
       else{
-        float Use;
+        double Use;
         if(snow_rain_determination[hh])
           Use = Common::Ice_Bulb(hru_t[hh], hru_rh[hh], Pa[hh]);
         else
@@ -447,7 +447,7 @@ DTindx[0] = Global::DTindx;
 
 void Classobs::Harder(void) {
 
-  float Tk, D, lamda, pta, L, Ti1, Ti2, crit, crit1, T1, T2, a, b, c, ratio, hru_icebulb;
+  double Tk, D, lamda, pta, L, Ti1, Ti2, crit, crit1, T1, T2, a, b, c, ratio, hru_icebulb;
 
   Tk = hru_t[hh] + CRHM_constants::Tm;
 
@@ -520,8 +520,8 @@ void Classobs::Harder(void) {
 
 void Classobs::finish(bool good) {
 
-  float Allcumhru_rain = 0.0;
-  float Allcumhru_snow = 0.0;
+  double Allcumhru_rain = 0.0;
+  double Allcumhru_snow = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (obs)'  cumhru_rain      (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumhru_rain[hh], hru_area[hh], basin_area[0]);

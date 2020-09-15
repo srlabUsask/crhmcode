@@ -11,33 +11,33 @@ ClassFlowInSnow(string Name, string Version = "undefined", CRHM::LMODULE Lvl = C
 ClassModule* Netroute_module; // used to call preser for simple projects
 
 // declared variables
-float *Ksat_snow;
-float *K_snow;
-float *u_down;
-float *K_down;
-float *K_slope;
-float *Meltrunoff_K;
-float *In_storage;
-float *runKstorage_var;
+double *Ksat_snow;
+double *K_snow;
+double *u_down;
+double *K_down;
+double *K_slope;
+double *Meltrunoff_K;
+double *In_storage;
+double *runKstorage_var;
 
 // get variables:
-const float *rho;
-const float *h2o_sat;
-const float *T_s_l;
-const float *z_s;
+const double *rho;
+const double *h2o_sat;
+const double *T_s_l;
+const double *z_s;
 
 // put variables
-float  *runKstorage;
+double  *runKstorage;
 
 // declared parameters
-const float *S_I;
-const float *d_g;
-const float *t_inhibit_flow;
-const float *runKstorage_winter;
-const float *runKstorage_summer;
-const float *Sr;
-const float  *hru_GSL;
-const float  *route_L;
+const double *S_I;
+const double *d_g;
+const double *t_inhibit_flow;
+const double *runKstorage_winter;
+const double *runKstorage_summer;
+const double *Sr;
+const double  *hru_GSL;
+const double  *route_L;
 const long  *inhibit_MeltRunoff_Kstorage;
 
 void decl(void);

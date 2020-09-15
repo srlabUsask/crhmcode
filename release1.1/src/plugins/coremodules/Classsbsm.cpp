@@ -82,7 +82,7 @@ void Classsbsm::init(void) {
 
   nhru = getdim(NHRU);
 
-  hru_basin = new float[nhru];
+  hru_basin = new double[nhru];
 
   dt = 3600*24/Global::Freq;
 
@@ -107,7 +107,7 @@ void Classsbsm::init(void) {
 
 void Classsbsm::run(void) {
 
-  float SumDrift, total, SWE_Max, trans;
+  double SumDrift, total, SWE_Max, trans;
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -123,7 +123,7 @@ void Classsbsm::run(void) {
     if(hru_t[hh] >= 0.0)
       wet_snow[hh] = SWE[hh];
     else
-      wet_snow[hh] = min<float> (SWE[hh], wet_snow[hh]);
+      wet_snow[hh] = min<double> (SWE[hh], wet_snow[hh]);
 
     Drift[hh] = 0.0;
     Subl[hh]  = 0.0;
@@ -133,7 +133,7 @@ void Classsbsm::run(void) {
       prob();
 
       if(Prob[hh] > 0.0) {
-        float RH = hru_rh[hh];
+        double RH = hru_rh[hh];
         if(RH > 1.01)
           RH /= 100.0;
         Drift[hh] = Prob[hh]*transport()*dt/fetch[hh];
@@ -159,7 +159,7 @@ void Classsbsm::run(void) {
 
 
   if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
-    float Drft = Drift[0]*distrib[0];
+    double Drft = Drift[0]*distrib[0];
     SWE[0] += Drft;
     cumDriftIn[0] += Drft;
     cumBasinSnowGain[0] += Drft*hru_basin[0];
@@ -253,29 +253,29 @@ void Classsbsm::finish(bool good) {
 }
 
 //=======================================================================
-float Classsbsm::transport(void) {
+double Classsbsm::transport(void) {
 //=======================================================================
   return ((0.00096f*sqr(hru_t[hh]) + 0.5298f*hru_t[hh] + 666.82f)*pow(hru_u[hh]/25.0f, 4.0f))/1000.0f;
 }
 
 //=======================================================================
-float Classsbsm::sublimation(void){
+double Classsbsm::sublimation(void){
 //=======================================================================
   return  137.6f*pow(hru_u[hh]/25.0f, 5.0f)/1000.0f;
 }
 
 //=======================================================================
-float Classsbsm::scale(void){
+double Classsbsm::scale(void){
 //=======================================================================
-  float
+  double
    cond,       // Thermal conductivity of air (W/m/K)
    diff,       // Diffusivity of water vapour in air (m^2/s)
    rsat,       // Saturation density of water vapour (kg/m3)
    tk;         // Temperature (K)
 
-  float const ls = 2.838e6; // Latent heat of sublimation (J/kg)
-  float const m = 18.01;    // Molecular weight of water (kg/kmole)
-  float const r = 8313.0;   // Universal gas constant (J/kmole/K)
+  double const ls = 2.838e6; // Latent heat of sublimation (J/kg)
+  double const m = 18.01;    // Molecular weight of water (kg/kmole)
+  double const r = 8313.0;   // Universal gas constant (J/kmole/K)
 
     tk = hru_t[hh] + 273.0f;
     diff = 2.06e-5f*pow(tk/273.0f, 1.75f);
@@ -288,15 +288,15 @@ float Classsbsm::scale(void){
 void Classsbsm::prob(void){
 //=======================================================================
 
-  float
+  double
    mean        // Mean of cumulative normal distribution
   ,var         // Standard deviation
   ,rho         // Snow density (kg/m3)
   ,sd          // Snow depth (m)
   ,us;
 
-//  float const ht[] = { 0.01,  0.01,  0.08,  0.08,  1.0,   1.0,   3.   };// Vegetation height (m)
-//  float const zr[] = { 0.1,   0.1,   0.05,  0.05,  0.05,  0.05,  0.08 };// Ratio of aerodynamic roughness length to vegetation height
+//  double const ht[] = { 0.01,  0.01,  0.08,  0.08,  1.0,   1.0,   3.   };// Vegetation height (m)
+//  double const zr[] = { 0.1,   0.1,   0.05,  0.05,  0.05,  0.05,  0.08 };// Ratio of aerodynamic roughness length to vegetation height
 //     1 - water      2 - soil      3 - open tundra
 //     4 - sparse shrub tundra      5 - shrub tundra
 //     6 - dense shrub tundra       7 - sparse forest

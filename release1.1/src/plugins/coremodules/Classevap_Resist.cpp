@@ -137,12 +137,12 @@ void Classevap_Resist::init(void) {
 
 void Classevap_Resist::run(void) {
 
-   float Q, rcstar, LAI, Z0, d, U, f1, f2, f3, f4, ra, ratio_rs_ra, p;
+   double Q, rcstar, LAI, Z0, d, U, f1, f2, f3, f4, ra, ratio_rs_ra, p;
 
-   const float Cp = 1.005; // (kJ/kg/K)
+   const double Cp = 1.005; // (kJ/kg/K)
 
   if(getstep() == 1 && rcs[0] < 0)
-    const_cast<float *> (rcs)[0] = -rcs[0];
+    const_cast<double *> (rcs)[0] = -rcs[0];
 
    long nstep = getstep() % Global::Freq;
 
@@ -173,7 +173,7 @@ void Classevap_Resist::run(void) {
 
      Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
 
-     float Soil_Moist = (soil_moist[hh]/soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3];
+     double Soil_Moist = (soil_moist[hh]/soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3];
 
      switch (evap_type[hh]){
 
@@ -195,14 +195,14 @@ void Classevap_Resist::run(void) {
 
            f1 = 1.0;
            if(Qsi_ > 0.0)
-             f1 = max <float> (1.0, 500.0/(Qsi_) - 1.5);
+             f1 = max <double> (1.0, 500.0/(Qsi_) - 1.5);
 
-           f2 = max <float> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
+           f2 = max <double> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
 
            p = soilproperties[soil_type[hh]][AIRENT]*
              pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]);
 
-           f3 = max <float> (1.0, p/40.0);
+           f3 = max <double> (1.0, p/40.0);
 
            f4 = 1.0;
            if(hru_t[hh] < 0.0 || hru_t[hh] > 40.0)
@@ -240,14 +240,14 @@ void Classevap_Resist::run(void) {
 
            f1 = 1.0;
            if(Qsi_ > 0.0)
-             f1 = max <float> (1.0, 500.0/(Qsi_) - 1.5);
+             f1 = max <double> (1.0, 500.0/(Qsi_) - 1.5);
 
-           f2 = max <float> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
+           f2 = max <double> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
 
            p = soilproperties[soil_type[hh]][AIRENT]*
              pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]);
 
-           f3 = max <float> (1.0, p/40.0);
+           f3 = max <double> (1.0, p/40.0);
 
            f4 = 1.0;
            if(hru_t[hh] < 5.0 || hru_t[hh] > 40.0)
@@ -263,8 +263,8 @@ void Classevap_Resist::run(void) {
                rc[hh] = 5000.0;
            }
 
-           float qs = 0.622*Common::estar(Ts[hh])/(Pa[hh] - Common::estar(Ts[hh])*0.378); // Specific humidity (kg/kg)
-           float q  = 0.622*hru_ea[hh]/(Pa[hh] - hru_ea[hh]*0.378);
+           double qs = 0.622*Common::estar(Ts[hh])/(Pa[hh] - Common::estar(Ts[hh])*0.378); // Specific humidity (kg/kg)
+           double q  = 0.622*hru_ea[hh]/(Pa[hh] - hru_ea[hh]*0.378);
 
            evap[hh] = RHOa(hru_t[hh], hru_ea[hh], Pa[hh])*(qs - q)/((ra + rc[hh])/86400)/Global::Freq;
          }
@@ -299,17 +299,17 @@ void Classevap_Resist::finish(bool good) {
   }
 }
 
-double Classevap_Resist::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
+double Classevap_Resist::gamma(double Pa, double t) // Psychrometric constant (kPa/°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
 }
 
-float Classevap_Resist::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+double Classevap_Resist::lambda(double t) // Latent heat of vaporization (mJ/(kg °C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double Classevap_Resist::delta(float t) // Slope of sat vap p vs t, kPa/°C
+double Classevap_Resist::delta(double t) // Slope of sat vap p vs t, kPa/°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -317,8 +317,8 @@ double Classevap_Resist::delta(float t) // Slope of sat vap p vs t, kPa/°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-float Classevap_Resist::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double Classevap_Resist::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R0 = 2870;
+  const double R0 = 2870;
    return (1E4*Pa /(R0*( 273.15 + t))*(1.0 - 0.379*(ea/Pa))); //
 }

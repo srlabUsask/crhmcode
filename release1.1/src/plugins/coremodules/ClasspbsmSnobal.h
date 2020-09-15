@@ -7,57 +7,57 @@ public:
 
 ClasspbsmSnobal(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust"), // setting PeerRank
                                   hru_basin(NULL) {};
-float hru_u_;
+double hru_u_;
 
 // declared variables
-float *Subl;
-float *Drift;     // HRU composite drift
-float *SublH;
-float *DriftH;
-float *Drift_out; // HRU drift out
-float *Drift_in;  // HRU drift in
-float *cumSubl;
-float *cumDrift;
-float *cumDriftIn;
-float *Prob;
-float *snowdepth;
-float *BasinSnowLoss;
-float *cumBasinSnowLoss;
-float *cumBasinSnowGain;
-float *SnowAge;
+double *Subl;
+double *Drift;     // HRU composite drift
+double *SublH;
+double *DriftH;
+double *Drift_out; // HRU drift out
+double *Drift_in;  // HRU drift in
+double *cumSubl;
+double *cumDrift;
+double *cumDriftIn;
+double *Prob;
+double *snowdepth;
+double *BasinSnowLoss;
+double *cumBasinSnowLoss;
+double *cumBasinSnowGain;
+double *SnowAge;
 long  *DrySnow;
 
 // declared parameters
-const float *fetch;
-const float *Ht;
-const float *distrib;
-const float *basin_area;
-const float *hru_area;
-const float *A_S;
-const float *N_S;
-const float *u_D;
-const float *Drift_offset;
-const float *Drift_slope;
-const float *Subl_offset;
-const float *Subl_slope;
+const double *fetch;
+const double *Ht;
+const double *distrib;
+const double *basin_area;
+const double *hru_area;
+const double *A_S;
+const double *N_S;
+const double *u_D;
+const double *Drift_offset;
+const double *Drift_slope;
+const double *Subl_offset;
+const double *Subl_slope;
 const long *inhibit_evap;
 const long *inhibit_bs;
 const long *inhibit_subl;
 
 // variable inputs
-const float *hru_t;
-const float *hru_ea;
-const float *hru_u;
-const float *hru_Uadjust;
-const float *net_snow;
+const double *hru_t;
+const double *hru_ea;
+const double *hru_u;
+const double *hru_Uadjust;
+const double *net_snow;
 
 // put variable inputs
-float *SWE; // actually m_s
-float *z_s;
-float *rho;
+double *SWE; // actually m_s
+double *z_s;
+double *rho;
 
 // local allocated arrays
-float *hru_basin;
+double *hru_basin;
 
 
 void decl(void);

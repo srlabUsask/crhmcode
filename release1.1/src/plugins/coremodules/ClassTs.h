@@ -9,43 +9,43 @@ class ClassTs : public ClassModule {
     ClassTs(string Name, string Version = "Radiation", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, "QliVt_Var, ") {};
 
 // declared observations
-    float *Ts;
+    double *Ts;
 
 // declared observation variables
 
-    const float *hru_u;
+    const double *hru_u;
 
-    const float *hru_t;
+    const double *hru_t;
 
-    const float *hru_rh;
+    const double *hru_rh;
 
-    const float *Qli;
+    const double *Qli;
 
-    const float *QliVt_Var;
+    const double *QliVt_Var;
 
 // declared variables
 
-   float *hru_Ts;
+   double *hru_Ts;
 
-   float *Pa;
+   double *Pa;
 
-   float *q;
+   double *q;
 
-   float *ra;
+   double *ra;
 
-   float *Qli_;
+   double *Qli_;
 
 // declared parameters
 
-   const float *Ht;
+   const double *Ht;
 
-   const float *Zref;
+   const double *Zref;
 
-   const float *Zwind;
+   const double *Zwind;
 
-   const float *hru_elev;
+   const double *hru_elev;
 
-   const float *Z0snow; // snow roughness length (m)
+   const double *Z0snow; // snow roughness length (m)
 
 // variable inputs
 

@@ -97,7 +97,7 @@ void ClassHMSA::init(void) {
   nhru = getdim(NHRU);
   nlay = getdim(NLAY);
 
-float F_Dummy, Alpha, I_Avg, I_Dummy; // [Max_Layers]
+double F_Dummy, Alpha, I_Avg, I_Dummy; // [Max_Layers]
 
   for(hh = 0; chkStruct(); ++hh) {
     if(Soil_Layers[hh] > nlay){
@@ -121,7 +121,7 @@ float F_Dummy, Alpha, I_Avg, I_Dummy; // [Max_Layers]
 void ClassHMSA::run(void) {
 
   long I_Avg;
-  float Alpha;
+  double Alpha;
 
   for(hh = 0; chkStruct(); ++hh) {
 
@@ -347,12 +347,12 @@ void ClassHMSA::run(void) {
 
 void ClassHMSA::Get_Heat_Chad(long nn){
 
-   float Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
+   double Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
 
-   float x_a = K_Air;
-   float x_w = Soil_Water_lay[nn][hh];
-   float x_s = 1.0-Porosity_lay[nn][hh] + Soil_Ice_lay[nn][hh];
-   float lam_s;
+   double x_a = K_Air;
+   double x_w = Soil_Water_lay[nn][hh];
+   double x_s = 1.0-Porosity_lay[nn][hh] + Soil_Ice_lay[nn][hh];
+   double lam_s;
 
    if (Minerals < 0.1)     // Organic Soil
      lam_s = K_Organic;
@@ -361,26 +361,26 @@ void ClassHMSA::Get_Heat_Chad(long nn){
    else   //mixed
      lam_s = (Minerals*K_Minerals + Organic_lay[nn][hh]*K_Organic)/x_s;
 
-   float n = Porosity_lay[nn][hh];
+   double n = Porosity_lay[nn][hh];
 
-   float g_a;
+   double g_a;
    if(x_w >= 0.09)
      g_a = 0.333-x_a/n*(0.333-0.035);
    else
      g_a = 0.013 + 0.944*x_w;
 
-   float g_c = 1.0 - 2.0*g_a;
+   double g_c = 1.0 - 2.0*g_a;
 
-   //float Fs = 1.0/3.0*(2.0/(1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.125)
+   //double Fs = 1.0/3.0*(2.0/(1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.125)
    //             + (1.0/((1 + (ks_s[soil_type_lay[nn][hh]]/lam_w-1.0)*0.75))));
 
-   //float Fa = 1.0/3.0*(2.0/(1 + (lam_a/lam_w-1.0)*ga) + (1.0/((1 + (lam_a/lam_w-1.0)*gc))));
+   //double Fa = 1.0/3.0*(2.0/(1 + (lam_a/lam_w-1.0)*ga) + (1.0/((1 + (lam_a/lam_w-1.0)*gc))));
 
-   float F_a = 1.0/3.0*(2.0/(1.0+(lam_a/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_a/lam_w-1.0)*g_c));
-   float F_s = 1.0/3.0*(2.0/(1.0+(lam_s/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_s/lam_w-1.0)*g_c));
+   double F_a = 1.0/3.0*(2.0/(1.0+(lam_a/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_a/lam_w-1.0)*g_c));
+   double F_s = 1.0/3.0*(2.0/(1.0+(lam_s/lam_w-1.0)*g_a) + 1.0/(1.0+(lam_s/lam_w-1.0)*g_c));
 
-   //float a = Farouki_a(por_s[soil_type_lay[nn][hh]]);
-   float a = Farouki_a(Porosity_lay[nn][hh]);
+   //double a = Farouki_a(por_s[soil_type_lay[nn][hh]]);
+   double a = Farouki_a(Porosity_lay[nn][hh]);
 
  // Calculate thermal cond. (W/m/K) of each layer depending on thermal & saturation condition (C_K0 in HMSA):
  // if layer is saturated & frozen:
@@ -396,16 +396,16 @@ void ClassHMSA::Get_Heat_Chad(long nn){
                              /(x_w + F_a*x_a + F_s*x_s);
 }
 
-void ClassHMSA::Get_Heat_Param_Soil(float Soil_Temp, long nn) {
+void ClassHMSA::Get_Heat_Param_Soil(double Soil_Temp, long nn) {
 
 // Subroutine to calculate soil heat parameters (method to be chosen by user)
-// uses: int Method_ID, float bulkdensity, Porosity, Organic, Soil_Water, Soil_Ice.
+// uses: int Method_ID, double bulkdensity, Porosity, Organic, Soil_Water, Soil_Ice.
 // parameters: Soil_Temp, layer.
 // returns: C_K0 = conductivity; C_K1 = specific  heat capacity
 
-float Air, Minerals; //repsective volumetric fractions of soil air and minerals
-float KersNumber, SoilDryCond, SoilSatCond; // for method 2
-float Sr, g_a, g_c, F_a, F_s, x_a, x_w,x_s, lam_a, lam_w,lam_s,F_i,x_i,lam_i, Solid; //for method 3
+double Air, Minerals; //repsective volumetric fractions of soil air and minerals
+double KersNumber, SoilDryCond, SoilSatCond; // for method 2
+double Sr, g_a, g_c, F_a, F_s, x_a, x_w,x_s, lam_a, lam_w,lam_s,F_i,x_i,lam_i, Solid; //for method 3
 
     Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
     if (Minerals < 0.0) Minerals = 0.0;

@@ -8,21 +8,21 @@ public:
 Classintcp(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *net_rain;
-float *cumnet_rain;
-float *cumnet_snow;
-float *net_snow;
-float *net_p;
-float *intcp_evap;
+double *net_rain;
+double *cumnet_rain;
+double *cumnet_snow;
+double *net_snow;
+double *net_p;
+double *intcp_evap;
 
 // declared parameters
-const float *basin_area;
-const float *hru_area;
+const double *basin_area;
+const double *hru_area;
 
 // variable inputs
-const float *hru_rain;
-const float *hru_snow;
-const float *hru_p;
+const double *hru_rain;
+const double *hru_snow;
+const double *hru_p;
 
 void decl(void);
 void init(void);

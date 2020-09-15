@@ -18,11 +18,11 @@ ClassNetroute_M_D* ClassNetroute_M_D::klone(string name) const{
   return new ClassNetroute_M_D(name);
 }
 
-float ClassNetroute_M_D::Function1(float *I, long hh) {
+double ClassNetroute_M_D::Function1(double *I, long hh) {
   return runDelay->ChangeLag(I, hh);
 }
 
-float ClassNetroute_M_D::Function2(float *X, long hh) {
+double ClassNetroute_M_D::Function2(double *X, long hh) {
   return runDelay->ChangeStorage(X, hh);
 }
 
@@ -194,10 +194,10 @@ void ClassNetroute_M_D::init(void) {
     LogError(TExcept);
   }
 
-  const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+  const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
   for(hh = 0; hh < nhru; ++hh){
-    float Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
+    double Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
     Ktravel[hh] = route_L[hh]/(Vw[route_Cshp[hh]]*Vavg)/86400.0; // (d)
   }
 
@@ -289,19 +289,19 @@ void ClassNetroute_M_D::run(void) {
 
       for(long hhh = 0; chkStruct(hhh); ++hhh) { // do HRUs in sequence
         if(distrib_hru[hh][hhh] < 0.0)
-          const_cast<float **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
+          const_cast<double **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
         distrib_sum[hh] += distrib_hru[hh][hhh];
       }
 
       if(distrib_sum[hh] <= 0 && distrib_Basin[hh] <= 0.0){
-        const_cast<float *> (distrib_Basin) [hh] = 1;
+        const_cast<double *> (distrib_Basin) [hh] = 1;
       }
 
       distrib_sum[hh] += distrib_Basin[hh];
     }
   }
 
-  float gw_amount;
+  double gw_amount;
 
   for(long jj = 0; chkStruct(jj); ++jj){ // do HRUs in sequence
 
@@ -328,7 +328,7 @@ void ClassNetroute_M_D::run(void) {
 
         if(abs(gwwhereto[hhh]) <= nhru){
           if(gwwhereto[hhh] > 0){ // direct to HRU surface
-            float free = soil_rechr_max[hh] - soil_rechr[hh];
+            double free = soil_rechr_max[hh] - soil_rechr[hh];
             if(free > 0.0 && !soil_rechr_ByPass[hh]){
               if(free > gw_amount/hru_area[hh]){ // outflow (mm*km^2/int)
                 soil_rechr[hh] += gw_amount/hru_area[hh];
@@ -399,7 +399,7 @@ void ClassNetroute_M_D::run(void) {
     
     if(outflow[hh] > 0.0){
 
-      float Used = outflow[hh]*distrib_Basin[hh]/distrib_sum[hh];
+      double Used = outflow[hh]*distrib_Basin[hh]/distrib_sum[hh];
       if(distrib_Basin[hh] > 0.0){ // direct to basin
 
         basinflow[0] += Used*1000; // (m3)
@@ -410,7 +410,7 @@ void ClassNetroute_M_D::run(void) {
       for(long To = 0; chkStruct(To); ++To) { // distribute outflow of HRUs
 
         if(hh != To && distrib_hru[hh][To] > 0.0){
-          float Amount = (outflow[hh]-Used)/hru_area[To]*distrib_hru[hh][To]/(distrib_sum[hh]-distrib_Basin[hh]); // outflow (mm*km^2/int)
+          double Amount = (outflow[hh]-Used)/hru_area[To]*distrib_hru[hh][To]/(distrib_sum[hh]-distrib_Basin[hh]); // outflow (mm*km^2/int)
 
           if(preferential_flow[hh]) {
 	          gw[To] += Amount;
@@ -418,7 +418,7 @@ void ClassNetroute_M_D::run(void) {
 	          Amount = 0.0;
           }
           else {
-            float free = soil_rechr_max[To] - soil_rechr[To];
+            double free = soil_rechr_max[To] - soil_rechr[To];
             if(free > 0.0 && !soil_rechr_ByPass[To]){
               if(free > Amount){ // outflow (mm*km^2/int)
                 soil_rechr[To] += Amount;
@@ -501,21 +501,21 @@ void ClassNetroute_M_D::run(void) {
 
 void ClassNetroute_M_D::finish(bool good) {
 
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
+  double Allcuminflow = 0.0;
+  double Allcumoutflow = 0.0;
+  double Allcumoutflowdiverted = 0.0;
 
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
+  double Allgwcuminflow = 0.0;
+  double Allgwcumoutflow = 0.0;
+  double Allgwcumoutflowdiverted = 0.0;
 
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
+  double Allssrcuminflow = 0.0;
+  double Allssrcumoutflow = 0.0;
+  double Allruncuminflow = 0.0;
+  double Allruncumoutflow = 0.0;
 
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
+  double AllSdcuminflow = 0.0;
+  double Allrechrcuminflow = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
 

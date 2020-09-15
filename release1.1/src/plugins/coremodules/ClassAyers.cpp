@@ -80,7 +80,7 @@ void ClassAyers::run(void) {
     if(nstep == 0)
       melt_int[hh] = snowmeltD[hh]/Global::Freq;
 
-    float maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
+    double maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
 
     if(melt_int[hh] > 0.0){
         if(maxinfil > melt_int[hh])

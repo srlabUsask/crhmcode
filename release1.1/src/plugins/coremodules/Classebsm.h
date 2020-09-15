@@ -9,47 +9,47 @@ public:
 Classebsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , Qnsn_Var, , "){};
 
 // declared observation variables
-const float *Qnsn;
-const float *QnD;
+const double *Qnsn;
+const double *QnD;
 
 // declared variables
-float *snowmeltD;
-float *cumsnowmelt;
-float *LW_ebsm;
-float *u_ebsm;
-float *Qmelt;
-float *Qn_ebsm;
-float *Qh_ebsm;
-float *Qe_ebsm;
-float *Qe_subl;
-float *cumQe_subl;
-float *Qp_ebsm;
-float *Qnsn_Acc;
+double *snowmeltD;
+double *cumsnowmelt;
+double *LW_ebsm;
+double *u_ebsm;
+double *Qmelt;
+double *Qn_ebsm;
+double *Qh_ebsm;
+double *Qe_ebsm;
+double *Qe_subl;
+double *cumQe_subl;
+double *Qp_ebsm;
+double *Qnsn_Acc;
 
-float *LWmax;
-float *net_rainD;
+double *LWmax;
+double *net_rainD;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *tfactor;
-const float *nfactor;
-const float *Use_QnD;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *tfactor;
+const double *nfactor;
+const double *Use_QnD;
 
 // variable inputs
-float *SWE;
-const float *tmean;
-const float *tmax;
-const float *tmin;
-const float *umean;
-const float *rhmean;
-const float *net_rain;
-const float *Albedo;
-const float *sunact;
-const float *QdroD;
-const float *QdfoD;
-const float *sunmax;
-const float *Qnsn_Var;
+double *SWE;
+const double *tmean;
+const double *tmax;
+const double *tmin;
+const double *umean;
+const double *rhmean;
+const double *net_rain;
+const double *Albedo;
+const double *sunact;
+const double *QdroD;
+const double *QdfoD;
+const double *sunmax;
+const double *Qnsn_Var;
 
 const long  *meltflag;
 const long  *delay_melt;

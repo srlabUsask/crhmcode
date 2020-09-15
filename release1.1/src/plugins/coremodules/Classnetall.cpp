@@ -62,7 +62,7 @@ void Classnetall::init(void) {
 
 void Classnetall::run(void) {
 
-  float netlong, shortw;
+  double netlong, shortw;
 
   long nstep = getstep() % Global::Freq;
 
@@ -86,7 +86,7 @@ void Classnetall::run(void) {
         else
           shortw = (0.024f*pQdro_FREQ[ff][hh] + 2.68f*pQdfo_FREQ[ff][hh]);
 
-        float Net = (shortw*(1.0f-Albedo[hh]) + netlong/Global::Freq); // MJ/interval
+        double Net = (shortw*(1.0f-Albedo[hh]) + netlong/Global::Freq); // MJ/interval
         netD[hh] +=  Net;
 
         Net = Net/(2.501f-0.002361f*tday_intvls[ff][hh]); // MJ/m^2 to mm/m^2

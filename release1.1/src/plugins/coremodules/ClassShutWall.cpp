@@ -108,7 +108,7 @@ void ClassShutWall::init(void) {
 
 void ClassShutWall::run(void) {
 
-   const float Cp = 1.005; // (kj/kg/K)
+   const double Cp = 1.005; // (kj/kg/K)
 
    long nstep = getstep() % Global::Freq;
 
@@ -134,13 +134,13 @@ void ClassShutWall::run(void) {
 
      } //  beginning of every day
 
-     float U =hru_u[hh];
+     double U =hru_u[hh];
 
-     float Ustar = CRHM_constants::kappa*U/log((Zwind[hh] - d)/z0);
+     double Ustar = CRHM_constants::kappa*U/log((Zwind[hh] - d)/z0);
 
-     float kh = CRHM_constants::kappa*Ustar*(Ht[hh] - d);
+     double kh = CRHM_constants::kappa*Ustar*(Ht[hh] - d);
 
-     float rb = 100/n*sqrt(w[hh]/(0.1*U))/(1.0-exp(-n/2.0));
+     double rb = 100/n*sqrt(w[hh]/(0.1*U))/(1.0-exp(-n/2.0));
 
      raa[hh] = 1.0/(CRHM_constants::kappa*Ustar)*log((Zwind[hh]-d)/(Ht[hh] - d)) + Ht[hh]/(n*kh)*(exp(n*(1-(z0+d)/Ht[hh])) - 1.0);
      rca[hh] = rb*gammab[hh]/LAI[hh];
@@ -148,11 +148,11 @@ void ClassShutWall::run(void) {
      rsa[hh] = (Ht[hh]*exp(n)/(n*kh))*(exp(-n*z0g[hh]/Ht[hh])-exp(-n*(z0+d)/Ht[hh]));
      rss[hh] = 4000;
 
-     float Rn = Qn[hh] // Watts
+     double Rn = Qn[hh] // Watts
                  *86400/1e3/lambda(hru_t[hh]); // (mm/d)
-     float G =  Qg[hh] // Watts
+     double G =  Qg[hh] // Watts
                  *86400/1e3/lambda(hru_t[hh]); // (mm/d)
-     float Rsn = Rn*exp(-Cr[hh]*LAI[hh]);
+     double Rsn = Rn*exp(-Cr[hh]*LAI[hh]);
 
 
      Ra[hh] = (delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh]))*raa[hh];
@@ -190,23 +190,23 @@ void ClassShutWall::finish(bool good) {
   }
 }
 
-double ClassShutWall::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
+double ClassShutWall::gamma(double Pa, double t) // Psychrometric constant (kPa/°C)
 {
    return(1.63 * Pa / lambda(t)); // lambda (kJ/(kg °C))
 }
 
-float ClassShutWall::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double ClassShutWall::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R = 2870;
+  const double R = 2870;
    return (1E4*Pa /(R*( 273.15 + t))*(1.0 - 0.379*(ea/Pa)) ); //
 }
 
-float ClassShutWall::lambda(float t) // Latent heat of vaporization  (kJ/(kg °C))
+double ClassShutWall::lambda(double t) // Latent heat of vaporization  (kJ/(kg °C))
 {
    return( 2501.0 - 2.361 * t );
 }
 
-double ClassShutWall::delta(float t)  // Slope of sat vap p vs t, (kPa/°C)
+double ClassShutWall::delta(double t)  // Slope of sat vap p vs t, (kPa/°C)
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));

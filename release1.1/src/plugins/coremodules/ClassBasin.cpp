@@ -63,14 +63,14 @@ void Classbasin::init(void) {
 
   run_ID[0] = RUN_ID[0];  // transfer run identification
 
-  float totarea = 0;
+  double totarea = 0;
   nhru = getdim(NHRU);
 
   for(hh = 0; hh < nhru; ++hh)
     totarea += hru_area[hh];
 
   if(fabs((totarea-basin_area[0])/basin_area[0]) > 1e-3){
-    const_cast<float *>  (basin_area)[0] = totarea;
+    const_cast<double *>  (basin_area)[0] = totarea;
     CRHMException TExcept(string(string("Sum of HRU's area <> Basin area, Basin area made = ") + FloatToStrF(totarea, ffGeneral, 3, 0)).c_str(), WARNING);
     LogError(TExcept);
   }

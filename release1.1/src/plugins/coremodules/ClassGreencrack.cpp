@@ -107,9 +107,9 @@ void ClassGreencrack::init(void) {
 
   try {
 
-    Xinfil = new float*[3];   // Data [3] [nhru]
+    Xinfil = new double*[3];   // Data [3] [nhru]
     for (int jj = 0; jj < 3; ++jj)
-      Xinfil[jj] = new float[nhru];
+      Xinfil[jj] = new double[nhru];
   }
   catch (std::bad_alloc) {
     CRHMException Except("Could not allocate in module CRACK." ,TERMINATE);
@@ -355,24 +355,24 @@ void ClassGreencrack::ponding(void){
 
 void ClassGreencrack::startponding(void){ // ponding during interval
 
-  float Fp = k[hh]*psidthbot[hh]/(intensity - k[hh]); // (mm/h)
-  float dt = (Fp - F0[hh])/intensity;
+  double Fp = k[hh]*psidthbot[hh]/(intensity - k[hh]); // (mm/h)
+  double dt = (Fp - F0[hh])/intensity;
 
   howmuch(F0[hh], Global::Interval*24.0 - dt);
 
   pond = F0[hh] + garain - F1[hh];
 }
 
-void ClassGreencrack::howmuch(float F0, float dt) { // output is F1[hh]
+void ClassGreencrack::howmuch(double F0, double dt) { // output is F1[hh]
 
-  float LastF1;
+  double LastF1;
   do {
     LastF1 = F1[hh];
     F1[hh] = F0 + k[hh]*dt + psidthbot[hh]*log((F1[hh] + psidthbot[hh])/(F0 + psidthbot[hh]));
   } while(fabs(LastF1 - F1[hh]) > 0.01);
 }
 
-float ClassGreencrack::calcf1(float F, float psidth){ // calculates infitration rate
+double ClassGreencrack::calcf1(double F, double psidth){ // calculates infitration rate
 
   return k[hh]*(psidth/F + 1.0); // (mm/h)
 }

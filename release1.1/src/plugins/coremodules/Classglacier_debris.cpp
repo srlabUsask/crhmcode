@@ -416,20 +416,20 @@ void Classglacier_debris::run(void){
 
 // used by debris
 
-  const float Cp_air = 1006;
-  const float MOL_wt_ratio_h2o_to_air = 0.622;
-  const float Lv = 2.5e6;
-  const float Ts_glacier = 273.15;
-  const float e_s = 0.6113;
-  const float Pr = 5;
-  const float Katabatic = 0.0004;
-  const float g = 9.8;
-  const float Cp_W0 = 4217.7;
-  const float rho_h2o =  1000.0;
-  const float lapse_rate = 0.005;
+  const double Cp_air = 1006;
+  const double MOL_wt_ratio_h2o_to_air = 0.622;
+  const double Lv = 2.5e6;
+  const double Ts_glacier = 273.15;
+  const double e_s = 0.6113;
+  const double Pr = 5;
+  const double Katabatic = 0.0004;
+  const double g = 9.8;
+  const double Cp_W0 = 4217.7;
+  const double rho_h2o =  1000.0;
+  const double lapse_rate = 0.005;
 
   long nstep;
-  float umin, ref, rho;
+  double umin, ref, rho;
 
   nstep = getstep();
 
@@ -493,7 +493,7 @@ void Classglacier_debris::run(void){
       Qp_ebsm[hh] = 0.0;  */
     }
 
-float TF, SRF;
+double TF, SRF;
     if(variation == VARIATION_5){
       if(debris_h[hh] <= 0.0){
         TF = 0.0; SRF = 0.0;
@@ -617,7 +617,7 @@ float TF, SRF;
           }
         }
         else if(delay_melt[hh] <= julian("now")){
-          float eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;
+          double eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;
 
           switch (variation) {
             case VARIATION_ORG :
@@ -669,7 +669,7 @@ float TF, SRF;
       if(firn[hh] > 0.0 || ice[hh] > 0.0){
 
         if(nfirn[hh] > 0 && Qmelt[hh] > 0.0 && !inhibit_firnmelt[hh]){ // melt firn
-          float h2o;
+          double h2o;
           while(nfirn[hh] > 0 && Qmelt[hh] > 0.0){
             h2o = firn_dens_array[0][hh]*firn_h_array[0][hh]/1000.0;
             if(Qmelt[hh] < h2o){ // melt some firn
@@ -723,14 +723,14 @@ float TF, SRF;
 
 // Update glacier at end of summer
 
-        const float R = 8.314; // (J/(K.mol)
-        const float RHOi = 917; // (kg/m3)
+        const double R = 8.314; // (J/(K.mol)
+        const double RHOi = 917; // (kg/m3)
 
         long Julian = julian("now"); // same as "decday"
         if(SWE_to_firn_Julian[hh] == Julian){ // use fixed date - end of day    !!!!
 
-          float k0 = 11.0*exp(-10160.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
-          float k1 = 575.0*exp(-21400.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
+          double k0 = 11.0*exp(-10160.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
+          double k1 = 575.0*exp(-21400.0/(R*(TKMA[hh] + CRHM_constants::Tm)));
 
 // Check if bottom layer of firn becomes ice
           if(nfirn[hh] && firn_dens_array[nfirn[hh] - 1][hh] >= 830.0){ // transfer
@@ -751,7 +751,7 @@ float TF, SRF;
 
           if(SWE[hh] > 0.0){
             if(nfirn[hh] == nlay){ // combine last two entries
-              float mean_d = (firn_dens_array[nlay-2][hh] + firn_dens_array[nlay-1][hh])/2.0;
+              double mean_d = (firn_dens_array[nlay-2][hh] + firn_dens_array[nlay-1][hh])/2.0;
               firn_h_array[nlay-2][hh] = (firn_h_array[nlay-2][hh]*firn_dens_array[nlay-2][hh] + firn_h_array[nlay-1][hh]*firn_dens_array[nlay-1][hh])/mean_d;
               firn_dens_array[nlay-2][hh] = mean_d;
               --nfirn[hh]; // remove layer from SWE
@@ -772,7 +772,7 @@ float TF, SRF;
 
 // solve for density from SWE using Bisection method
 
-            float h1 = 0.6, h2 = 8.00, e, h;
+            double h1 = 0.6, h2 = 8.00, e, h;
             long iter_max = 0;
             do {
               h = (h1 + h2)/2.0; // (m)
@@ -805,7 +805,7 @@ float TF, SRF;
           firn[hh] = firn_dens_array[0][hh]*firn_h_array[0][hh]/1000.0; // (mm)
           if(nfirn[hh] > 0)
           for(long nn = 1; nn < nfirn[hh]; ++nn){
-            float old_firn = firn_dens_array[nn][hh]*firn_h_array[nn][hh]/1000.0;
+            double old_firn = firn_dens_array[nn][hh]*firn_h_array[nn][hh]/1000.0;
 
             if(old_firn == 0.0){
               old_firn = hh*100 + nn;
@@ -817,23 +817,23 @@ float TF, SRF;
               CRHMException TExcept(SS.c_str(), WARNING);
               LogError(TExcept);
             }
-            float h550 = 1000.0/(RHOi*k0)*(log(550.0/(RHOi - 550.0)) - log(rho/(RHOi - rho))); // rho is current SWE density      Densification
+            double h550 = 1000.0/(RHOi*k0)*(log(550.0/(RHOi - 550.0)) - log(rho/(RHOi - rho))); // rho is current SWE density      Densification
             if(Densification[hh] != 0){
               if(firn_dens_array[nn][hh] < 550.0){ // density < 550
-                float Z0 = exp(RHOi*k0*firn_depth[hh]/10e6 + log(firn_dens_array[nn][hh]/(RHOi - firn_dens_array[nn][hh])));
-                float New = RHOi*Z0/(1.0 + Z0);
+                double Z0 = exp(RHOi*k0*firn_depth[hh]/10e6 + log(firn_dens_array[nn][hh]/(RHOi - firn_dens_array[nn][hh])));
+                double New = RHOi*Z0/(1.0 + Z0);
                 if(New > firn_dens_array[nn][hh])
                   firn_dens_array[nn][hh] = New;
                 firn_h_array[nn][hh] = old_firn/firn_dens_array[nn][hh]*1000.0;
                 firn_yr_array[nn][hh] = 1.0/(k0*SWEAA[hh])*log((RHOi - rho)/(RHOi - 550));
               }
               else{ // density >= 550
-                float Z1 = exp(RHOi*k1*(firn_depth[hh]/1000.0-h550)/1000.0/sqrt(SWEAA[hh])+log(550.0/(RHOi-550.0)));
-                float New = RHOi*Z1/(1.0 + Z1);
+                double Z1 = exp(RHOi*k1*(firn_depth[hh]/1000.0-h550)/1000.0/sqrt(SWEAA[hh])+log(550.0/(RHOi-550.0)));
+                double New = RHOi*Z1/(1.0 + Z1);
                 if(firn_dens_array[nn][hh] > New)
                   firn_dens_array[nn][hh] = New;
                 firn_h_array[nn][hh] = old_firn/firn_dens_array[nn][hh]*1000.0;
-                float t550 = 1.0/(k0*SWEAA[hh])*(log((RHOi - rho)/(RHOi - 550))); // units years
+                double t550 = 1.0/(k0*SWEAA[hh])*(log((RHOi - rho)/(RHOi - 550))); // units years
                 firn_yr_array[nn][hh] = 1.0/(k1*sqrt(SWEAA[hh]))*log((RHOi - 550)/(RHOi - firn_dens_array[nn][hh])) + t550;
               }
             }
@@ -882,19 +882,19 @@ float TF, SRF;
 
 void Classglacier_debris::finish(bool good) {
 
-  float Glacier_All = 0.0;
-  float SWE_All = 0.0;
-  float firn_All = 0.0;
-  float ice_All = 0.0;
-  float firn_init_All = 0.0;
-  float ice_init_All = 0.0;
-  float firn_change_All = 0.0;
-  float ice_change_All = 0.0;
-  float cumfirnmelt_All = 0.0;
-  float cumSWE_2firn_All = 0.0;
-  float cumicemelt_All = 0.0;
-  float cumfirn_2ice_All = 0.0;
-  float cumnet_rain_glacier_All = 0.0;
+  double Glacier_All = 0.0;
+  double SWE_All = 0.0;
+  double firn_All = 0.0;
+  double ice_All = 0.0;
+  double firn_init_All = 0.0;
+  double ice_init_All = 0.0;
+  double firn_change_All = 0.0;
+  double ice_change_All = 0.0;
+  double cumfirnmelt_All = 0.0;
+  double cumSWE_2firn_All = 0.0;
+  double cumicemelt_All = 0.0;
+  double cumfirn_2ice_All = 0.0;
+  double cumnet_rain_glacier_All = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (glacier_debris)' firn_init    (mm) (mm*hru) (mm*hru/basin): ").c_str(), firn_init[hh], hru_area[hh], basin_area[0]);
@@ -951,10 +951,10 @@ void Classglacier_debris::finish(bool good) {
   delete iceDelay;
 }
 
-float Classglacier_debris::DepthofSnow(float SWE){ // (mm)
+double Classglacier_debris::DepthofSnow(double SWE){ // (mm)
 
 // Tabler et al. (1990b) Calculates Snow Depth(mm) from SWE(mm)
-  float rho;
+  double rho;
 
   if (SWE > 1.0) {
     rho = 522.0 - 204700/SWE*(1.0 - exp(-SWE/673.0)); // converted from original cm to mm

@@ -140,7 +140,7 @@ void Classebsm::init(void) {
 
 void Classebsm::run(void) {
 
-      float umin, ref, melt;
+      double umin, ref, melt;
 
       long  nstep = getstep()%Global::Freq;
 
@@ -203,7 +203,7 @@ void Classebsm::run(void) {
             }
           }
           else if(meltflag[hh] == 1 && delay_melt[hh] <= julian("now")) {
-            float eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;\
+            double eamean = Common::estar(tmean[hh])*rhmean[hh]/100.0;\
             switch (variation) {
 
               case VARIATION_ORG :
@@ -252,7 +252,7 @@ void Classebsm::run(void) {
 
             LWmax[hh] = SWE[hh]*0.05;
 
-            float t_minus = tmin[hh];
+            double t_minus = tmin[hh];
             if(t_minus > 0.0)
               t_minus = 0.0;
 
@@ -324,7 +324,7 @@ void Classebsm::finish(bool good) {
 
   if(!good) return;
 
-  float Allcumsnowmelt = 0.0;
+  double Allcumsnowmelt = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (ebsm)' cumQe_subl   (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumQe_subl[hh], hru_area[hh], basin_area[0]);

@@ -9,57 +9,57 @@ ClassShutWall(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRH
 
 long Qn_Cnt;
 long Qg_Cnt;
-float z0;
-float d;
-float n;
+double z0;
+double d;
+double n;
 
 
 // declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evap;
-float *evapD;
-float *cum_evap;
-float *Cc;
-float *Cs;
-float *Ra;
-float *Rc;
-float *Rs;
-float *ETc;
-float *ETs;
-float *raa;
-float *rca;
-float *rcs;
-float *rsa;
-float *rss;
+double *hru_actet;
+double *hru_cum_actet;
+double *evap;
+double *evapD;
+double *cum_evap;
+double *Cc;
+double *Cs;
+double *Ra;
+double *Rc;
+double *Rs;
+double *ETc;
+double *ETs;
+double *raa;
+double *rca;
+double *rcs;
+double *rsa;
+double *rss;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *rs;
-const float *hru_elev;
-const float *Cr;
-const float *LAI;
-const float *Ht;
-const float *Zwind;
-const float *w;
-const float *rst;
-const float *z0g;
-const float *gammab;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *rs;
+const double *hru_elev;
+const double *Cr;
+const double *LAI;
+const double *Ht;
+const double *Zwind;
+const double *w;
+const double *rst;
+const double *z0g;
+const double *gammab;
 
 const long *inhibit_evap;
 
 // declared observations
-const float *hru_u;
-const float *hru_t;
-const float *hru_ea;
-const float *Qn;
-const float *Qg;
+const double *hru_u;
+const double *hru_t;
+const double *hru_ea;
+const double *Qn;
+const double *Qg;
 
 // variable inputs
 
 // local allocated arrays
-float *Pa;
+double *Pa;
 
 void decl(void);
 void init(void);
@@ -68,8 +68,8 @@ void finish(bool good);
 
 ClassShutWall* klone(string name) const;
 
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double gamma(double Pa, double t);         // Psychrometric constant
+double lambda(double t);                   // Latent heat of vaporization
+double delta(double t);                   // Slope of sat vap p vs t, kPa/°C
 };

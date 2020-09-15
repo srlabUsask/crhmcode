@@ -211,7 +211,7 @@ void Classlake::process(void) {
         if(hru_lat[hh] < 0.0) // Southern Hemisphere 6 months offset
           Index = (Index +6)%12;
 
-        float Tw = 0.6*hru_t_Mmean[hh] + Meyer_B[Index];
+        double Tw = 0.6*hru_t_Mmean[hh] + Meyer_B[Index];
 
         Vw[hh] = pow(10,(-7.903*(373.16/(Tw+273.16)-1)+(5.028*log10(373.16/(Tw+273.16)))
         -(0.0000001382*(pow(10, (11.34*(1-(373.16/(Tw+273.16)))))-1))

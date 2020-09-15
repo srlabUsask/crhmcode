@@ -162,16 +162,16 @@ void ClassNeedle::run(void) { // executed every interval
       continue;
     }
 
-    float Exposure = Ht[hh] - Common::DepthofSnow(SWE[hh]); /* depths(m) SWE(mm) */
+    double Exposure = Ht[hh] - Common::DepthofSnow(SWE[hh]); /* depths(m) SWE(mm) */
     if(Exposure < 0.0) Exposure = 0.0;
 
-    float LAI_ = LAI[hh]*Exposure/Ht[hh];
+    double LAI_ = LAI[hh]*Exposure/Ht[hh];
 
-    float Vf = 0.45 - 0.29*log(LAI[hh]);
+    double Vf = 0.45 - 0.29*log(LAI[hh]);
 
-    float Vf_ = Vf + (1.0 - Vf)*sin((Ht[hh] - Exposure)/Ht[hh]*M_PI_2);
+    double Vf_ = Vf + (1.0 - Vf)*sin((Ht[hh] - Exposure)/Ht[hh]*M_PI_2);
 
-    float T1 = hru_t[hh] + CRHM_constants::Tm;
+    double T1 = hru_t[hh] + CRHM_constants::Tm;
 
     if(beta[hh] > 0.001) {
       k[hh] = 1.081*beta[hh]*cos(beta[hh])/sin(beta[hh]);
@@ -193,15 +193,15 @@ void ClassNeedle::run(void) { // executed every interval
     Qsisn[hh] = Qsi_*Tauc[hh];
 
 
-    float rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
+    double rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
 
-    float U1 = hru_u[hh]; // Wind speed (m/s)
+    double U1 = hru_u[hh]; // Wind speed (m/s)
 
     ra[hh] = (log(Zref[hh]/Z0snow[hh])*log(Zwind[hh]/Z0snow[hh]))/sqr(CRHM_constants::kappa)/U1;
 
-    float delta = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
+    double delta = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
 
-    float q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
+    double q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
 
 
     Ts[hh] = T1 + (CRHM_constants::emiss*(Qli_ - CRHM_constants::sbc*pow(T1, 4.0f)) + CRHM_constants::Ls*(q - Common::Qs(Pa[hh], T1))*rho/ra[hh])/

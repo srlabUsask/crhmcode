@@ -110,8 +110,8 @@ void ClassGreenAmpt::run(void) {
     snowinfil[hh] = 0.0;
     meltrunoff[hh] = 0.0;
 
-    float melt = snowmelt[hh]/Global::Freq;
-    float All = net_rain[hh] + melt;
+    double melt = snowmelt[hh]/Global::Freq;
+    double All = net_rain[hh] + melt;
 
     if(All > 0.0) {
 
@@ -230,8 +230,8 @@ void ClassGreenAmpt::ponding(void){
 
 void ClassGreenAmpt::startponding(void){
 
-  float Fp = k[hh]*psidthbot[hh]/(intensity - k[hh]);
-  float dt = (Fp - F0[hh])/intensity;
+  double Fp = k[hh]*psidthbot[hh]/(intensity - k[hh]);
+  double dt = (Fp - F0[hh])/intensity;
 
   howmuch(Fp, Global::Interval*24.0 - dt);
 
@@ -239,9 +239,9 @@ void ClassGreenAmpt::startponding(void){
 
 }
 
-void ClassGreenAmpt::howmuch(float F0, float dt) {
+void ClassGreenAmpt::howmuch(double F0, double dt) {
 
-  float LastF1;
+  double LastF1;
 
   do {
     LastF1 = F1[hh];
@@ -249,7 +249,7 @@ void ClassGreenAmpt::howmuch(float F0, float dt) {
   } while(fabs(LastF1 - F1[hh]) > 0.001);
 }
 
-float ClassGreenAmpt::calcf1(float F, float psidth){
+double ClassGreenAmpt::calcf1(double F, double psidth){
 
   return k[hh]*(psidth/F + 1.0);
 }

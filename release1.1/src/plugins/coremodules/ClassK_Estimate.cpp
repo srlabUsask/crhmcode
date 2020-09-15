@@ -130,20 +130,20 @@ void ClassK_Estimate::init(void) {
 void ClassK_Estimate::run(void) {
 
   
-  const float den_water = 1000.0, acc_gravi = 9.8, dyna_visc_water = 0.001787;
+  const double den_water = 1000.0, acc_gravi = 9.8, dyna_visc_water = 0.001787;
 
   for(hh = 0; chkStruct(); ++hh){
     if(soil_rechr[hh] <= 0.0000001)
-      const_cast<float *>  (soil_rechr)[hh] = 0.0;
+      const_cast<double *>  (soil_rechr)[hh] = 0.0;
 
     if(soil_moist[hh] <= 0.0000001)
-      const_cast<float *>  (soil_moist)[hh] = 0.0;
+      const_cast<double *>  (soil_moist)[hh] = 0.0;
 
     if(gw[hh] <= 0.0000001)
-      const_cast<float *>  (gw)[hh] = 0.0;
+      const_cast<double *>  (gw)[hh] = 0.0;
 
     if(soil_rechr[hh] > soil_moist[hh])
-      const_cast<float *>  (soil_rechr)[hh] = soil_moist[hh];
+      const_cast<double *>  (soil_rechr)[hh] = soil_moist[hh];
 
     if(!(soil_rechr_max[hh] == 0.0 && soil_moist_max[hh] == 0.0)) {
       if(inhibit_evap[hh] == 1){

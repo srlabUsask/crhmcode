@@ -16,109 +16,109 @@ long evapDiv;
 
 // declared variables
 long *current_getstep;
-float *Sd;
-float *gw;
-float *soil_rechr;
-float *soil_moist;
-float *soil_gw;
-float *Sd_gw;
-float *gw_flow;
-float *soil_ssr;
-float *rechr_ssr;
-float *soil_runoff;
-float *cum_soil_ssr;
-float *cum_rechr_ssr;
-float *cum_soil_runoff;
-float *cum_runoff_to_Sd;
-float *cum_redirected_residual;
-float *soil_gw_D;
-float *soil_ssr_D;
-float *gw_flow_D;
-float *soil_runoff_D;
-float *HK_V;
-float *HK_A;
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_over_Q;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
-float *redirected_residual;
-float *infil_act;
-float *cum_infil_act;
-float *infil_act_D;
+double *Sd;
+double *gw;
+double *soil_rechr;
+double *soil_moist;
+double *soil_gw;
+double *Sd_gw;
+double *gw_flow;
+double *soil_ssr;
+double *rechr_ssr;
+double *soil_runoff;
+double *cum_soil_ssr;
+double *cum_rechr_ssr;
+double *cum_soil_runoff;
+double *cum_runoff_to_Sd;
+double *cum_redirected_residual;
+double *soil_gw_D;
+double *soil_ssr_D;
+double *gw_flow_D;
+double *soil_runoff_D;
+double *HK_V;
+double *HK_A;
+double *culvert_Q;
+double *culvert_water_H;
+double *culvert_water_A;
+double *culvert_water_V;
+double *culvert_over_Q;
+double *culvert_evap;
+double *cum_culvert;
+double *cum_culvert_over;
+double *HD;
+double *redirected_residual;
+double *infil_act;
+double *cum_infil_act;
+double *infil_act_D;
 
-float *soil_runoff_stream;
-float *weir_outflow;
-float *weir_outflow_m3s;
-float *weir_water_A;
-float *weir_water_V;
-float *weir_water_h;
-float *weir_evap;
-float *cum_weir_over_m3;
-float *weir_crest_volume;
-float *stream;
-float *stream_to_Sd;
-float *cum_stream;
-float *stream_Grp_in;
-float *stream_Grp_loss;
-float *cum_stream_Grp_loss;
+double *soil_runoff_stream;
+double *weir_outflow;
+double *weir_outflow_m3s;
+double *weir_water_A;
+double *weir_water_V;
+double *weir_water_h;
+double *weir_evap;
+double *cum_weir_over_m3;
+double *weir_crest_volume;
+double *stream;
+double *stream_to_Sd;
+double *cum_stream;
+double *stream_Grp_in;
+double *stream_Grp_loss;
+double *cum_stream_Grp_loss;
 
 // local variables
-float *cum_soil_gw;
-float *cum_Sd_gw;
-float *cum_gw_flow;
-float *cum_hru_condense;
-float *cum_Sd_evap;
-float *soil_moist_Init;
-float *soil_rechr_Init;
-float *Sd_Init;
-float *gw_Init;
-float *SWE_Init;
+double *cum_soil_gw;
+double *cum_Sd_gw;
+double *cum_gw_flow;
+double *cum_hru_condense;
+double *cum_Sd_evap;
+double *soil_moist_Init;
+double *soil_rechr_Init;
+double *Sd_Init;
+double *gw_Init;
+double *SWE_Init;
 
-float *snowinfil_buf;
-float *runoff_buf;
-float *meltrunoff_buf;
-float *hru_evap_buf;
+double *snowinfil_buf;
+double *runoff_buf;
+double *meltrunoff_buf;
+double *hru_evap_buf;
 
 // declared parameters
-const float *Sdmax;
-const float *Sdinit;
-const float *gw_max;
-const float *gw_init;
-const float *gw_K;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *soil_rechr_max;
-const float *soil_rechr_init;
-const float *soil_moist_max;
-const float *soil_moist_init;
-const float *soil_gw_K;
-const float *rechr_ssr_K;
-const float *lower_ssr_K;
-const float *Sd_ssr_K;
-const float *Sd_gw_K;
-const float *channel_slope;
-const float *side_slope;
-const float *culvert_diam;
-const float *culvert_water_Dmax;
-const float *number_culverts;
+const double *Sdmax;
+const double *Sdinit;
+const double *gw_max;
+const double *gw_init;
+const double *gw_K;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *soil_rechr_max;
+const double *soil_rechr_init;
+const double *soil_moist_max;
+const double *soil_moist_init;
+const double *soil_gw_K;
+const double *rechr_ssr_K;
+const double *lower_ssr_K;
+const double *Sd_ssr_K;
+const double *Sd_gw_K;
+const double *channel_slope;
+const double *side_slope;
+const double *culvert_diam;
+const double *culvert_water_Dmax;
+const double *number_culverts;
 
-const float *weir_crest;
-const float *weir_coefficient;
-const float *weir_mult;
-const float *weir_b;
-const float *lake_mult;
-const float *lake_power;
-const float *lake_p;
-const float *lake_S;
-const float *runoff_stream;
-const float *stream_runoff;
-const float *stream_Sd;
-const float *Wetlands_scaling_factor;    // temporary modification
+const double *weir_crest;
+const double *weir_coefficient;
+const double *weir_mult;
+const double *weir_b;
+const double *lake_mult;
+const double *lake_power;
+const double *lake_p;
+const double *lake_S;
+const double *runoff_stream;
+const double *stream_runoff;
+const double *stream_Sd;
+const double *Wetlands_scaling_factor;    // temporary modification
 
 const long *culvert_type;
 const long *cov_type;
@@ -129,16 +129,16 @@ const long *soil_withdrawal;
 const long **soil_withdrawal_Tables;
 
 // variable inputs
-const float *infil;
-const float *snowinfil;
-const float *meltrunoff; // frozen melt runoff
-const float *runoff;     // liquid runoff
-const float *hru_evap;
-const float *SD;
+const double *infil;
+const double *snowinfil;
+const double *meltrunoff; // frozen melt runoff
+const double *runoff;     // liquid runoff
+const double *hru_evap;
+const double *SD;
 
 // variable put inputs
-float *hru_actet;      // [nhru]
-float *hru_cum_actet;
+double *hru_actet;      // [nhru]
+double *hru_cum_actet;
 
 
 // local allocated arrays

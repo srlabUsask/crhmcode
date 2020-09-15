@@ -96,11 +96,11 @@ void ClassICEflow::init(void) {
 
 void ClassICEflow::run(void) {
 
-  const float ice_dens = 917;
-  const float g = 9.81;
-  const float n_Glen = 3;  // Glen's flow parameter
-  const float alpha = M_PI/180.0;  // degrees to radians
-  const float water_dens = 1000;  // kg/m^3
+  const double ice_dens = 917;
+  const double g = 9.81;
+  const double n_Glen = 3;  // Glen's flow parameter
+  const double alpha = M_PI/180.0;  // degrees to radians
+  const double water_dens = 1000;  // kg/m^3
 
   long nstep = getstep()% Global::Freq;
 
@@ -131,18 +131,18 @@ void ClassICEflow::run(void) {
         if(test_option[hh] >= 0.0) // use user value for ice flow
           Utot[hh] = test_option[hh];
         else{
-          float ICE = ice[hh] + firn[hh];
+          double ICE = ice[hh] + firn[hh];
           if(channel_option[hh] == 0) // channel flow
             Ux[hh] = 2*Arrhenius_const[hh]*pow(slip_sf[hh]*ice_dens*g*sin(hru_GSL[hh]*alpha), n_Glen)*pow(radius_glacier[hh], n_Glen+1)/(n_Glen+2);
           else // by default slab flow
             Ux[hh] = 2*Arrhenius_const[hh]*pow(ice_dens*g*sin(hru_GSL[hh]*alpha), n_Glen)*pow(ICE/ice_dens, n_Glen+1)/(n_Glen+2);
 
-	        float ice_thickness = ICE/ice_dens; //ICE is in mm water equivalent, and ice_dens is in kg/m3, therefore, ice_thickness is in m
-          float Iw = ice_dens*g*ice_thickness;
-          float tau_b = slip_sf[hh]*ice_dens*g*ice_thickness*sin(hru_GSL[hh]*alpha);
+	        double ice_thickness = ICE/ice_dens; //ICE is in mm water equivalent, and ice_dens is in kg/m3, therefore, ice_thickness is in m
+          double Iw = ice_dens*g*ice_thickness;
+          double tau_b = slip_sf[hh]*ice_dens*g*ice_thickness*sin(hru_GSL[hh]*alpha);
 
           if(basal_option[hh] == 1){
-            float Pw = water_dens*g*cumulative_net_rain[hh]/1000.0; // (mm) > (m)
+            double Pw = water_dens*g*cumulative_net_rain[hh]/1000.0; // (mm) > (m)
             Ub[hh] = slip_c[hh]*pow(tau_b, slip_m[hh])/(Iw - Pw);
           }
           else{ // by default option 2
@@ -157,7 +157,7 @@ void ClassICEflow::run(void) {
           for(long To = 0; chkStruct(To); ++To) { // distribute ice outflow of HRU
 
             if(hh != To && Utot[hh] > 0.0 && distrib_hru[hh][To] > 0.0){
-              float Amount = Utot[hh]*distrib_hru[hh][To];
+              double Amount = Utot[hh]*distrib_hru[hh][To];
               Ice_out[hh] = Amount;
               cumIce_out[hh] += Amount;
               ice[hh] -= Amount;

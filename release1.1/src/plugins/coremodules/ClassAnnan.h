@@ -5,38 +5,38 @@
 class ClassAnnan : public ClassModule {
 public:
 
-  float QsiDT, TauAT;
+  double QsiDT, TauAT;
 
   ClassAnnan(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observation variables
-//const float *SunAct;
+//const double *SunAct;
 
 // declared variables
-float *hru_SunAct;
-float *QsiA_Var;
-float *QsiD_Var;
-float *QsiS_Var;
+double *hru_SunAct;
+double *QsiA_Var;
+double *QsiD_Var;
+double *QsiS_Var;
 
 // declared parameters
-const float *krs;
-const float *hru_elev;
+const double *krs;
+const double *hru_elev;
 
 // declared observations
-float *QsiA;
-float *QsiD;
-float *QsiS;
+double *QsiA;
+double *QsiD;
+double *QsiS;
 
 // variable inputs
-const float *QdflatE;
-const float *QdflatD;
-const float *QdroDext;
-const float *Qdro;
-const float *Qdfo;
-const float *QdfoD;
-const float *SunMax;
-const float *hru_tmax;
-const float *hru_tmin;
+const double *QdflatE;
+const double *QdflatD;
+const double *QdroDext;
+const double *Qdro;
+const double *Qdfo;
+const double *QdfoD;
+const double *SunMax;
+const double *hru_tmax;
+const double *hru_tmin;
 
 void decl(void);
 void init(void);

@@ -108,8 +108,8 @@ void ClassSimpleRichard::init(void) {
 void ClassSimpleRichard::run(void) { // executed every interval
 
     for (hh = 0; chkStruct(); ++hh) {
-        float Q1 = (rh[hh]/100.)*Common::Qs(Pa[hh], t[hh]); // Specific humidity (kg/kg)
-        float U1 = max<float> (u[hh], 1.0e-3);    // Wind speed (m/s)
+        double Q1 = (rh[hh]/100.)*Common::Qs(Pa[hh], t[hh]); // Specific humidity (kg/kg)
+        double U1 = max<double> (u[hh], 1.0e-3);    // Wind speed (m/s)
         SURF(hh, Q1, U1);
         U1 = 0;
     }
@@ -118,7 +118,7 @@ void ClassSimpleRichard::run(void) { // executed every interval
 
 // Calculate surface exchange coefficient, Richardson number formulation
 
-      void ClassSimpleRichard::EXCH(long hh, float Q1, float U1, float &CH) {
+      void ClassSimpleRichard::EXCH(long hh, double Q1, double U1, double &CH) {
 
 // Q1         ! Specific humidity (kg/kg)
 // T0         ! Surface temperature (C)
@@ -131,7 +131,7 @@ void ClassSimpleRichard::run(void) { // executed every interval
 // CH         ! Scalar exchange coefficient
 // Local variables
 
-  float CHn        // Neutral exchange coefficient
+  double CHn        // Neutral exchange coefficient
        ,RiB        // Bulk Richardson number
        ,fh         // Stability function
        ,fz         // Stability function
@@ -174,7 +174,7 @@ void ClassSimpleRichard::ALBEDO(long hh){
 
 // Surface energy balance and temperature
 
-void ClassSimpleRichard::SURF(long hh, float Q1, float U1) {
+void ClassSimpleRichard::SURF(long hh, double Q1, double U1) {
 // Arguments IN
 // LW         ! Longwave radiation (W/m^2)
 // Pa         ! Surface pressure (KPa)
@@ -199,14 +199,14 @@ void ClassSimpleRichard::SURF(long hh, float Q1, float U1) {
 // T0         ! Surface temperature (C)
 
 // Local variables
-  float A1;         // Penman-Monteith radiative term
-  float Ch;         // Surface exchange coefficient
-  float dQ1;        // Air humidity deficit
-  float D;          // dQs/dT
-  float R1;         // Net radiation for T0=t
-  float rho;        // Air density (kg/m^3)
-  float rKh;        // rho*Ch*U1
-  float rKPM;       // Penman-Monteith exchange term
+  double A1;         // Penman-Monteith radiative term
+  double Ch;         // Surface exchange coefficient
+  double dQ1;        // Air humidity deficit
+  double D;          // dQs/dT
+  double R1;         // Net radiation for T0=t
+  double rho;        // Air density (kg/m^3)
+  double rKh;        // rho*Ch*U1
+  double rKPM;       // Penman-Monteith exchange term
 
   EXCH(hh, Q1, U1, Ch);
 
@@ -252,7 +252,7 @@ void ClassSimpleRichard::SURF(long hh, float Q1, float U1) {
 
   SWE[hh] -= (snowmelt[hh] + sursubl[hh]);
 
-  SWE[hh] = max<float> (SWE[hh], 0.0);
+  SWE[hh] = max<double> (SWE[hh], 0.0);
 
   ALBEDO(hh);
 }

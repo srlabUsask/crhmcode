@@ -13,48 +13,48 @@ long soil_runoffDiv;
 long soil_gwDiv;
 
 // declared variables
-float *inflow;           // [nhru]
-float *cuminflow;        // [nhru]
-float *outflow;          // [nhru]
-float *outflow_diverted; // [nhru]
-float *cumoutflow_diverted; // [nhru]
-float *cumoutflow;       // [nhru]
-float *cumscaling_boost; // [nhru]
-float *gwinflow;         // [nhru]
-float *gwoutflow_diverted; // [nhru]
-float *gwcumoutflow_diverted; // [nhru]
-float *HRU_cumbasinflow; // [nhru]
+double *inflow;           // [nhru]
+double *cuminflow;        // [nhru]
+double *outflow;          // [nhru]
+double *outflow_diverted; // [nhru]
+double *cumoutflow_diverted; // [nhru]
+double *cumoutflow;       // [nhru]
+double *cumscaling_boost; // [nhru]
+double *gwinflow;         // [nhru]
+double *gwoutflow_diverted; // [nhru]
+double *gwcumoutflow_diverted; // [nhru]
+double *HRU_cumbasinflow; // [nhru]
 
-float *ssrinflow;        // [nhru]
-float *ssrcuminflow;     // [nhru]
-float *ssroutflow;       // [nhru]
-float *ssrcumoutflow;    // [nhru]
+double *ssrinflow;        // [nhru]
+double *ssrcuminflow;     // [nhru]
+double *ssroutflow;       // [nhru]
+double *ssrcumoutflow;    // [nhru]
 
-float *runinflow;        // [nhru]
-float *runcuminflow;     // [nhru]
-float *runoutflow;       // [nhru]
-float *runcumoutflow;    // [nhru]
+double *runinflow;        // [nhru]
+double *runcuminflow;     // [nhru]
+double *runoutflow;       // [nhru]
+double *runcumoutflow;    // [nhru]
 
-float *gwoutflow;       // [nhru]
-float *gwcuminflow;    // [nhru]
-float *gwcumoutflow;    // [nhru]
+double *gwoutflow;       // [nhru]
+double *gwcuminflow;    // [nhru]
+double *gwcumoutflow;    // [nhru]
 
-float *basinflow;     // [BASIN] all HRUs
-float *basinflow_s;   // [BASIN] all HRUs
-float *cumbasinflow;  // [BASIN] all HRUs
-float *basingw;       // [BASIN} all HRUs
-float *basingw_s;     // [BASIN} all HRUs
-float *cumbasingw;    // [BASIN} all HRUs
+double *basinflow;     // [BASIN] all HRUs
+double *basinflow_s;   // [BASIN] all HRUs
+double *cumbasinflow;  // [BASIN] all HRUs
+double *basingw;       // [BASIN} all HRUs
+double *basingw_s;     // [BASIN} all HRUs
+double *cumbasingw;    // [BASIN} all HRUs
 
-float *soil_ssr_Buf;    // buffered
-float *soil_runoff_Buf; // buffered
-float *soil_gw_Buf;     // buffered
+double *soil_ssr_Buf;    // buffered
+double *soil_runoff_Buf; // buffered
+double *soil_gw_Buf;     // buffered
 
-float *cum_to_Sd;         // [nhru]
-float *cum_to_soil_rechr; // [nhru]
+double *cum_to_Sd;         // [nhru]
+double *cum_to_soil_rechr; // [nhru]
 
-float *distrib_sum;
-float *cum_preferential_flow_to_gw;
+double *distrib_sum;
+double *cum_preferential_flow_to_gw;
 
 ClassClark *hruDelay;
 ClassClark *ssrDelay;
@@ -62,41 +62,41 @@ ClassClark *runDelay;
 ClassClark *gwDelay;
 
 // declared parameters
-const float *Kstorage;         // [nhru]
-const float *Lag;              // [nhru]
-const float *ssrKstorage;      // [nhru]
-const float *ssrLag;           // [nhru]
-const float *runKstorage;      // [nhru]
-const float *runLag;           // [nhru]
-const float *gwKstorage;       // [nhru]
-const float *gwLag;            // [nhru]
+const double *Kstorage;         // [nhru]
+const double *Lag;              // [nhru]
+const double *ssrKstorage;      // [nhru]
+const double *ssrLag;           // [nhru]
+const double *runKstorage;      // [nhru]
+const double *runLag;           // [nhru]
+const double *gwKstorage;       // [nhru]
+const double *gwLag;            // [nhru]
 const long  *gwwhereto;        // [nhru]
 
-const float *basin_area;        // [BASIN]
-const float *hru_area;          // [nhru]
-const float *distrib;
-const float **distrib_hru;
-const float *distrib_Basin;
-const float *Sdmax;             // [nhru]
-const float *soil_rechr_max;    // [nhru]
+const double *basin_area;        // [BASIN]
+const double *hru_area;          // [nhru]
+const double *distrib;
+const double **distrib_hru;
+const double *distrib_Basin;
+const double *Sdmax;             // [nhru]
+const double *soil_rechr_max;    // [nhru]
 const long  *Sd_ByPass;         // [nhru]
 const long  *soil_rechr_ByPass; // [nhru]
 const long  *order; // [nhru]
 const long  *preferential_flow; // [nhru]
 
-const float *scaling_factor;    // temporary modification
+const double *scaling_factor;    // temporary modification
 
 // variable inputs
-const float *soil_gw;   // [nhru]
-const float *soil_ssr;    // [nhru]
-const float *soil_runoff; // [nhru]
+const double *soil_gw;   // [nhru]
+const double *soil_ssr;    // [nhru]
+const double *soil_runoff; // [nhru]
 
 // variable puts
-float *Sd;
-float *soil_moist;
-float *soil_rechr;
-float *redirected_residual;
-float *gw;
+double *Sd;
+double *soil_moist;
+double *soil_rechr;
+double *redirected_residual;
+double *gw;
 
 // local allocated arrays
 
@@ -104,8 +104,8 @@ void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
-virtual float Function1(float *I, long hh);
-virtual float Function2(float *X, long hh);
+virtual double Function1(double *I, long hh);
+virtual double Function2(double *X, long hh);
 
 ClassNetroute_D* klone(string name) const;
 };

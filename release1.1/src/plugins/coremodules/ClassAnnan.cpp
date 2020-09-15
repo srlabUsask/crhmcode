@@ -64,7 +64,7 @@ void ClassAnnan::init(void) {
 
 void ClassAnnan::run(void) {
 
-  float QsiAT, QsiST;
+  double QsiAT, QsiST;
 
   for (hh = 0; chkStruct(); ++hh){
     long nstep = getstep() % Global::Freq;
@@ -91,8 +91,8 @@ void ClassAnnan::run(void) {
       }
     }
 
-    float Ratio;
-    float Temp =  QsiDT*WtoMJ_D - QdfoD[hh]; // observed direct incoming  - QdfoD[hh]
+    double Ratio;
+    double Temp =  QsiDT*WtoMJ_D - QdfoD[hh]; // observed direct incoming  - QdfoD[hh]
     if(Temp <= 0.0 || QdflatD[hh] - QdfoD[hh] <= 0.0)
       Ratio = 0.0;
     else{

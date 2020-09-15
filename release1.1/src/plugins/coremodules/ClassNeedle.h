@@ -8,76 +8,76 @@ class ClassNeedle : public ClassModule {
 
     ClassNeedle(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
-    float Qli_;
+    double Qli_;
 
-    float Qsi_;
+    double Qsi_;
 
 // declared observations
 
-    float *Ts;
+    double *Ts;
 
-    float *Qnsn;
+    double *Qnsn;
 
-    float *Qsisn;
+    double *Qsisn;
 
-    float *Qlisn;
+    double *Qlisn;
 
-    float *Qlosn;
+    double *Qlosn;
 
 // declared observation variables
 
-    const float *Qsi;
+    const double *Qsi;
 
-    const float *Qli;
+    const double *Qli;
 
-    const float *QsiA_Var;
+    const double *QsiA_Var;
 
-    const float *QsiS_Var;
+    const double *QsiS_Var;
 
-    const float *QliVt_Var;
+    const double *QliVt_Var;
 
 // declared variables
 
-   float *Pa;
+   double *Pa;
 
-   float *k;
+   double *k;
 
-   float *Tauc;
+   double *Tauc;
 
-   float *ra;
+   double *ra;
 
-   float *Qnsn_Var;
+   double *Qnsn_Var;
 
 // declared parameters
 
-   const float *LAI;
+   const double *LAI;
 
-   const float *Ht;
+   const double *Ht;
 
-   const float *Zwind;
+   const double *Zwind;
 
-   const float *Zref;
+   const double *Zref;
 
-   const float *hru_elev;
+   const double *hru_elev;
 
-   const float *Z0snow; // snow roughness length (m)
+   const double *Z0snow; // snow roughness length (m)
 
 
 // variable inputs
 
-    const float *beta;
+    const double *beta;
 
-    const float *SWE;
+    const double *SWE;
 
-    const float *Albedo;
+    const double *Albedo;
 
-    const float *hru_t;
+    const double *hru_t;
 
-    const float *hru_u;
+    const double *hru_u;
 
-    const float *hru_ea;
+    const double *hru_ea;
 
-    const float *hru_rh;
+    const double *hru_rh;
 
 
     void decl(void);

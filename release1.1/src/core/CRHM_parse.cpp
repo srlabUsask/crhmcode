@@ -69,7 +69,7 @@ VarCHRM & VarCHRM::operator=(const VarCHRM & Cl) {
 	return *this;
 }
 
-void VarCHRM::put(float val_) {
+void VarCHRM::put(double val_) {
 
 	switch (kind) {
 	case LOCAL:
@@ -99,7 +99,7 @@ void VarCHRM::put(float val_) {
 	// NOP falls through
 }
 
-float VarCHRM::get(void) {
+double VarCHRM::get(void) {
 	switch (kind) {
 	case LOCAL:
 		return val;

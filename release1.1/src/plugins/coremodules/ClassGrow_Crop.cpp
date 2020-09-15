@@ -53,9 +53,9 @@ void ClassGrow_Crop::run(void) {
     JULIAN = julian("now");
     for(hh = 0; chkStruct(); ++hh) {
       if(JULIAN >= JCrop_Start[hh] && JULIAN < JCrop_Mature[hh] && Crop_Grow_Rate[hh] > 0.0)
-        const_cast<float*> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate[hh];
+        const_cast<double*> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate[hh];
       else if(JULIAN == JCrop_Harvest[hh])
-        const_cast<float*> (Ht)[hh] = Init_Crop_Ht[hh];
+        const_cast<double*> (Ht)[hh] = Init_Crop_Ht[hh];
 
       Crop_Ht[hh] = Ht[hh];
     }

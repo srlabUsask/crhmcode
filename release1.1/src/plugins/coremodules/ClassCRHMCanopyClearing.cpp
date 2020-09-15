@@ -212,7 +212,7 @@ void ClassCRHMCanopyClearing::init(void) {
 
 void ClassCRHMCanopyClearing::run(void) {
 
-  float Kstar_H;
+  double Kstar_H;
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -251,19 +251,19 @@ void ClassCRHMCanopyClearing::run(void) {
     Subl_Cpy[hh] = 0.0;
 
 // Canopy temperature is approximated by the air temperature.
-    float T1 = hru_t[hh] + CRHM_constants::Tm;
+    double T1 = hru_t[hh] + CRHM_constants::Tm;
 
     if(CanopyClearing[hh] == 0){
 
-      float Exposure = Ht[hh] - Common::DepthofSnow(SWE[hh]); /* depths(m) SWE(mm) */
+      double Exposure = Ht[hh] - Common::DepthofSnow(SWE[hh]); /* depths(m) SWE(mm) */
       if(Exposure < 0.0)
         Exposure = 0.0;
 
-      float LAI_ = LAI[hh]*Exposure/Ht[hh];
+      double LAI_ = LAI[hh]*Exposure/Ht[hh];
 
-      float Vf = 0.45 - 0.29*log(LAI[hh]);
+      double Vf = 0.45 - 0.29*log(LAI[hh]);
 
-      float Vf_ = Vf + (1.0 - Vf)*sin((Ht[hh] - Exposure)/Ht[hh]*M_PI_2);
+      double Vf_ = Vf + (1.0 - Vf)*sin((Ht[hh] - Exposure)/Ht[hh]*M_PI_2);
 
       if(SolAng[hh] > 0.001) {
         k[hh] = 1.081*SolAng[hh]*cos(SolAng[hh])/sin(SolAng[hh]);
@@ -296,15 +296,15 @@ void ClassCRHMCanopyClearing::run(void) {
     }
 
 
-    float rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
+    double rho = Pa[hh]*1000/(CRHM_constants::Rgas*T1);
 
-    float U1 = hru_u[hh]; // Wind speed (m/s)
+    double U1 = hru_u[hh]; // Wind speed (m/s)
 
     ra[hh] = (log(Zref[hh]/Z0snow[hh])*log(Zwind[hh]/Z0snow[hh]))/sqr(CRHM_constants::kappa)/U1;
 
-    float deltaX = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
+    double deltaX = 0.622*CRHM_constants::Ls*Common::Qs(Pa[hh], T1)/(CRHM_constants::Rgas*sqr(T1));
 
-    float q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
+    double q = (hru_rh[hh]/100)*Common::Qs(Pa[hh], T1); // specific humidity (kg/kg)
 
 
     Ts[hh] = T1 + (CRHM_constants::emiss*(Qli_ - CRHM_constants::sbc*pow(T1, 4.0f)) + CRHM_constants::Ls*(q - Common::Qs(Pa[hh], T1))*rho/ra[hh])/
@@ -330,8 +330,8 @@ void ClassCRHMCanopyClearing::run(void) {
       if(Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0){ // handle snow interception
 
         if(Sbar[hh] >= 0.0){
-          float RhoS = 67.92 + 51.25* exp(hru_t[hh]/2.59);
-          float LStar = Sbar[hh]* (0.27 + 46.0/RhoS)* LAI[hh];
+          double RhoS = 67.92 + 51.25* exp(hru_t[hh]/2.59);
+          double LStar = Sbar[hh]* (0.27 + 46.0/RhoS)* LAI[hh];
 
           if(Snow_load[hh] > LStar){ // after increase in temperature
             direct_snow[hh] = Snow_load[hh] - LStar;
@@ -368,33 +368,33 @@ void ClassCRHMCanopyClearing::run(void) {
   // calculate snow ventilation windspeed:
 
   //=============================================================================
-          const float gamma = 1.15;
-          const float AlbedoIce = 0.8;       // albedo of ideal ice sphere
-          const float Radius = 5.0e-4;       // radii of single 'ideal' ice sphere in, m)
-          const float KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
-          const float ks = 0.0114;           // snow shape coefficient for jack pine
-          const float Fract = 0.37;          // fractal dimension of intercepted snow
-          const float ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
-          const float Hs = 2.838e6;          // heat of sublimation (MJ/kg)
+          const double gamma = 1.15;
+          const double AlbedoIce = 0.8;       // albedo of ideal ice sphere
+          const double Radius = 5.0e-4;       // radii of single 'ideal' ice sphere in, m)
+          const double KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
+          const double ks = 0.0114;           // snow shape coefficient for jack pine
+          const double Fract = 0.37;          // fractal dimension of intercepted snow
+          const double ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
+          const double Hs = 2.838e6;          // heat of sublimation (MJ/kg)
   //==============================================================================
 
-          float xi2 = 1-Zvent[hh];
-          float windExt2 = (gamma * LAI[hh] * xi2);
+          double xi2 = 1-Zvent[hh];
+          double windExt2 = (gamma * LAI[hh] * xi2);
 
-          float uVent = u_FHt[hh] * exp(-1 * windExt2);
+          double uVent = u_FHt[hh] * exp(-1 * windExt2);
 
 
   // calculate sublimation of intercepted snow from ideal intercepted ice sphere (500 microns diameter):
 
-          float Alpha, A1, B1, C1, J, D, Lamb, Mpm, Nu, Nr, SStar, Sigma2;
+          double Alpha, A1, B1, C1, J, D, Lamb, Mpm, Nu, Nr, SStar, Sigma2;
 
-          float Es = 611.15f * exp(22.452f*hru_t[hh]/(hru_t[hh] + 273.0f));  // {sat pressure}
+          double Es = 611.15f * exp(22.452f*hru_t[hh]/(hru_t[hh] + 273.0f));  // {sat pressure}
 
-          float SvDens = Es*PBSM_constants::M/(PBSM_constants::R*(hru_t[hh] + 273.0f)); // {sat density}
+          double SvDens = Es*PBSM_constants::M/(PBSM_constants::R*(hru_t[hh] + 273.0f)); // {sat density}
 
           Lamb = 6.3e-4*(hru_t[hh]+273.0) + 0.0673;  // thermal conductivity of atmosphere
           Nr = 2.0 * Radius * uVent / KinVisc;  // Reynolds number
-          Nu = 1.79 + 0.606 * sqrt((float) Nr); // Nusselt number
+          Nu = 1.79 + 0.606 * sqrt((double) Nr); // Nusselt number
           SStar = M_PI * sqr(Radius) * (1.0f - AlbedoIce) * Qsi_;  // SW to snow particle !!!! changed
           A1 = Lamb * (hru_t[hh] + 273) * Nu;
           B1 = Hs * PBSM_constants::M /(PBSM_constants::R * (hru_t[hh] + 273.0f))- 1.0;
@@ -408,11 +408,11 @@ void ClassCRHMCanopyClearing::run(void) {
 
   // sublimation rate of single 'ideal' ice sphere:
 
-          float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+          double Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
 
   // snow exposure coefficient (Ce):
 
-          float Ce;
+          double Ce;
           if ((Snow_load[hh]/LStar) <= 0.0)
             Ce = 0.07;
           else
@@ -420,7 +420,7 @@ void ClassCRHMCanopyClearing::run(void) {
 
   // calculate 'potential' canopy sublimation:
 
-          float Vi = Vs*Ce;
+          double Vi = Vs*Ce;
 
   // limit sublimation to canopy snow available and take sublimated snow away from canopy snow at timestep start
 
@@ -437,10 +437,10 @@ void ClassCRHMCanopyClearing::run(void) {
 
   // calculate 'ice-bulb' temperature of intercepted snow:
 
-          float IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
-          float Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
+          double IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
+          double Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
 
-          const float c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
+          const double c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
 
   // determine whether canopy snow is unloaded:
 
@@ -491,7 +491,7 @@ void ClassCRHMCanopyClearing::run(void) {
       if(Cc[hh] <= 0.0)
         Cc[hh] = 0.0;
 
-      float smax = Cc[hh]*LAI[hh]*0.2;
+      double smax = Cc[hh]*LAI[hh]*0.2;
 
 //  Forest rain interception and evaporation model
 // 'sparse' Rutter interception model (i.e. Valente 1997):
@@ -527,7 +527,7 @@ void ClassCRHMCanopyClearing::run(void) {
           }
         }
         else{ // use Priestley-Taylor when snowcover
-          float Q = Qsi_*86400/Global::Freq/1e6/lambda(hru_t[hh]); // convert w/m2 to mm/m2/int
+          double Q = Qsi_*86400/Global::Freq/1e6/lambda(hru_t[hh]); // convert w/m2 to mm/m2/int
 
           if(Qsi_ > 0.0)
            Pevap[hh] = 1.26*delta(hru_t[hh])*Q/(delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh]));
@@ -572,7 +572,7 @@ void ClassCRHMCanopyClearing::finish(bool good) {
   }
 }
 
-double ClassCRHMCanopyClearing::delta(float t) // Slope of sat vap p vs t, kPa/째C
+double ClassCRHMCanopyClearing::delta(double t) // Slope of sat vap p vs t, kPa/째C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -580,18 +580,18 @@ double ClassCRHMCanopyClearing::delta(float t) // Slope of sat vap p vs t, kPa/�
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-float ClassCRHMCanopyClearing::lambda(float t) // Latent heat of vaporization (mJ/(kg 째C))
+double ClassCRHMCanopyClearing::lambda(double t) // Latent heat of vaporization (mJ/(kg 째C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassCRHMCanopyClearing::gamma(float Pa, float t) // Psychrometric constant (kPa/째C)
+double ClassCRHMCanopyClearing::gamma(double Pa, double t) // Psychrometric constant (kPa/째C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg 째C))
 }
 
-float ClassCRHMCanopyClearing::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
+double ClassCRHMCanopyClearing::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
-  const float R = 2870;
+  const double R = 2870;
    return (1E4*Pa /(R*( 273.15 + t))*(1.0 - 0.379*(ea/Pa)) ); //
 }

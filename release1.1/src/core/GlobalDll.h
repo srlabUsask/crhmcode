@@ -102,14 +102,14 @@ public:
 											  //static HWND crhmMain;
 											  //static HWND crhmLog;
 
-	static float * lapse_rate; // used for array observations adjustments
-	static float * ppt_adj; // used for array observations adjustments
-	static float * hru_elev; // used for array observations adjustments
-	static float * obs_elev;
-	static float ** OBS_ELEV; // used for array observations adjustments
+	static double * lapse_rate; // used for array observations adjustments
+	static double * ppt_adj; // used for array observations adjustments
+	static double * hru_elev; // used for array observations adjustments
+	static double * obs_elev;
+	static double ** OBS_ELEV; // used for array observations adjustments
 
-	static float * Warming_t; // used for climate warming
-	static float * Warming_p; // used for climate warming
+	static double * Warming_t; // used for climate warming
+	static double * Warming_p; // used for climate warming
 	static long  * RH_VP_flag; // used for elevation change. -> 0 maintain rh, 1 -> maintain ea
 	static long  * RH_VP_flag2; // used for climate warming. -> 0 maintain rh, 1 -> maintain ea
 	static long   RH_EA_flag; // used for climate warming
@@ -119,34 +119,34 @@ public:
 
 	static long  ** HRU_OBS; // used for array observations
 	static long  ** HRU_OBS_DIRECT; // used for array observations
-	static float ** obs_t; // used for array observations adjustments
-	static float ** obs_ea; // used for array observations adjustments
-	static float ** obs_rh; // used for array observations adjustments
-	static float ** obs_t_obs; // used for array observations adjustments
+	static double ** obs_t; // used for array observations adjustments
+	static double ** obs_ea; // used for array observations adjustments
+	static double ** obs_rh; // used for array observations adjustments
+	static double ** obs_t_obs; // used for array observations adjustments
 
 	static TObject *thisVar;
 
 
 	//manishankar. this is used for resolving the address related issue.
-	//static float** t_layvalues;
-	//static float** rh_layvalues;
+	//static double** t_layvalues;
+	//static double** rh_layvalues;
 };
 
 
 //Mani added this from TStringList.
 
-string static FloatToStrF(float value, string format, int precision, int digits) {
+string static FloatToStrF(double value, string format, int precision, int digits) {
 	stringstream stream;
 
-	//float minVal = 3000.14159265359;
+	//double minVal = 3000.14159265359;
 
 	if (strcmp(format.c_str(), "ffFixed"))
 		format = "fixed";
 	stream << format << setprecision(precision) << value;
 	return stream.str();
 };
-
-string static FloatToStrF(float X, TFloatFormat Format, int Prec, int Digits) {
+/** removed function overload due to Float to Double conversion jhs507
+string static FloatToStrF(double X, TFloatFormat Format, int Prec, int Digits) {
 	ostringstream temp;
 	if (Format == ffFixed) {
 		temp.precision(Prec);
@@ -160,7 +160,7 @@ string static FloatToStrF(float X, TFloatFormat Format, int Prec, int Digits) {
 	}
 	return temp.str();
 }
-
+**/
 string static FloatToStrF(double X, TFloatFormat Format, int Prec, int Digits) {
 	ostringstream temp;
 	if (Format == ffFixed) {
@@ -281,9 +281,9 @@ string static FormatString(double DT, string) {
 
 
 //taken from NewModules.cpp file.
-static float SWEfromDepth(float Snow_Depth) { // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
+static double SWEfromDepth(double Snow_Depth) { // 3/5/98 Calculates SWE(mm) from Snow Depth(m)
 
-	float SWE;
+	double SWE;
 
 	if (Snow_Depth > 0.6)
 		SWE = 4.5608 * Snow_Depth * 100.0 - 128.06;
@@ -297,7 +297,7 @@ static float SWEfromDepth(float Snow_Depth) { // 3/5/98 Calculates SWE(mm) from 
 
 
 //taken from NewModules.cpp file.
-static void infil_index(float Theta, float SWE, float& Index, float& Pot) {
+static void infil_index(double Theta, double SWE, double& Index, double& Pot) {
 
 	Pot = 5 * (1 - Theta) * pow(SWE, 0.584f);
 	Index = Pot / SWE;
@@ -306,7 +306,7 @@ static void infil_index(float Theta, float SWE, float& Index, float& Pot) {
 }
 
 
-static float soilproperties[][9] = {
+static double soilproperties[][9] = {
   { 0.0,  999.9, 0.000, 0.00, 1.100,  1.000,	0.000,	0.0,  4},  //      0  water
   { 49.5, 117.8, 0.020, 0.10, 0.437,  0.395,	0.121,	4.05, 1},  //      1  sand
   { 61.3,  29.9, 0.036, 0.16, 0.437,  0.41 ,	0.09,	4.38, 4},  //      2  loamsand
@@ -322,7 +322,7 @@ static float soilproperties[][9] = {
   {  0.0,   0.0, 0.000, 0.00, 0.000,  0.000,	0.0,	 0.0, 4}   //      12 pavement. Values not used
 };
 
-static float SetSoilproperties[][4] = {
+static double SetSoilproperties[][4] = {
 	//  avail       wilt    field   pore
 	  {1000.0,	  0.0, 1000.0,  1000.0},          //      0  water
 	  {  84.0,	 40.0,	124.0,  395.0 },	  //      1  sand
@@ -340,12 +340,12 @@ static float SetSoilproperties[][4] = {
 };
 
 //taken from NewModules.cpp file.
-static void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probability, float & Threshold,
-                             long Snow, float & SnowAge, long & DrySnow){
+static void ProbabilityThresholdNew(double SWE, double t, double Uten_Prob, double & Probability, double & Threshold,
+                             long Snow, double & SnowAge, long & DrySnow){
 
 //Probability of blowing snow occurrence and threshold wind speeds determined by ambient air temperature and snow age
 
-   float Wind, Mean, Variance, c;
+   double Wind, Mean, Variance, c;
 
         Wind = 0.0;
         Probability = 0.0;
@@ -363,7 +363,7 @@ static void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float &
         SnowAge = 24.0/Global::Freq;
 
         Mean = 0.365 * t + 0.00706 * sqr(t)
-              + 0.91 * log((float)SnowAge) + 11.0;
+              + 0.91 * log((double)SnowAge) + 11.0;
         Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
 
         while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
@@ -384,7 +384,7 @@ static void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float &
         SnowAge = SnowAge + 24.0/Global::Freq;
 
         Mean = 0.365 * t + 0.00706 * sqr(t)
-              + 0.91 * log((float)SnowAge) + 11.0;
+              + 0.91 * log((double)SnowAge) + 11.0;
         Variance = 0.145 * t + 0.00196 * sqr(t) + 4.23;
 
         while ((Wind <= Uten_Prob) && (Uten_Prob >= 3.0)) {
@@ -418,7 +418,7 @@ static void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float &
 
 
 //taken from NewModules.cpp file.
-static void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float& DriftH, float& SublH) {
+static void Sum(double TQsalt, double TQsusp, double SBsum, double SBsalt, double& DriftH, double& SublH) {
 
 	// total sublimation
 
@@ -437,8 +437,8 @@ static void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float& Dr
 
 
 //taken from NewModules.cpp file.
-static void Pbsm(float E_StubHt, float Uthr, float& DriftH, float& SublH,
-	float t, float u, float rh, float Fetch, long N_S, float A_S)
+static void Pbsm(double E_StubHt, double Uthr, double& DriftH, double& SublH,
+	double t, double u, double rh, double Fetch, long N_S, double A_S)
 {
 
 	/*   Modified Calculations for Mean Particle Mass in this version
@@ -454,7 +454,7 @@ static void Pbsm(float E_StubHt, float Uthr, float& DriftH, float& SublH,
 		 Fetch and is expressed in millimeters of blowing snow lost over
 		 a square meter of snow surface per half hour  */
 
-	float   A, Alpha, B, Bd, Bound, C,
+	double   A, Alpha, B, Bd, Bound, C,
 		Diff, DmDt, Es, H,
 		Htran, Hsalt, Inc, Lamb, Lambda, Lb,
 		Mpm, Mpr, Nh, Nsalt,
@@ -641,10 +641,10 @@ static void Pbsm(float E_StubHt, float Uthr, float& DriftH, float& SublH,
 } //PBSM procedure}
 
 //taken from NewModules.cpp
-static float Farouki_a(float fract_por) {
+static double Farouki_a(double fract_por) {
 
-	float a = 0.0;
-	float nnew = 0.0;
+	double a = 0.0;
+	double nnew = 0.0;
 
 	while (fabs(fract_por - nnew) > 0.001) {
 		a += (fract_por - nnew) * 0.25;
@@ -656,51 +656,51 @@ static float Farouki_a(float fract_por) {
 
 //Define HMSA constants:
 
-static const float rho_a = 1.2; // (kg/m3) air
-static const float rho_i = 920.0; // (kg/m3) ice
+static const double rho_a = 1.2; // (kg/m3) air
+static const double rho_i = 920.0; // (kg/m3) ice
 
-static const float c_a = 1010.0; // (J/kg/K) air
-static const float c_i = 2120.0; // (J/kg/K) ice
+static const double c_a = 1010.0; // (J/kg/K) air
+static const double c_i = 2120.0; // (J/kg/K) ice
 
-static const float Cv_a = 1212.0; // (J/m3/K) air
-static const float Cv_i = 1950400.0; // (J/m3/K) ice
-static const float Cv_w = 4185000.0; // (J/m3/K) water
+static const double Cv_a = 1212.0; // (J/m3/K) air
+static const double Cv_i = 1950400.0; // (J/m3/K) ice
+static const double Cv_w = 4185000.0; // (J/m3/K) water
 
-static const float lam_a = 0.025; // (W/m/K) air
-static const float lam_i = 2.24;  // (W/m/K) ice
-static const float lam_w = 0.57;  // (W/m/K) water
+static const double lam_a = 0.025; // (W/m/K) air
+static const double lam_i = 2.24;  // (W/m/K) ice
+static const double lam_w = 0.57;  // (W/m/K) water
 
-static const float Rho_Organic = 1300.0; // (kg m-3)
-static const float Rho_Minerals = 2650.0; // (kg m-3)
-static const float Rho_Water = 1000.0; // (kg m-3)
-static const float Rho_Ice = 920.0; // (note: 890.0 on Hayashi's paper) (kg m-3)
-static const float Rho_Snow = 200.0; // (kg m-3)
-static const float Rho_Air = 1.2;  // (kg m-3)
+static const double Rho_Organic = 1300.0; // (kg m-3)
+static const double Rho_Minerals = 2650.0; // (kg m-3)
+static const double Rho_Water = 1000.0; // (kg m-3)
+static const double Rho_Ice = 920.0; // (note: 890.0 on Hayashi's paper) (kg m-3)
+static const double Rho_Snow = 200.0; // (kg m-3)
+static const double Rho_Air = 1.2;  // (kg m-3)
 
 //K_x: heat conductivity
-static const float K_Organic = 0.21;  // W/(m K)  //0.25
-static const float K_Minerals = 2.50;  // W/(m K)  //2.9
-static const float K_Air = 0.025; // W/(m K)
-static const float K_Ice = 2.24;  // W/(m K)
-static const float K_Water = 0.57;  // W/(m K)
+static const double K_Organic = 0.21;  // W/(m K)  //0.25
+static const double K_Minerals = 2.50;  // W/(m K)  //2.9
+static const double K_Air = 0.025; // W/(m K)
+static const double K_Ice = 2.24;  // W/(m K)
+static const double K_Water = 0.57;  // W/(m K)
 
 //HC_x: specific heat capacity
-static const float HC_Minerals = 890.0; //745.1 // J/(kg.K)
-static const float HC_Water = 4185.0; // J/(kg.K)
-static const float HC_Air = 1010.0; // J/(kg.K)
-static const float HC_Organic = 1920.0; // J/(kg.K)
-static const float HC_Ice = 2120.0; // J/(kg.K)
-static const float Water_Ice = 334.0e3; // latent heat for fusion of water (J kg-1)
-static const float Max_Layers = 20;  // maximum layers allowed
+static const double HC_Minerals = 890.0; //745.1 // J/(kg.K)
+static const double HC_Water = 4185.0; // J/(kg.K)
+static const double HC_Air = 1010.0; // J/(kg.K)
+static const double HC_Organic = 1920.0; // J/(kg.K)
+static const double HC_Ice = 2120.0; // J/(kg.K)
+static const double Water_Ice = 334.0e3; // latent heat for fusion of water (J kg-1)
+static const double Max_Layers = 20;  // maximum layers allowed
 
-static const float DEGtoRAD = M_PI / 180.0;
-static const float DEGtoRAD365 = 2 * M_PI / 365.0;
+static const double DEGtoRAD = M_PI / 180.0;
+static const double DEGtoRAD365 = 2 * M_PI / 365.0;
 static const long CalcFreq = 288;
-static const float RADxxMIN = 2.0 * M_PI / CalcFreq;
-static const float MINS_int = 24.0 * 60.0 / CalcFreq;
+static const double RADxxMIN = 2.0 * M_PI / CalcFreq;
+static const double MINS_int = 24.0 * 60.0 / CalcFreq;
 
 
-static float textureproperties[][6] = { // mm/hour
+static double textureproperties[][6] = { // mm/hour
   {7.6, 12.7, 15.2, 17.8, 25.4, 76.2},  // coarse over coarse
   {2.5,  5.1,  7.6, 10.2, 12.7,  15.2}, // medium over medium
   {1.3,  1.8,  2.5,  3.8,  5.1,  6.4},  // medium/fine over fine
@@ -715,18 +715,18 @@ static float textureproperties[][6] = { // mm/hour
 #define M_PI_2 1.57079632679489661923
 #endif
 
-static const float rho_s[] = { 41.1, 75.2, 91.4, 1300.0, 1300.0 }; // (kg/m3) solids
-static const float c_s[] = { 1920.0, 1920.0, 1920.0, 890.0, 890.0 }; // (J/m3/K) solids
-static const float Cv_s[] = { 78912.0, 144384.0, 175392.0, 1157000.0, 1157000.0 }; // (J/m3/K) solids
-static const float lam_s[] = { 0.21, 0.21, 0.21, 2.50, 2.50 };  // (W/m/K) solids
-static const float ks_s[] = { 450.0, 154.0, 13.0, 5.0, 3.0 }; // (m/day)  solids
-static const float por_s[] = { 0.96, 0.9, 0.87, 0.43, 0.43 }; // ()  solids
+static const double rho_s[] = { 41.1, 75.2, 91.4, 1300.0, 1300.0 }; // (kg/m3) solids
+static const double c_s[] = { 1920.0, 1920.0, 1920.0, 890.0, 890.0 }; // (J/m3/K) solids
+static const double Cv_s[] = { 78912.0, 144384.0, 175392.0, 1157000.0, 1157000.0 }; // (J/m3/K) solids
+static const double lam_s[] = { 0.21, 0.21, 0.21, 2.50, 2.50 };  // (W/m/K) solids
+static const double ks_s[] = { 450.0, 154.0, 13.0, 5.0, 3.0 }; // (m/day)  solids
+static const double por_s[] = { 0.96, 0.9, 0.87, 0.43, 0.43 }; // ()  solids
 
 #define Hf  334.4E3    // Latent heat of fusion, J/kg
 #define major 5.0      // threshold for major melt event(5 mm/d)
 
 
-static float fLimit;
+static double fLimit;
 
 #define AH		1.0	// ratio sensible/momentum phi func
 #define AV		1.0	// ratio latent/momentum phi func

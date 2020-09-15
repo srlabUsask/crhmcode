@@ -10,92 +10,92 @@ Classglacier_debris(string Name, string Version = "undefined", CRHM::LMODULE Lvl
 long ObsCnt_Albedo;
 
 // declared observation variables
-const float *Qnsn;
-const float *QnD;
+const double *Qnsn;
+const double *QnD;
 
 // declared variables
-float *SWEmelt;         // SWE snowmelt
-float *SWEmelt_delayed; // SWE snowmelt delayed
-float *cumSWEmelt;      // cumulative SWE snowmelt (same as snowmeltD_org}
-float *firnmelt;         // firn snowmelt
-float *firnmelt_delayed; // firn snowmelt delayed
-float *cumfirnmelt;      // cumulative firn snowmelt runoff
-float *icemelt;         // ice melt
-float *icemelt_delayed; // ice melt delayed
-float *cumicemelt;      // cumulative ice melt runoff
-float *cumnet_rain_glacier; // cumulative net_rain + firn and ice melt
-float *cumsnowmeltD_glacier; // cumulative snowmeltD + firn and ice melt
+double *SWEmelt;         // SWE snowmelt
+double *SWEmelt_delayed; // SWE snowmelt delayed
+double *cumSWEmelt;      // cumulative SWE snowmelt (same as snowmeltD_org}
+double *firnmelt;         // firn snowmelt
+double *firnmelt_delayed; // firn snowmelt delayed
+double *cumfirnmelt;      // cumulative firn snowmelt runoff
+double *icemelt;         // ice melt
+double *icemelt_delayed; // ice melt delayed
+double *cumicemelt;      // cumulative ice melt runoff
+double *cumnet_rain_glacier; // cumulative net_rain + firn and ice melt
+double *cumsnowmeltD_glacier; // cumulative snowmeltD + firn and ice melt
 
-float *glacier_Albedo;
-float *glacier_h2o;
-float *glacier_Surf;
-float *firn;
-float *firn_depth;
-float *firn_init;
-float *firn_h;
-float **firn_h_array;
-float *firn_yr;
-float **firn_yr_array;
-float *firn_dens;
-float **firn_dens_array;
-float *SWE_2firn;
-float *cumSWE_2firn;
-float *SWE_2firn_dens;
-float *firn_2ice;
-float *cumfirn_2ice;
-float *firn_2ice_dens;
+double *glacier_Albedo;
+double *glacier_h2o;
+double *glacier_Surf;
+double *firn;
+double *firn_depth;
+double *firn_init;
+double *firn_h;
+double **firn_h_array;
+double *firn_yr;
+double **firn_yr_array;
+double *firn_dens;
+double **firn_dens_array;
+double *SWE_2firn;
+double *cumSWE_2firn;
+double *SWE_2firn_dens;
+double *firn_2ice;
+double *cumfirn_2ice;
+double *firn_2ice_dens;
 
-float *Qmelt;
-float *Xmelt_int;
-float *Xmelt_acc;
-float *Xmelt_V5;
-float *cumQmelt;
-float *ice;
-float *Qn_ebsm;
-float *Qh_ebsm;
-float *Qe_ebsm;
-float *Qp_ebsm;
-float *Qnsn_Acc;
+double *Qmelt;
+double *Xmelt_int;
+double *Xmelt_acc;
+double *Xmelt_V5;
+double *cumQmelt;
+double *ice;
+double *Qn_ebsm;
+double *Qh_ebsm;
+double *Qe_ebsm;
+double *Qp_ebsm;
+double *Qnsn_Acc;
 
-float *Gnet_rainD;
-float *net_rain_org;
-float *cumnet_rain_org;
-float *SWE;
-float *topo_elev;
-float *glacier_depth;
-float *rho_snow;
+double *Gnet_rainD;
+double *net_rain_org;
+double *cumnet_rain_org;
+double *SWE;
+double *topo_elev;
+double *glacier_depth;
+double *rho_snow;
 long *nfirn;
 long *GlacierMode; // 0 - glacier, 1 - tongue
 
 // declared put variable
-float *Pa;
-float *net_rain;
-float *Albedo;
+double *Pa;
+double *net_rain;
+double *Albedo;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *tfactor;
-const float *nfactor;
-const float *Use_QnD;
-const float *firn_Albedo;
-const float *ice_init;
-const float *ice_Albedo;
-const float *ice_dens;
-const float *TKMA;
-const float *SWEAA;
-const float *SWEstorage;
-const float *SWELag;
-const float *firnstorage;
-const float *firnLag;
-const float *icestorage;
-const float *iceLag;
-const float *topo_elev_init;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *tfactor;
+const double *nfactor;
+const double *Use_QnD;
+const double *firn_Albedo;
+const double *ice_init;
+const double *ice_Albedo;
+const double *ice_dens;
+const double *TKMA;
+const double *SWEAA;
+const double *SWEstorage;
+const double *SWELag;
+const double *firnstorage;
+const double *firnLag;
+const double *icestorage;
+const double *iceLag;
+const double *topo_elev_init;
 
-const float *firn_h_init;
-const float **firn_h_array_init;
-const float *firn_dens_init;
-const float **firn_dens_array_init;
+const double *firn_h_init;
+const double **firn_h_array_init;
+const double *firn_dens_init;
+const double **firn_dens_array_init;
 const long  *Elev_Adj_glacier_surf;
 const long  *delay_melt;
 const long  *SWE_to_firn_Julian;
@@ -103,52 +103,52 @@ const long  *inhibit_evap;
 const long  *inhibit_firnmelt;
 const long  *inhibit_icemelt;
 const long  *Densification;
-const float *Densification_550;
-const float *Densification_above_550;
+const double *Densification_550;
+const double *Densification_above_550;
 
-const float* debris_h; // not variation 4
-const float* T_threshold; // not variation 4
-const float* lagT1; // not variation 4
-const float* lagT2; // not variation 4
-const float* lagT3; // not variation 4
-const float* lagT4; // not variation 4
-const float* lagSW1; // not variation 4
-const float* lagSW2; // not variation 4
-const float* lagSW3; // not variation 4
-const float* lagSW4; // not variation 4
-const float* lagSW5; // not variation 4
-const float* lagSW6; // not variation 4
+const double* debris_h; // not variation 4
+const double* T_threshold; // not variation 4
+const double* lagT1; // not variation 4
+const double* lagT2; // not variation 4
+const double* lagT3; // not variation 4
+const double* lagT4; // not variation 4
+const double* lagSW1; // not variation 4
+const double* lagSW2; // not variation 4
+const double* lagSW3; // not variation 4
+const double* lagSW4; // not variation 4
+const double* lagSW5; // not variation 4
+const double* lagSW6; // not variation 4
 
 // declared variables
 
-float* lagTB;  // not variation 4
-float* lagT;  // not variation 4
-float* lagSW; // not variation 4
-float* Gmelt_energy; // not variation 4
-float* den_air; // not variation 4
-float* K_kat; // not variation 4
-float* Cp_water; // not variation 4
+double* lagTB;  // not variation 4
+double* lagT;  // not variation 4
+double* lagSW; // not variation 4
+double* Gmelt_energy; // not variation 4
+double* den_air; // not variation 4
+double* K_kat; // not variation 4
+double* Cp_water; // not variation 4
 
 // declared put parameters
-float *hru_elev;
-float *snowmeltD;
+double *hru_elev;
+double *snowmeltD;
 
 // variable inputs
-const float *tmean;
-const float *tmax;
-const float *tmin;
-const float *umean;
-const float *rhmean;
-const float *sunact;
-const float *QdroD;
-const float *QdfoD;
-const float *sunmax;
-const float *Qnsn_Var;
-const float *Xmelt;
-const float *hru_t; // variation 5
-const float *T_rain; // variation 5
-const float *hru_ea; // variation 5
-const float *glacier_Albedo_obs;
+const double *tmean;
+const double *tmax;
+const double *tmin;
+const double *umean;
+const double *rhmean;
+const double *sunact;
+const double *QdroD;
+const double *QdfoD;
+const double *sunmax;
+const double *Qnsn_Var;
+const double *Xmelt;
+const double *hru_t; // variation 5
+const double *T_rain; // variation 5
+const double *hru_ea; // variation 5
+const double *glacier_Albedo_obs;
 
 ClassClark *SWEDelay;
 ClassClark *firnDelay;
@@ -162,5 +162,5 @@ void run(void);
 void finish(bool good);
 
 Classglacier_debris* klone(string name) const;
-float DepthofSnow(float SWE);
+double DepthofSnow(double SWE);
 };

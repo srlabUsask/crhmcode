@@ -10,46 +10,46 @@ class ClassSnobalCRHM : public ClassSnobalBase {
 
     ClassSnobalCRHM* klone(string name) const;
 
-    float Qsi_;
-    float Qli_;
+    double Qsi_;
+    double Qli_;
 
 // Observations
 
-    const float *Qsi; // incoming solar radiation (W/m^2)
-    const float *Qli; // incoming longwave (thermal) rad (W/m^2) long
-    const float *T_g_Obs; // ground temperature at depth
-    const float *F_g_Obs; // ground flux at depth
+    const double *Qsi; // incoming solar radiation (W/m^2)
+    const double *Qli; // incoming longwave (thermal) rad (W/m^2) long
+    const double *T_g_Obs; // ground temperature at depth
+    const double *F_g_Obs; // ground flux at depth
 
 // variable climate-data inputs
 
-    const float  *T_a_X;      // air temp (C) hru_t
-    const float  *T_pp_X;       // precip temp (C) hru_t
-    const float  *e_a_X;      // vapor pressure (Pa) hru_ea
-    const float  *u_X;        // wind speed (m/sec)  hru_u
-    const float  *Albedo;     // albedo ()
-    const float  *Qsisn_Var;  // short wave at snow surface
-    const float  *QsiS_Var;  // short wave at snow surface from Slope_Qsi
-    const float  *Qlisn_Var;  // long wave at snow surface - through canopy
-    const float  *QliVt_Var;  // long wave at snow surface - no canopy
+    const double  *T_a_X;      // air temp (C) hru_t
+    const double  *T_pp_X;       // precip temp (C) hru_t
+    const double  *e_a_X;      // vapor pressure (Pa) hru_ea
+    const double  *u_X;        // wind speed (m/sec)  hru_u
+    const double  *Albedo;     // albedo ()
+    const double  *Qsisn_Var;  // short wave at snow surface
+    const double  *QsiS_Var;  // short wave at snow surface from Slope_Qsi
+    const double  *Qlisn_Var;  // long wave at snow surface - through canopy
+    const double  *QliVt_Var;  // long wave at snow surface - no canopy
 
 // variable precipitation inputs
 
-    const float  *m_precip_X;	// specific mass of total precip     (kg/m^2) net_p
-    const float  *m_snow_X;	// specific mass in snow in precip   (kg/m^2) net_snow
-    const float  *m_drift_X;	// specific mass in snow drift       (kg/m^2) Drift
-    const float  *m_subl_X;	// specific mass of snow sublimation (kg/m^2) Subl
+    const double  *m_precip_X;	// specific mass of total precip     (kg/m^2) net_p
+    const double  *m_snow_X;	// specific mass in snow in precip   (kg/m^2) net_snow
+    const double  *m_drift_X;	// specific mass in snow drift       (kg/m^2) Drift
+    const double  *m_subl_X;	// specific mass of snow sublimation (kg/m^2) Subl
 
 // put variable precipitation inputs
 
-    float  *m_rain_X;	// specific mass of rain in precip   (kg/m^2) net_rain
+    double  *m_rain_X;	// specific mass of rain in precip   (kg/m^2) net_rain
 
 // parameters
 
-    const float  *rho_snow_X;       // density of snowfall               (kg/m^3)
-    const float  *T_g_X;            // soil temp at depth z_g (C)
-    const float  *F_g_X;            // soil flux at depth z_g (C)
+    const double  *rho_snow_X;       // density of snowfall               (kg/m^3)
+    const double  *T_g_X;            // soil temp at depth z_g (C)
+    const double  *F_g_X;            // soil flux at depth z_g (C)
     const long   *rain_soil_snow;  //
-    float *snow_store; // accumulates snow till > 1+mm
+    double *snow_store; // accumulates snow till > 1+mm
 
     void decl(void);
 

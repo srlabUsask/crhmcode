@@ -82,22 +82,22 @@ void Classinterception::init(void) {
 
 void Classinterception::run(void) {
 
-const float Radius  = 0.0005;     /* Ice sphere radius, metres */
-const float R = 8313.0;          /* Universal gas constant, J/(mole*K) */
-const float M = 18.01;           /* Molecular weight of water */
-const float RhoI = 900.0;        /* Density of ice, kg/m^3 */
-//const float k1 = 0.0114;         /* Snow shape coefficient, Jackpine site */
-const float Fract = 0.4;         /* Fractal dimension */
-//const float SnowAlb = 0.8;       /* Albedo for snow */
-//const float CanAlb = 0.2;        /* Albedo for canopy */
-const float Hs = 2838000.0;      // Latent heat of sublimation, J/kg
+const double Radius  = 0.0005;     /* Ice sphere radius, metres */
+const double R = 8313.0;          /* Universal gas constant, J/(mole*K) */
+const double M = 18.01;           /* Molecular weight of water */
+const double RhoI = 900.0;        /* Density of ice, kg/m^3 */
+//const double k1 = 0.0114;         /* Snow shape coefficient, Jackpine site */
+const double Fract = 0.4;         /* Fractal dimension */
+//const double SnowAlb = 0.8;       /* Albedo for snow */
+//const double CanAlb = 0.2;        /* Albedo for canopy */
+const double Hs = 2838000.0;      // Latent heat of sublimation, J/kg
 
-const float Cc = 0.82;
-const float Viscosity = 1.88E-5;
-const float Albedo = 0.8; // particle albedo
+const double Cc = 0.82;
+const double Viscosity = 1.88E-5;
+const double Albedo = 0.8; // particle albedo
 
-  float RhoSat, RhoT, Nr, Nu, Sstar, A, B, J, D, Vs, Ce;
-  float I1, Unld, Istar, Cp, RhoS;
+  double RhoSat, RhoT, Nr, Nu, Sstar, A, B, J, D, Vs, Ce;
+  double I1, Unld, Istar, Cp, RhoS;
 
   for(hh = 0; chkStruct(); ++hh) {
 
@@ -135,12 +135,12 @@ const float Albedo = 0.8; // particle albedo
     RhoT = 0.00063*(hru_t[hh]+273.0) + 0.0673; // thermal conductivity of atmosphere
 
 
-    float n = 2.43*Cc + 2.97*(1.0-Cc);
-    float mx = 3.46*Cc + 3.2*(1.0-Cc);
-    float Is_CioncoA = n + mx*exp(-Ht[hh]);
-    float For_vent = velw[hh]*Ht[hh];
-    float Is_CioncoB = For_vent/Ht[hh] - 1.0;
-    float Is_CioncoAB = Is_CioncoA*Is_CioncoB;
+    double n = 2.43*Cc + 2.97*(1.0-Cc);
+    double mx = 3.46*Cc + 3.2*(1.0-Cc);
+    double Is_CioncoA = n + mx*exp(-Ht[hh]);
+    double For_vent = velw[hh]*Ht[hh];
+    double Is_CioncoB = For_vent/Ht[hh] - 1.0;
+    double Is_CioncoAB = Is_CioncoA*Is_CioncoB;
     v[hh] = hru_u[hh]*exp(Is_CioncoAB); // estimated windspeed z
 
     Nr = 2*Radius*v[hh]/Viscosity;

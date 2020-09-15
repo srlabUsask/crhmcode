@@ -8,11 +8,11 @@ public:
 Class_z_s_rho(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-  float*  z_s;            // total snowcover thickness (m)
-  float*  rho;            // average snowcover density (kg/m^3)
+  double*  z_s;            // total snowcover thickness (m)
+  double*  rho;            // average snowcover density (kg/m^3)
 
 // variable inputs
-const float *SWE;
+const double *SWE;
 
 void decl(void);
 void init(void);

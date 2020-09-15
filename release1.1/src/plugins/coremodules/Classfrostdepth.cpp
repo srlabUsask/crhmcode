@@ -56,34 +56,34 @@ void Classfrostdepth::decl(void) {
   declgetvar("*",   "snowdepth", "(m)", &snowdepth);
 }
 
-const float ko = 0.21;  // W/(m K) organic material
-const float km = 2.50;  // W/(m K) mineral
-const float ka = 0.025; // W/(m K) air
-const float ki = 2.24;  // W/(m K) ice
-const float kw = 0.57;  // W/(m K) water
-const float Cm = 2.000; // MJ/(m3.K) mineral
-const float Cw = 4.185; // MJ/(m3.K) water
-const float Ca = 0.001; // MJ/(m3.K) air
-const float Co = 0.110; // MJ/(m3.K) organic
-const float Ci = 1.950; // MJ/(m3.K) ice
+const double ko = 0.21;  // W/(m K) organic material
+const double km = 2.50;  // W/(m K) mineral
+const double ka = 0.025; // W/(m K) air
+const double ki = 2.24;  // W/(m K) ice
+const double kw = 0.57;  // W/(m K) water
+const double Cm = 2.000; // MJ/(m3.K) mineral
+const double Cw = 4.185; // MJ/(m3.K) water
+const double Ca = 0.001; // MJ/(m3.K) air
+const double Co = 0.110; // MJ/(m3.K) organic
+const double Ci = 1.950; // MJ/(m3.K) ice
 
 void Classfrostdepth::init(void) {
 
   nlay = getdim(NLAY);
   nhru = getdim(NHRU);
 
-//  Lacc = new float[nhru];
-//  Cacc = new float[nhru];
-//  Kacc = new float[nhru];
+//  Lacc = new double[nhru];
+//  Cacc = new double[nhru];
+//  Kacc = new double[nhru];
 
-  k_lay = new float*[nlay];   // Array  [nlay][nhru]
-  L_lay = new float*[nlay];   // Array  [nlay][nhru]
-  c_lay = new float*[nlay];   // Array  [nlay][nhru]
+  k_lay = new double*[nlay];   // Array  [nlay][nhru]
+  L_lay = new double*[nlay];   // Array  [nlay][nhru]
+  c_lay = new double*[nlay];   // Array  [nlay][nhru]
 
   for (int nn = 0; nn < nlay; ++nn) {
-    k_lay[nn] = new float[nhru];
-    L_lay[nn] = new float[nhru];
-    c_lay[nn] = new float[nhru];
+    k_lay[nn] = new double[nhru];
+    L_lay[nn] = new double[nhru];
+    c_lay[nn] = new double[nhru];
   }
 
   for(hh = 0; hh < nhru; ++hh) {
@@ -111,20 +111,20 @@ void Classfrostdepth::init(void) {
 
 void Classfrostdepth::run(void) {
 
-  const float csnow = 0.25*Ci;       // MJ/(m3.°C)
-  const float ksnow = 0.25*ki+0.75*ka; // J/(m.K.s)
+  const double csnow = 0.25*Ci;       // MJ/(m3.°C)
+  const double ksnow = 0.25*ki+0.75*ka; // J/(m.K.s)
 
-  float FrozenD;     // depth frozen of next layer
+  double FrozenD;     // depth frozen of next layer
   long  FrozenL;     // last fully frozen layer
-  float dsum;        // soil and snow frozen depth
-  float dsoil;       // soil frozen depth
+  double dsum;        // soil and snow frozen depth
+  double dsoil;       // soil frozen depth
 
   long nstep = getstep()%Global::Freq;
 
   if(nstep != 0) return; // not end of day
 
   long jday = julian("now");
-  float hemisphere = (hru_lat[0] < 0.0); // use hru #1
+  double hemisphere = (hru_lat[0] < 0.0); // use hru #1
   if((!hemisphere && (jday < 300) || hemisphere && (jday < 117)) && Tfreeze[0] == 0) return; // use hru #1
 
   for(hh = 0; chkStruct(); ++hh) {
@@ -137,7 +137,7 @@ void Classfrostdepth::run(void) {
       continue;
     }
     else {
-      float Lastsnowdepth = snowdepth[hh];
+      double Lastsnowdepth = snowdepth[hh];
 //      snowdepth[hh] = SWE[hh]/250.0;
       if(snowdepth[hh] > Lastsnowdepth && Lastsnowdepth > 0.05) {
         Findex[hh] = (Lacc[hh]+Cacc[hh]*Ta[hh]*1.8)/

@@ -9,34 +9,34 @@ public:
 Classnetall(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observation variables
-const float *t;
-const float *ea;
-const float **tday_intvls;
-const float **eaday_intvls;
-const float *NotUsed;
+const double *t;
+const double *ea;
+const double **tday_intvls;
+const double **eaday_intvls;
+const double *NotUsed;
 
 // declared variables
-float *net;
-float *Rn; // net converted to mm
-float *netD;
-float *RnD; // netD converted to mm
-float *RnD_POS;
-float *cum_net;
+double *net;
+double *Rn; // net converted to mm
+double *netD;
+double *RnD; // netD converted to mm
+double *RnD_POS;
+double *cum_net;
 
 // declared parameters
 
 // variable inputs
-const float *hru_t;
-const float *hru_ea;
-const float *Albedo;
-const float *hru_SunAct;
-const float *SunMax;
-const float *Qdro;
-const float *Qdfo;
-const float *pQdro;
-const float *pQdfo;
-const float **pQdro_FREQ;
-const float **pQdfo_FREQ;
+const double *hru_t;
+const double *hru_ea;
+const double *Albedo;
+const double *hru_SunAct;
+const double *SunMax;
+const double *Qdro;
+const double *Qdfo;
+const double *pQdro;
+const double *pQdfo;
+const double **pQdro_FREQ;
+const double **pQdfo_FREQ;
 
 void decl(void);
 void init(void);

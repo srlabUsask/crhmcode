@@ -93,14 +93,14 @@ void ClassSetSoil::decl(void) {
 
 void ClassSetSoil::init(void) {
 
-  float totarea = 0;
+  double totarea = 0;
   nhru = getdim(NHRU);
 
   for(hh = 0; chkStruct(); ++hh)
     totarea += hru_area[hh];
 
   if(fabs((totarea-basin_area[0])/basin_area[0]) > 1e-3){
-    const_cast<float *>  (basin_area)[0] = totarea;
+    const_cast<double *>  (basin_area)[0] = totarea;
     CRHMException TExcept(string(string("Sum of HRU's area <> Basin area, Basin area made = ") + FloatToStrF(totarea, ffGeneral, 3, 0)).c_str(), WARNING);
     LogError(TExcept);
   }
@@ -134,30 +134,30 @@ void ClassSetSoil::init(void) {
   }
 
   for(hh = 0; chkStruct(); ++hh) {
-    float Fract = (Vol_h2o_content[hh]*1000 - SetSoilproperties[soiltype_rechr[hh]][1])/SetSoilproperties[soiltype_rechr[hh]][0];
+    double Fract = (Vol_h2o_content[hh]*1000 - SetSoilproperties[soiltype_rechr[hh]][1])/SetSoilproperties[soiltype_rechr[hh]][0];
     if(Fract > 1.0)
       Fract = 1.0;
     if(Fract < 0.0)
       Fract = 0.0;
 
-    const_cast<float *> (soil_rechr_init)[hh] = soil_Depth_rechr[hh]*Fract*SetSoilproperties[soiltype_rechr[hh]][0];
+    const_cast<double *> (soil_rechr_init)[hh] = soil_Depth_rechr[hh]*Fract*SetSoilproperties[soiltype_rechr[hh]][0];
 
-    const_cast<float *> (soil_rechr_max)[hh] = soil_Depth_rechr[hh]*SetSoilproperties[soiltype_rechr[hh]][0];
+    const_cast<double *> (soil_rechr_max)[hh] = soil_Depth_rechr[hh]*SetSoilproperties[soiltype_rechr[hh]][0];
 
-    float Fract2 = (Vol_h2o_content[hh]*1000 - SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][0];
+    double Fract2 = (Vol_h2o_content[hh]*1000 - SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][0];
     if(Fract2 > 1.0)
       Fract2 = 1.0;
     if(Fract2 < 0.0)
       Fract2 = 0.0;
 
-    const_cast<float *> (soil_moist_init)[hh] = soil_Depth[hh]*Fract2*SetSoilproperties[soil_type[hh]][0];
+    const_cast<double *> (soil_moist_init)[hh] = soil_Depth[hh]*Fract2*SetSoilproperties[soil_type[hh]][0];
 
-    const_cast<float *> (soil_moist_max)[hh] = soil_Depth[hh]*SetSoilproperties[soil_type[hh]][0];
+    const_cast<double *> (soil_moist_max)[hh] = soil_Depth[hh]*SetSoilproperties[soil_type[hh]][0];
 
     if(soil_rechr_init[hh] > soil_moist_init[hh]) // handles approximations
-      const_cast<float *> (soil_rechr_init)[hh] = soil_moist_init[hh];
+      const_cast<double *> (soil_rechr_init)[hh] = soil_moist_init[hh];
 
     if(soil_rechr_max[hh] > soil_moist_max[hh]) // handles approximations
-      const_cast<float *> (soil_rechr_max)[hh] = soil_moist_max[hh];
+      const_cast<double *> (soil_rechr_max)[hh] = soil_moist_max[hh];
   }
 }

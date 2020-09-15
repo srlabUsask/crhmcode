@@ -11,21 +11,21 @@ ClassMeltRunoff_Kstorage(string Name, string Version = "undefined", CRHM::LMODUL
 ClassModule* Netroute_module; // used to call preser for simple projects
 
 // declared variables
-float *Ksat;
-float *Meltrunoff_K;
-float *In_storage;
+double *Ksat;
+double *Meltrunoff_K;
+double *In_storage;
 
 // get variables:
-const float *rho;
+const double *rho;
 
 // put variables
-float *runKstorage;
+double *runKstorage;
 
 // declared parameters
-const float *d_g;
-const float *hru_GSL;
-const float *runLag;
-const float *route_L;
+const double *d_g;
+const double *hru_GSL;
+const double *runLag;
+const double *route_L;
 const long  *inhibit_evap;
 const long  *inhibit_MeltRunoff_Kstorage;
 

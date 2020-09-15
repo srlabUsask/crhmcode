@@ -91,11 +91,11 @@ void Classglobal::init(void) {
 
 }
 
-void Classglobal::air_mass (const float czen, float &oam){
+void Classglobal::air_mass (const double czen, double &oam){
 
-  float diff;
+  double diff;
 
-  float Z = acos(czen);
+  double Z = acos(czen);
   oam = fabs(1.0f/(czen + 0.50572f*pow(96.07995f-Z, -1.6364f)));       // oam by cosecant approx.
 
   if(oam < 2.9)                          // zenith < 70 deg
@@ -178,10 +178,10 @@ void Classglobal::run(void) {
 
   long Period, Day;
 
-  float Trans, Dec, Rad_vec, Sol, Clat, Slat, Cdec, Sdec, Hr_Ang;
-  float Czen, t1, t2, x, y, z, Oam;
-  float cosxsL, cosxs0, t10, t20;
-  float It, Id, diffuse, Sum_Id, Sum_Diff, Sum_Sol, Sum_cosxs, Sum_cosxs0, Sum_Ext, Sum_Flatd, Sum_Flatf;
+  double Trans, Dec, Rad_vec, Sol, Clat, Slat, Cdec, Sdec, Hr_Ang;
+  double Czen, t1, t2, x, y, z, Oam;
+  double cosxsL, cosxs0, t10, t20;
+  double It, Id, diffuse, Sum_Id, Sum_Diff, Sum_Sol, Sum_cosxs, Sum_cosxs0, Sum_Ext, Sum_Flatd, Sum_Flatf;
 
   Period = (getstep()-1)%Global::Freq;
 

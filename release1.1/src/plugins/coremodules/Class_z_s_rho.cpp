@@ -42,7 +42,7 @@ void Class_z_s_rho::init(void) {
 
 void Class_z_s_rho::run(void) {
 
-  float SWE_Max;
+  double SWE_Max;
 
   for (hh = 0; chkStruct(); ++hh){
     z_s[hh] = Common::DepthofSnow(SWE[hh]); // returns zero if SWE <= 2.05 mm

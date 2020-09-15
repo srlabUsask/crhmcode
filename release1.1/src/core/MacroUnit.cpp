@@ -24,44 +24,44 @@
 
 extern double xLimit;
 
-float Fday() { // used for variable DAY
+double Fday() { // used for variable DAY
 	int year, month, day, h, m;
 	StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
 	return day;
 }
 
-float Fmonth() { // used for variable MONTH
+double Fmonth() { // used for variable MONTH
 	int year, month, day, h, m;
 	StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
 	return month;
 }
 
-float Fyear() { // used for variable YEAR
+double Fyear() { // used for variable YEAR
 	int year, month, day, h, m;
 	StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
 	return year;
 }
 
-float Fjulian() { // used for variable JULIAN
+double Fjulian() { // used for variable JULIAN
 	return Julian("now");
 }
 
-float Fgetstep() { // used for variable STEP
+double Fgetstep() { // used for variable STEP
 	return getstep();
 }
 
-float Fgetfirst() { // used for variable FIRST
+double Fgetfirst() { // used for variable FIRST
 
 	return (getstep() % Global::Freq == 1);
 }
 
-float Fgetlast() { // used for variable LAST
+double Fgetlast() { // used for variable LAST
 
 	return (getstep() % Global::Freq == 0);
 }
 
-float Fgetrand() { // used for variable STEP
-	return (float)rand() / RAND_MAX;
+double Fgetrand() { // used for variable STEP
+	return (double)rand() / RAND_MAX;
 }
 
 ClassMacro* ClassMacro::klone(string name) const {
@@ -551,7 +551,7 @@ void ClassMacro::run(void) { // executed every interval
 		PCiter = Operations.begin();
 		while (PCiter != Operations.end()) {
 			execbase Op = (*(*PCiter));
-			float X = (*(*PCiter))(); // run instruction
+			double X = (*(*PCiter))(); // run instruction
 			++PCiter;
 			int Cnt = eval.size();
 		}
@@ -1005,11 +1005,11 @@ void Defdeclparam::CallDecl() {
 		else {
 			if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
 				FP->second.kind = VarCHRM::CRHM2;
-				FP->second.value2 = const_cast<float **> (fix2_const);
+				FP->second.value2 = const_cast<double **> (fix2_const);
 			}
 			else {
 				FP->second.kind = VarCHRM::CRHM;
-				FP->second.value = const_cast<float *> (fix_const);
+				FP->second.value = const_cast<double *> (fix_const);
 			}
 		}
 	}
@@ -1205,11 +1205,11 @@ void Defdeclgetvar::CallDecl() {
 			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
 			if (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN) {
 				FP->second.kind = VarCHRM::CRHM2;
-				FP->second.value2 = const_cast<float **> (fix2_const);
+				FP->second.value2 = const_cast<double **> (fix2_const);
 			}
 			else {
 				FP->second.kind = VarCHRM::CRHM;
-				FP->second.value = const_cast<float *> (fix_const);
+				FP->second.value = const_cast<double *> (fix_const);
 			}
 		}
 	}
@@ -1255,11 +1255,11 @@ void Defdeclputvar::CallDecl() {
 		//else if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences.
 		else if (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN) {
 			FP->second.kind = VarCHRM::CRHM2;
-			FP->second.value2 = const_cast<float **> (fix2);
+			FP->second.value2 = const_cast<double **> (fix2);
 		}
 		else {
 			FP->second.kind = VarCHRM::CRHM;
-			FP->second.value = const_cast<float *> (fix);
+			FP->second.value = const_cast<double *> (fix);
 		}
 	}
 }
@@ -1302,11 +1302,11 @@ void Defdeclputparam::CallDecl() {
 		}
 		else if (thisPar->dimen == CRHM::NDEF || thisPar->dimen == CRHM::NDEFN) {
 			FP->second.kind = VarCHRM::CRHM2;
-			FP->second.value2 = const_cast<float **> (fix2);
+			FP->second.value2 = const_cast<double **> (fix2);
 		}
 		else {
 			FP->second.kind = VarCHRM::CRHM;
-			FP->second.value = const_cast<float *> (fix);
+			FP->second.value = const_cast<double *> (fix);
 		}
 	}
 }
@@ -1401,7 +1401,7 @@ void Defdeclreadobs::CallDecl() {
 	FP->second.name = name;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = cnt;
-	FP->second.value = const_cast<float *> (fix_const);
+	FP->second.value = const_cast<double *> (fix_const);
 	FP->second.Me = Macro;
 }
 
@@ -1419,13 +1419,13 @@ void Defdeclobsfunc::CallDecl() {
 	FP->second.name = name;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = cnt;
-	//  FP->second.value = const_cast<float *> (fix);
+	//  FP->second.value = const_cast<double *> (fix);
 	FP->second.value = fix;
 	FP->second.Me = Macro;
 }
 
 //---------------------------------------------------------------------------
-long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string help, string units, float **value) {
+long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string help, string units, double **value) {
 	MapVar::iterator itVar;
 	ClassVar *newVar;
 	ClassVar *thisVar;
@@ -1455,10 +1455,10 @@ long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string he
 				thisVar->ReleaseM(); // releases everything
 				thisVar->dim = cnt;
 				if (thisVar->lay > 0) {
-					thisVar->layvalues = new float *[thisVar->lay];
-					for (int ii = 0; ii < thisVar->lay; ii++) thisVar->layvalues[ii] = new float[cnt];
+					thisVar->layvalues = new double *[thisVar->lay];
+					for (int ii = 0; ii < thisVar->lay; ii++) thisVar->layvalues[ii] = new double[cnt];
 				}
-				thisVar->values = new float[cnt];
+				thisVar->values = new double[cnt];
 			}
 
 			thisVar->dimen = dimen;
@@ -1479,7 +1479,7 @@ long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string he
 		newVar->DLLName = DLLName;
 		newVar->root = ID;
 
-		newVar->values = new float[cnt];
+		newVar->values = new double[cnt];
 
 		PairVar Item = PairVar("obs " + name, newVar);
 		Global::MapVars.insert(Item);

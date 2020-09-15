@@ -10,30 +10,30 @@ Classqdrift(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM:
 ClassClark *Delaymelt;
 
 // declared observation variables
-const float *p;
+const double *p;
 
 // input variables
-const float *hru_p;
+const double *hru_p;
 
 // declared variables
-float *SWE;
-float *driftmelt;
-float *driftmeltDly;
-float *cumdriftmelt;
-float *cumdriftmeltDly;
-float *driftmeltD;
-float *snowmeltD;
+double *SWE;
+double *driftmelt;
+double *driftmeltDly;
+double *cumdriftmelt;
+double *cumdriftmeltDly;
+double *driftmeltD;
+double *snowmeltD;
 
 // declared parameters
 const long *Type;      // NOTUSED, DRIFT or HUMMOCK
 const long *DrainTo;   // drain to HRU
-const float *InitSWE;  // initial SWE
-const float *length;   // length normal to creek
-const float *meltstorage;  // delay parameter (days)
-const float *meltLag;      // delay parameter (days)
+const double *InitSWE;  // initial SWE
+const double *length;   // length normal to creek
+const double *meltstorage;  // delay parameter (days)
+const double *meltLag;      // delay parameter (days)
 
 // variable inputs
-const float *Qm;
+const double *Qm;
 
 // local allocated arrays
 

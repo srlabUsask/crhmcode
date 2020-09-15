@@ -88,7 +88,7 @@ void ClassFlowInSnow::init(void) {
 }
 
 void ClassFlowInSnow::run(void) {
-  const float UnitWidth =1.0, UnitArea = 1.1;
+  const double UnitWidth =1.0, UnitArea = 1.1;
   for(hh = 0.0; chkStruct(); ++hh) {
     if(rho[hh] > 0){
       if(T_s_l[hh] >= t_inhibit_flow[hh] && h2o_sat[hh] > Sr[hh]){

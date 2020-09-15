@@ -70,9 +70,9 @@ void Classcrack::init(void) {
 
   try {
 
-    Xinfil = new float*[3];   // Data [3] [nhru]
+    Xinfil = new double*[3];   // Data [3] [nhru]
     for (int jj = 0; jj < 3; ++jj)
-      Xinfil[jj] = new float[nhru];
+      Xinfil[jj] = new double[nhru];
 
     timer = new long[nhru];
   }

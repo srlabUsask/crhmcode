@@ -12,42 +12,42 @@ ClassKevin(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::
 // declared observation variables
 
 // declared variables
-float *albedo;
-float *sca;
-float *snowmelt;
-float *snowmeltD;
-float *cumsnowmelt;
-float *netLong;
-float *netShort;
+double *albedo;
+double *sca;
+double *snowmelt;
+double *snowmeltD;
+double *cumsnowmelt;
+double *netLong;
+double *netShort;
 long  *winter;
 long  *SnowStat;
 
 // declared parameters
-const float *Asnow1;
-const float *Asnow2;
-const float *Asoil;
-const float *cv;
-const float *tfactor;
-const float *nfactor;
-const float *meltthresh;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_lat;
+const double *Asnow1;
+const double *Asnow2;
+const double *Asoil;
+const double *cv;
+const double *tfactor;
+const double *nfactor;
+const double *meltthresh;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *hru_lat;
 
 // variable inputs
-float *SWE;
-const float *hru_t;
-const float *hru_tmean;
-const float *hru_eamean;
-const float *hru_Qn;
-const float *hru_SunAct;
-const float *Qdro;
-const float *Qdfo;
-const float *SunMax;
+double *SWE;
+const double *hru_t;
+const double *hru_tmean;
+const double *hru_eamean;
+const double *hru_Qn;
+const double *hru_SunAct;
+const double *Qdro;
+const double *Qdfo;
+const double *SunMax;
 
 // local allocated arrays
-float   *SWEpeak;
-float   *SWElast;
+double   *SWEpeak;
+double   *SWElast;
 
 void decl(void);
 void init(void);

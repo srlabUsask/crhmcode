@@ -67,21 +67,21 @@ void ClassIceBulb::run(void) {
   long nstep = getstep() % Global::Freq;
 
   for (hh = 0; chkStruct(); ++hh){
-    float Tk = hru_t[hh] + CRHM_constants::Tm;
-    float D = 0.0000206*pow(Tk/CRHM_constants::Tm, 1.75);
-    float RHO = Pa[hh]*1000.0/(CRHM_constants::Rgas*Tk);
+    double Tk = hru_t[hh] + CRHM_constants::Tm;
+    double D = 0.0000206*pow(Tk/CRHM_constants::Tm, 1.75);
+    double RHO = Pa[hh]*1000.0/(CRHM_constants::Rgas*Tk);
 
-    float qt = CRHM_constants::em/(Pa[hh]*1000.0)*611.213*exp(22.4422*hru_t[hh]/(CRHM_constants::Tm + hru_t[hh]));
+    double qt = CRHM_constants::em/(Pa[hh]*1000.0)*611.213*exp(22.4422*hru_t[hh]/(CRHM_constants::Tm + hru_t[hh]));
 
-    float lamda = 0.000076843*Tk + 0.003130762;
+    double lamda = 0.000076843*Tk + 0.003130762;
 
-    float L;
+    double L;
     if(hru_t[hh] > 0.0)
       L = CRHM_constants::Lv;
     else
       L = CRHM_constants::Ls;
 
-    float delta = CRHM_constants::em*L*qt/(CRHM_constants::Rgas*sqr(Tk));
+    double delta = CRHM_constants::em*L*qt/(CRHM_constants::Rgas*sqr(Tk));
 
     hru_icebulb[hh] = hru_t[hh] - L*(1.0 - hru_rh[hh]/100.0)*qt/(CRHM_constants::Cp + L*delta) *(RHO*CRHM_constants::Cp*D/lamda);
 

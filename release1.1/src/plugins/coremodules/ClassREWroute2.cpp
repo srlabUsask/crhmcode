@@ -160,10 +160,10 @@ void ClassREWroute2::init(void) {
   }
 
   if(variation == VARIATION_ORG || variation == VARIATION_2){
-    const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+    const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
     for(hh = 0; hh < nhru; ++hh){
-      float Vavg = (1.0/WS_route_n[hh])*pow(WS_route_R[hh], 2.0f/3.0f)*pow(WS_route_S0[hh], 0.5f);
+      double Vavg = (1.0/WS_route_n[hh])*pow(WS_route_R[hh], 2.0f/3.0f)*pow(WS_route_S0[hh], 0.5f);
 
       WS_gwKtravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
       WS_Ktravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
@@ -319,7 +319,7 @@ void ClassREWroute2::run(void) {
 
 void ClassREWroute2::Culvert(long hh) {
 
-  float culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
+  double culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
 
   culvert_water_A[hh] = 0.0;
   culvert_water_H[hh] = 0.0;
@@ -342,7 +342,7 @@ void ClassREWroute2::Culvert(long hh) {
 
       if(culvert_water_H[hh] > WS_culvert_water_Dmax[hh]){ // (m) overflow over road
         culvert_water_H[hh] = WS_culvert_water_Dmax[hh]; // (m)
-        float maxVol = pow(WS_culvert_water_Dmax[hh], 3.0)/(3.0*WS_channel_slope[hh]*WS_side_slope[hh]); // (m3)
+        double maxVol = pow(WS_culvert_water_Dmax[hh], 3.0)/(3.0*WS_channel_slope[hh]*WS_side_slope[hh]); // (m3)
 
         culvert_over_Q[hh] = (culvert_water_V[hh] - maxVol)/86400*Global::Freq; //  (m3) to (m3/int) - difference released over interval
         culvert_water_V[hh] = maxVol; // (m3)
@@ -360,7 +360,7 @@ void ClassREWroute2::Culvert(long hh) {
       if(HD[hh] <= 0.0)
         culvert_Q[hh] = 0.0;
       else if(HD[hh] < 1.5)
-        culvert_Q[hh] = max <float>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
+        culvert_Q[hh] = max <double>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
              + 0.159413*HD[hh] + 0.00772254)*culvert_C[WS_culvert_type[hh]]*WS_number_culverts[hh]*pow(WS_culvert_diam[hh], 2.5), 0.0); // (m3/s)
       else
         culvert_Q[hh] = culvert_C[WS_culvert_type[hh]]*WS_number_culverts[hh]*0.785*pow(WS_culvert_diam[hh], 2.5)*sqrt(2.0*9.81*(HD[hh] - 0.5));

@@ -9,13 +9,13 @@ public:
 Classalbedoobs(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *Albedo;
+double *Albedo;
 
 // declared observation variables
-const float *Albedo_obs;      // interval data
+const double *Albedo_obs;      // interval data
 
 // declared parameters
-const float *Albedo_Value;
+const double *Albedo_Value;
 
 void decl(void);
 void init(void);

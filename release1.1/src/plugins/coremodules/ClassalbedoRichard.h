@@ -10,28 +10,28 @@ ClassalbedoRichard(string Name, string Version = "undefined", CRHM::LMODULE Lvl 
 
 // local class
 
-    float dt;
+    double dt;
 
 // declared variables
-float *Albedo;
+double *Albedo;
 
 // put variables:
 
 // get variables:
 
- const float *net_snow;
- const float *SWE;
+ const double *net_snow;
+ const double *SWE;
 
-const float *T0;
+const double *T0;
 
 // declared parameters
-  const float *Albedo_Bare;
-  const float *Albedo_Snow;
-  const float *a1;       // Albedo decay time constant for cold snow (s)
-  const float *a2;       // Albedo decay time constant for melting snow (s)
-  const float *amin;     // Minimum albedo for aged snow
-  const float *amax;     // Maximum albedo for fresh snow
-  const float *smin;     // Minimum snowfall to refresh snow albedo (mm)
+  const double *Albedo_Bare;
+  const double *Albedo_Snow;
+  const double *a1;       // Albedo decay time constant for cold snow (s)
+  const double *a2;       // Albedo decay time constant for melting snow (s)
+  const double *amin;     // Minimum albedo for aged snow
+  const double *amax;     // Maximum albedo for fresh snow
+  const double *smin;     // Minimum snowfall to refresh snow albedo (mm)
 
 void decl(void);
 void init(void);

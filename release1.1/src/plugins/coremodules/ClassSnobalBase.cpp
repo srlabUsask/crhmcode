@@ -147,7 +147,7 @@ void ClassSnobalBase::finish(bool good) { // only required for local storage and
 
 void ClassSnobalBase::init_snow(void)
 {
-    float	rho_dry;	// snow density without H2O
+    double	rho_dry;	// snow density without H2O
 
     m_s[hh] = rho[hh] * z_s[hh];
 
@@ -305,10 +305,10 @@ void ClassSnobalBase::_layer_mass(void)
 ** NAME
 **      _cold_content -- calculates cold content for a layer
 **
-**      float
+**      double
 **	_cold_content(
-**	    float  temp,		|* temperature of layer *|
-**	    float  mass)		|* specific mass of layer *|
+**	    double  temp,		|* temperature of layer *|
+**	    double  mass)		|* specific mass of layer *|
 **
 ** DESCRIPTION
 **      This routine calculates the cold content for a layer (i.e., the
@@ -319,9 +319,9 @@ void ClassSnobalBase::_layer_mass(void)
 **	The layer's cold content.
 */
 
-float ClassSnobalBase::_cold_content(
-    float	temp,		// temperature of layer
-    float	mass)		// specific mass of layer
+double ClassSnobalBase::_cold_content(
+    double	temp,		// temperature of layer
+    double	mass)		// specific mass of layer
 {
     if (temp < FREEZE)
         return heat_stor(CP_ICE(temp), mass, (temp - FREEZE));
@@ -556,7 +556,7 @@ int ClassSnobalBase::_divide_tstep(TSTEP_REC* tstep) {  // record of timestep to
 **
 **      int
 **	_below_thold(
-**	    float  threshold)	|* current timestep's threshold for a
+**	    double  threshold)	|* current timestep's threshold for a
 **				   layer's mass *|
 **
 ** DESCRIPTION
@@ -577,7 +577,7 @@ int ClassSnobalBase::_divide_tstep(TSTEP_REC* tstep) {  // record of timestep to
 ** GLOBAL VARIABLES MODIFIED
 */
 
-int ClassSnobalBase::_below_thold(float	threshold) { // current timestep's threshold for a layer's mass
+int ClassSnobalBase::_below_thold(double	threshold) { // current timestep's threshold for a layer's mass
 
     if (layer_count[hh] == 0)
         return 0;
@@ -840,10 +840,10 @@ void ClassSnobalBase::_net_rad(void)
 
 int ClassSnobalBase::_h_le(void) {
 
-    float e_s, e_a_fix;
-    float sat_vp;
-    float rel_z_T; // relative z_T (temperature measurement height) above snow surface
-    float rel_z_u; // relative z_u (windspeed measurement height) above snow surface
+    double e_s, e_a_fix;
+    double sat_vp;
+    double rel_z_T; // relative z_T (temperature measurement height) above snow surface
+    double rel_z_u; // relative z_u (windspeed measurement height) above snow surface
 
 // calculate saturation vapor pressure
 
@@ -854,7 +854,7 @@ int ClassSnobalBase::_h_le(void) {
     sat_vp = sati(T_a[hh]);
     if (e_a[hh] > sat_vp)
         e_a_fix = sat_vp;
-    //		const_cast<float*> (e_a)[hh] = sat_vp;
+    //		const_cast<double*> (e_a)[hh] = sat_vp;
     else
         e_a_fix = e_a[hh];
 
@@ -880,18 +880,18 @@ int ClassSnobalBase::_h_le(void) {
     return 1;
 }
 
-float ClassSnobalBase::g_soil(
-    float	rho,	// snow layer's density (kg/m^3)
-    float	tsno,	// snow layer's temperature (K)
-    float	tg,	// soil temperature (K)
-    float	ds,	// snow layer's thickness (m)
-    float	dg,	// dpeth of soil temperature measurement (m)
-    float	pa)	// air pressure (Pa)
+double ClassSnobalBase::g_soil(
+    double	rho,	// snow layer's density (kg/m^3)
+    double	tsno,	// snow layer's temperature (K)
+    double	tg,	// soil temperature (K)
+    double	ds,	// snow layer's thickness (m)
+    double	dg,	// dpeth of soil temperature measurement (m)
+    double	pa)	// air pressure (Pa)
 {
-    float	k_g;
-    float	kcs;
-    float	k_s;
-    float	g;
+    double	k_g;
+    double	kcs;
+    double	k_s;
+    double	g;
 
     // check tsno
     if (tsno > FREEZE) {
@@ -912,20 +912,20 @@ float ClassSnobalBase::g_soil(
     return (g);
 }
 
-float ClassSnobalBase::g_snow(
-    float	rho1,	/* upper snow layer's density (kg/m^3)	*/
-    float	rho2,	/* lower  "     "        "    (kg/m^3)	*/
-    float	ts1,	/* upper snow layer's temperature (K)	*/
-    float	ts2,	/* lower  "     "         "       (K)	*/
-    float	ds1,	/* upper snow layer's thickness (m)	*/
-    float	ds2,	/* lower  "     "         "     (m)	*/
-    float	pa)	/* air pressure (Pa)			*/
+double ClassSnobalBase::g_snow(
+    double	rho1,	/* upper snow layer's density (kg/m^3)	*/
+    double	rho2,	/* lower  "     "        "    (kg/m^3)	*/
+    double	ts1,	/* upper snow layer's temperature (K)	*/
+    double	ts2,	/* lower  "     "         "       (K)	*/
+    double	ds1,	/* upper snow layer's thickness (m)	*/
+    double	ds2,	/* lower  "     "         "     (m)	*/
+    double	pa)	/* air pressure (Pa)			*/
 {
-    float	kcs1;
-    float	kcs2;
-    float	k_s1;
-    float	k_s2;
-    float	g;
+    double	kcs1;
+    double	kcs2;
+    double	k_s1;
+    double	k_s2;
+    double	g;
 
 
     //	calculate G
@@ -1085,10 +1085,10 @@ void ClassSnobalBase::_mass_bal(void) {
 
 void ClassSnobalBase::_time_compact(void)
 {
-    const float A = 350; // Maximum density due to compaction by gravity (kg/m^2).
-    const float B = 86400;
+    const double A = 350; // Maximum density due to compaction by gravity (kg/m^2).
+    const double B = 86400;
 
-    float	time;	/* point on time axis corresponding to current density */
+    double	time;	/* point on time axis corresponding to current density */
   // If the snow is already at or above the maximum density due compaction by gravity, then just leave.
 
     if (!snowcover[hh] || rho[hh] > A || m_s[hh] <= 0.0)
@@ -1144,7 +1144,7 @@ void ClassSnobalBase::_time_compact(void)
 
 void ClassSnobalBase::_precip(void)
 {
-    float	h2o_vol_snow;	// liquid water content of new snowfall as volume ratio
+    double	h2o_vol_snow;	// liquid water content of new snowfall as volume ratio
 
     if (precip_now[hh]) {
         if (snowcover[hh]) {
@@ -1217,11 +1217,11 @@ void ClassSnobalBase::_drift(void)
 
 void ClassSnobalBase::_snowmelt(void) {
 
-    float  Q_0;            // energy available for surface melt
-    float  Q_l;	       // energy available for lower layer melt
-    float  Q_freeze;       // energy used for re-freezing
-    float  Q_left;         // energy left after re_freezing
-    float  h2o_refrozen;   // amount of liquid H2O that was refrozen
+    double  Q_0;            // energy available for surface melt
+    double  Q_l;	       // energy available for lower layer melt
+    double  Q_freeze;       // energy used for re-freezing
+    double  Q_left;         // energy left after re_freezing
+    double  h2o_refrozen;   // amount of liquid H2O that was refrozen
 
 // If no snow on ground at start of timestep, then just exit.
 
@@ -1383,8 +1383,8 @@ void ClassSnobalBase::_new_density(void) {
 **
 **      void
 **	_adj_snow(
-**	    float delta_z_s,	|* change in snowcover's depth *|
-**	    float delta_m_s)	|* change is snowcover's mass *|
+**	    double delta_z_s,	|* change in snowcover's depth *|
+**	    double delta_m_s)	|* change is snowcover's mass *|
 **
 ** DESCRIPTION
 **      This routine adjusts the snowcover for a change in its depth or
@@ -1410,11 +1410,11 @@ void ClassSnobalBase::_new_density(void) {
 */
 
 void ClassSnobalBase::_adj_snow(
-    float	delta_z_s,	// change in snowcover's depth
-    float	delta_m_s)	// change is snowcover's mass
+    double	delta_z_s,	// change in snowcover's depth
+    double	delta_m_s)	// change is snowcover's mass
 {
 
-    const float MAX_SNOW_DENSITY = 750; // Maximum snow density (kg/m^3)
+    const double MAX_SNOW_DENSITY = 750; // Maximum snow density (kg/m^3)
 
   // Update depth, mass, and then recompute density.
     z_s[hh] += delta_z_s;
@@ -1476,18 +1476,18 @@ void ClassSnobalBase::_adj_snow(
 
 void ClassSnobalBase::_evap_cond(void) {
 
-    //        float  E_s_0;          // mass of evaporation to air (kg/m^2)
-    //        float  E_s_l;          // mass of evaporation to soil (kg/m^2)
-    float  E_l;	       // mass flux by evap/cond to soil (kg/m^2/s)
-    float  e_g;            // soil vapor press
-    float  e_s_l;          // lower snow layer's vapor press
-    float  k;              // soil diffusion coef
-    float  prev_h2o_tot;   // previous value of h2o_total variable
-    float  q_delta;        // difference between snow & soil spec hum's
-    float  q_g;            // soil spec hum
-    float  q_s_l;          // lower snow layer's spec hum
-    float  rho_air;        // air density
-    float  T_bar;          // snow-soil mean temp
+    //        double  E_s_0;          // mass of evaporation to air (kg/m^2)
+    //        double  E_s_l;          // mass of evaporation to soil (kg/m^2)
+    double  E_l;	       // mass flux by evap/cond to soil (kg/m^2/s)
+    double  e_g;            // soil vapor press
+    double  e_s_l;          // lower snow layer's vapor press
+    double  k;              // soil diffusion coef
+    double  prev_h2o_tot;   // previous value of h2o_total variable
+    double  q_delta;        // difference between snow & soil spec hum's
+    double  q_g;            // soil spec hum
+    double  q_s_l;          // lower snow layer's spec hum
+    double  rho_air;        // air density
+    double  T_bar;          // snow-soil mean temp
 
 // calculate evaporation or condensation
 
@@ -1615,9 +1615,9 @@ void ClassSnobalBase::_evap_cond(void) {
 void ClassSnobalBase::_h2o_compact(void)
 {
 
-    float Alocal;         // difference between maximum & currentdensities
+    double Alocal;         // difference between maximum & currentdensities
 
-    float	h2o_added;	// ratio of mass of liquid H2O added from melting and rain to mass of snowcover
+    double	h2o_added;	// ratio of mass of liquid H2O added from melting and rain to mass of snowcover
 
   // If the snow is already at or above the maximum density due compaction by liquid H2O, then just leave.
 
@@ -1776,8 +1776,8 @@ void ClassSnobalBase::_adj_layers(void) {
 
 void ClassSnobalBase::_runoff(void) {
 
-    float	m_s_dry;	/* snowcover's mass without liquid H2O */
-    float	rho_dry;	/* snow density without liquid H2O */
+    double	m_s_dry;	/* snowcover's mass without liquid H2O */
+    double	rho_dry;	/* snow density without liquid H2O */
 
 // calculate runoff
 
@@ -1814,8 +1814,8 @@ void ClassSnobalBase::_runoff(void) {
     }
 }
 
-float satw(
-    float  tk) {		/* air temperature (K)		*/
+double satw(
+    double  tk) {		/* air temperature (K)		*/
 
     double  x;
     double  l10;
@@ -1890,7 +1890,7 @@ psi(double zeta,		// z/lo
 
 
 
-float ClassSnobalBase::sati(float  tk) { //* air temperature (K)
+double ClassSnobalBase::sati(double  tk) { //* air temperature (K)
 
     double  l10;
     double  x;
@@ -1921,15 +1921,15 @@ float ClassSnobalBase::sati(float  tk) { //* air temperature (K)
 }
 /* ----------------------------------------------------------------------- */
 
-float ClassSnobalBase::ssxfr(
-    float	k1,	/* layer 1's thermal conductivity (J / (m K sec))  */
-    float	k2,	/* layer 2's    "         "                        */
-    float	t1,	/* layer 1's average layer temperature (K)	   */
-    float	t2,	/* layer 2's    "      "        "         	   */
-    float	d1,     /* layer 1's thickness (m)			   */
-    float	d2)     /* layer 2's    "       "			   */
+double ClassSnobalBase::ssxfr(
+    double	k1,	/* layer 1's thermal conductivity (J / (m K sec))  */
+    double	k2,	/* layer 2's    "         "                        */
+    double	t1,	/* layer 1's average layer temperature (K)	   */
+    double	t2,	/* layer 2's    "      "        "         	   */
+    double	d1,     /* layer 1's thickness (m)			   */
+    double	d2)     /* layer 2's    "       "			   */
 {
-    float	xfr;
+    double	xfr;
 
     xfr = 2.0 * (k1 * k2 * (t2 - t1)) / ((k2 * d1) + (k1 * d2));
 
@@ -1937,12 +1937,12 @@ float ClassSnobalBase::ssxfr(
 }
 /* ----------------------------------------------------------------------- */
 
-float ClassSnobalBase::heat_stor(
-    float	cp,	/* specific heat of layer (J/kg K) */
-    float	spm,	/* layer specific mass (kg/m^2)    */
-    float	tdif)	/* temperature change (K)          */
+double ClassSnobalBase::heat_stor(
+    double	cp,	/* specific heat of layer (J/kg K) */
+    double	spm,	/* layer specific mass (kg/m^2)    */
+    double	tdif)	/* temperature change (K)          */
 {
-    float	stor;
+    double	stor;
 
     stor = cp * spm * tdif;
 
@@ -1950,14 +1950,14 @@ float ClassSnobalBase::heat_stor(
 }
 /* ----------------------------------------------------------------------- */
 
-float ClassSnobalBase::new_tsno(
-    float	spm,	/* layer's specific mass (kg/m^2) 	 */
-    float	t0,	/* layer's last temperature (K) 	 */
-    float	ccon)	/* layer's adjusted cold content (J/m^2) */
+double ClassSnobalBase::new_tsno(
+    double	spm,	/* layer's specific mass (kg/m^2) 	 */
+    double	t0,	/* layer's last temperature (K) 	 */
+    double	ccon)	/* layer's adjusted cold content (J/m^2) */
 {
-    float	tsno;
-    float	cp;
-    float	tdif;
+    double	tsno;
+    double	cp;
+    double	tdif;
 
     cp = CP_ICE(t0);
 
@@ -1975,10 +1975,10 @@ float ClassSnobalBase::new_tsno(
 }
 /* ----------------------------------------------------------------------- */
 
-float ClassSnobalBase::efcon(
-    float	k,	/* layer thermal conductivity (J/(m K sec)) */
-    float	t,	/* layer temperature (K)		    */
-    float	p)	/* air pressure (Pa)  			    */
+double ClassSnobalBase::efcon(
+    double	k,	/* layer thermal conductivity (J/(m K sec)) */
+    double	t,	/* layer temperature (K)		    */
+    double	p)	/* air pressure (Pa)  			    */
 {
     double	etc;
     double	de;
@@ -2008,22 +2008,22 @@ float ClassSnobalBase::efcon(
 }
 
 int ClassSnobalBase::hle1(
-    float	press,	// aiFr pressure (Pa)
-    float	ta,	// air temperature (K) at height za
-    float	ts,	// surface temperature (K)
-    float	za,	// height of air temp measurement (m)
-    float	ea,	// vapor pressure (Pa) at height zq
-    float	es,	// vapor pressure (Pa) at surface
-    float	zq,	// height of spec hum measurement (m)
-    float	u,	// wind speed (m/s) at height zu
-    float	zu,	// height of wind speed measurement (m)
-    float	z0,	// roughness length (m)
+    double	press,	// aiFr pressure (Pa)
+    double	ta,	// air temperature (K) at height za
+    double	ts,	// surface temperature (K)
+    double	za,	// height of air temp measurement (m)
+    double	ea,	// vapor pressure (Pa) at height zq
+    double	es,	// vapor pressure (Pa) at surface
+    double	zq,	// height of spec hum measurement (m)
+    double	u,	// wind speed (m/s) at height zu
+    double	zu,	// height of wind speed measurement (m)
+    double	z0,	// roughness length (m)
 
 // output variables
 
-float& CRHM_h,	// sens heat flux (+ to surf) (W/m^2)
-float& CRHM_le,	// latent heat flux (+ to surf) (W/m^2)
-float& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
+double& CRHM_h,	// sens heat flux (+ to surf) (W/m^2)
+double& CRHM_le,	// latent heat flux (+ to surf) (W/m^2)
+double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
 {
     double h = 0;	// sens heat flux (+ to surf) (W/m^2)
     double e = 0;	// mass flux (+ to surf) (kg/m^2/s)

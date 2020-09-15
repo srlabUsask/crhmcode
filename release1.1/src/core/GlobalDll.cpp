@@ -93,28 +93,28 @@ TStringList *(Global::NewModuleName);
 //HWND Global::crhmMain;
 //HWND Global::crhmLog;
 
-float  *Global::lapse_rate; // used for array observations adjustments
-float  *Global::ppt_adj; // used for array observations adjustments
-float  *Global::hru_elev; // used for array observations adjustments
+double  *Global::lapse_rate; // used for array observations adjustments
+double  *Global::ppt_adj; // used for array observations adjustments
+double  *Global::hru_elev; // used for array observations adjustments
 long   **Global::HRU_OBS; // used for array observations
 
-float  *Global::Warming_t; // used for climate warming
-float  *Global::Warming_p; // used for climate warming
+double  *Global::Warming_t; // used for climate warming
+double  *Global::Warming_p; // used for climate warming
 long   *Global::RH_VP_flag; // used for elevation change. -> 0 maintain rh, 1 -> maintain ea
 long   *Global::RH_VP_flag2; // used for climate warming. -> 0 maintain rh, 1 -> maintain ea
 long    Global::RH_EA_obs; // 0 -> rh obs, 1 -> ea obs
 long    Global::OBS_AS_IS; // 0 -> process obs, 1 -> no processing
 long    Global::WQ_prj; // true -> processing WQ modules
 
-float  **Global::OBS_ELEV; // used for array observations adjustments
+double  **Global::OBS_ELEV; // used for array observations adjustments
 long   **Global::HRU_OBS_DIRECT; // used for array observations
-float  **Global::obs_t; // used for array observations adjustments
-float  **Global::obs_ea; // used for array observations adjustments
-float  **Global::obs_rh; // used for array observations adjustments
-float  **Global::obs_t_obs; // used for array observations adjustments
+double  **Global::obs_t; // used for array observations adjustments
+double  **Global::obs_ea; // used for array observations adjustments
+double  **Global::obs_rh; // used for array observations adjustments
+double  **Global::obs_t_obs; // used for array observations adjustments
 
 TObject *Global::thisVar;
 
 //manishankar. this is used for resolving the address related issue.
-//float** Global::t_layvalues;
-//float** Global::rh_layvalues;
+//double** Global::t_layvalues;
+//double** Global::rh_layvalues;

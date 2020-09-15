@@ -82,12 +82,12 @@ void Classcontribution::run(void) {
 
       for(long hhh = 0; chkStruct(hhh); ++hhh) { // do HRUs in sequence
         if(distrib_hru[hh][hhh] < 0.0)
-          const_cast<float **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
+          const_cast<double **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
         distrib_sum[hh] += distrib_hru[hh][hhh];
       }
 
       if(distrib_sum[hh] <= 0 && distrib_Basin[hh] <= 0.0){
-        const_cast<float *> (distrib_Basin) [hh] = 1;
+        const_cast<double *> (distrib_Basin) [hh] = 1;
     }
 
     distrib_sum[hh] += distrib_Basin[hh];
@@ -128,7 +128,7 @@ void Classcontribution::run(void) {
     }
   } // hh
 
-  float sum2 = 0;
+  double sum2 = 0;
   for(long hh = 6; chkStruct(hh); ++hh) {
     sum2 += contrib_area[hh];
   } // hh

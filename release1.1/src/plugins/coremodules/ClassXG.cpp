@@ -189,14 +189,14 @@ void ClassXG::init(void) {
     t_trend[hh] = 0.0;
 
     if(Zpf_init[hh] <= 0.0)
-      const_cast<float *> (Zpf_init)[hh] = 2.0;
+      const_cast<double *> (Zpf_init)[hh] = 2.0;
 
     for(long ll = 0; ll < nlay; ++ll)
       Zd_front_array[ll][hh] = 0.0;
 
-    float rechrmax = soil_rechr_max[hh];
-    float soilmax = soil_moist_max[hh];
-    float profile_depth = 0.0;
+    double rechrmax = soil_rechr_max[hh];
+    double soilmax = soil_moist_max[hh];
+    double profile_depth = 0.0;
 
     XG_rechr_d[hh] = 0.0;
     XG_moist_d[hh] = 0.0;
@@ -216,11 +216,11 @@ void ClassXG::init(void) {
            rechrmax -= XG_max_lay[ll][hh];
          }
          else{
-           float amount = rechrmax/XG_max_lay[ll][hh];
+           double amount = rechrmax/XG_max_lay[ll][hh];
            rechr_fract_lay[ll][hh] = rechrmax/XG_max_lay[ll][hh];
 
            XG_rechr_d[hh] += depths_lay[ll][hh]*amount;
-           float left = 1.0 - amount;
+           double left = 1.0 - amount;
            if(soilmax >= XG_max_lay[ll][hh]*left){ // layer all used
              moist_fract_lay[ll][hh] = left;
              soilmax -= XG_max_lay[ll][hh]*left;
@@ -228,7 +228,7 @@ void ClassXG::init(void) {
            }
            else { // layer partly used
              moist_fract_lay[ll][hh] = (soilmax - rechrmax)/XG_max_lay[ll][hh];
-             float used = rechr_fract_lay[ll][hh] + moist_fract_lay[ll][hh];
+             double used = rechr_fract_lay[ll][hh] + moist_fract_lay[ll][hh];
              default_fract_lay[ll][hh] = 1.0 - used;
              XG_moist_d[hh] += (XG_rechr_d[hh] + depths_lay[ll][hh]*used);
              soilmax = 0.0;
@@ -243,11 +243,11 @@ void ClassXG::init(void) {
            soilmax -= XG_max_lay[ll][hh];
         }
         else{
-          float amount = soilmax/XG_max_lay[ll][hh];
+          double amount = soilmax/XG_max_lay[ll][hh];
           XG_moist_d[hh] += depths_lay[ll][hh]*amount;
           moist_fract_lay[ll][hh] = amount;
 
-          float left = 1.0 - amount;
+          double left = 1.0 - amount;
           if(left) // adjust last layer depth
             default_fract_lay[ll][hh] = left;
           soilmax = 0.0;
@@ -350,14 +350,14 @@ void ClassXG::init(void) {
 
 void ClassXG::run(void) {
 
-  float Za, X, X1;
-  float L = 335000;// the latent heat of fusion of ice(J/kg);
+  double Za, X, X1;
+  double L = 335000;// the latent heat of fusion of ice(J/kg);
   long  nstep = getstep();
 
   for(hh = 0; chkStruct(); ++hh) {
 
     if(nstep == 1){
-      const_cast<float *> (depths_lay[N_Soil_layers[hh]-1])[hh] = 100.0; // ensure stays in last layer. Must be here to be restored
+      const_cast<double *> (depths_lay[N_Soil_layers[hh]-1])[hh] = 100.0; // ensure stays in last layer. Must be here to be restored
       if(Zdf_init[hh] > 0.0 && Bfr[hh] <= 0.0) // not set by state file
         find_freeze_D(Zdf_init[hh]); // initialises Bfr and Zdf from Zdf_init
       if(Zdt_init[hh] && Zdt_init[hh] < Zpf_init[hh] && Bth[hh] <= 0.0) // not set by state file
@@ -491,11 +491,11 @@ void ClassXG::run(void) {
 // check for thaw front
           if(Zdt[hh] > 0.0 && Zdf[hh] >= Zdt[hh]){
             if(nfront[hh] > 0){
-              float Last = last_front();
+              double Last = last_front();
               if(Last < 0.0){ // frozen front
                 Zdf[hh] = pop_front();
                 find_freeze_D(Zdf[hh]);
-                float Last = last_front();
+                double Last = last_front();
                 if(Last > 0.0){ // thaw front
                   Zdt[hh] = pop_front();
                   find_thaw_D(Zdf[hh]);
@@ -566,7 +566,7 @@ void ClassXG::run(void) {
 // check for freeze front
           if(Zdf[hh] > 0.0 && Zdt[hh] >= Zdf[hh]){
             if(nfront[hh] > 0){
-              float Last = last_front();
+              double Last = last_front();
               if(Last > 0.0){ // thaw front
                 Zdt[hh] = pop_front();
                 find_thaw_D(Zdt[hh]);
@@ -625,12 +625,12 @@ void ClassXG::run(void) {
 void ClassXG::freeze(void) { // XG-Algorithm - Freezing
 
   long lay = 1;
-  float Za;
-  float L = 335000; // the latent heat of fusion of ice(3.35Ã?105J/kg);
+  double Za;
+  double L = 335000; // the latent heat of fusion of ice(3.35Ã?105J/kg);
 
   Zdf[hh] = 0.0;
 
-  float ftc;
+  double ftc;
   if(k_update[hh] == 2)
     ftc = Interpolated_ftc_lay(Zdf[hh], lay);
   else
@@ -662,12 +662,12 @@ void ClassXG::freeze(void) { // XG-Algorithm - Freezing
 void ClassXG::thaw(void) { // XG-Algorithm - Thawing
 
   long lay = 1;
-  float Za;
-  float L = 335000;// the latent heat of fusion of ice(3.35Ã?105J/kg);
+  double Za;
+  double L = 335000;// the latent heat of fusion of ice(3.35Ã?105J/kg);
 
   Zdt[hh] = 0.0;
 
-  float ttc;
+  double ttc;
   if(k_update[hh] == 2)
     ttc = Interpolated_ttc_lay(Zdf[hh], lay);
   else
@@ -696,39 +696,39 @@ void ClassXG::thaw(void) { // XG-Algorithm - Thawing
     Zdt[hh] = Zpf_init[hh];
 }
 
-float ClassXG::Interpolated_ttc_lay(float Za, long lay) { //
+double ClassXG::Interpolated_ttc_lay(double Za, long lay) { //
 
   if(!thaw_ki_kw_update[hh])
     return (ttc_lay[lay-1][hh]);
 
-  float split = (Za - Zdt[hh])/depths_lay[lay-1][hh];
+  double split = (Za - Zdt[hh])/depths_lay[lay-1][hh];
   if(split >= 1.0)
     split = 1.0;
 
-  float combination = ttc_lay[lay-1][hh] - split*(ttc_lay[lay-1][hh] - ftc_lay[lay-1][hh]); // thawed(18k) to frozen (4k)
+  double combination = ttc_lay[lay-1][hh] - split*(ttc_lay[lay-1][hh] - ftc_lay[lay-1][hh]); // thawed(18k) to frozen (4k)
 
   tc_composite2_lay[lay-1][hh] = combination;
 
   return (combination);
 }
 
-float ClassXG::Interpolated_ftc_lay(float Za, long lay) { //
+double ClassXG::Interpolated_ftc_lay(double Za, long lay) { //
 
   if(!freeze_kw_ki_update[hh])
     return (ftc_lay[lay-1][hh]);
 
-  float split = (Za - Zdf[hh])/depths_lay[lay-1][hh];
+  double split = (Za - Zdf[hh])/depths_lay[lay-1][hh];
   if(split >= 1.0)
     split = 1.0;
 
-  float combination = ftc_lay[lay-1][hh] + split*(ttc_lay[lay-1][hh] - ftc_lay[lay-1][hh]); // frozen (4k) to thawed(18k)
+  double combination = ftc_lay[lay-1][hh] + split*(ttc_lay[lay-1][hh] - ftc_lay[lay-1][hh]); // frozen (4k) to thawed(18k)
 
   tc_composite2_lay[lay-1][hh] = combination;
 
   return (combination);
 }
 
-void ClassXG::find_thaw_D(float dt) { // XG-Algorithm - Thawing - used by init
+void ClassXG::find_thaw_D(double dt) { // XG-Algorithm - Thawing - used by init
 // solve for Bth from Zdt using Bisection method
 
   if(dt == 0)
@@ -748,7 +748,7 @@ void ClassXG::find_thaw_D(float dt) { // XG-Algorithm - Thawing - used by init
 }
 
 
-void ClassXG::find_freeze_D(float df) { // XG-Algorithm - Thawing - used by init
+void ClassXG::find_freeze_D(double df) { // XG-Algorithm - Thawing - used by init
 // solve for Bfr from Zdt using Bisection method
 
   if(df == 0)
@@ -767,7 +767,7 @@ void ClassXG::find_freeze_D(float df) { // XG-Algorithm - Thawing - used by init
   throw TExcept;
 }
 
-void ClassXG::push_front(float D) {
+void ClassXG::push_front(double D) {
 
   if(nfront[hh] >= front_size-3){ // space to allocate plus Zdf/Zdt(2 slots) plus top of stack indicator
     string S = string("'") + Name + " (XG)' too many fronts in hru = " + to_string(hh+1).c_str();
@@ -783,9 +783,9 @@ void ClassXG::push_front(float D) {
   Zd_front_array[2][hh] = D; // add new entry
 }
 
-float ClassXG::pop_front(void) {
+double ClassXG::pop_front(void) {
 
-float D = fabs(Zd_front_array[2][hh]); // always positive
+double D = fabs(Zd_front_array[2][hh]); // always positive
 
   for(long ii = 2; ii < nfront[hh]+1; ++ii) // move contents down
     Zd_front_array[ii][hh] = Zd_front_array[ii+1][hh];
@@ -797,7 +797,7 @@ float D = fabs(Zd_front_array[2][hh]); // always positive
   return D;
 }
 
-float ClassXG::last_front(void){
+double ClassXG::last_front(void){
 
   if(!nfront[hh])
     return 0.0;
@@ -805,11 +805,11 @@ float ClassXG::last_front(void){
     return (Zd_front_array[2][hh]);
 }
 
-/*float ClassXG::SWE_to_rho(float SWE) { // Pomeroy et al (1998)
+/*double ClassXG::SWE_to_rho(double SWE) { // Pomeroy et al (1998)
 
 // solve for desity from SWE using Bisection method
 
-  float h1 = 0.6, h2 = 8.00, e, h, rho;
+  double h1 = 0.6, h2 = 8.00, e, h, rho;
   long iter_max = 0;
   do {
     h = (h1 + h2)/2.0; // m
@@ -834,7 +834,7 @@ void ClassXG::finish(bool good) {
   LogDebug(" ");
 }
 
-float ClassXG::get_ftc_lay(long lay){ // unfrozen(thawed) soil to be frozen
+double ClassXG::get_ftc_lay(long lay){ // unfrozen(thawed) soil to be frozen
   if(calc_coductivity[hh]){
     return (soil_solid_km_ki_lay[lay][hh] - soil_solid_km_lay[lay][hh])*sqr(h2o_lay[lay][hh]/(1000.0*por_lay[lay][hh])) + soil_solid_km_lay[lay][hh];
   }
@@ -842,7 +842,7 @@ float ClassXG::get_ftc_lay(long lay){ // unfrozen(thawed) soil to be frozen
     return (1.0 - por_lay[lay][hh])*soil_solid_km_lay[lay][hh] + h2o_lay[lay][hh]/1000.0*kw + (por_lay[lay][hh] - h2o_lay[lay][hh]/1000.0)*ka;
 }
 
-float ClassXG::get_ttc_lay(long lay){ // frozen soil to be unfrozen(thawed)
+double ClassXG::get_ttc_lay(long lay){ // frozen soil to be unfrozen(thawed)
   if(calc_coductivity[hh]){
     return  soil_solid_km_lay[lay][hh]*pow(soil_solid_km_ki_lay[lay][hh]/soil_solid_km_lay[lay][hh], h2o_lay[lay][hh]/(1000.0*por_lay[lay][hh]));
   }

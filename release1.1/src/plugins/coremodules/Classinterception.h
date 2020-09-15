@@ -9,33 +9,33 @@ public:
 Classinterception(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observations
-const float *Qsi;
+const double *Qsi;
 
 // variable inputs
-const float *hru_t;
-const float *hru_snow;
-const float *hru_rain;
-const float *hru_u;
-const float *hru_rh;
+const double *hru_t;
+const double *hru_snow;
+const double *hru_rain;
+const double *hru_u;
+const double *hru_rh;
 
 // declared variables
-float *SI_Lo;
-float *net_snow;
-float *net_rain;
-float *SI_Subl;
-float *Cum_Subl;
-float *Cum_net_snow;
-float *v;
+double *SI_Lo;
+double *net_snow;
+double *net_rain;
+double *SI_Subl;
+double *Cum_Subl;
+double *Cum_net_snow;
+double *v;
 
 // declared parameters
-const float *Sbar;
-const float *LAI;
-const float *k;
-const float *velw;
-const float *Ht;
-const float *WidthJ;
-const float *basin_area;
-const float *hru_area;
+const double *Sbar;
+const double *LAI;
+const double *k;
+const double *velw;
+const double *Ht;
+const double *WidthJ;
+const double *basin_area;
+const double *hru_area;
 
 // variable inputs
 

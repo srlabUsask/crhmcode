@@ -11,74 +11,74 @@ long Exist;
 long Exist2;
 
 // declared observation variables
-const float *p;      // interval data
-const float *ppt;    // daily data
-const float *t;
-float **tday_intvls;
-const float *rh;
-float **rhday_intvls;
-const float *ea;
-float **eaday_intvls;
-const float *u;
-const float *t_max;
-const float *t_min;
-const float *obs_snow;
-const float *obs_rain;
+const double *p;      // interval data
+const double *ppt;    // daily data
+const double *t;
+double **tday_intvls;
+const double *rh;
+double **rhday_intvls;
+const double *ea;
+double **eaday_intvls;
+const double *u;
+const double *t_max;
+const double *t_min;
+const double *obs_snow;
+const double *obs_rain;
 
 // declared observation functions
-float *tmean;
-float *tmin;
-float *tmax;
-float *umean;
-float *pptD;
-//float *p;      // interval data
-float *NotUsed;
+double *tmean;
+double *tmin;
+double *tmax;
+double *umean;
+double *pptD;
+//double *p;      // interval data
+double *NotUsed;
 
 // declared variables
-float *hru_t;
-float *hru_rh;
-float *hru_ea;
-float *hru_estar;
-float *hru_u;
-float *hru_p;
-// float *hru_icebulb;
-float *Pa;
-float *DTnow;
+double *hru_t;
+double *hru_rh;
+double *hru_ea;
+double *hru_estar;
+double *hru_u;
+double *hru_p;
+// double *hru_icebulb;
+double *Pa;
+double *DTnow;
 long  *DTindx;
-float *hru_rain;
-float *cumhru_rain;
-float *hru_snow;
-float *cumhru_snow;
-float *cumhru_snow_meas;
-float *hru_tmax;
-float *hru_tmin;
-float *hru_tmean;
-float *hru_eamean;
-float *hru_umean;
-float *hru_rhmean;
+double *hru_rain;
+double *cumhru_rain;
+double *hru_snow;
+double *cumhru_snow;
+double *cumhru_snow_meas;
+double *hru_tmax;
+double *hru_tmin;
+double *hru_tmean;
+double *hru_eamean;
+double *hru_umean;
+double *hru_rhmean;
 
-float *t_obs;
-float **t_obs_lay;
+double *t_obs;
+double **t_obs_lay;
 
 long  *hru_newsnow;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *tmax_allrain;
-const float *tmax_allsnow;
-const float *lapse_rate;
-const float *precip_elev_adj;
-const float *hru_elev;
-const float *ClimChng_t;
-const float *ClimChng_precip;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *tmax_allrain;
+const double *tmax_allsnow;
+const double *lapse_rate;
+const double *precip_elev_adj;
+const double *hru_elev;
+const double *ClimChng_t;
+const double *ClimChng_precip;
 const long  *catchadjust;
 const long  *ppt_daily_distrib;
 const long  *snow_rain_determination;
 const long  *HRU_OBS;
 const long  **HRU_OBS_Tables;
-const float *obs_elev;
-const float  **obs_elev_Tables;
+const double *obs_elev;
+const double  **obs_elev_Tables;
 const long  *ElevChng_flag;
 const long  *ClimChng_flag;
 

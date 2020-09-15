@@ -16,93 +16,93 @@ long depths_size; // handles recharge and lower layers
 // declared observation variables
 
 // declared variables
-float *Sd;
-float *gw;
-float *soil_rechr;
-float *soil_moist;
-float *soil_gw;
-float *gw_flow;
-float *soil_ssr;
-float *rechr_ssr;
-float *soil_runoff;
-float *cum_soil_ssr;
-float *cum_rechr_ssr;
-float *cum_soil_runoff;
-float *cum_runoff_to_Sd;
-float *cum_redirected_residual;
-float *soil_gw_D;
-float *soil_ssr_D;
-float *gw_flow_D;
-float *soil_runoff_D;
-float *HK_V;
-float *HK_A;
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_over_Q;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
-float *redirected_residual;
-float *infil_act;
-float *cum_infil_act;
-float *infil_act_D;
+double *Sd;
+double *gw;
+double *soil_rechr;
+double *soil_moist;
+double *soil_gw;
+double *gw_flow;
+double *soil_ssr;
+double *rechr_ssr;
+double *soil_runoff;
+double *cum_soil_ssr;
+double *cum_rechr_ssr;
+double *cum_soil_runoff;
+double *cum_runoff_to_Sd;
+double *cum_redirected_residual;
+double *soil_gw_D;
+double *soil_ssr_D;
+double *gw_flow_D;
+double *soil_runoff_D;
+double *HK_V;
+double *HK_A;
+double *culvert_Q;
+double *culvert_water_H;
+double *culvert_water_A;
+double *culvert_water_V;
+double *culvert_over_Q;
+double *culvert_evap;
+double *cum_culvert;
+double *cum_culvert_over;
+double *HD;
+double *redirected_residual;
+double *infil_act;
+double *cum_infil_act;
+double *infil_act_D;
 
 // local variables
-float *cum_soil_gw;
-float *cum_gw_flow;
-float *cum_hru_condense;
-float *soil_moist_Init;
-float *soil_rechr_Init;
-float *Sd_Init;
-float *gw_Init;
-float *SWE_Init;
-float *Dts_runoff_K; // from Dts_snow_runoff_K or Dts_organic_runoff_K
+double *cum_soil_gw;
+double *cum_gw_flow;
+double *cum_hru_condense;
+double *soil_moist_Init;
+double *soil_rechr_Init;
+double *Sd_Init;
+double *gw_Init;
+double *SWE_Init;
+double *Dts_runoff_K; // from Dts_snow_runoff_K or Dts_organic_runoff_K
 
-float *snowinfil_buf;
-float *runoff_buf;
-float *meltrunoff_buf;
-float *hru_evap_buf;
+double *snowinfil_buf;
+double *runoff_buf;
+double *meltrunoff_buf;
+double *hru_evap_buf;
 
-float *thaw_layers;
-float **thaw_layers_lay;
-float *depth_layers;
-float **depth_layers_lay;
-float *thaw_all;
+double *thaw_layers;
+double **thaw_layers_lay;
+double *depth_layers;
+double **depth_layers_lay;
+double *thaw_all;
 
 // declared parameters
-const float *Sdmax;
-const float *Sdinit;
-const float *gw_max;
-const float *gw_init;
-const float *gw_K;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *soil_rechr_max;
-const float *soil_rechr_init;
-const float *soil_moist_max;
-const float *soil_moist_init;
-const float *soil_gw_K;
-const float *rechr_ssr_K;
-const float *lower_ssr_K;
-const float *Sd_ssr_K;
-const float *Sd_gw_K;
-const float *channel_slope;
-const float *side_slope;
-const float *culvert_diam;
-const float *culvert_water_Dmax;
-const float *number_culverts;
-const float *porosity_upper;
-const float *porosity_lower;
-const float *evap_from_runoff;
-const float *Dts_snow_max;
-const float *Dts_organic_max;
-const float *Dts_snow_init;
-const float *Dts_snow_runoff_K;
-const float *Dts_organic_runoff_K;
-const float *Dts_organic_init;
+const double *Sdmax;
+const double *Sdinit;
+const double *gw_max;
+const double *gw_init;
+const double *gw_K;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *soil_rechr_max;
+const double *soil_rechr_init;
+const double *soil_moist_max;
+const double *soil_moist_init;
+const double *soil_gw_K;
+const double *rechr_ssr_K;
+const double *lower_ssr_K;
+const double *Sd_ssr_K;
+const double *Sd_gw_K;
+const double *channel_slope;
+const double *side_slope;
+const double *culvert_diam;
+const double *culvert_water_Dmax;
+const double *number_culverts;
+const double *porosity_upper;
+const double *porosity_lower;
+const double *evap_from_runoff;
+const double *Dts_snow_max;
+const double *Dts_organic_max;
+const double *Dts_snow_init;
+const double *Dts_snow_runoff_K;
+const double *Dts_organic_runoff_K;
+const double *Dts_organic_init;
 const long *soil_withdrawal;
 const long **soil_withdrawal_Tables;
 
@@ -114,22 +114,22 @@ const long *NO_Freeze;
 const long *inhibit_evap;
 
 // variable inputs
-const float *infil;
-const float *snowinfil;
-const float *meltrunoff; // frozen melt runoff
-const float *runoff;     // liquid runoff
-const float *hru_evap;
-const float *Zdt;
-const float *Zdf;
-const float *Zd_front;
-const float **Zd_front_array;
+const double *infil;
+const double *snowinfil;
+const double *meltrunoff; // frozen melt runoff
+const double *runoff;     // liquid runoff
+const double *hru_evap;
+const double *Zdt;
+const double *Zdf;
+const double *Zd_front;
+const double **Zd_front_array;
 
-float *Dts;
-float *Dts_max;
+double *Dts;
+double *Dts_max;
 
 // variable put inputs
-float *hru_actet;      // [nhru]
-float *hru_cum_actet;
+double *hru_actet;      // [nhru]
+double *hru_cum_actet;
 
 
 // local allocated arrays

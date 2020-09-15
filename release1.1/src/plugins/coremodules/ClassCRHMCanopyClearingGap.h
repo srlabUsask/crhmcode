@@ -8,99 +8,99 @@ public:
 
 ClassCRHMCanopyClearingGap(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
-float Qsi_, Qli_;
+double Qsi_, Qli_;
 
 // observation variables
 
-const float *Qsi;
-const float *Qli;
+const double *Qsi;
+const double *Qli;
 
 // declared observation variables
 
-float *Ts;
-float *Qnsn;
-float *Qsisn;
-float *Qlisn;
-float *Qlosn;
+double *Ts;
+double *Qnsn;
+double *Qsisn;
+double *Qlisn;
+double *Qlosn;
 
 // put variables
 
-float *SWE;
+double *SWE;
 
 // declared variables
 
-float *drip_Cpy;
-float *thrufall_Cpy;
-float *netRain_Cpy;
-float *direct_rain;
-float *rain_load;
-float *Snow_load;
-float *direct_snow;
-float *SUnload;
-float *SUnload_H2O;
-float *Qnsn_Var;
-float *Qsisn_Var;
-float *Qlisn_Var;
+double *drip_Cpy;
+double *thrufall_Cpy;
+double *netRain_Cpy;
+double *direct_rain;
+double *rain_load;
+double *Snow_load;
+double *direct_snow;
+double *SUnload;
+double *SUnload_H2O;
+double *Qnsn_Var;
+double *Qsisn_Var;
+double *Qlisn_Var;
 
-float *net_rain;
-float *cum_net_rain;
-float *net_snow;
-float *cum_net_snow;
-float *net_p;
-float *intcp_evap;
-float *cum_intcp_evap;
-float *Subl_Cpy;
-float *cum_Subl_Cpy;
-float *cum_SUnload;
-float *cum_SUnload_H2O;
+double *net_rain;
+double *cum_net_rain;
+double *net_snow;
+double *cum_net_snow;
+double *net_p;
+double *intcp_evap;
+double *cum_intcp_evap;
+double *Subl_Cpy;
+double *cum_Subl_Cpy;
+double *cum_SUnload;
+double *cum_SUnload_H2O;
 
-float *Cc;
-float *k;
-float *Tauc;
-float *Pa;
-float *ra;
-float *u_FHt;
-float *Pevap;
+double *Cc;
+double *k;
+double *Tauc;
+double *Pa;
+double *ra;
+double *u_FHt;
+double *Pevap;
 
 // variable inputs
 
-const float *hru_t;
-const float *hru_u;
-const float *hru_rh;
-const float *hru_ea;
-const float *Albedo;
+const double *hru_t;
+const double *hru_u;
+const double *hru_rh;
+const double *hru_ea;
+const double *Albedo;
 
-const float *hru_snow;
-const float *hru_rain;
-const float *hru_evap;
+const double *hru_snow;
+const double *hru_rain;
+const double *hru_evap;
 
-const float *SolAng;
-const float *cosxs;
-const float *cosxsflat;
-const float *Qdfo;
+const double *SolAng;
+const double *cosxs;
+const double *cosxsflat;
+const double *Qdfo;
 
-const float *QsiS_Var;
-const float *QsiA_Var;
-const float *QliVt_Var;
+const double *QsiS_Var;
+const double *QsiA_Var;
+const double *QliVt_Var;
 
 // declared parameters:
 
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_elev;
-const float *Ht;
-const float *LAI;
-const float *Sbar;
-const float *Z0snow;
-const float *Zref;
-const float *Zwind;
-const float *Zvent;
-const float *unload_t;
-const float *unload_t_water;
-const float *Surrounding_Ht;
-const float *Gap_diameter;
-const float *Alpha_c;
-const float *B_canopy;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *hru_elev;
+const double *Ht;
+const double *LAI;
+const double *Sbar;
+const double *Z0snow;
+const double *Zref;
+const double *Zwind;
+const double *Zvent;
+const double *unload_t;
+const double *unload_t_water;
+const double *Surrounding_Ht;
+const double *Gap_diameter;
+const double *Alpha_c;
+const double *B_canopy;
 
 const long *CanopyClearing;
 const long *inhibit_evap;
@@ -111,10 +111,10 @@ void init(void);
 void run(void);
 void finish(bool good);
 
-double delta(float t); // Slope of sat vap p vs t, kPa/°C
-double gamma(float Pa, float t); // Psychrometric constant (kPa/°C)
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-float lambda(float t); // Latent heat of vaporization (mJ/(kg °C))
+double delta(double t); // Slope of sat vap p vs t, kPa/°C
+double gamma(double Pa, double t); // Psychrometric constant (kPa/°C)
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double lambda(double t); // Latent heat of vaporization (mJ/(kg °C))
 
 ClassCRHMCanopyClearingGap* klone(string name) const;
 };

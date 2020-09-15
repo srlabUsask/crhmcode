@@ -8,22 +8,22 @@ public:
 ClassVolumetric(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "soil_gw") {}; // setting PeerVar. Cannot be "STATE" var
 
 // declared parameters
-const float *soil_Depth;
-float *fallstat;
-const float *Si;
-const float *Si_correction;
-const float *soil_moist_max;
+const double *soil_Depth;
+double *fallstat;
+const double *Si;
+const double *Si_correction;
+const double *soil_moist_max;
 const long *soil_type;
 const long *set_fallstat;
 //const long *fallstat_Si;
 
 // declared variables
-float *Volumetric;
-float *fallstat_V;
-float *Si_V;
+double *Volumetric;
+double *fallstat_V;
+double *Si_V;
 
 // variable inputs
-const float *soil_moist;
+const double *soil_moist;
 
 void decl(void);
 void init(void);

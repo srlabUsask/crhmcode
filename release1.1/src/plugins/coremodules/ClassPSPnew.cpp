@@ -68,8 +68,8 @@ void ClassPSPnew::init(void) {
 
   nhru = getdim(NHRU);
 
-  T0CanSnow = new float[nhru];
-  T0biomass = new float[nhru];
+  T0CanSnow = new double[nhru];
+  T0biomass = new double[nhru];
 
   for(long hh = 0; hh < nhru; hh++) {
     Qsubl[hh] = 0.0;
@@ -78,54 +78,54 @@ void ClassPSPnew::init(void) {
   }
 }
 
-  float SatVP(float Temp) /* outputs sat. vapor pressure, Pa */
+  double SatVP(double Temp) /* outputs sat. vapor pressure, Pa */
     {if(Temp > 0.0)  return 611.0*exp(17.27*Temp/(Temp+237.3));
      else return 611.0*exp(21.88*Temp/(Temp+265.5));
   }
 
 void ClassPSPnew::run(void) {
 
-  const float GapFrac = 0.16;      /* Canopy gap fraction */
-  const float UpperGF = 0.58;      /* Mid-canopy level gap fraction */
-  const float Radius  = 0.0005;    /* Ice sphere radius, metres */
-  const float KinVisc = 1.88E-5;   /* Kinematic viscosity of air (Sask. avg. value) */
-  const float R = 8313.0;          /* Universal gas constant, J/(mole*K) */
-  const float M = 18.01;           /* Molecular weight of water */
-  const float RhoI = 900.0;        /* Density of ice, kg/m^3 */
-  const float k1 = 0.0114;         /* Snow shape coefficient, Jackpine site */
-  const float Fract = 0.4;         /* Fractal dimension */
-  const float SnowAlb = 0.8;       /* Albedo for snow */
-  const float CanAlb = 0.2;        /* Albedo for canopy */
-  const float KARMAN = 0.4;        /* Von Karman"s constant */
-  const float g = 9.8;             /* Gravitational acceleration, m/s^2 */
-  const float SBC = 5.67E-8;       /* Stephan-Boltzmann constant W/m2*/
-  const float SpHtAir = 1013.0;    /* Specific heat of air, J/(kg*K) */
-  const float SpHtIce = 2090.0;    /* Specific heat of ice, J/(kg*K) */
-  const float SpHtCan = 2700.0;    /* Specific heat of canopy (CLASS value), J/(kg*K) */
-  const float Hs = 2838000.0;      // Latent heat of sublimation, J/kg
+  const double GapFrac = 0.16;      /* Canopy gap fraction */
+  const double UpperGF = 0.58;      /* Mid-canopy level gap fraction */
+  const double Radius  = 0.0005;    /* Ice sphere radius, metres */
+  const double KinVisc = 1.88E-5;   /* Kinematic viscosity of air (Sask. avg. value) */
+  const double R = 8313.0;          /* Universal gas constant, J/(mole*K) */
+  const double M = 18.01;           /* Molecular weight of water */
+  const double RhoI = 900.0;        /* Density of ice, kg/m^3 */
+  const double k1 = 0.0114;         /* Snow shape coefficient, Jackpine site */
+  const double Fract = 0.4;         /* Fractal dimension */
+  const double SnowAlb = 0.8;       /* Albedo for snow */
+  const double CanAlb = 0.2;        /* Albedo for canopy */
+  const double KARMAN = 0.4;        /* Von Karman"s constant */
+  const double g = 9.8;             /* Gravitational acceleration, m/s^2 */
+  const double SBC = 5.67E-8;       /* Stephan-Boltzmann constant W/m2*/
+  const double SpHtAir = 1013.0;    /* Specific heat of air, J/(kg*K) */
+  const double SpHtIce = 2090.0;    /* Specific heat of ice, J/(kg*K) */
+  const double SpHtCan = 2700.0;    /* Specific heat of canopy (CLASS value), J/(kg*K) */
+  const double Hs = 2838000.0;      // Latent heat of sublimation, J/kg
 
   long   TItNum, RHItNum, TItNum2;       // Used in iteration loops
   bool   Tup, RHup, Tup2;
-  float I1, Cp, wtsubl, Unld;
+  double I1, Cp, wtsubl, Unld;
 
   double StepT, StepRH, StepT2;
   double DblRHcan, DblTbarCan, DblTCanSnow;
 
-  float RhoS, Lstar; // Hedstrom-Pomeroy, for L/L*
+  double RhoS, Lstar; // Hedstrom-Pomeroy, for L/L*
 
-  float SVDensC, SVDensS, LambdaT, CanVent, A, Nr, NuSh, D,
+  double SVDensC, SVDensS, LambdaT, CanVent, A, Nr, NuSh, D,
           Vs, Vhr, Ce, Vi; // Pomeroy-Schmidt components
 
-  float QTrans50, QTrUp50, CanSnowFrac; /* Radiation model components */
+  double QTrans50, QTrUp50, CanSnowFrac; /* Radiation model components */
 
-  float RhoAir, SVDensA, VPref, Ustar, Uh, Ra, Ri,
+  double RhoAir, SVDensA, VPref, Ustar, Uh, Ra, Ri,
          Stabil, Qe, Qh, dUdt; // CLASS components
 
   static long N;
-  static float Z0m, Z0h, Disp, CdragH, CdragE;
+  static double Z0m, Z0h, Disp, CdragH, CdragE;
 
-  const float Cc = 0.82;
-  const float Velw = 0.75;
+  const double Cc = 0.82;
+  const double Velw = 0.75;
 
   for(long hh = 0; hh < nhru; hh++) {
 
@@ -173,7 +173,7 @@ void ClassPSPnew::run(void) {
      break;
    }
 
-   float RHrefhh;
+   double RHrefhh;
    if(RHref[hh] > 1.5)
      RHrefhh = RHref[hh]/100.0;
    else
@@ -201,9 +201,9 @@ void ClassPSPnew::run(void) {
    NuSh = 1.79+0.606*sqrt(Nr);
 
    if (SolarAng[hh] > 0.001)  {
-     float Mu = LAI[hh]/(Ht[hh]-10)*(0.781*SolarAng[hh]*cos(SolarAng[hh])+0.0591);
+     double Mu = LAI[hh]/(Ht[hh]-10)*(0.781*SolarAng[hh]*cos(SolarAng[hh])+0.0591);
      QTrans50 = QsIn[hh]*exp(-Mu*(Ht[hh]-10)/2/sin(SolarAng[hh]));
-     float QTrans100 = QsIn[hh]*exp(-Mu*(Ht[hh]-10)/sin(SolarAng[hh]));
+     double QTrans100 = QsIn[hh]*exp(-Mu*(Ht[hh]-10)/sin(SolarAng[hh]));
      QTrUp50 = (1.0-SnowAlb)*QTrans100*exp(LAI[hh]/(Ht[hh]-10)*0.0591*(Ht[hh]-10)/2);
    }
    else {
@@ -240,21 +240,21 @@ void ClassPSPnew::run(void) {
                                        /(Biomass[hh]*SpHtCan);
          }
               /* Solve for longwave */
-         float QlwOut = SBC*(GapFrac*pow(TsnowG[0]+273.15,4.0) +
+         double QlwOut = SBC*(GapFrac*pow(TsnowG[0]+273.15,4.0) +
                      (1.0-GapFrac)*((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
                                  + CanSnowFrac*pow(DblTCanSnow+273.15,4.0)));
-//         float QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
-         float QlwIn = QsIn[hh]+QsOut[hh]+QlwOut;
+//         double QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
+         double QlwIn = QsIn[hh]+QsOut[hh]+QlwOut;
 
               /* Solve for particle net radiation*/
-         float QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-SnowAlb);
-         float QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-CanAlb);
-         float QlwUpStar = M_PI*Radius*Radius*QlwOut;
-         float QlwDnStar = M_PI*Radius*Radius*(QlwIn*UpperGF + SBC*(1.0-UpperGF)*
+         double QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-SnowAlb);
+         double QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-CanAlb);
+         double QlwUpStar = M_PI*Radius*Radius*QlwOut;
+         double QlwDnStar = M_PI*Radius*Radius*(QlwIn*UpperGF + SBC*(1.0-UpperGF)*
                               ((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
                                + (CanSnowFrac*pow(DblTCanSnow+273.15,4.0))));
-         float QradStar = 2*M_PI*Radius*Radius*SBC*pow(DblTCanSnow+273.15,4.0);
-         float QnetStar = QsDnStar+QsUpStar+QlwDnStar+QlwUpStar-QradStar;
+         double QradStar = 2*M_PI*Radius*Radius*SBC*pow(DblTCanSnow+273.15,4.0);
+         double QnetStar = QsDnStar+QsUpStar+QlwDnStar+QlwUpStar-QradStar;
 
          SVDensS = Common::SVDens(DblTCanSnow);
          Vs = (2.0*M_PI*D*Radius*(SVDensC*DblRHcan-SVDensS)*NuSh)*Hs;

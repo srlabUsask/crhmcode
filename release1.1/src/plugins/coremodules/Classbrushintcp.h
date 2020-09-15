@@ -8,41 +8,41 @@ public:
 Classbrushintcp(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 2000) {};
 
 // declared variables
-float *net_rain;
-float *cum_net_rain;
-float *net_snow;
-float *net_p;
-float *Load;
-float *Thru;
-float *cumThru;
-float *brushsubl;
-float *spherecoeff;
-float *cumbrushsubl;
-float *intcp_evap;
+double *net_rain;
+double *cum_net_rain;
+double *net_snow;
+double *net_p;
+double *Load;
+double *Thru;
+double *cumThru;
+double *brushsubl;
+double *spherecoeff;
+double *cumbrushsubl;
+double *intcp_evap;
 
 // declared parameters
-const float *basin_area;   // [ONE]
-const float *hru_area;
-const float *Ht;
-const float *Zref;
-const float *Zcan;
-const float *brushAtten;
-const float *Sbar;
-const float *LAI;
-const float *WidthJ;
-const float *Tunload;
+const double *basin_area;   // [ONE]
+const double *hru_area;
+const double *Ht;
+const double *Zref;
+const double *Zcan;
+const double *brushAtten;
+const double *Sbar;
+const double *LAI;
+const double *WidthJ;
+const double *Tunload;
 
 // variable inputs
-const float *hru_t;
-const float *hru_tmean;
-const float *hru_rh;
-const float *hru_u;
-const float *hru_p;
-const float *hru_rain;
-const float *hru_snow;
+const double *hru_t;
+const double *hru_tmean;
+const double *hru_rh;
+const double *hru_u;
+const double *hru_p;
+const double *hru_rain;
+const double *hru_snow;
 
 // variable inputs/outputs
-float *cumSubl;
+double *cumSubl;
 
 // local allocated arrays
 

@@ -127,10 +127,10 @@ void ClassREWroute::init(void) {
   }
 
   if(variation == VARIATION_ORG){
-    const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+    const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
     for(hh = 0; hh < nhru; ++hh){
-      float Vavg = (1.0/WS_route_n[hh])*pow(WS_route_R[hh], 2.0f/3.0f)*pow(WS_route_S0[hh], 0.5f);
+      double Vavg = (1.0/WS_route_n[hh])*pow(WS_route_R[hh], 2.0f/3.0f)*pow(WS_route_S0[hh], 0.5f);
 
       WS_gwKtravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)
       WS_Ktravel_var[hh] = WS_route_L[hh]/(Vw[WS_Channel_shp[hh]]*Vavg)/86400.0; // (d)

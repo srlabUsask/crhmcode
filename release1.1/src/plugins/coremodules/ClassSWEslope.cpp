@@ -91,7 +91,7 @@ void ClassSWEslope::run(void) {
     hh = order[hhh] - 1; // do HRUs in the desired sequence
 
     if(hru_GSL[hh] > 25.0){
-      float den_snow;
+      double den_snow;
       if (use_rho[hh])
         den_snow = rho[hh];
       else
@@ -101,8 +101,8 @@ void ClassSWEslope::run(void) {
 
       if(Hd[hh] > Hd_min[hh] && SWE[hh] > Hd[hh]){
 
-        float Used, total = 0.0;
-        float Amount = SWE[hh];
+        double Used, total = 0.0;
+        double Amount = SWE[hh];
 
         for(long To = 0; chkStruct(To); ++To) // distribute SWE flow of this HRU
           total += distrib_hru[hh][To]; // includes itself

@@ -91,7 +91,7 @@ void Classevap::init(void) {
 
 void Classevap::run(void) {
 
-   float Q;
+   double Q;
 
    long nstep = getstep() % Global::Freq;
 
@@ -155,11 +155,11 @@ void Classevap::run(void) {
        case 2: // Penman-Monteith
          if(Q > 0.0) {
 
-           float Z0 = Ht[hh]/7.6;
-           float d  = Ht[hh]*0.67;
-           float ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*hru_u[hh]);
-           float RHOa = 1E3*Pa[hh] /(CRHM_constants::Rgas*(hru_t[hh] + CRHM_constants::Tm))*(1.0 - 0.379*hru_ea[hh]/Pa[hh]);
-           float Cp = 1.005; // (kJ/kg/K)
+           double Z0 = Ht[hh]/7.6;
+           double d  = Ht[hh]*0.67;
+           double ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*hru_u[hh]);
+           double RHOa = 1E3*Pa[hh] /(CRHM_constants::Rgas*(hru_t[hh] + CRHM_constants::Tm))*(1.0 - 0.379*hru_ea[hh]/Pa[hh]);
+           double Cp = 1.005; // (kJ/kg/K)
 
            evap[hh] = (delta(hru_t[hh])*Q*Global::Freq + (RHOa*Cp/
                         (lambda(hru_t[hh])*1e3)*(Common::estar(hru_t[hh]) - hru_ea[hh])/(ra/86400)))/
@@ -183,8 +183,8 @@ void Classevap::run(void) {
 
 void Classevap::finish(bool good) {
 
-  float Allcum_evap = 0.0;
-  float Allcum_actet = 0.0;
+  double Allcum_evap = 0.0;
+  double Allcum_actet = 0.0;
 
   string Evap_names[] = {"Granger", "Priestley-Taylor", "Penman-Monteith", "Dalton Bulk transfer"}; //added this array here. It has another instance in NewModules.cpp.
 
@@ -205,17 +205,17 @@ void Classevap::finish(bool good) {
 
 }
 
-double Classevap::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
+double Classevap::gamma(double Pa, double t) // Psychrometric constant (kPa/°C)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
 }
 
-float Classevap::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+double Classevap::lambda(double t) // Latent heat of vaporization (mJ/(kg °C))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double Classevap::delta(float t) // Slope of sat vap p vs t, kPa/°C
+double Classevap::delta(double t) // Slope of sat vap p vs t, kPa/°C
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -223,10 +223,10 @@ double Classevap::delta(float t) // Slope of sat vap p vs t, kPa/°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-double Classevap::fdaily(float u, float Ht){ // Drying power f(u) (mm/d/kPa)
+double Classevap::fdaily(double u, double Ht){ // Drying power f(u) (mm/d/kPa)
 
-   float Z0 = Ht*100.0/7.6;
-   float a = 8.19 + 0.22*Z0;
-   float b = 1.16 + 0.08*Z0;
+   double Z0 = Ht*100.0/7.6;
+   double a = 8.19 + 0.22*Z0;
+   double b = 1.16 + 0.08*Z0;
    return a + b*u;
 }

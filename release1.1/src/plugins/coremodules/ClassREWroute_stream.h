@@ -11,31 +11,31 @@ long instreamflowCnt;
 long gwCnt;
 
 // declared variables
-float *rew;
+double *rew;
 
-float **instreamflow_All;
-float **instreamflow_Grp_out_All;
+double **instreamflow_All;
+double **instreamflow_Grp_out_All;
 
-float *instreamflow;        // [nhru]
-float *cuminstreamflow;     // [nhru]
-float *outstreamflow;       // [nhru]
-float *cumoutstreamflow;    // [nhru]
+double *instreamflow;        // [nhru]
+double *cuminstreamflow;     // [nhru]
+double *outstreamflow;       // [nhru]
+double *cumoutstreamflow;    // [nhru]
 
-float *streamflow;     // [BASIN] all HRUs
-float *streamflow_s;   // [BASIN] all HRUs
-float *cumstreamflow;  // [BASIN] all HRUs
+double *streamflow;     // [BASIN] all HRUs
+double *streamflow_s;   // [BASIN] all HRUs
+double *cumstreamflow;  // [BASIN] all HRUs
 
-float *WS_stream_Ktravel_var;         // [nhru]
+double *WS_stream_Ktravel_var;         // [nhru]
 
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_water_O;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
+double *culvert_Q;
+double *culvert_water_H;
+double *culvert_water_A;
+double *culvert_water_V;
+double *culvert_water_O;
+double *culvert_evap;
+double *cum_culvert;
+double *cum_culvert_over;
+double *HD;
 
 ClassMuskingum *instreamflowDelay;
 
@@ -43,26 +43,26 @@ ClassClark *Clark_instreamflowDelay;
 
 // declared parameters
 
-const float *WS_stream_route_n;         // [nhru]
-const float *WS_stream_route_R;         // [nhru]
-const float *WS_stream_route_S0;        // [nhru]
-const float *WS_stream_route_L;         // [nhru]
+const double *WS_stream_route_n;         // [nhru]
+const double *WS_stream_route_R;         // [nhru]
+const double *WS_stream_route_S0;        // [nhru]
+const double *WS_stream_route_L;         // [nhru]
 const long  *WS_stream_Channel_shp;      // [nhru]
 
-const float *WS_stream_Lag;             // [nhru]
-const float *WS_stream_route_X_M;       // [nhru]
+const double *WS_stream_Lag;             // [nhru]
+const double *WS_stream_route_X_M;       // [nhru]
 const long  *WS_stream_whereto_Grp;     // [nhru]
 const long  *WS_stream_wherefrom_HRU;   // [nhru]
 const long  *WS_stream_whereto_HRU;     // [nhru]
 const long  *WS_stream_order;           // [nhru]
 
-const float *WS_stream_Kstorage;     // [nhru]
+const double *WS_stream_Kstorage;     // [nhru]
 
-const float *WS_stream_channel_slope;
-const float *WS_stream_side_slope;
-const float *WS_stream_culvert_diam;
-const float *WS_stream_culvert_water_Dmax;
-const float *WS_stream_number_culverts;
+const double *WS_stream_channel_slope;
+const double *WS_stream_side_slope;
+const double *WS_stream_culvert_diam;
+const double *WS_stream_culvert_water_Dmax;
+const double *WS_stream_number_culverts;
 
 const long *WS_stream_culvert_type;
 

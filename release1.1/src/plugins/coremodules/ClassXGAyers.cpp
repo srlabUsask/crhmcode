@@ -83,7 +83,7 @@ void ClassXGAyers::run(void) {
     runoff[hh] = 0.0;
 
     if(net_rain[hh] > 0.0){
-      float maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
+      double maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
       if(maxinfil > net_rain[hh])
         infil[hh] = net_rain[hh];
       else{

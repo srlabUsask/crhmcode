@@ -143,7 +143,7 @@ void ClassfrozenAyers::run(void) {
 
   long nstep = getstep() % Global::Freq;
 
-  float SWE_sum = 0.0;
+  double SWE_sum = 0.0;
 
   for(hh = 0; chkStruct(); ++hh)
     SWE_sum += SWE[hh]; // used to reset opportunity time
@@ -173,7 +173,7 @@ void ClassfrozenAyers::run(void) {
     runoff[hh] = 0.0;
 
     if(net_rain[hh] > 0.0){
-      float maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
+      double maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
       if(maxinfil > net_rain[hh])
         infil[hh] = net_rain[hh];
       else{
@@ -191,7 +191,7 @@ void ClassfrozenAyers::run(void) {
     if(Julian_lockout[0] == julian("now"))
       Julian_lockout[0] = 0;
 
-    float snowmelt = snowmeltD[hh]/Global::Freq;
+    double snowmelt = snowmeltD[hh]/Global::Freq;
 
     if(nstep == 1 && hh == 0){
       if(t0_Julian[0] == julian("now") || t0_Julian[0] == 0 && SWE_sum/nhru > 10 && snowmeltD[hh] > 2.0 && !Julian_lockout[0]){
@@ -228,7 +228,7 @@ void ClassfrozenAyers::run(void) {
       }
 
       if(!SetOpportunityTime){ // normal operation
-        float capacity;
+        double capacity;
         switch(infiltype[hh]) {
           case LIMITED :
 
@@ -242,7 +242,7 @@ void ClassfrozenAyers::run(void) {
               INF[hh] = C[hh]*pow(S0[hh], 2.92f)*pow(1.0f-Si[hh], 1.64f)*
                    pow((273.15f-hru_tsoil[hh])/273.15f, -0.45f)*pow(t0_Var[hh], 0.44f); // (mm)
 
-              float INF0 = INF[hh]/t0_Var[hh];
+              double INF0 = INF[hh]/t0_Var[hh];
 
               if(snowmelt <= INF0 && snowmelt <= capacity) {
                 snowinfil[hh] = snowmelt;

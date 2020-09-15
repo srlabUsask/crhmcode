@@ -8,41 +8,41 @@ public:
 ClassPSPnew(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 2000) {};
 
 // declared observation variables
-const float *TsnowG;
-const float *Lnot;
+const double *TsnowG;
+const double *Lnot;
 
 // declared variables
-float *Qsubl;
-float *Load;
-float *Thru;
-float *TCanSnow;
-float *Tbiomass;
+double *Qsubl;
+double *Load;
+double *Thru;
+double *TCanSnow;
+double *Tbiomass;
 
 // declared parameters
-const float *Sbar;
-const float *LAI;
-const float *Zcan;
-const float *Zref;
-const float *Ht;
-const float *Biomass;
-const float *k;
-const float *HeightH;
-const float *WidthJ;
+const double *Sbar;
+const double *LAI;
+const double *Zcan;
+const double *Zref;
+const double *Ht;
+const double *Biomass;
+const double *k;
+const double *HeightH;
+const double *WidthJ;
 const long *InitN;
 
 // variable inputs
-const float *RHref;
-const float *Qn;
-const float *QsIn;
-const float *QsOut;
-const float *hru_u;
-const float *hru_p;
-const float *TAref;
-const float *SolarAng;
+const double *RHref;
+const double *Qn;
+const double *QsIn;
+const double *QsOut;
+const double *hru_u;
+const double *hru_p;
+const double *TAref;
+const double *SolarAng;
 
 // local allocated arrays
-float *T0CanSnow;
-float *T0biomass;
+double *T0CanSnow;
+double *T0biomass;
 
 void decl(void);
 void init(void);

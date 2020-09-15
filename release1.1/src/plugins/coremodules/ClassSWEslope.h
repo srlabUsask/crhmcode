@@ -8,29 +8,29 @@ public:
 ClassSWEslope(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, "glacier_h2o, snowmeltD") {};
 
 // declared variables
-float *SWE_in;
-float *SWE_out;
-float *cumSWE_in;
-float *cumSWE_out;
-float *Hd;
+double *SWE_in;
+double *SWE_out;
+double *cumSWE_in;
+double *cumSWE_out;
+double *Hd;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area; // [nhru]
-const float *hru_GSL;    // [nhru]
-const float *use_rho;    // [nhru]
-const float *snow_density;    // [nhru]
-const float *Hd_min;    // [nhru]
+const double *basin_area;   // [BASIN]
+const double *hru_area; // [nhru]
+const double *hru_GSL;    // [nhru]
+const double *use_rho;    // [nhru]
+const double *snow_density;    // [nhru]
+const double *Hd_min;    // [nhru]
 const long *order; // [nhru]
-const float *distrib_SWEslope;
-const float **distrib_hru;
+const double *distrib_SWEslope;
+const double **distrib_hru;
 const long *Disable_SWEslope; // [nhru]
 
 // variable put inputs
-float *SWE;
+double *SWE;
 
 // variable inputs 
-const float *rho;
+const double *rho;
 
 void decl(void);
 void init(void);

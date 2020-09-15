@@ -47,7 +47,7 @@ void ClassNO_pbsm::init(void) {
 
   nhru = getdim(NHRU);
 
-  hru_basin = new float[nhru];
+  hru_basin = new double[nhru];
 
   for (hh = 0; hh < nhru; ++hh) {
     SWE[hh] = 0.0;

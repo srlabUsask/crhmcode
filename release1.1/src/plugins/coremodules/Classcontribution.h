@@ -10,27 +10,27 @@ Classcontribution(string Name, string Version = "undefined", CRHM::LMODULE Lvl =
 long soil_runoffDiv;
 
 // declared variables
-float *contrib_area;
-float *pre_contrib_area;
-float *connected;
+double *contrib_area;
+double *pre_contrib_area;
+double *connected;
 long  *N_connected;
 long  *connectedTo;
-float *Results;
-float **Results_lay;
-float *distrib_sum;
-const float *distrib_Basin;
-float *soil_runoff_Buf; // buffered
+double *Results;
+double **Results_lay;
+double *distrib_sum;
+const double *distrib_Basin;
+double *soil_runoff_Buf; // buffered
 
 // declared parameters
-const float *basin_area;
-const float *hru_area;
-const float *Sdmax;
-const float *distrib;
-const float **distrib_hru;
+const double *basin_area;
+const double *hru_area;
+const double *Sdmax;
+const double *distrib;
+const double **distrib_hru;
 
 // variable inputs
-const float *soil_runoff;
-const float *Sd;
+const double *soil_runoff;
+const double *Sd;
 
 void decl(void);
 void init(void);
