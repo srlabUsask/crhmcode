@@ -17,7 +17,7 @@
 using namespace std;
 using namespace CRHM;
 
-static float fLimit;
+//static float fLimit;
 
 const float minFlow_WQ = 0.001f;
 

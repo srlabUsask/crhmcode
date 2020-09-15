@@ -1947,8 +1947,9 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 				//clock_t btime = clock(); //////////////////////////////////////////////////////////////////////////////////////////////
 
-				if (p->GroupCnt && ((ClassMacro*)p)->ObsModule) // only execute if group has an obs module
-					((ClassMacro*)p)->ObsModule->pre_run();
+
+				//if (p->GroupCnt && ((ClassMacro*)p)->ObsModule) // only execute if group has an obs module
+					//((ClassMacro*)p)->ObsModule->pre_run();
 
 				p->ReadObs(Reset);
 				Reset = false;
@@ -1963,6 +1964,11 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 					//{
 					//Common::writefile("d:/test.txt","p = "+p->Name+", p nameroot = "+p->NameRoot);
 					//if (!(p->Name == "WQ_Soil_BGC"))
+
+					//manishankar added this for resolving the address related issue.
+					//Global::t_layvalues = p->t_layvalues;
+					//Global::rh_layvalues = p->rh_layvalues;
+
 					p->run();
 					//}
 					//catch (...)

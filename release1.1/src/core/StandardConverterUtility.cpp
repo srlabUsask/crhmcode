@@ -1,7 +1,7 @@
 #if defined(_WIN32)
 #include "stdafx.h"
 #endif
-#include <math.h>
+#include <cmath>
 #include "StandardConverterUtility.h"
 #include "TStringList.h"
 

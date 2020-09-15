@@ -2620,7 +2620,19 @@ void ClassModule::ReadObs(bool Reset) {
 			P->dim = nhru; // check if necessary. Group?
 
 			if (P->FunctVar->FileData->GoodDay)
+			{
 				(P->*(P->UserFunct))();
+
+				//manishankar. this is used for resolving the address related issue.
+				//if (P->name == "t")
+				//{
+				//	this->t_layvalues = P->layvalues;
+				//}
+				//else if (P->name == "rh")
+				//{
+				//	this->rh_layvalues = P->layvalues;
+				//}
+			}
 
 			if (P->CustomFunct) // execute any extra features except for nfreq observations   && !P->nfreq
 				(P->*(P->CustomFunct))(this); // do_t_day, do_rh_day, do_ea_day, do_t, do_p,  do_ppt or Nothing
