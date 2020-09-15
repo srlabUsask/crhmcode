@@ -10,7 +10,7 @@
 #include "GlobalCommon.h"
 #include "GlobalDll.h"
 #include "ClassCRHM.h"
-#include <math.h>
+#include <cmath>
 #include <string>
 #include <time.h>
 
@@ -26,7 +26,7 @@ public:
 	string NameRoot; // When Macro gives Root
 	string DLLName; // CRHM, Macro or DLL name
 	string ID; // Class name. If macro is the macro name
-	Administer *OurAdmin;
+	Administer* OurAdmin {NULL};
 	string Version;
 	long PeerRank;
 	string PeerVar;
@@ -38,9 +38,9 @@ public:
 	long nlay;
 	long hh;
 	long nn;
-	long variation;     // module operating variation
-	long variation_set; // current variation call variation level
-	long variation_max; // maximum - OR of all variation_set
+	unsigned short variation;     // module operating variation
+	unsigned short variation_set; // current variation call variation level
+	unsigned short variation_max; // maximum - OR of all variation_set
 
 	bool isGroup; // in declgroup macros
 	bool isStruct; // in declstruct macros
@@ -52,18 +52,19 @@ public:
 
 	long Dummy;
 
-	double **Var_loop_lay_value;
-	double **Par_loop_lay_value;
+	double** Var_loop_lay_value {NULL};
+	double** Par_loop_lay_value {NULL};
 
-	double ***Var_loop_lay_table;
-	double ***Par_loop_lay_table;
+	double*** Var_loop_lay_table {NULL};
+	double*** Par_loop_lay_table {NULL};
 
 	long Var_NDEFN_cnt = 0;
 	long Par_NDEFN_cnt = 0;
 
 	//added by Manishankar to solve the address issue.
-	//double** t_layvalues;
-	//double** rh_layvalues;
+	double** t_layvalues {NULL};
+	double** rh_layvalues {NULL};
+
 
 	// long Using_RH_EA_obs;
 
@@ -81,6 +82,7 @@ public:
 	void initbase(void);
 	virtual void init(void) {};
 	virtual void run(void) {};
+	virtual void run2(double **) {}; //added by Manishankar to solve the address issue.
 	virtual void pre_run(void) {};
 	virtual void finish(bool good) {};
 	ClassModule* link(string Module);
@@ -319,14 +321,15 @@ public:
 class Myparser {
 	const char *exp_ptr;  // points to the expression
 	char token[80]; // holds current token
-	char tok_type;  // holds token's type
+	char tok_type {'\0'};  // holds token's type
 
-	int row, col;
-	int repeat;
-	int rowrepeat;
-	int Bang;
-	bool repeatset;
-	ClassPar *LocalPar;
+	int row {0};
+	int col {0};
+	int repeat {0};
+	int rowrepeat {0};
+	int Bang {0};
+	bool repeatset {false};
+	ClassPar* LocalPar {NULL};
 
 	void eval_exp2(double &result);
 	void eval_exp3(double &result);
@@ -389,9 +392,10 @@ public:
 	double* c0; // storage constant from K
 	double* c1; // storage constant from K
 	double* c2; // storage constant from K
+	double prevdate {0.0};
 
 private:
-	const double* kstorage;
+	const double* kstorage {NULL};
 	const  double* inVar;
 	double* outVar;
 
