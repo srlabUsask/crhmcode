@@ -128,7 +128,7 @@ enum TFloatFormat { ffGeneral, ffExponent, ffFixed, ffNumber, ffCurrency };
 
 class snowcover {
 public:
-	double *data;
+	double* data {NULL};
 	long  N;
 	snowcover(double SWEmean, double cv);
 	double lookup(double melt) { return 0; };
