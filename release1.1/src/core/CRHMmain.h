@@ -36,7 +36,11 @@ public:
 	string Title;
 	TSeries(int Cnt) { MaxCnt = Cnt; XValues = new double[MaxCnt]; YValues = new double[MaxCnt]; Used = 0; };
 	~TSeries() { delete[] XValues; delete[] YValues; };
-	void AddXY(double X, double Y) { XValues[Used] = X; YValues[Used++] = Y; };
+	void AddXY(double X, double Y) 
+	{ 
+		XValues[Used] = X; 
+		YValues[Used++] = Y; 
+	};
 	int Count(void) { return Used; };
 	double XValue(int nn) { return XValues[nn]; };
 	double YValue(int nn) { return YValues[nn]; };
@@ -109,7 +113,7 @@ public:
 	bool OpenStateFlag;
 
 	//double ProjectFileDate;
-	double Dt0; // used to ca
+	time_t Dt0; // used to ca
 
 
 	string ProjectDir;// = ApplicationDir;
@@ -151,7 +155,7 @@ public:
 
 	void InitModules(void);
 
-	void GetAllVariables(void);
+	void Label4Click(void);
 
 	CRHM::TFun FindObservationType(string Kind);
 

@@ -12,9 +12,12 @@
 #include <time.h>
 //#include "boost/shared_ptr.hpp"
 #include "GlobalDll.h"
+//#include "ClassCRHM.h"
 #include "ClassModule.h"
 #include "NewModules.h"
 #include "MacroUnit.h"
+#include "Common.h"
+#include "StandardConverterUtility.h"
 
 #include <time.h>
 
@@ -432,7 +435,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 					idx = S.find('#');
 					if (idx != -1) {
-						Variation = pow(2, S[idx + 1] - char('1'));
+						Variation = (long)pow(2, S[idx + 1] - char('1'));
 						s = S.substr(0, idx);
 					}
 					else
@@ -596,7 +599,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 										newPar->layvalues[jj][ii] = x;
 									}
 									else if (newPar->varType == CRHM::Int) {
-										double x;
+										long x;
 										instr >> x;
 										if (instr.fail())
 											break;
@@ -854,7 +857,7 @@ void CRHMmain::FormCreate(void) {
 
 	cdSeries = NULL;
 
-	double Dt = time(NULL);
+	time_t Dt = time(NULL);
 	OpenStateFlag = false;
 
 	Global::nhru = Global::maxhru;
@@ -947,11 +950,11 @@ void  CRHMmain::InitModules(void) {
 		((ClassModule*)Global::OurModulesList->Objects[ii])->nhru = Global::nhru;
 		((ClassModule*)Global::OurModulesList->Objects[ii])->decl();
 	}
-	GetAllVariables();
+	Label4Click();
 }
 
 
-void  CRHMmain::GetAllVariables(void) {
+void  CRHMmain::Label4Click(void) {
 
 	ClassVar *thisVar;
 	MapVar::iterator itVar;
@@ -1947,7 +1950,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 				//clock_t btime = clock(); //////////////////////////////////////////////////////////////////////////////////////////////
 
-
+				//manishankar. This if condition is creating address sanitizing error.
 				//if (p->GroupCnt && ((ClassMacro*)p)->ObsModule) // only execute if group has an obs module
 					//((ClassMacro*)p)->ObsModule->pre_run();
 
@@ -1966,8 +1969,9 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 					//if (!(p->Name == "WQ_Soil_BGC"))
 
 					//manishankar added this for resolving the address related issue.
-					//Global::t_layvalues = p->t_layvalues;
+					//Global::t_layvalues = p->t_layvalues; 
 					//Global::rh_layvalues = p->rh_layvalues;
+
 
 					p->run();
 					//}
@@ -3467,7 +3471,7 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 
 	while (fgets(line, sizeof line, obfile) != NULL) //reading the lines upto #############.
 	{
-		for (int i = 0; i < strlen(line); i++)
+		for (unsigned int i = 0; i < strlen(line); i++)
 		{
 			obsname[i] = line[i];
 			if (line[i] == ' ')
@@ -3521,7 +3525,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 
 	while (fgets(line, sizeof line, obfile) != NULL) //reading the lines upto #############.
 	{
-		for (int i = 0; i < strlen(line); i++)
+		for (unsigned int i = 0; i < strlen(line); i++)
 		{
 			obsname[i] = line[i];
 			if (line[i] == ' ')
