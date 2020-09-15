@@ -262,12 +262,12 @@ void ClassVar::WriteVar(void) {
 			if (dimen == CRHM::NHRU)
 			{
 				for (long ii = 0; ii < dim; ++ii)
-					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = ivalues[ii];
+					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = (double)ivalues[ii];
 			}
 			else
 			{
 				for (long ii = 0; ii < cnt; ++ii)
-					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = ivalues[ii];
+					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = (double)ivalues[ii];
 			}
 		}
 	}
@@ -395,7 +395,7 @@ void ClassVar::Count_(long dim_n) {
 
 	double X = FunctVar->FileData->Data[FunctVar->offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][dim_n], FunctVar->cnt) - 1][Index_ - FunctVar->FileData->IndxMin];
 	if (X > 0.0)
-		values[dim_n] += 1.0 / this->FileData->Freq;
+		values[dim_n] += (double)1.0 / this->FileData->Freq;
 
 };
 
@@ -404,7 +404,7 @@ void ClassVar::Count0_(long dim_n) {
 
 	double X = FunctVar->FileData->Data[FunctVar->offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][dim_n], FunctVar->cnt) - 1][Index_ - FunctVar->FileData->IndxMin];
 	if (X == 0.0)
-		values[dim_n] += 1.0 / this->FileData->Freq;
+		values[dim_n] += (double)1.0 / this->FileData->Freq;
 
 };
 
@@ -533,16 +533,16 @@ void ClassVar::Peak(void) {
 void ClassVar::Count(void) {
 
 	long Index = Global::DTindx / FunctVar->FileData->ModN;
-	double Divisor = FunctVar->FileData->ModN;
+	double Divisor = (double)FunctVar->FileData->ModN;
 
 	if (this->root != "") // VarObsFunct - normalise to daily value
-		Divisor = this->FileData->Freq;
+		Divisor = (double)this->FileData->Freq;
 
 	do {
 		for (long ii = 0; ii < this->dim; ++ii) {
 			double X = FunctVar->FileData->Data[FunctVar->offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], FunctVar->cnt) - 1][Index - FunctVar->FileData->IndxMin];
 			if (X > 0.0)
-				values[ii] += 1.0 / Divisor;
+				values[ii] += (double)1.0 / Divisor;
 		}
 	} while (++Index%FunctVar->FileData->Freq != 0);
 };
@@ -551,16 +551,16 @@ void ClassVar::Count(void) {
 void ClassVar::Count0(void) {
 
 	long Index = Global::DTindx / FunctVar->FileData->ModN;
-	double Divisor = FunctVar->FileData->ModN;
+	double Divisor = (double)FunctVar->FileData->ModN;
 
 	if (this->root != "") // VarObsFunct - normalise to daily value
-		Divisor = this->FileData->Freq;
+		Divisor = (double)this->FileData->Freq;
 
 	do {
 		for (long ii = 0; ii < this->dim; ++ii) {
 			double X = FunctVar->FileData->Data[FunctVar->offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], FunctVar->cnt) - 1][Index - FunctVar->FileData->IndxMin];
 			if (X == 0.0)
-				values[ii] += 1.0 / Divisor;
+				values[ii] += (double)1.0 / Divisor;
 		}
 	} while (++Index%FunctVar->FileData->Freq != 0);
 };
@@ -584,7 +584,7 @@ void ClassVar::Pos(void) {
 void ClassVar::do_t(ClassModule *thisModule) { // adjusts t_max and t_min observations for lapse rate and climate warming
 
 	for (int ii = 0; ii < this->dim; ++ii) // does this step
-		values[ii] -= Global::lapse_rate[ii] * (Global::hru_elev[ii] - Global::OBS_ELEV[0][ii]) / 100.0;
+		values[ii] -= Global::lapse_rate[ii] * (double)(Global::hru_elev[ii] - Global::OBS_ELEV[0][ii]) / (double)100.0;
 	// should original t be saved for ea
 };
 
@@ -602,7 +602,7 @@ void ClassVar::do_t_Clim(ClassModule *thisModule) { // adjusts t_max and t_min o
 void ClassVar::do_ppt(ClassModule *thisModule) { // adjusts observation for lapse rate
 
 	for (int ii = 0; ii < this->dim; ++ii) {
-		values[ii] = values[ii] * (1.0 + (Global::hru_elev[ii] - Global::OBS_ELEV[1][ii]) / 100.0 *Global::ppt_adj[ii]);
+		values[ii] = values[ii] * ((double)1.0 + (Global::hru_elev[ii] - Global::OBS_ELEV[1][ii]) / (double)100.0 *Global::ppt_adj[ii]);
 	}
 };
 
@@ -610,7 +610,7 @@ void ClassVar::do_ppt(ClassModule *thisModule) { // adjusts observation for laps
 void ClassVar::do_p(ClassModule *thisModule) { // adjusts observation for lapse rate
 
 	for (int ii = 0; ii < this->dim; ++ii) {
-		values[ii] = FunctVar->values[ii] * (1.0 + (Global::hru_elev[ii] - Global::OBS_ELEV[1][ii]) / 100.0 *Global::ppt_adj[ii]);
+		values[ii] = FunctVar->values[ii] * ((double)1.0 + (Global::hru_elev[ii] - Global::OBS_ELEV[1][ii]) / (double)100.0 *Global::ppt_adj[ii]);
 	}
 };
 
@@ -637,7 +637,7 @@ void ClassVar::do_ppt_Clim(ClassModule *thisModule) { // adjusts observation for
 //---------------------------------------------------------------------------
 void ClassVar::do_t_day(ClassModule *thisModule) { // FUNCTION - adjusts observation for lapse rate and handles climate warming
 	for (int ii = 0; ii < this->dim; ++ii) {
-		double Fix = Global::lapse_rate[ii] * (Global::hru_elev[ii] - Global::OBS_ELEV[0][ii]) / 100.0;
+		double Fix = (double)(Global::lapse_rate[ii] * (Global::hru_elev[ii] - Global::OBS_ELEV[0][ii]) / 100.0);
 		for (int tt = 0; tt < Global::Freq; ++tt) {
 			Global::obs_t_obs[tt][ii] = layvalues[tt][ii]; // save original values
 			layvalues[tt][ii] -= Fix; // make lapse rate correction
@@ -665,19 +665,19 @@ void ClassVar::do_rh_day(ClassModule *thisModule) { // FUNCTION - RH available
 	for (int ii = 0; ii < this->dim; ++ii) {
 		for (int tt = 0; tt < Global::Freq; ++tt) {
 			if (Global::RH_VP_flag[ii]) { // maintain ea if possible
-				Global::obs_ea[tt][ii] = Common::estar(Global::obs_t[tt][ii])*layvalues[tt][ii] / 100.0; // use new t
+				Global::obs_ea[tt][ii] = (double)(Common::estar(Global::obs_t[tt][ii])*layvalues[tt][ii] / 100.0); // use new t
 				if (Global::obs_t_obs[tt][ii] > Global::obs_t[tt][ii]) { // new t lower, could be supersaturated
-					double New_es = Common::estar(Global::obs_t[tt][ii]); // maximum ea from new t
+					double New_es = (double)Common::estar(Global::obs_t[tt][ii]); // maximum ea from new t
 					if (Global::obs_ea[tt][ii] > New_es) {
 						Global::obs_ea[tt][ii] = New_es;  // in saturation
 						layvalues[tt][ii] = 100.0; // adjust RH
 					}
 					else
-						layvalues[tt][ii] = Global::obs_ea[tt][ii] / New_es * 100.0; // adjust RH
+						layvalues[tt][ii] = (double)(Global::obs_ea[tt][ii] / New_es * 100.0); // adjust RH
 				}
 			}
 			else // maintain RH
-				Global::obs_ea[tt][ii] = Common::estar(Global::obs_t[tt][ii])*layvalues[tt][ii] / 100.0; // adjust ea
+				Global::obs_ea[tt][ii] = (double)(Common::estar(Global::obs_t[tt][ii])*layvalues[tt][ii] / 100.0); // adjust ea
 		}
 	}
 };
@@ -690,19 +690,19 @@ void ClassVar::do_rh_day_Clim(ClassModule *thisModule) { // FUNCTION - RH availa
 	for (int ii = 0; ii < this->dim; ++ii) {
 		for (int tt = 0; tt < Global::Freq; ++tt) {
 			if (Global::RH_VP_flag2[ii]) { // maintain ea if possible
-				Global::obs_ea[tt][ii] = Common::estar(Global::obs_t[tt][ii])*layvalues[tt][ii] / 100.0; // use new t
+				Global::obs_ea[tt][ii] = (double)(Common::estar(Global::obs_t[tt][ii])*layvalues[tt][ii] / 100.0); // use new t
 				if (Global::obs_t_obs[tt][ii] > Global::obs_t[tt][ii]) { // new t lower, could be supersaturated
-					double New_es = Common::estar(Global::obs_t[tt][ii]); // maximum ea from new t
+					double New_es = (double)Common::estar(Global::obs_t[tt][ii]); // maximum ea from new t
 					if (Global::obs_ea[tt][ii] > New_es) {
 						Global::obs_ea[tt][ii] = New_es;  // in saturation
 						layvalues[tt][ii] = 100.0; // adjust RH
 					}
 					else
-						layvalues[tt][ii] = Global::obs_ea[tt][ii] / New_es * 100.0; // adjust RH
+						layvalues[tt][ii] = (double)(Global::obs_ea[tt][ii] / New_es * 100.0); // adjust RH
 				}
 			}
 			else // maintain RH
-				Global::obs_ea[tt][ii] = Common::estar(Global::obs_t[tt][ii])*layvalues[tt][ii] / 100.0; // adjust ea
+				Global::obs_ea[tt][ii] = (double)(Common::estar(Global::obs_t[tt][ii])*layvalues[tt][ii] / 100.0); // adjust ea
 		}
 	}
 };
@@ -713,8 +713,8 @@ void ClassVar::do_ea_day(ClassModule *thisModule) { // FUNCTION - ea available
 	double New_es;
 	for (int ii = 0; ii < this->dim; ++ii) {
 		for (int tt = 0; tt < Global::Freq; ++tt) {
-			Global::obs_rh[tt][ii] = layvalues[tt][ii] / Common::estar(Global::obs_t_obs[tt][ii])*100.0; // use original t to calculate RH
-			New_es = Common::estar(Global::obs_t[tt][ii]); // maximum ea from new t
+			Global::obs_rh[tt][ii] = (double)(layvalues[tt][ii] / Common::estar(Global::obs_t_obs[tt][ii])*100.0); // use original t to calculate RH
+			New_es = (double)Common::estar(Global::obs_t[tt][ii]); // maximum ea from new t
 
 			if (Global::RH_VP_flag[ii]) { // maintain ea if possible
 				if (Global::obs_t_obs[tt][ii] > Global::obs_t[tt][ii]) { // new t lower, could be supersaturated
@@ -723,11 +723,11 @@ void ClassVar::do_ea_day(ClassModule *thisModule) { // FUNCTION - ea available
 						Global::obs_rh[tt][ii] = 100.0; // adjust RH
 					}
 					else
-						Global::obs_rh[tt][ii] = layvalues[tt][ii] / New_es * 100.0; // adjust RH
+						Global::obs_rh[tt][ii] = (double)(layvalues[tt][ii] / New_es * 100.0); // adjust RH
 				}
 			}
 			else { // maintain RH
-				layvalues[tt][ii] = New_es * Global::obs_rh[tt][ii] / 100.0; // adjust ea
+				layvalues[tt][ii] = New_es * Global::obs_rh[tt][ii] / (double)100.0; // adjust ea
 				double X = layvalues[tt][ii];
 			}
 		}
@@ -859,7 +859,7 @@ void ClassPar::ExpandShrink(long new_dim) {
 
 			for (int jj = 0; jj < lay; ++jj)
 				for (int kk = 0; kk < dim; ++kk)
-					ilayvalues[jj][kk] = 0.0;
+					ilayvalues[jj][kk] = (int)0.0;
 		}
 
 		ivalues = new long[dim];
@@ -1427,7 +1427,7 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 
 					for (int jj = 0; jj < lay; ++jj)
 						for (int kk = 0; kk < dim; ++kk)
-							ilayvalues[jj][kk] = 0.0;
+							ilayvalues[jj][kk] = (int)0.0;
 				}
 			}
 
@@ -1796,7 +1796,7 @@ bool ClassData::DataReadFile(void) {
 				DecimalTime = true;
 			else {
 				DecimalTime = false;
-				D[0] = Dt1;
+				D[0] = (int)Dt1;
 				//DataFile.seekg(Here - 1);  // go back to beginning of data
 				for (int ii = 1; ii < 5; ii++)
 					DataFile >> D[ii];
@@ -1888,14 +1888,14 @@ bool ClassData::DataReadFile(void) {
 				SparseFlag = true;
 			}
 
-			Freq = (1.0 / Interval + 0.8*Interval);
+			Freq = (long)(1.0 / Interval + 0.8*Interval);
 			Freq = Veto_Freq(Freq);
 
 			Interval = (double) 1.0 / Freq;
 			if (FirstFile)
 				IndxMin = 0;
 			else {
-				IndxMin = floor((Dt1 - Global::DTstart)*Freq + Interval / 2.0);
+				IndxMin = (long)floor((Dt1 - Global::DTstart)*Freq + Interval / 2.0);
 				if (Interval != 1) // Oct 30
 					--IndxMin;
 			}
@@ -1908,7 +1908,7 @@ bool ClassData::DataReadFile(void) {
 																			LogError(Except);*/
 
 				if (IndxMin == 0)
-					IndxMin = (Dt1 - floor(Dt1)) / Interval - 1;
+					IndxMin = (long)((Dt1 - floor(Dt1)) / Interval - 1);
 			}
 
 			DataFile.seekg(0, ios_base::end);
@@ -1941,7 +1941,7 @@ bool ClassData::DataReadFile(void) {
 
 		if (Global::DTend != 0.0 && Global::DTend < Dt2) Dt2 = Global::DTend;
 
-		Lines = ceil((Dt2 - Dt1 + 1.0 / (Freq * 2))* Freq);
+		Lines = (long)ceil((Dt2 - Dt1 + 1.0 / (static_cast<long long>(Freq) * 2))* static_cast<long long>(Freq));
 
 		if (SparseFlag && Lines < Global::Freq) // handle short interval with lots of sparse points
 			Lines = Global::Freq;
@@ -2122,7 +2122,7 @@ bool ClassData::DataReadFile(void) {
 						//S.sprintf("Discontinuous Date: \"%5u %3u %3u %3u %3u\" at line: %u", D[0], D[1], D[2], D[3], D[4], HdrLen + Position + 1);
 
 						//Message(S.c_str(), string("Warning Sparse Observation File: " + DataFileName).c_str(), mbOK);
-						//}
+					}
 					}
 
 				} // if !Simulation
@@ -2224,11 +2224,11 @@ bool ClassData::DataReadFile(void) {
 										Delta = (Data[jj][ii / NCnt] - Data[jj][ii / NCnt - 1])*Divisor;
 									}
 								}
-								NewData[ii] = Result + Delta * (ii%NCnt + 1) / NCnt;
+								NewData[ii] = Result + Delta * (static_cast<long long>(ii%NCnt) + 1) / NCnt;
 							}
 						}
 						else {
-							Divisor = 1.0 / NCnt;
+							Divisor = (double)1.0 / NCnt;
 							for (long ii = 0; ii < Lines*NCnt; ++ii) {
 								long kk = ii % NCnt;
 								if (kk == 0)
@@ -2252,7 +2252,7 @@ bool ClassData::DataReadFile(void) {
 						long NCnt = Freq / ForceInterval;
 						double *NewData = new double[Lines / NCnt];
 						if (!MyBitSet[jj])
-							Divisor = NCnt;
+							Divisor = (double)NCnt;
 						Result = 0.0;
 						for (long ii = 0; ii < Lines; ++ii) {
 							Result += Data[jj][ii];
@@ -2470,7 +2470,8 @@ bool last_timestep(void) {
 //Changed by Manishankar. 2018/09/11
 
 void dattim(string type, long *itime) { // dimension itime[6]
-	int Year, Month, Day, H, Min, Sec = 0, MSec;
+	int Year, Month, Day, H, Min, Sec = 0;
+	//int MSec; (unreferenced commented out jhs507)
 
 	if (type == "start") {
 		StandardConverterUtility::DecodeDateTime(Global::DTstart, &Year, &Month, &Day, &H, &Min);
@@ -2496,7 +2497,8 @@ void dattim(string type, long *itime) { // dimension itime[6]
 
 //---------------------------------------------------------------------------
 void dattim(double DT, long *itime) { // dimension itime[6]
-	int Year, Month, Day, H, Min, Sec = 0, MSec;
+	int Year, Month, Day, H, Min, Sec = 0;
+	//int MSec; (unreferenced commented out jhs507)
 
 	StandardConverterUtility::DecodeDateTime(DT, &Year, &Month, &Day, &H, &Min);
 	//DecodeTime(DT, &Hour, &Min, &Sec);
@@ -2736,7 +2738,7 @@ void Classfilter::readargs() {
 	while (ee = args.find(','), ee > 0) args[ee] = ' ';
 
 	instr.str(args);
-	long Cnt;
+	unsigned long Cnt;
 	long IndexC = 0;
 	long IndexV = 0;
 	long pp, pp2;
@@ -2840,7 +2842,7 @@ Classfilter::Classfilter(ClassData *MyObs, string ToVar, string args, string arg
 	MyObs(MyObs), ToVar(ToVar), args(args), argtypes(argtypes),
 	Vs(0), Cs(0), Error(0), ObsCnt(0), TotalCnt(0), FirstTime(true) {
 
-	for (int ii = 1; ii < argtypes.length() + 1; ++ii) {
+	for (unsigned int ii = 1; ii < argtypes.length() + 1; ++ii) {
 		if (argtypes[ii] == 'V') Vs++;
 		else if (argtypes[ii] == 'C') Cs++;
 	}
@@ -3035,7 +3037,7 @@ ClassFtoC::ClassFtoC(ClassData *MyObs, string ToVar, string args, string argtype
 
 void ClassFtoC::doFunc(long Obs, long Line) {
 
-	Data[Vs - 1][Obs][Line] = (Data[0][Obs][Line] - 32.0)*5.0 / 9.0;
+	Data[Vs - 1][Obs][Line] = (double)((Data[0][Obs][Line] - 32.0)*5.0 / 9.0);
 }
 
 //---------------------------------------------------------------------------
@@ -3046,7 +3048,7 @@ ClassCtoK::ClassCtoK(ClassData *MyObs, string ToVar, string args, string argtype
 
 void ClassCtoK::doFunc(long Obs, long Line) {
 
-	Data[Vs - 1][Obs][Line] = (Data[0][Obs][Line] + 273.15);
+	Data[Vs - 1][Obs][Line] = (double)((Data[0][Obs][Line] + 273.15));
 }
 
 //---------------------------------------------------------------------------
@@ -3073,7 +3075,7 @@ ClassKtoC::ClassKtoC(ClassData *MyObs, string ToVar, string args, string argtype
 
 void ClassKtoC::doFunc(long Obs, long Line) {
 
-	Data[Vs - 1][Obs][Line] = (Data[0][Obs][Line] - 273.15);
+	Data[Vs - 1][Obs][Line] = (double)(Data[0][Obs][Line] - 273.15);
 }
 
 //---------------------------------------------------------------------------
@@ -3081,7 +3083,7 @@ ClassTimeshift::ClassTimeshift(ClassData *MyObs, string ToVar, string args, stri
 	Classfilter(MyObs, ToVar, args, argtypes) {
 	readargs();
 
-	MyObs->TimeShiftFilter = Constants[0];
+	MyObs->TimeShiftFilter = (double)Constants[0];
 }
 
 //---------------------------------------------------------------------------
@@ -3096,7 +3098,7 @@ void ClassRH_WtoI::doFunc(long Obs, long Line) {
 	double RH = Data[1][Obs][Line];
 
 	if (T < 0.0)
-		Data[Vs - 1][Obs][Line] = RH * 0.9995*exp(22.452*T / (272.55 + T)) / exp(17.502*T / (240.97 + T));
+		Data[Vs - 1][Obs][Line] = (double)(RH * 0.9995*exp(22.452*T / (272.55 + T)) / exp(17.502*T / (240.97 + T)));
 	else
 		Data[Vs - 1][Obs][Line] = RH;
 }
@@ -3120,7 +3122,7 @@ void Classea::doFunc(long Obs, long Line) {
 	if (Line == MyObs->IndxMax) // wait till last
 		for (int Obs = 0; Obs < ObsCnt; ++Obs)
 			for (long Line = MyObs->IndxMin; Line <= MyObs->IndxMax; ++Line)
-				Data[Vs - 1][Obs][Line] = estar(Data[0][Obs][Line])* Data[1][Obs][Line] / 100.0;
+				Data[Vs - 1][Obs][Line] = (double)(estar(Data[0][Obs][Line])* Data[1][Obs][Line] / 100.0);
 }
 
 //---------------------------------------------------------------------------
@@ -3142,7 +3144,7 @@ Classrh::Classrh(ClassData *MyObs, string ToVar, string args, string argtypes) :
 
 void Classrh::doFunc(long Obs, long Line) {
 
-	Data[Vs - 1][Obs][Line] = Data[1][Obs][Line] / estar(Data[0][Obs][Line])*100.0;
+	Data[Vs - 1][Obs][Line] = (double)(Data[1][Obs][Line] / estar(Data[0][Obs][Line])*100.0);
 }
 
 //---------------------------------------------------------------------------
@@ -3155,16 +3157,16 @@ void Classsin::doFunc(long Obs, long Line) {
 
 	if (!Error) {
 		if (FirstTime) {
-			period = Constants[0] * MyObs->Freq;
-			phase = Constants[1] * MyObs->Freq;
+			period = (long)(Constants[0] * MyObs->Freq);
+			phase = (long)(Constants[1] * MyObs->Freq);
 
 			if (Constants[2] > MyObs->Dt1 && Constants[2] < MyObs->Dt2)
-				delay = (Constants[2] - MyObs->Dt1)*MyObs->Freq;
+				delay = (long)((Constants[2] - MyObs->Dt1)*MyObs->Freq);
 			else
 				delay = 0;
 
 			if (Constants[3] > 0.0) {
-				duration = (Constants[3] - MyObs->Dt1)*MyObs->Freq - 1;
+				duration = (long)((Constants[3] - MyObs->Dt1)*MyObs->Freq - 1);
 				if (duration <= 0) duration = MyObs->IndxMax;
 			}
 			else
@@ -3176,7 +3178,7 @@ void Classsin::doFunc(long Obs, long Line) {
 		if (Line <= delay || Line > duration)
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else
-			Data[Vs - 1][Obs][Line] = sin((double(Line) / period - double(phase) / period) * 2 * M_PI);
+			Data[Vs - 1][Obs][Line] = (double)sin((double(Line) / period - double(phase) / period) * 2 * M_PI);
 	}
 }
 
@@ -3190,16 +3192,16 @@ void Classcos::doFunc(long Obs, long Line) {
 
 	if (!Error) {
 		if (FirstTime) {
-			period = Constants[0] * MyObs->Freq;
-			phase = Constants[1] * MyObs->Freq;
+			period = (long)(Constants[0] * MyObs->Freq);
+			phase = (long)(Constants[1] * MyObs->Freq);
 
 			if (Constants[2] > MyObs->Dt1 && Constants[2] < MyObs->Dt2)
-				delay = (Constants[2] - MyObs->Dt1)*MyObs->Freq;
+				delay = (long)((Constants[2] - MyObs->Dt1)*MyObs->Freq);
 			else
 				delay = 0;
 
 			if (Constants[3] > 0.0) {
-				duration = (Constants[3] - MyObs->Dt1)*MyObs->Freq - 1;
+				duration = (long)((Constants[3] - MyObs->Dt1)*MyObs->Freq - 1);
 				if (duration <= 0) duration = MyObs->IndxMax;
 			}
 			else
@@ -3211,7 +3213,7 @@ void Classcos::doFunc(long Obs, long Line) {
 		if (Line <= delay || Line > duration)
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else
-			Data[Vs - 1][Obs][Line] = cos((double(Line) / period - double(phase) / period) * 2 * M_PI);
+			Data[Vs - 1][Obs][Line] = (double)cos((double(Line) / period - double(phase) / period) * 2 * M_PI);
 	}
 }
 
@@ -3225,16 +3227,16 @@ void Classramp::doFunc(long Obs, long Line) {
 
 	if (!Error) {
 		if (FirstTime) {
-			period = Constants[0] * MyObs->Freq;
-			phase = Constants[1] * MyObs->Freq;
+			period = (long)(Constants[0] * MyObs->Freq);
+			phase = (long)(Constants[1] * MyObs->Freq);
 
 			if (Constants[2] > MyObs->Dt1 && Constants[2] < MyObs->Dt2)
-				delay = (Constants[2] - MyObs->Dt1)*MyObs->Freq;
+				delay = (long)((Constants[2] - MyObs->Dt1)*MyObs->Freq);
 			else
 				delay = 0;
 
 			if (Constants[3] > 0.0) {
-				duration = (Constants[3] - MyObs->Dt1)*MyObs->Freq - 1;
+				duration = (long)((Constants[3] - MyObs->Dt1)*MyObs->Freq - 1);
 				if (duration <= 0) duration = MyObs->IndxMax;
 			}
 			else
@@ -3247,9 +3249,9 @@ void Classramp::doFunc(long Obs, long Line) {
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else {
 			Data[Vs - 1][Obs][Line] = 0.0;
-			double X = fmod(double(Line - delay) / double(period)*2.0, 1.0);
+			double X = (double)fmod(double(static_cast<long long>(Line) - static_cast<long long>(delay)) / double(period)*2.0, 1.0);
 			if (((Line + phase - delay) % period) >= period / 2)
-				Data[Vs - 1][Obs][Line] = 1.0 - X;
+				Data[Vs - 1][Obs][Line] = (double)1.0 - X;
 			else
 				Data[Vs - 1][Obs][Line] = X;
 		}
@@ -3266,16 +3268,16 @@ void Classsquare::doFunc(long Obs, long Line) {
 
 	if (!Error) {
 		if (FirstTime) {
-			period = Constants[0] * MyObs->Freq;
-			phase = Constants[1] * MyObs->Freq;
+			period = (long)(Constants[0] * MyObs->Freq);
+			phase = (long)(Constants[1] * MyObs->Freq);
 
 			if (Constants[2] > MyObs->Dt1 && Constants[2] < MyObs->Dt2)
-				delay = (Constants[2] - MyObs->Dt1)*MyObs->Freq - 1;
+				delay = (long)((Constants[2] - MyObs->Dt1)*MyObs->Freq - 1);
 			else
 				delay = -1;
 
 			if (Constants[3] > 0.0) {
-				duration = (Constants[3] - MyObs->Dt1)*MyObs->Freq - 1;
+				duration = (long)((Constants[3] - MyObs->Dt1)*MyObs->Freq - 1);
 				if (duration <= 0) duration = MyObs->IndxMax;
 			}
 			else
@@ -3306,12 +3308,12 @@ void Classpulse::doFunc(long Obs, long Line) {
 	if (!Error) {
 		if (FirstTime) {
 			if (Constants[0] > MyObs->Dt1 && Constants[0] < MyObs->Dt2)
-				delay = (Constants[0] - MyObs->Dt1)*MyObs->Freq - 1;
+				delay = (long)((Constants[0] - MyObs->Dt1)*MyObs->Freq - 1);
 			else
 				delay = -1;
 
 			if (Constants[1] > 0.0) {
-				duration = (Constants[1] - MyObs->Dt1)*MyObs->Freq - 1;
+				duration = (long)((Constants[1] - MyObs->Dt1)*MyObs->Freq - 1);
 				if (duration <= 0) duration = MyObs->IndxMax;
 			}
 			else
@@ -3338,19 +3340,19 @@ void Classexp::doFunc(long Obs, long Line) {
 	if (!Error) {
 		if (FirstTime) {
 			if (Constants[0] > MyObs->Dt1 && Constants[0] < MyObs->Dt2)
-				delay = (Constants[0] - MyObs->Dt1)*MyObs->Freq - 1;
+				delay = (long)((Constants[0] - MyObs->Dt1)*MyObs->Freq - 1);
 			else
 				delay = -1;
 
 			if (Constants[1] > 0.0) {
-				duration = (Constants[1] - MyObs->Dt1)*MyObs->Freq - 1;
+				duration = (long)((Constants[1] - MyObs->Dt1)*MyObs->Freq - 1);
 				if (duration <= 0) duration = MyObs->IndxMax;
 			}
 			else
 				duration = MyObs->IndxMax;
 
-			A = Constants[2];
-			B = Constants[3] / MyObs->Freq;
+			A = (double)Constants[2];
+			B = (double)(Constants[3] / MyObs->Freq);
 
 			FirstTime = false;
 		}
@@ -3358,7 +3360,7 @@ void Classexp::doFunc(long Obs, long Line) {
 		if (Line <= delay || Line > duration)
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else
-			Data[Vs - 1][Obs][Line] = A * exp(B*(Line - delay - 1));
+			Data[Vs - 1][Obs][Line] = A * exp(B*(static_cast<long long>(Line) - static_cast<long long>(delay) - 1));
 	}
 }
 
@@ -3367,8 +3369,8 @@ Classexpv::Classexpv(ClassData *MyObs, string ToVar, string args, string argtype
 	Classfilter(MyObs, ToVar, args, argtypes) {
 	readargs();
 	if (!Error) {
-		A = Constants[0];
-		B = Constants[0];
+		A = (double)Constants[0];
+		B = (double)Constants[0];
 	}
 }
 
@@ -3389,12 +3391,12 @@ void Classpoly::doFunc(long Obs, long Line) {
 		if (FirstTime) {
 
 			if (Constants[0] > MyObs->Dt1 && Constants[0] < MyObs->Dt2)
-				delay = (Constants[0] - MyObs->Dt1)*MyObs->Freq - 1;
+				delay = (long)((Constants[0] - MyObs->Dt1)*MyObs->Freq - 1);
 			else
 				delay = -1;
 
 			if (Constants[1] > 0.0) {
-				duration = (Constants[1] - MyObs->Dt1)*MyObs->Freq - 1;
+				duration = (long)((Constants[1] - MyObs->Dt1)*MyObs->Freq - 1);
 				if (duration <= 0) duration = MyObs->IndxMax;
 			}
 			else
@@ -3406,9 +3408,9 @@ void Classpoly::doFunc(long Obs, long Line) {
 		if (Line <= delay || Line > duration)
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else {
-			double x = (Line - delay - 1) / double(MyObs->Freq);
-			Data[Vs - 1][Obs][Line] = Constants[2] + Constants[3] * x + Constants[4] * x*x
-				+ Constants[5] * x*x*x + Constants[6] * x*x*x*x;
+			double x = (static_cast<long long>(Line) - static_cast<long long>(delay) - 1) / double(MyObs->Freq);
+			Data[Vs - 1][Obs][Line] = (double)(Constants[2] + Constants[3] * x + Constants[4] * x*x
+				+ Constants[5] * x*x*x + Constants[6] * x*x*x*x);
 		}
 	}
 }
@@ -3422,10 +3424,10 @@ Classpolyv::Classpolyv(ClassData *MyObs, string ToVar, string args, string argty
 void Classpolyv::doFunc(long Obs, long Line) {
 
 	double x = Data[0][Obs][Line];
-	Data[Vs - 1][Obs][Line] = Constants[0] + Constants[1] * x +
+	Data[Vs - 1][Obs][Line] = (double)(Constants[0] + Constants[1] * x +
 		Constants[2] * x*x +
 		Constants[3] * x*x*x +
-		Constants[4] * x*x*x*x;
+		Constants[4] * x*x*x*x);
 }
 
 //---------------------------------------------------------------------------
@@ -3440,19 +3442,19 @@ void Classlog::doFunc(long Obs, long Line) {
 		if (FirstTime) {
 
 			if (Constants[0] > MyObs->Dt1 && Constants[0] < MyObs->Dt2)
-				delay = (Constants[0] - MyObs->Dt1)*MyObs->Freq - 1;
+				delay = (long)((Constants[0] - MyObs->Dt1)*MyObs->Freq - 1);
 			else
 				delay = -1;
 
 			if (Constants[1] > 0.0) {
-				duration = (Constants[1] - MyObs->Dt1)*MyObs->Freq - 1;
+				duration = (long)((Constants[1] - MyObs->Dt1)*MyObs->Freq - 1);
 				if (duration <= 0) duration = MyObs->IndxMax;
 			}
 			else
 				duration = MyObs->IndxMax;
 
-			A = Constants[2];
-			B = fabs(Constants[3]);
+			A = (double)Constants[2];
+			B = (double)fabs(Constants[3]);
 
 			FirstTime = false;
 		}
@@ -3460,7 +3462,7 @@ void Classlog::doFunc(long Obs, long Line) {
 		if (Line <= delay || Line > duration)
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else
-			Data[Vs - 1][Obs][Line] = A * log(B*double(Line - delay) / MyObs->Freq);
+			Data[Vs - 1][Obs][Line] = A * log(B*double(static_cast<long long>(Line) - static_cast<long long>(delay)) / MyObs->Freq);
 	}
 }
 
@@ -3469,8 +3471,8 @@ Classlogv::Classlogv(ClassData *MyObs, string ToVar, string args, string argtype
 	Classfilter(MyObs, ToVar, args, argtypes) {
 	readargs();
 	if (!Error) {
-		A = fabs(Constants[0]);
-		B = fabs(Constants[1]);
+		A = (double)fabs(Constants[0]);
+		B = (double)fabs(Constants[1]);
 	}
 }
 
@@ -3490,19 +3492,19 @@ void Classpow::doFunc(long Obs, long Line) {
 	if (!Error) {
 		if (FirstTime) {
 			if (Constants[0] >= MyObs->Dt1 && Constants[0] <= MyObs->Dt2)
-				delay = (Constants[0] - MyObs->Dt1)*MyObs->Freq;
+				delay = (long)((Constants[0] - MyObs->Dt1)*MyObs->Freq);
 			else
 				delay = -1;
 
 			if (Constants[1] > 0.0) {
-				duration = (Constants[1] - MyObs->Dt1)*MyObs->Freq - 1;
+				duration = (long)((Constants[1] - MyObs->Dt1)*MyObs->Freq - 1);
 				if (duration <= 0) duration = MyObs->IndxMax;
 			}
 			else
 				duration = MyObs->IndxMax;
 
-			A = Constants[2];
-			B = Constants[3];
+			A = (double)Constants[2];
+			B = (double)Constants[3];
 
 			FirstTime = false;
 		}
@@ -3510,7 +3512,7 @@ void Classpow::doFunc(long Obs, long Line) {
 		if (Line < delay || Line > duration)
 			Data[Vs - 1][Obs][Line] = 0.0;
 		else
-			Data[Vs - 1][Obs][Line] = A * pow((Line - delay + 1) / double(MyObs->Freq), B);
+			Data[Vs - 1][Obs][Line] = A * pow((static_cast<long long>(Line) - static_cast<long long>(delay) + 1) / double(MyObs->Freq), B);
 	}
 }
 
@@ -3519,8 +3521,8 @@ Classpowv::Classpowv(ClassData *MyObs, string ToVar, string args, string argtype
 	Classfilter(MyObs, ToVar, args, argtypes) {
 	readargs();
 	if (!Error) {
-		A = Constants[0];
-		B = Constants[1];
+		A = (double)Constants[0];
+		B = (double)Constants[1];
 	}
 }
 
@@ -3539,7 +3541,7 @@ void Classtime::doFunc(long Obs, long Line) {
 
 	if (!Error) {
 		if (FirstTime) {
-			option = Constants[0];
+			option = (int)Constants[0];
 			if (option)
 				start = 0.0;
 			else
@@ -3548,7 +3550,7 @@ void Classtime::doFunc(long Obs, long Line) {
 			FirstTime = false;
 		}
 
-		Data[Vs - 1][Obs][Line] = start + Line / double(MyObs->Freq);
+		Data[Vs - 1][Obs][Line] = double(start + Line / double(MyObs->Freq));
 	}
 }
 
@@ -3557,15 +3559,15 @@ Classjulian::Classjulian(ClassData *MyObs, string ToVar, string args, string arg
 	Classfilter(MyObs, ToVar, args, argtypes) {
 	readargs();
 	if (!Error)
-		option = Constants[0];
+		option = (int)Constants[0];
 }
 
 void Classjulian::doFunc(long Obs, long Line) {
 
 	switch (option) {
-	case 0: Data[Vs - 1][Obs][Line] = julian("now"); break;
-	case 1: Data[Vs - 1][Obs][Line] = julian("start"); break;
-	case 2: Data[Vs - 1][Obs][Line] = julian("end"); break;
+	case 0: Data[Vs - 1][Obs][Line] = (double)julian("now"); break;
+	case 1: Data[Vs - 1][Obs][Line] = (double)julian("start"); break;
+	case 2: Data[Vs - 1][Obs][Line] = (double)julian("end"); break;
 	default:
 		break;
 	}
@@ -3589,9 +3591,9 @@ Classrefwind::Classrefwind(ClassData *MyObs, string ToVar, string args, string a
 
 	readargs();
 	if (!Error) {
-		double d = Constants[2] * 2.0 / 3.0;  // zero plane
-		double Z = Constants[2] * 0.123;    // roughness
-		Const = log((Constants[1] - d) / Z) / log((Constants[0] - d) / Z);
+		double d = (double)(Constants[2] * 2.0 / 3.0);  // zero plane
+		double Z = (double)(Constants[2] * 0.123);    // roughness
+		Const = (double)(log((Constants[1] - d) / Z) / log((Constants[0] - d) / Z));
 	}
 }
 
@@ -3608,7 +3610,7 @@ Classadd::Classadd(ClassData *MyObs, string ToVar, string args, string argtypes)
 
 void Classadd::doFunc(long Obs, long Line) {
 
-	Data[Vs - 1][Obs][Line] = Data[0][Obs][Line] + Constants[0];
+	Data[Vs - 1][Obs][Line] = Data[0][Obs][Line] + (double)Constants[0];
 }
 
 //---------------------------------------------------------------------------
@@ -3619,7 +3621,7 @@ Classsub::Classsub(ClassData *MyObs, string ToVar, string args, string argtypes)
 
 void Classsub::doFunc(long Obs, long Line) {
 
-	Data[Vs - 1][Obs][Line] = Data[0][Obs][Line] - Constants[0];
+	Data[Vs - 1][Obs][Line] = Data[0][Obs][Line] - (double)Constants[0];
 }
 
 //---------------------------------------------------------------------------
@@ -3630,7 +3632,7 @@ Classmul::Classmul(ClassData *MyObs, string ToVar, string args, string argtypes)
 
 void Classmul::doFunc(long Obs, long Line) {
 
-	Data[Vs - 1][Obs][Line] = Data[0][Obs][Line] * Constants[0];
+	Data[Vs - 1][Obs][Line] = Data[0][Obs][Line] * (double)Constants[0];
 }
 
 //---------------------------------------------------------------------------
@@ -3641,7 +3643,7 @@ Classdiv::Classdiv(ClassData *MyObs, string ToVar, string args, string argtypes)
 
 void Classdiv::doFunc(long Obs, long Line) {
 
-	Data[Vs - 1][Obs][Line] = Data[0][Obs][Line] / Constants[0];
+	Data[Vs - 1][Obs][Line] = Data[0][Obs][Line] / (double)Constants[0];
 }
 
 //---------------------------------------------------------------------------
@@ -3696,7 +3698,7 @@ Classconst::Classconst(ClassData *MyObs, string ToVar, string args, string argty
 
 void Classconst::doFunc(long Obs, long Line) {
 
-	Data[Vs - 1][Obs][Line] = Constants[0];
+	Data[Vs - 1][Obs][Line] = (double)Constants[0];
 }
 
 //---------------------------------------------------------------------------
@@ -3708,10 +3710,10 @@ ClassSim::ClassSim(ClassData *MyObs, string ToVar, string args, string argtypes)
 	MyObs->Dt1 = Constants[0];
 	MyObs->Dt2 = Constants[1];
 	MyObs->Interval = Constants[2] / 24.0;
-	MyObs->Freq = 1.0 / MyObs->Interval + 1.0 / 192.0;
-	MyObs->Lines = ceil(MyObs->Dt2 - MyObs->Dt1)*MyObs->Freq;
+	MyObs->Freq = (long)(1.0 / MyObs->Interval + 1.0 / 192.0);
+	MyObs->Lines = (long)(ceil(MyObs->Dt2 - MyObs->Dt1)*MyObs->Freq);
 	MyObs->IndxMin = 0;
-	MyObs->IndxMax = floor((MyObs->Dt2 - MyObs->Dt1)*MyObs->Freq + MyObs->Interval / 2.0) - 1;
+	MyObs->IndxMax = (long)(floor((MyObs->Dt2 - MyObs->Dt1)*MyObs->Freq + MyObs->Interval / 2.0) - 1);
 
 	// first data file?  Following necessary for use by filters
 	if (Global::DTstart == 0.0) {
@@ -3744,7 +3746,7 @@ ClassForce::ClassForce(ClassData *MyObs, string ToVar, string args, string argty
 	if (Constants[0] < 1)
 		error("ForceFilter filter interval cannot be greater than daily ");
 
-	MyObs->ForceInterval = Constants[0];
+	MyObs->ForceInterval = (long)Constants[0];
 }
 
 void ClassForce::doFunc(long Obs, long Line) {
@@ -3868,7 +3870,7 @@ void ClassMissingInter::doFunc(long Obs, long Line) {
 
 	if (Data[0][Obs][Line] > Constants[0] && Data[0][Obs][Line] < Constants[1]) {
 		if (Line - 1 > LastGoodData[Obs] && LastGoodData[Obs] != -1) {
-			double dif = (Data[0][Obs][Line] - GoodData[Obs]) / (Line - LastGoodData[Obs]);
+			double dif = (Data[0][Obs][Line] - GoodData[Obs]) / (static_cast<long long>(Line) - static_cast<long long>(LastGoodData[Obs]));
 			for (int ii = LastGoodData[Obs] + 1; ii < Line; ++ii)
 				Data[Vs - 1][Obs][ii] = Data[Vs - 1][Obs][ii - 1] + dif;
 		}
@@ -3898,7 +3900,7 @@ void ClassMissing0::doFunc(long Obs, long Line) {
 void ClassMissingC::doFunc(long Obs, long Line) {
 
 	if (Data[0][Obs][Line] <= Constants[0] || Data[0][Obs][Line] >= Constants[1])
-		Data[Vs - 1][Obs][Line] = Constants[2];
+		Data[Vs - 1][Obs][Line] = (double)Constants[2];
 	else
 		Data[Vs - 1][Obs][Line] = Data[0][Obs][Line];
 }
@@ -4673,7 +4675,7 @@ void Convert::SetBasicUnit(Tresult& u, double k, int iUnit)
 {
 	u.k = k;
 
-	int iBasicUnit = Infos[iUnit].k;
+	int iBasicUnit = (int)(Infos[iUnit].k);
 	if (0 <= iBasicUnit)
 		u.aExp[iBasicUnit] = 1;
 }

@@ -32,27 +32,27 @@ public:
 	string Description;
 	double **Data;
 	double *Times; // holds sparse times
-	double Dt1;
-	double Dt2;
-	double Interval; // days
-	long Lines;
-	long Freq;
-	long IndxMin;   // range of data available
-	long IndxMax;   // range of data available
+	double Dt1 {0.0};
+	double Dt2 {0.0};
+	double Interval {0.0}; // days
+	long Lines {0};
+	long Freq {0};
+	long IndxMin {0};   // range of data available
+	long IndxMax {0};   // range of data available
 	long ModN;      // divisor for data less frequent than basic interval
-	long HdrLen;    // length of file header
-	long Position;  // current line in file
+	long HdrLen {0};    // length of file header
+	long Position {0};  // current line in file
 	long DataCnt;
 	long FilterCnt;  // filter count
 
 	Classmacro *myMacro;
 	bool Simulation;
 	long ForceInterval;
-	bool GoodInterval;
-	bool GoodDay;
-	bool RunUsed;
-	bool Success;
-	long TimeIndx; // sparse file ??
+	bool GoodInterval {false};
+	bool GoodDay {false};
+	bool RunUsed {false};
+	bool Success {false};
+	long TimeIndx {0}; // sparse file ??
 	bool FirstFile;
 
 	double TimeShiftFilter; // used by Time shift filter
@@ -98,19 +98,19 @@ public:
 	long dim;
 	long dimMax; // used by observations
 	long lay;
-	long variation_set;
-	CRHM::TDim dimen;
+	long variation_set {0};
+	CRHM::TDim dimen {CRHM::NREB};
 
 	CRHM::TVISIBLE visibility;
 	bool optional;
 	bool PointPlot;
 	long TchrtOpt;
-	long VarFunct;
+	long VarFunct {0};
 	bool StatVar;
 	long InGroup;
 	bool nfreq;
 	CRHM::TFun FunKind;
-	bool Daily; // used by AddObsPlot to decide how to apply function to input obs/var
+	bool Daily {NULL}; // used by AddObsPlot to decide how to apply function to input obs/var
 
 	double * values;
 	long  * ivalues;
@@ -120,8 +120,8 @@ public:
 
 	// backup storage
 
-	double ** layvaluesBkup;
-	long **ilayvaluesBkup;
+	double** layvaluesBkup {NULL};
+	long** ilayvaluesBkup {NULL};
 
 	long offset; // observation offset in ClassData FileData/Data
 	long cnt;    // observation dimension
@@ -130,9 +130,9 @@ public:
 
 	long HRU_OBS_indexed; // used to access the HRU_OBS[HRU_OBS_indexed][HRU] table
 	ClassVar *FunctVar;
-	TLoopFunct LoopFunct;  // typedef void (ClassVar:: *SomeFunct) (long dim_n) used in ClassCRHM
-	TSomeFunct UserFunct;  // typedef void (ClassVar:: *SomeFunct) (void) used in ClassModule
-	TSomeFunct_ UserFunct_;  // typedef void (ClassVar:: *SomeFunct) (long dim_n) used in ClassCRHM
+	TLoopFunct LoopFunct {NULL};  // typedef void (ClassVar:: *SomeFunct) (long dim_n) used in ClassCRHM
+	TSomeFunct UserFunct {NULL};  // typedef void (ClassVar:: *SomeFunct) (void) used in ClassModule
+	TSomeFunct_ UserFunct_ {NULL};  // typedef void (ClassVar:: *SomeFunct) (long dim_n) used in ClassCRHM
 	TAccFunct CustomFunct; // typedef void (ClassVar:: *AccFunct) (ClassModule *) used in ClassModule
 	string CustomFunctName; // debug aid
 	long No_ReadVar; // do not read observation again in a group but use CustomFunct
@@ -259,11 +259,11 @@ public:
 	string units;
 
 	CRHM::TVar varType;
-	CRHM::TDim dimen;
+	CRHM::TDim dimen {CRHM::NDEFNZ};
 
 	long dim;
-	long lay;
-	long variation_set;
+	long lay {0};
+	long variation_set {0};
 
 	double *values;
 	long *ivalues;
@@ -272,23 +272,23 @@ public:
 	long **ilayvalues;
 
 	string valstr;
-	double minVal;
-	double maxVal;
+	double minVal {0.0};
+	double maxVal {0.0};
 
-	TStringList *Strings;
+	TStringList* Strings {NULL};
 
-	CRHM::TVISIBLE visibility;
+	CRHM::TVISIBLE visibility {CRHM::USUAL};
 
 	long Inhibit_share; // 0 - shared, 1 - linked to declparam, 2 - declputparam unlinked
 
 						// backup storage
 
-	double ** layvaluesBkup;
-	long **ilayvaluesBkup;
+	double** layvaluesBkup {NULL};
+	long** ilayvaluesBkup {NULL};
 
 	ClassPar *Identical;
 
-	TStringList * StringsBkup;
+	TStringList* StringsBkup {NULL};
 
 	ClassPar(string module = "none", string param = "none")
 		: module(module), param(param), dim(0), visibility(CRHM::USUAL), variation_set(0), varType(CRHM::none),
@@ -347,13 +347,13 @@ public:
 	long TotalCnt; // when created;
 	bool FirstTime;
 
-	long *DataIndx;    // Vs offsets
-	long *DataObsCnt;  // maximum number of observations
-	double ***Data;     // Data[Vs selection][Obs][line]
-	double *Constants; // constant data
+	long* DataIndx{ NULL };    // Vs offsets
+	long* DataObsCnt {NULL};  // maximum number of observations
+	double*** Data {NULL};     // Data[Vs selection][Obs][line]
+	double* Constants {NULL}; // constant data
 
-	ClassVar *thisVar; // last arg accessed
-	ClassVar *outVar; // ToVar
+	ClassVar* thisVar {NULL}; // last arg accessed
+	ClassVar* outVar {NULL}; // ToVar
 
 	virtual void readargs();
 	virtual void error(string Mess);
@@ -418,10 +418,10 @@ public:
 
 class Classsin : Classfilter {
 public:
-	long period;
-	long phase;
-	long delay;
-	long duration;
+	long period {0};
+	long phase {0};
+	long delay {0};
+	long duration {0};
 	Classsin(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -429,10 +429,10 @@ public:
 
 class Classcos : Classfilter {
 public:
-	long period;
-	long phase;
-	long delay;
-	long duration;
+	long period {0};
+	long phase {0};
+	long delay {0};
+	long duration {0};
 	Classcos(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -447,8 +447,8 @@ public:
 
 class Classpulse : Classfilter {
 public:
-	long delay;
-	long duration;
+	long delay {0};
+	long duration {0};
 	Classpulse(ClassData *MyObs, string ToVar, string args, string argtypes = "CC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -456,10 +456,10 @@ public:
 
 class Classexp : Classfilter {
 public:
-	long delay;
-	long duration;
-	double A;
-	double B;
+	long delay {0};
+	long duration {0};
+	double A {0.0};
+	double B {0.0};
 	Classexp(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -467,8 +467,8 @@ public:
 
 class Classexpv : Classfilter {
 public:
-	double A;
-	double B;
+	double A {0.0};
+	double B {0.0};
 	Classexpv(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -476,8 +476,8 @@ public:
 
 class Classpoly : Classfilter {
 public:
-	long delay;
-	long duration;
+	long delay {0};
+	long duration {0};
 	Classpoly(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCCCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -493,10 +493,10 @@ public:
 
 class Classlog : Classfilter {
 public:
-	long delay;
-	long duration;
-	double A;
-	double B;
+	long delay {0};
+	long duration {0};
+	double A {0.0};
+	double B {0.0};
 	Classlog(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -504,8 +504,8 @@ public:
 
 class Classlogv : Classfilter {
 public:
-	double A;
-	double B;
+	double A {0.0};
+	double B {0.0};
 	Classlogv(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -513,10 +513,10 @@ public:
 
 class Classpow : Classfilter {
 public:
-	long delay;
-	long duration;
-	double A;
-	double B;
+	long delay {0};
+	long duration {0};
+	double A {0.0};
+	double B {0.0};
 	Classpow(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -524,8 +524,8 @@ public:
 
 class Classpowv : Classfilter {
 public:
-	double A;
-	double B;
+	double A {0.0};
+	double B {0.0};
 	Classpowv(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -533,8 +533,8 @@ public:
 
 class Classtime : Classfilter {
 public:
-	double start;
-	int option;
+	double start {0.0};
+	int option {0};
 	Classtime(ClassData *MyObs, string ToVar, string args, string argtypes = "C");
 
 	virtual void doFunc(long Obs, long Line);
@@ -542,7 +542,7 @@ public:
 
 class Classjulian : Classfilter {
 public:
-	int option;
+	int option {0};
 	Classjulian(ClassData *MyObs, string ToVar, string args, string argtypes = "C");
 
 	virtual void doFunc(long Obs, long Line);
@@ -557,10 +557,10 @@ public:
 
 class Classsquare : Classfilter {
 public:
-	long period;
-	long phase;
-	long delay;
-	long duration;
+	long period {0};
+	long phase {0};
+	long delay {0};
+	long duration {0};
 	Classsquare(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -568,10 +568,10 @@ public:
 
 class Classramp : Classfilter {
 public:
-	long period;
-	long phase;
-	long delay;
-	long duration;
+	long period {0};
+	long phase {0};
+	long delay {0};
+	long duration {0};
 	Classramp(ClassData *MyObs, string ToVar, string args, string argtypes = "CCCC");
 
 	virtual void doFunc(long Obs, long Line);
@@ -579,7 +579,7 @@ public:
 
 class Classrefwind : Classfilter {
 public:
-	double Const; // result log((Z2 - d)/Z)/log((Zm - d)/Z)
+	double Const {0.0}; // result log((Z2 - d)/Z)/log((Zm - d)/Z)
 
 	Classrefwind(ClassData *MyObs, string ToVar, string args, string argtypes = "VCCC");
 
@@ -693,7 +693,7 @@ public:
 	ClassMissingInter(ClassData *MyObs, string ToVar, string args, string argtypes = "VCC");
 	~ClassMissingInter();
 
-	bool FirstTime;
+	bool FirstTime {true};
 	double *GoodData;
 	long *LastGoodData;
 
@@ -742,8 +742,8 @@ public:
 	};
 	~ClassMissingFlagAfter();
 
-	long First;
-	long Last;
+	long First {0};
+	long Last {0};
 
 	virtual void doFunc(long Obs, long Line);
 };
