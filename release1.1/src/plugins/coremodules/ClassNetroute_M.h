@@ -7,97 +7,97 @@ public:
 
 ClassNetroute_M(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long meltrunoffDiv;
-long soil_ssrDiv;
-long soil_runoffDiv;
-long soil_gwDiv;
+long meltrunoffDiv{0};
+long soil_ssrDiv{0};
+long soil_runoffDiv{0};
+long soil_gwDiv{0};
 
 // declared variables
-double *inflow;        // [nhru]
-double *cuminflow;     // [nhru]
-double *outflow;       // [nhru]
-double *outflow_diverted; // [nhru]
-double *cumoutflow_diverted; // [nhru]
-double *cumoutflow;    // [nhru]
-double *gwinflow;        // [nhru]
+double *inflow{ NULL };        // [nhru]
+double *cuminflow{ NULL };     // [nhru]
+double *outflow{ NULL };       // [nhru]
+double *outflow_diverted{ NULL }; // [nhru]
+double *cumoutflow_diverted{ NULL }; // [nhru]
+double *cumoutflow{ NULL };    // [nhru]
+double *gwinflow{ NULL };        // [nhru]
 
-double *ssrinflow;        // [nhru]
-double *ssrcuminflow;     // [nhru]
-double *ssroutflow;       // [nhru]
-double *ssrcumoutflow;    // [nhru]
-double *HRU_cumbasinflow; // [nhru]
+double *ssrinflow{ NULL };        // [nhru]
+double *ssrcuminflow{ NULL };     // [nhru]
+double *ssroutflow{ NULL };       // [nhru]
+double *ssrcumoutflow{ NULL };    // [nhru]
+double *HRU_cumbasinflow{ NULL }; // [nhru]
 
-double *runinflow;        // [nhru]
-double *runcuminflow;     // [nhru]
-double *runoutflow;       // [nhru]
-double *runcumoutflow;    // [nhru]
+double *runinflow{ NULL };        // [nhru]
+double *runcuminflow{ NULL };     // [nhru]
+double *runoutflow{ NULL };       // [nhru]
+double *runcumoutflow{ NULL };    // [nhru]
 
-double *gwoutflow;       // [nhru]
-double *gwoutflow_diverted; // [nhru]
-double *gwcuminflow;     // [nhru]
-double *gwcumoutflow;    // [nhru]
-double *gwcumoutflow_diverted; // [nhru]
+double *gwoutflow{ NULL };       // [nhru]
+double *gwoutflow_diverted{ NULL }; // [nhru]
+double *gwcuminflow{ NULL };     // [nhru]
+double *gwcumoutflow{ NULL };    // [nhru]
+double *gwcumoutflow_diverted{ NULL }; // [nhru]
 
-double *basinflow;     // [BASIN] all HRUs
-double *basinflow_s;   // [BASIN] all HRUs
-double *cumbasinflow;  // [BASIN] all HRUs
-double *basingw;       // [BASIN} all HRUs
-double *basingw_s;     // [BASIN} all HRUs
-double *cumbasingw;    // [BASIN} all HRUs
+double *basinflow{ NULL };     // [BASIN] all HRUs
+double *basinflow_s{ NULL };   // [BASIN] all HRUs
+double *cumbasinflow{ NULL };  // [BASIN] all HRUs
+double *basingw{ NULL };       // [BASIN} all HRUs
+double *basingw_s{ NULL };     // [BASIN} all HRUs
+double *cumbasingw{ NULL };    // [BASIN} all HRUs
 
-double *soil_ssr_Buf;    // buffered
-double *soil_runoff_Buf; // buffered
-double *soil_gw_Buf;     // buffered
+double *soil_ssr_Buf{ NULL };    // buffered
+double *soil_runoff_Buf{ NULL }; // buffered
+double *soil_gw_Buf{ NULL };     // buffered
 
-double *cum_to_Sd;         // [nhru]
-double *cum_to_soil_rechr; // [nhru]
+double *cum_to_Sd{ NULL };         // [nhru]
+double *cum_to_soil_rechr{ NULL }; // [nhru]
 
-double *Ktravel;         // [nhru] Muskingum
-double *cum_preferential_flow_to_gw;
+double *Ktravel{ NULL };         // [nhru] Muskingum
+double *cum_preferential_flow_to_gw{ NULL };
 
-ClassMuskingum *hruDelay;
-ClassClark *ssrDelay;
-ClassClark *runDelay;
-ClassClark *gwDelay;
+ClassMuskingum *hruDelay{ NULL };
+ClassClark *ssrDelay{ NULL };
+ClassClark *runDelay{ NULL };
+ClassClark *gwDelay{ NULL };
 
 // declared parameters
-const double *route_n;         // [nhru]
-const double *route_R;         // [nhru]
-const double *route_S0;        // [nhru]
-const double *route_L;         // [nhru]
-const double *route_X_M;       // [nhru]
-const long  *route_Cshp;      // [nhru]
+const double *route_n{ NULL };         // [nhru]
+const double *route_R{ NULL };         // [nhru]
+const double *route_S0{ NULL };        // [nhru]
+const double *route_L{ NULL };         // [nhru]
+const double *route_X_M{ NULL };       // [nhru]
+const long  *route_Cshp{ NULL };      // [nhru]
 
-const double *Lag;              // [nhru]
-const double *ssrKstorage;      // [nhru]
-const double *ssrLag;           // [nhru]
-const double *runKstorage;      // [nhru]
-const double *runLag;           // [nhru]
-const double *gwKstorage;       // [nhru]
-const double *gwLag;            // [nhru]
+const double *Lag{ NULL };              // [nhru]
+const double *ssrKstorage{ NULL };      // [nhru]
+const double *ssrLag{ NULL };           // [nhru]
+const double *runKstorage{ NULL };      // [nhru]
+const double *runLag{ NULL };           // [nhru]
+const double *gwKstorage{ NULL };       // [nhru]
+const double *gwLag{ NULL };            // [nhru]
 
-const double *basin_area;        // [BASIN]
-const double *hru_area;          // [nhru]
-const long  *whereto;           // [nhru]
-const long  *gwwhereto;         // [nhru]
-const long  *order;             // [nhru]
-const double *Sdmax;             // [nhru]
-const double *soil_rechr_max;    // [nhru]
-const long  *Sd_ByPass;         // [nhru]
-const long  *soil_rechr_ByPass; // [nhru]
-const long  *preferential_flow; // [nhru]
+const double *basin_area{ NULL };        // [BASIN]
+const double *hru_area{ NULL };          // [nhru]
+const long  *whereto{ NULL };           // [nhru]
+const long  *gwwhereto{ NULL };         // [nhru]
+const long  *order{ NULL };             // [nhru]
+const double *Sdmax{ NULL };             // [nhru]
+const double *soil_rechr_max{ NULL };    // [nhru]
+const long  *Sd_ByPass{ NULL };         // [nhru]
+const long  *soil_rechr_ByPass{ NULL }; // [nhru]
+const long  *preferential_flow{ NULL }; // [nhru]
 
 // variable inputs
-const double *soil_gw;     // [nhru]
-const double *soil_ssr;    // [nhru]
-const double *soil_runoff; // [nhru]
+const double *soil_gw{ NULL };     // [nhru]
+const double *soil_ssr{ NULL };    // [nhru]
+const double *soil_runoff{ NULL }; // [nhru]
 
 // variable puts
-double *Sd;
-double *soil_moist;
-double *soil_rechr;
-double *redirected_residual;
-double *gw;
+double *Sd{ NULL };
+double *soil_moist{ NULL };
+double *soil_rechr{ NULL };
+double *redirected_residual{ NULL };
+double *gw{ NULL };
 
 // local allocated arrays
 

@@ -8,15 +8,15 @@ public:
 ClassGrow_Crop(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-double *Crop_Ht;
+double *Crop_Ht{ NULL };
 
 // declared parameters
-const double *Ht;
-const double *Crop_Grow_Rate;
-const double *JCrop_Start;
-const double *JCrop_Mature;
-const double *JCrop_Harvest;
-const double *Init_Crop_Ht;
+const double *Ht{ NULL };
+const double *Crop_Grow_Rate{ NULL };
+const double *JCrop_Start{ NULL };
+const double *JCrop_Mature{ NULL };
+const double *JCrop_Harvest{ NULL };
+const double *Init_Crop_Ht{ NULL };
 
 // variable inputs
 

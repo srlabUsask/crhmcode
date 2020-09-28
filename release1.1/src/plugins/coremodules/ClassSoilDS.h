@@ -7,113 +7,113 @@ public:
 
 ClassSoilDS(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long snowinfilDiv;
-long meltrunoffDiv;
-long runoffDiv;
-long evapDiv;
+long snowinfilDiv{0};
+long meltrunoffDiv{0};
+long runoffDiv{0};
+long evapDiv{0};
 
 // declared observation variables
 
 // declared variables
-double *Sd;
-double *gw;
-double *soil_rechr;
-double *soil_moist;
-double *soil_gw;
-double *gw_flow;
-double *soil_ssr;
-double *rechr_ssr;
-double *soil_runoff;
-double *cum_soil_ssr;
-double *cum_rechr_ssr;
-double *cum_soil_runoff;
-double *cum_runoff_to_Sd;
-double *cum_redirected_residual;
-double *soil_gw_D;
-double *soil_ssr_D;
-double *gw_flow_D;
-double *soil_runoff_D;
-double *HK_V;
-double *HK_A;
-double *culvert_Q;
-double *culvert_water_H;
-double *culvert_water_A;
-double *culvert_water_V;
-double *culvert_over_Q;
-double *culvert_evap;
-double *cum_culvert;
-double *cum_culvert_over;
-double *HD;
-double *redirected_residual;
-double *infil_act;
-double *cum_infil_act;
-double *infil_act_D;
-double *Dts;
-double *Dts_max;
+double *Sd{ NULL };
+double *gw{ NULL };
+double *soil_rechr{ NULL };
+double *soil_moist{ NULL };
+double *soil_gw{ NULL };
+double *gw_flow{ NULL };
+double *soil_ssr{ NULL };
+double *rechr_ssr{ NULL };
+double *soil_runoff{ NULL };
+double *cum_soil_ssr{ NULL };
+double *cum_rechr_ssr{ NULL };
+double *cum_soil_runoff{ NULL };
+double *cum_runoff_to_Sd{ NULL };
+double *cum_redirected_residual{ NULL };
+double *soil_gw_D{ NULL };
+double *soil_ssr_D{ NULL };
+double *gw_flow_D{ NULL };
+double *soil_runoff_D{ NULL };
+double *HK_V{ NULL };
+double *HK_A{ NULL };
+double *culvert_Q{ NULL };
+double *culvert_water_H{ NULL };
+double *culvert_water_A{ NULL };
+double *culvert_water_V{ NULL };
+double *culvert_over_Q{ NULL };
+double *culvert_evap{ NULL };
+double *cum_culvert{ NULL };
+double *cum_culvert_over{ NULL };
+double *HD{ NULL };
+double *redirected_residual{ NULL };
+double *infil_act{ NULL };
+double *cum_infil_act{ NULL };
+double *infil_act_D{ NULL };
+double *Dts{ NULL };
+double *Dts_max{ NULL };
 
 // local variables
-double *cum_soil_gw;
-double *cum_gw_flow;
-double *cum_hru_condense;
-double *soil_moist_Init;
-double *soil_rechr_Init;
-double *Sd_Init;
-double *gw_Init;
-double *SWE_Init;
-double *Dts_runoff_K;
+double *cum_soil_gw{ NULL };
+double *cum_gw_flow{ NULL };
+double *cum_hru_condense{ NULL };
+double *soil_moist_Init{ NULL };
+double *soil_rechr_Init{ NULL };
+double *Sd_Init{ NULL };
+double *gw_Init{ NULL };
+double *SWE_Init{ NULL };
+double *Dts_runoff_K{ NULL };
 
-double *snowinfil_buf;
-double *runoff_buf;
-double *meltrunoff_buf;
-double *hru_evap_buf;
+double *snowinfil_buf{ NULL };
+double *runoff_buf{ NULL };
+double *meltrunoff_buf{ NULL };
+double *hru_evap_buf{ NULL };
 
 // declared parameters
-const double *Sdmax;
-const double *Sdinit;
-const double *gw_max;
-const double *gw_init;
-const double *gw_K;
-const double *basin_area;   // [BASIN]
-const double *hru_area;
-const double *soil_rechr_max;
-const double *soil_rechr_init;
-const double *soil_moist_max;
-const double *soil_moist_init;
-const double *soil_gw_K;
-const double *rechr_ssr_K;
-const double *lower_ssr_K;
-const double *Sd_ssr_K;
-const double *Sd_gw_K;
-const double *channel_slope;
-const double *side_slope;
-const double *culvert_diam;
-const double *culvert_water_Dmax;
-const double *number_culverts;
-const double *Dts_snow_max;
-const double *Dts_organic_max;
-const double *Dts_snow_init;
-const double *Dts_snow_runoff_K;
-const double *Dts_organic_runoff_K;
-const double *Dts_organic_init;
-const long *soil_withdrawal;
-const long **soil_withdrawal_Tables;
+const double *Sdmax{ NULL };
+const double *Sdinit{ NULL };
+const double *gw_max{ NULL };
+const double *gw_init{ NULL };
+const double *gw_K{ NULL };
+const double *basin_area{ NULL };   // [BASIN]
+const double *hru_area{ NULL };
+const double *soil_rechr_max{ NULL };
+const double *soil_rechr_init{ NULL };
+const double *soil_moist_max{ NULL };
+const double *soil_moist_init{ NULL };
+const double *soil_gw_K{ NULL };
+const double *rechr_ssr_K{ NULL };
+const double *lower_ssr_K{ NULL };
+const double *Sd_ssr_K{ NULL };
+const double *Sd_gw_K{ NULL };
+const double *channel_slope{ NULL };
+const double *side_slope{ NULL };
+const double *culvert_diam{ NULL };
+const double *culvert_water_Dmax{ NULL };
+const double *number_culverts{ NULL };
+const double *Dts_snow_max{ NULL };
+const double *Dts_organic_max{ NULL };
+const double *Dts_snow_init{ NULL };
+const double *Dts_snow_runoff_K{ NULL };
+const double *Dts_organic_runoff_K{ NULL };
+const double *Dts_organic_init{ NULL };
+const long *soil_withdrawal{ NULL };
+const long **soil_withdrawal_Tables{ NULL };
 
-const long *culvert_type;
-const long *cov_type;
-const long *transp_limited;
-const long *soil_ssr_runoff;
-const long *inhibit_evap;
+const long *culvert_type{ NULL };
+const long *cov_type{ NULL };
+const long *transp_limited{ NULL };
+const long *soil_ssr_runoff{ NULL };
+const long *inhibit_evap{ NULL };
 
 // variable inputs
-const double *infil;
-const double *snowinfil;
-const double *meltrunoff; // frozen melt runoff
-const double *runoff;     // liquid runoff
-const double *hru_evap;
+const double *infil{ NULL };
+const double *snowinfil{ NULL };
+const double *meltrunoff{ NULL }; // frozen melt runoff
+const double *runoff{ NULL };     // liquid runoff
+const double *hru_evap{ NULL };
 
 // variable put inputs
-double *hru_actet;      // [nhru]
-double *hru_cum_actet;
+double *hru_actet{ NULL };      // [nhru]
+double *hru_cum_actet{ NULL };
 
 
 // local allocated arrays

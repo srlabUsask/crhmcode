@@ -8,29 +8,29 @@ public:
 ClassSWEslope(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, "glacier_h2o, snowmeltD") {};
 
 // declared variables
-double *SWE_in;
-double *SWE_out;
-double *cumSWE_in;
-double *cumSWE_out;
-double *Hd;
+double *SWE_in{ NULL };
+double *SWE_out{ NULL };
+double *cumSWE_in{ NULL };
+double *cumSWE_out{ NULL };
+double *Hd{ NULL };
 
 // declared parameters
-const double *basin_area;   // [BASIN]
-const double *hru_area; // [nhru]
-const double *hru_GSL;    // [nhru]
-const double *use_rho;    // [nhru]
-const double *snow_density;    // [nhru]
-const double *Hd_min;    // [nhru]
-const long *order; // [nhru]
-const double *distrib_SWEslope;
-const double **distrib_hru;
-const long *Disable_SWEslope; // [nhru]
+const double *basin_area{ NULL };   // [BASIN]
+const double *hru_area{ NULL }; // [nhru]
+const double *hru_GSL{ NULL };    // [nhru]
+const double *use_rho{ NULL };    // [nhru]
+const double *snow_density{ NULL };    // [nhru]
+const double *Hd_min{ NULL };    // [nhru]
+const long *order{ NULL }; // [nhru]
+const double *distrib_SWEslope{ NULL };
+const double **distrib_hru{ NULL };
+const long *Disable_SWEslope{ NULL }; // [nhru]
 
 // variable put inputs
-double *SWE;
+double *SWE{ NULL };
 
 // variable inputs 
-const double *rho;
+const double *rho{ NULL };
 
 void decl(void);
 void init(void);

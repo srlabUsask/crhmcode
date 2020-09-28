@@ -8,25 +8,25 @@ public:
 ClassalbedoWinstral(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-  double *Albedo;
-  double *irdalb;
-  double *vdalb;
+  double *Albedo { NULL };
+  double *irdalb { NULL };
+  double *vdalb { NULL };
 //  double *balbx;
-  double *Ab_t;
+  double *Ab_t { NULL };
 
 // get variables:
 
-  const double *net_snow;
-  const double *SWE;
+  const double *net_snow { NULL };
+  const double *SWE { NULL };
 
 // put variables:
 
 // declared parameters
-  const double *maxdecay;
-  const double *power;
-  const double *decay_period;
-  const double *refresh;
-  const double *Albedo_Bare;
+  const double *maxdecay { NULL };
+  const double *power { NULL };
+  const double *decay_period { NULL };
+  const double *refresh { NULL };
+  const double *Albedo_Bare { NULL };
 
 void decl(void);
 void init(void);

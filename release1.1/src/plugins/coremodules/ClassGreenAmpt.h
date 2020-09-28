@@ -8,40 +8,40 @@ public:
 
 ClassGreenAmpt(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 // declared variables
-double *infil;
-double *cuminfil;
-double *runoff;
-double *cumrunoff;
-double *snowinfil;
-double *cumsnowinfil;
-double *meltrunoff;
-double *cummeltrunoff;
+double *infil{ NULL };
+double *cuminfil{ NULL };
+double *runoff{ NULL };
+double *cumrunoff{ NULL };
+double *snowinfil{ NULL };
+double *cumsnowinfil{ NULL };
+double *meltrunoff{ NULL };
+double *cummeltrunoff{ NULL };
 
 // local variables
-double *k;
-double *F0;
-double *f0;
-double *F1;
-double *f1;
-double *dthbot;
-double *psidthbot;
+double *k{ NULL };
+double *F0{ NULL };
+double *f0{ NULL };
+double *F1{ NULL };
+double *f1{ NULL };
+double *dthbot{ NULL };
+double *psidthbot{ NULL };
 
 // declared parameters
-const double *basin_area; // [BASIN]
-const double *hru_area;
-const double *soil_moist_max;
-const double *soil_moist_init;
-const long  *soil_type;
+const double *basin_area{ NULL }; // [BASIN]
+const double *hru_area{ NULL };
+const double *soil_moist_max{ NULL };
+const double *soil_moist_init{ NULL };
+const long  *soil_type{ NULL };
 
 // variable inputs
-const double *net_rain;
-const double *snowmelt;
-double *soil_moist; // changed to PUT
+const double *net_rain{ NULL };
+const double *snowmelt{ NULL };
+double *soil_moist{ NULL }; // changed to PUT
 
 // class allocated
-double garain;      // precipitation/int
-double intensity;   // precipitation/int converted to mm/h
-double pond;        // mm
+double garain {0.0};      // precipitation/int
+double intensity {0.0};   // precipitation/int converted to mm/h
+double pond {0.0};        // mm
 
 void decl(void);
 void init(void);

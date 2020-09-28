@@ -7,81 +7,81 @@ public:
 
 ClassREWroute(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 9999) {};
 
-long inflowCnt;
-long gwCnt;
+long inflowCnt{0};
+long gwCnt{0};
 
 // declared variables
-double *rew;
-double *gwrew;
+double *rew{ NULL };
+double *gwrew{ NULL };
 
-double **inflow_All;
-double **gw_All;
+double **inflow_All{ NULL };
+double **gw_All{ NULL };
 
-double *inflow;        // [nhru]
-double *cuminflow;     // [nhru]
-double *outflow;       // [nhru]
-double *cumoutflow;    // [nhru]
+double *inflow{ NULL };        // [nhru]
+double *cuminflow{ NULL };     // [nhru]
+double *outflow{ NULL };       // [nhru]
+double *cumoutflow{ NULL };    // [nhru]
 
-double *gwinflow;        // [nhru]
-double *cumgwinflow;     // [nhru]
-double *gwoutflow;       // [nhru]
-double *cumgwoutflow;    // [nhru]
+double *gwinflow{ NULL };        // [nhru]
+double *cumgwinflow{ NULL };     // [nhru]
+double *gwoutflow{ NULL };       // [nhru]
+double *cumgwoutflow{ NULL };    // [nhru]
 
-double *flow;     // [BASIN] all HRUs
-double *flow_s;   // [BASIN] all HRUs
-double *cumflow;  // [BASIN] all HRUs
+double *flow{ NULL };     // [BASIN] all HRUs
+double *flow_s{ NULL };   // [BASIN] all HRUs
+double *cumflow{ NULL };  // [BASIN] all HRUs
 
-double *gwflow;     // [BASIN] all HRUs
-double *gwflow_s;   // [BASIN] all HRUs
-double *cumgwflow;  // [BASIN] all HRUs
+double *gwflow{ NULL };     // [BASIN] all HRUs
+double *gwflow_s{ NULL };   // [BASIN] all HRUs
+double *cumgwflow{ NULL };  // [BASIN] all HRUs
 
-double *WS_Ktravel_var;         // [nhru]
-double *WS_gwKtravel_var;         // [nhru]
+double *WS_Ktravel_var{ NULL };         // [nhru]
+double *WS_gwKtravel_var{ NULL };         // [nhru]
 
-double *culvert_Q;
-double *culvert_water_H;
-double *culvert_water_A;
-double *culvert_water_V;
-double *culvert_water_O;
-double *culvert_evap;
-double *cum_culvert;
-double *cum_culvert_over;
-double *HD;
+double *culvert_Q{ NULL };
+double *culvert_water_H{ NULL };
+double *culvert_water_A{ NULL };
+double *culvert_water_V{ NULL };
+double *culvert_water_O{ NULL };
+double *culvert_evap{ NULL };
+double *cum_culvert{ NULL };
+double *cum_culvert_over{ NULL };
+double *HD{ NULL };
 
-ClassMuskingum *inflowDelay;
-ClassMuskingum *gwDelay;
+ClassMuskingum *inflowDelay{ NULL };
+ClassMuskingum *gwDelay{ NULL };
 
-ClassClark *Clark_inflowDelay;
-ClassClark *Clark_gwDelay;
+ClassClark *Clark_inflowDelay{ NULL };
+ClassClark *Clark_gwDelay{ NULL };
 
 // declared parameters
 
-const double *WS_route_n;         // [nhru]
-const double *WS_route_R;         // [nhru]
-const double *WS_route_S0;        // [nhru]
-const double *WS_route_L;         // [nhru]
-const long  *WS_Channel_shp;      // [nhru]
+const double *WS_route_n{ NULL };         // [nhru]
+const double *WS_route_R{ NULL };         // [nhru]
+const double *WS_route_S0{ NULL };        // [nhru]
+const double *WS_route_L{ NULL };         // [nhru]
+const long  *WS_Channel_shp{ NULL };      // [nhru]
 
-const double *WS_Lag;             // [nhru]
-const double *WS_route_X_M;       // [nhru]
-const long  *WS_whereto;         // [nhru]
-const long  *WS_order;           // [nhru]
+const double *WS_Lag{ NULL };             // [nhru]
+const double *WS_route_X_M{ NULL };       // [nhru]
+const long  *WS_whereto{ NULL };         // [nhru]
+const long  *WS_order{ NULL };           // [nhru]
 
-const double *WS_gwLag;           // [nhru]
-const double *WS_gwroute_X_M;     // [nhru]
-const long  *WS_gwwhereto;       // [nhru]
-const long  *WS_gworder;         // [nhru]
+const double *WS_gwLag{ NULL };           // [nhru]
+const double *WS_gwroute_X_M{ NULL };     // [nhru]
+const long  *WS_gwwhereto{ NULL };       // [nhru]
+const long  *WS_gworder{ NULL };         // [nhru]
 
-const double *WS_Kstorage;     // [nhru]
-const double *WS_gwKstorage;   // [nhru]
+const double *WS_Kstorage{ NULL };     // [nhru]
+const double *WS_gwKstorage{ NULL };   // [nhru]
 
-const double *WS_channel_slope;
-const double *WS_side_slope;
-const double *WS_culvert_diam;
-const double *WS_culvert_water_Dmax;
-const double *WS_number_culverts;
+const double *WS_channel_slope{ NULL };
+const double *WS_side_slope{ NULL };
+const double *WS_culvert_diam{ NULL };
+const double *WS_culvert_water_Dmax{ NULL };
+const double *WS_number_culverts{ NULL };
 
-const long *WS_culvert_type;
+const long *WS_culvert_type{ NULL };
 
 void decl(void);
 void init(void);

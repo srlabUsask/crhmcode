@@ -11,29 +11,29 @@ ClassXGAyers(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM
 // declared observation variables
 
 // declared variables
-double *infil;         // unfrozen infiltration
-double *cuminfil;      // cumulative unfrozen infiltration
-double *snowinfil;     // frozen infiltration
-double *cumsnowinfil;  // cumulative frozen infiltration
-double *meltrunoff;      // [nhru]
-double *cummeltrunoff; // cumulative frozen melt runoff
-double *runoff;        // cumulative runoff
-double *cumrunoff;     // cumulative melt runoff
+double *infil{ NULL };         // unfrozen infiltration
+double *cuminfil{ NULL };      // cumulative unfrozen infiltration
+double *snowinfil{ NULL };     // frozen infiltration
+double *cumsnowinfil{ NULL };  // cumulative frozen infiltration
+double *meltrunoff{ NULL };      // [nhru]
+double *cummeltrunoff{ NULL }; // cumulative frozen melt runoff
+double *runoff{ NULL };        // cumulative runoff
+double *cumrunoff{ NULL };     // cumulative melt runoff
 
 // variable put
 
 // local variables
-long *infiltype;
+long *infiltype{ NULL };
 
 // declared parameters
-const double *basin_area;  // [BASIN]
-const double *hru_area;
-const long  *texture;
-const long  *groundcover;
+const double *basin_area{ NULL };  // [BASIN]
+const double *hru_area{ NULL };
+const long  *texture{ NULL };
+const long  *groundcover{ NULL };
 
 // variable inputs
-const double *snowmeltD;   // (mm/day)
-const double *net_rain;
+const double *snowmeltD{ NULL };   // (mm/day)
+const double *net_rain{ NULL };
 
 void decl(void);
 void init(void);

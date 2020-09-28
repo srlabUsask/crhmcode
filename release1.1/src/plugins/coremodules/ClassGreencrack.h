@@ -10,53 +10,53 @@ ClassGreencrack(string Name, string Version = "undefined", CRHM::LMODULE Lvl = C
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables
-double *infil;
-double *cuminfil;
-double *meltrunoff;
-double *cummeltrunoff;
-double *runoff;
-double *cumrunoff;
-double *snowinfil;
-double *cumsnowinfil;
-long  *crackstat;
-long  *crackon;
-double *RainOnSnow;
-double *RainOnSnowA;
+double *infil{ NULL };
+double *cuminfil{ NULL };
+double *meltrunoff{ NULL };
+double *cummeltrunoff{ NULL };
+double *runoff{ NULL };
+double *cumrunoff{ NULL };
+double *snowinfil{ NULL };
+double *cumsnowinfil{ NULL };
+long  *crackstat{ NULL };
+long  *crackon{ NULL };
+double *RainOnSnow{ NULL };
+double *RainOnSnowA{ NULL };
 
 // local variables
-double *k;
-double *F0;
-double *f0;
-double *F1;
-double *f1;
-double *dthbot;
-double *psidthbot;
-long  *timer;
+double *k{ NULL };
+double *F0{ NULL };
+double *f0{ NULL };
+double *F1{ NULL };
+double *f1{ NULL };
+double *dthbot{ NULL };
+double *psidthbot{ NULL };
+long  *timer{ NULL };
 
 // declared parameters
-const double *basin_area; // [BASIN]
-const double *hru_area;
-const double *fallstat;
-const double *Major;      // threshold for major melt event(default is 5 mm/day)
-const double *soil_moist_max;
-const double *soil_moist_init;
-const long  *soil_type;
-const long  *PriorInfiltration;
+const double *basin_area{ NULL }; // [BASIN]
+const double *hru_area{ NULL };
+const double *fallstat{ NULL };
+const double *Major{ NULL };      // threshold for major melt event(default is 5 mm/day)
+const double *soil_moist_max{ NULL };
+const double *soil_moist_init{ NULL };
+const long  *soil_type{ NULL };
+const long  *PriorInfiltration{ NULL };
 
 // variable inputs
-const double *hru_tmax;
-const double *snowmelt;
-const double *SWE;
-const double *net_rain;
-double *soil_moist; // changed tp PUT
+const double *hru_tmax{ NULL };
+const double *snowmelt{ NULL };
+const double *SWE{ NULL };
+const double *net_rain{ NULL };
+double *soil_moist{ NULL }; // changed tp PUT
 
 // class allocated
-double garain;      // precipitation/int
-double intensity;   // precipitation/int converted to mm/h
-double pond;        // mm
+double garain {0.0};      // precipitation/int
+double intensity  {0.0};    // precipitation/int converted to mm/h
+double pond{ 0.0 };        // mm
 
 // class allocated arrays
-double **Xinfil; // [3] [nhru]
+double **Xinfil{ NULL }; // [3] [nhru]
 
 void decl(void);
 void init(void);

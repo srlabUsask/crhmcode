@@ -9,34 +9,34 @@ public:
 Classnetall(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observation variables
-const double *t;
-const double *ea;
-const double **tday_intvls;
-const double **eaday_intvls;
-const double *NotUsed;
+const double *t{ NULL };
+const double *ea{ NULL };
+const double **tday_intvls{ NULL };
+const double **eaday_intvls{ NULL };
+const double *NotUsed{ NULL };
 
 // declared variables
-double *net;
-double *Rn; // net converted to mm
-double *netD;
-double *RnD; // netD converted to mm
-double *RnD_POS;
-double *cum_net;
+double *net{ NULL };
+double *Rn{ NULL }; // net converted to mm
+double *netD{ NULL };
+double *RnD{ NULL }; // netD converted to mm
+double *RnD_POS{ NULL };
+double *cum_net{ NULL };
 
 // declared parameters
 
 // variable inputs
-const double *hru_t;
-const double *hru_ea;
-const double *Albedo;
-const double *hru_SunAct;
-const double *SunMax;
-const double *Qdro;
-const double *Qdfo;
-const double *pQdro;
-const double *pQdfo;
-const double **pQdro_FREQ;
-const double **pQdfo_FREQ;
+const double *hru_t{ NULL };
+const double *hru_ea{ NULL };
+const double *Albedo{ NULL };
+const double *hru_SunAct{ NULL };
+const double *SunMax{ NULL };
+const double *Qdro{ NULL };
+const double *Qdfo{ NULL };
+const double *pQdro{ NULL };
+const double *pQdfo{ NULL };
+const double **pQdro_FREQ{ NULL };
+const double **pQdfo_FREQ{ NULL };
 
 void decl(void);
 void init(void);

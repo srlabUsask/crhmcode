@@ -7,52 +7,52 @@ public:
 
 ClassevapD_Resist(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long QsiCnt;
-long TsCnt;
+long QsiCnt {0};
+long TsCnt {0};
 
 // declared variables
-double *hru_actet;
-double *hru_cum_actet;
-double *evapD;
-double *cum_evap;
-double *rc;
+double *hru_actet { NULL };
+double *hru_cum_actet { NULL };
+double *evapD { NULL };
+double *cum_evap { NULL };
+double *rc { NULL };
 
 // local allocated arrays
-double *Pa;
+double *Pa { NULL };
 
 // declared parameters
-const double *basin_area;   // [BASIN]
-const double *hru_area;
-const double *Ht;
-const double *Htmax;
-const double *Zwind;
-const double *hru_elev;
-const double *F_Qg;
-const double *rcs;
-const double *LAImax;
-const double *LAImin;
-const double *soil_Depth;
+const double *basin_area { NULL };   // [BASIN]
+const double *hru_area { NULL };
+const double *Ht { NULL };
+const double *Htmax { NULL };
+const double *Zwind { NULL };
+const double *hru_elev { NULL };
+const double *F_Qg { NULL };
+const double *rcs { NULL };
+const double *LAImax { NULL };
+const double *LAImin { NULL };
+const double *soil_Depth { NULL };
 
-const long *evap_type;
-const long *inhibit_evap;
-const long *soil_type;
-const double *s;
-const long *PM_method;
+const long *evap_type { NULL };
+const long *inhibit_evap { NULL };
+const long *soil_type { NULL };
+const double *s { NULL };
+const long *PM_method { NULL };
 
 // variable inputs
-const double *RnD;
-const double *hru_tmean;
-const double *hru_umean;
-const double *hru_eamean;
-const double *soil_moist;
+const double *RnD { NULL };
+const double *hru_tmean { NULL };
+const double *hru_umean { NULL };
+const double *hru_eamean { NULL };
+const double *soil_moist { NULL };
 
 // declared observations variable
-const double *Qsi;
-const double *Ts;
+const double *Qsi{ NULL };
+const double *Ts{ NULL };
 
 // declared observation functions
-double *Qsi_mean;
-double *Tsmean;
+double *Qsi_mean { NULL };
+double *Tsmean { NULL };
 
 void decl(void);
 void init(void);

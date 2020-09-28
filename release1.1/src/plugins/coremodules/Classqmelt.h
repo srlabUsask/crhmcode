@@ -8,26 +8,26 @@ public:
 Classqmelt(string Name = "Qmelt", string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl){};
 
 // declared variables
-double *Qm;      // MJ/m2/Int
-double *Qg;      // MJ/m2/Int
-double *cum_Qm;  // MJ/m2
-double *cum_Qg;  // MJ/m2
-double *QmD;     // MJ/m2
-double *QgD;     // MJ/m2
+double *Qm{ NULL };      // MJ/m2/Int
+double *Qg{ NULL };      // MJ/m2/Int
+double *cum_Qm{ NULL };  // MJ/m2
+double *cum_Qg{ NULL };  // MJ/m2
+double *QmD{ NULL };     // MJ/m2
+double *QgD{ NULL };     // MJ/m2
 
 // declared parameters
-const double *TIa0Mn;
-const double *TIa1Mn;
-const double *TIs0Mn;
-const double *TIs1Mn;
+const double *TIa0Mn{ NULL };
+const double *TIa1Mn{ NULL };
+const double *TIs0Mn{ NULL };
+const double *TIs1Mn{ NULL };
 
 // declared observations
-const double *t;      // °C
-const double *ts;     // °C
-double *tmean;  // °C
-double *tpos;   // °C
-double *tsmean; // °C
-double *tspos;  // °C
+const double *t{ NULL };      // °C
+const double *ts{ NULL };     // °C
+double *tmean{ NULL };  // °C
+double *tpos{ NULL };   // °C
+double *tsmean{ NULL }; // °C
+double *tspos{ NULL };  // °C
 
 void decl(void);
 void init(void);

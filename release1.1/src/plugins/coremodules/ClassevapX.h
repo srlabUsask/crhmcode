@@ -8,55 +8,55 @@ public:
 ClassevapX(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-double *hru_actet;
-double *hru_cum_actet;
-double *evap;
-double *evap_D;
-double *cum_evap;
-double *Granger_D;
-double *rc;
+double *hru_actet { NULL };
+double *hru_cum_actet { NULL };
+double *evap { NULL };
+double *evap_D { NULL };
+double *cum_evap { NULL };
+double *Granger_D { NULL };
+double *rc { NULL };
 
 // local allocated arrays
-double *Pa;
+double *Pa { NULL };
 
 // declared parameters
-const double *basin_area;   // [BASIN]
-const double *hru_area;
-const double *Ht;
-const double *hru_elev;
-const double *F_Qg;
-const double *Zwind;
-const double *rcs;
-const double *Htmax;
-const double *LAImax;
-const double *LAImin;
-const double *s;
-const double *PM_method;
-const double *soil_Depth;
+const double *basin_area { NULL };   // [BASIN]
+const double *hru_area { NULL };
+const double *Ht { NULL };
+const double *hru_elev { NULL };
+const double *F_Qg { NULL };
+const double *Zwind { NULL };
+const double *rcs { NULL };
+const double *Htmax { NULL };
+const double *LAImax { NULL };
+const double *LAImin { NULL };
+const double *s { NULL };
+const double *PM_method { NULL };
+const double *soil_Depth { NULL };
 
-const long *soil_type;
-const long *evap_type;
-const long *inhibit_evap;
+const long *soil_type { NULL };
+const long *evap_type { NULL };
+const long *inhibit_evap { NULL };
 
 // variable inputs
-const double *soil_moist;
-const double *Rn;
-const double *RnD;
-const double *RnD_POS;
-const double *hru_t;
-const double *hru_u;
-const double *hru_ea;
-const double *hru_tmean;
-const double *hru_umean;
-const double *hru_eamean;
+const double *soil_moist { NULL };
+const double *Rn { NULL };
+const double *RnD { NULL };
+const double *RnD_POS { NULL };
+const double *hru_t { NULL };
+const double *hru_u { NULL };
+const double *hru_ea { NULL };
+const double *hru_tmean { NULL };
+const double *hru_umean { NULL };
+const double *hru_eamean { NULL };
 
 // declared observations variable
-const double *Qsi;
-const double *RnObs;
+const double *Qsi { NULL };
+const double *RnObs { NULL };
 
 // declared observation functions
 //double *Qsi_mean;
-double *Tsmean;
+double *Tsmean { NULL };
 
 void decl(void);
 void init(void);

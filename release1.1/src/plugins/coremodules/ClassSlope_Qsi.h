@@ -8,21 +8,21 @@ public:
 ClassSlope_Qsi(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-double *QsiS_Var;
-double *QsiD_Var;
+double *QsiS_Var{ NULL };
+double *QsiD_Var{ NULL };
 
 // declared observations variable
-const double *Qsi;
+const double *Qsi{ NULL };
 
 // declared observations
-double *QsiS;
-double *QsiD;
-double *QsiD_Obs;
+double *QsiS{ NULL };
+double *QsiD{ NULL };
+double *QsiD_Obs{ NULL };
 
 // variable inputs
-const double *Qdro;
-const double *Qdfo;
-const double *Qdflat;
+const double *Qdro{ NULL };
+const double *Qdfo{ NULL };
+const double *Qdflat{ NULL };
 
 void decl(void);
 void init(void);

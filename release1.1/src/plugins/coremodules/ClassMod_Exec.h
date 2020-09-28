@@ -8,34 +8,34 @@ public:
 ClassMod_Exec(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
   //HINSTANCE DLL;
-  long Imodules;
+  long Imodules {0};
   string S_Vars;
   string S_Pars;
-  long Vars_Cnt;
-  long Pars_Cnt;
+  long Vars_Cnt {0};
+  long Pars_Cnt {0};
 
   typedef  long LoadModuleTypeInit(const char *Grp, long GrpNo, long hru_cnt, const char *S_Vars, long VarsNo, double **V, const char *V_Pars, long ParsNo, double **P);
   typedef  long LoadModuleTypeStep(double DTnow); // time step. Zero at end of run.
 
-  LoadModuleTypeInit *LoadUserInit;
-  LoadModuleTypeStep *LoadUserStep;
+  LoadModuleTypeInit *LoadUserInit{ NULL };
+  LoadModuleTypeStep *LoadUserStep{ NULL };
 
 // Lingage arrays
 
-  double **VarArray;
-  double **ParArray;
+  double **VarArray{ NULL };
+  double **ParArray{ NULL };
 
 // declared variables
-double *Dummy;
-double *Dummy2;
-long *statusInit;
-long *statusStep;
+double *Dummy{ NULL };
+double *Dummy2{ NULL };
+long *statusInit{ NULL };
+long *statusStep{ NULL };
 
 // declared parameters
-TStringList *DLL_name;
-TStringList *chg_Pars;
-TStringList *trk_Vars;
-const long *Borland_Dll;
+TStringList *DLL_name{ NULL };
+TStringList *chg_Pars{ NULL };
+TStringList *trk_Vars{ NULL };
+const long *Borland_Dll{ NULL };
 
 // variable inputs
 

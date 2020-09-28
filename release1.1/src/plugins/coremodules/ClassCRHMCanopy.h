@@ -8,96 +8,96 @@ public:
 
 ClassCRHMCanopy(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 2000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
-double Qsi_, Qli_;
+double Qsi_ { 0.0 }, Qli_ { 0.0 };
 
 // observation variables
 
-const double *Qsi;
-const double *Qli;
+const double *Qsi { NULL };
+const double *Qli { NULL };
 
 // declared observation variables
 
-double *Ts;
-double *Qnsn;
-double *Qsisn;
-double *Qlisn;
-double *Qlosn;
+double *Ts { NULL };
+double *Qnsn { NULL };
+double *Qsisn { NULL };
+double *Qlisn { NULL };
+double *Qlosn { NULL };
 
 // put variables
 
-double *SWE;
+double *SWE { NULL };
 
 // declared variables
 
-double *drip_Cpy;
-double *thrufall_Cpy;
-double *netRain_Cpy;
-double *direct_rain;
-double *rain_load;
-double *Snow_load;
-double *direct_snow;
-double *SUnload;
-double *SUnload_H2O;
-double *Qnsn_Var;
+double *drip_Cpy { NULL };
+double *thrufall_Cpy { NULL };
+double *netRain_Cpy { NULL };
+double *direct_rain { NULL };
+double *rain_load { NULL };
+double *Snow_load { NULL };
+double *direct_snow { NULL };
+double *SUnload { NULL };
+double *SUnload_H2O { NULL };
+double *Qnsn_Var { NULL };
 
-double *net_rain;
-double *cum_net_rain;
-double *net_snow;
-double *cum_net_snow;
-double *net_p;
-double *intcp_evap;
-double *cum_intcp_evap;
-double *Subl_Cpy;
-double *cum_Subl_Cpy;           
-double *cum_SUnload;
-double *cum_SUnload_H2O;
+double *net_rain { NULL };
+double *cum_net_rain { NULL };
+double *net_snow { NULL };
+double *cum_net_snow { NULL };
+double *net_p { NULL };
+double *intcp_evap { NULL };
+double *cum_intcp_evap { NULL };
+double *Subl_Cpy { NULL };
+double *cum_Subl_Cpy { NULL };
+double *cum_SUnload { NULL };
+double *cum_SUnload_H2O { NULL };
 
-double *Cc;
-double *k;
-double *Tauc;
-double *Pa;
-double *ra;
-double *u_FHt;
-double *Pevap;
-double *Qsisn_Var;
-double *Qlisn_Var;
+double *Cc { NULL };
+double *k { NULL };
+double *Tauc { NULL };
+double *Pa { NULL };
+double *ra { NULL };
+double *u_FHt { NULL };
+double *Pevap { NULL };
+double *Qsisn_Var { NULL };
+double *Qlisn_Var { NULL };
 
 // variable inputs
 
-const double *hru_t;
-const double *hru_u;
-const double *hru_rh;
-const double *hru_ea;
-const double *Albedo;
+const double *hru_t { NULL };
+const double *hru_u { NULL };
+const double *hru_rh { NULL };
+const double *hru_ea { NULL };
+const double *Albedo { NULL };
 
-const double *hru_snow;
-const double *hru_rain;
-const double *hru_evap;
+const double *hru_snow { NULL };
+const double *hru_rain { NULL };
+const double *hru_evap { NULL };
 
-const double *SolAng;
+const double *SolAng { NULL };
 
-const double *QsiS_Var;
-const double *QsiA_Var;
-const double *QliVt_Var;
+const double *QsiS_Var { NULL };
+const double *QsiA_Var { NULL };
+const double *QliVt_Var { NULL };
 
 // declared parameters:
 
-const double *basin_area;   // [BASIN]
-const double *hru_area;
-const double *hru_elev;
-const double *Ht;
-const double *LAI;
-const double *Sbar;
-const double *Z0snow;
-const double *Zref;
-const double *Zwind;
-const double *Zvent;
-const double *unload_t;
-const double *unload_t_water;
-const double *B_canopy;
-const double *Alpha_c;
+const double *basin_area { NULL };   // [BASIN]
+const double *hru_area { NULL };
+const double *hru_elev { NULL };
+const double *Ht { NULL };
+const double *LAI { NULL };
+const double *Sbar { NULL };
+const double *Z0snow { NULL };
+const double *Zref { NULL };
+const double *Zwind { NULL };
+const double *Zvent { NULL };
+const double *unload_t { NULL };
+const double *unload_t_water { NULL };
+const double *B_canopy { NULL };
+const double *Alpha_c { NULL };
 
-const long *inhibit_evap;
+const long *inhibit_evap { NULL };
 
 
 void decl(void);

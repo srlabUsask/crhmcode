@@ -7,48 +7,48 @@ public:
 
 Classlake(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-  int DaysMonth;
-  long ThisMonth;
-  bool DoMean;
-  bool Ahead;
-  long  N_intervals;
-  long itime[6];
+  int DaysMonth {0};
+  long ThisMonth {0};
+  bool DoMean{ false };
+  bool Ahead { false };
+  long  N_intervals {0};
+  long itime[6] {0,0,0,0,0,0};
 
 // declared variables
-  double *hru_evap;
-  double *hru_cum_evap;
-  double *hru_actet;
-  double *hru_cum_actet;
-  double *lake_evap_month;
-  double *hru_t_Mmean;
-  double *hru_rh_Mmean;
-  double *hru_u_Mmean;
-  double *hru_t_acc;
-  double *hru_rh_acc;
-  double *hru_u_acc;
-  double *Vw;
-  double *Va;
-  long  *start_open_day;
-  long  *end_open_day;
+  double *hru_evap{ NULL };
+  double *hru_cum_evap{ NULL };
+  double *hru_actet{ NULL };
+  double *hru_cum_actet{ NULL };
+  double *lake_evap_month{ NULL };
+  double *hru_t_Mmean{ NULL };
+  double *hru_rh_Mmean{ NULL };
+  double *hru_u_Mmean{ NULL };
+  double *hru_t_acc{ NULL };
+  double *hru_rh_acc{ NULL };
+  double *hru_u_acc{ NULL };
+  double *Vw{ NULL };
+  double *Va{ NULL };
+  long  *start_open_day{ NULL };
+  long  *end_open_day{ NULL };
 
 // get variables:
-  const double *hru_t;
-  const double *hru_rh;
-  const double *hru_u;
+  const double *hru_t{ NULL };
+  const double *hru_rh{ NULL };
+  const double *hru_u{ NULL };
 
 // put variables:
 
 // declared parameters
-  const double *Meyer_C;
-  const double *Meyer_B;
-  const double **Meyer_B_def;
-  const double *hru_area;
-  const double *basin_area;
-  const double *hru_lat;
-  const double *hru_elev;
+  const double *Meyer_C{ NULL };
+  const double *Meyer_B{ NULL };
+  const double **Meyer_B_def{ NULL };
+  const double *hru_area{ NULL };
+  const double *basin_area{ NULL };
+  const double *hru_lat{ NULL };
+  const double *hru_elev{ NULL };
 
-  const long *start_open_water;
-  const long *end_open_water;
+  const long *start_open_water{ NULL };
+  const long *end_open_water{ NULL };
 
 void decl(void);
 void init(void);

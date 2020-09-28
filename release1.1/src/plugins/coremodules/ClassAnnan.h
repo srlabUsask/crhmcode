@@ -5,7 +5,7 @@
 class ClassAnnan : public ClassModule {
 public:
 
-  double QsiDT, TauAT;
+	double QsiDT {0.0}, TauAT {0.0};
 
   ClassAnnan(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
@@ -13,30 +13,30 @@ public:
 //const double *SunAct;
 
 // declared variables
-double *hru_SunAct;
-double *QsiA_Var;
-double *QsiD_Var;
-double *QsiS_Var;
+double *hru_SunAct { NULL };
+double *QsiA_Var { NULL };
+double *QsiD_Var { NULL };
+double *QsiS_Var { NULL };
 
 // declared parameters
-const double *krs;
-const double *hru_elev;
+const double *krs { NULL };
+const double *hru_elev { NULL };
 
 // declared observations
-double *QsiA;
-double *QsiD;
-double *QsiS;
+double *QsiA { NULL };
+double *QsiD { NULL };
+double *QsiS { NULL };
 
 // variable inputs
-const double *QdflatE;
-const double *QdflatD;
-const double *QdroDext;
-const double *Qdro;
-const double *Qdfo;
-const double *QdfoD;
-const double *SunMax;
-const double *hru_tmax;
-const double *hru_tmin;
+const double *QdflatE { NULL };
+const double *QdflatD { NULL };
+const double *QdroDext { NULL };
+const double *Qdro { NULL };
+const double *Qdfo { NULL };
+const double *QdfoD { NULL };
+const double *SunMax { NULL };
+const double *hru_tmax { NULL };
+const double *hru_tmin { NULL };
 
 void decl(void);
 void init(void);

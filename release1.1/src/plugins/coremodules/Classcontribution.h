@@ -7,30 +7,30 @@ public:
 
 Classcontribution(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long soil_runoffDiv;
+long soil_runoffDiv {0};
 
 // declared variables
-double *contrib_area;
-double *pre_contrib_area;
-double *connected;
-long  *N_connected;
-long  *connectedTo;
-double *Results;
-double **Results_lay;
-double *distrib_sum;
-const double *distrib_Basin;
-double *soil_runoff_Buf; // buffered
+double *contrib_area { NULL };
+double *pre_contrib_area { NULL };
+double *connected { NULL };
+long  *N_connected { NULL };
+long  *connectedTo { NULL };
+double *Results { NULL };
+double **Results_lay { NULL };
+double *distrib_sum { NULL };
+const double *distrib_Basin { NULL };
+double *soil_runoff_Buf { NULL }; // buffered
 
 // declared parameters
-const double *basin_area;
-const double *hru_area;
-const double *Sdmax;
-const double *distrib;
-const double **distrib_hru;
+const double *basin_area { NULL };
+const double *hru_area { NULL };
+const double *Sdmax { NULL };
+const double *distrib { NULL };
+const double **distrib_hru { NULL };
 
 // variable inputs
-const double *soil_runoff;
-const double *Sd;
+const double *soil_runoff { NULL };
+const double *Sd { NULL };
 
 void decl(void);
 void init(void);

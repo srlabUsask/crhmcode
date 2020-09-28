@@ -85,12 +85,12 @@ protected:
 	ClassMacro *Macro;
 	symtab_t::iterator FP;
 	double *fix;
-	long *fix_long;
-	double **fix2;
-	const double *fix_const;
-	const double **fix2_const;
-	const long *fix_long_const;
-	const long **fix2_long_const;
+	long* fix_long {NULL};
+	double** fix2 {NULL};
+	const double* fix_const {NULL};
+	const double** fix2_const {NULL};
+	const long* fix_long_const {NULL};
+	const long** fix2_long_const {NULL};
 };
 
 class Defcommand : public DefCRHM {

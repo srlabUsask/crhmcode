@@ -9,37 +9,37 @@ ClassPrairieInfil(string Name, string Version = "undefined", CRHM::LMODULE Lvl =
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables
-double *snowinfil;
-double *cumsnowinfil;
-double *infil;
-double *cuminfil;
-double *meltrunoff;
-double *cummeltrunoff;
-double *runoff;
-double *cumrunoff;
-double *RainOnSnow;
-double *RainOnSnowA;
-long  *crackstat;
-long  *crackon;
+double *snowinfil{ NULL };
+double *cumsnowinfil{ NULL };
+double *infil{ NULL };
+double *cuminfil{ NULL };
+double *meltrunoff{ NULL };
+double *cummeltrunoff{ NULL };
+double *runoff{ NULL };
+double *cumrunoff{ NULL };
+double *RainOnSnow{ NULL };
+double *RainOnSnowA{ NULL };
+long  *crackstat{ NULL };
+long  *crackon{ NULL };
 
 // declared parameters
-const double *basin_area; // [BASIN]
-const double *hru_area;
-const double *fallstat;
-const double *Major;      // threshold for major melt event(default is 5 mm/day)
-const long  *PriorInfiltration;
-const long  *texture;
-const long  *groundcover;
+const double *basin_area{ NULL }; // [BASIN]
+const double *hru_area{ NULL };
+const double *fallstat{ NULL };
+const double *Major{ NULL };      // threshold for major melt event(default is 5 mm/day)
+const long  *PriorInfiltration{ NULL };
+const long  *texture{ NULL };
+const long  *groundcover{ NULL };
 
 // variable inputs
-const double *hru_tmax;
-const double *snowmelt;
-const double *SWE;
-const double *net_rain;
+const double *hru_tmax{ NULL };
+const double *snowmelt{ NULL };
+const double *SWE{ NULL };
+const double *net_rain{ NULL };
 
 // local allocated arrays
-double **Xinfil; // [3] [nhru]
-long *timer;
+double **Xinfil{ NULL }; // [3] [nhru]
+long *timer{ NULL };
 
 void decl(void);
 void init(void);

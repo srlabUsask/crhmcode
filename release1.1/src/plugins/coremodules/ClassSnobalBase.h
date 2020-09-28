@@ -18,106 +18,106 @@ public:
 
     //   snowpack information
 
-    long* layer_count;    // number of layers in snowcover: 0, 1, or 2
-    double* z_s;            // total snowcover thickness (m)
-    double* z_s_0;          // active layer depth (m)
-    double* z_s_l;          // lower layer depth (m)
-    double* rho;            // average snowcover density (kg/m^3)
-    double* m_s;            // snowcover's specific mass (kg/m^2). Init by init_snow.
-    double* m_s_0;          // active layer specific mass (kg/m^2). Init by init_snow.
-    double* m_s_l;          // lower layer specific mass (kg/m^2). Init by init_snow.
-    double* T_s;            // average snowcover temp (K). Init by init_snow
-    double* T_s_0;          // active snow layer temp (K)
-    double* T_s_l;          // lower layer temp (C)
-    double* cc_s;           // snowcover's cold content (J/m^2). Init by init_snow.
-    double* cc_s_0;         // active layer cold content (J/m^2). Init by init_snow.
-    double* cc_s_l;         // lower layer cold content (J/m^2). Init by init_snow.
-    double* h2o_sat;        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
+    long* layer_count{ NULL };    // number of layers in snowcover: 0, 1, or 2
+    double* z_s{ NULL };            // total snowcover thickness (m)
+    double* z_s_0{ NULL };          // active layer depth (m)
+    double* z_s_l{ NULL };          // lower layer depth (m)
+    double* rho{ NULL };            // average snowcover density (kg/m^3)
+    double* m_s{ NULL };            // snowcover's specific mass (kg/m^2). Init by init_snow.
+    double* m_s_0{ NULL };          // active layer specific mass (kg/m^2). Init by init_snow.
+    double* m_s_l{ NULL };          // lower layer specific mass (kg/m^2). Init by init_snow.
+    double* T_s{ NULL };            // average snowcover temp (K). Init by init_snow
+    double* T_s_0{ NULL };          // active snow layer temp (K)
+    double* T_s_l{ NULL };          // lower layer temp (C)
+    double* cc_s{ NULL };           // snowcover's cold content (J/m^2). Init by init_snow.
+    double* cc_s_0{ NULL };         // active layer cold content (J/m^2). Init by init_snow.
+    double* cc_s_l{ NULL };         // lower layer cold content (J/m^2). Init by init_snow.
+    double* h2o_sat{ NULL };        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
 //                                 to water that snowcover could hold at saturation)
-    double* h2o_vol;        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow
-    double* h2o;            // liquid h2o content as specific mass(kg/m^2)
-    double* h2o_max;        // max liquid h2o content as specific mass(kg/m^2)
-    double* h2o_total;      // total liquid h2o: includes h2o in snowcover, melt, and rainfall (kg/m^2)
+    double* h2o_vol{ NULL };        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow
+    double* h2o{ NULL };            // liquid h2o content as specific mass(kg/m^2)
+    double* h2o_max{ NULL };        // max liquid h2o content as specific mass(kg/m^2)
+    double* h2o_total{ NULL };      // total liquid h2o: includes h2o in snowcover, melt, and rainfall (kg/m^2)
 
 //   energy balance info for current timestep
 
-    double* R_n;            // net allwave radiation (W/m^2)
-    double* H;              // sensible heat xfr (W/m^2)
-    double* L_v_E;          // latent heat xfr (W/m^2)
-    double* G;              // heat xfr by conduction & diffusion from soil to snowcover (W/m^2)
-    double* G_0;            // heat xfr by conduction & diffusion from soil or lower layer to active layer (W/m^2)
-    double* M;              // advected heat from precip (W/m^2)
-    double* delta_Q;        // change in snowcover's energy (W/m^2)
-    double* delta_Q_0;      // change in active layer's energy (W/m^2)
+    double* R_n{ NULL };            // net allwave radiation (W/m^2)
+    double* H{ NULL };              // sensible heat xfr (W/m^2)
+    double* L_v_E{ NULL };          // latent heat xfr (W/m^2)
+    double* G{ NULL };              // heat xfr by conduction & diffusion from soil to snowcover (W/m^2)
+    double* G_0{ NULL };            // heat xfr by conduction & diffusion from soil or lower layer to active layer (W/m^2)
+    double* M{ NULL };              // advected heat from precip (W/m^2)
+    double* delta_Q{ NULL };        // change in snowcover's energy (W/m^2)
+    double* delta_Q_0{ NULL };      // change in active layer's energy (W/m^2)
 
 //   mass balance vars for current timestep
 
-    double* melt_direct_int;       // specific melt (kg/m^2 or m)
-    double* sum;       // specific melt (kg/m^2 or m)
-    double* SWE_change;       // interval change in SWE
-    double* E_int;	    // mass flux by evap into air from active layer (kg/m^2/s)
-    double* E_s_int;	    // mass of evap into air & soil from snowcover (kg/m^2)
-    double* snowmelt_int;   // predicted specific runoff (m/sec)
-    double* snowmeltD;      // daily predicted specific runoff (m/sec)
-    double* snowmeltD_acc;      // daily predicted specific runoff accumulator (m/sec)
+    double* melt_direct_int{ NULL };       // specific melt (kg/m^2 or m)
+    double* sum{ NULL };       // specific melt (kg/m^2 or m)
+    double* SWE_change{ NULL };       // interval change in SWE
+    double* E_int{ NULL };	    // mass flux by evap into air from active layer (kg/m^2/s)
+    double* E_s_int{ NULL };	    // mass of evap into air & soil from snowcover (kg/m^2)
+    double* snowmelt_int{ NULL };   // predicted specific runoff (m/sec)
+    double* snowmeltD{ NULL };      // daily predicted specific runoff (m/sec)
+    double* snowmeltD_acc{ NULL };      // daily predicted specific runoff accumulator (m/sec)
 
 //   mass balance vars for variable timestep
 
-    double* melt;        // specific melt (kg/m^2 or m)
-    double* E;		 // mass flux by evap into air from active layer (kg/m^2/s)
-    double* E_s;	 // mass of evap into air & soil from snowcover (kg/m^2)
-    double* ro_predict;  // predicted specific runoff (m/sec)
+    double* melt{ NULL };        // specific melt (kg/m^2 or m)
+    double* E{ NULL };		 // mass flux by evap into air from active layer (kg/m^2/s)
+    double* E_s{ NULL };	 // mass of evap into air & soil from snowcover (kg/m^2)
+    double* ro_predict{ NULL };  // predicted specific runoff (m/sec)
 
-    double* E_s_0;        // mass of evaporation to air (kg/m^2)
-    double* E_s_l;        // mass of evaporation to soil (kg/m^2)
-    double* E_l;	  // mass flux by evap/cond to soil (kg/m^2/s)
+    double* E_s_0{ NULL };        // mass of evaporation to air (kg/m^2)
+    double* E_s_l{ NULL };        // mass of evaporation to soil (kg/m^2)
+    double* E_l{ NULL };	  // mass flux by evap/cond to soil (kg/m^2/s)
 
-    double* E_s_0_int;        // mass of evaporation to air (kg/m^2)
-    double* E_s_l_int;        // mass of evaporation to soil (kg/m^2)
-    double* E_l_int;	  // mass flux by evap/cond to soil (kg/m^2/s)
+    double* E_s_0_int{ NULL };        // mass of evaporation to air (kg/m^2)
+    double* E_s_l_int{ NULL };        // mass of evaporation to soil (kg/m^2)
+    double* E_l_int{ NULL };	  // mass flux by evap/cond to soil (kg/m^2/s)
 
 //   precipitation info adjusted for current run timestep
 
-    double* m_precip;	// specific mass of total precip (kg/m^2)
-    double* m_rain;	// specific mass of rain in precip (kg/m^2)
-    double* m_snow;	// specific mass in snow in precip (kg/m^2)
-    double* m_drift;	// specific mass in snow drift (kg/m^2)
-    double* m_subl;	// specific mass in snow sublimation (kg/m^2)
-    double* rho_snow;   // density of snowfall (kg/m^3)
-    double* T_pp;       // precip temp (K)
-    double* z_snow;	// depth of snow in precip (m)
+    double* m_precip{ NULL };	// specific mass of total precip (kg/m^2)
+    double* m_rain{ NULL };	// specific mass of rain in precip (kg/m^2)
+    double* m_snow{ NULL };	// specific mass in snow in precip (kg/m^2)
+    double* m_drift{ NULL };	// specific mass in snow drift (kg/m^2)
+    double* m_subl{ NULL };	// specific mass in snow sublimation (kg/m^2)
+    double* rho_snow{ NULL };   // density of snowfall (kg/m^3)
+    double* T_pp{ NULL };       // precip temp (K)
+    double* z_snow{ NULL };	// depth of snow in precip (m)
 
 //   precipitation info for the current DATA timestep
 
-    long* precip_now;	// precipitation occur for current timestep?
-    double* T_rain;	// rain's temp (K)
-    double* T_snow;	// snowfall's temp (K)
-    double* h2o_sat_snow; // snowfall's % of liquid H2O saturation
+    long* precip_now{ NULL };	// precipitation occur for current timestep?
+    double* T_rain{ NULL };	// rain's temp (K)
+    double* T_snow{ NULL };	// snowfall's temp (K)
+    double* h2o_sat_snow{ NULL }; // snowfall's % of liquid H2O saturation
 
 //   local climate-data values for the current run timestep
-    double* S_n;      // net solar radiation (W/m^2)
-    double* I_lw;     // incoming longwave (thermal) rad (W/m^2)
-    double* T_a;      // air temp (K)
-    double* e_a;      // vapor pressure (Pa)
-    double* u;        // wind speed (m/sec)
-    double* T_g;      // soil temp at depth z_g (C)
-    double* F_g;      // soil flux at depth z_g (W/m^2)
+    double* S_n{ NULL };      // net solar radiation (W/m^2)
+    double* I_lw{ NULL };     // incoming longwave (thermal) rad (W/m^2)
+    double* T_a{ NULL };      // air temp (K)
+    double* e_a{ NULL };      // vapor pressure (Pa)
+    double* u{ NULL };        // wind speed (m/sec)
+    double* T_g{ NULL };      // soil temp at depth z_g (C)
+    double* F_g{ NULL };      // soil flux at depth z_g (W/m^2)
 
-    long* isothermal; // melting?
-    long* snowcover;  // snow on gnd at start of current timestep?
-    long* stop_no_snow;       //
+    long* isothermal{ NULL }; // melting?
+    long* snowcover{ NULL };  // snow on gnd at start of current timestep?
+    long* stop_no_snow{ NULL };       //
 
 //   local variables
-    double* P_a;            // air pressure (Pa)
-    double* m_precip_cum;   //
-    double* m_rain_cum;     //
-    double* m_snow_cum;     //
-    double* m_drift_cum;    //
-    double* m_subl_cum;    //
-    double* E_s_cum;        //
-    double* cumsnowmelt;    //
-    double* melt_direct_cum;       //
-    double* Fault;       //
+    double* P_a{ NULL };            // air pressure (Pa)
+    double* m_precip_cum{ NULL };   //
+    double* m_rain_cum{ NULL };     //
+    double* m_snow_cum{ NULL };     //
+    double* m_drift_cum{ NULL };    //
+    double* m_subl_cum{ NULL };    //
+    double* E_s_cum{ NULL };        //
+    double* cumsnowmelt{ NULL };    //
+    double* melt_direct_cum{ NULL };       //
+    double* Fault{ NULL };       //
 
 // debug variables
 /*    double *Length;
@@ -136,20 +136,20 @@ public:
 
     //   measurement heights/depths
 
-    const double* hru_elev;    // HRU elevation
-    const double* basin_area;  // [BASIN]
-    const double* hru_area;
-    const double* KT_sand; // thermal conductivity of wet sand
+    const double* hru_elev{ NULL };    // HRU elevation
+    const double* basin_area{ NULL };  // [BASIN]
+    const double* hru_area{ NULL };
+    const double* KT_sand{ NULL }; // thermal conductivity of wet sand
 
-    const long* relative_hts; // true if measurements heights, z_T and z_u, are relative to snow surface
+    const long* relative_hts{ NULL }; // true if measurements heights, z_T and z_u, are relative to snow surface
                               // false if they are absolute heights above the ground
-    const double* T_g_or_G_flux;    // soil temp or ground flux option
-    const double* z_g;         // depth of soil temp meas (m)
-    const double* z_u;         // height of wind measurement (m)
-    const double* z_T;         // height of air temp & vapor pressure measurement (m)
-    const double* z_0;         // roughness length
-    const double* max_z_s_0;   // maximum active layer thickness (m)
-    const double* max_h2o_vol; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
+    const double* T_g_or_G_flux{ NULL };    // soil temp or ground flux option
+    const double* z_g{ NULL };         // depth of soil temp meas (m)
+    const double* z_u{ NULL };         // height of wind measurement (m)
+    const double* z_T{ NULL };         // height of air temp & vapor pressure measurement (m)
+    const double* z_0{ NULL };         // roughness length
+    const double* max_z_s_0{ NULL };   // maximum active layer thickness (m)
+    const double* max_h2o_vol{ NULL }; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
 
 //    void decl(void);
 
@@ -237,27 +237,27 @@ public:
 
     // time step information
 
-    TSTEP_REC** tstep_info; 	// array of info for each timestep [nhru] [4]:
+    TSTEP_REC** tstep_info{ NULL }; 	// array of info for each timestep [nhru] [4]:
                                   //           0 : data timestep
                                   //           1 : normal run timestep
                                   //           2 : medium  "     "
                                   //           3 : small   "     "
 
-    long* time_step;     // length current timestep (sec)
-    long* current_time;  // start time of current time step (sec)
+    long* time_step{ NULL };     // length current timestep (sec)
+    long* current_time{ NULL };  // start time of current time step (sec)
 
   // climate-data input records
 
-    INPUT_REC* input_rec1;	// input data for start of data timestep [nhru]
-    INPUT_REC* input_rec2;	//   "     "   "  end   "   "      "     [nhru]
+    INPUT_REC* input_rec1{ NULL };	// input data for start of data timestep [nhru]
+    INPUT_REC* input_rec2{ NULL };	//   "     "   "  end   "   "      "     [nhru]
 
-    INPUT_REC** input_deltas;	// deltas for climate-input parameters
+    INPUT_REC** input_deltas{ NULL };	// deltas for climate-input parameters
                                   //  over each timestep [nhru] [4]
 
-    PRECIP_REC** precip_info;	// array of precip info adjusted for
+    PRECIP_REC** precip_info{ NULL };	// array of precip info adjusted for
                                   //  each timestep [nhru] [4]
 
-    int** computed;		// array of flags for each timestep;
+    int** computed{ NULL };		// array of flags for each timestep;
                                   //  true if computed values for input
                                   //   deltas and precip arrays [nhru] [4]
 };

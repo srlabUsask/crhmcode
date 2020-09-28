@@ -8,26 +8,26 @@ public:
 ClassMeltRunoff_Kstorage(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // index to module to be called
-ClassModule* Netroute_module; // used to call preser for simple projects
+ClassModule* Netroute_module { NULL }; // used to call preser for simple projects
 
 // declared variables
-double *Ksat;
-double *Meltrunoff_K;
-double *In_storage;
+double *Ksat{ NULL };
+double *Meltrunoff_K{ NULL };
+double *In_storage{ NULL };
 
 // get variables:
-const double *rho;
+const double *rho{ NULL };
 
 // put variables
-double *runKstorage;
+double *runKstorage{ NULL };
 
 // declared parameters
-const double *d_g;
-const double *hru_GSL;
-const double *runLag;
-const double *route_L;
-const long  *inhibit_evap;
-const long  *inhibit_MeltRunoff_Kstorage;
+const double *d_g{ NULL };
+const double *hru_GSL{ NULL };
+const double *runLag{ NULL };
+const double *route_L{ NULL };
+const long  *inhibit_evap{ NULL };
+const long  *inhibit_MeltRunoff_Kstorage{ NULL };
 
 void decl(void);
 void init(void);

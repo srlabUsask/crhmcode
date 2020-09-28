@@ -8,23 +8,23 @@ public:
 Classcalcsun(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , , , QsiD_Var") {};
 
 // declared observation variables
-const double *Qsi;
-const double *QsiD_Obs;
-const double *SunAct;
+const double *Qsi { NULL };
+const double *QsiD_Obs { NULL };
+const double *SunAct { NULL };
 
 // declared observation functions
-double *Qsitot;
+double *Qsitot { NULL };
 
 // declared variables
-double *hru_SunAct;
+double *hru_SunAct { NULL };
 
 // declared parameters
 
 // variable inputs
-const double *QdflatD;
-const double *QdfoD;
-const double *SunMax;
-const double *QsiD_Var;
+const double *QdflatD { NULL };
+const double *QdfoD { NULL };
+const double *SunMax { NULL };
+const double *QsiD_Var { NULL };
 
 void decl(void);
 void init(void);

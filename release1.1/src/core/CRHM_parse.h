@@ -170,7 +170,7 @@ public:
 	long IndexMax;    // Max index - (#HRUs - 1)
 	long IndexMaxLay; // Max index - (#HRUs - 1)
 	string name;      // identifier
-	double(*pget) (void);
+	double(*pget) (void) {NULL};
 	ClassModule* Me;
 };
 
@@ -755,7 +755,7 @@ public:
 	}
 
 private:
-	mutable double Ln;
+	mutable double Ln {0.0};
 };
 
 template<typename op>

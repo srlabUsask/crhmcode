@@ -9,21 +9,21 @@ public:
 ClassalbedoBaker(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-  double *Albedo;
-  double *Ab_t;
+  double *Albedo { NULL };
+  double *Ab_t { NULL };
 
 // get variables:
 
 
- const double *net_snow;
- const double *SWE;
+ const double *net_snow { NULL };
+ const double *SWE { NULL };
 
 // put variables:
 
 // declared parameters
-  const double *Albedo_Bare;
-  const double *Albedo_Snow;
-  const double *refresh;
+  const double *Albedo_Bare { NULL };
+  const double *Albedo_Snow { NULL };
+  const double *refresh { NULL };
 
 void decl(void);
 void init(void);

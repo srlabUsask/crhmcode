@@ -12,42 +12,42 @@ ClassKevin(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::
 // declared observation variables
 
 // declared variables
-double *albedo;
-double *sca;
-double *snowmelt;
-double *snowmeltD;
-double *cumsnowmelt;
-double *netLong;
-double *netShort;
-long  *winter;
-long  *SnowStat;
+double *albedo{ NULL };
+double *sca{ NULL };
+double *snowmelt{ NULL };
+double *snowmeltD{ NULL };
+double *cumsnowmelt{ NULL };
+double *netLong{ NULL };
+double *netShort{ NULL };
+long  *winter{ NULL };
+long  *SnowStat{ NULL };
 
 // declared parameters
-const double *Asnow1;
-const double *Asnow2;
-const double *Asoil;
-const double *cv;
-const double *tfactor;
-const double *nfactor;
-const double *meltthresh;
-const double *basin_area;   // [BASIN]
-const double *hru_area;
-const double *hru_lat;
+const double *Asnow1{ NULL };
+const double *Asnow2{ NULL };
+const double *Asoil{ NULL };
+const double *cv{ NULL };
+const double *tfactor{ NULL };
+const double *nfactor{ NULL };
+const double *meltthresh{ NULL };
+const double *basin_area{ NULL };   // [BASIN]
+const double *hru_area{ NULL };
+const double *hru_lat{ NULL };
 
 // variable inputs
-double *SWE;
-const double *hru_t;
-const double *hru_tmean;
-const double *hru_eamean;
-const double *hru_Qn;
-const double *hru_SunAct;
-const double *Qdro;
-const double *Qdfo;
-const double *SunMax;
+double *SWE{ NULL };
+const double *hru_t{ NULL };
+const double *hru_tmean{ NULL };
+const double *hru_eamean{ NULL };
+const double *hru_Qn{ NULL };
+const double *hru_SunAct{ NULL };
+const double *Qdro{ NULL };
+const double *Qdfo{ NULL };
+const double *SunMax{ NULL };
 
 // local allocated arrays
-double   *SWEpeak;
-double   *SWElast;
+double   *SWEpeak{ NULL };
+double   *SWElast{ NULL };
 
 void decl(void);
 void init(void);

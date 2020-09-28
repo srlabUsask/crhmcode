@@ -7,50 +7,50 @@ public:
 
 ClassTestSparse(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long ObsCnt_N_up;
-long ObsCnt_P_up;
-long ObsCntMan_N_up;
-long ObsCntMan_P_up;
-long ObsCntRes_N_up;
-long ObsCntRes_P_up;
-long ObsCnt_N_down;
-long ObsCnt_P_down;
-long ObsCntMan_N_down;
-long ObsCntMan_P_down;
-long ObsCntRes_N_down;
-long ObsCntRes_P_down;
-long ObsCnt_fertperiod;
-long ObsCnt_litterperiod;
+long ObsCnt_N_up{0};
+long ObsCnt_P_up{0};
+long ObsCntMan_N_up{0};
+long ObsCntMan_P_up{0};
+long ObsCntRes_N_up{0};
+long ObsCntRes_P_up{0};
+long ObsCnt_N_down{0};
+long ObsCnt_P_down{0};
+long ObsCntMan_N_down{0};
+long ObsCntMan_P_down{0};
+long ObsCntRes_N_down{0};
+long ObsCntRes_P_down{0};
+long ObsCnt_fertperiod{0};
+long ObsCnt_litterperiod{0};
 
 // declared variables
-double *Fert_N_Var;
-double *Fert_P_Var;
-double *Man_N_Var;
-double *Man_P_Var;
-double *Res_N_Var;
-double *Res_P_Var;
-double *Fert_period_Var;
-double *Litter_period_Var;
+double *Fert_N_Var{ NULL };
+double *Fert_P_Var{ NULL };
+double *Man_N_Var{ NULL };
+double *Man_P_Var{ NULL };
+double *Res_N_Var{ NULL };
+double *Res_P_Var{ NULL };
+double *Fert_period_Var{ NULL };
+double *Litter_period_Var{ NULL };
 
 // declared parameters
 
 // put parameters
 
 // declared observation variables
-const double *Fert_N_up;
-const double *Fert_P_up;
-const double *Man_N_up;
-const double *Man_P_up;
-const double *Res_N_up;
-const double *Res_P_up;
-const double *Fert_N_down;
-const double *Fert_P_down;
-const double *Man_N_down;
-const double *Man_P_down;
-const double *Res_N_down;
-const double *Res_P_down;
-const double *Fert_period;
-const double *Litter_period;
+const double *Fert_N_up{ NULL };
+const double *Fert_P_up{ NULL };
+const double *Man_N_up{ NULL };
+const double *Man_P_up{ NULL };
+const double *Res_N_up{ NULL };
+const double *Res_P_up{ NULL };
+const double *Fert_N_down{ NULL };
+const double *Fert_P_down{ NULL };
+const double *Man_N_down{ NULL };
+const double *Man_P_down{ NULL };
+const double *Res_N_down{ NULL };
+const double *Res_P_down{ NULL };
+const double *Fert_period{ NULL };
+const double *Litter_period{ NULL };
 
 void decl(void);
 void init(void);

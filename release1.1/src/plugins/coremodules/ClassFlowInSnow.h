@@ -8,37 +8,37 @@ public:
 ClassFlowInSnow(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // index to module to be called
-ClassModule* Netroute_module; // used to call preser for simple projects
+ClassModule* Netroute_module { NULL }; // used to call preser for simple projects
 
 // declared variables
-double *Ksat_snow;
-double *K_snow;
-double *u_down;
-double *K_down;
-double *K_slope;
-double *Meltrunoff_K;
-double *In_storage;
-double *runKstorage_var;
+double* Ksat_snow {NULL};
+double *K_snow { NULL };
+double *u_down { NULL };
+double *K_down { NULL };
+double *K_slope { NULL };
+double *Meltrunoff_K { NULL };
+double *In_storage { NULL };
+double *runKstorage_var { NULL };
 
 // get variables:
-const double *rho;
-const double *h2o_sat;
-const double *T_s_l;
-const double *z_s;
+const double *rho { NULL };
+const double *h2o_sat { NULL };
+const double *T_s_l { NULL };
+const double *z_s { NULL };
 
 // put variables
-double  *runKstorage;
+double  *runKstorage { NULL };
 
 // declared parameters
-const double *S_I;
-const double *d_g;
-const double *t_inhibit_flow;
-const double *runKstorage_winter;
-const double *runKstorage_summer;
-const double *Sr;
-const double  *hru_GSL;
-const double  *route_L;
-const long  *inhibit_MeltRunoff_Kstorage;
+const double *S_I { NULL };
+const double *d_g { NULL };
+const double *t_inhibit_flow { NULL };
+const double *runKstorage_winter { NULL };
+const double *runKstorage_summer { NULL };
+const double *Sr { NULL };
+const double  *hru_GSL { NULL };
+const double  *route_L { NULL };
+const long  *inhibit_MeltRunoff_Kstorage { NULL };
 
 void decl(void);
 void init(void);

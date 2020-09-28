@@ -17,10 +17,10 @@
 class MMSData
 {
 public:
-	double ** mmsData;
-	long ** mmsDataL;
-	bool GoodRun;
-	ClassModule *obs_preset;
+	double** mmsData {NULL};
+	long** mmsDataL {NULL};
+	bool GoodRun {false};
+	ClassModule* obs_preset {NULL};
 	string S;
 };
 
@@ -30,7 +30,7 @@ class TSeries {
 public:
 	double *XValues;
 	double *YValues;
-	ClassVar *Tag;
+	ClassVar* Tag {NULL};
 	int MaxCnt;
 	int Used;
 	string Title;

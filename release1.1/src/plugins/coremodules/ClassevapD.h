@@ -8,32 +8,32 @@ public:
 ClassevapD(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-double *hru_actet;
-double *hru_cum_actet;
-double *evapD;
-double *cum_evap;
-double *G;
-double *D;
+double *hru_actet { NULL };
+double *hru_cum_actet { NULL };
+double *evapD { NULL };
+double *cum_evap { NULL };
+double *G { NULL };
+double *D { NULL };
 
 // local allocated arrays
-double *Pa;
+double *Pa { NULL };
 
 
 // declared parameters
-const double *basin_area;   // [BASIN]
-const double *hru_area;
-const double *Ht;
-const double *hru_elev;
-const double *F_Qg;
+const double *basin_area { NULL };   // [BASIN]
+const double *hru_area { NULL };
+const double *Ht { NULL };
+const double *hru_elev { NULL };
+const double *F_Qg { NULL };
 
-const long *evap_type;
-const long *inhibit_evap;
+const long *evap_type { NULL };
+const long *inhibit_evap { NULL };
 
 // variable inputs
-const double *RnD;
-const double *hru_tmean;
-const double *hru_umean;
-const double *hru_eamean;
+const double *RnD { NULL };
+const double *hru_tmean { NULL };
+const double *hru_umean { NULL };
+const double *hru_eamean { NULL };
 
 // variable puts
 

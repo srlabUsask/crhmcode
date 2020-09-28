@@ -7,33 +7,33 @@ public:
 
 Classqdrift(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-ClassClark *Delaymelt;
+ClassClark *Delaymelt{ NULL };
 
 // declared observation variables
-const double *p;
+const double *p{ NULL };
 
 // input variables
-const double *hru_p;
+const double *hru_p{ NULL };
 
 // declared variables
-double *SWE;
-double *driftmelt;
-double *driftmeltDly;
-double *cumdriftmelt;
-double *cumdriftmeltDly;
-double *driftmeltD;
-double *snowmeltD;
+double *SWE{ NULL };
+double *driftmelt{ NULL };
+double *driftmeltDly{ NULL };
+double *cumdriftmelt{ NULL };
+double *cumdriftmeltDly{ NULL };
+double *driftmeltD{ NULL };
+double *snowmeltD{ NULL };
 
 // declared parameters
-const long *Type;      // NOTUSED, DRIFT or HUMMOCK
-const long *DrainTo;   // drain to HRU
-const double *InitSWE;  // initial SWE
-const double *length;   // length normal to creek
-const double *meltstorage;  // delay parameter (days)
-const double *meltLag;      // delay parameter (days)
+const long *Type{ NULL };      // NOTUSED, DRIFT or HUMMOCK
+const long *DrainTo{ NULL };   // drain to HRU
+const double *InitSWE{ NULL };  // initial SWE
+const double *length{ NULL };   // length normal to creek
+const double *meltstorage{ NULL };  // delay parameter (days)
+const double *meltLag{ NULL };      // delay parameter (days)
 
 // variable inputs
-const double *Qm;
+const double *Qm{ NULL };
 
 // local allocated arrays
 

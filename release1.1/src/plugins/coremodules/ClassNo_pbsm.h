@@ -8,18 +8,18 @@ public:
 ClassNO_pbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
                                   hru_basin(NULL) {};
 // declared variables
-double *SWE;
-double *cumSno;
-double *snowdepth;
+double *SWE{ NULL };
+double *cumSno{ NULL };
+double *snowdepth{ NULL };
 
 // declared parameters
-const double *basin_area;
-const double *hru_area;
-const long *inhibit_evap;
+const double *basin_area{ NULL };
+const double *hru_area{ NULL };
+const long *inhibit_evap{ NULL };
 
 // variable inputs
-const double *net_snow;
-const long  *hru_newsnow;
+const double *net_snow{ NULL };
+const long  *hru_newsnow{ NULL };
 
 // local allocated arrays
 double *hru_basin;

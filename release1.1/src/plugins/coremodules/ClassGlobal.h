@@ -10,39 +10,39 @@ public:
 Classglobal(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-double *QdroD;
-double *QdroDext;
-double *QdfoD;
-double *Qdro;
-double *Qdfo;
-double *Qdflat;
-double *QdflatD;
-double *QdflatE;
-double *SolAng;
-double *SunMax;
-double *cosxs;
-double *cosxsflat;
-double *pQdro;
-double **pQdro_FREQ;
-double *pQdfo;
-double **pQdfo_FREQ;
-double *pQdflat;
-double **pQdflat_FREQ;
-double *pQdflatE;
-double **pQdflatE_FREQ;
-double *pSol;
-double **pSol_FREQ;
-double *pCosxs;
-double **pCosxs_FREQ;
-double *pCosxs0;
-double **pCosxs0_FREQ;
+double *QdroD{ NULL };
+double *QdroDext{ NULL };
+double *QdfoD{ NULL };
+double *Qdro{ NULL };
+double *Qdfo{ NULL };
+double *Qdflat{ NULL };
+double *QdflatD{ NULL };
+double *QdflatE{ NULL };
+double *SolAng{ NULL };
+double *SunMax{ NULL };
+double *cosxs{ NULL };
+double *cosxsflat{ NULL };
+double *pQdro{ NULL };
+double **pQdro_FREQ{ NULL };
+double *pQdfo{ NULL };
+double **pQdfo_FREQ{ NULL };
+double *pQdflat{ NULL };
+double **pQdflat_FREQ{ NULL };
+double *pQdflatE{ NULL };
+double **pQdflatE_FREQ{ NULL };
+double *pSol{ NULL };
+double **pSol_FREQ{ NULL };
+double *pCosxs{ NULL };
+double **pCosxs_FREQ{ NULL };
+double *pCosxs0{ NULL };
+double **pCosxs0_FREQ{ NULL };
 
 // declared parameters
-const double *hru_lat;
-const double *hru_elev;
-const double *hru_GSL;
-const double *hru_ASL;
-const double *Time_Offset;
+const double *hru_lat{ NULL };
+const double *hru_elev{ NULL };
+const double *hru_GSL{ NULL };
+const double *hru_ASL{ NULL };
+const double *Time_Offset{ NULL };
 
 //const long  *Extra;
 

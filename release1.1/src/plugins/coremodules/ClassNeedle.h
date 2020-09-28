@@ -8,76 +8,76 @@ class ClassNeedle : public ClassModule {
 
     ClassNeedle(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
-    double Qli_;
+    double Qli_ {0.0};
 
-    double Qsi_;
+    double Qsi_ {0.0};
 
 // declared observations
 
-    double *Ts;
+    double *Ts{ NULL };
 
-    double *Qnsn;
+    double *Qnsn{ NULL };
 
-    double *Qsisn;
+    double *Qsisn{ NULL };
 
-    double *Qlisn;
+    double *Qlisn{ NULL };
 
-    double *Qlosn;
+    double *Qlosn{ NULL };
 
 // declared observation variables
 
-    const double *Qsi;
+    const double *Qsi{ NULL };
 
-    const double *Qli;
+    const double *Qli{ NULL };
 
-    const double *QsiA_Var;
+    const double *QsiA_Var{ NULL };
 
-    const double *QsiS_Var;
+    const double *QsiS_Var{ NULL };
 
-    const double *QliVt_Var;
+    const double *QliVt_Var{ NULL };
 
 // declared variables
 
-   double *Pa;
+   double *Pa{ NULL };
 
-   double *k;
+   double *k{ NULL };
 
-   double *Tauc;
+   double *Tauc{ NULL };
 
-   double *ra;
+   double *ra{ NULL };
 
-   double *Qnsn_Var;
+   double *Qnsn_Var{ NULL };
 
 // declared parameters
 
-   const double *LAI;
+   const double *LAI{ NULL };
 
-   const double *Ht;
+   const double *Ht{ NULL };
 
-   const double *Zwind;
+   const double *Zwind{ NULL };
 
-   const double *Zref;
+   const double *Zref{ NULL };
 
-   const double *hru_elev;
+   const double *hru_elev{ NULL };
 
-   const double *Z0snow; // snow roughness length (m)
+   const double *Z0snow{ NULL }; // snow roughness length (m)
 
 
 // variable inputs
 
-    const double *beta;
+    const double *beta{ NULL };
 
-    const double *SWE;
+    const double *SWE{ NULL };
 
-    const double *Albedo;
+    const double *Albedo{ NULL };
 
-    const double *hru_t;
+    const double *hru_t{ NULL };
 
-    const double *hru_u;
+    const double *hru_u{ NULL };
 
-    const double *hru_ea;
+    const double *hru_ea{ NULL };
 
-    const double *hru_rh;
+    const double *hru_rh{ NULL };
 
 
     void decl(void);

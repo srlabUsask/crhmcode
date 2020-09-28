@@ -7,43 +7,43 @@ public:
 
 Classsbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
                                   hru_basin(NULL) {};
-double dt;
+double dt{0.0};
 
 // declared variables
-double *SWE;
-double *wet_snow;
-double *Subl;
-double *Drift;
-double *cumSubl;
-double *cumDrift;
-double *cumDriftIn;
-double *cumSno;
-double *Prob;
-double *snow_age;
-double *BasinSnowLoss;
-double *cumBasinSnowLoss;
-double *cumBasinSnowGain;
-double *snowdepth;
+double *SWE{ NULL };
+double *wet_snow{ NULL };
+double *Subl{ NULL };
+double *Drift{ NULL };
+double *cumSubl{ NULL };
+double *cumDrift{ NULL };
+double *cumDriftIn{ NULL };
+double *cumSno{ NULL };
+double *Prob{ NULL };
+double *snow_age{ NULL };
+double *BasinSnowLoss{ NULL };
+double *cumBasinSnowLoss{ NULL };
+double *cumBasinSnowGain{ NULL };
+double *snowdepth{ NULL };
 
 // declared parameters
-const double *basin_area;
-const double *hru_area;
-const double *Ht;
-const double *zr;
-const double *distrib;
-const double *fetch;
-const long *inhibit_evap;
-const long *inhibit_subl;
+const double *basin_area{ NULL };
+const double *hru_area{ NULL };
+const double *Ht{ NULL };
+const double *zr{ NULL };
+const double *distrib{ NULL };
+const double *fetch{ NULL };
+const long *inhibit_evap{ NULL };
+const long *inhibit_subl{ NULL };
 
 // variable inputs
-const double *hru_t;
-const double *hru_rh;
-const double *hru_u;
-const double *net_snow;
-const long  *hru_newsnow;
+const double *hru_t{ NULL };
+const double *hru_rh{ NULL };
+const double *hru_u{ NULL };
+const double *net_snow{ NULL };
+const long  *hru_newsnow{ NULL };
 
 // local allocated arrays
-double *hru_basin;
+double *hru_basin{ NULL };
 
 
 void decl(void);

@@ -8,25 +8,25 @@ public:
 ClassAyers(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-double *infil;
-double *cuminfil;
-double *runoff;
-double *cumrunoff;
-double *snowinfil;
-double *cumsnowinfil;
-double *meltrunoff;
-double *cummeltrunoff;
-double *melt_int; // interval melt - from snowmelD
+double *infil { NULL };
+double *cuminfil { NULL };
+double *runoff { NULL };
+double *cumrunoff { NULL };
+double *snowinfil { NULL };
+double *cumsnowinfil { NULL };
+double *meltrunoff { NULL };
+double *cummeltrunoff { NULL };
+double *melt_int { NULL }; // interval melt - from snowmelD
 
 // declared parameters
-const double *basin_area; // [BASIN]
-const double *hru_area;
-const long  *texture;
-const long  *groundcover;
+const double *basin_area { NULL }; // [BASIN]
+const double *hru_area { NULL };
+const long  *texture { NULL };
+const long  *groundcover { NULL };
 
 // variable inputs
-const double *net_rain;
-const double *snowmeltD;
+const double *net_rain { NULL };
+const double *snowmeltD { NULL };
 
 // local allocated arrays
 

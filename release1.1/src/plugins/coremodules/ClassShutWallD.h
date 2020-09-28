@@ -7,58 +7,58 @@ public:
 
 ClassShutWallD(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long Qn_Cnt;
-long Qg_Cnt;
+long Qn_Cnt{0};
+long Qg_Cnt{0};
 
 // declared variables
-double *hru_actet;
-double *hru_cum_actet;
-double *evapD;
-double *cum_evap;
-double *Cc;
-double *Cs;
-double *Ra;
-double *Rc;
-double *Rs;
-double *ETc;
-double *ETs;
-double *raa;
-double *rca;
-double *rcs;
-double *rsa;
-double *rss;
+double *hru_actet{ NULL };
+double *hru_cum_actet{ NULL };
+double *evapD{ NULL };
+double *cum_evap{ NULL };
+double *Cc{ NULL };
+double *Cs{ NULL };
+double *Ra{ NULL };
+double *Rc{ NULL };
+double *Rs{ NULL };
+double *ETc{ NULL };
+double *ETs{ NULL };
+double *raa{ NULL };
+double *rca{ NULL };
+double *rcs{ NULL };
+double *rsa{ NULL };
+double *rss{ NULL };
 
 // declared parameters
-const double *basin_area;   // [BASIN]
-const double *hru_area;
-const double *rs;
-const double *hru_elev;
-const double *Cr;
-const double *LAI;
-const double *Ht;
-const double *Zwind;
-const double *w;
-const double *rst;
-const double *z0g;
-const double *gammab;
+const double *basin_area{ NULL };   // [BASIN]
+const double *hru_area{ NULL };
+const double *rs{ NULL };
+const double *hru_elev{ NULL };
+const double *Cr{ NULL };
+const double *LAI{ NULL };
+const double *Ht{ NULL };
+const double *Zwind{ NULL };
+const double *w{ NULL };
+const double *rst{ NULL };
+const double *z0g{ NULL };
+const double *gammab{ NULL };
 
-const long *inhibit_evap;
+const long *inhibit_evap{ NULL };
 
 // declared observations
-const double *hru_umean;
-const double *hru_tmean;
-const double *hru_eamean;
-const double *Qn;
-const double *Qg;
+const double *hru_umean{ NULL };
+const double *hru_tmean{ NULL };
+const double *hru_eamean{ NULL };
+const double *Qn{ NULL };
+const double *Qg{ NULL };
 
 // declared observation functions
-double *Qnmean;
-double *Qgmean;
+double *Qnmean{ NULL };
+double *Qgmean{ NULL };
 
 // variable inputs
 
 // local allocated arrays
-double *Pa;
+double *Pa{ NULL };
 
 void decl(void);
 void init(void);

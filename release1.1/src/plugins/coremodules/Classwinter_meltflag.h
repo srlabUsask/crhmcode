@@ -8,19 +8,19 @@ public:
 Classwinter_meltflag(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-long *meltflag;
-long *winter;
+long *meltflag{ NULL };
+long *winter{ NULL };
 
 // declared parameters
-const double *hru_lat;
+const double *hru_lat{ NULL };
 
 // variable inputs
-const double *hru_tmax;
-const double *hru_tmin;
-const double *QdroD;
-const double *SWE;
-const long  *hru_newsnow;
-const double *Albedo;
+const double *hru_tmax{ NULL };
+const double *hru_tmin{ NULL };
+const double *QdroD{ NULL };
+const double *SWE{ NULL };
+const long  *hru_newsnow{ NULL };
+const double *Albedo{ NULL };
 
 void decl(void);
 void init(void);
