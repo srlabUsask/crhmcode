@@ -3397,7 +3397,7 @@ void Myparser::get_token()
 		while (!isdelim(*exp_ptr)) *temp++ = *exp_ptr++;
 		tok_type = CRHM::VARIABLE;
 	}
-	else if (isdigit(*exp_ptr)) {
+	else if (iswdigit(*exp_ptr)) {
 		while ((*exp_ptr) && strchr("0123456789.", *exp_ptr)) *temp++ = *exp_ptr++;
 		if ((*exp_ptr) && strchr("eE", *exp_ptr)) {
 			*temp++ = *exp_ptr++;

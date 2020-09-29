@@ -402,7 +402,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					c = DataFile.peek();
 				}
 
-				if (isdigit(c) && ObsFilesList->Count == 0) {
+				if (iswdigit(c) && ObsFilesList->Count == 0) {
 					DataFile >> Global::Freq;
 					Global::Interval = 1.0 / Global::Freq;
 				}

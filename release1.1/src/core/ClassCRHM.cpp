@@ -4761,13 +4761,13 @@ string Convert::ParsePowUnitExpr(string pszIn, Tresult& u)
 		pszIn = tcsinc(pszIn);
 
 	//if (!_istdigit(pszIn[0]))
-	if (isdigit(pszIn[0]))
+	if (iswdigit(pszIn[0]))
 		return pszMark;
 
 	char nPow = 0;
 
 	//while (_istdigit(pszIn[0]))
-	while (isdigit(pszIn[0]))
+	while (iswdigit(pszIn[0]))
 	{
 		char nPow2 = nPow * 10 + (pszIn[0] - '0');
 		if (nPow2 < nPow)
@@ -4812,7 +4812,7 @@ string Convert::ParseUnitPhase1(string pszIn, Tresult& u)
 			pszIn = tcsinc(pszIn);
 
 		//if (!_istdigit(pszIn[0]))
-		if (!isdigit(pszIn[0]))
+		if (!iswdigit(pszIn[0]))
 
 			throw 1; // cause fault
 		else {
@@ -4820,7 +4820,7 @@ string Convert::ParseUnitPhase1(string pszIn, Tresult& u)
 			k = 0;
 
 			//while (_istdigit(pszIn[0]))
-			while (isdigit(pszIn[0]))
+			while (iswdigit(pszIn[0]))
 			{
 				char nPow2 = k * 10 + (pszIn[0] - '0');
 				if (nPow2 < k)
