@@ -64,7 +64,8 @@ void ClassAnnan::init(void) {
 
 void ClassAnnan::run(void) {
 
-  double QsiAT, QsiST;
+  double QsiAT = 0.0;
+  double QsiST = 0.0;
 
   for (hh = 0; chkStruct(); ++hh){
     long nstep = getstep() % Global::Freq;
