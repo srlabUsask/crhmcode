@@ -194,9 +194,9 @@ void Classglobal::run(void) {
 
       Trans = 0.818;
 
-      Dec = sin((Day - 81) * DEGtoRAD365) * 0.40928;     // Declination
+      Dec = sin(((long long)Day - 81ll) * DEGtoRAD365) * 0.40928;     // Declination
 
-      Rad_vec = .01676*cos(M_PI-0.017262*(Day-3))+1.0;   // radius vector
+      Rad_vec = .01676*cos(M_PI-0.017262*((long long)Day-3ll))+1.0;   // radius vector
       Sol = 0.0819/(Rad_vec*Rad_vec);                    // solar constant  mj/m**2*min or 117.936 mj/m**2*day
 
 // calculate sines and cosines

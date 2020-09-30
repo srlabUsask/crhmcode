@@ -6557,7 +6557,7 @@ double SRF = 0.0;
         Gh_ebsm[hh] = den_air[hh] * Cp_air * ((0.01 + K_kat[hh])/2) * ((hru_t[hh] + 273.15) - Ts_glacier);
         Ge_ebsm[hh] = (MOL_wt_ratio_h2o_to_air * den_air[hh] * Lv) / (Pa[hh]*10) * ((0.01 + K_kat[hh])/2) * (hru_ea[hh] - e_s)*0.1;
         Cp_water[hh] = Cp_W0 - 2.55 * ((T_rain[hh] + 273.15) - FREEZE);
-        Gp_ebsm[hh] = Cp_water[hh] * rho_h2o * net_rain[hh] / 1000 * ((T_rain[hh] + 273.15) - Ts_glacier) / (24 / Global::Freq * 3600);
+        Gp_ebsm[hh] = Cp_water[hh] * rho_h2o * net_rain[hh] / 1000 * ((T_rain[hh] + 273.15) - Ts_glacier) / (24ll / (long long)Global::Freq * 3600ll);
         Gmelt_energy[hh] = Gn_ebsm[hh] + Gh_ebsm[hh] + Ge_ebsm[hh] + Gp_ebsm[hh];
         Xmelt_int[hh] = Gmelt_energy[hh]/(996.0*334000.0)*1000.0*3600.0; // (996*334000) * 1000*3600;
         if(Xmelt_int[hh] < 0.0)

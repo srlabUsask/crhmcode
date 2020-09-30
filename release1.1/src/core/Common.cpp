@@ -26,7 +26,7 @@ snowcover::snowcover(double SWEmean, double cv) {  //Manishankar: this is only b
 	data = new double[N];
 
 	for (int ii = 0; ii < N; ii++) {
-		x = SWEmean * 2.0*(ii + 1) / N;
+		x = SWEmean * 2.0*((long long) ii + 1ll) / N;
 		double K = (x - SWEmean) / (SWEmean*cv);
 
 		double Sy = sqrt(log(cv*cv + 1.0));

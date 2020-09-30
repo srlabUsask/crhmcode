@@ -2667,7 +2667,7 @@ bool ClassModule::ReadAheadObs(long inc) {
 	TDateTime CurrentDTnow = Global::DTnow;
 
 	Global::DTindx += inc;
-	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 
 	long p = 0;
 
@@ -2706,7 +2706,7 @@ bool ClassModule::ReadAheadObsMacro(long inc) {
 	long **Save_HRU_obs = Global::HRU_OBS;
 
 	Global::DTindx += inc;
-	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 
 	long p = 0;
 
@@ -3538,7 +3538,7 @@ double ClassClark::ChangeLag(const double *newlag, const long hh) {
 		LastValue = 0.0;
 
 		for (int mm = 1; mm < newilag - 1; ++mm) {
-			double Y = double(mm) / (newilag - 1)*(ilag[hh] - 1);
+			double Y = double(mm) / ((long long) newilag - 1ll)*((long long) ilag[hh] - 1ll);
 			int Yint = Y + 0.0001;
 			double Ydif = Y - Yint;
 			double NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
@@ -3701,7 +3701,7 @@ void ClassMuskingum::ChangeLag(const double *newlag, const long hh)
 	double LastValue = 0.0;
 
 	for (int mm = 1; mm < newilag - 1; ++mm) {
-		double Y = double(mm) / (newilag - 1)*(ilag[hh] - 1);
+		double Y = double(mm) / ((long long)newilag - 1ll)*((long long)ilag[hh] - 1ll);
 		int Yint = Y + 0.0001;
 		double Ydif = Y - Yint;
 		double NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);

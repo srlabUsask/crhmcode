@@ -636,7 +636,7 @@ void ClassXG::freeze(void) { // XG-Algorithm - Freezing
   else
     ftc = ftc_lay[lay-1][hh];
 
-  Za = sqrt(2*86400*ftc*Bfr[hh]/(h2o_lay[lay-1][hh]*L));
+  Za = sqrt(2ll*86400ll*ftc*Bfr[hh]/(h2o_lay[lay-1][hh]*L));
 
 
   while(Za > depths_lay[lay-1][hh] && lay < N_Soil_layers[hh]){
@@ -673,7 +673,7 @@ void ClassXG::thaw(void) { // XG-Algorithm - Thawing
   else
     ttc = ttc_lay[lay-1][hh];
 
-  Za = sqrt(2*86400*ttc*Bth[hh]/(h2o_lay[lay-1][hh]*L)); //Stefan Equation
+  Za = sqrt(2ll*86400ll*ttc*Bth[hh]/(h2o_lay[lay-1][hh]*L)); //Stefan Equation
 
   while(Za > depths_lay[lay-1][hh] && lay < N_Soil_layers[hh]){
     Zdt[hh] += depths_lay[lay-1][hh];

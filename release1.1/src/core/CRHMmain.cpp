@@ -1698,7 +1698,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 	Global::DTmin = (int)((DTstartR - Global::DTstart)* Global::Freq);
 	Global::DTindx = Global::DTmin;
-	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 
 	int Modii = 0;
 	Global::MapVarsGet.clear();
@@ -1896,7 +1896,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			if (Global::Freq == 1)
 				Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx);
 			else
-				Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+				Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 
 			if ((double)Global::RapidAdvanceTo > 0.0 && !(Global::CRHMStatus & 4)) {
 				if (Global::DTnow < Global::RapidAdvanceTo)
@@ -2016,7 +2016,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 					Global::DTindx -= 1;
 				}
 				else {
-					Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+					Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 					Global::DTindx -= 1;
 				}
 

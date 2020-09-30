@@ -97,8 +97,8 @@ void ClassFlowInSnow::run(void) {
         u_down[hh] = K_snow[hh]*1000*9.8/0.001787;
         K_down[hh] = u_down[hh]*z_s[hh]*UnitWidth/UnitArea;
         K_slope[hh] = K_down[hh]*sin(hru_GSL[hh]*DEGtoRAD);
-        Meltrunoff_K[hh] = route_L[hh]/(K_slope[hh])/(60*60*24);
-        runKstorage[hh] = route_L[hh]/(K_slope[hh])/(60*60*24);
+        Meltrunoff_K[hh] = route_L[hh]/(K_slope[hh])/(60ll*60ll*24ll);
+        runKstorage[hh] = route_L[hh]/(K_slope[hh])/(60ll*60ll*24ll);
         if(Meltrunoff_K[hh] > runKstorage_winter[hh]) {
           Meltrunoff_K[hh] = runKstorage_winter[hh];
           runKstorage[hh] = runKstorage_winter[hh];
