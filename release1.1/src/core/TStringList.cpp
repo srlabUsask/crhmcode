@@ -44,7 +44,7 @@ void TStringList::DelimitedText(string s) {
 		return;
 
 	s.append(",");
-	for (pos = 0; pos < s.size(); ++pos) {
+	for (pos = 0; pos < (long)s.size(); ++pos) {
 		here = s.find_first_of("' ,", pos);
 		pos = here;
 		switch (s[here]) {
