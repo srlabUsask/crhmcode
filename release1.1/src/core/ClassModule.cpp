@@ -67,7 +67,7 @@ void ClassModule::initbase(void) {
 
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	//ClassPar *newPar; variable is unreferenced commenting out for now - jhs507
 
 
 
@@ -1170,7 +1170,7 @@ long ClassModule::declgetvar(string source, string name, string units, const dou
 	AKAhook(VARG, Name, name, name, source, ID);
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	//ClassPar *newPar; variable is unreferenced commenting out for now - jhs507
 	long GetUnit;
 
 	switch (Global::BuildFlag) {
@@ -1245,7 +1245,7 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 	AKAhook(VARG, Name, name, name, source, ID);
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	//ClassPar *newPar; variable is unreferenced commenting out for now - jhs507
 	long GetUnit;
 
 	switch (Global::BuildFlag) {
@@ -2795,7 +2795,7 @@ void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
 
 	long p = 0;
 	ClassVar *P;
-	string::size_type indx;
+	//string::size_type indx; variable is unreferenced commenting out for now - jhs507
 
 	while (p < ReadListN->Count && GroupCnt == 0) { // duplicates possible in simple projects
 		P = (ClassVar*)ReadListN->array[p].Object;
@@ -3293,8 +3293,9 @@ void Myparser::eval_exp3(double &result)
 // Process an exponent
 void Myparser::eval_exp4(double &result)
 {
-	double temp, ex;
-	int t; //removed register keyword to fix warning. Manishankar
+	double temp;
+	//double ex; variable is unreferenced commenting out for now - jhs507
+	//int t; //removed register keyword to fix warning. Manishankar variable is unreferenced commenting out for now - jhs507
 
 	eval_exp5(result);
 	if (*token == '^') {

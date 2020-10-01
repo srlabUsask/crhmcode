@@ -575,7 +575,8 @@ void ClassWQ_SoilBGC::finish(bool good) {
 */
 
 // Local variables
-    long k,kcrop;
+    //long k; varible is unreferenced commenting out for now - jhs507
+    //long kcrop; varible is unreferenced commenting out for now - jhs507
     double common_nadd[maxsoillayers][2]; // kg/km2   where 0 - manureinogNfrac, 1 - manurelabileNfrac
     double common_padd[maxsoillayers][2]; // kg/km2
     double common_nres[maxsoillayers][2]; // kg/km2
@@ -854,7 +855,7 @@ Argument declarations
 */
 
 // Local variables
-    long k;   // soillayer
+    //long k; soillayer - varible is unreferenced commenting out for now - jhs507
     double degradhN[maxsoillayers] ,transfminN[maxsoillayers], transfnitrN[maxsoillayers];
     double transfP[maxsoillayers], degradhP[maxsoillayers];
     double dissolfN[maxsoillayers], dissolfP[maxsoillayers];
@@ -1522,7 +1523,7 @@ double ClassWQ_SoilBGC::tempfactor(double temperature){
 
 // Local variables
 
-    long k;   // soillayer
+    //long k; soillayer - varible is unreferenced commenting out for now - jhs507
     double DOCpool[maxsoillayers];
     double fasttorefractory[maxsoillayers];
     double doctofast[maxsoillayers];
@@ -1952,11 +1953,19 @@ void ClassWQ_SoilBGC::calculate_erosion(double& erodedP){
 */
 
     // Local variables
-    long kcrop, k;
+    //long kcrop; varible is unreferenced commenting out for now - jhs507
+    //long k; varible is unreferenced commenting out for now - jhs507
     double MobilisedSed, MobilisedP, Rainfall_energy, cropcover, groundcover;
     double intensity;
-    double bd1, bd2, bd3, bd4, bd5;  // cultivation dates
-    double common_cropcover, common_groundcover, maxday1, maxday2;
+    // cultivation dates
+    //double bd1; varible is unreferenced commenting out for now - jhs507
+    //double bd2; varible is unreferenced commenting out for now - jhs507
+    //double bd3; varible is unreferenced commenting out for now - jhs507
+    //double bd4; varible is unreferenced commenting out for now - jhs507
+    //double bd5; varible is unreferenced commenting out for now - jhs507
+    double common_cropcover, common_groundcover;
+    //double maxday2; varible is unreferenced commenting out for now - jhs507
+    //double maxday1; varible is unreferenced commenting out for now - jhs507
 
     fracminP[hh] = 0.0f;
     erodedP = 0.0f;

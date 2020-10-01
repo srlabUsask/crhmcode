@@ -20,7 +20,8 @@
 using namespace std;
 
 snowcover::snowcover(double SWEmean, double cv) {  //Manishankar: this is only being used in NewModules.cpp
-	double x, sca;
+	double x;
+	//double sca; variable is unreferenced commenting out for now - jhs507
 
 	const long N = 150;
 	data = new double[N];

@@ -221,7 +221,8 @@ void ClassCRHMCanopyClearingGap::init(void) {
 
 void ClassCRHMCanopyClearingGap::run(void){
 
-  double Exposure, LAI_, Vf, Vf_, Tau, Kstar_H, Kd;
+  double Exposure, LAI_, Vf, Vf_, Kstar_H, Kd;
+  //double Tau; variable is unreferenced commenting out for now - jhs507
 
   for (hh = 0; chkStruct(); ++hh){
 

@@ -329,7 +329,9 @@ void Classglacier::init(void) {
 void Classglacier::run(void){
 
   long nstep;
-  double umin, ref, rho;
+  double rho;
+  //double umin; variable is unreferenced commenting out for now - jhs507
+  //double ref; variable is unreferenced commenting out for now - jhs507
 
   nstep = getstep();
 

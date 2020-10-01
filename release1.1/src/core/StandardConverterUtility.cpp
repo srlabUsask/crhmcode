@@ -37,7 +37,8 @@ double StandardConverterUtility::GetDateTimeInDouble(int year, int month, int da
 //This function takes a double date time as a parameter and returns date time in string format   'mm/dd/yyyy hh:mm'
 std::string StandardConverterUtility::GetDateTimeInString(double datetime)
 {
-	int y, m, d, h, min, s;
+	int y, m, d, h, min; 
+	//int s; variable is unreferenced commenting out for now - jhs507
 	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
 	std::string stime = std::to_string(m) + "/" + std::to_string(d) + "/" + std::to_string(y) + " " + std::to_string(h) + ":" + std::to_string(min);
 	return stime;
@@ -45,7 +46,8 @@ std::string StandardConverterUtility::GetDateTimeInString(double datetime)
 
 std::string StandardConverterUtility::GetDateTimeInStringForOutput(double datetime)
 {
-	int y, m, d, h, min, s;
+	int y, m, d, h, min;
+	//int s; variable is unreferenced commenting out for now - jhs507
 	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
 	//if (min == 59 && h != 23) { h = h + 1; min = 0; } //added by Manishankar to round the minutes into the next hour.
 	std::string stime = std::to_string(y) + " " + std::to_string(m) + " " + std::to_string(d) + " " + std::to_string(h) + " " + std::to_string(min);
@@ -55,7 +57,8 @@ std::string StandardConverterUtility::GetDateTimeInStringForOutput(double dateti
 
 std::string StandardConverterUtility::GetDateInString(double datetime)
 {
-	int y, m, d, h, min, s;
+	int y, m, d, h, min;
+	//int s; variable is unreferenced commenting out for now - jhs507
 	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
 	std::string stime = std::to_string(y) + " " + std::to_string(m) + " " + std::to_string(d);
 	return stime;
@@ -63,7 +66,8 @@ std::string StandardConverterUtility::GetDateInString(double datetime)
 
 void StandardConverterUtility::GetDateTimeElements(double datetime, int * y, int * m, int * d, int * h, int * mi)
 {
-	int y1, m1, d1, h1, min1, s1;
+	int y1, m1, d1, h1, min1;
+	//int s1; variable is unreferenced commenting out for now - jhs507
 	DecodeDateTime(datetime, &y1, &m1, &d1, &h1, &min1);
 
 	*y = y1; *m = m1, *d = d1, *h = h1, *mi = min1;
@@ -146,7 +150,8 @@ double StandardConverterUtility::DateTimeDt(void) {  //Manishankar: in CRHMmain.
 
 //this function is being used CRHMmain.cpp. Added by Manishankar.
 std::string StandardConverterUtility::FormatDateTime(std::string fmt, double datetime) {
-	int y, m, d, h, min, s;
+	int y, m, d, h, min;
+	//int s; variable is unreferenced commenting out for now - jhs507
 	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
 
 	string m1 = to_string(m), d1 = to_string(d), h1 = to_string(h), min1 = to_string(min);

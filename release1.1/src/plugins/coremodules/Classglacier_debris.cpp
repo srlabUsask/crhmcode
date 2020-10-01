@@ -429,7 +429,10 @@ void Classglacier_debris::run(void){
   const double lapse_rate = 0.005;
 
   long nstep;
-  double umin, ref, rho;
+  //double umin; variable is unreferenced commenting out for now - jhs507
+  //double ref; variable is unreferenced commenting out for now - jhs507
+  double rho;
+
 
   nstep = getstep();
 

@@ -350,7 +350,9 @@ void ClassXG::init(void) {
 
 void ClassXG::run(void) {
 
-  double Za, X, X1;
+  //double X; varible is unreferenced commenting out for now - jhs507
+  //double X1; varible is unreferenced commenting out for now - jhs507
+  //double Za; varible is unreferenced commenting out for now - jhs507
   double L = 335000;// the latent heat of fusion of ice(J/kg);
   long  nstep = getstep();
 

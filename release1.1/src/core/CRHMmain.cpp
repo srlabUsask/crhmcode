@@ -941,7 +941,7 @@ void CRHMmain::FormCreate(void) {
 
 void  CRHMmain::InitModules(void) {
 
-	ClassVar *thisVar;
+	//ClassVar *thisVar; variable is unreferenced commenting out for now - jhs507
 
 	Global::BuildFlag = CRHM::DECL;
 
@@ -3463,7 +3463,7 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 	FILE * obfile = fopen(obsfilepath, "r");
 
 	char line[128], obsname[128];
-	char * token;
+	//char * token; variable is unreferenced commenting out for now - jhs507
 	char obsnames[50][128];
 	int obsindex = 0, j = 0;
 
@@ -3558,7 +3558,9 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 	char tokens[50][50];
 	int tokencount = 0;
 	double obsvalue = 0.0;
-	int dateelements = 0, year, month, day, hour, minute, second;
+	int dateelements = 0, year, month, day, hour;
+	//int minute; variable is unreferenced commenting out for now - jhs507
+	//int second; variable is unreferenced commenting out for now - jhs507
 	double ddate;
 
 

@@ -110,7 +110,8 @@ void ClassevapD_Resist::init(void) {
 
 void ClassevapD_Resist::run(void) {
 
-   double Q, rcstar, LAI, Z0, d, U, f1, f2, f3, f4, p, ra, ratio_rs_ra;
+   double Q, rcstar, Z0, d, U, f1, f2, f3, f4, p, ra, ratio_rs_ra;
+   //double LAI; variable is unreferenced commenting out for now - jhs507
 
    const double Cp = 1.005; // (kJ/kg/K)
 

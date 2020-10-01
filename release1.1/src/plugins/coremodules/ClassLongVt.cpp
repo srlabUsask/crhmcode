@@ -110,7 +110,7 @@ void ClassLongVt::init(void) {
 
 void ClassLongVt::run(void) {
 
-  long hhmax;
+  //long hhmax; varible is unreferenced commenting out for now - jhs507
   long nstep = getstep() % Global::Freq;
 
 

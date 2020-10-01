@@ -857,7 +857,8 @@ void ClassSoil::run(void) {
 
     if(avail_evap > 0.0 && soil_moist[hh] > 0.0 && cov_type[hh] > 0){
 
-      double pctl, pctr, etl, ets, etr;
+      double pctl, pctr, etl, etr;
+      //double ets; varible is unreferenced commenting out for now - jhs507
 
       if((soil_moist_max[hh] - soil_rechr_max[hh]) > 0.0)
         pctl = (soil_moist[hh] - soil_rechr[hh])/(soil_moist_max[hh] - soil_rechr_max[hh]);

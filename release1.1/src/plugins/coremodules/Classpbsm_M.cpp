@@ -133,7 +133,8 @@ void Classpbsm_M::init(void) {
 void Classpbsm_M::run(void) {
 
   double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  double DriftH, SublH, CurrentDrift, total, SWE_Max, transport;
+  double DriftH, SublH, CurrentDrift, SWE_Max, transport;
+  //double total; varible is unreferenced commenting out for now - jhs507
   double VB_distrib;
 
   for (hh = 0; chkStruct(); ++hh) {
@@ -394,7 +395,9 @@ void Classpbsm_M::Pbsm (double E_StubHt, double Uthr, double & DriftH, double & 
   SigmaZ, Sigma2, SvDens, Usthr,  Ustar,
   UstarZ, Uz,     Vs,     Vsalt,  Sigma,
   Vsusp,  Z,      Zr,     Zstb,
-  tX,     tH,     Qdist;
+  tX,     tH;
+  //double Qdist; varible is unreferenced commenting out for now - jhs507
+
 
 //Compute stubble coefficients
 
