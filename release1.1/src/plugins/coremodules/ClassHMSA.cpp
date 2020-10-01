@@ -409,10 +409,11 @@ void ClassHMSA::Get_Heat_Param_Soil(double Soil_Temp, long nn) {
 
 double Air, Minerals; //repsective volumetric fractions of soil air and minerals
 double KersNumber, SoilDryCond, SoilSatCond; // for method 2
-double Sr, g_a, g_c, F_a, F_s, x_a, x_w, x_s, lam_a, lam_w, lam_s, lam_i; //for method 3
+double Sr, g_a, g_c, F_a, F_s, x_a, x_w, x_s, lam_a, lam_w, lam_s; //for method 3
 //double Solid; varible is unreferenced commenting out for now - jhs507
 //double x_i; varible is unreferenced commenting out for now - jhs507
 //double F_i; varible is unreferenced commenting out for now - jhs507
+//double lam_i; varible is unreferenced commenting out for now - jhs507
 
     Minerals = 1.0 - Porosity_lay[nn][hh] - Organic_lay[nn][hh];
     if (Minerals < 0.0) Minerals = 0.0;
