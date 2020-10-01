@@ -356,7 +356,7 @@ static void ProbabilityThresholdNew(double SWE, double t, double Uten_Prob, doub
         Threshold = 9.43 + 0.18 * t + 0.0033 * sqr(t); // (m/s)
    }
 
-   else if((Snow == true) && (t < 0.0))
+   else if( (Snow != 0) && ( t < 0.0) )
    {
 // with concurrent snowfall: new dry snow
         DrySnow = true;
