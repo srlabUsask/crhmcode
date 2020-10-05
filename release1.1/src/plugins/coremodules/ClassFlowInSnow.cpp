@@ -89,7 +89,7 @@ void ClassFlowInSnow::init(void) {
 
 void ClassFlowInSnow::run(void) {
   const double UnitWidth =1.0, UnitArea = 1.1;
-  for(hh = 0.0; chkStruct(); ++hh) {
+  for(hh = 0; chkStruct(); ++hh) {
     if(rho[hh] > 0){
       if(T_s_l[hh] >= t_inhibit_flow[hh] && h2o_sat[hh] > Sr[hh]){
         Ksat_snow[hh] = 0.077*sqr((d_g[hh]/1000))*exp(-7.8*(rho[hh]/1000));

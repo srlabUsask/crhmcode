@@ -3143,7 +3143,7 @@ next:
 		if (Par->varType == CRHM::Float)
 			Par->layvalues[row][col++] = result;
 		else if (Par->varType == CRHM::Int)
-			Par->ilayvalues[row][col++] = result;
+			Par->ilayvalues[row][col++] = (long) result;
 
 		for (int ll = row; ll < Par->lay; ++ll) {
 			if (Bang) { // N.B. loop start
@@ -3151,7 +3151,7 @@ next:
 					if (Par->varType == CRHM::Float)
 						Par->layvalues[ll][ii] = Last;
 					else if (Par->varType == CRHM::Int)
-						Par->ilayvalues[ll][ii] = Last;
+						Par->ilayvalues[ll][ii] = (long) Last;
 
 					Last += 1;
 				}
@@ -3161,7 +3161,7 @@ next:
 					if (Par->varType == CRHM::Float)
 						Par->layvalues[ll][ii] = 0.0;
 					else if (Par->varType == CRHM::Int)
-						Par->ilayvalues[ll][ii] = 0.0;
+						Par->ilayvalues[ll][ii] = 0;
 			}
 
 			col = 0;;
@@ -3184,14 +3184,14 @@ next:
 			if (Par->varType == CRHM::Float)
 				Par->layvalues[row][col++] = result;
 			else if (Par->varType == CRHM::Int)
-				Par->ilayvalues[row][col++] = result;
+				Par->ilayvalues[row][col++] = (long) result;
 
 		for (int ii = col; ii < Par->dim; ++ii) {
 			Last += Bang;
 			if (Par->varType == CRHM::Float)
 				Par->layvalues[row][ii] = Last;
 			else if (Par->varType == CRHM::Int)
-				Par->ilayvalues[row][ii] = Last;
+				Par->ilayvalues[row][ii] = (long) Last;
 		}
 
 		Bang = 0;
@@ -3220,7 +3220,7 @@ next:
 			if (Par->varType == CRHM::Float)
 				Par->layvalues[row][col++] = result;
 			else if (Par->varType == CRHM::Int)
-				Par->ilayvalues[row][col++] = result;
+				Par->ilayvalues[row][col++] = (long) result;
 		if (col >= Par->dim)
 			if (!OpenBrkt && (row + 1 < Par->lay)) {
 				col = 0;
@@ -3267,7 +3267,7 @@ void Myparser::eval_exp3(double &result)
 	while ((op = *token) == '*' || op == '/' || op == '%') {
 		get_token();
 		if (op == '*' && !repeatset) {
-			repeat = result;
+			repeat = (int) result; //added cast to int - jhs507
 			repeatset = true;
 			if (*token == '[') return;
 			eval_exp4(result);
@@ -3419,7 +3419,7 @@ int Myparser::isdelim(char c)
 	return 0;
 }
 
-ClassClark::ClassClark(const double* inVar, double* outVar, const double* kstorage, const double* lag, const long nhru, const double setlag)
+ClassClark::ClassClark(const double* inVar, double* outVar, const double* kstorage, const double* lag, const long nhru, const long setlag)
 	: inVar(inVar), outVar(outVar), kstorage(kstorage), nhru(nhru) {
 
 	// kstorage (days)
@@ -3607,7 +3607,7 @@ double ClassClark::Left(int hh) {
 }
 
 //---------------------------------------------------------------------------
-ClassMuskingum::ClassMuskingum(const double* inVar, double* outVar, const double* k, const double* X_M, const double* lag, const long nhru, const double setlag)
+ClassMuskingum::ClassMuskingum(const double* inVar, double* outVar, const double* k, const double* X_M, const double* lag, const long nhru, const long setlag)
 	: inVar(inVar), outVar(outVar), nhru(nhru) {
 
 	// !!! UNITS !!!

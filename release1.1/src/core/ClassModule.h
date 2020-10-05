@@ -348,7 +348,7 @@ public:
 class   ClassClark {
 
 public:
-	ClassClark(const double* inVar, double* outVar, const double* kstorage, const double* lag, const long nhru, const double setlag = -1);
+	ClassClark(const double* inVar, double* outVar, const double* kstorage, const double* lag, const long nhru, const long setlag = -1);
 	~ClassClark();
 	void DoClark();
 	void DoClark(const long hh);
@@ -381,7 +381,7 @@ private:
 class   ClassMuskingum {
 
 public:
-	ClassMuskingum(const double* inVar, double* outVar, const double* kstorage, const double* route_X_M, const double* lag, const long nhru, const double setlag = -1);
+	ClassMuskingum(const double* inVar, double* outVar, const double* kstorage, const double* route_X_M, const double* lag, const long nhru, const long setlag = -1);
 	~ClassMuskingum();
 	void DoMuskingum();
 	void DoMuskingum(const long hh);

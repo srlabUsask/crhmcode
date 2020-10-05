@@ -102,7 +102,7 @@ void ClassMacro::decl(void) {
 
 			string::size_type idx = S.find("#");
 			if (idx != string::npos) {
-				Variation = pow(2, S[idx + 1] - char('1'));
+				Variation = (long) pow(2, S[idx + 1] - char('1'));
 				S = S.substr(0, idx);
 			}
 			else

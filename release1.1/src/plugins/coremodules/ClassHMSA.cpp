@@ -299,7 +299,7 @@ void ClassHMSA::run(void) {
                   Cum_Thaw[hh] = 0.0;
                 Lamda_b[hh] = 0.0;
                 f[hh] = 0.0;
-                I_Avg = 0.0;
+                I_Avg = 0;
             // calculate the frost penetration
                 for (long nn = 0; nn < Soil_Layers[hh]; ++nn)    {
                     f[hh] +=  Total_Moisture_lay[nn][hh]*Soil_depths_lay[nn][hh];
