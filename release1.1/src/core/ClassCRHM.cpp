@@ -4817,12 +4817,12 @@ string Convert::ParseUnitPhase1(string pszIn, Tresult& u)
 			throw 1; // cause fault
 		else {
 
-			k = 0;
+			k = 0.0;
 
 			//while (_istdigit(pszIn[0]))
 			while (iswdigit(pszIn[0]))
 			{
-				char nPow2 = k * 10 + (pszIn[0] - '0');
+				double nPow2 = (k * 10.0) + ((long long)pszIn[0] - (long long)'0');
 				if (nPow2 < k)
 					break;
 
