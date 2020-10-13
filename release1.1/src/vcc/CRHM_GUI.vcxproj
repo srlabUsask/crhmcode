@@ -63,9 +63,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="UserMacros.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="UserMacros.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -76,13 +78,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Timonic\source\repos\crhmcode\release1.1\src\vcc\tchart;C:\Users\Timonic\source\repos\crhmcode\release1.1\src\vcc\gui;C:\Users\Timonic\source\repos\crhmcode\release1.1\src\plugins\newmodules;C:\Users\Timonic\source\repos\crhmcode\release1.1\src\vcc;C:\Users\Timonic\source\repos\crhmcode\release1.1\src\core;C:\Users\Timonic\source\repos\crhmcode\release1.1\src\macro;C:\Users\Timonic\source\repos\crhmcode\release1.1\src\plugins;C:\Users\Timonic\source\repos\crhmcode\release1.1\src\plugins\waterquality;C:\Users\Timonic\source\repos\crhmcode\release1.1\src\plugins\hype;C:\Users\Timonic\source\repos\crhmcode\release1.1\src\plugins\coremodules;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectHome)\vcc;$(ProjectHome)\vcc\tchart;$(ProjectHome)\vcc\gui;$(ProjectHome)\core;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\waterquality;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectHome)\core;$(ProjectHome)\vcc;$(ProjectHome)\vcc\gui;$(ProjectHome)\vcc\tchart;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\waterquality;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectHome)\core;$(ProjectHome)\vcc;$(ProjectHome)\vcc\gui;$(ProjectHome)\vcc\tchart;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\waterquality;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -94,7 +98,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\core;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\macro;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\gui;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\vcc\tchart;D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\waterquality</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
