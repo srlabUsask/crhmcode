@@ -467,7 +467,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					}
 					else {
 						Variation = ((long)Global::OurModulesList->Objects[ii]);
-						((ClassModule*)Global::AllModulesList->Objects[jj])->variation = Variation;
+						((ClassModule*)Global::AllModulesList->Objects[jj])->variation = (unsigned short) Variation;
 						Global::OurModulesList->Objects[ii] = Global::AllModulesList->Objects[jj];
 					}
 				}
