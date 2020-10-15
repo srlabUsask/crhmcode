@@ -594,8 +594,8 @@ void ClassWQ_SoilBGC::finish(bool good) {
     if(!(calcN[hh] || calcP[hh] || calcC[hh]))
       return;   // no substance modelled
 
-    for (long ii = 0.0; ii < maxsoillayers; ++ii){
-      for (long kk = 0.0; kk < 2; ++kk){ // kg/km2   where 0 - manureinogNfrac, 1 - manurelabileNfrac
+    for (long ii = 0; ii < maxsoillayers; ++ii){
+      for (long kk = 0; kk < 2; ++kk){ // kg/km2   where 0 - manureinogNfrac, 1 - manurelabileNfrac
         common_nadd[ii][kk]   = 0.0;
         common_padd[ii][kk]   = 0.0;
         common_nres[ii][kk]   = 0.0;
