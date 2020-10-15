@@ -5971,7 +5971,7 @@ void ClassGrow_crops_annually::run(void) {
         }
         if(ObsCnt_fertperiod >= hh){ // file open
           declputparam("*", "fertperiod", "(d)", &fertperiod);
-          const_cast<double *> (fertperiod)[hh] = 0; // set by this module
+          const_cast<long *> (fertperiod)[hh] = 0; // set by this module
         }
 //        if(ObsCnt_litterperiod >= hh){ // file open  check ????
           declputparam("*", "litterperiod", "(d)", &litterperiod);
@@ -5999,7 +5999,7 @@ void ClassGrow_crops_annually::run(void) {
           if(ObsCnt_fertperiod > 0){ // file open
             if(!(Fert_period[hh] >= fLimit || !Fert_period[hh])){
                fertperiod[hh] = 1;
-               if(Fert_period[hh] > 1.0 && Fert_period[hh] < 366){
+               if(Fert_period[hh] > 1 && Fert_period[hh] < 366){
                 fertperiod[hh] = Fert_period[hh];
                }
                Fertperiod[hh] = Fert_period[hh];

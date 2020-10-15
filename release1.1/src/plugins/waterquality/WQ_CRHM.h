@@ -1295,7 +1295,7 @@ double *fertday_up{ NULL };
 double *fertday_down{ NULL };
 double *resday_up{ NULL };
 double *resday_down{ NULL };
-double *fertperiod{ NULL };
+long *fertperiod{ NULL };
 long *litterperiod{ NULL };
 
 // declared observation variables
@@ -1311,7 +1311,7 @@ const double *Man_N_down{ NULL };
 const double *Man_P_down{ NULL };
 const double *Res_N_down{ NULL };
 const double *Res_P_down{ NULL };
-const double *Fert_period{ NULL };
+const long *Fert_period{ NULL };
 
 void decl(void);
 void init(void);
