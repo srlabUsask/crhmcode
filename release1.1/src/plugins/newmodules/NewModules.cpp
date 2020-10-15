@@ -115,7 +115,7 @@
 
 #pragma package(smart_init)
 
-#define numsubstances 5
+//#define numsubstances 5 removed macro redefinition - jhs507
 
 
 
