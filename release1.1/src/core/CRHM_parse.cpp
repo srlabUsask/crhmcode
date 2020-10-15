@@ -82,10 +82,10 @@ void VarCHRM::put(double val_) {
 		value2[min<long>(Ill, IndexMaxLay)][min<long>(Ihh, IndexMax)] = val_;
 		break;
 	case CRHMint:
-		ivalue[min<long>(Ihh, IndexMax)] = (int)val_;
+		ivalue[min<long>(Ihh, IndexMax)] = (long)val_;
 		break;
 	case CRHMint2:
-		ivalue2[min<long>(Ill, IndexMaxLay)][min<long>(Ihh, IndexMax)] = (int)val_;
+		ivalue2[min<long>(Ill, IndexMaxLay)][min<long>(Ihh, IndexMax)] = (long)val_;
 		break;
 	case FUNobs:
 		if (name == "ReadAheadObs")
