@@ -95,14 +95,14 @@ void ClassMacro::decl(void) {
 		}
 
 		Modules.clear();
-		long Variation;
+		unsigned short Variation;
 
 		for (int ii = 0; ii < GrpStringList->Count; ++ii) {
 			string S = GrpStringList->Strings[ii];
 
 			string::size_type idx = S.find("#");
 			if (idx != string::npos) {
-				Variation = (long) pow(2, S[idx + 1] - char('1'));
+				Variation = (unsigned short) (pow(2, S[idx + 1] - char('1')));
 				S = S.substr(0, idx);
 			}
 			else
