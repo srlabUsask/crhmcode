@@ -811,7 +811,7 @@ double TF, SRF;
             double old_firn = firn_dens_array[nn][hh]*firn_h_array[nn][hh]/1000.0;
 
             if(old_firn == 0.0){
-              old_firn = (long long)hh*100ll + (long long)nn;
+              old_firn = (double) (long long)hh * 100ll + (long long)nn;
 //              assert(0);
               string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " Update firn layer densities (27549)";
               string SS = D + "hh " + to_string(hh) + "old_firn: " + FloatToStrF(old_firn, ffFixed, 10, 4);
