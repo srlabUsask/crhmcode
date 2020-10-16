@@ -204,7 +204,7 @@ void ClassMacro::decl(void) {
 			string SS = (*iterM)->NameRoot.c_str();
 			if ((*iterM)->variation > 0) { // handle variation name
 				string  AA = "#0";
-				AA[1] += log((*iterM)->variation) / log(2) + 1;
+				AA[1] += (char) (log((*iterM)->variation) / log(2) + 1);
 				SS += AA;
 			}
 			long jj = GrpStringList->IndexOf(SS); // find module entry
