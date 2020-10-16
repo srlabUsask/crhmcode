@@ -121,7 +121,7 @@ void StandardConverterUtility::DecodeDateTime(double Dttime, int *Year, int *Mon
 				break;
 		}
 
-	long Fix = roundl((Dttime - Decade_Offsets[indx][1])*86400.0);
+	long Fix = (long) roundl((Dttime - Decade_Offsets[indx][1])*86400.0);
 	//long Fix = (Dttime - Decade_Offsets[indx][1])*86400.0;
 	time_t rawtime = (time_t)Fix;
 
