@@ -52,7 +52,7 @@ double ClassModule::Now(void) {
 string ClassModule::Var_name(ClassModule* thisModule, string S) {
 	if (thisModule->variation != 0) {
 		string AA("#0");
-		AA[2] += log(thisModule->variation) / log(2) + 1;
+		AA[2] += (char) (log(thisModule->variation) / log(2) + 1);
 		S += AA;
 	}
 	return S;
@@ -2415,7 +2415,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 		}
 		else if (StructCnt && type == VARD) {
 			string A("@`");
-			A[1] += StructCnt;
+			A[1] += (char) StructCnt;
 			NewName.append(A);
 		}
 	}
@@ -3441,7 +3441,7 @@ ClassClark::ClassClark(const double* inVar, double* outVar, const double* kstora
 		c01[hh] = Global::Interval*0.5 / (kstorage[hh] + Global::Interval*0.5);  // units of Global::Interval (days)
 		c2[hh] = (kstorage[hh] - Global::Interval*0.5) / (kstorage[hh] + Global::Interval*0.5); // units of kstorage (days)
 
-		ilag[hh] = max<double>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+ 		ilag[hh] = max<double>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)
 			maxlag[hh] = ilag[hh] + 1; // Quick fix

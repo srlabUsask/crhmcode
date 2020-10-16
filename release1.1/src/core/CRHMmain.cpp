@@ -1272,7 +1272,7 @@ string CRHMmain::DeclObsName(ClassVar *thisVar) {
 		ClassModule* thisModule = (ClassModule*)Global::OurModulesList->Objects[jj];
 		if (thisModule->isGroup) { // if group add suffix
 			string AA("@@");
-			AA[1] += thisModule->GroupCnt;
+			AA[1] += (char) thisModule->GroupCnt;
 			Newname += AA;
 		}
 	}
@@ -1628,7 +1628,7 @@ MMSData *  CRHMmain::RunClick2Start()
 		S += Global::OurModulesList->Strings[ii];
 		if (thisModule->variation != 0) {
 			string AA("#0");
-			AA[1] += log(thisModule->variation) / log(2) + 1;
+			AA[1] += (char) (log(thisModule->variation) / log(2) + 1);
 			S += AA;
 		}
 
@@ -2954,7 +2954,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			string S = Global::OurModulesList->Strings[ii];
 			if (thisModule->variation > 0) {
 				string AA("#0 ");
-				AA[1] += log(thisModule->variation) / log(2) + 1;
+				AA[1] += (char) (log(thisModule->variation) / log(2) + 1);
 				S = S + AA.c_str();
 			}
 			else
@@ -2972,7 +2972,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 					string S = string(" +") + (*iterM)->NameRoot.c_str();
 					if ((*iterM)->variation > 0) {
 						string AA("#0 ");
-						AA[1] += log((*iterM)->variation) / log(2) + 1;
+						AA[1] += (char) (log((*iterM)->variation) / log(2) + 1);
 						S = S + AA.c_str();
 					}
 					else
