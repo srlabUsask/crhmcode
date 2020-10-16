@@ -89,9 +89,9 @@ void VarCHRM::put(double val_) {
 		break;
 	case FUNobs:
 		if (name == "ReadAheadObs")
-			val = !Me->ReadAheadObsMacro(val_);
+			val = !Me->ReadAheadObsMacro((long) val_);
 		else
-			val = !Me->WriteAheadObsMacro(val_);
+			val = !Me->WriteAheadObsMacro((long) val_);
 		break;
 	default:
 		break;
