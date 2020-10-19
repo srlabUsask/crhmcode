@@ -472,7 +472,8 @@ void Classpbsm::init(void) {
 void Classpbsm::run(void) {
 
   double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  double SumDrift, total, SWE_Max, transport;
+  double SumDrift, total, SWE_Max;
+  double transport = 0.0;
   long step = getstep();
 
   if(step == 1)
