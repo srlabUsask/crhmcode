@@ -2244,7 +2244,7 @@ bool ClassData::DataReadFile(void) {
 							Lines = Lines * NCnt;
 							Freq = Freq * NCnt;
 							Interval = Interval / NCnt;
-							IndxMin *= TimeShiftFilter;
+							IndxMin *= (long) TimeShiftFilter; //Assumes that timezones are ints and time is in hours -jhs507
 							IndxMax = IndxMin + Lines - 1;
 						}
 					} // expand data
