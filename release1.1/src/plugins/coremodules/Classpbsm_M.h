@@ -37,7 +37,7 @@ const double **distrib_hru{ NULL };
 const double *basin_area{ NULL };
 const double *hru_area{ NULL };
 const double *A_S{ NULL };
-const double *N_S{ NULL };
+const long *N_S{ NULL };
 const double *Zwind{ NULL };
 const double *hru_GSL{ NULL };
 const double *Beta_M{ NULL };

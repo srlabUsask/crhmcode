@@ -34,7 +34,7 @@ const double *distrib{ NULL };
 const double *basin_area{ NULL };
 const double *hru_area{ NULL };
 const double *A_S{ NULL };
-const double *N_S{ NULL };
+const long *N_S{ NULL };
 const double *u_D{ NULL };
 const double *Drift_offset{ NULL };
 const double *Drift_slope{ NULL };
