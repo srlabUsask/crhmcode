@@ -554,7 +554,7 @@ void ClassWQ_Soil::init(void) {
 void ClassWQ_Soil::run(void) {
 
   try{
-  double excs, excs_mWQ, condense, et, direct_excs_Saved, direct_excs_mWQ_lay_Saved, potential_Saved, potential_mWQ_lay_Saved,
+      double excs, excs_mWQ, condense, et, direct_excs_Saved{0.0}, direct_excs_mWQ_lay_Saved{0.0}, potential_Saved, potential_mWQ_lay_Saved,
         leaching_mWQ;
 
   long step = getstep();
