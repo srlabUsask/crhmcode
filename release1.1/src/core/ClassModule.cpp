@@ -1506,8 +1506,8 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		if ((itVar = Global::MapVars.find(declModule + variable)) != Global::MapVars.end()) { // look for in declModule
 			newVar = (*itVar).second;
 
-			if ((newVar->varType == CRHM::ReadF | newVar->varType == CRHM::Read) && newVar->values == NULL) {
-				Convert convert; convert.CheckUnitsObs(newVar->units, units, variable); // check original observation units
+			if ((newVar->varType == CRHM::ReadF || newVar->varType == CRHM::Read) && newVar->values == NULL) {
+ 				Convert convert; convert.CheckUnitsObs(newVar->units, units, variable); // check original observation units
 
 				newVar->varType = CRHM::ReadF;
 
@@ -1522,8 +1522,8 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 			}
 		}
 
-		string::size_type indx; // indicates if declared obs
-		if (itVar == Global::MapVars.end() || (!newVar->cnt && newVar->DLLName.empty())) { // look for with/without #  //warning resolved by Manishankar
+		string::size_type indx = 0; // indicates if declared obs initalized to zero to prevent accidental declaration to npos - jhs507
+ 		if (itVar == Global::MapVars.end() || (!newVar->cnt && newVar->DLLName.empty())) { // look for with/without #  //warning resolved by Manishankar
 			string variable2;
 
 			indx = variable.find('#');
@@ -3441,7 +3441,7 @@ ClassClark::ClassClark(const double* inVar, double* outVar, const double* kstora
 		c01[hh] = Global::Interval*0.5 / (kstorage[hh] + Global::Interval*0.5);  // units of Global::Interval (days)
 		c2[hh] = (kstorage[hh] - Global::Interval*0.5) / (kstorage[hh] + Global::Interval*0.5); // units of kstorage (days)
 
- 		ilag[hh] = max<double>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+ 		ilag[hh] = (long) (max<double>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1); // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)
 			maxlag[hh] = ilag[hh] + 1; // Quick fix
@@ -3506,7 +3506,7 @@ double ClassClark::ChangeLag(const double *newlag, const long hh) {
 	double LastValue;
 	double Lag_storage = 0.0;
 
-	long newilag = max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+	long newilag = (long) max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
 
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		Lag_storage += LagArray[hh][(ulag[hh] + ii) % ilag[hh]];
@@ -3638,7 +3638,7 @@ ClassMuskingum::ClassMuskingum(const double* inVar, double* outVar, const double
 		c2[hh] = (2.0*k[hh] * (1.0 - X_M[hh]) - Global::Interval) /
 			(2.0*k[hh] * (1.0 - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
-		ilag[hh] = max<double>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+		ilag[hh] = (long) (max<double>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1); // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)
 			maxlag[hh] = ilag[hh];
@@ -3681,7 +3681,7 @@ ClassMuskingum::~ClassMuskingum() {
 void ClassMuskingum::ChangeLag(const double *newlag, const long hh)
 {
 
-	long newilag = max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+	long newilag = (long) max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
 
 	if (newilag == ilag[hh]) return;
 
