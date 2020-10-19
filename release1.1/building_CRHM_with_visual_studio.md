@@ -10,6 +10,14 @@
         https://docs.microsoft.com/en-us/cpp/build/vcpkg?view=vs-2019#installation
 
 
+### Install TeeChart
+    1. Download TeeChart from https://www.steema.com/downloads/net
+
+    2. Run the installer provided.
+
+    3. To make sure the TeeChart ActiveX control is 
+        accessible, execute this command to register TeeChart Pro Activex with command prompt: regsvr32.exe c:\yourpath\teechart2020.ocx
+
 # Download and configure project
 1. Open visual studio.
 2. In dialog window select clone repository.
