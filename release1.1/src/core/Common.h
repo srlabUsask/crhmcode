@@ -228,9 +228,17 @@ namespace CHAD_constants {
 
 string static GetCurrentDir(void) {
 	char buff[FILENAME_MAX];
-	GetCurrentDir(buff, FILENAME_MAX);
-	std::string current_working_dir(buff);
-	return current_working_dir;
+	char* cwd;
+	cwd = GetCurrentDir(buff, FILENAME_MAX);
+	if (cwd == NULL) {
+		//TODO: throw an allocation exception - jhs507
+		std::string current_working_dir(NULL);
+		return current_working_dir;
+	}
+	else {
+		std::string current_working_dir(buff);
+		return current_working_dir;
+	}
 }
 
 
