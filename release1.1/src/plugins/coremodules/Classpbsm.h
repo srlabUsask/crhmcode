@@ -43,7 +43,7 @@ const double *Drift_offset{ NULL };
 const double *Drift_slope{ NULL };
 const double *Subl_offset{ NULL };
 const double *Subl_slope{ NULL };
-const long *N_S{ NULL };
+const long *N_S{ NULL }; // N_S represents the number of plant stalks for a given square meter of ground.
 const long *inhibit_evap{ NULL };
 const long *inhibit_bs{ NULL };
 const long *inhibit_subl{ NULL };
