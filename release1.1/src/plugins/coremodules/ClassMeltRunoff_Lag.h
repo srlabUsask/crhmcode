@@ -12,7 +12,7 @@ ClassModule* Netroute_module{ NULL }; // used to call preser for simple projects
 
 // declared variables
 double *In_Lagstorage{ NULL };
-long *Tf{ NULL };
+double *Tf{ NULL };
 
 // get variables:
 const double *snowmelt_int{ NULL };
