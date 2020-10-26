@@ -1824,16 +1824,16 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 
 	case CRHM::BUILD: {
 		pair<Mapstr::iterator, Mapstr::iterator> range = Global::Mapreadvar.equal_range(Name.c_str());
-		string units;
-
+		//string units; local variable is not used - jhs507
+		 
 		for (Mapstr::iterator itMap = range.first; itMap != range.second; ++itMap) {
 			if (itMap->second.first == obs.c_str()) {
-				units = itMap->second.second;
+				//units = itMap->second.second; units is set here with a long value to a string but never used - jhs507
 				break;
 			}
 		}
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(CRHM::DIAGNOSTIC);
+      		VandP VP; VP.PutV(variation_set); VP.PutP(CRHM::DIAGNOSTIC);
 		PairstrV Item2 = PairstrV(obs.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -2068,11 +2068,11 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 
 	case CRHM::BUILD: {
 		pair<Mapstr::iterator, Mapstr::iterator> range = Global::Mapreadvar.equal_range(Name.c_str());
-		string units;
+		//string units; Units is set below with a long value into a string but never used - jhs507
 
 		for (Mapstr::iterator itMap = range.first; itMap != range.second; ++itMap) {
 			if (itMap->second.first == obs.c_str()) {
-				units = itMap->second.second; //Storing long into a string? jhs507
+				//units = itMap->second.second; //The value of units is never used - jhs507
 				break;
 			}
 		}
