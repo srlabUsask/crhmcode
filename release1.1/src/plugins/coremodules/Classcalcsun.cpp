@@ -89,7 +89,8 @@ void Classcalcsun::init(void) {
 }
 
 void Classcalcsun::run(void) {
-double Temp, Ratio;
+double Temp = -9999;
+double Ratio;
 
   long nstep = getstep() % Global::Freq;
 
