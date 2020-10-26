@@ -1160,8 +1160,8 @@ Argument declarations
 
 // Local variables
     double maxpooluptake[maxsoillayers];
-    double tmpfcn[maxsoillayers];
-    double smfcn[maxsoillayers]; // sm[maxsoillayers],
+    double tmpfcn[maxsoillayers]; //tempature funciton 
+    double smfcn[maxsoillayers]; // sm[maxsoillayers], soil moisture 
     double excess_pltup, plant_uptk_mWQ;
 
     plant_uptk_mWQ = 0.0f;
