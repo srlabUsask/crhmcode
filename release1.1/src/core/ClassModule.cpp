@@ -2072,7 +2072,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 
 		for (Mapstr::iterator itMap = range.first; itMap != range.second; ++itMap) {
 			if (itMap->second.first == obs.c_str()) {
-				units = itMap->second.second;
+				units = itMap->second.second; //Storing long into a string? jhs507
 				break;
 			}
 		}
@@ -3432,6 +3432,13 @@ ClassClark::ClassClark(const double* inVar, double* outVar, const double* kstora
 	c2 = new double[nhru];
 	NO_lag_release = new double[nhru];
 
+
+	/*
+	* ilag  for routing water along a stream, it is used to simulate the delay caused by the travel time of water.
+	* ilag is the length of the stream (the number of elements or letters). 
+	* If on every cycle the water moves one step then the number of elements determines how many steps 
+	* are required to get to the end of the stream.
+	*/
 	ilag = new long[nhru];
 	maxlag = new long[nhru];
 	ulag = new long[nhru];
@@ -3506,7 +3513,7 @@ double ClassClark::ChangeLag(const double *newlag, const long hh) {
 	double LastValue;
 	double Lag_storage = 0.0;
 
-	long newilag = (long) max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+	long newilag = (long) (max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1); // =1 for lag of zero
 
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		Lag_storage += LagArray[hh][(ulag[hh] + ii) % ilag[hh]];
@@ -3540,7 +3547,7 @@ double ClassClark::ChangeLag(const double *newlag, const long hh) {
 
 		for (int mm = 1; mm < newilag - 1; ++mm) {
 			double Y = double(mm) / ((long long) newilag - 1ll)*((long long) ilag[hh] - 1ll);
-			int Yint = Y + 0.0001;
+			int Yint = (int) (Y + 0.0001);
 			double Ydif = Y - Yint;
 			double NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
 
@@ -3622,6 +3629,12 @@ ClassMuskingum::ClassMuskingum(const double* inVar, double* outVar, const double
 	c1 = new double[nhru];
 	c2 = new double[nhru];
 
+	/*
+	* ilag  for routing water along a stream, it is used to simulate the delay caused by the travel time of water.
+	* ilag is the length of the stream (the number of elements or letters).
+	* If on every cycle the water moves one step then the number of elements determines how many steps
+	* are required to get to the end of the stream.
+	*/
 	ilag = new long[nhru];
 	maxlag = new long[nhru];
 	ulag = new long[nhru];
@@ -3681,7 +3694,7 @@ ClassMuskingum::~ClassMuskingum() {
 void ClassMuskingum::ChangeLag(const double *newlag, const long hh)
 {
 
-	long newilag = (long) max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+	long newilag = (long) (max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1); // =1 for lag of zero
 
 	if (newilag == ilag[hh]) return;
 
@@ -3703,7 +3716,7 @@ void ClassMuskingum::ChangeLag(const double *newlag, const long hh)
 
 	for (int mm = 1; mm < newilag - 1; ++mm) {
 		double Y = double(mm) / ((long long)newilag - 1ll)*((long long)ilag[hh] - 1ll);
-		int Yint = Y + 0.0001;
+		int Yint = (int)(Y + 0.0001);
 		double Ydif = Y - Yint;
 		double NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
 
