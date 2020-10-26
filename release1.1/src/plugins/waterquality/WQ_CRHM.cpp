@@ -2575,7 +2575,7 @@ void ClassWQ_Netroute::finish(bool good) {
   double AllSdcuminflow_mWQ = 0.0;
   double Allrechrcuminflow_mWQ = 0.0;
   double AllTotal = 0.0;
-  double Total;
+  double Total = 0.0;
 
   string S = string("H2O");
   LogDebug(S.c_str());
