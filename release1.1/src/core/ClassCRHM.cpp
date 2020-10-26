@@ -1700,8 +1700,8 @@ bool ClassData::DataReadFile(void) {
 	FirstFile = !Global::DTstart;
 
 	int D[5];
-	long jj, 
-	long MaxLines;
+	long jj;
+	long MaxLines = 0;
 	bool SparseFlag = false;
 	bool LineError = false;
 	bool OneLine = false;
