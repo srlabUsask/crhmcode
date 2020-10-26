@@ -135,7 +135,7 @@ void Classpbsm_M::run(void) {
   double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
   double DriftH, SublH, CurrentDrift, SWE_Max, transport;
   //double total; varible is unreferenced commenting out for now - jhs507
-  double VB_distrib;
+  double VB_distrib = 0.0;
 
   for (hh = 0; chkStruct(); ++hh) {
 
