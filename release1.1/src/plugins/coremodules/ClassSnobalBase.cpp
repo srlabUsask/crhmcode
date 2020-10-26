@@ -1854,7 +1854,7 @@ psi(double zeta,		// z/lo
     int	code)		// which psi function? (see above)
 {
     double	x;		// height function variable
-    double	result;
+    double	result = 0.0;
 
     if (zeta > 0) {		// stable
         if (zeta > 1)
@@ -1879,10 +1879,6 @@ psi(double zeta,		// z/lo
             CRHMException TExcept("psi-function code not of these: SM, SH, SV", TERMINATE);
             LogError(TExcept);
         }
-    }
-
-    else {			/* neutral */
-        result = 0;
     }
 
     return (result);
