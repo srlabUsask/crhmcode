@@ -87,7 +87,7 @@ public:
 	virtual void finish(bool good) {};
 	ClassModule* link(string Module);
 	double Now(void);
-	virtual double Function1(long *I, long hh) { return 0.0; };
+	virtual double Function1(double *I, long hh) { return 0.0; };
 	virtual double Function2(double *X, long hh) { return 0.0; };
 	virtual void reset(void) {
 
