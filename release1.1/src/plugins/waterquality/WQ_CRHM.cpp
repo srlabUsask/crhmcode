@@ -4385,7 +4385,7 @@ void ClassWQ_Netroute_M_D::finish(bool good){
   double AllSdcuminflow_mWQ = 0.0;
   double Allrechrcuminflow_mWQ = 0.0;
   double AllTotal = 0.0;
-  double Total;
+  double Total = 0.0;
 
   string S = string("*H2O*");
   LogDebug(S.c_str());
@@ -6292,8 +6292,9 @@ void ClassGrow_crops_annually::finish(bool good) {
 bool ClassGrow_crops_annually::Good_Dates(const double* dates) {
 
   for(hh = 0; hh < nhru; ++hh) {
-    if(dates[hh] > 366 || dates[hh] < 0);
-    return false; // error
+      if (dates[hh] > 366 || dates[hh] < 0) {
+          return false; // error
+      };
   }
   return true;
 }
