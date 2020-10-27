@@ -139,6 +139,7 @@ TObject * CRHMmain::GetObjectOfVariable(string vname)
 			return obj;
 		}
 	}
+	return NULL; //added fall through case where name is not found - jhs507
 }
 
 //manishankar added this function from CRHMmainDlg.cpp file.
@@ -158,6 +159,7 @@ TObject * CRHMmain::GetObjectOfObservation(string vname)
 			return obj;
 		}
 	}
+	return NULL; //added fall through case where observation is not found - jhs507
 }
 
 
@@ -2064,7 +2066,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 	}
 
 	catch (exception &E) {
-		//    string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
+		//string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
 		//    ShowMessage(S);
 		LogError(S + " (" + FloatToStrF(Global::DTnow, ffGeneral, 10, 0) + ")", ERR);
 		GoodRun = false;
@@ -3462,37 +3464,56 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 {
 	FILE * obfile = fopen(obsfilepath, "r");
 
-	char line[128], obsname[128];
+	char line[128];
+	char obsname[128]; 
 	//char * token; variable is unreferenced commenting out for now - jhs507
 	char obsnames[50][128];
-	int obsindex = 0, j = 0;
+	int obsindex = 0;
+	int j = 0;
 
-	fgets(line, sizeof line, obfile); //reading the first line.
+	fgets(line, sizeof line, obfile); //reading the first line. discarding because first line is not an obsname
 
-	while (fgets(line, sizeof line, obfile) != NULL) //reading the lines upto #############.
+	while (fgets(line, sizeof line, obfile) != NULL) //read a line, end loop if end of file is reached
 	{
+		//Reset obsname variable
+		obsname[0] = '\0';
+
+		//Exit once we reach the division between observation names and data
+		if (line[0] == '#')
+		{
+			break;
+		}
+
+		//copy the read line character by character into obsname until a space is reached 
 		for (unsigned int i = 0; i < strlen(line); i++)
 		{
 			obsname[i] = line[i];
 			if (line[i] == ' ')
 			{
-				obsname[i] = '\0';
-				strcpy(obsnames[j], obsname);
+				obsname[i] = '\0'; //end the obsname with a null byte
+				strcpy(obsnames[j], obsname); //copy the observation name into the array of observation names
 				break;
 			}
 		}
-		if (line[0] == '#') { break; }
 
+		//loop over the previous observation names to see if the current obsname matches 
+		//a previously recorded observation name with a '$' prepended to it indicating a derived observation 
+		//If this is found decriment j which has the effect of discarding the current obsname 
 		for (int i = 0; i < j; i++)
 		{
-			char test[128]; test[0] = '$'; test[1] = '\0';
+			char test[128];
+			test[0] = '$'; 
+			test[1] = '\0';
+			
 			strcat(test, obsnames[i]);
+
 			if (strcmp(obsname, test) == 0)
 			{
 				j--;
 				break;
 			}
 		}
+
 		j++;
 	}
 	fclose(obfile);
@@ -3511,36 +3532,61 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 
 void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 {
-	int l = strlen(observationname);
-	if (observationname[l - 1] == '\n') { observationname[l - 1] = '\0'; }
-
+	int length = strlen(observationname);
+	if (observationname[length - 1] == '\n') 
+	{ 
+		observationname[length - 1] = '\0'; 
+	}
 
 	FILE * obfile = fopen(obsfilepath, "r");
 
-	char line[128], obsname[128];
+	char line[128];
+	char obsname[128];
 	char * token, obsnames[50][128];
-	int obsindex = 0, j = 0;
+	int obsindex = 0;
+	int j = 0;
 
-	fgets(line, sizeof line, obfile); //reading the first line.
+	fgets(line, sizeof line, obfile); //reading the first line which gets discarded as the first line in the obsfile is a description 
 
-	while (fgets(line, sizeof line, obfile) != NULL) //reading the lines upto #############.
+	while (fgets(line, sizeof line, obfile) != NULL) //reading lines from the file until the end of file is reached
 	{
+
+		//Reset obsname variable
+		obsname[0] = '\0';
+
+		//End the loop if the line begins with '#' which indicates the break between obsnames and data
+		if (line[0] == '#') 
+		{ 
+			break; 
+		}
+
+		//Loop along the line unntil a space character is reached 
 		for (unsigned int i = 0; i < strlen(line); i++)
 		{
 			obsname[i] = line[i];
 			if (line[i] == ' ')
 			{
-				obsname[i] = '\0';
-				strcpy(obsnames[j], obsname);
+				obsname[i] = '\0'; //end the obsname with a null byte 
+				strcpy(obsnames[j], obsname); //copy the new obsname into the obsname array. 
 				break;
 			}
 		}
-		if (strcmp(obsname, observationname) == 0) { obsindex = j + 1; }
-		if (line[0] == '#') { break; }
 
+		//if the current obsname matches the requested observation name set obsindex
+		if (strcmp(obsname, observationname) == 0) 
+		{ 
+			obsindex = j + 1; 
+		}
+		
+		//loop over the previous observation names to see if the current obsname matches 
+		//a previously recorded observation name with a '$' prepended to it indicating a derived observation 
+		//If this is found decriment j which has the effect of discarding the current obsname 
 		for (int i = 0; i < j; i++)
 		{
-			char test[128]; test[0] = '$'; test[1] = '\0';
+			char test[128]; 
+			test[0] = '$'; 
+			test[1] = '\0';
+
 			strcat(test, obsnames[i]);
 			if (strcmp(obsname, test) == 0)
 			{
@@ -3548,6 +3594,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 				break;
 			}
 		}
+
 		j++;
 	}
 
