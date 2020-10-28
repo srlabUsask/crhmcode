@@ -1203,7 +1203,7 @@ void Defdeclgetvar::CallDecl() {
 		}
 		else {
 			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
-			if (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN) {
+			if (Global::thisVar != NULL && (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN)) {
 				FP->second.kind = VarCHRM::CRHM2;
 				FP->second.value2 = const_cast<double **> (fix2_const);
 			}
@@ -1253,7 +1253,7 @@ void Defdeclputvar::CallDecl() {
 			FP->second.ivalue = const_cast<long *> (fix_long);
 		}
 		//else if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences.
-		else if (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN) {
+		else if (Global::thisVar != NULL && (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN)) {
 			FP->second.kind = VarCHRM::CRHM2;
 			FP->second.value2 = const_cast<double **> (fix2);
 		}
