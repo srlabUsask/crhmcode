@@ -1119,11 +1119,34 @@ bool ClassPar::Same(ClassPar &p) {  // compares parameter data
 			}
 		}
 		if (dim == p.dim) {
-			if (varType == CRHM::Txt) {
-				if (!Strings && !p.Strings) return true;
-				if (Strings->Count != p.Strings->Count) return(false);
-				for (int ii = 0; ii < Strings->Count; ++ii)
-					if (Strings->Strings[ii] != p.Strings->Strings[ii]) return(false);
+			if (varType == CRHM::Txt) 
+			{
+				
+				if (!Strings && !p.Strings)
+				{
+					return true;
+				}
+
+				if (Strings != NULL && (Strings->Count != p.Strings->Count))
+				{
+					return(false);
+				}
+
+				if (Strings == NULL) {
+					return false;
+				}
+				else {
+					for (int ii = 0; ii < Strings->Count; ++ii) {
+
+						if (Strings->Strings[ii] != p.Strings->Strings[ii])
+						{
+							return(false);
+						}
+
+					}
+				}
+				
+					
 			}
 			else
 			{
