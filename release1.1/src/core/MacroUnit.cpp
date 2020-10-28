@@ -1300,7 +1300,7 @@ void Defdeclputparam::CallDecl() {
 			FP->second.kind = VarCHRM::CRHMint;
 			FP->second.ivalue = const_cast<long *> (fix_long);
 		}
-		else if (thisPar->dimen == CRHM::NDEF || thisPar->dimen == CRHM::NDEFN) {
+		else if (thisPar != NULL && (thisPar->dimen == CRHM::NDEF || thisPar->dimen == CRHM::NDEFN)) {
 			FP->second.kind = VarCHRM::CRHM2;
 			FP->second.value2 = const_cast<double **> (fix2);
 		}
