@@ -1056,25 +1056,37 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 	layvalues = NULL;
 	Identical = NULL;
 
-	try {
-		if (varType == CRHM::Float) {
+	try 
+	{
+		if (varType == CRHM::Float) 
+		{
 			layvalues = new double *[lay];
-			for (int ii = 0; ii < lay; ii++)
+			
+			for (int ii = 0; ii < lay; ii++) 
+			{
 				layvalues[ii] = new double[dim];
+			}
+				
 			values = layvalues[0];
 		}
-		else if (varType == CRHM::Int) {
+		else if (varType == CRHM::Int) 
+		{
 			ilayvalues = new long *[lay];
-			for (int ii = 0; ii < lay; ii++)
+			
+			for (int ii = 0; ii < lay; ii++) 
+			{
 				ilayvalues[ii] = new long[dim];
+			}
+			
 			ivalues = ilayvalues[0];
 		}
-		else if (varType == CRHM::Txt) {
+		else if (varType == CRHM::Txt) 
+		{
 			Strings = new TStringList;
 		}
 	}
-
-	catch (std::bad_alloc) {
+	catch (std::bad_alloc) 
+	{
 		CRHMException Except("Could not allocate in ClassPar.", TERMINATE);
 		LogError(Except);
 		throw CRHMException(Except);
@@ -1085,16 +1097,31 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 		for (int jj = 0; jj < lay; jj++)
 		{
 			for (int ii = 0; ii < dim; ii++)
+			{
 				layvalues[jj][ii] = p.layvalues[jj][ii];
+			}
 		}
 	}
 	else if (varType == CRHM::Int)
 	{
-		for (int jj = 0; jj < lay; jj++)
+
+		if (ilayvalues != NULL) 
 		{
-			for (int ii = 0; ii < dim; ii++)
-				ilayvalues[jj][ii] = p.ilayvalues[jj][ii];
+			for (int jj = 0; jj < lay; jj++)
+			{
+				for (int ii = 0; ii < dim; ii++)
+				{
+					ilayvalues[jj][ii] = p.ilayvalues[jj][ii];
+				}
+			}
 		}
+		else {
+			CRHMException Except("ilayvalues array is null allocation must have failed.", TERMINATE);
+			LogError(Except);
+			throw CRHMException(Except);
+		}
+
+		
 	}
 	else if (varType == CRHM::Txt)
 	{
