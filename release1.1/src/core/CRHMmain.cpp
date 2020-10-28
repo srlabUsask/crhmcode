@@ -1741,17 +1741,20 @@ MMSData *  CRHMmain::RunClick2Start()
 	if (ObsFilesList->Count > 0)
 	{
 		FileData = (ClassData *)ObsFilesList->Objects[0];
+
+		if (DTstartR < FileData->Dt1) {
+			LogMessageX("Start Time before first Observation");
+			GoodRun = false;
+		}
+
+		if (DTendR > FileData->Dt2) {
+			LogMessageX("End Time after last Observation");
+			GoodRun = false;
+		}
 	}
 
-	if (DTstartR < FileData->Dt1) {
-		LogMessageX("Start Time before first Observation");
-		GoodRun = false;
-	}
-
-	if (DTendR > FileData->Dt2) {
-		LogMessageX("End Time after last Observation");
-		GoodRun = false;
-	}
+	
+	
 
 	if (GoodRun) {
 		if (!OpenStateFlag) {
@@ -2179,13 +2182,13 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit)
 				Needed = true;
 			else if (MainLoop) {
 				string namebasic = thisVar->name;
-				if (VarPar->Strings->IndexOf(namebasic) > -1)
+				if (VarPar && (VarPar->Strings->IndexOf(namebasic) > -1))
 					Needed = true;
 				else if (Wild) { // if Wild reduce parameter to root
 					string::size_type Idx = namebasic.find("@");
 					if (Idx != string::npos) {
 						namebasic = namebasic.substr(1, Idx - 1);
-						if (VarPar->Strings->IndexOf(namebasic) > -1)
+						if (VarPar && (VarPar->Strings->IndexOf(namebasic) > -1))
 							Needed = true;
 					}
 				} // wild!
