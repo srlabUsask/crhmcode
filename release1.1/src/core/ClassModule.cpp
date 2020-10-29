@@ -186,7 +186,8 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 	}
 
 	case CRHM::INIT: {
-		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
+		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) 
+		{
 			newVar = (*itVar).second;
 			*value = newVar->values;
 
@@ -197,17 +198,26 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 				return 0;
 
 			long querycnt = 0;
-			for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
+			for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) 
+			{
 				ClassVar* foundVar = (*itVar).second;
-				if (newVar != NULL) {
-					if (foundVar->FileData)
+
+				if (newVar != NULL) 
+				{
+					if (foundVar->FileData) 
+					{
 						continue;
+					}
+					
 					string S = foundVar->name;
 					string::size_type indx = S.find('@');
-					if (indx != string::npos) {
+					
+					if (indx != string::npos) 
+					{
 						string N = S.substr(indx + 1);
 						S = S.erase(indx);
-						if (S == queryvar) {
+						if (S == queryvar) 
+						{
 							newVar->layvalues[querycnt] = foundVar->values;
 							newVar->values[querycnt] = foundVar->dim;
 							++querycnt;
@@ -215,10 +225,22 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 					} // if - found group
 				} // if - not null, is it possible?
 			} // for
-			*layvalue = newVar->layvalues; // return address
+			
+			if (newVar != NULL) 
+			{
+				*layvalue = newVar->layvalues; // return address
+			}
+			else
+			{
+				CRHMException Except("variable was null found: " + Name + ' ' + variable, TERMINATE);
+				LogError(Except);
+				throw Except;
+			}
+			
 			return querycnt;
 		}
-		else {
+		else 
+		{
 			CRHMException Except("variable not found: " + Name + ' ' + variable, TERMINATE);
 			LogError(Except);
 			throw Except;
