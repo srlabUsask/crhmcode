@@ -3624,7 +3624,17 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 			tokencount++;
 			token = strtok(NULL, " \t");
 		}
-		obsvalue = atof(tokens[tokencount - obscount + obsindex - 1]);
+
+		if ((tokencount - obscount + obsindex - 1) > 0 )
+		{
+			obsvalue = atof(tokens[tokencount - obscount + obsindex - 1]);
+		}
+		else 
+		{
+			CRHMException Except("Reading an obs file attempted to read before the begining of an array", TERMINATE);
+		}
+
+		
 
 		dateelements = tokencount - obscount;
 		if (dateelements == 1) { ddate = atof(tokens[0]); }
