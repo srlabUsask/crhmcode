@@ -149,7 +149,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996;1083</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\postdoc\CRHM\GIT\crhmcode\release1.1\src\core;D:\postdoc\CRHM\GIT\crhmcode\release1.1\src\plugins\hype;D:\postdoc\CRHM\GIT\crhmcode\release1.1\src\plugins\newmodules;D:\postdoc\CRHM\GIT\crhmcode\release1.1\src\vcc;D:\postdoc\CRHM\GIT\crhmcode\release1.1\src\vcc\gui;D:\postdoc\CRHM\GIT\crhmcode\release1.1\src\vcc\tchart;D:\postdoc\CRHM\GIT\crhmcode\release1.1\src\plugins\waterquality;D:\postdoc\CRHM\GIT\crhmcode\release1.1\src\plugins\coremodules</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\core;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\plugins\hype;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\plugins\newmodules;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\vcc;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\vcc\gui;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\vcc\tchart;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\plugins\waterquality;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\plugins\coremodules</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

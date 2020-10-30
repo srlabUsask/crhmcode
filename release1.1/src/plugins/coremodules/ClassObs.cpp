@@ -278,9 +278,11 @@ DTnow[0] = (double) Global::DTnow;
 DTindx[0] = Global::DTindx;
 
 //added by Manishankar to solve the address issue.
-//tday_intvls = this->t_layvalues;
-//rhday_intvls = this->rh_layvalues;
-
+if (this->t_layvalues != NULL && this->rh_layvalues != NULL)
+{
+    tday_intvls = this->t_layvalues;
+    rhday_intvls = this->rh_layvalues;
+}
   for (hh = 0; chkStruct(); ++hh) {
 
     hru_t[hh] = tday_intvls[tt][hh];
