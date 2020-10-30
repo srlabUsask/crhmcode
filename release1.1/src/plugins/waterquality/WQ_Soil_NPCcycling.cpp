@@ -908,10 +908,18 @@ Argument declarations
     }
 
 // Temperature dependence factor
-    for (long k = 0; k < maxsoillayers; ++k)
-      if(water_lay[k][hh] > 0.0){
-        tmpfcn[k] = tempfactor(Temp_lay[0][hh]); // requires soil temperature
-      }
+    for (long k = 0; k < maxsoillayers; ++k) {
+        if (water_lay[k][hh] > 0.0) 
+        {
+            tmpfcn[k] = tempfactor(Temp_lay[0][hh]); // requires soil temperature
+        }
+        else
+        {
+            tmpfcn[k] = 0.0;
+
+        }
+    }
+      
 
 // Soil moisture dependence factor
 
@@ -1144,7 +1152,8 @@ Argument declarations
 // Inorganic nitrogen and phosphorus is removed.
 // Reference ModelDescription Chapter Nitrogen and phosphorus in land routines (Soil processes - Vegetation nutrient uptake)
 // -------------------------------------------------------------------
-    void  ClassWQ_SoilBGC::plant_uptake(double **conc_soil_rechr_lay, double **conc_soil_lower_lay, double **sink_lay){
+    void  ClassWQ_SoilBGC::plant_uptake(double **conc_soil_rechr_lay, double **conc_soil_lower_lay, double **sink_lay)
+    {
 
 //    USE MODVAR, ONLY : numsubstances, maxsoillayers, i_no3n, i_srp
 
@@ -1176,11 +1185,19 @@ Argument declarations
       plant_uptk_SRP_mWQ_lay[kk][hh] = 0.0f;
     }
     
-  // Temperature dependence factor
-      for (long k = 0; k < maxsoillayers; ++k)
-        if(water_lay[k][hh] > 0.0){
-          tmpfcn[k] = tempfactor(Temp_lay[0][hh]); // requires soil temperature
+        // Temperature dependence factor
+        for (long k = 0; k < maxsoillayers; ++k) 
+        {
+            if (water_lay[k][hh] > 0.0) 
+            {
+                tmpfcn[k] = tempfactor(Temp_lay[0][hh]); // requires soil temperature
+            }
+            else 
+            {
+                tmpfcn[k] = 0.0;
+            }
         }
+        
 
   // Soil moisture dependence factor
 
@@ -1544,10 +1561,18 @@ double ClassWQ_SoilBGC::tempfactor(double temperature){
     fracprod = 1.0 - minc[hh];    // fraction of degradationn that is not mineralised
 
     // Temperature dependence factor
-    for(long kk = 0; kk < maxsoillayers; ++kk)
-      if(water_lay[kk][hh] > 0.0){
-        tmpfcn[kk] = tempfactor(Temp_lay[kk][hh]);
+    for(long kk = 0; kk < maxsoillayers; ++kk) 
+    {
+        if (water_lay[kk][hh] > 0.0) 
+        {
+            tmpfcn[kk] = tempfactor(Temp_lay[kk][hh]);
+        }
+        else
+        {
+            tmpfcn[kk] = 0.0;
+        }
     }
+        
 
     // Soil moisture dependence factor
 
