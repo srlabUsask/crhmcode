@@ -3718,15 +3718,19 @@ void ClassMuskingum::ChangeLag(const double *newlag, const long hh)
 
 	long newilag = (long) (max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1); // =1 for lag of zero
 
-	if (newilag == ilag[hh]) return;
+	if (newilag == ilag[hh]) {
+		return;
+	}
 
 	double* AccArray = new double[ilag[hh]]; // work area for ChangeLag
 
 	AccArray[0] = 0.0;
 
 	for (int ii = 1; ii < ilag[hh]; ++ii)
+	{
 		AccArray[ii] = AccArray[ii - 1] + LagArray[hh][(ulag[hh] + ii) % ilag[hh]]; // accumulate storage
-
+	}
+		
 	delete[] LagArray[hh]; // delete previous length
 
 	LagArray[hh] = new double[newilag]; // create new length
@@ -3736,7 +3740,8 @@ void ClassMuskingum::ChangeLag(const double *newlag, const long hh)
 
 	double LastValue = 0.0;
 
-	for (int mm = 1; mm < newilag - 1; ++mm) {
+	for (int mm = 1; mm < newilag - 1; ++mm) 
+	{
 		double Y = double(mm) / ((long long)newilag - 1ll)*((long long)ilag[hh] - 1ll);
 		int Yint = (int)(Y + 0.0001);
 		double Ydif = Y - Yint;
