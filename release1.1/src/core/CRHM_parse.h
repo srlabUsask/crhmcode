@@ -144,9 +144,11 @@ struct modulus : public binary_function<_Tp, _Tp, _Tp>
 
 class ClassMacro;
 
+enum class TV { CRHM, CRHMint, LOCAL, FUNget, FUNobs, CRHM2, CRHMint2, NOP };
+
 class VarCHRM {
 public:
-	VarCHRM() : kind(LOCAL), val(0.0), value(NULL), ivalue(NULL), value2(NULL), ivalue2(NULL),
+	VarCHRM() : kind(TV::LOCAL), val(0.0), value(NULL), ivalue(NULL), value2(NULL), ivalue2(NULL),
 		Ihh(0), Ill(0), IndexMax(0), IndexMaxLay(0), name("Undefined"), Me(NULL) {};
 	VarCHRM(const VarCHRM & Cl); // copy constructor
 	VarCHRM &operator=(const VarCHRM & Cl);
@@ -155,7 +157,7 @@ public:
 	void put(double val_);
 	double get(void);
 
-	enum TV { CRHM, CRHMint, LOCAL, FUNget, FUNobs, CRHM2, CRHMint2, NOP };
+	
 
 	TV kind;          // enum TV {CRHM, CRHMint, LOCAL, FUNget, FUNobs, CRHM2, CRHMint2, NOP}
 	double val;        // const value
@@ -1194,10 +1196,10 @@ struct execVaddN : public execbase { // pushed on to stack!
 			eval.pop(); // remove element index
 
 			if (Lvar->IndexMaxLay) {
-				Lvar->kind = VarCHRM::CRHM2; // allocated on next entry above
+				Lvar->kind = TV::CRHM2; // allocated on next entry above
 			}
 			else {
-				Lvar->kind = VarCHRM::CRHM;
+				Lvar->kind = TV::CRHM;
 				Lvar->value = new double[Lvar->IndexMax];
 				--Lvar->IndexMax;
 			}

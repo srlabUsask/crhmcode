@@ -280,7 +280,7 @@ void ClassMacro::init(void) {
 		FP = vars.find("hh");
 	}
 
-	FP->second.kind = VarCHRM::CRHMint;
+	FP->second.kind = TV::CRHMint;
 	FP->second.ivalue = const_cast<long*> (&hh);
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -293,7 +293,7 @@ void ClassMacro::init(void) {
 		FP = vars.find("NHRU");
 	}
 
-	FP->second.kind = VarCHRM::LOCAL;
+	FP->second.kind = TV::LOCAL;
 	FP->second.val = nhru;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -306,7 +306,7 @@ void ClassMacro::init(void) {
 		FP = vars.find("GROUP");
 	}
 
-	FP->second.kind = VarCHRM::LOCAL;
+	FP->second.kind = TV::LOCAL;
 	FP->second.val = GroupCnt;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -319,7 +319,7 @@ void ClassMacro::init(void) {
 		FP = vars.find("STRUCT");
 	}
 
-	FP->second.kind = VarCHRM::LOCAL;
+	FP->second.kind = TV::LOCAL;
 	FP->second.val = StructCnt;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -331,7 +331,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("PI", VarCHRM()));
 		FP = vars.find("PI");
 	}
-	FP->second.kind = VarCHRM::LOCAL;
+	FP->second.kind = TV::LOCAL;
 	FP->second.val = M_PI;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -342,7 +342,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("NO_DISPLAY", VarCHRM()));
 		FP = vars.find("NO_DISPLAY");
 	}
-	FP->second.kind = VarCHRM::LOCAL;
+	FP->second.kind = TV::LOCAL;
 	//FP->second.val = xLimit;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
@@ -354,7 +354,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("FREQ", VarCHRM()));
 		FP = vars.find("FREQ");
 	}
-	FP->second.kind = VarCHRM::LOCAL;
+	FP->second.kind = TV::LOCAL;
 	FP->second.val = Global::Freq;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -365,7 +365,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("RAND", VarCHRM()));
 		FP = vars.find("RAND");
 	}
-	FP->second.kind = VarCHRM::FUNget;
+	FP->second.kind = TV::FUNget;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -377,7 +377,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("STEP", VarCHRM()));
 		FP = vars.find("STEP");
 	}
-	FP->second.kind = VarCHRM::FUNget;
+	FP->second.kind = TV::FUNget;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -389,7 +389,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("LASTINT", VarCHRM()));
 		FP = vars.find("LASTINT");
 	}
-	FP->second.kind = VarCHRM::FUNget;
+	FP->second.kind = TV::FUNget;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -401,7 +401,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("FIRSTINT", VarCHRM()));
 		FP = vars.find("FIRSTINT");
 	}
-	FP->second.kind = VarCHRM::FUNget;
+	FP->second.kind = TV::FUNget;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -413,7 +413,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("JULIAN", VarCHRM()));
 		FP = vars.find("JULIAN");
 	}
-	FP->second.kind = VarCHRM::FUNget;
+	FP->second.kind = TV::FUNget;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -425,7 +425,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("YEAR", VarCHRM()));
 		FP = vars.find("YEAR");
 	}
-	FP->second.kind = VarCHRM::FUNget;
+	FP->second.kind = TV::FUNget;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -437,7 +437,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("MONTH", VarCHRM()));
 		FP = vars.find("MONTH");
 	}
-	FP->second.kind = VarCHRM::FUNget;
+	FP->second.kind = TV::FUNget;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -449,7 +449,7 @@ void ClassMacro::init(void) {
 		vars.insert(make_pair("DAY", VarCHRM()));
 		FP = vars.find("DAY");
 	}
-	FP->second.kind = VarCHRM::FUNget;
+	FP->second.kind = TV::FUNget;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -462,7 +462,7 @@ void ClassMacro::init(void) {
 		FP = vars.find("ReadAheadObs");
 	}
 
-	FP->second.kind = VarCHRM::FUNobs;
+	FP->second.kind = TV::FUNobs;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -476,7 +476,7 @@ void ClassMacro::init(void) {
 		FP = vars.find("WriteAheadObs");
 	}
 
-	FP->second.kind = VarCHRM::FUNobs;
+	FP->second.kind = TV::FUNobs;
 	FP->second.val = 0;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = 0;
@@ -582,7 +582,7 @@ void ClassMacro::finish(bool good) { // only required for local storage and fina
 	symtab_t::iterator pos;
 
 	for (pos = vars.begin(); pos != vars.end();) { // remove local variables
-		if (pos->second.kind == VarCHRM::LOCAL) {
+		if (pos->second.kind == TV::LOCAL) {
 			vars.erase(pos++);
 		}
 		else {
@@ -994,21 +994,21 @@ void Defdeclparam::CallDecl() {
 
 		if (Int) {
 			if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
-				FP->second.kind = VarCHRM::CRHMint2;
+				FP->second.kind = TV::CRHMint2;
 				FP->second.ivalue2 = const_cast<long **> (fix2_long_const);
 			}
 			else {
-				FP->second.kind = VarCHRM::CRHMint;
+				FP->second.kind = TV::CRHMint;
 				FP->second.ivalue = const_cast<long *> (fix_long_const);
 			}
 		}
 		else {
 			if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
-				FP->second.kind = VarCHRM::CRHM2;
+				FP->second.kind = TV::CRHM2;
 				FP->second.value2 = const_cast<double **> (fix2_const);
 			}
 			else {
-				FP->second.kind = VarCHRM::CRHM;
+				FP->second.kind = TV::CRHM;
 				FP->second.value = const_cast<double *> (fix_const);
 			}
 		}
@@ -1039,15 +1039,15 @@ void Defdeclvar::CallDecl() {
 	FP->second.Me = Macro;
 
 	if (Int) {
-		FP->second.kind = VarCHRM::CRHMint;
+		FP->second.kind = TV::CRHMint;
 		FP->second.ivalue = const_cast<long *> (fix_long);
 	}
 	else if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
 		FP->second.value2 = fix2;
-		FP->second.kind = VarCHRM::CRHM2;
+		FP->second.kind = TV::CRHM2;
 	}
 	else {
-		FP->second.kind = VarCHRM::CRHM;
+		FP->second.kind = TV::CRHM;
 		FP->second.value = fix;
 	}
 }
@@ -1073,15 +1073,15 @@ void Defdecldiag::CallDecl() {
 	FP->second.Me = Macro;
 
 	if (Int) {
-		FP->second.kind = VarCHRM::CRHMint;
+		FP->second.kind = TV::CRHMint;
 		FP->second.ivalue = const_cast<long *> (fix_long);
 	}
 	else if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
 		FP->second.value2 = fix2;
-		FP->second.kind = VarCHRM::CRHM2;
+		FP->second.kind = TV::CRHM2;
 	}
 	else {
-		FP->second.kind = VarCHRM::CRHM;
+		FP->second.kind = TV::CRHM;
 		FP->second.value = fix;
 	}
 }
@@ -1107,15 +1107,15 @@ void Defdeclstatvar::CallDecl() {
 	FP->second.Me = Macro;
 
 	if (Int) {
-		FP->second.kind = VarCHRM::CRHMint;
+		FP->second.kind = TV::CRHMint;
 		FP->second.ivalue = const_cast<long *> (fix_long);
 	}
 	else if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
 		FP->second.value2 = fix2;
-		FP->second.kind = VarCHRM::CRHM2;
+		FP->second.kind = TV::CRHM2;
 	}
 	else {
-		FP->second.kind = VarCHRM::CRHM;
+		FP->second.kind = TV::CRHM;
 		FP->second.value = fix;
 	}
 }
@@ -1141,15 +1141,15 @@ void Defdecllocal::CallDecl() {
 	FP->second.Me = Macro;
 
 	if (Int) {
-		FP->second.kind = VarCHRM::CRHMint;
+		FP->second.kind = TV::CRHMint;
 		FP->second.ivalue = const_cast<long *> (fix_long);
 	}
 	else if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
 		FP->second.value2 = fix2;
-		FP->second.kind = VarCHRM::CRHM2;
+		FP->second.kind = TV::CRHM2;
 	}
 	else {
-		FP->second.kind = VarCHRM::CRHM;
+		FP->second.kind = TV::CRHM;
 		FP->second.value = fix;
 	}
 }
@@ -1193,22 +1193,22 @@ void Defdeclgetvar::CallDecl() {
 		if (Int) {
 			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
 			if (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN) {
-				FP->second.kind = VarCHRM::CRHMint2;
+				FP->second.kind = TV::CRHMint2;
 				FP->second.ivalue2 = const_cast<long **> (fix2_long_const);
 			}
 			else {
-				FP->second.kind = VarCHRM::CRHMint;
+				FP->second.kind = TV::CRHMint;
 				FP->second.ivalue = const_cast<long *> (fix_long_const);
 			}
 		}
 		else {
 			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
 			if (Global::thisVar != NULL && (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN)) {
-				FP->second.kind = VarCHRM::CRHM2;
+				FP->second.kind = TV::CRHM2;
 				FP->second.value2 = const_cast<double **> (fix2_const);
 			}
 			else {
-				FP->second.kind = VarCHRM::CRHM;
+				FP->second.kind = TV::CRHM;
 				FP->second.value = const_cast<double *> (fix_const);
 			}
 		}
@@ -1249,16 +1249,16 @@ void Defdeclputvar::CallDecl() {
 		FP->second.Me = Macro;
 
 		if (Int) {
-			FP->second.kind = VarCHRM::CRHMint;
+			FP->second.kind = TV::CRHMint;
 			FP->second.ivalue = const_cast<long *> (fix_long);
 		}
 		//else if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences.
 		else if (Global::thisVar != NULL && (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN)) {
-			FP->second.kind = VarCHRM::CRHM2;
+			FP->second.kind = TV::CRHM2;
 			FP->second.value2 = const_cast<double **> (fix2);
 		}
 		else {
-			FP->second.kind = VarCHRM::CRHM;
+			FP->second.kind = TV::CRHM;
 			FP->second.value = const_cast<double *> (fix);
 		}
 	}
@@ -1297,15 +1297,15 @@ void Defdeclputparam::CallDecl() {
 		FP->second.Me = Macro;
 
 		if (Int) {
-			FP->second.kind = VarCHRM::CRHMint;
+			FP->second.kind = TV::CRHMint;
 			FP->second.ivalue = const_cast<long *> (fix_long);
 		}
 		else if (thisPar != NULL && (thisPar->dimen == CRHM::NDEF || thisPar->dimen == CRHM::NDEFN)) {
-			FP->second.kind = VarCHRM::CRHM2;
+			FP->second.kind = TV::CRHM2;
 			FP->second.value2 = const_cast<double **> (fix2);
 		}
 		else {
-			FP->second.kind = VarCHRM::CRHM;
+			FP->second.kind = TV::CRHM;
 			FP->second.value = const_cast<double *> (fix);
 		}
 	}
@@ -1322,9 +1322,9 @@ void Defdeclobs::CallDecl() {
 	}
 
 	if (fix)
-		FP->second.kind = VarCHRM::CRHM;
+		FP->second.kind = TV::CRHM;
 	else
-		FP->second.kind = VarCHRM::NOP;
+		FP->second.kind = TV::NOP;
 
 	FP->second.name = name;
 	FP->second.Ihh = 0;
@@ -1397,7 +1397,7 @@ void Defdeclreadobs::CallDecl() {
 		FP = Macro->vars.find(name);
 	}
 
-	FP->second.kind = VarCHRM::CRHM;
+	FP->second.kind = TV::CRHM;
 	FP->second.name = name;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = cnt;
@@ -1415,7 +1415,7 @@ void Defdeclobsfunc::CallDecl() {
 		FP = Macro->vars.find(name);
 	}
 
-	FP->second.kind = VarCHRM::CRHM;
+	FP->second.kind = TV::CRHM;
 	FP->second.name = name;
 	FP->second.Ihh = 0;
 	FP->second.IndexMax = cnt;

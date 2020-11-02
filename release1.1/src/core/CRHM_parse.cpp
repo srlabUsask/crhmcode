@@ -18,13 +18,13 @@
 using namespace std;
 
 VarCHRM::~VarCHRM() {
-	if (Me == NULL && (kind == CRHM || kind == CRHM2)) {
+	if (Me == NULL && (kind == TV::CRHM || kind == TV::CRHM2)) {
 		switch (kind) {
-		case CRHM:
+		case TV::CRHM:
 			delete[] value;
 			value = NULL;
 			break;
-		case CRHM2:
+		case TV::CRHM2:
 			for (int ii = 0; ii <= IndexMaxLay; ii++)
 				delete[] value2[ii];
 			delete[] value2;
@@ -72,22 +72,22 @@ VarCHRM & VarCHRM::operator=(const VarCHRM & Cl) {
 void VarCHRM::put(double val_) {
 
 	switch (kind) {
-	case LOCAL:
+	case TV::LOCAL:
 		val = val_;
 		break;
-	case CRHM:
+	case TV::CRHM:
 		value[min<long>(Ihh, IndexMax)] = val_;
 		break;
-	case CRHM2:
+	case TV::CRHM2:
 		value2[min<long>(Ill, IndexMaxLay)][min<long>(Ihh, IndexMax)] = val_;
 		break;
-	case CRHMint:
+	case TV::CRHMint:
 		ivalue[min<long>(Ihh, IndexMax)] = (long)val_;
 		break;
-	case CRHMint2:
+	case TV::CRHMint2:
 		ivalue2[min<long>(Ill, IndexMaxLay)][min<long>(Ihh, IndexMax)] = (long)val_;
 		break;
-	case FUNobs:
+	case TV::FUNobs:
 		if (name == "ReadAheadObs")
 			val = !Me->ReadAheadObsMacro((long) val_);
 		else
@@ -101,19 +101,19 @@ void VarCHRM::put(double val_) {
 
 double VarCHRM::get(void) {
 	switch (kind) {
-	case LOCAL:
+	case TV::LOCAL:
 		return val;
-	case CRHM:
+	case TV::CRHM:
 		return value[min<long>(Ihh, IndexMax)];
-	case CRHM2:
+	case TV::CRHM2:
 		return value2[min<long>(Ill, IndexMaxLay)][min<long>(Ihh, IndexMax)];
-	case CRHMint:
+	case TV::CRHMint:
 		return ivalue[min<long>(Ihh, IndexMax)];
-	case CRHMint2:
+	case TV::CRHMint2:
 		return ivalue2[min<long>(Ill, IndexMaxLay)][min<long>(Ihh, IndexMax)];
-	case FUNget:
+	case TV::FUNget:
 		return (*pget)();
-	case FUNobs:
+	case TV::FUNobs:
 		return (val);
 	default:
 		break;
