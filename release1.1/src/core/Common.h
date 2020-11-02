@@ -54,7 +54,7 @@
 
 using namespace std;
 
-enum TMemoSel { LOG, DEBUG };
+enum class TMemoSel { LOG, DEBUG };
 enum TExcept { NONE, ERR, DECLERR, WARNING, USER, TERMINATE };
 enum class TExtra { BLANK, DD, TT, DT };
 enum TAKA { AKAERROR = -1, VARG, OBSR, VARD, OBSD, PARD, OBSF, AKAEND };
