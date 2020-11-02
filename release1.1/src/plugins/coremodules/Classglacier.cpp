@@ -615,9 +615,9 @@ void Classglacier::run(void){
               old_firn = (double) (long long)hh * 100ll + (long long)nn;
 //              assert(0);
               string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " Update firn layer densities (27549)";
-              string SS = D + "hh " + to_string(hh) + "old_firn: " + FloatToStrF(old_firn, ffFixed, 10, 4);
-              SS = SS + " firn_dens_array[nn][hh]: " + FloatToStrF(firn_dens_array[nn][hh], ffFixed, 10, 4)
-                      + " firn_h_array[nn][hh]: " + FloatToStrF(firn_h_array[nn][hh], ffFixed, 10, 4);
+              string SS = D + "hh " + to_string(hh) + "old_firn: " + FloatToStrF(old_firn, TFloatFormat::ffFixed, 10, 4);
+              SS = SS + " firn_dens_array[nn][hh]: " + FloatToStrF(firn_dens_array[nn][hh], TFloatFormat::ffFixed, 10, 4)
+                      + " firn_h_array[nn][hh]: " + FloatToStrF(firn_h_array[nn][hh], TFloatFormat::ffFixed, 10, 4);
               CRHMException TExcept(SS.c_str(), WARNING);
               LogError(TExcept);
             }

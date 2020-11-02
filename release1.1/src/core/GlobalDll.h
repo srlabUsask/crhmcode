@@ -163,7 +163,7 @@ string static FloatToStrF(double X, TFloatFormat Format, int Prec, int Digits) {
 **/
 string static FloatToStrF(double X, TFloatFormat Format, int Prec, int Digits) {
 	ostringstream temp;
-	if (Format == ffFixed) {
+	if (Format == TFloatFormat::ffFixed) {
 		temp.precision(Prec);
 		temp.width(Digits);
 		temp << X;
@@ -178,7 +178,7 @@ string static FloatToStrF(double X, TFloatFormat Format, int Prec, int Digits) {
 
 string static FloatToStrF(long L, TFloatFormat Format, int Prec, int Digits) {
 	ostringstream temp;
-	if (Format == ffFixed) {
+	if (Format == TFloatFormat::ffFixed) {
 		temp.precision(Prec);
 		temp.width(Digits);
 		temp << L;

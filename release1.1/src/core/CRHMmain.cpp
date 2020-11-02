@@ -2071,7 +2071,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 	catch (exception &E) {
 		//string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
 		//    ShowMessage(S);
-		LogError(S + " (" + FloatToStrF(Global::DTnow, ffGeneral, 10, 0) + ")", ERR);
+		LogError(S + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 0) + ")", ERR);
 		GoodRun = false;
 	}
 }
@@ -2203,9 +2203,9 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit)
 			if (thisVar->lay == 0)
 				for (int ii = 0; ii < thisVar->dim; ii++) {
 					if (thisVar->values != NULL)
-						S = S + FloatToStrF(thisVar->values[ii], ffGeneral, 7, 0) + " ";
+						S = S + FloatToStrF(thisVar->values[ii], TFloatFormat::ffGeneral, 7, 0) + " ";
 					else if (thisVar->ivalues != NULL)
-						S = S + FloatToStrF(thisVar->ivalues[ii], ffGeneral, 7, 0) + " ";
+						S = S + FloatToStrF(thisVar->ivalues[ii], TFloatFormat::ffGeneral, 7, 0) + " ";
 					else
 						S = S + "-0 ";
 
@@ -2218,9 +2218,9 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit)
 				for (int ll = 0; ll < thisVar->lay; ll++) {
 					for (int ii = 0; ii < thisVar->dim; ii++) {
 						if (thisVar->layvalues != NULL)
-							S = S + FloatToStrF(thisVar->layvalues[ll][ii], ffGeneral, 4, 0) + " ";
+							S = S + FloatToStrF(thisVar->layvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 						else if (thisVar->ivalues != NULL)
-							S = S + FloatToStrF(thisVar->ilayvalues[ll][ii], ffGeneral, 4, 0) + " ";
+							S = S + FloatToStrF(thisVar->ilayvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 						else
 							S = S + "-0 ";
 
@@ -2361,7 +2361,7 @@ void  CRHMmain::AllRprt(void)
 		//added this switch statement according to Peter's code.
 		switch (Global::TimeFormat) {
 		case CRHM::MS:
-			Sx = FloatToStrF(cdSeries[0]->XValue(nn), ffGeneral, 10, 0);
+			Sx = FloatToStrF(cdSeries[0]->XValue(nn), TFloatFormat::ffGeneral, 10, 0);
 			break;
 		case CRHM::MMDDYYYY:
 			Sx = StandardConverterUtility::FormatDateTime("mm/dd/yyyy hh:mm ", cdSeries[0]->XValue(nn));
@@ -2384,7 +2384,7 @@ void  CRHMmain::AllRprt(void)
 				if (thisVar->varType == CRHM::Int || thisVar->varType == CRHM::ReadI)
 					prec = 7;
 				*/
-				Sy = FloatToStrF(cdSeries[vv]->YValue(nn), ffGeneral, prec, 10);
+				Sy = FloatToStrF(cdSeries[vv]->YValue(nn), TFloatFormat::ffGeneral, prec, 10);
 				Sx = Sx + "\t" + Sy;
 			}
 		}
@@ -2406,7 +2406,7 @@ void  CRHMmain::LastRprt(void)
 
 	int nn = cdSeries[0]->Count();
 
-	Sx = FloatToStrF(cdSeries[0]->XValue(nn - 1), ffGeneral, 10, 0);
+	Sx = FloatToStrF(cdSeries[0]->XValue(nn - 1), TFloatFormat::ffGeneral, 10, 0);
 
 	for (int vv = 0; vv < SeriesCnt; ++vv) {
 		ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
@@ -2414,7 +2414,7 @@ void  CRHMmain::LastRprt(void)
 		if (thisVar->varType == CRHM::Int || thisVar->varType == CRHM::ReadI)
 			prec = 4;
 
-		Sy = FloatToStrF(cdSeries[vv]->YValue(nn - 1), ffGeneral, prec, 0);
+		Sy = FloatToStrF(cdSeries[vv]->YValue(nn - 1), TFloatFormat::ffGeneral, prec, 0);
 
 		Sx = Sx + "\t" + Sy;
 	}
@@ -2643,20 +2643,20 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 				if (thisVar->lay == 0) {
 					for (int ii = 0; ii < thisVar->dim; ii++)
 						if (thisVar->values != NULL) {
-							Sy += FloatToStrF(thisVar->values[ii], ffGeneral, 4, 0) + " ";
+							Sy += FloatToStrF(thisVar->values[ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 						}
 						else if (thisVar->ivalues != NULL) {
-							Sy += FloatToStrF(thisVar->ivalues[ii], ffFixed, 0, 0) + " ";
+							Sy += FloatToStrF(thisVar->ivalues[ii], TFloatFormat::ffFixed, 0, 0) + " ";
 						}
 				}
 				else {
 					for (int ll = 0; ll < thisVar->lay; ll++)
 						for (int ii = 0; ii < thisVar->dim; ii++)
 							if (thisVar->layvalues != NULL) {
-								Sy += FloatToStrF(thisVar->layvalues[ll][ii], ffGeneral, 4, 0) + " ";
+								Sy += FloatToStrF(thisVar->layvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 							}
 							else  if (thisVar->ivalues != NULL) {
-								Sy += FloatToStrF(thisVar->ilayvalues[ll][ii], ffGeneral, 0, 0) + " ";
+								Sy += FloatToStrF(thisVar->ilayvalues[ll][ii], TFloatFormat::ffGeneral, 0, 0) + " ";
 							}
 				}
 
@@ -2716,20 +2716,20 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 						if (thisVar->lay == 0) {
 							for (int ii = 0; ii < thisVar->dim; ii++)
 								if (thisVar->values != NULL) {
-									Sy += FloatToStrF(thisVar->values[ii], ffGeneral, 4, 0) + " ";
+									Sy += FloatToStrF(thisVar->values[ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 								}
 								else if (thisVar->ivalues != NULL) {
-									Sy += FloatToStrF(thisVar->ivalues[ii], ffFixed, 0, 0) + " ";
+									Sy += FloatToStrF(thisVar->ivalues[ii], TFloatFormat::ffFixed, 0, 0) + " ";
 								}
 						}
 						else {
 							for (int ll = 0; ll < thisVar->lay; ll++)
 								for (int ii = 0; ii < thisVar->dim; ii++)
 									if (thisVar->layvalues != NULL) {
-										Sy += FloatToStrF(thisVar->layvalues[ll][ii], ffGeneral, 4, 0) + " ";
+										Sy += FloatToStrF(thisVar->layvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 									}
 									else  if (thisVar->ivalues != NULL) {
-										Sy += FloatToStrF(thisVar->ilayvalues[ll][ii], ffGeneral, 0, 0) + " ";
+										Sy += FloatToStrF(thisVar->ilayvalues[ll][ii], TFloatFormat::ffGeneral, 0, 0) + " ";
 									}
 						}
 
@@ -2928,7 +2928,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 
 		if (ObsFilesList->Count == 0)
-			S = S + " " + FloatToStrF(Global::Freq, ffGeneral, 0, 0);
+			S = S + " " + FloatToStrF(Global::Freq, TFloatFormat::ffGeneral, 0, 0);
 		ProjectList->Add(S);
 
 
@@ -3009,7 +3009,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 				string S = string(thisPar->module.c_str()) + " " + string(thisPar->param.c_str());
 
 				if (thisPar->varType != CRHM::Txt)
-					S += " <" + FloatToStrF(thisPar->minVal, ffGeneral, 4, 0) + " to " + FloatToStrF(thisPar->maxVal, ffGeneral, 4, 0) + ">";
+					S += " <" + FloatToStrF(thisPar->minVal, TFloatFormat::ffGeneral, 4, 0) + " to " + FloatToStrF(thisPar->maxVal, TFloatFormat::ffGeneral, 4, 0) + ">";
 
 
 				ProjectList->Add(S);
@@ -3019,11 +3019,11 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 					for (int ii = 0; ii < thisPar->dim; ii++) {
 						if (thisPar->varType == CRHM::Float)
 						{
-							S = S + FloatToStrF(thisPar->layvalues[jj][ii], ffGeneral, 4, 0) + " ";
+							S = S + FloatToStrF(thisPar->layvalues[jj][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 						}
 						else if (thisPar->varType == CRHM::Int)
 						{
-							S = S + FloatToStrF(thisPar->ilayvalues[jj][ii], ffFixed, 8, 0) + " ";
+							S = S + FloatToStrF(thisPar->ilayvalues[jj][ii], TFloatFormat::ffFixed, 8, 0) + " ";
 						}
 						else if (thisPar->varType == CRHM::Txt)
 						{

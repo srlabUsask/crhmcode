@@ -506,9 +506,9 @@ void ClassXG::run(void) {
                 else if(Last < 0.0){ // never two frozen fronts together
 //                  assert(0);
                   string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " **never two frozen fronts together, check for thaw front (20447)";
-                  string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, ffFixed, 10, 4);
-                  SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], ffFixed, 10, 4)
-                          + " Zdf[hh]: " + FloatToStrF(Zdt[hh], ffFixed, 10, 4);
+                  string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, TFloatFormat::ffFixed, 10, 4);
+                  SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4)
+                          + " Zdf[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4);
                   CRHMException TExcept(SS.c_str(), WARNING);
                   LogError(TExcept);
                }
@@ -521,9 +521,9 @@ void ClassXG::run(void) {
               else if(Last < 0.0){ // never two freeze fronts together
 //                  assert(0);
                   string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " **never two thaw fronts together (20462)";
-                  string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, ffFixed, 10, 4);
-                  SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], ffFixed, 10, 4)
-                          + " Zdf[hh]: " + FloatToStrF(Zdt[hh], ffFixed, 10, 4);
+                  string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, TFloatFormat::ffFixed, 10, 4);
+                  SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4)
+                          + " Zdf[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4);
                   CRHMException TExcept(SS.c_str(), WARNING);
                   LogError(TExcept);
               }
@@ -581,9 +581,9 @@ void ClassXG::run(void) {
                 else if(Last > 0.0){ // never two thaw fronts together
 //                  assert(0);
                   string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " **check for freeze front, never two thaw fronts together (20522)";
-                  string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, ffFixed, 10, 4);
-                  SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], ffFixed, 10, 4)
-                          + " Zdf[hh]: " + FloatToStrF(Zdt[hh], ffFixed, 10, 4);
+                  string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, TFloatFormat::ffFixed, 10, 4);
+                  SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4)
+                          + " Zdf[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4);
                   CRHMException TExcept(SS.c_str(), WARNING);
                   LogError(TExcept);
                 }
@@ -596,9 +596,9 @@ void ClassXG::run(void) {
               else if(Last < 0.0){ // never two freeze fronts together
 //                  assert(0);
                   string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " never two thaw fronts together (20537)";
-                  string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, ffFixed, 10, 4);
-                  SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], ffFixed, 10, 4)
-                          + " Zdf[hh]: " + FloatToStrF(Zdt[hh], ffFixed, 10, 4);
+                  string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, TFloatFormat::ffFixed, 10, 4);
+                  SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4)
+                          + " Zdf[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4);
                   CRHMException TExcept(SS.c_str(), WARNING);
                   LogError(TExcept);
               }

@@ -157,7 +157,7 @@ void Classfrozen::run(void) {
       LogMessage(hh, " ice lens formed at temperature of ", hru_tmin[hh], DT);
       LogDebug(" ");
 
-      CRHMException TExcept(string(string("Ice lens formed in HRU ") + to_string(hh+1) +", at minimum temperature of " + FloatToStrF(hru_tmin[hh], ffGeneral, 4, 1)).c_str(), WARNING);
+      CRHMException TExcept(string(string("Ice lens formed in HRU ") + to_string(hh+1) +", at minimum temperature of " + FloatToStrF(hru_tmin[hh], TFloatFormat::ffGeneral, 4, 1)).c_str(), WARNING);
       LogError(TExcept);
     }
 

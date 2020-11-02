@@ -1336,7 +1336,7 @@ void ClassWQ_Soil::run(void) {
       {
         //string S = E.Message + " at " +
 		  string S = "Error" + string(" at ") + StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " (" + to_string(getstep()) + ") in '" + Global::OurModulesList->Strings[Global::CurrentModuleRun] +
-            "'" + " (" + FloatToStrF(Global::DTnow, ffGeneral, 10, 6) + ") hh = " + FloatToStrF(hh, ffGeneral, 6, 0) + " Sub = " + FloatToStrF(Sub, ffGeneral, 6, 0);
+            "'" + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 6) + ") hh = " + FloatToStrF(hh, TFloatFormat::ffGeneral, 6, 0) + " Sub = " + FloatToStrF(Sub, TFloatFormat::ffGeneral, 6, 0);
         LogError(S, WARNING);
         std::cout  << "Diogo: Exception occurred in \"ClassWQ_Soil::run\" " << std::endl;
         if(++FaultsAllowed == 1)

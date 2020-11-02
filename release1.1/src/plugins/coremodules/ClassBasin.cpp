@@ -71,7 +71,7 @@ void Classbasin::init(void) {
 
   if(fabs((totarea-basin_area[0])/basin_area[0]) > 1e-3){
     const_cast<double *>  (basin_area)[0] = totarea;
-    CRHMException TExcept(string(string("Sum of HRU's area <> Basin area, Basin area made = ") + FloatToStrF(totarea, ffGeneral, 3, 0)).c_str(), WARNING);
+    CRHMException TExcept(string(string("Sum of HRU's area <> Basin area, Basin area made = ") + FloatToStrF(totarea, TFloatFormat::ffGeneral, 3, 0)).c_str(), WARNING);
     LogError(TExcept);
   }
 

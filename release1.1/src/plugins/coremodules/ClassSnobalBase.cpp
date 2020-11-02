@@ -2053,11 +2053,11 @@ double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
     if (z0 <= 0 || zq <= z0 || zu <= z0 || za <= z0) {
         string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow) + "hle1: height not positive ";
         string SS = D + "hru " + to_string(hh + 1);
-        SS = SS + "  ta: " + FloatToStrF(ta - CRHM_constants::Tm, ffFixed, 10, 4) +
-            ", z0: " + FloatToStrF(z0, ffFixed, 10, 4) +
-            ", zq: " + FloatToStrF(zq, ffFixed, 10, 4) +
-            ", zu: " + FloatToStrF(zu, ffFixed, 10, 4) +
-            ", za: " + FloatToStrF(za, ffFixed, 10, 4);
+        SS = SS + "  ta: " + FloatToStrF(ta - CRHM_constants::Tm, TFloatFormat::ffFixed, 10, 4) +
+            ", z0: " + FloatToStrF(z0, TFloatFormat::ffFixed, 10, 4) +
+            ", zq: " + FloatToStrF(zq, TFloatFormat::ffFixed, 10, 4) +
+            ", zu: " + FloatToStrF(zu, TFloatFormat::ffFixed, 10, 4) +
+            ", za: " + FloatToStrF(za, TFloatFormat::ffFixed, 10, 4);
 
         CRHMException TExcept(SS.c_str(), WARNING);
         LogError(TExcept);
@@ -2077,13 +2077,13 @@ double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
     if (ea <= 0 || es <= 0 || press <= 0 || ea >= press || es >= press) {
 
         string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
-        string SS = D + "hh " + to_string(hh) + " 'hle1' " + ". H: " + FloatToStrF(h, ffFixed, 10, 4) + " le: " + FloatToStrF(xlh * e, ffFixed, 10, 4);
-        SS = SS + " ta: " + FloatToStrF(ta - CRHM_constants::Tm, ffFixed, 10, 4) +
-            ", ts: " + FloatToStrF(ts - CRHM_constants::Tm, ffFixed, 10, 4) +
-            ", ea: " + FloatToStrF(ea, ffFixed, 10, 4) +
-            ", es: " + FloatToStrF(es, ffFixed, 10, 4) +
-            ", u:  " + FloatToStrF(u, ffFixed, 10, 4) +
-            ", m_s:  " + FloatToStrF(m_s[hh], ffFixed, 10, 4);
+        string SS = D + "hh " + to_string(hh) + " 'hle1' " + ". H: " + FloatToStrF(h, TFloatFormat::ffFixed, 10, 4) + " le: " + FloatToStrF(xlh * e, TFloatFormat::ffFixed, 10, 4);
+        SS = SS + " ta: " + FloatToStrF(ta - CRHM_constants::Tm, TFloatFormat::ffFixed, 10, 4) +
+            ", ts: " + FloatToStrF(ts - CRHM_constants::Tm, TFloatFormat::ffFixed, 10, 4) +
+            ", ea: " + FloatToStrF(ea, TFloatFormat::ffFixed, 10, 4) +
+            ", es: " + FloatToStrF(es, TFloatFormat::ffFixed, 10, 4) +
+            ", u:  " + FloatToStrF(u, TFloatFormat::ffFixed, 10, 4) +
+            ", m_s:  " + FloatToStrF(m_s[hh], TFloatFormat::ffFixed, 10, 4);
 
         CRHM_le = 0.0; // addition TB 09/23/14
         CRHM_h = 0.0;
@@ -2202,13 +2202,13 @@ double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
         LastDTnow = Global::DTnow;
 
         string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
-        string SS = D + "hh " + to_string(hh) + " 'hle1' " + Flag + ". H: " + FloatToStrF(h, ffFixed, 10, 4) + " le: " + FloatToStrF(xlh * e, ffFixed, 10, 4);
-        SS = SS + " ta: " + FloatToStrF(ta - CRHM_constants::Tm, ffFixed, 10, 4) +
-            ", ts: " + FloatToStrF(ts - CRHM_constants::Tm, ffFixed, 10, 4) +
-            ", ea: " + FloatToStrF(ea, ffFixed, 10, 4) +
-            ", es: " + FloatToStrF(es, ffFixed, 10, 4) +
-            ", u:  " + FloatToStrF(u, ffFixed, 10, 4) +
-            ", m_s:  " + FloatToStrF(m_s[hh], ffFixed, 10, 4);
+        string SS = D + "hh " + to_string(hh) + " 'hle1' " + Flag + ". H: " + FloatToStrF(h, TFloatFormat::ffFixed, 10, 4) + " le: " + FloatToStrF(xlh * e, TFloatFormat::ffFixed, 10, 4);
+        SS = SS + " ta: " + FloatToStrF(ta - CRHM_constants::Tm, TFloatFormat::ffFixed, 10, 4) +
+            ", ts: " + FloatToStrF(ts - CRHM_constants::Tm, TFloatFormat::ffFixed, 10, 4) +
+            ", ea: " + FloatToStrF(ea, TFloatFormat::ffFixed, 10, 4) +
+            ", es: " + FloatToStrF(es, TFloatFormat::ffFixed, 10, 4) +
+            ", u:  " + FloatToStrF(u, TFloatFormat::ffFixed, 10, 4) +
+            ", m_s:  " + FloatToStrF(m_s[hh], TFloatFormat::ffFixed, 10, 4);
         CRHMException TExcept2(SS.c_str(), WARNING);
         LogError(TExcept2);
 

@@ -122,7 +122,7 @@ const double a3 = 0.937298;
 const double little_p = 0.33267;
 
 
-enum TFloatFormat { ffGeneral, ffExponent, ffFixed, ffNumber, ffCurrency };
+enum class TFloatFormat { ffGeneral, ffExponent, ffFixed, ffNumber, ffCurrency };
 
 //void GroupEnding(string &AA, int Cnt);
 
