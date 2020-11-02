@@ -792,24 +792,24 @@ public:
 void   LogError(CRHMException Except);
 void   LogError(string S, TExcept Kind);
 
-void   LogMessage(const char *S, double V, TExtra Opt = BLANK);
-void   LogMessage(const char *S, double V, const char *S2, TExtra Opt = BLANK);
-void   LogMessage(const char *S, long V, TExtra Opt = BLANK);
-void   LogMessage(const char *S, TExtra Opt = BLANK);
+void   LogMessage(const char *S, double V, TExtra Opt = TExtra::BLANK);
+void   LogMessage(const char *S, double V, const char *S2, TExtra Opt = TExtra::BLANK);
+void   LogMessage(const char *S, long V, TExtra Opt = TExtra::BLANK);
+void   LogMessage(const char *S, TExtra Opt = TExtra::BLANK);
 
-void   LogMessage(long hh, const char *S, double V, TExtra Opt = BLANK);
-void   LogMessage(long hh, const char *S, long V, TExtra Opt = BLANK);
-void   LogMessage(long hh, const char *S, TExtra Opt = BLANK);
+void   LogMessage(long hh, const char *S, double V, TExtra Opt = TExtra::BLANK);
+void   LogMessage(long hh, const char *S, long V, TExtra Opt = TExtra::BLANK);
+void   LogMessage(long hh, const char *S, TExtra Opt = TExtra::BLANK);
 
-void   LogMessage(long hh, const char *S, double V1, double V2, TExtra Opt = BLANK);
-void   LogMessage(long hh, const char *S, double V1, double V2, double V3, TExtra Opt = BLANK);
+void   LogMessage(long hh, const char *S, double V1, double V2, TExtra Opt = TExtra::BLANK);
+void   LogMessage(long hh, const char *S, double V1, double V2, double V3, TExtra Opt = TExtra::BLANK);
 
-void   LogMessageA(long hh, const char *S, double V1, TExtra Opt = BLANK);
-void   LogMessageA(long hh, const char *S, double V1, const char *S2, TExtra Opt = BLANK);
-void   LogMessageA(long hh, const char *S, double V1, const double HRU_area, const double Basin_area, TExtra Opt = BLANK);
-void   LogMessageA(long hh, const char *S, double V1, const double HRU_area, const double Basin_area, const char *S2, TExtra Opt = BLANK);
-void   LogMessageA(long hh, const char *S, double V1, const double Basin_area, TExtra Opt = BLANK);
-void   LogMessageA(long hh, const char *S, double V1, const double Basin_area, const char *S2, TExtra Opt = BLANK);
+void   LogMessageA(long hh, const char *S, double V1, TExtra Opt = TExtra::BLANK);
+void   LogMessageA(long hh, const char *S, double V1, const char *S2, TExtra Opt = TExtra::BLANK);
+void   LogMessageA(long hh, const char *S, double V1, const double HRU_area, const double Basin_area, TExtra Opt = TExtra::BLANK);
+void   LogMessageA(long hh, const char *S, double V1, const double HRU_area, const double Basin_area, const char *S2, TExtra Opt = TExtra::BLANK);
+void   LogMessageA(long hh, const char *S, double V1, const double Basin_area, TExtra Opt = TExtra::BLANK);
+void   LogMessageA(long hh, const char *S, double V1, const double Basin_area, const char *S2, TExtra Opt = TExtra::BLANK);
 
 void   LogDebug(long h, char *Text, double v);
 void   LogDebug(char *S);

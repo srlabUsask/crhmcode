@@ -4103,21 +4103,21 @@ void   LogMessage(const char *S, double V, TExtra Opt) {
 
 	string D, SS;
 	switch (Opt) {
-	case BLANK:
+	case TExtra::BLANK:
 		break;
-	case DD:
+	case TExtra::DD:
 		D = FormatString(Global::DTnow, "yy mm dd ");
 		break;
-	case DT:
+	case TExtra::DT:
 		D = FormatString(Global::DTnow, "yy mm dd hh nn ");
 		break;
-	case TT:
+	case TExtra::TT:
 		D = FormatString(Global::DTnow, "hh nn ");
 	default:
 		break;
 	}
 
-	if (Opt == BLANK)
+	if (Opt == TExtra::BLANK)
 		SS = S + FloatToStrF(V, "ffFixed", 10, 4);
 	else
 		SS = D + S + FloatToStrF(V, "ffFixed", 10, 4);
@@ -4130,21 +4130,21 @@ void   LogMessage(const char *S, long V, TExtra Opt) {
 
 	string D, SS;
 	switch (Opt) {
-	case BLANK:
+	case TExtra::BLANK:
 		break;
-	case DD:
+	case TExtra::DD:
 		D = FormatString(Global::DTnow, "yy mm dd ");
 		break;
-	case DT:
+	case TExtra::DT:
 		D = FormatString(Global::DTnow, "yy mm dd hh nn ");
 		break;
-	case TT:
+	case TExtra::TT:
 		D = FormatString(Global::DTnow, "hh nn ");
 	default:
 		break;
 	}
 
-	if (Opt == BLANK)
+	if (Opt == TExtra::BLANK)
 		SS = S + to_string(V);
 	else
 		SS = D + S + to_string(V);
@@ -4157,21 +4157,21 @@ void   LogMessage(const char *S, TExtra Opt) {
 
 	string D, SS;
 	switch (Opt) {
-	case BLANK:
+	case TExtra::BLANK:
 		break;
-	case DD:
+	case TExtra::DD:
 		D = FormatString(Global::DTnow, "yy mm dd ");
 		break;
-	case DT:
+	case TExtra::DT:
 		D = FormatString(Global::DTnow, "yy mm dd hh nn ");
 		break;
-	case TT:
+	case TExtra::TT:
 		D = FormatString(Global::DTnow, "hh nn ");
 	default:
 		break;
 	}
 
-	if (Opt == BLANK)
+	if (Opt == TExtra::BLANK)
 		SS = S;
 	else
 		SS = D + S;
@@ -4185,15 +4185,15 @@ void   LogMessage(long hh, const char *S, double V, TExtra Opt) {
 	string A = string("HRU " + to_string(hh + 1) + ": ");
 	string D;
 	switch (Opt) {
-	case BLANK:
+	case TExtra::BLANK:
 		break;
-	case DD:
+	case TExtra::DD:
 		D = FormatString(Global::DTnow, "yy mm dd ");
 		break;
-	case DT:
+	case TExtra::DT:
 		D = FormatString(Global::DTnow, "yy mm dd hh nn ");
 		break;
-	case TT:
+	case TExtra::TT:
 		D = FormatString(Global::DTnow, "hh nn ");
 	default:
 		break;
@@ -4209,15 +4209,15 @@ void   LogMessage(long hh, const char *S, long V, TExtra Opt) {
 	string A = string("HRU " + to_string(hh + 1) + ": ");
 	string D;
 	switch (Opt) {
-	case BLANK:
+	case TExtra::BLANK:
 		break;
-	case DD:
+	case TExtra::DD:
 		D = FormatString(Global::DTnow, "yy mm dd ");
 		break;
-	case DT:
+	case TExtra::DT:
 		D = FormatString(Global::DTnow, "yy mm dd hh nn ");
 		break;
-	case TT:
+	case TExtra::TT:
 		D = FormatString(Global::DTnow, "hh nn ");
 	default:
 		break;
@@ -4233,15 +4233,15 @@ void   LogMessage(long hh, const char *S, TExtra Opt) {
 	string A = string("HRU " + to_string(hh + 1) + ": ");
 	string D;
 	switch (Opt) {
-	case BLANK:
+	case TExtra::BLANK:
 		break;
-	case DD:
+	case TExtra::DD:
 		D = FormatString(Global::DTnow, "yy mm dd ");
 		break;
-	case DT:
+	case TExtra::DT:
 		D = FormatString(Global::DTnow, "yy mm dd hh nn ");
 		break;
-	case TT:
+	case TExtra::TT:
 		D = FormatString(Global::DTnow, "hh nn ");
 	default:
 		break;

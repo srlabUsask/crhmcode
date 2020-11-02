@@ -210,7 +210,7 @@ void ClassKevin::run(void) {
 
           if(SWE[hh] > SWEpeak[hh]){ // snow fall exceeding last peak
             SWEpeak[hh] = SWE[hh];
-            LogMessage(hh, " add to SWE peak ", SWEpeak[hh], DT);
+            LogMessage(hh, " add to SWE peak ", SWEpeak[hh], TExtra::DT);
           }
           else
             if(SWE[hh] > SWElast[hh]) SnowStat[hh] = HOLD;
@@ -239,7 +239,7 @@ void ClassKevin::run(void) {
             SnowStat[hh] = EARLY;
             sca[hh] = 0.0;
             albedo[hh] = Asoil[hh];
-            LogMessage(hh, " going to 'EARLY' SWE ", SWE[hh], DT);
+            LogMessage(hh, " going to 'EARLY' SWE ", SWE[hh], TExtra::DT);
           }
         }
       break;
@@ -268,7 +268,7 @@ void ClassKevin::run(void) {
       if(snowmeltD[hh] >= meltthresh[hh] && SnowStat[hh] == EARLY && SWE[hh] > 5) {  // use today's melt // threshold for major melt event(5 mm/day)
         SnowStat[hh]  = MATURE;   // switch to MATURE
         SWEpeak[hh]   = SWE[hh];
-        LogMessage(hh, "'Kevin' SWE peak ", SWEpeak[hh], DT);
+        LogMessage(hh, "'Kevin' SWE peak ", SWEpeak[hh], TExtra::DT);
         LogDebug(" ");
         SWElast[hh]   = SWE[hh];
       }

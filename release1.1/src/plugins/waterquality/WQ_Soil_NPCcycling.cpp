@@ -476,7 +476,7 @@ void ClassWQ_SoilBGC::run(void) {
 void ClassWQ_SoilBGC::finish(bool good) {
 
   for(hh = 0; chkStruct(); ++hh) {
-    LogMessage(hh, string("'" + Name + " (WQ_Soil_BGC)'").c_str(), BLANK);
+    LogMessage(hh, string("'" + Name + " (WQ_Soil_BGC)'").c_str(), TExtra::BLANK);
   }
   LogDebug(" ");
 }

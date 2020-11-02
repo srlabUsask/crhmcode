@@ -154,7 +154,7 @@ void Classfrozen::run(void) {
 
       infiltype[hh] = RESTRICTED;
 
-      LogMessage(hh, " ice lens formed at temperature of ", hru_tmin[hh], DT);
+      LogMessage(hh, " ice lens formed at temperature of ", hru_tmin[hh], TExtra::DT);
       LogDebug(" ");
 
       CRHMException TExcept(string(string("Ice lens formed in HRU ") + to_string(hh+1) +", at minimum temperature of " + FloatToStrF(hru_tmin[hh], TFloatFormat::ffGeneral, 4, 1)).c_str(), WARNING);
@@ -205,7 +205,7 @@ void Classfrozen::run(void) {
 
           SetOpportunityTime = false;
           string s = Name + " End save ";
-          LogMessage(s.c_str(), DD);
+          LogMessage(s.c_str(), TExtra::DD);
           Julian_window[0] = 0;
         }
       }
@@ -282,7 +282,7 @@ void Classfrozen::run(void) {
           SetOpportunity = true;
           ++Global::CRHMControlSaveCnt; // save state for backtrack. Inhibit output, including this interval
           string s = Name + " Start save ";
-          LogMessage(s.c_str(), DD);
+          LogMessage(s.c_str(), TExtra::DD);
         }
 
         if(Update_infil){

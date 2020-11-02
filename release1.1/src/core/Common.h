@@ -56,7 +56,7 @@ using namespace std;
 
 enum TMemoSel { LOG, DEBUG };
 enum TExcept { NONE, ERR, DECLERR, WARNING, USER, TERMINATE };
-enum TExtra { BLANK, DD, TT, DT };
+enum class TExtra { BLANK, DD, TT, DT };
 enum TAKA { AKAERROR = -1, VARG, OBSR, VARD, OBSD, PARD, OBSF, AKAEND };
 enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll, mbNoToAll, mbYesToAll, mbHelp };
 

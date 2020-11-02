@@ -31,7 +31,7 @@ void ClassNOP::init(void) {
 void ClassNOP::finish(bool good) {
 
   for(hh = 0; chkStruct(); ++hh) {
-    LogMessage(hh, string("'" + Name + " (NOP)'").c_str(), BLANK);
+    LogMessage(hh, string("'" + Name + " (NOP)'").c_str(), TExtra::BLANK);
   }
   LogDebug(" ");
 }

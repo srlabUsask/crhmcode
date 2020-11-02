@@ -1909,26 +1909,26 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 				else if (Global::DTnow == Global::RapidAdvanceTo + Global::Interval && !Global::LoopCnt) { // reached RapidAdvanceTo and NO looping.
 					Global::CRHMStatus &= 125; // clear status == 2 (main control) and resume display
-					LogMessage("Terminate fast loop aheadMain", DD);
+					LogMessage("Terminate fast loop aheadMain", TExtra::DD);
 				}
 				else if (Global::DTnow == Global::RapidAdvanceTo && Global::LoopCnt) { // reached RapidAdvanceTo with looping.
 					if (Global::LoopCntDown == -1) { // first time
 						Global::LoopCntDown = Global::LoopCnt;
 						StatePar = ParFind("basin StateVars_to_Update");
 						ControlSaveState(true, StatePar, Global::RunUpBitSet); // save this position
-						LogMessage("Initialise LoopTo Main", DD);
+						LogMessage("Initialise LoopTo Main", TExtra::DD);
 					}
 				}
 				else if (Global::DTnow == Global::LoopTo && Global::LoopCnt) { // reached LoopTo position
 					ControlReadState(true, StatePar); // return to earlier position
 					--Global::LoopCntDown; // after above ReadState
-					LogMessage("Reached loop Main", DD);
+					LogMessage("Reached loop Main", TExtra::DD);
 					if (Global::LoopCntDown <= 0) {
 						ResetLoopList();
 						Global::CRHMStatus &= 125; // remove status == 2 (inhibit display)
 						Global::CRHMStatus |= 4; // flag done
 						Global::LoopCntDown = -1;
-						LogMessage("Terminate LoopTo Main", DD);
+						LogMessage("Terminate LoopTo Main", TExtra::DD);
 						continue;
 					}
 				}
@@ -2004,7 +2004,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			if (Global::CRHMControlSaveCnt && !(Global::CRHMStatus & 1)) { // Set module mode. Save current position.
 				ControlSaveState(false, StatePar, Global::ModuleBitSet);
 				Global::CRHMStatus |= 1; // set module control bit and inhibit display.
-				LogMessage("Start save Main", DD);
+				LogMessage("Start save Main", TExtra::DD);
 			}
 
 			// module loop control reset
@@ -2013,7 +2013,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				ControlReadState(false, NULL); // restore all
 				Global::CRHMStatus &= 126; // reset module mode.
 				Global::CRHMControlSaveCnt = 0; // required for Global::DTindx >= Global::DTmax-1 condition
-				LogMessage("End save Main", DD);
+				LogMessage("End save Main", TExtra::DD);
 				LogDebug(" ");
 
 				if (Global::Freq == 1) {
