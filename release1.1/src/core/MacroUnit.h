@@ -81,7 +81,7 @@ public:
 
 protected:
 	CRHM::TDim getTDim(string D);
-	CRHM::TFun getTFunc(string D);
+	TFun getTFunc(string D);
 	ClassMacro *Macro;
 	symtab_t::iterator FP;
 	double *fix;
@@ -235,7 +235,7 @@ public:
 
 	string obs;
 	string name;
-	CRHM::TFun typeFun;
+	TFun typeFun;
 };
 
 #endif

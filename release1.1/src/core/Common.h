@@ -76,6 +76,8 @@ enum class TIMEFORMAT { MS, MMDDYYYY, YYYYMMDD };
 
 enum class LMODULE { BASIC, MACRO, ADVANCE, SUPPORT, CUSTOM, PROTO, OBSOL };
 
+enum class TFun { FOBS, VP_SAT, W_MJ, MJ_W, AVG, MIN, MAX, TOT, POS, FIRST, LAST, CNT, CNT0, DLTA, INTVL, DAY, DTOT };
+
 namespace CRHM {
 	enum TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all variables/parameters
 
@@ -90,7 +92,7 @@ namespace CRHM {
 	
 
 	enum TTiming { IDLE, EARLY, MELT, MELT2, MATURE, HOLD };
-	enum TFun { FOBS, VP_SAT, W_MJ, MJ_W, AVG, MIN, MAX, TOT, POS, FIRST, LAST, CNT, CNT0, DLTA, INTVL, DAY, DTOT };
+	
 
 	enum TValue { PSI, KSAT, WILT, FCAP, PORG, PORE, AIRENT, PORESZ, AVAIL };
 

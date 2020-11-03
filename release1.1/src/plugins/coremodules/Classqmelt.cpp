@@ -51,10 +51,10 @@ void Classqmelt::decl(void) {
   declreadobs("ts", NOBS, "skin temperature", "(°C)", &ts);
 
 
-  declobsfunc("ta",  "Tmean", &tmean, AVG);
-  declobsfunc("ts", "Tsmean", &tsmean, AVG);
-  declobsfunc("ta",  "Tpos", &tpos, POS);
-  declobsfunc("ts", "Tspos", &tspos, POS);
+  declobsfunc("ta",  "Tmean", &tmean, TFun::AVG);
+  declobsfunc("ts", "Tsmean", &tsmean, TFun::AVG);
+  declobsfunc("ta",  "Tpos", &tpos, TFun::POS);
+  declobsfunc("ts", "Tspos", &tspos, TFun::POS);
 }
 
 void Classqmelt::init(void) {

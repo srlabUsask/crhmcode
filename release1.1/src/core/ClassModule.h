@@ -245,9 +245,9 @@ public:
 
 	long declobs(string name, CRHM::TDim dimen, string help, string units, double **value);
 
-	long declobsfunc(string obs, string variable, double **value, CRHM::TFun typeFun, double ***layvalue = NULL, bool optional = false);
+	long declobsfunc(string obs, string variable, double **value, TFun typeFun, double ***layvalue = NULL, bool optional = false);
 
-	long declobsfunc(string obs, string variable, long **value, CRHM::TFun typeFun, bool optional = false);
+	long declobsfunc(string obs, string variable, long **value, TFun typeFun, bool optional = false);
 
 	long declputvar(string source, string name, string units, double **value, double ***layvalue = NULL);
 

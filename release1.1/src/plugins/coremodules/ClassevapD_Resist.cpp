@@ -78,11 +78,11 @@ void ClassevapD_Resist::decl(void) {
 
   declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q, false);
 
-  declobsfunc("Qsi", "Qsi_mean", &Qsi_mean, AVG, NULL, false);
+  declobsfunc("Qsi", "Qsi_mean", &Qsi_mean, TFun::AVG, NULL, false);
 
   declreadobs("Ts", NHRU, "surface temperature", "(°C)", &Ts, HRU_OBS_misc, true);
 
-  declobsfunc("Ts", "Tsmean", &Tsmean, AVG, NULL, true);
+  declobsfunc("Ts", "Tsmean", &Tsmean, TFun::AVG, NULL, true);
 }
 
 void ClassevapD_Resist::init(void) {

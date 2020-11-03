@@ -109,7 +109,7 @@ public:
 	bool StatVar;
 	long InGroup;
 	bool nfreq;
-	CRHM::TFun FunKind;
+	TFun FunKind;
 	bool Daily {NULL}; // used by AddObsPlot to decide how to apply function to input obs/var
 
 	double * values;
@@ -141,7 +141,7 @@ public:
 
 		string name = "none")
 		: module(module), name(name), help(""), DLLName(""), root(""), varType(CRHM::none), dim(0), dimMax(0), lay(0), variation_set(0), nfreq(false),
-		optional(false), StatVar(false), InGroup(0), visibility(CRHM::USUAL), FunKind(CRHM::FOBS), VarFunct(0),
+		optional(false), StatVar(false), InGroup(0), visibility(CRHM::USUAL), FunKind(TFun::FOBS), VarFunct(0),
 		values(NULL), ivalues(NULL), layvalues(NULL), ilayvalues(NULL), Daily(false),
 		offset(0), cnt(0), FileData(NULL), HRU_OBS_indexed(0), UserFunct(NULL), FunctVar(NULL), CustomFunct(NULL), No_ReadVar(0), PointPlot(false), TchrtOpt(0) {};
 
@@ -153,7 +153,7 @@ public:
 
 	ClassVar(string module, string name, long cnt, long offset, ClassData * FileData)
 		: module(module), name(name), help(""), DLLName(""), root(""), varType(CRHM::Read), dim(cnt), dimMax(0), lay(0), variation_set(0), nfreq(false),
-		optional(false), StatVar(false), InGroup(0), visibility(CRHM::USUAL), FunKind(CRHM::FOBS), VarFunct(0),
+		optional(false), StatVar(false), InGroup(0), visibility(CRHM::USUAL), FunKind(TFun::FOBS), VarFunct(0),
 		offset(offset), cnt(cnt), FileData(FileData), HRU_OBS_indexed(0), UserFunct(NULL), FunctVar(NULL), CustomFunct(NULL), No_ReadVar(0), dimen(CRHM::NOBS),
 		values(NULL), ivalues(NULL), layvalues(NULL), ilayvalues(NULL), Daily(false), PointPlot(false), TchrtOpt(0) {};
 

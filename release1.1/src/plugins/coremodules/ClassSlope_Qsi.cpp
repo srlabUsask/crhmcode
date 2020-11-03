@@ -28,7 +28,7 @@ void ClassSlope_Qsi::decl(void) {
 
   declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
 
-  declobsfunc("Qsi", "QsiD_Obs", &QsiD, AVG);
+  declobsfunc("Qsi", "QsiD_Obs", &QsiD, TFun::AVG);
 
   declgetvar("*", "Qdro",   "(W/m^2)", &Qdro);
   declgetvar("*", "Qdfo",   "(W/m^2)", &Qdfo);

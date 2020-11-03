@@ -90,8 +90,8 @@ ClassShutWallD* ClassShutWallD::klone(string name) const{
   declreadobs("Qn", NHRU, "net all-wave", "(W/m^2)", &Qn, HRU_OBS_Q);
   declreadobs("Qg", NHRU, "ground flux", "(W/m^2)", &Qg, HRU_OBS_misc);
 
-  declobsfunc("Qn", "Qnmean", &Qnmean, AVG);
-  declobsfunc("Qg", "Qgmean", &Qgmean, AVG);
+  declobsfunc("Qn", "Qnmean", &Qnmean, TFun::AVG);
+  declobsfunc("Qg", "Qgmean", &Qgmean, TFun::AVG);
 
 }
 

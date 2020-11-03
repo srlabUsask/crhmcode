@@ -54,7 +54,7 @@ ClassLongVt* ClassLongVt::klone(string name) const{
 
   declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
 
-  declobsfunc("Qsi", "QsiDavg", &QsiDavg, AVG, NULL, true); // must check for NULL
+  declobsfunc("Qsi", "QsiDavg", &QsiDavg, TFun::AVG, NULL, true); // must check for NULL
 
 
   variation_set = VARIATION_1;

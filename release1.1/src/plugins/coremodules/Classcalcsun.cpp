@@ -35,7 +35,7 @@ void Classcalcsun::decl(void) {
 
   declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q, true); // must check for NULL
 
-  declobsfunc("Qsi", "Qsitot", &Qsitot, DTOT, NULL, true); // must check for NULL
+  declobsfunc("Qsi", "Qsitot", &Qsitot, TFun::DTOT, NULL, true); // must check for NULL
 
   variation_set = VARIATION_2;
 

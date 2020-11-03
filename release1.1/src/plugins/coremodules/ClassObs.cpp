@@ -119,16 +119,16 @@ void Classobs::decl(void) {
   Global::RH_EA_obs = -1;
 
   decldiag("Tday", NFREQ, "observation t unavailable", "(°C)", &NotUsed, &tday_intvls);
-  Exist = declobsfunc("t", "Tday", &NotUsed, INTVL, &tday_intvls);
+  Exist = declobsfunc("t", "Tday", &NotUsed, TFun::INTVL, &tday_intvls);
 
   decldiag("RHday", NFREQ, "observation rh unavailable", "(kPa)", &NotUsed, &rhday_intvls);
-  Exist = declobsfunc("rh", "RHday", &NotUsed, INTVL, &rhday_intvls, true);
+  Exist = declobsfunc("rh", "RHday", &NotUsed, TFun::INTVL, &rhday_intvls, true);
 
   if(Exist >= 0)
     Global::RH_EA_obs = 0;
 
   decldiag("EAday", NFREQ, "observation ea unavailable", "(kPa)", &NotUsed, &eaday_intvls);
-  Exist = declobsfunc("ea", "EAday", &NotUsed, INTVL, &eaday_intvls, true);
+  Exist = declobsfunc("ea", "EAday", &NotUsed, TFun::INTVL, &eaday_intvls, true);
 
   if(Exist >= 0)
     if(Global::RH_EA_obs < 0){
@@ -139,11 +139,11 @@ void Classobs::decl(void) {
       LogError(TExcept);
     }
 
-  declobsfunc("u", "Umean", &umean, AVG);
+  declobsfunc("u", "Umean", &umean, TFun::AVG);
 
-  declobsfunc("ppt", "pptD", &pptD, FIRST, NULL, true);
+  declobsfunc("ppt", "pptD", &pptD, TFun::FIRST, NULL, true);
 
-  declobsfunc("p", "p", const_cast<double **> (&p), FOBS, NULL, true);
+  declobsfunc("p", "p", const_cast<double **> (&p), TFun::FOBS, NULL, true);
 
 
   variation_set = VARIATION_0 + VARIATION_1;

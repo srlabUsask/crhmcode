@@ -1794,7 +1794,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 			*layvalue = (const long **)newVar->ilayvalues;
 			newVar->UserFunct = &ClassVar::Intvl;
-			newVar->FunKind = CRHM::INTVL;
+			newVar->FunKind = TFun::INTVL;
 			newVar->FunctVar = newVar;
 			addtofunctlist(newVar);  //insert in Obs read list
 		}
@@ -1825,7 +1825,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 //---------------------------------------------------------------------------
 
-long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM::TFun typeFun, double ***layvalue, bool optional) {
+long ClassModule::declobsfunc(string obs, string variable, double **value, TFun typeFun, double ***layvalue, bool optional) {
 
 	MapVar::iterator itVar;
 	ClassVar *obsVar, *newVar;
@@ -1917,7 +1917,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 				if (!newVar) { // Applies to ppt, p etc. when building a new project with NO observations defined
 
 					newVar = new ClassVar(Name, variable, nhru,
-						obsVar->help + " <" + Fstrings[typeFun] + "> ",
+						obsVar->help + " <" + Fstrings[(int)typeFun] + "> ",
 						obsVar->units, CRHM::Float);
 
 					newVar->dimMax = nhru;
@@ -1953,7 +1953,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 					throw Except;
 				}
 
-				if (typeFun == CRHM::INTVL) {
+				if (typeFun == TFun::INTVL) {
 
 					newVar->ReleaseM(false); // needs to release current values
 					newVar->dim = max<long>(nhru, newVar->dim);
@@ -1980,57 +1980,57 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 					newVar->CustomFunct = NULL; // Set by 'declobsfunc' for Groups. If simple set by 'addtoreadlist'
 
 				switch (typeFun) {
-				case CRHM::FOBS:
+				case TFun::FOBS:
 					newVar->FunctVar = obsVar;
-					newVar->FunKind = CRHM::FOBS;
+					newVar->FunKind = TFun::FOBS;
 					newVar->FileData = obsVar->FileData;
 					if (GroupCnt)
 						newVar->No_ReadVar = 1;  // do not read observation
 					break;
-				case CRHM::AVG:
+				case TFun::AVG:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Avg;
-					newVar->FunKind = CRHM::AVG;
+					newVar->FunKind = TFun::AVG;
 					break;
-				case CRHM::MIN:
+				case TFun::MIN:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Min;
-					newVar->FunKind = CRHM::MIN;
+					newVar->FunKind = TFun::MIN;
 					break;
-				case CRHM::MAX:
+				case TFun::MAX:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Max;
-					newVar->FunKind = CRHM::MAX;
+					newVar->FunKind = TFun::MAX;
 					break;
-				case CRHM::DTOT:
+				case TFun::DTOT:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Dtot;
-					newVar->FunKind = CRHM::DTOT;
+					newVar->FunKind = TFun::DTOT;
 					break;
-				case CRHM::TOT:
+				case TFun::TOT:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Tot;
-					newVar->FunKind = CRHM::TOT;
+					newVar->FunKind = TFun::TOT;
 					break;
-				case CRHM::FIRST:
+				case TFun::FIRST:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::First;
-					newVar->FunKind = CRHM::FIRST;
+					newVar->FunKind = TFun::FIRST;
 					break;
-				case CRHM::LAST:
+				case TFun::LAST:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Last;
-					newVar->FunKind = CRHM::LAST;
+					newVar->FunKind = TFun::LAST;
 					break;
-				case CRHM::POS:
+				case TFun::POS:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Pos;
-					newVar->FunKind = CRHM::POS;
+					newVar->FunKind = TFun::POS;
 					break;
-				case CRHM::INTVL:
+				case TFun::INTVL:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Intvl;
-					newVar->FunKind = CRHM::INTVL;
+					newVar->FunKind = TFun::INTVL;
 					newVar->offset = newVar->FunctVar->offset;
 
 					*layvalue = newVar->layvalues;
@@ -2042,7 +2042,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 				*value = newVar->values;
 
 				newVar->HRU_OBS_indexed = obsVar->HRU_OBS_indexed;
-				if (newVar->FunKind == CRHM::FOBS)
+				if (newVar->FunKind == TFun::FOBS)
 					addtoreadlist(newVar);
 				else if ((Global::RH_EA_obs == -1 && obs == "rh") || (Global::RH_EA_obs == -1 && obs == "ea") || Global::OBS_AS_IS || !(obs == "ea" || obs == "rh"))  //warning resolved by Manishankar
 					addtofunctlist(newVar);
@@ -2069,7 +2069,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::TFun typeFun, bool optional) {
+long ClassModule::declobsfunc(string obs, string variable, long **value, TFun typeFun, bool optional) {
 
 	MapVar::iterator itVar;
 	ClassVar *obsVar, *newVar;
@@ -2132,7 +2132,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 		}
 
 		newVar = new ClassVar(Name, variable, obsVar->dim,
-			obsVar->help + " <" + Fstrings[typeFun] + "> ",
+			obsVar->help + " <" + Fstrings[(int)typeFun] + "> ",
 			obsVar->units, CRHM::Float);
 
 		newVar->varType = CRHM::Float;
@@ -2183,45 +2183,45 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 			}
 
 			switch (typeFun) {
-			case CRHM::AVG:
+			case TFun::AVG:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Avg;
-				newVar->FunKind = CRHM::AVG;
+				newVar->FunKind = TFun::AVG;
 				break;
-			case CRHM::MIN:
+			case TFun::MIN:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Min;
-				newVar->FunKind = CRHM::MIN;
+				newVar->FunKind = TFun::MIN;
 				break;
-			case CRHM::MAX:
+			case TFun::MAX:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Max;
-				newVar->FunKind = CRHM::MAX;
+				newVar->FunKind = TFun::MAX;
 				break;
-			case CRHM::DTOT:
+			case TFun::DTOT:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Dtot;
-				newVar->FunKind = CRHM::DTOT;
+				newVar->FunKind = TFun::DTOT;
 				break;
-			case CRHM::TOT:
+			case TFun::TOT:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Tot;
-				newVar->FunKind = CRHM::TOT;
+				newVar->FunKind = TFun::TOT;
 				break;
-			case CRHM::FIRST:
+			case TFun::FIRST:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::First;
-				newVar->FunKind = CRHM::FIRST;
+				newVar->FunKind = TFun::FIRST;
 				break;
-			case CRHM::LAST:
+			case TFun::LAST:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Last;
-				newVar->FunKind = CRHM::LAST;
+				newVar->FunKind = TFun::LAST;
 				break;
-			case CRHM::POS:
+			case TFun::POS:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Pos;
-				newVar->FunKind = CRHM::POS;
+				newVar->FunKind = TFun::POS;
 				break;
 			default:
 				break;

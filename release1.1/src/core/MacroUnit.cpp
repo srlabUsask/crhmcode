@@ -829,7 +829,7 @@ CRHM::TDim DefCRHM::getTDim(string D) {
 	return (CRHM::TDim) - 1;
 }
 
-CRHM::TFun DefCRHM::getTFunc(string D) {
+TFun DefCRHM::getTFunc(string D) {
 	char table[][9] = {
 		"FOBS",
 		"W_MJ",
@@ -849,9 +849,9 @@ CRHM::TFun DefCRHM::getTFunc(string D) {
 
 	for (long ii = 1; ii < 11; ++ii)
 		if (D == table[ii])
-			return (CRHM::TFun) ii;
+			return (TFun) ii;
 
-	return (CRHM::TFun) - 1;
+	return (TFun) - 1;
 }
 
 Defdeclparam::Defdeclparam(ClassMacro *Macro_) : DefCRHM(Macro_) {

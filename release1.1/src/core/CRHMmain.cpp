@@ -977,12 +977,12 @@ void  CRHMmain::Label4Click(void) {
 }
 //---------------------------------------------------------------------------
 
-CRHM::TFun  CRHMmain::FindObservationType(string Kind) {
+TFun  CRHMmain::FindObservationType(string Kind) {
 
 	if (Kind == "_obs") Kind = "";
-	for (int ii = CRHM::FOBS; ii <= CRHM::LAST; ii++)
-		if (Kind == Sstrings[ii]) return (CRHM::TFun)ii;
-	return (CRHM::TFun) 0;
+	for (int ii = (int)TFun::FOBS; ii <= (int)TFun::LAST; ii++)
+		if (Kind == Sstrings[ii]) return (TFun)ii;
+	return (TFun::FOBS);
 }
 //---------------------------------------------------------------------------
 
@@ -1464,7 +1464,7 @@ void   CRHMmain::FreeChart1(void)
 		for (int ii = 0; ii < SeriesCnt; ii++) {
 
 			ClassVar* thisVar = (ClassVar *)cdSeries[ii]->Tag;
-			if (thisVar->FunKind > CRHM::FOBS && !thisVar->values && !thisVar->ivalues)
+			if (thisVar->FunKind > TFun::FOBS && !thisVar->values && !thisVar->ivalues)
 				delete thisVar;
 
 		}

@@ -157,7 +157,7 @@ public:
 
 	void Label4Click(void);
 
-	CRHM::TFun FindObservationType(string Kind);
+	TFun FindObservationType(string Kind);
 
 	void SqueezeParams(void);
 
@@ -188,7 +188,7 @@ public:
 
 
 
-	CRHM::TFun Funct = CRHM::FOBS;
+	TFun Funct = TFun::FOBS;
 
 	int InitModCnt = 0;
 	int InitMacroCnt = 0;
