@@ -17,6 +17,8 @@
 
 using namespace std;
 
+enum class OUTCOME { None, Implicit, Explicit, IgnoreObs, IgnoreVar, IgnoreObsFunct };
+
 class Administer;
 
 class   ClassModule {

@@ -2457,8 +2457,8 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 
 	Mapstr2::iterator it; // holds NewName AND source
 
-	enum { None, Implicit, Explicit, IgnoreObs, IgnoreVar, IgnoreObsFunct } Outcome;
-	Outcome = None;
+	
+	OUTCOME Outcome = OUTCOME::None;
 
 	TAKA typeL = type; // fudge until AKA screen fixed
 	if (type == TAKA::OBSF)
@@ -2472,9 +2472,9 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 		Try = Try.substr(0, Try.find(' '));
 		if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) { // looping redirection
 			if (typeL == TAKA::OBSF)
-				Outcome = IgnoreObsFunct;
+				Outcome = OUTCOME::IgnoreObsFunct;
 			else
-				Outcome = IgnoreObs;
+				Outcome = OUTCOME::IgnoreObs;
 		}
 		else if (GroupCnt && type == TAKA::VARG) {
 			string A;
@@ -2486,16 +2486,16 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 				Try = Try.substr(0, Try.find(' '));
 				NewName = (*it).second;
 				NewName = NewName.substr(0, NewName.find(' '));
-				Outcome = Implicit;
+				Outcome = OUTCOME::Implicit;
 			}
 		}
 		else if (typeL == TAKA::OBSF && Try[Try.size() - 1] == '#') { // declared observation and daily function
-			Outcome = IgnoreObsFunct;
+			Outcome = OUTCOME::IgnoreObsFunct;
 		}
 		else if (type == TAKA::OBSR) { //  observation   !!! was typeL 08/20/10
 			if (Try[Try.size() - 1] == '#') {
 				if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) {
-					Outcome = IgnoreObs;
+					Outcome = OUTCOME::IgnoreObs;
 				}
 			}
 
@@ -2503,14 +2503,14 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 			NewName = NewName.substr(0, NewName.find(' '));
 			source = (*it).second;
 			source = source.substr(source.find(' ') + 1) + ' ';
-			Outcome = Explicit;
+			Outcome = OUTCOME::Explicit;
 		}
 		else if (type == TAKA::VARG) { // handle read operation
 			NewName = (*it).second;
 			NewName = NewName.substr(0, NewName.find(' '));
 			source = (*it).second;
 			source = source.substr(source.find(' ') + 1);
-			Outcome = Explicit;
+			Outcome = OUTCOME::Explicit;
 		}
 	} // Above found in AKA table
 	else {
@@ -2520,7 +2520,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 				NewName = OrgName;
 				source = "obs ";
 				Try = NewName;
-				Outcome = Implicit;
+				Outcome = OUTCOME::Implicit;
 			}
 			else {
 				string mod_var = ID.substr(ID.find(' ') + 1) + '#';
@@ -2529,7 +2529,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 					NewName = OrgName + '#';
 					source = module + ' ';
 					Try = NewName;
-					Outcome = Implicit;
+					Outcome = OUTCOME::Implicit;
 				}
 			}
 		}
@@ -2547,12 +2547,12 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 				Try = (*it).second;
 				Try = Try.substr(0, Try.find('@'));
 				if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) {
-					Outcome = IgnoreVar;
+					Outcome = OUTCOME::IgnoreVar;
 				}
 				else {
 					NewName = (*it).second;
 					NewName = NewName.substr(0, NewName.find(' '));
-					Outcome = Implicit;
+					Outcome = OUTCOME::Implicit;
 				}
 			}
 		}
@@ -2560,39 +2560,39 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 
 	ID = AKAstrings[(int)typeL] + " (" + base + ") " + module + " -> " + OrgName + ' ';
 	switch (Outcome) {
-	case IgnoreObs:
+	case OUTCOME::IgnoreObs:
 		LogMessage(string(ID + " *** AKA warning, not changed to *** " + source + "->" + Try).c_str());
 		break;
-	case IgnoreObsFunct:
+	case OUTCOME::IgnoreObsFunct:
 		LogMessage(string(ID + "*** AKA warning, not changed to *** " + source + "->" + Try).c_str());
 		break;
-	case IgnoreVar: // VARG
+	case OUTCOME::IgnoreVar: // VARG
 		LogMessage(string(ID + "*** AKA warning, not changed to *** " + source + "->" + Try).c_str());
 		break;
 	default:
 		break;
 	} // switch
 
-	if (Global::ReportList && Outcome != None) {
+	if (Global::ReportList && Outcome != OUTCOME::None) {
 		string reason = "";
 		switch (Outcome) {
-		case Explicit:
+		case OUTCOME::Explicit:
 			source = (ID + " changed to " + source + "-> " + Try).c_str();
 			reason = " *** Explicit *** ";
 			break;
-		case Implicit:
+		case OUTCOME::Implicit:
 			source = (ID + " changed to " + source + "-> " + Try).c_str();
 			reason = " *** Implicit *** ";
 			break;
-		case IgnoreObs:
+		case OUTCOME::IgnoreObs:
 			source = (ID + " AKA warning, not changed to " + source + "-> " + Try).c_str();
 			reason = " *** source module AKA observation redirection would loop output to input";
 			break;
-		case IgnoreObsFunct:
+		case OUTCOME::IgnoreObsFunct:
 			source = (ID + " AKA warning, not changed to " + source + "-> " + Try).c_str();
 			reason = " *** daily function cannot be a declared observation";
 			break;
-		case IgnoreVar: // VARG
+		case OUTCOME::IgnoreVar: // VARG
 			source = (ID + " AKA warning, not changed to " + source + "-> " + Try).c_str();
 			reason = " *** source module AKA variable redirection would loop output to input";
 			break;
