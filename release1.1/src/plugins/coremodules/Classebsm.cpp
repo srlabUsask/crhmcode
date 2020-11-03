@@ -132,7 +132,7 @@ void Classebsm::init(void) {
 
     if(variation == VARIATION_ORG)
       if(nfactor[hh] != 0.0 && QnD == NULL){
-        CRHMException TExcept("ebsm: nfactor > 0.0 with observation 'QnD' not defined!", TERMINATE);
+        CRHMException TExcept("ebsm: nfactor > 0.0 with observation 'QnD' not defined!", TExcept::TERMINATE);
         LogError(TExcept);
       }
   }

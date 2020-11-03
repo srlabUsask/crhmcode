@@ -105,7 +105,7 @@ void ClassHMSA::init(void) {
 
   for(hh = 0; chkStruct(); ++hh) {
     if(Soil_Layers[hh] > nlay){
-      CRHMException TExcept("In module 'HMSA' Soil_Layers parameter must be <= number of layers (nlay)!", TERMINATE);
+      CRHMException TExcept("In module 'HMSA' Soil_Layers parameter must be <= number of layers (nlay)!", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
@@ -243,7 +243,7 @@ void ClassHMSA::run(void) {
                   if(FrontCnt[hh] < MaxFrontCnt-1)
                     ++FrontCnt[hh];
                   else{
-                    CRHMException TExcept("Maximum # of fronts exceeded ", TERMINATE);
+                    CRHMException TExcept("Maximum # of fronts exceeded ", TExcept::TERMINATE);
                     LogError(TExcept);
                     throw TExcept;
                   }
@@ -289,7 +289,7 @@ void ClassHMSA::run(void) {
                     if(FrontCnt[hh] < MaxFrontCnt-1)
                       ++FrontCnt[hh];
                     else{
-                      CRHMException TExcept("Maximum # of fronts exceeded ", TERMINATE);
+                      CRHMException TExcept("Maximum # of fronts exceeded ", TExcept::TERMINATE);
                       LogError(TExcept);
                       throw TExcept;
                     }

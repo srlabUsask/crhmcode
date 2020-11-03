@@ -820,7 +820,7 @@ void ClassWQ_SoilBGC::finish(bool good) {
 		string S = string("Error ") + " at " +
 		  StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " (" + to_string(getstep()) + ") in '" + Global::OurModulesList->Strings[Global::CurrentModuleRun] +
           "'" + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 6) + ") hh = " + FloatToStrF(hh, TFloatFormat::ffGeneral, 6, 0);
-      LogError(S, WARNING);
+      LogError(S, TExcept::WARNING);
       throw;
     }
   }  // crop_sources

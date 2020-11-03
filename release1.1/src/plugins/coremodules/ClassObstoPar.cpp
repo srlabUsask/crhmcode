@@ -40,7 +40,7 @@ void ClassObstoPar::init(void) {
   nhru = getdim(NHRU);
 
   if(Ht_obs == NULL){
-    CRHMException TExcept("\"Ht_obs\". No observation vegetation height data!  Using constant parameter value instead.", WARNING);
+    CRHMException TExcept("\"Ht_obs\". No observation vegetation height data!  Using constant parameter value instead.", TExcept::WARNING);
     LogError(TExcept);
   }
 

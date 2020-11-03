@@ -76,37 +76,37 @@ void ClassTestSparse::init(void) {
   nhru = getdim(NHRU);
 
     if(ObsCnt_N_up > -1){
-      CRHMException TExcept("Handling N fertilizer from (Fert_N_up) observation.", WARNING);
+      CRHMException TExcept("Handling N fertilizer from (Fert_N_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCnt_P_up > -1){
-      CRHMException TExcept("Handling P fertilizer from (Fert_P_up) observation.", WARNING);
+      CRHMException TExcept("Handling P fertilizer from (Fert_P_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntMan_N_up > -1){
-      CRHMException TExcept("Handling N manure from (Man_N_up) observation.", WARNING);
+      CRHMException TExcept("Handling N manure from (Man_N_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntMan_P_up > -1){
-      CRHMException TExcept("Handling P manure from (Man_P_up) observation.", WARNING);
+      CRHMException TExcept("Handling P manure from (Man_P_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntRes_N_up > -1){
-      CRHMException TExcept("Handling N residues from (Res_N_up) observation.", WARNING);
+      CRHMException TExcept("Handling N residues from (Res_N_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntRes_P_up > -1){
-      CRHMException TExcept("Handling P residues from (Res_P_up) observation.", WARNING);
+      CRHMException TExcept("Handling P residues from (Res_P_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCnt_fertperiod > -1){
-      CRHMException TExcept("Handling fertilizer and manure period (Fertperiod) observation.", WARNING);
+      CRHMException TExcept("Handling fertilizer and manure period (Fertperiod) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 

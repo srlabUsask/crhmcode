@@ -55,11 +55,11 @@ void Classalbedoobs2::init(void) {
   nhru = getdim(NHRU);
 
   if(Albedo_obs == NULL){
-    CRHMException TExcept("\"albedo_obs\". No observation albedo data!  Using calculated albedo instead.", WARNING);
+    CRHMException TExcept("\"albedo_obs\". No observation albedo data!  Using calculated albedo instead.", TExcept::WARNING);
     LogError(TExcept);
   }
   else{
-    CRHMException TExcept("\"albedo_obs\". Using observation albedo data!.", WARNING);
+    CRHMException TExcept("\"albedo_obs\". Using observation albedo data!.", TExcept::WARNING);
     LogError(TExcept);
   }
 

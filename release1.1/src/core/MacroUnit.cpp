@@ -113,7 +113,7 @@ void ClassMacro::decl(void) {
 			if (Indx == -1) {
 
 				Common::Message(string("Module: '" + S + "' not found!"), "Macro Error");
-				CRHMException Except(string(string("module: ") + S + " not found in " + Name).c_str(), TERMINATE);
+				CRHMException Except(string(string("module: ") + S + " not found in " + Name).c_str(), TExcept::TERMINATE);
 				LogError(Except);
 				throw Except;
 
@@ -511,7 +511,7 @@ void ClassMacro::init(void) {
 		if (!info.hit || info.length == 0)
 		{
 			string err(first, str.end());
-			CRHMException TExcept(string("cannot parse the command string: ") + err.c_str(), TERMINATE);
+			CRHMException TExcept(string("cannot parse the command string: ") + err.c_str(), TExcept::TERMINATE);
 			LogError(TExcept);
 		}
 		else if (!info.full)
@@ -1500,12 +1500,12 @@ long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string he
 			else {
 				*value = newVar->values;
 				newVar->cnt = cnt; // required if previously an observation file
-				LogError(CRHMException(" macro module '" + module + "' creating declared observation: '" + name + "'", WARNING));
+				LogError(CRHMException(" macro module '" + module + "' creating declared observation: '" + name + "'", TExcept::WARNING));
 				return(newVar->cnt - 1);
 			}
 		}
 		else {
-			CRHMException Except("observation not found: " + module + " " + name, TERMINATE);
+			CRHMException Except("observation not found: " + module + " " + name, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}

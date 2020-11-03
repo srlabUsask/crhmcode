@@ -55,7 +55,7 @@
 using namespace std;
 
 enum class TMemoSel { LOG, DEBUG };
-enum TExcept { NONE, ERR, DECLERR, WARNING, USER, TERMINATE };
+enum class TExcept { NONE, ERR, DECLERR, WARNING, USER, TERMINATE };
 enum class TExtra { BLANK, DD, TT, DT };
 enum TAKA { AKAERROR = -1, VARG, OBSR, VARD, OBSD, PARD, OBSF, AKAEND };
 enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll, mbNoToAll, mbYesToAll, mbHelp };
@@ -139,7 +139,7 @@ class CRHMException {
 public:
 	std::string Message;
 	TExcept Kind;
-	CRHMException() : Message(""), Kind(NONE) {};
+	CRHMException() : Message(""), Kind(TExcept::NONE) {};
 	CRHMException(std::string Message, TExcept Kind) :
 		Message(Message), Kind(Kind) {};
 };

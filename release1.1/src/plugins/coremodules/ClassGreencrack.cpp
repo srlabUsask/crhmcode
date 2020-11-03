@@ -112,7 +112,7 @@ void ClassGreencrack::init(void) {
       Xinfil[jj] = new double[nhru];
   }
   catch (std::bad_alloc) {
-    CRHMException Except("Could not allocate in module CRACK." ,TERMINATE);
+    CRHMException Except("Could not allocate in module CRACK." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
   }

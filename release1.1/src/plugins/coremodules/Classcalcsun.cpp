@@ -63,11 +63,11 @@ void Classcalcsun::init(void) {
 
       case VARIATION_ORG:
         if(SunAct == NULL){
-          CRHMException TExcept(string("'" + Name + " (calcsun)' sunshine hours observation missing. Using Qsi instead.").c_str(), WARNING);
+          CRHMException TExcept(string("'" + Name + " (calcsun)' sunshine hours observation missing. Using Qsi instead.").c_str(), TExcept::WARNING);
           LogError(TExcept);
 
           if(Qsi == NULL || Qsitot == NULL){
-            CRHMException TExcept(string("'" + Name + " (calcsun)' Qsi interval observation missing.").c_str(), TERMINATE);
+            CRHMException TExcept(string("'" + Name + " (calcsun)' Qsi interval observation missing.").c_str(), TExcept::TERMINATE);
             LogError(TExcept);
           }
         }
@@ -75,14 +75,14 @@ void Classcalcsun::init(void) {
 
       case VARIATION_1:
         if(Qsi == NULL || Qsitot == NULL) {
-          CRHMException TExcept(string("'" + Name + " (calcsun)' Qsi interval observation missing.").c_str(), TERMINATE);
+          CRHMException TExcept(string("'" + Name + " (calcsun)' Qsi interval observation missing.").c_str(), TExcept::TERMINATE);
           LogError(TExcept);
         }
       break;
 
       case VARIATION_2:
         if(QsiD_Obs == NULL) {
-          CRHMException TExcept(string("'" + Name + " (calcsun)' QsiD_Obs daily observation missing.").c_str(), TERMINATE);
+          CRHMException TExcept(string("'" + Name + " (calcsun)' QsiD_Obs daily observation missing.").c_str(), TExcept::TERMINATE);
           LogError(TExcept);
         }
   } // switch
@@ -120,7 +120,7 @@ double Ratio;
         break;
 
       default :
-        CRHMException TExcept(string("'" + Name + " (variation)' 'variation not defined.").c_str(), TERMINATE);
+        CRHMException TExcept(string("'" + Name + " (variation)' 'variation not defined.").c_str(), TExcept::TERMINATE);
         LogError(TExcept);
       } // switch
 

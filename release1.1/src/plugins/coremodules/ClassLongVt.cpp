@@ -86,24 +86,24 @@ void ClassLongVt::init(void) {
 
   if(variation == VARIATION_ORG){
       if(!QsiDavg){ // only exists if an actual file observation
-        CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi observation to calculate tau. Qsi appears to be a declared obs instead of read from a file.").c_str(), TERMINATE);
+        CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi observation to calculate tau. Qsi appears to be a declared obs instead of read from a file.").c_str(), TExcept::TERMINATE);
         LogError(TExcept);
       }
       else{
-        CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi observation to calculate tau.").c_str(), WARNING);
+        CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi observation to calculate tau.").c_str(), TExcept::WARNING);
         LogError(TExcept);
       }
   }
   else if(variation == VARIATION_1){
-      CRHMException TExcept(string("'" + Name + " (LongVt)' using QsiDObs observation to calculate tau.").c_str(), WARNING);
+      CRHMException TExcept(string("'" + Name + " (LongVt)' using QsiDObs observation to calculate tau.").c_str(), TExcept::WARNING);
       LogError(TExcept);
   }
   else if(variation == VARIATION_2){
-      CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi_Var variable to calculate tau.").c_str(), WARNING);
+      CRHMException TExcept(string("'" + Name + " (LongVt)' using Qsi_Var variable to calculate tau.").c_str(), TExcept::WARNING);
       LogError(TExcept);
   }
   else if(variation == VARIATION_3){
-      CRHMException TExcept(string("'" + Name + " (LongVt)' using Qli observation to convert to QliVT_Var.").c_str(), WARNING);
+      CRHMException TExcept(string("'" + Name + " (LongVt)' using Qli observation to convert to QliVT_Var.").c_str(), TExcept::WARNING);
       LogError(TExcept);
   }
 }

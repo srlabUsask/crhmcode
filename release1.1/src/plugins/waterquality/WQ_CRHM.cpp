@@ -432,25 +432,25 @@ void ClassWQ_Soil::init(void) {
 
   if(snowinfilDiv > 1){
     string S = "Soil:  \"snowinfil\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(evapDiv > 1){
     string S = "Soil:  \"hru_evap\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(meltrunoffDiv > 1){
     string S = "Netroute:  \"meltrunoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(runoffDiv > 1){
     string S = "Netroute:  \"runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -486,21 +486,21 @@ void ClassWQ_Soil::init(void) {
         if(soil_rechr[hh] > soil_moist[hh]) {
           soil_rechr[hh] = soil_moist[hh];
           string S = string("'") + Name + " (Soil)' Soil_rechr greater than soil_moist, soil_rechr set to soil_moist, hru = " + to_string(hh).c_str();
-          CRHMException TExcept(S.c_str(), WARNING);
+          CRHMException TExcept(S.c_str(), TExcept::WARNING);
           LogError(TExcept);
           throw TExcept;
         }
 
         if(soil_rechr_max[hh] > soil_moist_max[hh]) {
           string S = string("'") + Name + " (Soil)' Soil_rechr_max cannot be greater than soil_moist_max in hru = " + to_string(hh+1).c_str();
-          CRHMException TExcept(S.c_str(), TERMINATE);
+          CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
           LogError(TExcept);
           throw TExcept;
         }
 
         if(Sdinit[hh] > Sdmax[hh]) {
           string S = string("'") + Name + " (Soil)' Initial value of depression storage is greater than the maximum value in hru = " + to_string(hh+1).c_str();
-          CRHMException Except(S.c_str() ,TERMINATE);
+          CRHMException Except(S.c_str() , TExcept::TERMINATE);
           LogError(Except);
           throw Except;
         }
@@ -508,7 +508,7 @@ void ClassWQ_Soil::init(void) {
         if(variation == VARIATION_1){
           if(culvert_water_Dmax[hh]/culvert_diam[hh] > 2.5){
             string S = "soil: " + string(Name.c_str()) +  " ratio of H/D > 2.5 in HRU " + to_string(hh+1);
-            CRHMException TExcept(S.c_str(), WARNING);
+            CRHMException TExcept(S.c_str(), TExcept::WARNING);
             LogError(TExcept);
           }
           culvert_water_V[hh] = 0.0;
@@ -1337,7 +1337,7 @@ void ClassWQ_Soil::run(void) {
         //string S = E.Message + " at " +
 		  string S = "Error" + string(" at ") + StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " (" + to_string(getstep()) + ") in '" + Global::OurModulesList->Strings[Global::CurrentModuleRun] +
             "'" + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 6) + ") hh = " + FloatToStrF(hh, TFloatFormat::ffGeneral, 6, 0) + " Sub = " + FloatToStrF(Sub, TFloatFormat::ffGeneral, 6, 0);
-        LogError(S, WARNING);
+        LogError(S, TExcept::WARNING);
         std::cout  << "Diogo: Exception occurred in \"ClassWQ_Soil::run\" " << std::endl;
         if(++FaultsAllowed == 1)
          throw;
@@ -1995,7 +1995,7 @@ void ClassWQ_Netroute::init(void) {
       for(hh = 0; hh < nhru; ++hh){
         if(Ktravel[hh] >= (Global::Interval/(2.0*route_X_M[hh]))){
           string S = string("'" + Name + " (Netroute_M_D) Muskingum coefficient negative in HRU ").c_str() + to_string(hh+1);
-          CRHMException TExcept(S.c_str(), WARNING);
+          CRHMException TExcept(S.c_str(), TExcept::WARNING);
           LogError(TExcept);
         }
       } // for
@@ -2022,26 +2022,26 @@ void ClassWQ_Netroute::init(void) {
     } // VARIATION_1
   } // try
   catch (std::bad_alloc) {
-    CRHMException Except("Could not allocate in module CRACK." ,TERMINATE);
+    CRHMException Except("Could not allocate in module CRACK." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
   }
 
   if(soil_ssrDiv > 1){
     string S = "Netroute:  \"soil_ssr\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(soil_runoffDiv > 1){
     string S = "Netroute:  \"soil_runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(soil_gwDiv > 1){
     string S = "Netroute:  \"gw_flow\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -2117,7 +2117,7 @@ void ClassWQ_Netroute::init(void) {
 
     if(!OK){
         string SS = string("'" + Name + " (Netroute)' the 'order' parameter does not have a unique value for each HRU");
-        CRHMException Except(SS.c_str() ,ERR);
+        CRHMException Except(SS.c_str() , TExcept::ERR);
         LogError(Except);
         throw Except;
     }
@@ -3054,7 +3054,7 @@ void ClassWQ_pbsm::init(void) {
     Prob[hh] = 0.0;
 
     if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
-      CRHMException TExcept(string("'" + Name + " (pbsm)' vegetation heights not in ascending order.").c_str(), WARNING);
+      CRHMException TExcept(string("'" + Name + " (pbsm)' vegetation heights not in ascending order.").c_str(), TExcept::WARNING);
       LogError(TExcept);
     }
   }
@@ -3726,7 +3726,7 @@ void ClassWQ_Netroute_M_D::init(void) {
       for(hh = 0; hh < nhru; ++hh){
         if(Ktravel[hh] >= (Global::Interval/(2.0*route_X_M[hh]))){
           string S = string("'" + Name + " (Netroute_M_D) Muskingum coefficient negative in HRU ").c_str() + to_string(hh+1);
-          CRHMException TExcept(S.c_str(), WARNING);
+          CRHMException TExcept(S.c_str(), TExcept::WARNING);
           LogError(TExcept);
         }
       } // for
@@ -3753,26 +3753,26 @@ void ClassWQ_Netroute_M_D::init(void) {
     } // VARIATION_ORG
   } // try
   catch (std::bad_alloc) {
-    CRHMException Except("Could not allocate in module Netroute_M_D." ,TERMINATE);
+    CRHMException Except("Could not allocate in module Netroute_M_D." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
   }
 
   if(soil_ssrDiv > 1){
     string S = "WQ_Netroute_M_D:  \"soil_ssr\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(soil_runoffDiv > 1){
     string S = "WQ_Netroute_M_D:  \"soil_runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(soil_gwDiv > 1){
     string S = "WQ_Netroute_M_D:  \"gw_flow\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -3848,7 +3848,7 @@ void ClassWQ_Netroute_M_D::init(void) {
 
     if(!OK){
         string SS = string("'" + Name + " (Netroute)' the 'order' parameter does not have a unique value for each HRU");
-        CRHMException Except(SS.c_str() ,ERR);
+        CRHMException Except(SS.c_str() , TExcept::ERR);
         LogError(Except);
         throw Except;
     }
@@ -5005,7 +5005,7 @@ void ClassWQ_pbsmSnobal::init(void) {
     hru_basin[hh] = hru_area[hh]/basin_area[0];
 
     if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
-      CRHMException TExcept(string("'" + Name + " (pbsmSnobal)' vegetation heights not in ascending order.").c_str(), WARNING);
+      CRHMException TExcept(string("'" + Name + " (pbsmSnobal)' vegetation heights not in ascending order.").c_str(), TExcept::WARNING);
       LogError(TExcept);
     }
   }
@@ -5813,37 +5813,37 @@ void ClassGrow_crops_annually::init(void) {
 
   if(variation == VARIATION_1 || variation == VARIATION_3){
     if(ObsCnt_N_up > -1){
-      CRHMException TExcept("Handling N fertilizer from (Fert_N_up) observation.", WARNING);
+      CRHMException TExcept("Handling N fertilizer from (Fert_N_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCnt_P_up > -1){
-      CRHMException TExcept("Handling P fertilizer from (Fert_P_up) observation.", WARNING);
+      CRHMException TExcept("Handling P fertilizer from (Fert_P_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntMan_N_up > -1){
-      CRHMException TExcept("Handling N manure from (Man_N_up) observation.", WARNING);
+      CRHMException TExcept("Handling N manure from (Man_N_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntMan_P_up > -1){
-      CRHMException TExcept("Handling P manure from (Man_P_up) observation.", WARNING);
+      CRHMException TExcept("Handling P manure from (Man_P_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntRes_N_up > -1){
-      CRHMException TExcept("Handling N residues from (Res_N_up) observation.", WARNING);
+      CRHMException TExcept("Handling N residues from (Res_N_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntRes_P_up > -1){
-      CRHMException TExcept("Handling P residues from (Res_P_up) observation.", WARNING);
+      CRHMException TExcept("Handling P residues from (Res_P_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCnt_fertperiod > -1){
-      CRHMException TExcept("Handling fertilizer and manure period (Fert_period) observation.", WARNING);
+      CRHMException TExcept("Handling fertilizer and manure period (Fert_period) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
@@ -5872,22 +5872,22 @@ void ClassGrow_crops_annually::init(void) {
   if(variation == VARIATION_2 || variation == VARIATION_3){
 
     if(Good_Dates(JCrop_Start_1)){
-      CRHMException TExcept("JCrop_Start_1 dates out of range!", TERMINATE);
+      CRHMException TExcept("JCrop_Start_1 dates out of range!", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
     if(Good_Dates(JCrop_Harvest_1)){
-      CRHMException TExcept("JCrop_Harvest_1 dates out of range!", TERMINATE);
+      CRHMException TExcept("JCrop_Harvest_1 dates out of range!", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
     if(Good_Dates(JCrop_Start_2)){
-      CRHMException TExcept("JCrop_Start_2 dates out of range!", TERMINATE);
+      CRHMException TExcept("JCrop_Start_2 dates out of range!", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
     if(Good_Dates(JCrop_Harvest_2)){
-      CRHMException TExcept("JCrop_Harvest_2 dates out of range!", TERMINATE);
+      CRHMException TExcept("JCrop_Harvest_2 dates out of range!", TExcept::TERMINATE);
       LogError(TExcept);
     }
     for(hh = 0; hh < nhru; ++hh)
@@ -6864,25 +6864,25 @@ void ClassSoilPrairie::init(void) {
 
   if(snowinfilDiv > 1){
     string S = "Soil:  \"snowinfil\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(evapDiv > 1){
     string S = "Soil:  \"hru_evap\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(meltrunoffDiv > 1){
     string S = "Netroute:  \"meltrunoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(runoffDiv > 1){
     string S = "Netroute:  \"runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -6890,34 +6890,34 @@ void ClassSoilPrairie::init(void) {
 
     if(soil_moist[hh] > soil_moist_max[hh]) {
       string S = string("'") + Name + " (Soil)' soil_moist cannot be greater than soil_moist_max in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), TERMINATE);
+      CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
       LogError(TExcept);
       throw TExcept;
     }
 
     if(soil_rechr[hh] > soil_rechr_max[hh]) {
       string S = string("'") + Name + " (Soil)' soil_rechr cannot be greater than soil_rechr_max in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), TERMINATE);
+      CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
       LogError(TExcept);
       throw TExcept;
     }
     if(soil_rechr_max[hh] > soil_moist_max[hh]) {
       string S = string("'") + Name + " (Soil)' Soil_rechr_max cannot be greater than soil_moist_max in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), WARNING);
+      CRHMException TExcept(S.c_str(), TExcept::WARNING);
       LogError(TExcept);
       throw TExcept;
     }
 
     if(Sdinit[hh] > Sdmax[hh]) {
       string S = string("'") + Name + " (Soil)' Initial value of depression storage is greater than the maximum value in hru = " + to_string(hh+1).c_str();
-      CRHMException Except(S.c_str() ,TERMINATE);
+      CRHMException Except(S.c_str() , TExcept::TERMINATE);
       LogError(Except);
       throw Except;
     }
 
     if(gw_init[hh] > gw_max[hh]) {
       string S = string("'") + Name + " (Soil)' Initial value of gw storage is greater than the maximum value in hru = " + to_string(hh+1).c_str();
-      CRHMException Except(S.c_str() ,TERMINATE);
+      CRHMException Except(S.c_str() , TExcept::TERMINATE);
       LogError(Except);
       throw Except;
     }

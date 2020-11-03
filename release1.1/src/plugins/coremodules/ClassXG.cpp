@@ -172,14 +172,14 @@ void ClassXG::init(void) {
   front_size = nlay; // first two locations used by active Zdf and Zdt. Last location always 0.0, i.e. end of stack. Not related to nlay. Only dimensioned as nlay for convenience
 
   if(front_size < 4){ //
-    CRHMException TExcept("number of layers (nlay) should 4 or greater to give 1 or more fronts.", TERMINATE);
+    CRHMException TExcept("number of layers (nlay) should 4 or greater to give 1 or more fronts.", TExcept::TERMINATE);
     LogError(TExcept);
   }
 
   for(hh = 0; hh < nhru; ++hh) {
 
     if(N_Soil_layers[hh] > nlay){
-      CRHMException TExcept("nlay cannot be less than N_Soil_layers.", TERMINATE);
+      CRHMException TExcept("nlay cannot be less than N_Soil_layers.", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
@@ -310,13 +310,13 @@ void ClassXG::init(void) {
 
     if(rechrmax != 0.0 || soilmax != 0.0){
       string S = string("'") + Name + " (XG)' too few layers (nlay) to handle soil_max in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), TERMINATE);
+      CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
       LogError(TExcept);
     }
 
     if(profile_depth + 0.00001 < Zpf_init[hh]){ // values in Debug Inspector identical but comparison true
       string S = string("'") + Name + " (XG)' sum of soil layer depths is less than the depth of the initial permafrost in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), WARNING);
+      CRHMException TExcept(S.c_str(), TExcept::WARNING);
       LogError(TExcept);
     }
 
@@ -329,7 +329,7 @@ void ClassXG::init(void) {
       }
 
       if(depths_lay[ll][hh] == 0.0 && !EndofProfile){
-        CRHMException TExcept("Fewer soil layers defined than specified in N_Soil_layers.", TERMINATE);
+        CRHMException TExcept("Fewer soil layers defined than specified in N_Soil_layers.", TExcept::TERMINATE);
         LogError(TExcept);
       }
     } // for nlay
@@ -509,7 +509,7 @@ void ClassXG::run(void) {
                   string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, TFloatFormat::ffFixed, 10, 4);
                   SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4)
                           + " Zdf[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4);
-                  CRHMException TExcept(SS.c_str(), WARNING);
+                  CRHMException TExcept(SS.c_str(), TExcept::WARNING);
                   LogError(TExcept);
                }
                 else{ // no thaw front
@@ -524,7 +524,7 @@ void ClassXG::run(void) {
                   string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, TFloatFormat::ffFixed, 10, 4);
                   SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4)
                           + " Zdf[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4);
-                  CRHMException TExcept(SS.c_str(), WARNING);
+                  CRHMException TExcept(SS.c_str(), TExcept::WARNING);
                   LogError(TExcept);
               }
               else{ // no thaw layer
@@ -584,7 +584,7 @@ void ClassXG::run(void) {
                   string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, TFloatFormat::ffFixed, 10, 4);
                   SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4)
                           + " Zdf[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4);
-                  CRHMException TExcept(SS.c_str(), WARNING);
+                  CRHMException TExcept(SS.c_str(), TExcept::WARNING);
                   LogError(TExcept);
                 }
                 else{ // no frozen front
@@ -599,7 +599,7 @@ void ClassXG::run(void) {
                   string SS = D + "hh " + to_string(hh) + "Last: " + FloatToStrF(Last, TFloatFormat::ffFixed, 10, 4);
                   SS = SS + " Zdt[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4)
                           + " Zdf[hh]: " + FloatToStrF(Zdt[hh], TFloatFormat::ffFixed, 10, 4);
-                  CRHMException TExcept(SS.c_str(), WARNING);
+                  CRHMException TExcept(SS.c_str(), TExcept::WARNING);
                   LogError(TExcept);
               }
               else{ // no thaw layer
@@ -744,7 +744,7 @@ void ClassXG::find_thaw_D(double dt) { // XG-Algorithm - Thawing - used by init
   }
 
   string S = string("'") + Name + " (XG)' Zdt too large in hru = " + to_string(hh+1).c_str();
-  CRHMException TExcept(S.c_str(), TERMINATE);
+  CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
   LogError(TExcept);
   throw TExcept;
 }
@@ -764,7 +764,7 @@ void ClassXG::find_freeze_D(double df) { // XG-Algorithm - Thawing - used by ini
   }
 
   string S = string("'") + Name + " (XG)' Zdf too large in hru = " + to_string(hh+1).c_str();
-  CRHMException TExcept(S.c_str(), TERMINATE);
+  CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
   LogError(TExcept);
   throw TExcept;
 }
@@ -773,7 +773,7 @@ void ClassXG::push_front(double D) {
 
   if(nfront[hh] >= front_size-3){ // space to allocate plus Zdf/Zdt(2 slots) plus top of stack indicator
     string S = string("'") + Name + " (XG)' too many fronts in hru = " + to_string(hh+1).c_str();
-    CRHMException TExcept(S.c_str(), TERMINATE);
+    CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
     LogError(TExcept);
     throw TExcept;
   }

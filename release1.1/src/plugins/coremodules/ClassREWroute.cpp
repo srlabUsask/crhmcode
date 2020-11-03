@@ -109,19 +109,19 @@ void ClassREWroute::decl(void) {
 void ClassREWroute::init(void) {
 
   if(nhru < inflowCnt) {
-    CRHMException Except("Module REW route # of HRUs must be >= # of groups." ,TERMINATE);
+    CRHMException Except("Module REW route # of HRUs must be >= # of groups." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
   }
 
   if(WS_whereto[WS_order[nhru-1]-1] != 0) {
-    CRHMException Except("In module REW route 'whereto' for last RB must be zero." ,TERMINATE);
+    CRHMException Except("In module REW route 'whereto' for last RB must be zero." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
   }
 
   if(WS_gwwhereto[WS_gworder[nhru-1]-1] != 0) {
-    CRHMException Except("In module REW route 'gwwhereto' for last RB must be zero." ,TERMINATE);
+    CRHMException Except("In module REW route 'gwwhereto' for last RB must be zero." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
   }
@@ -142,7 +142,7 @@ void ClassREWroute::init(void) {
     for(hh = 0; hh < nhru; ++hh){
       if(WS_gwKtravel_var[hh] >= (Global::Interval/(2.0*WS_gwroute_X_M[hh]))){
         string S = string("'" + Name + " (REW_route) GW Muskingum coefficient negative in HRU ").c_str();
-        CRHMException TExcept(S.c_str(), WARNING);
+        CRHMException TExcept(S.c_str(), TExcept::WARNING);
         LogError(TExcept);
       }
 
@@ -154,7 +154,7 @@ void ClassREWroute::init(void) {
 
       if(WS_Ktravel_var[hh] >= (Global::Interval/(2.0*WS_route_X_M[hh]))){
         string S = string("'" + Name + " (REW_route) inflow Muskingum coefficient negative in HRU ").c_str();
-        CRHMException TExcept(S.c_str(), WARNING);
+        CRHMException TExcept(S.c_str(), TExcept::WARNING);
         LogError(TExcept);
       }
 

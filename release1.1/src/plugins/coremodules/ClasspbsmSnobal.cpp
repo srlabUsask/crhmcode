@@ -135,7 +135,7 @@ void ClasspbsmSnobal::init(void) {
     snowdepth[hh] = 0.0;
 
     if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
-      CRHMException TExcept(string("'" + Name + " (pbsmSnobal)' vegetation heights not in ascending order.").c_str(), WARNING);
+      CRHMException TExcept(string("'" + Name + " (pbsmSnobal)' vegetation heights not in ascending order.").c_str(), TExcept::WARNING);
       LogError(TExcept);
     }
   }

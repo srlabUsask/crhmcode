@@ -82,7 +82,7 @@ void ClassKevin::init(void) {
 
   for (hh = 0; hh < nhru; ++hh)
     if(nfactor[hh] != 0.0 && hru_Qn == NULL){
-      CRHMException TExcept("Kevin: nfactor > 0.0 with observation 'hru_Qn' not defined!", TERMINATE);
+      CRHMException TExcept("Kevin: nfactor > 0.0 with observation 'hru_Qn' not defined!", TExcept::TERMINATE);
       LogError(TExcept);
     }
 

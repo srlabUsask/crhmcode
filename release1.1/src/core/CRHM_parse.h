@@ -933,7 +933,7 @@ public:
 		symtab_t::iterator FP = vars.find(S);
 		if (FP == vars.end()) {
 			string SS("macro code - writing to an undefined variable: \"" + S + "\".  Suggestion - declared observations always end with a # symbol");
-			CRHMException Except(SS, TERMINATE);
+			CRHMException Except(SS, TExcept::TERMINATE);
 			throw CRHMException(Except);
 		}
 
@@ -1032,7 +1032,7 @@ public:
 
 		if (FP == vars.end()) {
 			string SS("macro code - reading from an undefined variable: " + S);
-			CRHMException Except(SS, TERMINATE);
+			CRHMException Except(SS, TExcept::TERMINATE);
 			throw CRHMException(Except);
 		}
 

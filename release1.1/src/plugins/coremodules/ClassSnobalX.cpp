@@ -192,7 +192,7 @@ void ClassSnobalX::run(void) { // executed every interval
 
     if(m_snow[hh] > 0.0){
       if (rho_snow[hh] <= 0.0){
-        CRHMException TExcept("Snobal: rho_snow is <= 0.0 with snow > 0.0", TERMINATE);
+        CRHMException TExcept("Snobal: rho_snow is <= 0.0 with snow > 0.0", TExcept::TERMINATE);
         LogError(TExcept);
       }
       z_snow[hh]   = m_snow[hh] / rho_snow[hh];
@@ -232,7 +232,7 @@ void ClassSnobalX::run(void) { // executed every interval
       do_data_tstep(); // executes Snobal code
     }
     else if(m_precip[hh] > 0.0) {
-         CRHMException TExcept("Snobal - cannot handle precipitation during first day of model run", WARNING);
+         CRHMException TExcept("Snobal - cannot handle precipitation during first day of model run", TExcept::WARNING);
          LogError(TExcept);
     }
 

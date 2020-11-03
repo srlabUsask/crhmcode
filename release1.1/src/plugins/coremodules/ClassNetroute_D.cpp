@@ -167,19 +167,19 @@ void ClassNetroute_D::init(void) {
 
   if(soil_ssrDiv > 1){
     string S = "Netroute_D:  \"soil_ssr\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(soil_runoffDiv > 1){
     string S = "Netroute_D:  \"soil_runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(soil_gwDiv > 1){
     string S = "Netroute:  \"gw_flow\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -236,7 +236,7 @@ void ClassNetroute_D::init(void) {
 
     if(!OK){
         string SS = string("'" + Name + " (Netroute_D)' the 'order' parameter does not have a unique value for each HRU");
-        CRHMException Except(SS.c_str() ,ERR);
+        CRHMException Except(SS.c_str() , TExcept::ERR);
         LogError(Except);
         throw Except;
     }

@@ -39,7 +39,7 @@ void Classalbedoobs::init(void) {
   }
 
   if(Albedo_obs == NULL){
-    CRHMException TExcept("\"albedo_obs\". No observation albedo data!  Using constant parameter value instead.", WARNING);
+    CRHMException TExcept("\"albedo_obs\". No observation albedo data!  Using constant parameter value instead.", TExcept::WARNING);
     LogError(TExcept);
   }
 }

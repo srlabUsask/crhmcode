@@ -86,13 +86,13 @@ void ClassREWroute_stream::decl(void) {
 void ClassREWroute_stream::init(void) {
 
   if(nhru < instreamflowCnt) {
-    CRHMException Except("Module REW route # of HRUs must be >= # of groups." ,TERMINATE);
+    CRHMException Except("Module REW route # of HRUs must be >= # of groups." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
   }
 
   if(WS_stream_whereto_Grp[WS_stream_order[nhru-1]-1] != 0) {
-    CRHMException Except("In module REW route 'whereto' for last RB must be zero." ,TERMINATE);
+    CRHMException Except("In module REW route 'whereto' for last RB must be zero." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
   }
@@ -113,7 +113,7 @@ void ClassREWroute_stream::init(void) {
 
       if(WS_stream_Ktravel_var[hh] >= (Global::Interval/(2.0*WS_stream_route_X_M[hh]))){
         string S = string("'" + Name + " (REW_route) inflow Muskingum coefficient negative in HRU ").c_str();
-        CRHMException TExcept(S.c_str(), WARNING);
+        CRHMException TExcept(S.c_str(), TExcept::WARNING);
         LogError(TExcept);
       }
 

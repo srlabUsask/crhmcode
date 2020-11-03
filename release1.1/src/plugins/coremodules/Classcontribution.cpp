@@ -61,7 +61,7 @@ void Classcontribution::init(void) {
 
   if(soil_runoffDiv > 1){
     string S = "Netroute:  \"soil_runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 

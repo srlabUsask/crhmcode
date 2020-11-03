@@ -194,7 +194,7 @@ void Classquinton::init(void) {
       if(Residual_lay[nn][hh] >= por_s[soil_type_lay[nn][hh]] && Type[hh] == HUMMOCK) {
         string S = "residual cannot be greater or equal to the layer porosity in HRU " +
         to_string(hh+1) + ", layer " + to_string(nn+1);
-        CRHMException TExcept(S.c_str(), TERMINATE);
+        CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
         LogError(TExcept);
       }
 

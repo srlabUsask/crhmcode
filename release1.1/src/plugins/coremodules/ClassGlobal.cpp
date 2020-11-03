@@ -85,7 +85,7 @@ void Classglobal::init(void) {
   int Remainder = CalcFreq%Global::Freq;
 
   if(Remainder != 0 || Integer < 1){
-    CRHMException TExcept("\"288/(first observation frequency)\" must be an integer > one!", TERMINATE);
+    CRHMException TExcept("\"288/(first observation frequency)\" must be an integer > one!", TExcept::TERMINATE);
     LogError(TExcept);
   }
 

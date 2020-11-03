@@ -281,25 +281,25 @@ void ClassSoil::init(void) {
 
   if(snowinfilDiv > 1){
     string S = "Soil:  \"snowinfil\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(evapDiv > 1){
     string S = "Soil:  \"hru_evap\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(meltrunoffDiv > 1){
     string S = "Netroute:  \"meltrunoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(runoffDiv > 1){
     string S = "Netroute:  \"runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -307,35 +307,35 @@ void ClassSoil::init(void) {
 
     if(soil_moist[hh] > soil_moist_max[hh]) {
       string S = string("'") + Name + " (Soil)' soil_moist cannot be greater than soil_moist_max in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), TERMINATE);
+      CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
       LogError(TExcept);
       throw TExcept;
     }
 
     if(soil_rechr[hh] > soil_rechr_max[hh]) {
       string S = string("'") + Name + " (Soil)' soil_rechr cannot be greater than soil_rechr_max in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), TERMINATE);
+      CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
       LogError(TExcept);
       throw TExcept;
     }
 
     if(soil_rechr_max[hh] > soil_moist_max[hh]) {
       string S = string("'") + Name + " (Soil)' Soil_rechr_max cannot be greater than soil_moist_max in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), WARNING);
+      CRHMException TExcept(S.c_str(), TExcept::WARNING);
       LogError(TExcept);
       throw TExcept;
     }
 
     if(Sdinit[hh] > Sdmax[hh]) {
       string S = string("'") + Name + " (Soil)' Initial value of depression storage is greater than the maximum value in hru = " + to_string(hh+1).c_str();
-      CRHMException Except(S.c_str() ,TERMINATE);
+      CRHMException Except(S.c_str() , TExcept::TERMINATE);
       LogError(Except);
       throw Except;
     }
 
     if(gw_init[hh] > gw_max[hh]) {
       string S = string("'") + Name + " (Soil)' Initial value of gw storage is greater than the maximum value in hru = " + to_string(hh+1).c_str();
-      CRHMException Except(S.c_str() ,TERMINATE);
+      CRHMException Except(S.c_str() , TExcept::TERMINATE);
       LogError(Except);
       throw Except;
     }
@@ -382,7 +382,7 @@ void ClassSoil::init(void) {
     if(variation == VARIATION_1){
       if(culvert_water_Dmax[hh]/culvert_diam[hh] > 2.5){
         string S = "soil: " + string(Name.c_str()) +  " ratio of H/D > 2.5 in HRU " + to_string(hh+1);
-        CRHMException TExcept(S.c_str(), WARNING);
+        CRHMException TExcept(S.c_str(), TExcept::WARNING);
         LogError(TExcept);
       }
       culvert_water_V[hh] = 0.0;

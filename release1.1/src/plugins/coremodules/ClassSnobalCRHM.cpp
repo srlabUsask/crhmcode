@@ -187,12 +187,12 @@ void ClassSnobalCRHM::init(void) {
 
   ClassSnobalBase::init();
   if(!T_g_Obs){
-    CRHMException TExcept(string("'" + Name + " (SnobalCRHM)' ground temperature T_g observation not available using parameter hru_T_g.").c_str(), WARNING);
+    CRHMException TExcept(string("'" + Name + " (SnobalCRHM)' ground temperature T_g observation not available using parameter hru_T_g.").c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(!F_g_Obs){
-    CRHMException TExcept(string("'" + Name + " (SnobalCRHM)' ground flux F_g observation not available using parameter hru_F_g.").c_str(), WARNING);
+    CRHMException TExcept(string("'" + Name + " (SnobalCRHM)' ground flux F_g observation not available using parameter hru_F_g.").c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -306,7 +306,7 @@ void ClassSnobalCRHM::run(void) { // executed every interval
 
     if(m_snow[hh] > 0.0){
       if (rho_snow[hh] <= 0.0){
-        CRHMException TExcept("Snobal: rho_snow is <= 0.0 with snow > 0.0", TERMINATE);
+        CRHMException TExcept("Snobal: rho_snow is <= 0.0 with snow > 0.0", TExcept::TERMINATE);
         LogError(TExcept);
       }
       z_snow[hh]   = m_snow[hh] / rho_snow[hh];
@@ -347,7 +347,7 @@ void ClassSnobalCRHM::run(void) { // executed every interval
 
     }
     else if(m_precip[hh] > 0.0) {
-         CRHMException TExcept("Snobal - cannot handle precipitation during first day of model run", WARNING);
+         CRHMException TExcept("Snobal - cannot handle precipitation during first day of model run", TExcept::WARNING);
          LogError(TExcept);
     }
 

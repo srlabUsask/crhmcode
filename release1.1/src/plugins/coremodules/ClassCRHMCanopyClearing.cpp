@@ -204,7 +204,7 @@ void ClassCRHMCanopyClearing::init(void) {
     cum_SUnload_H2O[hh] = 0.0;
 
     if(Ht[hh] > Zwind[hh]){
-      CRHMException TExcept(string("'" + Name + " (CanopyClearing)' Vegetation height greater than wind reference height, i.e. (Ht > Zwind)!").c_str(), WARNING);
+      CRHMException TExcept(string("'" + Name + " (CanopyClearing)' Vegetation height greater than wind reference height, i.e. (Ht > Zwind)!").c_str(), TExcept::WARNING);
       LogError(TExcept);
     }
   }

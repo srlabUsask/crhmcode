@@ -117,7 +117,7 @@ void ClassNeedle::init(void) {
     Pa[hh] = 101.3f*pow((293.0f-0.0065f*hru_elev[hh])/293.0f, 5.26f);  // kPa
 
     if(Ht[hh] > Zwind[hh]){
-      CRHMException TExcept("Vegetation height greater than Intrument reference height or wind reference height, i.e. (Ht > Zref or Ht > Zwind)!", WARNING);
+      CRHMException TExcept("Vegetation height greater than Intrument reference height or wind reference height, i.e. (Ht > Zref or Ht > Zwind)!", TExcept::WARNING);
       LogError(TExcept);
     }
   }

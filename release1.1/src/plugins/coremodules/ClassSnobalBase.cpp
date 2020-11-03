@@ -1821,7 +1821,7 @@ double satw(
     double  l10;
 
     if (tk <= 0.) {
-        CRHMException TExcept("satw temperature <= 0.0", TERMINATE);
+        CRHMException TExcept("satw temperature <= 0.0", TExcept::TERMINATE);
         LogError(TExcept);
     }
 
@@ -1836,7 +1836,7 @@ double satw(
     x = pow(1.0e1f, x);
 
     if (errno) {
-        CRHMException TExcept("satw: bad return from log or pow", TERMINATE);
+        CRHMException TExcept("satw: bad return from log or pow", TExcept::TERMINATE);
         LogError(TExcept);
     }
 
@@ -1876,7 +1876,7 @@ psi(double zeta,		// z/lo
             break;
 
         default: // shouldn't reach
-            CRHMException TExcept("psi-function code not of these: SM, SH, SV", TERMINATE);
+            CRHMException TExcept("psi-function code not of these: SM, SH, SV", TExcept::TERMINATE);
             LogError(TExcept);
         }
     }
@@ -1892,7 +1892,7 @@ double ClassSnobalBase::sati(double  tk) { //* air temperature (K)
     double  x;
 
     if (tk <= 0.0) {
-        CRHMException TExcept("sati temperature <= 0.0", TERMINATE);
+        CRHMException TExcept("sati temperature <= 0.0", TExcept::TERMINATE);
         LogError(TExcept);
         //            tk = FREEZE + 0.01;
     }
@@ -1909,7 +1909,7 @@ double ClassSnobalBase::sati(double  tk) { //* air temperature (K)
         8.76793e-1 * (1.0 - (tk / FREEZE)) + log(6.1071) / l10);
 
     if (errno) {
-        CRHMException TExcept("sati: bad return from log or pow", TERMINATE);
+        CRHMException TExcept("sati: bad return from log or pow", TExcept::TERMINATE);
         LogError(TExcept);
     }
 
@@ -2059,7 +2059,7 @@ double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
             ", zu: " + FloatToStrF(zu, TFloatFormat::ffFixed, 10, 4) +
             ", za: " + FloatToStrF(za, TFloatFormat::ffFixed, 10, 4);
 
-        CRHMException TExcept(SS.c_str(), WARNING);
+        CRHMException TExcept(SS.c_str(), TExcept::WARNING);
         LogError(TExcept);
         ier = -2;
         return (ier);
@@ -2067,7 +2067,7 @@ double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
 
     // temperatures are Kelvin
     if (ta <= 0 || ts <= 0) {
-        CRHMException TExcept("temps not K", TERMINATE);
+        CRHMException TExcept("temps not K", TExcept::TERMINATE);
         LogError(TExcept);
         ier = -2;
         return (ier);
@@ -2089,12 +2089,12 @@ double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
         CRHM_h = 0.0;
         CRHM_e = 0.0;
 
-        CRHMException TExcept2(SS.c_str(), WARNING);
+        CRHMException TExcept2(SS.c_str(), TExcept::WARNING);
         LogError(TExcept2);
 
         //Manishankar made this change to keep the program running.
         //CRHMException TExcept("hle1: pressures must be positive", TERMINATE);
-        CRHMException TExcept("hle1: pressures must be positive", WARNING);
+        CRHMException TExcept("hle1: pressures must be positive", TExcept::WARNING);
         LogError(TExcept);
 
         ier = -2;
@@ -2103,7 +2103,7 @@ double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
 
     // vapor pressures can't exceed saturation if way off stop
     if ((es - 25.0) > sati(ts) || (ea - 25.0) > satw(ta)) {
-        CRHMException TExcept("hle1: vapor pressures can't exceed saturation", TERMINATE);
+        CRHMException TExcept("hle1: vapor pressures can't exceed saturation", TExcept::TERMINATE);
         LogError(TExcept);
         ier = -2;
         return (ier);
@@ -2209,7 +2209,7 @@ double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
             ", es: " + FloatToStrF(es, TFloatFormat::ffFixed, 10, 4) +
             ", u:  " + FloatToStrF(u, TFloatFormat::ffFixed, 10, 4) +
             ", m_s:  " + FloatToStrF(m_s[hh], TFloatFormat::ffFixed, 10, 4);
-        CRHMException TExcept2(SS.c_str(), WARNING);
+        CRHMException TExcept2(SS.c_str(), TExcept::WARNING);
         LogError(TExcept2);
 
         ier = -1;

@@ -142,7 +142,7 @@ void Classpbsm::init(void) {
     cumrain_on_snow[hh] = 0.0;;
 
     if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
-      CRHMException TExcept(string("'" + Name + " (pbsm)' vegetation heights not in ascending order.").c_str(), WARNING);
+      CRHMException TExcept(string("'" + Name + " (pbsm)' vegetation heights not in ascending order.").c_str(), TExcept::WARNING);
       LogError(TExcept);
     }
   }

@@ -301,13 +301,13 @@ void Classglacier_debris::init(void) {
 
   if(nlay < 3) {
     string S = string("'") + Name + " (glacier)' project file nlay(number of layers) must be greater than 2";
-    CRHMException TExcept(S.c_str(), TERMINATE);
+    CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
     LogError(TExcept);
     throw TExcept;
   }
 
   if(ObsCnt_Albedo > -1){
-    CRHMException TExcept("Handling glacier albedo from 'glacier_Albedo_obs' observation input.", WARNING);
+    CRHMException TExcept("Handling glacier albedo from 'glacier_Albedo_obs' observation input.", TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -364,7 +364,7 @@ void Classglacier_debris::init(void) {
       if(firn_h_array_init[ll][hh] > 0.0){
         if(end_para && !Warned){
           string S = string("'") + Name + " (glacier)' firn initialisation parameters not contiguous in hru = " + to_string(hh+1).c_str();
-          CRHMException TExcept(S.c_str(), WARNING);
+          CRHMException TExcept(S.c_str(), TExcept::WARNING);
           LogError(TExcept);
           Warned = true;
         }
@@ -384,7 +384,7 @@ void Classglacier_debris::init(void) {
 
     if(nfirn[hh] > nlay){ // nfirm always less than nlay
       string S = string("'") + Name + " (glacier)' global 'nlay'(" + to_string(nlay).c_str() + ") must be greater than number of firn layers (" + to_string(nfirn[hh]).c_str() + ") in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), TERMINATE);
+      CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
       LogError(TExcept);
     }
 
@@ -401,7 +401,7 @@ void Classglacier_debris::init(void) {
 
     if(variation == VARIATION_ORG){
       if(nfactor[hh] != 0.0 && QnD == NULL){
-        CRHMException TExcept("ebsm: nfactor > 0.0 with observation 'QnD' not defined!", TERMINATE);
+        CRHMException TExcept("ebsm: nfactor > 0.0 with observation 'QnD' not defined!", TExcept::TERMINATE);
         LogError(TExcept);
       }
     }
@@ -767,7 +767,7 @@ double TF, SRF;
 
             if(nfirn[hh] >= nlay){ // space available to allocate layer !!! check purpose/position !!!
               string S = string("'") + Name + " (glacier)' too many firn fronts in hru = " + to_string(hh+1).c_str();
-              CRHMException TExcept(S.c_str(), TERMINATE);
+              CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
               LogError(TExcept);
               throw TExcept;
             }
@@ -817,7 +817,7 @@ double TF, SRF;
               string SS = D + "hh " + to_string(hh) + "old_firn: " + FloatToStrF(old_firn, TFloatFormat::ffFixed, 10, 4);
               SS = SS + " firn_dens_array[nn][hh]: " + FloatToStrF(firn_dens_array[nn][hh], TFloatFormat::ffFixed, 10, 4)
                       + " firn_h_array[nn][hh]: " + FloatToStrF(firn_h_array[nn][hh], TFloatFormat::ffFixed, 10, 4);
-              CRHMException TExcept(SS.c_str(), WARNING);
+              CRHMException TExcept(SS.c_str(), TExcept::WARNING);
               LogError(TExcept);
             }
             double h550 = 1000.0/(RHOi*k0)*(log(550.0/(RHOi - 550.0)) - log(rho/(RHOi - rho))); // rho is current SWE density      Densification

@@ -118,7 +118,7 @@ void Classpbsm_M::init(void) {
     snowdepth[hh] = 0.0;
 
     if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
-         CRHMException TExcept("PBSM - vegetation heights not in ascending order", WARNING);
+         CRHMException TExcept("PBSM - vegetation heights not in ascending order", TExcept::WARNING);
          LogError(TExcept);
 //         throw TExcept;
     }

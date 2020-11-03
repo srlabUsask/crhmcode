@@ -101,7 +101,7 @@ void ClassSetSoil::init(void) {
 
   if(fabs((totarea-basin_area[0])/basin_area[0]) > 1e-3){
     const_cast<double *>  (basin_area)[0] = totarea;
-    CRHMException TExcept(string(string("Sum of HRU's area <> Basin area, Basin area made = ") + FloatToStrF(totarea, TFloatFormat::ffGeneral, 3, 0)).c_str(), WARNING);
+    CRHMException TExcept(string(string("Sum of HRU's area <> Basin area, Basin area made = ") + FloatToStrF(totarea, TFloatFormat::ffGeneral, 3, 0)).c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -126,7 +126,7 @@ void ClassSetSoil::init(void) {
 
   }
   catch (...){
-    CRHMException TExcept("Error in 'RapidAdvance_to' or 'Loop_to' parameters", TERMINATE);
+    CRHMException TExcept("Error in 'RapidAdvance_to' or 'Loop_to' parameters", TExcept::TERMINATE);
     LogError(TExcept);
     Global::RapidAdvanceTo = 0;
     Global::LoopTo = 0;

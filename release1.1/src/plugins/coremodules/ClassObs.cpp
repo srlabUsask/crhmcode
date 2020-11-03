@@ -135,7 +135,7 @@ void Classobs::decl(void) {
       Global::RH_EA_obs = 1;
       CRHMException TExcept("The obs module is using the observation ea instead of RH. This is not yet implemented.\
       An optioin is to use the filter '$rh rh(t, ea)' in the observarion file before the separator line,\
-      '########################################'", TERMINATE);
+      '########################################'", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
@@ -183,35 +183,35 @@ void Classobs::init(void) {
   if(this->GroupCnt < 2){ // display for simple project and first group
 
     if(ppt == NULL && p == NULL && variation != VARIATION_2){
-      CRHMException TExcept("No precipitation data.  Both p and ppt not available!", TERMINATE);
+      CRHMException TExcept("No precipitation data.  Both p and ppt not available!", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
     if(ppt){
-      CRHMException TExcept("using daily precipitation (ppt) observation.", WARNING);
+      CRHMException TExcept("using daily precipitation (ppt) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(p){
-      CRHMException TExcept("using interval precipitation (p) observation.", WARNING);
+      CRHMException TExcept("using interval precipitation (p) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(variation == VARIATION_1 && Global::Freq != 1){
-      CRHMException TExcept("obs#1 (using daily maximun/minimum temperatures) only works with daily data", TERMINATE);
+      CRHMException TExcept("obs#1 (using daily maximun/minimum temperatures) only works with daily data", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
     if(Global::RH_EA_obs == -1){
-      CRHMException TExcept("No psychrometric data.  Both relative humidity (rh) and vapour pressure (ea) observations not available.", TERMINATE);
+      CRHMException TExcept("No psychrometric data.  Both relative humidity (rh) and vapour pressure (ea) observations not available.", TExcept::TERMINATE);
       LogError(TExcept);
     }
     else if(Global::RH_EA_obs == 1){
-      CRHMException TExcept("using vapour pressure (ea) observation.", WARNING);
+      CRHMException TExcept("using vapour pressure (ea) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
     else if(Global::RH_EA_obs == 0){
-      CRHMException TExcept("using relative humidity (rh) observation.", WARNING);
+      CRHMException TExcept("using relative humidity (rh) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
   }

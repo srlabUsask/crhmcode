@@ -1018,7 +1018,7 @@ ClassPar::ClassPar(string module, string param, CRHM::TDim dimen,
 		}
 	}
 	catch (std::bad_alloc) {
-		CRHMException Except("Could not allocate in ClassPar.", TERMINATE);
+		CRHMException Except("Could not allocate in ClassPar.", TExcept::TERMINATE);
 		LogError(Except);
 		throw CRHMException(Except);
 	}
@@ -1087,7 +1087,7 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 	}
 	catch (std::bad_alloc) 
 	{
-		CRHMException Except("Could not allocate in ClassPar.", TERMINATE);
+		CRHMException Except("Could not allocate in ClassPar.", TExcept::TERMINATE);
 		LogError(Except);
 		throw CRHMException(Except);
 	}
@@ -1116,7 +1116,7 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 			}
 		}
 		else {
-			CRHMException Except("ilayvalues array is null allocation must have failed.", TERMINATE);
+			CRHMException Except("ilayvalues array is null allocation must have failed.", TExcept::TERMINATE);
 			LogError(Except);
 			throw CRHMException(Except);
 		}
@@ -1239,7 +1239,7 @@ ClassPar *ClassParFindShared(string name) { // where name is concatenation of MO
 	MapPar::iterator itPar;
 
 	if ((itPar = Global::SharedMapPars.find(name)) == Global::SharedMapPars.end()) {
-		CRHMException Except("Could not find Parameter: " + name, WARNING);
+		CRHMException Except("Could not find Parameter: " + name, TExcept::WARNING);
 		LogError(Except);
 		return NULL;
 	}
@@ -1251,7 +1251,7 @@ ClassPar *ClassParFind(string name) { // where name is concatenation of MODULE a
 	MapPar::iterator itPar;
 
 	if ((itPar = Global::MapPars.find(name)) == Global::MapPars.end()) {
-		CRHMException Except("Could not find Parameter: " + name, WARNING);
+		CRHMException Except("Could not find Parameter: " + name, TExcept::WARNING);
 		LogError(Except);
 		return NULL;
 	}
@@ -1352,7 +1352,7 @@ ClassPar *ClassParFind(string module, string param) { // routine concatenates MO
 				return ((*itPar).second);
 			}
 		}
-		LogError(CRHMException("Parameter defined in module: " + param + ", " + module + " not found", WARNING));
+		LogError(CRHMException("Parameter defined in module: " + param + ", " + module + " not found", TExcept::WARNING));
 		return NULL;
 	}
 }
@@ -1368,7 +1368,7 @@ ClassPar *ClassParFindRev(string module, string param) {
 		return ((*itPar).second);
 	}
 	else {
-		LogError(CRHMException("Parameter defined in module: " + param + ", " + module + " not found", TERMINATE));
+		LogError(CRHMException("Parameter defined in module: " + param + ", " + module + " not found", TExcept::TERMINATE));
 		return NULL;
 	}
 }
@@ -1400,7 +1400,7 @@ ClassVar *ClassVarFind(string name) {
 
 	if ((itVar = Global::MapVars.find(name)) == Global::MapVars.end())
 		if ((itVar = Global::MapVars.find('#' + name)) == Global::MapVars.end()) { // could be local
-			CRHMException Except("Could not find Variable: " + name, WARNING);
+			CRHMException Except("Could not find Variable: " + name, TExcept::WARNING);
 			LogError(Except);
 			return NULL;
 		}
@@ -1489,7 +1489,7 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 		}
 	}
 	catch (std::bad_alloc) {
-		CRHMException Except("Could not allocate in ClassVar.", TERMINATE);
+		CRHMException Except("Could not allocate in ClassVar.", TExcept::TERMINATE);
 		LogError(Except);
 		throw CRHMException(Except);
 	}
@@ -1513,7 +1513,7 @@ ClassVar::ClassVar(string module, string name, long dim,
 			ivalues = new long[dim];
 	}
 	catch (std::bad_alloc) {
-		CRHMException Except("Could not allocate in ClassVar.", TERMINATE);
+		CRHMException Except("Could not allocate in ClassVar.", TExcept::TERMINATE);
 		LogError(Except);
 		throw CRHMException(Except);
 	}
@@ -2027,7 +2027,7 @@ bool ClassData::DataReadFile(void) {
 
 	catch (std::bad_alloc) {
 		CRHMException Except("Could not allocate for observations file: " +
-			DataFileName, ERR);
+			DataFileName, TExcept::ERR);
 		LogError(Except);
 		Data = NULL;
 	}
@@ -2200,7 +2200,7 @@ bool ClassData::DataReadFile(void) {
 
 	if (Freq > 1 && fmodl(Lines, Freq) > 0 && !SparseFlag) {
 
-		CRHMException Except("Last day is incomplete and is padded with 0.0 " + DataFileName, WARNING);
+		CRHMException Except("Last day is incomplete and is padded with 0.0 " + DataFileName, TExcept::WARNING);
 		LogError(Except);
 
 		IndxMax = IndxMin + MaxLines - 1;
@@ -2693,7 +2693,7 @@ ClassVar *declread(string module, string name, long cnt, long offset,
 	if ((itVar = Global::MapVars.find(s1 + " " + s2)) != Global::MapVars.end()) {
 		thisVar = (*itVar).second;
 		if (thisVar->varType >= CRHM::Read) {
-			LogError(CRHMException("Duplicate Observation variable: " + s1 + " " + s2, ERR));
+			LogError(CRHMException("Duplicate Observation variable: " + s1 + " " + s2, TExcept::ERR));
 			return NULL;
 		}
 		//    Convert convert; convert.CheckUnitsObs(units, thisVar->units, name); // check original observation units
@@ -2938,7 +2938,7 @@ void Classfilter::error(string Mess) {
 
 	string Mess2 = string(Mess);
 	string F = string(string("\"") + typeid(*this).name());
-	CRHMException Except(Mess2.c_str(), ERR);
+	CRHMException Except(Mess2.c_str(), TExcept::ERR);
 	////Application->MessageBox(Mess2.c_str(), string("Error in filter: " + F + "\" in observation file: \"" + MyObs->DataFileName.c_str() + "\"").c_str(), MB_OK);
 	LogError(Except);
 	Error = true;
@@ -3073,7 +3073,7 @@ Classmacro::Classmacro(ClassData *File) : File(File), Interpolation(0) {
 Classmacro::~Classmacro() { // calls all filters to finalise data memory addresses
 
 	if (Interpolation > 0 && FilterList->Count > Interpolation)
-		LogError("Filter execution occurs before interpolation -> values may be incorrect." + File->DataFileName, WARNING);
+		LogError("Filter execution occurs before interpolation -> values may be incorrect." + File->DataFileName, TExcept::WARNING);
 
 	//for (int ii = 0; ii < FilterList->Count; ii++)
 	//	delete (Classfilter*)FilterList->Objects[ii];
@@ -3868,7 +3868,7 @@ void ClassMissing::doFunc(long Obs, long Line) {
 	if (FirstTime) {
 		if ((Data[0][Obs][Line] <= Constants[0] || Data[0][Obs][Line] >= Constants[1]) && !Warned) {
 			////Application->MessageBox(MyObs->DataFileName.c_str(), "Missing data in first interval of filter 'missing'", MB_OK);
-			LogError("Missing data in first interval of " + MyObs->DataFileName, WARNING);
+			LogError("Missing data in first interval of " + MyObs->DataFileName, TExcept::WARNING);
 			Warned = true;
 		}
 
@@ -3905,7 +3905,7 @@ void ClassMissingInter::doFunc(long Obs, long Line) {
 	if (FirstTime) {
 		if ((Data[0][Obs][Line] <= Constants[0] || Data[0][Obs][Line] >= Constants[1]) && !Warned) {
 			////Application->MessageBox(MyObs->DataFileName.c_str(), "Missing data in first interval of filter 'missinginter'", MB_OK);
-			LogError("Missing data in first interval of " + MyObs->DataFileName, WARNING);
+			LogError("Missing data in first interval of " + MyObs->DataFileName, TExcept::WARNING);
 			Warned = true;
 			LastGoodData[Obs] = -1;
 			return;
@@ -4081,7 +4081,7 @@ void setdim(CRHM::TDim dimen, long dim) {
 //---------------------------------------------------------------------------
 void   LogError(CRHMException Except) {
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION, (unsigned int)&Except, 0);
-	if (Except.Kind == TERMINATE)
+	if (Except.Kind == TExcept::TERMINATE)
 		throw (Except);
 }
 
@@ -4951,7 +4951,7 @@ void Convert::CheckUnitsString(string Name, string variable, string units)
 		}
 	}
 	catch (int i) {
-		CRHMException Except("Units error: '" + units + "' in " + Name + ' ' + variable, WARNING);
+		CRHMException Except("Units error: '" + units + "' in " + Name + ' ' + variable, TExcept::WARNING);
 		LogError(Except);
 	}
 }
@@ -4962,7 +4962,7 @@ void Convert::CheckUnitsObs(string Vunits, string Munits, string declaration) { 
 
 	if (!Vunits.empty()) {
 		if (!ConvertUnit(d, tcsSqueeze(Vunits), tcsSqueeze(Munits)) || d != 1.0) {
-			CRHMException Except("Units error: '" + Vunits + " instead of " + Munits + "' in " + declaration, WARNING);
+			CRHMException Except("Units error: '" + Vunits + " instead of " + Munits + "' in " + declaration, TExcept::WARNING);
 			LogError(Except);
 		}
 	}

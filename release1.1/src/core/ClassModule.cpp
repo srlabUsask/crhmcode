@@ -159,12 +159,12 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 		}
 
 		if (layvalue == NULL) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, WARNING));
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return -1;
 		}
 
 		if (!Global::GroupCntTrk) {
-			LogError(CRHMException("No groups defined " + Name + " " + variable, WARNING));
+			LogError(CRHMException("No groups defined " + Name + " " + variable, TExcept::WARNING));
 			return -1;
 		}
 		newVar = new ClassVar(Name, variable, CRHM::NREB, help, units, CRHM::Float, PointPlot, nhru);
@@ -232,7 +232,7 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 			}
 			else
 			{
-				CRHMException Except("variable was null found: " + Name + ' ' + variable, TERMINATE);
+				CRHMException Except("variable was null found: " + Name + ' ' + variable, TExcept::TERMINATE);
 				LogError(Except);
 				throw Except;
 			}
@@ -241,7 +241,7 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 		}
 		else 
 		{
-			CRHMException Except("variable not found: " + Name + ' ' + variable, TERMINATE);
+			CRHMException Except("variable not found: " + Name + ' ' + variable, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -375,7 +375,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		}
 
 		if (dimen == CRHM::NLAY && layvalue == NULL) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, WARNING));
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
 
@@ -437,7 +437,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("variable not found: " + Name + ' ' + variable, TERMINATE);
+			CRHMException Except("variable not found: " + Name + ' ' + variable, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -487,7 +487,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		}
 
 		if (dimen == CRHM::NLAY && ilayvalue == NULL) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, WARNING));
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
 
@@ -536,7 +536,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("Variable not found: " + Name + ' ' + variable, TERMINATE);
+			CRHMException Except("Variable not found: " + Name + ' ' + variable, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -572,7 +572,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 
 		if ((dimen == CRHM::NLAY || dimen == CRHM::NFREQ) && layvalue == NULL) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, WARNING));
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
 
@@ -619,7 +619,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("variable not found: " + S, TERMINATE);
+			CRHMException Except("variable not found: " + S, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -655,7 +655,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 
 		if (dimen == CRHM::NLAY && layvalue == NULL) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, WARNING));
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
 
@@ -702,7 +702,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("variable not found: " + S, TERMINATE);
+			CRHMException Except("variable not found: " + S, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -797,7 +797,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 			return stringsList;
 		}
 		else {
-			CRHMException Except("Parameter not found: " + Name + param, TERMINATE);
+			CRHMException Except("Parameter not found: " + Name + param, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -899,7 +899,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		}
 
 		if ((dimen == CRHM::NLAY && layvalue == NULL) || (dimen == CRHM::NDEF && layvalue == NULL) || (dimen == CRHM::NDEFN && layvalue == NULL)) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + param, WARNING));
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + param, TExcept::WARNING));
 			return;
 		}
 
@@ -937,7 +937,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			*value = newPar->values;
 		}
 		else {
-			CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+			CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -1045,7 +1045,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		}
 
 		if ((dimen == CRHM::NLAY && ilayvalue == NULL) || (dimen == CRHM::NDEF && ilayvalue == NULL) || (dimen == CRHM::NDEFN && ilayvalue == NULL)) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + param, WARNING));
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + param, TExcept::WARNING));
 			return;
 		}
 
@@ -1092,7 +1092,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			return;
 		}
 		else {
-			CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+			CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -1421,7 +1421,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 			}
 		}
 		else {
-			CRHMException Except("Observation not found: " + Name + " " + name + "#", TERMINATE);
+			CRHMException Except("Observation not found: " + Name + " " + name + "#", TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -1479,7 +1479,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 	case CRHM::DECL: {
 
 		if (dimen == CRHM::NFREQ && layvalue == NULL) {
-			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, WARNING));
+			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return(-1);
 		}
 
@@ -1569,7 +1569,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 				*value = NULL;
 				return(-1);
 			}
-			CRHMException Except("Observation not found " + declModule + ": " + variable, TERMINATE);
+			CRHMException Except("Observation not found " + declModule + ": " + variable, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -1583,7 +1583,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 				return(-1);
 			}
 			else {
-				CRHMException Except("Observation: '" + variable + "', not in Data file. Requested by '" + Name.c_str() + "'", TERMINATE);
+				CRHMException Except("Observation: '" + variable + "', not in Data file. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 				LogError(Except);
 
 
@@ -1657,7 +1657,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 	case CRHM::DECL: {
 
 		if (dimen == CRHM::NFREQ && layvalue == NULL) {
-			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, WARNING));
+			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return(-1);
 		}
 
@@ -1752,7 +1752,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 		}
 
 		if (newVar == NULL) {
-			CRHMException Except("Observation not found " + declModule + ": " + variable, TERMINATE);
+			CRHMException Except("Observation not found " + declModule + ": " + variable, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -1766,7 +1766,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 				return(-1);
 			}
 			else {
-				CRHMException Except("Observation: '" + variable + "', not in Data file. Requested by '" + Name.c_str() + "'", TERMINATE);
+				CRHMException Except("Observation: '" + variable + "', not in Data file. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 				LogError(Except);
 
 				//added by Manishankar
@@ -1872,7 +1872,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 	case CRHM::DECL: {
 
 		if ((itVar = Global::MapVars.find(declModule + obs)) == Global::MapVars.end()) {
-			LogError(CRHMException("function obs variable not declared: " + Name + " " + obs, WARNING));
+			LogError(CRHMException("function obs variable not declared: " + Name + " " + obs, TExcept::WARNING));
 			return(-1);
 		}
 
@@ -1941,14 +1941,14 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 						return(-1);
 					}
 					else {
-						CRHMException Except("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "'", TERMINATE);
+						CRHMException Except("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 						LogError(Except);
 						throw Except;
 					}
 				}
 
 				if (obsVar->FileData->Times != NULL) {
-					CRHMException Except("Function observation: '" + variable + "', uses a 'sparse' Data file. Requested by '" + Name.c_str() + "'", TERMINATE);
+					CRHMException Except("Function observation: '" + variable + "', uses a 'sparse' Data file. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 					LogError(Except);
 					throw Except;
 				}
@@ -2050,7 +2050,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 			}
 			else {
 				if (!optional) {
-					CRHMException Except("Observation not found obs: " + obs, TERMINATE);
+					CRHMException Except("Observation not found obs: " + obs, TExcept::TERMINATE);
 					LogError(Except);
 					throw Except;
 				}
@@ -2116,7 +2116,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 	case CRHM::DECL: {
 
 		if ((itVar = Global::MapVars.find(declModule + obs)) == Global::MapVars.end()) {
-			LogError(CRHMException("function obs variable not declared: " + Name + " " + obs, WARNING));
+			LogError(CRHMException("function obs variable not declared: " + Name + " " + obs, TExcept::WARNING));
 			return(-1);
 		}
 
@@ -2159,19 +2159,19 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 
 			if (obsVar->FileData == NULL) {
 				if (optional) {
-					LogError(CRHMException("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "' (optional).", WARNING));
+					LogError(CRHMException("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "' (optional).", TExcept::WARNING));
 					*value = NULL;
 					return(-1);
 				}
 				else {
-					CRHMException Except("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "'", TERMINATE);
+					CRHMException Except("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 					LogError(Except);
 					throw Except;
 				}
 			}
 
 			if (obsVar->FileData->Times != NULL) {
-				CRHMException Except("Function observation: '" + variable + "', uses a 'sparse' Data file. Requested by '" + Name.c_str() + "'", TERMINATE);
+				CRHMException Except("Function observation: '" + variable + "', uses a 'sparse' Data file. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 				LogError(Except);
 				throw Except;
 			}
@@ -2234,7 +2234,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 			return (obsVar->cnt - 1);
 		}
 		else {
-			CRHMException Except("Variable not found obs: " + obs, TERMINATE);
+			CRHMException Except("Variable not found obs: " + obs, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -2301,12 +2301,12 @@ long ClassModule::declputvar(string source, string name, string units, double **
 				return GetUnit;
 			}
 
-			CRHMException Except("Wild variable not found: " + source + ' ' + name, TERMINATE);
+			CRHMException Except("Wild variable not found: " + source + ' ' + name, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
 		else {
-			CRHMException Except("Variable not found: " + source + ' ' + name, TERMINATE);
+			CRHMException Except("Variable not found: " + source + ' ' + name, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -2374,12 +2374,12 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 				return GetUnit;
 			}
 
-			CRHMException Except("Wild variable not found: " + source + ' ' + name, TERMINATE);
+			CRHMException Except("Wild variable not found: " + source + ' ' + name, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
 		else {
-			CRHMException Except("Variable not found: " + source + ' ' + name, TERMINATE);
+			CRHMException Except("Variable not found: " + source + ' ' + name, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -2829,7 +2829,7 @@ void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
 	}
 
 	if (((Global::DTmax - Global::DTmin) / Global::Freq + newVar->FileData->Dt1 > newVar->FileData->Dt2) && !newVar->FileData->Times) {
-		CRHMException TExcept((string("Observation file '") + string(newVar->FileData->DataFileName.c_str()) + "' shorter than model run!").c_str(), WARNING);
+		CRHMException TExcept((string("Observation file '") + string(newVar->FileData->DataFileName.c_str()) + "' shorter than model run!").c_str(), TExcept::WARNING);
 		LogError(TExcept);
 	}
 
@@ -3065,7 +3065,7 @@ void Administer::Accept(int Result) {
 		case mbYes:
 		case mbYesToAll:
 			if (jj != -1) {
-				LogError(CRHMException((DLLModuleList->Strings[ii] + " module being replaced").c_str(), WARNING));
+				LogError(CRHMException((DLLModuleList->Strings[ii] + " module being replaced").c_str(), TExcept::WARNING));
 				Global::AllModulesList->Delete(jj);
 			}
 
@@ -3381,7 +3381,7 @@ void Myparser::serror(int error)
 		"No expression Present"
 	};
 	LogError(CRHMException(string(e[error]) + " in module '" +
-		LocalPar->module + "' parameter '" + LocalPar->param + "'", WARNING));
+		LocalPar->module + "' parameter '" + LocalPar->param + "'", TExcept::WARNING));
 
 	for (int ll = row; ll < LocalPar->lay; ++ll) { // reset remainder of parameter values to 0
 		for (int ii = col; ii < LocalPar->dim; ++ii)
@@ -3966,7 +3966,7 @@ long ClassModule::declputparam(string source, string param, string units, double
 				}
 			}
 			else {
-				CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+				CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 				LogError(Except);
 				throw Except; // does not return
 			}
@@ -4039,7 +4039,7 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 					*layvalue = (const double **)newPar->layvalues;
 			}
 			else {
-				CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+				CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 				LogError(Except);
 				throw Except; // does not return
 			}
@@ -4076,7 +4076,7 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 		else if ((newPar = ClassParFindPar(param))) {
 		}
 		else {
-			CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+			CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except; // does not return
 		}
@@ -4093,7 +4093,7 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 		return    (long)Global::OurModulesList->array[ii].Object;
 	}
 
-	CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+	CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 	LogError(Except);
 	throw Except; // does not return
 }
@@ -4191,7 +4191,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 				}
 			}
 			else {
-				CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+				CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 				LogError(Except);
 				throw Except;
 			}
@@ -4267,7 +4267,7 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 				return;
 			}
 			else {
-				CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+				CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 				LogError(Except);
 				throw Except;
 			}

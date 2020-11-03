@@ -117,7 +117,7 @@ void Classevap_Resist::init(void) {
   for(hh = 0; chkStruct(); ++hh) {
 
     if(evap_type[hh] == 1 && Ts == NULL){
-      CRHMException TExcept("'evap_Resist' Ts observation not available for Dalton bulk transfer!", TERMINATE);
+      CRHMException TExcept("'evap_Resist' Ts observation not available for Dalton bulk transfer!", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
@@ -127,7 +127,7 @@ void Classevap_Resist::init(void) {
     hru_cum_actet[hh] = 0.0;
 
     if(Ht[hh] > Zwind[hh]/0.67 && evap_type[hh] != 0){
-      CRHMException TExcept("Vegetation height greater than wind reference height, i.e. (Ht > Zwind/0.67)!", WARNING);
+      CRHMException TExcept("Vegetation height greater than wind reference height, i.e. (Ht > Zwind/0.67)!", TExcept::WARNING);
       LogError(TExcept);
     }
   }

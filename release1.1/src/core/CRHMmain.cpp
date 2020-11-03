@@ -459,7 +459,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					string Name = Global::OurModulesList->Strings[ii];
 					int jj = Global::AllModulesList->IndexOf(Name);
 					if (jj < 0) {
-						CRHMException Except("Unknown Module: " + string(Name.c_str()), ERR);
+						CRHMException Except("Unknown Module: " + string(Name.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
 							"Unknown Module: incorrect CRHM version or DLL not loaded");
 						LogError(Except);
@@ -661,7 +661,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					else {
 						if (string(param) != "Use_Observations_As_Supplied") {
 							CRHMException Except("Unknown Module Parameter: " + string(module) + " -> " + string(param) +
-								" in " + OpenNamePrj, ERR);
+								" in " + OpenNamePrj, TExcept::ERR);
 							//Application->MessageBox(Except.Message.c_str(), "Unknown Parameter in project file", MB_OK);
 							LogError(Except);
 						}
@@ -710,7 +710,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					}
 					else {
 						CRHMException Except("Unknown Variable " + S +
-							" in " + string(OpenNamePrj.c_str()), ERR);
+							" in " + string(OpenNamePrj.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
 							"Unknown Variable in project file");
 						LogError(Except);
@@ -764,7 +764,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					}
 					else {
 						CRHMException Except("Unknown Variable " + S +
-							" in " + string(OpenNamePrj.c_str()), ERR);
+							" in " + string(OpenNamePrj.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
 							"Unknown Variable in project file");
 						LogError(Except);
@@ -2071,7 +2071,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 	catch (exception &E) {
 		//string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
 		//    ShowMessage(S);
-		LogError(S + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 0) + ")", ERR);
+		LogError(S + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 0) + ")", TExcept::ERR);
 		GoodRun = false;
 	}
 }
@@ -3631,7 +3631,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 		}
 		else 
 		{
-			CRHMException Except("Reading an obs file attempted to read before the begining of an array", TERMINATE);
+			CRHMException Except("Reading an obs file attempted to read before the begining of an array", TExcept::TERMINATE);
 		}
 
 		
