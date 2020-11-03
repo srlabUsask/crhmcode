@@ -5,7 +5,7 @@
 class Classwinter_meltflag : public ClassModule {
 public:
 
-Classwinter_meltflag(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classwinter_meltflag(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 long *meltflag{ NULL };

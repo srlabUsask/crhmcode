@@ -6,7 +6,7 @@
 class ClassalbedoRichard : public ClassModule {
 public:
 
-ClassalbedoRichard(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassalbedoRichard(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // local class
 

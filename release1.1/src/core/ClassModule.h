@@ -30,7 +30,7 @@ public:
 	string Version;
 	long PeerRank;
 	string PeerVar;
-	CRHM::LMODULE Lvl;  // module level - BASIC, MACRO, ADVANCE, SUPPORT, CUSTOM, PROTO, OBSOL
+	LMODULE Lvl;  // module level - BASIC, MACRO, ADVANCE, SUPPORT, CUSTOM, PROTO, OBSOL
 	string Description;
 
 	long nhru; // # of HRU's. Can be different from Global::nhru for groups, structurs and comprising modules
@@ -68,7 +68,7 @@ public:
 
 	// long Using_RH_EA_obs;
 
-	ClassModule(string Name, string Version, CRHM::LMODULE Lvl = CRHM::PROTO, long PeerRank = 1000, string PeerVar = "")
+	ClassModule(string Name, string Version, LMODULE Lvl = LMODULE::PROTO, long PeerRank = 1000, string PeerVar = "")
 		: Name(Name), NameRoot(Name), Version(Version), Lvl(Lvl), PeerRank(PeerRank), PeerVar(PeerVar), HRU_struct(NULL), isGroup(false), isStruct(false),
 		nhru(0), nobs(0), nlay(0), hh(0), nn(0), variation(0), variation_set(0), variation_max(0),
 		DLLName(""), GroupCnt(0), StructCnt(0), ModuleIndx(0),

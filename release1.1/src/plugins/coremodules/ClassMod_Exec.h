@@ -5,7 +5,7 @@
 class ClassMod_Exec : public ClassModule {
 public:
 
-ClassMod_Exec(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassMod_Exec(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
   //HINSTANCE DLL;
   long Imodules {0};

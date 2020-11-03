@@ -5,7 +5,7 @@
 class ClassHtobs : public ClassModule {
 public:
 
-ClassHtobs(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassHtobs(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *Ht_var{ NULL };

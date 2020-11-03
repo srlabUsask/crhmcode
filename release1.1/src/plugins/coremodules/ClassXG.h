@@ -7,7 +7,7 @@ public:
 
 long front_size{0};
 
-ClassXG(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, "hru_tsf, , ") {};
+ClassXG(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, "hru_tsf, , ") {};
 
 // constants
 

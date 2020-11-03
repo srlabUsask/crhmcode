@@ -5,7 +5,7 @@
 class ClassK_Estimate : public ClassModule {
 public:
 
-ClassK_Estimate(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassK_Estimate(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
   double *Ht_var{ NULL };

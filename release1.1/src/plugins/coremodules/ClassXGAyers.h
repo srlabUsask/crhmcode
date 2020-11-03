@@ -5,7 +5,7 @@
 class ClassXGAyers : public ClassModule {
 public:
 
-ClassXGAyers(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+ClassXGAyers(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl),
                                     infiltype(NULL) {};
 
 // declared observation variables

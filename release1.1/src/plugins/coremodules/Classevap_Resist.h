@@ -5,7 +5,7 @@
 class Classevap_Resist : public ClassModule {
 public:
 
-Classevap_Resist(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QsiS_Var, QsiA_Var") {};
+Classevap_Resist(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QsiS_Var, QsiA_Var") {};
 
 double Qsi_ {0.0};
 long QsiCnt {0};

@@ -19,7 +19,7 @@ public:
 long dayno{0};
 long nstep{0};
 
-ClassWQ_SoilBGC(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_SoilBGC(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameter
 

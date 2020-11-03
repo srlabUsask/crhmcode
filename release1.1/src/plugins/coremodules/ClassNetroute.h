@@ -6,7 +6,7 @@
 class ClassNetroute : public ClassModule {
 public:
 
-ClassNetroute(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassNetroute(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long meltrunoffDiv {0};
 long soil_ssrDiv {0};

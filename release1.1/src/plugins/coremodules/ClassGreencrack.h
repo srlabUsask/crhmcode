@@ -6,7 +6,7 @@
 class ClassGreencrack : public ClassModule {
 public:
 
-ClassGreencrack(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+ClassGreencrack(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl),
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables

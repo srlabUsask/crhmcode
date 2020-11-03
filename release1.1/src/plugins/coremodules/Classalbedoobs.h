@@ -6,7 +6,7 @@
 class Classalbedoobs : public ClassModule {
 public:
 
-Classalbedoobs(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classalbedoobs(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *Albedo { NULL };

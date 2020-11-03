@@ -6,7 +6,7 @@ class ClassCRHMCanopy:public ClassModule {
 
 public:
 
-ClassCRHMCanopy(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 2000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
+ClassCRHMCanopy(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 2000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
 double Qsi_ { 0.0 }, Qli_ { 0.0 };
 

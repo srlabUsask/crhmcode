@@ -5,7 +5,7 @@
 class Classbrushintcp : public ClassModule {
 public:
 
-Classbrushintcp(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 2000) {};
+Classbrushintcp(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 2000) {};
 
 // declared variables
 double *net_rain { NULL };

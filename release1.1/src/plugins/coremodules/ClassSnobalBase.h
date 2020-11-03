@@ -12,7 +12,7 @@ class ClassSnobalBase : public ClassModule {
 
 public:
 
-    ClassSnobalBase(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+    ClassSnobalBase(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
     // declared variables
 

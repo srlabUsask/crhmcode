@@ -6,7 +6,7 @@ class ClassSnobalX : public ClassSnobalBase {
 
     public:
 
-    ClassSnobalX(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassSnobalBase(Name, Version, Lvl) {};
+    ClassSnobalX(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassSnobalBase(Name, Version, Lvl) {};
 
     ClassSnobalX* klone(string name) const;
 

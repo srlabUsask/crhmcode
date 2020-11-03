@@ -5,7 +5,7 @@
 class Classglacier : public ClassModule {
 public:
 
-Classglacier(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " ,snowmeltD"){};
+Classglacier(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, " ,snowmeltD"){};
 
 long ObsCnt_Albedo {0};
 

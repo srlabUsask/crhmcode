@@ -5,7 +5,7 @@
 class ClassSWEslope : public ClassModule {
 public:
 
-ClassSWEslope(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, "glacier_h2o, snowmeltD") {};
+ClassSWEslope(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, "glacier_h2o, snowmeltD") {};
 
 // declared variables
 double *SWE_in{ NULL };

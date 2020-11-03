@@ -591,7 +591,7 @@ void ClassMacro::finish(bool good) { // only required for local storage and fina
 	}
 }
 
-ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) : ClassModule(Name, Version, CRHM::MACRO) {
+ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) : ClassModule(Name, Version, LMODULE::MACRO) {
 
 	int ThisEnd = ThisBegin;
 	MacroBegin = ThisBegin;

@@ -5,7 +5,7 @@
 class ClassFlowInSnow : public ClassModule {
 public:
 
-ClassFlowInSnow(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassFlowInSnow(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // index to module to be called
 ClassModule* Netroute_module { NULL }; // used to call preser for simple projects

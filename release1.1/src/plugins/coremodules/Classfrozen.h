@@ -6,7 +6,7 @@
 class Classfrozen : public ClassModule {
 public:
 
-Classfrozen(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+Classfrozen(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl),
                                     infiltype(NULL) {};
 bool SetOpportunityTime {false};
 bool Update_infil {false};

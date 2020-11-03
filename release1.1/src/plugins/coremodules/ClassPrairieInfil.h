@@ -5,7 +5,7 @@
 class ClassPrairieInfil : public ClassModule {
 public:
 
-ClassPrairieInfil(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+ClassPrairieInfil(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl),
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables

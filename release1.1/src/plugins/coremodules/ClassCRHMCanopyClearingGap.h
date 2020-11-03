@@ -6,7 +6,7 @@ class ClassCRHMCanopyClearingGap:public ClassModule {
 
 public:
 
-ClassCRHMCanopyClearingGap(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
+ClassCRHMCanopyClearingGap(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
 double Qsi_{ 0.0 }, Qli_ {0.0};
 

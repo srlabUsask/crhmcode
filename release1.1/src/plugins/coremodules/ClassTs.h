@@ -6,7 +6,7 @@ class ClassTs : public ClassModule {
 
     public:
 
-    ClassTs(string Name, string Version = "Radiation", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, "QliVt_Var, ") {};
+    ClassTs(string Name, string Version = "Radiation", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, "QliVt_Var, ") {};
 
 // declared observations
     double *Ts{ NULL };

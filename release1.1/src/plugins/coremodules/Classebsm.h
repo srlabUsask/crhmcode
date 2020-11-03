@@ -6,7 +6,7 @@
 class Classebsm : public ClassModule {
 public:
 
-Classebsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , Qnsn_Var, , "){};
+Classebsm(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , Qnsn_Var, , "){};
 
 // declared observation variables
 const double *Qnsn { NULL };

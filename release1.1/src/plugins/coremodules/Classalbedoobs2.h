@@ -5,7 +5,7 @@
 class Classalbedoobs2 : public ClassModule {
 public:
 
-Classalbedoobs2(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classalbedoobs2(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observation variables
 const double *Albedo_obs { NULL };      // interval data

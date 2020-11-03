@@ -6,7 +6,7 @@
 class Classinterception : public ClassModule {
 public:
 
-Classinterception(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classinterception(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observations
 const double *Qsi{ NULL };

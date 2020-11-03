@@ -5,7 +5,7 @@
 class ClassHMSA : public ClassModule {
 public:
 
-ClassHMSA(string Name = "HMSA", string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " hru_t, "){};
+ClassHMSA(string Name = "HMSA", string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, " hru_t, "){};
 
 double Soil_Temp{0.0};
 

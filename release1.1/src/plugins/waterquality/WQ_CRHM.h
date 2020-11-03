@@ -14,7 +14,7 @@ using namespace std;
 class ClassWQ_Soil : public ClassModule {
 public:
 
-ClassWQ_Soil(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Soil(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long snowinfilDiv{0};
 long meltrunoffDiv{0};
@@ -279,7 +279,7 @@ ClassWQ_Soil* klone(string name) const;
 class ClassWQ_Netroute : public ClassModule {
 public:
 
-ClassWQ_Netroute(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Netroute(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long meltrunoffDiv{0};
 long soil_ssrDiv{0};
@@ -500,7 +500,7 @@ ClassWQ_Netroute* klone(string name) const;
 class ClassWQ_pbsm : public ClassModule {
 public:
 
-ClassWQ_pbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
+ClassWQ_pbsm(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
 
 double hru_u_{0.0};
 
@@ -627,7 +627,7 @@ ClassWQ_pbsm* klone(string name) const;
 class ClassWQ_Netroute_M_D : public ClassModule {
 public:
 
-ClassWQ_Netroute_M_D(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Netroute_M_D(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long meltrunoffDiv{0};
 long soil_ssrDiv{0};
@@ -857,7 +857,7 @@ ClassWQ_Netroute_M_D* klone(string name) const;
 class ClassWQ_Test_Hype : public ClassModule {
 public:
 
-ClassWQ_Test_Hype(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Test_Hype(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *infil{ NULL };
@@ -912,7 +912,7 @@ ClassWQ_Test_Hype* klone(string name) const;
 class ClassWQ_pbsmSnobal : public ClassModule {
 public:
 
-ClassWQ_pbsmSnobal(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
+ClassWQ_pbsmSnobal(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
 
 double hru_u_{0.0};
 
@@ -1043,7 +1043,7 @@ ClassWQ_pbsmSnobal* klone(string name) const;
 class ClassWQ_mass_conc : public ClassModule {
 public:
 
-ClassWQ_mass_conc(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_mass_conc(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *inflow_conc{ NULL };
@@ -1091,7 +1091,7 @@ ClassWQ_mass_conc* klone(string name) const;
 class ClassWQ_Substitute_Hype : public ClassModule {
 public:
 
-ClassWQ_Substitute_Hype(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Substitute_Hype(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *conc_soil_rechr{ NULL };   // concentration of inorganic nitrogen *** from soilstate
@@ -1114,7 +1114,7 @@ ClassWQ_Substitute_Hype* klone(string name) const;
 class ClassWQ_Gen_Mass_Var_Soil : public ClassModule {
 public:
 
-ClassWQ_Gen_Mass_Var_Soil(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Gen_Mass_Var_Soil(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameters
 
@@ -1219,7 +1219,7 @@ ClassWQ_Gen_Mass_Var_Soil* klone(string name) const;
 class ClassGrow_crops_annually : public ClassModule {
 public:
 
-ClassGrow_crops_annually(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassGrow_crops_annually(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long ObsCnt_N_up{0};
 long ObsCnt_P_up{0};
@@ -1325,7 +1325,7 @@ ClassGrow_crops_annually* klone(string name) const;
 class ClassWQ_Gen_Mass_Var_Netroute : public ClassModule {
 public:
 
-ClassWQ_Gen_Mass_Var_Netroute(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Gen_Mass_Var_Netroute(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameters
 
@@ -1375,7 +1375,7 @@ ClassWQ_Gen_Mass_Var_Netroute* klone(string name) const;
 class Classlapse_rate_Monthly_Mod : public ClassModule {
 public:
 
-Classlapse_rate_Monthly_Mod(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classlapse_rate_Monthly_Mod(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double* lapse_rate{ NULL };
@@ -1391,7 +1391,7 @@ Classlapse_rate_Monthly_Mod* klone(string name) const;
 class ClassGlacier_melt_debris_cover_estimate_Mod : public ClassModule {
 public:
 
-ClassGlacier_melt_debris_cover_estimate_Mod(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassGlacier_melt_debris_cover_estimate_Mod(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameters
 
@@ -1451,7 +1451,7 @@ ClassGlacier_melt_debris_cover_estimate_Mod* klone(string name) const;
 class ClassSoilPrairie : public ClassModule {
 public:
 
-ClassSoilPrairie(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassSoilPrairie(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long snowinfilDiv{0};
 long meltrunoffDiv{0};
@@ -1611,7 +1611,7 @@ double Small_Ponds_runoff_frac(const double Sd_Sdmax, const long hh);
 class ClassGlacier_debris_cover : public ClassModule {
 public:
 
-ClassGlacier_debris_cover(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassGlacier_debris_cover(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameters
 
@@ -1655,7 +1655,7 @@ ClassGlacier_debris_cover* klone(string name) const;
 class Class_lapse_rate_Monthly : public ClassModule {
 public:
 
-Class_lapse_rate_Monthly(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Class_lapse_rate_Monthly(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double* lapse_rate{ NULL };

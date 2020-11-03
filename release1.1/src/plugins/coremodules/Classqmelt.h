@@ -5,7 +5,7 @@
 class Classqmelt : public ClassModule {
 public:
 
-Classqmelt(string Name = "Qmelt", string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl){};
+Classqmelt(string Name = "Qmelt", string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl){};
 
 // declared variables
 double *Qm{ NULL };      // MJ/m2/Int

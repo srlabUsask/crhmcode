@@ -5,7 +5,7 @@
 class ClassMeltRunoff_Kstorage : public ClassModule {
 public:
 
-ClassMeltRunoff_Kstorage(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassMeltRunoff_Kstorage(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // index to module to be called
 ClassModule* Netroute_module { NULL }; // used to call preser for simple projects

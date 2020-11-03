@@ -6,7 +6,7 @@
 class Classnetall : public ClassModule {
 public:
 
-Classnetall(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classnetall(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observation variables
 const double *t{ NULL };

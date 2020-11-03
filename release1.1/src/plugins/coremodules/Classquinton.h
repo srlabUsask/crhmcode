@@ -5,7 +5,7 @@
 class Classquinton : public ClassModule {
 public:
 
-Classquinton(string Name = "Quinton", string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl){};
+Classquinton(string Name = "Quinton", string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl){};
 
 ClassClark *Delayrunoff{ NULL };
 ClassClark *Delayflow{ NULL };

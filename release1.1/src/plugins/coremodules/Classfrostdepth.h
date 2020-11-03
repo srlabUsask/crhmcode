@@ -5,7 +5,7 @@
 class Classfrostdepth : public ClassModule {
 public:
 
-Classfrostdepth(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+Classfrostdepth(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl),
                                         k_lay(NULL),
                                         L_lay(NULL),
                                         c_lay(NULL),

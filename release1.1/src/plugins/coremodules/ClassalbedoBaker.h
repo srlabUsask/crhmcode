@@ -6,7 +6,7 @@
 class ClassalbedoBaker : public ClassModule {
 public:
 
-ClassalbedoBaker(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassalbedoBaker(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
   double *Albedo { NULL };

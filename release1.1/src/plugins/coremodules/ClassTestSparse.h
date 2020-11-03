@@ -5,7 +5,7 @@
 class ClassTestSparse : public ClassModule {
 public:
 
-ClassTestSparse(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassTestSparse(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long ObsCnt_N_up{0};
 long ObsCnt_P_up{0};

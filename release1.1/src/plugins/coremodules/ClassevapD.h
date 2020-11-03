@@ -5,7 +5,7 @@
 class ClassevapD : public ClassModule {
 public:
 
-ClassevapD(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassevapD(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *hru_actet { NULL };

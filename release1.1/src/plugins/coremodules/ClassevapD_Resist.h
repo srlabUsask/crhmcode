@@ -5,7 +5,7 @@
 class ClassevapD_Resist : public ClassModule {
 public:
 
-ClassevapD_Resist(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassevapD_Resist(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long QsiCnt {0};
 long TsCnt {0};

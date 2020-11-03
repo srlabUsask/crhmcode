@@ -5,7 +5,7 @@
 class ClassICEflow : public ClassModule {
 public:
 
-ClassICEflow(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "") {};
+ClassICEflow(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001, "") {};
 
 // declared variables
 double *Ux{ NULL };

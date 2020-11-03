@@ -5,7 +5,7 @@
 class ClassIceBulb : public ClassModule {
 public:
 
-ClassIceBulb(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassIceBulb(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *hru_icebulb{ NULL };

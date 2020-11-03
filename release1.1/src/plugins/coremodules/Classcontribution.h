@@ -5,7 +5,7 @@
 class Classcontribution : public ClassModule {
 public:
 
-Classcontribution(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classcontribution(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long soil_runoffDiv {0};
 

@@ -5,7 +5,7 @@
 class Classlake : public ClassModule {
 public:
 
-Classlake(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classlake(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
   int DaysMonth {0};
   long ThisMonth {0};

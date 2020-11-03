@@ -5,7 +5,7 @@
 class Classtsurface : public ClassModule {
 public:
 
-Classtsurface(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classtsurface(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *hru_tsf{ NULL };

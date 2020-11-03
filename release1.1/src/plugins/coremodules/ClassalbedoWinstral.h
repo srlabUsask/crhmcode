@@ -5,7 +5,7 @@
 class ClassalbedoWinstral : public ClassModule {
 public:
 
-ClassalbedoWinstral(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassalbedoWinstral(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
   double *Albedo { NULL };

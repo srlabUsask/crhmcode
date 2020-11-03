@@ -5,7 +5,7 @@
 class ClassShutWall : public ClassModule {
 public:
 
-ClassShutWall(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassShutWall(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long Qn_Cnt{0};
 long Qg_Cnt{0};

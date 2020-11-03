@@ -5,7 +5,7 @@
 class ClassVolumetric : public ClassModule {
 public:
 
-ClassVolumetric(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "soil_gw") {}; // setting PeerVar. Cannot be "STATE" var
+ClassVolumetric(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001, "soil_gw") {}; // setting PeerVar. Cannot be "STATE" var
 
 // declared parameters
 const double *soil_Depth{ NULL };

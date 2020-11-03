@@ -5,7 +5,7 @@
 class ClasspbsmSnobal : public ClassModule {
 public:
 
-ClasspbsmSnobal(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust"), // setting PeerRank
+ClasspbsmSnobal(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust"), // setting PeerRank
                                   hru_basin(NULL) {};
 double hru_u_{0.0};
 

@@ -6,7 +6,7 @@
 class ClassKevin : public ClassModule {
 public:
 
-ClassKevin(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+ClassKevin(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl),
                                    SWEpeak(NULL),
                                    SWElast(NULL) {};
 // declared observation variables

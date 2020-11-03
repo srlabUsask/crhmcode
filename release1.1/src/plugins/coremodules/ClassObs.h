@@ -5,7 +5,7 @@
 class Classobs : public ClassModule {
 public:
 
-Classobs(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classobs(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long Exist{0};
 long Exist2{0};

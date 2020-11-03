@@ -5,7 +5,7 @@
 class ClassGrow_Crop : public ClassModule {
 public:
 
-ClassGrow_Crop(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassGrow_Crop(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *Crop_Ht{ NULL };

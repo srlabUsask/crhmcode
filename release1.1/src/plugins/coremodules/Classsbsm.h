@@ -5,7 +5,7 @@
 class Classsbsm : public ClassModule {
 public:
 
-Classsbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
+Classsbsm(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
                                   hru_basin(NULL) {};
 double dt{0.0};
 

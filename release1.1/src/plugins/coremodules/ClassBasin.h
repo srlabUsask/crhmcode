@@ -5,7 +5,7 @@
 class Classbasin : public ClassModule {
 public:
 
-Classbasin(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classbasin(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameters
 const long *RUN_ID { NULL };

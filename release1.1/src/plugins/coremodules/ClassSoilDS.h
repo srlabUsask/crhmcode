@@ -5,7 +5,7 @@
 class ClassSoilDS : public ClassModule {
 public:
 
-ClassSoilDS(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassSoilDS(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long snowinfilDiv{0};
 long meltrunoffDiv{0};

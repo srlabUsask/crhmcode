@@ -5,7 +5,7 @@
 class ClassREWroute_stream : public ClassModule {
 public:
 
-ClassREWroute_stream(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 9999) {};
+ClassREWroute_stream(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 9999) {};
 
 long instreamflowCnt{0};
 long gwCnt{0};

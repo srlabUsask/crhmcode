@@ -6,7 +6,7 @@ class ClassSimpleRichard : public ClassModule {
 
     public:
 
-    ClassSimpleRichard(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+    ClassSimpleRichard(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observation variables
 

@@ -5,7 +5,7 @@
 class ClassfrozenAyers : public ClassModule {
 public:
 
-ClassfrozenAyers(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+ClassfrozenAyers(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl),
                                     infiltype(NULL) {};
 bool SetOpportunityTime {false};
 bool Update_infil {false};

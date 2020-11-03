@@ -5,7 +5,7 @@
 class ClassSlope_Qsi : public ClassModule {
 public:
 
-ClassSlope_Qsi(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassSlope_Qsi(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *QsiS_Var{ NULL };

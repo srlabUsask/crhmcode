@@ -5,7 +5,7 @@
 class ClassNO_pbsm : public ClassModule {
 public:
 
-ClassNO_pbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
+ClassNO_pbsm(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
                                   hru_basin(NULL) {};
 // declared variables
 double *SWE{ NULL };

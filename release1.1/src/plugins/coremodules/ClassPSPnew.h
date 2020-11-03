@@ -5,7 +5,7 @@
 class ClassPSPnew : public ClassModule {
 public:
 
-ClassPSPnew(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 2000) {};
+ClassPSPnew(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 2000) {};
 
 // declared observation variables
 const double *TsnowG{ NULL };

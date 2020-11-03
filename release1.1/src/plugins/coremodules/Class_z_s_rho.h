@@ -5,7 +5,7 @@
 class Class_z_s_rho : public ClassModule {
 public:
 
-Class_z_s_rho(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Class_z_s_rho(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
   double*  z_s{ NULL };            // total snowcover thickness (m)

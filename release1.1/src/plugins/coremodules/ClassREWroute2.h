@@ -5,7 +5,7 @@
 class ClassREWroute2 : public ClassModule {
 public:
 
-ClassREWroute2(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 9999) {};
+ClassREWroute2(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 9999) {};
 
 long inflowCnt{0};
 long gwCnt{0};

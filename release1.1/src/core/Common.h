@@ -74,6 +74,8 @@ enum class TBuild { BUILD, DECL, INIT, RUN };
 
 enum class TIMEFORMAT { MS, MMDDYYYY, YYYYMMDD };
 
+enum class LMODULE { BASIC, MACRO, ADVANCE, SUPPORT, CUSTOM, PROTO, OBSOL };
+
 namespace CRHM {
 	enum TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all variables/parameters
 
@@ -100,7 +102,7 @@ namespace CRHM {
 
 	enum TCONDITION { FROZEN, ICEWATER, WATER, DRAINING };
 
-	enum LMODULE { BASIC, MACRO, ADVANCE, SUPPORT, CUSTOM, PROTO, OBSOL };
+	
 
 	enum CONTROLSTATES { SAVE, LOAD };
 

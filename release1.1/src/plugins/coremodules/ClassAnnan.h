@@ -7,7 +7,7 @@ public:
 
 	double QsiDT {0.0}, TauAT {0.0};
 
-  ClassAnnan(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+  ClassAnnan(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observation variables
 //const double *SunAct;

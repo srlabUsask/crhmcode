@@ -4,7 +4,7 @@
 
 class Classwalmsley_wind : public ClassModule {
 public:
-Classwalmsley_wind(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classwalmsley_wind(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
 double *hru_Uadjust{ NULL };
