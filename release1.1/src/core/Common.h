@@ -70,7 +70,7 @@ static long lLimit = (numeric_limits<long>::max)();
 //static long lLimit = 2147483647;
 
 
-
+enum class TBuild { BUILD, DECL, INIT, RUN };
 
 namespace CRHM {
 	enum TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all variables/parameters
@@ -83,7 +83,7 @@ namespace CRHM {
 
 	// NREB only applies to variables. NDEFNZ only applies to parameters
 	enum TDim { BASIN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, NHRU, NOBS, NLAY, NDEF, NFREQ, NREB, NDEFN, NDEFNZ };
-	enum TBuild { BUILD, DECL, INIT, RUN };
+	
 
 	enum TTiming { IDLE, EARLY, MELT, MELT2, MATURE, HOLD };
 	enum TFun { FOBS, VP_SAT, W_MJ, MJ_W, AVG, MIN, MAX, TOT, POS, FIRST, LAST, CNT, CNT0, DLTA, INTVL, DAY, DTOT };

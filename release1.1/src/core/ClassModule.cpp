@@ -63,7 +63,7 @@ void ClassModule::initbase(void) {
 
 
 
-	Global::BuildFlag = CRHM::INIT;
+	Global::BuildFlag = TBuild::INIT;
 
 
 	MapPar::iterator itPar;
@@ -143,7 +143,7 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(variable.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -152,7 +152,7 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 		return 0;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			return 0;
@@ -185,7 +185,7 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 		return 0;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) 
 		{
 			newVar = (*itVar).second;
@@ -273,7 +273,7 @@ void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, true, Local);
 
-	if (Global::BuildFlag == CRHM::BUILD) {
+	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
 		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
@@ -290,7 +290,7 @@ void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, true, Local);
 
-	if (Global::BuildFlag == CRHM::BUILD) {
+	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
 		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
@@ -307,7 +307,7 @@ void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, true, Local);
 
-	if (Global::BuildFlag == CRHM::BUILD) {
+	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
 		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
@@ -324,7 +324,7 @@ void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, true, Local);
 
-	if (Global::BuildFlag == CRHM::BUILD) {
+	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
 		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
@@ -356,7 +356,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
 		PairstrV Item2 = PairstrV(variable.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
@@ -368,7 +368,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			return;
@@ -403,7 +403,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
@@ -468,7 +468,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
 		PairstrV Item2 = PairstrV(variable.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
@@ -480,7 +480,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			return;
@@ -511,7 +511,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
@@ -566,7 +566,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find("#" + Name + " " + variable)) != Global::MapVars.end())
 			return;
@@ -596,7 +596,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		string S = "#" + Name + " " + variable;
 
@@ -649,7 +649,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find("#" + Name + " " + variable)) != Global::MapVars.end())
 			return;
@@ -679,7 +679,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		string S = "#" + Name + " " + variable;
 
@@ -744,7 +744,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
@@ -753,7 +753,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 		return (TStringList*)NULL;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
@@ -785,7 +785,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 		return newPar->Strings;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			stringsList = newPar->Strings;
@@ -844,7 +844,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
@@ -853,7 +853,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		return;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if (dim <= 0) { // find existing parameter
 			return;
@@ -924,7 +924,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			*value = newPar->values;
@@ -992,7 +992,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
@@ -1001,7 +1001,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		return;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if (dim <= 0) { // find existing parameter
 			return;
@@ -1070,7 +1070,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			*ivalue = newPar->ivalues;
@@ -1197,7 +1197,7 @@ long ClassModule::declgetvar(string source, string name, string units, const dou
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
 		string s = string(source.c_str()) + " " + name.c_str();
 
@@ -1208,11 +1208,11 @@ long ClassModule::declgetvar(string source, string name, string units, const dou
 		return 0;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return 0;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		string::size_type indx2 = name.find('@');
 		if ((itVar = Global::MapVars.find(source + " " + name)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
@@ -1272,7 +1272,7 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
 		string s = string(source.c_str()) + " " + name.c_str();
 
@@ -1283,11 +1283,11 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 		return 0;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return 0;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if (name == "Not_Used") // AKA does not handle int/double
 			name = "Not_Used_int";
 
@@ -1351,7 +1351,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
 		VandP VP; VP.PutV(variation_set); VP.PutP(CRHM::USUAL);
 		PairstrV Item2 = PairstrV((name + "#").c_str(), VP.both);
@@ -1365,7 +1365,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + name + "#")) != Global::MapVars.end()) {
 
@@ -1405,7 +1405,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 		return(-1);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itVar = Global::MapVars.find(Name + " " + name + "#")) != Global::MapVars.end()) {
 			Global::DeclRootList->Add(string(ID.c_str()) + " " + (name + "#").c_str()); // to prevent input/output looping
 
@@ -1466,7 +1466,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(variable.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -1476,7 +1476,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if (dimen == CRHM::NFREQ && layvalue == NULL) {
 			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, TExcept::WARNING));
@@ -1521,7 +1521,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		return(-1);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		newVar = NULL; // unchanged if nothing found
 
@@ -1644,7 +1644,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(variable.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -1654,7 +1654,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if (dimen == CRHM::NFREQ && layvalue == NULL) {
 			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, TExcept::WARNING));
@@ -1724,7 +1724,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 		return(-1);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		newVar = NULL; // unchanged if nothing found
 
@@ -1844,7 +1844,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		pair<Mapstr::iterator, Mapstr::iterator> range = Global::Mapreadvar.equal_range(Name.c_str());
 		//string units; local variable is not used - jhs507
 		 
@@ -1869,7 +1869,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(declModule + obs)) == Global::MapVars.end()) {
 			LogError(CRHMException("function obs variable not declared: " + Name + " " + obs, TExcept::WARNING));
@@ -1905,7 +1905,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 		return(0);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		itVar = Global::MapVars.find(Name + " " + variable);
 
 		try
@@ -2088,7 +2088,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		pair<Mapstr::iterator, Mapstr::iterator> range = Global::Mapreadvar.equal_range(Name.c_str());
 		//string units; Units is set below with a long value into a string but never used - jhs507
 
@@ -2113,7 +2113,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(declModule + obs)) == Global::MapVars.end()) {
 			LogError(CRHMException("function obs variable not declared: " + Name + " " + obs, TExcept::WARNING));
@@ -2150,7 +2150,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 		return(-1);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		itVar = Global::MapVars.find(Name + " " + variable);
 		newVar = (*itVar).second;
 
@@ -2265,7 +2265,7 @@ long ClassModule::declputvar(string source, string name, string units, double **
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
 		string s = string(source.c_str()) + " " + name.c_str();
 
@@ -2276,11 +2276,11 @@ long ClassModule::declputvar(string source, string name, string units, double **
 		return 0;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return 0;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itVar = Global::MapVars.find(source + " " + name)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			*value = newVar->values;
@@ -2335,7 +2335,7 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
 		string s = string(source.c_str()) + " " + name.c_str();
 
@@ -2346,11 +2346,11 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 		return 0;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return 0;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if (name == "Not_Used") // AKA does not handle int/double
 			name = "Not_Used_int";
 
@@ -3858,7 +3858,7 @@ TAKA AKAtype(string type) {
 //---------------------------------------------------------------------------
 bool ClassModule::Variation_Skip(void) {
 
-	if ((Global::BuildFlag == CRHM::BUILD && variation == 0) ||                    // for Build screen   //warning resolved by Manishankar
+	if ((Global::BuildFlag == TBuild::BUILD && variation == 0) ||                    // for Build screen   //warning resolved by Manishankar
 		((variation_set & 2048) != 0 && variation == 0) ||                        // handles VARIATION_0
 		(variation_set & 4096) != 0 ||                        // handles VARIATION_0
 		(variation_set == 0) ||                                                // handles VARIATION_ORG
@@ -3887,7 +3887,7 @@ long ClassModule::declputparam(string source, string param, string units, double
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(param.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -3895,7 +3895,7 @@ long ClassModule::declputparam(string source, string param, string units, double
 		return -1;
 	}
 
-	case CRHM::DECL: { // only finds groups
+	case TBuild::DECL: { // only finds groups
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
@@ -3930,7 +3930,7 @@ long ClassModule::declputparam(string source, string param, string units, double
 		return -1;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if (source[0] != '*') {
 			if ((itPar = Global::MapPars.find(source + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
@@ -3999,7 +3999,7 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(param.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -4007,11 +4007,11 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 		return -1;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return -1;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if (source[0] != '*') {
 			if ((itPar = Global::MapPars.find(source + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
@@ -4116,7 +4116,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(param.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -4124,7 +4124,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 		return -1;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			newPar->Inhibit_share = 1;
@@ -4157,7 +4157,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 		return -1;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if (source[0] != '*') {
 			if ((itPar = Global::MapPars.find(source + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
@@ -4223,7 +4223,7 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(param.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -4231,11 +4231,11 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 		return;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if (source[0] != '*') {
 			if ((itPar = Global::MapPars.find(source + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;

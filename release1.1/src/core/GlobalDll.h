@@ -68,7 +68,7 @@ public:
 	static long LoopCnt;
 	static long LoopCntDown;
 
-	static CRHM::TBuild BuildFlag;
+	static TBuild BuildFlag;
 	static CRHM::TIMEFORMAT TimeFormat;
 
 	static MapVar MapVars;     // DECL

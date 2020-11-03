@@ -848,7 +848,7 @@ void CRHMmain::SetSharedParams(ClassPar *basinPar) {
 
 void CRHMmain::FormCreate(void) {
 
-	Global::BuildFlag = CRHM::BUILD;
+	Global::BuildFlag = TBuild::BUILD;
 
 	Global::maxhru = 1;
 	Global::maxlay = 1;
@@ -945,7 +945,7 @@ void  CRHMmain::InitModules(void) {
 
 	//ClassVar *thisVar; variable is unreferenced commenting out for now - jhs507
 
-	Global::BuildFlag = CRHM::DECL;
+	Global::BuildFlag = TBuild::DECL;
 
 	// executes the DECL portion of the declvar/declparam etc. routines
 	for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
@@ -1790,11 +1790,11 @@ MMSData *  CRHMmain::RunClick2Start()
 		for (int ii = 0; ii < Modii; ii++)
 			((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(false);
 
-		Global::BuildFlag = CRHM::DECL;
+		Global::BuildFlag = TBuild::DECL;
 		return mmsdata;
 	}
 
-	Global::BuildFlag = CRHM::RUN;
+	Global::BuildFlag = TBuild::RUN;
 	Global::DTmax = (int)((DTendR - Global::DTstart)* Global::Freq);
 
 	SeriesCnt = SelectedVariables->Count;
@@ -2063,7 +2063,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 		} // end for
 
 		int d = iter;
-		Global::BuildFlag = CRHM::DECL;
+		Global::BuildFlag = TBuild::DECL;
 
 
 	}
@@ -3457,7 +3457,7 @@ void CRHMmain::ClearModules(bool All) {
 	}
 	//Chart->Refresh();
 
-	Global::BuildFlag = CRHM::BUILD;
+	Global::BuildFlag = TBuild::BUILD;
 
 	Global::MapAKA.clear(); // remove all AKA
 }

@@ -979,7 +979,7 @@ void Defdeclparam::CallDecl() {
 	else
 		Macro->declparam(name, Dim, Default, Min, Max, Description, Units, &fix_const, &fix2_const, Macro->nhru, visibility);
 
-	if (Global::BuildFlag == CRHM::INIT) {
+	if (Global::BuildFlag == TBuild::INIT) {
 		FP = Macro->vars.find(name);
 		if (FP == Macro->vars.end()) {
 			Macro->vars.insert(make_pair(name, VarCHRM()));
@@ -1175,7 +1175,7 @@ void Defdeclgetvar::CallDecl() {
 	else
 		Macro->declgetvar(module, name, Units, &fix_const, &fix2_const);
 
-	if (Global::BuildFlag == CRHM::INIT) { // moved down 06/20/11
+	if (Global::BuildFlag == TBuild::INIT) { // moved down 06/20/11
 
 		FP = Macro->vars.find(name);
 		if (FP == Macro->vars.end()) {
@@ -1233,7 +1233,7 @@ void Defdeclputvar::CallDecl() {
 	else
 		Macro->declputvar(module, name, Units, &fix, &fix2);
 
-	if (Global::BuildFlag == CRHM::INIT) { // moved down 06/20/11
+	if (Global::BuildFlag == TBuild::INIT) { // moved down 06/20/11
 
 		FP = Macro->vars.find(name);
 		if (FP == Macro->vars.end()) {
@@ -1281,7 +1281,7 @@ void Defdeclputparam::CallDecl() {
 	else
 		Macro->declputparam(module, name, Units, &fix, &fix2);
 
-	if (Global::BuildFlag == CRHM::INIT) { // moved down 06/20/11
+	if (Global::BuildFlag == TBuild::INIT) { // moved down 06/20/11
 
 		FP = Macro->vars.find(name);
 		if (FP == Macro->vars.end()) {
@@ -1437,7 +1437,7 @@ long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string he
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
 		PairstrV Item2 = PairstrV(name, variation_set);
 		PairstrI Item = PairstrI(module, Item2);
@@ -1447,7 +1447,7 @@ long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string he
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + name)) != Global::MapVars.end()) {
 			thisVar = (*itVar).second;
@@ -1490,7 +1490,7 @@ long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string he
 		return(-1);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itVar = Global::MapVars.find(Name + " " + name)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			if (newVar->FileData) {

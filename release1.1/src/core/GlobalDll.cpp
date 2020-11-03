@@ -59,7 +59,7 @@ TDateTime Global::LoopTo; // Loop to this date.
 long Global::LoopCnt;  // Loop this count
 long Global::LoopCntDown;  // Loop this count
 
-CRHM::TBuild Global::BuildFlag;
+TBuild Global::BuildFlag;
 CRHM::TIMEFORMAT Global::TimeFormat;
 
 MapVar Global::MapVars;     // DECL
