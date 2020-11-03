@@ -69,7 +69,7 @@ public:
 	static long LoopCntDown;
 
 	static TBuild BuildFlag;
-	static CRHM::TIMEFORMAT TimeFormat;
+	static TIMEFORMAT TimeFormat;
 
 	static MapVar MapVars;     // DECL
 	static MapVar MapVarsGet;  // INIT

@@ -57,7 +57,7 @@ using namespace std;
 enum class TMemoSel { LOG, DEBUG };
 enum class TExcept { NONE, ERR, DECLERR, WARNING, USER, TERMINATE };
 enum class TExtra { BLANK, DD, TT, DT };
-enum TAKA { AKAERROR = -1, VARG, OBSR, VARD, OBSD, PARD, OBSF, AKAEND };
+enum class TAKA { AKAERROR = -1, VARG, OBSR, VARD, OBSD, PARD, OBSF, AKAEND };
 enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll, mbNoToAll, mbYesToAll, mbHelp };
 
 
@@ -71,6 +71,8 @@ static long lLimit = (numeric_limits<long>::max)();
 
 
 enum class TBuild { BUILD, DECL, INIT, RUN };
+
+enum class TIMEFORMAT { MS, MMDDYYYY, YYYYMMDD };
 
 namespace CRHM {
 	enum TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all variables/parameters
@@ -104,7 +106,6 @@ namespace CRHM {
 
 	enum HRUOBSTYPES { HRU_OBS_t_rh_ea = 1, HRU_OBS_p_ppt, HRU_OBS_u, HRU_OBS_Q, HRU_OBS_misc };
 
-	enum TIMEFORMAT { MS, MMDDYYYY, YYYYMMDD };
 }
 
 #define MAXHRU 101

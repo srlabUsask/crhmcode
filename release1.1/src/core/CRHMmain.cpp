@@ -339,12 +339,12 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 					TAKA Type = AKAtype(type);
 
-					if (Type == VARG || Type == OBSR || Type == OBSF) {
+					if (Type == TAKA::VARG || Type == TAKA::OBSR || Type == TAKA::OBSF) {
 						DataFile >> source;
 						alias += ' ' + source;
 					}
 
-					if (Type != AKAERROR) {
+					if (Type != TAKA::AKAERROR) {
 						Pairstr2 Item = Pairstr2(type + " " + module + " " + name, alias);
 						Global::MapAKA.insert(Item);
 					}
@@ -937,7 +937,7 @@ void CRHMmain::FormCreate(void) {
 
 	Global::NaNcheck = false;
 	Global::LOGVARLOAD = false;
-	Global::TimeFormat = MS;
+	Global::TimeFormat = TIMEFORMAT::MS;
 
 }
 
@@ -2360,13 +2360,13 @@ void  CRHMmain::AllRprt(void)
 
 		//added this switch statement according to Peter's code.
 		switch (Global::TimeFormat) {
-		case CRHM::MS:
+		case TIMEFORMAT::MS:
 			Sx = FloatToStrF(cdSeries[0]->XValue(nn), TFloatFormat::ffGeneral, 10, 0);
 			break;
-		case CRHM::MMDDYYYY:
+		case TIMEFORMAT::MMDDYYYY:
 			Sx = StandardConverterUtility::FormatDateTime("mm/dd/yyyy hh:mm ", cdSeries[0]->XValue(nn));
 			break;
-		case CRHM::YYYYMMDD:
+		case TIMEFORMAT::YYYYMMDD:
 			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn));
 			break;
 		default:

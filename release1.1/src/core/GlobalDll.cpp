@@ -60,7 +60,7 @@ long Global::LoopCnt;  // Loop this count
 long Global::LoopCntDown;  // Loop this count
 
 TBuild Global::BuildFlag;
-CRHM::TIMEFORMAT Global::TimeFormat;
+TIMEFORMAT Global::TimeFormat;
 
 MapVar Global::MapVars;     // DECL
 MapVar Global::MapVarsGet;  // INIT

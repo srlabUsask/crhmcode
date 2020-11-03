@@ -139,7 +139,7 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 	}
 	Convert convert; convert.CheckUnitsString(Name, variable, units);
 
-	AKAhook(VARD, Name, variable, variable);
+	AKAhook(TAKA::VARD, Name, variable, variable);
 
 	switch (Global::BuildFlag) {
 
@@ -352,7 +352,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 	Convert convert; convert.CheckUnitsString(Name, variable, units);
 
-	AKAhook(VARD, Name, variable, variable);
+	AKAhook(TAKA::VARD, Name, variable, variable);
 
 	switch (Global::BuildFlag) {
 
@@ -462,7 +462,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(VARD, Name, variable, variable);
+	AKAhook(TAKA::VARD, Name, variable, variable);
 
 	Convert convert; convert.CheckUnitsString(Name, variable, units);
 
@@ -562,7 +562,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 	Convert convert; convert.CheckUnitsString(Name, variable, units);
 
-	AKAhook(VARD, Name, variable, variable); // new 04/23/13
+	AKAhook(TAKA::VARD, Name, variable, variable); // new 04/23/13
 
 	switch (Global::BuildFlag) {
 
@@ -645,7 +645,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 	Convert convert; convert.CheckUnitsString(Name, variable, units);
 
-	AKAhook(VARD, Name, variable, variable); // new 04/23/13
+	AKAhook(TAKA::VARD, Name, variable, variable); // new 04/23/13
 
 	switch (Global::BuildFlag) {
 
@@ -740,7 +740,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(PARD, Name, param, param);
+	AKAhook(TAKA::PARD, Name, param, param);
 
 	switch (Global::BuildFlag) {
 
@@ -840,7 +840,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param);
+	AKAhook(TAKA::PARD, Name, param, param);
 
 	switch (Global::BuildFlag) {
 
@@ -988,7 +988,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param);
+	AKAhook(TAKA::PARD, Name, param, param);
 
 	switch (Global::BuildFlag) {
 
@@ -1189,7 +1189,7 @@ long ClassModule::declgetvar(string source, string name, string units, const dou
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(VARG, Name, name, name, source, ID);
+	AKAhook(TAKA::VARG, Name, name, name, source, ID);
 
 	MapPar::iterator itPar;
 	//ClassPar *newPar; variable is unreferenced commenting out for now - jhs507
@@ -1264,7 +1264,7 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(VARG, Name, name, name, source, ID);
+	AKAhook(TAKA::VARG, Name, name, name, source, ID);
 
 	MapPar::iterator itPar;
 	//ClassPar *newPar; variable is unreferenced commenting out for now - jhs507
@@ -1345,7 +1345,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 
 	Convert convert; convert.CheckUnitsString(Name, name, units);
 
-	AKAhook(OBSD, Name, name, name);
+	AKAhook(TAKA::OBSD, Name, name, name);
 
 	int cnt = getdim(dimen);
 
@@ -1462,7 +1462,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(OBSR, Name, variable, variable, declModule, ID);
+	AKAhook(TAKA::OBSR, Name, variable, variable, declModule, ID);
 
 	switch (Global::BuildFlag) {
 
@@ -1640,7 +1640,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(OBSR, Name, variable, variable, declModule, ID);
+	AKAhook(TAKA::OBSR, Name, variable, variable, declModule, ID);
 
 	switch (Global::BuildFlag) {
 
@@ -1839,8 +1839,8 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, CRHM:
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(OBSF, Name, obs, obs, declModule, ID);
-	AKAhook(VARD, Name, variable, variable);
+	AKAhook(TAKA::OBSF, Name, obs, obs, declModule, ID);
+	AKAhook(TAKA::VARD, Name, variable, variable);
 
 	switch (Global::BuildFlag) {
 
@@ -2083,8 +2083,8 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(OBSF, Name, obs, obs, declModule, ID);
-	AKAhook(VARD, Name, variable, variable);
+	AKAhook(TAKA::OBSF, Name, obs, obs, declModule, ID);
+	AKAhook(TAKA::VARD, Name, variable, variable);
 
 	switch (Global::BuildFlag) {
 
@@ -2261,7 +2261,7 @@ long ClassModule::declputvar(string source, string name, string units, double **
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(VARG, Name, name, name, source, ID);
+	AKAhook(TAKA::VARG, Name, name, name, source, ID);
 
 	switch (Global::BuildFlag) {
 
@@ -2331,7 +2331,7 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(VARG, Name, name, name, source, ID);
+	AKAhook(TAKA::VARG, Name, name, name, source, ID);
 
 	switch (Global::BuildFlag) {
 
@@ -2394,7 +2394,7 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & NewName) { // OBSD, PARD, VARD
 
 	Mapstr2::iterator it; // holds NewName
-	string ID = AKAstrings[type] + ' ' + module + ' ' + OrgName;
+	string ID = AKAstrings[(int)type] + ' ' + module + ' ' + OrgName;
 	bool Added = false;
 	bool Explicit = false;
 
@@ -2404,7 +2404,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 		Explicit = true;
 	}
 	else {
-		if (type == OBSD) {
+		if (type == TAKA::OBSD) {
 			string::size_type idx = ID.size();
 
 			if (ID[idx - 1] == '#')
@@ -2424,18 +2424,18 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 			else
 				Added = false;
 		}
-		else if (GroupCnt && type == VARD) {
+		else if (GroupCnt && type == TAKA::VARD) {
 			string A;
 			Common::GroupEnding(A, GroupCnt);
 			NewName.append(A);
-			ID = AKAstrings[type] + ' ' + module + ' ' + NewName;
+			ID = AKAstrings[(int)type] + ' ' + module + ' ' + NewName;
 			if ((it = Global::MapAKA.find(ID)) != Global::MapAKA.end()) {
 				NewName = (*it).second;
 				NewName = NewName.substr(0, NewName.find(' '));
 				Explicit = true;
 			}
 		}
-		else if (StructCnt && type == VARD) {
+		else if (StructCnt && type == TAKA::VARD) {
 			string A("@`");
 			A[1] += (char) StructCnt;
 			NewName.append(A);
@@ -2443,7 +2443,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 	}
 
 	if (Global::ReportList && Explicit) {
-		string ID = AKAstrings[type] + ' ' + module + ' ' + OrgName;
+		string ID = AKAstrings[(int)type] + ' ' + module + ' ' + OrgName;
 		if (Added)
 			NewName.insert(NewName.size(), "#");
 		if (Explicit)
@@ -2461,26 +2461,26 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 	Outcome = None;
 
 	TAKA typeL = type; // fudge until AKA screen fixed
-	if (type == OBSF)
-		type = OBSR;
+	if (type == TAKA::OBSF)
+		type = TAKA::OBSR;
 
 	string Try;
-	string ID = AKAstrings[type] + ' ' + module + ' ' + OrgName;
+	string ID = AKAstrings[(int)type] + ' ' + module + ' ' + OrgName;
 
 	if ((it = Global::MapAKA.find(ID)) != Global::MapAKA.end()) { // search AKA list
 		Try = (*it).second;
 		Try = Try.substr(0, Try.find(' '));
 		if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) { // looping redirection
-			if (typeL == OBSF)
+			if (typeL == TAKA::OBSF)
 				Outcome = IgnoreObsFunct;
 			else
 				Outcome = IgnoreObs;
 		}
-		else if (GroupCnt && type == VARG) {
+		else if (GroupCnt && type == TAKA::VARG) {
 			string A;
 			Common::GroupEnding(A, GroupCnt);
 			NewName.append(A);
-			ID = AKAstrings[type] + ' ' + module + ' ' + NewName;
+			ID = AKAstrings[(int)type] + ' ' + module + ' ' + NewName;
 			if ((it = Global::MapAKA.find(ID)) != Global::MapAKA.end()) { // search AKA list for GROUP name
 				Try = (*it).second;
 				Try = Try.substr(0, Try.find(' '));
@@ -2489,10 +2489,10 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 				Outcome = Implicit;
 			}
 		}
-		else if (typeL == OBSF && Try[Try.size() - 1] == '#') { // declared observation and daily function
+		else if (typeL == TAKA::OBSF && Try[Try.size() - 1] == '#') { // declared observation and daily function
 			Outcome = IgnoreObsFunct;
 		}
-		else if (type == OBSR) { //  observation   !!! was typeL 08/20/10
+		else if (type == TAKA::OBSR) { //  observation   !!! was typeL 08/20/10
 			if (Try[Try.size() - 1] == '#') {
 				if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) {
 					Outcome = IgnoreObs;
@@ -2505,7 +2505,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 			source = source.substr(source.find(' ') + 1) + ' ';
 			Outcome = Explicit;
 		}
-		else if (type == VARG) { // handle read operation
+		else if (type == TAKA::VARG) { // handle read operation
 			NewName = (*it).second;
 			NewName = NewName.substr(0, NewName.find(' '));
 			source = (*it).second;
@@ -2514,7 +2514,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 		}
 	} // Above found in AKA table
 	else {
-		if (GroupCnt && typeL == OBSR) { // use declared observation in same group
+		if (GroupCnt && typeL == TAKA::OBSR) { // use declared observation in same group
 
 			if ((Global::MapVars.find("obs " + OrgName)) != Global::MapVars.end()) { // look for as observation
 				NewName = OrgName;
@@ -2533,7 +2533,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 				}
 			}
 		}
-		else if ((GroupCnt || StructCnt) && type == VARG) {
+		else if ((GroupCnt || StructCnt) && type == TAKA::VARG) {
 			string A;
 			if (GroupCnt) {
 				Common::GroupEnding(A, GroupCnt);
@@ -2542,7 +2542,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 				Common::GroupEnding(A, StructCnt);
 			}
 			NewName.append(A);
-			ID = AKAstrings[type] + ' ' + module + ' ' + NewName;
+			ID = AKAstrings[(int)type] + ' ' + module + ' ' + NewName;
 			if ((it = Global::MapAKA.find(ID)) != Global::MapAKA.end()) {
 				Try = (*it).second;
 				Try = Try.substr(0, Try.find('@'));
@@ -2558,7 +2558,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 		}
 	}
 
-	ID = AKAstrings[typeL] + " (" + base + ") " + module + " -> " + OrgName + ' ';
+	ID = AKAstrings[(int)typeL] + " (" + base + ") " + module + " -> " + OrgName + ' ';
 	switch (Outcome) {
 	case IgnoreObs:
 		LogMessage(string(ID + " *** AKA warning, not changed to *** " + source + "->" + Try).c_str());
@@ -3845,9 +3845,9 @@ long ClassModule::getdim(CRHM::TDim dimen) {
 //---------------------------------------------------------------------------
 TAKA AKAtype(string type) {
 
-	TAKA Type = AKAERROR;
+	TAKA Type = TAKA::AKAERROR;
 
-	for (int ii = VARG; ii < AKAEND; ++ii)
+	for (int ii = (int) TAKA::VARG; ii < (int) TAKA::AKAEND; ++ii)
 		if (type == AKAstrings[ii]) {
 			Type = (TAKA)ii;
 			break;
@@ -3883,7 +3883,7 @@ long ClassModule::declputparam(string source, string param, string units, double
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param); // handles explicit rename - redundant now ?
+	AKAhook(TAKA::PARD, Name, param, param); // handles explicit rename - redundant now ?
 
 	switch (Global::BuildFlag) {
 
@@ -3995,7 +3995,7 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param); // handles explicit rename - redundant now ?
+	AKAhook(TAKA::PARD, Name, param, param); // handles explicit rename - redundant now ?
 
 	switch (Global::BuildFlag) {
 
@@ -4059,7 +4059,7 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(PARD, Name, param, param); // handles explicit rename - redundant now ?
+	AKAhook(TAKA::PARD, Name, param, param); // handles explicit rename - redundant now ?
 
 	if (source[0] != '*') {
 		if ((itPar = Global::MapPars.find(source + " " + param)) != Global::MapPars.end()) {
@@ -4112,7 +4112,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param); // handles explicit rename - redundant now ?
+	AKAhook(TAKA::PARD, Name, param, param); // handles explicit rename - redundant now ?
 
 	switch (Global::BuildFlag) {
 
@@ -4219,7 +4219,7 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param); // handles explicit rename - redundant now ?
+	AKAhook(TAKA::PARD, Name, param, param); // handles explicit rename - redundant now ?
 
 	switch (Global::BuildFlag) {
 
