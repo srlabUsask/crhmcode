@@ -38,81 +38,81 @@ void Classpbsm::decl(void) {
 
   variation_set = VARIATION_2 + VARIATION_3;
 
-  declparam("u_D", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed correction", "()", &u_D);
+  declparam("u_D", TDim::NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed correction", "()", &u_D);
 
-  declparam("Drift_offset", NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed drift offset correction", "()", &Drift_offset);
+  declparam("Drift_offset", TDim::NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed drift offset correction", "()", &Drift_offset);
 
-  declparam("Drift_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed drift slope correction", "()", &Drift_slope);
+  declparam("Drift_slope", TDim::NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed drift slope correction", "()", &Drift_slope);
 
-  declparam("Subl_offset", NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed sublimation offset correction", "()", &Subl_offset);
+  declparam("Subl_offset", TDim::NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed sublimation offset correction", "()", &Subl_offset);
 
-  declparam("Subl_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed sublimation slope correction", "()", &Subl_slope);
+  declparam("Subl_slope", TDim::NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed sublimation slope correction", "()", &Subl_slope);
 
 
   variation_set = VARIATION_ORG;
 
 
-  declstatvar("SWE", NHRU, "snow water equivalent", "(mm)", &SWE);
+  declstatvar("SWE", TDim::NHRU, "snow water equivalent", "(mm)", &SWE);
 
-  declvar("Subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
+  declvar("Subl", TDim::NHRU, "interval sublimation", "(mm/int)", &Subl);
 
-  declvar("Drift", NHRU, "interval transport", "(mm/int)", &Drift);
+  declvar("Drift", TDim::NHRU, "interval transport", "(mm/int)", &Drift);
 
-  decldiag("DriftH", NHRU, "interval transport", "(mm/int)", &DriftH);
+  decldiag("DriftH", TDim::NHRU, "interval transport", "(mm/int)", &DriftH);
 
-  decldiag("SublH", NHRU, "interval sublimation", "(mm/int)", &SublH);
+  decldiag("SublH", TDim::NHRU, "interval sublimation", "(mm/int)", &SublH);
 
-  decldiag("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
+  decldiag("BasinSnowLoss", TDim::BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
 
-  declstatdiag("cumSubl", NHRU, "cumulative sublimation", "(mm)", &cumSubl);
+  declstatdiag("cumSubl", TDim::NHRU, "cumulative sublimation", "(mm)", &cumSubl);
 
-  declstatdiag("cumDrift", NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
+  declstatdiag("cumDrift", TDim::NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
 
-  declstatdiag("cumBasinSnowLoss", BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
+  declstatdiag("cumBasinSnowLoss", TDim::BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
 
-  declstatdiag("cumBasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
+  declstatdiag("cumBasinSnowGain", TDim::BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
 
-  declstatdiag("cumDriftIn", NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
+  declstatdiag("cumDriftIn", TDim::NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
 
-  decllocal("hru_basin", NHRU, "conversion factor", "()", &hru_basin);
+  decllocal("hru_basin", TDim::NHRU, "conversion factor", "()", &hru_basin);
 
-  decldiag("DrySnow", NHRU, "DrySnow", "()", &DrySnow);
+  decldiag("DrySnow", TDim::NHRU, "DrySnow", "()", &DrySnow);
 
-  declstatdiag("SnowAge", NHRU, "SnowAge", "()", &SnowAge);
+  declstatdiag("SnowAge", TDim::NHRU, "SnowAge", "()", &SnowAge);
 
-  declstatdiag("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
+  declstatdiag("cumSno", TDim::NHRU, "cumulative snow", "(mm)", &cumSno);
 
-  declvar("Prob", NHRU, "Probability", "()", &Prob);
+  declvar("Prob", TDim::NHRU, "Probability", "()", &Prob);
 
-  declvar("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
+  declvar("snowdepth", TDim::NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
 
-  declvar("rain_on_snow", NHRU, "mass of rain falling on snowcover", "(mm/int)", &rain_on_snow);
+  declvar("rain_on_snow", TDim::NHRU, "mass of rain falling on snowcover", "(mm/int)", &rain_on_snow);
 
-  declvar("cumrain_on_snow", NHRU, "cumulative rain on snow", "(mm)", &cumrain_on_snow);
+  declvar("cumrain_on_snow", TDim::NHRU, "cumulative rain on snow", "(mm)", &cumrain_on_snow);
 
-  decllocal("SWE_Init", NHRU, "initial SWE", "(mm)", &SWE_Init);
+  decllocal("SWE_Init", TDim::NHRU, "initial SWE", "(mm)", &SWE_Init);
 
 /* parameters */
 
-  declparam("fetch", NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
+  declparam("fetch", TDim::NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
 
-  declparam("distrib", NHRU, "[0.0, 1.0]", "-10.0", "10.0", "distribution fractions - can sum to 1", "()", &distrib);
+  declparam("distrib", TDim::NHRU, "[0.0, 1.0]", "-10.0", "10.0", "distribution fractions - can sum to 1", "()", &distrib);
 
-  decldiagparam("N_S", NHRU, "[320]", "1", "500", "vegetation number density", "(1/m^2)", &N_S);
+  decldiagparam("N_S", TDim::NHRU, "[320]", "1", "500", "vegetation number density", "(1/m^2)", &N_S);
 
-  decldiagparam("A_S", NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
+  decldiagparam("A_S", TDim::NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporatation(System use only), 1 -> inhibit", "()", &inhibit_evap);
+  decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporatation(System use only), 1 -> inhibit", "()", &inhibit_evap);
 
-  decldiagparam("inhibit_bs", NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
+  decldiagparam("inhibit_bs", TDim::NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
 
-  decldiagparam("inhibit_subl", NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
+  decldiagparam("inhibit_subl", TDim::NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
 
   declgetvar("*", "hru_t", "(°C)", &hru_t);
   declgetvar("*", "hru_rh", "(%)", &hru_rh);
@@ -124,7 +124,7 @@ void Classpbsm::decl(void) {
 
 void Classpbsm::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   cumBasinSnowLoss[0] = 0.0;
   cumBasinSnowGain[0] = 0.0;

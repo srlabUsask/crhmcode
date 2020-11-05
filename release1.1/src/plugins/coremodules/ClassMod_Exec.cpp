@@ -22,21 +22,21 @@ void ClassMod_Exec::decl(void) {
 
   Description = "'Link variables and parameters to routines in external DLL.'";
 
-  declvar("statusInit", ONE, "status of variables", "()", &statusInit);
+  declvar("statusInit", TDim::ONE, "status of variables", "()", &statusInit);
 
-  declvar("statusStep", ONE, "status of time step", "()", &statusStep);
+  declvar("statusStep", TDim::ONE, "status of time step", "()", &statusStep);
 
-  declvar("Dummy", NHRU, "non constant", "()", &Dummy);
+  declvar("Dummy", TDim::NHRU, "non constant", "()", &Dummy);
 
-  declvar("Dummy2", NHRU, "constant", "()", &Dummy2);
+  declvar("Dummy2", TDim::NHRU, "constant", "()", &Dummy2);
 
-  DLL_name = declparam("DLL_name", ONE, " ", "DLL name, e.g. 'C:/Jose/Borland/Jose1.dll' ", DLL_name);
+  DLL_name = declparam("DLL_name", TDim::ONE, " ", "DLL name, e.g. 'C:/Jose/Borland/Jose1.dll' ", DLL_name);
 
-  trk_Vars = decldiagparam("trk_Vars", TEN, "' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '", "Trace these variables at end of loop.",  trk_Vars);
+  trk_Vars = decldiagparam("trk_Vars", TDim::TEN, "' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '", "Trace these variables at end of loop.",  trk_Vars);
 
-  chg_Pars = decldiagparam("chg_Pars", TEN, "' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '", "Trace these variables at end of loop.",  chg_Pars);
+  chg_Pars = decldiagparam("chg_Pars", TDim::TEN, "' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '", "Trace these variables at end of loop.",  chg_Pars);
 
-  decldiagparam("Borland_Dll", ONE, "1", "0", "1", "Borland_Dll requires an underscore before routine name", "()", &Borland_Dll);
+  decldiagparam("Borland_Dll", TDim::ONE, "1", "0", "1", "Borland_Dll requires an underscore before routine name", "()", &Borland_Dll);
 
 }
 
@@ -47,7 +47,7 @@ void ClassMod_Exec::init(void) {
 
   string S;
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   ClassVar *newVar;
   ClassPar *newPar;

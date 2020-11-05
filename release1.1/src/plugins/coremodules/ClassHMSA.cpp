@@ -35,48 +35,48 @@ void ClassHMSA::decl(void) {
   variation_set = VARIATION_ORG;
 
 // Variables:
-  declstatvar("Cum_Thaw", NHRU, "Cumulative thaw depth", "(m)", &Cum_Thaw);
-  declstatvar("Cum_Frozen", NHRU, "Cumulative frozen depth", "(m)", &Cum_Frozen);
-  declvar("Lamda_b", NHRU, "Thermal conductivity", "()", &Lamda_b); // (W/m.°C)
-  declvar("Thaw_D", NHRU, "thaw table depth below surface", "(m)", &Thaw_D);
-  declvar("Frozen_D", NHRU, "frost table depth below surface", "(m)", &Frozen_D);
-  declvar("C_K0", NHRU, "Conductivity", "()", &C_K0);
-  declvar("Last_Tsurf", NHRU, "last surface temperature", "(°C)", &Last_Tsurf);
+  declstatvar("Cum_Thaw", TDim::NHRU, "Cumulative thaw depth", "(m)", &Cum_Thaw);
+  declstatvar("Cum_Frozen", TDim::NHRU, "Cumulative frozen depth", "(m)", &Cum_Frozen);
+  declvar("Lamda_b", TDim::NHRU, "Thermal conductivity", "()", &Lamda_b); // (W/m.°C)
+  declvar("Thaw_D", TDim::NHRU, "thaw table depth below surface", "(m)", &Thaw_D);
+  declvar("Frozen_D", TDim::NHRU, "frost table depth below surface", "(m)", &Frozen_D);
+  declvar("C_K0", TDim::NHRU, "Conductivity", "()", &C_K0);
+  declvar("Last_Tsurf", TDim::NHRU, "last surface temperature", "(°C)", &Last_Tsurf);
 
-  declvar("f", NHRU, "Vol fraction of ice (or water)", "(m^3/m^3)", &f);
-  declvar("Soil_Ice", NLAY, "Ice fraction in soil", "()", &Soil_Ice, &Soil_Ice_lay);
-  declvar("Soil_Water", NLAY, "Liquid water fraction in soil", "()", &Soil_Water, &Soil_Water_lay);
-  declvar("Total_Moisture", NLAY, "layer moisture fraction", "()", &Total_Moisture, &Total_Moisture_lay);
-  declstatvar("Cum_d", NLAY, "cumulative layer depths", "(m)", &Cum_d, &Cum_d_lay);
-  declstatvar("Frozen_ID", NLAY, "cumulative layer depths", "(m)", &Frozen_ID, &Frozen_ID_lay);
+  declvar("f", TDim::NHRU, "Vol fraction of ice (or water)", "(m^3/m^3)", &f);
+  declvar("Soil_Ice", TDim::NLAY, "Ice fraction in soil", "()", &Soil_Ice, &Soil_Ice_lay);
+  declvar("Soil_Water", TDim::NLAY, "Liquid water fraction in soil", "()", &Soil_Water, &Soil_Water_lay);
+  declvar("Total_Moisture", TDim::NLAY, "layer moisture fraction", "()", &Total_Moisture, &Total_Moisture_lay);
+  declstatvar("Cum_d", TDim::NLAY, "cumulative layer depths", "(m)", &Cum_d, &Cum_d_lay);
+  declstatvar("Frozen_ID", TDim::NLAY, "cumulative layer depths", "(m)", &Frozen_ID, &Frozen_ID_lay);
 
-  declvar("FrntDepth", NDEFN, "Front depth", "(m)", &FrntDepth, &FrntDepth_array, MaxFrontCnt);
-  declstatvar("FreezeCum", NDEFN, "Front depth", "(m)", &FreezeCum, &FreezeCum_array, MaxFrontCnt);
-  declvar("ThawCum", NDEFN, "Front depth", "(m)", &ThawCum, &ThawCum_array, MaxFrontCnt);
-  declvar("FrntDepthType", NDEFN, "Front depth type > 0 thaw, < 0 freeze", "()", &FrntDepthType, &FrntDepthType_array, MaxFrontCnt);
-  declvar("FrontCnt", NHRU, "number of fronts", "()", &FrontCnt);
+  declvar("FrntDepth", TDim::NDEFN, "Front depth", "(m)", &FrntDepth, &FrntDepth_array, MaxFrontCnt);
+  declstatvar("FreezeCum", TDim::NDEFN, "Front depth", "(m)", &FreezeCum, &FreezeCum_array, MaxFrontCnt);
+  declvar("ThawCum", TDim::NDEFN, "Front depth", "(m)", &ThawCum, &ThawCum_array, MaxFrontCnt);
+  declvar("FrntDepthType", TDim::NDEFN, "Front depth type > 0 thaw, < 0 freeze", "()", &FrntDepthType, &FrntDepthType_array, MaxFrontCnt);
+  declvar("FrontCnt", TDim::NHRU, "number of fronts", "()", &FrontCnt);
 
 // local variables
-  decllocal("Tsurface", NHRU, "soil surface temperature used in module", "()", &Tsurface);
+  decllocal("Tsurface", TDim::NHRU, "soil surface temperature used in module", "()", &Tsurface);
 
 // Parameters (some are already defined in 'CRHMQuinton'):
-  declparam("Alpha_ID", NHRU, "1", "0", "1", "For ID=0 input Alpha values used, for ID=1 Alpha calculated in model", "()", &Alpha_ID);
-  declparam("Alpha_T", NHRU, "0.000118", "0.0", "1e2", "Thaw layer migration constant", "()", &Alpha_T); // (J^-1/2/m^3/2)
-  declparam("Alpha_F", NHRU, "0.000118", "0.0", "1e2", "Freeze layer migration constant", "()", &Alpha_F); //(J^-1/2/m^3/2)
+  declparam("Alpha_ID", TDim::NHRU, "1", "0", "1", "For ID=0 input Alpha values used, for ID=1 Alpha calculated in model", "()", &Alpha_ID);
+  declparam("Alpha_T", TDim::NHRU, "0.000118", "0.0", "1e2", "Thaw layer migration constant", "()", &Alpha_T); // (J^-1/2/m^3/2)
+  declparam("Alpha_F", TDim::NHRU, "0.000118", "0.0", "1e2", "Freeze layer migration constant", "()", &Alpha_F); //(J^-1/2/m^3/2)
 
-  declparam("Soil_depths_lay", NLAY, "[0.15] , [0.1], [0.1] ,[0.1]", "0.0", "100.0", "layer depths", "(m)", &Soil_Depths, &Soil_depths_lay);
-  declparam("Organic", NLAY, "0.10, 0.17, 0.24, 0.25, 0.25, 0.25", "0.0", "1.0", "Volume ratio of organic matter", "(m^3/m^3)", &Organic, &Organic_lay);
-  declparam("Porosity", NLAY, "0.90, 0.83, 0.76, 0.75, 0.75, 0.75", "0.0", "1.0", "Layer Porosity", "(m^3/m^3)", &Porosity, &Porosity_lay); // "Pors" in CRHMQuinton
-  declparam("Bulkdensity", NLAY, "90.0, 144.3, 200.0, 248.0, 248.0, 248.0", "0.0", "1e3", "Bulk density of layer", "(kg/m^3)", &BulkDensity, &BulkDensity_lay);
-  declparam("Soil_ID", NLAY, "0, 1, 2, 3, 3, 3", "0", "4", "Soil_ID", "(kg/m^3)", &Soil_ID, &Soil_ID_lay);
+  declparam("Soil_depths_lay", TDim::NLAY, "[0.15] , [0.1], [0.1] ,[0.1]", "0.0", "100.0", "layer depths", "(m)", &Soil_Depths, &Soil_depths_lay);
+  declparam("Organic", TDim::NLAY, "0.10, 0.17, 0.24, 0.25, 0.25, 0.25", "0.0", "1.0", "Volume ratio of organic matter", "(m^3/m^3)", &Organic, &Organic_lay);
+  declparam("Porosity", TDim::NLAY, "0.90, 0.83, 0.76, 0.75, 0.75, 0.75", "0.0", "1.0", "Layer Porosity", "(m^3/m^3)", &Porosity, &Porosity_lay); // "Pors" in CRHMQuinton
+  declparam("Bulkdensity", TDim::NLAY, "90.0, 144.3, 200.0, 248.0, 248.0, 248.0", "0.0", "1e3", "Bulk density of layer", "(kg/m^3)", &BulkDensity, &BulkDensity_lay);
+  declparam("Soil_ID", TDim::NLAY, "0, 1, 2, 3, 3, 3", "0", "4", "Soil_ID", "(kg/m^3)", &Soil_ID, &Soil_ID_lay);
 
-  declparam("InitThaw_D", NHRU, "0.7", "0.0", "1e2", "Initial thaw table depth below surface", "(m)", &InitThaw_D);
-  declparam("InitFrozen_D", NHRU, "0.0", "0.0", "1e2", "Initial frost table depth below surface", "(m)", &InitFrozen_D);
-  declparam("Soil_Layers", NHRU, "6", "0.0", "100.0", "No. of soil layers", "()", &Soil_Layers);
-  declparam("D_Top", NHRU, "0.02", "0.0", "1e2", "Pos of upper bndry temp rel to grd surface", "(m)", &D_Top);
-  declparam("Method_ID", NHRU, "1", "1", "5", "SoilHeat method, 1/2/3/4/5 - Johansen Complete/Johansen  common/ De Vries as Hayashi/ De Vries as Farouki/ Chad", "()", &Method_ID);
+  declparam("InitThaw_D", TDim::NHRU, "0.7", "0.0", "1e2", "Initial thaw table depth below surface", "(m)", &InitThaw_D);
+  declparam("InitFrozen_D", TDim::NHRU, "0.0", "0.0", "1e2", "Initial frost table depth below surface", "(m)", &InitFrozen_D);
+  declparam("Soil_Layers", TDim::NHRU, "6", "0.0", "100.0", "No. of soil layers", "()", &Soil_Layers);
+  declparam("D_Top", TDim::NHRU, "0.02", "0.0", "1e2", "Pos of upper bndry temp rel to grd surface", "(m)", &D_Top);
+  declparam("Method_ID", TDim::NHRU, "1", "1", "5", "SoilHeat method, 1/2/3/4/5 - Johansen Complete/Johansen  common/ De Vries as Hayashi/ De Vries as Farouki/ Chad", "()", &Method_ID);
 
-  declparam("TMPB_W", NDEF, "0.15, 0.18, 0.19, 0.19, 0.06", "0", "1.0", "Liquid water fraction in soil", "()", &TMPB_W, &TMPB_W_NDEF, 5);
+  declparam("TMPB_W", TDim::NDEF, "0.15, 0.18, 0.19, 0.19, 0.06", "0", "1.0", "Liquid water fraction in soil", "()", &TMPB_W, &TMPB_W_NDEF, 5);
 
   variation_set = VARIATION_0;
 
@@ -85,17 +85,17 @@ void ClassHMSA::decl(void) {
 
   variation_set = VARIATION_1;
 
-  Liqcnt = declreadobs("LiqWat", NOBS, "liquid water at depth observation", "()", &LiqWat, HRU_OBS_misc); // # layers
-  Totcnt = declreadobs("TotMoist", NOBS, "total moisture at depth observation", "()", &TotMoist, HRU_OBS_misc); // # layers
-  declreadobs("Tsurf_obs", NHRU, "soil surface temperature observation", "(°C)", &Tsurf_obs, HRU_OBS_misc);
+  Liqcnt = declreadobs("LiqWat", TDim::NOBS, "liquid water at depth observation", "()", &LiqWat, HRU_OBS_misc); // # layers
+  Totcnt = declreadobs("TotMoist", TDim::NOBS, "total moisture at depth observation", "()", &TotMoist, HRU_OBS_misc); // # layers
+  declreadobs("Tsurf_obs", TDim::NHRU, "soil surface temperature observation", "(°C)", &Tsurf_obs, HRU_OBS_misc);
 
   variation_set = VARIATION_ORG;
 }
 
 void ClassHMSA::init(void) {
 
-  nhru = getdim(NHRU);
-  nlay = getdim(NLAY);
+  nhru = getdim(TDim::NHRU);
+  nlay = getdim(TDim::NLAY);
 
 //[Max_Layers]
 //double Alpha; variable is unreferenced commenting out for now - jhs507

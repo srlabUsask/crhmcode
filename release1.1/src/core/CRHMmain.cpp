@@ -556,7 +556,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 									break;
 								//                else if(Cols > 0 && Cols%thisPar->lay == 0) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
 								//                  break;
-								else if (thisPar->varType == TVar::Txt && thisPar->dimen < CRHM::NHRU) // text can have variable length
+								else if (thisPar->varType == TVar::Txt && thisPar->dimen < TDim::NHRU) // text can have variable length
 									break;
 								else if (thisPar->param == "obs_elev" || thisPar->param == "soil_withdrawal")
 									break;
@@ -968,7 +968,7 @@ void  CRHMmain::Label4Click(void) {
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
-		if (thisVar->varType < TVar::Read && thisVar->visibility == TVISIBLE::USUAL && thisVar->dimen != CRHM::NREB) {
+		if (thisVar->varType < TVar::Read && thisVar->visibility == TVISIBLE::USUAL && thisVar->dimen != TDim::NREB) {
 			Newname = DeclObsName(thisVar);
 			if (Common::IndexOf(AllVariables, Newname) == -1)
 				AllVariables->AddObject(Newname, (TObject*)thisVar);
@@ -3650,13 +3650,13 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 }
 
 
-string CRHMmain::BuildHru(string S, long Hru, CRHM::TDim dimen) {
+string CRHMmain::BuildHru(string S, long Hru, TDim dimen) {
 
 	if (!HruNames)
 		return S + "(" + to_string(Hru) + ")";
 	else {
 		string SS;
-		if (dimen == CRHM::BASIN)
+		if (dimen == TDim::BASIN)
 			SS = "(" + ListHruNames->Strings[0] + ")";
 		else
 			SS = "(" + ListHruNames->Strings[Hru] + ")";

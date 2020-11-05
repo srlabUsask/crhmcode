@@ -25,30 +25,30 @@ void Classqmelt::decl(void) {
 
   Global::OBS_AS_IS = 1; // ClassModule uses only intvl for NFREQ observation reads
 
-  declvar("Qm", NHRU, "degree day/daily mean air temperature/partitioned", "(MJ/m^2*int)", &Qm);
+  declvar("Qm", TDim::NHRU, "degree day/daily mean air temperature/partitioned", "(MJ/m^2*int)", &Qm);
 
-  declvar("Qg", NHRU, "degree day/daily mean skin temperature/partitioned", "(MJ/m^2*int)", &Qg);
+  declvar("Qg", TDim::NHRU, "degree day/daily mean skin temperature/partitioned", "(MJ/m^2*int)", &Qg);
 
-  declvar("cum_Qm", NHRU, "cumulative melt flux from degree day/daily mean air temperature/partitioned", "(MJ/m^2)", &cum_Qm);
+  declvar("cum_Qm", TDim::NHRU, "cumulative melt flux from degree day/daily mean air temperature/partitioned", "(MJ/m^2)", &cum_Qm);
 
-  declvar("cum_Qg", NHRU, "cumulative ground flux from degree day/daily mean skin temperature/partitioned", "(MJ/m^2)", &cum_Qg);
+  declvar("cum_Qg", TDim::NHRU, "cumulative ground flux from degree day/daily mean skin temperature/partitioned", "(MJ/m^2)", &cum_Qg);
 
-  decllocal("QmD", NHRU, "daily melt from degree day/daily mean air temperature", "(MJ/m^2)", &QmD);
+  decllocal("QmD", TDim::NHRU, "daily melt from degree day/daily mean air temperature", "(MJ/m^2)", &QmD);
 
-  decllocal("QgD", NHRU, "daily ground flux from degree day/daily mean skin temperature", "(MJ/m^2)", &QgD);
+  decllocal("QgD", TDim::NHRU, "daily ground flux from degree day/daily mean skin temperature", "(MJ/m^2)", &QgD);
 
-  declparam("TIa0Mn", NHRU, "[0.0]", "-10", "10", "Qm: degree day/daily mean air temperature", "(°C)", &TIa0Mn);
+  declparam("TIa0Mn", TDim::NHRU, "[0.0]", "-10", "10", "Qm: degree day/daily mean air temperature", "(°C)", &TIa0Mn);
 
-  declparam("TIa1Mn", NHRU, "[0.8844, 0.0]", "0", "10", "Qm: degree day/daily mean air temperature", "(MJ/d*°C)", &TIa1Mn);
+  declparam("TIa1Mn", TDim::NHRU, "[0.8844, 0.0]", "0", "10", "Qm: degree day/daily mean air temperature", "(MJ/d*°C)", &TIa1Mn);
 
-  declparam("TIs0Mn", NHRU, "[0.0]", "-10", "10", "Qg: degree day/daily mean skin temperature", "(°C)", &TIs0Mn);
+  declparam("TIs0Mn", TDim::NHRU, "[0.0]", "-10", "10", "Qg: degree day/daily mean skin temperature", "(°C)", &TIs0Mn);
 
-  declparam("TIs1Mn", NHRU, "[0.0, 0.2]", "0", "10", "Qg: degree day/daily mean skin temperature", "(MJ/d*°C)", &TIs1Mn);
+  declparam("TIs1Mn", TDim::NHRU, "[0.0, 0.2]", "0", "10", "Qg: degree day/daily mean skin temperature", "(MJ/d*°C)", &TIs1Mn);
 
 
-  declreadobs("ta", NOBS, "air temperature", "(°C)", &t);
+  declreadobs("ta", TDim::NOBS, "air temperature", "(°C)", &t);
 
-  declreadobs("ts", NOBS, "skin temperature", "(°C)", &ts);
+  declreadobs("ts", TDim::NOBS, "skin temperature", "(°C)", &ts);
 
 
   declobsfunc("ta",  "Tmean", &tmean, TFun::AVG);
@@ -59,7 +59,7 @@ void Classqmelt::decl(void) {
 
 void Classqmelt::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(long hh = 0; hh < nhru; ++hh) {
     cum_Qg[hh] = 0.0;

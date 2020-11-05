@@ -30,128 +30,128 @@ void ClassNetroute_M_D::decl(void) {
 
   Description = "'Handles the routing of surface runoff, subsurface runoff and HRU routing using the lag and route and Muskingum method for \"outflow\". Distributed flow.'";
 
-  declvar("inflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &inflow);
+  declvar("inflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &inflow);
 
-  declstatdiag("cuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &cuminflow);
+  declstatdiag("cuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &cuminflow);
 
-  declvar("outflow", NHRU, "HRU outflow", "(mm*km^2/int)", &outflow);
+  declvar("outflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &outflow);
 
-  declstatdiag("cumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &cumoutflow);
+  declstatdiag("cumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &cumoutflow);
 
-  decldiag("outflow_diverted", NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
+  decldiag("outflow_diverted", TDim::NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
 
-  declstatdiag("cumoutflow_diverted", NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
+  declstatdiag("cumoutflow_diverted", TDim::NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
 
-  declstatdiag("cum_to_Sd", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
+  declstatdiag("cum_to_Sd", TDim::NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
 
-  declstatdiag("cum_to_soil_rechr", NHRU, "cumulative other HRU recycled tosoil_rechr of this HRU", "(mm)", &cum_to_soil_rechr);
+  declstatdiag("cum_to_soil_rechr", TDim::NHRU, "cumulative other HRU recycled tosoil_rechr of this HRU", "(mm)", &cum_to_soil_rechr);
 
-  declvar("gwinflow", NHRU, "ground water inflow", "(mm*km^2/int)", &gwinflow);
+  declvar("gwinflow", TDim::NHRU, "ground water inflow", "(mm*km^2/int)", &gwinflow);
 
-  declstatdiag("gwcuminflow", NHRU, "cumulative gw inflow", "(mm*km^2)", &gwcuminflow);
+  declstatdiag("gwcuminflow", TDim::NHRU, "cumulative gw inflow", "(mm*km^2)", &gwcuminflow);
 
-  declvar("gwoutflow", NHRU, "HRU gw outflow", "(mm*km^2/int)", &gwoutflow);
+  declvar("gwoutflow", TDim::NHRU, "HRU gw outflow", "(mm*km^2/int)", &gwoutflow);
 
-  declstatdiag("gwcumoutflow", NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
+  declstatdiag("gwcumoutflow", TDim::NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
 
-  decldiag("gwoutflow_diverted", NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
+  decldiag("gwoutflow_diverted", TDim::NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
 
-  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
+  declstatdiag("gwcumoutflow_diverted", TDim::NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
 
-  declvar("ssrinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
+  declvar("ssrinflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
 
-  declstatdiag("ssrcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
+  declstatdiag("ssrcuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
 
-  declvar("ssroutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
+  declvar("ssroutflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
 
-  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
+  declstatdiag("ssrcumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
 
-  declstatdiag("HRU_cumbasinflow", NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
+  declstatdiag("HRU_cumbasinflow", TDim::NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
 
-  declstatdiag("cum_preferential_flow_to_gw", NHRU, "cumulative other HRU's runoff to this HRU's gw via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
+  declstatdiag("cum_preferential_flow_to_gw", TDim::NHRU, "cumulative other HRU's runoff to this HRU's gw via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
 
-  declparam("preferential_flow", NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
+  declparam("preferential_flow", TDim::NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
 
-  declvar("runinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
+  declvar("runinflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
 
-  declstatdiag("runcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
+  declstatdiag("runcuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
 
-  declvar("runoutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
+  declvar("runoutflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
 
-  declstatdiag("runcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
+  declstatdiag("runcumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
 
-  declstatdiag("cumscaling_boost", NHRU, "cumulative amout inflow boosted", "(mm*km^2)", &cumscaling_boost);
+  declstatdiag("cumscaling_boost", TDim::NHRU, "cumulative amout inflow boosted", "(mm*km^2)", &cumscaling_boost);
 
-  declvar("basinflow", BASIN, "basin surface and sub-surface outflow", "(m^3/int)", &basinflow);
+  declvar("basinflow", TDim::BASIN, "basin surface and sub-surface outflow", "(m^3/int)", &basinflow);
 
-  decldiag("basinflow_s", BASIN, "basin surface and sub-surface outflow", "(m^3/s)", &basinflow_s);
+  decldiag("basinflow_s", TDim::BASIN, "basin surface and sub-surface outflow", "(m^3/s)", &basinflow_s);
 
-  declstatdiag("cumbasinflow", BASIN, "cumulative basin surface and sub-surface outflow", "(m^3)", &cumbasinflow);
+  declstatdiag("cumbasinflow", TDim::BASIN, "cumulative basin surface and sub-surface outflow", "(m^3)", &cumbasinflow);
 
-  declvar("basingw", BASIN, "cumulative basin groundwater outflow", "(m^3/int)", &basingw);
+  declvar("basingw", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3/int)", &basingw);
 
-  decldiag("basingw_s", BASIN, "cumulative basin groundwater outflow", "(m^3/s)", &basingw_s);
+  decldiag("basingw_s", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3/s)", &basingw_s);
 
-  declstatdiag("cumbasingw", BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
+  declstatdiag("cumbasingw", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
 
-  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
+  decllocal("soil_ssr_Buf", TDim::NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
 
-  decllocal("soil_runoff_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
+  decllocal("soil_runoff_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
 
-  decllocal("soil_gw_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
+  decllocal("soil_gw_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
 
-  decllocal("Ktravel", NHRU, "travel time", "(d)", &Ktravel);
+  decllocal("Ktravel", TDim::NHRU, "travel time", "(d)", &Ktravel);
 
-  decllocal("distrib_sum", NHRU, "HRU distribution sum", "()", &distrib_sum);
+  decllocal("distrib_sum", TDim::NHRU, "HRU distribution sum", "()", &distrib_sum);
 
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e09", "Total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e09", "Total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e09", "HRU area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e09", "HRU area", "(km^2)", &hru_area);
 
-  declparam("Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &Lag);
+  declparam("Lag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &Lag);
 
-  declparam("route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &route_n);
+  declparam("route_n", TDim::NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &route_n);
 
-  declparam("route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &route_R);
+  declparam("route_R", TDim::NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &route_R);
 
-  declparam("route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &route_S0);
+  declparam("route_S0", TDim::NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &route_S0);
 
-  declparam("route_L", NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
+  declparam("route_L", TDim::NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
 
-  declparam("route_X_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &route_X_M);
+  declparam("route_X_M", TDim::NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &route_X_M);
 
-  declparam("ssrKstorage", NHRU, "[0.0]", "0.0","200.0", "subsurface runoff storage constant", "(d)", &ssrKstorage);
+  declparam("ssrKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "subsurface runoff storage constant", "(d)", &ssrKstorage);
 
-  declparam("ssrLag", NHRU, "[0.0]", "0.0","1.0E4.0", "subsurface runoff lag delay", "(h)", &ssrLag);
+  declparam("ssrLag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "subsurface runoff lag delay", "(h)", &ssrLag);
 
-  declparam("runKstorage", NHRU, "[0.0]", "0.0","200.0", "runoff storage constant", "(d)", &runKstorage);
+  declparam("runKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "runoff storage constant", "(d)", &runKstorage);
 
-  declparam("runLag", NHRU, "[0.0]", "0.0","1.0E4", "runoff lag delay", "(h)", &runLag);
+  declparam("runLag", TDim::NHRU, "[0.0]", "0.0","1.0E4", "runoff lag delay", "(h)", &runLag);
 
-  declparam("gwKstorage", NHRU, "[0.0]", "0.0","200.0", "gw storage constant", "(d)", &gwKstorage);
+  declparam("gwKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "gw storage constant", "(d)", &gwKstorage);
 
-  declparam("gwLag", NHRU, "[0.0]", "0.0","1.0E4", "gw lag delay", "(h)", &gwLag);
+  declparam("gwLag", TDim::NHRU, "[0.0]", "0.0","1.0E4", "gw lag delay", "(h)", &gwLag);
 
-  declparam("distrib_Route", NDEFN, "[0.0]", "-1.0E6.0", "1.0E6.0", "route this HRU to these HRUs", "()", &distrib, &distrib_hru, nhru);
+  declparam("distrib_Route", TDim::NDEFN, "[0.0]", "-1.0E6.0", "1.0E6.0", "route this HRU to these HRUs", "()", &distrib, &distrib_hru, nhru);
 
-  declparam("distrib_Basin", NHRU, "[1.0]", "0.0", "100.0", "route this HRU to basin (and other HRU(s) determined by 'distrib_Route')", "()", &distrib_Basin);
+  declparam("distrib_Basin", TDim::NHRU, "[1.0]", "0.0", "100.0", "route this HRU to basin (and other HRU(s) determined by 'distrib_Route')", "()", &distrib_Basin);
 
-  declparam("gwwhereto", NHRU, "[0]", "-1000", "1000", "send to: 0 - basingw, >0 - other HRU surface input <0 - other abs(-HRU) gw input, or (< -HRUmax or > +HRUmax) - surface basinflow", "()", &gwwhereto);
+  declparam("gwwhereto", TDim::NHRU, "[0]", "-1000", "1000", "send to: 0 - basingw, >0 - other HRU surface input <0 - other abs(-HRU) gw input, or (< -HRUmax or > +HRUmax) - surface basinflow", "()", &gwwhereto);
 
-  declparam("Sdmax", NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
+  declparam("Sdmax", TDim::NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
 
-  declparam("soil_rechr_max", NHRU, "[60.0]", "0.0", "350.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
+  declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
 
-  decldiagparam("Sd_ByPass", NHRU, "[0]", "0", "1","0 - normal, 1 - Bypass Pond/Depressional storage (i.e. Sd).", "()", &Sd_ByPass);
+  decldiagparam("Sd_ByPass", TDim::NHRU, "[0]", "0", "1","0 - normal, 1 - Bypass Pond/Depressional storage (i.e. Sd).", "()", &Sd_ByPass);
 
-  decldiagparam("soil_rechr_ByPass", NHRU, "[1]", "0", "1","0 - normal, 1 - Bypass recharge layer (i.e. soil_rechr).", "()", &soil_rechr_ByPass);
+  decldiagparam("soil_rechr_ByPass", TDim::NHRU, "[1]", "0", "1","0 - normal, 1 - Bypass recharge layer (i.e. soil_rechr).", "()", &soil_rechr_ByPass);
 
-  declparam("Channel_shp", NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
+  declparam("Channel_shp", TDim::NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
 
-  decldiagparam("scaling_factor", NHRU, "[1.0]", "0.0", "1.0E6","multiplies the input to Muskingum by this scaling factor.", "()", &scaling_factor); // temporary
+  decldiagparam("scaling_factor", TDim::NHRU, "[1.0]", "0.0", "1.0E6","multiplies the input to Muskingum by this scaling factor.", "()", &scaling_factor); // temporary
 
-  declparam("order", NHRU, "[1,2,3,4,5!]", "1","1000", "HRU routing process order", "()", &order);
+  declparam("order", TDim::NHRU, "[1,2,3,4,5!]", "1","1000", "HRU routing process order", "()", &order);
 
 
   soil_gwDiv = declgetvar("*", "gw_flow", "(mm/int)", &soil_gw);
@@ -174,7 +174,7 @@ void ClassNetroute_M_D::decl(void) {
 
 void ClassNetroute_M_D::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   if(soil_ssrDiv > 1){
     string S = "Netroute_M_D:  \"soil_ssr\". Converting to mm/int";

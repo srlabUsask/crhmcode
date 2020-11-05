@@ -22,47 +22,47 @@ void Classevap::decl(void) {
 
   Description = "'Calculates interval evaporation. Parameter \"evap_type\" selects Granger/Priestley-Taylor/Penman-Monteith.'";
 
-  declvar("hru_actet", NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
+  declvar("hru_actet", TDim::NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
 
-  declstatdiag("hru_cum_actet", NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet); // , NULL, false, CRHM::DIAGNOSTIC
+  declstatdiag("hru_cum_actet", TDim::NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet); // , NULL, false, CRHM::DIAGNOSTIC
 
-  declvar("hru_evap", NHRU, "interval evaporation", "(mm/int)", &evap);
+  declvar("hru_evap", TDim::NHRU, "interval evaporation", "(mm/int)", &evap);
 
-  declvar("hru_evap_PT", NHRU, "Priestley-Taylor interval evaporation", "(mm/int)", &hru_evap_PT);
+  declvar("hru_evap_PT", TDim::NHRU, "Priestley-Taylor interval evaporation", "(mm/int)", &hru_evap_PT);
 
-  declvar("hru_evapD", NHRU, "daily sum of interval evaporation", "(mm/d)", &evapD);
+  declvar("hru_evapD", TDim::NHRU, "daily sum of interval evaporation", "(mm/d)", &evapD);
 
-  declstatdiag("hru_cum_evap", NHRU, "cumulative interval evaporation", "(mm)", &cum_evap);
+  declstatdiag("hru_cum_evap", TDim::NHRU, "cumulative interval evaporation", "(mm)", &cum_evap);
 
-  declvar("evapGrangerD", NHRU, "daily Granger evaporation", "(mm/d)", &evapGrangerD);
+  declvar("evapGrangerD", TDim::NHRU, "daily Granger evaporation", "(mm/d)", &evapGrangerD);
 
-  decllocal("evap_G", NHRU, "relative evaporation", "()", &G);
+  decllocal("evap_G", TDim::NHRU, "relative evaporation", "()", &G);
 
-  decllocal("evap_D", NHRU, "drying power", "()", &D);
+  decllocal("evap_D", TDim::NHRU, "drying power", "()", &D);
 
-  decllocal("Pa", NHRU, "Atmospheric pressure", "(kPa)", &Pa);
+  decllocal("Pa", TDim::NHRU, "Atmospheric pressure", "(kPa)", &Pa);
 
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height", "(m)", &Ht);
 
-  declparam("evap_type", NHRU, "0", "0", "2", "Evaporation method for this HRU, 0 = Granger, 1 = Priestley-Taylor, 2 = Penman-Monteith.",
+  declparam("evap_type", TDim::NHRU, "0", "0", "2", "Evaporation method for this HRU, 0 = Granger, 1 = Priestley-Taylor, 2 = Penman-Monteith.",
             "()", &evap_type);
 
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
+  decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
 
-  declparam("inhibit_evap_User", NHRU, "[0]", "0", "1", "inhibit evaporatation(User), 1 -> inhibit", "()", &inhibit_evap_User);
+  declparam("inhibit_evap_User", TDim::NHRU, "[0]", "0", "1", "inhibit evaporatation(User), 1 -> inhibit", "()", &inhibit_evap_User);
 
-  decldiagparam("F_Qg", NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
+  decldiagparam("F_Qg", TDim::NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
 
-  decldiagparam("rs", NHRU, "[0.0]", "0.0", "0.01", "stomatal resistance (Penman-Monteith); water 0.0, crops - 0.000579, short grass - 0.00081, forest - 0.002315", "(d/m)", &rs);
+  decldiagparam("rs", TDim::NHRU, "[0.0]", "0.0", "0.01", "stomatal resistance (Penman-Monteith); water 0.0, crops - 0.000579, short grass - 0.00081, forest - 0.002315", "(d/m)", &rs);
 
-  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height (Penman-Monteith)", "(m)", &Zwind);
+  declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height (Penman-Monteith)", "(m)", &Zwind);
 
   declgetvar("*", "Rn", "(mm/m^2*int)", &Rn);
   declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);

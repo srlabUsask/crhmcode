@@ -27,26 +27,26 @@ void ClassTs::decl(void) {
 
   variation_set = VARIATION_ORG;
 
-  declvar("hru_Ts", NHRU, "snow surface temperature", "(°C)", &hru_Ts);
+  declvar("hru_Ts", TDim::NHRU, "snow surface temperature", "(°C)", &hru_Ts);
 
 
-  declobs("Ts", NHRU, "snow surface temperature", "(°C)", &Ts);
+  declobs("Ts", TDim::NHRU, "snow surface temperature", "(°C)", &Ts);
 
 
-  decllocal("Pa", NHRU, "average surface pressure", "(kPa)", &Pa);
+  decllocal("Pa", TDim::NHRU, "average surface pressure", "(kPa)", &Pa);
 
-  decllocal("ra", NHRU, "", "(s/m)", &ra);
+  decllocal("ra", TDim::NHRU, "", "(s/m)", &ra);
 
-  decllocal("Qli_", NHRU, "", "(W/m^2)", &Qli_);
+  decllocal("Qli_", TDim::NHRU, "", "(W/m^2)", &Qli_);
 
 
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
-  declparam("Z0snow", NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
+  declparam("Z0snow", TDim::NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
 
-  decldiagparam("Zref", NHRU, "[1.5]", "0.01", "100.0", "temperature measurement height", "(m)", &Zref);
+  decldiagparam("Zref", TDim::NHRU, "[1.5]", "0.01", "100.0", "temperature measurement height", "(m)", &Zref);
 
-  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
+  declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
 
 
   declgetvar("*",  "hru_t", "(°C)", &hru_t);
@@ -61,14 +61,14 @@ void ClassTs::decl(void) {
 
   variation_set = VARIATION_1;
 
-  declreadobs("Qli", NHRU, "incident long-wave for a flat horizon with vt = 0", "(W/m^2)", &Qli, HRU_OBS_Q);
+  declreadobs("Qli", TDim::NHRU, "incident long-wave for a flat horizon with vt = 0", "(W/m^2)", &Qli, HRU_OBS_Q);
 
 
 }
 
 void ClassTs::init(void) {
 
-  nhru = getdim(NHRU); // transfers current # of HRUs to module
+  nhru = getdim(TDim::NHRU); // transfers current # of HRUs to module
 
   for (hh = 0; hh < nhru; ++hh) {
     Pa[hh] = 101.3f*pow((293.0f-0.0065f*hru_elev[hh])/293.0f, 5.26f);  // kPa

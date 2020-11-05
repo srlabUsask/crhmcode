@@ -22,24 +22,24 @@ void Classalbedoobs2::decl(void) {
 
   Description = "'Every interval sets the variable Albedo to the value of the observation Albedo_obs with enhancements.'";
 
-  declstatvar("Albedo", NHRU, "Albedo()", "()", &Albedo);
+  declstatvar("Albedo", TDim::NHRU, "Albedo()", "()", &Albedo);
 
-  declvar("meltflag", NHRU, "meltflag = 1 - melt true", "()", &meltflag);
+  declvar("meltflag", TDim::NHRU, "meltflag = 1 - melt true", "()", &meltflag);
 
-  declvar("winter", NHRU, "winter = 1 - true", "()", &winter);
+  declvar("winter", TDim::NHRU, "winter = 1 - true", "()", &winter);
 
-  declvar("net_snowD", NHRU, "daily snow fall", "(mm/d)", &net_snowD);
+  declvar("net_snowD", TDim::NHRU, "daily snow fall", "(mm/d)", &net_snowD);
 
-  declvar("newsnowcnt", NHRU, "snow age count", "()", &newsnowcnt);
+  declvar("newsnowcnt", TDim::NHRU, "snow age count", "()", &newsnowcnt);
 
 
-  decldiagparam("Albedo_bare", NHRU, "[0.17]", "0.0", "1.0", "albedo for bare ground", "()", &Albedo_bare); // pseudo
+  decldiagparam("Albedo_bare", TDim::NHRU, "[0.17]", "0.0", "1.0", "albedo for bare ground", "()", &Albedo_bare); // pseudo
 
-  decldiagparam("Albedo_snow", NHRU, "[0.85]", "0.0", "1.0", "albedo for fresh snow covered ground", "()", &Albedo_snow); // pseudo
+  decldiagparam("Albedo_snow", TDim::NHRU, "[0.85]", "0.0", "1.0", "albedo for fresh snow covered ground", "()", &Albedo_snow); // pseudo
 
-  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
+  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
 
-  declreadobs("Albedo_obs", NHRU, "albedo observation", "()", &Albedo_obs, HRU_OBS_Q, true);
+  declreadobs("Albedo_obs", TDim::NHRU, "albedo observation", "()", &Albedo_obs, HRU_OBS_Q, true);
 
 
   declgetvar("*",    "hru_tmax", "(°C)", &hru_tmax);
@@ -52,7 +52,7 @@ void Classalbedoobs2::decl(void) {
 
 void Classalbedoobs2::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   if(Albedo_obs == NULL){
     CRHMException TExcept("\"albedo_obs\". No observation albedo data!  Using calculated albedo instead.", TExcept::WARNING);

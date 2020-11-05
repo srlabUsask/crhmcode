@@ -20,48 +20,48 @@ Classbrushintcp* Classbrushintcp::klone(string name) const{
 
 void Classbrushintcp::decl(void) {
 
-  declvar("SnowLoad", NHRU, "Canopy snow load", "(kg/m^2)", &Load);
+  declvar("SnowLoad", TDim::NHRU, "Canopy snow load", "(kg/m^2)", &Load);
 
-  declvar("Thru", NHRU, "Canopy fall through", "(kg/m^2)", &Thru);
+  declvar("Thru", TDim::NHRU, "Canopy fall through", "(kg/m^2)", &Thru);
 
-  declstatvar("cumThru", NHRU, "Cumulative canopy fall through", "(mm)", &cumThru);
+  declstatvar("cumThru", TDim::NHRU, "Cumulative canopy fall through", "(mm)", &cumThru);
 
-  declvar("brushsubl", NHRU, "Canopy snow sublimation", "(mm/int)", &brushsubl);
+  declvar("brushsubl", TDim::NHRU, "Canopy snow sublimation", "(mm/int)", &brushsubl);
 
-  declstatvar("cumbrushsubl", NHRU, "Cumulative canopy snow sublimation", "(mm)", &cumbrushsubl);
+  declstatvar("cumbrushsubl", TDim::NHRU, "Cumulative canopy snow sublimation", "(mm)", &cumbrushsubl);
 
-  declvar("spherecoeff", NHRU, "pan to sphere coefficient", "(mm/g)", &spherecoeff);
+  declvar("spherecoeff", TDim::NHRU, "pan to sphere coefficient", "(mm/g)", &spherecoeff);
 
-  declvar("net_rain", NHRU, "hru_rain minus interception", "(mm/int)", &net_rain);
+  declvar("net_rain", TDim::NHRU, "hru_rain minus interception", "(mm/int)", &net_rain);
 
-  declstatdiag("cum_net_rain", NHRU, "cumulative hru_rain minus interception", "(mm)", &cum_net_rain);
+  declstatdiag("cum_net_rain", TDim::NHRU, "cumulative hru_rain minus interception", "(mm)", &cum_net_rain);
 
-  declvar("net_snow", NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
+  declvar("net_snow", TDim::NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
 
-  declvar("net_p", NHRU, "hru_precipitation (rain and/or snow) less interception", "(mm/int)", &net_p);
+  declvar("net_p", TDim::NHRU, "hru_precipitation (rain and/or snow) less interception", "(mm/int)", &net_p);
 
-  declvar("intcp_evap", NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
+  declvar("intcp_evap", TDim::NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
 
 
-  declparam("Ht", NHRU, "[20.0]", "0.001", "100.0", "Canopy height", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[20.0]", "0.001", "100.0", "Canopy height", "(m)", &Ht);
 
-  declparam("Zcan", NHRU, "10.0", "0.0", "100.0", "Mid-canopy wind modelling height", "(m)", &Zcan);
+  declparam("Zcan", TDim::NHRU, "10.0", "0.0", "100.0", "Mid-canopy wind modelling height", "(m)", &Zcan);
 
-  declparam("Zref", NHRU, "[20.0]", "0.0", "100.0", "Reference height. Set <= 0.0 to disable this module for this HRU", "(m)", &Zref);
+  declparam("Zref", TDim::NHRU, "[20.0]", "0.0", "100.0", "Reference height. Set <= 0.0 to disable this module for this HRU", "(m)", &Zref);
 
-  declparam("Sbar", NHRU, "6.6", "0.0", "20.0", "Uncorrected snow capacity", "(kg/m^2)", &Sbar);
+  declparam("Sbar", TDim::NHRU, "6.6", "0.0", "20.0", "Uncorrected snow capacity", "(kg/m^2)", &Sbar);
 
-  declparam("LAI", NHRU, "[2.2]", "0.0", "20.0", "Leaf area index", "(m^2/m^2)", &LAI);
+  declparam("LAI", TDim::NHRU, "[2.2]", "0.0", "20.0", "Leaf area index", "(m^2/m^2)", &LAI);
 
-  declparam("WidthJ", NHRU, "[75]", "0.0", "100.0", "Canopy forested downwind distance", "(m)", &WidthJ);
+  declparam("WidthJ", TDim::NHRU, "[75]", "0.0", "100.0", "Canopy forested downwind distance", "(m)", &WidthJ);
 
-  declparam("brushAtten", NHRU, "[1.0]", "0.2", "10.0", "Brush attenuation coefficient", "()", &brushAtten);
+  declparam("brushAtten", TDim::NHRU, "[1.0]", "0.2", "10.0", "Brush attenuation coefficient", "()", &brushAtten);
 
-  declparam("Tunload", NHRU, "0.0", "-5.0", "5.0", "Canopy unload at daily mean temperature", "(°C)", &Tunload);
+  declparam("Tunload", TDim::NHRU, "0.0", "-5.0", "5.0", "Canopy unload at daily mean temperature", "(°C)", &Tunload);
 
-  declparam("basin_area", ONE, "3", "0.01", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::ONE, "3", "0.01", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "0.01", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "0.01", "1e+09", "hru area", "(km^2)", &hru_area);
 
   declgetvar("obs",  "hru_t", "(°C)", &hru_t);
   declgetvar("obs",  "hru_tmean", ", (°C)", &hru_tmean);
@@ -75,7 +75,7 @@ void Classbrushintcp::decl(void) {
 }
 
 void Classbrushintcp::init(void) {
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(hh = 0; chkStruct(); ++hh) {
     net_p[hh] = 0.0;

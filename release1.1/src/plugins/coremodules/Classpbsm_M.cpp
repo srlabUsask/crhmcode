@@ -24,73 +24,73 @@ void Classpbsm_M::decl(void) {
 
   Description = "'Calculates snow transport and sublimation (Pomeroy and Li, 1999). This module has enhanced transport distribution features.'";
 
-  declstatvar("SWE", NHRU, "snow water equivalent", "(mm)", &SWE);
+  declstatvar("SWE", TDim::NHRU, "snow water equivalent", "(mm)", &SWE);
 
-  declvar("Subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
+  declvar("Subl", TDim::NHRU, "interval sublimation", "(mm/int)", &Subl);
 
-  declvar("Drift", NHRU, "interval transport", "(mm/int)", &Drift);
+  declvar("Drift", TDim::NHRU, "interval transport", "(mm/int)", &Drift);
 
-  declvar("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
+  declvar("BasinSnowLoss", TDim::BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
 
-  declstatvar("cumSubl", NHRU, "cumulative sublimation", "(mm)", &cumSubl);
+  declstatvar("cumSubl", TDim::NHRU, "cumulative sublimation", "(mm)", &cumSubl);
 
-  declstatvar("cumDrift", NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
+  declstatvar("cumDrift", TDim::NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
 
-  declstatvar("cumBasinSnowLoss", BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
+  declstatvar("cumBasinSnowLoss", TDim::BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
 
-  declstatvar("cumBasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
+  declstatvar("cumBasinSnowGain", TDim::BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
 
-  decllocal("cumDriftIn", NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
+  decllocal("cumDriftIn", TDim::NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
 
-  decllocal("DrySnow", NHRU, "DrySnow", "()", &DrySnow);
+  decllocal("DrySnow", TDim::NHRU, "DrySnow", "()", &DrySnow);
 
-  decllocal("SnowAge", NHRU, "SnowAge", "()", &SnowAge);
+  decllocal("SnowAge", TDim::NHRU, "SnowAge", "()", &SnowAge);
 
-  decllocal("this_distrib", NHRU, "current step distribution", "()", &this_distrib);
+  decllocal("this_distrib", TDim::NHRU, "current step distribution", "()", &this_distrib);
 
-  declstatvar("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
+  declstatvar("cumSno", TDim::NHRU, "cumulative snow", "(mm)", &cumSno);
 
-  declvar("Prob", NHRU, "Probability", "()", &Prob);
+  declvar("Prob", TDim::NHRU, "Probability", "()", &Prob);
 
-  declstatvar("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
+  declstatvar("snowdepth", TDim::NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
 
-  declvar("Q_leeslope", NHRU, "leeslope transport from HRU", "(mm)", &Q_leeslope);
+  declvar("Q_leeslope", TDim::NHRU, "leeslope transport from HRU", "(mm)", &Q_leeslope);
 
-  declvar("Q_valley", NHRU, "valley transport from HRU", "(mm)", &Q_valley);
+  declvar("Q_valley", TDim::NHRU, "valley transport from HRU", "(mm)", &Q_valley);
 
-  declvar("Results", NDEFN, "calulated distributions", "()", &Results, &Results_lay, nhru);
+  declvar("Results", TDim::NDEFN, "calulated distributions", "()", &Results, &Results_lay, nhru);
 
 /* parameters */
 
-  declparam("fetch", NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
+  declparam("fetch", TDim::NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
 
-  declparam("distrib", NDEFN, "[0.0, 1.0, 1.0, 1.0]", "0.0", "99.0", "distribution array", "()", &distrib, &distrib_hru, nhru);
+  declparam("distrib", TDim::NDEFN, "[0.0, 1.0, 1.0, 1.0]", "0.0", "99.0", "distribution array", "()", &distrib, &distrib_hru, nhru);
 
-  decldiagparam("N_S", NHRU, "[320]", "0.1", "500", "vegetation number density", "(1/m^2)", &N_S);
+  decldiagparam("N_S", TDim::NHRU, "[320]", "0.1", "500", "vegetation number density", "(1/m^2)", &N_S);
 
-  decldiagparam("A_S", NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
+  decldiagparam("A_S", TDim::NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("hru_GSL", NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
 
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
+  decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
 
-  declparam("inhibit_bs", NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
+  declparam("inhibit_bs", TDim::NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
 
-  decldiagparam("inhibit_subl", NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
+  decldiagparam("inhibit_subl", TDim::NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
 
-  declparam("eq_prof", NHRU, "[0]", "0", "1", "0: use vegetation height, 1: use equilibrium profile depth as SWE_Max",  "()", &eq_prof);
+  declparam("eq_prof", TDim::NHRU, "[0]", "0", "1", "0: use vegetation height, 1: use equilibrium profile depth as SWE_Max",  "()", &eq_prof);
 
-  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
+  declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
 
-  decldiagparam("Beta_M", NHRU, "[170.0]", "32.0", "170.0", "ratio of element to surface drag for vegetation; 170 for stalks, 320 for shrubs", "()", &Beta_M);
+  decldiagparam("Beta_M", TDim::NHRU, "[170.0]", "32.0", "170.0", "ratio of element to surface drag for vegetation; 170 for stalks, 320 for shrubs", "()", &Beta_M);
 
-  declparam("hru_Ht", NHRU, "[0.0]", "0.0", "1000.0", "HRU feature height(m)", "(m)", &hru_Ht);
+  declparam("hru_Ht", TDim::NHRU, "[0.0]", "0.0", "1000.0", "HRU feature height(m)", "(m)", &hru_Ht);
 
   declgetvar("*", "hru_t", "(°C)", &hru_t);
   declgetvar("*", "hru_rh", "(%)", &hru_rh);
@@ -102,7 +102,7 @@ void Classpbsm_M::decl(void) {
 
 void Classpbsm_M::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   cumBasinSnowLoss[0] = 0.0;
   cumBasinSnowGain[0] = 0.0;

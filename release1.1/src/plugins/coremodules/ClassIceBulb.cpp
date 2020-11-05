@@ -26,34 +26,34 @@ void ClassIceBulb::decl(void) {
   declgetvar("*", "hru_rh", "(%)", &hru_rh);
   declgetvar("*", "hru_p", "(mm/int)", &hru_p);
 
-  declvar("hru_icebulb", NHRU, "Estimates ice bulb temperature", "(°C)", &hru_icebulb);
+  declvar("hru_icebulb", TDim::NHRU, "Estimates ice bulb temperature", "(°C)", &hru_icebulb);
 
-  declvar("hru_rainI", NHRU, "rain", "(mm/int)", &hru_rainI);
+  declvar("hru_rainI", TDim::NHRU, "rain", "(mm/int)", &hru_rainI);
 
-  declstatdiag("cumhru_rainI", NHRU, "cumulative HRU rain", "(mm)", &cumhru_rainI);
+  declstatdiag("cumhru_rainI", TDim::NHRU, "cumulative HRU rain", "(mm)", &cumhru_rainI);
 
-  declvar("hru_snowI", NHRU, "snow", "(mm/int)", &hru_snowI);
+  declvar("hru_snowI", TDim::NHRU, "snow", "(mm/int)", &hru_snowI);
 
-  declstatdiag("cumhru_snowI", NHRU, "cumulative HRU snow", "(mm)", &cumhru_snowI);
+  declstatdiag("cumhru_snowI", TDim::NHRU, "cumulative HRU snow", "(mm)", &cumhru_snowI);
 
-  declstatdiag("cumhru_pI", NHRU, "cumulative HRU snow", "(mm)", &cumhru_pI);
+  declstatdiag("cumhru_pI", TDim::NHRU, "cumulative HRU snow", "(mm)", &cumhru_pI);
 
-  decllocal("Pa", NHRU, "Atmospheric pressure", "(kPa)", &Pa);
+  decllocal("Pa", TDim::NHRU, "Atmospheric pressure", "(kPa)", &Pa);
 
 
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
-  decldiagparam("tmaxI_allrain", NHRU, "[1.0]", "-10", "10", "precip all rain if HRU ice bulb temperature above or equal to this value",
+  decldiagparam("tmaxI_allrain", TDim::NHRU, "[1.0]", "-10", "10", "precip all rain if HRU ice bulb temperature above or equal to this value",
     "(°C)", &tmaxI_allrain);
 
-  decldiagparam("tmaxI_allsnow", NHRU, "[-1.0]", "-10", "10", "precip all snow if HRUice bulb  temperature below this value",
+  decldiagparam("tmaxI_allsnow", TDim::NHRU, "[-1.0]", "-10", "10", "precip all snow if HRUice bulb  temperature below this value",
     "(°C)", &tmaxI_allsnow);
 
 }
 
 void ClassIceBulb::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
   for (hh = 0; hh < nhru; ++hh) {
     Pa[hh] = 101.3f*pow((293.0f-0.0065f*hru_elev[hh])/293.0f, 5.26f);  // kPa
     cumhru_rainI[hh] = 0.0;

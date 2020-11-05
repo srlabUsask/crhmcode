@@ -23,16 +23,16 @@ void Classalbedoobs::decl(void) {
 
   Description = "'Every interval sets the variable \"Albedo\" to the value of the observation \"Albedo_obs\".'";
 
-  declvar("Albedo", NHRU, "Albedo", "()", &Albedo);
+  declvar("Albedo", TDim::NHRU, "Albedo", "()", &Albedo);
 
-  decldiagparam("Albedo_Value", NHRU, "[0.17]", "0.0", "1.0","Albedo", "()", &Albedo_Value);
+  decldiagparam("Albedo_Value", TDim::NHRU, "[0.17]", "0.0", "1.0","Albedo", "()", &Albedo_Value);
 
-  declreadobs("Albedo_obs", NHRU, "albedo observation", "()", &Albedo_obs, HRU_OBS_Q, true);
+  declreadobs("Albedo_obs", TDim::NHRU, "albedo observation", "()", &Albedo_obs, HRU_OBS_Q, true);
 
 }
 
 void Classalbedoobs::init(void) {
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for (hh = 0; hh < nhru; ++hh){
     Albedo[hh] = Albedo_Value[hh];

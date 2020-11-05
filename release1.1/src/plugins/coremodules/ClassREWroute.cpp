@@ -29,78 +29,78 @@ void ClassREWroute::decl(void) {
 
   inflowCnt = declgrpvar("WS_ALL_inflow", "basinflow", "query variable = 'basinflow'", "(m^3/int)", &rew, &inflow_All);
 
-  declvar("WS_inflow", NHRU, "inflow from each RB", "(m^3/int)", &inflow);
+  declvar("WS_inflow", TDim::NHRU, "inflow from each RB", "(m^3/int)", &inflow);
 
-  declstatdiag("cum_WSinflow", NHRU, "cumulative inflow from each RB", "(m^3)", &cuminflow);
+  declstatdiag("cum_WSinflow", TDim::NHRU, "cumulative inflow from each RB", "(m^3)", &cuminflow);
 
-  declvar("WS_outflow", NHRU, "outflow of each RB", "(m^3/int)", &outflow);
+  declvar("WS_outflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &outflow);
 
-  declstatdiag("cum_WSoutflow", NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutflow);
+  declstatdiag("cum_WSoutflow", TDim::NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutflow);
 
-  declvar("WS_flow", BASIN, "watershed surface and sub-surface outflow", "(m^3/int)", &flow);
+  declvar("WS_flow", TDim::BASIN, "watershed surface and sub-surface outflow", "(m^3/int)", &flow);
 
-  declvar("WS_flow_s", BASIN, "watershed surface and sub-surface outflow", "(m^3/s)", &flow_s);
+  declvar("WS_flow_s", TDim::BASIN, "watershed surface and sub-surface outflow", "(m^3/s)", &flow_s);
 
-  declstatdiag("cum_WSflow", BASIN, "cumulative watershed surface and sub-surface outflow", "(m^3)", &cumflow);
+  declstatdiag("cum_WSflow", TDim::BASIN, "cumulative watershed surface and sub-surface outflow", "(m^3)", &cumflow);
 
 
   gwCnt = declgrpvar("WS_ALL_gwflow", "basingw", "query variable = 'basingw'", "(m^3/int)", &gwrew, &gw_All);
 
-  declvar("WS_gwinflow", NHRU, "inflow from each RB", "(m^3/int)", &gwinflow);
+  declvar("WS_gwinflow", TDim::NHRU, "inflow from each RB", "(m^3/int)", &gwinflow);
 
-  declstatdiag("cum_WSgwinflow", NHRU, "cumulative inflow from each RB", "(m^3)", &cumgwinflow);
+  declstatdiag("cum_WSgwinflow", TDim::NHRU, "cumulative inflow from each RB", "(m^3)", &cumgwinflow);
 
-  declvar("WS_gwoutflow", NHRU, "outflow of each RB", "(m^3/int)", &gwoutflow);
+  declvar("WS_gwoutflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &gwoutflow);
 
-  declstatdiag("cum_WSgwoutflow", NHRU, "cumulative outflow of each RB", "(m^3)", &cumgwoutflow);
+  declstatdiag("cum_WSgwoutflow", TDim::NHRU, "cumulative outflow of each RB", "(m^3)", &cumgwoutflow);
 
-  declvar("WS_gwflow", BASIN, "watershed ground water outflow", "(m^3/int)", &gwflow);
+  declvar("WS_gwflow", TDim::BASIN, "watershed ground water outflow", "(m^3/int)", &gwflow);
 
-  declvar("WS_gwflow_s", BASIN, "watershed ground water outflow", "(m^3/s)", &gwflow_s);
+  declvar("WS_gwflow_s", TDim::BASIN, "watershed ground water outflow", "(m^3/s)", &gwflow_s);
 
-  declstatdiag("cum_WSgwflow", BASIN, "cumulative watershed ground water outflow", "(m^3)", &cumgwflow);
+  declstatdiag("cum_WSgwflow", TDim::BASIN, "cumulative watershed ground water outflow", "(m^3)", &cumgwflow);
 
 
-  declparam("WS_Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_Lag);
+  declparam("WS_Lag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_Lag);
 
-  declparam("WS_gwLag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_gwLag);
+  declparam("WS_gwLag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_gwLag);
 
-  declparam("WS_whereto", NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_whereto);
+  declparam("WS_whereto", TDim::NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_whereto);
 
-  declparam("WS_order", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_order);
+  declparam("WS_order", TDim::NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_order);
 
-  declparam("WS_gwwhereto", NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_gwwhereto);
+  declparam("WS_gwwhereto", TDim::NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_gwwhereto);
 
-  declparam("WS_gworder", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_gworder);
+  declparam("WS_gworder", TDim::NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_gworder);
 
 
   variation_set = VARIATION_0;
 
-  decldiag("WS_Ktravel_var", NHRU, "inflow storage constant", "(d)", &WS_Ktravel_var);
+  decldiag("WS_Ktravel_var", TDim::NHRU, "inflow storage constant", "(d)", &WS_Ktravel_var);
 
-  decldiag("WS_gwKtravel_var", NHRU, "gw storage constant", "(d)", &WS_gwKtravel_var);
+  decldiag("WS_gwKtravel_var", TDim::NHRU, "gw storage constant", "(d)", &WS_gwKtravel_var);
 
 
-  declparam("WS_route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &WS_route_n);
+  declparam("WS_route_n", TDim::NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &WS_route_n);
 
-  declparam("WS_route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "()", &WS_route_R);
+  declparam("WS_route_R", TDim::NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "()", &WS_route_R);
 
-  declparam("WS_route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &WS_route_S0);
+  declparam("WS_route_S0", TDim::NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &WS_route_S0);
 
-  declparam("WS_route_L", NHRU, "[3.69]", "0.01","1.0E10", "routing length", "(m)", &WS_route_L);
+  declparam("WS_route_L", TDim::NHRU, "[3.69]", "0.01","1.0E10", "routing length", "(m)", &WS_route_L);
 
-  declparam("WS_Channel_shp", NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &WS_Channel_shp);
+  declparam("WS_Channel_shp", TDim::NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &WS_Channel_shp);
 
-  declparam("WS_X_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &WS_route_X_M);
+  declparam("WS_X_M", TDim::NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &WS_route_X_M);
 
-  declparam("WS_gwX_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &WS_gwroute_X_M);
+  declparam("WS_gwX_M", TDim::NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &WS_gwroute_X_M);
 
 
   variation_set = VARIATION_1;
 
-  declparam("WS_Kstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_Kstorage);
+  declparam("WS_Kstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_Kstorage);
 
-  declparam("WS_gwKstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_gwKstorage);
+  declparam("WS_gwKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_gwKstorage);
 
 
   variation_set = VARIATION_ORG;

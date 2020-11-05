@@ -22,14 +22,14 @@ void Class3D_param::decl(void) {
 
   Description = "'Initialises the variable \"Param_3D\" from the parameter \"Var_3D\".'";
 
-  declvar("Var_3D", NHRU, "Var_3D", "()", &Var_3D);
+  declvar("Var_3D", TDim::NHRU, "Var_3D", "()", &Var_3D);
 
-  declparam("Param_3D", NHRU, "[0.17]", "0.0", "1.0","Param_3D", "()", &Param_3D);
+  declparam("Param_3D", TDim::NHRU, "[0.17]", "0.0", "1.0","Param_3D", "()", &Param_3D);
 
 }
 
 void Class3D_param::init(void) {
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for (hh = 0; hh < nhru; ++hh){
     Var_3D[hh] = Param_3D[hh];

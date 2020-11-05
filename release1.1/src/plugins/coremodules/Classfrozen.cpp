@@ -23,61 +23,61 @@ void Classfrozen::decl(void) {
 
   Description = "'Frozen soil infiltration Zhao and Gray (1999).'";
 
-  declvar("infil", NHRU, "Potential rain infiltration", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU, "Potential rain infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential rain infiltration", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential rain infiltration", "(mm)", &cuminfil);
 
-  declvar("snowinfil", NHRU, "melt infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "melt infiltration", "(mm/int)", &snowinfil);
 
-  declstatvar("cumsnowinfil", NHRU, "cumulative melt infiltration", "(mm)", &cumsnowinfil); // for looping
+  declstatvar("cumsnowinfil", TDim::NHRU, "cumulative melt infiltration", "(mm)", &cumsnowinfil); // for looping
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/int)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
 
-  declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
+  declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  decllocal("t0_Var", NHRU, "t0 value used by module", "(h)", &t0_Var);
+  decllocal("t0_Var", TDim::NHRU, "t0 value used by module", "(h)", &t0_Var);
 
-  decllocal("t0_Acc", NHRU, "opportunity time", "(h)", &t0_Acc); // to reset every loop
+  decllocal("t0_Acc", TDim::NHRU, "opportunity time", "(h)", &t0_Acc); // to reset every loop
 
-  decllocal("INF", NHRU, "parametric calculation", "(mm)", &INF);
+  decllocal("INF", TDim::NHRU, "parametric calculation", "(mm)", &INF);
 
-  decllocal("Julian_window", ONE, "currently in Julian window handling frozen infiltration.", "()", &Julian_window);
+  decllocal("Julian_window", TDim::ONE, "currently in Julian window handling frozen infiltration.", "()", &Julian_window);
 
-  decllocal("Julian_lockout", ONE, "lockout next frozen cycle until after this Julian date when t0_Julian is not set (i.e. 0).", "()", &Julian_lockout);
+  decllocal("Julian_lockout", TDim::ONE, "lockout next frozen cycle until after this Julian date when t0_Julian is not set (i.e. 0).", "()", &Julian_lockout);
 
-  decllocal("infiltype", NHRU, "infiltration type. PREMELT/RESTRICTED/LIMITED/UNLIMITED/SATURATED - 0/1/2/3/4 respectively", "()", &infiltype);
+  decllocal("infiltype", TDim::NHRU, "infiltration type. PREMELT/RESTRICTED/LIMITED/UNLIMITED/SATURATED - 0/1/2/3/4 respectively", "()", &infiltype);
 
-  decllocal("snowmeltD_last", NHRU, "yesterday's snowmelt. Used to determine the formation of ice lens.", "(mm/d)", &snowmeltD_last);
+  decllocal("snowmeltD_last", TDim::NHRU, "yesterday's snowmelt. Used to determine the formation of ice lens.", "(mm/d)", &snowmeltD_last);
 
-  decllocal("SWEPk", NHRU, "peak snow water equivalent", "(mm)", &SWEPk);
+  decllocal("SWEPk", TDim::NHRU, "peak snow water equivalent", "(mm)", &SWEPk);
 
 
-  declparam("t0", NHRU, "[0.0]", "0.0", "1000.0", "< 0 - calculate opportunity time, == 0 - calculate t0 from '0.65*SWE-5.0',  > 0 - use as opportunity time", "(h)", &t0);
+  declparam("t0", TDim::NHRU, "[0.0]", "0.0", "1000.0", "< 0 - calculate opportunity time, == 0 - calculate t0 from '0.65*SWE-5.0',  > 0 - use as opportunity time", "(h)", &t0);
 
-  decldiagparam("S0", NHRU, "[1.0]", "0.0", "1.0", "surface saturation", "(mm^3/mm^3)", &S0);
+  decldiagparam("S0", TDim::NHRU, "[1.0]", "0.0", "1.0", "surface saturation", "(mm^3/mm^3)", &S0);
 
-  declparam("Si", NHRU, "[0.5]", "0.0", "1.0", "initial soil saturation (0 - 0.4m)", "(mm^3/mm^3)", &Si);
+  declparam("Si", TDim::NHRU, "[0.5]", "0.0", "1.0", "initial soil saturation (0 - 0.4m)", "(mm^3/mm^3)", &Si);
 
-  decldiagparam("C", NHRU, "[1.0]", "0.0", "3.0", "coefficient", "()", &C);
+  decldiagparam("C", TDim::NHRU, "[1.0]", "0.0", "3.0", "coefficient", "()", &C);
 
-  declparam("hru_tsoil", NHRU, "[269.15]", "223.0", "273.15", "soil average temperature at start of infiltration (0 - 0.4m)", "(ºK)", &hru_tsoil);
+  declparam("hru_tsoil", TDim::NHRU, "[269.15]", "223.0", "273.15", "soil average temperature at start of infiltration (0 - 0.4m)", "(ºK)", &hru_tsoil);
 
-  decldiagparam("t_ice_lens", NHRU, "[-20]", "-50.0", "0.0", "overnight minimum to cause ice lens after major melt", "(ºC)", &t_ice_lens);
+  decldiagparam("t_ice_lens", TDim::NHRU, "[-20]", "-50.0", "0.0", "overnight minimum to cause ice lens after major melt", "(ºC)", &t_ice_lens);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0",
+  declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0",
     "Maximum available water holding capacity of soil profile."//
     "Soil profile is surface to bottom of rooting zone",
     "(mm)", &soil_moist_max);
 
-  decldiagparam("t0_Julian", ONE, "[30]", "0","366", "value > 0 - inhibit frozen algorithm till after this Julian date, 0 - enable frozen algorithm immediately when melt criteria is met.", "()", &t0_Julian);
+  decldiagparam("t0_Julian", TDim::ONE, "[30]", "0","366", "value > 0 - inhibit frozen algorithm till after this Julian date, 0 - enable frozen algorithm immediately when melt criteria is met.", "()", &t0_Julian);
 
   declgetvar("*", "soil_moist", "(mm)", &soil_moist);
 
@@ -90,12 +90,12 @@ void Classfrozen::decl(void) {
   declgetvar("*",  "hru_tmin", "(°C)", &hru_tmin);
 
 
-  declreadobs("t0_inhibit", NHRU, "opportunity time inhibit", "()", &t0_inhibit, 0, true);
+  declreadobs("t0_inhibit", TDim::NHRU, "opportunity time inhibit", "()", &t0_inhibit, 0, true);
 }
 
 void Classfrozen::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   if(t0[0] <= 0.0){ // going to calculate oportunity time
     if(t0_inhibit == NULL){

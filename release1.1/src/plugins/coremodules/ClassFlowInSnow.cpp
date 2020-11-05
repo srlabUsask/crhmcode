@@ -23,38 +23,38 @@ void ClassFlowInSnow::decl(void) {
 
   Description = "'Calculates Flow in Snow.'";
 
-  declvar("Ksat_snow", NHRU, "saturated permeability of snow", "(m^2)", &Ksat_snow);
+  declvar("Ksat_snow", TDim::NHRU, "saturated permeability of snow", "(m^2)", &Ksat_snow);
 
-  declvar("K_snow", NHRU, "intrinsic permeability of snow", "(m^2)", &K_snow);
+  declvar("K_snow", TDim::NHRU, "intrinsic permeability of snow", "(m^2)", &K_snow);
 
-  declvar("u_down", NHRU, "Colbeck's downward flux of water flow in snow based on Darcy's Law", "(m/s)", &u_down);
+  declvar("u_down", TDim::NHRU, "Colbeck's downward flux of water flow in snow based on Darcy's Law", "(m/s)", &u_down);
 
-  declvar("K_down", NHRU, "mass flow of Colbeck's downward flux in snow", "(m/s)", &K_down);
+  declvar("K_down", TDim::NHRU, "mass flow of Colbeck's downward flux in snow", "(m/s)", &K_down);
 
-  declvar("K_slope", NHRU, "mass flow in snow along slope", "(m/s)", &K_slope);
+  declvar("K_slope", TDim::NHRU, "mass flow in snow along slope", "(m/s)", &K_slope);
 
-  declvar("Meltrunoff_K", NHRU, "melt runoff storage constant", "(d)", &Meltrunoff_K);
+  declvar("Meltrunoff_K", TDim::NHRU, "melt runoff storage constant", "(d)", &Meltrunoff_K);
 
-  decldiag("In_storage", NHRU, "melt runoff in storage at the beginning of interval!", "(mm)", &In_storage);
+  decldiag("In_storage", TDim::NHRU, "melt runoff in storage at the beginning of interval!", "(mm)", &In_storage);
 
-  decldiag("runKstorage_var", NHRU, "modified value of runKstorage", "(d)", &runKstorage_var);
+  decldiag("runKstorage_var", TDim::NHRU, "modified value of runKstorage", "(d)", &runKstorage_var);
 
 
-  declparam("S_I", NHRU, "[3.3]", "1.0", "7.0", "soil index", "()", &S_I);
+  declparam("S_I", TDim::NHRU, "[3.3]", "1.0", "7.0", "soil index", "()", &S_I);
 
-  declparam("d_g", NHRU, "[3.0]", "0.0", "10.0", "snow grain diameter", "(mm)", &d_g);
+  declparam("d_g", TDim::NHRU, "[3.0]", "0.0", "10.0", "snow grain diameter", "(mm)", &d_g);
 
-  declparam("t_inhibit_flow", NHRU, "[-2.0]", "-15", "5", "threshold temperature of inhibit flow in snow; i.e. inhibit when lower snowpack temperature is below this threshold temperature", "(°C)", &t_inhibit_flow);
+  declparam("t_inhibit_flow", TDim::NHRU, "[-2.0]", "-15", "5", "threshold temperature of inhibit flow in snow; i.e. inhibit when lower snowpack temperature is below this threshold temperature", "(°C)", &t_inhibit_flow);
 
-  declparam("runKstorage_winter", NHRU, "[2.0]", "0", "200.0", "runoff storage constant when lower snowpack temperature is below the threshold temperature", "(d)", &runKstorage_winter);
+  declparam("runKstorage_winter", TDim::NHRU, "[2.0]", "0", "200.0", "runoff storage constant when lower snowpack temperature is below the threshold temperature", "(d)", &runKstorage_winter);
 
-  declparam("runKstorage_summer", NHRU, "[2.0]", "0", "200.0", "runoff storage constant for snowcover free period", "(d)", &runKstorage_summer);
+  declparam("runKstorage_summer", TDim::NHRU, "[2.0]", "0", "200.0", "runoff storage constant for snowcover free period", "(d)", &runKstorage_summer);
 
-  declparam("Sr", NHRU, "[0.07]", "0.0", "1.0", "residual saturation of snow", "()", &Sr);
+  declparam("Sr", TDim::NHRU, "[0.07]", "0.0", "1.0", "residual saturation of snow", "()", &Sr);
 
-  declparam("hru_GSL", NHRU, "[0.0]", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "()", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "[0.0]", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "()", &hru_GSL);
 
-  declparam("route_L", NHRU, "[200.0]", "0.01", "1.0E10", "routing length", "(m)", &route_L);
+  declparam("route_L", TDim::NHRU, "[200.0]", "0.01", "1.0E10", "routing length", "(m)", &route_L);
 
   declputparam("*", "runKstorage", "(d)", &runKstorage);
 
@@ -71,7 +71,7 @@ void ClassFlowInSnow::decl(void) {
 
 void ClassFlowInSnow::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(hh = 0; chkStruct(); ++hh) {
     Ksat_snow[hh] = 0.0;

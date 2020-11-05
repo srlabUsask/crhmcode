@@ -34,23 +34,23 @@ void Classobs::decl(void) {
     Global::maxlay = 2;
   }
 
-  decldiagparam("HRU_OBS", NDEFN, "[1, 2, 3!]", "1", "100", "observation indirection table ([1] - t, rh and ea, [2] - p and ppt, [3] - u, [4] - Q, [5] - misc)", "()", &HRU_OBS, &HRU_OBS_Tables, 5);
+  decldiagparam("HRU_OBS", TDim::NDEFN, "[1, 2, 3!]", "1", "100", "observation indirection table ([1] - t, rh and ea, [2] - p and ppt, [3] - u, [4] - Q, [5] - misc)", "()", &HRU_OBS, &HRU_OBS_Tables, 5);
 
-  declparam("obs_elev", NDEFN, "[0]", "0.0", "100000.0", "observation measurement altitude table ([1] - t, rh and ea, [2] - p and ppt", "(m)", &obs_elev, &obs_elev_Tables, 2);
+  declparam("obs_elev", TDim::NDEFN, "[0]", "0.0", "100000.0", "observation measurement altitude table ([1] - t, rh and ea, [2] - p and ppt", "(m)", &obs_elev, &obs_elev_Tables, 2);
 
-  declparam("hru_elev", NHRU, "[0]", "0.0", "100000.0", "HRU altitude", "(m)", &hru_elev);
+  declparam("hru_elev", TDim::NHRU, "[0]", "0.0", "100000.0", "HRU altitude", "(m)", &hru_elev);
 
-  declparam("lapse_rate", NHRU, "[0.75]", "0", "2", "temperature lapse rate", "(°C/100m)", &lapse_rate);
+  declparam("lapse_rate", TDim::NHRU, "[0.75]", "0", "2", "temperature lapse rate", "(°C/100m)", &lapse_rate);
 
-  decldiagparam("precip_elev_adj", NHRU, "[0.0]", "-1.0", "1.0", "precipitation height adjustment {adjusted p(or ppt) = p(or ppt)*(1.0 + precip_elev_adj*elev_difference/100)}", "(1/100m)", &precip_elev_adj);
+  decldiagparam("precip_elev_adj", TDim::NHRU, "[0.0]", "-1.0", "1.0", "precipitation height adjustment {adjusted p(or ppt) = p(or ppt)*(1.0 + precip_elev_adj*elev_difference/100)}", "(1/100m)", &precip_elev_adj);
 
-  decldiagparam("ElevChng_flag", NHRU, "[0]", "0", "1", "Elevation change control; 0 - maintain RH, 1 - keep Vp within Vsat maximum", "()", &ElevChng_flag);
+  decldiagparam("ElevChng_flag", TDim::NHRU, "[0]", "0", "1", "Elevation change control; 0 - maintain RH, 1 - keep Vp within Vsat maximum", "()", &ElevChng_flag);
 
-  decldiagparam("ClimChng_flag", NHRU, "[0]", "0", "1", "Climate change control; 0 - maintain RH, 1 - keep Vp within Vsat maximum", "()", &ClimChng_flag);
+  decldiagparam("ClimChng_flag", TDim::NHRU, "[0]", "0", "1", "Climate change control; 0 - maintain RH, 1 - keep Vp within Vsat maximum", "()", &ClimChng_flag);
 
-  decldiagparam("ClimChng_t", NHRU, "[0]", "-50", "+50", "Climate change additive temperature change.", "(°C)", &ClimChng_t);
+  decldiagparam("ClimChng_t", TDim::NHRU, "[0]", "-50", "+50", "Climate change additive temperature change.", "(°C)", &ClimChng_t);
 
-  decldiagparam("ClimChng_precip", NHRU, "[1]", "0.0", "10", "Climate change multiplative p/ppt change.", "()", &ClimChng_precip);
+  decldiagparam("ClimChng_precip", TDim::NHRU, "[1]", "0.0", "10", "Climate change multiplative p/ppt change.", "()", &ClimChng_precip);
 
   Global::HRU_OBS = const_cast<long **> (HRU_OBS_Tables);
 
@@ -59,75 +59,75 @@ void Classobs::decl(void) {
   Global::Warming_p = const_cast<double *> (this->ClimChng_precip); // must be here to load do_p etc.
 
 
-  declreadobs("u", NHRU, "wind velocity", "(m/s)", &u, HRU_OBS_u);
+  declreadobs("u", TDim::NHRU, "wind velocity", "(m/s)", &u, HRU_OBS_u);
 
-  declreadobs("ppt", NHRU, "daily precipitation", "(mm/d)", &ppt, HRU_OBS_p_ppt, true);
+  declreadobs("ppt", TDim::NHRU, "daily precipitation", "(mm/d)", &ppt, HRU_OBS_p_ppt, true);
 
-  declreadobs("p", NHRU, "interval precipitation", "(mm/int)", &p, HRU_OBS_p_ppt, true);
-
-
-  decldiag("t_obs", NFREQ, "observation temperature before modification by lapse rate and global warning", "(°C)", &t_obs, &t_obs_lay);
+  declreadobs("p", TDim::NHRU, "interval precipitation", "(mm/int)", &p, HRU_OBS_p_ppt, true);
 
 
-  declvar("hru_t", NHRU, "temperature", "(°C)", &hru_t);
-
-  declvar("hru_rh", NHRU, "relative humidity", "(%)", &hru_rh);
-
-  declvar("hru_ea", NHRU, "HRU vapour pressure", "(kPa)", &hru_ea);
-
-  decldiag("hru_estar", NHRU, "HRU saturation vapour pressure", "(kPa)", &hru_estar);
-
-  declvar("hru_u", NHRU, "wind velocity", "(m/s)", &hru_u);
-
-  declvar("hru_p", NHRU, "total precip (includes snow catch adjustment", "(mm/int)", &hru_p);
-
-  declvar("hru_rain", NHRU, "rain", "(mm/int)", &hru_rain);
-
-  declvar("Pa", NHRU, "average surface pressure", "(kPa)", &Pa);
-
-  decllocal("DTindx", ONE, "main loop Index", "()", &DTindx);
-
-  decllocal("DTnow", ONE, "main loop Time", "()", &DTnow);
-
-  declstatdiag("cumhru_rain", NHRU, "cumulative HRU rain", "(mm)", &cumhru_rain);
-
-  declvar("hru_snow", NHRU, "snow", "(mm/int)", &hru_snow);
-
-  declstatdiag("cumhru_snow", NHRU, "cumulative HRU snow", "(mm)", &cumhru_snow);
-
-  declstatdiag("cumhru_snow_meas", NHRU, "cumulative HRU snow catch adjustment", "(mm)", &cumhru_snow_meas);
-
-  declvar("hru_tmax", NHRU, "max daily temp", "(°C)", &hru_tmax);
-
-  declvar("hru_tmin", NHRU, "min daily temp", "(°C)", &hru_tmin);
-
-  declvar("hru_tmean", NHRU, "mean daily temp", "(°C)", &hru_tmean);
-
-  declvar("hru_eamean", NHRU, "mean daily vapour pressure", "(kPa)", &hru_eamean);
-
-  declvar("hru_umean", NHRU, "mean daily wind", "(m/s)", &hru_umean);
-
-  declvar("hru_rhmean", NHRU,"daily mean relative humidity", "(%)", &hru_rhmean);
-
-  declvar("hru_newsnow", NHRU, "new snow on HRU - 0=no, 1=yes", "()", &hru_newsnow);
+  decldiag("t_obs", TDim::NFREQ, "observation temperature before modification by lapse rate and global warning", "(°C)", &t_obs, &t_obs_lay);
 
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declvar("hru_t", TDim::NHRU, "temperature", "(°C)", &hru_t);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declvar("hru_rh", TDim::NHRU, "relative humidity", "(%)", &hru_rh);
+
+  declvar("hru_ea", TDim::NHRU, "HRU vapour pressure", "(kPa)", &hru_ea);
+
+  decldiag("hru_estar", TDim::NHRU, "HRU saturation vapour pressure", "(kPa)", &hru_estar);
+
+  declvar("hru_u", TDim::NHRU, "wind velocity", "(m/s)", &hru_u);
+
+  declvar("hru_p", TDim::NHRU, "total precip (includes snow catch adjustment", "(mm/int)", &hru_p);
+
+  declvar("hru_rain", TDim::NHRU, "rain", "(mm/int)", &hru_rain);
+
+  declvar("Pa", TDim::NHRU, "average surface pressure", "(kPa)", &Pa);
+
+  decllocal("DTindx", TDim::ONE, "main loop Index", "()", &DTindx);
+
+  decllocal("DTnow", TDim::ONE, "main loop Time", "()", &DTnow);
+
+  declstatdiag("cumhru_rain", TDim::NHRU, "cumulative HRU rain", "(mm)", &cumhru_rain);
+
+  declvar("hru_snow", TDim::NHRU, "snow", "(mm/int)", &hru_snow);
+
+  declstatdiag("cumhru_snow", TDim::NHRU, "cumulative HRU snow", "(mm)", &cumhru_snow);
+
+  declstatdiag("cumhru_snow_meas", TDim::NHRU, "cumulative HRU snow catch adjustment", "(mm)", &cumhru_snow_meas);
+
+  declvar("hru_tmax", TDim::NHRU, "max daily temp", "(°C)", &hru_tmax);
+
+  declvar("hru_tmin", TDim::NHRU, "min daily temp", "(°C)", &hru_tmin);
+
+  declvar("hru_tmean", TDim::NHRU, "mean daily temp", "(°C)", &hru_tmean);
+
+  declvar("hru_eamean", TDim::NHRU, "mean daily vapour pressure", "(kPa)", &hru_eamean);
+
+  declvar("hru_umean", TDim::NHRU, "mean daily wind", "(m/s)", &hru_umean);
+
+  declvar("hru_rhmean", TDim::NHRU,"daily mean relative humidity", "(%)", &hru_rhmean);
+
+  declvar("hru_newsnow", TDim::NHRU, "new snow on HRU - 0=no, 1=yes", "()", &hru_newsnow);
+
+
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
   Global::RH_EA_obs = -1;
 
-  decldiag("Tday", NFREQ, "observation t unavailable", "(°C)", &NotUsed, &tday_intvls);
+  decldiag("Tday", TDim::NFREQ, "observation t unavailable", "(°C)", &NotUsed, &tday_intvls);
   Exist = declobsfunc("t", "Tday", &NotUsed, TFun::INTVL, &tday_intvls);
 
-  decldiag("RHday", NFREQ, "observation rh unavailable", "(kPa)", &NotUsed, &rhday_intvls);
+  decldiag("RHday", TDim::NFREQ, "observation rh unavailable", "(kPa)", &NotUsed, &rhday_intvls);
   Exist = declobsfunc("rh", "RHday", &NotUsed, TFun::INTVL, &rhday_intvls, true);
 
   if(Exist >= 0)
     Global::RH_EA_obs = 0;
 
-  decldiag("EAday", NFREQ, "observation ea unavailable", "(kPa)", &NotUsed, &eaday_intvls);
+  decldiag("EAday", TDim::NFREQ, "observation ea unavailable", "(kPa)", &NotUsed, &eaday_intvls);
   Exist = declobsfunc("ea", "EAday", &NotUsed, TFun::INTVL, &eaday_intvls, true);
 
   if(Exist >= 0)
@@ -148,31 +148,31 @@ void Classobs::decl(void) {
 
   variation_set = VARIATION_0 + VARIATION_1;
 
-  declparam("catchadjust", NHRU, "[0]", "0", "3", "none - 0/Nipher - 1/MacDonald-Alter - 2 (not recommended)/Smith-Alter - 3", "()", &catchadjust);
+  declparam("catchadjust", TDim::NHRU, "[0]", "0", "3", "none - 0/Nipher - 1/MacDonald-Alter - 2 (not recommended)/Smith-Alter - 3", "()", &catchadjust);
 
-  decldiagparam("ppt_daily_distrib", NHRU, "[1]", "0", "1", "0 - daily precip in first interval, 1 - equally divided over the day", "()", &ppt_daily_distrib);
+  decldiagparam("ppt_daily_distrib", TDim::NHRU, "[1]", "0", "1", "0 - daily precip in first interval, 1 - equally divided over the day", "()", &ppt_daily_distrib);
 
-  declparam("snow_rain_determination", NHRU, "[0]", "0", "2", "snow/rain determination: 0 - air temperature, 1 - ice bulb temperature, 2 - Harder", "()", &snow_rain_determination);
+  declparam("snow_rain_determination", TDim::NHRU, "[0]", "0", "2", "snow/rain determination: 0 - air temperature, 1 - ice bulb temperature, 2 - Harder", "()", &snow_rain_determination);
 
-  decldiagparam("tmax_allrain", NHRU, "[4.0]", "-10", "10", "precip all rain if HRU air/ice bulb temperature above or equal to this value. Not used in Harder method.",
+  decldiagparam("tmax_allrain", TDim::NHRU, "[4.0]", "-10", "10", "precip all rain if HRU air/ice bulb temperature above or equal to this value. Not used in Harder method.",
     "(°C)", &tmax_allrain);
 
-  decldiagparam("tmax_allsnow", NHRU, "[0.0]", "-10", "10", "precip all snow if HRU air/ice bulb temperature below this value. Not used in Harder method",
+  decldiagparam("tmax_allsnow", TDim::NHRU, "[0.0]", "-10", "10", "precip all snow if HRU air/ice bulb temperature below this value. Not used in Harder method",
     "(°C)", &tmax_allsnow);
 
 
   variation_set = VARIATION_1;
 
-  declreadobs("t_max", NHRU, " daily maximum temperature", "(°C)", &t_max, HRU_OBS_t_rh_ea);
+  declreadobs("t_max", TDim::NHRU, " daily maximum temperature", "(°C)", &t_max, HRU_OBS_t_rh_ea);
 
-  declreadobs("t_min", NHRU, " daily minimumn temperature", "(°C)", &t_min, HRU_OBS_t_rh_ea);
+  declreadobs("t_min", TDim::NHRU, " daily minimumn temperature", "(°C)", &t_min, HRU_OBS_t_rh_ea);
 
 
   variation_set = VARIATION_2;
 
-  declreadobs("obs_snow", NHRU, "snow observation", "(mm)", &obs_snow, HRU_OBS_Q);
+  declreadobs("obs_snow", TDim::NHRU, "snow observation", "(mm)", &obs_snow, HRU_OBS_Q);
 
-  declreadobs("obs_rain", NHRU, "rain observation", "(mm)", &obs_rain, HRU_OBS_Q);
+  declreadobs("obs_rain", TDim::NHRU, "rain observation", "(mm)", &obs_rain, HRU_OBS_Q);
 
 
   variation_set = VARIATION_ORG;
@@ -216,8 +216,8 @@ void Classobs::init(void) {
     }
   }
 
-  nhru = getdim(NHRU);
-  nobs = getdim(NOBS);
+  nhru = getdim(TDim::NHRU);
+  nobs = getdim(TDim::NOBS);
 
   for(hh = 0; hh < nhru; ++hh) {
     cumhru_rain[hh] = 0.0;

@@ -22,41 +22,41 @@ void Classcrack::decl(void) {
 
   Description = "'Handles frozen soil infiltration using Granger et al. 1984; Gray et al., 1986.'";
 
-  declvar("snowinfil", NHRU, "infiltration", "(mm/d)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "infiltration", "(mm/d)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/d)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/d)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
 
-  declvar("infil", NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
 
-  declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
+  declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  declstatvar("crackstat", NHRU, "infiltration status", "()", &crackstat);
+  declstatvar("crackstat", TDim::NHRU, "infiltration status", "()", &crackstat);
 
-  declstatdiag("RainOnSnow", NHRU, "cumulative rain on snow", "(mm)", &RainOnSnow);
+  declstatdiag("RainOnSnow", TDim::NHRU, "cumulative rain on snow", "(mm)", &RainOnSnow);
 
-  declstatvar("crackon", NHRU,"crack cycle enabled", "()", &crackon);
+  declstatvar("crackon", TDim::NHRU,"crack cycle enabled", "()", &crackon);
 
 
-  decllocal("RainOnSnowA", NHRU, "accumulated rain on snow", "(mm)", &RainOnSnowA);
+  decllocal("RainOnSnowA", TDim::NHRU, "accumulated rain on snow", "(mm)", &RainOnSnowA);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("fallstat", NHRU, "[50.0]", "-1.0","100.0",
+  declparam("fallstat", TDim::NHRU, "[50.0]", "-1.0","100.0",
      "fall status 0.0 - unlimited/ 100.0 - restricted/ other - limited", "(%)", &fallstat);
 
-  decldiagparam("Major", NHRU, "[5]", "1", "100", "threshold for major melt", "(mm/d)", &Major);
+  decldiagparam("Major", TDim::NHRU, "[5]", "1", "100", "threshold for major melt", "(mm/d)", &Major);
 
-  decldiagparam("PriorInfiltration", NHRU, "[1]", "0", "1", "allow limited melt to infiltrate prior to first major melt", "(mm/d)", &PriorInfiltration);
+  decldiagparam("PriorInfiltration", TDim::NHRU, "[1]", "0", "1", "allow limited melt to infiltrate prior to first major melt", "(mm/d)", &PriorInfiltration);
 
   declgetvar("*",  "hru_tmax", "(°C)", &hru_tmax);
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmelt);
@@ -66,7 +66,7 @@ void Classcrack::decl(void) {
 
 void Classcrack::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   try {
 

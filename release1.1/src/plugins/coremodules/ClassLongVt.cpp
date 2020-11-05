@@ -28,11 +28,11 @@ ClassLongVt* ClassLongVt::klone(string name) const{
 
   variation_set = VARIATION_ORG;
 
-  declvar("tau", NHRU, "Atmospheric transmissivity = S/Sextra", "()", &tau);
+  declvar("tau", TDim::NHRU, "Atmospheric transmissivity = S/Sextra", "()", &tau);
 
-  declvar("Qli_Var", NHRU, "calculated incoming long", "(W/m^2)", &Qli_Var);
+  declvar("Qli_Var", TDim::NHRU, "calculated incoming long", "(W/m^2)", &Qli_Var);
 
-  declvar("QliVt_Var", NHRU, "calculated incoming long in open environment", "(W/m^2)", &QliVt_Var);
+  declvar("QliVt_Var", TDim::NHRU, "calculated incoming long in open environment", "(W/m^2)", &QliVt_Var);
 
 
 
@@ -45,21 +45,21 @@ ClassLongVt* ClassLongVt::klone(string name) const{
   declgetvar("*",  "hru_rh", "()", &hru_rh);
 
 
-  declparam("Vt", NHRU, "[0.3]", "0.0", "1.0", "terrain view factor (equivalent to 1-Vf)", "()", &Vt);
+  declparam("Vt", TDim::NHRU, "[0.3]", "0.0", "1.0", "terrain view factor (equivalent to 1-Vf)", "()", &Vt);
 
-  decldiagparam("epsilon_s", NHRU, "[0.98]", "0.0", "1.0", "terrain emissivity", "()", &epsilon_s);
+  decldiagparam("epsilon_s", TDim::NHRU, "[0.98]", "0.0", "1.0", "terrain emissivity", "()", &epsilon_s);
 
 
   variation_set = VARIATION_0;
 
-  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
+  declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
 
   declobsfunc("Qsi", "QsiDavg", &QsiDavg, TFun::AVG, NULL, true); // must check for NULL
 
 
   variation_set = VARIATION_1;
 
-  declreadobs("QsiDObs", NHRU, "incident short-wave", "(W/m^2)", &QsiD, HRU_OBS_Q);
+  declreadobs("QsiDObs", TDim::NHRU, "incident short-wave", "(W/m^2)", &QsiD, HRU_OBS_Q);
 
 
   variation_set = VARIATION_2;
@@ -69,12 +69,12 @@ ClassLongVt* ClassLongVt::klone(string name) const{
 
   variation_set = VARIATION_3;
 
-  declreadobs("Qli", NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
+  declreadobs("Qli", TDim::NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
 
 
   variation_set = VARIATION_0 + VARIATION_1 + VARIATION_2;
 
-  declobs("Qli", NHRU, "incoming calculated long-wave", "(W/m^2)", &Qli_out);
+  declobs("Qli", TDim::NHRU, "incoming calculated long-wave", "(W/m^2)", &Qli_out);
 
 
   variation_set = VARIATION_ORG;
@@ -82,7 +82,7 @@ ClassLongVt* ClassLongVt::klone(string name) const{
 }
 
 void ClassLongVt::init(void) {
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   if(variation == VARIATION_ORG){
       if(!QsiDavg){ // only exists if an actual file observation

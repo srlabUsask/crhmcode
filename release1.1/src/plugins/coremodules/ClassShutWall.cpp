@@ -22,81 +22,81 @@ ClassShutWall* ClassShutWall::klone(string name) const{
 
   Description = "'Evaluation evaporation model (Shuttleworth - Wallace).'";
 
-  declvar("hru_actet", NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
+  declvar("hru_actet", TDim::NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
 
-  declstatdiag("hru_cum_actet", NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet);
+  declstatdiag("hru_cum_actet", TDim::NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet);
 
-  declvar("hru_evap", NHRU, "evaporation, interval calculation from daily", "(mm/int)", &evap);
+  declvar("hru_evap", TDim::NHRU, "evaporation, interval calculation from daily", "(mm/int)", &evap);
 
-  declvar("hru_evapD", NHRU, "daily evaporation", "(mm)", &evapD);
+  declvar("hru_evapD", TDim::NHRU, "daily evaporation", "(mm)", &evapD);
 
-  declstatdiag("hru_cum_evap", NHRU, "cumulative interval evaporation from daily", "(mm)", &cum_evap);
+  declstatdiag("hru_cum_evap", TDim::NHRU, "cumulative interval evaporation from daily", "(mm)", &cum_evap);
 
-  decldiag("Cc", NHRU, "canopy weighting coefficient", "()", &Cc);
+  decldiag("Cc", TDim::NHRU, "canopy weighting coefficient", "()", &Cc);
 
-  decldiag("Cs", NHRU, "substrate weighting coefficient", "()", &Cs);
+  decldiag("Cs", TDim::NHRU, "substrate weighting coefficient", "()", &Cs);
 
-  decldiag("Ra", NHRU, "", "()", &Ra);
+  decldiag("Ra", TDim::NHRU, "", "()", &Ra);
 
-  decldiag("Rc", NHRU, "", "()", &Rc);
+  decldiag("Rc", TDim::NHRU, "", "()", &Rc);
 
-  decldiag("Rs", NHRU, "", "()", &Rs);
+  decldiag("Rs", TDim::NHRU, "", "()", &Rs);
 
-  decldiag("ETc", NHRU, "", "(mm/d)", &ETc);
+  decldiag("ETc", TDim::NHRU, "", "(mm/d)", &ETc);
 
-  decldiag("ETs", NHRU, "", "(mm/d)", &ETs);
+  decldiag("ETs", TDim::NHRU, "", "(mm/d)", &ETs);
 
-  decldiag("raa", NHRU, "aerodynamic resistance from canopy to reference height", "(s/m)", &raa);
+  decldiag("raa", TDim::NHRU, "aerodynamic resistance from canopy to reference height", "(s/m)", &raa);
 
-  decldiag("rca", NHRU, "boundary resistance", "(s/m)", &rca);
+  decldiag("rca", TDim::NHRU, "boundary resistance", "(s/m)", &rca);
 
-  decldiag("rcs", NHRU, "canopy stomatal resistance", "(s/m)", &rcs);
+  decldiag("rcs", TDim::NHRU, "canopy stomatal resistance", "(s/m)", &rcs);
 
-  decldiag("rsa", NHRU, "aerodynamic resistance from soil to canopy", "(s/m)", &rsa);
+  decldiag("rsa", TDim::NHRU, "aerodynamic resistance from soil to canopy", "(s/m)", &rsa);
 
-  decldiag("rss", NHRU, "soil surface resistance", "(s/m)", &rss);
-
-
-  decllocal("Pa", NHRU, "Atmospheric pressure", "(kPa)", &Pa);
+  decldiag("rss", TDim::NHRU, "soil surface resistance", "(s/m)", &rss);
 
 
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  decllocal("Pa", TDim::NHRU, "Atmospheric pressure", "(kPa)", &Pa);
 
-  declparam("basin_area", BASIN, "1", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
+  declparam("basin_area", TDim::BASIN, "1", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  decldiagparam("Cr", NHRU, "[0.7]", "0.3", "0.9", "extinction coefficient", "(s/m)", &Cr);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("LAI", NHRU, "[2.2]", "0.0", "20.0", "Leaf area index", "(m^2/m^2)", &LAI);
+  decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
 
-  declparam("w", NHRU, "[0.004]", "0.0", "1.0", "canopy characteristic leaf width", "(m)", &w);
+  decldiagparam("Cr", TDim::NHRU, "[0.7]", "0.3", "0.9", "extinction coefficient", "(s/m)", &Cr);
 
-  declparam("z0g", NHRU, "[0.01]", "0.0", "1.0", "ground roughness length", "(m)", &z0g);
+  declparam("LAI", TDim::NHRU, "[2.2]", "0.0", "20.0", "Leaf area index", "(m^2/m^2)", &LAI);
 
-  declparam("rs", NHRU, "[250]", "0.0", "1e3", "mean stomatal resistance", "(s/m)", &rst);
+  declparam("w", TDim::NHRU, "[0.004]", "0.0", "1.0", "canopy characteristic leaf width", "(m)", &w);
 
-  decldiagparam("gammab", NHRU, "[0.5]", "0.0", "1.0", "shielding factor", "()", &gammab);
+  declparam("z0g", TDim::NHRU, "[0.01]", "0.0", "1.0", "ground roughness length", "(m)", &z0g);
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
+  declparam("rs", TDim::NHRU, "[250]", "0.0", "1e3", "mean stomatal resistance", "(s/m)", &rst);
 
-  decldiagparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
+  decldiagparam("gammab", TDim::NHRU, "[0.5]", "0.0", "1.0", "shielding factor", "()", &gammab);
+
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
+
+  decldiagparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
 
 
   declgetvar("*", "hru_u",  "(m/s)", &hru_u);
   declgetvar("*", "hru_t",  "(m/s)", &hru_t);
   declgetvar("*", "hru_ea", "kPa",   &hru_ea);
 
-  declreadobs("Qn", NHRU, "net all-wave", "(W/m^2)", &Qn, HRU_OBS_Q);
-  declreadobs("Qg", NHRU, "ground flux", "(W/m^2)", &Qg, HRU_OBS_Q);
+  declreadobs("Qn", TDim::NHRU, "net all-wave", "(W/m^2)", &Qn, HRU_OBS_Q);
+  declreadobs("Qg", TDim::NHRU, "ground flux", "(W/m^2)", &Qg, HRU_OBS_Q);
 
 }
 
 void ClassShutWall::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(hh=0; hh < nhru; ++hh) {
 

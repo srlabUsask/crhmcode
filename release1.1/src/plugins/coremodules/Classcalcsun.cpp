@@ -28,18 +28,18 @@ void Classcalcsun::decl(void) {
 
   variation_set = VARIATION_0;
 
-  declreadobs("SunAct", NHRU, "sunshine hours", "(h)", &SunAct, HRU_OBS_Q, true); // must check for NULL
+  declreadobs("SunAct", TDim::NHRU, "sunshine hours", "(h)", &SunAct, HRU_OBS_Q, true); // must check for NULL
 
 
   variation_set = VARIATION_0 + VARIATION_1;
 
-  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q, true); // must check for NULL
+  declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q, true); // must check for NULL
 
   declobsfunc("Qsi", "Qsitot", &Qsitot, TFun::DTOT, NULL, true); // must check for NULL
 
   variation_set = VARIATION_2;
 
-  declreadobs("QsiD_Obs", NHRU, "daily short-wave", "(W/m^2)", &QsiD_Obs, HRU_OBS_Q);
+  declreadobs("QsiD_Obs", TDim::NHRU, "daily short-wave", "(W/m^2)", &QsiD_Obs, HRU_OBS_Q);
 
 
   variation_set = VARIATION_3;
@@ -53,11 +53,11 @@ void Classcalcsun::decl(void) {
   declgetvar("*", "QdfoD",   "(MJ/m^2*d)", &QdfoD);
   declgetvar("*", "SunMax",  "(h)", &SunMax);
 
-  declvar("hru_SunAct", NHRU, "Actual Sunshine", "(h)", &hru_SunAct);
+  declvar("hru_SunAct", TDim::NHRU, "Actual Sunshine", "(h)", &hru_SunAct);
 }
 
 void Classcalcsun::init(void) {
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
       switch(variation) {
 

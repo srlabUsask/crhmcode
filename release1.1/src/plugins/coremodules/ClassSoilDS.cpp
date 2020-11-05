@@ -26,35 +26,35 @@ void ClassSoilDS::decl(void) {
 
   variation_set = VARIATION_1;
 
-  declvar("culvert_Q", NHRU, "flow in culvert.", "(m^3/s)", &culvert_Q);
+  declvar("culvert_Q", TDim::NHRU, "flow in culvert.", "(m^3/s)", &culvert_Q);
 
-  declvar("culvert_water_H", NHRU, "depth of pond at culvert inlet.", "(m)", &culvert_water_H);
+  declvar("culvert_water_H", TDim::NHRU, "depth of pond at culvert inlet.", "(m)", &culvert_water_H);
 
-  declvar("culvert_water_A", NHRU, "surface area of culvert pond.", "(m^2)", &culvert_water_A);
+  declvar("culvert_water_A", TDim::NHRU, "surface area of culvert pond.", "(m^2)", &culvert_water_A);
 
-  declvar("culvert_water_V", NHRU, "volume of water in culvert pond.", "(m^3)", &culvert_water_V);
+  declvar("culvert_water_V", TDim::NHRU, "volume of water in culvert pond.", "(m^3)", &culvert_water_V);
 
-  declvar("culvert_over_Q", NHRU, "flow over the road.", "(m^3/s)", &culvert_over_Q);
+  declvar("culvert_over_Q", TDim::NHRU, "flow over the road.", "(m^3/s)", &culvert_over_Q);
 
-  declvar("culvert_evap", NHRU, "Depth of water evaporating from culvert pond.", "(mm/int)", &culvert_evap);
+  declvar("culvert_evap", TDim::NHRU, "Depth of water evaporating from culvert pond.", "(mm/int)", &culvert_evap);
 
-  declstatdiag("cum_culvert", NHRU, "Cumulative culvert HRU flow.", "(m^3)", &cum_culvert);
+  declstatdiag("cum_culvert", TDim::NHRU, "Cumulative culvert HRU flow.", "(m^3)", &cum_culvert);
 
-  declstatdiag("cum_culvert_over", NHRU, "Cumulative culvert HRU overflow.", "(m^3)", &cum_culvert_over);
+  declstatdiag("cum_culvert_over", TDim::NHRU, "Cumulative culvert HRU overflow.", "(m^3)", &cum_culvert_over);
 
-  decldiag("HD", NHRU, "ratio of depth of water at culvert/culvert diameter.", "()", &HD);
+  decldiag("HD", TDim::NHRU, "ratio of depth of water at culvert/culvert diameter.", "()", &HD);
 
-  declparam("channel_slope", NHRU, "[0.002]", "0.0001", "0.01", "soil slope to culvert.", "()", &channel_slope);
+  declparam("channel_slope", TDim::NHRU, "[0.002]", "0.0001", "0.01", "soil slope to culvert.", "()", &channel_slope);
 
-  declparam("side_slope", NHRU, "[0.02]", "0.0001", "0.01", "side soil slope mormal to culvert slope.", "()", &side_slope);
+  declparam("side_slope", TDim::NHRU, "[0.02]", "0.0001", "0.01", "side soil slope mormal to culvert slope.", "()", &side_slope);
 
-  declparam("culvert_diam", NHRU, "[0.5]", "0.1", "5.0", "culvert diameter.", "(m)", &culvert_diam);
+  declparam("culvert_diam", TDim::NHRU, "[0.5]", "0.1", "5.0", "culvert diameter.", "(m)", &culvert_diam);
 
-  declparam("culvert_water_Dmax", NHRU, "[2.0]", "0.1", "10.0", "maximum depth of pond at culvert inlet.", "(m)", &culvert_water_Dmax);
+  declparam("culvert_water_Dmax", TDim::NHRU, "[2.0]", "0.1", "10.0", "maximum depth of pond at culvert inlet.", "(m)", &culvert_water_Dmax);
 
-  declparam("number_culverts", NHRU, "[1.0]", "0.0", "10.0", "number of culverts and efficiency factor. Zero = no culvert.", "()", &number_culverts);
+  declparam("number_culverts", TDim::NHRU, "[1.0]", "0.0", "10.0", "number of culverts and efficiency factor. Zero = no culvert.", "()", &number_culverts);
 
-  declparam("culvert_type", NHRU, "[0]", "0", "4", "0- thin walled projection, 1- square edged (flush) inlet, 2- socket and concrete pipe, 3- 45 degree beveled inlet, 4- well-rounded (streamlined) inlet.", "()", &culvert_type);
+  declparam("culvert_type", TDim::NHRU, "[0]", "0", "4", "0- thin walled projection, 1- square edged (flush) inlet, 2- socket and concrete pipe, 3- 45 degree beveled inlet, 4- well-rounded (streamlined) inlet.", "()", &culvert_type);
 
 
   variation_set = VARIATION_ORG;
@@ -64,127 +64,127 @@ void ClassSoilDS::decl(void) {
     Global::maxlay = 2;
   }
 
-  declvar("redirected_residual", NHRU, "redirected residual after topping up Sd and soil_rechar in Netroute/_D/_M/_M_D.", "(mm*km^2/int)", &redirected_residual);
+  declvar("redirected_residual", TDim::NHRU, "redirected residual after topping up Sd and soil_rechar in Netroute/_D/_M/_M_D.", "(mm*km^2/int)", &redirected_residual);
 
-  declstatdiag("cum_redirected_residual", NHRU, "cumulative HRU redirected_residual to another HRU.", "(mm*km^2)", &cum_redirected_residual);
+  declstatdiag("cum_redirected_residual", TDim::NHRU, "cumulative HRU redirected_residual to another HRU.", "(mm*km^2)", &cum_redirected_residual);
 
-  declstatvar("Sd", NHRU, "Depression storage.", "(mm)", &Sd);
+  declstatvar("Sd", TDim::NHRU, "Depression storage.", "(mm)", &Sd);
 
-  declstatvar("gw", NHRU, "ground water storage.", "(mm)", &gw);
+  declstatvar("gw", TDim::NHRU, "ground water storage.", "(mm)", &gw);
 
-  declstatvar("soil_rechr", NHRU, "moisture content of soil recharge zone, ie, the"//
+  declstatvar("soil_rechr", TDim::NHRU, "moisture content of soil recharge zone, ie, the"//
     "portion of the soil profile from which evaporation can take place.", "(mm)", &soil_rechr);
 
-  declstatvar("soil_moist", NHRU, "moisture content of soil profile to the depth"//
+  declstatvar("soil_moist", TDim::NHRU, "moisture content of soil profile to the depth"//
     "of the rooting zone of the major vegetation type on the HRU.", "(mm)", &soil_moist);
 
-  decllocal("cum_hru_condense", NHRU, "cumulative condensation over HRU.", "(mm)", &cum_hru_condense);
+  decllocal("cum_hru_condense", TDim::NHRU, "cumulative condensation over HRU.", "(mm)", &cum_hru_condense);
 
-  decllocal("Dts_runoff_K", NHRU, "daily detention storage runoff drainage factor. Values from parameters Dts_snow_runoff_K or Dts_organic_runoff_K determined from snowcover.", "mm/d", &Dts_runoff_K);
+  decllocal("Dts_runoff_K", TDim::NHRU, "daily detention storage runoff drainage factor. Values from parameters Dts_snow_runoff_K or Dts_organic_runoff_K determined from snowcover.", "mm/d", &Dts_runoff_K);
 
-  declvar("soil_gw", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/int)", &soil_gw);
+  declvar("soil_gw", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/int)", &soil_gw);
 
-  declvar("soil_gw_D", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_gw_D);
+  declvar("soil_gw_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_gw_D);
 
-  declvar("gw_flow", NHRU, "Drainage from HRU ground water reservoir.", "(mm/int)", &gw_flow);
+  declvar("gw_flow", TDim::NHRU, "Drainage from HRU ground water reservoir.", "(mm/int)", &gw_flow);
 
-  declvar("gw_flow_D", NHRU, "Daily drainage from HRU ground water reservoir.", "(mm/d)", &gw_flow_D);
+  declvar("gw_flow_D", TDim::NHRU, "Daily drainage from HRU ground water reservoir.", "(mm/d)", &gw_flow_D);
 
-  declvar("infil_act", NHRU, "Actual amount of water infiltrating the soil on each HRU.", "(mm/int)", &infil_act);
+  declvar("infil_act", TDim::NHRU, "Actual amount of water infiltrating the soil on each HRU.", "(mm/int)", &infil_act);
 
-  declvar("cum_infil_act", NHRU, "Accumulation of the actual amount of water infiltrating the soil on each HRU.", "(mm)", &cum_infil_act);
+  declvar("cum_infil_act", TDim::NHRU, "Accumulation of the actual amount of water infiltrating the soil on each HRU.", "(mm)", &cum_infil_act);
 
-  declvar("infil_act_D", NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
+  declvar("infil_act_D", TDim::NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
 
-  declstatdiag("cum_gw_flow", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
+  declstatdiag("cum_gw_flow", TDim::NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
 
-  declvar("soil_ssr", NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
+  declvar("soil_ssr", TDim::NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
 
-  declvar("rechr_ssr", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
+  declvar("rechr_ssr", TDim::NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
 
-  declstatdiag("cum_soil_ssr", NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
+  declstatdiag("cum_soil_ssr", TDim::NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
 
-  declstatdiag("cum_rechr_ssr", NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
+  declstatdiag("cum_rechr_ssr", TDim::NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
 
-  declvar("soil_ssr_D", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
+  declvar("soil_ssr_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
 
-  declvar("soil_runoff", NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
+  declvar("soil_runoff", TDim::NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
 
-  declstatdiag("cum_soil_runoff", NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
+  declstatdiag("cum_soil_runoff", TDim::NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
-  declvar("soil_runoff_D", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
+  declvar("soil_runoff_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
 
-  declstatdiag("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
+  declstatdiag("cum_runoff_to_Sd", TDim::NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
 
-  declstatdiag("cum_soil_gw", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
-
-
-  decllocal("snowinfil_buf", NHRU, "buffer snow infiltration.", "(mm/d)", &snowinfil_buf);
-
-  decllocal("runoff_buf", NHRU, "buffer runoff.", "(mm/d)", &runoff_buf);
-
-  decllocal("meltrunoff_buf", NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
-
-  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
-
-  decllocal("soil_moist_Init", NHRU, "initial soil moisture.", "(mm)", &soil_moist_Init);
-
-  decllocal("soil_rechr_Init", NHRU, "initial soil recharge.", "(mm)", &soil_rechr_Init);
-
-  decllocal("Sd_Init", NHRU, "initial Depression storage.", "(mm)", &Sd_Init);
-
-  decllocal("gw_Init", NHRU, "initial ground water storage.", "(mm)", &gw_Init);
+  declstatdiag("cum_soil_gw", TDim::NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
 
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area.", "(km^2)", &basin_area);
+  decllocal("snowinfil_buf", TDim::NHRU, "buffer snow infiltration.", "(mm/d)", &snowinfil_buf);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area.", "(km^2)", &hru_area);
+  decllocal("runoff_buf", TDim::NHRU, "buffer runoff.", "(mm/d)", &runoff_buf);
 
-  declparam("Sdmax", NHRU, "[0]", "0.0", "5000.0","Maximum depression storage.", "(mm)", &Sdmax);
+  decllocal("meltrunoff_buf", TDim::NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
 
-  declparam("Sdinit", NHRU, "[0]", "0.0", "5000.0","Initial depression storage.", "(mm)", &Sdinit);
+  decllocal("hru_evap_buf", TDim::NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
 
-  declparam("soil_rechr_max", NHRU, "[60.0]", "0.0", "350.0",
+  decllocal("soil_moist_Init", TDim::NHRU, "initial soil moisture.", "(mm)", &soil_moist_Init);
+
+  decllocal("soil_rechr_Init", TDim::NHRU, "initial soil recharge.", "(mm)", &soil_rechr_Init);
+
+  decllocal("Sd_Init", TDim::NHRU, "initial Depression storage.", "(mm)", &Sd_Init);
+
+  decllocal("gw_Init", TDim::NHRU, "initial ground water storage.", "(mm)", &gw_Init);
+
+
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area.", "(km^2)", &basin_area);
+
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area.", "(km^2)", &hru_area);
+
+  declparam("Sdmax", TDim::NHRU, "[0]", "0.0", "5000.0","Maximum depression storage.", "(mm)", &Sdmax);
+
+  declparam("Sdinit", TDim::NHRU, "[0]", "0.0", "5000.0","Initial depression storage.", "(mm)", &Sdinit);
+
+  declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0",
     "Maximum value for soil recharge zone (upper portion of soil_moist where losses occur as both evaporation "//
     "and transpiration).  Must be less than or equal to soil_moist.","(mm)", &soil_rechr_max);
 
-  declparam("soil_rechr_init", NHRU, "[30.0]", "0.0", "250.0", "Initial value for soil recharge zone (upper part of "//
+  declparam("soil_rechr_init", TDim::NHRU, "[30.0]", "0.0", "250.0", "Initial value for soil recharge zone (upper part of "//
     "soil_moist).  Must be less than or equal to soil_moist_init.", "(mm)", &soil_rechr_init);
 
-  declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile."//
+  declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile."//
     "Soil profile is surface to bottom of rooting zone.", "(mm)", &soil_moist_max);
 
-  declparam("soil_moist_init", NHRU, "[187.0]", "0.0", "5000.0",
+  declparam("soil_moist_init", TDim::NHRU, "[187.0]", "0.0", "5000.0",
     "Initial value of available water in soil profile.", "(mm)", &soil_moist_init);
 
-  declparam("soil_gw_K", NHRU, "[0.0]", "0.", "100.0", "The maximum amount of the soil water excess for an HRU "//
+  declparam("soil_gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "The maximum amount of the soil water excess for an HRU "//
     "that is routed directly to the associated groundwater reservoir each day.", "(mm/d)", &soil_gw_K);
 
-  declparam("gw_max", NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of ground water reservoir.", "(mm)", &gw_max);
+  declparam("gw_max", TDim::NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of ground water reservoir.", "(mm)", &gw_max);
 
-  declparam("gw_init", NHRU, "[187.0]", "0.0", "5000.0", "Initial value of available water in ground water reservoir.", "(mm)", &gw_init);
+  declparam("gw_init", TDim::NHRU, "[187.0]", "0.0", "5000.0", "Initial value of available water in ground water reservoir.", "(mm)", &gw_init);
 
-  declparam("gw_K", NHRU, "[0.0]", "0.", "100.0", "daily ground water drainage from gw reservoir.", "(mm/d)", &gw_K);
+  declparam("gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ground water drainage from gw reservoir.", "(mm/d)", &gw_K);
 
-  declparam("rechr_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge.", "(mm/d)", &rechr_ssr_K);
+  declparam("rechr_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge.", "(mm/d)", &rechr_ssr_K);
 
-  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column.", "(mm/d)", &lower_ssr_K);
+  declparam("lower_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column.", "(mm/d)", &lower_ssr_K);
 
-  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor.", "(mm/d)", &Sd_ssr_K);
+  declparam("Sd_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor.", "(mm/d)", &Sd_ssr_K);
 
-  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
+  declparam("Sd_gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
 
-  declparam("soil_withdrawal", NDEFN, "[3]", "1", "4",
+  declparam("soil_withdrawal", TDim::NDEFN, "[3]", "1", "4",
       "Select water withdrawal function for soil type: 1 = sand, 2 = loam, 3 = clay, 4 = organic. soil_withdrawal[1] - rechr layer, soil_withdrawal[2] - lower layer", "()",
       &soil_withdrawal, &soil_withdrawal_Tables, 2);
 
-  declparam("cov_type", NHRU,
+  declparam("cov_type", TDim::NHRU,
     "[1]", "0", "2", "Vegetation evaporation type designation for HRU:  "//
     "0 = bare soil (no evaporation), 1 = crops (recharge layer), 2 = grasses & shrubs (all soil moisture).", "()", &cov_type);
 
-  declparam("transp_limited", NHRU, "[0]", "0", "1", "limit transpiration to recharge layer only  on-1/off-0.", "()", &transp_limited);
+  declparam("transp_limited", TDim::NHRU, "[0]", "0", "1", "limit transpiration to recharge layer only  on-1/off-0.", "()", &transp_limited);
 
-  declparam("soil_ssr_runoff", NHRU, "[1]", "0", "1", "soil column excess to interflow(ssr)/runoff (and possibly Sd)  interflow-0/runoff-1.", "()", &soil_ssr_runoff);
+  declparam("soil_ssr_runoff", TDim::NHRU, "[1]", "0", "1", "soil column excess to interflow(ssr)/runoff (and possibly Sd)  interflow-0/runoff-1.", "()", &soil_ssr_runoff);
 
   declgetparam("*", "inhibit_evap", "()", &inhibit_evap); // used since no declgetparam defined
 
@@ -204,26 +204,26 @@ void ClassSoilDS::decl(void) {
 
   meltrunoffDiv = declgetvar("*", "meltrunoff", "(mm/int)", &meltrunoff);
 
-  declparam("Dts_snow_max", NHRU, "[0]", "0.0", "5000.0","Maximum detention storage in snowcover period.", "(mm)", &Dts_snow_max);
+  declparam("Dts_snow_max", TDim::NHRU, "[0]", "0.0", "5000.0","Maximum detention storage in snowcover period.", "(mm)", &Dts_snow_max);
 
-  declparam("Dts_organic_max", NHRU, "[0]", "0.0", "5000.0","Maximum detention storage in organic layer for snow free period.", "(mm)", &Dts_organic_max);
+  declparam("Dts_organic_max", TDim::NHRU, "[0]", "0.0", "5000.0","Maximum detention storage in organic layer for snow free period.", "(mm)", &Dts_organic_max);
 
-  declparam("Dts_snow_init", NHRU, "[0]", "0.0", "5000.0","Initial detention storage in snowcover period.", "(mm)", &Dts_snow_init);
+  declparam("Dts_snow_init", TDim::NHRU, "[0]", "0.0", "5000.0","Initial detention storage in snowcover period.", "(mm)", &Dts_snow_init);
 
-  declparam("Dts_snow_runoff_K", NHRU, "[0.0]", "0.", "100.0", "daily detention storage of snow runoff drainage factor.", "(mm/d)", &Dts_snow_runoff_K);
+  declparam("Dts_snow_runoff_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily detention storage of snow runoff drainage factor.", "(mm/d)", &Dts_snow_runoff_K);
 
-  declparam("Dts_organic_runoff_K", NHRU, "[0.0]", "0.", "100.0", "daily detention storage of organic layer runoff drainage factor.", "(mm/d)", &Dts_organic_runoff_K);
+  declparam("Dts_organic_runoff_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily detention storage of organic layer runoff drainage factor.", "(mm/d)", &Dts_organic_runoff_K);
 
-  declparam("Dts_organic_init", NHRU, "[0]", "0.0", "5000.0","Initial detention storage in organic layer for snow free period.", "(mm)", &Dts_organic_init);
+  declparam("Dts_organic_init", TDim::NHRU, "[0]", "0.0", "5000.0","Initial detention storage in organic layer for snow free period.", "(mm)", &Dts_organic_init);
 
-  declvar("Dts", NHRU, "Detention storage.", "(mm)", &Dts);
+  declvar("Dts", TDim::NHRU, "Detention storage.", "(mm)", &Dts);
 
-  declvar("Dts_max", NHRU, "Maximum detention storage.", "(mm)", &Dts_max);
+  declvar("Dts_max", TDim::NHRU, "Maximum detention storage.", "(mm)", &Dts_max);
 }
 
 void ClassSoilDS::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   if(snowinfilDiv > 1){
     string S = "Soil:  \"snowinfil\". Converting to mm/int";

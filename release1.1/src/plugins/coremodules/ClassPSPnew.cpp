@@ -20,36 +20,36 @@ ClassPSPnew* ClassPSPnew::klone(string name) const{
 
 void ClassPSPnew::decl(void) {
 
-  declvar("Qsubl", NHRU, "Canopy sublimation", "(mm/int)", &Qsubl);
+  declvar("Qsubl", TDim::NHRU, "Canopy sublimation", "(mm/int)", &Qsubl);
 
-  declvar("SnowLoad", NHRU, "Canopy snow load", "(kg/m^2)", &Load);
+  declvar("SnowLoad", TDim::NHRU, "Canopy snow load", "(kg/m^2)", &Load);
 
-  declvar("Thru", NHRU, "Canopy fall through", "(kg/m^2)", &Thru);
+  declvar("Thru", TDim::NHRU, "Canopy fall through", "(kg/m^2)", &Thru);
 
-  declvar("TCanSnow", NHRU, "snow Canopy temperature", "(°C)", &TCanSnow);
+  declvar("TCanSnow", TDim::NHRU, "snow Canopy temperature", "(°C)", &TCanSnow);
 
-  declvar("Tbiomass", NHRU, "biomass temperature", "(°C)", &Tbiomass);
+  declvar("Tbiomass", TDim::NHRU, "biomass temperature", "(°C)", &Tbiomass);
 
 
-  declparam("InitN", NHRU, "0", "0", "200", "Number of periods before calculating sublimation", "()", &InitN);
+  declparam("InitN", TDim::NHRU, "0", "0", "200", "Number of periods before calculating sublimation", "()", &InitN);
 
-  declparam("Sbar", NHRU, "6.6", "0.0", "20.0", "Uncorrected snow capacity", "(kg/m^2)", &Sbar);
+  declparam("Sbar", TDim::NHRU, "6.6", "0.0", "20.0", "Uncorrected snow capacity", "(kg/m^2)", &Sbar);
 
-  declparam("LAI", NHRU, "2.2", "0.0", "20.0", "Leaf area index", "(m^2/m^2)", &LAI);
+  declparam("LAI", TDim::NHRU, "2.2", "0.0", "20.0", "Leaf area index", "(m^2/m^2)", &LAI);
 
-  declparam("Zcan", NHRU, "16", "0.0", "30.0", "Mid-canopy wind modelling height", "(m)", &Zcan);
+  declparam("Zcan", TDim::NHRU, "16", "0.0", "30.0", "Mid-canopy wind modelling height", "(m)", &Zcan);
 
-  declparam("Zref", NHRU, "27", "0.0", "40.0", "Reference height", "(m)", &Zref);
+  declparam("Zref", TDim::NHRU, "27", "0.0", "40.0", "Reference height", "(m)", &Zref);
 
-  declparam("Ht", NHRU, "[20.0]", "0.001", "100.0", "Canopy height", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[20.0]", "0.001", "100.0", "Canopy height", "(m)", &Ht);
 
-  declparam("Biomass", NHRU, "30.0", "0.0", "100.0", "Biomass", "(kg/m^2)", &Biomass);
+  declparam("Biomass", TDim::NHRU, "30.0", "0.0", "100.0", "Biomass", "(kg/m^2)", &Biomass);
 
-  declparam("k", NHRU, "0.0113", "0.0", "1.0", "Snow shape coefficient", "()", &k);
+  declparam("k", TDim::NHRU, "0.0113", "0.0", "1.0", "Snow shape coefficient", "()", &k);
 
-  declparam("HeightH", NHRU, "20", "0.0", "100.0", "Canopy height", "(m)", &HeightH);
+  declparam("HeightH", TDim::NHRU, "20", "0.0", "100.0", "Canopy height", "(m)", &HeightH);
 
-  declparam("WidthJ", NHRU, "75", "0.0", "100.0", "Canopy ", "(m)", &WidthJ);
+  declparam("WidthJ", TDim::NHRU, "75", "0.0", "100.0", "Canopy ", "(m)", &WidthJ);
 
   declgetvar("obs",    "hru_u",  "(m/s)",   &hru_u);
   declgetvar("obs",    "hru_t",  "(°C)",   &TAref);
@@ -57,16 +57,16 @@ void ClassPSPnew::decl(void) {
   declgetvar("obs",    "hru_p",  "(mm/int)",   &hru_p);
   declgetvar("*",      "SolAng", "(r)",  &SolarAng);
 
-  declreadobs("TsnowG", NHRU, "snow temperature", "(°C)", &TsnowG, HRU_OBS_misc);
-  declreadobs("Lnot",   NHRU, "tree weight",      "(kg/m^2)", &Lnot, HRU_OBS_misc);
-  declreadobs("Qsi",   NHRU, "Qsi",      "(W/m^2)", &QsIn, HRU_OBS_Q);
-  declreadobs("Qso",   NHRU, "Qso",      "(W/m^2)", &QsOut, HRU_OBS_Q);
+  declreadobs("TsnowG", TDim::NHRU, "snow temperature", "(°C)", &TsnowG, HRU_OBS_misc);
+  declreadobs("Lnot", TDim::NHRU, "tree weight",      "(kg/m^2)", &Lnot, HRU_OBS_misc);
+  declreadobs("Qsi", TDim::NHRU, "Qsi",      "(W/m^2)", &QsIn, HRU_OBS_Q);
+  declreadobs("Qso", TDim::NHRU, "Qso",      "(W/m^2)", &QsOut, HRU_OBS_Q);
 
 }
 
 void ClassPSPnew::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   T0CanSnow = new double[nhru];
   T0biomass = new double[nhru];

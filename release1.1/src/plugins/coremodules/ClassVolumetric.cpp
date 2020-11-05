@@ -22,28 +22,28 @@ void ClassVolumetric::decl(void) {
 
   Description = "'Converts soil moisture to volumetric equivalent and determines fall status.'";
 
-  declvar("Volumetric", NHRU, "volumetric soil moisture", "()", &Volumetric);
+  declvar("Volumetric", TDim::NHRU, "volumetric soil moisture", "()", &Volumetric);
 
-  declvar("fallstat_V", NHRU, "fallstat_V copy of parameter fallstat", "()", &fallstat_V);
+  declvar("fallstat_V", TDim::NHRU, "fallstat_V copy of parameter fallstat", "()", &fallstat_V);
 
-  declvar("Si_V", NHRU, "Si_V copy of parameter Si", "()", &Si_V);
+  declvar("Si_V", TDim::NHRU, "Si_V copy of parameter Si", "()", &Si_V);
 
-  declparam("soil_type", NHRU, "[4]", "0", "12",
+  declparam("soil_type", TDim::NHRU, "[4]", "0", "12",
         "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soil_type);
 
-  declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0",
+  declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0",
     "Maximum available water holding capacity of soil profile."//
     "Soil profile is surface to bottom of rooting zone",
     "(mm)", &soil_moist_max);
 
-  declparam("soil_Depth", NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
+  declparam("soil_Depth", TDim::NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
 
-  declparam("Si_correction", NHRU, "[0.0]", "0.0", "1.0", "Si correction number", "()", &Si_correction);
+  declparam("Si_correction", TDim::NHRU, "[0.0]", "0.0", "1.0", "Si correction number", "()", &Si_correction);
 
-  declparam("set_fallstat", NHRU, "[305]", "0","366", "set fallstat on this Julian date", "()", &set_fallstat);
+  declparam("set_fallstat", TDim::NHRU, "[305]", "0","366", "set fallstat on this Julian date", "()", &set_fallstat);
 
-  declparam("Si", NHRU, "[0.5]", "0.0", "1.0", "initial soil saturation (0 - 0.4m)", "(mm^3/mm^3)", &Si);
+  declparam("Si", TDim::NHRU, "[0.5]", "0.0", "1.0", "initial soil saturation (0 - 0.4m)", "(mm^3/mm^3)", &Si);
 
 //  declputparam("*", "Si", "(mm^3/mm^3)", &Si);
 

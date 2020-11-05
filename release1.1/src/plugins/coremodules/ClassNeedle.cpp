@@ -33,12 +33,12 @@ void ClassNeedle::decl(void) {
 
   variation_set = VARIATION_0 + VARIATION_1;
 
-  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
+  declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
 
 
   variation_set = VARIATION_0 + VARIATION_2;
 
-  declreadobs("Qli", NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
+  declreadobs("Qli", TDim::NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
 
 
   variation_set = VARIATION_1 + VARIATION_3 + VARIATION_4;
@@ -58,40 +58,40 @@ void ClassNeedle::decl(void) {
 
   variation_set = VARIATION_ORG;
 
-  declobs("Ts", NHRU, "snow surface temperature", "(°C)", &Ts);
+  declobs("Ts", TDim::NHRU, "snow surface temperature", "(°C)", &Ts);
 
-  declobs("Qnsn", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
+  declobs("Qnsn", TDim::NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
 
-  declobs("Qsisn", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn);
+  declobs("Qsisn", TDim::NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn);
 
-  declobs("Qlisn", NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn);
+  declobs("Qlisn", TDim::NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn);
 
-  declobs("Qlosn", NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
-
-
-  decldiag("k", NHRU, "extinction coefficient", "()", &k);
-
-  decldiag("Tauc", NHRU, "short-wave transmissivity", "(W/m^2)", &Tauc);
-
-  decllocal("Pa", NHRU, "Average surface pressure", "(kPa)", &Pa);
-
-  declvar("ra", NHRU, "", "(s/m)", &ra);
-
-  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2*int)", &Qnsn_Var);
+  declobs("Qlosn", TDim::NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
 
 
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  decldiag("k", TDim::NHRU, "extinction coefficient", "()", &k);
 
-  declparam("LAI", NHRU, "[2.2]", "0.0", "20.0", "Leaf area index", "(m^2/m^2)", &LAI);
+  decldiag("Tauc", TDim::NHRU, "short-wave transmissivity", "(W/m^2)", &Tauc);
+
+  decllocal("Pa", TDim::NHRU, "Average surface pressure", "(kPa)", &Pa);
+
+  declvar("ra", TDim::NHRU, "", "(s/m)", &ra);
+
+  declvar("Qnsn_Var", TDim::NHRU, "net all-wave at snow surface", "(W/m^2*int)", &Qnsn_Var);
 
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "Canopy height(m)", "(m)", &Ht);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
-  declparam("Z0snow", NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
+  declparam("LAI", TDim::NHRU, "[2.2]", "0.0", "20.0", "Leaf area index", "(m^2/m^2)", &LAI);
 
-  declparam("Zref", NHRU, "[1.5]", "0.01", "100.0", "temperature measurement height", "(m)", &Zref);
 
-  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "Canopy height(m)", "(m)", &Ht);
+
+  declparam("Z0snow", TDim::NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
+
+  declparam("Zref", TDim::NHRU, "[1.5]", "0.01", "100.0", "temperature measurement height", "(m)", &Zref);
+
+  declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
 
 
   declgetvar("*",  "hru_t", "(°C)", &hru_t);
@@ -111,7 +111,7 @@ void ClassNeedle::decl(void) {
 
 void ClassNeedle::init(void) {
 
-  nhru = getdim(NHRU); // transfers current # of HRU's to module
+  nhru = getdim(TDim::NHRU); // transfers current # of HRU's to module
 
   for (hh = 0; hh < nhru; ++hh) {
     Pa[hh] = 101.3f*pow((293.0f-0.0065f*hru_elev[hh])/293.0f, 5.26f);  // kPa

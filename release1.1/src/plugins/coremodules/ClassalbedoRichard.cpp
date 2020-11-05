@@ -23,21 +23,21 @@ void ClassalbedoRichard::decl(void) {
 
   Description = "'Calculates snow cover albedo from a method proposed by R.Essery.'";
 
-  declstatvar("Albedo", NHRU, "Albedo", "()", &Albedo);
+  declstatvar("Albedo", TDim::NHRU, "Albedo", "()", &Albedo);
 
-  decldiagparam("Albedo_Snow", NHRU, "[0.85]", "0.0", "1.0","Initial albedo for snow cover", "()", &Albedo_Snow);
+  decldiagparam("Albedo_Snow", TDim::NHRU, "[0.85]", "0.0", "1.0","Initial albedo for snow cover", "()", &Albedo_Snow);
 
-  decldiagparam("Albedo_Bare", NHRU, "[0.17]", "0.0", "1.0","Initial albedo for bare ground", "()", &Albedo_Bare);
+  decldiagparam("Albedo_Bare", TDim::NHRU, "[0.17]", "0.0", "1.0","Initial albedo for bare ground", "()", &Albedo_Bare);
 
-  decldiagparam("a1", NHRU, "[1.08e7]", "0.0", "1.0e8", "Albedo decay time constant for cold snow", "(s)", &a1);
+  decldiagparam("a1", TDim::NHRU, "[1.08e7]", "0.0", "1.0e8", "Albedo decay time constant for cold snow", "(s)", &a1);
 
-  decldiagparam("a2", NHRU, "[7.2e5]", "0.0", "1.0e8", "Albedo decay time constant for melting snow", "(s)", &a2);
+  decldiagparam("a2", TDim::NHRU, "[7.2e5]", "0.0", "1.0e8", "Albedo decay time constant for melting snow", "(s)", &a2);
 
-  decldiagparam("amin", NHRU, "[0.5]", "0.0", "1.0", "Minimum albedo for aged snow", "()", &amin);
+  decldiagparam("amin", TDim::NHRU, "[0.5]", "0.0", "1.0", "Minimum albedo for aged snow", "()", &amin);
 
-  decldiagparam("amax", NHRU, "[0.84]", "0.0", "1.0", "Maximum albedo for fresh snow", "()", &amax);
+  decldiagparam("amax", TDim::NHRU, "[0.84]", "0.0", "1.0", "Maximum albedo for fresh snow", "()", &amax);
 
-  decldiagparam("smin", NHRU, "[10]", "0.0", "20", "Minimum snowfall to refresh snow albedo", "(mm/int)", &smin);
+  decldiagparam("smin", TDim::NHRU, "[10]", "0.0", "20", "Minimum snowfall to refresh snow albedo", "(mm/int)", &smin);
 
   declgetvar("*", "hru_tmean", "(°C)", &T0);
 
@@ -50,7 +50,7 @@ void ClassalbedoRichard::init(void) {
 
   dt = 3600*24/Global::Freq;
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for (hh = 0; hh < nhru; ++hh)
     if(SWE[hh] > 1.0)

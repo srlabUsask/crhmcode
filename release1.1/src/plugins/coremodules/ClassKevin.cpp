@@ -23,48 +23,48 @@ void ClassKevin::decl(void) {
 
   Description = "'Melt model loosely based on thesis (K. Shook).'";
 
-  declvar("winter", NHRU, "winter = 1 - true", "()", &winter);
+  declvar("winter", TDim::NHRU, "winter = 1 - true", "()", &winter);
 
-  declvar("SnowStat", NHRU, "EARLY/MATURE/HOLD 0/1/2", "()", &SnowStat);
+  declvar("SnowStat", TDim::NHRU, "EARLY/MATURE/HOLD 0/1/2", "()", &SnowStat);
 
-  declvar("sca", NHRU, "snow covered area", "()", &sca);
+  declvar("sca", TDim::NHRU, "snow covered area", "()", &sca);
 
-  declvar("snowmelt", NHRU, "snow melt", "(mm/int)", &snowmelt);
+  declvar("snowmelt", TDim::NHRU, "snow melt", "(mm/int)", &snowmelt);
 
-  declvar("netLong", NHRU, "net long-wave", "(mm/int)", &netLong);
+  declvar("netLong", TDim::NHRU, "net long-wave", "(mm/int)", &netLong);
 
-  declvar("netShort", NHRU, "net long-wave", "(mm/int)", &netShort);
+  declvar("netShort", TDim::NHRU, "net long-wave", "(mm/int)", &netShort);
 
-  declvar("snowmeltD", NHRU, "daily snow melt", "(mm/d)", &snowmeltD);
+  declvar("snowmeltD", TDim::NHRU, "daily snow melt", "(mm/d)", &snowmeltD);
 
-  declvar("cumsnowmelt", NHRU, "cumulative snow melt", "(mm)", &cumsnowmelt);
+  declvar("cumsnowmelt", TDim::NHRU, "cumulative snow melt", "(mm)", &cumsnowmelt);
 
-  decldiag("albedo", NHRU, "areal albedo()", "()", &albedo);
+  decldiag("albedo", TDim::NHRU, "areal albedo()", "()", &albedo);
 
 
-  decldiagparam("Asnow1", NHRU, "0.8", "0", "1", "early snow albedo", "()", &Asnow1);
+  decldiagparam("Asnow1", TDim::NHRU, "0.8", "0", "1", "early snow albedo", "()", &Asnow1);
 
-  decldiagparam("Asnow2", NHRU, "0.6", "0", "1", "mature snow albedo", "()", &Asnow2);
+  decldiagparam("Asnow2", TDim::NHRU, "0.6", "0", "1", "mature snow albedo", "()", &Asnow2);
 
-  decldiagparam("Asoil", NHRU, "0.2", "0.1", "1", "soil albedo", "()", &Asoil);
+  decldiagparam("Asoil", TDim::NHRU, "0.2", "0.1", "1", "soil albedo", "()", &Asoil);
 
-  declparam("cv", NHRU, "0.33", "0.2", "0.7", "coefficient of variation", "()", &cv);
+  declparam("cv", TDim::NHRU, "0.33", "0.2", "0.7", "coefficient of variation", "()", &cv);
 
-  declparam("tfactor", NHRU, "0.1", "0.0", "10.0", "degree interval melt factor", "(mm/d*ºC)", &tfactor);
+  declparam("tfactor", TDim::NHRU, "0.1", "0.0", "10.0", "degree interval melt factor", "(mm/d*ºC)", &tfactor);
 
-  declparam("nfactor", NHRU, "0.0", "0.0","10.0", "net radiation factor (typical value 3.0 (mm/MJ*m^2*d))", "(mm/MJ*m^2*d)", &nfactor);
+  declparam("nfactor", TDim::NHRU, "0.0", "0.0","10.0", "net radiation factor (typical value 3.0 (mm/MJ*m^2*d))", "(mm/MJ*m^2*d)", &nfactor);
 
-  declparam("meltthresh", NHRU, "1.0", "0.0","10.0", "melt threshold to become mature pack", "(mm/d)", &meltthresh);
+  declparam("meltthresh", TDim::NHRU, "1.0", "0.0","10.0", "melt threshold to become mature pack", "(mm/d)", &meltthresh);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
+  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
 
   declputvar("*",    "SWE", "(mm)",   &SWE);
 
-  declreadobs("hru_Qn", NHRU, "net radiation", "(W/m^2)", &hru_Qn, 0, true);
+  declreadobs("hru_Qn", TDim::NHRU, "net radiation", "(W/m^2)", &hru_Qn, 0, true);
 
 
   declgetvar("*",  "hru_t", "(°C)", &hru_t);
@@ -78,7 +78,7 @@ void ClassKevin::decl(void) {
 
 void ClassKevin::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for (hh = 0; hh < nhru; ++hh)
     if(nfactor[hh] != 0.0 && hru_Qn == NULL){

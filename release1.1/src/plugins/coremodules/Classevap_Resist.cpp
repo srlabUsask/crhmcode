@@ -27,55 +27,55 @@ void Classevap_Resist::decl(void) {
                  'Uses variable QsiS_Var (W/m^2)(slope) from Annandale, '\
                  'Uses variable QsiA_Var (W/m^2)(horizontal) from Annandale, '";
 
-  declvar("hru_actet", NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
+  declvar("hru_actet", TDim::NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
 
-  declstatdiag("hru_cum_actet", NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet);
+  declstatdiag("hru_cum_actet", TDim::NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet);
 
-  declvar("hru_evap", NHRU, "interval evaporation", "(mm/int)", &evap);
+  declvar("hru_evap", TDim::NHRU, "interval evaporation", "(mm/int)", &evap);
 
-  declvar("hru_evapD", NHRU, "daily sum of interval evaporation", "(mm/d)", &evapD);
+  declvar("hru_evapD", TDim::NHRU, "daily sum of interval evaporation", "(mm/d)", &evapD);
 
-  declstatdiag("hru_cum_evap", NHRU, "cumulative interval evaporation", "(mm)", &cum_evap);
+  declstatdiag("hru_cum_evap", TDim::NHRU, "cumulative interval evaporation", "(mm)", &cum_evap);
 
-  decldiag("rc", NHRU, "stomatal resistance (Penman-Monteith)", "(s/m)", &rc);
+  decldiag("rc", TDim::NHRU, "stomatal resistance (Penman-Monteith)", "(s/m)", &rc);
 
-  decllocal("Pa", NHRU, "Atmospheric pressure", "(kPa)", &Pa);
+  decllocal("Pa", TDim::NHRU, "Atmospheric pressure", "(kPa)", &Pa);
 
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height", "(m)", &Ht);
 
-  decldiagparam("Zwind", NHRU, "[10.0]", "0.0", "100.0", "Wind instrument height", "(m)", &Zwind);
+  decldiagparam("Zwind", TDim::NHRU, "[10.0]", "0.0", "100.0", "Wind instrument height", "(m)", &Zwind);
 
-  declparam("evap_type", NHRU, "0", "0", "2", "Evaporation method for this HRU, 0 = Penman-Monteith, 1 = Dalton bulk transfer, 2 = Priestley-Taylor",
+  declparam("evap_type", TDim::NHRU, "0", "0", "2", "Evaporation method for this HRU, 0 = Penman-Monteith, 1 = Dalton bulk transfer, 2 = Priestley-Taylor",
             "()", &evap_type);
 
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
-  declparam("basin_area", BASIN, "1", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "1", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
+  decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
 
-  decldiagparam("F_Qg", NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
+  decldiagparam("F_Qg", TDim::NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
 
-  declparam("rcs", NHRU, "[25]", "25.0", "5000.0", "stomatal resistance", "(s/m)", &rcs);
+  declparam("rcs", TDim::NHRU, "[25]", "25.0", "5000.0", "stomatal resistance", "(s/m)", &rcs);
 
-  declparam("Htmax", NHRU, "[0.1]", "0.1", "100.0", "maximum vegetation height (Penman-Monteith)", "(m)", &Htmax);
+  declparam("Htmax", TDim::NHRU, "[0.1]", "0.1", "100.0", "maximum vegetation height (Penman-Monteith)", "(m)", &Htmax);
 
-  declparam("LAImax", NHRU, "[3.0]", "0.0", "20.0", "maximum leaf area index (Penman-Monteith)", "(m^2/m^2)", &LAImax);
+  declparam("LAImax", TDim::NHRU, "[3.0]", "0.0", "20.0", "maximum leaf area index (Penman-Monteith)", "(m^2/m^2)", &LAImax);
 
-  declparam("LAImin", NHRU, "[0.0]", "0.0", "20.0", "minimum leaf area index (Penman-Monteith)", "(m^2/m^2)", &LAImin);
+  declparam("LAImin", TDim::NHRU, "[0.0]", "0.0", "20.0", "minimum leaf area index (Penman-Monteith)", "(m^2/m^2)", &LAImin);
 
-  declparam("s", NHRU, "[1]", "0", "1", "seasonal growth index (Penman-Monteith)", "()", &s);
+  declparam("s", TDim::NHRU, "[1]", "0", "1", "seasonal growth index (Penman-Monteith)", "()", &s);
 
-  declparam("PMmethod", NHRU, "[0]", "0", "1", "Penman-Monteith method, 0 = RC min, 1 = LAI", "()", &PM_method);
+  declparam("PMmethod", TDim::NHRU, "[0]", "0", "1", "Penman-Monteith method, 0 = RC min, 1 = LAI", "()", &PM_method);
 
-  declparam("soil_type", NHRU, "[2]", "1", "12",
+  declparam("soil_type", TDim::NHRU, "[2]", "1", "12",
     "HRU soil type (1->11): sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay",
     "()", &soil_type);
 
-  declparam("soil_Depth", NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
+  declparam("soil_Depth", TDim::NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
 
   declgetvar("*", "Rn", "(mm/m^2*int)", &Rn);
   declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
@@ -91,13 +91,13 @@ void Classevap_Resist::decl(void) {
 
   declgetvar("*",  "soil_moist", "(mm)", &soil_moist);
 
-  declreadobs("Ts", NHRU, "surface temperature", "(°C)", &Ts, HRU_OBS_misc, true);
+  declreadobs("Ts", TDim::NHRU, "surface temperature", "(°C)", &Ts, HRU_OBS_misc, true);
 
-  declreadobs("RnObs", NHRU, "all-wave", "(W/m^2)", &RnObs, HRU_OBS_Q, true);
+  declreadobs("RnObs", TDim::NHRU, "all-wave", "(W/m^2)", &RnObs, HRU_OBS_Q, true);
 
   variation_set = VARIATION_0;
 
-  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q, false);
+  declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q, false);
 
   variation_set = VARIATION_1;
 

@@ -240,7 +240,7 @@ public:
 	void GetObservationData(char * obsfilepath, char * observationname);
 	void GetObservationNames(char * obsfilepath);
 	string ExtractHruLay(string S, long &Hru, long &Lay);
-	string BuildHru(string S, long Hru, CRHM::TDim dimen);
+	string BuildHru(string S, long Hru, TDim dimen);
 	string BuildLay(string S, long Lay);
 	void BldModelClick();
 	void MacroClick(void);

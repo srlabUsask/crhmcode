@@ -24,15 +24,15 @@ void ClassalbedoBaker::decl(void) {
 
   Description = "'Calculates snowcover albedo from a method proposed by Baker.'";
 
-  declstatvar("Albedo", NHRU, "Albedo", "()", &Albedo);
+  declstatvar("Albedo", TDim::NHRU, "Albedo", "()", &Albedo);
 
-  decllocal("Ab_t", NHRU, "timesteps since albedo refresh", "()", &Ab_t);
+  decllocal("Ab_t", TDim::NHRU, "timesteps since albedo refresh", "()", &Ab_t);
 
-  decldiagparam("Albedo_Snow", NHRU, "[0.85]", "0.0", "1.0","Initial albedo for snow cover", "()", &Albedo_Snow);
+  decldiagparam("Albedo_Snow", TDim::NHRU, "[0.85]", "0.0", "1.0","Initial albedo for snow cover", "()", &Albedo_Snow);
 
-  decldiagparam("Albedo_Bare", NHRU, "[0.17]", "0.0", "1.0","Initial albedo for bare ground", "()", &Albedo_Bare);
+  decldiagparam("Albedo_Bare", TDim::NHRU, "[0.17]", "0.0", "1.0","Initial albedo for bare ground", "()", &Albedo_Bare);
 
-  decldiagparam("refresh", NHRU, "[3.0]", "0.0", "50.0", "minimum sub-canopy snowfall to refresh albedo", "(mm)", &refresh);
+  decldiagparam("refresh", TDim::NHRU, "[3.0]", "0.0", "50.0", "minimum sub-canopy snowfall to refresh albedo", "(mm)", &refresh);
 
 
   declgetvar("*",  "SWE", "(mm)", &SWE);
@@ -42,7 +42,7 @@ void ClassalbedoBaker::decl(void) {
 
 void ClassalbedoBaker::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for (hh = 0; hh < nhru; ++hh){
     if(SWE[hh] > 1.0)

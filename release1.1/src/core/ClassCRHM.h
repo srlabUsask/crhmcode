@@ -99,7 +99,7 @@ public:
 	long dimMax; // used by observations
 	long lay;
 	long variation_set {0};
-	CRHM::TDim dimen {CRHM::NREB};
+	TDim dimen { TDim::NREB};
 
 	TVISIBLE visibility;
 	bool optional;
@@ -145,7 +145,7 @@ public:
 		values(NULL), ivalues(NULL), layvalues(NULL), ilayvalues(NULL), Daily(false),
 		offset(0), cnt(0), FileData(NULL), HRU_OBS_indexed(0), UserFunct(NULL), FunctVar(NULL), CustomFunct(NULL), No_ReadVar(0), PointPlot(false), TchrtOpt(0) {};
 
-	ClassVar(string module, string name, CRHM::TDim dimen,
+	ClassVar(string module, string name, TDim dimen,
 		string help, string units, TVar varType, bool PointPlot = false, int Grpdim = 0, int defdim = 0);
 
 	ClassVar(string module, string name, long dim,
@@ -154,7 +154,7 @@ public:
 	ClassVar(string module, string name, long cnt, long offset, ClassData * FileData)
 		: module(module), name(name), help(""), DLLName(""), root(""), varType(TVar::Read), dim(cnt), dimMax(0), lay(0), variation_set(0), nfreq(false),
 		optional(false), StatVar(false), InGroup(0), visibility(TVISIBLE::USUAL), FunKind(TFun::FOBS), VarFunct(0),
-		offset(offset), cnt(cnt), FileData(FileData), HRU_OBS_indexed(0), UserFunct(NULL), FunctVar(NULL), CustomFunct(NULL), No_ReadVar(0), dimen(CRHM::NOBS),
+		offset(offset), cnt(cnt), FileData(FileData), HRU_OBS_indexed(0), UserFunct(NULL), FunctVar(NULL), CustomFunct(NULL), No_ReadVar(0), dimen(TDim::NOBS),
 		values(NULL), ivalues(NULL), layvalues(NULL), ilayvalues(NULL), Daily(false), PointPlot(false), TchrtOpt(0) {};
 
 	virtual   ~ClassVar() { ReleaseM(); } // releases everything
@@ -259,7 +259,7 @@ public:
 	string units;
 
 	TVar varType;
-	CRHM::TDim dimen {CRHM::NDEFNZ};
+	TDim dimen { TDim::NDEFNZ};
 
 	long dim;
 	long lay {0};
@@ -297,10 +297,10 @@ public:
 
 
 
-	ClassPar(string module, string param, CRHM::TDim dimen,  // strings
+	ClassPar(string module, string param, TDim dimen,  // strings
 		string CommaText, string help, TVar varType, int Grpdim);
 
-	ClassPar(string module, string param, CRHM::TDim dimen,  // integer and double
+	ClassPar(string module, string param, TDim dimen,  // integer and double
 		string valstr, double minVal, double maxVal,
 		string help, string units, TVar varType, int defdim = 0, int GrpN = 0);
 
@@ -818,17 +818,17 @@ void   LogDebugT(string S);
 
 void   Update_Main_Status(string S);
 
-void   Update_Main_DIM(CRHM::TDim Dim, long dim);
+void   Update_Main_DIM(TDim Dim, long dim);
 
 void   Update_Main_Dirty(void);
 
-long getdim(CRHM::TDim dimen);
+long getdim(TDim dimen);
 
 long getstep(void);
 
 bool laststep(void);
 
-void setdim(CRHM::TDim dimen, long dim);
+void setdim(TDim dimen, long dim);
 
 void setdim(string name, long dim);
 

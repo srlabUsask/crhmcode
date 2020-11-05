@@ -22,32 +22,32 @@ void ClassAyers::decl(void) {
 
   Description = "'Uses Ayers, 1959 for unfrozen soil. Snow is assumed to melt immediately on contact with the ground.'";
 
-  declvar("infil", NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
 
-  declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
+  declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  declvar("snowinfil", NHRU, "infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "infiltration", "(mm/int)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/int)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", NHRU, "melt runoff", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", TDim::NHRU, "melt runoff", "(mm)", &cummeltrunoff);
 
-  decllocal("melt_int", NHRU, "interval melt from snowmelD", "(mm/int)", &melt_int);
+  decllocal("melt_int", TDim::NHRU, "interval melt from snowmelD", "(mm/int)", &melt_int);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("texture", NHRU, "[1]", "1","4",
+  declparam("texture", TDim::NHRU, "[1]", "1","4",
      "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "(%)", &texture);
 
-  declparam("groundcover", NHRU, "[1]", "1","6",
+  declparam("groundcover", TDim::NHRU, "[1]", "1","6",
      "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "(%)", &groundcover);
 
   declgetvar("*",  "net_rain", "(mm/int)", &net_rain);
@@ -57,7 +57,7 @@ void ClassAyers::decl(void) {
 
 void ClassAyers::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(hh = 0; hh < nhru; ++hh) {
     cuminfil[hh] = 0.0;

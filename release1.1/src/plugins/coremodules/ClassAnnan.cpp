@@ -26,8 +26,8 @@ void ClassAnnan::decl(void) {
 
   variation_set = VARIATION_ORG;
 
-  declparam("krs", NHRU, "[0.16]", "0.15", "0.2", "location index, interior = 0.16/coastal = 0.19", "()", &krs);
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  declparam("krs", TDim::NHRU, "[0.16]", "0.15", "0.2", "location index, interior = 0.16/coastal = 0.19", "()", &krs);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
   declgetvar("*", "hru_tmax", "(°C)",  &hru_tmax);
   declgetvar("*", "hru_tmin", "(°C)",  &hru_tmin);
@@ -40,26 +40,26 @@ void ClassAnnan::decl(void) {
   declgetvar("*", "QdfoD",   "(MJ/m^2*d)", &QdfoD);
   declgetvar("*", "SunMax",  "(h)", &SunMax);
 
-  declvar("hru_SunAct", NHRU, "Actual Sunshine", "(h)", &hru_SunAct);
+  declvar("hru_SunAct", TDim::NHRU, "Actual Sunshine", "(h)", &hru_SunAct);
 
   variation_set = VARIATION_0;
 
-  declobs("QsiA", NHRU, "interval synthesized short-wave derived from Annandale method", "(W/m^2)", &QsiA);
-  declobs("QsiD", NHRU, "daily synthesized short-wave derived from Annandale method", "(W/m^2)", &QsiD);
-  declobs("QsiS", NHRU, "interval synthesized short-wave on slope derived from global and Annandale method", "(W/m^2)", &QsiS);
+  declobs("QsiA", TDim::NHRU, "interval synthesized short-wave derived from Annandale method", "(W/m^2)", &QsiA);
+  declobs("QsiD", TDim::NHRU, "daily synthesized short-wave derived from Annandale method", "(W/m^2)", &QsiD);
+  declobs("QsiS", TDim::NHRU, "interval synthesized short-wave on slope derived from global and Annandale method", "(W/m^2)", &QsiS);
 
   variation_set = VARIATION_1;
 
-  declvar("QsiA_Var", NHRU, "interval synthesized short-wave derived from Annandale method", "(W/m^2)", &QsiA_Var);
-  declvar("QsiD_Var", NHRU, "daily synthesized short-wave derived from Annandale method", "(W/m^2)", &QsiD_Var);
-  declvar("QsiS_Var", NHRU, "synthesized short-wave on slope derived from global and Annandale method", "(W/m^2)", &QsiS_Var);
+  declvar("QsiA_Var", TDim::NHRU, "interval synthesized short-wave derived from Annandale method", "(W/m^2)", &QsiA_Var);
+  declvar("QsiD_Var", TDim::NHRU, "daily synthesized short-wave derived from Annandale method", "(W/m^2)", &QsiD_Var);
+  declvar("QsiS_Var", TDim::NHRU, "synthesized short-wave on slope derived from global and Annandale method", "(W/m^2)", &QsiS_Var);
 
   variation_set = VARIATION_ORG;
 }
 
 void ClassAnnan::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 }
 
 void ClassAnnan::run(void) {

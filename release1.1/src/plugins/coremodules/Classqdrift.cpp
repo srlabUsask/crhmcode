@@ -26,30 +26,30 @@ void Classqdrift::decl(void) {
 
   Global::OBS_AS_IS = 1; // ClassModule uses only intvl for NFREQ observation reads
 
-  declvar("SWE", NHRU, "mean snow water equivalent over HRU", "(mm)", &SWE);
+  declvar("SWE", TDim::NHRU, "mean snow water equivalent over HRU", "(mm)", &SWE);
 
-  decllocal("driftmeltOrg", NHRU, "snow melt without delay", "(m^3/int)", &driftmelt); // pack
+  decllocal("driftmeltOrg", TDim::NHRU, "snow melt without delay", "(m^3/int)", &driftmelt); // pack
 
-  declvar("driftmelt", NHRU, "snow melt with delay", "(m^3/int)", &driftmeltDly); // with delay
+  declvar("driftmelt", TDim::NHRU, "snow melt with delay", "(m^3/int)", &driftmeltDly); // with delay
 
-  decllocal("cumdriftmeltOrg", NHRU, "cumulative snow melt", "(km^3)", &cumdriftmelt); // pack
+  decllocal("cumdriftmeltOrg", TDim::NHRU, "cumulative snow melt", "(km^3)", &cumdriftmelt); // pack
 
-  declvar("driftmeltD", NHRU, "daily snow melt with delay", "(m^3/d)", &driftmeltD); // with delay
+  declvar("driftmeltD", TDim::NHRU, "daily snow melt with delay", "(m^3/d)", &driftmeltD); // with delay
 
-  declvar("snowmeltD", NHRU, "daily snow melt with delay", "(m^3/d)", &snowmeltD); // with delay
+  declvar("snowmeltD", TDim::NHRU, "daily snow melt with delay", "(m^3/d)", &snowmeltD); // with delay
 
-  declvar("cumdriftmelt", NHRU, "cumulative snow melt with delay", "(m^3)", &cumdriftmeltDly); // with delay
+  declvar("cumdriftmelt", TDim::NHRU, "cumulative snow melt with delay", "(m^3)", &cumdriftmeltDly); // with delay
 
 
-  declparam("DrainTo", NHRU, "[0]", "0", "20", " drift drain to hru, 0=NOWHERE, otherwise HRU# (1->MAXHRU)", "()", &DrainTo);
+  declparam("DrainTo", TDim::NHRU, "[0]", "0", "20", " drift drain to hru, 0=NOWHERE, otherwise HRU# (1->MAXHRU)", "()", &DrainTo);
 
-  declparam("InitSWE", NHRU, "[0.0]", "0", "1E3", "initial mean snow water equivalent", "(mm)", &InitSWE);
+  declparam("InitSWE", TDim::NHRU, "[0.0]", "0", "1E3", "initial mean snow water equivalent", "(mm)", &InitSWE);
 
-  declparam("length", NHRU, "[1]", "1", "1E4", "length normal to creek", "(m)", &length);
+  declparam("length", TDim::NHRU, "[1]", "1", "1E4", "length normal to creek", "(m)", &length);
 
-  declparam("meltstorage", NHRU, "[0]", "0", "20", "melt Storage", "(d)", &meltstorage);
+  declparam("meltstorage", TDim::NHRU, "[0]", "0", "20", "melt Storage", "(d)", &meltstorage);
 
-  declparam("meltLag", NHRU, "[0]", "0", "48", "melt delay", "(h)", &meltLag);
+  declparam("meltLag", TDim::NHRU, "[0]", "0", "48", "melt delay", "(h)", &meltLag);
 
 
   declgetvar("*", "Qm", "(MJ/m^2*int)", &Qm);
@@ -57,9 +57,9 @@ void Classqdrift::decl(void) {
 
   variation_set = VARIATION_0;
 
-  declreadobs("p", NOBS, "precipitation", "(mm/int)", &p, true); // share location
+  declreadobs("p", TDim::NOBS, "precipitation", "(mm/int)", &p, true); // share location
 
-  declparam("Type", NHRU, "[NOTUSED]", "0", "2", "hru land type, 0=NOTUSED/1=DRIFT/2=HUMMOCK", "()", &Type);
+  declparam("Type", TDim::NHRU, "[NOTUSED]", "0", "2", "hru land type, 0=NOTUSED/1=DRIFT/2=HUMMOCK", "()", &Type);
 
 
   variation_set = VARIATION_1;
@@ -72,7 +72,7 @@ void Classqdrift::decl(void) {
 
 void Classqdrift::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   Delaymelt = new ClassClark(driftmelt, driftmeltDly, meltstorage, meltLag, nhru);
 

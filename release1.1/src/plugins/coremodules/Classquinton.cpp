@@ -26,109 +26,109 @@ void Classquinton::decl(void) {
 
   Global::OBS_AS_IS = 1; // ClassModule uses only intvl for NFREQ observation reads
 
-  declvar("Depth", NHRU, "water depth above the frost table.", "(m)", &Depth);
+  declvar("Depth", TDim::NHRU, "water depth above the frost table.", "(m)", &Depth);
 
-  declvar("theta", NLAY, "volumetric soil moisture.", "(m^3/m^3)", &theta, &theta_lay);
+  declvar("theta", TDim::NLAY, "volumetric soil moisture.", "(m^3/m^3)", &theta, &theta_lay);
 
-  declvar("layerwater", NLAY, "depth of drainable liquid water in layer.", "(m)", &layerwater, &layerwater_lay);
+  declvar("layerwater", TDim::NLAY, "depth of drainable liquid water in layer.", "(m)", &layerwater, &layerwater_lay);
 
-  declvar("capillary", NLAY, "depth of capillary liquid water in layer.", "(m)", &capillary, &capillary_lay);
+  declvar("capillary", TDim::NLAY, "depth of capillary liquid water in layer.", "(m)", &capillary, &capillary_lay);
 
-  declvar("tension", NLAY, "tension in layer.", "(m)", &tension, &tension_lay);
+  declvar("tension", TDim::NLAY, "tension in layer.", "(m)", &tension, &tension_lay);
 
-  declvar("dmelt", NHRU, "frost table depth from surface.", "(m)", &dmelt);
+  declvar("dmelt", TDim::NHRU, "frost table depth from surface.", "(m)", &dmelt);
 
-  declvar("k", NHRU, "hydraulic conductivity.", "(m/d)", &k);
+  declvar("k", TDim::NHRU, "hydraulic conductivity.", "(m/d)", &k);
 
-  declvar("d_surface", NHRU, "water depth used to calculate horizontal hydraulic conductivity.", "(m)", &d_surface);
+  declvar("d_surface", TDim::NHRU, "water depth used to calculate horizontal hydraulic conductivity.", "(m)", &d_surface);
 
-  declvar("watertable", NHRU, "depth of the water table surface from the ground surface.", "(m)", &watertable);
+  declvar("watertable", TDim::NHRU, "depth of the water table surface from the ground surface.", "(m)", &watertable);
 
-  declvar("flowin", NHRU, "flow into HRU depth (water only).", "(m/m^2*int)", &flowin);
+  declvar("flowin", TDim::NHRU, "flow into HRU depth (water only).", "(m/m^2*int)", &flowin);
 
-  declvar("flowinm3", NHRU, "flow into HRU depth.", "(m^3/int)", &flowinm3);
+  declvar("flowinm3", TDim::NHRU, "flow into HRU depth.", "(m^3/int)", &flowinm3);
 
-  declvar("cumflowin", NHRU, "cumulative flow into HRU depth (water only).", "(m/m^2)", &cumflowin);
+  declvar("cumflowin", TDim::NHRU, "cumulative flow into HRU depth (water only).", "(m/m^2)", &cumflowin);
 
-  declvar("loss", NHRU, "water loss from all layers (water only).", "(m/m^2*int)", &loss);
+  declvar("loss", TDim::NHRU, "water loss from all layers (water only).", "(m/m^2*int)", &loss);
 
-  declvar("transit", NHRU, "transit time through HRU.", "(d)", &transit);
+  declvar("transit", TDim::NHRU, "transit time through HRU.", "(d)", &transit);
 
-  decllocal("runoffI", NHRU, "runoff from HRU no delay.", "(m/m^2*int)", &runoff);
+  decllocal("runoffI", TDim::NHRU, "runoff from HRU no delay.", "(m/m^2*int)", &runoff);
 
-  declvar("runoff", NHRU, "runoff from HRU delayed (water only).", "(m/m^2*int)", &runoffDly);
+  declvar("runoff", TDim::NHRU, "runoff from HRU delayed (water only).", "(m/m^2*int)", &runoffDly);
 
-  declvar("runoffm3", NHRU, "runoff from HRU delayed.", "(m^3/int)", &runoffm3Dly);
+  declvar("runoffm3", TDim::NHRU, "runoff from HRU delayed.", "(m^3/int)", &runoffm3Dly);
 
-  declvar("cumrunoff", NHRU, "cumulative runoff from HRU delayed.", "(m/m^2)", &cumrunoff);
+  declvar("cumrunoff", TDim::NHRU, "cumulative runoff from HRU delayed.", "(m/m^2)", &cumrunoff);
 
-  decllocal("flowI", NHRU, "flow from all layers no delay.", "(m/m^2*int)", &flow);
+  decllocal("flowI", TDim::NHRU, "flow from all layers no delay.", "(m/m^2*int)", &flow);
 
-  declvar("flow", NHRU, "flow from all layers delayed (water only).", "(m/m^2*int)", &flowDly);
+  declvar("flow", TDim::NHRU, "flow from all layers delayed (water only).", "(m/m^2*int)", &flowDly);
 
-  declvar("flowm3", NHRU, "flow from all layers delayed.", "(m^3/int)", &flowm3Dly);
+  declvar("flowm3", TDim::NHRU, "flow from all layers delayed.", "(m^3/int)", &flowm3Dly);
 
-  declvar("cumflow", NHRU, "cumulative flow from all layers delayed (water only).", "(m/m^2)", &cumflow);
+  declvar("cumflow", TDim::NHRU, "cumulative flow from all layers delayed (water only).", "(m/m^2)", &cumflow);
 
-  declvar("Cvis", NLAY, "Heat capacity sat/frozen.", "(J/m^3*K)", &Cvis, &Cvis_lay);
+  declvar("Cvis", TDim::NLAY, "Heat capacity sat/frozen.", "(J/m^3*K)", &Cvis, &Cvis_lay);
 
-  declvar("Cvisa", NLAY, "Heat capacity unsat/frozen.", "(J/m^3*K)", &Cvisa, &Cvisa_lay);
+  declvar("Cvisa", TDim::NLAY, "Heat capacity unsat/frozen.", "(J/m^3*K)", &Cvisa, &Cvisa_lay);
 
-  declvar("Cvws", NLAY, "Heat capacity sat/unfrozen.", "(J/m^3*K)", &Cvws, &Cvws_lay);
+  declvar("Cvws", TDim::NLAY, "Heat capacity sat/unfrozen.", "(J/m^3*K)", &Cvws, &Cvws_lay);
 
-  declvar("Cvwsa", NLAY, "Heat capacity unsat/unfrozen.", "(J/m^3*K)", &Cvwsa, &Cvwsa_lay);
+  declvar("Cvwsa", TDim::NLAY, "Heat capacity unsat/unfrozen.", "(J/m^3*K)", &Cvwsa, &Cvwsa_lay);
 
-  declvar("lamis", NLAY, "Thermal conductivity sat/frozen.", "(W/m*K)", &lamis, &lamis_lay);
+  declvar("lamis", TDim::NLAY, "Thermal conductivity sat/frozen.", "(W/m*K)", &lamis, &lamis_lay);
 
-  declvar("lamws", NLAY, "Thermal conductivity sat/unfrozen.", "(W/m*K)", &lamws, &lamws_lay);
+  declvar("lamws", TDim::NLAY, "Thermal conductivity sat/unfrozen.", "(W/m*K)", &lamws, &lamws_lay);
 
-  declvar("lamwsa", NLAY, "Thermal conductivity unsat/unfrozen.", "(W/m*K)", &lamwsa, &lamwsa_lay);
+  declvar("lamwsa", TDim::NLAY, "Thermal conductivity unsat/unfrozen.", "(W/m*K)", &lamwsa, &lamwsa_lay);
 
-  declvar("wDrained", NHRU, "depth of drained frozen organic material from surface.", "(m)", &wDrained);
+  declvar("wDrained", TDim::NHRU, "depth of drained frozen organic material from surface.", "(m)", &wDrained);
 
-  decllocal("tlayer", NLAY, "layer temperature.", "(°C)", &tlayer, &tlayer_lay);
+  decllocal("tlayer", TDim::NLAY, "layer temperature.", "(°C)", &tlayer, &tlayer_lay);
 
 
-  declparam("Type", NHRU, "drift, [HUMMOCK]", "0", "2", "hru land type, 0=NOTUSED/1=DRIFT/2=HUMMOCK.", "()", &Type);
+  declparam("Type", TDim::NHRU, "drift, [HUMMOCK]", "0", "2", "hru land type, 0=NOTUSED/1=DRIFT/2=HUMMOCK.", "()", &Type);
 
-  declparam("DrainTo", NHRU, "[0]", "0", "20", " drift drains to hru, 0=NOWHERE, otherwise HRU# (1->MAXHRU).", "()", &DrainTo);
+  declparam("DrainTo", TDim::NHRU, "[0]", "0", "20", " drift drains to hru, 0=NOWHERE, otherwise HRU# (1->MAXHRU).", "()", &DrainTo);
 
-  declparam("soil_type", NLAY, "[0, 1, 2]", "0", "4",
+  declparam("soil_type", TDim::NLAY, "[0, 1, 2]", "0", "4",
             "HRU soil type: 0 = loam1, 1 = loam2, 2 = loam3, 3 = sand, 4 = clay.", "()", &soil_type, &soil_type_lay);
 
-  declparam("Pors", NDEF, "0.96, 0.9, 0.87, 0.43, 0.43", "0.0", "1.0", "porosity at layer depths.", "(m^3/m^3)", &Pors, &Pors_def, CLAY+1);
+  declparam("Pors", TDim::NDEF, "0.96, 0.9, 0.87, 0.43, 0.43", "0.0", "1.0", "porosity at layer depths.", "(m^3/m^3)", &Pors, &Pors_def, CLAY+1);
 
-  declparam("d", NLAY, "[0.15] , [0.1], [0.1] ,[0.1]", "0.0", "100.0", "layer depth.", "(m)", &d, &d_lay);
+  declparam("d", TDim::NLAY, "[0.15] , [0.1], [0.1] ,[0.1]", "0.0", "100.0", "layer depth.", "(m)", &d, &d_lay);
 
-  declparam("tinit", NLAY, "[-8.0] , [-8.0], [-8.0] ,[-8.0]", "-40.0", "10.0", "initial layer temperature.", "(°C)", &tinit, &tinit_lay);
+  declparam("tinit", TDim::NLAY, "[-8.0] , [-8.0], [-8.0] ,[-8.0]", "-40.0", "10.0", "initial layer temperature.", "(°C)", &tinit, &tinit_lay);
 
-  declparam("slope", NHRU, "[0.01]", "0.0", "1.0", "slope.", "(m/m)", &slope);
+  declparam("slope", TDim::NHRU, "[0.01]", "0.0", "1.0", "slope.", "(m/m)", &slope);
 
-  declparam("length", NHRU, "[1]", "1", "1E4", "length normal to creek", "(m)", &length);
+  declparam("length", TDim::NHRU, "[1]", "1", "1E4", "length normal to creek", "(m)", &length);
 
-  declparam("K_btm", NHRU, "[1.4]", "0.6", "2.5", "horizontal bottom hydraulic conductivity.", "(m/d)", &Kbtm);
+  declparam("K_btm", TDim::NHRU, "[1.4]", "0.6", "2.5", "horizontal bottom hydraulic conductivity.", "(m/d)", &Kbtm);
 
-  declparam("K_top", NHRU, "[360]", "30", "1200", "horizontal top hydraulic conductivity.", "(m/d)", &Ktop);
+  declparam("K_top", TDim::NHRU, "[360]", "30", "1200", "horizontal top hydraulic conductivity.", "(m/d)", &Ktop);
 
-  declparam("z_trn", NHRU, "[0.15]", "0.12", "0.18", "hydraulic conductivity transition depth.", "(m)", &ztrn);
+  declparam("z_trn", TDim::NHRU, "[0.15]", "0.12", "0.18", "hydraulic conductivity transition depth.", "(m)", &ztrn);
 
-  declparam("Residual", NLAY, "[0.5], [0.8], [0.8]", "0.0", "1.0", "Organic non-drainable porosity.", "(m^3/m^3)", &Residual, &Residual_lay);
+  declparam("Residual", TDim::NLAY, "[0.5], [0.8], [0.8]", "0.0", "1.0", "Organic non-drainable porosity.", "(m^3/m^3)", &Residual, &Residual_lay);
 
-  declparam("n", NLAY, "[2], [1.6], [1.6]", "0.0", "10.0", "empirical constant.", "()", &n_const, &n_const_lay);
+  declparam("n", TDim::NLAY, "[2], [1.6], [1.6]", "0.0", "10.0", "empirical constant.", "()", &n_const, &n_const_lay);
 
-  declparam("a", NLAY, "[25], [15], [15]", "0.0", "50.0", "empirical constant for alpha.", "()", &a_const, &a_const_lay);
+  declparam("a", TDim::NLAY, "[25], [15], [15]", "0.0", "50.0", "empirical constant for alpha.", "()", &a_const, &a_const_lay);
 
-  declparam("Drained", NHRU, "[0.0]", "0.0", "1.0", "depth of saturated organic material(ice or water).", "(m)", &Drained);
+  declparam("Drained", TDim::NHRU, "[0.0]", "0.0", "1.0", "depth of saturated organic material(ice or water).", "(m)", &Drained);
 
-  declparam("FrozenTo", NHRU, "[0.0]", "0.0", "1.0", "initial depth of frost table.", "(m)", &FrozenTo);
+  declparam("FrozenTo", TDim::NHRU, "[0.0]", "0.0", "1.0", "initial depth of frost table.", "(m)", &FrozenTo);
 
-  declparam("runoffstorage", NHRU, "[0]", "0", "20", "runoff Storage.", "(d)", &runoffstorage);
+  declparam("runoffstorage", TDim::NHRU, "[0]", "0", "20", "runoff Storage.", "(d)", &runoffstorage);
 
-  declparam("runoffLag", NHRU, "[0]", "0", "48", "runoff delay.", "(h)", &runoffLag);
+  declparam("runoffLag", TDim::NHRU, "[0]", "0", "48", "runoff delay.", "(h)", &runoffLag);
 
-  declparam("flowstorage", NHRU, "[0]", "0", "20", "flow Storage.", "(d)", &flowstorage);
+  declparam("flowstorage", TDim::NHRU, "[0]", "0", "20", "flow Storage.", "(d)", &flowstorage);
 
-  declparam("flowLag", NHRU, "[0]", "-1", "192", "flow delay.", "(h)", &flowLag);
+  declparam("flowLag", TDim::NHRU, "[0]", "-1", "192", "flow delay.", "(h)", &flowLag);
 
 
 
@@ -139,7 +139,7 @@ void Classquinton::decl(void) {
 
   variation_set = VARIATION_0;
 
-  declreadobs("p", NOBS, "precipitation", "(mm/int)", &p, true);
+  declreadobs("p", TDim::NOBS, "precipitation", "(mm/int)", &p, true);
 
 
   variation_set = VARIATION_1;
@@ -152,7 +152,7 @@ void Classquinton::decl(void) {
 
 void Classquinton::init(void) {
 
-  nlay = getdim(NLAY);
+  nlay = getdim(TDim::NLAY);
 
   Delayrunoff = new ClassClark(runoff, runoffDly, runoffstorage, runoffLag, nhru); // input runoff
   Delayflow = new ClassClark(flow, flowDly, flowstorage, flowLag, nhru); // flow from soil layers

@@ -22,26 +22,26 @@ void ClassGrow_Crop::decl(void) {
 
   Description = "'Grows crop height from initial to maturiy.'";
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
 
-  declparam("Crop_Grow_Rate", NHRU, "[0.0]", "0.0", "1.0", "crop growth rate", "(m/d)", &Crop_Grow_Rate);
+  declparam("Crop_Grow_Rate", TDim::NHRU, "[0.0]", "0.0", "1.0", "crop growth rate", "(m/d)", &Crop_Grow_Rate);
 
-  declparam("JCrop_Start", NHRU, "[121]", "1", "366", "start Julian day", "()", &JCrop_Start);
+  declparam("JCrop_Start", TDim::NHRU, "[121]", "1", "366", "start Julian day", "()", &JCrop_Start);
 
-  declparam("JCrop_Mature", NHRU, "[182]", "1", "366", "maturity Julian day", "()", &JCrop_Mature);
+  declparam("JCrop_Mature", TDim::NHRU, "[182]", "1", "366", "maturity Julian day", "()", &JCrop_Mature);
 
-  declparam("JCrop_Harvest", NHRU, "[228]", "1", "366", "harvest Julian day", "()", &JCrop_Harvest);
+  declparam("JCrop_Harvest", TDim::NHRU, "[228]", "1", "366", "harvest Julian day", "()", &JCrop_Harvest);
 
-  declparam("Init_Crop_Ht", NHRU, "0.001]", "0.001", "100.0", "Crop height at beginning of growth season. Used to reset crop Ht(parameter Ht)", "(m)", &Init_Crop_Ht);
+  declparam("Init_Crop_Ht", TDim::NHRU, "0.001]", "0.001", "100.0", "Crop height at beginning of growth season. Used to reset crop Ht(parameter Ht)", "(m)", &Init_Crop_Ht);
 
 
-  declvar("Crop_Ht", NHRU, "crop height", "(m)", &Crop_Ht);
+  declvar("Crop_Ht", TDim::NHRU, "crop height", "(m)", &Crop_Ht);
 
 }
 
 void ClassGrow_Crop::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 }
 
 void ClassGrow_Crop::run(void) {

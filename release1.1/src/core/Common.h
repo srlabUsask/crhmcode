@@ -82,17 +82,15 @@ enum class TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all
 
 enum class TVar { none, Int, Float, Txt, Read, ReadI, ReadF };
 
+// NREB only applies to variables. NDEFNZ only applies to parameters
+enum class TDim { BASIN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, NHRU, NOBS, NLAY, NDEF, NFREQ, NREB, NDEFN, NDEFNZ };
+
+
 namespace CRHM {
 	
-	
-
 	enum TFitType { POLY, FOURIER, POWER, EXPO, LOGARITHM, MLR };
 	enum TAgainst { myTIME, VARIABLE };
 	enum TDsply { FRACT, OBS, BOTH, MDY, XY };
-
-	// NREB only applies to variables. NDEFNZ only applies to parameters
-	enum TDim { BASIN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, NHRU, NOBS, NLAY, NDEF, NFREQ, NREB, NDEFN, NDEFNZ };
-	
 
 	enum TTiming { IDLE, EARLY, MELT, MELT2, MATURE, HOLD };
 	

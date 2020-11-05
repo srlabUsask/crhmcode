@@ -22,25 +22,25 @@ void ClassMeltRunoff_Kstorage::decl(void) {
 
   Description = "'Calculates Melt Runoff Kstorage.'";
 
-  declvar("Ksat", NHRU, "saturated hydraulic conductivity of porous snow media", "(m/s)", &Ksat);
+  declvar("Ksat", TDim::NHRU, "saturated hydraulic conductivity of porous snow media", "(m/s)", &Ksat);
 
-  declvar("Meltrunoff_K", NHRU, "melt runoff storage constant", "(d)", &Meltrunoff_K);
+  declvar("Meltrunoff_K", TDim::NHRU, "melt runoff storage constant", "(d)", &Meltrunoff_K);
 
-  decldiag("In_storage", NHRU, "melt runoff in storage at the beginning of interval!", "(mm)", &In_storage);
+  decldiag("In_storage", TDim::NHRU, "melt runoff in storage at the beginning of interval!", "(mm)", &In_storage);
 
 
-  declparam("d_g", NHRU, "[3.0]", "0.0", "10.0", "snow grain diameter", "(mm)", &d_g);
+  declparam("d_g", TDim::NHRU, "[3.0]", "0.0", "10.0", "snow grain diameter", "(mm)", &d_g);
 
-  declparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
+  declparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
 
-  declparam("inhibit_MeltRunoff_Kstorage", NHRU, "[0]", "0", "1", "inhibit MeltRunoff_Kstorage correction, 1 -> inhibit", "()", &inhibit_MeltRunoff_Kstorage);
+  declparam("inhibit_MeltRunoff_Kstorage", TDim::NHRU, "[0]", "0", "1", "inhibit MeltRunoff_Kstorage correction, 1 -> inhibit", "()", &inhibit_MeltRunoff_Kstorage);
 
   declputparam("*", "runKstorage", "(d)", &runKstorage);
 
 
-  declparam("route_L", NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
+  declparam("route_L", TDim::NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
 
-  declparam("hru_GSL", NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
 
 
   declgetvar("*", "rho", "((kg/m^3))", &rho);
@@ -49,7 +49,7 @@ void ClassMeltRunoff_Kstorage::decl(void) {
 
 void ClassMeltRunoff_Kstorage::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(hh = 0; chkStruct(); ++hh) {
     Ksat[hh] = 0.0;

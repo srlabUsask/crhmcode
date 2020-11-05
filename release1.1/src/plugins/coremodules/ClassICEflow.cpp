@@ -22,55 +22,55 @@ void ClassICEflow::decl(void) {
 
   Description = "'Simulates ICE flow dynamic.'";
 
-  declvar("Ice_out", NHRU, "outgoing iceflow transport", "(mm/int)", &Ice_out);
+  declvar("Ice_out", TDim::NHRU, "outgoing iceflow transport", "(mm/int)", &Ice_out);
 
-  declvar("Ice_in", NHRU, "incoming iceflow transport", "(mm/int)", &Ice_in);
+  declvar("Ice_in", TDim::NHRU, "incoming iceflow transport", "(mm/int)", &Ice_in);
 
-  declvar("Ux", NHRU, "plastic flow due to its own weight. Can be channel flow or slab flow(shallow iceflow).", "(m)", &Ux);
+  declvar("Ux", TDim::NHRU, "plastic flow due to its own weight. Can be channel flow or slab flow(shallow iceflow).", "(m)", &Ux);
 
-  declvar("Ub", NHRU, "velocity due to basal slip", "(m)", &Ub);
+  declvar("Ub", TDim::NHRU, "velocity due to basal slip", "(m)", &Ub);
 
-  declvar("Utot", NHRU, "sum of plastic deformation and basal slip", "(m)", &Utot);
+  declvar("Utot", TDim::NHRU, "sum of plastic deformation and basal slip", "(m)", &Utot);
 
-  declvar("cumulative_net_rain", NHRU, "cumulative meltwater and rain", "(m/yr)", &cumulative_net_rain);
+  declvar("cumulative_net_rain", TDim::NHRU, "cumulative meltwater and rain", "(m/yr)", &cumulative_net_rain);
 
-  decldiag("cumIce_in", NHRU, "incoming cumulative Slip transport ice from other HRU", "(mm)", &cumIce_in);
+  decldiag("cumIce_in", TDim::NHRU, "incoming cumulative Slip transport ice from other HRU", "(mm)", &cumIce_in);
 
-  decldiag("cumIce_out", NHRU, "outgoing cumulative Slip transport ice to other HRU", "(mm)", &cumIce_out);
+  decldiag("cumIce_out", TDim::NHRU, "outgoing cumulative Slip transport ice to other HRU", "(mm)", &cumIce_out);
 
 /* parameters */
 
-  declparam("order", NHRU, "[1,2,3,4,5!]", "1","1000", "sequence of HRUs for iceflow distribution", "()", &order);
+  declparam("order", TDim::NHRU, "[1,2,3,4,5!]", "1","1000", "sequence of HRUs for iceflow distribution", "()", &order);
 
-  declparam("Disable_ICEflow", NHRU, "[0]", "0","1", "set to 1 to disable module", "()", &Disable_ICEflow);
+  declparam("Disable_ICEflow", TDim::NHRU, "[0]", "0","1", "set to 1 to disable module", "()", &Disable_ICEflow);
 
-  declparam("distrib_iceflow", NDEFN, "[0.0]", "-1.0E6.0", "1.0E6.0", "distribute this HRU iceflow to these HRUs", "()", &distrib, &distrib_hru, nhru);
+  declparam("distrib_iceflow", TDim::NDEFN, "[0.0]", "-1.0E6.0", "1.0E6.0", "distribute this HRU iceflow to these HRUs", "()", &distrib, &distrib_hru, nhru);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("hru_GSL", NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
 
-  declparam("SWE_to_firn_Julian", NHRU, "[274]", "0", "366", "convert any SWE to firn on Julian day. 0 - inhibit transfer", "()", &SWE_to_firn_Julian);
+  declparam("SWE_to_firn_Julian", TDim::NHRU, "[274]", "0", "366", "convert any SWE to firn on Julian day. 0 - inhibit transfer", "()", &SWE_to_firn_Julian);
 
-  declparam("test_option", NHRU, "[-1]", "-1", "100", "negative - disable testing option, >= 0 sets Utot to value of test option.", "(mm)", &test_option);
+  declparam("test_option", TDim::NHRU, "[-1]", "-1", "100", "negative - disable testing option, >= 0 sets Utot to value of test option.", "(mm)", &test_option);
 
-  declparam("channel_option", NHRU, "[0]", "0", "1", "0 - channel flow, 1 - slab flow.", "()", &channel_option);
+  declparam("channel_option", TDim::NHRU, "[0]", "0", "1", "0 - channel flow, 1 - slab flow.", "()", &channel_option);
 
-  declparam("basal_option", NHRU, "[1]", "1", "2", "1 - u_basal option 1, 2 - u_basal option 2", "()", &basal_option);
+  declparam("basal_option", TDim::NHRU, "[1]", "1", "2", "1 - u_basal option 1, 2 - u_basal option 2", "()", &basal_option);
 
-  declparam("radius_glacier", NHRU, "[1000]", "100", "10000", "radius of glacier", "(m)", &radius_glacier);
+  declparam("radius_glacier", TDim::NHRU, "[1000]", "100", "10000", "radius of glacier", "(m)", &radius_glacier);
 
-  declparam("Arrhenius_const", NHRU, "[2.935E-17]", "1E-30", "1E-2", "Arrhenius constant", "(1/Pa*yr)", &Arrhenius_const); // Cuffey and Paterson (2010)
+  declparam("Arrhenius_const", TDim::NHRU, "[2.935E-17]", "1E-30", "1E-2", "Arrhenius constant", "(1/Pa*yr)", &Arrhenius_const); // Cuffey and Paterson (2010)
 
-  declparam("slip_sf", NHRU, "[0.5]", "0.0", "2.0", "shape factor for the shear stress in channel flow", "()", &slip_sf); // Nye J.F. (1965). The flow of a glacier in a channel of rectangular, elliptic, or parabolic cross-section. Journal of Glaciology. Vol 5, 661-690.
+  declparam("slip_sf", TDim::NHRU, "[0.5]", "0.0", "2.0", "shape factor for the shear stress in channel flow", "()", &slip_sf); // Nye J.F. (1965). The flow of a glacier in a channel of rectangular, elliptic, or parabolic cross-section. Journal of Glaciology. Vol 5, 661-690.
 
-  declparam("slip_m", NHRU, "[3.0]", "0.0", "3.0", "exponent constant for basal slip", "()", &slip_m); // Generally 2 to 3 (Oerlemans, 2001)
+  declparam("slip_m", TDim::NHRU, "[3.0]", "0.0", "3.0", "exponent constant for basal slip", "()", &slip_m); // Generally 2 to 3 (Oerlemans, 2001)
 
-  declparam("slip_c", NHRU, "[0.1]", "0.0", "1.0", "constant for physical characteristics of the bed", "()", &slip_c);
+  declparam("slip_c", TDim::NHRU, "[0.1]", "0.0", "1.0", "constant for physical characteristics of the bed", "()", &slip_c);
 
-  declparam("slip_fs", NHRU, "[1.8E-12]", "1E-25", "1.0", "sliding parameter from Budd et al. (1979) for basal option 2", "(Pa^-3*m^2*yr)", &slip_fs); // fs = 5.7e-20*(365.2422*24*3600) Oerlemans J. (2001). Glaciers and Climate Change. A.A. Balkema Publishers, Lisse.
+  declparam("slip_fs", TDim::NHRU, "[1.8E-12]", "1E-25", "1.0", "sliding parameter from Budd et al. (1979) for basal option 2", "(Pa^-3*m^2*yr)", &slip_fs); // fs = 5.7e-20*(365.2422*24*3600) Oerlemans J. (2001). Glaciers and Climate Change. A.A. Balkema Publishers, Lisse.
 
 
   declputvar("*", "ice", "(mm)", &ice); // water equivalent of ice
@@ -80,7 +80,7 @@ void ClassICEflow::decl(void) {
 
 void ClassICEflow::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for (hh = 0; hh < nhru; ++hh){
     Ice_in[hh] = 0.0;

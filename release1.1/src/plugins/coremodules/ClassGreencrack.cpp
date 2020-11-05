@@ -23,69 +23,69 @@ void ClassGreencrack::decl(void) {
 
   Description = "'Handles summer using Green Ampt and frozen soil infiltration using Granger et al. 1984; Gray et al., 1986.'";
 
-  declvar("infil", NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
 
-  declvar("snowinfil", NHRU, "infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "infiltration", "(mm/int)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
 
-  declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
+  declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/int)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
 
-  declvar("crackstat", NHRU, "infiltration status", "()", &crackstat);
+  declvar("crackstat", TDim::NHRU, "infiltration status", "()", &crackstat);
 
-  declstatvar("RainOnSnow", NHRU, "cumulative rain on snow", "(mm)", &RainOnSnow);
+  declstatvar("RainOnSnow", TDim::NHRU, "cumulative rain on snow", "(mm)", &RainOnSnow);
 
-  declstatvar("crackon", NHRU,"crack cycle enabled", "()", &crackon);
-
-
-  decllocal("RainOnSnowA", NHRU, "accumulated rain on snow", "(mm)", &RainOnSnowA);
-
-  decllocal("k", NHRU, "(mm/h)", "()", &k);
-
-  decllocal("F0", NHRU, "last HRU cumulative infiltration", "(mm)", &F0);
-
-  decllocal("f0", NHRU, "", "(mm/h)", &f0);
-
-  decllocal("F1", NHRU, "HRU cumulative infiltration", "(mm)", &F1);
-
-  decllocal("f1", NHRU, "", "(mm/h)", &f1);
-
-  decllocal("dthbot", NHRU, "", "()", &dthbot);
-
-  decllocal("psidthbot", NHRU, "", "(mm)", &psidthbot);
-
-  decllocal("timer", NHRU, "", "(d)", &timer);
+  declstatvar("crackon", TDim::NHRU,"crack cycle enabled", "()", &crackon);
 
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  decllocal("RainOnSnowA", TDim::NHRU, "accumulated rain on snow", "(mm)", &RainOnSnowA);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  decllocal("k", TDim::NHRU, "(mm/h)", "()", &k);
 
-  declparam("fallstat", NHRU, "[50.0]", "-1.0","100.0",
+  decllocal("F0", TDim::NHRU, "last HRU cumulative infiltration", "(mm)", &F0);
+
+  decllocal("f0", TDim::NHRU, "", "(mm/h)", &f0);
+
+  decllocal("F1", TDim::NHRU, "HRU cumulative infiltration", "(mm)", &F1);
+
+  decllocal("f1", TDim::NHRU, "", "(mm/h)", &f1);
+
+  decllocal("dthbot", TDim::NHRU, "", "()", &dthbot);
+
+  decllocal("psidthbot", TDim::NHRU, "", "(mm)", &psidthbot);
+
+  decllocal("timer", TDim::NHRU, "", "(d)", &timer);
+
+
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+
+  declparam("fallstat", TDim::NHRU, "[50.0]", "-1.0","100.0",
      "fall status 0.0 - unlimited/ 100.0 - restricted/ other - limited", "(%)", &fallstat);
 
-  decldiagparam("Major", NHRU, "[5]", "1", "100", "threshold for major melt", "(mm/d)", &Major);
+  decldiagparam("Major", TDim::NHRU, "[5]", "1", "100", "threshold for major melt", "(mm/d)", &Major);
 
-  declparam("soil_type", NHRU, "[4]", "0", "12",
+  declparam("soil_type", TDim::NHRU, "[4]", "0", "12",
         "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soil_type);
 
-  declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0",
+  declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0",
         "Maximum available water holding capacity of soil profile."//
         "Soil profile is surface to bottom of rooting zone", "(mm)", &soil_moist_max);
 
-  declparam("soil_moist_init", NHRU, "[187.0]", "0.0", "2500.0",
+  declparam("soil_moist_init", TDim::NHRU, "[187.0]", "0.0", "2500.0",
         "Initial value of available water in soil profile", "(mm)", &soil_moist_init);
 
-  decldiagparam("PriorInfiltration", NHRU, "[0]", "0", "1", "allow limited melt to infiltrate prior to major melt", "()", &PriorInfiltration);
+  decldiagparam("PriorInfiltration", TDim::NHRU, "[0]", "0", "1", "allow limited melt to infiltrate prior to major melt", "()", &PriorInfiltration);
 
 
   declgetvar("*",  "hru_tmax", "(°C)", &hru_tmax);
@@ -103,7 +103,7 @@ void ClassGreencrack::decl(void) {
 
 void ClassGreencrack::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   try {
 

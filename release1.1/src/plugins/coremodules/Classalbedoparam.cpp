@@ -22,14 +22,14 @@ void Classalbedoparam::decl(void) {
 
   Description = "'Initialises the variable \"Albedo\" from the parameter \"Albedo_Value\".'";
 
-  declvar("Albedo", NHRU, "Albedo", "()", &Albedo);
+  declvar("Albedo", TDim::NHRU, "Albedo", "()", &Albedo);
 
-  declparam("Albedo_Value", NHRU, "[0.17]", "0.0", "1.0","Albedo", "()", &Albedo_Value);
+  declparam("Albedo_Value", TDim::NHRU, "[0.17]", "0.0", "1.0","Albedo", "()", &Albedo_Value);
 
 }
 
 void Classalbedoparam::init(void) {
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for (hh = 0; hh < nhru; ++hh){
     Albedo[hh] = Albedo_Value[hh];

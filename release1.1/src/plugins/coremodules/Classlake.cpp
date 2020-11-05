@@ -22,51 +22,51 @@ void Classlake::decl(void) {
 
   Description = "'Calculates lake evaporation from the Meyer formula.'";
 
-  declvar("hru_evap", NHRU, "interval evaporation", "(mm/int)", &hru_evap);
+  declvar("hru_evap", TDim::NHRU, "interval evaporation", "(mm/int)", &hru_evap);
 
-  declstatdiag("hru_cum_evap", NHRU, "cumulative interval evaporation", "(mm)", &hru_cum_evap);
+  declstatdiag("hru_cum_evap", TDim::NHRU, "cumulative interval evaporation", "(mm)", &hru_cum_evap);
 
-  declvar("hru_actet", NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
+  declvar("hru_actet", TDim::NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
 
-  declstatdiag("hru_cum_actet", NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet);
+  declstatdiag("hru_cum_actet", TDim::NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet);
 
-  decldiag("Va", NHRU, "water vapour pressure, Vw*rh (Meyer)", "(mm)", &Va);
+  decldiag("Va", TDim::NHRU, "water vapour pressure, Vw*rh (Meyer)", "(mm)", &Va);
 
-  decldiag("Vw", NHRU, "air vapour pressure (Meyer)", "(mm)", &Vw);
+  decldiag("Vw", TDim::NHRU, "air vapour pressure (Meyer)", "(mm)", &Vw);
 
-  declvar("lake_evap_month", NHRU, "monthly evaporation from rh", "(mm)", &lake_evap_month); // ***cannot be a state variable***
+  declvar("lake_evap_month", TDim::NHRU, "monthly evaporation from rh", "(mm)", &lake_evap_month); // ***cannot be a state variable***
 
-  declvar("hru_t_Mmean", NHRU, "HRU temperature", "(°C)", &hru_t_Mmean);
+  declvar("hru_t_Mmean", TDim::NHRU, "HRU temperature", "(°C)", &hru_t_Mmean);
 
-  declvar("hru_rh_Mmean", NHRU, "HRU rh", "()", &hru_rh_Mmean);
+  declvar("hru_rh_Mmean", TDim::NHRU, "HRU rh", "()", &hru_rh_Mmean);
 
-  declvar("hru_u_Mmean", NHRU, "HRU wind speed", "(m/s)", &hru_u_Mmean);
+  declvar("hru_u_Mmean", TDim::NHRU, "HRU wind speed", "(m/s)", &hru_u_Mmean);
 
-  decllocal("hru_t_acc", NHRU, "HRU t accumulated", "(°C)", &hru_t_acc);
+  decllocal("hru_t_acc", TDim::NHRU, "HRU t accumulated", "(°C)", &hru_t_acc);
 
-  decllocal("hru_rh_acc", NHRU, "HRU rh accumulated", "()", &hru_rh_acc);
+  decllocal("hru_rh_acc", TDim::NHRU, "HRU rh accumulated", "()", &hru_rh_acc);
 
-  decllocal("hru_u_acc", NHRU, "HRU u accumulated", "(m)", &hru_u_acc);
+  decllocal("hru_u_acc", TDim::NHRU, "HRU u accumulated", "(m)", &hru_u_acc);
 
-  decllocal("start_open_day", NHRU, "TDate format start of open water", "()", &start_open_day);
+  decllocal("start_open_day", TDim::NHRU, "TDate format start of open water", "()", &start_open_day);
 
-  decllocal("end_open_day", NHRU, "TDate format end of open water", "()", &end_open_day);
+  decllocal("end_open_day", TDim::NHRU, "TDate format end of open water", "()", &end_open_day);
 
-  decldiagparam("Meyer_C", NHRU, "[10.5]", "5.0", "15.0", "Meyer coefficient. (Recommended range 10.1->11)", "()", &Meyer_C);
+  decldiagparam("Meyer_C", TDim::NHRU, "[10.5]", "5.0", "15.0", "Meyer coefficient. (Recommended range 10.1->11)", "()", &Meyer_C);
 
-  declparam("start_open_water", NHRU, "[120]", "1", "366", "Start of lake evaporation (Julian day)", "()", &start_open_water);
+  declparam("start_open_water", TDim::NHRU, "[120]", "1", "366", "Start of lake evaporation (Julian day)", "()", &start_open_water);
 
-  declparam("end_open_water", NHRU, "[240]", "1", "366", "End of lake evaporation (Julian day)", "()", &end_open_water);
+  declparam("end_open_water", TDim::NHRU, "[240]", "1", "366", "End of lake evaporation (Julian day)", "()", &end_open_water);
 
-  decldiagparam("Meyer_B", TWELVE, "[-0.3, -2.8, -1.4, 2.0, 7.3, 8.8, 10.0, 9.6, 7.1, 3.0, -1.2, -2.6]", "-10.0", "20.0", "Meyer monthly intercept coefficient", "()", &Meyer_B);
+  decldiagparam("Meyer_B", TDim::TWELVE, "[-0.3, -2.8, -1.4, 2.0, 7.3, 8.8, 10.0, 9.6, 7.1, 3.0, -1.2, -2.6]", "-10.0", "20.0", "Meyer monthly intercept coefficient", "()", &Meyer_B);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
+  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
 
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
   declgetvar("*", "hru_t", "(°C)", &hru_t);
   declgetvar("*", "hru_rh", "()", &hru_rh);

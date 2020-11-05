@@ -30,41 +30,41 @@ void Classebsm::decl(void) {
 
   variation_set = VARIATION_ORG;
 
-  declvar("snowmeltD", NHRU, "daily snowmelt", "(mm/d)", &snowmeltD);
+  declvar("snowmeltD", TDim::NHRU, "daily snowmelt", "(mm/d)", &snowmeltD);
 
-  declvar("cumsnowmelt", NHRU, "cumulative melt", "(mm)", &cumsnowmelt);
+  declvar("cumsnowmelt", TDim::NHRU, "cumulative melt", "(mm)", &cumsnowmelt);
 
-  declstatvar("LW_ebsm", NHRU, "liquid water in snowpack", "(mm)", &LW_ebsm, NULL, 1, false, TVISIBLE::PRIVATE);
+  declstatvar("LW_ebsm", TDim::NHRU, "liquid water in snowpack", "(mm)", &LW_ebsm, NULL, 1, false, TVISIBLE::PRIVATE);
 
-  declstatvar("u_ebsm", NHRU, "snowpack energy deficit", "(MJ)", &u_ebsm, NULL, 1, false, TVISIBLE::PRIVATE);
+  declstatvar("u_ebsm", TDim::NHRU, "snowpack energy deficit", "(MJ)", &u_ebsm, NULL, 1, false, TVISIBLE::PRIVATE);
 
-  declvar("Qmelt", NHRU, "Qmelt = Qn+Qh+Qe+Qp", "(MJ/d)", &Qmelt);
+  declvar("Qmelt", TDim::NHRU, "Qmelt = Qn+Qh+Qe+Qp", "(MJ/d)", &Qmelt);
 
-  declvar("Qn_ebsm", NHRU, "net radiation", "(MJ/d)", &Qn_ebsm);
+  declvar("Qn_ebsm", TDim::NHRU, "net radiation", "(MJ/d)", &Qn_ebsm);
 
-  declvar("Qh_ebsm", NHRU, "sensible heat", "(MJ/d)", &Qh_ebsm);
+  declvar("Qh_ebsm", TDim::NHRU, "sensible heat", "(MJ/d)", &Qh_ebsm);
 
-  declvar("Qe_ebsm", NHRU, "latent heat", "(MJ/d)", &Qe_ebsm);
+  declvar("Qe_ebsm", TDim::NHRU, "latent heat", "(MJ/d)", &Qe_ebsm);
 
-  declvar("Qe_subl", NHRU, "latent heat sublimation", "(mm/d)", &Qe_subl);
+  declvar("Qe_subl", TDim::NHRU, "latent heat sublimation", "(mm/d)", &Qe_subl);
 
-  declvar("cumQe_subl", NHRU, "cumulative latent heat sublimation", "(mm)", &cumQe_subl);
+  declvar("cumQe_subl", TDim::NHRU, "cumulative latent heat sublimation", "(mm)", &cumQe_subl);
 
-  declvar("Qp_ebsm", NHRU, "input from rainfall", "(MJ/d)", &Qp_ebsm);
-
-
-  decldiag("LWmax", NHRU, "maximum liquid water in snowpack", "(mm)", &LWmax);
-
-  declvar("net_rainD", NHRU, "daily net rain", "(mm/d)", &net_rainD);
+  declvar("Qp_ebsm", TDim::NHRU, "input from rainfall", "(MJ/d)", &Qp_ebsm);
 
 
-  decldiagparam("delay_melt", NHRU, "[0]", "0","366", "inhibit melt until this Julian date. Default incorrect for the Southern Hemisphere", "()", &delay_melt);
+  decldiag("LWmax", TDim::NHRU, "maximum liquid water in snowpack", "(mm)", &LWmax);
 
-  decldiagparam("Qe_subl_from_SWE", NHRU, "[0]", "0", "1", "0 - add to 'Qmelt' (original version), 1 - take Qe_subl from SWE ", "()", &Qe_subl_from_SWE);
+  declvar("net_rainD", TDim::NHRU, "daily net rain", "(mm/d)", &net_rainD);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  decldiagparam("delay_melt", TDim::NHRU, "[0]", "0","366", "inhibit melt until this Julian date. Default incorrect for the Southern Hemisphere", "()", &delay_melt);
+
+  decldiagparam("Qe_subl_from_SWE", TDim::NHRU, "[0]", "0", "1", "0 - add to 'Qmelt' (original version), 1 - take Qe_subl from SWE ", "()", &Qe_subl_from_SWE);
+
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
 
   declgetvar("*", "SunMax", "(h)",       &sunmax);
@@ -84,21 +84,21 @@ void Classebsm::decl(void) {
 
   variation_set = VARIATION_0;
 
-  decldiagparam("tfactor", NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*°C)", &tfactor);
+  decldiagparam("tfactor", TDim::NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*°C)", &tfactor);
 
-  decldiagparam("nfactor", NHRU, "[0.0]", "0.0","10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
+  decldiagparam("nfactor", TDim::NHRU, "[0.0]", "0.0","10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
 
-  decldiagparam("Use_QnD", NHRU, "[0]", "0","1", "1 - Use QnD if available", "()", &Use_QnD);
+  decldiagparam("Use_QnD", TDim::NHRU, "[0]", "0","1", "1 - Use QnD if available", "()", &Use_QnD);
 
 
   variation_set = VARIATION_0 + VARIATION_3;
 
-  declreadobs("QnD", NHRU, "net radiation", "(MJ/m^2*d)", &QnD, HRU_OBS_Q, true); // must check for NULL
+  declreadobs("QnD", TDim::NHRU, "net radiation", "(MJ/m^2*d)", &QnD, HRU_OBS_Q, true); // must check for NULL
 
 
   variation_set = VARIATION_1 + VARIATION_2;
 
-  declstatvar("Qnsn_Acc", NHRU, "accumulator for Qnsn_Var/Qnsn", "(W/m^2)", &Qnsn_Acc); // daily value
+  declstatvar("Qnsn_Acc", TDim::NHRU, "accumulator for Qnsn_Var/Qnsn", "(W/m^2)", &Qnsn_Acc); // daily value
 
 
   variation_set = VARIATION_1;
@@ -108,14 +108,14 @@ void Classebsm::decl(void) {
   variation_set = VARIATION_2;
 
 
-  declreadobs("Qnsn", NHRU, "net radiation", "(W/m^2*int)", &Qnsn, HRU_OBS_Q);
+  declreadobs("Qnsn", TDim::NHRU, "net radiation", "(W/m^2*int)", &Qnsn, HRU_OBS_Q);
 
   variation_set = VARIATION_ORG;
 }
 
 void Classebsm::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(hh = 0; hh < nhru; ++hh) {
     snowmeltD[hh] = 0.0;

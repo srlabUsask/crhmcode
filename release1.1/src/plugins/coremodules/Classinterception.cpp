@@ -23,40 +23,40 @@ void Classinterception::decl(void) {
 
   Description = "'Calculates canopy sublimation and unloading.'";
 
-  declvar("SI_Lo", NHRU, "Canopy load", "(kg/m^2)", &SI_Lo);
+  declvar("SI_Lo", TDim::NHRU, "Canopy load", "(kg/m^2)", &SI_Lo);
 
-  declvar("net_snow", NHRU, "Canopy unload ", "(kg/m^2)", &net_snow);
+  declvar("net_snow", TDim::NHRU, "Canopy unload ", "(kg/m^2)", &net_snow);
 
-  decldiag("Cum_net_snow", NHRU, "Cumulative Canopy unload ", "(kg/m^2)", &Cum_net_snow);
+  decldiag("Cum_net_snow", TDim::NHRU, "Cumulative Canopy unload ", "(kg/m^2)", &Cum_net_snow);
 
-  declvar("SI_Subl", NHRU, "Canopy sublimation", "(kg/m^2*int)", &SI_Subl);
+  declvar("SI_Subl", TDim::NHRU, "Canopy sublimation", "(kg/m^2*int)", &SI_Subl);
 
-  decldiag("Cum_Subl", NHRU, "Cumulative Canopy sublimation", "(kg/m^2)", &Cum_Subl);
-
-
-  declvar("net_rain", NHRU, "hru_rain minus interception", "(mm/int)", &net_rain);
-
-  decldiag("v", NHRU, "ventilation velocity", "(m/s)", &v);
+  decldiag("Cum_Subl", TDim::NHRU, "Cumulative Canopy sublimation", "(kg/m^2)", &Cum_Subl);
 
 
-  declparam("Sbar", NHRU, "[6.6]", "0.0", "100.0", "Maximum snow load", "(kg/m^2)", &Sbar);
+  declvar("net_rain", TDim::NHRU, "hru_rain minus interception", "(mm/int)", &net_rain);
 
-  declparam("LAI", NHRU, "[2.2]", "0.0", "10.0", "Leaf are index", "(m^2/m^2)", &LAI);
-
-  decldiagparam("k", NHRU, "[0.0113]", "0.0", "1.0", "Snow shape coefficient", "()", &k);
-
-  declparam("Ht", NHRU, "[20]", "0.0", "100.0", "Canopy height", "(m)", &Ht);
-
-  decldiagparam("WidthJ", NHRU, "[75]", "0.0", "100.0", "Canopy ", "(m)", &WidthJ);
-
-  decldiagparam("velW", NHRU, "[0.75]", "0.0", "1.0", "Canopy wind coefficient", "(m)", &velw);
-
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
-
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  decldiag("v", TDim::NHRU, "ventilation velocity", "(m/s)", &v);
 
 
-  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
+  declparam("Sbar", TDim::NHRU, "[6.6]", "0.0", "100.0", "Maximum snow load", "(kg/m^2)", &Sbar);
+
+  declparam("LAI", TDim::NHRU, "[2.2]", "0.0", "10.0", "Leaf are index", "(m^2/m^2)", &LAI);
+
+  decldiagparam("k", TDim::NHRU, "[0.0113]", "0.0", "1.0", "Snow shape coefficient", "()", &k);
+
+  declparam("Ht", TDim::NHRU, "[20]", "0.0", "100.0", "Canopy height", "(m)", &Ht);
+
+  decldiagparam("WidthJ", TDim::NHRU, "[75]", "0.0", "100.0", "Canopy ", "(m)", &WidthJ);
+
+  decldiagparam("velW", TDim::NHRU, "[0.75]", "0.0", "1.0", "Canopy wind coefficient", "(m)", &velw);
+
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+
+
+  declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
 
   declgetvar("*", "hru_t", "(°C)", &hru_t);
   declgetvar("*", "hru_snow", "(mm/int)", &hru_snow);
@@ -67,8 +67,8 @@ void Classinterception::decl(void) {
 
 void Classinterception::init(void) {
 
-  nobs = getdim(NOBS);
-  nhru = getdim(NHRU);
+  nobs = getdim(TDim::NOBS);
+  nhru = getdim(TDim::NHRU);
 
   for(hh = 0; hh < nhru; ++hh) {
     SI_Lo[hh] = 0.0;

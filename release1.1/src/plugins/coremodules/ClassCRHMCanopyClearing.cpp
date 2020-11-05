@@ -31,12 +31,12 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   variation_set = VARIATION_0 + VARIATION_1;
 
-  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
+  declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
 
 
   variation_set = VARIATION_0 + VARIATION_2;
 
-  declreadobs("Qli", NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
+  declreadobs("Qli", TDim::NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
 
 
   variation_set = VARIATION_1 + VARIATION_3 + VARIATION_4;
@@ -80,114 +80,114 @@ void ClassCRHMCanopyClearing::decl(void) {
 
 // declared observations
 
-  declobs("Ts", NHRU, "snow surface temperature", "(°C)", &Ts);
+  declobs("Ts", TDim::NHRU, "snow surface temperature", "(°C)", &Ts);
 
-  declobs("Qnsn", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
+  declobs("Qnsn", TDim::NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
 
-  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2*int)", &Qnsn_Var);
+  declvar("Qnsn_Var", TDim::NHRU, "net all-wave at snow surface", "(W/m^2*int)", &Qnsn_Var);
 
-  declobs("Qsisn", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn);
+  declobs("Qsisn", TDim::NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn);
 
-  declvar("Qsisn_Var", NHRU, "incident short-wave at surface", "(W/m^2*int)", &Qsisn_Var);
+  declvar("Qsisn_Var", TDim::NHRU, "incident short-wave at surface", "(W/m^2*int)", &Qsisn_Var);
 
-  declobs("Qlisn", NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn);
+  declobs("Qlisn", TDim::NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn);
 
-  declvar("Qlisn_Var", NHRU, "incident short-wave at surface", "(W/m^2*int)", &Qlisn_Var);
+  declvar("Qlisn_Var", TDim::NHRU, "incident short-wave at surface", "(W/m^2*int)", &Qlisn_Var);
 
-  declobs("Qlosn", NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
+  declobs("Qlosn", TDim::NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
 
 // declared variables
 
-  decldiag("k", NHRU, "extinction coefficient", "()", &k);
+  decldiag("k", TDim::NHRU, "extinction coefficient", "()", &k);
 
-  decldiag("Tauc", NHRU, "short-wave transmissivity", "(W/m^2)", &Tauc);
+  decldiag("Tauc", TDim::NHRU, "short-wave transmissivity", "(W/m^2)", &Tauc);
 
-  decllocal("Pa", NHRU, "Average surface pressure", "(kPa)", &Pa);
+  decllocal("Pa", TDim::NHRU, "Average surface pressure", "(kPa)", &Pa);
 
-  declvar("ra", NHRU, "", "(s/m)", &ra);
+  declvar("ra", TDim::NHRU, "", "(s/m)", &ra);
 
-  declvar("drip_cpy", NHRU, "canopy drip", "(mm/int)", &drip_Cpy);
+  declvar("drip_cpy", TDim::NHRU, "canopy drip", "(mm/int)", &drip_Cpy);
 
-  declvar("direct_rain", NHRU, "direct rainfall through canopy", "(mm/int)", &direct_rain);
+  declvar("direct_rain", TDim::NHRU, "direct rainfall through canopy", "(mm/int)", &direct_rain);
 
-  declvar("net_rain", NHRU, " direct_rain + drip", "(mm/int)", &net_rain);
+  declvar("net_rain", TDim::NHRU, " direct_rain + drip", "(mm/int)", &net_rain);
 
-  declstatdiag("cum_net_rain", NHRU, " direct_rain + drip", "(mm)", &cum_net_rain);
+  declstatdiag("cum_net_rain", TDim::NHRU, " direct_rain + drip", "(mm)", &cum_net_rain);
 
-  declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
+  declvar("Subl_Cpy", TDim::NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
-  declstatdiag("cum_Subl_Cpy", NHRU, "canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
+  declstatdiag("cum_Subl_Cpy", TDim::NHRU, "canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
 
-  decldiag("Pevap", NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
+  decldiag("Pevap", TDim::NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
 
-  declstatvar("rain_load", NHRU, "canopy rain load", "(mm)", &rain_load);
+  declstatvar("rain_load", TDim::NHRU, "canopy rain load", "(mm)", &rain_load);
 
-  declstatvar("Snow_load", NHRU, "canopy snow load (timetep start)", "(mm)", &Snow_load);
+  declstatvar("Snow_load", TDim::NHRU, "canopy snow load (timetep start)", "(mm)", &Snow_load);
 
-  declvar("direct_snow", NHRU, "snow 'direct' Thru", "(mm/int)", &direct_snow);
+  declvar("direct_snow", TDim::NHRU, "snow 'direct' Thru", "(mm/int)", &direct_snow);
 
-  declvar("SUnload", NHRU, "unloaded canopy snow", "(mm)", &SUnload);
+  declvar("SUnload", TDim::NHRU, "unloaded canopy snow", "(mm)", &SUnload);
 
-  declvar("SUnload_H2O", NHRU, "unloaded canopy snow as water", "(mm)", &SUnload_H2O);
+  declvar("SUnload_H2O", TDim::NHRU, "unloaded canopy snow as water", "(mm)", &SUnload_H2O);
 
-  declstatdiag("cum_SUnload_H2O", NHRU, "Cumulative unloaded canopy snow as water", "(mm)", &cum_SUnload_H2O);
+  declstatdiag("cum_SUnload_H2O", TDim::NHRU, "Cumulative unloaded canopy snow as water", "(mm)", &cum_SUnload_H2O);
 
-  declstatdiag("cum_SUnload", NHRU, "Cumulative unloaded canopy snow as snow", "(mm)", &cum_SUnload);
+  declstatdiag("cum_SUnload", TDim::NHRU, "Cumulative unloaded canopy snow as snow", "(mm)", &cum_SUnload);
 
-  declvar("net_snow", NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
+  declvar("net_snow", TDim::NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
 
-  declstatdiag("cum_net_snow", NHRU, "Cumulative Canopy unload ", "(mm)", &cum_net_snow);
+  declstatdiag("cum_net_snow", TDim::NHRU, "Cumulative Canopy unload ", "(mm)", &cum_net_snow);
 
-  declvar("net_p", NHRU, "total precipitation after interception", "(mm/int)", &net_p);
+  declvar("net_p", TDim::NHRU, "total precipitation after interception", "(mm/int)", &net_p);
 
-  decldiag("u_FHt", NHRU, "wind speed at forest top (z = FHt)", "(m/s)", &u_FHt);
+  decldiag("u_FHt", TDim::NHRU, "wind speed at forest top (z = FHt)", "(m/s)", &u_FHt);
 
-  decldiag("Cc", NHRU, "Canopy coverage", "()", &Cc);
+  decldiag("Cc", TDim::NHRU, "Canopy coverage", "()", &Cc);
 
-  declvar("intcp_evap", NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
+  declvar("intcp_evap", TDim::NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
 
-  declstatdiag("cum_intcp_evap", NHRU, "HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
+  declstatdiag("cum_intcp_evap", TDim::NHRU, "HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
 
 
 // parameters:
 
-  declparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
+  declparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "forest/vegetation height", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "forest/vegetation height", "(m)", &Ht);
 
-  declparam("Zref", NHRU, "[1.5]", "0.01", "100.0", "temperature measurement height", "(m)", &Zref);
+  declparam("Zref", TDim::NHRU, "[1.5]", "0.01", "100.0", "temperature measurement height", "(m)", &Zref);
 
-  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
+  declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
 
-  declparam("Z0snow", NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
+  declparam("Z0snow", TDim::NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
 
-  declparam("LAI", NHRU, "[2.2]", "0.1", "20.0", "leaf-area-index", "()", &LAI);
+  declparam("LAI", TDim::NHRU, "[2.2]", "0.1", "20.0", "leaf-area-index", "()", &LAI);
 
-  declparam("Sbar", NHRU, "[6.6]", "0.0", "100.0", "maximum canopy snow interception load", "(kg/m^2)", &Sbar);
+  declparam("Sbar", TDim::NHRU, "[6.6]", "0.0", "100.0", "maximum canopy snow interception load", "(kg/m^2)", &Sbar);
 
-  declparam("Zvent", NHRU, "[0.75]", "0.0", "1.0", "ventilation wind speed height (z/Ht)", "()", &Zvent);
+  declparam("Zvent", TDim::NHRU, "[0.75]", "0.0", "1.0", "ventilation wind speed height (z/Ht)", "()", &Zvent);
 
-  declparam("unload_t", NHRU, "[1.0]", "-10.0", "20.0", "if ice-bulb temp >= t : canopy snow is unloaded as snow", "(°C)", &unload_t);
+  declparam("unload_t", TDim::NHRU, "[1.0]", "-10.0", "20.0", "if ice-bulb temp >= t : canopy snow is unloaded as snow", "(°C)", &unload_t);
 
-  declparam("unload_t_water", NHRU, "[4.0]", "-10.0", "20.0", "if ice-bulb temp >= t: canopy snow is unloaded as water", "(°C)", &unload_t_water);
+  declparam("unload_t_water", TDim::NHRU, "[4.0]", "-10.0", "20.0", "if ice-bulb temp >= t: canopy snow is unloaded as water", "(°C)", &unload_t_water);
 
-  declparam("CanopyClearing", NHRU, "[0]", "0", "1", "canopy - 0/clearing - 1", "()", &CanopyClearing);
+  declparam("CanopyClearing", TDim::NHRU, "[0]", "0", "1", "canopy - 0/clearing - 1", "()", &CanopyClearing);
 
-  decldiagparam("Alpha_c", NHRU, "[0.1]", "0.05", "0.2", "canopy albedo", "()", &Alpha_c);
+  decldiagparam("Alpha_c", TDim::NHRU, "[0.1]", "0.05", "0.2", "canopy albedo", "()", &Alpha_c);
 
-  decldiagparam("B_canopy", NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
+  decldiagparam("B_canopy", TDim::NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
 }
 
 void ClassCRHMCanopyClearing::init(void) {
 
-  nhru = getdim(NHRU); // transfers current # of HRU's to module
+  nhru = getdim(TDim::NHRU); // transfers current # of HRU's to module
 
   for (hh = 0; hh < nhru; ++hh) {
 

@@ -22,22 +22,22 @@ void ClassObstoPar::decl(void) {
 
   Description = "'Every interval sets the parameter specified in parameter \"par_name\"to the value of the observation specified in parameter \"obs_name\".'";
 
-  obs_name = declparam("obs_name", BASIN, "default_obs", "observation name", obs_name);
+  obs_name = declparam("obs_name", TDim::BASIN, "default_obs", "observation name", obs_name);
 
-  par_name = declparam("par_name", BASIN, "default_par", "parameter name", par_name);
+  par_name = declparam("par_name", TDim::BASIN, "default_par", "parameter name", par_name);
 
   if(par_name)
     declputparam("*", (par_name->Strings[0]).c_str(), "(m)", &Ht);
 
 
   if(obs_name)
-    declreadobs((obs_name->Strings[0]).c_str(), NHRU, "height observation", "(m)", &Ht_obs);
+    declreadobs((obs_name->Strings[0]).c_str(), TDim::NHRU, "height observation", "(m)", &Ht_obs);
 
-  decldiag("Ht_var", NHRU, "variable name", "()", &Ht_var);
+  decldiag("Ht_var", TDim::NHRU, "variable name", "()", &Ht_var);
 }
 
 void ClassObstoPar::init(void) {
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   if(Ht_obs == NULL){
     CRHMException TExcept("\"Ht_obs\". No observation vegetation height data!  Using constant parameter value instead.", TExcept::WARNING);

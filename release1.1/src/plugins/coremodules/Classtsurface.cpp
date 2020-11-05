@@ -29,11 +29,11 @@ void Classtsurface::decl(void) {
     'use previous daily mean snowpack temperature with thermal conductivity and energy of snowpack (***Snobal*** case) to estimate surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57).' \
     'use previous daily mean hru_t with thermal conductivity and energy of snowpack (***ebsm*** case) to estimate surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57). '";
 
-  declvar("hru_tsf", NHRU, "surface/skin temperature", "(°C)", &hru_tsf);
+  declvar("hru_tsf", TDim::NHRU, "surface/skin temperature", "(°C)", &hru_tsf);
 
-  declvar("hru_tsf_D", NHRU, "mean daily surface/skin temperature", "(°C)", &hru_tsf_D);
+  declvar("hru_tsf_D", TDim::NHRU, "mean daily surface/skin temperature", "(°C)", &hru_tsf_D);
 
-  decldiag("hru_tsf_acc", NHRU, "mean daily surface/skin temperature", "(°C)", &hru_tsf_acc);
+  decldiag("hru_tsf_acc", TDim::NHRU, "mean daily surface/skin temperature", "(°C)", &hru_tsf_acc);
 
   declgetvar("*", "SWE", "(m)", &SWE);
 
@@ -42,9 +42,9 @@ void Classtsurface::decl(void) {
 
   variation_set = VARIATION_2 + VARIATION_4; // Snobal
 
-  decllocal("hru_T_s_D", NHRU, "mean daily surface/skin temperature", "(°C)", &hru_T_s_D);
+  decllocal("hru_T_s_D", TDim::NHRU, "mean daily surface/skin temperature", "(°C)", &hru_T_s_D);
 
-  decllocal("hru_T_s_acc", NHRU, "sum interval air temperature from previous day", "(°C)", &hru_T_s_acc);
+  decllocal("hru_T_s_acc", TDim::NHRU, "sum interval air temperature from previous day", "(°C)", &hru_T_s_acc);
 
   declgetvar("*", "z_s", "(m)", &z_s);
 
@@ -57,9 +57,9 @@ void Classtsurface::decl(void) {
 
   variation_set = VARIATION_3 + VARIATION_5; // ebsm
 
-  decllocal("hru_t_D", NHRU, "mean daily snowpack temperature from previous day", "(°C)", &hru_t_D);
+  decllocal("hru_t_D", TDim::NHRU, "mean daily snowpack temperature from previous day", "(°C)", &hru_t_D);
 
-  decllocal("hru_t_acc", NHRU, "sum interval air temperature from previous day", "(°C)", &hru_t_acc);
+  decllocal("hru_t_acc", TDim::NHRU, "sum interval air temperature from previous day", "(°C)", &hru_t_acc);
 
   declgetvar("*", "hru_tmin", "(°C)",   &tmin);
 
@@ -68,15 +68,15 @@ void Classtsurface::decl(void) {
 
   variation_set = VARIATION_0 + VARIATION_2 + VARIATION_3;
 
-  decllocal("Zdt_last", NHRU, "Last value of thaw depth", "(m)", &Zdt_last);
+  decllocal("Zdt_last", TDim::NHRU, "Last value of thaw depth", "(m)", &Zdt_last);
 
-  declparam("W_a", NHRU, "[0.77]", "0.0", "1.5", "empirical constant for air temperature", "()", &W_a);
+  declparam("W_a", TDim::NHRU, "[0.77]", "0.0", "1.5", "empirical constant for air temperature", "()", &W_a);
 
-  declparam("W_b", NHRU, "[0.02]", "0.0", "0.1", "empirical constant for net radiation at ground surface", "()", &W_b);
+  declparam("W_b", TDim::NHRU, "[0.02]", "0.0", "0.1", "empirical constant for net radiation at ground surface", "()", &W_b);
 
-  declparam("W_c", NHRU, "[7.0]", "0.0", "10.0", "empirical constant for frost table", "()", &W_c);
+  declparam("W_c", TDim::NHRU, "[7.0]", "0.0", "10.0", "empirical constant for frost table", "()", &W_c);
 
-  declparam("W_d", NHRU, "[0.03]", "0.0", "0.1", "empirical constant for frost table", "()", &W_d);
+  declparam("W_d", TDim::NHRU, "[0.03]", "0.0", "0.1", "empirical constant for frost table", "()", &W_d);
 
   declgetvar("*", "netD", "(MJ/m^2*d)", &netD);
 
@@ -85,22 +85,22 @@ void Classtsurface::decl(void) {
 
   variation_set = VARIATION_1 + VARIATION_4 + VARIATION_5;
 
-  declparam("n_factor_a", NHRU, "[1.0]", "0", "1.2", "a constant in n_factor = n_factor_a - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_a);
+  declparam("n_factor_a", TDim::NHRU, "[1.0]", "0", "1.2", "a constant in n_factor = n_factor_a - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_a);
 
-  declparam("n_factor_b", NHRU, "[0.0]", "0.0", "1.0", "a constant in n_factor = n_factor_b - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_b);
+  declparam("n_factor_b", TDim::NHRU, "[0.0]", "0.0", "1.0", "a constant in n_factor = n_factor_b - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_b);
 
-  declparam("n_factor_c", NHRU, "[0.0]", "0.0", "0.1", "a constant in n_factor = n_factor_c - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_c);
+  declparam("n_factor_c", TDim::NHRU, "[0.0]", "0.0", "0.1", "a constant in n_factor = n_factor_c - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_c);
 
-  decllocal("n_factor_T", NHRU, "Days after the start of thaw", "()", &n_factor_T);
+  decllocal("n_factor_T", TDim::NHRU, "Days after the start of thaw", "()", &n_factor_T);
 
-  decllocal("n_factor", NHRU, "Calculated value of n_factor from parameters", "()", &n_factor);
+  decllocal("n_factor", TDim::NHRU, "Calculated value of n_factor from parameters", "()", &n_factor);
 
 
   variation_set = VARIATION_2 + VARIATION_3 + VARIATION_4 + VARIATION_5;
 
-  declvar("SWE_tc", NHRU, "SWE thermal conductivity", "(W/(m*K)", &SWE_tc);
+  declvar("SWE_tc", TDim::NHRU, "SWE thermal conductivity", "(W/(m*K)", &SWE_tc);
 
-  declvar("SWE_density", NHRU, "SWE density", "( kg/m^3)", &SWE_density);
+  declvar("SWE_density", TDim::NHRU, "SWE density", "( kg/m^3)", &SWE_density);
 
 
   variation_set = VARIATION_ORG;
@@ -108,7 +108,7 @@ void Classtsurface::decl(void) {
 
 void Classtsurface::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for (hh = 0; chkStruct(); ++hh){
     hru_tsf_D[hh] = 0.0;

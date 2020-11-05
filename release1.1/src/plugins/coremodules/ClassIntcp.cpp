@@ -23,22 +23,22 @@ void Classintcp::decl(void) {
 
   Description = "'Substitutes for canopy in open environment - implements variable name change. hru_snow --> net_snow, hru_rain --> net_rain.'";
 
-  declvar("net_rain", NHRU, "hru_rain minus interception", "(mm/int)", &net_rain);
+  declvar("net_rain", TDim::NHRU, "hru_rain minus interception", "(mm/int)", &net_rain);
 
-  declstatdiag("cumnet_rain", NHRU, "cumulative hru_rain minus interception", "(mm)", &cumnet_rain);
+  declstatdiag("cumnet_rain", TDim::NHRU, "cumulative hru_rain minus interception", "(mm)", &cumnet_rain);
 
-  declvar("net_snow", NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
+  declvar("net_snow", TDim::NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
 
-  declstatdiag("cumnet_snow", NHRU, "cumulative hru_snow minus interception", "(mm)", &cumnet_snow);
+  declstatdiag("cumnet_snow", TDim::NHRU, "cumulative hru_snow minus interception", "(mm)", &cumnet_snow);
 
-  declvar("net_p", NHRU, "hru_precipitation (rain and/or snow) less interception", "(mm/int)", &net_p);
+  declvar("net_p", TDim::NHRU, "hru_precipitation (rain and/or snow) less interception", "(mm/int)", &net_p);
 
-  declvar("intcp_evap", NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
+  declvar("intcp_evap", TDim::NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
 
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
   declgetvar("*", "hru_rain", "(mm/int)", &hru_rain);
   declgetvar("*", "hru_snow", "(mm/int)", &hru_snow);
@@ -48,7 +48,7 @@ void Classintcp::decl(void) {
 
 void Classintcp::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
   for(hh = 0; hh < nhru; ++hh) {
     cumnet_rain[hh] = 0.0;
     cumnet_snow[hh] = 0.0;

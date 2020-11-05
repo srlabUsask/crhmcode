@@ -22,13 +22,13 @@ void ClassMeltRunoff_Lag::decl(void) {
 
   Description = "'Calculates Melt Runoff.'";
 
-  declvar("Tf", NHRU, "time lag after water percolated snowcover", "()", &Tf);  // minutes
+  declvar("Tf", TDim::NHRU, "time lag after water percolated snowcover", "()", &Tf);  // minutes
 
-  decldiag("In_Lagstorage", NHRU, "melt runoff in Lag storage at the beginning of interval!", "(mm)", &In_Lagstorage);
+  decldiag("In_Lagstorage", TDim::NHRU, "melt runoff in Lag storage at the beginning of interval!", "(mm)", &In_Lagstorage);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("inhibit_MeltRunoff_Lag", NHRU, "[0]", "0", "1", "inhibit MeltRunoff_Lag correction, 1 -> inhibit", "()", &inhibit_MeltRunoff_Lag);
+  declparam("inhibit_MeltRunoff_Lag", TDim::NHRU, "[0]", "0", "1", "inhibit MeltRunoff_Lag correction, 1 -> inhibit", "()", &inhibit_MeltRunoff_Lag);
 
   declputparam("*", "runLag", "(h)", &runLag);
 
@@ -39,7 +39,7 @@ void ClassMeltRunoff_Lag::decl(void) {
 
 void ClassMeltRunoff_Lag::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(hh = 0; chkStruct(); ++hh) {
     Tf[hh] = 0;

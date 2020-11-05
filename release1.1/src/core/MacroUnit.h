@@ -55,7 +55,7 @@ public:
 
 	~ClassMacro();
 
-	long declobs(string module, string name, CRHM::TDim dimen, string help, string units, double **value);
+	long declobs(string module, string name, TDim dimen, string help, string units, double **value);
 
 	virtual void decl(void);
 
@@ -80,7 +80,7 @@ public:
 	virtual void CallInit(long nhru, long nlay) {};
 
 protected:
-	CRHM::TDim getTDim(string D);
+	TDim getTDim(string D);
 	TFun getTFunc(string D);
 	ClassMacro *Macro;
 	symtab_t::iterator FP;
@@ -105,7 +105,7 @@ public:
 	void CallInit(long nhru, long nlay);
 
 	string name;
-	CRHM::TDim Dim;
+	TDim Dim;
 	string Default;
 	string Min;
 	string Max;
@@ -123,7 +123,7 @@ public:
 	void CallInit(long nhru, long nlay);
 
 	string name;
-	CRHM::TDim Dim;
+	TDim Dim;
 	string Description;
 	string Units;
 	bool Int;
@@ -136,7 +136,7 @@ public:
 	void CallInit(long nhru, long nlay);
 
 	string name;
-	CRHM::TDim Dim;
+	TDim Dim;
 	string Description;
 	string Units;
 	bool Int;
@@ -149,7 +149,7 @@ public:
 	void CallInit(long nhru, long nlay);
 
 	string name;
-	CRHM::TDim Dim;
+	TDim Dim;
 	string Description;
 	string Units;
 	bool Int;
@@ -162,7 +162,7 @@ public:
 	void CallInit(long nhru, long nlay);
 
 	string name;
-	CRHM::TDim Dim;
+	TDim Dim;
 	string Description;
 	string Units;
 	bool Int;
@@ -175,7 +175,7 @@ public:
 	void CallInit(long nhru, long nlay);
 
 	string name;
-	CRHM::TDim Dim;
+	TDim Dim;
 	string Description;
 	string Units;
 };
@@ -222,7 +222,7 @@ public:
 	void CallDecl();
 
 	string name;
-	CRHM::TDim Dim;
+	TDim Dim;
 	string Description;
 	string Units;
 	long HRU_OBS_indexed;

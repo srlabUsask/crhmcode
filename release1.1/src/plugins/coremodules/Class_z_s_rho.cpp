@@ -22,9 +22,9 @@ void Class_z_s_rho::decl(void) {
 
   Description = "'Required when pbsmSnobal used with glacier and glacier_org. Replaces z_s and rho normally supplied by module SnobalCRHM to pbsmSnobal.'";
 
-  declstatvar("z_s", NHRU, "total snowcover thickness", "(m)", &z_s);
+  declstatvar("z_s", TDim::NHRU, "total snowcover thickness", "(m)", &z_s);
 
-  declstatvar("rho", NHRU, "average snowcover density", "(kg/m^3)", &rho);
+  declstatvar("rho", TDim::NHRU, "average snowcover density", "(kg/m^3)", &rho);
 
   declgetvar("*", "SWE", "(mm)",        &SWE);
 
@@ -32,7 +32,7 @@ void Class_z_s_rho::decl(void) {
 
 void Class_z_s_rho::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for (hh = 0; chkStruct(); ++hh){
     z_s[hh] = 0.0;

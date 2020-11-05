@@ -22,61 +22,61 @@ void ClassSimpleRichard::decl(void) {
 
     Description = "'A simple snow melt model (R. Essery).'";
 
-    declvar("alb", NHRU, "Snow albedo", "()", &alb);
+    declvar("alb", TDim::NHRU, "Snow albedo", "()", &alb);
 
-    declvar("snowmelt", NHRU, "snow melt", "(kg/m^2)", &snowmelt);
+    declvar("snowmelt", TDim::NHRU, "snow melt", "(kg/m^2)", &snowmelt);
 
-    declvar("sursubl", NHRU, "Surface sublimation", "(kg/m^2)", &sursubl);
+    declvar("sursubl", TDim::NHRU, "Surface sublimation", "(kg/m^2)", &sursubl);
 
-    declvar("meltclark", NHRU, "snow melt delayed", "(kg/m^2)", &meltclark);
+    declvar("meltclark", TDim::NHRU, "snow melt delayed", "(kg/m^2)", &meltclark);
 
-    declvar("T0", NHRU, "Surface temperature", "(°C)", &T0);
-
-
-    declvar("LE", NHRU, "Latent heat flux", "(W/m^2)", &LE);
-
-    declvar("H", NHRU, "Sensible heat flux", "(W/m^2)", &H);
-
-    declvar("Hsm", NHRU, "Snowmelt heat flux", "(W/m^2)", &Hsm);
-
-    declvar("LWn", NHRU, "Net longwave radiation", "(W/m^2)", &LWn);
-
-    declvar("SWn", NHRU, "Net shortwave radiation", "(W/m^2)", &SWn);
+    declvar("T0", TDim::NHRU, "Surface temperature", "(°C)", &T0);
 
 
+    declvar("LE", TDim::NHRU, "Latent heat flux", "(W/m^2)", &LE);
 
-    declreadobs("Qsi", NHRU, "short-wave incoming", "W/m^2", &Qsi, HRU_OBS_Q);
+    declvar("H", TDim::NHRU, "Sensible heat flux", "(W/m^2)", &H);
 
-    declreadobs("Qli", NHRU, "long-wave incoming", "W/m^2", &Qli, HRU_OBS_Q);
+    declvar("Hsm", TDim::NHRU, "Snowmelt heat flux", "(W/m^2)", &Hsm);
 
-    declreadobs("snow", NHRU, "snowfall rate", "mm/int", &snow, HRU_OBS_misc);
+    declvar("LWn", TDim::NHRU, "Net longwave radiation", "(W/m^2)", &LWn);
 
-    declreadobs("t", NHRU, "air temperature", "(°C)", &t, HRU_OBS_t_rh_ea);
-
-    declreadobs("u", NHRU, "windspeed", "m/s", &u, HRU_OBS_u);
-
-    declreadobs("rh", NHRU, "relative humidity", "rh", &rh, HRU_OBS_t_rh_ea);
+    declvar("SWn", TDim::NHRU, "Net shortwave radiation", "(W/m^2)", &SWn);
 
 
-    decldiagparam("a1", NHRU, "[1.08e7]", "0.0", "1.0e8", "Albedo decay time constant for cold snow", "(s)", &a1);
 
-    decldiagparam("a2", NHRU, "[7.2e5]", "0.0", "1.0e8", "Albedo decay time constant for melting snow", "(s)", &a2);
+    declreadobs("Qsi", TDim::NHRU, "short-wave incoming", "W/m^2", &Qsi, HRU_OBS_Q);
 
-    decldiagparam("amin", NHRU, "[0.5]", "0.0", "1.0", "Minimum albedo for aged snow", "()", &amin);
+    declreadobs("Qli", TDim::NHRU, "long-wave incoming", "W/m^2", &Qli, HRU_OBS_Q);
 
-    decldiagparam("amax", NHRU, "[0.84]", "0.0", "1.0", "Maximum albedo for fresh snow", "()", &amax);
+    declreadobs("snow", TDim::NHRU, "snowfall rate", "mm/int", &snow, HRU_OBS_misc);
 
-    decldiagparam("smin", NHRU, "[10]", "0.0", "20", "Minimum snowfall to refresh snow albedo", "(mm)", &smin);
+    declreadobs("t", TDim::NHRU, "air temperature", "(°C)", &t, HRU_OBS_t_rh_ea);
 
-    declparam("Z0snow", NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
+    declreadobs("u", TDim::NHRU, "windspeed", "m/s", &u, HRU_OBS_u);
 
-    declparam("Zref", NHRU, "[2]", "0.0", "100.0", "Reference height", "(m)", &Zref);
+    declreadobs("rh", TDim::NHRU, "relative humidity", "rh", &rh, HRU_OBS_t_rh_ea);
 
-    decldiagparam("Pa", NHRU, "[84]", "10", "1e3", "Average surface pressure", "(KPa)", &Pa);
 
-    decldiagparam("Kstorage", NHRU, "[0.0]", "0.0","200.0", "storage constant", "(d)", &Kstorage);
+    decldiagparam("a1", TDim::NHRU, "[1.08e7]", "0.0", "1.0e8", "Albedo decay time constant for cold snow", "(s)", &a1);
 
-    decldiagparam("Lag", NHRU, "[0.0]", "0.0","960.0", "lag delay", "(h)", &Lag);
+    decldiagparam("a2", TDim::NHRU, "[7.2e5]", "0.0", "1.0e8", "Albedo decay time constant for melting snow", "(s)", &a2);
+
+    decldiagparam("amin", TDim::NHRU, "[0.5]", "0.0", "1.0", "Minimum albedo for aged snow", "()", &amin);
+
+    decldiagparam("amax", TDim::NHRU, "[0.84]", "0.0", "1.0", "Maximum albedo for fresh snow", "()", &amax);
+
+    decldiagparam("smin", TDim::NHRU, "[10]", "0.0", "20", "Minimum snowfall to refresh snow albedo", "(mm)", &smin);
+
+    declparam("Z0snow", TDim::NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
+
+    declparam("Zref", TDim::NHRU, "[2]", "0.0", "100.0", "Reference height", "(m)", &Zref);
+
+    decldiagparam("Pa", TDim::NHRU, "[84]", "10", "1e3", "Average surface pressure", "(KPa)", &Pa);
+
+    decldiagparam("Kstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "storage constant", "(d)", &Kstorage);
+
+    decldiagparam("Lag", TDim::NHRU, "[0.0]", "0.0","960.0", "lag delay", "(h)", &Lag);
 
 
     declputvar("*", "SWE", "(mm)", &SWE);
@@ -86,7 +86,7 @@ void ClassSimpleRichard::decl(void) {
 
 void ClassSimpleRichard::init(void) {
 
-    nhru = getdim(NHRU); // transfers current # of HRU's to module
+    nhru = getdim(TDim::NHRU); // transfers current # of HRU's to module
 
     Delays = new ClassClark(snowmelt, meltclark, Kstorage, Lag, nhru);
 

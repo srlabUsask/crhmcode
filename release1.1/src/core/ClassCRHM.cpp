@@ -114,7 +114,7 @@ void ClassVar::ReadVar(void) {
 
 	if (FileData->Times == NULL) {
 		if (varType == TVar::ReadF || varType == TVar::Read) {
-			if (dimen == CRHM::NHRU)
+			if (dimen == TDim::NHRU)
 				for (long ii = 0; ii < dim; ++ii)
 					values[ii] = FileData->Data
 					[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][Global::DTindx / FileData->ModN - FileData->IndxMin];
@@ -137,7 +137,7 @@ void ClassVar::ReadVar(void) {
 		}
 		else if (varType == TVar::ReadI)
 		{
-			if (dimen == CRHM::NHRU)
+			if (dimen == TDim::NHRU)
 			{
 				for (long ii = 0; ii < dim; ++ii)
 				{
@@ -165,7 +165,7 @@ void ClassVar::ReadVar(void) {
 	else if (FileData->GoodInterval) { // sparse data
 		if (varType == TVar::ReadF || varType == TVar::Read)
 		{
-			if (dimen == CRHM::NHRU)
+			if (dimen == TDim::NHRU)
 			{
 				for (long ii = 0; ii < dim; ++ii)
 					values[ii] = FileData->Data
@@ -182,7 +182,7 @@ void ClassVar::ReadVar(void) {
 		}
 		else if (varType == TVar::ReadI)
 		{
-			if (dimen == CRHM::NHRU)
+			if (dimen == TDim::NHRU)
 			{
 				for (long ii = 0; ii < dim; ++ii)
 				{
@@ -202,7 +202,7 @@ void ClassVar::ReadVar(void) {
 	}
 	else {
 		double doN = dim;
-		if (dimen == CRHM::NOBS)
+		if (dimen == TDim::NOBS)
 			doN = cnt;
 		if (varType == TVar::ReadF || varType == TVar::Read)
 			for (long ii = 0; ii < doN; ++ii)
@@ -220,7 +220,7 @@ void ClassVar::WriteVar(void) {
 	if (FileData->Times == NULL) {
 		if (varType == TVar::ReadF || varType == TVar::Read)
 		{
-			if (dimen == CRHM::NHRU)
+			if (dimen == TDim::NHRU)
 			{
 				for (long ii = 0; ii < dim; ++ii)
 					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][Global::DTindx / FileData->ModN - FileData->IndxMin] = values[ii];
@@ -246,7 +246,7 @@ void ClassVar::WriteVar(void) {
 	else if (FileData->GoodInterval) { // sparse data
 		if (varType == TVar::ReadF || varType == TVar::Read)
 		{
-			if (dimen == CRHM::NHRU)
+			if (dimen == TDim::NHRU)
 			{
 				for (long ii = 0; ii < dim; ++ii)
 					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = values[ii];
@@ -259,7 +259,7 @@ void ClassVar::WriteVar(void) {
 		}
 		else if (varType == TVar::ReadI)
 		{
-			if (dimen == CRHM::NHRU)
+			if (dimen == TDim::NHRU)
 			{
 				for (long ii = 0; ii < dim; ++ii)
 					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = (double)ivalues[ii];
@@ -739,13 +739,13 @@ void setdim(string name, long dim) {
 	string s = name;
 
 	if (name == "nhru") {
-		Update_Main_DIM(CRHM::NHRU, dim);
+		Update_Main_DIM(TDim::NHRU, dim);
 	}
 	else if (name == "nobs") {
-		Update_Main_DIM(CRHM::NOBS, dim);
+		Update_Main_DIM(TDim::NOBS, dim);
 	}
 	else if (name == "nlay") {
-		Update_Main_DIM(CRHM::NLAY, dim);
+		Update_Main_DIM(TDim::NLAY, dim);
 	}
 }
 
@@ -753,17 +753,17 @@ void setdim(string name, long dim) {
 //double sqr(double X) { return X * X; }
 
 
-ClassPar::ClassPar(string module, string param, CRHM::TDim dimen,
+ClassPar::ClassPar(string module, string param, TDim dimen,
 	string CommaText, string help, TVar varType, int Grpdim)
 	: module(module), basemodule(""), param(param), varType(varType), dimen(dimen), help(help),
 	units(""), valstr(""), minVal(0), maxVal(0), Inhibit_share(0),
 	values(NULL), ivalues(NULL), layvalues(NULL), ilayvalues(NULL), Identical(NULL),
 	layvaluesBkup(NULL), ilayvaluesBkup(NULL), lay(1) {
 
-	if (Grpdim == 0 && dimen >= CRHM::NHRU)
+	if (Grpdim == 0 && dimen >= TDim::NHRU)
 		Grpdim = Global::nhru;
 
-	if (dimen < CRHM::NHRU)
+	if (dimen < TDim::NHRU)
 		dim = getdim(dimen); // handle cases of 'ONE, TWO, ...
 	else
 		dim = Grpdim;
@@ -774,7 +774,7 @@ ClassPar::ClassPar(string module, string param, CRHM::TDim dimen,
 	if (Strings->Count == 0) // handle case of newly added string parameter. Only handles 'BASIN'
 		Strings->Add("");
 
-	if (dimen == CRHM::NHRU)
+	if (dimen == TDim::NHRU)
 		for (int ii = Strings->Count; ii < dim; ++ii) {
 			Strings->Add(Strings->Strings[0] + std::to_string(ii + 1));
 		}
@@ -833,7 +833,7 @@ void ClassPar::ExpandShrink(long new_dim) {
 
 	dim = new_dim;
 
-	if (dimen == CRHM::NDEFN) // NDEFN stays the same
+	if (dimen == TDim::NDEFN) // NDEFN stays the same
 		lay = new_dim;
 
 	if (varType == TVar::Float) {
@@ -965,7 +965,7 @@ void ClassPar::Restore() {
 }
 
 //---------------------------------------------------------------------------
-ClassPar::ClassPar(string module, string param, CRHM::TDim dimen,
+ClassPar::ClassPar(string module, string param, TDim dimen,
 	string valstr, double minVal, double maxVal,
 	string help, string units, TVar varType, int defdim, int Grpdim)
 	: module(module), basemodule(""), param(param), varType(varType), dimen(dimen),
@@ -975,26 +975,26 @@ ClassPar::ClassPar(string module, string param, CRHM::TDim dimen,
 	layvalues(NULL), ilayvalues(NULL), Strings(NULL),
 	layvaluesBkup(NULL), ilayvaluesBkup(NULL), Identical(NULL), StringsBkup(NULL), lay(1) {
 
-	if (Grpdim == 0 && dimen >= CRHM::NHRU)
+	if (Grpdim == 0 && dimen >= TDim::NHRU)
 		Grpdim = Global::nhru;
 
-	if (dimen == CRHM::NLAY) {
+	if (dimen == TDim::NLAY) {
 		lay = Global::nlay;
 		dim = Grpdim;
 	}
-	else if (dimen == CRHM::NDEF) {
+	else if (dimen == TDim::NDEF) {
 		lay = defdim;
 		dim = 1; //
 	}
-	else if (dimen == CRHM::NDEFNZ) {
+	else if (dimen == TDim::NDEFNZ) {
 		lay = defdim;
 		dim = 1; // array 1 * n;
 	}
-	else if (dimen == CRHM::NDEFN) {
+	else if (dimen == TDim::NDEFN) {
 		lay = defdim;
 		dim = Grpdim; // Global::nhru;
 	}
-	else if (dimen < CRHM::NHRU) {
+	else if (dimen < TDim::NHRU) {
 		dim = getdim(dimen); // handle cases of 'ONE, TWO, ...
 		lay = 1;
 	}
@@ -1408,7 +1408,7 @@ ClassVar *ClassVarFind(string name) {
 }
 
 //---------------------------------------------------------------------------
-ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
+ClassVar::ClassVar(string module, string name, TDim dimen,
 	string help, string units, TVar varType, bool PointPlot, int Grpdim, int defdim)
 	: module(module), name(name), DLLName(""), root(""), varType(varType), lay(0), nfreq(false),
 	optional(false), StatVar(false), InGroup(0), visibility(TVISIBLE::USUAL), FunKind(TFun::FOBS),
@@ -1420,26 +1420,26 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 	if (Grpdim == 0)
 		Grpdim = Global::nhru;
 
-	if (dimen == CRHM::NLAY)
+	if (dimen == TDim::NLAY)
 		lay = Global::nlay;
-	else if (dimen == CRHM::NFREQ) {
+	else if (dimen == TDim::NFREQ) {
 		lay = Global::Freq;
 		nfreq = true;
 	}
-	else if (dimen == CRHM::NDEF) {
+	else if (dimen == TDim::NDEF) {
 		lay = defdim;
 		dim = 1;
 	}
-	else if (dimen == CRHM::NDEFN) {
+	else if (dimen == TDim::NDEFN) {
 		lay = defdim;
 		dim = Grpdim;
 	}
-	else if (dimen == CRHM::NREB)
+	else if (dimen == TDim::NREB)
 		lay = Grpdim; // memory allocated by variables found
 	else
 		lay = 0;
 
-	if (dimen == CRHM::NOBS)
+	if (dimen == TDim::NOBS)
 		dim = Global::nobs;
 	else
 		dim = Grpdim;
@@ -1450,7 +1450,7 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 				layvalues = new double *[lay];
 				if (!values)
 					values = new double[dim];
-				if (dimen != CRHM::NREB) { // NREB does not own lay memory only HRU memory
+				if (dimen != TDim::NREB) { // NREB does not own lay memory only HRU memory
 					for (int ii = 0; ii < lay; ii++)
 						layvalues[ii] = new double[dim];
 					values = layvalues[0]; // sets to first layer
@@ -1461,7 +1461,7 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 				}
 			}
 
-			if (lay == 0 || dimen == CRHM::NREB) {
+			if (lay == 0 || dimen == TDim::NREB) {
 				values = new double[dim];
 				for (int kk = 0; kk < dim; ++kk)
 					values[kk] = 0.0;
@@ -1470,7 +1470,7 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 		else if (varType == TVar::Int) {
 			if (lay > 0) {
 				ilayvalues = new long *[lay];
-				if (dimen != CRHM::NREB) { // NREB does not own lay memory only HRU memory
+				if (dimen != TDim::NREB) { // NREB does not own lay memory only HRU memory
 					for (int ii = 0; ii < lay; ii++)
 						ilayvalues[ii] = new long[dim];
 					ivalues = ilayvalues[0];
@@ -1481,7 +1481,7 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 				}
 			}
 
-			if (lay == 0 || dimen == CRHM::NREB) {
+			if (lay == 0 || dimen == TDim::NREB) {
 				ivalues = new long[dim];
 				for (int kk = 0; kk < dim; ++kk)
 					ivalues[kk] = 0;
@@ -1503,7 +1503,7 @@ ClassVar::ClassVar(string module, string name, long dim,
 	help(help), units(units), layvalues(NULL), ilayvalues(NULL),
 	values(NULL), ivalues(NULL), offset(0), cnt(0), FileData(NULL), HRU_OBS_indexed(0),
 	UserFunct(NULL), FunctVar(NULL), CustomFunct(NULL), No_ReadVar(0), PointPlot(PointPlot), TchrtOpt(0),
-	dimen(CRHM::NHRU) {
+	dimen(TDim::NHRU) {
 
 
 	try {
@@ -1526,10 +1526,10 @@ void ClassVar::ReleaseM(bool Keep) {
 	if (varType == TVar::Float || varType == TVar::ReadF) {
 
 		if (lay > 0) {
-			if (dimen != CRHM::NREB)
+			if (dimen != TDim::NREB)
 				values = NULL;
 
-			if (dimen != CRHM::NREB) // NREB does not own lay memory only HRU memory
+			if (dimen != TDim::NREB) // NREB does not own lay memory only HRU memory
 				for (int ii = 0; ii < lay; ++ii)
 					delete[] layvalues[ii];
 
@@ -1545,10 +1545,10 @@ void ClassVar::ReleaseM(bool Keep) {
 	else if (varType == TVar::Int || varType == TVar::ReadI) {
 
 		if (lay > 0) {
-			if (dimen != CRHM::NREB)
+			if (dimen != TDim::NREB)
 				ivalues = NULL;
 
-			if (dimen != CRHM::NREB) // NREB does not own lay memory only HRU memory
+			if (dimen != TDim::NREB) // NREB does not own lay memory only HRU memory
 				for (int ii = 0; ii < lay; ++ii)
 					delete[] ilayvalues[ii];
 
@@ -1613,7 +1613,7 @@ ClassVar::ClassVar(const ClassVar & Cl) { // used for observation totals +
 
 	if (lay > 0) {
 		layvalues = new double *[lay];
-		if (dimen != CRHM::NREB) { // NREB does not own lay memory only HRU memory
+		if (dimen != TDim::NREB) { // NREB does not own lay memory only HRU memory
 			for (int ii = 0; ii < lay; ii++)
 				layvalues[ii] = new double[dim];
 			values = layvalues[0];
@@ -1624,7 +1624,7 @@ ClassVar::ClassVar(const ClassVar & Cl) { // used for observation totals +
 		}
 	}
 
-	if (lay == 0 || dimen == CRHM::NREB) {
+	if (lay == 0 || dimen == TDim::NREB) {
 		varType = TVar::Float; // display always double. handles integer variables from VarObsFunct_Update
 		values = new double[dim];
 		ivalues = NULL;
@@ -2726,7 +2726,7 @@ ClassVar *declread(string module, string name, long cnt, long offset,
 	thisVar = new ClassVar(module, name, cnt, offset, FileData);
 
 	if (thisVar->name == "p" || thisVar->name == "ppt") // must be NHRU for routine "ReadVar" when obs file loaded after modules.
-		thisVar->dimen = CRHM::NHRU;
+		thisVar->dimen = TDim::NHRU;
 
 	thisVar->varType = TVar::Read;
 	thisVar->units = units;
@@ -3998,7 +3998,7 @@ void ClassMissingrepl::doFunc(long Obs, long Line) {
 }
 
 //---------------------------------------------------------------------------
-void   Update_Main_DIM(CRHM::TDim Dim, long dim) {
+void   Update_Main_DIM(TDim Dim, long dim) {
 	//SendMessage(Global::crhmMain, WM_CRHM_Main_DIM, (unsigned int)Dim, (unsigned int)dim);
 }
 
@@ -4009,36 +4009,36 @@ void   Update_Main_Dirty(void) {
 
 //---------------------------------------------------------------------------
 
-long getdim(CRHM::TDim dimen) {
+long getdim(TDim dimen) {
 	MapDim::iterator itDim;
 	string s;
 
 	switch (dimen) {
 
-	case CRHM::BASIN:
-		return ((int)CRHM::ONE);
+	case TDim::BASIN:
+		return ((int)TDim::ONE);
 
-	case CRHM::ONE:
-	case CRHM::TWO:
-	case CRHM::THREE:
-	case CRHM::FOUR:
-	case CRHM::FIVE:
-	case CRHM::SIX:
-	case CRHM::SEVEN:
-	case CRHM::EIGHT:
-	case CRHM::NINE:
-	case CRHM::TEN:
-	case CRHM::ELEVEN:
-	case CRHM::TWELVE:
+	case TDim::ONE:
+	case TDim::TWO:
+	case TDim::THREE:
+	case TDim::FOUR:
+	case TDim::FIVE:
+	case TDim::SIX:
+	case TDim::SEVEN:
+	case TDim::EIGHT:
+	case TDim::NINE:
+	case TDim::TEN:
+	case TDim::ELEVEN:
+	case TDim::TWELVE:
 		return ((int)dimen);
 
-	case CRHM::NHRU:
+	case TDim::NHRU:
 		return (Global::nhru);
 
-	case CRHM::NOBS:
+	case TDim::NOBS:
 		return (Global::nobs);
 
-	case CRHM::NLAY:
+	case TDim::NLAY:
 		return (Global::nlay);
 
 	default:
@@ -4054,22 +4054,22 @@ long getstep(void) { return Global::DTindx - Global::DTmin + 1; }
 bool laststep(void) { return (Global::DTindx == Global::DTmax - 1); }
 
 //---------------------------------------------------------------------------
-void setdim(CRHM::TDim dimen, long dim) {
+void setdim(TDim dimen, long dim) {
 	MapDim::iterator itDim;
 	string s;
 
 	switch (dimen) {
 
-	case CRHM::NHRU: s = "nhru";
-		Update_Main_DIM(CRHM::NHRU, dim);
+	case TDim::NHRU: s = "nhru";
+		Update_Main_DIM(TDim::NHRU, dim);
 		break;
 
-	case CRHM::NOBS: s = "nobs";
-		Update_Main_DIM(CRHM::NOBS, dim);
+	case TDim::NOBS: s = "nobs";
+		Update_Main_DIM(TDim::NOBS, dim);
 		break;
 
-	case CRHM::NLAY: s = "nlay";
-		Update_Main_DIM(CRHM::NLAY, dim);
+	case TDim::NLAY: s = "nlay";
+		Update_Main_DIM(TDim::NLAY, dim);
 		break;
 
 	default:

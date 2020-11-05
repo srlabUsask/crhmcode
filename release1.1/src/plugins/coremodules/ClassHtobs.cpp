@@ -22,17 +22,17 @@ void ClassHtobs::decl(void) {
 
   Description = "'Every interval sets the variable \"Ht_var\" to the value of the observation \"Ht_obs\".'";
 
-  declvar("Ht_var", NHRU, "vegetation height", "(m)", &Ht_var);
+  declvar("Ht_var", TDim::NHRU, "vegetation height", "(m)", &Ht_var);
 
   declputparam("*", "Ht", "(m)", &Ht);
 
 
-  declreadobs("Ht_obs", NHRU, "height observation", "(m)", &Ht_obs, HRU_OBS_misc, true);
+  declreadobs("Ht_obs", TDim::NHRU, "height observation", "(m)", &Ht_obs, HRU_OBS_misc, true);
 
 }
 
 void ClassHtobs::init(void) {
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   if(Ht_obs == NULL){
     CRHMException TExcept("\"Ht_obs\". No observation vegetation height data!  Using constant parameter value instead.", TExcept::WARNING);

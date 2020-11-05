@@ -31,53 +31,53 @@ void ClassREWroute_stream::decl(void) {
 
   instreamflowCnt = declgrpvar("WS_ALL_instreamflow_Grp_in", "stream_Grp_in", "query variable = 'stream_Grp_in'", "(mm*km^2/int)", &rew, &instreamflow_Grp_out_All); // NB in/out change in name
 
-  declvar("WS_instreamflow", NHRU, "inflow from each RB", "(m^3/int)", &instreamflow);
+  declvar("WS_instreamflow", TDim::NHRU, "inflow from each RB", "(m^3/int)", &instreamflow);
 
-  declvar("cum_WSinstreamflow", NHRU, "cumulative inflow from each RB", "(m^3)", &cuminstreamflow);
+  declvar("cum_WSinstreamflow", TDim::NHRU, "cumulative inflow from each RB", "(m^3)", &cuminstreamflow);
 
-  declvar("WS_outstreamflow", NHRU, "outflow of each RB", "(m^3/int)", &outstreamflow);
+  declvar("WS_outstreamflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &outstreamflow);
 
-  declvar("cum_WSoutstreamflow", NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutstreamflow);
+  declvar("cum_WSoutstreamflow", TDim::NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutstreamflow);
 
-  declvar("WS_streamflow", BASIN, "watershed surface and sub-surface outflow", "(m^3/int)", &streamflow);
+  declvar("WS_streamflow", TDim::BASIN, "watershed surface and sub-surface outflow", "(m^3/int)", &streamflow);
 
-  declvar("WS_streamflow_s", BASIN, "watershed surface and sub-surface outflow", "(m^3/s)", &streamflow_s);
+  declvar("WS_streamflow_s", TDim::BASIN, "watershed surface and sub-surface outflow", "(m^3/s)", &streamflow_s);
 
-  declvar("cum_WSstreamflow", BASIN, "cumulative watershed surface and sub-surface outflow", "(m^3)", &cumstreamflow);
+  declvar("cum_WSstreamflow", TDim::BASIN, "cumulative watershed surface and sub-surface outflow", "(m^3)", &cumstreamflow);
 
 
-  declparam("WS_stream_Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_stream_Lag);
+  declparam("WS_stream_Lag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_stream_Lag);
 
-  declparam("WS_stream_whereto_Grp", NHRU, "[0]", "0", "1000", "this stream to this Grp", "()", &WS_stream_whereto_Grp);
+  declparam("WS_stream_whereto_Grp", TDim::NHRU, "[0]", "0", "1000", "this stream to this Grp", "()", &WS_stream_whereto_Grp);
 
-  declparam("WS_stream_whereto_HRU", NHRU, "[0]", "0", "1000", "this stream to this HRU in the next Grp", "()", &WS_stream_whereto_HRU);
+  declparam("WS_stream_whereto_HRU", TDim::NHRU, "[0]", "0", "1000", "this stream to this HRU in the next Grp", "()", &WS_stream_whereto_HRU);
 
-  declparam("WS_stream_wherefrom_HRU", NHRU, "[0]", "1", "1000", "this stream to this HRU in the next Grp", "()", &WS_stream_wherefrom_HRU);
+  declparam("WS_stream_wherefrom_HRU", TDim::NHRU, "[0]", "1", "1000", "this stream to this HRU in the next Grp", "()", &WS_stream_wherefrom_HRU);
 
-  declparam("WS_stream_order", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_stream_order);
+  declparam("WS_stream_order", TDim::NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_stream_order);
 
 
   variation_set = VARIATION_0;
 
-  decldiag("WS_stream_Ktravel_var", NHRU, "inflow storage constant", "(d)", &WS_stream_Ktravel_var);
+  decldiag("WS_stream_Ktravel_var", TDim::NHRU, "inflow storage constant", "(d)", &WS_stream_Ktravel_var);
 
 
-  declparam("WS_stream_route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &WS_stream_route_n);
+  declparam("WS_stream_route_n", TDim::NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &WS_stream_route_n);
 
-  declparam("WS_stream_route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "()", &WS_stream_route_R);
+  declparam("WS_stream_route_R", TDim::NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "()", &WS_stream_route_R);
 
-  declparam("WS_stream_route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &WS_stream_route_S0);
+  declparam("WS_stream_route_S0", TDim::NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &WS_stream_route_S0);
 
-  declparam("WS_stream_route_L", NHRU, "[3.69]", "0.01","1.0E10", "routing length", "(m)", &WS_stream_route_L);
+  declparam("WS_stream_route_L", TDim::NHRU, "[3.69]", "0.01","1.0E10", "routing length", "(m)", &WS_stream_route_L);
 
-  declparam("WS_stream_Channel_shp", NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &WS_stream_Channel_shp);
+  declparam("WS_stream_Channel_shp", TDim::NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &WS_stream_Channel_shp);
 
-  declparam("WS_stream_X_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &WS_stream_route_X_M);
+  declparam("WS_stream_X_M", TDim::NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &WS_stream_route_X_M);
 
 
   variation_set = VARIATION_1;
 
-  declparam("WS_stream_Kstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_stream_Kstorage);
+  declparam("WS_stream_Kstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_stream_Kstorage);
 
 
   variation_set = VARIATION_ORG;

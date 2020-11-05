@@ -23,20 +23,20 @@ void ClassNO_pbsm::decl(void) {
 
   Description = "'Substitute for pbsm when there is no transport and sublimation.  Alternatve is \"pbsm\" with parameter \"inhibit_bs\" = 1.'";
 
-  declstatvar("SWE", NHRU, "snow water equivalent", "(mm)", &SWE);
+  declstatvar("SWE", TDim::NHRU, "snow water equivalent", "(mm)", &SWE);
 
-  declstatdiag("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
+  declstatdiag("cumSno", TDim::NHRU, "cumulative snow", "(mm)", &cumSno);
 
-  declvar("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
+  declvar("snowdepth", TDim::NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
 
 
 /* parameters */
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
+  decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
 
   declgetvar("*", "hru_newsnow", "()", &hru_newsnow);
   declgetvar("*",   "net_snow", "(mm/int)", &net_snow);
@@ -45,7 +45,7 @@ void ClassNO_pbsm::decl(void) {
 
 void ClassNO_pbsm::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   hru_basin = new double[nhru];
 

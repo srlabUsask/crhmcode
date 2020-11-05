@@ -23,62 +23,62 @@ void Classglobal::decl(void) {
 
   Description = "'Calculate theoretical short_wave radiation using method proposed by Garnier and Ohmura (1970).'";
 
-  declvar("QdroD", NHRU, "daily clear-sky direct", "(MJ/m^2*d)", &QdroD);
+  declvar("QdroD", TDim::NHRU, "daily clear-sky direct", "(MJ/m^2*d)", &QdroD);
 
-  declvar("QdroDext", NHRU, "daily ExtraTerrestrial direct", "(MJ/m^2*d)", &QdroDext);
+  declvar("QdroDext", TDim::NHRU, "daily ExtraTerrestrial direct", "(MJ/m^2*d)", &QdroDext);
 
-  declvar("QdfoD", NHRU, "daily average clear-sky diffuse", "(MJ/m^2*d)", &QdfoD);
+  declvar("QdfoD", TDim::NHRU, "daily average clear-sky diffuse", "(MJ/m^2*d)", &QdfoD);
 
-  declvar("Qdro", NHRU, "clear-sky direct", "(W/m^2)", &Qdro);
+  declvar("Qdro", TDim::NHRU, "clear-sky direct", "(W/m^2)", &Qdro);
 
-  declvar("Qdfo", NHRU, "clear-sky diffuse", "(W/m^2)", &Qdfo);
+  declvar("Qdfo", TDim::NHRU, "clear-sky diffuse", "(W/m^2)", &Qdfo);
 
-  declvar("Qdflat", NHRU, "clear-sky 'Qdro + Qdfo' on horizontal surface", "(W/m^2)", &Qdflat);
+  declvar("Qdflat", TDim::NHRU, "clear-sky 'Qdro + Qdfo' on horizontal surface", "(W/m^2)", &Qdflat);
 
-  declvar("QdflatE", NHRU, "'Qdro' on horizontal surface, no atmosheric attenuation", "(W/m^2)", &QdflatE);
+  declvar("QdflatE", TDim::NHRU, "'Qdro' on horizontal surface, no atmosheric attenuation", "(W/m^2)", &QdflatE);
 
-  declvar("QdflatD", NHRU, "daily clear-sky Qdro (with diffuse) on horizontal surface", "(MJ/m^2*d)", &QdflatD);
+  declvar("QdflatD", TDim::NHRU, "daily clear-sky Qdro (with diffuse) on horizontal surface", "(MJ/m^2*d)", &QdflatD);
 
-  declvar("SolAng", NHRU, "Solar Angle", "(r)", &SolAng);
+  declvar("SolAng", TDim::NHRU, "Solar Angle", "(r)", &SolAng);
 
-  declvar("SunMax", NHRU, "maximum sunshine hours", "(h)", &SunMax);
+  declvar("SunMax", TDim::NHRU, "maximum sunshine hours", "(h)", &SunMax);
 
-  declvar("cosxs", NHRU, "cosine of the angle of incidence on the slope", "()", &cosxs);
+  declvar("cosxs", TDim::NHRU, "cosine of the angle of incidence on the slope", "()", &cosxs);
 
-  declvar("cosxsflat", NHRU, "cosine of the angle of incidence on the horizontal", "()", &cosxsflat);
+  declvar("cosxsflat", TDim::NHRU, "cosine of the angle of incidence on the horizontal", "()", &cosxsflat);
 
-  declvar("pQdro", NFREQ, "clear-sky direct", "(MJ/m^2*int)", &pQdro, &pQdro_FREQ, 0, true, false, TVISIBLE::PRIVATE);
+  declvar("pQdro", TDim::NFREQ, "clear-sky direct", "(MJ/m^2*int)", &pQdro, &pQdro_FREQ, 0, true, false, TVISIBLE::PRIVATE);
 
-  declvar("pQdfo", NFREQ, "clear-sky diffuse", "(MJ/m^2*int)", &pQdfo, &pQdfo_FREQ, 0, true, false, TVISIBLE::PRIVATE);
+  declvar("pQdfo", TDim::NFREQ, "clear-sky diffuse", "(MJ/m^2*int)", &pQdfo, &pQdfo_FREQ, 0, true, false, TVISIBLE::PRIVATE);
 
-  declvar("pQdflat", NFREQ, "Qdro + Qdfo on horizontal surface", "(MJ/m^2*int)", &pQdflat, &pQdflat_FREQ, 0, true, false, TVISIBLE::PRIVATE);
+  declvar("pQdflat", TDim::NFREQ, "Qdro + Qdfo on horizontal surface", "(MJ/m^2*int)", &pQdflat, &pQdflat_FREQ, 0, true, false, TVISIBLE::PRIVATE);
 
-  declvar("pQdflatE", NFREQ, "Qdro on horizontal surface with no atmospheric attenuation", "(MJ/m^2*int)", &pQdflatE, &pQdflatE_FREQ, 0, true, false, TVISIBLE::PRIVATE);
+  declvar("pQdflatE", TDim::NFREQ, "Qdro on horizontal surface with no atmospheric attenuation", "(MJ/m^2*int)", &pQdflatE, &pQdflatE_FREQ, 0, true, false, TVISIBLE::PRIVATE);
 
-  declvar("pSol", NFREQ, "Solar Angle", "(r)", &pSol, &pSol_FREQ, 0, true, false, TVISIBLE::PRIVATE);
+  declvar("pSol", TDim::NFREQ, "Solar Angle", "(r)", &pSol, &pSol_FREQ, 0, true, false, TVISIBLE::PRIVATE);
 
-  declvar("pCosxs", NFREQ, "Cos(x^s)", "(r)", &pCosxs, &pCosxs_FREQ, 0, true, false, TVISIBLE::PRIVATE);
+  declvar("pCosxs", TDim::NFREQ, "Cos(x^s)", "(r)", &pCosxs, &pCosxs_FREQ, 0, true, false, TVISIBLE::PRIVATE);
 
-  declvar("pCosxs0", NFREQ, "Cos(x^s) on the horizontal", "(r)", &pCosxs0, &pCosxs0_FREQ, 0, true, false, TVISIBLE::PRIVATE);
+  declvar("pCosxs0", TDim::NFREQ, "Cos(x^s) on the horizontal", "(r)", &pCosxs0, &pCosxs0_FREQ, 0, true, false, TVISIBLE::PRIVATE);
 
 
 // parameters
 
-  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
+  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
 
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
-  declparam("hru_GSL", NHRU, "0.0", "-90.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "0.0", "-90.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
 
-  declparam("hru_ASL", NHRU, "0.0", "-360.0", "360.0","aspect, 0/90/180/270 - north/east/south/west facing for positive GSL.", "(°)", &hru_ASL);
+  declparam("hru_ASL", TDim::NHRU, "0.0", "-360.0", "360.0","aspect, 0/90/180/270 - north/east/south/west facing for positive GSL.", "(°)", &hru_ASL);
 
-  declparam("Time_Offset", NHRU, "0.0", "-12.0", "12.0","solar time offset from local time", "(h)", &Time_Offset);
+  declparam("Time_Offset", TDim::NHRU, "0.0", "-12.0", "12.0","solar time offset from local time", "(h)", &Time_Offset);
 
 }
 
 void Classglobal::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   int Integer = CalcFreq/Global::Freq;
 

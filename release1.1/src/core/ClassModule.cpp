@@ -167,7 +167,7 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 			LogError(CRHMException("No groups defined " + Name + " " + variable, TExcept::WARNING));
 			return -1;
 		}
-		newVar = new ClassVar(Name, variable, CRHM::NREB, help, units, TVar::Float, PointPlot, nhru);
+		newVar = new ClassVar(Name, variable, TDim::NREB, help, units, TVar::Float, PointPlot, nhru);
 
 		newVar->varType = TVar::Float;
 
@@ -253,14 +253,14 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decldiag(string variable, CRHM::TDim dimen,
+void ClassModule::decldiag(string variable, TDim dimen,
 	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, false, Local);
 }
 //---------------------------------------------------------------------------
 
-void ClassModule::decldiag(string variable, CRHM::TDim dimen,
+void ClassModule::decldiag(string variable, TDim dimen,
 	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, false, Local);
@@ -268,7 +268,7 @@ void ClassModule::decldiag(string variable, CRHM::TDim dimen,
 }
 //---------------------------------------------------------------------------
 
-void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
+void ClassModule::declstatdiag(string variable, TDim dimen,
 	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, true, Local);
@@ -285,7 +285,7 @@ void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
 };
 
 //---------------------------------------------------------------------------
-void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
+void ClassModule::declstatdiag(string variable, TDim dimen,
 	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, true, Local);
@@ -302,7 +302,7 @@ void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
 };
 
 //---------------------------------------------------------------------------
-void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
+void ClassModule::declstatvar(string variable, TDim dimen,
 	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, true, Local);
@@ -319,7 +319,7 @@ void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
 };
 
 //---------------------------------------------------------------------------
-void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
+void ClassModule::declstatvar(string variable, TDim dimen,
 	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, true, Local);
@@ -337,7 +337,7 @@ void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 
-void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
+void ClassModule::declvar(string variable, TDim dimen, string help,
 	string units, double **value, double ***layvalue, const int dim, bool PointPlot, bool StatVar, TVISIBLE Local) {
 	MapVar::iterator itVar;
 	ClassVar *newVar;
@@ -374,12 +374,12 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 
-		if (dimen == CRHM::NLAY && layvalue == NULL) {
+		if (dimen == TDim::NLAY && layvalue == NULL) {
 			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
 
-		if (dimen == CRHM::NDEFN) // save for lay loop
+		if (dimen == TDim::NDEFN) // save for lay loop
 			++Var_NDEFN_cnt;
 
 		newVar = new ClassVar(Name, variable, dimen, help, units, TVar::Float, PointPlot, nhru, dim);
@@ -408,7 +408,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			if (newVar->layvalues != NULL) {
-				if (dimen == CRHM::NFREQ && newVar->lay != Global::Freq) {
+				if (dimen == TDim::NFREQ && newVar->lay != Global::Freq) {
 					newVar->nfreq = true;
 					newVar->lay = Global::Freq;
 					newVar->ReleaseM(true);
@@ -416,7 +416,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 					for (int ii = 0; ii < newVar->lay; ii++)
 						newVar->layvalues[ii] = new double[newVar->dim];
 				}
-				if ((dimen == CRHM::NLAY || dimen == CRHM::NDEFN) && newVar->lay != dim) {
+				if ((dimen == TDim::NLAY || dimen == TDim::NDEFN) && newVar->lay != dim) {
 					long JJ = newVar->lay;
 				}
 
@@ -427,7 +427,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 			*value = newVar->values; // TB 10/07/10
 
-			if (dimen == CRHM::NDEF) { // save for lay loop
+			if (dimen == TDim::NDEF) { // save for lay loop
 				Var_loop_lay_table[Var_NDEFN_cnt] = newVar->layvalues;
 				Var_loop_lay_value[Var_NDEFN_cnt++] = newVar->values;
 			}
@@ -448,7 +448,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
+void ClassModule::declvar(string variable, TDim dimen, string help,
 	string units, long **ivalue, long ***ilayvalue, const int dim, bool PointPlot, bool StatVar, TVISIBLE Local) {
 
 	MapVar::iterator itVar;
@@ -486,7 +486,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 
-		if (dimen == CRHM::NLAY && ilayvalue == NULL) {
+		if (dimen == TDim::NLAY && ilayvalue == NULL) {
 			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
@@ -515,7 +515,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
-			if ((dimen == CRHM::NLAY || dimen == CRHM::NFREQ) && ilayvalue != NULL) {
+			if ((dimen == TDim::NLAY || dimen == TDim::NFREQ) && ilayvalue != NULL) {
 				if (newVar->nfreq && newVar->lay != Global::Freq) {
 					newVar->ReleaseM(true);
 					newVar->lay = Global::Freq;
@@ -547,7 +547,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
+void ClassModule::decllocal(string variable, TDim dimen, string help,
 	string units, double **value, double ***layvalue, const int dim) {
 
 	MapVar::iterator itVar;
@@ -571,7 +571,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 		if ((itVar = Global::MapVars.find("#" + Name + " " + variable)) != Global::MapVars.end())
 			return;
 
-		if ((dimen == CRHM::NLAY || dimen == CRHM::NFREQ) && layvalue == NULL) {
+		if ((dimen == TDim::NLAY || dimen == TDim::NFREQ) && layvalue == NULL) {
 			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
@@ -602,7 +602,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 		if ((itVar = Global::MapVars.find(S)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
-			if ((dimen == CRHM::NLAY || dimen == CRHM::NFREQ) && layvalue != NULL) {
+			if ((dimen == TDim::NLAY || dimen == TDim::NFREQ) && layvalue != NULL) {
 				if (newVar->nfreq && newVar->lay != Global::Freq) {
 					newVar->ReleaseM(true);
 					newVar->lay = Global::Freq;
@@ -630,7 +630,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
+void ClassModule::decllocal(string variable, TDim dimen, string help,
 	string units, long **value, long ***layvalue, const int dim) {
 
 	MapVar::iterator itVar;
@@ -654,7 +654,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 		if ((itVar = Global::MapVars.find("#" + Name + " " + variable)) != Global::MapVars.end())
 			return;
 
-		if (dimen == CRHM::NLAY && layvalue == NULL) {
+		if (dimen == TDim::NLAY && layvalue == NULL) {
 			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
@@ -685,7 +685,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 		if ((itVar = Global::MapVars.find(S)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
-			if ((dimen == CRHM::NLAY || dimen == CRHM::NFREQ) && layvalue != NULL) {
+			if ((dimen == TDim::NLAY || dimen == TDim::NFREQ) && layvalue != NULL) {
 				if (newVar->nfreq && newVar->lay != Global::Freq) {
 					newVar->ReleaseM(true);
 					newVar->lay = Global::Freq;
@@ -713,7 +713,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 }
 
 //---------------------------------------------------------------------------
-TStringList* ClassModule::decldiagparam(string param, CRHM::TDim dimen,
+TStringList* ClassModule::decldiagparam(string param, TDim dimen,
 	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
 
 	TStringList* fix = declparam(param, dimen, Texts, help, stringsList, Local);
@@ -721,7 +721,7 @@ TStringList* ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-TStringList* ClassModule::decllocalparam(string param, CRHM::TDim dimen,
+TStringList* ClassModule::decllocalparam(string param, TDim dimen,
 	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
 
 	TStringList* fix = declparam(param, dimen, Texts, help, stringsList, Local);
@@ -729,7 +729,7 @@ TStringList* ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
+TStringList* ClassModule::declparam(string param, TDim dimen,
 	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
 	MapPar::iterator itPar;
 	ClassPar *newPar;
@@ -756,7 +756,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 	case TBuild::DECL: {
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
-			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
+			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
 				newPar = (*itPar).second;
 				return newPar->Strings;
 			}
@@ -809,7 +809,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
+void ClassModule::decldiagparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
 	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
 
@@ -817,7 +817,7 @@ void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
+void ClassModule::decllocalparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
 	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
 
@@ -825,7 +825,7 @@ void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declparam(string param, CRHM::TDim dimen,
+void ClassModule::declparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
 	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
 	MapPar::iterator itPar;
@@ -859,11 +859,11 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			return;
 		}
 
-		if (dimen == CRHM::NDEFN)// save for lay loop
+		if (dimen == TDim::NDEFN)// save for lay loop
 			++Par_NDEFN_cnt;
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
-			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
+			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share == 2) {
 					newPar->basemodule = this->NameRoot;
@@ -888,7 +888,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		}
 
 		if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
-			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
+			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share == 2) {
 					newPar->Inhibit_share = 1;
@@ -898,7 +898,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			}
 		}
 
-		if ((dimen == CRHM::NLAY && layvalue == NULL) || (dimen == CRHM::NDEF && layvalue == NULL) || (dimen == CRHM::NDEFN && layvalue == NULL)) {
+		if ((dimen == TDim::NLAY && layvalue == NULL) || (dimen == TDim::NDEF && layvalue == NULL) || (dimen == TDim::NDEFN && layvalue == NULL)) {
 			LogError(CRHMException("Layer Array not defined for " + Name + " " + param, TExcept::WARNING));
 			return;
 		}
@@ -942,10 +942,10 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			throw Except;
 		}
 
-		if ((dimen == CRHM::NLAY && layvalue != NULL) || (dimen == CRHM::NDEF && layvalue != NULL) || (dimen == CRHM::NDEFN && layvalue != NULL))
+		if ((dimen == TDim::NLAY && layvalue != NULL) || (dimen == TDim::NDEF && layvalue != NULL) || (dimen == TDim::NDEFN && layvalue != NULL))
 			*layvalue = (const double**)newPar->layvalues;
 
-		if (dimen == CRHM::NDEF) {
+		if (dimen == TDim::NDEF) {
 			Par_loop_lay_table[Par_NDEFN_cnt] = newPar->layvalues; // save for lay loop
 			Par_loop_lay_value[Par_NDEFN_cnt++] = newPar->values; // save for lay loop
 		}
@@ -956,7 +956,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
+void ClassModule::decldiagparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
 	string help, string units, const long **value, const long ***layvalue, const int dim, TVISIBLE Local) {
 
@@ -964,7 +964,7 @@ void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
+void ClassModule::decllocalparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
 	string help, string units, const long **value, const long ***layvalue, const int dim, TVISIBLE Local) {
 
@@ -972,7 +972,7 @@ void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declparam(string param, CRHM::TDim dimen,
+void ClassModule::declparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
 	string help, string units, const long **ivalue, const long ***ilayvalue, const int dim, TVISIBLE Local) {
 
@@ -1010,7 +1010,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		*ivalue = &Dummy;
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
-			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
+			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share == 2) {
 					newPar->basemodule = this->NameRoot;
@@ -1035,7 +1035,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		}
 
 		if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
-			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
+			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share == 2) {
 					assert(0);
@@ -1044,7 +1044,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			}
 		}
 
-		if ((dimen == CRHM::NLAY && ilayvalue == NULL) || (dimen == CRHM::NDEF && ilayvalue == NULL) || (dimen == CRHM::NDEFN && ilayvalue == NULL)) {
+		if ((dimen == TDim::NLAY && ilayvalue == NULL) || (dimen == TDim::NDEF && ilayvalue == NULL) || (dimen == TDim::NDEFN && ilayvalue == NULL)) {
 			LogError(CRHMException("Layer Array not defined for " + Name + " " + param, TExcept::WARNING));
 			return;
 		}
@@ -1074,20 +1074,20 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			*ivalue = newPar->ivalues;
-			if ((dimen == CRHM::NLAY && ilayvalue != NULL) || (dimen == CRHM::NDEF && ilayvalue != NULL) || (dimen == CRHM::NDEFN && ilayvalue != NULL))
+			if ((dimen == TDim::NLAY && ilayvalue != NULL) || (dimen == TDim::NDEF && ilayvalue != NULL) || (dimen == TDim::NDEFN && ilayvalue != NULL))
 				*ilayvalue = (const long **)newPar->ilayvalues;
 			return;
 		}
 		else if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			*ivalue = newPar->ivalues;
-			if ((dimen == CRHM::NLAY && ilayvalue != NULL) || (dimen == CRHM::NDEF && ilayvalue != NULL) || (dimen == CRHM::NDEFN && ilayvalue != NULL))
+			if ((dimen == TDim::NLAY && ilayvalue != NULL) || (dimen == TDim::NDEF && ilayvalue != NULL) || (dimen == TDim::NDEFN && ilayvalue != NULL))
 				*ilayvalue = (const long **)newPar->ilayvalues;
 			return;
 		}
 		else if ((newPar = ClassParFindPar(param))) {
 			*ivalue = newPar->ivalues;
-			if ((dimen == CRHM::NLAY && ilayvalue != NULL) || (dimen == CRHM::NDEF && ilayvalue != NULL) || (dimen == CRHM::NDEFN && ilayvalue != NULL))
+			if ((dimen == TDim::NLAY && ilayvalue != NULL) || (dimen == TDim::NDEF && ilayvalue != NULL) || (dimen == TDim::NDEFN && ilayvalue != NULL))
 				*ilayvalue = (const long **)newPar->ilayvalues;
 			return;
 		}
@@ -1330,7 +1330,7 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string units, double **value) {
+long ClassModule::declobs(string name, TDim dimen, string help, string units, double **value) {
 
 	MapVar::iterator itVar;
 	ClassVar *newVar;
@@ -1447,7 +1447,7 @@ long ClassModule::getdimObs(string variable) {
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
+long ClassModule::declreadobs(string variable, TDim dimen,
 	string help, string units, const double **value, long HRU_index, bool optional, const double ***layvalue) {
 
 	MapVar::iterator itVar;
@@ -1478,7 +1478,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 
 	case TBuild::DECL: {
 
-		if (dimen == CRHM::NFREQ && layvalue == NULL) {
+		if (dimen == TDim::NFREQ && layvalue == NULL) {
 			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return(-1);
 		}
@@ -1599,7 +1599,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		}
 
 		if (newVar->FileData) {
-			if (dimen == CRHM::NHRU)
+			if (dimen == TDim::NHRU)
 				newVar->dim = nhru;
 			else
 				newVar->dim = newVar->cnt;
@@ -1625,7 +1625,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updating. Is it ever used.
+long ClassModule::declreadobs(string variable, TDim dimen,  // needs updating. Is it ever used.
 	string help, string units, const long **value, long HRU_index, bool optional, const long ***layvalue) {
 
 	MapVar::iterator itVar;
@@ -1656,7 +1656,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 	case TBuild::DECL: {
 
-		if (dimen == CRHM::NFREQ && layvalue == NULL) {
+		if (dimen == TDim::NFREQ && layvalue == NULL) {
 			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return(-1);
 		}
@@ -1664,7 +1664,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 		if ((itVar = Global::MapVars.find(declModule + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			if (newVar->varType == TVar::Read || newVar->varType == TVar::ReadI) {
-				if (dimen == CRHM::NFREQ && (newVar->lay == 0 || nhru > newVar->dim)) {
+				if (dimen == TDim::NFREQ && (newVar->lay == 0 || nhru > newVar->dim)) {
 					newVar->ReleaseM(true);
 					newVar->dim = nhru;
 					newVar->dimMax = newVar->dim;
@@ -1700,7 +1700,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 					Global::MapVars.insert(Item);
 				}
 			}
-			else if (newVar->dimen != dimen && dimen == CRHM::NFREQ) { // upgrade t to t-freq
+			else if (newVar->dimen != dimen && dimen == TDim::NFREQ) { // upgrade t to t-freq
 				newVar->ReleaseM(true);
 				newVar->lay = Global::Freq;
 				newVar->nfreq = true;
@@ -3802,39 +3802,39 @@ double ClassMuskingum::Left(int hh) {
 
 //---------------------------------------------------------------------------
 
-long ClassModule::getdim(CRHM::TDim dimen) {
+long ClassModule::getdim(TDim dimen) {
 	MapDim::iterator itDim;
 	string s;
 
 	switch (dimen) {
 
-	case CRHM::BASIN:
-		return ((int)CRHM::ONE);
+	case TDim::BASIN:
+		return ((int)TDim::ONE);
 
-	case CRHM::ONE:
-	case CRHM::TWO:
-	case CRHM::THREE:
-	case CRHM::FOUR:
-	case CRHM::FIVE:
-	case CRHM::SIX:
-	case CRHM::SEVEN:
-	case CRHM::EIGHT:
-	case CRHM::NINE:
-	case CRHM::TEN:
-	case CRHM::ELEVEN:
-	case CRHM::TWELVE:
+	case TDim::ONE:
+	case TDim::TWO:
+	case TDim::THREE:
+	case TDim::FOUR:
+	case TDim::FIVE:
+	case TDim::SIX:
+	case TDim::SEVEN:
+	case TDim::EIGHT:
+	case TDim::NINE:
+	case TDim::TEN:
+	case TDim::ELEVEN:
+	case TDim::TWELVE:
 		return ((int)dimen);
 
-	case CRHM::NHRU:
+	case TDim::NHRU:
 		if (nhru)
 			return (nhru);
 		else
 			return (Global::nhru);
 
-	case CRHM::NOBS:
+	case TDim::NOBS:
 		return (Global::nhru);
 
-	case CRHM::NLAY:
+	case TDim::NLAY:
 		return (Global::nlay);
 
 	default:
@@ -3910,7 +3910,7 @@ long ClassModule::declputparam(string source, string param, string units, double
 			return 0;
 		}
 
-		newPar = new ClassPar(string(Name.c_str()), string(param), CRHM::NHRU, "", 0, 0, "", units, TVar::Float);
+		newPar = new ClassPar(string(Name.c_str()), string(param), TDim::NHRU, "", 0, 0, "", units, TVar::Float);
 
 		newPar->basemodule = this->NameRoot;
 
@@ -4138,7 +4138,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 			return 0;
 		}
 
-		newPar = new ClassPar(string(Name.c_str()), string(param), CRHM::NHRU, "", 0, 0, "", units, TVar::Int);
+		newPar = new ClassPar(string(Name.c_str()), string(param), TDim::NHRU, "", 0, 0, "", units, TVar::Int);
 
 		newPar->basemodule = this->NameRoot;
 

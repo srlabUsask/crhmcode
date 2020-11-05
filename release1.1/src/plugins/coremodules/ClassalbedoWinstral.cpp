@@ -22,23 +22,23 @@ void ClassalbedoWinstral::decl(void) {
 
   Description = "'Incomplete code to calculate snowcover albedo from a method proposed by Winstral.'";
 
-  declstatvar("Albedo", NHRU, "Albedo", "()", &Albedo);
+  declstatvar("Albedo", TDim::NHRU, "Albedo", "()", &Albedo);
 
-  declstatdiag("Ab_t", NHRU, "steps since albedo refresh", "()", &Ab_t);
+  declstatdiag("Ab_t", TDim::NHRU, "steps since albedo refresh", "()", &Ab_t);
 
-  decllocal("irdalb", NHRU, "ir_diffuse decay", "()", &irdalb);
+  decllocal("irdalb", TDim::NHRU, "ir_diffuse decay", "()", &irdalb);
 
-  decllocal("vddalb", NHRU, "visible_diffuse decay", "()", &vdalb);
+  decllocal("vddalb", TDim::NHRU, "visible_diffuse decay", "()", &vdalb);
 
-  decldiagparam("maxdecay", NHRU, "[0.25]", "0.1", "0.5","maximum decay", "()", &maxdecay);
+  decldiagparam("maxdecay", TDim::NHRU, "[0.25]", "0.1", "0.5","maximum decay", "()", &maxdecay);
 
-  decldiagparam("power", NHRU, "[1.4]", "-2.0", "2.0", "power function", "()", &power);
+  decldiagparam("power", TDim::NHRU, "[1.4]", "-2.0", "2.0", "power function", "()", &power);
 
-  decldiagparam("decay_period", NHRU, "[5000]", "100", "20000", "time over albedo decays", "()", &decay_period);
+  decldiagparam("decay_period", TDim::NHRU, "[5000]", "100", "20000", "time over albedo decays", "()", &decay_period);
 
-  decldiagparam("refresh", NHRU, "[1.0]", "0.5", "50.0", "minimum sub-canopy snowfall to refresh albedo", "(mm)", &refresh);
+  decldiagparam("refresh", TDim::NHRU, "[1.0]", "0.5", "50.0", "minimum sub-canopy snowfall to refresh albedo", "(mm)", &refresh);
 
-  decldiagparam("Albedo_Bare", NHRU, "[0.17]", "0.0", "1.0","Initial albedo for bare ground", "()", &Albedo_Bare);
+  decldiagparam("Albedo_Bare", TDim::NHRU, "[0.17]", "0.0", "1.0","Initial albedo for bare ground", "()", &Albedo_Bare);
 
 
   declgetvar("*",  "SWE", "(mm)", &SWE);
@@ -48,7 +48,7 @@ void ClassalbedoWinstral::decl(void) {
 
 void ClassalbedoWinstral::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for (hh = 0; hh < nhru; ++hh){
     Ab_t[hh] = 0;

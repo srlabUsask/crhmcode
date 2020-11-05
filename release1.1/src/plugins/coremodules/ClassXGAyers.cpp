@@ -22,32 +22,32 @@ void ClassXGAyers::decl(void) {
 
   Description = "'Snow melt handled by XG and and Ayers, .'";
 
-  declvar("infil", NHRU, "Potential rain infiltration", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU, "Potential rain infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential rain infiltration", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential rain infiltration", "(mm)", &cuminfil);
 
-  declvar("snowinfil", NHRU, "melt infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "melt infiltration", "(mm/int)", &snowinfil);
 
-  declstatvar("cumsnowinfil", NHRU, "cumulative melt infiltration", "(mm)", &cumsnowinfil); // for looping
+  declstatvar("cumsnowinfil", TDim::NHRU, "cumulative melt infiltration", "(mm)", &cumsnowinfil); // for looping
 
-  declvar("meltrunoff", NHRU, "melt runoff = 0.0", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "melt runoff = 0.0", "(mm/int)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", NHRU, "cumulative melt runoff = 0.0", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative melt runoff = 0.0", "(mm)", &cummeltrunoff);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
 
-  declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
+  declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
 
-  declparam("texture", NHRU, "[1]", "1","4",
+  declparam("texture", TDim::NHRU, "[1]", "1","4",
      "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "(%)", &texture);
 
-  declparam("groundcover", NHRU, "[1]", "1","6",
+  declparam("groundcover", TDim::NHRU, "[1]", "1","6",
      "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "(%)", &groundcover);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
 
   declgetvar("*", "snowmeltD", "(mm/d)", &snowmeltD); // mm day
@@ -57,7 +57,7 @@ void ClassXGAyers::decl(void) {
 
 void ClassXGAyers::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
 
   for(hh = 0; hh < nhru; ++hh) {

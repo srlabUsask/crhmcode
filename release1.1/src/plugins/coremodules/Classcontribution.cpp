@@ -22,33 +22,33 @@ void Classcontribution::decl(void) {
 
   Description = "'calculates contributing area.'";
 
-  declvar("contrib_area", NHRU, "contributing area", "(mm^2)", &contrib_area);
+  declvar("contrib_area", TDim::NHRU, "contributing area", "(mm^2)", &contrib_area);
 
-  declvar("pre_contrib_area", NHRU, "maximum contributing area of HRU before transfer", "(mm^2)", &pre_contrib_area);
+  declvar("pre_contrib_area", TDim::NHRU, "maximum contributing area of HRU before transfer", "(mm^2)", &pre_contrib_area);
 
-  declvar("connected", NHRU, "connected HRUs", "()", &connected);
+  declvar("connected", TDim::NHRU, "connected HRUs", "()", &connected);
 
-  declvar("N_connected", NHRU, "number of connected HRUs", "()", &N_connected);
+  declvar("N_connected", TDim::NHRU, "number of connected HRUs", "()", &N_connected);
 
-  declvar("connectedTo", NHRU, "connected HRUs", "()", &connectedTo);
+  declvar("connectedTo", TDim::NHRU, "connected HRUs", "()", &connectedTo);
 
-  declvar("Results", NDEFN, "calulated distributions", "()", &Results, &Results_lay, nhru);
+  declvar("Results", TDim::NDEFN, "calulated distributions", "()", &Results, &Results_lay, nhru);
 
-  decllocal("distrib_sum", NHRU, "HRU distribution sum", "()", &distrib_sum);
+  decllocal("distrib_sum", TDim::NHRU, "HRU distribution sum", "()", &distrib_sum);
 
-  decllocal("soil_runoff_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
+  decllocal("soil_runoff_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
 
 
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("Sdmax", NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
+  declparam("Sdmax", TDim::NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
 
-  declparam("distrib_Route", NDEFN, "[0.0]", "-1.0E6.0", "1.0E6.0", "route this HRU to these HRUs", "()", &distrib, &distrib_hru, nhru);
+  declparam("distrib_Route", TDim::NDEFN, "[0.0]", "-1.0E6.0", "1.0E6.0", "route this HRU to these HRUs", "()", &distrib, &distrib_hru, nhru);
 
-  declparam("distrib_Basin", NHRU, "[1.0]", "0.0", "100.0", "route this HRU to basin (and other HRU(s) determined by 'distrib_Route')", "()", &distrib_Basin);
+  declparam("distrib_Basin", TDim::NHRU, "[1.0]", "0.0", "100.0", "route this HRU to basin (and other HRU(s) determined by 'distrib_Route')", "()", &distrib_Basin);
 
 
   soil_runoffDiv = declgetvar("*", "soil_runoff", "(mm/int)", &soil_runoff);
@@ -65,7 +65,7 @@ void Classcontribution::init(void) {
     LogError(TExcept);
   }
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
   for(hh = 0; hh < nhru; ++hh) {
     contrib_area[hh] = 0.0;
     pre_contrib_area[hh] = 0.0;

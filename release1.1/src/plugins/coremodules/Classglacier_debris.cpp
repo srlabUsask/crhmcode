@@ -30,145 +30,145 @@ void Classglacier_debris::decl(void){
 
   variation_set = VARIATION_ORG;
 
-  declvar("SWEmelt", NHRU, "daily SWE snowmelt", "(mm/d)", &SWEmelt);
+  declvar("SWEmelt", TDim::NHRU, "daily SWE snowmelt", "(mm/d)", &SWEmelt);
 
-  declvar("SWEmelt_delayed", NHRU, "daily SWE snowmelt delayed", "(mm/d)", &SWEmelt_delayed);
+  declvar("SWEmelt_delayed", TDim::NHRU, "daily SWE snowmelt delayed", "(mm/d)", &SWEmelt_delayed);
 
-  declstatdiag("cumSWEmelt", NHRU, "cumulative SWE snowmelt", "(mm)", &cumSWEmelt);
+  declstatdiag("cumSWEmelt", TDim::NHRU, "cumulative SWE snowmelt", "(mm)", &cumSWEmelt);
 
-  declvar("firnmelt", NHRU, "daily firn melt", "(mm/d)", &firnmelt);
+  declvar("firnmelt", TDim::NHRU, "daily firn melt", "(mm/d)", &firnmelt);
 
-  declvar("firnmelt_delayed", NHRU, "daily firn melt delayed", "(mm/d)", &firnmelt_delayed);
+  declvar("firnmelt_delayed", TDim::NHRU, "daily firn melt delayed", "(mm/d)", &firnmelt_delayed);
 
-  declstatdiag("cumfirnmelt", NHRU, "cumulative firn melt", "(mm)", &cumfirnmelt);
+  declstatdiag("cumfirnmelt", TDim::NHRU, "cumulative firn melt", "(mm)", &cumfirnmelt);
 
-  declvar("icemelt", NHRU, "daily ice melt", "(mm/d)", &icemelt);
+  declvar("icemelt", TDim::NHRU, "daily ice melt", "(mm/d)", &icemelt);
 
-  declvar("icemelt_delayed", NHRU, "daily ice melt delayed", "(mm/d)", &icemelt_delayed);
+  declvar("icemelt_delayed", TDim::NHRU, "daily ice melt delayed", "(mm/d)", &icemelt_delayed);
 
-  declstatdiag("cumicemelt", NHRU, "cumulative ice melt", "(mm)", &cumicemelt);
+  declstatdiag("cumicemelt", TDim::NHRU, "cumulative ice melt", "(mm)", &cumicemelt);
 
-  declstatvar("firn_dens", NDEFN, "densities of snow densification layers", "(kg/m^3)", &firn_dens, &firn_dens_array, Global::nlay);
+  declstatvar("firn_dens", TDim::NDEFN, "densities of snow densification layers", "(kg/m^3)", &firn_dens, &firn_dens_array, Global::nlay);
 
-  declstatvar("firn_h", NDEFN, "depths of snow densification layers", "(m)", &firn_h, &firn_h_array, Global::nlay);
+  declstatvar("firn_h", TDim::NDEFN, "depths of snow densification layers", "(m)", &firn_h, &firn_h_array, Global::nlay);
 
-  declstatvar("firn_yr", NDEFN, "layer[1] - years to 'critical density] and layer[2, ...] age of firn", "(yr)", &firn_yr, &firn_yr_array, Global::nlay);
+  declstatvar("firn_yr", TDim::NDEFN, "layer[1] - years to 'critical density] and layer[2, ...] age of firn", "(yr)", &firn_yr, &firn_yr_array, Global::nlay);
 
-  decldiagparam("firn_dens_init", NDEFN, "[220.0]", "0.0", "1000.0", "initial densities of firn densification layers", "(kg/m^3)", &firn_dens_init, &firn_dens_array_init, Global::nlay);
+  decldiagparam("firn_dens_init", TDim::NDEFN, "[220.0]", "0.0", "1000.0", "initial densities of firn densification layers", "(kg/m^3)", &firn_dens_init, &firn_dens_array_init, Global::nlay);
 
-  decldiagparam("firn_h_init", NDEFN, "[0.0]", "0.0", "100.0", "initial depths of firn densification layers", "(m)", &firn_h_init, &firn_h_array_init, Global::nlay);
+  decldiagparam("firn_h_init", TDim::NDEFN, "[0.0]", "0.0", "100.0", "initial depths of firn densification layers", "(m)", &firn_h_init, &firn_h_array_init, Global::nlay);
 
 
-  declstatvar("ice", NHRU, "water equivalent of ice", "(mm)", &ice);
+  declstatvar("ice", TDim::NHRU, "water equivalent of ice", "(mm)", &ice);
 
-  declstatvar("firn", NHRU, "water equivalent of all firn layers", "(mm)", &firn);
+  declstatvar("firn", TDim::NHRU, "water equivalent of all firn layers", "(mm)", &firn);
 
-  declvar("glacier_Albedo", NHRU, "Albedo used by glacier. From an albedo module unless overwritten by an albedo observation", "()", &glacier_Albedo);
+  declvar("glacier_Albedo", TDim::NHRU, "Albedo used by glacier. From an albedo module unless overwritten by an albedo observation", "()", &glacier_Albedo);
 
-  declvar("glacier_h2o", NHRU, "water equivalent of SWE, firn layers and ice", "(mm)", &glacier_h2o);
+  declvar("glacier_h2o", TDim::NHRU, "water equivalent of SWE, firn layers and ice", "(mm)", &glacier_h2o);
 
-  declvar("glacier_depth", NHRU, "depth of glacier", "(m)", &glacier_depth);
+  declvar("glacier_depth", TDim::NHRU, "depth of glacier", "(m)", &glacier_depth);
 
-  declvar("glacier_Surf", NHRU, "surface elevation of glacier (SWE, firn layers, ice and optionally land elevation)", "(m)", &glacier_Surf);
+  declvar("glacier_Surf", TDim::NHRU, "surface elevation of glacier (SWE, firn layers, ice and optionally land elevation)", "(m)", &glacier_Surf);
 
-  declstatvar("firn_depth", NHRU, "depth of all firn layers", "(m)", &firn_depth);
+  declstatvar("firn_depth", TDim::NHRU, "depth of all firn layers", "(m)", &firn_depth);
 
-  declvar("firn_init", NHRU, "initial water equivalent of all firn layers", "(mm)", &firn_init);
+  declvar("firn_init", TDim::NHRU, "initial water equivalent of all firn layers", "(mm)", &firn_init);
 
-  declstatvar("nfirn", NHRU, "num of layers used in firn consolidation array", "()", &nfirn);
+  declstatvar("nfirn", TDim::NHRU, "num of layers used in firn consolidation array", "()", &nfirn);
 
-  decllocal("topo_elev", NHRU, "topography elevations below glacier", "(m)", &topo_elev);
+  decllocal("topo_elev", TDim::NHRU, "topography elevations below glacier", "(m)", &topo_elev);
 
-  decllocal("rho_snow", NHRU, "rho of snow moved to furn", "(kg/m^3)", &rho_snow);
+  decllocal("rho_snow", TDim::NHRU, "rho of snow moved to furn", "(kg/m^3)", &rho_snow);
 
-  declvar("Gmelt", NHRU, "Qmelt = Qn+Qh+Qe+Qp/316.8*1000.0", "(mm/d)", &Qmelt);
+  declvar("Gmelt", TDim::NHRU, "Qmelt = Qn+Qh+Qe+Qp/316.8*1000.0", "(mm/d)", &Qmelt);
 
-  decllocal("cumGmelt", NHRU, "cumulative Qmelt = Qn+Qh+Qe+Qp/316.8*1000.0", "(mm)", &cumQmelt);
+  decllocal("cumGmelt", TDim::NHRU, "cumulative Qmelt = Qn+Qh+Qe+Qp/316.8*1000.0", "(mm)", &cumQmelt);
 
-  decllocal("cumnet_rain_glacier", NHRU, "cumulative net_rain + firn and ice melt", "(mm)", &cumnet_rain_glacier);
+  decllocal("cumnet_rain_glacier", TDim::NHRU, "cumulative net_rain + firn and ice melt", "(mm)", &cumnet_rain_glacier);
 
-  decllocal("cumsnowmeltD_glacier", NHRU, "cumulative snowmeltD + firn and ice melt", "(mm)", &cumsnowmeltD_glacier);
+  decllocal("cumsnowmeltD_glacier", TDim::NHRU, "cumulative snowmeltD + firn and ice melt", "(mm)", &cumsnowmeltD_glacier);
 
-  declvar("Gn_ebsm", NHRU, "net radiation", "(MJ/d)", &Qn_ebsm);
+  declvar("Gn_ebsm", TDim::NHRU, "net radiation", "(MJ/d)", &Qn_ebsm);
 
-  declvar("Gh_ebsm", NHRU, "sensible heat", "(MJ/d)", &Qh_ebsm);
+  declvar("Gh_ebsm", TDim::NHRU, "sensible heat", "(MJ/d)", &Qh_ebsm);
 
-  declvar("Ge_ebsm", NHRU, "latent heat", "(MJ/d)", &Qe_ebsm);
+  declvar("Ge_ebsm", TDim::NHRU, "latent heat", "(MJ/d)", &Qe_ebsm);
 
-  declvar("Gp_ebsm", NHRU, "input from rainfall", "(MJ/d)", &Qp_ebsm);
+  declvar("Gp_ebsm", TDim::NHRU, "input from rainfall", "(MJ/d)", &Qp_ebsm);
 
-  decldiag("GlacierMode", NHRU, "1 - glacier, 0 - tongue (no firn or ice", "()", &GlacierMode);
+  decldiag("GlacierMode", TDim::NHRU, "1 - glacier, 0 - tongue (no firn or ice", "()", &GlacierMode);
 
-  decldiag("SWE_2firn", NHRU, "end of summer SWE transferred to firn", "(mm)", &SWE_2firn);
+  decldiag("SWE_2firn", TDim::NHRU, "end of summer SWE transferred to firn", "(mm)", &SWE_2firn);
 
-  decldiag("SWE_2firn_dens", NHRU, "end of summer density of SWE transferred to firn", "(kg/m^3)", &SWE_2firn_dens);
+  decldiag("SWE_2firn_dens", TDim::NHRU, "end of summer density of SWE transferred to firn", "(kg/m^3)", &SWE_2firn_dens);
 
-  declstatdiag("cumSWE_2firn", NHRU, "cumulative SWE added to firn", "(mm)", &cumSWE_2firn);
+  declstatdiag("cumSWE_2firn", TDim::NHRU, "cumulative SWE added to firn", "(mm)", &cumSWE_2firn);
 
-  decldiag("firn_2ice", NHRU, "end of summer firn transferred to ice", "(mm)", &firn_2ice);
+  decldiag("firn_2ice", TDim::NHRU, "end of summer firn transferred to ice", "(mm)", &firn_2ice);
 
-  decldiag("firn_2ice_dens", NHRU, "end of summer density of firn transferred to ice.", "(kg/m^3)", &firn_2ice_dens);
+  decldiag("firn_2ice_dens", TDim::NHRU, "end of summer density of firn transferred to ice.", "(kg/m^3)", &firn_2ice_dens);
 
-  declstatdiag("cumfirn_2ice", NHRU, "cumulative firn added to ice", "(mm)", &cumfirn_2ice);
+  declstatdiag("cumfirn_2ice", TDim::NHRU, "cumulative firn added to ice", "(mm)", &cumfirn_2ice);
 
-  declvar("Gnet_rainD", NHRU, "daily net rain", "(mm/d)", &Gnet_rainD);
+  declvar("Gnet_rainD", TDim::NHRU, "daily net rain", "(mm/d)", &Gnet_rainD);
 
-  declvar("net_rain_org", NHRU, "value of 'net_rain' before addition of SWE, firn and ice melt", "(mm/int)", &net_rain_org);
+  declvar("net_rain_org", TDim::NHRU, "value of 'net_rain' before addition of SWE, firn and ice melt", "(mm/int)", &net_rain_org);
 
-  declvar("cumnet_rain_org", NHRU, "value of 'net_rain' before addition of SWE, firn and ice melt", "(mm)", &cumnet_rain_org);
+  declvar("cumnet_rain_org", TDim::NHRU, "value of 'net_rain' before addition of SWE, firn and ice melt", "(mm)", &cumnet_rain_org);
 
 
-  ObsCnt_Albedo = declreadobs("glacier_Albedo_obs", NHRU, "available Albedo observations", "()", &glacier_Albedo_obs, HRU_OBS_misc, true); // HRU_OBS_p_ppt HRU_OBS_misc HRU_OBS_Q HRU_OBS_u HRU_OBS_t_rh_ea
+  ObsCnt_Albedo = declreadobs("glacier_Albedo_obs", TDim::NHRU, "available Albedo observations", "()", &glacier_Albedo_obs, HRU_OBS_misc, true); // HRU_OBS_p_ppt HRU_OBS_misc HRU_OBS_Q HRU_OBS_u HRU_OBS_t_rh_ea
 
 
 
-  decldiagparam("delay_melt", NHRU, "[0]", "0","366", "inhibit melt until this Julian date. Default incorrect for the Southern Hemisphere", "()", &delay_melt);
+  decldiagparam("delay_melt", TDim::NHRU, "[0]", "0","366", "inhibit melt until this Julian date. Default incorrect for the Southern Hemisphere", "()", &delay_melt);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("ice_init", NHRU, "[1.0]", "0.0", "1.0E6", "Initial water equivalent of glacier ice", "(mm)", &ice_init);
+  declparam("ice_init", TDim::NHRU, "[1.0]", "0.0", "1.0E6", "Initial water equivalent of glacier ice", "(mm)", &ice_init);
 
-  declparam("firn_Albedo", NHRU, "[187.0]", "0.2", "0.9", "Initial glacier firn albedo", "()", &firn_Albedo);
+  declparam("firn_Albedo", TDim::NHRU, "[187.0]", "0.2", "0.9", "Initial glacier firn albedo", "()", &firn_Albedo);
 
-  declparam("ice_Albedo", NHRU, "[187.0]", "0.2", "0.9", "Initial glacier ice albedo", "()", &ice_Albedo);
+  declparam("ice_Albedo", TDim::NHRU, "[187.0]", "0.2", "0.9", "Initial glacier ice albedo", "()", &ice_Albedo);
 
-  declparam("ice_dens", NHRU, "[1000.0]", "200.0", "1000.0", "density of glacier ice", "(kg/m^3)", &ice_dens);
+  declparam("ice_dens", TDim::NHRU, "[1000.0]", "200.0", "1000.0", "density of glacier ice", "(kg/m^3)", &ice_dens);
 
-  declparam("TKMA", NHRU, "[30]", "-50", "50", "Mean annual temperature of glacier", "(ºC)", &TKMA);
+  declparam("TKMA", TDim::NHRU, "[30]", "-50", "50", "Mean annual temperature of glacier", "(ºC)", &TKMA);
 
-  declparam("SWEAA", NHRU, "[0.3]", "0.1", "10.0", "Mean annual accumulation of glacier SWE", "(m/yr)", &SWEAA);
+  declparam("SWEAA", TDim::NHRU, "[0.3]", "0.1", "10.0", "Mean annual accumulation of glacier SWE", "(m/yr)", &SWEAA);
 
-  declparam("SWEstorage", NHRU, "[0.0]", "0.0","200.0", "snowmelt storage constant", "(d)", &SWEstorage);
+  declparam("SWEstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "snowmelt storage constant", "(d)", &SWEstorage);
 
-  declparam("SWELag", NHRU, "[0.0]", "0.0","1.0E4.0", "snowmelt  lag delay", "(h)", &SWELag);
+  declparam("SWELag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "snowmelt  lag delay", "(h)", &SWELag);
 
-  declparam("topo_elev_init", NHRU, "[0]", "0","1000", "elevation used to initialise 'topo_elev' when 'Elev_Adj_glacier_surf equals 0.0'", "(m)", &topo_elev_init);
+  declparam("topo_elev_init", TDim::NHRU, "[0]", "0","1000", "elevation used to initialise 'topo_elev' when 'Elev_Adj_glacier_surf equals 0.0'", "(m)", &topo_elev_init);
 
-  declparam("Elev_Adj_glacier_surf", NHRU, "[0]", "0","1", " 0 - glacier_Surf (m) = glacier depth, 1 - glacier_Surf = glacier depth + land elevation", "()", &Elev_Adj_glacier_surf);
+  declparam("Elev_Adj_glacier_surf", TDim::NHRU, "[0]", "0","1", " 0 - glacier_Surf (m) = glacier depth, 1 - glacier_Surf = glacier depth + land elevation", "()", &Elev_Adj_glacier_surf);
 
-  declparam("firnstorage", NHRU, "[0.1]", "0.0","200.0", "firn storage constant", "(d)", &firnstorage);
+  declparam("firnstorage", TDim::NHRU, "[0.1]", "0.0","200.0", "firn storage constant", "(d)", &firnstorage);
 
-  declparam("firnLag", NHRU, "[0.0]", "0.0","1.0E4.0", "firn  lag delay", "(h)", &firnLag);
+  declparam("firnLag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "firn  lag delay", "(h)", &firnLag);
 
-  declparam("icestorage", NHRU, "[0.1]", "0.0","200.0", "ice melt storage constant", "(d)", &icestorage);
+  declparam("icestorage", TDim::NHRU, "[0.1]", "0.0","200.0", "ice melt storage constant", "(d)", &icestorage);
 
-  declparam("iceLag", NHRU, "[0.0]", "0.0","1.0E4.0", "ice melt lag delay", "(h)", &iceLag);
+  declparam("iceLag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "ice melt lag delay", "(h)", &iceLag);
 
-  declparam("SWE_to_firn_Julian", NHRU, "[244]", "0", "366", "convert any SWE to firn on Julian day. 0 - inhibit transfer", "()", &SWE_to_firn_Julian);
+  declparam("SWE_to_firn_Julian", TDim::NHRU, "[244]", "0", "366", "convert any SWE to firn on Julian day. 0 - inhibit transfer", "()", &SWE_to_firn_Julian);
 
-  declparam("Densification", NHRU, "[0]", "0", "1", ". Densification method: 0 - simple linear, 1 - original", "()", &Densification);
+  declparam("Densification", TDim::NHRU, "[0]", "0", "1", ". Densification method: 0 - simple linear, 1 - original", "()", &Densification);
 
-  declparam("Densification_550", NHRU, "[100]", "0", "1000", ". Densification increment < 550", "()", &Densification_550);
+  declparam("Densification_550", TDim::NHRU, "[100]", "0", "1000", ". Densification increment < 550", "()", &Densification_550);
 
-  declparam("Densification_above_550", NHRU, "[100]", "0", "1000", ". Densification increment >= 550", "()", &Densification_above_550);
+  declparam("Densification_above_550", TDim::NHRU, "[100]", "0", "1000", ". Densification increment >= 550", "()", &Densification_above_550);
 
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporatation, 1 -> inhibit", "()", &inhibit_evap);
+  decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporatation, 1 -> inhibit", "()", &inhibit_evap);
 
-  declparam("inhibit_firnmelt", NHRU, "[0]", "0","1", "set to 1 to inhibit firn melt", "()", &inhibit_firnmelt);
+  declparam("inhibit_firnmelt", TDim::NHRU, "[0]", "0","1", "set to 1 to inhibit firn melt", "()", &inhibit_firnmelt);
 
-  declparam("inhibit_icenmelt", NHRU, "[0]", "0","1", "set to 1 to inhibit firn melt", "()", &inhibit_icemelt);
+  declparam("inhibit_icenmelt", TDim::NHRU, "[0]", "0","1", "set to 1 to inhibit firn melt", "()", &inhibit_icemelt);
 
   declgetvar("*", "SunMax", "(h)",       &sunmax);
 
@@ -210,21 +210,21 @@ void Classglacier_debris::decl(void){
 
   variation_set = VARIATION_0;
 
-  decldiagparam("tfactor", NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*°C)", &tfactor);
+  decldiagparam("tfactor", TDim::NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*°C)", &tfactor);
 
-  decldiagparam("nfactor", NHRU, "[0.0]", "0.0","10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
+  decldiagparam("nfactor", TDim::NHRU, "[0.0]", "0.0","10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
 
-  decldiagparam("Use_QnD", NHRU, "[0]", "0","1", "1 - Use QnD if available", "()", &Use_QnD);
+  decldiagparam("Use_QnD", TDim::NHRU, "[0]", "0","1", "1 - Use QnD if available", "()", &Use_QnD);
 
 
   variation_set = VARIATION_0 + VARIATION_3;
 
-  declreadobs("QnD", NHRU, "net radiation", "(MJ/m^2*d)", &QnD, HRU_OBS_Q, true); // must check for NULL
+  declreadobs("QnD", TDim::NHRU, "net radiation", "(MJ/m^2*d)", &QnD, HRU_OBS_Q, true); // must check for NULL
 
 
   variation_set = VARIATION_1 + VARIATION_2;
 
-  declstatvar("Qnsn_Acc", NHRU, "accumulator for Qnsn_Var/Qnsn", "(W/m^2)", &Qnsn_Acc); // daily value
+  declstatvar("Qnsn_Acc", TDim::NHRU, "accumulator for Qnsn_Var/Qnsn", "(W/m^2)", &Qnsn_Acc); // daily value
 
 
   variation_set = VARIATION_1 + VARIATION_5;
@@ -234,7 +234,7 @@ void Classglacier_debris::decl(void){
 
   variation_set = VARIATION_2;
 
-  declreadobs("Qnsn", NHRU, "net radiation", "(W/m^2*int)", &Qnsn, HRU_OBS_Q);
+  declreadobs("Qnsn", TDim::NHRU, "net radiation", "(W/m^2*int)", &Qnsn, HRU_OBS_Q);
   
 
   variation_set = VARIATION_4;
@@ -249,55 +249,55 @@ void Classglacier_debris::decl(void){
 // debris 
 
 
-  declvar("lagT", NHRU, "lagged temperature.", "(°C)", &lagT);
+  declvar("lagT", TDim::NHRU, "lagged temperature.", "(°C)", &lagT);
 
-  declvar("lagSW", NHRU, "lagged shortwave radiation.", "(W/m^2)", &lagSW);
+  declvar("lagSW", TDim::NHRU, "lagged shortwave radiation.", "(W/m^2)", &lagSW);
 
-  declvar("Gmelt_energy", NHRU, "Energy available for glacier melt.", "(W/m^2)", &Gmelt_energy);
+  declvar("Gmelt_energy", TDim::NHRU, "Energy available for glacier melt.", "(W/m^2)", &Gmelt_energy);
 
-  declvar("den_air", NHRU, "air density.", "(kg/m^-3)", &den_air);
+  declvar("den_air", TDim::NHRU, "air density.", "(kg/m^-3)", &den_air);
 
-  declvar("K_kat", NHRU, "katabatic bulk exchange coefficient.", "()", &K_kat);
+  declvar("K_kat", TDim::NHRU, "katabatic bulk exchange coefficient.", "()", &K_kat);
 
-  declvar("Cp_water", NHRU, "specific heat of water.", "(J/(kg*K))", &Cp_water);
+  declvar("Cp_water", TDim::NHRU, "specific heat of water.", "(J/(kg*K))", &Cp_water);
 
-  declvar("Xmelt_int", NHRU, "Experimental Firn and Ice melt at interval timestep.", "(mm/int)", &Xmelt_int);
+  declvar("Xmelt_int", TDim::NHRU, "Experimental Firn and Ice melt at interval timestep.", "(mm/int)", &Xmelt_int);
 
-  declvar("Xmelt_acc", NHRU, "Experimental Firn and Ice melt daily accumulator.", "(mm)", &Xmelt_acc);
+  declvar("Xmelt_acc", TDim::NHRU, "Experimental Firn and Ice melt daily accumulator.", "(mm)", &Xmelt_acc);
 
-  declvar("Xmelt_V5", NHRU, "Version 5 Firn and Ice melt daily variable.", "(mm)", &Xmelt_V5);
+  declvar("Xmelt_V5", TDim::NHRU, "Version 5 Firn and Ice melt daily variable.", "(mm)", &Xmelt_V5);
 
-  declparam("debris_h", NHRU, "[0.0]", "0", "10", "debris thickness.", "(m)", &debris_h);
+  declparam("debris_h", TDim::NHRU, "[0.0]", "0", "10", "debris thickness.", "(m)", &debris_h);
 
-  declparam("T_threshold", NHRU, "[1.0]", "-30", "30", "threshold temperature for melt to occur.", "(°C)", &T_threshold);
+  declparam("T_threshold", TDim::NHRU, "[1.0]", "-30", "30", "threshold temperature for melt to occur.", "(°C)", &T_threshold);
 
-  declreadobs("lagT1", NHRU, "lagged temperature 1", "(°C)", &lagT1, HRU_OBS_Q, true);
+  declreadobs("lagT1", TDim::NHRU, "lagged temperature 1", "(°C)", &lagT1, HRU_OBS_Q, true);
 
-  declreadobs("lagT2", NHRU, "lagged temperature 2", "(°C)", &lagT2, HRU_OBS_Q, true);
+  declreadobs("lagT2", TDim::NHRU, "lagged temperature 2", "(°C)", &lagT2, HRU_OBS_Q, true);
 
-  declreadobs("lagT3", NHRU, "lagged temperature 3", "(°C)", &lagT3, HRU_OBS_Q, true);
+  declreadobs("lagT3", TDim::NHRU, "lagged temperature 3", "(°C)", &lagT3, HRU_OBS_Q, true);
 
-  declreadobs("lagT4", NHRU, "lagged temperature 4", "(°C)", &lagT4, HRU_OBS_Q, true);
+  declreadobs("lagT4", TDim::NHRU, "lagged temperature 4", "(°C)", &lagT4, HRU_OBS_Q, true);
 
-  declreadobs("lagSW1", NHRU, "lagged shortwave radiation 1", "(W/m^2)", &lagSW1, HRU_OBS_Q, true);
+  declreadobs("lagSW1", TDim::NHRU, "lagged shortwave radiation 1", "(W/m^2)", &lagSW1, HRU_OBS_Q, true);
 
-  declreadobs("lagSW2", NHRU, "lagged shortwave radiation 2", "(W/m^2)", &lagSW2, HRU_OBS_Q, true);
+  declreadobs("lagSW2", TDim::NHRU, "lagged shortwave radiation 2", "(W/m^2)", &lagSW2, HRU_OBS_Q, true);
 
-  declreadobs("lagSW3", NHRU, "lagged shortwave radiation 3", "(W/m^2)", &lagSW3, HRU_OBS_Q, true);
+  declreadobs("lagSW3", TDim::NHRU, "lagged shortwave radiation 3", "(W/m^2)", &lagSW3, HRU_OBS_Q, true);
 
-  declreadobs("lagSW4", NHRU, "lagged shortwave radiation 4", "(W/m^2)", &lagSW4, HRU_OBS_Q, true);
+  declreadobs("lagSW4", TDim::NHRU, "lagged shortwave radiation 4", "(W/m^2)", &lagSW4, HRU_OBS_Q, true);
 
-  declreadobs("lagSW5", NHRU, "lagged shortwave radiation 5", "(W/m^2)", &lagSW5, HRU_OBS_Q, true);
+  declreadobs("lagSW5", TDim::NHRU, "lagged shortwave radiation 5", "(W/m^2)", &lagSW5, HRU_OBS_Q, true);
 
-  declreadobs("lagSW6", NHRU, "lagged shortwave radiation 6", "(W/m^2)", &lagSW6, HRU_OBS_Q, true);
+  declreadobs("lagSW6", TDim::NHRU, "lagged shortwave radiation 6", "(W/m^2)", &lagSW6, HRU_OBS_Q, true);
 
   variation_set = VARIATION_ORG;
 }
 
 void Classglacier_debris::init(void) {
 
-  nhru = getdim(NHRU);
-  nlay = getdim(NLAY);
+  nhru = getdim(TDim::NHRU);
+  nlay = getdim(TDim::NLAY);
 
   if(nlay < 3) {
     string S = string("'") + Name + " (glacier)' project file nlay(number of layers) must be greater than 2";

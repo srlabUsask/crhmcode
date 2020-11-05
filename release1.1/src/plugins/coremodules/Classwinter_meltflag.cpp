@@ -22,11 +22,11 @@ void Classwinter_meltflag::decl(void) {
 
   Description = "'Estimates the snow albedo during the winter and the melt period. Use with \"ebsm\".'";
 
-  declvar("meltflag", NHRU, "meltflag = 1 - melt true", "()", &meltflag);
+  declvar("meltflag", TDim::NHRU, "meltflag = 1 - melt true", "()", &meltflag);
 
-  declvar("winter", NHRU, "winter = 1 - true", "()", &winter);
+  declvar("winter", TDim::NHRU, "winter = 1 - true", "()", &winter);
 
-  declparam("hru_lat", NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
+  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
 
   declgetvar("*",    "hru_tmax", "(°C)", &hru_tmax);
   declgetvar("*",    "hru_tmin", "(°C)", &hru_tmin);
@@ -37,7 +37,7 @@ void Classwinter_meltflag::decl(void) {
 
 void Classwinter_meltflag::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(hh = 0; hh < nhru; ++hh) {
     if(SWE[hh] > 5.0)

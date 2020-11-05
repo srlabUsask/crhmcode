@@ -86,12 +86,12 @@ void ClassMacro::decl(void) {
 
 		if (isGroup) {
 
-			declparam("HRU_group", CRHM::NHRU, S, "1", "1e3", "group #", "()", &HRU_group);
+			declparam("HRU_group", TDim::NHRU, S, "1", "1e3", "group #", "()", &HRU_group);
 		}
 
 		if (isStruct) {
 			string Choice = GrpStringList->CommaText();
-			declparam("HRU_struct", CRHM::NHRU, "[1]", "1", Common::longtoStr(GrpStringList->Count), string("select using 1/2/3 ... module/group from '" + Choice + "'"), "()", &HRU_struct); // _group
+			declparam("HRU_struct", TDim::NHRU, "[1]", "1", Common::longtoStr(GrpStringList->Count), string("select using 1/2/3 ... module/group from '" + Choice + "'"), "()", &HRU_struct); // _group
 		}
 
 		Modules.clear();
@@ -229,7 +229,7 @@ void ClassMacro::decl(void) {
 
 void ClassMacro::init(void) {
 
-	nhru = getdim(CRHM::NHRU); // transfers current # of HRU's to module
+	nhru = getdim(TDim::NHRU); // transfers current # of HRU's to module
 
 	if (isGroup || isStruct) {
 
@@ -797,7 +797,7 @@ ClassMacro::~ClassMacro() { // Can be Group or Struct or module
 
 TStringList *DefCRHM::DefStringList = NULL;
 
-CRHM::TDim DefCRHM::getTDim(string D) {
+TDim DefCRHM::getTDim(string D) {
 	char table[][7] = {
 		"BASIN",
 		"ONE",
@@ -824,9 +824,9 @@ CRHM::TDim DefCRHM::getTDim(string D) {
 
 	for (long ii = 0; ii < 21; ++ii)
 		if (D == table[ii])
-			return (CRHM::TDim) ii;
+			return (TDim) ii;
 
-	return (CRHM::TDim) - 1;
+	return (TDim) - 1;
 }
 
 TFun DefCRHM::getTFunc(string D) {
@@ -993,7 +993,7 @@ void Defdeclparam::CallDecl() {
 		FP->second.Me = Macro;
 
 		if (Int) {
-			if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
+			if (Dim == TDim::NDEF || Dim == TDim::NDEFN) {
 				FP->second.kind = TV::CRHMint2;
 				FP->second.ivalue2 = const_cast<long **> (fix2_long_const);
 			}
@@ -1003,7 +1003,7 @@ void Defdeclparam::CallDecl() {
 			}
 		}
 		else {
-			if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
+			if (Dim == TDim::NDEF || Dim == TDim::NDEFN) {
 				FP->second.kind = TV::CRHM2;
 				FP->second.value2 = const_cast<double **> (fix2_const);
 			}
@@ -1042,7 +1042,7 @@ void Defdeclvar::CallDecl() {
 		FP->second.kind = TV::CRHMint;
 		FP->second.ivalue = const_cast<long *> (fix_long);
 	}
-	else if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
+	else if (Dim == TDim::NDEF || Dim == TDim::NDEFN) {
 		FP->second.value2 = fix2;
 		FP->second.kind = TV::CRHM2;
 	}
@@ -1076,7 +1076,7 @@ void Defdecldiag::CallDecl() {
 		FP->second.kind = TV::CRHMint;
 		FP->second.ivalue = const_cast<long *> (fix_long);
 	}
-	else if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
+	else if (Dim == TDim::NDEF || Dim == TDim::NDEFN) {
 		FP->second.value2 = fix2;
 		FP->second.kind = TV::CRHM2;
 	}
@@ -1110,7 +1110,7 @@ void Defdeclstatvar::CallDecl() {
 		FP->second.kind = TV::CRHMint;
 		FP->second.ivalue = const_cast<long *> (fix_long);
 	}
-	else if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
+	else if (Dim == TDim::NDEF || Dim == TDim::NDEFN) {
 		FP->second.value2 = fix2;
 		FP->second.kind = TV::CRHM2;
 	}
@@ -1144,7 +1144,7 @@ void Defdecllocal::CallDecl() {
 		FP->second.kind = TV::CRHMint;
 		FP->second.ivalue = const_cast<long *> (fix_long);
 	}
-	else if (Dim == CRHM::NDEF || Dim == CRHM::NDEFN) {
+	else if (Dim == TDim::NDEF || Dim == TDim::NDEFN) {
 		FP->second.value2 = fix2;
 		FP->second.kind = TV::CRHM2;
 	}
@@ -1192,7 +1192,7 @@ void Defdeclgetvar::CallDecl() {
 
 		if (Int) {
 			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
-			if (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN) {
+			if (((ClassVar*)Global::thisVar)->dimen == TDim::NDEF || ((ClassVar*)Global::thisVar)->dimen == TDim::NDEFN) {
 				FP->second.kind = TV::CRHMint2;
 				FP->second.ivalue2 = const_cast<long **> (fix2_long_const);
 			}
@@ -1203,7 +1203,7 @@ void Defdeclgetvar::CallDecl() {
 		}
 		else {
 			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
-			if (Global::thisVar != NULL && (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN)) {
+			if (Global::thisVar != NULL && (((ClassVar*)Global::thisVar)->dimen == TDim::NDEF || ((ClassVar*)Global::thisVar)->dimen == TDim::NDEFN)) {
 				FP->second.kind = TV::CRHM2;
 				FP->second.value2 = const_cast<double **> (fix2_const);
 			}
@@ -1253,7 +1253,7 @@ void Defdeclputvar::CallDecl() {
 			FP->second.ivalue = const_cast<long *> (fix_long);
 		}
 		//else if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences.
-		else if (Global::thisVar != NULL && (((ClassVar*)Global::thisVar)->dimen == CRHM::NDEF || ((ClassVar*)Global::thisVar)->dimen == CRHM::NDEFN)) {
+		else if (Global::thisVar != NULL && (((ClassVar*)Global::thisVar)->dimen == TDim::NDEF || ((ClassVar*)Global::thisVar)->dimen == TDim::NDEFN)) {
 			FP->second.kind = TV::CRHM2;
 			FP->second.value2 = const_cast<double **> (fix2);
 		}
@@ -1300,7 +1300,7 @@ void Defdeclputparam::CallDecl() {
 			FP->second.kind = TV::CRHMint;
 			FP->second.ivalue = const_cast<long *> (fix_long);
 		}
-		else if (thisPar != NULL && (thisPar->dimen == CRHM::NDEF || thisPar->dimen == CRHM::NDEFN)) {
+		else if (thisPar != NULL && (thisPar->dimen == TDim::NDEF || thisPar->dimen == TDim::NDEFN)) {
 			FP->second.kind = TV::CRHM2;
 			FP->second.value2 = const_cast<double **> (fix2);
 		}
@@ -1425,7 +1425,7 @@ void Defdeclobsfunc::CallDecl() {
 }
 
 //---------------------------------------------------------------------------
-long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string help, string units, double **value) {
+long ClassMacro::declobs(string module, string name, TDim dimen, string help, string units, double **value) {
 	MapVar::iterator itVar;
 	ClassVar *newVar;
 	ClassVar *thisVar;

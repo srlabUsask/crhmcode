@@ -150,7 +150,7 @@ public:
 
 	string Var_name(ClassModule* thisModule, string S);
 
-	long getdim(CRHM::TDim dimen);
+	long getdim(TDim dimen);
 
 	void AKAhook(TAKA type, string module, string OrgName, string & NewName);
 
@@ -159,91 +159,91 @@ public:
 	int declgrpvar(string variable, string queryvar,
 		string help, string units, double **value, double ***layvalue, bool PointPlot = false);
 
-	void declvar(string variable, CRHM::TDim dimen,
+	void declvar(string variable, TDim dimen,
 		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
 		bool PointPlot = false, bool StatVar = false, TVISIBLE Local = TVISIBLE::USUAL);
 
-	void declvar(string variable, CRHM::TDim dimen,
+	void declvar(string variable, TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1,
 		bool PointPlot = false, bool StatVar = false, TVISIBLE Local = TVISIBLE::USUAL);
 
-	void decldiag(string variable, CRHM::TDim dimen,
+	void decldiag(string variable, TDim dimen,
 		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
 		bool PointPlot = false, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
-	void declstatdiag(string variable, CRHM::TDim dimen,
+	void declstatdiag(string variable, TDim dimen,
 		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
 		bool PointPlot = false, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
-	void decldiag(string variable, CRHM::TDim dimen,
+	void decldiag(string variable, TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1,
 		bool PointPlot = false, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
-	void declstatdiag(string variable, CRHM::TDim dimen,
+	void declstatdiag(string variable, TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1,
 		bool PointPlot = false, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
-	void declstatvar(string variable, CRHM::TDim dimen,
+	void declstatvar(string variable, TDim dimen,
 		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
 		bool PointPlot = false, TVISIBLE Local = TVISIBLE::USUAL);
 
-	void declstatvar(string variable, CRHM::TDim dimen,
+	void declstatvar(string variable, TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1,
 		bool PointPlot = false, TVISIBLE Local = TVISIBLE::USUAL);
 
-	void decllocal(string variable, CRHM::TDim dimen,
+	void decllocal(string variable, TDim dimen,
 		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1);
 
-	void decllocal(string variable, CRHM::TDim dimen,
+	void decllocal(string variable, TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1);
 
-	void declparam(string param, CRHM::TDim dimen,
+	void declparam(string param, TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const double **value,
 		const double ***layvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::USUAL);
 
-	void declparam(string param, CRHM::TDim dimen,
+	void declparam(string param, TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const long **value,
 		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::USUAL);
 
-	TStringList* declparam(string param, CRHM::TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::USUAL);
+	TStringList* declparam(string param, TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::USUAL);
 
-	void decldiagparam(string param, CRHM::TDim dimen,
+	void decldiagparam(string param, TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const double **value,
 		const double ***layvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
-	void decldiagparam(string param, CRHM::TDim dimen,
+	void decldiagparam(string param, TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const long **value,
 		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
-	TStringList* decldiagparam(string param, CRHM::TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
+	TStringList* decldiagparam(string param, TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
-	void decllocalparam(string param, CRHM::TDim dimen,
+	void decllocalparam(string param, TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const double **value,
 		const double ***layvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::PRIVATE);
 
-	void decllocalparam(string param, CRHM::TDim dimen,
+	void decllocalparam(string param, TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const long **value,
 		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::PRIVATE);
 
-	TStringList* decllocalparam(string param, CRHM::TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::PRIVATE);
+	TStringList* decllocalparam(string param, TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::PRIVATE);
 
 	long declgetvar(string source, string name, string units, const double **value, const double ***layvalue = NULL);
 
 	long declgetvar(string source, string name, string units, const long **value, const long ***layvalue = NULL);
 
-	long declreadobs(string variable, CRHM::TDim dimen, string help, string units,
+	long declreadobs(string variable, TDim dimen, string help, string units,
 		const double **value, long HRU_index = CRHM::HRU_OBS_t_rh_ea, bool optional = false, const double ***layvalue = NULL);
 
-	long declreadobs(string variable, CRHM::TDim dimen, string help, string units,
+	long declreadobs(string variable, TDim dimen, string help, string units,
 		const long **value, long HRU_index = 0, bool optional = false, const long ***layvalue = NULL);
 
-	long declobs(string name, CRHM::TDim dimen, string help, string units, double **value);
+	long declobs(string name, TDim dimen, string help, string units, double **value);
 
 	long declobsfunc(string obs, string variable, double **value, TFun typeFun, double ***layvalue = NULL, bool optional = false);
 

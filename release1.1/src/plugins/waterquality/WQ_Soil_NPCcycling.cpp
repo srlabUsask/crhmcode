@@ -66,263 +66,263 @@ void ClassWQ_SoilBGC::decl(void) {
 
   Description = "'Soil biogeochemical cycling module.'";
 
-  declstatvar("partP", NDEFN, "immobile/undissolved pool of organic phosphorus adsorded to soil particles.", "(kg/km^2)", &partP, &partP_lay, maxsoillayers);
+  declstatvar("partP", TDim::NDEFN, "immobile/undissolved pool of organic phosphorus adsorded to soil particles.", "(kg/km^2)", &partP, &partP_lay, maxsoillayers);
 
-  declstatvar("refractoryN", NDEFN, "immobile/undissolved pool of organic nitrogen in soil with slow turnover.", "(kg/km^2)", &refractoryN, &refractoryN_lay, maxsoillayers);
+  declstatvar("refractoryN", TDim::NDEFN, "immobile/undissolved pool of organic nitrogen in soil with slow turnover.", "(kg/km^2)", &refractoryN, &refractoryN_lay, maxsoillayers);
 
-  declstatvar("refractoryP", NDEFN, "immobile/undissolved pool of organic phosphorus in soil with slow turnover.", "(kg/km^2)", &refractoryP, &refractoryP_lay, maxsoillayers);
+  declstatvar("refractoryP", TDim::NDEFN, "immobile/undissolved pool of organic phosphorus in soil with slow turnover.", "(kg/km^2)", &refractoryP, &refractoryP_lay, maxsoillayers);
 
-  declstatvar("refractoryC", NDEFN, "immobile/undissolved pool of organic carbon with slow turnover.", "(kg/km^2)", &refractoryC, &refractoryC_lay, maxsoillayers);
+  declstatvar("refractoryC", TDim::NDEFN, "immobile/undissolved pool of organic carbon with slow turnover.", "(kg/km^2)", &refractoryC, &refractoryC_lay, maxsoillayers);
 
-  declstatvar("labileN", NDEFN, "immobile/undissolved pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileN, &labileN_lay, maxsoillayers);
+  declstatvar("labileN", TDim::NDEFN, "immobile/undissolved pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileN, &labileN_lay, maxsoillayers);
 
-  declstatvar("labileP", NDEFN, "immobile/undissolved pool of organic phosphorus in soil with rapid turnover.", "(kg/km^2)", &labileP, &labileP_lay, maxsoillayers);
+  declstatvar("labileP", TDim::NDEFN, "immobile/undissolved pool of organic phosphorus in soil with rapid turnover.", "(kg/km^2)", &labileP, &labileP_lay, maxsoillayers);
 
-  declstatvar("labileC", NDEFN, "immobile/undissolved pool of organic carbon in soil with rapid turnover.", "(kg/km^2)", &labileC, &labileC_lay, maxsoillayers);
+  declstatvar("labileC", TDim::NDEFN, "immobile/undissolved pool of organic carbon in soil with rapid turnover.", "(kg/km^2)", &labileC, &labileC_lay, maxsoillayers);
 
-  declstatvar("NO3_Npool", NDEFN, "NO3-N (nitrate-nitrogen, dissolved) pool in soil", "(kg/km^2)", &NO3_Npool, &NO3_Npool_lay, maxsoillayers);
+  declstatvar("NO3_Npool", TDim::NDEFN, "NO3-N (nitrate-nitrogen, dissolved) pool in soil", "(kg/km^2)", &NO3_Npool, &NO3_Npool_lay, maxsoillayers);
 
-  declstatvar("NH4_Npool", NDEFN, "NH4-N (ammonium-nitrogen, dissolved) pool in soil", "(kg/km^2)", &NH4_Npool, &NH4_Npool_lay, maxsoillayers);
+  declstatvar("NH4_Npool", TDim::NDEFN, "NH4-N (ammonium-nitrogen, dissolved) pool in soil", "(kg/km^2)", &NH4_Npool, &NH4_Npool_lay, maxsoillayers);
 
-  declstatvar("DONpool", NDEFN, "dissolved organic nitrogen pool in soil", "(kg/km^2)", &DONpool, &DONpool_lay, maxsoillayers);
+  declstatvar("DONpool", TDim::NDEFN, "dissolved organic nitrogen pool in soil", "(kg/km^2)", &DONpool, &DONpool_lay, maxsoillayers);
 
-  declstatvar("SRPpool", NDEFN, "soluble-reactive phosphorus pool in soil", "(kg/km^2)", &SRPpool, &SRPpool_lay, maxsoillayers);
+  declstatvar("SRPpool", TDim::NDEFN, "soluble-reactive phosphorus pool in soil", "(kg/km^2)", &SRPpool, &SRPpool_lay, maxsoillayers);
 
-  declstatvar("DOPpool", NDEFN, "dissolved organic phosphorus pool in soil", "(kg/km^2)", &DOPpool, &DOPpool_lay, maxsoillayers);
+  declstatvar("DOPpool", TDim::NDEFN, "dissolved organic phosphorus pool in soil", "(kg/km^2)", &DOPpool, &DOPpool_lay, maxsoillayers);
 
-  declstatvar("PPrelpool", NHRU, "soil PP (particulate phosphorus) released to runoff due to erosion", "(kg/int)", &PPrelpool);
+  declstatvar("PPrelpool", TDim::NHRU, "soil PP (particulate phosphorus) released to runoff due to erosion", "(kg/int)", &PPrelpool);
   
-  declstatvar("plant_uptk_NO3N_mWQ", NDEFN, "plant uptake of NO3-N expressed as mass/int", "(kg/int)", &plant_uptk_NO3N_mWQ, &plant_uptk_NO3N_mWQ_lay, maxsoillayers);
+  declstatvar("plant_uptk_NO3N_mWQ", TDim::NDEFN, "plant uptake of NO3-N expressed as mass/int", "(kg/int)", &plant_uptk_NO3N_mWQ, &plant_uptk_NO3N_mWQ_lay, maxsoillayers);
 
-  declstatvar("plant_uptk_NH4N_mWQ", NDEFN, "plant uptake of NH4-N expressed as mass/int", "(kg/int)", &plant_uptk_NH4N_mWQ, &plant_uptk_NH4N_mWQ_lay, maxsoillayers);
+  declstatvar("plant_uptk_NH4N_mWQ", TDim::NDEFN, "plant uptake of NH4-N expressed as mass/int", "(kg/int)", &plant_uptk_NH4N_mWQ, &plant_uptk_NH4N_mWQ_lay, maxsoillayers);
 
-  declstatvar("plant_uptk_SRP_mWQ", NDEFN, "plant uptake of SRP expressed as mass/int", "(kg/int)", &plant_uptk_SRP_mWQ, &plant_uptk_SRP_mWQ_lay, maxsoillayers);
+  declstatvar("plant_uptk_SRP_mWQ", TDim::NDEFN, "plant uptake of SRP expressed as mass/int", "(kg/int)", &plant_uptk_SRP_mWQ, &plant_uptk_SRP_mWQ_lay, maxsoillayers);
 
-  declvar("water", NDEFN, "soil moisture", "(mm)", &water, &water_lay, maxsoillayers);
+  declvar("water", TDim::NDEFN, "soil moisture", "(mm)", &water, &water_lay, maxsoillayers);
   
-  declvar("watermax", NDEFN, "soil moisture", "(mm)", &watermax, &watermax_lay, maxsoillayers);
+  declvar("watermax", TDim::NDEFN, "soil moisture", "(mm)", &watermax, &watermax_lay, maxsoillayers);
 
-  declvar("Temp", NDEFN, "soil layer temperature", "(°C)", &Temp, &Temp_lay, maxsoillayers);
+  declvar("Temp", TDim::NDEFN, "soil layer temperature", "(°C)", &Temp, &Temp_lay, maxsoillayers);
 
-  declvar("denitrification", NDEFN, "denitrification (maxsoillayers", "(kg/int)", &denitrification, &denitrification_lay, maxsoillayers);
+  declvar("denitrification", TDim::NDEFN, "denitrification (maxsoillayers", "(kg/int)", &denitrification, &denitrification_lay, maxsoillayers);
 
-  declstatvar("denitrification_surfsoil", NHRU, "denitrification in WQ's surfsoil", "(kg/int)", &denitrification_surfsoil);
+  declstatvar("denitrification_surfsoil", TDim::NHRU, "denitrification in WQ's surfsoil", "(kg/int)", &denitrification_surfsoil);
 
-  declstatvar("conc_soil_rechr", NDEFN, "concentration in soil_rechr: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
+  declstatvar("conc_soil_rechr", TDim::NDEFN, "concentration in soil_rechr: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
       "(i_srp=3) SRP, (i_dop=4) DOP, (i_pp=5) PP, (i_oc=6) OC", "(mg/l)", &conc_soil_rechr, &conc_soil_rechr_lay, numsubstances); //
 
-  declstatvar("conc_soil_lower", NDEFN, "concentration in soil_lower: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
+  declstatvar("conc_soil_lower", TDim::NDEFN, "concentration in soil_lower: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
       "(i_srp=3) SRP, (i_dop=4) DOP, (i_pp=5) PP, (i_oc=6) OC", "(mg/l)", &conc_soil_lower, &conc_soil_lower_lay, numsubstances);
 
-  //declstatvar("conc_soil_moist", NDEFN, "concentration of soluble (reactive) phosphorus, i.e. phosphate in soil moisture per land-soil", "(mg/l)", &conc_soil_moist, &conc_soil_moist_lay, numsubstances);
+  //declstatvar("conc_soil_moist", TDim::NDEFN, "concentration of soluble (reactive) phosphorus, i.e. phosphate in soil moisture per land-soil", "(mg/l)", &conc_soil_moist, &conc_soil_moist_lay, numsubstances);
 
-  declvar("source", NDEFN, "source of soil water nutrients through mineralization", "(kg/int)", &source, &source_lay, numsubstances);
+  declvar("source", TDim::NDEFN, "source of soil water nutrients through mineralization", "(kg/int)", &source, &source_lay, numsubstances);
 
-  declvar("sink", NDEFN, "sink of nutrients in subroutine)", "(kg/km^2)", &sink, &sink_lay, numsubstances);
+  declvar("sink", TDim::NDEFN, "sink of nutrients in subroutine)", "(kg/km^2)", &sink, &sink_lay, numsubstances);
 
-  declvar("sources_plant", NDEFN, "nutrient load from plant residues. Indexed as LAY -> substance", "(kg/int)", &sources_plant, &sources_plant_lay, numsubstances);
+  declvar("sources_plant", TDim::NDEFN, "nutrient load from plant residues. Indexed as LAY -> substance", "(kg/int)", &sources_plant, &sources_plant_lay, numsubstances);
 
-  declvar("src_mineral_fertman_surfsoil", NDEFN, "load from fertilizer to surfsoil. Indexed as LAY -> substance", "(kg/int)", &src_mineral_fertman_surfsoil, &src_mineral_fertman_surfsoil_lay, numsubstances);
+  declvar("src_mineral_fertman_surfsoil", TDim::NDEFN, "load from fertilizer to surfsoil. Indexed as LAY -> substance", "(kg/int)", &src_mineral_fertman_surfsoil, &src_mineral_fertman_surfsoil_lay, numsubstances);
 
-  declvar("src_mineral_fertman_soilrechr", NDEFN, "load from fertilizer) to soil_rechr. Indexed as LAY -> substance", "(kg/int)", &src_mineral_fertman_soilrechr, &src_mineral_fertman_soilrechr_lay, numsubstances);
+  declvar("src_mineral_fertman_soilrechr", TDim::NDEFN, "load from fertilizer) to soil_rechr. Indexed as LAY -> substance", "(kg/int)", &src_mineral_fertman_soilrechr, &src_mineral_fertman_soilrechr_lay, numsubstances);
 
-  declvar("fracminP", NHRU, "part of eroded P in mineral form", "()", &fracminP);
+  declvar("fracminP", TDim::NHRU, "part of eroded P in mineral form", "()", &fracminP);
 
-  declvar("cropuptake", NHRU, "crop uptake of nitrogen", "(kg/int)", &cropuptake);
+  declvar("cropuptake", TDim::NHRU, "crop uptake of nitrogen", "(kg/int)", &cropuptake);
 
-  declvar("surfsoil_solub_mWQ", NDEFN, "Mass in the surficial soil layer ready for mobilization: dissolved substances", "(kg/km2)", &surfsoil_solub_mWQ, &surfsoil_solub_mWQ_lay, numsubstances); //
-  declvar("surfsoil_labileN_mWQ", NHRU, "Mass in the surficial soil layer ready for mobilization: Labile N", "(kg/km2)", &surfsoil_labileN_mWQ);
-  declvar("surfsoil_labileP_mWQ", NHRU, "Mass in the surficial soil layer ready for mobilization: Labile P", "(kg/km2)", &surfsoil_labileP_mWQ);
-  declvar("surfsoil_refractoryN_mWQ", NHRU, "Mass in the surficial soil layer ready for mobilization: Refractory N", "(kg/km2)", &surfsoil_refractoryN_mWQ);
-  declvar("surfsoil_refractoryP_mWQ", NHRU, "Mass in the surficial soil layer ready for mobilization: Refractory N", "(kg/km2)", &surfsoil_refractoryP_mWQ);
+  declvar("surfsoil_solub_mWQ", TDim::NDEFN, "Mass in the surficial soil layer ready for mobilization: dissolved substances", "(kg/km2)", &surfsoil_solub_mWQ, &surfsoil_solub_mWQ_lay, numsubstances); //
+  declvar("surfsoil_labileN_mWQ", TDim::NHRU, "Mass in the surficial soil layer ready for mobilization: Labile N", "(kg/km2)", &surfsoil_labileN_mWQ);
+  declvar("surfsoil_labileP_mWQ", TDim::NHRU, "Mass in the surficial soil layer ready for mobilization: Labile P", "(kg/km2)", &surfsoil_labileP_mWQ);
+  declvar("surfsoil_refractoryN_mWQ", TDim::NHRU, "Mass in the surficial soil layer ready for mobilization: Refractory N", "(kg/km2)", &surfsoil_refractoryN_mWQ);
+  declvar("surfsoil_refractoryP_mWQ", TDim::NHRU, "Mass in the surficial soil layer ready for mobilization: Refractory N", "(kg/km2)", &surfsoil_refractoryP_mWQ);
 
-  //declparam("ep", NDEFN, "[1.9]", "0.0", "2.0", "normalized effective porosity w.r.t. soil_rechr_max or soil_lower_max", "()", &ep, &ep_lay, maxsoillayers);
+  //declparam("ep", TDim::NDEFN, "[1.9]", "0.0", "2.0", "normalized effective porosity w.r.t. soil_rechr_max or soil_lower_max", "()", &ep, &ep_lay, maxsoillayers);
 
-  declparam("wp", NDEFN, "[0]", "0.05", "0.2", "normalized wilting point w.r.t. soil_rechr_max or soil_lower_max", "()", &wp, &wp_lay, maxsoillayers);
+  declparam("wp", TDim::NDEFN, "[0]", "0.05", "0.2", "normalized wilting point w.r.t. soil_rechr_max or soil_lower_max", "()", &wp, &wp_lay, maxsoillayers);
 
-  //declparam("pw", NDEFN, "[2]", "0.5", "2.0", "normalized total porosity w.r.t. soil_rechr_max or soil_lower_max", "()", &pw, &pw_lay, maxsoillayers);
+  //declparam("pw", TDim::NDEFN, "[2]", "0.5", "2.0", "normalized total porosity w.r.t. soil_rechr_max or soil_lower_max", "()", &pw, &pw_lay, maxsoillayers);
  
   
-  //declvar("fc_mm", NDEFN, "field capacity w.r.t. soil_rechr_max or soil_lower_max", "(mm)", &fc_mm, &fc_mm_lay, maxsoillayers);
+  //declvar("fc_mm", TDim::NDEFN, "field capacity w.r.t. soil_rechr_max or soil_lower_max", "(mm)", &fc_mm, &fc_mm_lay, maxsoillayers);
 
-  //declvar("ep_mm", NDEFN, "effective porosity w.r.t. soil_rechr_max or soil_lower_max", "(mm)", &ep_mm, &ep_mm_lay, maxsoillayers);
+  //declvar("ep_mm", TDim::NDEFN, "effective porosity w.r.t. soil_rechr_max or soil_lower_max", "(mm)", &ep_mm, &ep_mm_lay, maxsoillayers);
 
-  declvar("wp_mm", NDEFN, "wilting point w.r.t. soil_rechr_max or soil_lower_max", "(mm)", &wp_mm, &wp_mm_lay, maxsoillayers);
+  declvar("wp_mm", TDim::NDEFN, "wilting point w.r.t. soil_rechr_max or soil_lower_max", "(mm)", &wp_mm, &wp_mm_lay, maxsoillayers);
 
-  //declvar("pw_mm", NDEFN, "total porosity w.r.t. soil_rechr_max or soil_lower_max", "(mm)", &pw_mm, &pw_mm_lay, maxsoillayers);
+  //declvar("pw_mm", TDim::NDEFN, "total porosity w.r.t. soil_rechr_max or soil_lower_max", "(mm)", &pw_mm, &pw_mm_lay, maxsoillayers);
 
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("hru_GSL", NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
 
-  declparam("ccmax1", NHRU, "[0]", "0","10", "crop cover during summer", "()", &ccmax1);
+  declparam("ccmax1", TDim::NHRU, "[0]", "0","10", "crop cover during summer", "()", &ccmax1);
 
-  // declparam("ccmax2", NHRU, "[0]", "0","10", "crop cover during winter and all year for year round", "()", &ccmax2);
+  // declparam("ccmax2", TDim::NHRU, "[0]", "0","10", "crop cover during winter and all year for year round", "()", &ccmax2);
 
-  declparam("gcmax1", NHRU, "[0]", "0","10", "ground cover during summer", "()", &gcmax1);
+  declparam("gcmax1", TDim::NHRU, "[0]", "0","10", "ground cover during summer", "()", &gcmax1);
 
-  // declparam("gcmax2", NHRU, "[0]", "0","10", "ground cover during winter and all year for year round", "()", &gcmax2);
+  // declparam("gcmax2", TDim::NHRU, "[0]", "0","10", "ground cover during winter and all year for year round", "()", &gcmax2);
 
   /*
-  declparam("baredayno1", NHRU, "[0]", "1","366", "spring ploughing", "()", &baredayno1);
+  declparam("baredayno1", TDim::NHRU, "[0]", "1","366", "spring ploughing", "()", &baredayno1);
 
-  declparam("baredayno2", NHRU, "[0]", "1","366", "sow date/beginning of growing season", "()", &baredayno2);
+  declparam("baredayno2", TDim::NHRU, "[0]", "1","366", "sow date/beginning of growing season", "()", &baredayno2);
 
-  declparam("baredayno3", NHRU, "[0]", "1","366", "harvest", "()", &baredayno3);
+  declparam("baredayno3", TDim::NHRU, "[0]", "1","366", "harvest", "()", &baredayno3);
 
-  declparam("baredayno4", NHRU, "[0]", "1","366", "autumn ploughing", "()", &baredayno4);
+  declparam("baredayno4", TDim::NHRU, "[0]", "1","366", "autumn ploughing", "()", &baredayno4);
 
-  declparam("baredayno5", NHRU, "[0]", "1","366", "winter crops sowing date", "()", &baredayno5);
+  declparam("baredayno5", TDim::NHRU, "[0]", "1","366", "winter crops sowing date", "()", &baredayno5);
   */
 
-  declparam("erodibility", NHRU, "[0]", "0","100", "erodibility", "(g/J)", &erodibility);
+  declparam("erodibility", TDim::NHRU, "[0]", "0","100", "erodibility", "(g/J)", &erodibility);
 
-  declparam("cohesion", NHRU, "[0]", "0","100", "cohesion", "(kPa)", &cohesion);
+  declparam("cohesion", TDim::NHRU, "[0]", "0","100", "cohesion", "(kPa)", &cohesion);
 
-  declparam("pardenN", NHRU, "[1]", "0", "100", "denitrification in soil", "(mm)", &pardenN);
+  declparam("pardenN", TDim::NHRU, "[1]", "0", "100", "denitrification in soil", "(mm)", &pardenN);
 
-  declparam("calcN", NHRU, "[0]", "0", "1", "flag for nitrogen simulation", "()", &calcN);
+  declparam("calcN", TDim::NHRU, "[0]", "0", "1", "flag for nitrogen simulation", "()", &calcN);
 
-  declparam("calcP", NHRU, "[0]", "0", "1", "flag for phosphorus simulation", "()", &calcP);
+  declparam("calcP", TDim::NHRU, "[0]", "0", "1", "flag for phosphorus simulation", "()", &calcP);
 
-  declparam("calcC", NHRU, "[0]", "0", "1", "flag for carbon simulation", "()", &calcC);
+  declparam("calcC", TDim::NHRU, "[0]", "0", "1", "flag for carbon simulation", "()", &calcC);
 
-  declparam("Inhibit_Soil_BGC", BASIN, "[0]", "0", "1", "Bypass Hype routines", "()", &Inhibit_Soil_BGC);
+  declparam("Inhibit_Soil_BGC", TDim::BASIN, "[0]", "0", "1", "Bypass Hype routines", "()", &Inhibit_Soil_BGC);
 
-  declparam("parminfN", NHRU, "[0]", "0", "1", "mineralisation of labileN: labileN to NH4", "(1/d)", &parminfN);
+  declparam("parminfN", TDim::NHRU, "[0]", "0", "1", "mineralisation of labileN: labileN to NH4", "(1/d)", &parminfN);
 
-  declparam("parnitrfN", NHRU, "[0]", "0", "1", "nitrification: NH4 to NO3", "(1/d)", &parnitrfN);
+  declparam("parnitrfN", TDim::NHRU, "[0]", "0", "1", "nitrification: NH4 to NO3", "(1/d)", &parnitrfN);
 
-  declparam("parminfP", NHRU, "[0]", "0", "1", "mineralisation of labileP: labileP to DIP", "(1/d)", &parminfP);
+  declparam("parminfP", TDim::NHRU, "[0]", "0", "1", "mineralisation of labileP: labileP to DIP", "(1/d)", &parminfP);
 
-  declparam("pardegrhN", NHRU, "[0]", "0", "1", "degradation of refractoryN: refractoryN to labileN", "(1/d)", &pardegrhN);
+  declparam("pardegrhN", TDim::NHRU, "[0]", "0", "1", "degradation of refractoryN: refractoryN to labileN", "(1/d)", &pardegrhN);
 
-  declparam("pardegrhP", NHRU, "[0]", "0", "1", "degradation refractoryP: refractoryP to labileP", "(1/d)", &pardegrhP);
+  declparam("pardegrhP", TDim::NHRU, "[0]", "0", "1", "degradation refractoryP: refractoryP to labileP", "(1/d)", &pardegrhP);
 
-  declparam("pardisfN", NHRU, "[0]", "0", "1", "dissolution of labileN: labileN to DON", "(1/d)", &pardisfN);
+  declparam("pardisfN", TDim::NHRU, "[0]", "0", "1", "dissolution of labileN: labileN to DON", "(1/d)", &pardisfN);
 
-  declparam("pardisfP", NHRU, "[0]", "0", "1", "dissolution of labileP: labileP to DOP", "(1/d)", &pardisfP);
+  declparam("pardisfP", TDim::NHRU, "[0]", "0", "1", "dissolution of labileP: labileP to DOP", "(1/d)", &pardisfP);
 
-  declparam("pardishN", NHRU, "[0]", "0", "1", "dissolution of refractoryN: refractoryN to DON", "(1/d)", &pardishN);
+  declparam("pardishN", TDim::NHRU, "[0]", "0", "1", "dissolution of refractoryN: refractoryN to DON", "(1/d)", &pardishN);
 
-  declparam("pardishP", NHRU, "[0]", "0", "1", "dissolution of refractoryP: refractoryP to DOP", "(1/d)", &pardishP);
+  declparam("pardishP", TDim::NHRU, "[0]", "0", "1", "dissolution of refractoryP: refractoryP to DOP", "(1/d)", &pardishP);
 
-  declparam("klh",    NHRU, "[0]", "0", "100", "speed of transformation from litter to refractory", "(1/d)", &klh);
+  declparam("klh", TDim::NHRU, "[0]", "0", "100", "speed of transformation from litter to refractory", "(1/d)", &klh);
 
-  declparam("klo",    NHRU, "[0]", "0", "100", "speed of transformation from litter to DOC", "(1/d)", &klo);
+  declparam("klo", TDim::NHRU, "[0]", "0", "100", "speed of transformation from litter to DOC", "(1/d)", &klo);
 
-  declparam("kho",    NHRU, "[0]", "0", "100", "speed of transformation from refractory to DOC", "(1/d)", &kho);
+  declparam("kho", TDim::NHRU, "[0]", "0", "100", "speed of transformation from refractory to DOC", "(1/d)", &kho);
 
-  declparam("kof",    NHRU, "[0]", "0", "100", "speed of transformation from DOC to labileC", "(1/d)", &kof);
+  declparam("kof", TDim::NHRU, "[0]", "0", "100", "speed of transformation from DOC to labileC", "(1/d)", &kof);
 
-  declparam("koflim", NHRU, "[0.5]", "0", "100", "threshold for wetness for transformation DOC to labileC", "()", &koflim);
+  declparam("koflim", TDim::NHRU, "[0.5]", "0", "100", "threshold for wetness for transformation DOC to labileC", "()", &koflim);
 
-  declparam("minc",   NHRU, "[1]", "0", "100", "fraction mineralisation to DIC", "()", &minc);
+  declparam("minc", TDim::NHRU, "[1]", "0", "100", "fraction mineralisation to DIC", "()", &minc);
 
-  declparam("soimf",  NHRU, "[1]", "0", "100", "saturation soilmoisture factor", "()", &soimf);
+  declparam("soimf", TDim::NHRU, "[1]", "0", "100", "saturation soilmoisture factor", "()", &soimf);
   
-  declparam("soimr",  NHRU, "[1]", "0", "100", "rate soilmoisture factor", "()", &soimr);
+  declparam("soimr", TDim::NHRU, "[1]", "0", "100", "rate soilmoisture factor", "()", &soimr);
   
-  declparam("fertNamount_up", NHRU, "[1]", "0", "1000000", "fertiliser amount1 N", "(kg/km^2)", &fertNamount_up);
+  declparam("fertNamount_up", TDim::NHRU, "[1]", "0", "1000000", "fertiliser amount1 N", "(kg/km^2)", &fertNamount_up);
 
-  declparam("fertNamount_down", NHRU, "[1]", "0", "1000000", "fertiliser amount2 N", "(kg/km^2)", &fertNamount_down);
+  declparam("fertNamount_down", TDim::NHRU, "[1]", "0", "1000000", "fertiliser amount2 N", "(kg/km^2)", &fertNamount_down);
 
-  declparam("fertPamount_up", NHRU, "[1]", "0", "1000000", "fertiliser amount1 P", "(kg/km^2)", &fertPamount_up);
+  declparam("fertPamount_up", TDim::NHRU, "[1]", "0", "1000000", "fertiliser amount1 P", "(kg/km^2)", &fertPamount_up);
 
-  declparam("fertPamount_down", NHRU, "[1]", "0", "1000000", "fertiliser amount2 P", "(kg/km^2)", &fertPamount_down);
+  declparam("fertPamount_down", TDim::NHRU, "[1]", "0", "1000000", "fertiliser amount2 P", "(kg/km^2)", &fertPamount_down);
 
-  declparam("fertday_up", NHRU, "[0]", "0", "366", "day for fertilizing 1 (dayno)", "()", &fertday_up);
+  declparam("fertday_up", TDim::NHRU, "[0]", "0", "366", "day for fertilizing 1 (dayno)", "()", &fertday_up);
 
-  declparam("fertday_down", NHRU, "[0]", "0", "366", "day for fertilizing 2 (dayno)", "()", &fertday_down);
+  declparam("fertday_down", TDim::NHRU, "[0]", "0", "366", "day for fertilizing 2 (dayno)", "()", &fertday_down);
 
-  declparam("resday_up", NHRU, "[0]", "0", "366", "day for residual (dayno), code 0 give residuals every day)", "()", &resday_up);
+  declparam("resday_up", TDim::NHRU, "[0]", "0", "366", "day for residual (dayno), code 0 give residuals every day)", "()", &resday_up);
 
-  declparam("resday_down", NHRU, "[0]", "0", "366", "day for residual (dayno), code 0 give residuals every day)", "()", &resday_down);
+  declparam("resday_down", TDim::NHRU, "[0]", "0", "366", "day for residual (dayno), code 0 give residuals every day)", "()", &resday_down);
 
-  declparam("manday_up", NHRU, "[0]", "0", "366", "day for manureing 1)", "()", &manday_up);
+  declparam("manday_up", TDim::NHRU, "[0]", "0", "366", "day for manureing 1)", "()", &manday_up);
 
-  declparam("manday_down", NHRU, "[0]", "0", "366", "day for manureing 2)", "()", &manday_down);
+  declparam("manday_down", TDim::NHRU, "[0]", "0", "366", "day for manureing 2)", "()", &manday_down);
 
-  //declparam("fertdown1", NHRU, "[0.0]", "0", "1", " fertilizer amount1 ploughed down", "()", &fertdown1);
+  //declparam("fertdown1", TDim::NHRU, "[0.0]", "0", "1", " fertilizer amount1 ploughed down", "()", &fertdown1);
 
-  //declparam("fertdown2", NHRU, "[0.0]", "0", "1", " fertilizer amount2 ploughed down", "()", &fertdown2);
+  //declparam("fertdown2", TDim::NHRU, "[0.0]", "0", "1", " fertilizer amount2 ploughed down", "()", &fertdown2);
 
-  //declparam("mandown1", NHRU, "[0.0]", "0", "1", " manure amount1 ploughed down", "()", &mandown1);
+  //declparam("mandown1", TDim::NHRU, "[0.0]", "0", "1", " manure amount1 ploughed down", "()", &mandown1);
 
-  //declparam("mandown2", NHRU, "[0.0]", "0", "1", " manure amount2 ploughed down", "()", &mandown2);
+  //declparam("mandown2",TDim:: NHRU, "[0.0]", "0", "1", " manure amount2 ploughed down", "()", &mandown2);
 
-  declparam("manNamount_up", NHRU, "[0.0]", "0", "1000000", "manure amount1 N", "(kg/km^2)", &manNamount_up);
+  declparam("manNamount_up", TDim::NHRU, "[0.0]", "0", "1000000", "manure amount1 N", "(kg/km^2)", &manNamount_up);
 
-  declparam("manNamount_down", NHRU, "[0.0]", "0", "1000000", "manure amount2 N", "(kg/km^2)", &manNamount_down);
+  declparam("manNamount_down", TDim::NHRU, "[0.0]", "0", "1000000", "manure amount2 N", "(kg/km^2)", &manNamount_down);
 
-  declparam("manPamount_up", NHRU, "[0.0]", "0", "1000000", "manure amount1 P", "(kg/km^2)", &manPamount_up);
+  declparam("manPamount_up", TDim::NHRU, "[0.0]", "0", "1000000", "manure amount1 P", "(kg/km^2)", &manPamount_up);
 
-  declparam("manPamount_down", NHRU, "[0.0]", "0", "1000000", "manure amount2 P", "(kg/km^2)", &manPamount_down);
+  declparam("manPamount_down", TDim::NHRU, "[0.0]", "0", "1000000", "manure amount2 P", "(kg/km^2)", &manPamount_down);
 
-  declparam("resNamount_up", NHRU, "[0.0]", "0", "1000000", "residual amount of N", "(kg/km^2)", &resNamount_up);
+  declparam("resNamount_up", TDim::NHRU, "[0.0]", "0", "1000000", "residual amount of N", "(kg/km^2)", &resNamount_up);
 
-  declparam("resPamount_up", NHRU, "[0.0]", "0", "1000000", "residual amount of P", "(kg/km^2)", &resPamount_up);
+  declparam("resPamount_up", TDim::NHRU, "[0.0]", "0", "1000000", "residual amount of P", "(kg/km^2)", &resPamount_up);
 
-  declparam("resNamount_down", NHRU, "[0.0]", "0", "1000000", "residual amount of N", "(kg/km^2)", &resNamount_down);
+  declparam("resNamount_down", TDim::NHRU, "[0.0]", "0", "1000000", "residual amount of N", "(kg/km^2)", &resNamount_down);
 
-  declparam("resPamount_down", NHRU, "[0.0]", "0", "1000000", "residual amount of P", "(kg/km^2)", &resPamount_down);
+  declparam("resPamount_down", TDim::NHRU, "[0.0]", "0", "1000000", "residual amount of P", "(kg/km^2)", &resPamount_down);
 
-  declparam("resCamount", NHRU, "[0.0]", "0", "1", "litter fall of C", "(kg/km^2)", &resCamount);
+  declparam("resCamount", TDim::NHRU, "[0.0]", "0", "1", "litter fall of C", "(kg/km^2)", &resCamount);
 
-  declparam("resfast", NHRU, "[0.0]", "0", "1", " residual amount to labileN/P pool (rest to refractoryN/P)", "(-)", &resfast);
+  declparam("resfast", TDim::NHRU, "[0.0]", "0", "1", " residual amount to labileN/P pool (rest to refractoryN/P)", "(-)", &resfast);
 
-  //declparam("resdown", NHRU, "[0.0]", "0", "1", " residual amount to labileN/P pool (rest to refractoryN/P)", "(-)", &resdown);
+  //declparam("resdown", TDim::NHRU, "[0.0]", "0", "1", " residual amount to labileN/P pool (rest to refractoryN/P)", "(-)", &resdown);
 
-  declparam("fertperiod", NHRU, "[1]", "1", "100", "days for fertilization.", "()", &fertperiod);
+  declparam("fertperiod", TDim::NHRU, "[1]", "1", "100", "days for fertilization.", "()", &fertperiod);
 
-  declparam("litterperiod", NHRU, "[1]", "1", "100", "days for litterfall.", "()", &litterperiod);
+  declparam("litterperiod", TDim::NHRU, "[1]", "1", "100", "days for litterfall.", "()", &litterperiod);
 
-  declparam("manureinogNfrac", NHRU, "[0.5]", "0", "1", "fraction of inorN in manure.", "(-)", &manureinogNfrac);
+  declparam("manureinogNfrac", TDim::NHRU, "[0.5]", "0", "1", "fraction of inorN in manure.", "(-)", &manureinogNfrac);
 
-  declparam("manureinogPfrac", NHRU, "[0.5]", "0", "1", "fraction of inorN in manure.", "(-)", &manureinogPfrac);
+  declparam("manureinogPfrac", TDim::NHRU, "[0.5]", "0", "1", "fraction of inorN in manure.", "(-)", &manureinogPfrac);
 
-   declparam("fertandman_inogNfrac_NO3Nfrac", NHRU, "[0.5]", "0", "1", "fraction of NO3-N in fraction of inorgN in fertilizer and manure.", "(-)", &fertandman_inogNfrac_NO3Nfrac);
+   declparam("fertandman_inogNfrac_NO3Nfrac", TDim::NHRU, "[0.5]", "0", "1", "fraction of NO3-N in fraction of inorgN in fertilizer and manure.", "(-)", &fertandman_inogNfrac_NO3Nfrac);
 
-  declparam("fertandman_inogNfrac_NH4frac", NHRU, "[0.5]", "0", "1", "fraction of NH4-N in fraction of inorgN in fertilizer and manure.", "(-)", &fertandman_inogNfrac_NH4Nfrac);
+  declparam("fertandman_inogNfrac_NH4frac", TDim::NHRU, "[0.5]", "0", "1", "fraction of NH4-N in fraction of inorgN in fertilizer and manure.", "(-)", &fertandman_inogNfrac_NH4Nfrac);
 
-  declparam("refractoryNmass_init", NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with slow turnover.", "(kg/km^2)", &refractoryNmass_init, &refractoryNmass_init_lay, maxsoillayers);
+  declparam("refractoryNmass_init", TDim::NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with slow turnover.", "(kg/km^2)", &refractoryNmass_init, &refractoryNmass_init_lay, maxsoillayers);
 
-  declparam("refractoryPmass_init", NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic phosphorus in soil with slow turnover.", "(kg/km^2)", &refractoryPmass_init, &refractoryPmass_init_lay, maxsoillayers);
+  declparam("refractoryPmass_init", TDim::NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic phosphorus in soil with slow turnover.", "(kg/km^2)", &refractoryPmass_init, &refractoryPmass_init_lay, maxsoillayers);
 
-  declparam("refractoryCmass_init", NDEFN, "[0.0]", "0", "1000000", "refractoryC pool in soil", "(kg/km^2)", &refractoryCmass_init, &refractoryCmass_init_lay, maxsoillayers);
+  declparam("refractoryCmass_init", TDim::NDEFN, "[0.0]", "0", "1000000", "refractoryC pool in soil", "(kg/km^2)", &refractoryCmass_init, &refractoryCmass_init_lay, maxsoillayers);
 
-  declparam("labileNmass_init", NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileNmass_init, &labileNmass_init_lay, maxsoillayers);
+  declparam("labileNmass_init", TDim::NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileNmass_init, &labileNmass_init_lay, maxsoillayers);
 
-  declparam("labilePmass_init", NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic phosphorus in soil with rapid turnover.", "(kg/km^2)", &labilePmass_init, &labilePmass_init_lay, maxsoillayers);
+  declparam("labilePmass_init", TDim::NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic phosphorus in soil with rapid turnover.", "(kg/km^2)", &labilePmass_init, &labilePmass_init_lay, maxsoillayers);
 
-  declparam("labileCmass_init", NDEFN, "[0.0]", "0", "1000000", "labileC pool in soil", "(kg/km^2)", &labileCmass_init, &labileCmass_init_lay, maxsoillayers);
+  declparam("labileCmass_init", TDim::NDEFN, "[0.0]", "0", "1000000", "labileC pool in soil", "(kg/km^2)", &labileCmass_init, &labileCmass_init_lay, maxsoillayers);
 
-  declparam("plant_uptk_NO3N", NDEFN, "[0]", "0", "10", "plant NO3-N uptake per day.", "(kg/km^2)", &plant_uptk_NO3N, &plant_uptk_NO3N_lay, maxsoillayers);
+  declparam("plant_uptk_NO3N", TDim::NDEFN, "[0]", "0", "10", "plant NO3-N uptake per day.", "(kg/km^2)", &plant_uptk_NO3N, &plant_uptk_NO3N_lay, maxsoillayers);
 
-  declparam("plant_uptk_NH4N", NDEFN, "[0]", "0", "10", "plant NH4-N uptake per day.", "(kg/km^2)", &plant_uptk_NH4N, &plant_uptk_NH4N_lay, maxsoillayers);
+  declparam("plant_uptk_NH4N", TDim::NDEFN, "[0]", "0", "10", "plant NH4-N uptake per day.", "(kg/km^2)", &plant_uptk_NH4N, &plant_uptk_NH4N_lay, maxsoillayers);
 
-  declparam("plant_uptk_SRP", NDEFN, "[0]", "0", "10", "plant P uptake per day.", "(kg/km^2)", &plant_uptk_SRP, &plant_uptk_SRP_lay, maxsoillayers);
+  declparam("plant_uptk_SRP", TDim::NDEFN, "[0]", "0", "10", "plant P uptake per day.", "(kg/km^2)", &plant_uptk_SRP, &plant_uptk_SRP_lay, maxsoillayers);
 
-  declparam("conc_soil_rechr_init", NDEFN, "[0.0]", "0", "1000", "initial concentration of inorganic nitrogen in soil moisture per land-soil", "(mg/l)", &conc_soil_rechr_init, &conc_soil_rechr_init_lay, numsubstances);
+  declparam("conc_soil_rechr_init", TDim::NDEFN, "[0.0]", "0", "1000", "initial concentration of inorganic nitrogen in soil moisture per land-soil", "(mg/l)", &conc_soil_rechr_init, &conc_soil_rechr_init_lay, numsubstances);
 
-  declparam("conc_soil_lower_init", NDEFN, "[0.0]", "0", "1000", "concentration of organic nitrogen in soil moisture per land-soil", "(mg/l)", &conc_soil_lower_init, &conc_soil_lower_init_lay, numsubstances);
+  declparam("conc_soil_lower_init", TDim::NDEFN, "[0.0]", "0", "1000", "concentration of organic nitrogen in soil moisture per land-soil", "(mg/l)", &conc_soil_lower_init, &conc_soil_lower_init_lay, numsubstances);
 
-  declparam("surfsoil_massSolub_init", NDEFN, "[0.0]", "0", "1000", "initial concentration of inorganic nitrogen in surfsoil layer", "(mg/l)", &surfsoil_massSolub_init, &surfsoil_massSolub_init_lay, numsubstances);
+  declparam("surfsoil_massSolub_init", TDim::NDEFN, "[0.0]", "0", "1000", "initial concentration of inorganic nitrogen in surfsoil layer", "(mg/l)", &surfsoil_massSolub_init, &surfsoil_massSolub_init_lay, numsubstances);
   
-  declparam("surfsoil_masslabileNmass_init", NHRU, "[0.0]", "0", "1000000", "initial mass of labile N in the surfsoil layer", "(kg/km^2)", &surfsoil_masslabileNmass_init);
+  declparam("surfsoil_masslabileNmass_init", TDim::NHRU, "[0.0]", "0", "1000000", "initial mass of labile N in the surfsoil layer", "(kg/km^2)", &surfsoil_masslabileNmass_init);
 
-  declparam("surfsoil_masslabilePmass_init", NHRU, "[0.0]", "0", "1000000", "initial mass of labile P in the surfsoil layer", "(kg/km^2)", &surfsoil_masslabilePmass_init);
+  declparam("surfsoil_masslabilePmass_init", TDim::NHRU, "[0.0]", "0", "1000000", "initial mass of labile P in the surfsoil layer", "(kg/km^2)", &surfsoil_masslabilePmass_init);
   
-  declparam("surfsoil_massrefractoryNmass_init", NHRU, "[0.0]", "0", "1000000", "initial mass of labile N in the surfsoil layer", "(kg/km^2)", &surfsoil_massrefractoryNmass_init);
+  declparam("surfsoil_massrefractoryNmass_init", TDim::NHRU, "[0.0]", "0", "1000000", "initial mass of labile N in the surfsoil layer", "(kg/km^2)", &surfsoil_massrefractoryNmass_init);
 
-  declparam("surfsoil_massrefractoryPmass_init", NHRU, "[0.0]", "0", "1000000", "initial mass of labile N in the surfsoil layer", "(kg/km^2)", &surfsoil_massrefractoryPmass_init);
+  declparam("surfsoil_massrefractoryPmass_init", TDim::NHRU, "[0.0]", "0", "1000000", "initial mass of labile N in the surfsoil layer", "(kg/km^2)", &surfsoil_massrefractoryPmass_init);
 
-  declparam("labileNmass_init", NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileNmass_init, &labileNmass_init_lay, maxsoillayers);
+  declparam("labileNmass_init", TDim::NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileNmass_init, &labileNmass_init_lay, maxsoillayers);
 
-  declparam("labileNmass_init", NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileNmass_init, &labileNmass_init_lay, maxsoillayers);
+  declparam("labileNmass_init", TDim::NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileNmass_init, &labileNmass_init_lay, maxsoillayers);
 
-  declparam("labileNmass_init", NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileNmass_init, &labileNmass_init_lay, maxsoillayers);
+  declparam("labileNmass_init", TDim::NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileNmass_init, &labileNmass_init_lay, maxsoillayers);
 
   declgetvar("*", "hru_t", "(°C)", &hru_t);
 
@@ -340,7 +340,7 @@ void ClassWQ_SoilBGC::decl(void) {
 
   declputvar("*", "SWE_conc", "(mg/l)", &SWE_conc, &SWE_conc_lay);
 
-  declparam("soil_Depth", NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
+  declparam("soil_Depth", TDim::NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
   
   declgetvar("*", "soil_moist", "(mm)", &soil_moist);
 
@@ -355,8 +355,8 @@ void ClassWQ_SoilBGC::decl(void) {
 
 void ClassWQ_SoilBGC::init(void) {
 
-  nhru = getdim(NHRU);
-  nlay = getdim(NLAY);
+  nhru = getdim(TDim::NHRU);
+  nlay = getdim(TDim::NLAY);
 
   for(hh = 0; hh < nhru; ++hh) {
     fracminP[hh] = 0.0;

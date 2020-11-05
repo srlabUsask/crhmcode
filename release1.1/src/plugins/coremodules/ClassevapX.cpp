@@ -22,57 +22,57 @@ void ClassevapX::decl(void) {
 
   Description = "'Calculates interval evaporation. Parameter \"evap_type\" selects Granger/Priestley-Taylor/Penman-Monteith.'";
 
-  declvar("hru_actet", NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
+  declvar("hru_actet", TDim::NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
 
-  declstatdiag("hru_cum_actet", NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet); // , NULL, false, CRHM::DIAGNOSTIC
+  declstatdiag("hru_cum_actet", TDim::NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet); // , NULL, false, CRHM::DIAGNOSTIC
 
-  declvar("hru_evap", NHRU, "interval evaporation", "(mm/int)", &evap);
+  declvar("hru_evap", TDim::NHRU, "interval evaporation", "(mm/int)", &evap);
 
-  declvar("hru_evapD", NHRU, "daily sum of interval evaporation", "(mm/d)", &evap_D);
+  declvar("hru_evapD", TDim::NHRU, "daily sum of interval evaporation", "(mm/d)", &evap_D);
 
-  declstatdiag("hru_cum_evap", NHRU, "cumulative interval evaporation", "(mm)", &cum_evap);
+  declstatdiag("hru_cum_evap", TDim::NHRU, "cumulative interval evaporation", "(mm)", &cum_evap);
 
-  decllocal("Granger_D", NHRU, "daily Granger evaporation", "(mm/d)", &Granger_D);
+  decllocal("Granger_D", TDim::NHRU, "daily Granger evaporation", "(mm/d)", &Granger_D);
 
-  decldiag("rc", NHRU, "stomatal resistance (used by Penman-Monteith and Dalton)", "(s/m)", &rc);
+  decldiag("rc", TDim::NHRU, "stomatal resistance (used by Penman-Monteith and Dalton)", "(s/m)", &rc);
 
-  decllocal("Pa", NHRU, "Atmospheric pressure", "(kPa)", &Pa);
+  decllocal("Pa", TDim::NHRU, "Atmospheric pressure", "(kPa)", &Pa);
 
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height", "(m)", &Ht);
 
-  declparam("evap_type", NHRU, "0", "0", "2", "Evaporation method for this HRU, 0 = Granger, 1 = Priestley-Taylor, 2 = Penman-Monteith.",
+  declparam("evap_type", TDim::NHRU, "0", "0", "2", "Evaporation method for this HRU, 0 = Granger, 1 = Priestley-Taylor, 2 = Penman-Monteith.",
             "()", &evap_type);
 
-  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+  declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
+  declparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
 
-  decldiagparam("F_Qg", NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
+  decldiagparam("F_Qg", TDim::NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
 
-  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height (used by Penman-Monteith).", "(m)", &Zwind);
+  declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height (used by Penman-Monteith).", "(m)", &Zwind);
 
 
-  declparam("rcs", NHRU, "[25]", "25.0", "5000.0", "stomatal resistance (used by Penman-Monteith).", "(s/m)", &rcs);
+  declparam("rcs", TDim::NHRU, "[25]", "25.0", "5000.0", "stomatal resistance (used by Penman-Monteith).", "(s/m)", &rcs);
 
-  declparam("Htmax", NHRU, "[0.1]", "0.1", "100.0", "maximum vegetation height (used by Penman-Monteith).", "(m)", &Htmax);
+  declparam("Htmax", TDim::NHRU, "[0.1]", "0.1", "100.0", "maximum vegetation height (used by Penman-Monteith).", "(m)", &Htmax);
 
-  declparam("LAImax", NHRU, "[3.0]", "0.0", "20.0", "maximum leaf area index (used by Penman-Monteith).", "(m^2/m^2)", &LAImax);
+  declparam("LAImax", TDim::NHRU, "[3.0]", "0.0", "20.0", "maximum leaf area index (used by Penman-Monteith).", "(m^2/m^2)", &LAImax);
 
-  declparam("LAImin", NHRU, "[0.0]", "0.0", "20.0", "minimum leaf area index (used by Penman-Monteith).", "(m^2/m^2)", &LAImin);
+  declparam("LAImin", TDim::NHRU, "[0.0]", "0.0", "20.0", "minimum leaf area index (used by Penman-Monteith).", "(m^2/m^2)", &LAImin);
 
-  declparam("s", NHRU, "[1]", "0", "1", "seasonal growth index (used by Penman-Monteith).", "()", &s);
+  declparam("s", TDim::NHRU, "[1]", "0", "1", "seasonal growth index (used by Penman-Monteith).", "()", &s);
 
-  declparam("PM_method", NHRU, "[0]", "0", "2", "Penman-Monteith method (used by Penman-Monteith), 0 = RC min, 1 = LAI, 2 = bulk.", "()", &PM_method);
+  declparam("PM_method", TDim::NHRU, "[0]", "0", "2", "Penman-Monteith method (used by Penman-Monteith), 0 = RC min, 1 = LAI, 2 = bulk.", "()", &PM_method);
 
-  declparam("soil_type", NHRU, "[2]", " 1", "12",
+  declparam("soil_type", TDim::NHRU, "[2]", " 1", "12",
     "HRU soil type (used by Penman-Monteith) [1->11]: sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay.", "()", &soil_type);
 
-  declparam("soil_Depth", NHRU, "[1.0]", "0.0", "10.0", "depth of soil column (used by Penman-Monteith).", "(m)", &soil_Depth);
+  declparam("soil_Depth", TDim::NHRU, "[1.0]", "0.0", "10.0", "depth of soil column (used by Penman-Monteith).", "(m)", &soil_Depth);
 
   declgetvar("*",  "soil_moist", "(mm)", &soil_moist);
 
@@ -88,9 +88,9 @@ void ClassevapX::decl(void) {
   declgetvar("*",  "hru_umean", "(m/s)", &hru_umean);
   declgetvar("*",  "hru_eamean", "kPa", &hru_eamean);
 
-  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q, false);
+  declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q, false);
 
-  declreadobs("RnObs", NHRU, "all-wave", "(W/m^2)", &RnObs, HRU_OBS_Q, true);
+  declreadobs("RnObs", TDim::NHRU, "all-wave", "(W/m^2)", &RnObs, HRU_OBS_Q, true);
 }
 
 void ClassevapX::init(void) {

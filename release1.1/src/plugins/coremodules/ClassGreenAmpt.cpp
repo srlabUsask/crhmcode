@@ -24,51 +24,51 @@ void ClassGreenAmpt::decl(void) {
 
   Description = "'Summer Green Ampt model.'";
 
-  declvar("infil", NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
 
-  declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
+  declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  declvar("snowinfil", NHRU, "infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "infiltration", "(mm/int)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/int)", &meltrunoff);
 
-  declstatvar("cummeltrunoff", NHRU, "cumulative melt runoff", "(mm/int)", &cummeltrunoff);
-
-
-  decllocal("k", NHRU, "(mm/h)", "()", &k);
-
-  declstatdiag("F0", NHRU, "last HRU cumulative infiltration", "(mm)", &F0);
-
-  decllocal("f0", NHRU, "", "(mm/h)", &f0);
-
-  declstatdiag("F1", NHRU, "HRU cumulative infiltration", "(mm)", &F1);
-
-  decllocal("f1", NHRU, "", "(mm/h)", &f1);
-
-  decllocal("dthbot", NHRU, "", "()", &dthbot);
-
-  decllocal("psidthbot", NHRU, "", "(mm)", &psidthbot);
+  declstatvar("cummeltrunoff", TDim::NHRU, "cumulative melt runoff", "(mm/int)", &cummeltrunoff);
 
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  decllocal("k", TDim::NHRU, "(mm/h)", "()", &k);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declstatdiag("F0", TDim::NHRU, "last HRU cumulative infiltration", "(mm)", &F0);
 
-  declparam("soil_type", NHRU, "[4]", "0", "12",
+  decllocal("f0", TDim::NHRU, "", "(mm/h)", &f0);
+
+  declstatdiag("F1", TDim::NHRU, "HRU cumulative infiltration", "(mm)", &F1);
+
+  decllocal("f1", TDim::NHRU, "", "(mm/h)", &f1);
+
+  decllocal("dthbot", TDim::NHRU, "", "()", &dthbot);
+
+  decllocal("psidthbot", TDim::NHRU, "", "(mm)", &psidthbot);
+
+
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+
+  declparam("soil_type", TDim::NHRU, "[4]", "0", "12",
         "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soil_type);
 
-  declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0",
+  declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0",
         "Maximum available water holding capacity of soil profile."//
         "Soil profile is surface to bottom of rooting zone", "(mm)", &soil_moist_max);
 
-  declparam("soil_moist_init", NHRU, "[187.0]", "0.0", "2500.0",
+  declparam("soil_moist_init", TDim::NHRU, "[187.0]", "0.0", "2500.0",
         "Initial value of available water in soil profile", "(mm)", &soil_moist_init);
 
 
@@ -83,7 +83,7 @@ void ClassGreenAmpt::decl(void) {
 
 void ClassGreenAmpt::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(hh = 0; hh < nhru; ++hh) {
     cuminfil[hh] = 0.0;

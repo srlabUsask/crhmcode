@@ -26,11 +26,11 @@ void ClassK_Estimate::decl(void) {
 
   variation_set = VARIATION_ORG;
 
-  declvar("v_L_upper", NHRU, "Darcy's lateral flow velocity in upper soil column (ie. recharge layer)", "(m/s)", &v_L_upper);
-  declvar("v_L_lower", NHRU, "Darcy's lateral flow velocity in lower soil column", "(m/s)", &v_L_lower);
-  declvar("v_V_sd", NHRU, "Darcy's vertical flow velocity for sd (ie. depression)", "(m/s)", &v_V_sd);
-  declvar("v_V_soil", NHRU, "Darcy's vertical flow velocity for soil column", "(m/s)", &v_V_soil);
-  declvar("v_L_gw", NHRU, "Darcy's lateral flow velocity for groundwater reservoir", "(m/s)", &v_L_gw);
+  declvar("v_L_upper", TDim::NHRU, "Darcy's lateral flow velocity in upper soil column (ie. recharge layer)", "(m/s)", &v_L_upper);
+  declvar("v_L_lower", TDim::NHRU, "Darcy's lateral flow velocity in lower soil column", "(m/s)", &v_L_lower);
+  declvar("v_V_sd", TDim::NHRU, "Darcy's vertical flow velocity for sd (ie. depression)", "(m/s)", &v_V_sd);
+  declvar("v_V_soil", TDim::NHRU, "Darcy's vertical flow velocity for soil column", "(m/s)", &v_V_soil);
+  declvar("v_L_gw", TDim::NHRU, "Darcy's lateral flow velocity for groundwater reservoir", "(m/s)", &v_L_gw);
 
   declputparam("*", "rechr_ssr_K", "(mm/d)", &rechr_ssr_K);
   declputparam("*", "lower_ssr_K", "(mm/d)", &lower_ssr_K);
@@ -39,22 +39,22 @@ void ClassK_Estimate::decl(void) {
   declputparam("*", "soil_gw_K",   "(mm/d)", &soil_gw_K);
   declputparam("*", "gw_K",        "(mm/d)", &gw_K);
 
-  declvar("rechr_ssr_K_V", NHRU, "ssr drainage factor from recharge", "(mm/d)", &rechr_ssr_K_V);
-  declvar("lower_ssr_K_V", NHRU, "ssr drainage factor from soil column", "(mm/d)", &lower_ssr_K_V);
-  declvar("Sd_ssr_K_V", NHRU, "depression storage ssr drainage factor", "(mm/d)", &Sd_ssr_K_V);
-  declvar("Sd_gw_K_V", NHRU, "depression storage gw drainage factor", "(mm/d)", &Sd_gw_K_V);
-  declvar("soil_gw_K_V", NHRU, "The maximum amount of the soil water excess for an HRU that is routed directly to the associated groundwater reservoir each day", "(mm/d)", &soil_gw_K_V);
-  declvar("gw_K_V", NHRU, "ground water drainage factor from gw reservoir each day", "(m/s)", &gw_K_V);
+  declvar("rechr_ssr_K_V", TDim::NHRU, "ssr drainage factor from recharge", "(mm/d)", &rechr_ssr_K_V);
+  declvar("lower_ssr_K_V", TDim::NHRU, "ssr drainage factor from soil column", "(mm/d)", &lower_ssr_K_V);
+  declvar("Sd_ssr_K_V", TDim::NHRU, "depression storage ssr drainage factor", "(mm/d)", &Sd_ssr_K_V);
+  declvar("Sd_gw_K_V", TDim::NHRU, "depression storage gw drainage factor", "(mm/d)", &Sd_gw_K_V);
+  declvar("soil_gw_K_V", TDim::NHRU, "The maximum amount of the soil water excess for an HRU that is routed directly to the associated groundwater reservoir each day", "(mm/d)", &soil_gw_K_V);
+  declvar("gw_K_V", TDim::NHRU, "ground water drainage factor from gw reservoir each day", "(m/s)", &gw_K_V);
 
-  declparam("Inhibit_K_set",    NHRU, "[0]", "0", "63", "Inhibit setting of rechr_ssr_K/lower_ssr_K/Sd_ssr_K/Sd_gw_K/soil_gw_K/gw_K parameters using 1/2/4/8/16/32", "()", &Inhibit_K_set);
+  declparam("Inhibit_K_set", TDim::NHRU, "[0]", "0", "63", "Inhibit setting of rechr_ssr_K/lower_ssr_K/Sd_ssr_K/Sd_gw_K/soil_gw_K/gw_K parameters using 1/2/4/8/16/32", "()", &Inhibit_K_set);
 
-  declparam("Ks_lower",    NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for lower soil", "(m/s)", &Ks_lower);
-  declparam("Ks_upper",    NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for upper soil layer", "(m/s)", &Ks_upper);
-  declparam("Ks_gw",       NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for groundwater layer", "(m/s)", &Ks_gw);
-  declparam("hru_GSL",     NHRU, "[0.0]", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
-  declparam("PSD",         NHRU, "[0.252]", "0.0", "10.0", "pore size distribution", "()", &PSD);
-  declparam("soil_rechr_max", NHRU, "[60.0]", "0.0", "350.0", "Maximum value for soil recharge zone (upper portion of soil_moist where losses occur as both evaporation and transpiration). Must be less than or equal to soil_moist.", "(mm)", &soil_rechr_max);
-  declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile. Soil profile is surface to bottom of rooting zone.", "(mm)", &soil_moist_max);
+  declparam("Ks_lower", TDim::NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for lower soil", "(m/s)", &Ks_lower);
+  declparam("Ks_upper", TDim::NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for upper soil layer", "(m/s)", &Ks_upper);
+  declparam("Ks_gw", TDim::NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for groundwater layer", "(m/s)", &Ks_gw);
+  declparam("hru_GSL", TDim::NHRU, "[0.0]", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("PSD", TDim::NHRU, "[0.252]", "0.0", "10.0", "pore size distribution", "()", &PSD);
+  declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0", "Maximum value for soil recharge zone (upper portion of soil_moist where losses occur as both evaporation and transpiration). Must be less than or equal to soil_moist.", "(mm)", &soil_rechr_max);
+  declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile. Soil profile is surface to bottom of rooting zone.", "(mm)", &soil_moist_max);
 
   declgetparam("*", "inhibit_evap", "()", &inhibit_evap); // used since no declgetparam defined
 
@@ -64,15 +64,15 @@ void ClassK_Estimate::decl(void) {
 
   variation_set = VARIATION_1;
 
-  declvar("Dts_organic_runoff_K_V", NHRU, "detention storage of organic layer runoff drainage factor", "(mm/d)", &Dts_organic_runoff_K_V);
+  declvar("Dts_organic_runoff_K_V", TDim::NHRU, "detention storage of organic layer runoff drainage factor", "(mm/d)", &Dts_organic_runoff_K_V);
 
-  declvar("Dts_snow_runoff_K_V", NHRU, "detention storage of snow runoff drainage factor", "(mm/d)", &Dts_snow_runoff_K_V);
+  declvar("Dts_snow_runoff_K_V", TDim::NHRU, "detention storage of snow runoff drainage factor", "(mm/d)", &Dts_snow_runoff_K_V);
 
-  declvar("Ks_snow", NHRU, "saturated hydraulic conductivity for snow slush layer", "(m/s)", &Ks_snow);
+  declvar("Ks_snow", TDim::NHRU, "saturated hydraulic conductivity for snow slush layer", "(m/s)", &Ks_snow);
 
-  declvar("v_L_organic", NHRU, "Darcy's lateral flow velocity in organic layer", "(m/s)", &v_L_organic);
+  declvar("v_L_organic", TDim::NHRU, "Darcy's lateral flow velocity in organic layer", "(m/s)", &v_L_organic);
 
-  declvar("v_L_snow", NHRU, "Darcy's lateral flow velocity in snow slush layer", "(m/s)", &v_L_snow);
+  declvar("v_L_snow", TDim::NHRU, "Darcy's lateral flow velocity in snow slush layer", "(m/s)", &v_L_snow);
 
 
   declputparam("*", "Dts_organic_runoff_K", "(mm/d)", &Dts_organic_runoff_K);
@@ -80,13 +80,13 @@ void ClassK_Estimate::decl(void) {
   declputparam("*", "Dts_snow_runoff_K", "(mm/d)", &Dts_snow_runoff_K);
 
 
-  declparam("d_g", NHRU, "[3.0]", "0.0", "10.0", "snow grain diameter", "(mm)", &d_g);
+  declparam("d_g", TDim::NHRU, "[3.0]", "0.0", "10.0", "snow grain diameter", "(mm)", &d_g);
 
-  declparam("Ks_organic", NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for organic layer", "(m/s)", &Ks_organic);
+  declparam("Ks_organic", TDim::NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for organic layer", "(m/s)", &Ks_organic);
 
-  declparam("PSD_org", NHRU, "[0.252]", "0.0", "10.0", "pore size distribution for organic layer", "()", &PSD_org);
+  declparam("PSD_org", TDim::NHRU, "[0.252]", "0.0", "10.0", "pore size distribution for organic layer", "()", &PSD_org);
 
-  declparam("S_I", NHRU, "[3.3]", "1.0", "7.0", "soil index", "()", &S_I);
+  declparam("S_I", TDim::NHRU, "[3.3]", "1.0", "7.0", "soil index", "()", &S_I);
 
 
   declgetvar("*", "Dts", "(mm)", &Dts);
@@ -100,7 +100,7 @@ void ClassK_Estimate::decl(void) {
 
 void ClassK_Estimate::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
   for(hh = 0; chkStruct(); ++hh){
     v_L_upper[hh] = 0.0;
     v_L_lower[hh] = 0.0;

@@ -26,7 +26,7 @@ void ClassSlope_Qsi::decl(void) {
 
   variation_set = VARIATION_ORG;
 
-  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
+  declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
 
   declobsfunc("Qsi", "QsiD_Obs", &QsiD, TFun::AVG);
 
@@ -37,23 +37,23 @@ void ClassSlope_Qsi::decl(void) {
 
   variation_set = VARIATION_0;
 
-  declobs("QsiS", NHRU, "generated interval short-wave", "(W/m^2)", &QsiS);
+  declobs("QsiS", TDim::NHRU, "generated interval short-wave", "(W/m^2)", &QsiS);
 
-  declobs("QsiD_Obs", NHRU, "average measured (Qsi) short-wave on horizontal", "(W/m^2)", &QsiD_Obs);
+  declobs("QsiD_Obs", TDim::NHRU, "average measured (Qsi) short-wave on horizontal", "(W/m^2)", &QsiD_Obs);
 
 
   variation_set = VARIATION_1;
 
-  declvar("QsiS_Var", NHRU, "corrected short-wave on slope", "(W/m^2)", &QsiS_Var);
+  declvar("QsiS_Var", TDim::NHRU, "corrected short-wave on slope", "(W/m^2)", &QsiS_Var);
 
-  declvar("QsiD_Var", NHRU, "average short-wave on horizontal", "(W/m^2)", &QsiD_Var);
+  declvar("QsiD_Var", TDim::NHRU, "average short-wave on horizontal", "(W/m^2)", &QsiD_Var);
 
   variation_set = VARIATION_ORG;
 }
 
 void ClassSlope_Qsi::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 }
 
 void ClassSlope_Qsi::run(void) {

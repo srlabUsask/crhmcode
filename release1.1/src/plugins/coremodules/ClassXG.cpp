@@ -32,102 +32,102 @@ void ClassXG::decl(void) {
 
   variation_set = VARIATION_ORG;
 
-  declstatvar("Zd_front", NDEFN, "depth of freezing/thawing fronts", "(m)", &Zd_front, &Zd_front_array, Global::nlay);
+  declstatvar("Zd_front", TDim::NDEFN, "depth of freezing/thawing fronts", "(m)", &Zd_front, &Zd_front_array, Global::nlay);
 
-  declstatvar("Zdf", NHRU, "active freezing front", "(m)", &Zdf);
+  declstatvar("Zdf", TDim::NHRU, "active freezing front", "(m)", &Zdf);
 
-  declstatvar("Zdt", NHRU, "active thawing front", "(m)", &Zdt);
+  declstatvar("Zdt", TDim::NHRU, "active thawing front", "(m)", &Zdt);
 
-  declstatvar("Th_low_lay", NHRU, "lowest thawed layer", "()", &Th_low_lay);
+  declstatvar("Th_low_lay", TDim::NHRU, "lowest thawed layer", "()", &Th_low_lay);
 
-  declstatvar("Fz_low_lay", NHRU, "lowest frozen layer", "()", &Fz_low_lay);
+  declstatvar("Fz_low_lay", TDim::NHRU, "lowest frozen layer", "()", &Fz_low_lay);
 
-  declstatvar("nfront", NHRU, "number of freezing/thawing fronts", "()", &nfront);
+  declstatvar("nfront", TDim::NHRU, "number of freezing/thawing fronts", "()", &nfront);
 
-  declstatvar("Bfr", NHRU, "freeze degree days", "(ºC*d)", &Bfr);
+  declstatvar("Bfr", TDim::NHRU, "freeze degree days", "(ºC*d)", &Bfr);
 
-  declstatvar("Bth", NHRU, "thaw degree days", "(ºC*d)", &Bth);
+  declstatvar("Bth", TDim::NHRU, "thaw degree days", "(ºC*d)", &Bth);
 
-  declvar("pf", NDEFN, "freezing ratios", "()", &pf, &pf_lay, Global::nlay);
+  declvar("pf", TDim::NDEFN, "freezing ratios", "()", &pf, &pf_lay, Global::nlay);
 
-  declvar("pt", NDEFN, "thawing ratios", "()", &pt, &pt_lay, Global::nlay);
+  declvar("pt", TDim::NDEFN, "thawing ratios", "()", &pt, &pt_lay, Global::nlay);
 
-  declstatvar("ttc", NDEFN, "thawing thermal conductivity", "(W/(m*K)", &ttc, &ttc_lay, Global::nlay);
+  declstatvar("ttc", TDim::NDEFN, "thawing thermal conductivity", "(W/(m*K)", &ttc, &ttc_lay, Global::nlay);
 
-  declstatvar("ftc", NDEFN, "freezing thermal conductivity", "(W/(m*K)", &ftc, &ftc_lay, Global::nlay);
+  declstatvar("ftc", TDim::NDEFN, "freezing thermal conductivity", "(W/(m*K)", &ftc, &ftc_lay, Global::nlay);
 
-  declstatvar("ttc_contents", NDEFN, "thawing 0/1 thaw/freeze", "()", &ttc_contents, &ttc_contents_lay, Global::nlay);
+  declstatvar("ttc_contents", TDim::NDEFN, "thawing 0/1 thaw/freeze", "()", &ttc_contents, &ttc_contents_lay, Global::nlay);
 
-  declstatvar("ftc_contents", NDEFN, "freezing 0/1 freeze/thaw", "()", &ftc_contents, &ftc_contents_lay, Global::nlay);
+  declstatvar("ftc_contents", TDim::NDEFN, "freezing 0/1 freeze/thaw", "()", &ftc_contents, &ftc_contents_lay, Global::nlay);
 
-  declvar("tc_composite", NDEFN, "freeze/thaw composite ftc/ttc value", "(W/(m*K)", &tc_composite, &tc_composite_lay, Global::nlay);
+  declvar("tc_composite", TDim::NDEFN, "freeze/thaw composite ftc/ttc value", "(W/(m*K)", &tc_composite, &tc_composite_lay, Global::nlay);
 
-  declvar("tc_composite2", NDEFN, "freeze/thaw composite2 ftc/ttc value", "(W/(m*K)", &tc_composite2, &tc_composite2_lay, Global::nlay);
+  declvar("tc_composite2", TDim::NDEFN, "freeze/thaw composite2 ftc/ttc value", "(W/(m*K)", &tc_composite2, &tc_composite2_lay, Global::nlay);
 
-  declvar("layer_h2o", NDEFN, "water content", "(kg/m^3)", &layer_h2o, &h2o_lay, Global::nlay);
+  declvar("layer_h2o", TDim::NDEFN, "water content", "(kg/m^3)", &layer_h2o, &h2o_lay, Global::nlay);
 
-  decllocal("B", NHRU, "freeze degree days", "()", &B);
+  decllocal("B", TDim::NHRU, "freeze degree days", "()", &B);
 
-  decllocal("TrigAcc", NHRU, "freeze degree days", "()", &TrigAcc);
+  decllocal("TrigAcc", TDim::NHRU, "freeze degree days", "()", &TrigAcc);
 
-  decllocal("TrigState", NHRU, "1/0/-1 thaw/standby/freeze", "()", &TrigState);
+  decllocal("TrigState", TDim::NHRU, "1/0/-1 thaw/standby/freeze", "()", &TrigState);
 
-  decldiag("XG_moist_d", NHRU, "soil moisture depth", "()", &XG_moist_d);
+  decldiag("XG_moist_d", TDim::NHRU, "soil moisture depth", "()", &XG_moist_d);
 
-  decldiag("XG_rechr_d", NHRU, "XG calculated soil recharge depth", "()", &XG_rechr_d);
+  decldiag("XG_rechr_d", TDim::NHRU, "XG calculated soil recharge depth", "()", &XG_rechr_d);
 
-  decllocal("check_XG_moist", NHRU, "sum of XG soil_moist should equal SoilX soil_moist", "()", &check_XG_moist);
+  decllocal("check_XG_moist", TDim::NHRU, "sum of XG soil_moist should equal SoilX soil_moist", "()", &check_XG_moist);
 
-  decllocal("t_trend", NHRU, "temperature long term trend", "(°C)", &t_trend);
+  decllocal("t_trend", TDim::NHRU, "temperature long term trend", "(°C)", &t_trend);
 
-  decllocal("check_t", NHRU, "check temperature source", "(°C)", &check_t);
+  decllocal("check_t", TDim::NHRU, "check temperature source", "(°C)", &check_t);
 
-  declstatvar("XG_max", NDEFN, "layer maximum soil moisture content", "(mm)", &XG_max, &XG_max_lay, Global::nlay);
+  declstatvar("XG_max", TDim::NDEFN, "layer maximum soil moisture content", "(mm)", &XG_max, &XG_max_lay, Global::nlay);
 
-  declstatvar("XG_moist", NDEFN, "layer soil moisture content", "(mm)", &XG_moist, &XG_moist_lay, Global::nlay);
+  declstatvar("XG_moist", TDim::NDEFN, "layer soil moisture content", "(mm)", &XG_moist, &XG_moist_lay, Global::nlay);
 
-  declvar("theta", NDEFN, "XG theta calulated from soil moistures and defaults", "(m^3/m^3)", &theta, &theta_lay, Global::nlay);
+  declvar("theta", TDim::NDEFN, "XG theta calulated from soil moistures and defaults", "(m^3/m^3)", &theta, &theta_lay, Global::nlay);
 
-  declstatvar("rechr_fract", NDEFN, "fraction of layer moisture assigned to soilX soil_rechr.", "()", &rechr_fract, &rechr_fract_lay, Global::nlay);
+  declstatvar("rechr_fract", TDim::NDEFN, "fraction of layer moisture assigned to soilX soil_rechr.", "()", &rechr_fract, &rechr_fract_lay, Global::nlay);
 
-  declstatvar("moist_fract", NDEFN, "fraction of layer moisture assigned to soilX soil_moist.", "()", &moist_fract, &moist_fract_lay, Global::nlay);
+  declstatvar("moist_fract", TDim::NDEFN, "fraction of layer moisture assigned to soilX soil_moist.", "()", &moist_fract, &moist_fract_lay, Global::nlay);
 
-  declstatvar("default_fract", NDEFN, "below defined soil_moist profile - use default ", "()", &default_fract, &default_fract_lay, Global::nlay);
+  declstatvar("default_fract", TDim::NDEFN, "below defined soil_moist profile - use default ", "()", &default_fract, &default_fract_lay, Global::nlay);
 
 
-  decldiagparam("Trigthrhld", NHRU, "[100.0]", "50.0", "1000.0", "Trigger reference level in degree days", "(ºC*d)", &Trigthrhld);
+  decldiagparam("Trigthrhld", TDim::NHRU, "[100.0]", "50.0", "1000.0", "Trigger reference level in degree days", "(ºC*d)", &Trigthrhld);
 
-  declparam("N_Soil_layers", NHRU, "[2]", "1", "20", "number of soil layers. Must be less than or equal nlay. Define Parameters for layers used. All others are ignored", "()", &N_Soil_layers);
+  declparam("N_Soil_layers", TDim::NHRU, "[2]", "1", "20", "number of soil layers. Must be less than or equal nlay. Define Parameters for layers used. All others are ignored", "()", &N_Soil_layers);
 
-  declparam("calc_coductivity", NHRU, "[0]", "0", "1", "0 - linear method, 1 - use Johansen 1975", "()", &calc_coductivity);
+  declparam("calc_coductivity", TDim::NHRU, "[0]", "0", "1", "0 - linear method, 1 - use Johansen 1975", "()", &calc_coductivity);
 
-  declparam("depths", NDEFN, "[0.5]", "0.0", "10.0", "depths(thickness) of soil layers", "(m)", &depths, &depths_lay, Global::nlay);
+  declparam("depths", TDim::NDEFN, "[0.5]", "0.0", "10.0", "depths(thickness) of soil layers", "(m)", &depths, &depths_lay, Global::nlay);
 
-  declparam("por", NDEFN, "[0.5]", "0.0", "1.0", "porosity", "(m^3/m^3)", &por, &por_lay, Global::nlay);
+  declparam("por", TDim::NDEFN, "[0.5]", "0.0", "1.0", "porosity", "(m^3/m^3)", &por, &por_lay, Global::nlay);
 
-  declparam("theta_default", NDEFN, "[0.5]", "0.0", "1.0", "default degree of saturation when not defined by soil module profile from module 'soilX')", "(m^3/m^3)", &theta_default, &theta_default_lay, Global::nlay);
+  declparam("theta_default", TDim::NDEFN, "[0.5]", "0.0", "1.0", "default degree of saturation when not defined by soil module profile from module 'soilX')", "(m^3/m^3)", &theta_default, &theta_default_lay, Global::nlay);
 
-  declparam("theta_min", NHRU, "[0.001]", "0.0001", "0.1", "minimum value of theta to prevent divide by zero errors)", "(m^3/m^3)", &theta_min);
+  declparam("theta_min", TDim::NHRU, "[0.001]", "0.0001", "0.1", "minimum value of theta to prevent divide by zero errors)", "(m^3/m^3)", &theta_min);
 
-  declparam("soil_solid_km", NDEFN, "[2.5]", "0.03", "4", "dry soil thermal conductivity", "(W/(m*K)", &soil_solid_km, &soil_solid_km_lay, Global::nlay);
+  declparam("soil_solid_km", TDim::NDEFN, "[2.5]", "0.03", "4", "dry soil thermal conductivity", "(W/(m*K)", &soil_solid_km, &soil_solid_km_lay, Global::nlay);
 
-  declparam("soil_solid_km_ki", NDEFN, "[2.5]", "0.03", "4", "saturated frozen soil thermal conductivity", "(W/(m*K)", &soil_solid_km_ki, &soil_solid_km_ki_lay, Global::nlay);
+  declparam("soil_solid_km_ki", TDim::NDEFN, "[2.5]", "0.03", "4", "saturated frozen soil thermal conductivity", "(W/(m*K)", &soil_solid_km_ki, &soil_solid_km_ki_lay, Global::nlay);
 
-  declparam("soil_solid_km_kw", NDEFN, "[2.5]", "0.03", "4", "saturated unfrozen soil thermal conductivity.", "(W/(m*K)", &soil_solid_km_kw, &soil_solid_km_kw_lay, Global::nlay);
+  declparam("soil_solid_km_kw", TDim::NDEFN, "[2.5]", "0.03", "4", "saturated unfrozen soil thermal conductivity.", "(W/(m*K)", &soil_solid_km_kw, &soil_solid_km_kw_lay, Global::nlay);
 
-  declparam("SWE_k", NHRU, "[0.35]", "0.1", "1.0", "thermal conductivity of blowing snow.", "(W/(m*K)", &SWE_k);
+  declparam("SWE_k", TDim::NHRU, "[0.35]", "0.1", "1.0", "thermal conductivity of blowing snow.", "(W/(m*K)", &SWE_k);
 
-  declparam("Zdf_init", NHRU, "[0]", "0.0", "3", "initial depth of freezing front. Maximum value limited by freezing algorithm.", "(m)", &Zdf_init);
+  declparam("Zdf_init", TDim::NHRU, "[0]", "0.0", "3", "initial depth of freezing front. Maximum value limited by freezing algorithm.", "(m)", &Zdf_init);
 
-  declparam("Zdt_init", NHRU, "[0]", "0.0", "3", "initial depth of thawing front. Maximum value limited by thawing algorithm.", "(m)", &Zdt_init);
+  declparam("Zdt_init", TDim::NHRU, "[0]", "0.0", "3", "initial depth of thawing front. Maximum value limited by thawing algorithm.", "(m)", &Zdt_init);
 
-  declparam("Zpf_init", NHRU, "[2]", "0.0", "30", "initial depth of permafrost front. Maximum value limited by thawing algorithm. If zero set to 2m", "(m)", &Zpf_init);
+  declparam("Zpf_init", TDim::NHRU, "[2]", "0.0", "30", "initial depth of permafrost front. Maximum value limited by thawing algorithm. If zero set to 2m", "(m)", &Zpf_init);
 
-  declparam("freeze_kw_ki_update", NHRU, "[0]", "0", "1", "Change thermal conductivities kw to ki behind freezing front.", "()", &freeze_kw_ki_update);
+  declparam("freeze_kw_ki_update", TDim::NHRU, "[0]", "0", "1", "Change thermal conductivities kw to ki behind freezing front.", "()", &freeze_kw_ki_update);
 
-  declparam("thaw_ki_kw_update", NHRU, "[0]", "0", "1", "Change thermal conductivities ki to kw behind thawing front.", "()", &thaw_ki_kw_update);
+  declparam("thaw_ki_kw_update", TDim::NHRU, "[0]", "0", "1", "Change thermal conductivities ki to kw behind thawing front.", "()", &thaw_ki_kw_update);
 
-  declparam("k_update", NHRU, "[0]", "0", "2", "Change thermal conductivities ki to kw 0 - never, 1 _ after processing layer, 2 - continuously through layer.", "()", &k_update);
+  declparam("k_update", TDim::NHRU, "[0]", "0", "2", "Change thermal conductivities ki to kw 0 - never, 1 _ after processing layer, 2 - continuously through layer.", "()", &k_update);
 
   declgetparam("*", "soil_moist_max", "(mm)", &soil_moist_max); // used since no declgetparam defined
 
@@ -146,15 +146,15 @@ void ClassXG::decl(void) {
 
   variation_set = VARIATION_1;
 
-  declparam("n_factor_a", NHRU, "[0.5]", "0", "1.2", "n_factor = n_factor_a - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_a);
+  declparam("n_factor_a", TDim::NHRU, "[0.5]", "0", "1.2", "n_factor = n_factor_a - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_a);
 
-  declparam("n_factor_b", NHRU, "[0.54]", "0.0", "1.0", "n_factor = n_factor_b - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_b);
+  declparam("n_factor_b", TDim::NHRU, "[0.54]", "0.0", "1.0", "n_factor = n_factor_b - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_b);
 
-  declparam("n_factor_c", NHRU, "[0.05]", "0.0", "0.1", "n_factor = n_factor_c - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_c);
+  declparam("n_factor_c", TDim::NHRU, "[0.05]", "0.0", "0.1", "n_factor = n_factor_c - n_factor_b*exp(-n_factor_c*T) where T is days after start of ground thaw.", "()", &n_factor_c);
 
-  decllocal("n_factor_T", NHRU, "Days after the start of thaw", "()", &n_factor_T);
+  decllocal("n_factor_T", TDim::NHRU, "Days after the start of thaw", "()", &n_factor_T);
 
-  decllocal("n_factor", NHRU, "calculated value of n_factor from parameters. Woo (2012), p. 57", "()", &n_factor);
+  decllocal("n_factor", TDim::NHRU, "calculated value of n_factor from parameters. Woo (2012), p. 57", "()", &n_factor);
 
   declgetvar("*", "hru_t", "(°C)", &hru_t);
 
@@ -166,8 +166,8 @@ void ClassXG::decl(void) {
 
 void ClassXG::init(void) {
 
-  nhru = getdim(NHRU);
-  nlay = getdim(NLAY);
+  nhru = getdim(TDim::NHRU);
+  nlay = getdim(TDim::NLAY);
 
   front_size = nlay; // first two locations used by active Zdf and Zdt. Last location always 0.0, i.e. end of stack. Not related to nlay. Only dimensioned as nlay for convenience
 
