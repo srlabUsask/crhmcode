@@ -1164,7 +1164,7 @@ void Defdeclgetvar::CallDecl() {
 
 
 	//if (thisVar != NULL && thisVar->varType == CRHM::Int) //Manishankar did this to fix output differences
-	if (Global::thisVar != NULL && ((ClassVar*)Global::thisVar)->varType == CRHM::Int)
+	if (Global::thisVar != NULL && ((ClassVar*)Global::thisVar)->varType == TVar::Int)
 	
 		Int = true;
 	else
@@ -1223,7 +1223,7 @@ void Defdeclputvar::CallDecl() {
 	GetUnit = Macro->FindWildVarFloat(name, thisVar);//, false, true); // just find name
 
 	//if (thisVar != NULL && thisVar->varType == CRHM::Int) //Manishankar did this to fix output differences
-	if (Global::thisVar != NULL && ((ClassVar*)Global::thisVar)->varType == CRHM::Int)
+	if (Global::thisVar != NULL && ((ClassVar*)Global::thisVar)->varType == TVar::Int)
 		Int = true;
 	else
 		Int = false;
@@ -1271,7 +1271,7 @@ void Defdeclputparam::CallDecl() {
 
 	GetUnit = Macro->FindWildParFloat(name, thisPar, false, false); // name
 
-	if (thisPar != NULL && thisPar->varType == CRHM::Int)
+	if (thisPar != NULL && thisPar->varType == TVar::Int)
 		Int = true;
 	else
 		Int = false;
@@ -1472,7 +1472,7 @@ long ClassMacro::declobs(string module, string name, CRHM::TDim dimen, string he
 
 		newVar = new ClassVar("obs", name, cnt, 0, NULL);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 		newVar->help = help;
 		newVar->units = units;
 		newVar->module = module;

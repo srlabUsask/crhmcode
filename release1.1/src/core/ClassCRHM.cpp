@@ -46,7 +46,7 @@ void ClassVar::BackUp() {
 	long Fix = lay;
 	if (lay == 0) Fix = 1;
 
-	if (varType == CRHM::Float) {
+	if (varType == TVar::Float) {
 		layvaluesBkup = new double *[Fix];
 		for (int ii = 0; ii < Fix; ii++)
 			layvaluesBkup[ii] = new double[dim];
@@ -58,7 +58,7 @@ void ClassVar::BackUp() {
 				else
 					layvaluesBkup[jj][ii] = layvalues[jj][ii];
 	}
-	else if (varType == CRHM::Int) {
+	else if (varType == TVar::Int) {
 		ilayvaluesBkup = new long *[Fix];
 		for (int ii = 0; ii < Fix; ii++)
 			ilayvaluesBkup[ii] = new long[dim];
@@ -78,7 +78,7 @@ void ClassVar::Restore() {
 	long Fix = lay;
 	if (lay == 0) Fix = 1;
 
-	if (varType == CRHM::Float) {
+	if (varType == TVar::Float) {
 
 		for (int jj = 0; jj < Fix; jj++)
 			for (int ii = 0; ii < dim; ii++)
@@ -93,7 +93,7 @@ void ClassVar::Restore() {
 		delete[] layvaluesBkup;  //Array [nhru] [lay]
 		layvaluesBkup = NULL;
 	}
-	else if (varType == CRHM::Int) {
+	else if (varType == TVar::Int) {
 
 		for (int jj = 0; jj < Fix; jj++)
 			for (int ii = 0; ii < dim; ii++)
@@ -113,7 +113,7 @@ void ClassVar::Restore() {
 void ClassVar::ReadVar(void) {
 
 	if (FileData->Times == NULL) {
-		if (varType == CRHM::ReadF || varType == CRHM::Read) {
+		if (varType == TVar::ReadF || varType == TVar::Read) {
 			if (dimen == CRHM::NHRU)
 				for (long ii = 0; ii < dim; ++ii)
 					values[ii] = FileData->Data
@@ -135,7 +135,7 @@ void ClassVar::ReadVar(void) {
 					}
 			}
 		}
-		else if (varType == CRHM::ReadI)
+		else if (varType == TVar::ReadI)
 		{
 			if (dimen == CRHM::NHRU)
 			{
@@ -163,7 +163,7 @@ void ClassVar::ReadVar(void) {
 		}
 	}
 	else if (FileData->GoodInterval) { // sparse data
-		if (varType == CRHM::ReadF || varType == CRHM::Read)
+		if (varType == TVar::ReadF || varType == TVar::Read)
 		{
 			if (dimen == CRHM::NHRU)
 			{
@@ -180,7 +180,7 @@ void ClassVar::ReadVar(void) {
 				}
 			}
 		}
-		else if (varType == CRHM::ReadI)
+		else if (varType == TVar::ReadI)
 		{
 			if (dimen == CRHM::NHRU)
 			{
@@ -204,11 +204,11 @@ void ClassVar::ReadVar(void) {
 		double doN = dim;
 		if (dimen == CRHM::NOBS)
 			doN = cnt;
-		if (varType == CRHM::ReadF || varType == CRHM::Read)
+		if (varType == TVar::ReadF || varType == TVar::Read)
 			for (long ii = 0; ii < doN; ++ii)
 				values[ii] = xLimit;
 
-		else if (varType == CRHM::ReadI)
+		else if (varType == TVar::ReadI)
 			for (long ii = 0; ii < doN; ++ii)
 				ivalues[ii] = lLimit;
 	}
@@ -218,7 +218,7 @@ void ClassVar::ReadVar(void) {
 void ClassVar::WriteVar(void) {
 
 	if (FileData->Times == NULL) {
-		if (varType == CRHM::ReadF || varType == CRHM::Read)
+		if (varType == TVar::ReadF || varType == TVar::Read)
 		{
 			if (dimen == CRHM::NHRU)
 			{
@@ -232,7 +232,7 @@ void ClassVar::WriteVar(void) {
 			}
 		}
 
-		else if (varType == CRHM::ReadI)
+		else if (varType == TVar::ReadI)
 		{
 			for (long ii = 0; ii < dim; ++ii)
 				FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][Global::DTindx / FileData->ModN - FileData->IndxMin] = ivalues[ii];
@@ -244,7 +244,7 @@ void ClassVar::WriteVar(void) {
 		}
 	}
 	else if (FileData->GoodInterval) { // sparse data
-		if (varType == CRHM::ReadF || varType == CRHM::Read)
+		if (varType == TVar::ReadF || varType == TVar::Read)
 		{
 			if (dimen == CRHM::NHRU)
 			{
@@ -257,7 +257,7 @@ void ClassVar::WriteVar(void) {
 					FileData->Data[offset + min<long>(Global::HRU_OBS[HRU_OBS_indexed][ii], cnt) - 1][FileData->TimeIndx] = values[ii];
 			}
 		}
-		else if (varType == CRHM::ReadI)
+		else if (varType == TVar::ReadI)
 		{
 			if (dimen == CRHM::NHRU)
 			{
@@ -754,7 +754,7 @@ void setdim(string name, long dim) {
 
 
 ClassPar::ClassPar(string module, string param, CRHM::TDim dimen,
-	string CommaText, string help, CRHM::TVar varType, int Grpdim)
+	string CommaText, string help, TVar varType, int Grpdim)
 	: module(module), basemodule(""), param(param), varType(varType), dimen(dimen), help(help),
 	units(""), valstr(""), minVal(0), maxVal(0), Inhibit_share(0),
 	values(NULL), ivalues(NULL), layvalues(NULL), ilayvalues(NULL), Identical(NULL),
@@ -785,11 +785,11 @@ void ClassPar::ExpandShrink(long new_dim) {
 
 	// backup current string
 
-	if (varType == CRHM::Txt) {
+	if (varType == TVar::Txt) {
 		StringsBkup = new TStringList;
 		StringsBkup->Assign(Strings);
 	}
-	else if (varType == CRHM::Float) {
+	else if (varType == TVar::Float) {
 		layvaluesBkup = new double *[lay];
 		for (int ii = 0; ii < lay; ii++)
 			layvaluesBkup[ii] = new double[dim];
@@ -798,7 +798,7 @@ void ClassPar::ExpandShrink(long new_dim) {
 			for (int ii = 0; ii<dim; ii++)
 				layvaluesBkup[jj][ii] = layvalues[jj][ii];
 	}
-	else if (varType == CRHM::Int) {
+	else if (varType == TVar::Int) {
 		ilayvaluesBkup = new long *[lay];
 		for (int ii = 0; ii < lay; ii++)
 			ilayvaluesBkup[ii] = new long[dim];
@@ -810,19 +810,19 @@ void ClassPar::ExpandShrink(long new_dim) {
 
 	// delete current arrays
 
-	if (varType == CRHM::Float) {
+	if (varType == TVar::Float) {
 		for (int ii = 0; ii < lay; ++ii) delete[] layvalues[ii];
 
 		delete[] layvalues;  //Array [nhru] [lay]
 		values = NULL;
 	}
-	else if (varType == CRHM::Int) {
+	else if (varType == TVar::Int) {
 		for (int ii = 0; ii < lay; ++ii) delete[] ilayvalues[ii];
 
 		delete[] ilayvalues; //Array [nhru] [lay]
 		ivalues = NULL;
 	}
-	else if (varType == CRHM::Txt) {
+	else if (varType == TVar::Txt) {
 		Strings->Clear();
 	}
 
@@ -836,7 +836,7 @@ void ClassPar::ExpandShrink(long new_dim) {
 	if (dimen == CRHM::NDEFN) // NDEFN stays the same
 		lay = new_dim;
 
-	if (varType == CRHM::Float) {
+	if (varType == TVar::Float) {
 		if (lay > 0) {
 			layvalues = new double *[lay];
 			for (int ii = 0; ii < lay; ii++)
@@ -851,7 +851,7 @@ void ClassPar::ExpandShrink(long new_dim) {
 		for (int kk = 0; kk < dim; ++kk)
 			values[kk] = 0.0;
 	}
-	else if (varType == CRHM::Int) {
+	else if (varType == TVar::Int) {
 		if (lay > 0) {
 			ilayvalues = new long *[lay];
 			for (int ii = 0; ii < lay; ii++)
@@ -866,13 +866,13 @@ void ClassPar::ExpandShrink(long new_dim) {
 		for (int kk = 0; kk < dim; ++kk)
 			ivalues[kk] = 0;
 	}
-	else if (varType == CRHM::Txt) {
+	else if (varType == TVar::Txt) {
 		Strings->Clear();
 	}
 
 	// copy data into expanded/shrunk array
 
-	if (varType == CRHM::Txt) {
+	if (varType == TVar::Txt) {
 		if (StringsBkup->Count > 0)
 		{
 			for (int kk = 0; kk < dim; ++kk)
@@ -881,7 +881,7 @@ void ClassPar::ExpandShrink(long new_dim) {
 		}
 		StringsBkup = NULL;
 	}
-	else if (varType == CRHM::Float) {
+	else if (varType == TVar::Float) {
 
 		for (int jj = 0; jj<lay; jj++)
 			for (int ii = 0; ii<dim; ii++)
@@ -892,7 +892,7 @@ void ClassPar::ExpandShrink(long new_dim) {
 		delete[] layvaluesBkup;  //Array [nhru] [lay]
 		layvaluesBkup = NULL;
 	}
-	else if (varType == CRHM::Int) {
+	else if (varType == TVar::Int) {
 
 		for (int jj = 0; jj<lay; jj++)
 			for (int ii = 0; ii<dim; ii++)
@@ -908,11 +908,11 @@ void ClassPar::ExpandShrink(long new_dim) {
 //---------------------------------------------------------------------------
 void ClassPar::BackUp() {
 
-	if (varType == CRHM::Txt) {
+	if (varType == TVar::Txt) {
 		StringsBkup = new TStringList;
 		StringsBkup->Assign(Strings);
 	}
-	else if (varType == CRHM::Float) {
+	else if (varType == TVar::Float) {
 		layvaluesBkup = new double *[lay];
 		for (int ii = 0; ii < lay; ii++)
 			layvaluesBkup[ii] = new double[dim];
@@ -921,7 +921,7 @@ void ClassPar::BackUp() {
 			for (int ii = 0; ii<dim; ii++)
 				layvaluesBkup[jj][ii] = layvalues[jj][ii];
 	}
-	else if (varType == CRHM::Int) {
+	else if (varType == TVar::Int) {
 		ilayvaluesBkup = new long *[lay];
 		for (int ii = 0; ii < lay; ii++)
 			ilayvaluesBkup[ii] = new long[dim];
@@ -935,12 +935,12 @@ void ClassPar::BackUp() {
 //---------------------------------------------------------------------------
 void ClassPar::Restore() {
 
-	if (varType == CRHM::Txt) {
+	if (varType == TVar::Txt) {
 		Strings->Assign(StringsBkup);
 		delete StringsBkup;
 		StringsBkup = NULL;
 	}
-	else if (varType == CRHM::Float) {
+	else if (varType == TVar::Float) {
 
 		for (int jj = 0; jj<lay; jj++)
 			for (int ii = 0; ii<dim; ii++)
@@ -951,7 +951,7 @@ void ClassPar::Restore() {
 		delete[] layvaluesBkup;  //Array [nhru] [lay]
 		layvaluesBkup = NULL;
 	}
-	else if (varType == CRHM::Int) {
+	else if (varType == TVar::Int) {
 
 		for (int jj = 0; jj<lay; jj++)
 			for (int ii = 0; ii<dim; ii++)
@@ -967,7 +967,7 @@ void ClassPar::Restore() {
 //---------------------------------------------------------------------------
 ClassPar::ClassPar(string module, string param, CRHM::TDim dimen,
 	string valstr, double minVal, double maxVal,
-	string help, string units, CRHM::TVar varType, int defdim, int Grpdim)
+	string help, string units, TVar varType, int defdim, int Grpdim)
 	: module(module), basemodule(""), param(param), varType(varType), dimen(dimen),
 	valstr(valstr), minVal(minVal), maxVal(maxVal), Inhibit_share(0),
 	help(help), units(units),
@@ -1004,13 +1004,13 @@ ClassPar::ClassPar(string module, string param, CRHM::TDim dimen,
 	}
 
 	try {
-		if (varType == CRHM::Float) {
+		if (varType == TVar::Float) {
 			layvalues = new double *[lay];
 			for (int ii = 0; ii < lay; ii++)
 				layvalues[ii] = new double[dim];
 			values = layvalues[0];
 		}
-		else if (varType == CRHM::Int) {
+		else if (varType == TVar::Int) {
 			ilayvalues = new long *[lay];
 			for (int ii = 0; ii < lay; ii++)
 				ilayvalues[ii] = new long[dim];
@@ -1058,7 +1058,7 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 
 	try 
 	{
-		if (varType == CRHM::Float) 
+		if (varType == TVar::Float)
 		{
 			layvalues = new double *[lay];
 			
@@ -1069,7 +1069,7 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 				
 			values = layvalues[0];
 		}
-		else if (varType == CRHM::Int) 
+		else if (varType == TVar::Int)
 		{
 			ilayvalues = new long *[lay];
 			
@@ -1080,7 +1080,7 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 			
 			ivalues = ilayvalues[0];
 		}
-		else if (varType == CRHM::Txt) 
+		else if (varType == TVar::Txt)
 		{
 			Strings = new TStringList;
 		}
@@ -1092,7 +1092,7 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 		throw CRHMException(Except);
 	}
 
-	if (varType == CRHM::Float)
+	if (varType == TVar::Float)
 	{
 		for (int jj = 0; jj < lay; jj++)
 		{
@@ -1102,7 +1102,7 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 			}
 		}
 	}
-	else if (varType == CRHM::Int)
+	else if (varType == TVar::Int)
 	{
 
 		if (ilayvalues != NULL) 
@@ -1123,7 +1123,7 @@ ClassPar::ClassPar(ClassPar &p) {  // copy constructor
 
 		
 	}
-	else if (varType == CRHM::Txt)
+	else if (varType == TVar::Txt)
 	{
 		Strings->Assign(p.Strings);
 	}
@@ -1146,7 +1146,7 @@ bool ClassPar::Same(ClassPar &p) {  // compares parameter data
 			}
 		}
 		if (dim == p.dim) {
-			if (varType == CRHM::Txt) 
+			if (varType == TVar::Txt)
 			{
 				
 				if (!Strings && !p.Strings)
@@ -1179,10 +1179,10 @@ bool ClassPar::Same(ClassPar &p) {  // compares parameter data
 			{
 				for (int jj = 0; jj<lay; ++jj)
 					for (int ii = 0; ii<dim; ++ii)
-						if (varType == CRHM::Float) {
+						if (varType == TVar::Float) {
 							if (layvalues[jj][ii] != p.layvalues[jj][ii]) return(false);
 						}
-						else if (varType == CRHM::Int) {
+						else if (varType == TVar::Int) {
 							if (ilayvalues[jj][ii] != p.ilayvalues[jj][ii]) return(false);
 						}
 			}
@@ -1197,7 +1197,7 @@ void ClassPar::Change(ClassPar &p) {  // changes parameter data to 'p'
 
 	if (this == &p) return;
 
-	if (varType == CRHM::Txt) {
+	if (varType == TVar::Txt) {
 		Strings->Assign(p.Strings);
 		while (Strings->Count < dim && Strings->Count>0)  // duplicate last field when # of HRUs increased
 														  //Strings->Append(Strings->Strings[Strings->Count - 1]);
@@ -1210,21 +1210,21 @@ void ClassPar::Change(ClassPar &p) {  // changes parameter data to 'p'
 			for (int ii = 0; ii < dim; ++ii) {
 				long ii0 = min<long>(ii, p.dim - 1);
 				if (Bang && ii0 < ii) {
-					if (varType == CRHM::Float)
+					if (varType == TVar::Float)
 					{
 						layvalues[jj][ii] = layvalues[jj][ii - 1] + 1;
 					}
-					else if (varType == CRHM::Int)
+					else if (varType == TVar::Int)
 					{
 						ilayvalues[jj][ii] = ilayvalues[jj][ii - 1] + 1;
 					}
 				}
 				else {
-					if (varType == CRHM::Float)
+					if (varType == TVar::Float)
 					{
 						layvalues[jj][ii] = p.layvalues[jj0][ii0];
 					}
-					else if (varType == CRHM::Int)
+					else if (varType == TVar::Int)
 					{
 						ilayvalues[jj][ii] = p.ilayvalues[jj0][ii0];
 					}
@@ -1376,22 +1376,22 @@ ClassPar *ClassParFindRev(string module, string param) {
 //---------------------------------------------------------------------------
 ClassPar::~ClassPar() {
 
-	if (varType == CRHM::Float) {
+	if (varType == TVar::Float) {
 		for (int ii = 0; ii < lay; ++ii) delete[] layvalues[ii];
 
 		delete[] layvalues;  //Array [nhru] [lay]
 		values = NULL;
 	}
-	else if (varType == CRHM::Int) {
+	else if (varType == TVar::Int) {
 		for (int ii = 0; ii < lay; ++ii) delete[] ilayvalues[ii];
 
 		delete[] ilayvalues; //Array [nhru] [lay]
 		ivalues = NULL;
 	}
-	else if (varType == CRHM::Txt) {
+	else if (varType == TVar::Txt) {
 		delete Strings;
 	}
-	varType = CRHM::none;
+	varType = TVar::none;
 }
 
 //---------------------------------------------------------------------------
@@ -1409,7 +1409,7 @@ ClassVar *ClassVarFind(string name) {
 
 //---------------------------------------------------------------------------
 ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
-	string help, string units, CRHM::TVar varType, bool PointPlot, int Grpdim, int defdim)
+	string help, string units, TVar varType, bool PointPlot, int Grpdim, int defdim)
 	: module(module), name(name), DLLName(""), root(""), varType(varType), lay(0), nfreq(false),
 	optional(false), StatVar(false), InGroup(0), visibility(TVISIBLE::USUAL), FunKind(TFun::FOBS),
 	help(help), units(units), layvalues(NULL), ilayvalues(NULL), dim(0), dimMax(0),
@@ -1445,7 +1445,7 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 		dim = Grpdim;
 
 	try {
-		if (varType == CRHM::Float) {
+		if (varType == TVar::Float) {
 			if (lay > 0) {
 				layvalues = new double *[lay];
 				if (!values)
@@ -1467,7 +1467,7 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 					values[kk] = 0.0;
 			}
 		}
-		else if (varType == CRHM::Int) {
+		else if (varType == TVar::Int) {
 			if (lay > 0) {
 				ilayvalues = new long *[lay];
 				if (dimen != CRHM::NREB) { // NREB does not own lay memory only HRU memory
@@ -1497,7 +1497,7 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 ClassVar::ClassVar(string module, string name, long dim,
-	string help, string units, CRHM::TVar varType, bool PointPlot)
+	string help, string units, TVar varType, bool PointPlot)
 	: module(module), name(name), DLLName(""), root(""), varType(varType), dim(dim), dimMax(0), lay(0), nfreq(false),
 	optional(false), StatVar(false), InGroup(0), visibility(TVISIBLE::USUAL), FunKind(TFun::FOBS),
 	help(help), units(units), layvalues(NULL), ilayvalues(NULL),
@@ -1507,9 +1507,9 @@ ClassVar::ClassVar(string module, string name, long dim,
 
 
 	try {
-		if (varType == CRHM::Float)
+		if (varType == TVar::Float)
 			values = new double[dim];
-		else if (varType == CRHM::Int)
+		else if (varType == TVar::Int)
 			ivalues = new long[dim];
 	}
 	catch (std::bad_alloc) {
@@ -1523,7 +1523,7 @@ ClassVar::ClassVar(string module, string name, long dim,
 void ClassVar::ReleaseM(bool Keep) {
 	if (!values && !ivalues) return;
 
-	if (varType == CRHM::Float || varType == CRHM::ReadF) {
+	if (varType == TVar::Float || varType == TVar::ReadF) {
 
 		if (lay > 0) {
 			if (dimen != CRHM::NREB)
@@ -1542,7 +1542,7 @@ void ClassVar::ReleaseM(bool Keep) {
 			values = NULL;
 		}
 	}
-	else if (varType == CRHM::Int || varType == CRHM::ReadI) {
+	else if (varType == TVar::Int || varType == TVar::ReadI) {
 
 		if (lay > 0) {
 			if (dimen != CRHM::NREB)
@@ -1625,7 +1625,7 @@ ClassVar::ClassVar(const ClassVar & Cl) { // used for observation totals +
 	}
 
 	if (lay == 0 || dimen == CRHM::NREB) {
-		varType = CRHM::Float; // display always double. handles integer variables from VarObsFunct_Update
+		varType = TVar::Float; // display always double. handles integer variables from VarObsFunct_Update
 		values = new double[dim];
 		ivalues = NULL;
 		for (int kk = 0; kk < dim; ++kk)
@@ -2377,7 +2377,7 @@ ClassData::~ClassData() {
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end();) {
 		thisVar = (*itVar).second;
-		if (thisVar->varType == CRHM::Read && thisVar->FileData == this) {
+		if (thisVar->varType == TVar::Read && thisVar->FileData == this) {
 			delete thisVar;
 			Global::MapVars.erase(itVar++);
 		}
@@ -2389,10 +2389,10 @@ ClassData::~ClassData() {
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
-		if (thisVar->FileData == this && (thisVar->varType == CRHM::ReadF || thisVar->varType == CRHM::ReadI || thisVar->varType == CRHM::Float)) {
+		if (thisVar->FileData == this && (thisVar->varType == TVar::ReadF || thisVar->varType == TVar::ReadI || thisVar->varType == TVar::Float)) {
 			thisVar->FileData = NULL;
 
-			if (thisVar->varType == CRHM::Float) { // handles TDay, RHDay and EADay
+			if (thisVar->varType == TVar::Float) { // handles TDay, RHDay and EADay
 				thisVar->FunctVar = NULL;
 				thisVar->CustomFunct = NULL;
 				thisVar->CustomFunctName = "";
@@ -2406,8 +2406,8 @@ ClassData::~ClassData() {
 				thisVar->cnt = 0;
 			thisVar->offset = 0;
 
-			if (thisVar->varType == CRHM::ReadI) thisVar->varType = CRHM::Int;
-			if (thisVar->varType == CRHM::ReadF) thisVar->varType = CRHM::Float;
+			if (thisVar->varType == TVar::ReadI) thisVar->varType = TVar::Int;
+			if (thisVar->varType == TVar::ReadF) thisVar->varType = TVar::Float;
 		}
 	}
 }
@@ -2582,7 +2582,7 @@ void ModVarRemove(MapVar & MapVars) {
 		thisVar = (*itVar).second;
 		if (thisVar != NULL) {
 			S = (*itVar).first;
-			if (thisVar->varType < CRHM::Read) {
+			if (thisVar->varType < TVar::Read) {
 				for (itVar2 = Global::MapVars.begin(); itVar2 != Global::MapVars.end(); itVar2++) {
 					thisVar2 = (*itVar2).second;
 					if (thisVar2 != NULL) {
@@ -2621,7 +2621,7 @@ void ModVarRemove(MapVar & MapVars) {
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		switch (thisVar->varType) {
-		case CRHM::ReadI:
+		case TVar::ReadI:
 			if (thisVar->lay > 0) { // handles NFREQ
 				for (int ii = 0; ii < thisVar->lay; ++ii)
 					delete[] thisVar->ilayvalues[ii];
@@ -2633,10 +2633,10 @@ void ModVarRemove(MapVar & MapVars) {
 
 			delete[]thisVar->ivalues;
 			thisVar->ivalues = NULL;
-			thisVar->varType = CRHM::Read;
+			thisVar->varType = TVar::Read;
 			thisVar->dim = thisVar->cnt;
 			break;
-		case CRHM::ReadF:
+		case TVar::ReadF:
 
 			if (thisVar->lay > 0) { // handles NFREQ
 				for (int ii = 0; ii < thisVar->lay; ++ii)
@@ -2649,11 +2649,11 @@ void ModVarRemove(MapVar & MapVars) {
 
 			delete[]thisVar->values;
 			thisVar->values = NULL;
-			thisVar->varType = CRHM::Read;
+			thisVar->varType = TVar::Read;
 			thisVar->dim = thisVar->cnt;
 			break;
-		case CRHM::Int:
-		case CRHM::Float:
+		case TVar::Int:
+		case TVar::Float:
 			exit(1); // should never happen
 		default:
 			break;
@@ -2692,7 +2692,7 @@ ClassVar *declread(string module, string name, long cnt, long offset,
 	// executes following code only if observation file replaced
 	if ((itVar = Global::MapVars.find(s1 + " " + s2)) != Global::MapVars.end()) {
 		thisVar = (*itVar).second;
-		if (thisVar->varType >= CRHM::Read) {
+		if (thisVar->varType >= TVar::Read) {
 			LogError(CRHMException("Duplicate Observation variable: " + s1 + " " + s2, TExcept::ERR));
 			return NULL;
 		}
@@ -2715,10 +2715,10 @@ ClassVar *declread(string module, string name, long cnt, long offset,
 		thisVar->values = new double[thisVar->dim];
 		}
 		*/
-		if (thisVar->varType == CRHM::Int)
-			thisVar->varType = CRHM::ReadI;
-		if (thisVar->varType == CRHM::Float)
-			thisVar->varType = CRHM::ReadF;
+		if (thisVar->varType == TVar::Int)
+			thisVar->varType = TVar::ReadI;
+		if (thisVar->varType == TVar::Float)
+			thisVar->varType = TVar::ReadF;
 
 		return thisVar;
 	}
@@ -2728,7 +2728,7 @@ ClassVar *declread(string module, string name, long cnt, long offset,
 	if (thisVar->name == "p" || thisVar->name == "ppt") // must be NHRU for routine "ReadVar" when obs file loaded after modules.
 		thisVar->dimen = CRHM::NHRU;
 
-	thisVar->varType = CRHM::Read;
+	thisVar->varType = TVar::Read;
 	thisVar->units = units;
 	thisVar->help = Comment;
 
@@ -2833,7 +2833,7 @@ void Classfilter::readargs() {
 
 			if ((itVar = Global::MapVars.find("obs " + V)) != Global::MapVars.end()) {
 				thisVar = (*itVar).second;
-				if (thisVar->varType < CRHM::Read) {
+				if (thisVar->varType < TVar::Read) {
 					error("not observation variable");
 					return;
 				}
@@ -2871,7 +2871,7 @@ void Classfilter::readargs() {
 
 		if ((itVar = Global::MapVars.find("obs " + ToVar)) != Global::MapVars.end()) {
 			thisVar = (*itVar).second;
-			if (thisVar->varType >= CRHM::Read) {
+			if (thisVar->varType >= TVar::Read) {
 				DataIndx[Vs - 1] = thisVar->offset;
 				DataObsCnt[Vs - 1] = ObsCnt;
 				return;

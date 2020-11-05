@@ -167,9 +167,9 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 			LogError(CRHMException("No groups defined " + Name + " " + variable, TExcept::WARNING));
 			return -1;
 		}
-		newVar = new ClassVar(Name, variable, CRHM::NREB, help, units, CRHM::Float, PointPlot, nhru);
+		newVar = new ClassVar(Name, variable, CRHM::NREB, help, units, TVar::Float, PointPlot, nhru);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
 		newVar->variation_set = variation_set;
 
@@ -382,9 +382,9 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		if (dimen == CRHM::NDEFN) // save for lay loop
 			++Var_NDEFN_cnt;
 
-		newVar = new ClassVar(Name, variable, dimen, help, units, CRHM::Float, PointPlot, nhru, dim);
+		newVar = new ClassVar(Name, variable, dimen, help, units, TVar::Float, PointPlot, nhru, dim);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
 		newVar->StatVar = StatVar;
 
@@ -491,9 +491,9 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 
-		newVar = new ClassVar(Name, variable, dimen, help, units, CRHM::Int, PointPlot, nhru, dim);
+		newVar = new ClassVar(Name, variable, dimen, help, units, TVar::Int, PointPlot, nhru, dim);
 
-		newVar->varType = CRHM::Int;
+		newVar->varType = TVar::Int;
 
 		newVar->StatVar = StatVar;
 
@@ -576,9 +576,9 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 
-		newVar = new ClassVar(Name, variable, dimen, help, units, CRHM::Float, false, nhru, dim);
+		newVar = new ClassVar(Name, variable, dimen, help, units, TVar::Float, false, nhru, dim);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
 		newVar->InGroup = GroupCnt;
 
@@ -659,9 +659,9 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 
-		newVar = new ClassVar(Name, variable, dimen, help, units, CRHM::Int, false, nhru, dim);
+		newVar = new ClassVar(Name, variable, dimen, help, units, TVar::Int, false, nhru, dim);
 
-		newVar->varType = CRHM::Int;
+		newVar->varType = TVar::Int;
 
 		newVar->InGroup = GroupCnt;
 
@@ -772,7 +772,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 			return newPar->Strings;
 		}
 
-		newPar = new ClassPar(string(Name.c_str()), string(param), dimen, Texts, help, CRHM::Txt, nhru);
+		newPar = new ClassPar(string(Name.c_str()), string(param), dimen, Texts, help, TVar::Txt, nhru);
 
 		newPar->basemodule = this->NameRoot;
 
@@ -907,7 +907,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		double maxval = atof(maxstr.c_str());
 
 		newPar = new ClassPar(string(Name.c_str()), string(param), dimen,
-			valstr, minval, maxval, help, units, CRHM::Float, dim, nhru);
+			valstr, minval, maxval, help, units, TVar::Float, dim, nhru);
 
 		newPar->basemodule = this->NameRoot;
 
@@ -1053,7 +1053,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		double maxval = atof(maxstr.c_str());
 
 		newPar = new ClassPar(string(Name.c_str()), string(param), dimen,
-			valstr, minval, maxval, help, units, CRHM::Int, dim, nhru);
+			valstr, minval, maxval, help, units, TVar::Int, dim, nhru);
 
 		newPar->basemodule = this->NameRoot;
 
@@ -1389,7 +1389,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 
 		newVar = new ClassVar(Name, name + "#", cnt, 0, NULL);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 		newVar->help = help;
 		newVar->units = units;
 		newVar->DLLName = DLLName.c_str();
@@ -1486,13 +1486,13 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		if ((itVar = Global::MapVars.find(declModule + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 
-			if (newVar->varType == CRHM::Read) { // used only once. Changes Read to ReadF
+			if (newVar->varType == TVar::Read) { // used only once. Changes Read to ReadF
 				Convert convert;
 				convert.CheckUnitsObs(newVar->units, units, variable); // check original observation units
 
 				newVar->values = NULL; // memory assigned in CRHM::INIT
 
-				newVar->varType = CRHM::ReadF;
+				newVar->varType = TVar::ReadF;
 
 				newVar->dimen = dimen;
 
@@ -1508,9 +1508,9 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		if (optional)
 			return(-1);
 
-		newVar = new ClassVar("obs", variable, dimen, help, units, CRHM::Float);
+		newVar = new ClassVar("obs", variable, dimen, help, units, TVar::Float);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
 		Item = PairVar(declModule + variable, newVar);
 		Global::MapVars.insert(Item);
@@ -1528,10 +1528,10 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		if ((itVar = Global::MapVars.find(declModule + variable)) != Global::MapVars.end()) { // look for in declModule
 			newVar = (*itVar).second;
 
-			if ((newVar->varType == CRHM::ReadF || newVar->varType == CRHM::Read) && newVar->values == NULL) {
+			if ((newVar->varType == TVar::ReadF || newVar->varType == TVar::Read) && newVar->values == NULL) {
  				Convert convert; convert.CheckUnitsObs(newVar->units, units, variable); // check original observation units
 
-				newVar->varType = CRHM::ReadF;
+				newVar->varType = TVar::ReadF;
 
 				newVar->dimMax = Global::maxhru;
 				newVar->values = new double[newVar->dimMax];
@@ -1663,7 +1663,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 		if ((itVar = Global::MapVars.find(declModule + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
-			if (newVar->varType == CRHM::Read || newVar->varType == CRHM::ReadI) {
+			if (newVar->varType == TVar::Read || newVar->varType == TVar::ReadI) {
 				if (dimen == CRHM::NFREQ && (newVar->lay == 0 || nhru > newVar->dim)) {
 					newVar->ReleaseM(true);
 					newVar->dim = nhru;
@@ -1675,7 +1675,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 						newVar->ilayvalues[ii] = new long[newVar->dimMax];
 				}
 
-				if (newVar->varType == CRHM::Read || (newVar->varType == CRHM::ReadF && nhru > newVar->dimMax)) {  //warning resolved by Manishankar
+				if (newVar->varType == TVar::Read || (newVar->varType == TVar::ReadF && nhru > newVar->dimMax)) {  //warning resolved by Manishankar
 					if (newVar->ivalues != NULL)
 						delete[] newVar->ivalues;
 					else {
@@ -1687,7 +1687,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 					newVar->ivalues = new long[newVar->dimMax];
 
-					newVar->varType = CRHM::ReadI;
+					newVar->varType = TVar::ReadI;
 
 					newVar->help = help;
 					newVar->units = units;
@@ -1711,9 +1711,9 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 			return(-1);
 		}
 
-		newVar = new ClassVar(declModule, variable, dimen, help, units, CRHM::Int);
+		newVar = new ClassVar(declModule, variable, dimen, help, units, TVar::Int);
 
-		newVar->varType = CRHM::Int;
+		newVar->varType = TVar::Int;
 
 		Item = PairVar(declModule + variable, newVar);
 		Global::MapVars.insert(Item);
@@ -1886,11 +1886,11 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, TFun 
 		//string help = obsVar->help + " <" + Fstrings[typeFun] + "> ";
 		string help = obsVar->help + " <" + "> ";
 
-		newVar = new ClassVar(Name, variable, nhru, help, obsVar->units, CRHM::Float);
+		newVar = new ClassVar(Name, variable, nhru, help, obsVar->units, TVar::Float);
 
 		newVar->dimMax = nhru; // added 04/16/13 (replacing t obs faulty)
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
 		newVar->visibility = TVISIBLE::DIAGNOSTIC;
 
@@ -1918,11 +1918,11 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, TFun 
 
 					newVar = new ClassVar(Name, variable, nhru,
 						obsVar->help + " <" + Fstrings[(int)typeFun] + "> ",
-						obsVar->units, CRHM::Float);
+						obsVar->units, TVar::Float);
 
 					newVar->dimMax = nhru;
 
-					newVar->varType = CRHM::Float;
+					newVar->varType = TVar::Float;
 
 					newVar->visibility = TVISIBLE::DIAGNOSTIC;
 
@@ -2128,14 +2128,14 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, TFun ty
 
 		if (!obsVar->ivalues) {
 			obsVar->ivalues = new long[obsVar->dim]; // TB 10/08/10
-			obsVar->varType = CRHM::ReadI;
+			obsVar->varType = TVar::ReadI;
 		}
 
 		newVar = new ClassVar(Name, variable, obsVar->dim,
 			obsVar->help + " <" + Fstrings[(int)typeFun] + "> ",
-			obsVar->units, CRHM::Float);
+			obsVar->units, TVar::Float);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
 		newVar->visibility = TVISIBLE::DIAGNOSTIC;
 
@@ -3162,17 +3162,17 @@ next:
 	case '\0':
 		if (col >= Par->dim) break;
 
-		if (Par->varType == CRHM::Float)
+		if (Par->varType == TVar::Float)
 			Par->layvalues[row][col++] = result;
-		else if (Par->varType == CRHM::Int)
+		else if (Par->varType == TVar::Int)
 			Par->ilayvalues[row][col++] = (long) result;
 
 		for (int ll = row; ll < Par->lay; ++ll) {
 			if (Bang) { // N.B. loop start
 				for (int ii = col - 1; ii < Par->dim; ++ii) {
-					if (Par->varType == CRHM::Float)
+					if (Par->varType == TVar::Float)
 						Par->layvalues[ll][ii] = Last;
-					else if (Par->varType == CRHM::Int)
+					else if (Par->varType == TVar::Int)
 						Par->ilayvalues[ll][ii] = (long) Last;
 
 					Last += 1;
@@ -3180,9 +3180,9 @@ next:
 			}
 			else {
 				for (int ii = col; ii < Par->dim; ++ii)
-					if (Par->varType == CRHM::Float)
+					if (Par->varType == TVar::Float)
 						Par->layvalues[ll][ii] = 0.0;
-					else if (Par->varType == CRHM::Int)
+					else if (Par->varType == TVar::Int)
 						Par->ilayvalues[ll][ii] = 0;
 			}
 
@@ -3203,16 +3203,16 @@ next:
 		stop = col + repeat;
 		if (stop > Par->dim) stop = Par->dim;
 		for (int ii = col; ii < stop; ++ii)
-			if (Par->varType == CRHM::Float)
+			if (Par->varType == TVar::Float)
 				Par->layvalues[row][col++] = result;
-			else if (Par->varType == CRHM::Int)
+			else if (Par->varType == TVar::Int)
 				Par->ilayvalues[row][col++] = (long) result;
 
 		for (int ii = col; ii < Par->dim; ++ii) {
 			Last += Bang;
-			if (Par->varType == CRHM::Float)
+			if (Par->varType == TVar::Float)
 				Par->layvalues[row][ii] = Last;
-			else if (Par->varType == CRHM::Int)
+			else if (Par->varType == TVar::Int)
 				Par->ilayvalues[row][ii] = (long) Last;
 		}
 
@@ -3224,9 +3224,9 @@ next:
 
 			for (int ll = row; ll < stop; ++ll) {
 				for (int ii = col; ii < Par->dim; ++ii)
-					if (Par->varType == CRHM::Float)
+					if (Par->varType == TVar::Float)
 						Par->layvalues[ll][ii] = Par->layvalues[ll - 1][ii];
-					else if (Par->varType == CRHM::Int)
+					else if (Par->varType == TVar::Int)
 						Par->ilayvalues[ll][ii] = Par->ilayvalues[ll - 1][ii];
 			}
 			row = stop;
@@ -3239,9 +3239,9 @@ next:
 		stop = col + repeat;
 		if (stop > Par->dim) stop = Par->dim;
 		for (int ii = col; ii < stop; ++ii)
-			if (Par->varType == CRHM::Float)
+			if (Par->varType == TVar::Float)
 				Par->layvalues[row][col++] = result;
-			else if (Par->varType == CRHM::Int)
+			else if (Par->varType == TVar::Int)
 				Par->ilayvalues[row][col++] = (long) result;
 		if (col >= Par->dim)
 			if (!OpenBrkt && (row + 1 < Par->lay)) {
@@ -3385,9 +3385,9 @@ void Myparser::serror(int error)
 
 	for (int ll = row; ll < LocalPar->lay; ++ll) { // reset remainder of parameter values to 0
 		for (int ii = col; ii < LocalPar->dim; ++ii)
-			if (LocalPar->varType == CRHM::Float)
+			if (LocalPar->varType == TVar::Float)
 				LocalPar->layvalues[ll][ii] = 0.0;
-			else if (LocalPar->varType == CRHM::Int)
+			else if (LocalPar->varType == TVar::Int)
 				LocalPar->ilayvalues[ll][ii] = 0;
 	}
 }
@@ -3910,7 +3910,7 @@ long ClassModule::declputparam(string source, string param, string units, double
 			return 0;
 		}
 
-		newPar = new ClassPar(string(Name.c_str()), string(param), CRHM::NHRU, "", 0, 0, "", units, CRHM::Float);
+		newPar = new ClassPar(string(Name.c_str()), string(param), CRHM::NHRU, "", 0, 0, "", units, TVar::Float);
 
 		newPar->basemodule = this->NameRoot;
 
@@ -4138,7 +4138,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 			return 0;
 		}
 
-		newPar = new ClassPar(string(Name.c_str()), string(param), CRHM::NHRU, "", 0, 0, "", units, CRHM::Int);
+		newPar = new ClassPar(string(Name.c_str()), string(param), CRHM::NHRU, "", 0, 0, "", units, TVar::Int);
 
 		newPar->basemodule = this->NameRoot;
 

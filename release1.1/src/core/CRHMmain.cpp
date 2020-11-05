@@ -556,7 +556,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 									break;
 								//                else if(Cols > 0 && Cols%thisPar->lay == 0) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
 								//                  break;
-								else if (thisPar->varType == CRHM::Txt && thisPar->dimen < CRHM::NHRU) // text can have variable length
+								else if (thisPar->varType == TVar::Txt && thisPar->dimen < CRHM::NHRU) // text can have variable length
 									break;
 								else if (thisPar->param == "obs_elev" || thisPar->param == "soil_withdrawal")
 									break;
@@ -580,7 +580,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					if (thisPar) {
 						ClassPar *newPar = new ClassPar(*thisPar);
 						newPar->module = module; // set module name
-						if (thisPar->varType == CRHM::Txt) {
+						if (thisPar->varType == TVar::Txt) {
 							//newPar->Strings->DelimitedText = S.c_str();
 							newPar->Strings->DelimitedText(S.c_str());
 							//int a = 10;
@@ -593,14 +593,14 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 							for (int jj = 0; jj <thisPar->lay; ++jj) {
 								Cols = 0;
 								for (int ii = 0; ii < newPar->dim; ++ii) {
-									if (newPar->varType == CRHM::Float) {
+									if (newPar->varType == TVar::Float) {
 										double x;
 										instr >> x;
 										if (instr.fail())
 											break;
 										newPar->layvalues[jj][ii] = x;
 									}
-									else if (newPar->varType == CRHM::Int) {
+									else if (newPar->varType == TVar::Int) {
 										long x;
 										instr >> x;
 										if (instr.fail())
@@ -624,7 +624,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 									if (!(Cols == 0 && newPar->lay > Rows)) { // always handle rows before filling columns
 
 										for (int ii = Cols; ii < newPar->dim; ++ii) { // fills columns
-											if (newPar->varType == CRHM::Float)
+											if (newPar->varType == TVar::Float)
 												newPar->layvalues[Rows][ii] = newPar->layvalues[Rows][ii - 1];
 											else
 												newPar->ilayvalues[Rows][ii] = newPar->ilayvalues[Rows][ii - 1];
@@ -633,7 +633,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 									else {
 										for (int jjj = Rows; jjj <thisPar->lay; ++jjj) {
 											for (int ii = 0; ii < newPar->dim; ++ii) {
-												if (newPar->varType == CRHM::Float)
+												if (newPar->varType == TVar::Float)
 												{
 													//manishankar. commented to run the macro code. need to activate.
 													newPar->layvalues[jjj][ii] = newPar->layvalues[jjj - 1][ii];
@@ -968,7 +968,7 @@ void  CRHMmain::Label4Click(void) {
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
-		if (thisVar->varType < CRHM::Read && thisVar->visibility == TVISIBLE::USUAL && thisVar->dimen != CRHM::NREB) {
+		if (thisVar->varType < TVar::Read && thisVar->visibility == TVISIBLE::USUAL && thisVar->dimen != CRHM::NREB) {
 			Newname = DeclObsName(thisVar);
 			if (Common::IndexOf(AllVariables, Newname) == -1)
 				AllVariables->AddObject(Newname, (TObject*)thisVar);
@@ -1332,7 +1332,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 		// always starts with this display// remove entries that are in observation AllVariables
 		for (int ii = 0; ii < AllVariables->Count; ii++) {
 			thisVar = (ClassVar *)AllVariables->Objects[ii];
-			if (thisVar && thisVar->varType >= CRHM::Read) {
+			if (thisVar && thisVar->varType >= TVar::Read) {
 				AllVariables->Delete(ii);
 				ii = 0;
 			}
@@ -1341,7 +1341,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 		// remove entries that are in observation ListBox3
 		for (int ii = 0; ii < SelectedVariables->Count; ii++) {
 			thisVar = (ClassVar *)SelectedVariables->Objects[ii];
-			if (thisVar && thisVar->varType >= CRHM::Read) {
+			if (thisVar && thisVar->varType >= TVar::Read) {
 				SelectedVariables->Delete(ii);
 				ii = 0;
 			}
@@ -1351,7 +1351,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 
 		for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 			thisVar = (*itVar).second;
-			if (thisVar && thisVar->varType >= CRHM::Read)
+			if (thisVar && thisVar->varType >= TVar::Read)
 				if (Common::IndexOf(AllObservations, thisVar->name) == -1)
 					AllObservations->AddObject(thisVar->name, (TObject*)thisVar);
 		}
@@ -1410,7 +1410,7 @@ void  CRHMmain::ObsFileClose(void)
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
-		if (thisVar->varType >= CRHM::Read)
+		if (thisVar->varType >= TVar::Read)
 			if (Common::IndexOf(AllObservations, (*itVar).second->name) == -1)
 				AllObservations->AddObject((*itVar).second->name,
 				(TObject*)(*itVar).second);
@@ -1419,7 +1419,7 @@ void  CRHMmain::ObsFileClose(void)
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		//if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::VARIABLE) //changed by Manishankar.
-		if (thisVar->varType < CRHM::Read && thisVar->visibility == TVISIBLE::USUAL)
+		if (thisVar->varType < TVar::Read && thisVar->visibility == TVISIBLE::USUAL)
 			if (Common::IndexOf(AllVariables, (*itVar).second->name) == -1)
 				AllVariables->AddObject((*itVar).second->name, (TObject*)(*itVar).second);
 	}
@@ -1821,7 +1821,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 		S = ExtractHruLay(S, dim, lay);
 
-		if (thisVar->varType == CRHM::Float) {
+		if (thisVar->varType == TVar::Float) {
 			mmsDataL[ii] = NULL;
 			if (thisVar->lay == 0) {
 				mmsData[ii] = thisVar->values + (dim - 1);
@@ -1830,7 +1830,7 @@ MMSData *  CRHMmain::RunClick2Start()
 				mmsData[ii] = (thisVar->layvalues[lay - 1]) + (dim - 1);
 			}
 		}
-		else if (thisVar->varType == CRHM::Int) {
+		else if (thisVar->varType == TVar::Int) {
 			mmsData[ii] = NULL;
 			if (thisVar->lay == 0) {
 				mmsDataL[ii] = thisVar->ivalues + (dim - 1);
@@ -2176,7 +2176,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit)
 		thisVar = (*itVar).second;
 		Needed = false;
 
-		if (thisVar->varType < CRHM::Read && thisVar->StatVar) { // Is state variable!
+		if (thisVar->varType < TVar::Read && thisVar->StatVar) { // Is state variable!
 
 			if (!thisVar->InGroup || Global::ModuleBitSet[thisVar->InGroup - 1])  // All variables in simple projects and module requested group projects
 				Needed = true;
@@ -2411,7 +2411,7 @@ void  CRHMmain::LastRprt(void)
 	for (int vv = 0; vv < SeriesCnt; ++vv) {
 		ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
 		int prec = 6;
-		if (thisVar->varType == CRHM::Int || thisVar->varType == CRHM::ReadI)
+		if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
 			prec = 4;
 
 		Sy = FloatToStrF(cdSeries[vv]->YValue(nn - 1), TFloatFormat::ffGeneral, prec, 0);
@@ -3008,7 +3008,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 				string S = string(thisPar->module.c_str()) + " " + string(thisPar->param.c_str());
 
-				if (thisPar->varType != CRHM::Txt)
+				if (thisPar->varType != TVar::Txt)
 					S += " <" + FloatToStrF(thisPar->minVal, TFloatFormat::ffGeneral, 4, 0) + " to " + FloatToStrF(thisPar->maxVal, TFloatFormat::ffGeneral, 4, 0) + ">";
 
 
@@ -3017,15 +3017,15 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 				for (int jj = 0; jj<thisPar->lay; jj++) {
 					S = "";
 					for (int ii = 0; ii < thisPar->dim; ii++) {
-						if (thisPar->varType == CRHM::Float)
+						if (thisPar->varType == TVar::Float)
 						{
 							S = S + FloatToStrF(thisPar->layvalues[jj][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 						}
-						else if (thisPar->varType == CRHM::Int)
+						else if (thisPar->varType == TVar::Int)
 						{
 							S = S + FloatToStrF(thisPar->ilayvalues[jj][ii], TFloatFormat::ffFixed, 8, 0) + " ";
 						}
-						else if (thisPar->varType == CRHM::Txt)
+						else if (thisPar->varType == TVar::Txt)
 						{
 							if (thisPar->Strings->Count > ii)
 							{

@@ -80,9 +80,11 @@ enum class TFun { FOBS, VP_SAT, W_MJ, MJ_W, AVG, MIN, MAX, TOT, POS, FIRST, LAST
 
 enum class TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all variables/parameters
 
+enum class TVar { none, Int, Float, Txt, Read, ReadI, ReadF };
+
 namespace CRHM {
 	
-	enum TVar { none, Int, Float, Txt, Read, ReadI, ReadF };
+	
 
 	enum TFitType { POLY, FOURIER, POWER, EXPO, LOGARITHM, MLR };
 	enum TAgainst { myTIME, VARIABLE };

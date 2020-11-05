@@ -93,7 +93,7 @@ public:
 	string units;
 	string DLLName; // use to differentiate DLLs and Macros from normal modules, i.e. CRHM
 
-	CRHM::TVar varType;
+	TVar varType;
 
 	long dim;
 	long dimMax; // used by observations
@@ -140,19 +140,19 @@ public:
 	ClassVar(string module = "none",
 
 		string name = "none")
-		: module(module), name(name), help(""), DLLName(""), root(""), varType(CRHM::none), dim(0), dimMax(0), lay(0), variation_set(0), nfreq(false),
+		: module(module), name(name), help(""), DLLName(""), root(""), varType(TVar::none), dim(0), dimMax(0), lay(0), variation_set(0), nfreq(false),
 		optional(false), StatVar(false), InGroup(0), visibility(TVISIBLE::USUAL), FunKind(TFun::FOBS), VarFunct(0),
 		values(NULL), ivalues(NULL), layvalues(NULL), ilayvalues(NULL), Daily(false),
 		offset(0), cnt(0), FileData(NULL), HRU_OBS_indexed(0), UserFunct(NULL), FunctVar(NULL), CustomFunct(NULL), No_ReadVar(0), PointPlot(false), TchrtOpt(0) {};
 
 	ClassVar(string module, string name, CRHM::TDim dimen,
-		string help, string units, CRHM::TVar varType, bool PointPlot = false, int Grpdim = 0, int defdim = 0);
+		string help, string units, TVar varType, bool PointPlot = false, int Grpdim = 0, int defdim = 0);
 
 	ClassVar(string module, string name, long dim,
-		string help, string units, CRHM::TVar varType, bool PointPlot = false);
+		string help, string units, TVar varType, bool PointPlot = false);
 
 	ClassVar(string module, string name, long cnt, long offset, ClassData * FileData)
-		: module(module), name(name), help(""), DLLName(""), root(""), varType(CRHM::Read), dim(cnt), dimMax(0), lay(0), variation_set(0), nfreq(false),
+		: module(module), name(name), help(""), DLLName(""), root(""), varType(TVar::Read), dim(cnt), dimMax(0), lay(0), variation_set(0), nfreq(false),
 		optional(false), StatVar(false), InGroup(0), visibility(TVISIBLE::USUAL), FunKind(TFun::FOBS), VarFunct(0),
 		offset(offset), cnt(cnt), FileData(FileData), HRU_OBS_indexed(0), UserFunct(NULL), FunctVar(NULL), CustomFunct(NULL), No_ReadVar(0), dimen(CRHM::NOBS),
 		values(NULL), ivalues(NULL), layvalues(NULL), ilayvalues(NULL), Daily(false), PointPlot(false), TchrtOpt(0) {};
@@ -258,7 +258,7 @@ public:
 	string help;
 	string units;
 
-	CRHM::TVar varType;
+	TVar varType;
 	CRHM::TDim dimen {CRHM::NDEFNZ};
 
 	long dim;
@@ -291,18 +291,18 @@ public:
 	TStringList* StringsBkup {NULL};
 
 	ClassPar(string module = "none", string param = "none")
-		: module(module), param(param), dim(0), visibility(TVISIBLE::USUAL), variation_set(0), varType(CRHM::none),
+		: module(module), param(param), dim(0), visibility(TVISIBLE::USUAL), variation_set(0), varType(TVar::none),
 		values(NULL), ivalues(NULL), layvalues(NULL), ilayvalues(NULL), Identical(NULL), Inhibit_share(0) {};
 
 
 
 
 	ClassPar(string module, string param, CRHM::TDim dimen,  // strings
-		string CommaText, string help, CRHM::TVar varType, int Grpdim);
+		string CommaText, string help, TVar varType, int Grpdim);
 
 	ClassPar(string module, string param, CRHM::TDim dimen,  // integer and double
 		string valstr, double minVal, double maxVal,
-		string help, string units, CRHM::TVar varType, int defdim = 0, int GrpN = 0);
+		string help, string units, TVar varType, int defdim = 0, int GrpN = 0);
 
 	ClassPar(ClassPar &p);  // copy constructor
 
