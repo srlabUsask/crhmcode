@@ -968,7 +968,7 @@ void  CRHMmain::Label4Click(void) {
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
-		if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::USUAL && thisVar->dimen != CRHM::NREB) {
+		if (thisVar->varType < CRHM::Read && thisVar->visibility == TVISIBLE::USUAL && thisVar->dimen != CRHM::NREB) {
 			Newname = DeclObsName(thisVar);
 			if (Common::IndexOf(AllVariables, Newname) == -1)
 				AllVariables->AddObject(Newname, (TObject*)thisVar);
@@ -1419,7 +1419,7 @@ void  CRHMmain::ObsFileClose(void)
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		//if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::VARIABLE) //changed by Manishankar.
-		if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::USUAL)
+		if (thisVar->varType < CRHM::Read && thisVar->visibility == TVISIBLE::USUAL)
 			if (Common::IndexOf(AllVariables, (*itVar).second->name) == -1)
 				AllVariables->AddObject((*itVar).second->name, (TObject*)(*itVar).second);
 	}

@@ -857,9 +857,9 @@ TFun DefCRHM::getTFunc(string D) {
 Defdeclparam::Defdeclparam(ClassMacro *Macro_) : DefCRHM(Macro_) {
 
 	if (DefStringList->Strings[0] == "decldiagparam")
-		visibility = CRHM::DIAGNOSTIC;
+		visibility = TVISIBLE::DIAGNOSTIC;
 	else
-		visibility = CRHM::USUAL;
+		visibility = TVISIBLE::USUAL;
 
 	name = DefStringList->Strings[1];
 	Dim = getTDim(DefStringList->Strings[2]);

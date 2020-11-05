@@ -254,14 +254,14 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 
 //---------------------------------------------------------------------------
 void ClassModule::decldiag(string variable, CRHM::TDim dimen,
-	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, false, Local);
 }
 //---------------------------------------------------------------------------
 
 void ClassModule::decldiag(string variable, CRHM::TDim dimen,
-	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, false, Local);
 
@@ -269,14 +269,14 @@ void ClassModule::decldiag(string variable, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 
 void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
-	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, true, Local);
 
 	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(s, VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -286,14 +286,14 @@ void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
-	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, true, Local);
 
 	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(s, VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -303,14 +303,14 @@ void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
-	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, true, Local);
 
 	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(s, VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -320,14 +320,14 @@ void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
-	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, true, Local);
 
 	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(s, VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -338,7 +338,7 @@ void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 
 void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
-	string units, double **value, double ***layvalue, const int dim, bool PointPlot, bool StatVar, CRHM::TVISIBLE Local) {
+	string units, double **value, double ***layvalue, const int dim, bool PointPlot, bool StatVar, TVISIBLE Local) {
 	MapVar::iterator itVar;
 	ClassVar *newVar;
 	string Orgvariable = variable;
@@ -357,7 +357,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 	switch (Global::BuildFlag) {
 
 	case TBuild::BUILD: {
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(variable.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -449,7 +449,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 //---------------------------------------------------------------------------
 void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
-	string units, long **ivalue, long ***ilayvalue, const int dim, bool PointPlot, bool StatVar, CRHM::TVISIBLE Local) {
+	string units, long **ivalue, long ***ilayvalue, const int dim, bool PointPlot, bool StatVar, TVISIBLE Local) {
 
 	MapVar::iterator itVar;
 	ClassVar *newVar;
@@ -469,7 +469,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 	switch (Global::BuildFlag) {
 
 	case TBuild::BUILD: {
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(variable.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -582,7 +582,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 		newVar->InGroup = GroupCnt;
 
-		newVar->visibility = CRHM::PRIVATE;
+		newVar->visibility = TVISIBLE::PRIVATE;
 
 		newVar->variation_set = variation_set;
 
@@ -665,7 +665,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 		newVar->InGroup = GroupCnt;
 
-		newVar->visibility = CRHM::PRIVATE;
+		newVar->visibility = TVISIBLE::PRIVATE;
 
 		newVar->variation_set = variation_set;
 
@@ -714,7 +714,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 //---------------------------------------------------------------------------
 TStringList* ClassModule::decldiagparam(string param, CRHM::TDim dimen,
-	string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local) {
+	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
 
 	TStringList* fix = declparam(param, dimen, Texts, help, stringsList, Local);
 	return fix;
@@ -722,7 +722,7 @@ TStringList* ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 TStringList* ClassModule::decllocalparam(string param, CRHM::TDim dimen,
-	string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local) {
+	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
 
 	TStringList* fix = declparam(param, dimen, Texts, help, stringsList, Local);
 	return fix;
@@ -730,7 +730,7 @@ TStringList* ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
-	string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local) {
+	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
@@ -745,7 +745,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 	switch (Global::BuildFlag) {
 
 	case TBuild::BUILD: {
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -811,7 +811,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const double **value, const double ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
@@ -819,7 +819,7 @@ void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const double **value, const double ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
@@ -827,7 +827,7 @@ void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::declparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const double **value, const double ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
@@ -845,7 +845,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 	switch (Global::BuildFlag) {
 
 	case TBuild::BUILD: {
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -958,7 +958,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const long **value, const long ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const long **value, const long ***layvalue, const int dim, TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
@@ -966,7 +966,7 @@ void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const long **value, const long ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const long **value, const long ***layvalue, const int dim, TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
@@ -974,7 +974,7 @@ void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
 //---------------------------------------------------------------------------
 void ClassModule::declparam(string param, CRHM::TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const long **ivalue, const long ***ilayvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const long **ivalue, const long ***ilayvalue, const int dim, TVISIBLE Local) {
 
 	MapPar::iterator itPar;
 	ClassPar *newPar;
@@ -993,7 +993,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 	switch (Global::BuildFlag) {
 
 	case TBuild::BUILD: {
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -1353,7 +1353,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 
 	case TBuild::BUILD: {
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(CRHM::USUAL);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)TVISIBLE::USUAL);
 		PairstrV Item2 = PairstrV((name + "#").c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -1855,7 +1855,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, TFun 
 			}
 		}
 
-      		VandP VP; VP.PutV(variation_set); VP.PutP(CRHM::DIAGNOSTIC);
+      		VandP VP; VP.PutV(variation_set); VP.PutP((int)TVISIBLE::DIAGNOSTIC);
 		PairstrV Item2 = PairstrV(obs.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -1892,7 +1892,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, TFun 
 
 		newVar->varType = CRHM::Float;
 
-		newVar->visibility = CRHM::DIAGNOSTIC;
+		newVar->visibility = TVISIBLE::DIAGNOSTIC;
 
 		newVar->variation_set = variation_set;
 
@@ -1924,7 +1924,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, TFun 
 
 					newVar->varType = CRHM::Float;
 
-					newVar->visibility = CRHM::DIAGNOSTIC;
+					newVar->visibility = TVISIBLE::DIAGNOSTIC;
 
 					newVar->variation_set = variation_set;
 
@@ -2099,7 +2099,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, TFun ty
 			}
 		}
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(CRHM::DIAGNOSTIC);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)TVISIBLE::DIAGNOSTIC);
 		PairstrV Item2 = PairstrV(obs.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -2137,7 +2137,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, TFun ty
 
 		newVar->varType = CRHM::Float;
 
-		newVar->visibility = CRHM::DIAGNOSTIC;
+		newVar->visibility = TVISIBLE::DIAGNOSTIC;
 
 		newVar->variation_set = variation_set;
 
@@ -3916,7 +3916,7 @@ long ClassModule::declputparam(string source, string param, string units, double
 
 		newPar->variation_set = variation_set;
 
-		newPar->visibility = CRHM::USUAL;
+		newPar->visibility = TVISIBLE::USUAL;
 
 		if (this->GroupCnt)
 			newPar->Inhibit_share = 2;
@@ -4144,7 +4144,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 
 		newPar->variation_set = variation_set;
 
-		newPar->visibility = CRHM::USUAL;
+		newPar->visibility = TVISIBLE::USUAL;
 
 		newPar->Inhibit_share = 2;
 

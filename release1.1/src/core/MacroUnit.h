@@ -113,7 +113,7 @@ public:
 	string Units;
 	bool Int;
 	int nlay;
-	CRHM::TVISIBLE visibility;
+	TVISIBLE visibility;
 };
 
 class Defdeclvar : public DefCRHM {

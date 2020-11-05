@@ -78,9 +78,10 @@ enum class LMODULE { BASIC, MACRO, ADVANCE, SUPPORT, CUSTOM, PROTO, OBSOL };
 
 enum class TFun { FOBS, VP_SAT, W_MJ, MJ_W, AVG, MIN, MAX, TOT, POS, FIRST, LAST, CNT, CNT0, DLTA, INTVL, DAY, DTOT };
 
-namespace CRHM {
-	enum TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all variables/parameters
+enum class TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all variables/parameters
 
+namespace CRHM {
+	
 	enum TVar { none, Int, Float, Txt, Read, ReadI, ReadF };
 
 	enum TFitType { POLY, FOURIER, POWER, EXPO, LOGARITHM, MLR };

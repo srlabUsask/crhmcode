@@ -1411,7 +1411,7 @@ ClassVar *ClassVarFind(string name) {
 ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 	string help, string units, CRHM::TVar varType, bool PointPlot, int Grpdim, int defdim)
 	: module(module), name(name), DLLName(""), root(""), varType(varType), lay(0), nfreq(false),
-	optional(false), StatVar(false), InGroup(0), visibility(CRHM::USUAL), FunKind(TFun::FOBS),
+	optional(false), StatVar(false), InGroup(0), visibility(TVISIBLE::USUAL), FunKind(TFun::FOBS),
 	help(help), units(units), layvalues(NULL), ilayvalues(NULL), dim(0), dimMax(0),
 	values(NULL), ivalues(NULL), offset(0), cnt(0), FileData(NULL), HRU_OBS_indexed(0),
 	UserFunct(NULL), FunctVar(NULL), CustomFunct(NULL), No_ReadVar(0), PointPlot(PointPlot), TchrtOpt(0),
@@ -1499,7 +1499,7 @@ ClassVar::ClassVar(string module, string name, CRHM::TDim dimen,
 ClassVar::ClassVar(string module, string name, long dim,
 	string help, string units, CRHM::TVar varType, bool PointPlot)
 	: module(module), name(name), DLLName(""), root(""), varType(varType), dim(dim), dimMax(0), lay(0), nfreq(false),
-	optional(false), StatVar(false), InGroup(0), visibility(CRHM::USUAL), FunKind(TFun::FOBS),
+	optional(false), StatVar(false), InGroup(0), visibility(TVISIBLE::USUAL), FunKind(TFun::FOBS),
 	help(help), units(units), layvalues(NULL), ilayvalues(NULL),
 	values(NULL), ivalues(NULL), offset(0), cnt(0), FileData(NULL), HRU_OBS_indexed(0),
 	UserFunct(NULL), FunctVar(NULL), CustomFunct(NULL), No_ReadVar(0), PointPlot(PointPlot), TchrtOpt(0),

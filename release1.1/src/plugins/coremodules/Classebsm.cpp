@@ -34,9 +34,9 @@ void Classebsm::decl(void) {
 
   declvar("cumsnowmelt", NHRU, "cumulative melt", "(mm)", &cumsnowmelt);
 
-  declstatvar("LW_ebsm", NHRU, "liquid water in snowpack", "(mm)", &LW_ebsm, NULL, 1, false, CRHM::PRIVATE);
+  declstatvar("LW_ebsm", NHRU, "liquid water in snowpack", "(mm)", &LW_ebsm, NULL, 1, false, TVISIBLE::PRIVATE);
 
-  declstatvar("u_ebsm", NHRU, "snowpack energy deficit", "(MJ)", &u_ebsm, NULL, 1, false, CRHM::PRIVATE);
+  declstatvar("u_ebsm", NHRU, "snowpack energy deficit", "(MJ)", &u_ebsm, NULL, 1, false, TVISIBLE::PRIVATE);
 
   declvar("Qmelt", NHRU, "Qmelt = Qn+Qh+Qe+Qp", "(MJ/d)", &Qmelt);
 

@@ -161,35 +161,35 @@ public:
 
 	void declvar(string variable, CRHM::TDim dimen,
 		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
-		bool PointPlot = false, bool StatVar = false, CRHM::TVISIBLE Local = CRHM::USUAL);
+		bool PointPlot = false, bool StatVar = false, TVISIBLE Local = TVISIBLE::USUAL);
 
 	void declvar(string variable, CRHM::TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1,
-		bool PointPlot = false, bool StatVar = false, CRHM::TVISIBLE Local = CRHM::USUAL);
+		bool PointPlot = false, bool StatVar = false, TVISIBLE Local = TVISIBLE::USUAL);
 
 	void decldiag(string variable, CRHM::TDim dimen,
 		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
-		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
+		bool PointPlot = false, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
 	void declstatdiag(string variable, CRHM::TDim dimen,
 		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
-		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
+		bool PointPlot = false, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
 	void decldiag(string variable, CRHM::TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1,
-		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
+		bool PointPlot = false, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
 	void declstatdiag(string variable, CRHM::TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1,
-		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
+		bool PointPlot = false, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
 	void declstatvar(string variable, CRHM::TDim dimen,
 		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1,
-		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::USUAL);
+		bool PointPlot = false, TVISIBLE Local = TVISIBLE::USUAL);
 
 	void declstatvar(string variable, CRHM::TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1,
-		bool PointPlot = false, CRHM::TVISIBLE Local = CRHM::USUAL);
+		bool PointPlot = false, TVISIBLE Local = TVISIBLE::USUAL);
 
 	void decllocal(string variable, CRHM::TDim dimen,
 		string help, string units, double **value, double ***layvalue = NULL, const int dim = 1);
@@ -200,38 +200,38 @@ public:
 	void declparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const double **value,
-		const double ***layvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::USUAL);
+		const double ***layvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::USUAL);
 
 	void declparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const long **value,
-		const long ***ilayvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::USUAL);
+		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::USUAL);
 
-	TStringList* declparam(string param, CRHM::TDim dimen, string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local = CRHM::USUAL);
+	TStringList* declparam(string param, CRHM::TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::USUAL);
 
 	void decldiagparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const double **value,
-		const double ***layvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
+		const double ***layvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
 	void decldiagparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const long **value,
-		const long ***ilayvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
+		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
-	TStringList* decldiagparam(string param, CRHM::TDim dimen, string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local = CRHM::DIAGNOSTIC);
+	TStringList* decldiagparam(string param, CRHM::TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
 	void decllocalparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const double **value,
-		const double ***layvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::PRIVATE);
+		const double ***layvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::PRIVATE);
 
 	void decllocalparam(string param, CRHM::TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const long **value,
-		const long ***ilayvalue = NULL, const int dim = 1, CRHM::TVISIBLE Local = CRHM::PRIVATE);
+		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::PRIVATE);
 
-	TStringList* decllocalparam(string param, CRHM::TDim dimen, string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local = CRHM::PRIVATE);
+	TStringList* decllocalparam(string param, CRHM::TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::PRIVATE);
 
 	long declgetvar(string source, string name, string units, const double **value, const double ***layvalue = NULL);
 
