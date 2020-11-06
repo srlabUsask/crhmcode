@@ -10,7 +10,7 @@
 #include <cmath>
 #include <stdlib.h>
 //---------------------------------------------------------------------------
-#pragma package(smart_init)
+//#pragma package(smart_init) removed uneeded pragma - jhs507
 
 //---------------------------------------------------------------------------
 

@@ -15,7 +15,7 @@
 
 //---------------------------------------------------------------------------
 
-#pragma package(smart_init)
+//#pragma package(smart_init) removed uneeded pragma - jhs507
 
 using namespace std;
 
