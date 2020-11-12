@@ -74,15 +74,20 @@ void ClassPrairieInfil::init(void) {
 
   nhru = getdim(TDim::NHRU);
 
-  try {
+  try 
+  {
 
     Xinfil = new double*[3];   // Data [3] [nhru]
-    for (int jj = 0; jj < 3; ++jj)
-      Xinfil[jj] = new double[nhru];
+    for (int jj = 0; jj < 3; ++jj) 
+    {
+        Xinfil[jj] = new double[nhru];
+    }
 
     timer = new long[nhru];
+
   }
-  catch (std::bad_alloc) {
+  catch (std::bad_alloc) 
+  {
     CRHMException Except("Could not allocate in module CRACK." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
@@ -104,10 +109,14 @@ void ClassPrairieInfil::init(void) {
     crackon[hh] = false;
     crackstat[hh] = 0;
 
-    timer[hh] = 0;
-    Xinfil[0] [hh] = 0.0;
-    Xinfil[1] [hh] = 0.0;
-    Xinfil[2] [hh] = 0.0;
+    if (hh < nhru) 
+    {
+        timer[hh] = 0;
+        Xinfil[0][hh] = 0.0;
+        Xinfil[1][hh] = 0.0;
+        Xinfil[2][hh] = 0.0;
+    }
+    
   }
 }
 

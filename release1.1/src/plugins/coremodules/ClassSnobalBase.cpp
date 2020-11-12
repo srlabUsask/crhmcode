@@ -68,7 +68,11 @@ void ClassSnobalBase::init(void) {
         isothermal[hh] = 0;
         snowcover[hh] = 0;
         stop_no_snow[hh] = 0;
-        current_time[hh] = 0;
+        if (hh < nhru)
+        {
+            current_time[hh] = 0;
+        }
+        
 
         melt_direct_cum[hh] = 0.0;
         E_s_cum[hh] = 0.0;
@@ -89,25 +93,29 @@ void ClassSnobalBase::init(void) {
         delta_Q[hh] = 0.0;
         delta_Q_0[hh] = 0.0;
 
-        tstep_info[hh][DATA_TSTEP].level = DATA_TSTEP;
-        tstep_info[hh][DATA_TSTEP].time_step = 24 * 3600 / Global::Freq;
-        tstep_info[hh][DATA_TSTEP].intervals = 0;
-        tstep_info[hh][DATA_TSTEP].threshold = DEFAULT_NORMAL_THRESHOLD;
+        if (hh < nhru)
+        {
+            tstep_info[hh][DATA_TSTEP].level = DATA_TSTEP;
+            tstep_info[hh][DATA_TSTEP].time_step = 24 * 3600 / Global::Freq;
+            tstep_info[hh][DATA_TSTEP].intervals = 0;
+            tstep_info[hh][DATA_TSTEP].threshold = DEFAULT_NORMAL_THRESHOLD;
 
-        tstep_info[hh][NORMAL_TSTEP].level = NORMAL_TSTEP;
-        tstep_info[hh][NORMAL_TSTEP].time_step = 24 * 3600 / Global::Freq;
-        tstep_info[hh][NORMAL_TSTEP].intervals = 1;
-        tstep_info[hh][NORMAL_TSTEP].threshold = DEFAULT_NORMAL_THRESHOLD; // 60
+            tstep_info[hh][NORMAL_TSTEP].level = NORMAL_TSTEP;
+            tstep_info[hh][NORMAL_TSTEP].time_step = 24 * 3600 / Global::Freq;
+            tstep_info[hh][NORMAL_TSTEP].intervals = 1;
+            tstep_info[hh][NORMAL_TSTEP].threshold = DEFAULT_NORMAL_THRESHOLD; // 60
 
-        tstep_info[hh][MEDIUM_TSTEP].level = MEDIUM_TSTEP;
-        tstep_info[hh][MEDIUM_TSTEP].time_step = 24 * 3600 / Global::Freq / 4;
-        tstep_info[hh][MEDIUM_TSTEP].intervals = 4;
-        tstep_info[hh][MEDIUM_TSTEP].threshold = DEFAULT_MEDIUM_THRESHOLD; // 10
+            tstep_info[hh][MEDIUM_TSTEP].level = MEDIUM_TSTEP;
+            tstep_info[hh][MEDIUM_TSTEP].time_step = 24 * 3600 / Global::Freq / 4;
+            tstep_info[hh][MEDIUM_TSTEP].intervals = 4;
+            tstep_info[hh][MEDIUM_TSTEP].threshold = DEFAULT_MEDIUM_THRESHOLD; // 10
 
-        tstep_info[hh][SMALL_TSTEP].level = SMALL_TSTEP;
-        tstep_info[hh][SMALL_TSTEP].time_step = 24 * 3600 / Global::Freq / 60;
-        tstep_info[hh][SMALL_TSTEP].intervals = 15;
-        tstep_info[hh][SMALL_TSTEP].threshold = DEFAULT_SMALL_THRESHOLD;  // 1
+            tstep_info[hh][SMALL_TSTEP].level = SMALL_TSTEP;
+            tstep_info[hh][SMALL_TSTEP].time_step = 24 * 3600 / Global::Freq / 60;
+            tstep_info[hh][SMALL_TSTEP].intervals = 15;
+            tstep_info[hh][SMALL_TSTEP].threshold = DEFAULT_SMALL_THRESHOLD;  // 1
+        }
+        
     }
 }
 
