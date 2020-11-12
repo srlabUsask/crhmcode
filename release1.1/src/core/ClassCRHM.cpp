@@ -4616,7 +4616,9 @@ bool Convert::ConvertUnit(
 	try {
 		pszSrcUnit = ParseDivUnitExpr(pszSrcUnit, uSrcUnit);
 	}
-	catch (int i) {
+	catch (exception & e) {
+		CRHMException Except(e.what(), TExcept::WARNING);
+		LogError(Except);
 		return false;
 	}
 
@@ -4624,7 +4626,9 @@ bool Convert::ConvertUnit(
 	try {
 		pszDstUnit = ParseDivUnitExpr(pszDstUnit, uDstUnit);
 	}
-	catch (int i) {
+	catch (exception & e) {
+		CRHMException Except(e.what(), TExcept::WARNING);
+		LogError(Except);
 		return false;
 	}
 
@@ -4950,8 +4954,8 @@ void Convert::CheckUnitsString(string Name, string variable, string units)
 			throw 2;
 		}
 	}
-	catch (int i) {
-		CRHMException Except("Units error: '" + units + "' in " + Name + ' ' + variable, TExcept::WARNING);
+	catch (exception & e) {
+		CRHMException Except("Units error: '" + units + "' in " + Name + ' ' + variable + e.what(), TExcept::WARNING);
 		LogError(Except);
 	}
 }
