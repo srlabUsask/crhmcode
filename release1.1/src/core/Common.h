@@ -237,9 +237,8 @@ string static GetCurrentDir(void) {
 	char* cwd;
 	cwd = GetCurrentDir(buff, FILENAME_MAX);
 	if (cwd == NULL) {
-		//TODO: throw an allocation exception - jhs507
-		std::string current_working_dir(NULL);
-		return current_working_dir;
+		CRHMException Except("Failed to return the current working directory", TExcept::TERMINATE);
+		throw (Except);
 	}
 	else {
 		std::string current_working_dir(buff);
