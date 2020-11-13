@@ -2027,9 +2027,9 @@ bool ClassData::DataReadFile(void) {
 
 	catch (std::bad_alloc) {
 		CRHMException Except("Could not allocate for observations file: " +
-			DataFileName, TExcept::ERR);
+			DataFileName, TExcept::TERMINATE);
 		LogError(Except);
-		Data = NULL;
+		throw(Except);
 	}
 
 
@@ -2190,7 +2190,7 @@ bool ClassData::DataReadFile(void) {
 	  }*/
 
 
-	if (Dt2 > Times[Position - 1] + Interval / 2.0 && !SparseFlag && !Simulation) {
+	if (!Simulation && Dt2 > Times[Position - 1] + Interval / 2.0 && !SparseFlag ) {
 		/*     string S = string("Interval frequency increases ") + string(" in observation file ");
 		CRHMException Except(S + DataFileName, ERR);
 		Message(Except.Message.c_str(), "Project observation file", mbOK);
@@ -2230,7 +2230,8 @@ bool ClassData::DataReadFile(void) {
 		if (Lines < Freq)  // Handle less than one day
 			SparseFlag = true;
 
-		if (!SparseFlag) {
+		if (!SparseFlag) 
+		{
 			delete[] Times;
 			Times = NULL;
 
@@ -2328,10 +2329,13 @@ bool ClassData::DataReadFile(void) {
 				myMacro->fixup(); // required by myMacro->execute(Position)
 			}
 		}
-		else { //allocate space required
+		else 
+		{ //allocate space required
 			double *Temp = new double[Lines];
 			for (long ii = 0; ii < Lines; ++ii)
+			{
 				Temp[ii] = Times[ii];
+			}
 			delete[] Times;
 			Times = Temp;
 		}
