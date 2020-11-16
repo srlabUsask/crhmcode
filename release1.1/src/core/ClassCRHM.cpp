@@ -2331,13 +2331,28 @@ bool ClassData::DataReadFile(void) {
 		}
 		else 
 		{ //allocate space required
-			double *Temp = new double[Lines];
-			for (long ii = 0; ii < Lines; ++ii)
+			
+
+			if (SparseFlag && Simulation) 
 			{
-				Temp[ii] = Times[ii];
+				//If SparseFlag and Simulation are both true then something unintended has happened.
+				//Simulation data is not intended to have gaps.
+				CRHMException Except("File " + DataFileName + " contains simulation data with gaps. Discontinuous times in simulation data files is not currently supported.", TExcept::TERMINATE);
+				LogError(Except);
+				throw(Except);
 			}
-			delete[] Times;
-			Times = Temp;
+			else {
+				double* Temp = new double[Lines];
+
+				for (long ii = 0; ii < Lines; ++ii)
+				{
+					Temp[ii] = Times[ii];
+				}
+				delete[] Times;
+				Times = Temp;
+			}
+
+			
 		}
 	}
 
