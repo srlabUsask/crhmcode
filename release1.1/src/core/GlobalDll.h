@@ -723,7 +723,7 @@ static const double ks_s[] = { 450.0, 154.0, 13.0, 5.0, 3.0 }; // (m/day)  solid
 static const double por_s[] = { 0.96, 0.9, 0.87, 0.43, 0.43 }; // ()  solids
 
 #define Hf  334.4E3    // Latent heat of fusion, J/kg
-#define major 5.0      // threshold for major melt event(5 mm/d)
+#define majorMelt 5.0      // threshold for major melt event(5 mm/d)
 
 
 static double fLimit;
