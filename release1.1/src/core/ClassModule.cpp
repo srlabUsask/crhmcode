@@ -3744,8 +3744,19 @@ void ClassMuskingum::ChangeLag(const double *newlag, const long hh)
 	{
 		double Y = double(mm) / ((long long)newilag - 1ll)*((long long)ilag[hh] - 1ll);
 		int Yint = (int)(Y + 0.0001);
+		if ((Yint + 1) > ilag[hh] - 1) 
+		{
+			CRHMException Except("Attempting to read out of bounds array address", TExcept::TERMINATE);
+			LogError(Except);
+			throw(Except);
+		}
 		double Ydif = Y - Yint;
+		 
+		
 		double NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
+		
+
+		
 
 		LagArray[hh][(ulag[hh] + mm) % newilag] = NewValue - LastValue;
 
