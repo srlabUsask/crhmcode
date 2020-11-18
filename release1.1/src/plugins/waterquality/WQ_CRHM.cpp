@@ -825,14 +825,17 @@ void ClassWQ_Soil::run(void) {
               soil_rechr[hh] -= rechr_ssr[hh];
               rechr_ssr_conc_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh];
 
-              if(soil_rechr[hh] < 0.0){
+              if(soil_rechr[hh] < 0.0)
+              {
                 soil_moist[hh] -= soil_rechr[hh];
                 soil_rechr[hh] = 0.0;
                 conc_soil_rechr_lay[Sub][hh] = 0.0;
               }
               else
+              {
                 soil_moist[hh] -= rechr_ssr[hh];
-
+              }
+               
               soil_lower[hh] = soil_moist[hh] - soil_rechr[hh];
               soil_moist_conc_lay[Sub][hh] = (conc_soil_lower_lay[Sub][hh]*soil_lower[hh] + soil_rechr[hh]*conc_soil_rechr_lay[Sub][hh])/soil_moist[hh];
             } // handle non variation ssr
@@ -846,13 +849,16 @@ void ClassWQ_Soil::run(void) {
 
         double s2gw_k = soil_gw_K[hh]/Global::Freq;
         if(s2gw_k > 0)
-          if(direct_excs[hh] >= s2gw_k) { // to gw 03/04/10 changed from >
+          if(direct_excs[hh] >= s2gw_k) 
+          { // to gw 03/04/10 changed from >
             soil_gw[hh] = s2gw_k; // soil_gw[hh] = s2gw_k; // ?? Diogo: shouldn't it be += ?
             soil_gw_conc_lay[Sub][hh] = direct_excs_mWQ_lay[Sub][hh]/direct_excs[hh]; // ?? Diogo: if the above question is true, then this needs to be changed
             direct_excs_mWQ_lay[Sub][hh] -= soil_gw_conc_lay[Sub][hh]*s2gw_k;
             direct_excs[hh] -= s2gw_k;
           }
-          else { // to gw
+          else 
+          { 
+            // to gw
             soil_gw[hh] = direct_excs[hh]; // ?? Diogo: shouldn't it be += ?
             soil_gw_conc_lay[Sub][hh] = direct_excs_mWQ_lay[Sub][hh]/direct_excs[hh]; // ?? Diogo: if the above question is true, then this needs to be changed
             direct_excs[hh] = 0.0;
