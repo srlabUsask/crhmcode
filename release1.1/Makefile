@@ -8,6 +8,7 @@ DFLAGS = -g -O0 -fPIC -mstack-arg-probe -fstack-protector-all -fstack-check -fno
 CFLAGS = -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses -Wno-c++11-extra-semi -Wno-dangling-else -Wno-null-conversion -Wno-pragma-once-outside-header -Wno-string-plus-int -Wno-string-plus-char
 CFLAGS = -I$(BOOST) -I$(SDIR)/core -I$(SDIR)/macro -I$(SDIR)/plugins/waterquality -I$(SDIR)/plugins/newmodules -I$(SDIR)/plugins/coremodules -I$(SDIR)/gcc -std=c++11 -lboost_system
 DFLAGS = -fsanitize=address
+DFLAGS =
 
 #_DEPS = core/ClassCRHM.h core/ClassModule.h core/Common.h macro/CRHM_parse.h core/CRHMMain.h core/GlobalCommon.h core/GlobalDll.h plugins/waterquality/WQ_CRHM.h plugins/waterquality/WQ_Soil_NPCcycling.h macro/MacroUnit.h plugins/newmodules/NewModules.h plugins/newmodules/SnobalDefines.h core/StandardConverterUtility.h core/TStringList.h
 #DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
