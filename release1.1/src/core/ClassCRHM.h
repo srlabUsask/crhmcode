@@ -110,7 +110,7 @@ public:
 	long InGroup;
 	bool nfreq;
 	TFun FunKind;
-	bool Daily {NULL}; // used by AddObsPlot to decide how to apply function to input obs/var
+	bool Daily {false}; // used by AddObsPlot to decide how to apply function to input obs/var
 
 	double * values;
 	long  * ivalues;
