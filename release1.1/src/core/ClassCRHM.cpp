@@ -4632,19 +4632,29 @@ bool Convert::ConvertUnit(
 		return true;
 
 	Tresult uSrcUnit(NumBasicUnits);
-	try {
+	try 
+	{
 		pszSrcUnit = ParseDivUnitExpr(pszSrcUnit, uSrcUnit);
 	}
-	catch (int i) {
-		return false;
+	catch (int i) 
+	{
+		if (i == 3) 
+		{
+			return false;
+		}
 	}
 
 	Tresult uDstUnit(NumBasicUnits);
-	try {
+	try 
+	{
 		pszDstUnit = ParseDivUnitExpr(pszDstUnit, uDstUnit);
 	}
-	catch (int i) {
-		return false;
+	catch (int i) 
+	{
+		if (i == 3) 
+		{
+			return false;
+		}
 	}
 
 	for (int i = 0; i < NumBasicUnits; ++i)
@@ -4763,14 +4773,19 @@ string Convert::ParseDivUnitExpr(string pszIn, Tresult& u)
 {
 	pszIn = ParseMulUnitExpr(pszIn, u);
 
-	if (pszIn.empty())
+	if (pszIn.empty()) 
+	{
 		return pszIn;
+	}
+		
 
 	string pszMark = pszIn;
 	pszIn = tcsSkipSpaces(pszIn);
 	if (pszIn[0] != '/')
+	{
 		throw 3;
-
+	}
+		
 	pszIn = tcsinc(pszIn);
 	pszIn = tcsSkipSpaces(pszIn);
 
@@ -4970,8 +4985,18 @@ void Convert::CheckUnitsString(string Name, string variable, string units)
 		}
 	}
 	catch (int i) {
-		CRHMException Except("Units error: '" + units + "' in " + Name + ' ' + variable, TExcept::WARNING);
-		LogError(Except);
+		if (i == 3) 
+		{
+			CRHMException Except("Units error ParseDivUnitExpr threw error code 3: '" + units + "' in " + Name + ' ' + variable, TExcept::WARNING);
+			LogError(Except);
+		}
+		else 
+		{
+			CRHMException Except("Units error ParseDivUnitExpr returned empty: '" + units + "' in " + Name + ' ' + variable, TExcept::WARNING);
+			LogError(Except);
+		}
+		
+		
 	}
 }
 

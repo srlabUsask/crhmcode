@@ -2071,7 +2071,8 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 	catch (exception &E) {
 		//string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
 		//    ShowMessage(S);
-		LogError(S + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 0) + ")", TExcept::ERR);
+		string errorMessage = E.what();
+		LogError(errorMessage + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 0) + ")", TExcept::ERR);
 		GoodRun = false;
 	}
 }
