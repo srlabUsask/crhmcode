@@ -3,7 +3,6 @@
 #ifndef TSTRINGLIST_H
 #define TSTRINGLIST_H
 
-
 // 08/23/12
 #include <iostream>
 #include <vector>
@@ -13,10 +12,64 @@
 #include <string>
 #include <fstream>
 #include <list>
-//#include <atltime.h>
 #include<sstream>
 #include<iomanip>
+#include "StringandObject.h"
+#include "TStrings.h"
+#include "TObjects.h"
+//#include <atltime.h>
+
 using namespace std;
+
+#ifndef TOBJECT
+#define TOBJECT
+typedef void TObject;
+#endif // !TOBJECT
+
+
+class TStringList {
+public:
+	char QuoteChar = '\"';
+	vector<StringandObject> array;
+
+	TStrings Strings;
+	TObjects Objects;
+
+	int Count;
+
+	bool CaseSensitive; // not impemented
+	bool Sorted; // not impemented
+
+	TStringList() { array.reserve(64); Strings.Init(this); Objects.Init(this); Count = 0; CaseSensitive = false; Sorted = false; };
+
+	TStringList(const TStringList &p); // copy constructor
+
+	TStringList & operator=(const TStringList & p) = delete;//updated by Manishankar for resolving a warning.
+
+	int IndexOf(string s);
+	void Add(string s);
+	void AddObject(string s, TObject* thing);
+	void Clear();
+	void Delete(int Index);
+	void Assign(TStringList *Src);
+	string &operator[](int ii);
+
+	string FilePath; //it's created for storing observation file path
+
+	void DelimitedText(string s);
+	void CommaText(string s);
+	string CommaText(void);
+
+	//this functions are already implemented in Common.h and Common.cpp. Manishankar
+	//string trim(string & str);
+	//string trimright(string & str);
+	//string trimleft(string & str);
+
+	void SaveToFile(string FileName);
+	void InsertObject(int ii, string name, TObject * object);
+	void LoadFromFile(string filename);
+};
+
 
 
 //typedef void TObject;
@@ -98,81 +151,5 @@ using namespace std;
 //	TStringList* StringList;
 //};
 
-
-
-typedef void TObject;
-
-class TStringList;
-
-class StringandObject {
-public:
-	string Name;
-	TObject* Object;
-
-	StringandObject() { Name = ""; Object = 0; }
-	StringandObject(string Name_, TObject* Object_) { Name = Name_; Object = Object_; }
-	string get_Name() { return Name; }
-	TObject* get_Object() { return Object; }
-};
-
-class TStrings {
-public:
-	string & operator[](int ii);
-	void Init(TStringList* StringList_) { StringList = StringList_; };
-
-	TStringList* StringList;
-};
-
-class TObjects {
-public:
-	TObject * &operator[](int ii);
-	void Init(TStringList* StringList_) { StringList = StringList_; };
-
-	TStringList* StringList;
-};
-
-class TStringList {
-public:
-	char QuoteChar = '\"';
-	vector<StringandObject> array;
-
-	TStrings Strings;
-	TObjects Objects;
-
-	int Count;
-
-	bool CaseSensitive; // not impemented
-	bool Sorted; // not impemented
-
-	TStringList() { array.reserve(64); Strings.Init(this); Objects.Init(this); Count = 0; CaseSensitive = false; Sorted = false; };
-
-	TStringList(const TStringList &p); // copy constructor
-
-	TStringList & operator=(const TStringList & p) = delete;//updated by Manishankar for resolving a warning.
-
-	int IndexOf(string s);
-	void Add(string s);
-	void AddObject(string s, TObject* thing);
-	void Clear();
-	void Delete(int Index);
-	void Assign(TStringList *Src);
-	string &operator[](int ii);
-
-	string FilePath; //it's created for storing observation file path
-
-	void DelimitedText(string s);
-	void CommaText(string s);
-	string CommaText(void);
-
-	//this functions are already implemented in Common.h and Common.cpp. Manishankar
-	//string trim(string & str);
-	//string trimright(string & str);
-	//string trimleft(string & str);
-
-	void SaveToFile(string FileName);
-	void InsertObject(int ii, string name, TObject * object);
-	void LoadFromFile(string filename);
-};
-
-
 #endif // !TSTRINGLIST_H
+
