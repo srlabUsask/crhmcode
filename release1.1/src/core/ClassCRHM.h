@@ -9,7 +9,7 @@ using namespace std;
 
 #include "Common.h"
 #include "GlobalCommon.h"
-#include "TStringList.h"
+#include "TStringList/TStringList.h"
 #include <string>
 #include <iostream>
 #include <map>

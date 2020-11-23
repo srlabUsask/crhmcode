@@ -78,16 +78,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectHome)\vcc;$(ProjectHome)\vcc\tchart;$(ProjectHome)\vcc\gui;$(ProjectHome)\core;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\waterquality;$(IncludePath)</IncludePath>
-    <SourcePath>$(ProjectHome)\core;$(ProjectHome)\vcc;$(ProjectHome)\vcc\gui;$(ProjectHome)\vcc\tchart;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\waterquality;$(SourcePath)</SourcePath>
+    <IncludePath>$(ProjectHome)\vcc;$(ProjectHome)\vcc\tchart;$(ProjectHome)\vcc\gui;$(ProjectHome)\core;$(ProjectHome)\core\TStringList;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\waterquality;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectHome)\core;$(ProjectHome)\core\TStringList;$(ProjectHome)\vcc;$(ProjectHome)\vcc\gui;$(ProjectHome)\vcc\tchart;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\waterquality;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectHome)\core;$(ProjectHome)\vcc;$(ProjectHome)\vcc\gui;$(ProjectHome)\vcc\tchart;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\waterquality;$(IncludePath)</IncludePath>
-    <SourcePath>$(ProjectHome)\core;$(ProjectHome)\vcc;$(ProjectHome)\vcc\core;$(ProjectHome)\vcc\gui;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\waterquality;$(SourcePath)</SourcePath>
+    <IncludePath>$(ProjectHome)\core;$(ProjectHome)\core\TStringList;$(ProjectHome)\vcc;$(ProjectHome)\vcc\gui;$(ProjectHome)\vcc\tchart;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\waterquality;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectHome)\core;$(ProjectHome)\core\TStringList;$(ProjectHome)\vcc;$(ProjectHome)\vcc\core;$(ProjectHome)\vcc\gui;$(ProjectHome)\plugins\newmodules;$(ProjectHome)\plugins\coremodules;$(ProjectHome)\plugins\hype;$(ProjectHome)\plugins\waterquality;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -688,7 +688,7 @@
     <ClCompile Include="..\core\GlobalDll.cpp" />
     <ClCompile Include="..\core\MacroUnit.cpp" />
     <ClCompile Include="..\core\StandardConverterUtility.cpp" />
-    <ClCompile Include="..\core\TStringList.cpp" />
+    <ClCompile Include="..\core\TStringList\TStringList.cpp" />
     <ClCompile Include="..\plugins\coremodules\Class3D_param.cpp" />
     <ClCompile Include="..\plugins\coremodules\Classalbedo.cpp" />
     <ClCompile Include="..\plugins\coremodules\ClassalbedoBaker.cpp" />

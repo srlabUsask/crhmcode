@@ -23,6 +23,9 @@ crhm: $(OBJ)
 $(ODIR)/main.o: $(SDIR)/gcc/main.cpp | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
+$(ODIR)/TStringList.o: $(SDIR)/core/TStringList/TStringList.cpp $(SDIR)/core/TStringList/TStringList.h $(SDIR)/core/TStringList/TStrings.h $(SDIR)/core/TStringList/TObjects.h $(SDIR)/core/TStringList/StringandObject.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
 $(ODIR)/%.o: $(SDIR)/core/%.cpp $(SDIR)/core/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 

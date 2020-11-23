@@ -6,7 +6,7 @@
 #ifndef ClassModuleH
 #define ClassModuleH
 //---------------------------------------------------------------------------
-#include "TStringList.h"
+#include "TStringList/TStringList.h"
 #include "GlobalCommon.h"
 #include "GlobalDll.h"
 #include "ClassCRHM.h"
