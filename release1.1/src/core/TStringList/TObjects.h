@@ -7,12 +7,24 @@
 
 class TStringList;
 
+/**
+* Tobjects is a class that defines a List of objects
+*/
 class TObjects {
 public:
-	TObject*& operator[](int ii);
-	void Init(TStringList* StringList_) { StringList = StringList_; };
+	TStringList* StringList; //!< A TStringList of objects
 
-	TStringList* StringList;
+	/**
+	* Overload of [] such that the operator [i] returns the ith element of the TObjects::StringList
+	*
+	* @return the ith string in TObjects::StringList
+	*/
+	TObject*& operator[](int ii);
+	
+	/**
+	* Initalizes this TObjects::StringList with the provided TStringList
+	*/
+	void Init(TStringList* StringList_) { StringList = StringList_; };
 };
 
 #endif // !TOBJECTS

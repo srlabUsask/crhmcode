@@ -22,7 +22,7 @@ public:
 
 
 	/**
-	* Default constructor sets Name to empty string and Object to NULL
+	* Default constructor sets StringandObject::Name to empty string and StringandObject::Object to NULL
 	*/
 	StringandObject() { Name = ""; Object = NULL; }
 
@@ -37,17 +37,17 @@ public:
 	
 
 	/**
-	* Returns the Name of the object.
+	* Returns StringandObject::Name of this object. 
 	* 
-	* @return String - The name of the object
+	* @return String - The name of this object.
 	*/
 	string get_Name() { return Name; }
 	
 
 	/*
-	* Returns the contined TObject.
+	* Returns StringandObject::Object.
 	* 
-	* @return TObject* - for the contained object.
+	* @return a reference to the contained TObject.
 	*/
 	TObject* get_Object() { return Object; }
 };
