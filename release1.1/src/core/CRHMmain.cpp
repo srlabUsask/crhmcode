@@ -12,7 +12,7 @@
 #include <time.h>
 //#include "boost/shared_ptr.hpp"
 #include "GlobalDll.h"
-//#include "ClassCRHM.h"
+//#include "ClassCRHM/ClassCRHM.h"
 #include "ClassModule.h"
 #include "NewModules.h"
 #include "MacroUnit.h"

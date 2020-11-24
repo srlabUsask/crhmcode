@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <string>
 #include "Common.h"
-#include "ClassCRHM.h"
+#include "ClassCRHM/ClassCRHM.h"
 #include "ClassModule.h"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>

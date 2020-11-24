@@ -8,7 +8,7 @@
 #include "Common.h"
 #include "TStringList/TStringList.h"
 //#include "boost/shared_ptr.hpp"
-#include "ClassCRHM.h"
+#include "ClassCRHM/ClassCRHM.h"
 #include <map>
 #include <iostream>
 #include<list>

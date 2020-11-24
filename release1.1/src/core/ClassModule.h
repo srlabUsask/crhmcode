@@ -9,7 +9,7 @@
 #include "TStringList/TStringList.h"
 #include "GlobalCommon.h"
 #include "GlobalDll.h"
-#include "ClassCRHM.h"
+#include "ClassCRHM/ClassCRHM.h"
 #include <cmath>
 #include <string>
 #include <time.h>

@@ -17,7 +17,7 @@
 #include <cmath>
 
 
-#include "ClassCRHM.h"
+#include "ClassCRHM/ClassCRHM.h"
 #include "NewModules.h"
 #include "stddef.h"
 #include "GlobalDll.h"

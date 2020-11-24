@@ -3,7 +3,7 @@
 #include "ClassTestSparse.h"
 #include "GlobalDll.h"
 #include <algorithm>
-#include "ClassCRHM.h"
+#include "ClassCRHM/ClassCRHM.h"
 
 #include "SnobalDefines.h"
 #include <math.h>
