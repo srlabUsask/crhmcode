@@ -10,6 +10,7 @@ using namespace std;
 #include "Common.h"
 #include "GlobalCommon.h"
 #include "TStringList/TStringList.h"
+#include "ClassData.h"
 #include <string>
 #include <iostream>
 #include <map>
@@ -25,58 +26,10 @@ class ClassModule;
 typedef unsigned long Word;
 typedef int INT;
 
-//class   ClassData {
-class ClassData {
-public:
-	string DataFileName;
-	string Description;
-	double **Data;
-	double *Times; // holds sparse times
-	double Dt1 {0.0};
-	double Dt2 {0.0};
-	double Interval {0.0}; // days
-	long Lines {0};
-	long Freq {0};
-	long IndxMin {0};   // range of data available
-	long IndxMax {0};   // range of data available
-	long ModN;      // divisor for data less frequent than basic interval
-	long HdrLen {0};    // length of file header
-	long Position {0};  // current line in file
-	long DataCnt;
-	long FilterCnt;  // filter count
 
-	Classmacro *myMacro;
-	bool Simulation;
-	long ForceInterval;
-	bool GoodInterval {false};
-	bool GoodDay {false};
-	bool RunUsed {false};
-	bool Success {false};
-	long TimeIndx {0}; // sparse file ??
-	bool FirstFile;
 
-	double TimeShiftFilter; // used by Time shift filter
 
-	ClassData(string DataFileName) : DataFileName(DataFileName), Data(NULL), myMacro(NULL),
-		DataCnt(0), FilterCnt(0), Simulation(false), FirstFile(false),
-		ForceInterval(0), ModN(0), Times(NULL), TimeShiftFilter(0.0) {
-		Success = DataReadFile();
-	}
 
-	ClassData() : DataFileName(""), Data(NULL), myMacro(NULL),
-		DataCnt(0), FilterCnt(0), Simulation(false), FirstFile(false),
-		ForceInterval(0), ModN(0), Times(NULL), TimeShiftFilter(0.0) {};
-
-	ClassData(const ClassData & Cl);
-	ClassData & operator=(const ClassData & Cl);
-
-	bool DataReadFile(void); //{ return true; };
-	long Veto_Freq(long Freq);
-	virtual ~ClassData(); //{ ; };
-	double Encode24(int D[]);
-};
-
-//class   ClassVar {
 class ClassVar {
 
 	typedef void (ClassVar:: *TSomeFunct) (void);

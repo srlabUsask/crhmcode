@@ -1832,6 +1832,9 @@
     <ClCompile Include="..\core\ClassCRHM\ClassCRHM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\core\ClassCRHM\ClassData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CRHMGUI.rc">
