@@ -682,6 +682,7 @@
   <ItemGroup>
     <ClCompile Include="..\core\ClassCRHM\ClassCRHM.cpp" />
     <ClCompile Include="..\core\ClassCRHM\ClassData.cpp" />
+    <ClCompile Include="..\core\ClassCRHM\ClassVar.cpp" />
     <ClCompile Include="..\core\ClassModule.cpp" />
     <ClCompile Include="..\core\Common.cpp" />
     <ClCompile Include="..\core\CRHMmain.cpp" />
