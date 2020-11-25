@@ -987,3 +987,29 @@ void ClassVar::do_ea_day(ClassModule* thisModule) { // FUNCTION - ea available
 		}
 	}
 };
+
+long GetSharedUnitVar(string units) {
+	const string delims("()/* \t,.-_");
+	string::size_type begIdx, endIdx;
+	begIdx = units.find_first_not_of(delims);
+
+	while (begIdx != string::npos) {
+		endIdx = units.find_first_of(delims, begIdx);
+		if (endIdx == string::npos)
+			endIdx = units.length();
+
+		string name(units.substr(begIdx, endIdx - begIdx));
+
+		if (name == "d")
+			return Global::Freq;
+		else if (name == "int")
+			return 1;
+
+		begIdx = units.find_first_not_of(delims, endIdx);
+	}
+	return 0; // was -1!!!!!!
+}
+
+long ClassVar::GetUnit(void) {
+	return GetSharedUnitVar(units);
+}
