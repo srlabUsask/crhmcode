@@ -17,10 +17,10 @@
 class MMSData
 {
 public:
-	float ** mmsData;
-	long ** mmsDataL;
-	bool GoodRun;
-	ClassModule *obs_preset;
+	double** mmsData {NULL};
+	long** mmsDataL {NULL};
+	bool GoodRun {false};
+	ClassModule* obs_preset {NULL};
 	string S;
 };
 
@@ -29,17 +29,21 @@ public:
 class TSeries {
 public:
 	double *XValues;
-	float *YValues;
-	ClassVar *Tag;
+	double *YValues;
+	ClassVar* Tag {NULL};
 	int MaxCnt;
 	int Used;
 	string Title;
-	TSeries(int Cnt) { MaxCnt = Cnt; XValues = new double[MaxCnt]; YValues = new float[MaxCnt]; Used = 0; };
+	TSeries(int Cnt) { MaxCnt = Cnt; XValues = new double[MaxCnt]; YValues = new double[MaxCnt]; Used = 0; };
 	~TSeries() { delete[] XValues; delete[] YValues; };
-	void AddXY(double X, float Y) { XValues[Used] = X; YValues[Used++] = Y; };
+	void AddXY(double X, double Y) 
+	{ 
+		XValues[Used] = X; 
+		YValues[Used++] = Y; 
+	};
 	int Count(void) { return Used; };
 	double XValue(int nn) { return XValues[nn]; };
-	float YValue(int nn) { return YValues[nn]; };
+	double YValue(int nn) { return YValues[nn]; };
 };
 
 
@@ -109,7 +113,7 @@ public:
 	bool OpenStateFlag;
 
 	//double ProjectFileDate;
-	double Dt0; // used to ca
+	time_t Dt0; // used to ca
 
 
 	string ProjectDir;// = ApplicationDir;
@@ -151,9 +155,9 @@ public:
 
 	void InitModules(void);
 
-	void GetAllVariables(void);
+	void Label4Click(void);
 
-	CRHM::TFun FindObservationType(string Kind);
+	TFun FindObservationType(string Kind);
 
 	void SqueezeParams(void);
 
@@ -184,7 +188,7 @@ public:
 
 
 
-	CRHM::TFun Funct = CRHM::FOBS;
+	TFun Funct = TFun::FOBS;
 
 	int InitModCnt = 0;
 	int InitMacroCnt = 0;
@@ -236,7 +240,7 @@ public:
 	void GetObservationData(char * obsfilepath, char * observationname);
 	void GetObservationNames(char * obsfilepath);
 	string ExtractHruLay(string S, long &Hru, long &Lay);
-	string BuildHru(string S, long Hru, CRHM::TDim dimen);
+	string BuildHru(string S, long Hru, TDim dimen);
 	string BuildLay(string S, long Lay);
 	void BldModelClick();
 	void MacroClick(void);

@@ -13,7 +13,7 @@
 
 #include "TStringList.h"
 #include <time.h>
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 #include <string>
 #include <limits>
@@ -44,7 +44,7 @@ void TStringList::DelimitedText(string s) {
 		return;
 
 	s.append(",");
-	for (pos = 0; pos < s.size(); ++pos) {
+	for (pos = 0; pos < (long)s.size(); ++pos) {
 		here = s.find_first_of("' ,", pos);
 		pos = here;
 		switch (s[here]) {
@@ -186,7 +186,7 @@ string &TStrings::operator[](int ii) {
 	if (ii < 0 || ii >= StringList->Count)
 	{ 
 		//added by Manishankar.
-		CRHMException Except("Array index out of bounds.", TERMINATE);
+		CRHMException Except("Array index out of bounds.", TExcept::TERMINATE);
 		LogError(Except);
 		throw CRHMException(Except);
 	}
@@ -199,7 +199,7 @@ TObject* &TObjects::operator[](int ii) {
 	if (ii < 0 || ii >= StringList->Count)
 	{ 
 		//added by Manishankar.
-		CRHMException Except("Array index out of bounds.", TERMINATE);
+		CRHMException Except("Array index out of bounds.", TExcept::TERMINATE);
 		LogError(Except);
 		throw CRHMException(Except);
 	}

@@ -6,7 +6,7 @@ class ClassEntry {
 public:
 	unsigned long OrigPos; // ListBox2 initial index
 	long rank;             // rank bit: highest = 0
-	bool used;
+	bool used{false};
 	string Name;           // module name
 	ClassModule *module;   // pointer for module
 

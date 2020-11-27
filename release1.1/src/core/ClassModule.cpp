@@ -52,7 +52,7 @@ double ClassModule::Now(void) {
 string ClassModule::Var_name(ClassModule* thisModule, string S) {
 	if (thisModule->variation != 0) {
 		string AA("#0");
-		AA[2] += log(thisModule->variation) / log(2) + 1;
+		AA[2] += (char) (log(thisModule->variation) / log(2) + 1);
 		S += AA;
 	}
 	return S;
@@ -63,25 +63,25 @@ void ClassModule::initbase(void) {
 
 
 
-	Global::BuildFlag = CRHM::INIT;
+	Global::BuildFlag = TBuild::INIT;
 
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	//ClassPar *newPar; variable is unreferenced commenting out for now - jhs507
 
 
 
 	if (Var_NDEFN_cnt) {
 		
-		Var_loop_lay_table = new float**[Var_NDEFN_cnt]; // define [#Var][#layers]
+		Var_loop_lay_table = new double**[Var_NDEFN_cnt]; // define [#Var][#layers]
 														 
 		for (long jj = 0; jj < Var_NDEFN_cnt; ++jj) {
-			Var_loop_lay_table[jj] = new float*[nlay];
+			Var_loop_lay_table[jj] = new double*[nlay];
 		}
 		
-		Var_loop_lay_value = new float*[Var_NDEFN_cnt]; // define [#Var]
+		Var_loop_lay_value = new double*[Var_NDEFN_cnt]; // define [#Var]
 		for (long jj = 0; jj < Var_NDEFN_cnt; ++jj)
-			Var_loop_lay_value[jj] = new float[nhru];
+			Var_loop_lay_value[jj] = new double[nhru];
 	}
 	else {
 		
@@ -92,17 +92,17 @@ void ClassModule::initbase(void) {
 	
 
 	if (Par_NDEFN_cnt) {
-		Par_loop_lay_table = new float**[Par_NDEFN_cnt];
+		Par_loop_lay_table = new double**[Par_NDEFN_cnt];
 		for (long jj = 0; jj < Par_NDEFN_cnt; ++jj) {
-			Par_loop_lay_table[jj] = new float*[nlay];
+			Par_loop_lay_table[jj] = new double*[nlay];
 			for (long ll = 0; ll < nlay; ++ll)
-				Par_loop_lay_table[ll] = new float*[nhru];
+				Par_loop_lay_table[ll] = new double*[nhru];
 		}
-		Par_loop_lay_value = new float*[Par_NDEFN_cnt];
+		Par_loop_lay_value = new double*[Par_NDEFN_cnt];
 		for (long jj = 0; jj < Par_NDEFN_cnt; ++jj) {
-			Par_loop_lay_value[jj] = new float[nlay];
+			Par_loop_lay_value[jj] = new double[nlay];
 			for (long ll = 0; ll < nlay; ++ll)
-				Par_loop_lay_value[ll] = new float[nhru];
+				Par_loop_lay_value[ll] = new double[nhru];
 		}
 	}
 	else {
@@ -128,7 +128,7 @@ void ClassModule::initbase(void) {
 
 //---------------------------------------------------------------------------
 int ClassModule::declgrpvar(string variable, string queryvar, string help,
-	string units, float **value, float ***layvalue, bool PointPlot) {
+	string units, double **value, double ***layvalue, bool PointPlot) {
 
 	MapVar::iterator itVar;
 	ClassVar *newVar;
@@ -139,11 +139,11 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 	}
 	Convert convert; convert.CheckUnitsString(Name, variable, units);
 
-	AKAhook(VARD, Name, variable, variable);
+	AKAhook(TAKA::VARD, Name, variable, variable);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(variable.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -152,24 +152,24 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 		return 0;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			return 0;
 		}
 
 		if (layvalue == NULL) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, WARNING));
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return -1;
 		}
 
 		if (!Global::GroupCntTrk) {
-			LogError(CRHMException("No groups defined " + Name + " " + variable, WARNING));
+			LogError(CRHMException("No groups defined " + Name + " " + variable, TExcept::WARNING));
 			return -1;
 		}
-		newVar = new ClassVar(Name, variable, CRHM::NREB, help, units, CRHM::Float, PointPlot, nhru);
+		newVar = new ClassVar(Name, variable, TDim::NREB, help, units, TVar::Float, PointPlot, nhru);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
 		newVar->variation_set = variation_set;
 
@@ -185,8 +185,9 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 		return 0;
 	}
 
-	case CRHM::INIT: {
-		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
+	case TBuild::INIT: {
+		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) 
+		{
 			newVar = (*itVar).second;
 			*value = newVar->values;
 
@@ -197,17 +198,26 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 				return 0;
 
 			long querycnt = 0;
-			for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
+			for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) 
+			{
 				ClassVar* foundVar = (*itVar).second;
-				if (newVar != NULL) {
-					if (foundVar->FileData)
+
+				if (newVar != NULL) 
+				{
+					if (foundVar->FileData) 
+					{
 						continue;
+					}
+					
 					string S = foundVar->name;
 					string::size_type indx = S.find('@');
-					if (indx != string::npos) {
+					
+					if (indx != string::npos) 
+					{
 						string N = S.substr(indx + 1);
 						S = S.erase(indx);
-						if (S == queryvar) {
+						if (S == queryvar) 
+						{
 							newVar->layvalues[querycnt] = foundVar->values;
 							newVar->values[querycnt] = foundVar->dim;
 							++querycnt;
@@ -215,11 +225,23 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 					} // if - found group
 				} // if - not null, is it possible?
 			} // for
-			*layvalue = newVar->layvalues; // return address
+			
+			if (newVar != NULL) 
+			{
+				*layvalue = newVar->layvalues; // return address
+			}
+			else
+			{
+				CRHMException Except("variable was null found: " + Name + ' ' + variable, TExcept::TERMINATE);
+				LogError(Except);
+				throw Except;
+			}
+			
 			return querycnt;
 		}
-		else {
-			CRHMException Except("variable not found: " + Name + ' ' + variable, TERMINATE);
+		else 
+		{
+			CRHMException Except("variable not found: " + Name + ' ' + variable, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -231,30 +253,30 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decldiag(string variable, CRHM::TDim dimen,
-	string help, string units, float **value, float ***layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+void ClassModule::decldiag(string variable, TDim dimen,
+	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, false, Local);
 }
 //---------------------------------------------------------------------------
 
-void ClassModule::decldiag(string variable, CRHM::TDim dimen,
-	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+void ClassModule::decldiag(string variable, TDim dimen,
+	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, false, Local);
 
 }
 //---------------------------------------------------------------------------
 
-void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
-	string help, string units, float **value, float ***layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+void ClassModule::declstatdiag(string variable, TDim dimen,
+	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, true, Local);
 
-	if (Global::BuildFlag == CRHM::BUILD) {
+	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(s, VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -263,15 +285,15 @@ void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
 };
 
 //---------------------------------------------------------------------------
-void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
-	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+void ClassModule::declstatdiag(string variable, TDim dimen,
+	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, true, Local);
 
-	if (Global::BuildFlag == CRHM::BUILD) {
+	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(s, VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -280,15 +302,15 @@ void ClassModule::declstatdiag(string variable, CRHM::TDim dimen,
 };
 
 //---------------------------------------------------------------------------
-void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
-	string help, string units, float **value, float ***layvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+void ClassModule::declstatvar(string variable, TDim dimen,
+	string help, string units, double **value, double ***layvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, layvalue, dim, PointPlot, true, Local);
 
-	if (Global::BuildFlag == CRHM::BUILD) {
+	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(s, VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -297,15 +319,15 @@ void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
 };
 
 //---------------------------------------------------------------------------
-void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
-	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, CRHM::TVISIBLE Local) {
+void ClassModule::declstatvar(string variable, TDim dimen,
+	string help, string units, long **value, long ***ilayvalue, const int dim, bool PointPlot, TVISIBLE Local) {
 
 	declvar(variable, dimen, help, units, value, ilayvalue, dim, PointPlot, true, Local);
 
-	if (Global::BuildFlag == CRHM::BUILD) {
+	if (Global::BuildFlag == TBuild::BUILD) {
 		string s = string(Name.c_str()) + " " + variable.c_str();
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(s, VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -315,8 +337,8 @@ void ClassModule::declstatvar(string variable, CRHM::TDim dimen,
 
 //---------------------------------------------------------------------------
 
-void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
-	string units, float **value, float ***layvalue, const int dim, bool PointPlot, bool StatVar, CRHM::TVISIBLE Local) {
+void ClassModule::declvar(string variable, TDim dimen, string help,
+	string units, double **value, double ***layvalue, const int dim, bool PointPlot, bool StatVar, TVISIBLE Local) {
 	MapVar::iterator itVar;
 	ClassVar *newVar;
 	string Orgvariable = variable;
@@ -330,12 +352,12 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 	Convert convert; convert.CheckUnitsString(Name, variable, units);
 
-	AKAhook(VARD, Name, variable, variable);
+	AKAhook(TAKA::VARD, Name, variable, variable);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+	case TBuild::BUILD: {
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(variable.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -346,23 +368,23 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			return;
 		}
 
-		if (dimen == CRHM::NLAY && layvalue == NULL) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, WARNING));
+		if (dimen == TDim::NLAY && layvalue == NULL) {
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
 
-		if (dimen == CRHM::NDEFN) // save for lay loop
+		if (dimen == TDim::NDEFN) // save for lay loop
 			++Var_NDEFN_cnt;
 
-		newVar = new ClassVar(Name, variable, dimen, help, units, CRHM::Float, PointPlot, nhru, dim);
+		newVar = new ClassVar(Name, variable, dimen, help, units, TVar::Float, PointPlot, nhru, dim);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
 		newVar->StatVar = StatVar;
 
@@ -381,20 +403,20 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			if (newVar->layvalues != NULL) {
-				if (dimen == CRHM::NFREQ && newVar->lay != Global::Freq) {
+				if (dimen == TDim::NFREQ && newVar->lay != Global::Freq) {
 					newVar->nfreq = true;
 					newVar->lay = Global::Freq;
 					newVar->ReleaseM(true);
-					newVar->layvalues = new float *[newVar->lay];
+					newVar->layvalues = new double *[newVar->lay];
 					for (int ii = 0; ii < newVar->lay; ii++)
-						newVar->layvalues[ii] = new float[newVar->dim];
+						newVar->layvalues[ii] = new double[newVar->dim];
 				}
-				if ((dimen == CRHM::NLAY || dimen == CRHM::NDEFN) && newVar->lay != dim) {
+				if ((dimen == TDim::NLAY || dimen == TDim::NDEFN) && newVar->lay != dim) {
 					long JJ = newVar->lay;
 				}
 
@@ -405,7 +427,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 			*value = newVar->values; // TB 10/07/10
 
-			if (dimen == CRHM::NDEF) { // save for lay loop
+			if (dimen == TDim::NDEF) { // save for lay loop
 				Var_loop_lay_table[Var_NDEFN_cnt] = newVar->layvalues;
 				Var_loop_lay_value[Var_NDEFN_cnt++] = newVar->values;
 			}
@@ -415,7 +437,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("variable not found: " + Name + ' ' + variable, TERMINATE);
+			CRHMException Except("variable not found: " + Name + ' ' + variable, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -426,8 +448,8 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
-	string units, long **ivalue, long ***ilayvalue, const int dim, bool PointPlot, bool StatVar, CRHM::TVISIBLE Local) {
+void ClassModule::declvar(string variable, TDim dimen, string help,
+	string units, long **ivalue, long ***ilayvalue, const int dim, bool PointPlot, bool StatVar, TVISIBLE Local) {
 
 	MapVar::iterator itVar;
 	ClassVar *newVar;
@@ -440,14 +462,14 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(VARD, Name, variable, variable);
+	AKAhook(TAKA::VARD, Name, variable, variable);
 
 	Convert convert; convert.CheckUnitsString(Name, variable, units);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+	case TBuild::BUILD: {
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(variable.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -458,20 +480,20 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			return;
 		}
 
-		if (dimen == CRHM::NLAY && ilayvalue == NULL) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, WARNING));
+		if (dimen == TDim::NLAY && ilayvalue == NULL) {
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
 
-		newVar = new ClassVar(Name, variable, dimen, help, units, CRHM::Int, PointPlot, nhru, dim);
+		newVar = new ClassVar(Name, variable, dimen, help, units, TVar::Int, PointPlot, nhru, dim);
 
-		newVar->varType = CRHM::Int;
+		newVar->varType = TVar::Int;
 
 		newVar->StatVar = StatVar;
 
@@ -489,11 +511,11 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
-			if ((dimen == CRHM::NLAY || dimen == CRHM::NFREQ) && ilayvalue != NULL) {
+			if ((dimen == TDim::NLAY || dimen == TDim::NFREQ) && ilayvalue != NULL) {
 				if (newVar->nfreq && newVar->lay != Global::Freq) {
 					newVar->ReleaseM(true);
 					newVar->lay = Global::Freq;
@@ -514,7 +536,7 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("Variable not found: " + Name + ' ' + variable, TERMINATE);
+			CRHMException Except("Variable not found: " + Name + ' ' + variable, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -525,8 +547,8 @@ void ClassModule::declvar(string variable, CRHM::TDim dimen, string help,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
-	string units, float **value, float ***layvalue, const int dim) {
+void ClassModule::decllocal(string variable, TDim dimen, string help,
+	string units, double **value, double ***layvalue, const int dim) {
 
 	MapVar::iterator itVar;
 	ClassVar *newVar;
@@ -540,27 +562,27 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 	Convert convert; convert.CheckUnitsString(Name, variable, units);
 
-	AKAhook(VARD, Name, variable, variable); // new 04/23/13
+	AKAhook(TAKA::VARD, Name, variable, variable); // new 04/23/13
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find("#" + Name + " " + variable)) != Global::MapVars.end())
 			return;
 
-		if ((dimen == CRHM::NLAY || dimen == CRHM::NFREQ) && layvalue == NULL) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, WARNING));
+		if ((dimen == TDim::NLAY || dimen == TDim::NFREQ) && layvalue == NULL) {
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
 
-		newVar = new ClassVar(Name, variable, dimen, help, units, CRHM::Float, false, nhru, dim);
+		newVar = new ClassVar(Name, variable, dimen, help, units, TVar::Float, false, nhru, dim);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
 		newVar->InGroup = GroupCnt;
 
-		newVar->visibility = CRHM::PRIVATE;
+		newVar->visibility = TVISIBLE::PRIVATE;
 
 		newVar->variation_set = variation_set;
 
@@ -574,20 +596,20 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		string S = "#" + Name + " " + variable;
 
 		if ((itVar = Global::MapVars.find(S)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
-			if ((dimen == CRHM::NLAY || dimen == CRHM::NFREQ) && layvalue != NULL) {
+			if ((dimen == TDim::NLAY || dimen == TDim::NFREQ) && layvalue != NULL) {
 				if (newVar->nfreq && newVar->lay != Global::Freq) {
 					newVar->ReleaseM(true);
 					newVar->lay = Global::Freq;
 					newVar->nfreq = true;
-					newVar->layvalues = new float *[newVar->lay];
+					newVar->layvalues = new double *[newVar->lay];
 					for (int ii = 0; ii < newVar->lay; ii++)
-						newVar->layvalues[ii] = new float[newVar->dim];
+						newVar->layvalues[ii] = new double[newVar->dim];
 				}
 				*layvalue = newVar->layvalues;
 			}
@@ -597,7 +619,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("variable not found: " + S, TERMINATE);
+			CRHMException Except("variable not found: " + S, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -608,7 +630,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
+void ClassModule::decllocal(string variable, TDim dimen, string help,
 	string units, long **value, long ***layvalue, const int dim) {
 
 	MapVar::iterator itVar;
@@ -623,27 +645,27 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 
 	Convert convert; convert.CheckUnitsString(Name, variable, units);
 
-	AKAhook(VARD, Name, variable, variable); // new 04/23/13
+	AKAhook(TAKA::VARD, Name, variable, variable); // new 04/23/13
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find("#" + Name + " " + variable)) != Global::MapVars.end())
 			return;
 
-		if (dimen == CRHM::NLAY && layvalue == NULL) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, WARNING));
+		if (dimen == TDim::NLAY && layvalue == NULL) {
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return;
 		}
 
-		newVar = new ClassVar(Name, variable, dimen, help, units, CRHM::Int, false, nhru, dim);
+		newVar = new ClassVar(Name, variable, dimen, help, units, TVar::Int, false, nhru, dim);
 
-		newVar->varType = CRHM::Int;
+		newVar->varType = TVar::Int;
 
 		newVar->InGroup = GroupCnt;
 
-		newVar->visibility = CRHM::PRIVATE;
+		newVar->visibility = TVISIBLE::PRIVATE;
 
 		newVar->variation_set = variation_set;
 
@@ -657,13 +679,13 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		string S = "#" + Name + " " + variable;
 
 		if ((itVar = Global::MapVars.find(S)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
-			if ((dimen == CRHM::NLAY || dimen == CRHM::NFREQ) && layvalue != NULL) {
+			if ((dimen == TDim::NLAY || dimen == TDim::NFREQ) && layvalue != NULL) {
 				if (newVar->nfreq && newVar->lay != Global::Freq) {
 					newVar->ReleaseM(true);
 					newVar->lay = Global::Freq;
@@ -680,7 +702,7 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 			return;
 		}
 		else {
-			CRHMException Except("variable not found: " + S, TERMINATE);
+			CRHMException Except("variable not found: " + S, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -691,24 +713,24 @@ void ClassModule::decllocal(string variable, CRHM::TDim dimen, string help,
 }
 
 //---------------------------------------------------------------------------
-TStringList* ClassModule::decldiagparam(string param, CRHM::TDim dimen,
-	string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local) {
+TStringList* ClassModule::decldiagparam(string param, TDim dimen,
+	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
 
 	TStringList* fix = declparam(param, dimen, Texts, help, stringsList, Local);
 	return fix;
 }
 
 //---------------------------------------------------------------------------
-TStringList* ClassModule::decllocalparam(string param, CRHM::TDim dimen,
-	string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local) {
+TStringList* ClassModule::decllocalparam(string param, TDim dimen,
+	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
 
 	TStringList* fix = declparam(param, dimen, Texts, help, stringsList, Local);
 	return fix;
 }
 
 //---------------------------------------------------------------------------
-TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
-	string Texts, string help, TStringList *stringsList, CRHM::TVISIBLE Local) {
+TStringList* ClassModule::declparam(string param, TDim dimen,
+	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
@@ -718,12 +740,12 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(PARD, Name, param, param);
+	AKAhook(TAKA::PARD, Name, param, param);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+	case TBuild::BUILD: {
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -731,10 +753,10 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 		return (TStringList*)NULL;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
-			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
+			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
 				newPar = (*itPar).second;
 				return newPar->Strings;
 			}
@@ -750,7 +772,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 			return newPar->Strings;
 		}
 
-		newPar = new ClassPar(string(Name.c_str()), string(param), dimen, Texts, help, CRHM::Txt, nhru);
+		newPar = new ClassPar(string(Name.c_str()), string(param), dimen, Texts, help, TVar::Txt, nhru);
 
 		newPar->basemodule = this->NameRoot;
 
@@ -763,7 +785,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 		return newPar->Strings;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			stringsList = newPar->Strings;
@@ -775,7 +797,7 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 			return stringsList;
 		}
 		else {
-			CRHMException Except("Parameter not found: " + Name + param, TERMINATE);
+			CRHMException Except("Parameter not found: " + Name + param, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -787,25 +809,25 @@ TStringList* ClassModule::declparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
+void ClassModule::decldiagparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const float **value, const float ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
+void ClassModule::decllocalparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const float **value, const float ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declparam(string param, CRHM::TDim dimen,
+void ClassModule::declparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const float **value, const float ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
@@ -818,12 +840,12 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param);
+	AKAhook(TAKA::PARD, Name, param, param);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+	case TBuild::BUILD: {
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -831,17 +853,17 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		return;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if (dim <= 0) { // find existing parameter
 			return;
 		}
 
-		if (dimen == CRHM::NDEFN)// save for lay loop
+		if (dimen == TDim::NDEFN)// save for lay loop
 			++Par_NDEFN_cnt;
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
-			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
+			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share == 2) {
 					newPar->basemodule = this->NameRoot;
@@ -866,7 +888,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		}
 
 		if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
-			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
+			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share == 2) {
 					newPar->Inhibit_share = 1;
@@ -876,16 +898,16 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			}
 		}
 
-		if ((dimen == CRHM::NLAY && layvalue == NULL) || (dimen == CRHM::NDEF && layvalue == NULL) || (dimen == CRHM::NDEFN && layvalue == NULL)) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + param, WARNING));
+		if ((dimen == TDim::NLAY && layvalue == NULL) || (dimen == TDim::NDEF && layvalue == NULL) || (dimen == TDim::NDEFN && layvalue == NULL)) {
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + param, TExcept::WARNING));
 			return;
 		}
 
-		float minval = atof(minstr.c_str());
-		float maxval = atof(maxstr.c_str());
+		double minval = atof(minstr.c_str());
+		double maxval = atof(maxstr.c_str());
 
 		newPar = new ClassPar(string(Name.c_str()), string(param), dimen,
-			valstr, minval, maxval, help, units, CRHM::Float, dim, nhru);
+			valstr, minval, maxval, help, units, TVar::Float, dim, nhru);
 
 		newPar->basemodule = this->NameRoot;
 
@@ -902,7 +924,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			*value = newPar->values;
@@ -915,15 +937,15 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			*value = newPar->values;
 		}
 		else {
-			CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+			CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
 
-		if ((dimen == CRHM::NLAY && layvalue != NULL) || (dimen == CRHM::NDEF && layvalue != NULL) || (dimen == CRHM::NDEFN && layvalue != NULL))
-			*layvalue = (const float**)newPar->layvalues;
+		if ((dimen == TDim::NLAY && layvalue != NULL) || (dimen == TDim::NDEF && layvalue != NULL) || (dimen == TDim::NDEFN && layvalue != NULL))
+			*layvalue = (const double**)newPar->layvalues;
 
-		if (dimen == CRHM::NDEF) {
+		if (dimen == TDim::NDEF) {
 			Par_loop_lay_table[Par_NDEFN_cnt] = newPar->layvalues; // save for lay loop
 			Par_loop_lay_value[Par_NDEFN_cnt++] = newPar->values; // save for lay loop
 		}
@@ -934,25 +956,25 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decldiagparam(string param, CRHM::TDim dimen,
+void ClassModule::decldiagparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const long **value, const long ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const long **value, const long ***layvalue, const int dim, TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decllocalparam(string param, CRHM::TDim dimen,
+void ClassModule::decllocalparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const long **value, const long ***layvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const long **value, const long ***layvalue, const int dim, TVISIBLE Local) {
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declparam(string param, CRHM::TDim dimen,
+void ClassModule::declparam(string param, TDim dimen,
 	string valstr, string minstr, string maxstr,
-	string help, string units, const long **ivalue, const long ***ilayvalue, const int dim, CRHM::TVISIBLE Local) {
+	string help, string units, const long **ivalue, const long ***ilayvalue, const int dim, TVISIBLE Local) {
 
 	MapPar::iterator itPar;
 	ClassPar *newPar;
@@ -966,12 +988,12 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param);
+	AKAhook(TAKA::PARD, Name, param, param);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
-		VandP VP; VP.PutV(variation_set); VP.PutP(Local);
+	case TBuild::BUILD: {
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -979,7 +1001,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		return;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if (dim <= 0) { // find existing parameter
 			return;
@@ -988,7 +1010,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		*ivalue = &Dummy;
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
-			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
+			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share == 2) {
 					newPar->basemodule = this->NameRoot;
@@ -1013,7 +1035,7 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		}
 
 		if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
-			if ((*itPar).second->dim == this->nhru || dimen == CRHM::BASIN) {
+			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share == 2) {
 					assert(0);
@@ -1022,16 +1044,16 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 			}
 		}
 
-		if ((dimen == CRHM::NLAY && ilayvalue == NULL) || (dimen == CRHM::NDEF && ilayvalue == NULL) || (dimen == CRHM::NDEFN && ilayvalue == NULL)) {
-			LogError(CRHMException("Layer Array not defined for " + Name + " " + param, WARNING));
+		if ((dimen == TDim::NLAY && ilayvalue == NULL) || (dimen == TDim::NDEF && ilayvalue == NULL) || (dimen == TDim::NDEFN && ilayvalue == NULL)) {
+			LogError(CRHMException("Layer Array not defined for " + Name + " " + param, TExcept::WARNING));
 			return;
 		}
 
-		float minval = atof(minstr.c_str());
-		float maxval = atof(maxstr.c_str());
+		double minval = atof(minstr.c_str());
+		double maxval = atof(maxstr.c_str());
 
 		newPar = new ClassPar(string(Name.c_str()), string(param), dimen,
-			valstr, minval, maxval, help, units, CRHM::Int, dim, nhru);
+			valstr, minval, maxval, help, units, TVar::Int, dim, nhru);
 
 		newPar->basemodule = this->NameRoot;
 
@@ -1048,29 +1070,29 @@ void ClassModule::declparam(string param, CRHM::TDim dimen,
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			*ivalue = newPar->ivalues;
-			if ((dimen == CRHM::NLAY && ilayvalue != NULL) || (dimen == CRHM::NDEF && ilayvalue != NULL) || (dimen == CRHM::NDEFN && ilayvalue != NULL))
+			if ((dimen == TDim::NLAY && ilayvalue != NULL) || (dimen == TDim::NDEF && ilayvalue != NULL) || (dimen == TDim::NDEFN && ilayvalue != NULL))
 				*ilayvalue = (const long **)newPar->ilayvalues;
 			return;
 		}
 		else if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			*ivalue = newPar->ivalues;
-			if ((dimen == CRHM::NLAY && ilayvalue != NULL) || (dimen == CRHM::NDEF && ilayvalue != NULL) || (dimen == CRHM::NDEFN && ilayvalue != NULL))
+			if ((dimen == TDim::NLAY && ilayvalue != NULL) || (dimen == TDim::NDEF && ilayvalue != NULL) || (dimen == TDim::NDEFN && ilayvalue != NULL))
 				*ilayvalue = (const long **)newPar->ilayvalues;
 			return;
 		}
 		else if ((newPar = ClassParFindPar(param))) {
 			*ivalue = newPar->ivalues;
-			if ((dimen == CRHM::NLAY && ilayvalue != NULL) || (dimen == CRHM::NDEF && ilayvalue != NULL) || (dimen == CRHM::NDEFN && ilayvalue != NULL))
+			if ((dimen == TDim::NLAY && ilayvalue != NULL) || (dimen == TDim::NDEF && ilayvalue != NULL) || (dimen == TDim::NDEFN && ilayvalue != NULL))
 				*ilayvalue = (const long **)newPar->ilayvalues;
 			return;
 		}
 		else {
-			CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+			CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -1155,7 +1177,7 @@ long ClassModule::FindWildParFloat(string name, ClassPar* &newPar, bool Trunc = 
 	return -1;
 }
 //---------------------------------------------------------------------------
-long ClassModule::declgetvar(string source, string name, string units, const float **value, const float ***layvalue) {
+long ClassModule::declgetvar(string source, string name, string units, const double **value, const double ***layvalue) {
 
 	MapVar::iterator itVar;
 	ClassVar *newVar;
@@ -1167,15 +1189,15 @@ long ClassModule::declgetvar(string source, string name, string units, const flo
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(VARG, Name, name, name, source, ID);
+	AKAhook(TAKA::VARG, Name, name, name, source, ID);
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	//ClassPar *newPar; variable is unreferenced commenting out for now - jhs507
 	long GetUnit;
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
 		string s = string(source.c_str()) + " " + name.c_str();
 
@@ -1186,16 +1208,16 @@ long ClassModule::declgetvar(string source, string name, string units, const flo
 		return 0;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return 0;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		string::size_type indx2 = name.find('@');
 		if ((itVar = Global::MapVars.find(source + " " + name)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			*value = newVar->values;
-			if (layvalue != NULL) *layvalue = (const float **)newVar->layvalues;
+			if (layvalue != NULL) *layvalue = (const double **)newVar->layvalues;
 
 			PairVar Item = PairVar(Name + " " + name, newVar);
 			Global::MapVarsGet.insert(Item);
@@ -1205,7 +1227,7 @@ long ClassModule::declgetvar(string source, string name, string units, const flo
 			(itVar = Global::MapVars.find(source + " " + name.substr(0, indx2))) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			*value = newVar->values;
-			if (layvalue != NULL) *layvalue = (const float **)newVar->layvalues;
+			if (layvalue != NULL) *layvalue = (const double **)newVar->layvalues;
 
 			PairVar Item = PairVar(Name + " " + name, newVar);
 			Global::MapVarsGet.insert(Item);
@@ -1215,7 +1237,7 @@ long ClassModule::declgetvar(string source, string name, string units, const flo
 			GetUnit = FindWildVarFloat(name, newVar); // name
 			if (GetUnit > -1) {
 				*value = newVar->values;
-				if (layvalue != NULL) *layvalue = (const float **)newVar->layvalues;
+				if (layvalue != NULL) *layvalue = (const double **)newVar->layvalues;
 
 				PairVar Item = PairVar(Name + " " + name, newVar);
 				Global::MapVarsGet.insert(Item);
@@ -1242,15 +1264,15 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(VARG, Name, name, name, source, ID);
+	AKAhook(TAKA::VARG, Name, name, name, source, ID);
 
 	MapPar::iterator itPar;
-	ClassPar *newPar;
+	//ClassPar *newPar; variable is unreferenced commenting out for now - jhs507
 	long GetUnit;
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
 		string s = string(source.c_str()) + " " + name.c_str();
 
@@ -1261,12 +1283,12 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 		return 0;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return 0;
 	}
 
-	case CRHM::INIT: {
-		if (name == "Not_Used") // AKA does not handle int/float
+	case TBuild::INIT: {
+		if (name == "Not_Used") // AKA does not handle int/double
 			name = "Not_Used_int";
 
 		string::size_type indx2 = name.find('@');
@@ -1308,7 +1330,7 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string units, float **value) {
+long ClassModule::declobs(string name, TDim dimen, string help, string units, double **value) {
 
 	MapVar::iterator itVar;
 	ClassVar *newVar;
@@ -1323,15 +1345,15 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 
 	Convert convert; convert.CheckUnitsString(Name, name, units);
 
-	AKAhook(OBSD, Name, name, name);
+	AKAhook(TAKA::OBSD, Name, name, name);
 
 	int cnt = getdim(dimen);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(CRHM::USUAL);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)TVISIBLE::USUAL);
 		PairstrV Item2 = PairstrV((name + "#").c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -1343,7 +1365,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(Name + " " + name + "#")) != Global::MapVars.end()) {
 
@@ -1352,10 +1374,10 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 				thisVar->ReleaseM(); // releases everything
 				thisVar->dim = cnt;
 				if (thisVar->lay > 0) {
-					thisVar->layvalues = new float *[thisVar->lay];
-					for (int ii = 0; ii < thisVar->lay; ii++) thisVar->layvalues[ii] = new float[cnt];
+					thisVar->layvalues = new double *[thisVar->lay];
+					for (int ii = 0; ii < thisVar->lay; ii++) thisVar->layvalues[ii] = new double[cnt];
 				}
-				thisVar->values = new float[cnt];     // CHECK ???
+				thisVar->values = new double[cnt];     // CHECK ???
 			}
 			thisVar->dimen = dimen;  //warning resolved by Manishankar
 
@@ -1367,13 +1389,13 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 
 		newVar = new ClassVar(Name, name + "#", cnt, 0, NULL);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 		newVar->help = help;
 		newVar->units = units;
 		newVar->DLLName = DLLName.c_str();
 		newVar->root = ID.c_str();
 
-		newVar->values = new float[cnt];
+		newVar->values = new double[cnt];
 
 		newVar->variation_set = variation_set;
 
@@ -1383,7 +1405,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 		return(-1);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itVar = Global::MapVars.find(Name + " " + name + "#")) != Global::MapVars.end()) {
 			Global::DeclRootList->Add(string(ID.c_str()) + " " + (name + "#").c_str()); // to prevent input/output looping
 
@@ -1399,7 +1421,7 @@ long ClassModule::declobs(string name, CRHM::TDim dimen, string help, string uni
 			}
 		}
 		else {
-			CRHMException Except("Observation not found: " + Name + " " + name + "#", TERMINATE);
+			CRHMException Except("Observation not found: " + Name + " " + name + "#", TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -1425,8 +1447,8 @@ long ClassModule::getdimObs(string variable) {
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
-	string help, string units, const float **value, long HRU_index, bool optional, const float ***layvalue) {
+long ClassModule::declreadobs(string variable, TDim dimen,
+	string help, string units, const double **value, long HRU_index, bool optional, const double ***layvalue) {
 
 	MapVar::iterator itVar;
 	ClassVar *newVar;
@@ -1440,11 +1462,11 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(OBSR, Name, variable, variable, declModule, ID);
+	AKAhook(TAKA::OBSR, Name, variable, variable, declModule, ID);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(variable.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -1454,23 +1476,23 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
-		if (dimen == CRHM::NFREQ && layvalue == NULL) {
-			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, WARNING));
+		if (dimen == TDim::NFREQ && layvalue == NULL) {
+			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return(-1);
 		}
 
 		if ((itVar = Global::MapVars.find(declModule + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 
-			if (newVar->varType == CRHM::Read) { // used only once. Changes Read to ReadF
+			if (newVar->varType == TVar::Read) { // used only once. Changes Read to ReadF
 				Convert convert;
 				convert.CheckUnitsObs(newVar->units, units, variable); // check original observation units
 
 				newVar->values = NULL; // memory assigned in CRHM::INIT
 
-				newVar->varType = CRHM::ReadF;
+				newVar->varType = TVar::ReadF;
 
 				newVar->dimen = dimen;
 
@@ -1486,9 +1508,9 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		if (optional)
 			return(-1);
 
-		newVar = new ClassVar("obs", variable, dimen, help, units, CRHM::Float);
+		newVar = new ClassVar("obs", variable, dimen, help, units, TVar::Float);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
 		Item = PairVar(declModule + variable, newVar);
 		Global::MapVars.insert(Item);
@@ -1499,20 +1521,20 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		return(-1);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		newVar = NULL; // unchanged if nothing found
 
 		if ((itVar = Global::MapVars.find(declModule + variable)) != Global::MapVars.end()) { // look for in declModule
 			newVar = (*itVar).second;
 
-			if ((newVar->varType == CRHM::ReadF | newVar->varType == CRHM::Read) && newVar->values == NULL) {
-				Convert convert; convert.CheckUnitsObs(newVar->units, units, variable); // check original observation units
+			if ((newVar->varType == TVar::ReadF || newVar->varType == TVar::Read) && newVar->values == NULL) {
+ 				Convert convert; convert.CheckUnitsObs(newVar->units, units, variable); // check original observation units
 
-				newVar->varType = CRHM::ReadF;
+				newVar->varType = TVar::ReadF;
 
 				newVar->dimMax = Global::maxhru;
-				newVar->values = new float[newVar->dimMax];
+				newVar->values = new double[newVar->dimMax];
 
 				newVar->help = help;
 				newVar->units = units;
@@ -1522,8 +1544,8 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 			}
 		}
 
-		string::size_type indx; // indicates if declared obs
-		if (itVar == Global::MapVars.end() || (!newVar->cnt && newVar->DLLName.empty())) { // look for with/without #  //warning resolved by Manishankar
+		string::size_type indx = 0; // indicates if declared obs initalized to zero to prevent accidental declaration to npos - jhs507
+ 		if (itVar == Global::MapVars.end() || (!newVar->cnt && newVar->DLLName.empty())) { // look for with/without #  //warning resolved by Manishankar
 			string variable2;
 
 			indx = variable.find('#');
@@ -1547,7 +1569,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 				*value = NULL;
 				return(-1);
 			}
-			CRHMException Except("Observation not found " + declModule + ": " + variable, TERMINATE);
+			CRHMException Except("Observation not found " + declModule + ": " + variable, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -1561,7 +1583,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 				return(-1);
 			}
 			else {
-				CRHMException Except("Observation: '" + variable + "', not in Data file. Requested by '" + Name.c_str() + "'", TERMINATE);
+				CRHMException Except("Observation: '" + variable + "', not in Data file. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 				LogError(Except);
 
 
@@ -1577,7 +1599,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 		}
 
 		if (newVar->FileData) {
-			if (dimen == CRHM::NHRU)
+			if (dimen == TDim::NHRU)
 				newVar->dim = nhru;
 			else
 				newVar->dim = newVar->cnt;
@@ -1603,7 +1625,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updating. Is it ever used.
+long ClassModule::declreadobs(string variable, TDim dimen,  // needs updating. Is it ever used.
 	string help, string units, const long **value, long HRU_index, bool optional, const long ***layvalue) {
 
 	MapVar::iterator itVar;
@@ -1618,11 +1640,11 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(OBSR, Name, variable, variable, declModule, ID);
+	AKAhook(TAKA::OBSR, Name, variable, variable, declModule, ID);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(variable.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -1632,17 +1654,17 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
-		if (dimen == CRHM::NFREQ && layvalue == NULL) {
-			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, WARNING));
+		if (dimen == TDim::NFREQ && layvalue == NULL) {
+			LogError(CRHMException("NFREQ Array not defined for " + Name + " " + variable, TExcept::WARNING));
 			return(-1);
 		}
 
 		if ((itVar = Global::MapVars.find(declModule + variable)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
-			if (newVar->varType == CRHM::Read || newVar->varType == CRHM::ReadI) {
-				if (dimen == CRHM::NFREQ && (newVar->lay == 0 || nhru > newVar->dim)) {
+			if (newVar->varType == TVar::Read || newVar->varType == TVar::ReadI) {
+				if (dimen == TDim::NFREQ && (newVar->lay == 0 || nhru > newVar->dim)) {
 					newVar->ReleaseM(true);
 					newVar->dim = nhru;
 					newVar->dimMax = newVar->dim;
@@ -1653,7 +1675,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 						newVar->ilayvalues[ii] = new long[newVar->dimMax];
 				}
 
-				if (newVar->varType == CRHM::Read || (newVar->varType == CRHM::ReadF && nhru > newVar->dimMax)) {  //warning resolved by Manishankar
+				if (newVar->varType == TVar::Read || (newVar->varType == TVar::ReadF && nhru > newVar->dimMax)) {  //warning resolved by Manishankar
 					if (newVar->ivalues != NULL)
 						delete[] newVar->ivalues;
 					else {
@@ -1665,7 +1687,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 					newVar->ivalues = new long[newVar->dimMax];
 
-					newVar->varType = CRHM::ReadI;
+					newVar->varType = TVar::ReadI;
 
 					newVar->help = help;
 					newVar->units = units;
@@ -1678,7 +1700,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 					Global::MapVars.insert(Item);
 				}
 			}
-			else if (newVar->dimen != dimen && dimen == CRHM::NFREQ) { // upgrade t to t-freq
+			else if (newVar->dimen != dimen && dimen == TDim::NFREQ) { // upgrade t to t-freq
 				newVar->ReleaseM(true);
 				newVar->lay = Global::Freq;
 				newVar->nfreq = true;
@@ -1689,9 +1711,9 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 			return(-1);
 		}
 
-		newVar = new ClassVar(declModule, variable, dimen, help, units, CRHM::Int);
+		newVar = new ClassVar(declModule, variable, dimen, help, units, TVar::Int);
 
-		newVar->varType = CRHM::Int;
+		newVar->varType = TVar::Int;
 
 		Item = PairVar(declModule + variable, newVar);
 		Global::MapVars.insert(Item);
@@ -1702,7 +1724,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 		return(-1);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 
 		newVar = NULL; // unchanged if nothing found
 
@@ -1730,7 +1752,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 		}
 
 		if (newVar == NULL) {
-			CRHMException Except("Observation not found " + declModule + ": " + variable, TERMINATE);
+			CRHMException Except("Observation not found " + declModule + ": " + variable, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -1744,7 +1766,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 				return(-1);
 			}
 			else {
-				CRHMException Except("Observation: '" + variable + "', not in Data file. Requested by '" + Name.c_str() + "'", TERMINATE);
+				CRHMException Except("Observation: '" + variable + "', not in Data file. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 				LogError(Except);
 
 				//added by Manishankar
@@ -1772,7 +1794,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 			*layvalue = (const long **)newVar->ilayvalues;
 			newVar->UserFunct = &ClassVar::Intvl;
-			newVar->FunKind = CRHM::INTVL;
+			newVar->FunKind = TFun::INTVL;
 			newVar->FunctVar = newVar;
 			addtofunctlist(newVar);  //insert in Obs read list
 		}
@@ -1803,7 +1825,7 @@ long ClassModule::declreadobs(string variable, CRHM::TDim dimen,  // needs updat
 
 //---------------------------------------------------------------------------
 
-long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::TFun typeFun, float ***layvalue, bool optional) {
+long ClassModule::declobsfunc(string obs, string variable, double **value, TFun typeFun, double ***layvalue, bool optional) {
 
 	MapVar::iterator itVar;
 	ClassVar *obsVar, *newVar;
@@ -1817,23 +1839,23 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(OBSF, Name, obs, obs, declModule, ID);
-	AKAhook(VARD, Name, variable, variable);
+	AKAhook(TAKA::OBSF, Name, obs, obs, declModule, ID);
+	AKAhook(TAKA::VARD, Name, variable, variable);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		pair<Mapstr::iterator, Mapstr::iterator> range = Global::Mapreadvar.equal_range(Name.c_str());
-		string units;
-
+		//string units; local variable is not used - jhs507
+		 
 		for (Mapstr::iterator itMap = range.first; itMap != range.second; ++itMap) {
 			if (itMap->second.first == obs.c_str()) {
-				units = itMap->second.second;
+				//units = itMap->second.second; units is set here with a long value to a string but never used - jhs507
 				break;
 			}
 		}
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(CRHM::DIAGNOSTIC);
+      		VandP VP; VP.PutV(variation_set); VP.PutP((int)TVISIBLE::DIAGNOSTIC);
 		PairstrV Item2 = PairstrV(obs.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -1847,10 +1869,10 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(declModule + obs)) == Global::MapVars.end()) {
-			LogError(CRHMException("function obs variable not declared: " + Name + " " + obs, WARNING));
+			LogError(CRHMException("function obs variable not declared: " + Name + " " + obs, TExcept::WARNING));
 			return(-1);
 		}
 
@@ -1864,13 +1886,13 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 		//string help = obsVar->help + " <" + Fstrings[typeFun] + "> ";
 		string help = obsVar->help + " <" + "> ";
 
-		newVar = new ClassVar(Name, variable, nhru, help, obsVar->units, CRHM::Float);
+		newVar = new ClassVar(Name, variable, nhru, help, obsVar->units, TVar::Float);
 
 		newVar->dimMax = nhru; // added 04/16/13 (replacing t obs faulty)
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
-		newVar->visibility = CRHM::DIAGNOSTIC;
+		newVar->visibility = TVISIBLE::DIAGNOSTIC;
 
 		newVar->variation_set = variation_set;
 
@@ -1883,7 +1905,7 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 		return(0);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		itVar = Global::MapVars.find(Name + " " + variable);
 
 		try
@@ -1895,14 +1917,14 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 				if (!newVar) { // Applies to ppt, p etc. when building a new project with NO observations defined
 
 					newVar = new ClassVar(Name, variable, nhru,
-						obsVar->help + " <" + Fstrings[typeFun] + "> ",
-						obsVar->units, CRHM::Float);
+						obsVar->help + " <" + Fstrings[(int)typeFun] + "> ",
+						obsVar->units, TVar::Float);
 
 					newVar->dimMax = nhru;
 
-					newVar->varType = CRHM::Float;
+					newVar->varType = TVar::Float;
 
-					newVar->visibility = CRHM::DIAGNOSTIC;
+					newVar->visibility = TVISIBLE::DIAGNOSTIC;
 
 					newVar->variation_set = variation_set;
 
@@ -1919,30 +1941,30 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 						return(-1);
 					}
 					else {
-						CRHMException Except("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "'", TERMINATE);
+						CRHMException Except("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 						LogError(Except);
 						throw Except;
 					}
 				}
 
 				if (obsVar->FileData->Times != NULL) {
-					CRHMException Except("Function observation: '" + variable + "', uses a 'sparse' Data file. Requested by '" + Name.c_str() + "'", TERMINATE);
+					CRHMException Except("Function observation: '" + variable + "', uses a 'sparse' Data file. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 					LogError(Except);
 					throw Except;
 				}
 
-				if (typeFun == CRHM::INTVL) {
+				if (typeFun == TFun::INTVL) {
 
 					newVar->ReleaseM(false); // needs to release current values
 					newVar->dim = max<long>(nhru, newVar->dim);
 					newVar->dimMax = max<long>(newVar->dim, newVar->dimMax);
 					newVar->lay = Global::Freq;
 
-					newVar->layvalues = new float *[newVar->lay];
+					newVar->layvalues = new double *[newVar->lay];
 					*layvalue = newVar->layvalues;
 
 					for (int ii = 0; ii < newVar->lay; ++ii)
-						newVar->layvalues[ii] = new float[newVar->dimMax];
+						newVar->layvalues[ii] = new double[newVar->dimMax];
 
 					newVar->values = newVar->layvalues[0]; // set non-zero - ReleaseM requires - NOP
 
@@ -1951,64 +1973,64 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 				else if (nhru > newVar->dim) { // change of observation array size
 					delete[] newVar->values;
 					newVar->dimMax = nhru;
-					newVar->values = new float[newVar->dimMax];
+					newVar->values = new double[newVar->dimMax];
 					newVar->dim = newVar->dimMax;
 				}
 				if (GroupCnt)
 					newVar->CustomFunct = NULL; // Set by 'declobsfunc' for Groups. If simple set by 'addtoreadlist'
 
 				switch (typeFun) {
-				case CRHM::FOBS:
+				case TFun::FOBS:
 					newVar->FunctVar = obsVar;
-					newVar->FunKind = CRHM::FOBS;
+					newVar->FunKind = TFun::FOBS;
 					newVar->FileData = obsVar->FileData;
 					if (GroupCnt)
 						newVar->No_ReadVar = 1;  // do not read observation
 					break;
-				case CRHM::AVG:
+				case TFun::AVG:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Avg;
-					newVar->FunKind = CRHM::AVG;
+					newVar->FunKind = TFun::AVG;
 					break;
-				case CRHM::MIN:
+				case TFun::MIN:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Min;
-					newVar->FunKind = CRHM::MIN;
+					newVar->FunKind = TFun::MIN;
 					break;
-				case CRHM::MAX:
+				case TFun::MAX:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Max;
-					newVar->FunKind = CRHM::MAX;
+					newVar->FunKind = TFun::MAX;
 					break;
-				case CRHM::DTOT:
+				case TFun::DTOT:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Dtot;
-					newVar->FunKind = CRHM::DTOT;
+					newVar->FunKind = TFun::DTOT;
 					break;
-				case CRHM::TOT:
+				case TFun::TOT:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Tot;
-					newVar->FunKind = CRHM::TOT;
+					newVar->FunKind = TFun::TOT;
 					break;
-				case CRHM::FIRST:
+				case TFun::FIRST:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::First;
-					newVar->FunKind = CRHM::FIRST;
+					newVar->FunKind = TFun::FIRST;
 					break;
-				case CRHM::LAST:
+				case TFun::LAST:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Last;
-					newVar->FunKind = CRHM::LAST;
+					newVar->FunKind = TFun::LAST;
 					break;
-				case CRHM::POS:
+				case TFun::POS:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Pos;
-					newVar->FunKind = CRHM::POS;
+					newVar->FunKind = TFun::POS;
 					break;
-				case CRHM::INTVL:
+				case TFun::INTVL:
 					newVar->FunctVar = obsVar;
 					newVar->UserFunct = &ClassVar::Intvl;
-					newVar->FunKind = CRHM::INTVL;
+					newVar->FunKind = TFun::INTVL;
 					newVar->offset = newVar->FunctVar->offset;
 
 					*layvalue = newVar->layvalues;
@@ -2020,7 +2042,7 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 				*value = newVar->values;
 
 				newVar->HRU_OBS_indexed = obsVar->HRU_OBS_indexed;
-				if (newVar->FunKind == CRHM::FOBS)
+				if (newVar->FunKind == TFun::FOBS)
 					addtoreadlist(newVar);
 				else if ((Global::RH_EA_obs == -1 && obs == "rh") || (Global::RH_EA_obs == -1 && obs == "ea") || Global::OBS_AS_IS || !(obs == "ea" || obs == "rh"))  //warning resolved by Manishankar
 					addtofunctlist(newVar);
@@ -2028,7 +2050,7 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 			}
 			else {
 				if (!optional) {
-					CRHMException Except("Observation not found obs: " + obs, TERMINATE);
+					CRHMException Except("Observation not found obs: " + obs, TExcept::TERMINATE);
 					LogError(Except);
 					throw Except;
 				}
@@ -2047,7 +2069,7 @@ long ClassModule::declobsfunc(string obs, string variable, float **value, CRHM::
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::TFun typeFun, bool optional) {
+long ClassModule::declobsfunc(string obs, string variable, long **value, TFun typeFun, bool optional) {
 
 	MapVar::iterator itVar;
 	ClassVar *obsVar, *newVar;
@@ -2061,23 +2083,23 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(OBSF, Name, obs, obs, declModule, ID);
-	AKAhook(VARD, Name, variable, variable);
+	AKAhook(TAKA::OBSF, Name, obs, obs, declModule, ID);
+	AKAhook(TAKA::VARD, Name, variable, variable);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		pair<Mapstr::iterator, Mapstr::iterator> range = Global::Mapreadvar.equal_range(Name.c_str());
-		string units;
+		//string units; Units is set below with a long value into a string but never used - jhs507
 
 		for (Mapstr::iterator itMap = range.first; itMap != range.second; ++itMap) {
 			if (itMap->second.first == obs.c_str()) {
-				units = itMap->second.second;
+				//units = itMap->second.second; //The value of units is never used - jhs507
 				break;
 			}
 		}
 
-		VandP VP; VP.PutV(variation_set); VP.PutP(CRHM::DIAGNOSTIC);
+		VandP VP; VP.PutV(variation_set); VP.PutP((int)TVISIBLE::DIAGNOSTIC);
 		PairstrV Item2 = PairstrV(obs.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -2091,10 +2113,10 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 		return(-1);
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 
 		if ((itVar = Global::MapVars.find(declModule + obs)) == Global::MapVars.end()) {
-			LogError(CRHMException("function obs variable not declared: " + Name + " " + obs, WARNING));
+			LogError(CRHMException("function obs variable not declared: " + Name + " " + obs, TExcept::WARNING));
 			return(-1);
 		}
 
@@ -2106,16 +2128,16 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 
 		if (!obsVar->ivalues) {
 			obsVar->ivalues = new long[obsVar->dim]; // TB 10/08/10
-			obsVar->varType = CRHM::ReadI;
+			obsVar->varType = TVar::ReadI;
 		}
 
 		newVar = new ClassVar(Name, variable, obsVar->dim,
-			obsVar->help + " <" + Fstrings[typeFun] + "> ",
-			obsVar->units, CRHM::Float);
+			obsVar->help + " <" + Fstrings[(int)typeFun] + "> ",
+			obsVar->units, TVar::Float);
 
-		newVar->varType = CRHM::Float;
+		newVar->varType = TVar::Float;
 
-		newVar->visibility = CRHM::DIAGNOSTIC;
+		newVar->visibility = TVISIBLE::DIAGNOSTIC;
 
 		newVar->variation_set = variation_set;
 
@@ -2128,7 +2150,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 		return(-1);
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		itVar = Global::MapVars.find(Name + " " + variable);
 		newVar = (*itVar).second;
 
@@ -2137,19 +2159,19 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 
 			if (obsVar->FileData == NULL) {
 				if (optional) {
-					LogError(CRHMException("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "' (optional).", WARNING));
+					LogError(CRHMException("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "' (optional).", TExcept::WARNING));
 					*value = NULL;
 					return(-1);
 				}
 				else {
-					CRHMException Except("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "'", TERMINATE);
+					CRHMException Except("Function observation: '" + variable + "', cannot be generated from the declared observation, '" + obs.c_str() + "'. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 					LogError(Except);
 					throw Except;
 				}
 			}
 
 			if (obsVar->FileData->Times != NULL) {
-				CRHMException Except("Function observation: '" + variable + "', uses a 'sparse' Data file. Requested by '" + Name.c_str() + "'", TERMINATE);
+				CRHMException Except("Function observation: '" + variable + "', uses a 'sparse' Data file. Requested by '" + Name.c_str() + "'", TExcept::TERMINATE);
 				LogError(Except);
 				throw Except;
 			}
@@ -2161,45 +2183,45 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 			}
 
 			switch (typeFun) {
-			case CRHM::AVG:
+			case TFun::AVG:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Avg;
-				newVar->FunKind = CRHM::AVG;
+				newVar->FunKind = TFun::AVG;
 				break;
-			case CRHM::MIN:
+			case TFun::MIN:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Min;
-				newVar->FunKind = CRHM::MIN;
+				newVar->FunKind = TFun::MIN;
 				break;
-			case CRHM::MAX:
+			case TFun::MAX:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Max;
-				newVar->FunKind = CRHM::MAX;
+				newVar->FunKind = TFun::MAX;
 				break;
-			case CRHM::DTOT:
+			case TFun::DTOT:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Dtot;
-				newVar->FunKind = CRHM::DTOT;
+				newVar->FunKind = TFun::DTOT;
 				break;
-			case CRHM::TOT:
+			case TFun::TOT:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Tot;
-				newVar->FunKind = CRHM::TOT;
+				newVar->FunKind = TFun::TOT;
 				break;
-			case CRHM::FIRST:
+			case TFun::FIRST:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::First;
-				newVar->FunKind = CRHM::FIRST;
+				newVar->FunKind = TFun::FIRST;
 				break;
-			case CRHM::LAST:
+			case TFun::LAST:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Last;
-				newVar->FunKind = CRHM::LAST;
+				newVar->FunKind = TFun::LAST;
 				break;
-			case CRHM::POS:
+			case TFun::POS:
 				newVar->FunctVar = obsVar;
 				newVar->UserFunct = &ClassVar::Pos;
-				newVar->FunKind = CRHM::POS;
+				newVar->FunKind = TFun::POS;
 				break;
 			default:
 				break;
@@ -2212,7 +2234,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 			return (obsVar->cnt - 1);
 		}
 		else {
-			CRHMException Except("Variable not found obs: " + obs, TERMINATE);
+			CRHMException Except("Variable not found obs: " + obs, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -2226,7 +2248,7 @@ long ClassModule::declobsfunc(string obs, string variable, long **value, CRHM::T
 //---------------------------------------------------------------------------
 
 
-long ClassModule::declputvar(string source, string name, string units, float **value, float ***layvalue) {
+long ClassModule::declputvar(string source, string name, string units, double **value, double ***layvalue) {
 
 	MapVar::iterator itVar;
 	ClassVar *newVar;
@@ -2239,11 +2261,11 @@ long ClassModule::declputvar(string source, string name, string units, float **v
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(VARG, Name, name, name, source, ID);
+	AKAhook(TAKA::VARG, Name, name, name, source, ID);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
 		string s = string(source.c_str()) + " " + name.c_str();
 
@@ -2254,15 +2276,15 @@ long ClassModule::declputvar(string source, string name, string units, float **v
 		return 0;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return 0;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if ((itVar = Global::MapVars.find(source + " " + name)) != Global::MapVars.end()) {
 			newVar = (*itVar).second;
 			*value = newVar->values;
-			if (layvalue != NULL) (*layvalue) = newVar->layvalues; //const_cast<float **> (*layvalue) = newVar->layvalues;
+			if (layvalue != NULL) (*layvalue) = newVar->layvalues; //const_cast<double **> (*layvalue) = newVar->layvalues;
 
 			PairVar Item = PairVar(Name + " " + name, newVar);
 			Global::MapVarsPut.insert(Item);
@@ -2272,19 +2294,19 @@ long ClassModule::declputvar(string source, string name, string units, float **v
 			GetUnit = FindWildVarFloat(name, newVar); // name
 			if (GetUnit > -1) {
 				*value = newVar->values;
-				if (layvalue != NULL) (*layvalue) = newVar->layvalues;  //const_cast<float **> (*layvalue) = newVar->layvalues;
+				if (layvalue != NULL) (*layvalue) = newVar->layvalues;  //const_cast<double **> (*layvalue) = newVar->layvalues;
 
 				PairVar Item = PairVar(Name + " " + name, newVar);
 				Global::MapVarsPut.insert(Item);
 				return GetUnit;
 			}
 
-			CRHMException Except("Wild variable not found: " + source + ' ' + name, TERMINATE);
+			CRHMException Except("Wild variable not found: " + source + ' ' + name, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
 		else {
-			CRHMException Except("Variable not found: " + source + ' ' + name, TERMINATE);
+			CRHMException Except("Variable not found: " + source + ' ' + name, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -2309,11 +2331,11 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(VARG, Name, name, name, source, ID);
+	AKAhook(TAKA::VARG, Name, name, name, source, ID);
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 
 		string s = string(source.c_str()) + " " + name.c_str();
 
@@ -2324,12 +2346,12 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 		return 0;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return 0;
 	}
 
-	case CRHM::INIT: {
-		if (name == "Not_Used") // AKA does not handle int/float
+	case TBuild::INIT: {
+		if (name == "Not_Used") // AKA does not handle int/double
 			name = "Not_Used_int";
 
 		if ((itVar = Global::MapVars.find(source + " " + name)) != Global::MapVars.end()) {
@@ -2352,12 +2374,12 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 				return GetUnit;
 			}
 
-			CRHMException Except("Wild variable not found: " + source + ' ' + name, TERMINATE);
+			CRHMException Except("Wild variable not found: " + source + ' ' + name, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
 		else {
-			CRHMException Except("Variable not found: " + source + ' ' + name, TERMINATE);
+			CRHMException Except("Variable not found: " + source + ' ' + name, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except;
 		}
@@ -2372,7 +2394,7 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & NewName) { // OBSD, PARD, VARD
 
 	Mapstr2::iterator it; // holds NewName
-	string ID = AKAstrings[type] + ' ' + module + ' ' + OrgName;
+	string ID = AKAstrings[(int)type] + ' ' + module + ' ' + OrgName;
 	bool Added = false;
 	bool Explicit = false;
 
@@ -2382,7 +2404,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 		Explicit = true;
 	}
 	else {
-		if (type == OBSD) {
+		if (type == TAKA::OBSD) {
 			string::size_type idx = ID.size();
 
 			if (ID[idx - 1] == '#')
@@ -2402,26 +2424,26 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 			else
 				Added = false;
 		}
-		else if (GroupCnt && type == VARD) {
+		else if (GroupCnt && type == TAKA::VARD) {
 			string A;
 			Common::GroupEnding(A, GroupCnt);
 			NewName.append(A);
-			ID = AKAstrings[type] + ' ' + module + ' ' + NewName;
+			ID = AKAstrings[(int)type] + ' ' + module + ' ' + NewName;
 			if ((it = Global::MapAKA.find(ID)) != Global::MapAKA.end()) {
 				NewName = (*it).second;
 				NewName = NewName.substr(0, NewName.find(' '));
 				Explicit = true;
 			}
 		}
-		else if (StructCnt && type == VARD) {
+		else if (StructCnt && type == TAKA::VARD) {
 			string A("@`");
-			A[1] += StructCnt;
+			A[1] += (char) StructCnt;
 			NewName.append(A);
 		}
 	}
 
 	if (Global::ReportList && Explicit) {
-		string ID = AKAstrings[type] + ' ' + module + ' ' + OrgName;
+		string ID = AKAstrings[(int)type] + ' ' + module + ' ' + OrgName;
 		if (Added)
 			NewName.insert(NewName.size(), "#");
 		if (Explicit)
@@ -2435,45 +2457,45 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 
 	Mapstr2::iterator it; // holds NewName AND source
 
-	enum { None, Implicit, Explicit, IgnoreObs, IgnoreVar, IgnoreObsFunct } Outcome;
-	Outcome = None;
+	
+	OUTCOME Outcome = OUTCOME::None;
 
 	TAKA typeL = type; // fudge until AKA screen fixed
-	if (type == OBSF)
-		type = OBSR;
+	if (type == TAKA::OBSF)
+		type = TAKA::OBSR;
 
 	string Try;
-	string ID = AKAstrings[type] + ' ' + module + ' ' + OrgName;
+	string ID = AKAstrings[(int)type] + ' ' + module + ' ' + OrgName;
 
 	if ((it = Global::MapAKA.find(ID)) != Global::MapAKA.end()) { // search AKA list
 		Try = (*it).second;
 		Try = Try.substr(0, Try.find(' '));
 		if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) { // looping redirection
-			if (typeL == OBSF)
-				Outcome = IgnoreObsFunct;
+			if (typeL == TAKA::OBSF)
+				Outcome = OUTCOME::IgnoreObsFunct;
 			else
-				Outcome = IgnoreObs;
+				Outcome = OUTCOME::IgnoreObs;
 		}
-		else if (GroupCnt && type == VARG) {
+		else if (GroupCnt && type == TAKA::VARG) {
 			string A;
 			Common::GroupEnding(A, GroupCnt);
 			NewName.append(A);
-			ID = AKAstrings[type] + ' ' + module + ' ' + NewName;
+			ID = AKAstrings[(int)type] + ' ' + module + ' ' + NewName;
 			if ((it = Global::MapAKA.find(ID)) != Global::MapAKA.end()) { // search AKA list for GROUP name
 				Try = (*it).second;
 				Try = Try.substr(0, Try.find(' '));
 				NewName = (*it).second;
 				NewName = NewName.substr(0, NewName.find(' '));
-				Outcome = Implicit;
+				Outcome = OUTCOME::Implicit;
 			}
 		}
-		else if (typeL == OBSF && Try[Try.size() - 1] == '#') { // declared observation and daily function
-			Outcome = IgnoreObsFunct;
+		else if (typeL == TAKA::OBSF && Try[Try.size() - 1] == '#') { // declared observation and daily function
+			Outcome = OUTCOME::IgnoreObsFunct;
 		}
-		else if (type == OBSR) { //  observation   !!! was typeL 08/20/10
+		else if (type == TAKA::OBSR) { //  observation   !!! was typeL 08/20/10
 			if (Try[Try.size() - 1] == '#') {
 				if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) {
-					Outcome = IgnoreObs;
+					Outcome = OUTCOME::IgnoreObs;
 				}
 			}
 
@@ -2481,24 +2503,24 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 			NewName = NewName.substr(0, NewName.find(' '));
 			source = (*it).second;
 			source = source.substr(source.find(' ') + 1) + ' ';
-			Outcome = Explicit;
+			Outcome = OUTCOME::Explicit;
 		}
-		else if (type == VARG) { // handle read operation
+		else if (type == TAKA::VARG) { // handle read operation
 			NewName = (*it).second;
 			NewName = NewName.substr(0, NewName.find(' '));
 			source = (*it).second;
 			source = source.substr(source.find(' ') + 1);
-			Outcome = Explicit;
+			Outcome = OUTCOME::Explicit;
 		}
 	} // Above found in AKA table
 	else {
-		if (GroupCnt && typeL == OBSR) { // use declared observation in same group
+		if (GroupCnt && typeL == TAKA::OBSR) { // use declared observation in same group
 
 			if ((Global::MapVars.find("obs " + OrgName)) != Global::MapVars.end()) { // look for as observation
 				NewName = OrgName;
 				source = "obs ";
 				Try = NewName;
-				Outcome = Implicit;
+				Outcome = OUTCOME::Implicit;
 			}
 			else {
 				string mod_var = ID.substr(ID.find(' ') + 1) + '#';
@@ -2507,11 +2529,11 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 					NewName = OrgName + '#';
 					source = module + ' ';
 					Try = NewName;
-					Outcome = Implicit;
+					Outcome = OUTCOME::Implicit;
 				}
 			}
 		}
-		else if ((GroupCnt || StructCnt) && type == VARG) {
+		else if ((GroupCnt || StructCnt) && type == TAKA::VARG) {
 			string A;
 			if (GroupCnt) {
 				Common::GroupEnding(A, GroupCnt);
@@ -2520,57 +2542,57 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 				Common::GroupEnding(A, StructCnt);
 			}
 			NewName.append(A);
-			ID = AKAstrings[type] + ' ' + module + ' ' + NewName;
+			ID = AKAstrings[(int)type] + ' ' + module + ' ' + NewName;
 			if ((it = Global::MapAKA.find(ID)) != Global::MapAKA.end()) {
 				Try = (*it).second;
 				Try = Try.substr(0, Try.find('@'));
 				if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) {
-					Outcome = IgnoreVar;
+					Outcome = OUTCOME::IgnoreVar;
 				}
 				else {
 					NewName = (*it).second;
 					NewName = NewName.substr(0, NewName.find(' '));
-					Outcome = Implicit;
+					Outcome = OUTCOME::Implicit;
 				}
 			}
 		}
 	}
 
-	ID = AKAstrings[typeL] + " (" + base + ") " + module + " -> " + OrgName + ' ';
+	ID = AKAstrings[(int)typeL] + " (" + base + ") " + module + " -> " + OrgName + ' ';
 	switch (Outcome) {
-	case IgnoreObs:
+	case OUTCOME::IgnoreObs:
 		LogMessage(string(ID + " *** AKA warning, not changed to *** " + source + "->" + Try).c_str());
 		break;
-	case IgnoreObsFunct:
+	case OUTCOME::IgnoreObsFunct:
 		LogMessage(string(ID + "*** AKA warning, not changed to *** " + source + "->" + Try).c_str());
 		break;
-	case IgnoreVar: // VARG
+	case OUTCOME::IgnoreVar: // VARG
 		LogMessage(string(ID + "*** AKA warning, not changed to *** " + source + "->" + Try).c_str());
 		break;
 	default:
 		break;
 	} // switch
 
-	if (Global::ReportList && Outcome != None) {
+	if (Global::ReportList && Outcome != OUTCOME::None) {
 		string reason = "";
 		switch (Outcome) {
-		case Explicit:
+		case OUTCOME::Explicit:
 			source = (ID + " changed to " + source + "-> " + Try).c_str();
 			reason = " *** Explicit *** ";
 			break;
-		case Implicit:
+		case OUTCOME::Implicit:
 			source = (ID + " changed to " + source + "-> " + Try).c_str();
 			reason = " *** Implicit *** ";
 			break;
-		case IgnoreObs:
+		case OUTCOME::IgnoreObs:
 			source = (ID + " AKA warning, not changed to " + source + "-> " + Try).c_str();
 			reason = " *** source module AKA observation redirection would loop output to input";
 			break;
-		case IgnoreObsFunct:
+		case OUTCOME::IgnoreObsFunct:
 			source = (ID + " AKA warning, not changed to " + source + "-> " + Try).c_str();
 			reason = " *** daily function cannot be a declared observation";
 			break;
-		case IgnoreVar: // VARG
+		case OUTCOME::IgnoreVar: // VARG
 			source = (ID + " AKA warning, not changed to " + source + "-> " + Try).c_str();
 			reason = " *** source module AKA variable redirection would loop output to input";
 			break;
@@ -2620,7 +2642,19 @@ void ClassModule::ReadObs(bool Reset) {
 			P->dim = nhru; // check if necessary. Group?
 
 			if (P->FunctVar->FileData->GoodDay)
+			{
 				(P->*(P->UserFunct))();
+
+				//manishankar. this is used for resolving the address related issue.
+				if (P->name == "t")
+				{
+					this->t_layvalues = P->layvalues;
+				}
+				else if (P->name == "rh")
+				{
+					this->rh_layvalues = P->layvalues;
+				}
+			}
 
 			if (P->CustomFunct) // execute any extra features except for nfreq observations   && !P->nfreq
 				(P->*(P->CustomFunct))(this); // do_t_day, do_rh_day, do_ea_day, do_t, do_p,  do_ppt or Nothing
@@ -2655,7 +2689,7 @@ bool ClassModule::ReadAheadObs(long inc) {
 	TDateTime CurrentDTnow = Global::DTnow;
 
 	Global::DTindx += inc;
-	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 
 	long p = 0;
 
@@ -2694,7 +2728,7 @@ bool ClassModule::ReadAheadObsMacro(long inc) {
 	long **Save_HRU_obs = Global::HRU_OBS;
 
 	Global::DTindx += inc;
-	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 
 	long p = 0;
 
@@ -2758,7 +2792,7 @@ void ClassModule::DelReadObs(void) {
 }
 
 //---------------------------------------------------------------------------
-bool ClassModule::AnyOne(float *Data, int Cnt, float Val) {
+bool ClassModule::AnyOne(double *Data, int Cnt, double Val) {
 
 	if (Data == NULL) // remove later!
 		return false;
@@ -2783,7 +2817,7 @@ void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
 
 	long p = 0;
 	ClassVar *P;
-	string::size_type indx;
+	//string::size_type indx; variable is unreferenced commenting out for now - jhs507
 
 	while (p < ReadListN->Count && GroupCnt == 0) { // duplicates possible in simple projects
 		P = (ClassVar*)ReadListN->array[p].Object;
@@ -2795,7 +2829,7 @@ void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
 	}
 
 	if (((Global::DTmax - Global::DTmin) / Global::Freq + newVar->FileData->Dt1 > newVar->FileData->Dt2) && !newVar->FileData->Times) {
-		CRHMException TExcept((string("Observation file '") + string(newVar->FileData->DataFileName.c_str()) + "' shorter than model run!").c_str(), WARNING);
+		CRHMException TExcept((string("Observation file '") + string(newVar->FileData->DataFileName.c_str()) + "' shorter than model run!").c_str(), TExcept::WARNING);
 		LogError(TExcept);
 	}
 
@@ -3031,7 +3065,7 @@ void Administer::Accept(int Result) {
 		case mbYes:
 		case mbYesToAll:
 			if (jj != -1) {
-				LogError(CRHMException((DLLModuleList->Strings[ii] + " module being replaced").c_str(), WARNING));
+				LogError(CRHMException((DLLModuleList->Strings[ii] + " module being replaced").c_str(), TExcept::WARNING));
 				Global::AllModulesList->Delete(jj);
 			}
 
@@ -3081,13 +3115,18 @@ void Administer::Accept(int Result) {
 Myparser::Myparser() // parser constructor
 {
 	exp_ptr = NULL;
+	
+	for (int i = 0; i < 80; i++) {
+		token[i] = '\0';
+	}
+
 }
 
 // Parser entry point.
 void Myparser::eval_exp(ClassPar *Par)
 {
 	LocalPar = Par;
-	float result, Last;
+	double result, Last;
 	int stop;
 	bool OpenBrkt;
 
@@ -3123,28 +3162,28 @@ next:
 	case '\0':
 		if (col >= Par->dim) break;
 
-		if (Par->varType == CRHM::Float)
+		if (Par->varType == TVar::Float)
 			Par->layvalues[row][col++] = result;
-		else if (Par->varType == CRHM::Int)
-			Par->ilayvalues[row][col++] = result;
+		else if (Par->varType == TVar::Int)
+			Par->ilayvalues[row][col++] = (long) result;
 
 		for (int ll = row; ll < Par->lay; ++ll) {
 			if (Bang) { // N.B. loop start
 				for (int ii = col - 1; ii < Par->dim; ++ii) {
-					if (Par->varType == CRHM::Float)
+					if (Par->varType == TVar::Float)
 						Par->layvalues[ll][ii] = Last;
-					else if (Par->varType == CRHM::Int)
-						Par->ilayvalues[ll][ii] = Last;
+					else if (Par->varType == TVar::Int)
+						Par->ilayvalues[ll][ii] = (long) Last;
 
 					Last += 1;
 				}
 			}
 			else {
 				for (int ii = col; ii < Par->dim; ++ii)
-					if (Par->varType == CRHM::Float)
+					if (Par->varType == TVar::Float)
 						Par->layvalues[ll][ii] = 0.0;
-					else if (Par->varType == CRHM::Int)
-						Par->ilayvalues[ll][ii] = 0.0;
+					else if (Par->varType == TVar::Int)
+						Par->ilayvalues[ll][ii] = 0;
 			}
 
 			col = 0;;
@@ -3164,17 +3203,17 @@ next:
 		stop = col + repeat;
 		if (stop > Par->dim) stop = Par->dim;
 		for (int ii = col; ii < stop; ++ii)
-			if (Par->varType == CRHM::Float)
+			if (Par->varType == TVar::Float)
 				Par->layvalues[row][col++] = result;
-			else if (Par->varType == CRHM::Int)
-				Par->ilayvalues[row][col++] = result;
+			else if (Par->varType == TVar::Int)
+				Par->ilayvalues[row][col++] = (long) result;
 
 		for (int ii = col; ii < Par->dim; ++ii) {
 			Last += Bang;
-			if (Par->varType == CRHM::Float)
+			if (Par->varType == TVar::Float)
 				Par->layvalues[row][ii] = Last;
-			else if (Par->varType == CRHM::Int)
-				Par->ilayvalues[row][ii] = Last;
+			else if (Par->varType == TVar::Int)
+				Par->ilayvalues[row][ii] = (long) Last;
 		}
 
 		Bang = 0;
@@ -3185,9 +3224,9 @@ next:
 
 			for (int ll = row; ll < stop; ++ll) {
 				for (int ii = col; ii < Par->dim; ++ii)
-					if (Par->varType == CRHM::Float)
+					if (Par->varType == TVar::Float)
 						Par->layvalues[ll][ii] = Par->layvalues[ll - 1][ii];
-					else if (Par->varType == CRHM::Int)
+					else if (Par->varType == TVar::Int)
 						Par->ilayvalues[ll][ii] = Par->ilayvalues[ll - 1][ii];
 			}
 			row = stop;
@@ -3200,10 +3239,10 @@ next:
 		stop = col + repeat;
 		if (stop > Par->dim) stop = Par->dim;
 		for (int ii = col; ii < stop; ++ii)
-			if (Par->varType == CRHM::Float)
+			if (Par->varType == TVar::Float)
 				Par->layvalues[row][col++] = result;
-			else if (Par->varType == CRHM::Int)
-				Par->ilayvalues[row][col++] = result;
+			else if (Par->varType == TVar::Int)
+				Par->ilayvalues[row][col++] = (long) result;
 		if (col >= Par->dim)
 			if (!OpenBrkt && (row + 1 < Par->lay)) {
 				col = 0;
@@ -3218,10 +3257,10 @@ next:
 }
 
 // Add or subtract two terms.
-void Myparser::eval_exp2(float &result)
+void Myparser::eval_exp2(double &result)
 {
 	char op; //removed register keyword to fix warning. Manishankar
-	float temp;
+	double temp;
 
 	eval_exp3(result);
 	while ((op = *token) == '+' || op == '-') {
@@ -3241,16 +3280,16 @@ void Myparser::eval_exp2(float &result)
 }
 
 // Multiply or divide two factors.
-void Myparser::eval_exp3(float &result)
+void Myparser::eval_exp3(double &result)
 {
 	char op; //removed register keyword to fix warning. Manishankar
-	float temp;
+	double temp;
 
 	eval_exp4(result);
 	while ((op = *token) == '*' || op == '/' || op == '%') {
 		get_token();
 		if (op == '*' && !repeatset) {
-			repeat = result;
+			repeat = (int) result; //added cast to int - jhs507
 			repeatset = true;
 			if (*token == '[') return;
 			eval_exp4(result);
@@ -3274,10 +3313,11 @@ void Myparser::eval_exp3(float &result)
 }
 
 // Process an exponent
-void Myparser::eval_exp4(float &result)
+void Myparser::eval_exp4(double &result)
 {
-	float temp, ex;
-	int t; //removed register keyword to fix warning. Manishankar
+	double temp;
+	//double ex; variable is unreferenced commenting out for now - jhs507
+	//int t; //removed register keyword to fix warning. Manishankar variable is unreferenced commenting out for now - jhs507
 
 	eval_exp5(result);
 	if (*token == '^') {
@@ -3292,7 +3332,7 @@ void Myparser::eval_exp4(float &result)
 }
 
 // Evaluate a unary + or -.
-void Myparser::eval_exp5(float &result)
+void Myparser::eval_exp5(double &result)
 {
 	char  op; //removed register keyword to fix warning. Manishankar
 
@@ -3306,7 +3346,7 @@ void Myparser::eval_exp5(float &result)
 }
 
 // Process a parenthesized expression.
-void Myparser::eval_exp6(float &result)
+void Myparser::eval_exp6(double &result)
 {
 	if (*token == '(') {  //warning resolved by Manishankar
 		repeatset = true;
@@ -3320,7 +3360,7 @@ void Myparser::eval_exp6(float &result)
 }
 
 // Get the value of a number.
-void Myparser::atom(float &result)
+void Myparser::atom(double &result)
 {
 	switch (tok_type) {
 	case NUMBER:
@@ -3341,13 +3381,13 @@ void Myparser::serror(int error)
 		"No expression Present"
 	};
 	LogError(CRHMException(string(e[error]) + " in module '" +
-		LocalPar->module + "' parameter '" + LocalPar->param + "'", WARNING));
+		LocalPar->module + "' parameter '" + LocalPar->param + "'", TExcept::WARNING));
 
 	for (int ll = row; ll < LocalPar->lay; ++ll) { // reset remainder of parameter values to 0
 		for (int ii = col; ii < LocalPar->dim; ++ii)
-			if (LocalPar->varType == CRHM::Float)
+			if (LocalPar->varType == TVar::Float)
 				LocalPar->layvalues[ll][ii] = 0.0;
-			else if (LocalPar->varType == CRHM::Int)
+			else if (LocalPar->varType == TVar::Int)
 				LocalPar->ilayvalues[ll][ii] = 0;
 	}
 }
@@ -3380,7 +3420,7 @@ void Myparser::get_token()
 		while (!isdelim(*exp_ptr)) *temp++ = *exp_ptr++;
 		tok_type = CRHM::VARIABLE;
 	}
-	else if (isdigit(*exp_ptr)) {
+	else if (iswdigit(*exp_ptr)) {
 		while ((*exp_ptr) && strchr("0123456789.", *exp_ptr)) *temp++ = *exp_ptr++;
 		if ((*exp_ptr) && strchr("eE", *exp_ptr)) {
 			*temp++ = *exp_ptr++;
@@ -3401,19 +3441,26 @@ int Myparser::isdelim(char c)
 	return 0;
 }
 
-ClassClark::ClassClark(const float* inVar, float* outVar, const float* kstorage, const float* lag, const long nhru, const float setlag)
+ClassClark::ClassClark(const double* inVar, double* outVar, const double* kstorage, const double* lag, const long nhru, const long setlag)
 	: inVar(inVar), outVar(outVar), kstorage(kstorage), nhru(nhru) {
 
 	// kstorage (days)
 	// lag (hours)
 
-	LastIn = new float[nhru];
-	LastOut = new float[nhru];
+	LastIn = new double[nhru];
+	LastOut = new double[nhru];
 
-	c01 = new float[nhru];
-	c2 = new float[nhru];
-	NO_lag_release = new float[nhru];
+	c01 = new double[nhru];
+	c2 = new double[nhru];
+	NO_lag_release = new double[nhru];
 
+
+	/*
+	* ilag  for routing water along a stream, it is used to simulate the delay caused by the travel time of water.
+	* ilag is the length of the stream (the number of elements or letters). 
+	* If on every cycle the water moves one step then the number of elements determines how many steps 
+	* are required to get to the end of the stream.
+	*/
 	ilag = new long[nhru];
 	maxlag = new long[nhru];
 	ulag = new long[nhru];
@@ -3423,7 +3470,7 @@ ClassClark::ClassClark(const float* inVar, float* outVar, const float* kstorage,
 		c01[hh] = Global::Interval*0.5 / (kstorage[hh] + Global::Interval*0.5);  // units of Global::Interval (days)
 		c2[hh] = (kstorage[hh] - Global::Interval*0.5) / (kstorage[hh] + Global::Interval*0.5); // units of kstorage (days)
 
-		ilag[hh] = max<float>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+ 		ilag[hh] = (long) (max<double>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1); // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)
 			maxlag[hh] = ilag[hh] + 1; // Quick fix
@@ -3437,10 +3484,10 @@ ClassClark::ClassClark(const float* inVar, float* outVar, const float* kstorage,
 		NO_lag_release[hh] = 0.0; // released from storage
 	}
 
-	LagArray = new float*[nhru];   // create lag array
+	LagArray = new double*[nhru];   // create lag array
 
 	for (long hh = 0; hh < nhru; hh++) {
-		LagArray[hh] = new float[maxlag[hh]];
+		LagArray[hh] = new double[maxlag[hh]];
 		for (long jj = 0; jj < maxlag[hh]; jj++)
 			LagArray[hh][jj] = 0.0;
 	}
@@ -3461,15 +3508,15 @@ ClassClark::~ClassClark() {
 	delete[] LagArray;
 }
 
-float ClassClark::ChangeStorage(const float* kstorage, const long hh)
+double ClassClark::ChangeStorage(const double* kstorage, const long hh)
 {
-	float Last_c01 = c01[hh];
-	float Last_c2 = c2[hh];
+	double Last_c01 = c01[hh];
+	double Last_c2 = c2[hh];
 
 	if (c2[hh] >= 1.0) // handles case of NO delay
 		return 0.0;
 
-	float Sstorage = (1.0 / (1.0 - c2[hh]))*(c01[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
+	double Sstorage = (1.0 / (1.0 - c2[hh]))*(c01[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
 
 	c01[hh] = Global::Interval*0.5 / (kstorage[hh] + Global::Interval*0.5);  // units of Global::Interval (days)
 	c2[hh] = (kstorage[hh] - Global::Interval*0.5) / (kstorage[hh] + Global::Interval*0.5); // units of kstorage (days)
@@ -3483,12 +3530,12 @@ float ClassClark::ChangeStorage(const float* kstorage, const long hh)
 	return Sstorage;
 }
 
-float ClassClark::ChangeLag(const float *newlag, const long hh) {
+double ClassClark::ChangeLag(const double *newlag, const long hh) {
 
-	float LastValue;
-	float Lag_storage = 0.0;
+	double LastValue;
+	double Lag_storage = 0.0;
 
-	long newilag = max<float>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+	long newilag = (long) (max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1); // =1 for lag of zero
 
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		Lag_storage += LagArray[hh][(ulag[hh] + ii) % ilag[hh]];
@@ -3497,7 +3544,7 @@ float ClassClark::ChangeLag(const float *newlag, const long hh) {
 		return Lag_storage;
 	}
 
-	float* AccArray = new float[ilag[hh]]; // work area for ChangeLag
+	double* AccArray = new double[ilag[hh]]; // work area for ChangeLag
 	AccArray[0] = 0.0;
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		AccArray[ii] = AccArray[ii - 1] + LagArray[hh][(ulag[hh] + ii) % ilag[hh]]; // accumulate storage
@@ -3506,7 +3553,7 @@ float ClassClark::ChangeLag(const float *newlag, const long hh) {
 
 	delete[] LagArray[hh]; // delete previous length
 
-	LagArray[hh] = new float[newilag]; // create new length
+	LagArray[hh] = new double[newilag]; // create new length
 
 	ulag[hh] = 0; // next input value save here.
 	LagArray[hh][ulag[hh]] = 0; //
@@ -3521,10 +3568,10 @@ float ClassClark::ChangeLag(const float *newlag, const long hh) {
 		LastValue = 0.0;
 
 		for (int mm = 1; mm < newilag - 1; ++mm) {
-			float Y = float(mm) / (newilag - 1)*(ilag[hh] - 1);
-			int Yint = Y + 0.0001;
-			float Ydif = Y - Yint;
-			float NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
+			double Y = double(mm) / ((long long) newilag - 1ll)*((long long) ilag[hh] - 1ll);
+			int Yint = (int) (Y + 0.0001);
+			double Ydif = Y - Yint;
+			double NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
 
 			LagArray[hh][(ulag[hh] + mm) % newilag] = NewValue - LastValue;
 
@@ -3574,22 +3621,22 @@ void ClassClark::DoClark(const long hh) {
 	LastOut[hh] = outVar[hh];
 }
 
-float ClassClark::Left(int hh) {
+double ClassClark::Left(int hh) {
 
-	float Slag = 0;
+	double Slag = 0;
 
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		Slag += LagArray[hh][(ulag[hh] + ii) % ilag[hh]];
 
 	if (c2[hh] >= 1.0) return 0.0; // handles case of NO delay
 
-	float Sstorage = (1.0 / (1.0 - c2[hh]))*(c01[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
+	double Sstorage = (1.0 / (1.0 - c2[hh]))*(c01[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
 
 	return Slag + Sstorage;
 }
 
 //---------------------------------------------------------------------------
-ClassMuskingum::ClassMuskingum(const float* inVar, float* outVar, const float* k, const float* X_M, const float* lag, const long nhru, const float setlag)
+ClassMuskingum::ClassMuskingum(const double* inVar, double* outVar, const double* k, const double* X_M, const double* lag, const long nhru, const long setlag)
 	: inVar(inVar), outVar(outVar), nhru(nhru) {
 
 	// !!! UNITS !!!
@@ -3597,13 +3644,19 @@ ClassMuskingum::ClassMuskingum(const float* inVar, float* outVar, const float* k
 	// kstorage (days)
 	// lag (hours)
 
-	LastIn = new float[nhru];
-	LastOut = new float[nhru];
+	LastIn = new double[nhru];
+	LastOut = new double[nhru];
 
-	c0 = new float[nhru];
-	c1 = new float[nhru];
-	c2 = new float[nhru];
+	c0 = new double[nhru];
+	c1 = new double[nhru];
+	c2 = new double[nhru];
 
+	/*
+	* ilag  for routing water along a stream, it is used to simulate the delay caused by the travel time of water.
+	* ilag is the length of the stream (the number of elements or letters).
+	* If on every cycle the water moves one step then the number of elements determines how many steps
+	* are required to get to the end of the stream.
+	*/
 	ilag = new long[nhru];
 	maxlag = new long[nhru];
 	ulag = new long[nhru];
@@ -3620,7 +3673,7 @@ ClassMuskingum::ClassMuskingum(const float* inVar, float* outVar, const float* k
 		c2[hh] = (2.0*k[hh] * (1.0 - X_M[hh]) - Global::Interval) /
 			(2.0*k[hh] * (1.0 - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
-		ilag[hh] = max<float>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+		ilag[hh] = (long) (max<double>(lag[hh], 0.0) / 24.0*Global::Freq + 1.1); // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)
 			maxlag[hh] = ilag[hh];
@@ -3636,10 +3689,10 @@ ClassMuskingum::ClassMuskingum(const float* inVar, float* outVar, const float* k
 		if (maxlag[hh] > Biggest) Biggest = maxlag[hh];
 	}
 
-	LagArray = new float*[nhru];   // create lag array
+	LagArray = new double*[nhru];   // create lag array
 
 	for (long hh = 0; hh < nhru; hh++) {
-		LagArray[hh] = new float[maxlag[hh]];
+		LagArray[hh] = new double[maxlag[hh]];
 		for (long jj = 0; jj < maxlag[hh]; jj++)
 			LagArray[hh][jj] = 0.0;
 	}
@@ -3660,34 +3713,50 @@ ClassMuskingum::~ClassMuskingum() {
 	delete[] LagArray;
 }
 
-void ClassMuskingum::ChangeLag(const float *newlag, const long hh)
+void ClassMuskingum::ChangeLag(const double *newlag, const long hh)
 {
 
-	long newilag = max<float>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1; // =1 for lag of zero
+	long newilag = (long) (max<double>(newlag[hh], 0.0) / 24.0*Global::Freq + 1.1); // =1 for lag of zero
 
-	if (newilag == ilag[hh]) return;
+	if (newilag == ilag[hh]) {
+		return;
+	}
 
-	float* AccArray = new float[ilag[hh]]; // work area for ChangeLag
+	double* AccArray = new double[ilag[hh]]; // work area for ChangeLag
 
 	AccArray[0] = 0.0;
 
 	for (int ii = 1; ii < ilag[hh]; ++ii)
+	{
 		AccArray[ii] = AccArray[ii - 1] + LagArray[hh][(ulag[hh] + ii) % ilag[hh]]; // accumulate storage
-
+	}
+		
 	delete[] LagArray[hh]; // delete previous length
 
-	LagArray[hh] = new float[newilag]; // create new length
+	LagArray[hh] = new double[newilag]; // create new length
 
 	ulag[hh] = 0; // next input value save here.
 	LagArray[hh][0] = 0.0; // looks better
 
-	float LastValue = 0.0;
+	double LastValue = 0.0;
 
-	for (int mm = 1; mm < newilag - 1; ++mm) {
-		float Y = float(mm) / (newilag - 1)*(ilag[hh] - 1);
-		int Yint = Y + 0.0001;
-		float Ydif = Y - Yint;
-		float NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
+	for (int mm = 1; mm < newilag - 1; ++mm) 
+	{
+		double Y = double(mm) / ((long long)newilag - 1ll)*((long long)ilag[hh] - 1ll);
+		int Yint = (int)(Y + 0.0001);
+		if ((Yint + 1) > ilag[hh] - 1) 
+		{
+			CRHMException Except("Attempting to read out of bounds array address", TExcept::TERMINATE);
+			LogError(Except);
+			throw(Except);
+		}
+		double Ydif = Y - Yint;
+		 
+		
+		double NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
+		
+
+		
 
 		LagArray[hh][(ulag[hh] + mm) % newilag] = NewValue - LastValue;
 
@@ -3730,53 +3799,53 @@ void ClassMuskingum::DoMuskingum(const long hh) {
 	LastOut[hh] = outVar[hh];
 }
 
-float ClassMuskingum::Left(int hh) {
+double ClassMuskingum::Left(int hh) {
 
-	float Slag = 0;
+	double Slag = 0;
 
 	for (int ii = 1; ii < ilag[hh]; ++ii)
 		Slag += LagArray[hh][(ulag[hh] + ii) % ilag[hh]];
 
-	float Sstorage = (1.0 / (1.0 - c2[hh]))*(c1[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
+	double Sstorage = (1.0 / (1.0 - c2[hh]))*(c1[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
 
 	return Slag + Sstorage;
 }
 
 //---------------------------------------------------------------------------
 
-long ClassModule::getdim(CRHM::TDim dimen) {
+long ClassModule::getdim(TDim dimen) {
 	MapDim::iterator itDim;
 	string s;
 
 	switch (dimen) {
 
-	case CRHM::BASIN:
-		return ((int)CRHM::ONE);
+	case TDim::BASIN:
+		return ((int)TDim::ONE);
 
-	case CRHM::ONE:
-	case CRHM::TWO:
-	case CRHM::THREE:
-	case CRHM::FOUR:
-	case CRHM::FIVE:
-	case CRHM::SIX:
-	case CRHM::SEVEN:
-	case CRHM::EIGHT:
-	case CRHM::NINE:
-	case CRHM::TEN:
-	case CRHM::ELEVEN:
-	case CRHM::TWELVE:
+	case TDim::ONE:
+	case TDim::TWO:
+	case TDim::THREE:
+	case TDim::FOUR:
+	case TDim::FIVE:
+	case TDim::SIX:
+	case TDim::SEVEN:
+	case TDim::EIGHT:
+	case TDim::NINE:
+	case TDim::TEN:
+	case TDim::ELEVEN:
+	case TDim::TWELVE:
 		return ((int)dimen);
 
-	case CRHM::NHRU:
+	case TDim::NHRU:
 		if (nhru)
 			return (nhru);
 		else
 			return (Global::nhru);
 
-	case CRHM::NOBS:
+	case TDim::NOBS:
 		return (Global::nhru);
 
-	case CRHM::NLAY:
+	case TDim::NLAY:
 		return (Global::nlay);
 
 	default:
@@ -3787,9 +3856,9 @@ long ClassModule::getdim(CRHM::TDim dimen) {
 //---------------------------------------------------------------------------
 TAKA AKAtype(string type) {
 
-	TAKA Type = AKAERROR;
+	TAKA Type = TAKA::AKAERROR;
 
-	for (int ii = VARG; ii < AKAEND; ++ii)
+	for (int ii = (int) TAKA::VARG; ii < (int) TAKA::AKAEND; ++ii)
 		if (type == AKAstrings[ii]) {
 			Type = (TAKA)ii;
 			break;
@@ -3800,7 +3869,7 @@ TAKA AKAtype(string type) {
 //---------------------------------------------------------------------------
 bool ClassModule::Variation_Skip(void) {
 
-	if ((Global::BuildFlag == CRHM::BUILD && variation == 0) ||                    // for Build screen   //warning resolved by Manishankar
+	if ((Global::BuildFlag == TBuild::BUILD && variation == 0) ||                    // for Build screen   //warning resolved by Manishankar
 		((variation_set & 2048) != 0 && variation == 0) ||                        // handles VARIATION_0
 		(variation_set & 4096) != 0 ||                        // handles VARIATION_0
 		(variation_set == 0) ||                                                // handles VARIATION_ORG
@@ -3811,7 +3880,7 @@ bool ClassModule::Variation_Skip(void) {
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declputparam(string source, string param, string units, float **value, float ***layvalue) {
+long ClassModule::declputparam(string source, string param, string units, double **value, double ***layvalue) {
 
 	MapPar::iterator itPar;
 	ClassPar *newPar = NULL;
@@ -3825,11 +3894,11 @@ long ClassModule::declputparam(string source, string param, string units, float 
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param); // handles explicit rename - redundant now ?
+	AKAhook(TAKA::PARD, Name, param, param); // handles explicit rename - redundant now ?
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(param.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -3837,7 +3906,7 @@ long ClassModule::declputparam(string source, string param, string units, float 
 		return -1;
 	}
 
-	case CRHM::DECL: { // only finds groups
+	case TBuild::DECL: { // only finds groups
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
@@ -3852,13 +3921,13 @@ long ClassModule::declputparam(string source, string param, string units, float 
 			return 0;
 		}
 
-		newPar = new ClassPar(string(Name.c_str()), string(param), CRHM::NHRU, "", 0, 0, "", units, CRHM::Float);
+		newPar = new ClassPar(string(Name.c_str()), string(param), TDim::NHRU, "", 0, 0, "", units, TVar::Float);
 
 		newPar->basemodule = this->NameRoot;
 
 		newPar->variation_set = variation_set;
 
-		newPar->visibility = CRHM::USUAL;
+		newPar->visibility = TVISIBLE::USUAL;
 
 		if (this->GroupCnt)
 			newPar->Inhibit_share = 2;
@@ -3872,14 +3941,14 @@ long ClassModule::declputparam(string source, string param, string units, float 
 		return -1;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if (source[0] != '*') {
 			if ((itPar = Global::MapPars.find(source + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share != 2) { // 2 means no declare, ie not used.
 					*value = newPar->values;
 					if (layvalue != NULL)
-						(*layvalue) = newPar->layvalues;  //const_cast<float **> (*layvalue) = newPar->layvalues;
+						(*layvalue) = newPar->layvalues;  //const_cast<double **> (*layvalue) = newPar->layvalues;
 				}
 			}
 		}
@@ -3889,7 +3958,7 @@ long ClassModule::declputparam(string source, string param, string units, float 
 				//          if(newPar->Inhibit_share != 2){ // 2 means no declare, ie not used.
 				*value = newPar->values;
 				if (layvalue != NULL)
-					(*layvalue) = newPar->layvalues;  //const_cast<float **> (*layvalue) = newPar->layvalues;
+					(*layvalue) = newPar->layvalues;  //const_cast<double **> (*layvalue) = newPar->layvalues;
 													  //          }
 			}
 			else if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
@@ -3897,18 +3966,18 @@ long ClassModule::declputparam(string source, string param, string units, float 
 				if (newPar->Inhibit_share != 2) { // 2 means no declare, ie not used.
 					*value = newPar->values;
 					if (layvalue != NULL)
-						(*layvalue) = newPar->layvalues;  //const_cast<float **> (*layvalue) = newPar->layvalues;
+						(*layvalue) = newPar->layvalues;  //const_cast<double **> (*layvalue) = newPar->layvalues;
 				}
 			}
 			else if ((newPar = ClassParFindPar(param))) {
 				if (newPar->Inhibit_share != 2) { // 2 means no declare, ie not used.
 					*value = newPar->values;
 					if (layvalue != NULL)
-						(*layvalue) = newPar->layvalues;  //const_cast<float **> (*layvalue) = newPar->layvalues;
+						(*layvalue) = newPar->layvalues;  //const_cast<double **> (*layvalue) = newPar->layvalues;
 				}
 			}
 			else {
-				CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+				CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 				LogError(Except);
 				throw Except; // does not return
 			}
@@ -3923,7 +3992,7 @@ long ClassModule::declputparam(string source, string param, string units, float 
 }
 
 //---------------------------------------------------------------------------
-long ClassModule::declgetparam(string source, string param, string units, const float **value, const float ***layvalue) {
+long ClassModule::declgetparam(string source, string param, string units, const double **value, const double ***layvalue) {
 
 	MapPar::iterator itPar;
 	ClassPar *newPar;
@@ -3937,11 +4006,11 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param); // handles explicit rename - redundant now ?
+	AKAhook(TAKA::PARD, Name, param, param); // handles explicit rename - redundant now ?
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(param.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -3949,39 +4018,39 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 		return -1;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return -1;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if (source[0] != '*') {
 			if ((itPar = Global::MapPars.find(source + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
 				*value = newPar->values;
 				if (layvalue != NULL)
-					*layvalue = (const float **)newPar->layvalues;
+					*layvalue = (const double **)newPar->layvalues;
 			}
 		}
 		else {
 			if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
-				*value = (const float *)newPar->values;
+				*value = (const double *)newPar->values;
 				if (layvalue != NULL)
-					*layvalue = (const float **)newPar->layvalues;
+					*layvalue = (const double **)newPar->layvalues;
 			}
 			else if ((itPar = Global::MapPars.find("Shared " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
-				*value = (const float *)newPar->values;
+				*value = (const double *)newPar->values;
 				if (layvalue != NULL)
-					*layvalue = (const float **)newPar->layvalues;
+					*layvalue = (const double **)newPar->layvalues;
 			}
 			else if ((newPar = ClassParFindPar(param))) {
 				*value = newPar->values;
 				if (layvalue != NULL)
-					*layvalue = (const float **)newPar->layvalues;
+					*layvalue = (const double **)newPar->layvalues;
 			}
 			else {
-				CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+				CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 				LogError(Except);
 				throw Except; // does not return
 			}
@@ -4001,7 +4070,7 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 
 	variation_max = variation_max | variation_set;
 
-	AKAhook(PARD, Name, param, param); // handles explicit rename - redundant now ?
+	AKAhook(TAKA::PARD, Name, param, param); // handles explicit rename - redundant now ?
 
 	if (source[0] != '*') {
 		if ((itPar = Global::MapPars.find(source + " " + param)) != Global::MapPars.end()) {
@@ -4018,7 +4087,7 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 		else if ((newPar = ClassParFindPar(param))) {
 		}
 		else {
-			CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+			CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 			LogError(Except);
 			throw Except; // does not return
 		}
@@ -4035,7 +4104,7 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 		return    (long)Global::OurModulesList->array[ii].Object;
 	}
 
-	CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+	CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 	LogError(Except);
 	throw Except; // does not return
 }
@@ -4054,11 +4123,11 @@ long ClassModule::declputparam(string source, string param, string units, long *
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param); // handles explicit rename - redundant now ?
+	AKAhook(TAKA::PARD, Name, param, param); // handles explicit rename - redundant now ?
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(param.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -4066,7 +4135,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 		return -1;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			newPar = (*itPar).second;
 			newPar->Inhibit_share = 1;
@@ -4080,13 +4149,13 @@ long ClassModule::declputparam(string source, string param, string units, long *
 			return 0;
 		}
 
-		newPar = new ClassPar(string(Name.c_str()), string(param), CRHM::NHRU, "", 0, 0, "", units, CRHM::Int);
+		newPar = new ClassPar(string(Name.c_str()), string(param), TDim::NHRU, "", 0, 0, "", units, TVar::Int);
 
 		newPar->basemodule = this->NameRoot;
 
 		newPar->variation_set = variation_set;
 
-		newPar->visibility = CRHM::USUAL;
+		newPar->visibility = TVISIBLE::USUAL;
 
 		newPar->Inhibit_share = 2;
 
@@ -4099,7 +4168,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 		return -1;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if (source[0] != '*') {
 			if ((itPar = Global::MapPars.find(source + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
@@ -4133,7 +4202,7 @@ long ClassModule::declputparam(string source, string param, string units, long *
 				}
 			}
 			else {
-				CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+				CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 				LogError(Except);
 				throw Except;
 			}
@@ -4161,11 +4230,11 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 
 	Convert convert; convert.CheckUnitsString(Name, param, units);
 
-	AKAhook(PARD, Name, param, param); // handles explicit rename - redundant now ?
+	AKAhook(TAKA::PARD, Name, param, param); // handles explicit rename - redundant now ?
 
 	switch (Global::BuildFlag) {
 
-	case CRHM::BUILD: {
+	case TBuild::BUILD: {
 		PairstrV Item2 = PairstrV(param.c_str(), variation_set);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
@@ -4173,11 +4242,11 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 		return;
 	}
 
-	case CRHM::DECL: {
+	case TBuild::DECL: {
 		return;
 	}
 
-	case CRHM::INIT: {
+	case TBuild::INIT: {
 		if (source[0] != '*') {
 			if ((itPar = Global::MapPars.find(source + " " + param)) != Global::MapPars.end()) {
 				newPar = (*itPar).second;
@@ -4209,7 +4278,7 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 				return;
 			}
 			else {
-				CRHMException Except("Parameter not found: " + Name + " " + param, TERMINATE);
+				CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
 				LogError(Except);
 				throw Except;
 			}

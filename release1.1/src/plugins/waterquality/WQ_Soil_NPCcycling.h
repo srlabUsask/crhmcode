@@ -16,21 +16,21 @@ using namespace std;
 class ClassWQ_SoilBGC : public ClassModule {
 public:
 
-long dayno;
-long nstep;
+long dayno{0};
+long nstep{0};
 
-ClassWQ_SoilBGC(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_SoilBGC(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameter
 
-const float *hru_area; //
-const float *hru_GSL; // ground slope
-const float *soil_rechr_max;
-const float *soil_moist_max;
+const double *hru_area{ NULL }; //
+const double *hru_GSL{ NULL }; // ground slope
+const double *soil_rechr_max{ NULL };
+const double *soil_moist_max{ NULL };
 
-const long *ccmax1; // crop cover during summer
+const long *ccmax1{ NULL }; // crop cover during summer
 //const long *ccmax2; // crop cover during winter and all year for year round
-const long *gcmax1; // ground cover during summer
+const long *gcmax1{ NULL }; // ground cover during summer
 //const long *gcmax2; // ground cover during winter and all year for year round
 
 /*
@@ -41,217 +41,217 @@ const long *baredayno4; // autumn ploughing
 const long *baredayno5; // winter crops sowing date
 */
 
-const float *erodibility; // (g/J)
-const float *cohesion; // (kPa)
-const float *closewater; // ()
-const float *buffer; // ()
-const float *soil_Depth;
+const double *erodibility{ NULL }; // (g/J)
+const double *cohesion{ NULL }; // (kPa)
+const double *closewater{ NULL }; // ()
+const double *buffer{ NULL }; // ()
+const double *soil_Depth{ NULL };
 
-const float *klh;    // transformation rate of labileC to refractoryC (d-1)
-const float *klo;    // degradation labileC (d-1)
-const float *kho;    // degradation refractoryC (d-1)
-const float *kof;    // transformation to labileC (d-1)
-const float *koflim; // threshold for transformation to labileC (-)
-const float *minc;   // fraction mineralisation to DIC (-)
-const float *soimf;  // satuaration soilmoisture factor (-)
-const float *soim;   // rate soilmoisture factor (-)
-const float *soimr;  // rate soilmoisture factor (-)
+const double *klh{ NULL };    // transformation rate of labileC to refractoryC (d-1)
+const double *klo{ NULL };    // degradation labileC (d-1)
+const double *kho{ NULL };    // degradation refractoryC (d-1)
+const double *kof{ NULL };    // transformation to labileC (d-1)
+const double *koflim{ NULL }; // threshold for transformation to labileC (-)
+const double *minc{ NULL };   // fraction mineralisation to DIC (-)
+const double *soimf{ NULL };  // satuaration soilmoisture factor (-)
+const double *soim{ NULL };   // rate soilmoisture factor (-)
+const double *soimr{ NULL };  // rate soilmoisture factor (-)
 
-const long *calcN; // Status of nitrogen simulation
-const long *calcP; // Status of phosphorus simulation
-const long *calcC; // Status of organic carbon simulation
-const long *Inhibit_Soil_BGC; // Skip Hype
+const long *calcN{ NULL }; // Status of nitrogen simulation
+const long *calcP{ NULL }; // Status of phosphorus simulation
+const long *calcC{ NULL }; // Status of organic carbon simulation
+const long *Inhibit_Soil_BGC{ NULL }; // Skip Hype
 
-const float *fertNamount_up;
-const float *fertNamount_down;
-const float *fertPamount_up;
-const float *fertPamount_down;
-const float *manNamount_up;
-const float *manNamount_down;
-const float *manPamount_up;
-const float *manPamount_down;
-const float *resNamount_up;
-const float *resPamount_up;
-const float *resNamount_down;
-const float *resPamount_down;
-const float *resCamount;
-const float *resfast;
-//const float *resdown;
-//const float *fertdown1;
-//const float *fertdown2;
-//const float *mandown1;
-//const float *mandown2;
+const double *fertNamount_up{ NULL };
+const double *fertNamount_down{ NULL };
+const double *fertPamount_up{ NULL };
+const double *fertPamount_down{ NULL };
+const double *manNamount_up{ NULL };
+const double *manNamount_down{ NULL };
+const double *manPamount_up{ NULL };
+const double *manPamount_down{ NULL };
+const double *resNamount_up{ NULL };
+const double *resPamount_up{ NULL };
+const double *resNamount_down{ NULL };
+const double *resPamount_down{ NULL };
+const double *resCamount{ NULL };
+const double *resfast{ NULL };
+//const double *resdown;
+//const double *fertdown1;
+//const double *fertdown2;
+//const double *mandown1;
+//const double *mandown2;
 
-const float *fertday_up;
-const float *fertday_down;
-const float *manday_up;
-const float *manday_down;
-const float *resday_up;
-const float *resday_down;
+const double *fertday_up{ NULL };
+const double *fertday_down{ NULL };
+const double *manday_up{ NULL };
+const double *manday_down{ NULL };
+const double *resday_up{ NULL };
+const double *resday_down{ NULL };
 
-const float *fertperiod;
-const long *litterperiod;
+const double *fertperiod{ NULL };
+const long *litterperiod{ NULL };
 
-const float *manureinogNfrac;
-const float *manureinogPfrac;
-const float *fertandman_inogNfrac_NO3Nfrac;
-const float *fertandman_inogNfrac_NH4Nfrac;
+const double *manureinogNfrac{ NULL };
+const double *manureinogPfrac{ NULL };
+const double *fertandman_inogNfrac_NO3Nfrac{ NULL };
+const double *fertandman_inogNfrac_NH4Nfrac{ NULL };
 
 
-const float *wp; // water content at wilting point(mm)
+const double *wp{ NULL }; // water content at wilting point(mm)
 
-const float **wp_lay; // [maxsoillayers]
-//const float *pw; // water content: total porosity(mm)
-//const float **pw_lay; // [maxsoillayers]
-//const float *ep; // water content: effectiv porosity(mm)
-//const float **ep_lay; // [maxsoillayers]
-const float *plant_uptk_NO3N; //
-const float **plant_uptk_NO3N_lay; // 
-const float *plant_uptk_NH4N; //
-const float **plant_uptk_NH4N_lay; // 
-const float *plant_uptk_SRP; //
-const float **plant_uptk_SRP_lay; //
-const float *pardenN; // nitrification
-const float *parminfN; //
-const float *parnitrfN;
-const float *parminfP; //
-const float *pardegrhN; //
-const float *pardegrhP; //
-const float *pardisfN; //
-const float *pardisfP; //
-const float *pardishN; //
-const float *pardishP; // 
+const double **wp_lay{ NULL }; // [maxsoillayers]
+//const double *pw; // water content: total porosity(mm)
+//const double **pw_lay; // [maxsoillayers]
+//const double *ep; // water content: effectiv porosity(mm)
+//const double **ep_lay; // [maxsoillayers]
+const double *plant_uptk_NO3N{ NULL }; //
+const double **plant_uptk_NO3N_lay{ NULL }; // 
+const double *plant_uptk_NH4N{ NULL }; //
+const double **plant_uptk_NH4N_lay{ NULL }; // 
+const double *plant_uptk_SRP{ NULL }; //
+const double **plant_uptk_SRP_lay{ NULL }; //
+const double *pardenN{ NULL }; // nitrification
+const double *parminfN{ NULL }; //
+const double *parnitrfN{ NULL };
+const double *parminfP{ NULL }; //
+const double *pardegrhN{ NULL }; //
+const double *pardegrhP{ NULL }; //
+const double *pardisfN{ NULL }; //
+const double *pardisfP{ NULL }; //
+const double *pardishN{ NULL }; //
+const double *pardishP{ NULL }; // 
 
-const float *refractoryNmass_init;
-const float **refractoryNmass_init_lay;
-const float *refractoryPmass_init;
-const float **refractoryPmass_init_lay;
-const float *refractoryCmass_init;
-const float **refractoryCmass_init_lay;
-const float *labileNmass_init;
-const float **labileNmass_init_lay;
-const float *labilePmass_init;
-const float **labilePmass_init_lay;
-const float *labileCmass_init;
-const float **labileCmass_init_lay;
-const float *conc_soil_rechr_init;
-const float **conc_soil_rechr_init_lay;
-const float *conc_soil_lower_init;
-const float **conc_soil_lower_init_lay;
-const float *surfsoil_massSolub_init;
-const float **surfsoil_massSolub_init_lay;
-const float *surfsoil_masslabileNmass_init;
-const float *surfsoil_masslabilePmass_init;
-const float *surfsoil_massrefractoryNmass_init;
-const float *surfsoil_massrefractoryPmass_init;
+const double *refractoryNmass_init{ NULL };
+const double **refractoryNmass_init_lay{ NULL };
+const double *refractoryPmass_init{ NULL };
+const double **refractoryPmass_init_lay{ NULL };
+const double *refractoryCmass_init{ NULL };
+const double **refractoryCmass_init_lay{ NULL };
+const double *labileNmass_init{ NULL };
+const double **labileNmass_init_lay{ NULL };
+const double *labilePmass_init{ NULL };
+const double **labilePmass_init_lay{ NULL };
+const double *labileCmass_init{ NULL };
+const double **labileCmass_init_lay{ NULL };
+const double *conc_soil_rechr_init{ NULL };
+const double **conc_soil_rechr_init_lay{ NULL };
+const double *conc_soil_lower_init{ NULL };
+const double **conc_soil_lower_init_lay{ NULL };
+const double *surfsoil_massSolub_init{ NULL };
+const double **surfsoil_massSolub_init_lay{ NULL };
+const double *surfsoil_masslabileNmass_init{ NULL };
+const double *surfsoil_masslabilePmass_init{ NULL };
+const double *surfsoil_massrefractoryNmass_init{ NULL };
+const double *surfsoil_massrefractoryPmass_init{ NULL };
 // declared variables
 
-float *wp_mm; // water content at wilting point(mm)
-float **wp_mm_lay; // [maxsoillayers]
-//float *pw_mm; // water content: total porosity(mm)
-//float **pw_mm_lay; // [maxsoillayers]
-//float *fc_mm; // water content at field capacity(mm)
-//float **fc_mm_lay; // [maxsoillayers]
-//float *ep_mm; // water content: effectiv porosity(mm)
-//float **ep_mm_lay; // [maxsoillayers]
+double *wp_mm{ NULL }; // water content at wilting point(mm)
+double **wp_mm_lay{ NULL }; // [maxsoillayers]
+//double *pw_mm; // water content: total porosity(mm)
+//double **pw_mm_lay; // [maxsoillayers]
+//double *fc_mm; // water content at field capacity(mm)
+//double **fc_mm_lay; // [maxsoillayers]
+//double *ep_mm; // water content: effectiv porosity(mm)
+//double **ep_mm_lay; // [maxsoillayers]
 
-float *refractoryP; // refractoryP pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **refractoryP_lay; //  (soillayer,class, subbasin)
-float *refractoryN; // refractoryN pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **refractoryN_lay;
-float *refractoryC; // refractoryC pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **refractoryC_lay;
-float *labileN;  // labileN pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **labileN_lay;
-float *labileP;  // labileP pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **labileP_lay;
-float *labileC;  // labileC pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **labileC_lay;
-float *NO3_Npool;  // NO3-N pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **NO3_Npool_lay;
-float *NH4_Npool;  // NO3-N pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **NH4_Npool_lay;
-float *DONpool;  // DON pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **DONpool_lay;
-float *SRPpool;  // SRP pool pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **SRPpool_lay;
-float *DOPpool;  // DOP pool pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
-float **DOPpool_lay;
+double *refractoryP{ NULL }; // refractoryP pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **refractoryP_lay{ NULL }; //  (soillayer,class, subbasin)
+double *refractoryN{ NULL }; // refractoryN pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **refractoryN_lay{ NULL };
+double *refractoryC{ NULL }; // refractoryC pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **refractoryC_lay{ NULL };
+double *labileN{ NULL };  // labileN pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **labileN_lay{ NULL };
+double *labileP{ NULL };  // labileP pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **labileP_lay{ NULL };
+double *labileC{ NULL };  // labileC pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **labileC_lay{ NULL };
+double *NO3_Npool{ NULL };  // NO3-N pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **NO3_Npool_lay{ NULL };
+double *NH4_Npool{ NULL };  // NO3-N pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **NH4_Npool_lay{ NULL };
+double *DONpool{ NULL };  // DON pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **DONpool_lay{ NULL };
+double *SRPpool{ NULL };  // SRP pool pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **SRPpool_lay{ NULL };
+double *DOPpool{ NULL };  // DOP pool pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L) *** from soilstate
+double **DOPpool_lay{ NULL };
 
-float *PPrelpool; // (Particulate P release from soil due to erosion (kg/km2=mg/m2) (kg/km2/mm=mg/L)
-//float **PPrelpool_lay; // ()
+double *PPrelpool{ NULL }; // (Particulate P release from soil due to erosion (kg/km2=mg/m2) (kg/km2/mm=mg/L)
+//double **PPrelpool_lay; // ()
 
-//float *conc_soil_rechr;   // concentration of inorganic nitrogen *** from soilstate
-//float **conc_soil_rechr_lay;
-float *conc_soil_lower;   // concentration of organic nitrogen *** from soilstate
-float **conc_soil_lower_lay;
-//float *conc_soil_moist;   // concentration of soluble (reactive) phosphorus, i.e. phosphate *** from soilstate
-//float **conc_soil_moist_lay;
+//double *conc_soil_rechr;   // concentration of inorganic nitrogen *** from soilstate
+//double **conc_soil_rechr_lay;
+double *conc_soil_lower{ NULL };   // concentration of organic nitrogen *** from soilstate
+double **conc_soil_lower_lay{ NULL };
+//double *conc_soil_moist;   // concentration of soluble (reactive) phosphorus, i.e. phosphate *** from soilstate
+//double **conc_soil_moist_lay;
 
-float *surfsoil_solub_mWQ;
-float **surfsoil_solub_mWQ_lay;
-float *surfsoil_labileN_mWQ;
-float *surfsoil_labileP_mWQ;
-float *surfsoil_refractoryN_mWQ;
-float *surfsoil_refractoryP_mWQ;
+double *surfsoil_solub_mWQ{ NULL };
+double **surfsoil_solub_mWQ_lay{ NULL };
+double *surfsoil_labileN_mWQ{ NULL };
+double *surfsoil_labileP_mWQ{ NULL };
+double *surfsoil_refractoryN_mWQ{ NULL };
+double *surfsoil_refractoryP_mWQ{ NULL };
 
-float *conc_i_pp;   // concentration of particulate phosphorus *** from soilstate *** from soilstate
+double *conc_i_pp{ NULL };   // concentration of particulate phosphorus *** from soilstate *** from soilstate
 
-float *sources_plant;
-float **sources_plant_lay;
-float *src_mineral_fertman_surfsoil;
-float **src_mineral_fertman_surfsoil_lay; 
-float *src_mineral_fertman_soilrechr;
-float **src_mineral_fertman_soilrechr_lay;
+double *sources_plant{ NULL };
+double **sources_plant_lay{ NULL };
+double *src_mineral_fertman_surfsoil{ NULL };
+double **src_mineral_fertman_surfsoil_lay{ NULL };
+double *src_mineral_fertman_soilrechr{ NULL };
+double **src_mineral_fertman_soilrechr_lay{ NULL };
 
-float *sink;
-float **sink_lay;  // sink of nutrients in this subroutine  (kg/km2
-float *source;  // load from fertilizer and plant residues (kg/timestep)
-float **source_lay;  // sources(2,numsubstances) load from fertilizer and plant residues (kg/timestep)
-float *denitrification;  // load from fertilizer and plant residues (kg/timestep)
-float **denitrification_lay;  // sources(2,numsubstances) load from fertilizer and plant residues (kg/timestep)
-float *denitrification_surfsoil;
-float *Temp;  // layer soil temperatures
-float **Temp_lay;  //
+double *sink{ NULL };
+double **sink_lay{ NULL };  // sink of nutrients in this subroutine  (kg/km2
+double *source{ NULL };  // load from fertilizer and plant residues (kg/timestep)
+double **source_lay{ NULL };  // sources(2,numsubstances) load from fertilizer and plant residues (kg/timestep)
+double *denitrification{ NULL };  // load from fertilizer and plant residues (kg/timestep)
+double **denitrification_lay{ NULL };  // sources(2,numsubstances) load from fertilizer and plant residues (kg/timestep)
+double *denitrification_surfsoil{ NULL };
+double *Temp{ NULL };  // layer soil temperatures
+double **Temp_lay{ NULL };  //
 
-float *water;  // soil moisture *** from soilstate
-float **water_lay;  // layer oil moisture
-float *watermax;  // soil moisture max *** from soilstate
-float **watermax_lay;  // layer oil moisture max
-float *partP;  // partP pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L *** from soilstate
-float **partP_lay;
-float *plant_uptk_NO3N_mWQ;  //
-float **plant_uptk_NO3N_mWQ_lay;
-float *plant_uptk_NH4N_mWQ;  //
-float **plant_uptk_NH4N_mWQ_lay;
-float *plant_uptk_SRP_mWQ;  //
-float **plant_uptk_SRP_mWQ_lay;
+double *water{ NULL };  // soil moisture *** from soilstate
+double **water_lay{ NULL };  // layer oil moisture
+double *watermax{ NULL };  // soil moisture max *** from soilstate
+double **watermax_lay{ NULL };  // layer oil moisture max
+double *partP{ NULL };  // partP pool in soil (kg/km2=mg/m2) (kg/km2/mm=mg/L *** from soilstate
+double **partP_lay{ NULL };
+double *plant_uptk_NO3N_mWQ{ NULL };  //
+double **plant_uptk_NO3N_mWQ_lay{ NULL };
+double *plant_uptk_NH4N_mWQ{ NULL };  //
+double **plant_uptk_NH4N_mWQ_lay{ NULL };
+double *plant_uptk_SRP_mWQ{ NULL };  //
+double **plant_uptk_SRP_mWQ_lay{ NULL };
 
-float *fracminP; // part of eroded P in mineral form
-float *cropuptake; // of i_no3n
+double *fracminP{ NULL }; // part of eroded P in mineral form
+double *cropuptake{ NULL }; // of i_no3n
 
 // variable inputs
 
-const float *snowmelt_int;
-const float *SWE;
-const float *net_rain;
-const float *runoff;
-const float *soil_runoff;
-float *soil_runoff_cWQ;
-float **soil_runoff_cWQ_lay; 
-const float *hru_t; // has to be converted to soil temperatures. How?
+const double *snowmelt_int{ NULL };
+const double *SWE{ NULL };
+const double *net_rain{ NULL };
+const double *runoff{ NULL };
+const double *soil_runoff{ NULL };
+double *soil_runoff_cWQ{ NULL };
+double **soil_runoff_cWQ_lay{ NULL };
+const double *hru_t{ NULL }; // has to be converted to soil temperatures. How?
 
 // variable put inputs
 
-float *SWE_conc;
-float **SWE_conc_lay;
-const float *soil_moist;
-const float *soil_lower;
-float *soil_lower_conc;
-float **soil_lower_conc_lay;
-const float *soil_rechr;
-float *conc_soil_rechr;
-float **conc_soil_rechr_lay;
+double *SWE_conc{ NULL };
+double **SWE_conc_lay{ NULL };
+const double *soil_moist{ NULL };
+const double *soil_lower{ NULL };
+double *soil_lower_conc{ NULL };
+double **soil_lower_conc_lay{ NULL };
+const double *soil_rechr{ NULL };
+double *conc_soil_rechr{ NULL };
+double **conc_soil_rechr_lay{ NULL };
 
 void decl(void);
 void init(void);
@@ -266,54 +266,54 @@ ClassWQ_SoilBGC* klone(string name) const;
 
       void soil_pool_transformations(); // requires soil temperature
 
-      void  plant_uptake(float **conc_soil_rechr_lay, float **conc_soil_lower_lay, float **sink_lay);
+      void  plant_uptake(double **conc_soil_rechr_lay, double **conc_soil_lower_lay, double **sink_lay);
 
       void  nutrient_inputs();
 
       void soil_denitrification(const long soil_layer);
 
-      float tempfactor(float temperature);
+      double tempfactor(double temperature);
 
-      float moisturefactor(float sm, float wp, float satact, float thetapow, float thetalow, float thetaupp); // temporary creation
+      double moisturefactor(double sm, double wp, double satact, double thetapow, double thetalow, double thetaupp); // temporary creation
 
-      void add_source_to_water(const float vol, long n, float conc, float source);
+      void add_source_to_water(const double vol, long n, double conc, double source);
 
-      void add_source_to_water(const float vol, const long n, float *conc, const float source);
+      void add_source_to_water(const double vol, const long n, double *conc, const double source);
 
-      void new_concentration(const float pool, const float vol, float *conc); // return by reference
+      void new_concentration(const double pool, const double vol, double *conc); // return by reference
 
 
-      void retention_pool(long n, long hh, float **pool, float *sink);
+      void retention_pool(long n, long hh, double **pool, double *sink);
 
-      void retention_pool(long n, float *pool, float *sink);
+      void retention_pool(long n, double *pool, double *sink);
 
-      void retention_pool(float &pool, float &sink);
+      void retention_pool(double &pool, double &sink);
 
-      void production_pool(long n, float pool, const float source); // used
+      void production_pool(long n, double pool, const double source); // used
 
-      void production_pool(long n, long hh, float **pool, const float source[][2]); // used
+      void production_pool(long n, long hh, double **pool, const double source[][2]); // used
 
-      void production_pool(long n, long hh, float **pool, const float *source); // used
+      void production_pool(long n, long hh, double **pool, const double *source); // used
 
-      void production_pool(long n, float *pool, const float source);
+      void production_pool(long n, double *pool, const double source);
 
       void soil_carbon_processes();
 
       void soil_carbon_pool_transformations();
 
-      float exponential_moisturefactor(const float sm, const float pw, const float limpar, const float exp);
+      double exponential_moisturefactor(const double sm, const double pw, const double limpar, const double exp);
 
-      float halfsatconcfactor(const float conc, const float par);
+      double halfsatconcfactor(const double conc, const double par);
 
-      float SUM(float XX[maxsoillayers][2], long part); // two dimensional arrays
+      double SUM(double XX[maxsoillayers][2], long part); // two dimensional arrays
 
-      float SUM(float *XX); // one dimensional arrays
+      double SUM(double *XX); // one dimensional arrays
       
       void runoff_pp_by_erosion();
 
-      void calculate_erosion(float& erodedP);
+      void calculate_erosion(double& erodedP);
 
-      void calculate_transport(float erodingflow, float& erodedP);   // calculate amount of PP transported in fast flow paths  (kg/km2)
+      void calculate_transport(double erodingflow, double& erodedP);   // calculate amount of PP transported in fast flow paths  (kg/km2)
 
 };
 

@@ -12,9 +12,12 @@
 #include <time.h>
 //#include "boost/shared_ptr.hpp"
 #include "GlobalDll.h"
+//#include "ClassCRHM.h"
 #include "ClassModule.h"
 #include "NewModules.h"
 #include "MacroUnit.h"
+#include "Common.h"
+#include "StandardConverterUtility.h"
 
 #include <time.h>
 
@@ -136,6 +139,7 @@ TObject * CRHMmain::GetObjectOfVariable(string vname)
 			return obj;
 		}
 	}
+	return NULL; //added fall through case where name is not found - jhs507
 }
 
 //manishankar added this function from CRHMmainDlg.cpp file.
@@ -155,6 +159,7 @@ TObject * CRHMmain::GetObjectOfObservation(string vname)
 			return obj;
 		}
 	}
+	return NULL; //added fall through case where observation is not found - jhs507
 }
 
 
@@ -334,12 +339,12 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 					TAKA Type = AKAtype(type);
 
-					if (Type == VARG || Type == OBSR || Type == OBSF) {
+					if (Type == TAKA::VARG || Type == TAKA::OBSR || Type == TAKA::OBSF) {
 						DataFile >> source;
 						alias += ' ' + source;
 					}
 
-					if (Type != AKAERROR) {
+					if (Type != TAKA::AKAERROR) {
 						Pairstr2 Item = Pairstr2(type + " " + module + " " + name, alias);
 						Global::MapAKA.insert(Item);
 					}
@@ -399,7 +404,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					c = DataFile.peek();
 				}
 
-				if (isdigit(c) && ObsFilesList->Count == 0) {
+				if (iswdigit(c) && ObsFilesList->Count == 0) {
 					DataFile >> Global::Freq;
 					Global::Interval = 1.0 / Global::Freq;
 				}
@@ -432,7 +437,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 					idx = S.find('#');
 					if (idx != -1) {
-						Variation = pow(2, S[idx + 1] - char('1'));
+						Variation = (long)pow(2, S[idx + 1] - char('1'));
 						s = S.substr(0, idx);
 					}
 					else
@@ -454,7 +459,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					string Name = Global::OurModulesList->Strings[ii];
 					int jj = Global::AllModulesList->IndexOf(Name);
 					if (jj < 0) {
-						CRHMException Except("Unknown Module: " + string(Name.c_str()), ERR);
+						CRHMException Except("Unknown Module: " + string(Name.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
 							"Unknown Module: incorrect CRHM version or DLL not loaded");
 						LogError(Except);
@@ -464,7 +469,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					}
 					else {
 						Variation = ((long)Global::OurModulesList->Objects[ii]);
-						((ClassModule*)Global::AllModulesList->Objects[jj])->variation = Variation;
+						((ClassModule*)Global::AllModulesList->Objects[jj])->variation = (unsigned short) Variation;
 						Global::OurModulesList->Objects[ii] = Global::AllModulesList->Objects[jj];
 					}
 				}
@@ -551,7 +556,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 									break;
 								//                else if(Cols > 0 && Cols%thisPar->lay == 0) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
 								//                  break;
-								else if (thisPar->varType == CRHM::Txt && thisPar->dimen < CRHM::NHRU) // text can have variable length
+								else if (thisPar->varType == TVar::Txt && thisPar->dimen < TDim::NHRU) // text can have variable length
 									break;
 								else if (thisPar->param == "obs_elev" || thisPar->param == "soil_withdrawal")
 									break;
@@ -575,7 +580,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					if (thisPar) {
 						ClassPar *newPar = new ClassPar(*thisPar);
 						newPar->module = module; // set module name
-						if (thisPar->varType == CRHM::Txt) {
+						if (thisPar->varType == TVar::Txt) {
 							//newPar->Strings->DelimitedText = S.c_str();
 							newPar->Strings->DelimitedText(S.c_str());
 							//int a = 10;
@@ -588,15 +593,15 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 							for (int jj = 0; jj <thisPar->lay; ++jj) {
 								Cols = 0;
 								for (int ii = 0; ii < newPar->dim; ++ii) {
-									if (newPar->varType == CRHM::Float) {
-										float x;
+									if (newPar->varType == TVar::Float) {
+										double x;
 										instr >> x;
 										if (instr.fail())
 											break;
 										newPar->layvalues[jj][ii] = x;
 									}
-									else if (newPar->varType == CRHM::Int) {
-										float x;
+									else if (newPar->varType == TVar::Int) {
+										long x;
 										instr >> x;
 										if (instr.fail())
 											break;
@@ -619,7 +624,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 									if (!(Cols == 0 && newPar->lay > Rows)) { // always handle rows before filling columns
 
 										for (int ii = Cols; ii < newPar->dim; ++ii) { // fills columns
-											if (newPar->varType == CRHM::Float)
+											if (newPar->varType == TVar::Float)
 												newPar->layvalues[Rows][ii] = newPar->layvalues[Rows][ii - 1];
 											else
 												newPar->ilayvalues[Rows][ii] = newPar->ilayvalues[Rows][ii - 1];
@@ -628,7 +633,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 									else {
 										for (int jjj = Rows; jjj <thisPar->lay; ++jjj) {
 											for (int ii = 0; ii < newPar->dim; ++ii) {
-												if (newPar->varType == CRHM::Float)
+												if (newPar->varType == TVar::Float)
 												{
 													//manishankar. commented to run the macro code. need to activate.
 													newPar->layvalues[jjj][ii] = newPar->layvalues[jjj - 1][ii];
@@ -656,7 +661,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					else {
 						if (string(param) != "Use_Observations_As_Supplied") {
 							CRHMException Except("Unknown Module Parameter: " + string(module) + " -> " + string(param) +
-								" in " + OpenNamePrj, ERR);
+								" in " + OpenNamePrj, TExcept::ERR);
 							//Application->MessageBox(Except.Message.c_str(), "Unknown Parameter in project file", MB_OK);
 							LogError(Except);
 						}
@@ -705,7 +710,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					}
 					else {
 						CRHMException Except("Unknown Variable " + S +
-							" in " + string(OpenNamePrj.c_str()), ERR);
+							" in " + string(OpenNamePrj.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
 							"Unknown Variable in project file");
 						LogError(Except);
@@ -759,7 +764,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					}
 					else {
 						CRHMException Except("Unknown Variable " + S +
-							" in " + string(OpenNamePrj.c_str()), ERR);
+							" in " + string(OpenNamePrj.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
 							"Unknown Variable in project file");
 						LogError(Except);
@@ -843,7 +848,7 @@ void CRHMmain::SetSharedParams(ClassPar *basinPar) {
 
 void CRHMmain::FormCreate(void) {
 
-	Global::BuildFlag = CRHM::BUILD;
+	Global::BuildFlag = TBuild::BUILD;
 
 	Global::maxhru = 1;
 	Global::maxlay = 1;
@@ -854,7 +859,7 @@ void CRHMmain::FormCreate(void) {
 
 	cdSeries = NULL;
 
-	double Dt = time(NULL);
+	time_t Dt = time(NULL);
 	OpenStateFlag = false;
 
 	Global::nhru = Global::maxhru;
@@ -932,26 +937,26 @@ void CRHMmain::FormCreate(void) {
 
 	Global::NaNcheck = false;
 	Global::LOGVARLOAD = false;
-	Global::TimeFormat = MS;
+	Global::TimeFormat = TIMEFORMAT::MS;
 
 }
 
 void  CRHMmain::InitModules(void) {
 
-	ClassVar *thisVar;
+	//ClassVar *thisVar; variable is unreferenced commenting out for now - jhs507
 
-	Global::BuildFlag = CRHM::DECL;
+	Global::BuildFlag = TBuild::DECL;
 
 	// executes the DECL portion of the declvar/declparam etc. routines
 	for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
 		((ClassModule*)Global::OurModulesList->Objects[ii])->nhru = Global::nhru;
 		((ClassModule*)Global::OurModulesList->Objects[ii])->decl();
 	}
-	GetAllVariables();
+	Label4Click();
 }
 
 
-void  CRHMmain::GetAllVariables(void) {
+void  CRHMmain::Label4Click(void) {
 
 	ClassVar *thisVar;
 	MapVar::iterator itVar;
@@ -963,7 +968,7 @@ void  CRHMmain::GetAllVariables(void) {
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
-		if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::USUAL && thisVar->dimen != CRHM::NREB) {
+		if (thisVar->varType < TVar::Read && thisVar->visibility == TVISIBLE::USUAL && thisVar->dimen != TDim::NREB) {
 			Newname = DeclObsName(thisVar);
 			if (Common::IndexOf(AllVariables, Newname) == -1)
 				AllVariables->AddObject(Newname, (TObject*)thisVar);
@@ -972,12 +977,12 @@ void  CRHMmain::GetAllVariables(void) {
 }
 //---------------------------------------------------------------------------
 
-CRHM::TFun  CRHMmain::FindObservationType(string Kind) {
+TFun  CRHMmain::FindObservationType(string Kind) {
 
 	if (Kind == "_obs") Kind = "";
-	for (int ii = CRHM::FOBS; ii <= CRHM::LAST; ii++)
-		if (Kind == Sstrings[ii]) return (CRHM::TFun)ii;
-	return (CRHM::TFun) 0;
+	for (int ii = (int)TFun::FOBS; ii <= (int)TFun::LAST; ii++)
+		if (Kind == Sstrings[ii]) return (TFun)ii;
+	return (TFun::FOBS);
 }
 //---------------------------------------------------------------------------
 
@@ -1269,7 +1274,7 @@ string CRHMmain::DeclObsName(ClassVar *thisVar) {
 		ClassModule* thisModule = (ClassModule*)Global::OurModulesList->Objects[jj];
 		if (thisModule->isGroup) { // if group add suffix
 			string AA("@@");
-			AA[1] += thisModule->GroupCnt;
+			AA[1] += (char) thisModule->GroupCnt;
 			Newname += AA;
 		}
 	}
@@ -1327,7 +1332,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 		// always starts with this display// remove entries that are in observation AllVariables
 		for (int ii = 0; ii < AllVariables->Count; ii++) {
 			thisVar = (ClassVar *)AllVariables->Objects[ii];
-			if (thisVar && thisVar->varType >= CRHM::Read) {
+			if (thisVar && thisVar->varType >= TVar::Read) {
 				AllVariables->Delete(ii);
 				ii = 0;
 			}
@@ -1336,7 +1341,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 		// remove entries that are in observation ListBox3
 		for (int ii = 0; ii < SelectedVariables->Count; ii++) {
 			thisVar = (ClassVar *)SelectedVariables->Objects[ii];
-			if (thisVar && thisVar->varType >= CRHM::Read) {
+			if (thisVar && thisVar->varType >= TVar::Read) {
 				SelectedVariables->Delete(ii);
 				ii = 0;
 			}
@@ -1346,7 +1351,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 
 		for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 			thisVar = (*itVar).second;
-			if (thisVar && thisVar->varType >= CRHM::Read)
+			if (thisVar && thisVar->varType >= TVar::Read)
 				if (Common::IndexOf(AllObservations, thisVar->name) == -1)
 					AllObservations->AddObject(thisVar->name, (TObject*)thisVar);
 		}
@@ -1405,7 +1410,7 @@ void  CRHMmain::ObsFileClose(void)
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
-		if (thisVar->varType >= CRHM::Read)
+		if (thisVar->varType >= TVar::Read)
 			if (Common::IndexOf(AllObservations, (*itVar).second->name) == -1)
 				AllObservations->AddObject((*itVar).second->name,
 				(TObject*)(*itVar).second);
@@ -1414,7 +1419,7 @@ void  CRHMmain::ObsFileClose(void)
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		//if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::VARIABLE) //changed by Manishankar.
-		if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::USUAL)
+		if (thisVar->varType < TVar::Read && thisVar->visibility == TVISIBLE::USUAL)
 			if (Common::IndexOf(AllVariables, (*itVar).second->name) == -1)
 				AllVariables->AddObject((*itVar).second->name, (TObject*)(*itVar).second);
 	}
@@ -1459,7 +1464,7 @@ void   CRHMmain::FreeChart1(void)
 		for (int ii = 0; ii < SeriesCnt; ii++) {
 
 			ClassVar* thisVar = (ClassVar *)cdSeries[ii]->Tag;
-			if (thisVar->FunKind > CRHM::FOBS && !thisVar->values && !thisVar->ivalues)
+			if (thisVar->FunKind > TFun::FOBS && !thisVar->values && !thisVar->ivalues)
 				delete thisVar;
 
 		}
@@ -1550,7 +1555,7 @@ string  CRHMmain::ExtractHruLay(string S, long &Hru, long &Lay) {
 MMSData *  CRHMmain::RunClick2Start()
 {
 	ClassVar *thisVar;
-	float **mmsData;
+	double **mmsData;
 	long **mmsDataL;
 	bool GoodRun = true;
 	MMSData * mmsdata = new MMSData();
@@ -1625,7 +1630,7 @@ MMSData *  CRHMmain::RunClick2Start()
 		S += Global::OurModulesList->Strings[ii];
 		if (thisModule->variation != 0) {
 			string AA("#0");
-			AA[1] += log(thisModule->variation) / log(2) + 1;
+			AA[1] += (char) (log(thisModule->variation) / log(2) + 1);
 			S += AA;
 		}
 
@@ -1695,7 +1700,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 	Global::DTmin = (int)((DTstartR - Global::DTstart)* Global::Freq);
 	Global::DTindx = Global::DTmin;
-	Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+	Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 
 	int Modii = 0;
 	Global::MapVarsGet.clear();
@@ -1736,17 +1741,20 @@ MMSData *  CRHMmain::RunClick2Start()
 	if (ObsFilesList->Count > 0)
 	{
 		FileData = (ClassData *)ObsFilesList->Objects[0];
+
+		if (DTstartR < FileData->Dt1) {
+			LogMessageX("Start Time before first Observation");
+			GoodRun = false;
+		}
+
+		if (DTendR > FileData->Dt2) {
+			LogMessageX("End Time after last Observation");
+			GoodRun = false;
+		}
 	}
 
-	if (DTstartR < FileData->Dt1) {
-		LogMessageX("Start Time before first Observation");
-		GoodRun = false;
-	}
-
-	if (DTendR > FileData->Dt2) {
-		LogMessageX("End Time after last Observation");
-		GoodRun = false;
-	}
+	
+	
 
 	if (GoodRun) {
 		if (!OpenStateFlag) {
@@ -1782,11 +1790,11 @@ MMSData *  CRHMmain::RunClick2Start()
 		for (int ii = 0; ii < Modii; ii++)
 			((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(false);
 
-		Global::BuildFlag = CRHM::DECL;
+		Global::BuildFlag = TBuild::DECL;
 		return mmsdata;
 	}
 
-	Global::BuildFlag = CRHM::RUN;
+	Global::BuildFlag = TBuild::RUN;
 	Global::DTmax = (int)((DTendR - Global::DTstart)* Global::Freq);
 
 	SeriesCnt = SelectedVariables->Count;
@@ -1797,7 +1805,7 @@ MMSData *  CRHMmain::RunClick2Start()
 	for (int ii = 0; ii < SeriesCnt; ++ii)
 		cdSeries[ii] = new TSeries(Cnt);
 
-	mmsData = new float*[SeriesCnt];
+	mmsData = new double*[SeriesCnt];
 	mmsDataL = new long*[SeriesCnt];
 
 	for (int ii = 0; ii < SelectedVariables->Count; ii++) {
@@ -1813,7 +1821,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 		S = ExtractHruLay(S, dim, lay);
 
-		if (thisVar->varType == CRHM::Float) {
+		if (thisVar->varType == TVar::Float) {
 			mmsDataL[ii] = NULL;
 			if (thisVar->lay == 0) {
 				mmsData[ii] = thisVar->values + (dim - 1);
@@ -1822,7 +1830,7 @@ MMSData *  CRHMmain::RunClick2Start()
 				mmsData[ii] = (thisVar->layvalues[lay - 1]) + (dim - 1);
 			}
 		}
-		else if (thisVar->varType == CRHM::Int) {
+		else if (thisVar->varType == TVar::Int) {
 			mmsData[ii] = NULL;
 			if (thisVar->lay == 0) {
 				mmsDataL[ii] = thisVar->ivalues + (dim - 1);
@@ -1873,7 +1881,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 {
-	float **mmsData = mmsdata->mmsData;
+	double **mmsData = mmsdata->mmsData;
 	long ** mmsDataL = mmsdata->mmsDataL;
 	bool GoodRun = mmsdata->GoodRun;
 	string S = mmsdata->S;
@@ -1893,7 +1901,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			if (Global::Freq == 1)
 				Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx);
 			else
-				Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+				Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 
 			if ((double)Global::RapidAdvanceTo > 0.0 && !(Global::CRHMStatus & 4)) {
 				if (Global::DTnow < Global::RapidAdvanceTo)
@@ -1901,26 +1909,26 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 				else if (Global::DTnow == Global::RapidAdvanceTo + Global::Interval && !Global::LoopCnt) { // reached RapidAdvanceTo and NO looping.
 					Global::CRHMStatus &= 125; // clear status == 2 (main control) and resume display
-					LogMessage("Terminate fast loop aheadMain", DD);
+					LogMessage("Terminate fast loop aheadMain", TExtra::DD);
 				}
 				else if (Global::DTnow == Global::RapidAdvanceTo && Global::LoopCnt) { // reached RapidAdvanceTo with looping.
 					if (Global::LoopCntDown == -1) { // first time
 						Global::LoopCntDown = Global::LoopCnt;
 						StatePar = ParFind("basin StateVars_to_Update");
 						ControlSaveState(true, StatePar, Global::RunUpBitSet); // save this position
-						LogMessage("Initialise LoopTo Main", DD);
+						LogMessage("Initialise LoopTo Main", TExtra::DD);
 					}
 				}
 				else if (Global::DTnow == Global::LoopTo && Global::LoopCnt) { // reached LoopTo position
 					ControlReadState(true, StatePar); // return to earlier position
 					--Global::LoopCntDown; // after above ReadState
-					LogMessage("Reached loop Main", DD);
+					LogMessage("Reached loop Main", TExtra::DD);
 					if (Global::LoopCntDown <= 0) {
 						ResetLoopList();
 						Global::CRHMStatus &= 125; // remove status == 2 (inhibit display)
 						Global::CRHMStatus |= 4; // flag done
 						Global::LoopCntDown = -1;
-						LogMessage("Terminate LoopTo Main", DD);
+						LogMessage("Terminate LoopTo Main", TExtra::DD);
 						continue;
 					}
 				}
@@ -1947,13 +1955,14 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 				//clock_t btime = clock(); //////////////////////////////////////////////////////////////////////////////////////////////
 
-				if (p->GroupCnt && ((ClassMacro*)p)->ObsModule) // only execute if group has an obs module
-					((ClassMacro*)p)->ObsModule->pre_run();
+				//manishankar. This if condition is creating address sanitizing error.
+				//if (p->GroupCnt && ((ClassMacro*)p)->ObsModule) // only execute if group has an obs module
+					//((ClassMacro*)p)->ObsModule->pre_run();
 
 				p->ReadObs(Reset);
 				Reset = false;
 
-				//float tdiff = float(clock() - btime) / CLOCKS_PER_SEC; ///////////////////////////////////////////////////////////////
+				//double tdiff = double(clock() - btime) / CLOCKS_PER_SEC; ///////////////////////////////////////////////////////////////
 				//ts->addTime("ReadObs", tdiff);
 
 				CheckBlankModule();
@@ -1963,6 +1972,12 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 					//{
 					//Common::writefile("d:/test.txt","p = "+p->Name+", p nameroot = "+p->NameRoot);
 					//if (!(p->Name == "WQ_Soil_BGC"))
+
+					//manishankar added this for resolving the address related issue.
+					Global::t_layvalues = p->t_layvalues; 
+					Global::rh_layvalues = p->rh_layvalues;
+
+
 					p->run();
 					//}
 					//catch (...)
@@ -1989,7 +2004,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			if (Global::CRHMControlSaveCnt && !(Global::CRHMStatus & 1)) { // Set module mode. Save current position.
 				ControlSaveState(false, StatePar, Global::ModuleBitSet);
 				Global::CRHMStatus |= 1; // set module control bit and inhibit display.
-				LogMessage("Start save Main", DD);
+				LogMessage("Start save Main", TExtra::DD);
 			}
 
 			// module loop control reset
@@ -1998,7 +2013,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				ControlReadState(false, NULL); // restore all
 				Global::CRHMStatus &= 126; // reset module mode.
 				Global::CRHMControlSaveCnt = 0; // required for Global::DTindx >= Global::DTmax-1 condition
-				LogMessage("End save Main", DD);
+				LogMessage("End save Main", TExtra::DD);
 				LogDebug(" ");
 
 				if (Global::Freq == 1) {
@@ -2006,7 +2021,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 					Global::DTindx -= 1;
 				}
 				else {
-					Global::DTnow = Global::DTstart + Global::Interval*(Global::DTindx + 1);
+					Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 					Global::DTindx -= 1;
 				}
 
@@ -2048,22 +2063,23 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 		} // end for
 
 		int d = iter;
-		Global::BuildFlag = CRHM::DECL;
+		Global::BuildFlag = TBuild::DECL;
 
 
 	}
 
 	catch (exception &E) {
-		//    string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
+		//string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
 		//    ShowMessage(S);
-		LogError(S + " (" + FloatToStrF(Global::DTnow, ffGeneral, 10, 0) + ")", ERR);
+		string errorMessage = E.what();
+		LogError(errorMessage + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 0) + ")", TExcept::ERR);
 		GoodRun = false;
 	}
 }
 
 void CRHMmain::RunClick2End(MMSData * mmsdata)
 {
-	float ** mmsData = mmsdata->mmsData;
+	double ** mmsData = mmsdata->mmsData;
 	long ** mmsDataL = mmsdata->mmsDataL;
 	bool GoodRun = mmsdata->GoodRun;
 
@@ -2089,7 +2105,7 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 			LastRprt();
 	}
 
-	//float timediff2 = float(clock() - begintime2) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
+	//double timediff2 = double(clock() - begintime2) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
 	//ts->addTime("totaltime", timediff2);
 
 	//ts->writeStatistics();
@@ -2161,19 +2177,19 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit)
 		thisVar = (*itVar).second;
 		Needed = false;
 
-		if (thisVar->varType < CRHM::Read && thisVar->StatVar) { // Is state variable!
+		if (thisVar->varType < TVar::Read && thisVar->StatVar) { // Is state variable!
 
 			if (!thisVar->InGroup || Global::ModuleBitSet[thisVar->InGroup - 1])  // All variables in simple projects and module requested group projects
 				Needed = true;
 			else if (MainLoop) {
 				string namebasic = thisVar->name;
-				if (VarPar->Strings->IndexOf(namebasic) > -1)
+				if (VarPar && (VarPar->Strings->IndexOf(namebasic) > -1))
 					Needed = true;
 				else if (Wild) { // if Wild reduce parameter to root
 					string::size_type Idx = namebasic.find("@");
 					if (Idx != string::npos) {
 						namebasic = namebasic.substr(1, Idx - 1);
-						if (VarPar->Strings->IndexOf(namebasic) > -1)
+						if (VarPar && (VarPar->Strings->IndexOf(namebasic) > -1))
 							Needed = true;
 					}
 				} // wild!
@@ -2188,9 +2204,9 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit)
 			if (thisVar->lay == 0)
 				for (int ii = 0; ii < thisVar->dim; ii++) {
 					if (thisVar->values != NULL)
-						S = S + FloatToStrF(thisVar->values[ii], ffGeneral, 7, 0) + " ";
+						S = S + FloatToStrF(thisVar->values[ii], TFloatFormat::ffGeneral, 7, 0) + " ";
 					else if (thisVar->ivalues != NULL)
-						S = S + FloatToStrF(thisVar->ivalues[ii], ffGeneral, 7, 0) + " ";
+						S = S + FloatToStrF(thisVar->ivalues[ii], TFloatFormat::ffGeneral, 7, 0) + " ";
 					else
 						S = S + "-0 ";
 
@@ -2203,9 +2219,9 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit)
 				for (int ll = 0; ll < thisVar->lay; ll++) {
 					for (int ii = 0; ii < thisVar->dim; ii++) {
 						if (thisVar->layvalues != NULL)
-							S = S + FloatToStrF(thisVar->layvalues[ll][ii], ffGeneral, 4, 0) + " ";
+							S = S + FloatToStrF(thisVar->layvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 						else if (thisVar->ivalues != NULL)
-							S = S + FloatToStrF(thisVar->ilayvalues[ll][ii], ffGeneral, 4, 0) + " ";
+							S = S + FloatToStrF(thisVar->ilayvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 						else
 							S = S + "-0 ";
 
@@ -2345,13 +2361,13 @@ void  CRHMmain::AllRprt(void)
 
 		//added this switch statement according to Peter's code.
 		switch (Global::TimeFormat) {
-		case CRHM::MS:
-			Sx = FloatToStrF(cdSeries[0]->XValue(nn), ffGeneral, 10, 0);
+		case TIMEFORMAT::MS:
+			Sx = FloatToStrF(cdSeries[0]->XValue(nn), TFloatFormat::ffGeneral, 10, 0);
 			break;
-		case CRHM::MMDDYYYY:
+		case TIMEFORMAT::MMDDYYYY:
 			Sx = StandardConverterUtility::FormatDateTime("mm/dd/yyyy hh:mm ", cdSeries[0]->XValue(nn));
 			break;
-		case CRHM::YYYYMMDD:
+		case TIMEFORMAT::YYYYMMDD:
 			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn));
 			break;
 		default:
@@ -2369,7 +2385,7 @@ void  CRHMmain::AllRprt(void)
 				if (thisVar->varType == CRHM::Int || thisVar->varType == CRHM::ReadI)
 					prec = 7;
 				*/
-				Sy = FloatToStrF(cdSeries[vv]->YValue(nn), ffGeneral, prec, 10);
+				Sy = FloatToStrF(cdSeries[vv]->YValue(nn), TFloatFormat::ffGeneral, prec, 10);
 				Sx = Sx + "\t" + Sy;
 			}
 		}
@@ -2391,15 +2407,15 @@ void  CRHMmain::LastRprt(void)
 
 	int nn = cdSeries[0]->Count();
 
-	Sx = FloatToStrF(cdSeries[0]->XValue(nn - 1), ffGeneral, 10, 0);
+	Sx = FloatToStrF(cdSeries[0]->XValue(nn - 1), TFloatFormat::ffGeneral, 10, 0);
 
 	for (int vv = 0; vv < SeriesCnt; ++vv) {
 		ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
 		int prec = 6;
-		if (thisVar->varType == CRHM::Int || thisVar->varType == CRHM::ReadI)
+		if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
 			prec = 4;
 
-		Sy = FloatToStrF(cdSeries[vv]->YValue(nn - 1), ffGeneral, prec, 0);
+		Sy = FloatToStrF(cdSeries[vv]->YValue(nn - 1), TFloatFormat::ffGeneral, prec, 0);
 
 		Sx = Sx + "\t" + Sy;
 	}
@@ -2628,20 +2644,20 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 				if (thisVar->lay == 0) {
 					for (int ii = 0; ii < thisVar->dim; ii++)
 						if (thisVar->values != NULL) {
-							Sy += FloatToStrF(thisVar->values[ii], ffGeneral, 4, 0) + " ";
+							Sy += FloatToStrF(thisVar->values[ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 						}
 						else if (thisVar->ivalues != NULL) {
-							Sy += FloatToStrF(thisVar->ivalues[ii], ffFixed, 0, 0) + " ";
+							Sy += FloatToStrF(thisVar->ivalues[ii], TFloatFormat::ffFixed, 0, 0) + " ";
 						}
 				}
 				else {
 					for (int ll = 0; ll < thisVar->lay; ll++)
 						for (int ii = 0; ii < thisVar->dim; ii++)
 							if (thisVar->layvalues != NULL) {
-								Sy += FloatToStrF(thisVar->layvalues[ll][ii], ffGeneral, 4, 0) + " ";
+								Sy += FloatToStrF(thisVar->layvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 							}
 							else  if (thisVar->ivalues != NULL) {
-								Sy += FloatToStrF(thisVar->ilayvalues[ll][ii], ffGeneral, 0, 0) + " ";
+								Sy += FloatToStrF(thisVar->ilayvalues[ll][ii], TFloatFormat::ffGeneral, 0, 0) + " ";
 							}
 				}
 
@@ -2701,20 +2717,20 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 						if (thisVar->lay == 0) {
 							for (int ii = 0; ii < thisVar->dim; ii++)
 								if (thisVar->values != NULL) {
-									Sy += FloatToStrF(thisVar->values[ii], ffGeneral, 4, 0) + " ";
+									Sy += FloatToStrF(thisVar->values[ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 								}
 								else if (thisVar->ivalues != NULL) {
-									Sy += FloatToStrF(thisVar->ivalues[ii], ffFixed, 0, 0) + " ";
+									Sy += FloatToStrF(thisVar->ivalues[ii], TFloatFormat::ffFixed, 0, 0) + " ";
 								}
 						}
 						else {
 							for (int ll = 0; ll < thisVar->lay; ll++)
 								for (int ii = 0; ii < thisVar->dim; ii++)
 									if (thisVar->layvalues != NULL) {
-										Sy += FloatToStrF(thisVar->layvalues[ll][ii], ffGeneral, 4, 0) + " ";
+										Sy += FloatToStrF(thisVar->layvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 									}
 									else  if (thisVar->ivalues != NULL) {
-										Sy += FloatToStrF(thisVar->ilayvalues[ll][ii], ffGeneral, 0, 0) + " ";
+										Sy += FloatToStrF(thisVar->ilayvalues[ll][ii], TFloatFormat::ffGeneral, 0, 0) + " ";
 									}
 						}
 
@@ -2913,7 +2929,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 
 		if (ObsFilesList->Count == 0)
-			S = S + " " + FloatToStrF(Global::Freq, ffGeneral, 0, 0);
+			S = S + " " + FloatToStrF(Global::Freq, TFloatFormat::ffGeneral, 0, 0);
 		ProjectList->Add(S);
 
 
@@ -2944,7 +2960,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			string S = Global::OurModulesList->Strings[ii];
 			if (thisModule->variation > 0) {
 				string AA("#0 ");
-				AA[1] += log(thisModule->variation) / log(2) + 1;
+				AA[1] += (char) (log(thisModule->variation) / log(2) + 1);
 				S = S + AA.c_str();
 			}
 			else
@@ -2962,7 +2978,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 					string S = string(" +") + (*iterM)->NameRoot.c_str();
 					if ((*iterM)->variation > 0) {
 						string AA("#0 ");
-						AA[1] += log((*iterM)->variation) / log(2) + 1;
+						AA[1] += (char) (log((*iterM)->variation) / log(2) + 1);
 						S = S + AA.c_str();
 					}
 					else
@@ -2993,8 +3009,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 				string S = string(thisPar->module.c_str()) + " " + string(thisPar->param.c_str());
 
-				if (thisPar->varType != CRHM::Txt)
-					S += " <" + FloatToStrF(thisPar->minVal, ffGeneral, 4, 0) + " to " + FloatToStrF(thisPar->maxVal, ffGeneral, 4, 0) + ">";
+				if (thisPar->varType != TVar::Txt)
+					S += " <" + FloatToStrF(thisPar->minVal, TFloatFormat::ffGeneral, 4, 0) + " to " + FloatToStrF(thisPar->maxVal, TFloatFormat::ffGeneral, 4, 0) + ">";
 
 
 				ProjectList->Add(S);
@@ -3002,15 +3018,15 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 				for (int jj = 0; jj<thisPar->lay; jj++) {
 					S = "";
 					for (int ii = 0; ii < thisPar->dim; ii++) {
-						if (thisPar->varType == CRHM::Float)
+						if (thisPar->varType == TVar::Float)
 						{
-							S = S + FloatToStrF(thisPar->layvalues[jj][ii], ffGeneral, 4, 0) + " ";
+							S = S + FloatToStrF(thisPar->layvalues[jj][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
 						}
-						else if (thisPar->varType == CRHM::Int)
+						else if (thisPar->varType == TVar::Int)
 						{
-							S = S + FloatToStrF(thisPar->ilayvalues[jj][ii], ffFixed, 8, 0) + " ";
+							S = S + FloatToStrF(thisPar->ilayvalues[jj][ii], TFloatFormat::ffFixed, 8, 0) + " ";
 						}
-						else if (thisPar->varType == CRHM::Txt)
+						else if (thisPar->varType == TVar::Txt)
 						{
 							if (thisPar->Strings->Count > ii)
 							{
@@ -3442,7 +3458,7 @@ void CRHMmain::ClearModules(bool All) {
 	}
 	//Chart->Refresh();
 
-	Global::BuildFlag = CRHM::BUILD;
+	Global::BuildFlag = TBuild::BUILD;
 
 	Global::MapAKA.clear(); // remove all AKA
 }
@@ -3452,37 +3468,56 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 {
 	FILE * obfile = fopen(obsfilepath, "r");
 
-	char line[128], obsname[128];
-	char * token;
+	char line[128];
+	char obsname[128]; 
+	//char * token; variable is unreferenced commenting out for now - jhs507
 	char obsnames[50][128];
-	int obsindex = 0, j = 0;
+	int obsindex = 0;
+	int j = 0;
 
-	fgets(line, sizeof line, obfile); //reading the first line.
+	fgets(line, sizeof line, obfile); //reading the first line. discarding because first line is not an obsname
 
-	while (fgets(line, sizeof line, obfile) != NULL) //reading the lines upto #############.
+	while (fgets(line, sizeof line, obfile) != NULL) //read a line, end loop if end of file is reached
 	{
-		for (int i = 0; i < strlen(line); i++)
+		//Reset obsname variable
+		obsname[0] = '\0';
+
+		//Exit once we reach the division between observation names and data
+		if (line[0] == '#')
+		{
+			break;
+		}
+
+		//copy the read line character by character into obsname until a space is reached 
+		for (unsigned int i = 0; i < strlen(line); i++)
 		{
 			obsname[i] = line[i];
 			if (line[i] == ' ')
 			{
-				obsname[i] = '\0';
-				strcpy(obsnames[j], obsname);
+				obsname[i] = '\0'; //end the obsname with a null byte
+				strcpy(obsnames[j], obsname); //copy the observation name into the array of observation names
 				break;
 			}
 		}
-		if (line[0] == '#') { break; }
 
+		//loop over the previous observation names to see if the current obsname matches 
+		//a previously recorded observation name with a '$' prepended to it indicating a derived observation 
+		//If this is found decriment j which has the effect of discarding the current obsname 
 		for (int i = 0; i < j; i++)
 		{
-			char test[128]; test[0] = '$'; test[1] = '\0';
+			char test[128];
+			test[0] = '$'; 
+			test[1] = '\0';
+			
 			strcat(test, obsnames[i]);
+
 			if (strcmp(obsname, test) == 0)
 			{
 				j--;
 				break;
 			}
 		}
+
 		j++;
 	}
 	fclose(obfile);
@@ -3501,36 +3536,61 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 
 void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 {
-	int l = strlen(observationname);
-	if (observationname[l - 1] == '\n') { observationname[l - 1] = '\0'; }
-
+	int length = strlen(observationname);
+	if (observationname[length - 1] == '\n') 
+	{ 
+		observationname[length - 1] = '\0'; 
+	}
 
 	FILE * obfile = fopen(obsfilepath, "r");
 
-	char line[128], obsname[128];
+	char line[128];
+	char obsname[128];
 	char * token, obsnames[50][128];
-	int obsindex = 0, j = 0;
+	int obsindex = 0;
+	int j = 0;
 
-	fgets(line, sizeof line, obfile); //reading the first line.
+	fgets(line, sizeof line, obfile); //reading the first line which gets discarded as the first line in the obsfile is a description 
 
-	while (fgets(line, sizeof line, obfile) != NULL) //reading the lines upto #############.
+	while (fgets(line, sizeof line, obfile) != NULL) //reading lines from the file until the end of file is reached
 	{
-		for (int i = 0; i < strlen(line); i++)
+
+		//Reset obsname variable
+		obsname[0] = '\0';
+
+		//End the loop if the line begins with '#' which indicates the break between obsnames and data
+		if (line[0] == '#') 
+		{ 
+			break; 
+		}
+
+		//Loop along the line unntil a space character is reached 
+		for (unsigned int i = 0; i < strlen(line); i++)
 		{
 			obsname[i] = line[i];
 			if (line[i] == ' ')
 			{
-				obsname[i] = '\0';
-				strcpy(obsnames[j], obsname);
+				obsname[i] = '\0'; //end the obsname with a null byte 
+				strcpy(obsnames[j], obsname); //copy the new obsname into the obsname array. 
 				break;
 			}
 		}
-		if (strcmp(obsname, observationname) == 0) { obsindex = j + 1; }
-		if (line[0] == '#') { break; }
 
+		//if the current obsname matches the requested observation name set obsindex
+		if (strcmp(obsname, observationname) == 0) 
+		{ 
+			obsindex = j + 1; 
+		}
+		
+		//loop over the previous observation names to see if the current obsname matches 
+		//a previously recorded observation name with a '$' prepended to it indicating a derived observation 
+		//If this is found decriment j which has the effect of discarding the current obsname 
 		for (int i = 0; i < j; i++)
 		{
-			char test[128]; test[0] = '$'; test[1] = '\0';
+			char test[128]; 
+			test[0] = '$'; 
+			test[1] = '\0';
+
 			strcat(test, obsnames[i]);
 			if (strcmp(obsname, test) == 0)
 			{
@@ -3538,6 +3598,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 				break;
 			}
 		}
+
 		j++;
 	}
 
@@ -3547,8 +3608,10 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 	int obscount = j;
 	char tokens[50][50];
 	int tokencount = 0;
-	float obsvalue = 0.0;
-	int dateelements = 0, year, month, day, hour, minute, second;
+	double obsvalue = 0.0;
+	int dateelements = 0, year, month, day, hour;
+	//int minute; variable is unreferenced commenting out for now - jhs507
+	//int second; variable is unreferenced commenting out for now - jhs507
 	double ddate;
 
 
@@ -3562,7 +3625,17 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 			tokencount++;
 			token = strtok(NULL, " \t");
 		}
-		obsvalue = atof(tokens[tokencount - obscount + obsindex - 1]);
+
+		if ((tokencount - obscount + obsindex - 1) > 0 )
+		{
+			obsvalue = atof(tokens[tokencount - obscount + obsindex - 1]);
+		}
+		else 
+		{
+			CRHMException Except("Reading an obs file attempted to read before the begining of an array", TExcept::TERMINATE);
+		}
+
+		
 
 		dateelements = tokencount - obscount;
 		if (dateelements == 1) { ddate = atof(tokens[0]); }
@@ -3578,13 +3651,13 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 }
 
 
-string CRHMmain::BuildHru(string S, long Hru, CRHM::TDim dimen) {
+string CRHMmain::BuildHru(string S, long Hru, TDim dimen) {
 
 	if (!HruNames)
 		return S + "(" + to_string(Hru) + ")";
 	else {
 		string SS;
-		if (dimen == CRHM::BASIN)
+		if (dimen == TDim::BASIN)
 			SS = "(" + ListHruNames->Strings[0] + ")";
 		else
 			SS = "(" + ListHruNames->Strings[Hru] + ")";

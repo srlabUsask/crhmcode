@@ -16,9 +16,9 @@
 using namespace std;
 using namespace CRHM;
 
-static float fLimit;
+static double fLimit;
 
-const float minFlow_WQ = 0.001f;
+const double minFlow_WQ = 0.001f;
 
 //---------------------------------------------------------------------------
 
@@ -553,7 +553,7 @@ void ClassWQ_Soil::init(void) {
 void ClassWQ_Soil::run(void) {
 
   try{
-  float excs, excs_mWQ, condense, et, direct_excs_Saved, direct_excs_mWQ_lay_Saved, potential_Saved, potential_mWQ_lay_Saved,
+  double excs, excs_mWQ, condense, et, direct_excs_Saved, direct_excs_mWQ_lay_Saved, potential_Saved, potential_mWQ_lay_Saved,
         leaching_mWQ;
 
   long step = getstep();
@@ -735,7 +735,7 @@ void ClassWQ_Soil::run(void) {
           soil_moist_conc_lay[Sub][hh] = (conc_soil_lower_lay[Sub][hh]*soil_lower[hh] + leaching_mWQ + conc_soil_rechr_lay[Sub][hh]*soil_rechr[hh])/soil_moist[hh];
 
           if(soil_moist[hh] > soil_moist_max[hh]){
-            float excs0 = soil_moist[hh] - soil_moist_max[hh];
+            double excs0 = soil_moist[hh] - soil_moist_max[hh];
             soil_moist_conc_lay[Sub][hh] = (soil_moist_conc_lay[Sub][hh]*soil_moist[hh] - excs_mWQ*excs0/excs); // amount used
 
             conc_soil_lower_lay[Sub][hh] = (soil_moist_conc_lay[Sub][hh] - conc_soil_rechr_lay[Sub][hh]*soil_rechr[hh]); // amount used
@@ -787,13 +787,13 @@ void ClassWQ_Soil::run(void) {
           //'               tile_flowV[hh][1]=tile_flow[hh][1]*hru_area[1]// tile flow in HRU1 in mm*km^2/hr''
 
             if(tile_flow[hh] > 0.0){
-              // float Actual = soil_rechr[hh]/soil_rechr_max[hh]*tile_flow[hh]; // take out of recharge layer
-              float Actual = tile_flow[hh]; // take out of recharge layer (Diogo: not sure -> Tom's version is above)
-              float from_soil_rechr_to_tile_wq = 0.0f;
-              float from_soil_lower_to_tile_wq = 0.0f;
+              // double Actual = soil_rechr[hh]/soil_rechr_max[hh]*tile_flow[hh]; // take out of recharge layer
+              double Actual = tile_flow[hh]; // take out of recharge layer (Diogo: not sure -> Tom's version is above)
+              double from_soil_rechr_to_tile_wq = 0.0f;
+              double from_soil_lower_to_tile_wq = 0.0f;
               if(Actual > soil_rechr[hh]){// limit to available water
                 // rechr_ssr[hh] = soil_rechr[hh];
-                float from_soil_rechr_to_tile_wq = soil_rechr[hh];
+                double from_soil_rechr_to_tile_wq = soil_rechr[hh];
                 soil_rechr[hh] = 0.0f;
                 if (Actual > soil_moist[hh]){ // removed all soil_moist
                   tile_flow[hh] = soil_moist[hh];
@@ -806,7 +806,7 @@ void ClassWQ_Soil::run(void) {
               }else{
                 soil_rechr[hh] -= Actual;
                 soil_moist[hh] -= Actual;
-                float from_soil_rechr_to_tile = Actual;
+                double from_soil_rechr_to_tile = Actual;
               };
 
               soil_lower[hh] = soil_moist[hh] - soil_rechr[hh];
@@ -843,7 +843,7 @@ void ClassWQ_Soil::run(void) {
 
   //  Handle excess to gw
 
-        float s2gw_k = soil_gw_K[hh]/Global::Freq;
+        double s2gw_k = soil_gw_K[hh]/Global::Freq;
         if(s2gw_k > 0)
           if(direct_excs[hh] >= s2gw_k) { // to gw 03/04/10 changed from >
             soil_gw[hh] = s2gw_k; // soil_gw[hh] = s2gw_k; // ?? Diogo: shouldn't it be += ?
@@ -878,7 +878,7 @@ void ClassWQ_Soil::run(void) {
             excs_mWQ += atmos_mWQ_lay[Sub][hh];
       }
 
-      float runoff_to_Sd = 0.0;
+      double runoff_to_Sd = 0.0;
 
       soil_runoff[hh] = direct_excs[hh] + meltrunoff_buf[hh] + runoff_buf[hh] + redirected_residual[hh]/hru_area[hh]; // last term (mm*km^2/int) -> critical for outflow calc
 
@@ -888,9 +888,9 @@ void ClassWQ_Soil::run(void) {
         else
           scf[hh] = 0.0;
 
-        float amount_surfs = sr_mix_rate[hh]* surfsoil_solub_mWQ_lay[Sub][hh]*(1.0 - scf[hh]); 
+        double amount_surfs = sr_mix_rate[hh]* surfsoil_solub_mWQ_lay[Sub][hh]*(1.0 - scf[hh]); 
 
-        amount_surfs = std::fmin(std::max(amount_surfs,0.0f),surfsoil_solub_mWQ_lay[Sub][hh]);
+        amount_surfs = std::fmin(std::max(amount_surfs,0.0),surfsoil_solub_mWQ_lay[Sub][hh]);
         surfsoil_solub_mWQ_lay[Sub][hh] -= amount_surfs;
 
         soil_runoff_cWQ_lay[Sub][hh] = (excs_mWQ + direct_excs_mWQ_lay[Sub][hh] + meltrunoff_buf[hh]*SWE_conc_lay[Sub][hh] +
@@ -913,11 +913,11 @@ void ClassWQ_Soil::run(void) {
       redirected_residual_conc_lay[Sub][hh] = 0.0;
 
       if(soil_runoff[hh] > 0.0 && Sdmax[hh] > 0.0){
-        float Fix = -12.0;
+        double Fix = -12.0;
         if(soil_runoff[hh]/Sdmax[hh] < 12.0) // Diogo: what is this? (comes from an equation that is need below?)
           Fix = -soil_runoff[hh]/Sdmax[hh];
 
-        float Ds = (Sdmax[hh] - Sd[hh])*(1 - exp(Fix));
+        double Ds = (Sdmax[hh] - Sd[hh])*(1 - exp(Fix));
 
         if(soil_moist_max[hh] <= 0.0) // handle pond
           Ds = Sdmax[hh] - Sd[hh];
@@ -951,7 +951,7 @@ void ClassWQ_Soil::run(void) {
 
       if(variation == VARIATION_1){
 
-        float culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
+        double culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
 
         culvert_water_H[hh] = 0.0;
         culvert_water_A[hh] = 0.0;
@@ -973,7 +973,7 @@ void ClassWQ_Soil::run(void) {
 
             if(culvert_water_H[hh] > culvert_water_Dmax[hh]){ // (m) overflow over road
               culvert_water_H[hh] = culvert_water_Dmax[hh]; // (m)
-              float maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
+              double maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
 
               culvert_over_Q[hh] = (culvert_water_V[hh] - maxVol)/86400.0*Global::Freq; // (m3) to (m3/int)
               culvert_water_V[hh] = maxVol; // (m3)
@@ -988,7 +988,7 @@ void ClassWQ_Soil::run(void) {
             if(HD[hh] <= 0.0)
               culvert_Q[hh] = 0.0;
             else if(HD[hh] < 1.5)
-              culvert_Q[hh] = max <float>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
+              culvert_Q[hh] = max <double>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
                    + 0.159413*HD[hh] + 0.00772254)*culvert_C[culvert_type[hh]]*number_culverts[hh]*pow(culvert_diam[hh], 2.5), 0.0); // (m3/s)
             else
               culvert_Q[hh] = culvert_C[culvert_type[hh]]*number_culverts[hh]*0.785*pow(culvert_diam[hh], 2.5)*sqrt(2.0*9.81*(HD[hh] - 0.5));
@@ -1014,7 +1014,7 @@ void ClassWQ_Soil::run(void) {
       cum_runoff_to_Sd_mWQ_lay[Sub][hh] += runoff_to_Sd*soil_runoff_cWQ_lay[Sub][hh];
 
       if(Sd[hh] > 0.0 && Sd_gw_K[hh] > 0.0){
-        float Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
+        double Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
         if(Sd2gw_k > Sd[hh])
           Sd2gw_k = Sd[hh];
 
@@ -1058,7 +1058,7 @@ void ClassWQ_Soil::run(void) {
       if(gw_max[hh] > 0.0 && gw_K[hh]){ // prevents divide by zero error // ?? Diogo: what is the basis for this splitting? don't understand
         gw_flow_conc_lay[Sub][hh] = gw_conc_lay[Sub][hh];
 
-        float spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
+        double spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
         gw[hh] -= spill;
         gw_flow[hh] += spill;
       }
@@ -1068,7 +1068,7 @@ void ClassWQ_Soil::run(void) {
       cum_gw_flow_mWQ_lay[Sub][hh] += gw_flow[hh]*gw_conc_lay[Sub][hh];
 
       if(Sd[hh] > 0.0 && Sd_ssr_K[hh] > 0.0){
-        float Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
+        double Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
         if(Sd2ssr_k >= Sd[hh])
           Sd2ssr_k = Sd[hh];
 
@@ -1093,9 +1093,9 @@ void ClassWQ_Soil::run(void) {
         }
       }
 
-      float s2ssr_k = lower_ssr_K[hh]/Global::Freq;
+      double s2ssr_k = lower_ssr_K[hh]/Global::Freq;
       if(s2ssr_k > 0.00001){
-        float avail = soil_lower[hh];
+        double avail = soil_lower[hh];
         if(s2ssr_k >= avail)
           s2ssr_k = avail;
 
@@ -1121,9 +1121,9 @@ void ClassWQ_Soil::run(void) {
 
   //******Compute actual evapotranspiration
 
-      float culvert_pond = 0.0; // convert m3 to mm
+      double culvert_pond = 0.0; // convert m3 to mm
 
-      float culvert_evapL = 0;
+      double culvert_evapL = 0;
 
       if(variation == VARIATION_1 && culvert_water_V[hh] > 0.0 && hru_evap_buf[hh] > 0.0){ // conditions for culvert evaporation
         culvert_pond = culvert_water_V[hh]/(hru_area[hh]*1000.0); // convert m3 to mm over HRU area
@@ -1137,7 +1137,7 @@ void ClassWQ_Soil::run(void) {
         culvert_water_V[hh] = (culvert_pond - culvert_evapL)*(hru_area[hh]*1000.0); // remove evaporation from culvert pond and convert to volume
       }
 
-      float avail_evap = hru_evap_buf[hh] - culvert_evapL;
+      double avail_evap = hru_evap_buf[hh] - culvert_evapL;
       if(Sd[hh] + soil_moist[hh] + culvert_pond > 0.0)
         avail_evap *= (Sd[hh]/(Sd[hh] + soil_moist[hh]));
       else
@@ -1146,7 +1146,7 @@ void ClassWQ_Soil::run(void) {
       if(Sd[hh] > 0.0 && avail_evap > 0.0){
         if(Sd[hh] >= avail_evap){
           if(Sd[hh] - avail_evap < 0.0){
-            float Sdmass_2_soil = Sd_conc_lay[Sub][hh] * Sd[hh]; 
+            double Sdmass_2_soil = Sd_conc_lay[Sub][hh] * Sd[hh]; 
             Sd[hh] -= avail_evap;
             Sd[hh] = 0.0;
             Sd_conc_lay[Sub][hh] = 0.0;
@@ -1159,7 +1159,7 @@ void ClassWQ_Soil::run(void) {
             if(Sd[hh] > 0.05){ // Diogo: needed to avoid instability -> the water will be added to conc_soil_rechr
               Sd_conc_lay[Sub][hh] /= Sd[hh];
             }else{
-              float Sdmass_2_soil = Sd_conc_lay[Sub][hh] * Sd[hh]; 
+              double Sdmass_2_soil = Sd_conc_lay[Sub][hh] * Sd[hh]; 
               Sd_conc_lay[Sub][hh] = 0.0;
               Sd_to_soil_mass(Sdmass_2_soil); // function: add Sd mass to soil
             }
@@ -1167,7 +1167,7 @@ void ClassWQ_Soil::run(void) {
         }
         else {
           avail_evap = Sd[hh];
-          float Sdmass_2_soil = Sd_conc_lay[Sub][hh] * avail_evap; 
+          double Sdmass_2_soil = Sd_conc_lay[Sub][hh] * avail_evap; 
           Sd_conc_lay[Sub][hh] = 0.0;
           Sd[hh] = 0.0;
           Sd_to_soil_mass(Sdmass_2_soil); // function: add Sd mass to soil
@@ -1182,7 +1182,7 @@ void ClassWQ_Soil::run(void) {
 
       if(avail_evap > 0.0 && soil_moist[hh] > 0.0 && cov_type[hh] > 0){
 
-        float pctl, pctr, etl, ets, etr;
+        double pctl, pctr, etl, ets, etr;
 
         if((soil_moist_max[hh] - soil_rechr_max[hh]) > 0.0)
           pctl = (soil_moist[hh] - soil_rechr[hh])/(soil_moist_max[hh] - soil_rechr_max[hh]);
@@ -1344,29 +1344,29 @@ void ClassWQ_Soil::run(void) {
 
 void ClassWQ_Soil::finish(bool good) {
 
-    float Allcum_soil_runoff = 0.0;
-    float Allcum_soil_ssr = 0.0;
-    float Allcum_rechr_ssr = 0.0;
-    float Allcum_soil_gw = 0.0;
-    float Allcum_gw_flow = 0.0;
-    float Allcum_infil_act = 0.0;
-    float Allcum_soil_moist_change = 0.0;
-    float Allcum_Sd_change = 0.0;
-    float Allcum_gw_change = 0.0;
-    float Allcum_evap = 0.0;
-    float Allcum_solute_deposit = 0.0;
+    double Allcum_soil_runoff = 0.0;
+    double Allcum_soil_ssr = 0.0;
+    double Allcum_rechr_ssr = 0.0;
+    double Allcum_soil_gw = 0.0;
+    double Allcum_gw_flow = 0.0;
+    double Allcum_infil_act = 0.0;
+    double Allcum_soil_moist_change = 0.0;
+    double Allcum_Sd_change = 0.0;
+    double Allcum_gw_change = 0.0;
+    double Allcum_evap = 0.0;
+    double Allcum_solute_deposit = 0.0;
 
-    float Allcum_soil_runoff_mWQ = 0.0;
-    float Allcum_soil_ssr_mWQ = 0.0;
-    float Allcum_rechr_ssr_mWQ = 0.0;
-    float Allcum_soil_gw_mWQ = 0.0;
-    float Allcum_gw_flow_mWQ = 0.0;
-    float Allcum_infil_act_mWQ = 0.0;
-    float Allcum_soil_moist_change_mWQ = 0.0;
-    float Allcum_Sd_change_mWQ = 0.0;
-    float Allcum_gw_change_mWQ = 0.0;
+    double Allcum_soil_runoff_mWQ = 0.0;
+    double Allcum_soil_ssr_mWQ = 0.0;
+    double Allcum_rechr_ssr_mWQ = 0.0;
+    double Allcum_soil_gw_mWQ = 0.0;
+    double Allcum_gw_flow_mWQ = 0.0;
+    double Allcum_infil_act_mWQ = 0.0;
+    double Allcum_soil_moist_change_mWQ = 0.0;
+    double Allcum_Sd_change_mWQ = 0.0;
+    double Allcum_gw_change_mWQ = 0.0;
 
-    float AllTotal = 0.0;
+    double AllTotal = 0.0;
 
     string S = string("H2O");
     LogDebug(S.c_str());
@@ -1399,7 +1399,7 @@ void ClassWQ_Soil::finish(bool good) {
       LogMessageA(hh, string("'" + Name + " (WQ_Soil)' cum_redirected_residual     (mm)   (mm*hru) (mm*hru/basin): ").c_str(), cum_redirected_residual[hh]/hru_area[hh], hru_area[hh], basin_area[0], " *** Added to this HRU surface runoff");
       LogDebug(" ");
 
-      float Total = cum_soil_runoff[hh] + cum_soil_ssr[hh] + cum_soil_gw[hh]
+      double Total = cum_soil_runoff[hh] + cum_soil_ssr[hh] + cum_soil_gw[hh]
                      + cum_runoff_to_Sd[hh] + cum_gw_flow[hh]
                      + (soil_moist[hh] - soil_moist_Init[hh]) + (Sd[hh] - Sd_Init[hh]) + (gw[hh] - gw_Init[hh]) + hru_cum_actet[hh]
                      - cum_redirected_residual[hh]/hru_area[hh];
@@ -1473,7 +1473,7 @@ void ClassWQ_Soil::finish(bool good) {
     Allcum_Sd_change_mWQ = 0.0;
     Allcum_gw_change_mWQ = 0.0;
 
-    float AllTotal = 0.0;
+    double AllTotal = 0.0;
 
     for(hh = 0; chkStruct(); ++hh) {
       LogMessageA(hh, string("'" + Name + " (WQ_Soil)' soil_rechr                  (mm)   (mm*hru) (mm*hru/basin): ").c_str(), soil_rechr[hh], hru_area[hh], basin_area[0], " *** information only - already included in 'soil_moist'.");
@@ -1526,7 +1526,7 @@ void ClassWQ_Soil::finish(bool good) {
       LogMessageA(hh, string("'" + Name + " (WQ_Soil)' cum_redirected_residual_mWQ (mg)   (mg*hru) (mg*hru/basin): ").c_str(), cum_redirected_residual_mWQ_lay[Sub][hh]/hru_area[hh], hru_area[hh], basin_area[0], " *** Added to this HRU surface runoff");
       LogDebug(" ");
 
-      float Total = cum_soil_runoff[hh] + cum_soil_ssr[hh] + cum_soil_gw[hh]
+      double Total = cum_soil_runoff[hh] + cum_soil_ssr[hh] + cum_soil_gw[hh]
                      + cum_runoff_to_Sd[hh] + cum_gw_flow[hh]
                      + (soil_moist[hh] - soil_moist_Init[hh]) + (Sd[hh] - Sd_Init[hh]) + (gw[hh] - gw_Init[hh]) + hru_cum_actet[hh]
                      - cum_redirected_residual[hh]/hru_area[hh];
@@ -1594,10 +1594,10 @@ void ClassWQ_Soil::finish(bool good) {
   } // sub 
 }
 
-float ClassWQ_Soil::FunctX(const float x){
-  float X = 0.0, F;
+double ClassWQ_Soil::FunctX(const double x){
+  double X = 0.0, F;
   for( long n = 1; n < 100; ++n){
-    float y = -2.0*n*x;
+    double y = -2.0*n*x;
     F = 4.0*exp(y)/(n*(1.0-exp(y)));
     X += F;
     if(fabs(F) < 0.001)
@@ -1606,7 +1606,7 @@ float ClassWQ_Soil::FunctX(const float x){
   return X;
 }
 
-void ClassWQ_Soil::Sd_to_soil_mass(float add_mass){
+void ClassWQ_Soil::Sd_to_soil_mass(double add_mass){
     if (soil_rechr[hh] > 0.0f){ // Diogo: goes to rechr if existant
       conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh]*soil_rechr[hh] + add_mass; // Diogo: just mass
       conc_soil_rechr_lay[Sub][hh] /= soil_rechr[hh];
@@ -1618,7 +1618,7 @@ void ClassWQ_Soil::Sd_to_soil_mass(float add_mass){
     }   
  };
 
-void ClassWQ_Soil::Set_WQ(const long hru, float *var, float *var_cWQ, float amount, float amount_cWQ){
+void ClassWQ_Soil::Set_WQ(const long hru, double *var, double *var_cWQ, double amount, double amount_cWQ){
 
   var[hru] = amount;
   if(amount > 0.0)
@@ -1627,12 +1627,12 @@ void ClassWQ_Soil::Set_WQ(const long hru, float *var, float *var_cWQ, float amou
     var_cWQ[hru] = 0.0;
 }
 
-void ClassWQ_Soil::copy_array(float *from, float *to){
+void ClassWQ_Soil::copy_array(double *from, double *to){
   for(hh = 0; chkStruct(); ++hh)
     to[hh] = from[hh];
 }
 
-void ClassWQ_Soil::restore_hru(float *from, float *to, long hh){
+void ClassWQ_Soil::restore_hru(double *from, double *to, long hh){
   to[hh] = from[hh];
 }
 
@@ -1693,12 +1693,12 @@ void ClassWQ_Soil::Save(){
   copy_array(cum_solute_deposit, cum_solute_deposit_0);
 }
 
-void ClassWQ_Soil::Reset_WQ(long hru, float *var, float *var_cWQ){
+void ClassWQ_Soil::Reset_WQ(long hru, double *var, double *var_cWQ){
   var[hru] = 0.0;
   var_cWQ[hru] = 0.0;
 }
 
-void ClassWQ_Soil::Reset_WQ(long hru, float *var, float **var_cWQ_lay){
+void ClassWQ_Soil::Reset_WQ(long hru, double *var, double **var_cWQ_lay){
   var[hru] = 0.0;
   for(long Sub = 0; Sub < numsubstances; Sub++){
     var_cWQ_lay[Sub][hru] = 0.0;
@@ -1981,10 +1981,10 @@ void ClassWQ_Netroute::init(void) {
         Clark_hruDelay_mWQ[Sub] = new ClassClark(inflow_mWQ_lay[Sub], outflow_mWQ_lay[Sub], Kstorage, Lag, nhru);
     }
     else if(variation == VARIATION_1){
-      const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+      const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
       for(hh = 0; hh < nhru; ++hh){
-        float Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
+        double Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
         Ktravel[hh] = route_L[hh]/(Vw[route_Cshp[hh]]*Vavg)/86400.0; // (d)
       }
 
@@ -2127,11 +2127,11 @@ void ClassWQ_Netroute::run(void) {
   long step = getstep();
   long nstep = step% Global::Freq;
 
-  float gw_Amount = 0.0;
-  float gw_Amount_mWQ = 0.0;
+  double gw_Amount = 0.0;
+  double gw_Amount_mWQ = 0.0;
 
-  float Amount = 0.0;
-  float Amount_mWQ = 0.0;
+  double Amount = 0.0;
+  double Amount_mWQ = 0.0;
 
   Reset_WQ(0, basinflow, basinflow_conc_lay);
   Reset_WQ(0, basingw, basingw_conc_lay);
@@ -2200,8 +2200,8 @@ void ClassWQ_Netroute::run(void) {
 
           if(abs(gwwhereto[hhh]) <= nhru){
             if(gwwhereto[hhh] > 0){ // direct to HRU surface
-              float free = soil_rechr_max[hh] - soil_rechr[hh];
-              //float free_mWQ = Amount_mWQ*free/gw_Amount;
+              double free = soil_rechr_max[hh] - soil_rechr[hh];
+              //double free_mWQ = Amount_mWQ*free/gw_Amount;
 
               if(free > 0.0 && !soil_rechr_ByPass[hh]){
                 if(free > gw_Amount){ // units (mm*km^2/int)
@@ -2224,7 +2224,7 @@ void ClassWQ_Netroute::run(void) {
                   gw_Amount_mWQ = 0.0;
                 }
                 else {
-                  float free_WQ_2rechr = gw_Amount_mWQ*free/gw_Amount;
+                  double free_WQ_2rechr = gw_Amount_mWQ*free/gw_Amount;
                   gw_Amount_mWQ = gw_Amount_mWQ*(gw_Amount - free)/gw_Amount;  
                   gw_Amount = (gw_Amount - free);
 
@@ -2263,7 +2263,7 @@ void ClassWQ_Netroute::run(void) {
                   gw_Amount_mWQ = 0.0;
                 }
                 else {
-                  float free_mWQ_2Sd = gw_Amount_mWQ*free/gw_Amount;
+                  double free_mWQ_2Sd = gw_Amount_mWQ*free/gw_Amount;
                   gw_Amount_mWQ = gw_Amount_mWQ*(gw_Amount - free)/gw_Amount;
 
                   Sd_conc_lay[Sub][hh] = Sd_conc_lay[Sub][hh]*Sd[hh] + free_mWQ_2Sd;
@@ -2395,8 +2395,8 @@ void ClassWQ_Netroute::run(void) {
             else{
               if(!soil_rechr_ByPass[hh]){
                 if(soil_rechr[hh] + Amount >= soil_rechr_max[hh]){ // units (mm*km^2/int)
-                  float Excess = soil_rechr[hh] + Amount - soil_rechr_max[hh];
-                  float Free = Amount - Excess;
+                  double Excess = soil_rechr[hh] + Amount - soil_rechr_max[hh];
+                  double Free = Amount - Excess;
 
                   conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh]*soil_rechr[hh] + Amount_mWQ * Free / (Amount);
                   conc_soil_rechr_lay[Sub][hh] /= (soil_rechr[hh] + Free);
@@ -2432,8 +2432,8 @@ void ClassWQ_Netroute::run(void) {
               } // if !soil_rechr_ByPass
               else if(!Sd_ByPass[hh] && Amount > 0.0){
                 if(Sd[hh] + Amount >= Sdmax[hh]){ // units (mm*km^2/int)
-                  float Excess = Sd[hh] + Amount - Sdmax[hh];
-                  float Free = Amount - Excess;
+                  double Excess = Sd[hh] + Amount - Sdmax[hh];
+                  double Free = Amount - Excess;
 
                   Sd_conc_lay[Sub][hh] = Sd_conc_lay[Sub][hh]*Sd[hh] + Amount_mWQ * Free/Amount;
                   Sd_conc_lay[Sub][hh] /= (Sd[hh] + Free);
@@ -2541,39 +2541,39 @@ void ClassWQ_Netroute::run(void) {
 void ClassWQ_Netroute::finish(bool good) {
 
 
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
+  double Allcuminflow = 0.0;
+  double Allcumoutflow = 0.0;
+  double Allcumoutflowdiverted = 0.0;
 
-  float Allcuminflow_mWQ = 0.0;
-  float Allcumoutflow_mWQ = 0.0;
-  float Allcumoutflowdiverted_mWQ = 0.0;
+  double Allcuminflow_mWQ = 0.0;
+  double Allcumoutflow_mWQ = 0.0;
+  double Allcumoutflowdiverted_mWQ = 0.0;
 
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
+  double Allgwcuminflow = 0.0;
+  double Allgwcumoutflow = 0.0;
+  double Allgwcumoutflowdiverted = 0.0;
 
-  float Allgwcuminflow_mWQ = 0.0;
-  float Allgwcumoutflow_mWQ = 0.0;
-  float Allgwcumoutflowdiverted_mWQ = 0.0;
+  double Allgwcuminflow_mWQ = 0.0;
+  double Allgwcumoutflow_mWQ = 0.0;
+  double Allgwcumoutflowdiverted_mWQ = 0.0;
 
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
+  double Allssrcuminflow = 0.0;
+  double Allssrcumoutflow = 0.0;
+  double Allruncuminflow = 0.0;
+  double Allruncumoutflow = 0.0;
 
-  float Allssrcuminflow_mWQ = 0.0;
-  float Allssrcumoutflow_mWQ = 0.0;
-  float Allruncuminflow_mWQ = 0.0;
-  float Allruncumoutflow_mWQ = 0.0;
+  double Allssrcuminflow_mWQ = 0.0;
+  double Allssrcumoutflow_mWQ = 0.0;
+  double Allruncuminflow_mWQ = 0.0;
+  double Allruncumoutflow_mWQ = 0.0;
 
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
+  double AllSdcuminflow = 0.0;
+  double Allrechrcuminflow = 0.0;
 
-  float AllSdcuminflow_mWQ = 0.0;
-  float Allrechrcuminflow_mWQ = 0.0;
-  float AllTotal = 0.0;
-  float Total;
+  double AllSdcuminflow_mWQ = 0.0;
+  double Allrechrcuminflow_mWQ = 0.0;
+  double AllTotal = 0.0;
+  double Total;
 
   string S = string("H2O");
   LogDebug(S.c_str());
@@ -2790,22 +2790,22 @@ void ClassWQ_Netroute::finish(bool good) {
 }
 
 
-float ClassWQ_Netroute::Function1(float *I, long hh) {
+double ClassWQ_Netroute::Function1(double *I, long hh) {
   return runDelay->ChangeLag(I, hh);
 }
 
-float ClassWQ_Netroute::Function2(float *X, long hh) {
+double ClassWQ_Netroute::Function2(double *X, long hh) {
   return runDelay->ChangeStorage(X, hh);
 }
 
-void ClassWQ_Netroute::Reset_WQ(long hru, float *var, float **var_cWQ_lay){
+void ClassWQ_Netroute::Reset_WQ(long hru, double *var, double **var_cWQ_lay){
   var[hru] = 0.0;
   for(long Sub = 0; Sub < numsubstances; ++Sub){
     var_cWQ_lay[Sub][hru] = 0.0;
   }
 }
 
-void ClassWQ_Netroute::Set_WQ(const long hru, float *var, float *var_conc, float Amount, float amount_conc){
+void ClassWQ_Netroute::Set_WQ(const long hru, double *var, double *var_conc, double Amount, double amount_conc){
 
   var[hru] = Amount;
   if(Amount > 0.0)
@@ -2814,12 +2814,12 @@ void ClassWQ_Netroute::Set_WQ(const long hru, float *var, float *var_conc, float
     var_conc[hru] = 0.0;
 }
 
-void ClassWQ_Netroute::copy_array(float *from, float *to){
+void ClassWQ_Netroute::copy_array(double *from, double *to){
   for(hh = 0; chkStruct(); ++hh)
     to[hh] = from[hh];
 }
 
-void ClassWQ_Netroute::restore_hru(float *from, float *to, long hh){
+void ClassWQ_Netroute::restore_hru(double *from, double *to, long hh){
   to[hh] = from[hh];
 }
 
@@ -3064,8 +3064,8 @@ void ClassWQ_pbsm::init(void) {
 
 void ClassWQ_pbsm::run(void){
 
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float SumDrift, SumDrift_conc, total, transport;
+  double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+  double SumDrift, SumDrift_conc, total, transport;
   long Sub = 0;
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
@@ -3123,7 +3123,7 @@ void ClassWQ_pbsm::run(void){
 
          Ustn  = Ustar*sqrt((PBSM_constants::Beta*Lambda)/(1.0+PBSM_constants::Beta*Lambda));
 
-         Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *min <float> (0.0, Ustar-Ustn);
+         Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *min <double> (0.0, Ustar-Ustn);
        }
        else
        {
@@ -3172,7 +3172,7 @@ void ClassWQ_pbsm::run(void){
    // distribute drift
 
     if(distrib[0] > 0.0 && Drift_out[0] > 0.0) { // simulate transport entering basin using HRU 1
-      float Drft = Drift_out[0]*distrib[0];
+      double Drft = Drift_out[0]*distrib[0];
       SWE_conc_lay[Sub][0] = (SWE_conc_lay[Sub][0]*SWE[0] + SWE_conc_lay[Sub][0]*Drft)/(SWE[0] + Drft);
       SWE[0] += Drft;
       cumDriftIn[0] += Drft;
@@ -3215,7 +3215,7 @@ void ClassWQ_pbsm::run(void){
 
           if(hh == nn) { // handle last HRU
             if(distrib[nn] > 0){
-              float In = SumDrift/hru_basin[hh]; // remaining drift
+              double In = SumDrift/hru_basin[hh]; // remaining drift
               Drift_in_conc_lay[Sub][hh] = SumDrift_conc;
               if(SWE_max[hh] > SWE[hh] + In){ // fill snowpack, remainder leaves basin
                 Drift_in[hh] = In;
@@ -3226,7 +3226,7 @@ void ClassWQ_pbsm::run(void){
                 transport = 0.0;
               }
               else if(SWE_max[hh] > SWE[hh]){ // cannot handle all
-                float used = SWE_max[hh] - SWE[hh];
+                double used = SWE_max[hh] - SWE[hh];
                 Drift_in[hh] = used;
                 Drift_in_conc_lay[Sub][hh] = SumDrift_conc;
                 cumDriftIn[hh] += Drift_in[hh];
@@ -3239,7 +3239,7 @@ void ClassWQ_pbsm::run(void){
                 transport = SumDrift;
             }
             else if(distrib[nn] < 0){ // all drift deposited
-                float used = SumDrift/hru_basin[hh];
+                double used = SumDrift/hru_basin[hh];
                 SWE_conc_lay[Sub][hh] = (SWE_conc_lay[Sub][hh]*SWE[hh] + SumDrift_conc*used)/(SWE[hh] + used);
                 Drift_in[hh] = used;
                 Drift_in_conc_lay[Sub][hh] = SumDrift_conc;
@@ -3308,8 +3308,8 @@ void ClassWQ_pbsm::finish(bool good) {
 
   if(!good) return;
 
-  float AllcumSubl = 0.0;
-  float AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
+  double AllcumSubl = 0.0;
+  double AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
   long Sub = 0;
 
   for(hh = 0; chkStruct(); ++hh) {
@@ -3346,13 +3346,13 @@ void ClassWQ_pbsm::finish(bool good) {
 
 }
 
-void ClassWQ_pbsm::Reset_WQ(long hru, float *var, float **var_WQ_lay){
+void ClassWQ_pbsm::Reset_WQ(long hru, double *var, double **var_WQ_lay){
   var[hru] = 0.0;
   for(long Sub = 0; Sub < numsubstances; ++Sub)
     var_WQ_lay[Sub][hru] = 0.0;
 }
 
-void ClassWQ_pbsm::copy_array(float *from, float *to){
+void ClassWQ_pbsm::copy_array(double *from, double *to){
   for(hh = 0; chkStruct(); ++hh)
     to[hh] = from[hh];
 }
@@ -3362,11 +3362,11 @@ void ClassWQ_pbsm::copy_array(long *from, long *to){
     to[hh] = from[hh];
 }
 
-void ClassWQ_pbsm::copy_basin(float *from, float *to){
+void ClassWQ_pbsm::copy_basin(double *from, double *to){
   to[0] = from[0];
 }
 
-void ClassWQ_pbsm::restore_hru(float *from, float *to, long hh){
+void ClassWQ_pbsm::restore_hru(double *from, double *to, long hh){
   to[hh] = from[hh];
 }
 
@@ -3712,10 +3712,10 @@ void ClassWQ_Netroute_M_D::init(void) {
         Clark_hruDelay_mWQ[Sub] = new ClassClark(inflow_mWQ_lay[Sub], outflow_mWQ_lay[Sub], Kstorage, Lag, nhru);
     }
     else if(variation == VARIATION_ORG){
-      const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+      const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
       for(hh = 0; hh < nhru; ++hh){
-        float Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
+        double Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
         Ktravel[hh] = route_L[hh]/(Vw[route_Cshp[hh]]*Vavg)/86400.0; // (d)
       }
 
@@ -3858,11 +3858,11 @@ void ClassWQ_Netroute_M_D::run(void) {
   long step = getstep();
   long nstep = step%Global::Freq;
 
-  float Amount = 0.0;
-  float Amount_mWQ = 0.0;
+  double Amount = 0.0;
+  double Amount_mWQ = 0.0;
 
-  float gw_Amount = 0.0;
-  float gw_Amount_mWQ = 0.0;
+  double gw_Amount = 0.0;
+  double gw_Amount_mWQ = 0.0;
 
   for(hh = 0; chkStruct(hh); ++hh) { // do HRUs in sequence.
     if(nstep == 1){
@@ -3870,12 +3870,12 @@ void ClassWQ_Netroute_M_D::run(void) {
 
       for(long hhh = 0; chkStruct(hhh); ++hhh) { // do HRUs in sequence
         if(distrib_hru[hh][hhh] < 0.0) // distribute by area otherwise by fraction
-          const_cast<float **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
+          const_cast<double **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
         distrib_sum[hh] += distrib_hru[hh][hhh];
       }
 
       if(distrib_sum[hh] <= 0 && distrib_Basin[hh] <= 0.0){
-        const_cast<float *> (distrib_Basin) [hh] = 1;
+        const_cast<double *> (distrib_Basin) [hh] = 1;
       }
 
       distrib_sum[hh] += distrib_Basin[hh];
@@ -3953,9 +3953,9 @@ void ClassWQ_Netroute_M_D::run(void) {
             gw_Amount_mWQ /= hru_area[hh];
 
             if(gwwhereto[hhh] > 0){ // direct to HRU surface
-              float Excess = soil_rechr_max[hh] + gw_Amount - soil_rechr[hh];
-              float Free = gw_Amount - Excess;
-              float Free_mWQ = gw_Amount_mWQ*Free/gw_Amount;
+              double Excess = soil_rechr_max[hh] + gw_Amount - soil_rechr[hh];
+              double Free = gw_Amount - Excess;
+              double Free_mWQ = gw_Amount_mWQ*Free/gw_Amount;
 
               if(Free > 0.0 && !soil_rechr_ByPass[hh]){
                 if(Free > gw_Amount){ // units (mm*km^2/int)
@@ -4190,8 +4190,8 @@ void ClassWQ_Netroute_M_D::run(void) {
             }
             else if(!soil_rechr_ByPass[To] && Amount > 0.0){ // assumes both Amount and Amount_mWQ divided by hru_area
               if(soil_rechr[To] + Amount >= soil_rechr_max[To]){ // units (mm*km^2/int)
-                float Excess = soil_rechr[To] + Amount - soil_rechr_max[To];
-                float Free = Amount - Excess;
+                double Excess = soil_rechr[To] + Amount - soil_rechr_max[To];
+                double Free = Amount - Excess;
 
                 if (soil_rechr[To] + Amount > minFlow_WQ){
                   conc_soil_rechr_lay[Sub][To] = conc_soil_rechr_lay[Sub][To]*soil_rechr[To] + Amount_mWQ;
@@ -4245,8 +4245,8 @@ void ClassWQ_Netroute_M_D::run(void) {
             else if(!Sd_ByPass[To] && Amount > 0.0){
 
               if(Sd[To] + Amount >= Sdmax[To]){ // units (mm*km^2/int)
-                float Excess = Sd[To] + Amount - Sdmax[To];
-                float Free = Amount - Excess;
+                double Excess = Sd[To] + Amount - Sdmax[To];
+                double Free = Amount - Excess;
 
                 if (Sd[To] + Amount>minFlow_WQ){
                   Sd_conc_lay[Sub][To] = Sd_conc_lay[Sub][To]*Sd[To] + Amount_mWQ * Free/Amount;
@@ -4351,39 +4351,39 @@ void ClassWQ_Netroute_M_D::run(void) {
 void ClassWQ_Netroute_M_D::finish(bool good){
 
 
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
+  double Allcuminflow = 0.0;
+  double Allcumoutflow = 0.0;
+  double Allcumoutflowdiverted = 0.0;
 
-  float Allcuminflow_mWQ = 0.0;
-  float Allcumoutflow_mWQ = 0.0;
-  float Allcumoutflowdiverted_mWQ = 0.0;
+  double Allcuminflow_mWQ = 0.0;
+  double Allcumoutflow_mWQ = 0.0;
+  double Allcumoutflowdiverted_mWQ = 0.0;
 
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
+  double Allgwcuminflow = 0.0;
+  double Allgwcumoutflow = 0.0;
+  double Allgwcumoutflowdiverted = 0.0;
 
-  float Allgwcuminflow_mWQ = 0.0;
-  float Allgwcumoutflow_mWQ = 0.0;
-  float Allgwcumoutflowdiverted_mWQ = 0.0;
+  double Allgwcuminflow_mWQ = 0.0;
+  double Allgwcumoutflow_mWQ = 0.0;
+  double Allgwcumoutflowdiverted_mWQ = 0.0;
 
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
+  double Allssrcuminflow = 0.0;
+  double Allssrcumoutflow = 0.0;
+  double Allruncuminflow = 0.0;
+  double Allruncumoutflow = 0.0;
 
-  float Allssrcuminflow_mWQ = 0.0;
-  float Allssrcumoutflow_mWQ = 0.0;
-  float Allruncuminflow_mWQ = 0.0;
-  float Allruncumoutflow_mWQ = 0.0;
+  double Allssrcuminflow_mWQ = 0.0;
+  double Allssrcumoutflow_mWQ = 0.0;
+  double Allruncuminflow_mWQ = 0.0;
+  double Allruncumoutflow_mWQ = 0.0;
 
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
+  double AllSdcuminflow = 0.0;
+  double Allrechrcuminflow = 0.0;
 
-  float AllSdcuminflow_mWQ = 0.0;
-  float Allrechrcuminflow_mWQ = 0.0;
-  float AllTotal = 0.0;
-  float Total;
+  double AllSdcuminflow_mWQ = 0.0;
+  double Allrechrcuminflow_mWQ = 0.0;
+  double AllTotal = 0.0;
+  double Total;
 
   string S = string("*H2O*");
   LogDebug(S.c_str());
@@ -4602,14 +4602,14 @@ void ClassWQ_Netroute_M_D::finish(bool good){
 }
 
 
-void ClassWQ_Netroute_M_D::Reset_WQ(long hru, float *var, float **var_WQ_lay){
+void ClassWQ_Netroute_M_D::Reset_WQ(long hru, double *var, double **var_WQ_lay){
   var[hru] = 0.0;
   for(long Sub = 0; Sub < numsubstances; ++Sub){
     var_WQ_lay[Sub][hru] = 0.0;
   }
 }
 
-void ClassWQ_Netroute_M_D::Set_WQ(const long hru, float *var, float *var_conc, float Amount, float amount_conc){
+void ClassWQ_Netroute_M_D::Set_WQ(const long hru, double *var, double *var_conc, double Amount, double amount_conc){
 
   var[hru] = Amount;
   if(Amount > 0.0)
@@ -4618,12 +4618,12 @@ void ClassWQ_Netroute_M_D::Set_WQ(const long hru, float *var, float *var_conc, f
     var_conc[hru] = 0.0;
 }
 
-void ClassWQ_Netroute_M_D::copy_array(float *from, float *to){
+void ClassWQ_Netroute_M_D::copy_array(double *from, double *to){
   for(hh = 0; chkStruct(); ++hh)
     to[hh] = from[hh];
 }
 
-void ClassWQ_Netroute_M_D::restore_hru(float *from, float *to, long hh){
+void ClassWQ_Netroute_M_D::restore_hru(double *from, double *to, long hh){
   to[hh] = from[hh];
 }
 
@@ -4643,11 +4643,11 @@ ClassWQ_Netroute_M_D* ClassWQ_Netroute_M_D::klone(string name) const{
   return new ClassWQ_Netroute_M_D(name);
 }
 
-float ClassWQ_Netroute_M_D::Function1(float *I, long hh) {
+double ClassWQ_Netroute_M_D::Function1(double *I, long hh) {
   return runDelay->ChangeLag(I, hh);
 }
 
-float ClassWQ_Netroute_M_D::Function2(float *X, long hh) {
+double ClassWQ_Netroute_M_D::Function2(double *X, long hh) {
   return runDelay->ChangeStorage(X, hh);
 }
 
@@ -5011,8 +5011,8 @@ void ClassWQ_pbsmSnobal::init(void) {
 
 void ClassWQ_pbsmSnobal::run(void){
 
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float SumDrift, SumDrift_mWQ, total, transport, transport_mWQ;
+  double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+  double SumDrift, SumDrift_mWQ, total, transport, transport_mWQ;
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
     if(getstep() == 1)
@@ -5076,7 +5076,7 @@ void ClassWQ_pbsmSnobal::run(void){
        if (Prob[hh] > 0.001) {
          Ut = Ut * 0.8;
 
-         float RH = hru_ea[hh]/Common::estar(hru_t[hh]); // Snobal uses Pascals
+         double RH = hru_ea[hh]/Common::estar(hru_t[hh]); // Snobal uses Pascals
 
          Pbsm(E_StubHt, Ut, DriftH[hh], SublH[hh], hru_t[hh], hru_u_, RH, fetch[hh], N_S[hh], A_S[hh]);
 
@@ -5116,7 +5116,7 @@ void ClassWQ_pbsmSnobal::run(void){
 // distribute drift
 
     if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
-      float Drft = Drift_out[0]*distrib[0];
+      double Drft = Drift_out[0]*distrib[0];
       SWE_conc_lay[Sub][0] = SWE_conc_lay[Sub][0]*SWE[0] + Drift_out_conc_lay[Sub][0]*Drft;
       SWE[0] += Drft;
       SWE_conc_lay[Sub][0] /= SWE[0];
@@ -5158,7 +5158,7 @@ void ClassWQ_pbsmSnobal::run(void){
 
           if(hh == nn) { // handle last HRU
             if(distrib[nn] > 0){
-              float In = SumDrift/hru_basin[hh]; // remaining drift
+              double In = SumDrift/hru_basin[hh]; // remaining drift
               if(SWE_max[hh] > SWE[hh] + In){ // fill snowpack, remainder leaves basin
                 Drift_in[hh] = In; // can handle all
                 Drift_in_conc_lay[Sub][hh] = SumDrift_mWQ/hru_basin[hh]/In;
@@ -5169,7 +5169,7 @@ void ClassWQ_pbsmSnobal::run(void){
               }
               else if(SWE_max[hh] > SWE[hh]){ // cannot handle all
                 Drift_in[hh] = SWE_max[hh] - SWE[hh];
-                float used = Drift_in[hh]/In;
+                double used = Drift_in[hh]/In;
                 Drift_in_conc_lay[Sub][hh] = SumDrift_mWQ*used/Drift_in[hh];
                 cumDriftIn[hh] += Drift_in[hh];
                 cumDriftIn_mWQ_lay[Sub][hh] += SumDrift_mWQ*used;
@@ -5182,7 +5182,7 @@ void ClassWQ_pbsmSnobal::run(void){
               }
             }
             else if(distrib[nn] < 0){ // all drift deposited
-                float In = SumDrift/hru_basin[hh]; // remaining drift
+                double In = SumDrift/hru_basin[hh]; // remaining drift
                 Drift_in[hh] = SumDrift/hru_basin[hh]; // can handle all
                 Drift_in_conc_lay[Sub][hh] = SumDrift_mWQ/hru_basin[hh]/In;
                 cumDriftIn[hh] += Drift_in[hh];
@@ -5248,8 +5248,8 @@ void ClassWQ_pbsmSnobal::finish(bool good) {
 
   if(!good) return;
 
-  float AllcumSubl = 0.0;
-  float AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
+  double AllcumSubl = 0.0;
+  double AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
   long Sub = 0;
 
   for(hh = 0; chkStruct(); ++hh) {
@@ -5285,13 +5285,13 @@ void ClassWQ_pbsmSnobal::finish(bool good) {
   LogDebug(" ");
 }
 
-void ClassWQ_pbsmSnobal::Reset_WQ(long hru, float *var, float **var_WQ_lay){
+void ClassWQ_pbsmSnobal::Reset_WQ(long hru, double *var, double **var_WQ_lay){
   var[hru] = 0.0;
   for(long Sub = 0; Sub < numsubstances; ++Sub)
     var_WQ_lay[Sub][hru] = 0.0;
 }
 
-void ClassWQ_pbsmSnobal::copy_array(float *from, float *to){
+void ClassWQ_pbsmSnobal::copy_array(double *from, double *to){
   for(hh = 0; chkStruct(); ++hh)
     to[hh] = from[hh];
 }
@@ -5301,11 +5301,11 @@ void ClassWQ_pbsmSnobal::copy_array(long *from, long *to){
     to[hh] = from[hh];
 }
 
-void ClassWQ_pbsmSnobal::copy_basin(float *from, float *to){
+void ClassWQ_pbsmSnobal::copy_basin(double *from, double *to){
   to[0] = from[0];
 }
 
-void ClassWQ_pbsmSnobal::restore_hru(float *from, float *to, long hh){
+void ClassWQ_pbsmSnobal::restore_hru(double *from, double *to, long hh){
   to[hh] = from[hh];
 }
 
@@ -5403,7 +5403,7 @@ void ClassWQ_mass_conc::run(void) {
   mass_to_conc(gwoutflow, gwoutflow_mWQ_lay, gwoutflow_conc_lay);
 }
 
-void ClassWQ_mass_conc::mass_to_conc(const float *var, const float **var_mWQ, float **var_conc) {
+void ClassWQ_mass_conc::mass_to_conc(const double *var, const double **var_mWQ, double **var_conc) {
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
     for(long hh = 0; hh < nhru; ++hh) {
@@ -5415,7 +5415,7 @@ void ClassWQ_mass_conc::mass_to_conc(const float *var, const float **var_mWQ, fl
   }
 }
 
-void ClassWQ_mass_conc::Reset_WQ(float **var_lay){
+void ClassWQ_mass_conc::Reset_WQ(double **var_lay){
   for(long hh = 0; hh < nhru; ++hh) {
     for(long Sub = 0; Sub < numsubstances; ++Sub)
       var_lay[Sub][hh] = 0.0;
@@ -5597,7 +5597,7 @@ void ClassWQ_Gen_Mass_Var_Soil::init(void) {
 void ClassWQ_Gen_Mass_Var_Soil::run(void) {
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
-    float temp;
+    double temp;
     for(hh = 0; chkStruct(); ++hh) {
       temp = soil_rechr[hh]*conc_soil_rechr_lay[Sub][hh]; // using "conc"
       soil_top_change_mWQ_lay[Sub][hh] = temp - soil_top_mWQ_lay_last[Sub][hh];
@@ -5889,7 +5889,7 @@ void ClassGrow_crops_annually::init(void) {
       LogError(TExcept);
     }
     for(hh = 0; hh < nhru; ++hh)
-       const_cast<float *> (Ht)[hh] = Init_Crop_Ht_1[hh];
+       const_cast<double *> (Ht)[hh] = Init_Crop_Ht_1[hh];
   } // VARIATION_2
 }
 
@@ -5905,75 +5905,75 @@ void ClassGrow_crops_annually::run(void) {
       if(variation == VARIATION_1 || variation == VARIATION_3){
         if(ObsCnt_N_up >= hh){ // file open
           declputparam("*", "fertNamount_up", "(kg/km^2)", &fertNamount_up);
-          const_cast<float *> (fertNamount_up)[hh] = 0.0; // set by module
+          const_cast<double *> (fertNamount_up)[hh] = 0.0; // set by module
         }
         if(ObsCnt_P_up >= hh){ // file open
           declputparam("*", "fertPamount_up", "(kg/km^2)", &fertPamount_up);
-          const_cast<float *> (fertPamount_up)[hh] = 0.0; // set by module
+          const_cast<double *> (fertPamount_up)[hh] = 0.0; // set by module
         }
         if(ObsCntMan_N_up >= hh){ // file open
           declputparam("*", "manNamount_up", "(kg/km^2)", &manNamount_up);
-          const_cast<float *> (manNamount_up)[hh] = 0.0; // set by module
+          const_cast<double *> (manNamount_up)[hh] = 0.0; // set by module
         }
         if(ObsCntMan_P_up >= hh){ // file open
           declputparam("*", "manPamount_up", "(kg/km^2)", &manPamount_up);
-          const_cast<float *> (manPamount_up)[hh] = 0.0; // not used
+          const_cast<double *> (manPamount_up)[hh] = 0.0; // not used
         }
         if(ObsCntRes_N_up >= hh){ // file open
           declputparam("*", "resNamount_up", "(kg/km^2)", &resNamount_up);
-          const_cast<float *> (resNamount_up)[hh] = 0.0;  // set by this module
+          const_cast<double *> (resNamount_up)[hh] = 0.0;  // set by this module
         }
         if(ObsCntRes_P_up >= hh){ // file open
           declputparam("*", "resPamount_up", "(kg/km^2)", &resPamount_up);
-          const_cast<float *> (resPamount_up)[hh] = 0.0;  // set by this module
+          const_cast<double *> (resPamount_up)[hh] = 0.0;  // set by this module
         }
         if(ObsCnt_N_up >= hh || ObsCnt_P_up >= hh){ // file open
           declputparam("*", "fertday_up", "(d)", &fertday_up);
-          const_cast<float *> (fertday_up)[hh] = 0; // set by this module
+          const_cast<double *> (fertday_up)[hh] = 0; // set by this module
         }
         if(ObsCntMan_N_up >= hh || ObsCntMan_P_up >= hh){ // file open
           declputparam("*", "manday_up", "(d)", &manday_up);
-          const_cast<float *> (manday_up)[hh] = 0; // set by this module
+          const_cast<double *> (manday_up)[hh] = 0; // set by this module
         }
         if(ObsCnt_N_down >= hh){ // file open
           declputparam("*", "fertNamount_down", "(kg/km^2)", &fertNamount_down);
-          const_cast<float *> (fertNamount_down)[hh] = 0.0; // set by module
+          const_cast<double *> (fertNamount_down)[hh] = 0.0; // set by module
         }
         if(ObsCnt_P_down >= hh){ // file open
           declputparam("*", "fertPamount_down", "(kg/km^2)", &fertPamount_down);
-          const_cast<float *> (fertPamount_down)[hh] = 0.0; // set by module
+          const_cast<double *> (fertPamount_down)[hh] = 0.0; // set by module
         }
         if(ObsCntMan_N_down >= hh){ // file open
           declputparam("*", "manNamount_down", "(kg/km^2)", &manNamount_down);
-          const_cast<float *> (manNamount_down)[hh] = 0.0; // set by module
+          const_cast<double *> (manNamount_down)[hh] = 0.0; // set by module
         }
         if(ObsCntMan_P_down >= hh){ // file open
           declputparam("*", "manPamount_down", "(kg/km^2)", &manPamount_down);
-          const_cast<float *> (manPamount_down)[hh] = 0.0; // not used
+          const_cast<double *> (manPamount_down)[hh] = 0.0; // not used
         }
         if(ObsCntRes_N_down >= hh){ // file open
           declputparam("*", "resNamount_down", "(kg/km^2)", &resNamount_down);
-          const_cast<float *> (resNamount_down)[hh] = 0.0;  // set by this module
+          const_cast<double *> (resNamount_down)[hh] = 0.0;  // set by this module
         }
         if(ObsCntRes_P_down >= hh){ // file open
           declputparam("*", "resPamount_down", "(kg/km^2)", &resPamount_down);
-          const_cast<float *> (resPamount_down)[hh] = 0.0;  // set by this module
+          const_cast<double *> (resPamount_down)[hh] = 0.0;  // set by this module
         }
         if(ObsCnt_N_down >= hh || ObsCnt_P_down >= hh){ // file open
           declputparam("*", "fertday_down", "(d)", &fertday_down);
-          const_cast<float *> (fertday_down)[hh] = 0; // set by this module
+          const_cast<double *> (fertday_down)[hh] = 0; // set by this module
         }
         if(ObsCntMan_N_down >= hh || ObsCntMan_P_down >= hh){ // file open
           declputparam("*", "manday_down", "(d)", &manday_down);
-          const_cast<float *> (manday_down)[hh] = 0; // set by this module
+          const_cast<double *> (manday_down)[hh] = 0; // set by this module
         }
         if(ObsCnt_fertperiod >= hh){ // file open
           declputparam("*", "fertperiod", "(d)", &fertperiod);
-          const_cast<float *> (fertperiod)[hh] = 0; // set by this module
+          const_cast<double *> (fertperiod)[hh] = 0; // set by this module
         }
 //        if(ObsCnt_litterperiod >= hh){ // file open  check ????
           declputparam("*", "litterperiod", "(d)", &litterperiod);
-//          const_cast<float *> (litterperiod)[hh] = 0; // set by module
+//          const_cast<double *> (litterperiod)[hh] = 0; // set by module
 //        }
       } // VARIATION_1 or VARIATION_3
     } // for hh
@@ -6250,29 +6250,29 @@ void ClassGrow_crops_annually::run(void) {
 
       if(variation == VARIATION_2 || variation == VARIATION_3){
         if(today == JCrop_Start_1[hh])
-          const_cast<float *> (Ht)[hh] = Init_Crop_Ht_1[hh];
+          const_cast<double *> (Ht)[hh] = Init_Crop_Ht_1[hh];
 
         if(JCrop_Start_1[hh] != 0 && today >= JCrop_Start_1[hh] && today <= JCrop_Harvest_1[hh])
-          const_cast<float *> (Htmax)[hh] = Crop_Htmax_1[hh];
+          const_cast<double *> (Htmax)[hh] = Crop_Htmax_1[hh];
 
         if(Ht[hh] < Crop_Htmax_1[hh])
-          const_cast<float *> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate_1[hh];
+          const_cast<double *> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate_1[hh];
         else
-          const_cast<float *> (Ht)[hh] = Htmax[hh];
+          const_cast<double *> (Ht)[hh] = Htmax[hh];
 
         if(today == JCrop_Harvest_1[hh])
-          const_cast<float *> (Ht)[hh] =  Init_Crop_Ht_1[hh];
+          const_cast<double *> (Ht)[hh] =  Init_Crop_Ht_1[hh];
 
         if(today == JCrop_Start_2[hh])
-          const_cast<float *> (Ht)[hh] = Init_Crop_Ht_2[hh];
+          const_cast<double *> (Ht)[hh] = Init_Crop_Ht_2[hh];
 
         if(Ht[hh] < Crop_Htmax_2[hh])
-          const_cast<float *> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate_2[hh];
+          const_cast<double *> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate_2[hh];
         else
-          const_cast<float *> (Ht)[hh] = Htmax[hh];
+          const_cast<double *> (Ht)[hh] = Htmax[hh];
 
         if(today == JCrop_Harvest_2[hh])
-          const_cast<float *> (Ht)[hh] =  Init_Crop_Ht_2[hh];
+          const_cast<double *> (Ht)[hh] =  Init_Crop_Ht_2[hh];
       } // VARIATION_2 or VARIATION_3
     } // for hh
   } // start of day
@@ -6287,7 +6287,7 @@ void ClassGrow_crops_annually::finish(bool good) {
   LogDebug(" ");
 }
 
-bool ClassGrow_crops_annually::Good_Dates(const float* dates) {
+bool ClassGrow_crops_annually::Good_Dates(const double* dates) {
 
   for(hh = 0; hh < nhru; ++hh) {
     if(dates[hh] > 366 || dates[hh] < 0);
@@ -6364,7 +6364,7 @@ void ClassWQ_Gen_Mass_Var_Netroute::init(void) {
 
 void ClassWQ_Gen_Mass_Var_Netroute::run(void) {
 
-  float temp;
+  double temp;
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
     temp = basinflow[0]*basinflow_conc_lay[Sub][0]; // using "conc"
@@ -6524,22 +6524,22 @@ void ClassGlacier_melt_debris_cover_estimate_Mod::init(void){
 }
 
 void ClassGlacier_melt_debris_cover_estimate_Mod::run(void){
-const float Cp_air = 1006;
-const float MOL_wt_ratio_h2o_to_air = 0.622;
-const float Lv = 2.5e6;
-const float Ts_glacier = 273.15;
-const float e_s = 0.6113;
-const float Pr = 5;
-const float Katabatic = 0.0004;
-const float g = 9.8;
-const float FREEZE = 273.15;
-const float Cp_W0 = 4217.7;
-const float rho_h2o =  1000.0;
-const float B = 0.95;
-const float lapse_rate = 0.005;
-const float LH_fusion = 333.5;
-float TF = 0.0;
-float SRF = 0.0;
+const double Cp_air = 1006;
+const double MOL_wt_ratio_h2o_to_air = 0.622;
+const double Lv = 2.5e6;
+const double Ts_glacier = 273.15;
+const double e_s = 0.6113;
+const double Pr = 5;
+const double Katabatic = 0.0004;
+const double g = 9.8;
+const double FREEZE = 273.15;
+const double Cp_W0 = 4217.7;
+const double rho_h2o =  1000.0;
+const double B = 0.95;
+const double lapse_rate = 0.005;
+const double LH_fusion = 333.5;
+double TF = 0.0;
+double SRF = 0.0;
 
   long nstep = getstep();
   nstep = nstep%Global::Freq;
@@ -6979,8 +6979,8 @@ void ClassSoilPrairie::init(void) {
 
 void ClassSoilPrairie::run(void) {
 
-  float soil_lower, excs, condense;
-  float et;                                            
+  double soil_lower, excs, condense;
+  double et;                                            
 
   long nstep = getstep();
 
@@ -7043,7 +7043,7 @@ void ClassSoilPrairie::run(void) {
     if(soil_moist_max[hh] > 0.0){
       soil_lower = soil_moist[hh] - soil_rechr[hh];
 
-      float potential = infil[hh] + snowinfil_buf[hh] + condense;
+      double potential = infil[hh] + snowinfil_buf[hh] + condense;
 
       soil_rechr[hh] = soil_rechr[hh] + potential;
 
@@ -7084,7 +7084,7 @@ void ClassSoilPrairie::run(void) {
         cum_rechr_ssr[hh] += rechr_ssr[hh];
       }
 
-      float s2gw_k = soil_gw_K[hh]/Global::Freq;
+      double s2gw_k = soil_gw_K[hh]/Global::Freq;
 
 //  Handle excess to gw
 
@@ -7197,7 +7197,7 @@ void ClassSoilPrairie::run(void) {
     cum_runoff_to_Sd[hh] += runoff_to_Pond[hh];
 
     if(Sd[hh] > 0.0 && Sd_gw_K[hh] > 0.0){
-      float Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
+      double Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
       if(Sd2gw_k > Sd[hh])
         Sd2gw_k = Sd[hh];
       soil_gw[hh] += Sd2gw_k;
@@ -7217,7 +7217,7 @@ void ClassSoilPrairie::run(void) {
     }
 
     if(gw_max[hh] > 0.0){ // prevents divide by zero error
-      float spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
+      double spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
       gw[hh] -= spill;
       gw_flow[hh] += spill;
     }
@@ -7226,7 +7226,7 @@ void ClassSoilPrairie::run(void) {
     cum_gw_flow[hh] += gw_flow[hh];
 
     if(Sd[hh] > 0.0 && Sd_ssr_K[hh] > 0.0){
-      float Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq;
+      double Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq;
       if(Sd2ssr_k >= Sd[hh])
         Sd2ssr_k = Sd[hh];
       soil_ssr[hh] += Sd2ssr_k;
@@ -7235,9 +7235,9 @@ void ClassSoilPrairie::run(void) {
         Sd[hh] = 0.0;
     }
 
-    float s2ssr_k = lower_ssr_K[hh]/Global::Freq;
+    double s2ssr_k = lower_ssr_K[hh]/Global::Freq;
     if(s2ssr_k > 0.0){
-      float avail = soil_moist[hh] - soil_rechr[hh];
+      double avail = soil_moist[hh] - soil_rechr[hh];
       if(s2ssr_k >= avail)
         s2ssr_k = avail;
       soil_moist[hh] -= s2ssr_k;
@@ -7249,11 +7249,11 @@ void ClassSoilPrairie::run(void) {
 
 //   ***Compute actual evapotranspiration
 
-    float avail_evap = hru_evap_buf[hh]*(1.0 - (Pond_water_frac[hh] + Small_Ponds_water_frac[hh])); // N.B. Pond and Small_Ponds handled earlier with "wetlands_evap" variable.
+    double avail_evap = hru_evap_buf[hh]*(1.0 - (Pond_water_frac[hh] + Small_Ponds_water_frac[hh])); // N.B. Pond and Small_Ponds handled earlier with "wetlands_evap" variable.
 
     if(avail_evap > 0.0 && soil_moist[hh] > 0.0 && cov_type[hh] > 0){
 
-      float pctl, pctr, etl, ets, etr;
+      double pctl, pctr, etl, ets, etr;
 
       if((soil_moist_max[hh] - soil_rechr_max[hh]) > 0.0)
         pctl = (soil_moist[hh] - soil_rechr[hh])/(soil_moist_max[hh] - soil_rechr_max[hh]);
@@ -7386,15 +7386,15 @@ void ClassSoilPrairie::run(void) {
 
 void ClassSoilPrairie::finish(bool good) {
 
-  float Allcum_soil_runoff = 0.0;
-  float Allcum_soil_ssr = 0.0;
-  float Allcum_rechr_ssr = 0.0;
-  float Allcum_soil_gw = 0.0;
-  float Allcum_gw_flow = 0.0;
-  float Allcum_infil_act = 0.0;
-  float Allcum_soil_moist_change = 0.0;
-  float Allcum_Sd_change = 0.0;
-  float Allcum_gw_change = 0.0;
+  double Allcum_soil_runoff = 0.0;
+  double Allcum_soil_ssr = 0.0;
+  double Allcum_rechr_ssr = 0.0;
+  double Allcum_soil_gw = 0.0;
+  double Allcum_gw_flow = 0.0;
+  double Allcum_infil_act = 0.0;
+  double Allcum_soil_moist_change = 0.0;
+  double Allcum_Sd_change = 0.0;
+  double Allcum_gw_change = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (SoilPrairie)' soil_rechr         (mm) (mm*hru) (mm*hru/basin): ").c_str(), soil_rechr[hh], hru_area[hh], basin_area[0], " *** information only - already included in 'soil_moist'.");
@@ -7441,11 +7441,11 @@ void ClassSoilPrairie::finish(bool good) {
   LogDebug(" ");
 }
 
-float ClassSoilPrairie::Pond_area_frac(const float area_frac, const long hh){
+double ClassSoilPrairie::Pond_area_frac(const double area_frac, const long hh){
 
 // calculates maximum water area fraction from water volume fraction using simple scaling curve
 
-  float ZZ = Pond_C1[hh] * sqr(area_frac) + Pond_C2[hh]*area_frac + Pond_C3[hh]; // area_frac
+  double ZZ = Pond_C1[hh] * sqr(area_frac) + Pond_C2[hh]*area_frac + Pond_C3[hh]; // area_frac
 
   if(ZZ < 0.0)
     ZZ = 0.0;
@@ -7455,11 +7455,11 @@ float ClassSoilPrairie::Pond_area_frac(const float area_frac, const long hh){
   return ZZ;
 }
 
-float ClassSoilPrairie::Small_Ponds_area_frac(const float area_frac, const long hh){
+double ClassSoilPrairie::Small_Ponds_area_frac(const double area_frac, const long hh){
 
 // calculates maximum water area fraction from water volume fraction using simple scaling curve
 
-  float ZZ = Small_Ponds_C1[hh] * sqr(area_frac) + Small_Ponds_C2[hh]*area_frac + Small_Ponds_C3[hh]; // area_frac
+  double ZZ = Small_Ponds_C1[hh] * sqr(area_frac) + Small_Ponds_C2[hh]*area_frac + Small_Ponds_C3[hh]; // area_frac
 
   if(ZZ < 0.0)
     ZZ = 0.0;
@@ -7469,11 +7469,11 @@ float ClassSoilPrairie::Small_Ponds_area_frac(const float area_frac, const long 
   return ZZ;
 }
 
-float ClassSoilPrairie::Small_Ponds_runoff_frac(const float Sd_Sdmax, const long hh){
+double ClassSoilPrairie::Small_Ponds_runoff_frac(const double Sd_Sdmax, const long hh){
 
 // calculates maximum water area fraction from water volume fraction using simple scaling curve
 
-  float ZZ = Sd_Sdmax; // area_frac
+  double ZZ = Sd_Sdmax; // area_frac
 
   if(ZZ < 0.0)
     ZZ = 0.0;
@@ -7483,7 +7483,7 @@ float ClassSoilPrairie::Small_Ponds_runoff_frac(const float Sd_Sdmax, const long
   return ZZ;
 }
 
-void ClassSoilPrairie::Pond_calc_h_A(const float volume, const float s, const float p, float &h, float &area){
+void ClassSoilPrairie::Pond_calc_h_A(const double volume, const double s, const double p, double &h, double &area){
 
 // calculate current depth & area from s, p, maxarea and desired volume
 
@@ -7493,12 +7493,12 @@ void ClassSoilPrairie::Pond_calc_h_A(const float volume, const float s, const fl
 
 } // end  Pond_calc_h_A
 
-void ClassSoilPrairie::calc_h_and_S(const float maxvolume, const float maxarea, const float pval, float &S, float &h){
+void ClassSoilPrairie::calc_h_and_S(const double maxvolume, const double maxarea, const double pval, double &S, double &h){
 
-const float maxerror = 0.000001;
-const float  maxiterations = 100;
+const double maxerror = 0.000001;
+const double  maxiterations = 100;
 
-float est_area, area_error;
+double est_area, area_error;
 long iterations;
 long done;
 // does iterative calculations to find h and S
@@ -7571,8 +7571,8 @@ void ClassGlacier_debris_cover::init(void){
 
 void ClassGlacier_debris_cover::run(void){
 
-float TF = 0.0;
-float SRF = 0.0;
+double TF = 0.0;
+double SRF = 0.0;
 
   long nstep = getstep();
   nstep = nstep%Global::Freq;

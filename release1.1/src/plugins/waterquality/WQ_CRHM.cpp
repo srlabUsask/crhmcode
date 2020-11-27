@@ -10,16 +10,16 @@
 #include <cmath>
 #include <stdlib.h>
 //---------------------------------------------------------------------------
-#pragma package(smart_init)
+//#pragma package(smart_init) removed uneeded pragma - jhs507
 
 //---------------------------------------------------------------------------
 
 using namespace std;
 using namespace CRHM;
 
-static float fLimit;
+//static double fLimit;
 
-const float minFlow_WQ = 0.001f;
+const double minFlow_WQ = 0.001f;
 
 //---------------------------------------------------------------------------
 
@@ -51,62 +51,62 @@ void ClassWQ_Soil::decl(void) {
 
   variation_set = VARIATION_1;
 
-  declvar("culvert_Q", NHRU, "flow in culvert.", "(m^3/s)", &culvert_Q);
+  declvar("culvert_Q", TDim::NHRU, "flow in culvert.", "(m^3/s)", &culvert_Q);
 
-  declvar("culvert_water_H", NHRU, "depth of pond at culvert inlet.", "(m)", &culvert_water_H);
+  declvar("culvert_water_H", TDim::NHRU, "depth of pond at culvert inlet.", "(m)", &culvert_water_H);
 
-  declvar("culvert_water_A", NHRU, "surface area of culvert pond.", "(m^2)", &culvert_water_A);
+  declvar("culvert_water_A", TDim::NHRU, "surface area of culvert pond.", "(m^2)", &culvert_water_A);
 
-  declvar("culvert_water_V", NHRU, "volume of water in culvert pond.", "(m^3)", &culvert_water_V);
+  declvar("culvert_water_V", TDim::NHRU, "volume of water in culvert pond.", "(m^3)", &culvert_water_V);
 
-  declvar("culvert_over_Q", NHRU, "flow over the road.", "(m^3/s)", &culvert_over_Q);
+  declvar("culvert_over_Q", TDim::NHRU, "flow over the road.", "(m^3/s)", &culvert_over_Q);
 
-  declvar("culvert_evap", NHRU, "Depth of water evaporating from culvert pond.", "(mm/int)", &culvert_evap);
+  declvar("culvert_evap", TDim::NHRU, "Depth of water evaporating from culvert pond.", "(mm/int)", &culvert_evap);
 
-  declstatdiag("cum_culvert", NHRU, "Cumulative culvert HRU flow.", "(m^3)", &cum_culvert);
+  declstatdiag("cum_culvert", TDim::NHRU, "Cumulative culvert HRU flow.", "(m^3)", &cum_culvert);
 
-  declstatdiag("cum_culvert_over", NHRU, "Cumulative culvert HRU overflow.", "(m^3)", &cum_culvert_over);
+  declstatdiag("cum_culvert_over", TDim::NHRU, "Cumulative culvert HRU overflow.", "(m^3)", &cum_culvert_over);
 
-  decldiag("HD", NHRU, "ratio of depth of water at culvert/culvert diameter.", "()", &HD);
+  decldiag("HD", TDim::NHRU, "ratio of depth of water at culvert/culvert diameter.", "()", &HD);
 
-  declparam("channel_slope", NHRU, "[0.002]", "0.0001", "0.01", "soil slope to culvert.", "()", &channel_slope);
+  declparam("channel_slope", TDim::NHRU, "[0.002]", "0.0001", "0.01", "soil slope to culvert.", "()", &channel_slope);
 
-  declparam("side_slope", NHRU, "[0.02]", "0.0001", "0.01", "side soil slope mormal to culvert slope.", "()", &side_slope);
+  declparam("side_slope", TDim::NHRU, "[0.02]", "0.0001", "0.01", "side soil slope mormal to culvert slope.", "()", &side_slope);
 
-  declparam("culvert_diam", NHRU, "[0.5]", "0.1", "5.0", "culvert diameter.", "(m)", &culvert_diam);
+  declparam("culvert_diam", TDim::NHRU, "[0.5]", "0.1", "5.0", "culvert diameter.", "(m)", &culvert_diam);
 
-  declparam("culvert_water_Dmax", NHRU, "[2.0]", "0.1", "10.0", "maximum depth of pond at culvert inlet.", "(m)", &culvert_water_Dmax);
+  declparam("culvert_water_Dmax", TDim::NHRU, "[2.0]", "0.1", "10.0", "maximum depth of pond at culvert inlet.", "(m)", &culvert_water_Dmax);
 
-  declparam("number_culverts", NHRU, "[1.0]", "0.0", "10.0", "number of culverts and efficiency factor. Zero = no culvert.", "()", &number_culverts);
+  declparam("number_culverts", TDim::NHRU, "[1.0]", "0.0", "10.0", "number of culverts and efficiency factor. Zero = no culvert.", "()", &number_culverts);
 
-  declparam("culvert_type", NHRU, "[0]", "0", "4", "0- thin walled projection, 1- square edged (flush) inlet, 2- socket and concrete pipe, 3- 45 degree beveled inlet, 4- well-rounded (streamlined) inlet.", "()", &culvert_type);
+  declparam("culvert_type", TDim::NHRU, "[0]", "0", "4", "0- thin walled projection, 1- square edged (flush) inlet, 2- socket and concrete pipe, 3- 45 degree beveled inlet, 4- well-rounded (streamlined) inlet.", "()", &culvert_type);
 
 
   variation_set = VARIATION_2;
 
-  declvar("tile_flow", NHRU, "flow in tile drainage.", "(m^3/s)", &tile_flow);
+  declvar("tile_flow", TDim::NHRU, "flow in tile drainage.", "(m^3/s)", &tile_flow);
 
-  declvar("tile_flow_conc", NDEFN, "Concentration: tile flow.", "(mg/l)", &tile_flow_conc, &tile_flow_conc_lay, numsubstances);
+  declvar("tile_flow_conc", TDim::NDEFN, "Concentration: tile flow.", "(mg/l)", &tile_flow_conc, &tile_flow_conc_lay, numsubstances);
 
-  declvar("Dequiv_depth", NHRU, "closed-form expression for equivalent depth.", "(m)", &Dequiv_depth);
+  declvar("Dequiv_depth", TDim::NHRU, "closed-form expression for equivalent depth.", "(m)", &Dequiv_depth);
 
-  declvar("x", NHRU, ".", "(m)", &x);
+  declvar("x", TDim::NHRU, ".", "(m)", &x);
 
-  declvar("Dw", NHRU, "steady state depth of the watertable midway between the drain.", "(m)", &Dw);
+  declvar("Dw", TDim::NHRU, "steady state depth of the watertable midway between the drain.", "(m)", &Dw);
 
-  declparam("Ka", NHRU, "[1]", "0.1", "4", "hydraulic conductivity of the soil above drain level.", "(m/d)", &Ka);
+  declparam("Ka", TDim::NHRU, "[1]", "0.1", "4", "hydraulic conductivity of the soil above drain level.", "(m/d)", &Ka);
 
-  declparam("Kb", NHRU, "[1]", "0.1", "4", "hydraulic conductivity of the soil below drain level.", "(m/d)", &Kb);
+  declparam("Kb", TDim::NHRU, "[1]", "0.1", "4", "hydraulic conductivity of the soil below drain level.", "(m/d)", &Kb);
 
-  declparam("Di", NHRU, "[2]", "0", "10", "depth of the impermeable layer below drain level.", "(m)", &Di);
+  declparam("Di", TDim::NHRU, "[2]", "0", "10", "depth of the impermeable layer below drain level.", "(m)", &Di);
 
-  declparam("Dd", NHRU, "[0.5]", "0", "4", "depth of drains.", "(m)", &Dd);
+  declparam("Dd", TDim::NHRU, "[0.5]", "0", "4", "depth of drains.", "(m)", &Dd);
 
-  declparam("soil_poro_moist", NHRU, "[0.5]", "0", "1", "soil porosity of moist layer.", "()", &soil_poro_moist);
+  declparam("soil_poro_moist", TDim::NHRU, "[0.5]", "0", "1", "soil porosity of moist layer.", "()", &soil_poro_moist);
 
-  declparam("L", NHRU, "[2]", "0", "20", "spacing between drains.", "(m)", &L);
+  declparam("L", TDim::NHRU, "[2]", "0", "20", "spacing between drains.", "(m)", &L);
 
-  declparam("r", NHRU, "[0.1]", "0.01", "1", "drain radius.", "(m)", &r);
+  declparam("r", TDim::NHRU, "[0.1]", "0.01", "1", "drain radius.", "(m)", &r);
 
 
   variation_set = VARIATION_ORG;
@@ -116,223 +116,223 @@ void ClassWQ_Soil::decl(void) {
     Global::maxlay = 2;
   }
 
-  declvar("current_getstep", BASIN, "current getstep", "()", &current_getstep);
+  declvar("current_getstep", TDim::BASIN, "current getstep", "()", &current_getstep);
 
-  declvar("redirected_residual", NHRU, "redirected residual after topping up Sd and soil_rechar in Netroute/_D/_M/_M_D.", "(mm*km^2/int)", &redirected_residual);
+  declvar("redirected_residual", TDim::NHRU, "redirected residual after topping up Sd and soil_rechar in Netroute/_D/_M/_M_D.", "(mm*km^2/int)", &redirected_residual);
 
-  declvar("redirected_residual_conc", NDEFN, "Concentration:: redirected residual after topping up Sd and soil_rechar in Netroute/_D/_M/_M_D.", "(mg/l)", &redirected_residual_conc, &redirected_residual_conc_lay, numsubstances);
+  declvar("redirected_residual_conc", TDim::NDEFN, "Concentration:: redirected residual after topping up Sd and soil_rechar in Netroute/_D/_M/_M_D.", "(mg/l)", &redirected_residual_conc, &redirected_residual_conc_lay, numsubstances);
 
-  declstatdiag("cum_redirected_residual", NHRU, "cumulative HRU redirected_residual to another HRU.", "(mm*km^2)", &cum_redirected_residual);
+  declstatdiag("cum_redirected_residual", TDim::NHRU, "cumulative HRU redirected_residual to another HRU.", "(mm*km^2)", &cum_redirected_residual);
 
-  declstatdiag("cum_redirected_residual_mWQ", NDEFN, "mass of solute redirected_residual to another HRU.", "(mg/l * mm*km^2/int)", &cum_redirected_residual_mWQ, &cum_redirected_residual_mWQ_lay, numsubstances);
+  declstatdiag("cum_redirected_residual_mWQ", TDim::NDEFN, "mass of solute redirected_residual to another HRU.", "(mg/l * mm*km^2/int)", &cum_redirected_residual_mWQ, &cum_redirected_residual_mWQ_lay, numsubstances);
 
-  declstatvar("Sd", NHRU, "Depression storage.", "(mm)", &Sd);
+  declstatvar("Sd", TDim::NHRU, "Depression storage.", "(mm)", &Sd);
 
-  declstatvar("Sd_conc", NDEFN, "Concentration: Depression storage.", "(mg/l)", &Sd_conc, &Sd_conc_lay, numsubstances);
+  declstatvar("Sd_conc", TDim::NDEFN, "Concentration: Depression storage.", "(mg/l)", &Sd_conc, &Sd_conc_lay, numsubstances);
 
-  declstatvar("gw", NHRU, "ground water storage.", "(mm)", &gw);
+  declstatvar("gw", TDim::NHRU, "ground water storage.", "(mm)", &gw);
 
-  declstatvar("gw_conc", NDEFN, "Concentration: ground water storage.", "(mg/l)", &gw_conc, &gw_conc_lay, numsubstances);
+  declstatvar("gw_conc", TDim::NDEFN, "Concentration: ground water storage.", "(mg/l)", &gw_conc, &gw_conc_lay, numsubstances);
 
-  declvar("solute_deposit", NHRU, "solute deposit left by evaporation.", "(mg)", &solute_deposit);
+  declvar("solute_deposit", TDim::NHRU, "solute deposit left by evaporation.", "(mg)", &solute_deposit);
 
-  declstatvar("cum_solute_deposit", NHRU, "cumulative solute deposit left by evaporation.", "(mg)", &cum_solute_deposit);
+  declstatvar("cum_solute_deposit", TDim::NHRU, "cumulative solute deposit left by evaporation.", "(mg)", &cum_solute_deposit);
 
-  declstatvar("soil_rechr", NHRU, "moisture content of soil recharge zone, ie, the"//
+  declstatvar("soil_rechr", TDim::NHRU, "moisture content of soil recharge zone, ie, the"//
     "portion of the soil profile from which evaporation can take place.", "(mm)", &soil_rechr);
 
-  declstatvar("soil_moist", NHRU, "moisture content of soil profile to the depth"//
+  declstatvar("soil_moist", TDim::NHRU, "moisture content of soil profile to the depth"//
     "of the rooting zone of the major vegetation type on the HRU.", "(mm)", &soil_moist);
 
-  declstatvar("soil_moist_conc", NDEFN, "Concentration: moisture content of soil profile to the depth.", "(mg/l)", &soil_moist_conc, &soil_moist_conc_lay, numsubstances);
+  declstatvar("soil_moist_conc", TDim::NDEFN, "Concentration: moisture content of soil profile to the depth.", "(mg/l)", &soil_moist_conc, &soil_moist_conc_lay, numsubstances);
 
-  declstatvar("potential", NHRU, ".", "(mm)", &potential);
+  declstatvar("potential", TDim::NHRU, ".", "(mm)", &potential);
 
-  declstatvar("direct_excs", NHRU, ".", "(mm)", &direct_excs);
+  declstatvar("direct_excs", TDim::NHRU, ".", "(mm)", &direct_excs);
 
-  declstatvar("potential_mWQ", NDEFN, ".", "(mg/l * mm*km^2/int)", &potential_mWQ, &potential_mWQ_lay, numsubstances);
+  declstatvar("potential_mWQ", TDim::NDEFN, ".", "(mg/l * mm*km^2/int)", &potential_mWQ, &potential_mWQ_lay, numsubstances);
 
-  declstatvar("direct_excs_mWQ", NDEFN, ".", "(mg/l * mm*km^2/int)", &direct_excs_mWQ, &direct_excs_mWQ_lay, numsubstances);
+  declstatvar("direct_excs_mWQ", TDim::NDEFN, ".", "(mg/l * mm*km^2/int)", &direct_excs_mWQ, &direct_excs_mWQ_lay, numsubstances);
 
-  declstatvar("soil_lower_max", NHRU, "maximum moisture content of lower soil profile to the depth"//
+  declstatvar("soil_lower_max", TDim::NHRU, "maximum moisture content of lower soil profile to the depth"//
     "of the rooting zone of the major vegetation type on the HRU. (N.B. not Hype lower layer)", "(mm)", &soil_lower_max);
 
-  declstatvar("soil_lower", NHRU, "moisture content of lower soil profile to the depth"//
+  declstatvar("soil_lower", TDim::NHRU, "moisture content of lower soil profile to the depth"//
     "of the rooting zone of the major vegetation type on the HRU. (N.B. not Hype lower layer)", "(mm)", &soil_lower);
 
-  decllocal("cum_hru_condense", NHRU, "cumulative condensation over HRU.", "(mm)", &cum_hru_condense);
+  decllocal("cum_hru_condense", TDim::NHRU, "cumulative condensation over HRU.", "(mm)", &cum_hru_condense);
 
-  declvar("cum_Sd_evap", NHRU, "cumulative Sd evaporation(included in hru_actet).", "(mm)", &cum_Sd_evap);
+  declvar("cum_Sd_evap", TDim::NHRU, "cumulative Sd evaporation(included in hru_actet).", "(mm)", &cum_Sd_evap);
 
-  declstatvar("cum_Sd_ssr", NHRU, "Accumulation of Sd excess from a HRU to ssr.", "(mm)", &cum_Sd_ssr);
+  declstatvar("cum_Sd_ssr", TDim::NHRU, "Accumulation of Sd excess from a HRU to ssr.", "(mm)", &cum_Sd_ssr);
 
-  declstatvar("cum_Sd_gw", NHRU, "Accumulation of Sd excess from a HRU to gw.", "(mm)", &cum_Sd_gw);
+  declstatvar("cum_Sd_gw", TDim::NHRU, "Accumulation of Sd excess from a HRU to gw.", "(mm)", &cum_Sd_gw);
 
-  declstatvar("cum_lower_ssr", NHRU, "Accumulation of Sd excess from a HRU to ssr.", "(mm)", &cum_lower_ssr);
+  declstatvar("cum_lower_ssr", TDim::NHRU, "Accumulation of Sd excess from a HRU to ssr.", "(mm)", &cum_lower_ssr);
 
-  declvar("soil_gw", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/int)", &soil_gw);
+  declvar("soil_gw", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/int)", &soil_gw);
 
-  declvar("soil_gw_conc", NDEFN, "Concentration: Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mg/l)", &soil_gw_conc, &soil_gw_conc_lay, numsubstances);
+  declvar("soil_gw_conc", TDim::NDEFN, "Concentration: Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mg/l)", &soil_gw_conc, &soil_gw_conc_lay, numsubstances);
 
-  declvar("soil_gw_D", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_gw_D);
+  declvar("soil_gw_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_gw_D);
 
-  declvar("gw_flow", NHRU, "Drainage from HRU ground water reservoir.", "(mm/int)", &gw_flow);
+  declvar("gw_flow", TDim::NHRU, "Drainage from HRU ground water reservoir.", "(mm/int)", &gw_flow);
 
-  declvar("gw_flow_conc", NDEFN, "Concentration: Drainage from HRU ground water reservoir.", "(mg/l)", &gw_flow_conc, &gw_flow_conc_lay, numsubstances);
+  declvar("gw_flow_conc", TDim::NDEFN, "Concentration: Drainage from HRU ground water reservoir.", "(mg/l)", &gw_flow_conc, &gw_flow_conc_lay, numsubstances);
 
-  declvar("gw_flow_D", NHRU, "Daily drainage from HRU ground water reservoir.", "(mm/d)", &gw_flow_D);
+  declvar("gw_flow_D", TDim::NHRU, "Daily drainage from HRU ground water reservoir.", "(mm/d)", &gw_flow_D);
 
-  declvar("infil_act", NHRU, "Actual amount of water infiltrating the soil on each HRU.", "(mm/int)", &infil_act);
+  declvar("infil_act", TDim::NHRU, "Actual amount of water infiltrating the soil on each HRU.", "(mm/int)", &infil_act);
 
-  declvar("infil_act_conc", NDEFN, "Concentration: Actual amount of water infiltrating the soil on each HRU.", "(mm/int)", &infil_act_conc, &infil_act_conc_lay, numsubstances);
+  declvar("infil_act_conc", TDim::NDEFN, "Concentration: Actual amount of water infiltrating the soil on each HRU.", "(mm/int)", &infil_act_conc, &infil_act_conc_lay, numsubstances);
 
-  declvar("cum_infil_act", NHRU, "Accumulation of the actual amount of water infiltrating the soil on each HRU.", "(mm)", &cum_infil_act);
+  declvar("cum_infil_act", TDim::NHRU, "Accumulation of the actual amount of water infiltrating the soil on each HRU.", "(mm)", &cum_infil_act);
 
-  declvar("cum_infil_act_mWQ", NDEFN, "mass of solute infiltrating the soil on each HRU.", "(mg/l * mm*km^2/int)", &cum_infil_act_mWQ, &cum_infil_act_mWQ_lay, numsubstances);
+  declvar("cum_infil_act_mWQ", TDim::NDEFN, "mass of solute infiltrating the soil on each HRU.", "(mg/l * mm*km^2/int)", &cum_infil_act_mWQ, &cum_infil_act_mWQ_lay, numsubstances);
 
-  declvar("infil_act_D", NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
+  declvar("infil_act_D", TDim::NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
 
-  declstatvar("cum_gw_flow", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
+  declstatvar("cum_gw_flow", TDim::NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
 
-  declstatvar("cum_gw_flow_mWQ", NDEFN, "mass of solute from a HRU that enters groundwater reservoirs.", "(mg/l * mm*km^2/int)", &cum_gw_flow_mWQ, &cum_gw_flow_mWQ_lay, numsubstances);
+  declstatvar("cum_gw_flow_mWQ", TDim::NDEFN, "mass of solute from a HRU that enters groundwater reservoirs.", "(mg/l * mm*km^2/int)", &cum_gw_flow_mWQ, &cum_gw_flow_mWQ_lay, numsubstances);
 
-  declvar("soil_ssr", NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
+  declvar("soil_ssr", TDim::NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
 
-  declvar("soil_ssr_conc", NDEFN, "Concentration: Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mg/l)", &soil_ssr_conc, &soil_ssr_conc_lay, numsubstances);
+  declvar("soil_ssr_conc", TDim::NDEFN, "Concentration: Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mg/l)", &soil_ssr_conc, &soil_ssr_conc_lay, numsubstances);
 
-  declvar("rechr_ssr", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
+  declvar("rechr_ssr", TDim::NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
 
-  declvar("rechr_ssr_conc", NDEFN, "Concentration: Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mg/l)", &rechr_ssr_conc, &rechr_ssr_conc_lay, numsubstances);
+  declvar("rechr_ssr_conc", TDim::NDEFN, "Concentration: Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mg/l)", &rechr_ssr_conc, &rechr_ssr_conc_lay, numsubstances);
 
-  declvar("scf", NHRU, "Snow-cover fraction calculated from snow-cover depletion curves(Essery&Pomeroy,2004).", "()", &scf);
+  declvar("scf", TDim::NHRU, "Snow-cover fraction calculated from snow-cover depletion curves(Essery&Pomeroy,2004).", "()", &scf);
 
-  declstatvar("cum_soil_ssr", NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
+  declstatvar("cum_soil_ssr", TDim::NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
 
-  declstatvar("cum_soil_ssr_mWQ", NDEFN, "mass of solute from a HRU to ssr.", "(mg/l * mm*km^2/int)", &cum_soil_ssr_mWQ, &cum_soil_ssr_mWQ_lay, numsubstances);
+  declstatvar("cum_soil_ssr_mWQ", TDim::NDEFN, "mass of solute from a HRU to ssr.", "(mg/l * mm*km^2/int)", &cum_soil_ssr_mWQ, &cum_soil_ssr_mWQ_lay, numsubstances);
 
-  declstatvar("cum_rechr_ssr", NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
+  declstatvar("cum_rechr_ssr", TDim::NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
 
-  declstatvar("cum_rechr_ssr_mWQ", NDEFN, "mass of solute portion of excess from a HRU to ssr.", "(mg/l * mm*km^2/int)", &cum_rechr_ssr_mWQ, &cum_rechr_ssr_mWQ_lay, numsubstances);
+  declstatvar("cum_rechr_ssr_mWQ", TDim::NDEFN, "mass of solute portion of excess from a HRU to ssr.", "(mg/l * mm*km^2/int)", &cum_rechr_ssr_mWQ, &cum_rechr_ssr_mWQ_lay, numsubstances);
 
-  declvar("soil_ssr_D", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
+  declvar("soil_ssr_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
 
-  declvar("soil_runoff", NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
+  declvar("soil_runoff", TDim::NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
 
-  declvar("soil_runoff_cWQ", NDEFN, "Concentration: Portion of excess soil water from a HRU to runoff.", "()", &soil_runoff_cWQ, &soil_runoff_cWQ_lay, numsubstances);
+  declvar("soil_runoff_cWQ", TDim::NDEFN, "Concentration: Portion of excess soil water from a HRU to runoff.", "()", &soil_runoff_cWQ, &soil_runoff_cWQ_lay, numsubstances);
 
-  declstatvar("cum_soil_runoff", NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
+  declstatvar("cum_soil_runoff", TDim::NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
-  declstatvar("cum_soil_runoff_mWQ", NDEFN, "mass of solute of portion of excess soil water from a HRU to runoff.", "(mg/l * mm*km^2/int)", &cum_soil_runoff_mWQ, &cum_soil_runoff_mWQ_lay, numsubstances);
+  declstatvar("cum_soil_runoff_mWQ", TDim::NDEFN, "mass of solute of portion of excess soil water from a HRU to runoff.", "(mg/l * mm*km^2/int)", &cum_soil_runoff_mWQ, &cum_soil_runoff_mWQ_lay, numsubstances);
 
-  declvar("soil_runoff_D", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
+  declvar("soil_runoff_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
 
-  declstatvar("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
+  declstatvar("cum_runoff_to_Sd", TDim::NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
 
-  declstatvar("cum_runoff_to_Sd_mWQ", NDEFN, "mass of solute portion of runoff to depression storage.", "(mg/l * mm*km^2/int)", &cum_runoff_to_Sd_mWQ, &cum_runoff_to_Sd_mWQ_lay, numsubstances);
+  declstatvar("cum_runoff_to_Sd_mWQ", TDim::NDEFN, "mass of solute portion of runoff to depression storage.", "(mg/l * mm*km^2/int)", &cum_runoff_to_Sd_mWQ, &cum_runoff_to_Sd_mWQ_lay, numsubstances);
 
-  declstatvar("cum_runoff_to_ssr", NHRU, "Cumulative portion of runoff to interflow(ssr).", "(mm/int)", &cum_runoff_to_ssr);
+  declstatvar("cum_runoff_to_ssr", TDim::NHRU, "Cumulative portion of runoff to interflow(ssr).", "(mm/int)", &cum_runoff_to_ssr);
 
-  declstatvar("cum_soil_gw", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
+  declstatvar("cum_soil_gw", TDim::NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
 
-  declstatvar("cum_soil_gw_mWQ", NDEFN, "mass of solute of excess soil water from a HRU that enters groundwater reservoirs.", "(mg/l * mm*km^2/int)", &cum_soil_gw_mWQ, &cum_soil_gw_mWQ_lay, numsubstances);
+  declstatvar("cum_soil_gw_mWQ", TDim::NDEFN, "mass of solute of excess soil water from a HRU that enters groundwater reservoirs.", "(mg/l * mm*km^2/int)", &cum_soil_gw_mWQ, &cum_soil_gw_mWQ_lay, numsubstances);
 
-  decllocal("snowinfil_buf", NHRU, "buffer snow infiltration.", "(mm/d)", &snowinfil_buf);
+  decllocal("snowinfil_buf", TDim::NHRU, "buffer snow infiltration.", "(mm/d)", &snowinfil_buf);
 
-  decllocal("runoff_buf", NHRU, "buffer runoff.", "(mm/d)", &runoff_buf);
+  decllocal("runoff_buf", TDim::NHRU, "buffer runoff.", "(mm/d)", &runoff_buf);
 
-  decllocal("meltrunoff_buf", NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
+  decllocal("meltrunoff_buf", TDim::NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
 
-  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
+  decllocal("hru_evap_buf", TDim::NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
 
-  decllocal("soil_rechr_Init", NHRU, "initial soil recharge.", "(mm)", &soil_rechr_Init);
+  decllocal("soil_rechr_Init", TDim::NHRU, "initial soil recharge.", "(mm)", &soil_rechr_Init);
 
-  decllocal("soil_moist_Init", NHRU, "initial soil moisture.", "(mm)", &soil_moist_Init);
+  decllocal("soil_moist_Init", TDim::NHRU, "initial soil moisture.", "(mm)", &soil_moist_Init);
 
-  decllocal("soil_bottom_Init", NHRU, "initial bottom soil moisture.", "(mm)", &soil_bottom_Init);
+  decllocal("soil_bottom_Init", TDim::NHRU, "initial bottom soil moisture.", "(mm)", &soil_bottom_Init);
 
-  decllocal("Sd_Init", NHRU, "initial Depression storage.", "(mm)", &Sd_Init);
+  decllocal("Sd_Init", TDim::NHRU, "initial Depression storage.", "(mm)", &Sd_Init);
 
-  decllocal("gw_Init", NHRU, "initial ground water storage.", "(mm)", &gw_Init);
+  decllocal("gw_Init", TDim::NHRU, "initial ground water storage.", "(mm)", &gw_Init);
 
-  declvar("soil_moist_conc_Init", NDEFN, "initial soil moisture conc.", "(mg/l)", &soil_moist_conc_Init, &soil_moist_conc_Init_lay, numsubstances);
+  declvar("soil_moist_conc_Init", TDim::NDEFN, "initial soil moisture conc.", "(mg/l)", &soil_moist_conc_Init, &soil_moist_conc_Init_lay, numsubstances);
 
-  declvar("soil_bottom_conc_Init", NDEFN, "initial bottom soil moisture conc.", "(mg/l)", &soil_bottom_conc_Init, &soil_bottom_conc_Init_lay, numsubstances);
+  declvar("soil_bottom_conc_Init", TDim::NDEFN, "initial bottom soil moisture conc.", "(mg/l)", &soil_bottom_conc_Init, &soil_bottom_conc_Init_lay, numsubstances);
 
-  declvar("soil_top_conc_Init", NDEFN, "initial top soil moisture conc.", "(mg/l)", &soil_top_conc_Init, &soil_top_conc_Init_lay, numsubstances);
+  declvar("soil_top_conc_Init", TDim::NDEFN, "initial top soil moisture conc.", "(mg/l)", &soil_top_conc_Init, &soil_top_conc_Init_lay, numsubstances);
 
-  declvar("Sd_conc_Init", NDEFN, "initial concentration of nutrient species layer in the initial depression storage.", "(mg/l)", &Sd_conc_Init, &Sd_conc_Init_lay, numsubstances);
+  declvar("Sd_conc_Init", TDim::NDEFN, "initial concentration of nutrient species layer in the initial depression storage.", "(mg/l)", &Sd_conc_Init, &Sd_conc_Init_lay, numsubstances);
 
-  declvar("gw_conc_Init", NDEFN, "initial concentration of nutrient species layer  in the groundwater reservoir.", "(mg/l)", &gw_conc_Init, &gw_conc_Init_lay, numsubstances);
+  declvar("gw_conc_Init", TDim::NDEFN, "initial concentration of nutrient species layer  in the groundwater reservoir.", "(mg/l)", &gw_conc_Init, &gw_conc_Init_lay, numsubstances);
 
-  declparam("calcN", NHRU, "[0]", "0", "1", "flag for nitrogen simulation", "()", &calcN);
+  declparam("calcN", TDim::NHRU, "[0]", "0", "1", "flag for nitrogen simulation", "()", &calcN);
 
-  declparam("calcP", NHRU, "[0]", "0", "1", "flag for phosphorus simulation", "()", &calcP);
+  declparam("calcP", TDim::NHRU, "[0]", "0", "1", "flag for phosphorus simulation", "()", &calcP);
 
-  declparam("calcC", NHRU, "[0]", "0", "1", "flag for carbon simulation", "()", &calcC);
+  declparam("calcC", TDim::NHRU, "[0]", "0", "1", "flag for carbon simulation", "()", &calcC);
 
-  declparam("sr_mix_rate", NHRU, "[0.01]", "0", "1", "Soil-runoff nutrient mass mixing rate.", "(1/int)", &sr_mix_rate);
+  declparam("sr_mix_rate", TDim::NHRU, "[0.01]", "0", "1", "Soil-runoff nutrient mass mixing rate.", "(1/int)", &sr_mix_rate);
 
-  declparam("parleach", NHRU, "[1]", "0", "1", "Leaching from surfsoil to soil_rechr", "(1/T)", &parleach);
+  declparam("parleach", TDim::NHRU, "[1]", "0", "1", "Leaching from surfsoil to soil_rechr", "(1/T)", &parleach);
 
-  declparam("CV_SWE", NHRU, "[1]", "0", "1", "Coefficient of variation: values can be taken from Gray, D. M., Toth, B., Zhao, L., Pomeroy, J. W., & Granger, R. J. (2001). Estimating areal snowmelt infiltration into frozen soils. Hydrological Processes, 15(16), 30953111. https://doi.org/10.1002/hyp.320", "()", &CV_SWE);
+  declparam("CV_SWE", TDim::NHRU, "[1]", "0", "1", "Coefficient of variation: values can be taken from Gray, D. M., Toth, B., Zhao, L., Pomeroy, J. W., & Granger, R. J. (2001). Estimating areal snowmelt infiltration into frozen soils. Hydrological Processes, 15(16), 30953111. https://doi.org/10.1002/hyp.320", "()", &CV_SWE);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area.", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area.", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area.", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area.", "(km^2)", &hru_area);
 
-  declparam("Sdmax", NHRU, "[0]", "0.0", "5000.0","Maximum depression storage.", "(mm)", &Sdmax);
+  declparam("Sdmax", TDim::NHRU, "[0]", "0.0", "5000.0","Maximum depression storage.", "(mm)", &Sdmax);
 
-  declparam("Sdinit", NHRU, "[0]", "0.0", "5000.0","Initial depression storage.", "(mm)", &Sdinit);
+  declparam("Sdinit", TDim::NHRU, "[0]", "0.0", "5000.0","Initial depression storage.", "(mm)", &Sdinit);
 
-  declparam("Sd_conc_init", NDEFN, "[0]", "0.0", "10.0","Initial depression storage.", "(mg/l)", &Sd_conc_init, &Sd_conc_init_lay, numsubstances);
+  declparam("Sd_conc_init", TDim::NDEFN, "[0]", "0.0", "10.0","Initial depression storage.", "(mg/l)", &Sd_conc_init, &Sd_conc_init_lay, numsubstances);
 
-  declparam("soil_rechr_max", NHRU, "[60.0]", "0.0", "350.0",
+  declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0",
     "Maximum value for soil recharge zone (upper portion of soil_moist where losses occur as both evaporation "//
     "and transpiration).  Must be less than or equal to soil_moist.","( )", &soil_rechr_max);
 
-  declparam("soil_rechr_init", NHRU, "[30.0]", "0.0", "250.0", "Initial value for soil recharge zone (upper part of "//
+  declparam("soil_rechr_init", TDim::NHRU, "[30.0]", "0.0", "250.0", "Initial value for soil recharge zone (upper part of "//
     "soil_moist).  Must be less than or equal to soil_moist_init.", "(mm)", &soil_rechr_init);
 
-  declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile."//
+  declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile."//
     "Soil profile is surface to bottom of rooting zone.", "(mm)", &soil_moist_max);
 
-  declparam("soil_moist_init", NHRU, "[187.0]", "0.0", "5000.0",
+  declparam("soil_moist_init", TDim::NHRU, "[187.0]", "0.0", "5000.0",
     "Initial value of available water in soil profile.", "(mm)", &soil_moist_init);
 
-  declparam("soil_gw_K", NHRU, "[0.0]", "0.", "100.0", "The maximum amount of the soil water excess for an HRU "//
+  declparam("soil_gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "The maximum amount of the soil water excess for an HRU "//
     "that is routed directly to the associated groundwater reservoir each day.", "(mm/d)", &soil_gw_K);
 
-  declparam("gw_max", NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of ground water reservoir.", "(mm)", &gw_max);
+  declparam("gw_max", TDim::NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of ground water reservoir.", "(mm)", &gw_max);
 
-  declparam("gw_init", NHRU, "[187.0]", "0.0", "5000.0", "Initial value of available water in ground water reservoir.", "(mm)", &gw_init);
+  declparam("gw_init", TDim::NHRU, "[187.0]", "0.0", "5000.0", "Initial value of available water in ground water reservoir.", "(mm)", &gw_init);
 
-  declparam("gw_conc_init", NDEFN, "[1]", "0.0", "1.0", "Initial value of available water in ground water reservoir.", "(mg/l)", &gw_conc_init, &gw_conc_init_lay, numsubstances);
+  declparam("gw_conc_init", TDim::NDEFN, "[1]", "0.0", "1.0", "Initial value of available water in ground water reservoir.", "(mg/l)", &gw_conc_init, &gw_conc_init_lay, numsubstances);
 
-  declparam("gw_K", NHRU, "[0.0]", "0.", "100.0", "daily ground water drainage from gw reservoir.", "(mm/d)", &gw_K);
+  declparam("gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ground water drainage from gw reservoir.", "(mm/d)", &gw_K);
 
-  declparam("rechr_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge.", "(mm/d)", &rechr_ssr_K);
+  declparam("rechr_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge.", "(mm/d)", &rechr_ssr_K);
 
-  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column.", "(mm/d)", &lower_ssr_K);
+  declparam("lower_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column.", "(mm/d)", &lower_ssr_K);
 
-  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor.", "(mm/d)", &Sd_ssr_K);
+  declparam("Sd_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor.", "(mm/d)", &Sd_ssr_K);
 
-  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
+  declparam("Sd_gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
 
-  declparam("cov_type", NHRU,
+  declparam("cov_type", TDim::NHRU,
     "[1]", "0", "2", "Vegetation evaporation type designation for HRU:  "//
     "0 = bare soil (no evaporation), 1 = crops (recharge layer), 2 = grasses & shrubs (all soil moisture).", "()", &cov_type);
 
-  declparam("transp_limited", NHRU, "[0]", "0", "1", "limit transpiration to recharge layer only  on-1/off-0.", "()", &transp_limited);
+  declparam("transp_limited", TDim::NHRU, "[0]", "0", "1", "limit transpiration to recharge layer only  on-1/off-0.", "()", &transp_limited);
 
-  declparam("soil_ssr_runoff", NHRU, "[1]", "0", "1", "soil column excess to interflow(ssr)/runoff (and possibly Sd)  interflow-0/runoff-1.", "()", &soil_ssr_runoff);
+  declparam("soil_ssr_runoff", TDim::NHRU, "[1]", "0", "1", "soil column excess to interflow(ssr)/runoff (and possibly Sd)  interflow-0/runoff-1.", "()", &soil_ssr_runoff);
 
-  declparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit.", "()", &inhibit_evap);
+  declparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit.", "()", &inhibit_evap);
 
-  declparam("rain_conc", NDEFN, "0", "0", "1000", "rain solute concentration", "(mg/l)", &rain_conc, &rain_conc_lay, numsubstances);
+  declparam("rain_conc", TDim::NDEFN, "0", "0", "1000", "rain solute concentration", "(mg/l)", &rain_conc, &rain_conc_lay, numsubstances);
 
-  declparam("atmos_mWQ", NDEFN, "0", "0", "3", "atmospheric solute deposit", "(mg/int)", &atmos_mWQ, &atmos_mWQ_lay, numsubstances);
+  declparam("atmos_mWQ", TDim::NDEFN, "0", "0", "3", "atmospheric solute deposit", "(mg/int)", &atmos_mWQ, &atmos_mWQ_lay, numsubstances);
 
-  declparam("soil_withdrawal", NDEFN, "[3]", "1", "4",
+  declparam("soil_withdrawal", TDim::NDEFN, "[3]", "1", "4",
       "Select water withdrawal function for soil type: 1 = sand, 2 = loam, 3 = clay, 4 = organic. soil_withdrawal[1] - rechr layer, soil_withdrawal[2] - lower layer", "()",
       &soil_withdrawal, &soil_withdrawal_Tables, 2);
 
@@ -356,7 +356,7 @@ void ClassWQ_Soil::decl(void) {
 
   //declstatvar("*", "conc_soil_moist", "(mg/l)", &conc_soil_moist, &conc_soil_moist_lay);
 
-  declstatvar("conc_soil_moist", NDEFN, "concentration in soil_moist: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
+  declstatvar("conc_soil_moist", TDim::NDEFN, "concentration in soil_moist: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
       "(i_srp=3) SRP, (i_dop=4) DOP, (i_pp=5) PP, (i_oc=6) OC", "(mg/l)", &conc_soil_moist, &conc_soil_moist_lay, numsubstances);
 
   declgetvar("*", "infil", "(mm/int)", &infil);
@@ -367,55 +367,55 @@ void ClassWQ_Soil::decl(void) {
 
   meltrunoffDiv = declgetvar("*", "meltrunoff", "(mm/int)", &meltrunoff);
 
-  decllocal("redirected_residual_0", NHRU, "", "", &redirected_residual_0);
+  decllocal("redirected_residual_0", TDim::NHRU, "", "", &redirected_residual_0);
 
-  decllocal("Sd_0", NHRU, "Depression storage.", "(mm)", &Sd_0);
+  decllocal("Sd_0", TDim::NHRU, "Depression storage.", "(mm)", &Sd_0);
 
-  decllocal("gw_0", NHRU, "ground water storage.", "(mm)", &gw_0);
+  decllocal("gw_0", TDim::NHRU, "ground water storage.", "(mm)", &gw_0);
 
-  decllocal("soil_rechr_0", NHRU, "moisture content of soil recharge zone.", "(mm)", &soil_rechr_0);
+  decllocal("soil_rechr_0", TDim::NHRU, "moisture content of soil recharge zone.", "(mm)", &soil_rechr_0);
 
-  decllocal("soil_moist_0", NHRU, "moisture content of soil profile to the depth.", "(mm)", &soil_moist_0);
+  decllocal("soil_moist_0", TDim::NHRU, "moisture content of soil profile to the depth.", "(mm)", &soil_moist_0);
 
-  decllocal("soil_lower_0", NHRU, "moisture content of soil profile to the depth.", "(mm)", &soil_lower_0);
+  decllocal("soil_lower_0", TDim::NHRU, "moisture content of soil profile to the depth.", "(mm)", &soil_lower_0);
 
-  decllocal("gw_flow_0", NHRU, "Drainage from HRU ground water reservoir.", "(mm/int)", &gw_flow_0);
+  decllocal("gw_flow_0", TDim::NHRU, "Drainage from HRU ground water reservoir.", "(mm/int)", &gw_flow_0);
 
-  decllocal("hru_cum_actet_0", NHRU, "cumulative saved evaporation.", "(mm*km^2)", &hru_cum_actet_0);
+  decllocal("hru_cum_actet_0", TDim::NHRU, "cumulative saved evaporation.", "(mm*km^2)", &hru_cum_actet_0);
 
-  decllocal("cum_soil_runoff_0", NHRU, "cumulative saved runoff.", "(mm*km^2)", &cum_soil_runoff_0);
+  decllocal("cum_soil_runoff_0", TDim::NHRU, "cumulative saved runoff.", "(mm*km^2)", &cum_soil_runoff_0);
 
-  decllocal("cum_redirected_residual_0", NHRU, "cumulative saved redirected_residual to another HRU.", "(mm*km^2)", &cum_redirected_residual_0);
+  decllocal("cum_redirected_residual_0", TDim::NHRU, "cumulative saved redirected_residual to another HRU.", "(mm*km^2)", &cum_redirected_residual_0);
 
-  decllocal("cum_soil_ssr_0", NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr_0);
+  decllocal("cum_soil_ssr_0", TDim::NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr_0);
 
-  decllocal("cum_rechr_ssr_0", NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr_0);
+  decllocal("cum_rechr_ssr_0", TDim::NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr_0);
 
-  decllocal("hru_actet_0", NDEFN, "","(mm/int)", &hru_actet_0);
+  decllocal("hru_actet_0", TDim::NDEFN, "","(mm/int)", &hru_actet_0);
 
-  decllocal("cum_hru_condense_0", NHRU, "cumulative condensation over HRU.", "(mm)", &cum_hru_condense_0);
+  decllocal("cum_hru_condense_0", TDim::NHRU, "cumulative condensation over HRU.", "(mm)", &cum_hru_condense_0);
 
-  decllocal("cum_Sd_evap_0", NHRU, "cumulative Sd evaporation(included in hru_actet).", "(mm)", &cum_Sd_evap_0);
+  decllocal("cum_Sd_evap_0", TDim::NHRU, "cumulative Sd evaporation(included in hru_actet).", "(mm)", &cum_Sd_evap_0);
 
-  decllocal("cum_Sd_ssr_0", NHRU, "Accumulation of Sd excess from a HRU to ssr.", "(mm)", &cum_Sd_ssr_0);
+  decllocal("cum_Sd_ssr_0", TDim::NHRU, "Accumulation of Sd excess from a HRU to ssr.", "(mm)", &cum_Sd_ssr_0);
 
-  declstatvar("cum_Sd_gw_0", NHRU, "Accumulation of Sd excess from a HRU to gw.", "(mm)", &cum_Sd_gw_0);
+  declstatvar("cum_Sd_gw_0", TDim::NHRU, "Accumulation of Sd excess from a HRU to gw.", "(mm)", &cum_Sd_gw_0);
 
-  decllocal("cum_lower_ssr_0", NHRU, "Accumulation of Sd excess from a HRU to ssr.", "(mm)", &cum_lower_ssr_0);
+  decllocal("cum_lower_ssr_0", TDim::NHRU, "Accumulation of Sd excess from a HRU to ssr.", "(mm)", &cum_lower_ssr_0);
 
-  decllocal("cum_infil_act_0", NHRU, "Accumulation of the actual amount of water infiltrating the soil on each HRU.", "(mm)", &cum_infil_act_0);
+  decllocal("cum_infil_act_0", TDim::NHRU, "Accumulation of the actual amount of water infiltrating the soil on each HRU.", "(mm)", &cum_infil_act_0);
 
-  decllocal("cum_gw_flow_0", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow_0);
+  decllocal("cum_gw_flow_0", TDim::NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow_0);
 
-  decllocal("cum_soil_runoff_0", NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff_0);
+  decllocal("cum_soil_runoff_0", TDim::NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff_0);
 
-  decllocal("cum_runoff_to_Sd_0", NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd_0);
+  decllocal("cum_runoff_to_Sd_0", TDim::NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd_0);
 
-  decllocal("cum_runoff_to_ssr_0", NHRU, "Cumulative portion of runoff to interflow(ssr).", "(mm/int)", &cum_runoff_to_ssr_0);
+  decllocal("cum_runoff_to_ssr_0", TDim::NHRU, "Cumulative portion of runoff to interflow(ssr).", "(mm/int)", &cum_runoff_to_ssr_0);
 
-  decllocal("cum_soil_gw_0", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw_0);
+  decllocal("cum_soil_gw_0", TDim::NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw_0);
 
-  decllocal("cum_solute_deposit_0", NHRU, "cumulative solute deposit left by evaporation.", "(mg)", &cum_solute_deposit_0);
+  decllocal("cum_solute_deposit_0", TDim::NHRU, "cumulative solute deposit left by evaporation.", "(mg)", &cum_solute_deposit_0);
 
 }
 
@@ -427,30 +427,30 @@ void ClassWQ_Soil::init(void) {
   }
 
   FaultsAllowed = 0;
-  nhru = getdim(NHRU);
-  nlay = getdim(NLAY);
+  nhru = getdim(TDim::NHRU);
+  nlay = getdim(TDim::NLAY);
 
   if(snowinfilDiv > 1){
     string S = "Soil:  \"snowinfil\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(evapDiv > 1){
     string S = "Soil:  \"hru_evap\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(meltrunoffDiv > 1){
     string S = "Netroute:  \"meltrunoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(runoffDiv > 1){
     string S = "Netroute:  \"runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -486,21 +486,21 @@ void ClassWQ_Soil::init(void) {
         if(soil_rechr[hh] > soil_moist[hh]) {
           soil_rechr[hh] = soil_moist[hh];
           string S = string("'") + Name + " (Soil)' Soil_rechr greater than soil_moist, soil_rechr set to soil_moist, hru = " + to_string(hh).c_str();
-          CRHMException TExcept(S.c_str(), WARNING);
+          CRHMException TExcept(S.c_str(), TExcept::WARNING);
           LogError(TExcept);
           throw TExcept;
         }
 
         if(soil_rechr_max[hh] > soil_moist_max[hh]) {
           string S = string("'") + Name + " (Soil)' Soil_rechr_max cannot be greater than soil_moist_max in hru = " + to_string(hh+1).c_str();
-          CRHMException TExcept(S.c_str(), TERMINATE);
+          CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
           LogError(TExcept);
           throw TExcept;
         }
 
         if(Sdinit[hh] > Sdmax[hh]) {
           string S = string("'") + Name + " (Soil)' Initial value of depression storage is greater than the maximum value in hru = " + to_string(hh+1).c_str();
-          CRHMException Except(S.c_str() ,TERMINATE);
+          CRHMException Except(S.c_str() , TExcept::TERMINATE);
           LogError(Except);
           throw Except;
         }
@@ -508,7 +508,7 @@ void ClassWQ_Soil::init(void) {
         if(variation == VARIATION_1){
           if(culvert_water_Dmax[hh]/culvert_diam[hh] > 2.5){
             string S = "soil: " + string(Name.c_str()) +  " ratio of H/D > 2.5 in HRU " + to_string(hh+1);
-            CRHMException TExcept(S.c_str(), WARNING);
+            CRHMException TExcept(S.c_str(), TExcept::WARNING);
             LogError(TExcept);
           }
           culvert_water_V[hh] = 0.0;
@@ -554,7 +554,7 @@ void ClassWQ_Soil::init(void) {
 void ClassWQ_Soil::run(void) {
 
   try{
-  float excs, excs_mWQ, condense, et, direct_excs_Saved, direct_excs_mWQ_lay_Saved, potential_Saved, potential_mWQ_lay_Saved,
+      double excs, excs_mWQ, condense, et, direct_excs_Saved{0.0}, direct_excs_mWQ_lay_Saved{0.0}, potential_Saved, potential_mWQ_lay_Saved,
         leaching_mWQ;
 
   long step = getstep();
@@ -736,7 +736,7 @@ void ClassWQ_Soil::run(void) {
           soil_moist_conc_lay[Sub][hh] = (conc_soil_lower_lay[Sub][hh]*soil_lower[hh] + leaching_mWQ + conc_soil_rechr_lay[Sub][hh]*soil_rechr[hh])/soil_moist[hh];
 
           if(soil_moist[hh] > soil_moist_max[hh]){
-            float excs0 = soil_moist[hh] - soil_moist_max[hh];
+            double excs0 = soil_moist[hh] - soil_moist_max[hh];
             soil_moist_conc_lay[Sub][hh] = (soil_moist_conc_lay[Sub][hh]*soil_moist[hh] - excs_mWQ*excs0/excs); // amount used
 
             conc_soil_lower_lay[Sub][hh] = (soil_moist_conc_lay[Sub][hh] - conc_soil_rechr_lay[Sub][hh]*soil_rechr[hh]); // amount used
@@ -788,13 +788,13 @@ void ClassWQ_Soil::run(void) {
           //'               tile_flowV[hh][1]=tile_flow[hh][1]*hru_area[1]// tile flow in HRU1 in mm*km^2/hr''
 
             if(tile_flow[hh] > 0.0){
-              // float Actual = soil_rechr[hh]/soil_rechr_max[hh]*tile_flow[hh]; // take out of recharge layer
-              float Actual = tile_flow[hh]; // take out of recharge layer (Diogo: not sure -> Tom's version is above)
-              float from_soil_rechr_to_tile_wq = 0.0f;
-              float from_soil_lower_to_tile_wq = 0.0f;
+              // double Actual = soil_rechr[hh]/soil_rechr_max[hh]*tile_flow[hh]; // take out of recharge layer
+              double Actual = tile_flow[hh]; // take out of recharge layer (Diogo: not sure -> Tom's version is above)
+              double from_soil_rechr_to_tile_wq = 0.0f;
+              double from_soil_lower_to_tile_wq = 0.0f;
               if(Actual > soil_rechr[hh]){// limit to available water
                 // rechr_ssr[hh] = soil_rechr[hh];
-                float from_soil_rechr_to_tile_wq = soil_rechr[hh];
+                double from_soil_rechr_to_tile_wq = soil_rechr[hh];
                 soil_rechr[hh] = 0.0f;
                 if (Actual > soil_moist[hh]){ // removed all soil_moist
                   tile_flow[hh] = soil_moist[hh];
@@ -807,7 +807,7 @@ void ClassWQ_Soil::run(void) {
               }else{
                 soil_rechr[hh] -= Actual;
                 soil_moist[hh] -= Actual;
-                float from_soil_rechr_to_tile = Actual;
+                double from_soil_rechr_to_tile = Actual;
               };
 
               soil_lower[hh] = soil_moist[hh] - soil_rechr[hh];
@@ -825,14 +825,17 @@ void ClassWQ_Soil::run(void) {
               soil_rechr[hh] -= rechr_ssr[hh];
               rechr_ssr_conc_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh];
 
-              if(soil_rechr[hh] < 0.0){
+              if(soil_rechr[hh] < 0.0)
+              {
                 soil_moist[hh] -= soil_rechr[hh];
                 soil_rechr[hh] = 0.0;
                 conc_soil_rechr_lay[Sub][hh] = 0.0;
               }
               else
+              {
                 soil_moist[hh] -= rechr_ssr[hh];
-
+              }
+               
               soil_lower[hh] = soil_moist[hh] - soil_rechr[hh];
               soil_moist_conc_lay[Sub][hh] = (conc_soil_lower_lay[Sub][hh]*soil_lower[hh] + soil_rechr[hh]*conc_soil_rechr_lay[Sub][hh])/soil_moist[hh];
             } // handle non variation ssr
@@ -844,15 +847,18 @@ void ClassWQ_Soil::run(void) {
 
   //  Handle excess to gw
 
-        float s2gw_k = soil_gw_K[hh]/Global::Freq;
+        double s2gw_k = soil_gw_K[hh]/Global::Freq;
         if(s2gw_k > 0)
-          if(direct_excs[hh] >= s2gw_k) { // to gw 03/04/10 changed from >
+          if(direct_excs[hh] >= s2gw_k) 
+          { // to gw 03/04/10 changed from >
             soil_gw[hh] = s2gw_k; // soil_gw[hh] = s2gw_k; // ?? Diogo: shouldn't it be += ?
             soil_gw_conc_lay[Sub][hh] = direct_excs_mWQ_lay[Sub][hh]/direct_excs[hh]; // ?? Diogo: if the above question is true, then this needs to be changed
             direct_excs_mWQ_lay[Sub][hh] -= soil_gw_conc_lay[Sub][hh]*s2gw_k;
             direct_excs[hh] -= s2gw_k;
           }
-          else { // to gw
+          else 
+          { 
+            // to gw
             soil_gw[hh] = direct_excs[hh]; // ?? Diogo: shouldn't it be += ?
             soil_gw_conc_lay[Sub][hh] = direct_excs_mWQ_lay[Sub][hh]/direct_excs[hh]; // ?? Diogo: if the above question is true, then this needs to be changed
             direct_excs[hh] = 0.0;
@@ -879,7 +885,7 @@ void ClassWQ_Soil::run(void) {
             excs_mWQ += atmos_mWQ_lay[Sub][hh];
       }
 
-      float runoff_to_Sd = 0.0;
+      double runoff_to_Sd = 0.0;
 
       soil_runoff[hh] = direct_excs[hh] + meltrunoff_buf[hh] + runoff_buf[hh] + redirected_residual[hh]/hru_area[hh]; // last term (mm*km^2/int) -> critical for outflow calc
 
@@ -889,9 +895,9 @@ void ClassWQ_Soil::run(void) {
         else
           scf[hh] = 0.0;
 
-        float amount_surfs = sr_mix_rate[hh]* surfsoil_solub_mWQ_lay[Sub][hh]*(1.0 - scf[hh]); 
+        double amount_surfs = sr_mix_rate[hh]* surfsoil_solub_mWQ_lay[Sub][hh]*(1.0 - scf[hh]); 
 
-        amount_surfs = std::fmin(std::max(amount_surfs,0.0f),surfsoil_solub_mWQ_lay[Sub][hh]);
+        amount_surfs = std::fmin(std::max(amount_surfs,0.0),surfsoil_solub_mWQ_lay[Sub][hh]);
         surfsoil_solub_mWQ_lay[Sub][hh] -= amount_surfs;
 
         soil_runoff_cWQ_lay[Sub][hh] = (excs_mWQ + direct_excs_mWQ_lay[Sub][hh] + meltrunoff_buf[hh]*SWE_conc_lay[Sub][hh] +
@@ -914,11 +920,11 @@ void ClassWQ_Soil::run(void) {
       redirected_residual_conc_lay[Sub][hh] = 0.0;
 
       if(soil_runoff[hh] > 0.0 && Sdmax[hh] > 0.0){
-        float Fix = -12.0;
+        double Fix = -12.0;
         if(soil_runoff[hh]/Sdmax[hh] < 12.0) // Diogo: what is this? (comes from an equation that is need below?)
           Fix = -soil_runoff[hh]/Sdmax[hh];
 
-        float Ds = (Sdmax[hh] - Sd[hh])*(1 - exp(Fix));
+        double Ds = (Sdmax[hh] - Sd[hh])*(1 - exp(Fix));
 
         if(soil_moist_max[hh] <= 0.0) // handle pond
           Ds = Sdmax[hh] - Sd[hh];
@@ -952,7 +958,7 @@ void ClassWQ_Soil::run(void) {
 
       if(variation == VARIATION_1){
 
-        float culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
+        double culvert_C[5] = {0.5, 0.6, 0.7, 0.75, 0.97};
 
         culvert_water_H[hh] = 0.0;
         culvert_water_A[hh] = 0.0;
@@ -974,7 +980,7 @@ void ClassWQ_Soil::run(void) {
 
             if(culvert_water_H[hh] > culvert_water_Dmax[hh]){ // (m) overflow over road
               culvert_water_H[hh] = culvert_water_Dmax[hh]; // (m)
-              float maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
+              double maxVol = pow(culvert_water_Dmax[hh], 3.0)/(3.0*channel_slope[hh]*side_slope[hh]); // (m3)
 
               culvert_over_Q[hh] = (culvert_water_V[hh] - maxVol)/86400.0*Global::Freq; // (m3) to (m3/int)
               culvert_water_V[hh] = maxVol; // (m3)
@@ -989,7 +995,7 @@ void ClassWQ_Soil::run(void) {
             if(HD[hh] <= 0.0)
               culvert_Q[hh] = 0.0;
             else if(HD[hh] < 1.5)
-              culvert_Q[hh] = max <float>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
+              culvert_Q[hh] = max <double>((-0.544443*pow(HD[hh], 4.0) + 0.221892*pow(HD[hh], 3.0) + 2.29756*pow(HD[hh], 2.0)
                    + 0.159413*HD[hh] + 0.00772254)*culvert_C[culvert_type[hh]]*number_culverts[hh]*pow(culvert_diam[hh], 2.5), 0.0); // (m3/s)
             else
               culvert_Q[hh] = culvert_C[culvert_type[hh]]*number_culverts[hh]*0.785*pow(culvert_diam[hh], 2.5)*sqrt(2.0*9.81*(HD[hh] - 0.5));
@@ -1015,7 +1021,7 @@ void ClassWQ_Soil::run(void) {
       cum_runoff_to_Sd_mWQ_lay[Sub][hh] += runoff_to_Sd*soil_runoff_cWQ_lay[Sub][hh];
 
       if(Sd[hh] > 0.0 && Sd_gw_K[hh] > 0.0){
-        float Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
+        double Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
         if(Sd2gw_k > Sd[hh])
           Sd2gw_k = Sd[hh];
 
@@ -1059,7 +1065,7 @@ void ClassWQ_Soil::run(void) {
       if(gw_max[hh] > 0.0 && gw_K[hh]){ // prevents divide by zero error // ?? Diogo: what is the basis for this splitting? don't understand
         gw_flow_conc_lay[Sub][hh] = gw_conc_lay[Sub][hh];
 
-        float spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
+        double spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
         gw[hh] -= spill;
         gw_flow[hh] += spill;
       }
@@ -1069,7 +1075,7 @@ void ClassWQ_Soil::run(void) {
       cum_gw_flow_mWQ_lay[Sub][hh] += gw_flow[hh]*gw_conc_lay[Sub][hh];
 
       if(Sd[hh] > 0.0 && Sd_ssr_K[hh] > 0.0){
-        float Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
+        double Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq; // WHY not proportional?
         if(Sd2ssr_k >= Sd[hh])
           Sd2ssr_k = Sd[hh];
 
@@ -1094,9 +1100,9 @@ void ClassWQ_Soil::run(void) {
         }
       }
 
-      float s2ssr_k = lower_ssr_K[hh]/Global::Freq;
+      double s2ssr_k = lower_ssr_K[hh]/Global::Freq;
       if(s2ssr_k > 0.00001){
-        float avail = soil_lower[hh];
+        double avail = soil_lower[hh];
         if(s2ssr_k >= avail)
           s2ssr_k = avail;
 
@@ -1122,9 +1128,9 @@ void ClassWQ_Soil::run(void) {
 
   //******Compute actual evapotranspiration
 
-      float culvert_pond = 0.0; // convert m3 to mm
+      double culvert_pond = 0.0; // convert m3 to mm
 
-      float culvert_evapL = 0;
+      double culvert_evapL = 0;
 
       if(variation == VARIATION_1 && culvert_water_V[hh] > 0.0 && hru_evap_buf[hh] > 0.0){ // conditions for culvert evaporation
         culvert_pond = culvert_water_V[hh]/(hru_area[hh]*1000.0); // convert m3 to mm over HRU area
@@ -1138,7 +1144,7 @@ void ClassWQ_Soil::run(void) {
         culvert_water_V[hh] = (culvert_pond - culvert_evapL)*(hru_area[hh]*1000.0); // remove evaporation from culvert pond and convert to volume
       }
 
-      float avail_evap = hru_evap_buf[hh] - culvert_evapL;
+      double avail_evap = hru_evap_buf[hh] - culvert_evapL;
       if(Sd[hh] + soil_moist[hh] + culvert_pond > 0.0)
         avail_evap *= (Sd[hh]/(Sd[hh] + soil_moist[hh]));
       else
@@ -1147,7 +1153,7 @@ void ClassWQ_Soil::run(void) {
       if(Sd[hh] > 0.0 && avail_evap > 0.0){
         if(Sd[hh] >= avail_evap){
           if(Sd[hh] - avail_evap < 0.0){
-            float Sdmass_2_soil = Sd_conc_lay[Sub][hh] * Sd[hh]; 
+            double Sdmass_2_soil = Sd_conc_lay[Sub][hh] * Sd[hh]; 
             Sd[hh] -= avail_evap;
             Sd[hh] = 0.0;
             Sd_conc_lay[Sub][hh] = 0.0;
@@ -1160,7 +1166,7 @@ void ClassWQ_Soil::run(void) {
             if(Sd[hh] > 0.05){ // Diogo: needed to avoid instability -> the water will be added to conc_soil_rechr
               Sd_conc_lay[Sub][hh] /= Sd[hh];
             }else{
-              float Sdmass_2_soil = Sd_conc_lay[Sub][hh] * Sd[hh]; 
+              double Sdmass_2_soil = Sd_conc_lay[Sub][hh] * Sd[hh]; 
               Sd_conc_lay[Sub][hh] = 0.0;
               Sd_to_soil_mass(Sdmass_2_soil); // function: add Sd mass to soil
             }
@@ -1168,7 +1174,7 @@ void ClassWQ_Soil::run(void) {
         }
         else {
           avail_evap = Sd[hh];
-          float Sdmass_2_soil = Sd_conc_lay[Sub][hh] * avail_evap; 
+          double Sdmass_2_soil = Sd_conc_lay[Sub][hh] * avail_evap; 
           Sd_conc_lay[Sub][hh] = 0.0;
           Sd[hh] = 0.0;
           Sd_to_soil_mass(Sdmass_2_soil); // function: add Sd mass to soil
@@ -1183,7 +1189,8 @@ void ClassWQ_Soil::run(void) {
 
       if(avail_evap > 0.0 && soil_moist[hh] > 0.0 && cov_type[hh] > 0){
 
-        float pctl, pctr, etl, ets, etr;
+        double pctl, pctr, etl, etr;
+        //double ets; varible is unreferenced commenting out for now - jhs507
 
         if((soil_moist_max[hh] - soil_rechr_max[hh]) > 0.0)
           pctl = (soil_moist[hh] - soil_rechr[hh])/(soil_moist_max[hh] - soil_rechr_max[hh]);
@@ -1335,8 +1342,8 @@ void ClassWQ_Soil::run(void) {
       {
         //string S = E.Message + " at " +
 		  string S = "Error" + string(" at ") + StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " (" + to_string(getstep()) + ") in '" + Global::OurModulesList->Strings[Global::CurrentModuleRun] +
-            "'" + " (" + FloatToStrF(Global::DTnow, ffGeneral, 10, 6) + ") hh = " + FloatToStrF(hh, ffGeneral, 6, 0) + " Sub = " + FloatToStrF(Sub, ffGeneral, 6, 0);
-        LogError(S, WARNING);
+            "'" + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 6) + ") hh = " + FloatToStrF(hh, TFloatFormat::ffGeneral, 6, 0) + " Sub = " + FloatToStrF(Sub, TFloatFormat::ffGeneral, 6, 0);
+        LogError(S, TExcept::WARNING);
         std::cout  << "Diogo: Exception occurred in \"ClassWQ_Soil::run\" " << std::endl;
         if(++FaultsAllowed == 1)
          throw;
@@ -1345,29 +1352,29 @@ void ClassWQ_Soil::run(void) {
 
 void ClassWQ_Soil::finish(bool good) {
 
-    float Allcum_soil_runoff = 0.0;
-    float Allcum_soil_ssr = 0.0;
-    float Allcum_rechr_ssr = 0.0;
-    float Allcum_soil_gw = 0.0;
-    float Allcum_gw_flow = 0.0;
-    float Allcum_infil_act = 0.0;
-    float Allcum_soil_moist_change = 0.0;
-    float Allcum_Sd_change = 0.0;
-    float Allcum_gw_change = 0.0;
-    float Allcum_evap = 0.0;
-    float Allcum_solute_deposit = 0.0;
+    double Allcum_soil_runoff = 0.0;
+    double Allcum_soil_ssr = 0.0;
+    double Allcum_rechr_ssr = 0.0;
+    double Allcum_soil_gw = 0.0;
+    double Allcum_gw_flow = 0.0;
+    double Allcum_infil_act = 0.0;
+    double Allcum_soil_moist_change = 0.0;
+    double Allcum_Sd_change = 0.0;
+    double Allcum_gw_change = 0.0;
+    double Allcum_evap = 0.0;
+    double Allcum_solute_deposit = 0.0;
 
-    float Allcum_soil_runoff_mWQ = 0.0;
-    float Allcum_soil_ssr_mWQ = 0.0;
-    float Allcum_rechr_ssr_mWQ = 0.0;
-    float Allcum_soil_gw_mWQ = 0.0;
-    float Allcum_gw_flow_mWQ = 0.0;
-    float Allcum_infil_act_mWQ = 0.0;
-    float Allcum_soil_moist_change_mWQ = 0.0;
-    float Allcum_Sd_change_mWQ = 0.0;
-    float Allcum_gw_change_mWQ = 0.0;
+    double Allcum_soil_runoff_mWQ = 0.0;
+    double Allcum_soil_ssr_mWQ = 0.0;
+    double Allcum_rechr_ssr_mWQ = 0.0;
+    double Allcum_soil_gw_mWQ = 0.0;
+    double Allcum_gw_flow_mWQ = 0.0;
+    double Allcum_infil_act_mWQ = 0.0;
+    double Allcum_soil_moist_change_mWQ = 0.0;
+    double Allcum_Sd_change_mWQ = 0.0;
+    double Allcum_gw_change_mWQ = 0.0;
 
-    float AllTotal = 0.0;
+    double AllTotal = 0.0;
 
     string S = string("H2O");
     LogDebug(S.c_str());
@@ -1400,7 +1407,7 @@ void ClassWQ_Soil::finish(bool good) {
       LogMessageA(hh, string("'" + Name + " (WQ_Soil)' cum_redirected_residual     (mm)   (mm*hru) (mm*hru/basin): ").c_str(), cum_redirected_residual[hh]/hru_area[hh], hru_area[hh], basin_area[0], " *** Added to this HRU surface runoff");
       LogDebug(" ");
 
-      float Total = cum_soil_runoff[hh] + cum_soil_ssr[hh] + cum_soil_gw[hh]
+      double Total = cum_soil_runoff[hh] + cum_soil_ssr[hh] + cum_soil_gw[hh]
                      + cum_runoff_to_Sd[hh] + cum_gw_flow[hh]
                      + (soil_moist[hh] - soil_moist_Init[hh]) + (Sd[hh] - Sd_Init[hh]) + (gw[hh] - gw_Init[hh]) + hru_cum_actet[hh]
                      - cum_redirected_residual[hh]/hru_area[hh];
@@ -1474,7 +1481,7 @@ void ClassWQ_Soil::finish(bool good) {
     Allcum_Sd_change_mWQ = 0.0;
     Allcum_gw_change_mWQ = 0.0;
 
-    float AllTotal = 0.0;
+    double AllTotal = 0.0;
 
     for(hh = 0; chkStruct(); ++hh) {
       LogMessageA(hh, string("'" + Name + " (WQ_Soil)' soil_rechr                  (mm)   (mm*hru) (mm*hru/basin): ").c_str(), soil_rechr[hh], hru_area[hh], basin_area[0], " *** information only - already included in 'soil_moist'.");
@@ -1527,7 +1534,7 @@ void ClassWQ_Soil::finish(bool good) {
       LogMessageA(hh, string("'" + Name + " (WQ_Soil)' cum_redirected_residual_mWQ (mg)   (mg*hru) (mg*hru/basin): ").c_str(), cum_redirected_residual_mWQ_lay[Sub][hh]/hru_area[hh], hru_area[hh], basin_area[0], " *** Added to this HRU surface runoff");
       LogDebug(" ");
 
-      float Total = cum_soil_runoff[hh] + cum_soil_ssr[hh] + cum_soil_gw[hh]
+      double Total = cum_soil_runoff[hh] + cum_soil_ssr[hh] + cum_soil_gw[hh]
                      + cum_runoff_to_Sd[hh] + cum_gw_flow[hh]
                      + (soil_moist[hh] - soil_moist_Init[hh]) + (Sd[hh] - Sd_Init[hh]) + (gw[hh] - gw_Init[hh]) + hru_cum_actet[hh]
                      - cum_redirected_residual[hh]/hru_area[hh];
@@ -1595,10 +1602,10 @@ void ClassWQ_Soil::finish(bool good) {
   } // sub 
 }
 
-float ClassWQ_Soil::FunctX(const float x){
-  float X = 0.0, F;
+double ClassWQ_Soil::FunctX(const double x){
+  double X = 0.0, F;
   for( long n = 1; n < 100; ++n){
-    float y = -2.0*n*x;
+    double y = -2.0*n*x;
     F = 4.0*exp(y)/(n*(1.0-exp(y)));
     X += F;
     if(fabs(F) < 0.001)
@@ -1607,7 +1614,7 @@ float ClassWQ_Soil::FunctX(const float x){
   return X;
 }
 
-void ClassWQ_Soil::Sd_to_soil_mass(float add_mass){
+void ClassWQ_Soil::Sd_to_soil_mass(double add_mass){
     if (soil_rechr[hh] > 0.0f){ // Diogo: goes to rechr if existant
       conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh]*soil_rechr[hh] + add_mass; // Diogo: just mass
       conc_soil_rechr_lay[Sub][hh] /= soil_rechr[hh];
@@ -1619,7 +1626,7 @@ void ClassWQ_Soil::Sd_to_soil_mass(float add_mass){
     }   
  };
 
-void ClassWQ_Soil::Set_WQ(const long hru, float *var, float *var_cWQ, float amount, float amount_cWQ){
+void ClassWQ_Soil::Set_WQ(const long hru, double *var, double *var_cWQ, double amount, double amount_cWQ){
 
   var[hru] = amount;
   if(amount > 0.0)
@@ -1628,12 +1635,12 @@ void ClassWQ_Soil::Set_WQ(const long hru, float *var, float *var_cWQ, float amou
     var_cWQ[hru] = 0.0;
 }
 
-void ClassWQ_Soil::copy_array(float *from, float *to){
+void ClassWQ_Soil::copy_array(double *from, double *to){
   for(hh = 0; chkStruct(); ++hh)
     to[hh] = from[hh];
 }
 
-void ClassWQ_Soil::restore_hru(float *from, float *to, long hh){
+void ClassWQ_Soil::restore_hru(double *from, double *to, long hh){
   to[hh] = from[hh];
 }
 
@@ -1694,12 +1701,12 @@ void ClassWQ_Soil::Save(){
   copy_array(cum_solute_deposit, cum_solute_deposit_0);
 }
 
-void ClassWQ_Soil::Reset_WQ(long hru, float *var, float *var_cWQ){
+void ClassWQ_Soil::Reset_WQ(long hru, double *var, double *var_cWQ){
   var[hru] = 0.0;
   var_cWQ[hru] = 0.0;
 }
 
-void ClassWQ_Soil::Reset_WQ(long hru, float *var, float **var_cWQ_lay){
+void ClassWQ_Soil::Reset_WQ(long hru, double *var, double **var_cWQ_lay){
   var[hru] = 0.0;
   for(long Sub = 0; Sub < numsubstances; Sub++){
     var_cWQ_lay[Sub][hru] = 0.0;
@@ -1718,170 +1725,170 @@ void ClassWQ_Netroute::decl(void) {
                     'uses Clark,' \
                     'uses Muskingum.'";
 
-  declvar("inflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &inflow);
+  declvar("inflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &inflow);
 
-  declvar("inflow_mWQ", NDEFN, "Mass: inflow from other HRUs", "(mg/l * mm*km^2/int)", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
+  declvar("inflow_mWQ", TDim::NDEFN, "Mass: inflow from other HRUs", "(mg/l * mm*km^2/int)", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
 
-  declstatvar("cuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &cuminflow);
+  declstatvar("cuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &cuminflow);
 
-  declstatvar("cuminflow_mWQ", NDEFN, "cumulative mass of solute inflow from other HRUs", "(mg/l * mm*km^2/int)", &cuminflow_mWQ, &cuminflow_mWQ_lay, numsubstances);
+  declstatvar("cuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute inflow from other HRUs", "(mg/l * mm*km^2/int)", &cuminflow_mWQ, &cuminflow_mWQ_lay, numsubstances);
 
-  declvar("outflow", NHRU, "HRU outflow", "(mm*km^2/int)", &outflow);
+  declvar("outflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &outflow);
 
-  declvar("outflow_mWQ", NDEFN, "Substance mass: HRU outflow", "(mg/l * mm*km^2/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
+  declvar("outflow_mWQ", TDim::NDEFN, "Substance mass: HRU outflow", "(mg/l * mm*km^2/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
 
-  declvar("outflow_cWQ", NDEFN, "Substance concentration: HRU outflow", "(mg/l)", &outflow_cWQ, &outflow_cWQ_lay, numsubstances);
+  declvar("outflow_cWQ", TDim::NDEFN, "Substance concentration: HRU outflow", "(mg/l)", &outflow_cWQ, &outflow_cWQ_lay, numsubstances);
 
-  declstatvar("cumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &cumoutflow);
+  declstatvar("cumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &cumoutflow);
 
-  declstatvar("cumoutflow_mWQ", NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &cumoutflow_mWQ, &cumoutflow_mWQ_lay, numsubstances);
+  declstatvar("cumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &cumoutflow_mWQ, &cumoutflow_mWQ_lay, numsubstances);
 
-  declvar("outflow_diverted", NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
+  declvar("outflow_diverted", TDim::NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
 
-  declvar("outflow_diverted_conc", NDEFN, "Concentration: HRU outflow diverted to another HRU", "(mg/l)", &outflow_diverted_conc, &outflow_diverted_conc_lay, numsubstances);
+  declvar("outflow_diverted_conc", TDim::NDEFN, "Concentration: HRU outflow diverted to another HRU", "(mg/l)", &outflow_diverted_conc, &outflow_diverted_conc_lay, numsubstances);
 
-  declstatvar("cumoutflow_diverted", NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
+  declstatvar("cumoutflow_diverted", TDim::NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
 
-  declstatvar("cumoutflow_diverted_mWQ", NDEFN, "cumulative mass of solute HRU outflow diverted to another HRU", "(mg/l * mm*km^2/int)", &cumoutflow_diverted_mWQ, &cumoutflow_diverted_mWQ_lay, numsubstances);
+  declstatvar("cumoutflow_diverted_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow diverted to another HRU", "(mg/l * mm*km^2/int)", &cumoutflow_diverted_mWQ, &cumoutflow_diverted_mWQ_lay, numsubstances);
 
-  declstatvar("cum_to_Sd", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
+  declstatvar("cum_to_Sd", TDim::NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
 
-  declstatvar("cum_to_Sd_mWQ", NDEFN, "cumulative mass of solute from other HRU to depressional storage (Sd) of this HRU", "(mg/l * mm*km^2/int)", &cum_to_Sd_mWQ, &cum_to_Sd_mWQ_lay, numsubstances);
+  declstatvar("cum_to_Sd_mWQ", TDim::NDEFN, "cumulative mass of solute from other HRU to depressional storage (Sd) of this HRU", "(mg/l * mm*km^2/int)", &cum_to_Sd_mWQ, &cum_to_Sd_mWQ_lay, numsubstances);
 
-  declstatvar("cum_to_soil_rechr", NHRU, "cumulative other HRU to soil_rechr of this HRU", "(mm)", &cum_to_soil_rechr);
+  declstatvar("cum_to_soil_rechr", TDim::NHRU, "cumulative other HRU to soil_rechr of this HRU", "(mm)", &cum_to_soil_rechr);
 
-  declstatvar("cum_to_soil_rechr_mWQ", NDEFN, "cumulative mass of solute from other HRU to soil_rechr of this HRU", "(mg/l * mm*km^2/int)", &cum_to_soil_rechr_mWQ, &cum_to_soil_rechr_mWQ_lay, numsubstances);
+  declstatvar("cum_to_soil_rechr_mWQ", TDim::NDEFN, "cumulative mass of solute from other HRU to soil_rechr of this HRU", "(mg/l * mm*km^2/int)", &cum_to_soil_rechr_mWQ, &cum_to_soil_rechr_mWQ_lay, numsubstances);
 
-  declvar("gwinflow", NHRU, "ground water inflow", "(mm*km^2/int)", &gwinflow);
+  declvar("gwinflow", TDim::NHRU, "ground water inflow", "(mm*km^2/int)", &gwinflow);
 
-  declvar("gwinflow_mWQ", NDEFN, "Concentration: ground water inflow", "(mg/l * mm*km^2/int)", &gwinflow_mWQ, &gwinflow_mWQ_lay, numsubstances);
+  declvar("gwinflow_mWQ", TDim::NDEFN, "Concentration: ground water inflow", "(mg/l * mm*km^2/int)", &gwinflow_mWQ, &gwinflow_mWQ_lay, numsubstances);
 
-  declstatvar("gwcuminflow", NHRU, "cumulative gw inflow", "(mm*km^2)", &gwcuminflow);
+  declstatvar("gwcuminflow", TDim::NHRU, "cumulative gw inflow", "(mm*km^2)", &gwcuminflow);
 
-  declstatvar("gwcuminflow_mWQ", NDEFN, "cumulative mass of solute gw inflow", "(mg/l * mm*km^2/int)", &gwcuminflow_mWQ, &gwcuminflow_mWQ_lay, numsubstances);
+  declstatvar("gwcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute gw inflow", "(mg/l * mm*km^2/int)", &gwcuminflow_mWQ, &gwcuminflow_mWQ_lay, numsubstances);
 
-  declvar("gwoutflow", NHRU, "HRU gw outflow", "(mm*km^2/int)", &gwoutflow);
+  declvar("gwoutflow", TDim::NHRU, "HRU gw outflow", "(mm*km^2/int)", &gwoutflow);
 
-  declvar("gwoutflow_mWQ", NDEFN, "Concentration: HRU gw outflow", "(mg/l * mm*km^2/int)", &gwoutflow_mWQ, &gwoutflow_mWQ_lay, numsubstances);
+  declvar("gwoutflow_mWQ", TDim::NDEFN, "Concentration: HRU gw outflow", "(mg/l * mm*km^2/int)", &gwoutflow_mWQ, &gwoutflow_mWQ_lay, numsubstances);
 
-  declstatvar("gwcumoutflow", NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
+  declstatvar("gwcumoutflow", TDim::NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
 
-  declstatvar("gwcumoutflow_mWQ", NDEFN, "cumulative mass of solute HRU gw outflow", "(mg/l * mm*km^2/int)", &gwcumoutflow_mWQ, &gwcumoutflow_mWQ_lay, numsubstances);
+  declstatvar("gwcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU gw outflow", "(mg/l * mm*km^2/int)", &gwcumoutflow_mWQ, &gwcumoutflow_mWQ_lay, numsubstances);
 
-  decldiag("gwoutflow_diverted", NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
+  decldiag("gwoutflow_diverted", TDim::NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
 
-  decldiag("gwoutflow_diverted_conc", NDEFN, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted_conc, &gwoutflow_diverted_conc_lay, numsubstances);
+  decldiag("gwoutflow_diverted_conc", TDim::NDEFN, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted_conc, &gwoutflow_diverted_conc_lay, numsubstances);
 
-  declstatvar("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
+  declstatvar("gwcumoutflow_diverted", TDim::NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
 
-  declstatvar("gwcumoutflow_diverted_mWQ", NDEFN, "cumulative mass of solute HRU gw outflow diverted to another HRU", "(mg/l * mm*km^2/int)", &gwcumoutflow_diverted_mWQ, &gwcumoutflow_diverted_mWQ_lay, numsubstances);
+  declstatvar("gwcumoutflow_diverted_mWQ", TDim::NDEFN, "cumulative mass of solute HRU gw outflow diverted to another HRU", "(mg/l * mm*km^2/int)", &gwcumoutflow_diverted_mWQ, &gwcumoutflow_diverted_mWQ_lay, numsubstances);
 
-  declvar("ssrinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
+  declvar("ssrinflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
 
-  declvar("ssrinflow_mWQ", NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &ssrinflow_mWQ, &ssrinflow_mWQ_lay, numsubstances);
+  declvar("ssrinflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &ssrinflow_mWQ, &ssrinflow_mWQ_lay, numsubstances);
 
-  declstatvar("ssrcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
+  declstatvar("ssrcuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
 
-  declstatvar("ssrcuminflow_mWQ", NDEFN, "cumulative mass of solute of inflow from other HRUs", "(mg/l * mm*km^2/int)", &ssrcuminflow_mWQ, &ssrcuminflow_mWQ_lay, numsubstances);
+  declstatvar("ssrcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute of inflow from other HRUs", "(mg/l * mm*km^2/int)", &ssrcuminflow_mWQ, &ssrcuminflow_mWQ_lay, numsubstances);
 
-  declvar("ssroutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
+  declvar("ssroutflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
 
-  declvar("ssroutflow_mWQ", NDEFN, "Concentration: HRU outflow", "(mg/l * mm*km^2/int)", &ssroutflow_mWQ, &ssroutflow_mWQ_lay, numsubstances);
+  declvar("ssroutflow_mWQ", TDim::NDEFN, "Concentration: HRU outflow", "(mg/l * mm*km^2/int)", &ssroutflow_mWQ, &ssroutflow_mWQ_lay, numsubstances);
 
-  declstatvar("ssrcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
+  declstatvar("ssrcumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
 
-  declstatvar("ssrcumoutflow_mWQ", NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &ssrcumoutflow_mWQ, &ssrcumoutflow_mWQ_lay, numsubstances);
+  declstatvar("ssrcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &ssrcumoutflow_mWQ, &ssrcumoutflow_mWQ_lay, numsubstances);
 
-  declstatvar("HRU_cumbasinflow", NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
+  declstatvar("HRU_cumbasinflow", TDim::NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
 
-  declstatvar("HRU_cumbasinflow_mWQ", NDEFN, "cumulative HRU to basinflow", "(mg/l * mm*km^2/int)", &HRU_cumbasinflow_mWQ, &HRU_cumbasinflow_mWQ_lay, numsubstances);
+  declstatvar("HRU_cumbasinflow_mWQ", TDim::NDEFN, "cumulative HRU to basinflow", "(mg/l * mm*km^2/int)", &HRU_cumbasinflow_mWQ, &HRU_cumbasinflow_mWQ_lay, numsubstances);
 
-  declvar("runinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
+  declvar("runinflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
 
-  declvar("runinflow_mWQ", NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &runinflow_mWQ, &runinflow_mWQ_lay, numsubstances);
+  declvar("runinflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &runinflow_mWQ, &runinflow_mWQ_lay, numsubstances);
 
-  declstatvar("runcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
+  declstatvar("runcuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
 
-  declstatvar("runcuminflow_mWQ", NDEFN, "cumulative mass of solute inflow from other HRUs", "(mg/l * mm*km^2/int)", &runcuminflow_mWQ, &runcuminflow_mWQ_lay, numsubstances);
+  declstatvar("runcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute inflow from other HRUs", "(mg/l * mm*km^2/int)", &runcuminflow_mWQ, &runcuminflow_mWQ_lay, numsubstances);
 
-  declvar("runoutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
+  declvar("runoutflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
 
-  declvar("runoutflow_mWQ", NDEFN, "Concentration: HRU outflow", "(mg/l * mm*km^2/int)", &runoutflow_mWQ, &runoutflow_mWQ_lay, numsubstances);
+  declvar("runoutflow_mWQ", TDim::NDEFN, "Concentration: HRU outflow", "(mg/l * mm*km^2/int)", &runoutflow_mWQ, &runoutflow_mWQ_lay, numsubstances);
 
-  declstatvar("runcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
+  declstatvar("runcumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
 
-  declstatvar("runcumoutflow_mWQ", NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &runcumoutflow_mWQ, &runcumoutflow_mWQ_lay, numsubstances);
+  declstatvar("runcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &runcumoutflow_mWQ, &runcumoutflow_mWQ_lay, numsubstances);
 
-  declstatvar("cum_preferential_flow_to_gw", NHRU, "cumulative other HRU's runoff to gw of this HRU via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
+  declstatvar("cum_preferential_flow_to_gw", TDim::NHRU, "cumulative other HRU's runoff to gw of this HRU via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
 
 
-  declvar("basinflow", BASIN, "basin surface and sub-surface outflow", "(m^3/int)", &basinflow);
+  declvar("basinflow", TDim::BASIN, "basin surface and sub-surface outflow", "(m^3/int)", &basinflow);
 
-  declvar("basinflow_conc", NDEF, "basin surface and sub-surface outflow", "(mg/l)", &basinflow_conc, &basinflow_conc_lay, numsubstances);
+  declvar("basinflow_conc", TDim::NDEF, "basin surface and sub-surface outflow", "(mg/l)", &basinflow_conc, &basinflow_conc_lay, numsubstances);
 
-  decldiag("basinflow_s", BASIN, "basin surface and sub-surface outflow", "(m^3/s)", &basinflow_s);
+  decldiag("basinflow_s", TDim::BASIN, "basin surface and sub-surface outflow", "(m^3/s)", &basinflow_s);
 
-  declvar("cumbasinflow", BASIN, "cumulative basin surface and sub-surface outflow", "(m^3)", &cumbasinflow);
+  declvar("cumbasinflow", TDim::BASIN, "cumulative basin surface and sub-surface outflow", "(m^3)", &cumbasinflow);
 
-  declvar("cumbasinflow_mWQ", NDEF, "cumulative mass of solute basin surface and sub-surface outflow", "(mg/l * mm*km^2/int)", &cumbasinflow_mWQ, &cumbasinflow_mWQ_lay, numsubstances);
+  declvar("cumbasinflow_mWQ", TDim::NDEF, "cumulative mass of solute basin surface and sub-surface outflow", "(mg/l * mm*km^2/int)", &cumbasinflow_mWQ, &cumbasinflow_mWQ_lay, numsubstances);
 
-  declvar("basingw", BASIN, "cumulative basin groundwater outflow", "(m^3/int)", &basingw);
+  declvar("basingw", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3/int)", &basingw);
 
-  declvar("basingw_conc", NDEF, "cumulative basin groundwater outflow", "(m^3/int)", &basingw_conc, &basingw_conc_lay, numsubstances);
+  declvar("basingw_conc", TDim::NDEF, "cumulative basin groundwater outflow", "(m^3/int)", &basingw_conc, &basingw_conc_lay, numsubstances);
 
-  decldiag("basingw_s", BASIN, "cumulative basin groundwater outflow", "(m^3/s)", &basingw_s);
+  decldiag("basingw_s", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3/s)", &basingw_s);
 
-  declstatvar("cumbasingw", BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
+  declstatvar("cumbasingw", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
 
-  declvar("cumbasingw_mWQ", NDEF, "cumulative mass of solute basin groundwater outflow", "(mg/l * mm*km^2/int)", &cumbasingw_mWQ, &cumbasingw_mWQ_lay, numsubstances);
+  declvar("cumbasingw_mWQ", TDim::NDEF, "cumulative mass of solute basin groundwater outflow", "(mg/l * mm*km^2/int)", &cumbasingw_mWQ, &cumbasingw_mWQ_lay, numsubstances);
 
 
-  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
+  decllocal("soil_ssr_Buf", TDim::NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
 
-  declvar("soil_ssr_Buf_conc", NDEFN, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf_conc, &soil_ssr_Buf_conc_lay, numsubstances);
+  declvar("soil_ssr_Buf_conc", TDim::NDEFN, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf_conc, &soil_ssr_Buf_conc_lay, numsubstances);
 
-  decllocal("soil_runoff_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
+  decllocal("soil_runoff_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
 
-  declvar("soil_runoff_Buf_conc", NDEFN, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf_conc, &soil_runoff_Buf_conc_lay, numsubstances);
+  declvar("soil_runoff_Buf_conc", TDim::NDEFN, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf_conc, &soil_runoff_Buf_conc_lay, numsubstances);
 
-  decllocal("soil_gw_Buf", NHRU, "buffer soil_gw(gw_flow) runoff", "(mm/d)", &soil_gw_Buf);
+  decllocal("soil_gw_Buf", TDim::NHRU, "buffer soil_gw(gw_flow) runoff", "(mm/d)", &soil_gw_Buf);
 
-  declvar("soil_gw_Buf_conc", NDEFN, "buffer soil_gw(gw_flow) runoff", "(mm/d)", &soil_gw_Buf_conc, &soil_gw_Buf_conc_lay, numsubstances);
+  declvar("soil_gw_Buf_conc", TDim::NDEFN, "buffer soil_gw(gw_flow) runoff", "(mm/d)", &soil_gw_Buf_conc, &soil_gw_Buf_conc_lay, numsubstances);
 
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e09", "Total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e09", "Total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e09", "HRU area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e09", "HRU area", "(km^2)", &hru_area);
 
-  declparam("Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "aggregated lag delay", "(h)", &Lag);
+  declparam("Lag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "aggregated lag delay", "(h)", &Lag);
 
-  declparam("ssrKstorage", NHRU, "[0.0]", "0.0","200.0", "subsurface runoff storage constant", "(d)", &ssrKstorage);
+  declparam("ssrKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "subsurface runoff storage constant", "(d)", &ssrKstorage);
 
-  declparam("ssrLag", NHRU, "[0.0]", "0.0","1.0E4.0", "subsurface runoff lag delay", "(h)", &ssrLag);
+  declparam("ssrLag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "subsurface runoff lag delay", "(h)", &ssrLag);
 
-  declparam("runKstorage", NHRU, "[0.0]", "0.0","200.0", "runoff storage constant", "(d)", &runKstorage);
+  declparam("runKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "runoff storage constant", "(d)", &runKstorage);
 
-  declparam("runLag", NHRU, "[0.0]", "0.0","1.0E4", "runoff lag delay", "(h)", &runLag);
+  declparam("runLag", TDim::NHRU, "[0.0]", "0.0","1.0E4", "runoff lag delay", "(h)", &runLag);
 
-  declparam("gwKstorage", NHRU, "[0.0]", "0.0","200.0", "gw storage constant", "(d)", &gwKstorage);
+  declparam("gwKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "gw storage constant", "(d)", &gwKstorage);
 
-  declparam("gwLag", NHRU, "[0.0]", "0.0","1.0E4", "gw lag delay", "(h)", &gwLag);
+  declparam("gwLag", TDim::NHRU, "[0.0]", "0.0","1.0E4", "gw lag delay", "(h)", &gwLag);
 
-  declparam("order", NHRU, "[1,2,3,4,5!]", "1","1000", "HRU routing process order", "()", &order);
+  declparam("order", TDim::NHRU, "[1,2,3,4,5!]", "1","1000", "HRU routing process order", "()", &order);
 
-  declparam("whereto", NHRU, "[0]", "0", "1000", "send to; 0 - basin outflow, or HRU input", "()", &whereto);
+  declparam("whereto", TDim::NHRU, "[0]", "0", "1000", "send to; 0 - basin outflow, or HRU input", "()", &whereto);
 
-  declparam("gwwhereto", NHRU, "[0]", "-1000", "1000", "send to: 0 - basingw, >0 - other HRU surface input <0 - other abs(-HRU) gw input, or (< -HRUmax or > +HRUmax) - surface basinflow", "()", &gwwhereto);
+  declparam("gwwhereto", TDim::NHRU, "[0]", "-1000", "1000", "send to: 0 - basingw, >0 - other HRU surface input <0 - other abs(-HRU) gw input, or (< -HRUmax or > +HRUmax) - surface basinflow", "()", &gwwhereto);
 
-  declparam("Sdmax", NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
+  declparam("Sdmax", TDim::NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
 
-  declparam("soil_rechr_max", NHRU, "[60.0]", "0.0", "350.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
+  declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
 
-  declparam("Sd_ByPass", NHRU, "[0]", "0", "1","0 - normal, 1 - Bypass Pond/Depressional storage (i.e. Sd).", "()", &Sd_ByPass);
+  declparam("Sd_ByPass", TDim::NHRU, "[0]", "0", "1","0 - normal, 1 - Bypass Pond/Depressional storage (i.e. Sd).", "()", &Sd_ByPass);
 
-  declparam("soil_rechr_ByPass", NHRU, "[1]", "0", "1","0 - normal, 1 - Bypass recharge layer (i.e. soil_rechr).", "()", &soil_rechr_ByPass);
+  declparam("soil_rechr_ByPass", TDim::NHRU, "[1]", "0", "1","0 - normal, 1 - Bypass recharge layer (i.e. soil_rechr).", "()", &soil_rechr_ByPass);
 
-  declparam("preferential_flow", NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
+  declparam("preferential_flow", TDim::NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
 
 
   soil_gwDiv = declgetvar("*", "gw_flow", "(mm/int)", &soil_gw);
@@ -1926,38 +1933,38 @@ void ClassWQ_Netroute::decl(void) {
   declputvar("*", "conc_soil_lower", "(mg/l)", &conc_soil_lower, &conc_soil_lower_lay);
 
 
-  decllocal("gwoutflow_0", NHRU, "", "", &gwoutflow_0);
+  decllocal("gwoutflow_0", TDim::NHRU, "", "", &gwoutflow_0);
 
-  decllocal("outflow_0", NHRU, "", "", &outflow_0);
+  decllocal("outflow_0", TDim::NHRU, "", "", &outflow_0);
 
 
   variation_set = VARIATION_1;
 
-  decllocal("Ktravel", NHRU, "travel time", "(d)", &Ktravel);
+  decllocal("Ktravel", TDim::NHRU, "travel time", "(d)", &Ktravel);
 
-  declparam("route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &route_n);
+  declparam("route_n", TDim::NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &route_n);
 
-  declparam("route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &route_R);
+  declparam("route_R", TDim::NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &route_R);
 
-  declparam("route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &route_S0);
+  declparam("route_S0", TDim::NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &route_S0);
 
-  declparam("route_L", NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
+  declparam("route_L", TDim::NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
 
-  declparam("route_X_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &route_X_M);
+  declparam("route_X_M", TDim::NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &route_X_M);
 
-  declparam("Channel_shp", NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
+  declparam("Channel_shp", TDim::NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
 
 
   variation_set = VARIATION_0;
 
-  declparam("Kstorage", NHRU, "[0.0]", "0.0","200.0", "aggregated storage constant", "(d)", &Kstorage);
+  declparam("Kstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "aggregated storage constant", "(d)", &Kstorage);
 
   variation_set = VARIATION_ORG;
 }
 
 void ClassWQ_Netroute::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   try {
     ssrDelay = new ClassClark(ssrinflow, ssroutflow, ssrKstorage, ssrLag, nhru);
@@ -1982,10 +1989,10 @@ void ClassWQ_Netroute::init(void) {
         Clark_hruDelay_mWQ[Sub] = new ClassClark(inflow_mWQ_lay[Sub], outflow_mWQ_lay[Sub], Kstorage, Lag, nhru);
     }
     else if(variation == VARIATION_1){
-      const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+      const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
       for(hh = 0; hh < nhru; ++hh){
-        float Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
+        double Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
         Ktravel[hh] = route_L[hh]/(Vw[route_Cshp[hh]]*Vavg)/86400.0; // (d)
       }
 
@@ -1994,7 +2001,7 @@ void ClassWQ_Netroute::init(void) {
       for(hh = 0; hh < nhru; ++hh){
         if(Ktravel[hh] >= (Global::Interval/(2.0*route_X_M[hh]))){
           string S = string("'" + Name + " (Netroute_M_D) Muskingum coefficient negative in HRU ").c_str() + to_string(hh+1);
-          CRHMException TExcept(S.c_str(), WARNING);
+          CRHMException TExcept(S.c_str(), TExcept::WARNING);
           LogError(TExcept);
         }
       } // for
@@ -2021,26 +2028,26 @@ void ClassWQ_Netroute::init(void) {
     } // VARIATION_1
   } // try
   catch (std::bad_alloc) {
-    CRHMException Except("Could not allocate in module CRACK." ,TERMINATE);
+    CRHMException Except("Could not allocate in module CRACK." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
   }
 
   if(soil_ssrDiv > 1){
     string S = "Netroute:  \"soil_ssr\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(soil_runoffDiv > 1){
     string S = "Netroute:  \"soil_runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(soil_gwDiv > 1){
     string S = "Netroute:  \"gw_flow\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -2116,7 +2123,7 @@ void ClassWQ_Netroute::init(void) {
 
     if(!OK){
         string SS = string("'" + Name + " (Netroute)' the 'order' parameter does not have a unique value for each HRU");
-        CRHMException Except(SS.c_str() ,ERR);
+        CRHMException Except(SS.c_str() , TExcept::ERR);
         LogError(Except);
         throw Except;
     }
@@ -2128,11 +2135,11 @@ void ClassWQ_Netroute::run(void) {
   long step = getstep();
   long nstep = step% Global::Freq;
 
-  float gw_Amount = 0.0;
-  float gw_Amount_mWQ = 0.0;
+  double gw_Amount = 0.0;
+  double gw_Amount_mWQ = 0.0;
 
-  float Amount = 0.0;
-  float Amount_mWQ = 0.0;
+  double Amount = 0.0;
+  double Amount_mWQ = 0.0;
 
   Reset_WQ(0, basinflow, basinflow_conc_lay);
   Reset_WQ(0, basingw, basingw_conc_lay);
@@ -2201,8 +2208,8 @@ void ClassWQ_Netroute::run(void) {
 
           if(abs(gwwhereto[hhh]) <= nhru){
             if(gwwhereto[hhh] > 0){ // direct to HRU surface
-              float free = soil_rechr_max[hh] - soil_rechr[hh];
-              //float free_mWQ = Amount_mWQ*free/gw_Amount;
+              double free = soil_rechr_max[hh] - soil_rechr[hh];
+              //double free_mWQ = Amount_mWQ*free/gw_Amount;
 
               if(free > 0.0 && !soil_rechr_ByPass[hh]){
                 if(free > gw_Amount){ // units (mm*km^2/int)
@@ -2225,7 +2232,7 @@ void ClassWQ_Netroute::run(void) {
                   gw_Amount_mWQ = 0.0;
                 }
                 else {
-                  float free_WQ_2rechr = gw_Amount_mWQ*free/gw_Amount;
+                  double free_WQ_2rechr = gw_Amount_mWQ*free/gw_Amount;
                   gw_Amount_mWQ = gw_Amount_mWQ*(gw_Amount - free)/gw_Amount;  
                   gw_Amount = (gw_Amount - free);
 
@@ -2264,7 +2271,7 @@ void ClassWQ_Netroute::run(void) {
                   gw_Amount_mWQ = 0.0;
                 }
                 else {
-                  float free_mWQ_2Sd = gw_Amount_mWQ*free/gw_Amount;
+                  double free_mWQ_2Sd = gw_Amount_mWQ*free/gw_Amount;
                   gw_Amount_mWQ = gw_Amount_mWQ*(gw_Amount - free)/gw_Amount;
 
                   Sd_conc_lay[Sub][hh] = Sd_conc_lay[Sub][hh]*Sd[hh] + free_mWQ_2Sd;
@@ -2396,8 +2403,8 @@ void ClassWQ_Netroute::run(void) {
             else{
               if(!soil_rechr_ByPass[hh]){
                 if(soil_rechr[hh] + Amount >= soil_rechr_max[hh]){ // units (mm*km^2/int)
-                  float Excess = soil_rechr[hh] + Amount - soil_rechr_max[hh];
-                  float Free = Amount - Excess;
+                  double Excess = soil_rechr[hh] + Amount - soil_rechr_max[hh];
+                  double Free = Amount - Excess;
 
                   conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh]*soil_rechr[hh] + Amount_mWQ * Free / (Amount);
                   conc_soil_rechr_lay[Sub][hh] /= (soil_rechr[hh] + Free);
@@ -2433,8 +2440,8 @@ void ClassWQ_Netroute::run(void) {
               } // if !soil_rechr_ByPass
               else if(!Sd_ByPass[hh] && Amount > 0.0){
                 if(Sd[hh] + Amount >= Sdmax[hh]){ // units (mm*km^2/int)
-                  float Excess = Sd[hh] + Amount - Sdmax[hh];
-                  float Free = Amount - Excess;
+                  double Excess = Sd[hh] + Amount - Sdmax[hh];
+                  double Free = Amount - Excess;
 
                   Sd_conc_lay[Sub][hh] = Sd_conc_lay[Sub][hh]*Sd[hh] + Amount_mWQ * Free/Amount;
                   Sd_conc_lay[Sub][hh] /= (Sd[hh] + Free);
@@ -2542,39 +2549,39 @@ void ClassWQ_Netroute::run(void) {
 void ClassWQ_Netroute::finish(bool good) {
 
 
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
+  double Allcuminflow = 0.0;
+  double Allcumoutflow = 0.0;
+  double Allcumoutflowdiverted = 0.0;
 
-  float Allcuminflow_mWQ = 0.0;
-  float Allcumoutflow_mWQ = 0.0;
-  float Allcumoutflowdiverted_mWQ = 0.0;
+  double Allcuminflow_mWQ = 0.0;
+  double Allcumoutflow_mWQ = 0.0;
+  double Allcumoutflowdiverted_mWQ = 0.0;
 
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
+  double Allgwcuminflow = 0.0;
+  double Allgwcumoutflow = 0.0;
+  double Allgwcumoutflowdiverted = 0.0;
 
-  float Allgwcuminflow_mWQ = 0.0;
-  float Allgwcumoutflow_mWQ = 0.0;
-  float Allgwcumoutflowdiverted_mWQ = 0.0;
+  double Allgwcuminflow_mWQ = 0.0;
+  double Allgwcumoutflow_mWQ = 0.0;
+  double Allgwcumoutflowdiverted_mWQ = 0.0;
 
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
+  double Allssrcuminflow = 0.0;
+  double Allssrcumoutflow = 0.0;
+  double Allruncuminflow = 0.0;
+  double Allruncumoutflow = 0.0;
 
-  float Allssrcuminflow_mWQ = 0.0;
-  float Allssrcumoutflow_mWQ = 0.0;
-  float Allruncuminflow_mWQ = 0.0;
-  float Allruncumoutflow_mWQ = 0.0;
+  double Allssrcuminflow_mWQ = 0.0;
+  double Allssrcumoutflow_mWQ = 0.0;
+  double Allruncuminflow_mWQ = 0.0;
+  double Allruncumoutflow_mWQ = 0.0;
 
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
+  double AllSdcuminflow = 0.0;
+  double Allrechrcuminflow = 0.0;
 
-  float AllSdcuminflow_mWQ = 0.0;
-  float Allrechrcuminflow_mWQ = 0.0;
-  float AllTotal = 0.0;
-  float Total;
+  double AllSdcuminflow_mWQ = 0.0;
+  double Allrechrcuminflow_mWQ = 0.0;
+  double AllTotal = 0.0;
+  double Total = 0.0;
 
   string S = string("H2O");
   LogDebug(S.c_str());
@@ -2791,22 +2798,22 @@ void ClassWQ_Netroute::finish(bool good) {
 }
 
 
-float ClassWQ_Netroute::Function1(float *I, long hh) {
+double ClassWQ_Netroute::Function1(double *I, long hh) {
   return runDelay->ChangeLag(I, hh);
 }
 
-float ClassWQ_Netroute::Function2(float *X, long hh) {
+double ClassWQ_Netroute::Function2(double *X, long hh) {
   return runDelay->ChangeStorage(X, hh);
 }
 
-void ClassWQ_Netroute::Reset_WQ(long hru, float *var, float **var_cWQ_lay){
+void ClassWQ_Netroute::Reset_WQ(long hru, double *var, double **var_cWQ_lay){
   var[hru] = 0.0;
   for(long Sub = 0; Sub < numsubstances; ++Sub){
     var_cWQ_lay[Sub][hru] = 0.0;
   }
 }
 
-void ClassWQ_Netroute::Set_WQ(const long hru, float *var, float *var_conc, float Amount, float amount_conc){
+void ClassWQ_Netroute::Set_WQ(const long hru, double *var, double *var_conc, double Amount, double amount_conc){
 
   var[hru] = Amount;
   if(Amount > 0.0)
@@ -2815,12 +2822,12 @@ void ClassWQ_Netroute::Set_WQ(const long hru, float *var, float *var_conc, float
     var_conc[hru] = 0.0;
 }
 
-void ClassWQ_Netroute::copy_array(float *from, float *to){
+void ClassWQ_Netroute::copy_array(double *from, double *to){
   for(hh = 0; chkStruct(); ++hh)
     to[hh] = from[hh];
 }
 
-void ClassWQ_Netroute::restore_hru(float *from, float *to, long hh){
+void ClassWQ_Netroute::restore_hru(double *from, double *to, long hh){
   to[hh] = from[hh];
 }
 
@@ -2861,156 +2868,156 @@ void ClassWQ_pbsm::decl(void) {
 
   variation_set = VARIATION_2 + VARIATION_3;
 
-  declparam("u_D", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed correction", "()", &u_D);
+  declparam("u_D", TDim::NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed correction", "()", &u_D);
 
-  declparam("Drift_offset", NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed drift offset correction", "()", &Drift_offset);
+  declparam("Drift_offset", TDim::NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed drift offset correction", "()", &Drift_offset);
 
-  declparam("Drift_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed drift slope correction", "()", &Drift_slope);
+  declparam("Drift_slope", TDim::NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed drift slope correction", "()", &Drift_slope);
 
-  declparam("Subl_offset", NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed sublimation offset correction", "()", &Subl_offset);
+  declparam("Subl_offset", TDim::NHRU, "[0.0]", "0.0", "100.0", "Daily windspeed sublimation offset correction", "()", &Subl_offset);
 
-  declparam("Subl_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed sublimation slope correction", "()", &Subl_slope);
+  declparam("Subl_slope", TDim::NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed sublimation slope correction", "()", &Subl_slope);
 
 
   variation_set = VARIATION_ORG;
 
 
-  declstatvar("SWE", NHRU, "snow water equivalent", "(mm)", &SWE);
+  declstatvar("SWE", TDim::NHRU, "snow water equivalent", "(mm)", &SWE);
 
-  declstatvar("SWE_max", NHRU, "snow water equivalent seasonal maximum", "(mm)", &SWE_max);
+  declstatvar("SWE_max", TDim::NHRU, "snow water equivalent seasonal maximum", "(mm)", &SWE_max);
 
-  declstatvar("SWE_conc", NDEFN, "snow water equivalent", "(mg/l)", &SWE_conc, &SWE_conc_lay, numsubstances);
+  declstatvar("SWE_conc", TDim::NDEFN, "snow water equivalent", "(mg/l)", &SWE_conc, &SWE_conc_lay, numsubstances);
 
-  declvar("Subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
+  declvar("Subl", TDim::NHRU, "interval sublimation", "(mm/int)", &Subl);
 
-  declvar("Subl_conc", NDEFN, "interval sublimation", "(mm/int)", &Subl_conc, &Subl_conc_lay, numsubstances);
+  declvar("Subl_conc", TDim::NDEFN, "interval sublimation", "(mm/int)", &Subl_conc, &Subl_conc_lay, numsubstances);
 
-  declvar("Drift_in", NHRU, "interval transport into HRU", "(mm/int)", &Drift_in);
+  declvar("Drift_in", TDim::NHRU, "interval transport into HRU", "(mm/int)", &Drift_in);
 
-  declvar("Drift_in_conc", NDEFN, "interval transport into HRU", "(mg/l)", &Drift_in_conc, &Drift_in_conc_lay, numsubstances);
+  declvar("Drift_in_conc", TDim::NDEFN, "interval transport into HRU", "(mg/l)", &Drift_in_conc, &Drift_in_conc_lay, numsubstances);
 
-  declvar("Drift_out", NHRU, "interval transport out of HRU", "(mm/int)", &Drift_out);
+  declvar("Drift_out", TDim::NHRU, "interval transport out of HRU", "(mm/int)", &Drift_out);
 
-  declvar("Drift_out_conc", NDEFN, "interval transport out of HRU", "(mg/l)", &Drift_out_conc, &Drift_out_conc_lay, numsubstances);
+  declvar("Drift_out_conc", TDim::NDEFN, "interval transport out of HRU", "(mg/l)", &Drift_out_conc, &Drift_out_conc_lay, numsubstances);
 
-  decldiag("DriftH", NHRU, "interval transport", "(mm/int)", &DriftH);
+  decldiag("DriftH", TDim::NHRU, "interval transport", "(mm/int)", &DriftH);
 
-  decldiag("SublH", NHRU, "interval sublimation", "(mm/int)", &SublH);
+  decldiag("SublH", TDim::NHRU, "interval sublimation", "(mm/int)", &SublH);
 
-  decldiag("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
+  decldiag("BasinSnowLoss", TDim::BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
 
-  decldiag("BasinSnowLoss_mWQ", NDEF, "transport out of basin", "(mg/l * mm*km^2/int)", &BasinSnowLoss_mWQ, &BasinSnowLoss_mWQ_lay, numsubstances);
+  decldiag("BasinSnowLoss_mWQ", TDim::NDEF, "transport out of basin", "(mg/l * mm*km^2/int)", &BasinSnowLoss_mWQ, &BasinSnowLoss_mWQ_lay, numsubstances);
 
-  decldiag("BasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm/int)", &BasinSnowGain);
+  decldiag("BasinSnowGain", TDim::BASIN, "cumulative transport to basin estimated from HRU 1", "(mm/int)", &BasinSnowGain);
 
-  decldiag("BasinSnowGain_mWQ", NDEF, "cumulative transport to basin estimated from HRU 1", "(mg/l * mm*km^2/int)", &BasinSnowGain_mWQ, &BasinSnowGain_mWQ_lay, numsubstances);
+  decldiag("BasinSnowGain_mWQ", TDim::NDEF, "cumulative transport to basin estimated from HRU 1", "(mg/l * mm*km^2/int)", &BasinSnowGain_mWQ, &BasinSnowGain_mWQ_lay, numsubstances);
 
-  declstatvar("cumSubl", NHRU, "cumulative sublimation", "(mm)", &cumSubl);
+  declstatvar("cumSubl", TDim::NHRU, "cumulative sublimation", "(mm)", &cumSubl);
 
-  declstatvar("cumSubl_mWQ", NDEFN, "cumulative sublimation solute", "(mg/l * mm*km^2/int)", &cumSubl_mWQ, &cumSubl_mWQ_lay, numsubstances);
+  declstatvar("cumSubl_mWQ", TDim::NDEFN, "cumulative sublimation solute", "(mg/l * mm*km^2/int)", &cumSubl_mWQ, &cumSubl_mWQ_lay, numsubstances);
 
-  declstatvar("cumDriftOut", NHRU, "cumulative transport from HRU", "(mm)", &cumDriftOut);
+  declstatvar("cumDriftOut", TDim::NHRU, "cumulative transport from HRU", "(mm)", &cumDriftOut);
 
-  declstatvar("cumDriftOut_mWQ", NDEFN, "mass solute from HRU", "(mg/l * mm*km^2/int)", &cumDriftOut_mWQ, &cumDriftOut_mWQ_lay, numsubstances);
+  declstatvar("cumDriftOut_mWQ", TDim::NDEFN, "mass solute from HRU", "(mg/l * mm*km^2/int)", &cumDriftOut_mWQ, &cumDriftOut_mWQ_lay, numsubstances);
 
-  declstatvar("cumBasinSnowLoss", BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
+  declstatvar("cumBasinSnowLoss", TDim::BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
 
-  declstatvar("cumBasinSnowLoss_mWQ", NDEF, "cumulative mass of solute transport out of basin", "(mg/l * mm*km^2/int)", &cumBasinSnowLoss_mWQ, &cumBasinSnowLoss_mWQ_lay, numsubstances);
+  declstatvar("cumBasinSnowLoss_mWQ", TDim::NDEF, "cumulative mass of solute transport out of basin", "(mg/l * mm*km^2/int)", &cumBasinSnowLoss_mWQ, &cumBasinSnowLoss_mWQ_lay, numsubstances);
 
-  declstatvar("cumBasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
+  declstatvar("cumBasinSnowGain", TDim::BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
 
-  declstatvar("cumBasinSnowGain_mWQ", NDEF, "cumulative mass of solute transport to basin estimated from HRU 1", "(mg/l * mm*km^2/int)", &cumBasinSnowGain_mWQ, &cumBasinSnowGain_mWQ_lay, numsubstances);
+  declstatvar("cumBasinSnowGain_mWQ", TDim::NDEF, "cumulative mass of solute transport to basin estimated from HRU 1", "(mg/l * mm*km^2/int)", &cumBasinSnowGain_mWQ, &cumBasinSnowGain_mWQ_lay, numsubstances);
 
-  declstatvar("cumDriftIn", NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
+  declstatvar("cumDriftIn", TDim::NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
 
-  declstatvar("cumDriftIn_mWQ", NDEFN, "cumulative mass of solute transport to HRU", "(mg/l * mm*km^2/int)", &cumDriftIn_mWQ, &cumDriftIn_mWQ_lay, numsubstances);
+  declstatvar("cumDriftIn_mWQ", TDim::NDEFN, "cumulative mass of solute transport to HRU", "(mg/l * mm*km^2/int)", &cumDriftIn_mWQ, &cumDriftIn_mWQ_lay, numsubstances);
 
-  decllocal("hru_basin", NHRU, "conversion factor", "()", &hru_basin);
+  decllocal("hru_basin", TDim::NHRU, "conversion factor", "()", &hru_basin);
 
-  decldiag("DrySnow", NHRU, "DrySnow", "()", &DrySnow);
+  decldiag("DrySnow", TDim::NHRU, "DrySnow", "()", &DrySnow);
 
-  declstatvar("SnowAge", NHRU, "SnowAge", "()", &SnowAge);
+  declstatvar("SnowAge", TDim::NHRU, "SnowAge", "()", &SnowAge);
 
-  declstatvar("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
+  declstatvar("cumSno", TDim::NHRU, "cumulative snow", "(mm)", &cumSno);
 
-  declstatvar("cumSno_mWQ", NDEFN, "cumulative mass of solute snow", "(mg/l * mm*km^2/int)", &cumSno_mWQ, &cumSno_mWQ_lay, numsubstances);
+  declstatvar("cumSno_mWQ", TDim::NDEFN, "cumulative mass of solute snow", "(mg/l * mm*km^2/int)", &cumSno_mWQ, &cumSno_mWQ_lay, numsubstances);
 
-  declvar("Prob", NHRU, "Probability", "()", &Prob);
+  declvar("Prob", TDim::NHRU, "Probability", "()", &Prob);
 
-  declvar("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
+  declvar("snowdepth", TDim::NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
 
-  decllocal("SWE_Init", NHRU, "initial SWE", "(mm)", &SWE_Init);
+  decllocal("SWE_Init", TDim::NHRU, "initial SWE", "(mm)", &SWE_Init);
 
 // parameters
 
-  declparam("fetch", NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
+  declparam("fetch", TDim::NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
 
-  declparam("distrib", NHRU, "[0.0, 1.0]", "-10.0", "10.0", "distribution fractions - can sum to 1", "()", &distrib);
+  declparam("distrib", TDim::NHRU, "[0.0, 1.0]", "-10.0", "10.0", "distribution fractions - can sum to 1", "()", &distrib);
 
-  declparam("N_S", NHRU, "[320]", "1", "500", "vegetation number density", "(1/m^2)", &N_S);
+  declparam("N_S", TDim::NHRU, "[320]", "1", "500", "vegetation number density", "(1/m^2)", &N_S);
 
-  declparam("A_S", NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
+  declparam("A_S", TDim::NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporatation, 1 -> inhibit", "()", &inhibit_evap);
+  declparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporatation, 1 -> inhibit", "()", &inhibit_evap);
 
-  declparam("inhibit_bs", NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
+  declparam("inhibit_bs", TDim::NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
 
-  declparam("inhibit_subl", NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
+  declparam("inhibit_subl", TDim::NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
 
-  declparam("rain_conc", NDEFN, "0", "0", "1000", "rain solute concentration", "(mg/l)", &rain_conc, &rain_conc_lay, numsubstances);
+  declparam("rain_conc", TDim::NDEFN, "0", "0", "1000", "rain solute concentration", "(mg/l)", &rain_conc, &rain_conc_lay, numsubstances);
 
-  declparam("snow_conc", NDEFN, "0", "0", "1000", "snow solute concentration", "(mg/l)", &snow_conc, &snow_conc_lay, numsubstances);
+  declparam("snow_conc", TDim::NDEFN, "0", "0", "1000", "snow solute concentration", "(mg/l)", &snow_conc, &snow_conc_lay, numsubstances);
 
-  declparam("atmos_mWQ", NDEFN, "0", "0", "10", "total basin area", "(mg/int)", &atmos_mWQ, &atmos_mWQ_lay, numsubstances);
+  declparam("atmos_mWQ", TDim::NDEFN, "0", "0", "10", "total basin area", "(mg/int)", &atmos_mWQ, &atmos_mWQ_lay, numsubstances);
 
 
-  decllocal("DrySnow_0", NHRU, "", "", &DrySnow_0);
+  decllocal("DrySnow_0", TDim::NHRU, "", "", &DrySnow_0);
 
-  decllocal("SnowAge_0", NHRU, "", "", &SnowAge_0);
+  decllocal("SnowAge_0", TDim::NHRU, "", "", &SnowAge_0);
 
-  decllocal("BasinSnowGain_0", NHRU, "", "", &BasinSnowGain_0);
+  decllocal("BasinSnowGain_0", TDim::NHRU, "", "", &BasinSnowGain_0);
 
-  decllocal("cumBasinSnowGain_0", NHRU, "", "", &cumBasinSnowGain_0);
+  decllocal("cumBasinSnowGain_0", TDim::NHRU, "", "", &cumBasinSnowGain_0);
 
-  decllocal("BasinSnowLoss_0", NHRU, "", "", &BasinSnowLoss_0);
+  decllocal("BasinSnowLoss_0", TDim::NHRU, "", "", &BasinSnowLoss_0);
 
-  decllocal("cumBasinSnowLoss_0", NHRU, "", "", &cumBasinSnowLoss_0);
+  decllocal("cumBasinSnowLoss_0", TDim::NHRU, "", "", &cumBasinSnowLoss_0);
 
-  decllocal("Subl_0", NHRU, "", "", &Subl_0);
+  decllocal("Subl_0", TDim::NHRU, "", "", &Subl_0);
 
-  decllocal("SublH_0", NHRU, "", "", &SublH_0);
+  decllocal("SublH_0", TDim::NHRU, "", "", &SublH_0);
 
-  decllocal("cumSubl_0", NHRU, "", "", &cumSubl_0);
+  decllocal("cumSubl_0", TDim::NHRU, "", "", &cumSubl_0);
 
-  decllocal("Drift_in_0", NHRU, "", "", &Drift_in_0);
+  decllocal("Drift_in_0", TDim::NHRU, "", "", &Drift_in_0);
 
-  decllocal("cumDriftIn_0", NHRU, "", "", &cumDriftIn_0);
+  decllocal("cumDriftIn_0", TDim::NHRU, "", "", &cumDriftIn_0);
 
-  decllocal("Drift_out_0", NHRU, "", "", &Drift_out_0);
+  decllocal("Drift_out_0", TDim::NHRU, "", "", &Drift_out_0);
 
-  decllocal("cumDriftOut_0", NHRU, "", "", &cumDriftOut_0);
+  decllocal("cumDriftOut_0", TDim::NHRU, "", "", &cumDriftOut_0);
 
-  decllocal("SWE_0", NHRU, "", "", &SWE_0);
+  decllocal("SWE_0", TDim::NHRU, "", "", &SWE_0);
 
-  decllocal("SWE_Init_0", NHRU, "", "", &SWE_Init_0);
+  decllocal("SWE_Init_0", TDim::NHRU, "", "", &SWE_Init_0);
 
-  decllocal("cumSno_0", NHRU, "", "", &cumSno_0);
+  decllocal("cumSno_0", TDim::NHRU, "", "", &cumSno_0);
 
-  decllocal("DriftH_0", NHRU, "", "", &DriftH_0);
+  decllocal("DriftH_0", TDim::NHRU, "", "", &DriftH_0);
 
-  decllocal("SublH_0", NHRU, "", "", &SublH_0);
+  decllocal("SublH_0", TDim::NHRU, "", "", &SublH_0);
 
-  decllocal("Prob_0", NHRU, "", "", &Prob_0);
+  decllocal("Prob_0", TDim::NHRU, "", "", &Prob_0);
 
-  decllocal("rho_0", NHRU, "", "", &rho_0);
+  decllocal("rho_0", TDim::NHRU, "", "", &rho_0);
 
-  decllocal("z_s_0", NHRU, "", "", &z_s_0);
+  decllocal("z_s_0", TDim::NHRU, "", "", &z_s_0);
 
   declgetvar("*", "hru_t", "(°C)", &hru_t);
   declgetvar("*", "hru_rh", "(%)", &hru_rh);
@@ -3021,7 +3028,7 @@ void ClassWQ_pbsm::decl(void) {
 
 void ClassWQ_pbsm::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   cumBasinSnowLoss[0] = 0.0;
   cumBasinSnowGain[0] = 0.0;
@@ -3053,7 +3060,7 @@ void ClassWQ_pbsm::init(void) {
     Prob[hh] = 0.0;
 
     if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
-      CRHMException TExcept(string("'" + Name + " (pbsm)' vegetation heights not in ascending order.").c_str(), WARNING);
+      CRHMException TExcept(string("'" + Name + " (pbsm)' vegetation heights not in ascending order.").c_str(), TExcept::WARNING);
       LogError(TExcept);
     }
   }
@@ -3065,8 +3072,8 @@ void ClassWQ_pbsm::init(void) {
 
 void ClassWQ_pbsm::run(void){
 
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float SumDrift, SumDrift_conc, total, transport;
+  double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+  double SumDrift, SumDrift_conc, total, transport;
   long Sub = 0;
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
@@ -3124,7 +3131,7 @@ void ClassWQ_pbsm::run(void){
 
          Ustn  = Ustar*sqrt((PBSM_constants::Beta*Lambda)/(1.0+PBSM_constants::Beta*Lambda));
 
-         Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *min <float> (0.0, Ustar-Ustn);
+         Uten_Prob = (log(10.0/Znod))/PBSM_constants::KARMAN *min <double> (0.0, Ustar-Ustn);
        }
        else
        {
@@ -3173,7 +3180,7 @@ void ClassWQ_pbsm::run(void){
    // distribute drift
 
     if(distrib[0] > 0.0 && Drift_out[0] > 0.0) { // simulate transport entering basin using HRU 1
-      float Drft = Drift_out[0]*distrib[0];
+      double Drft = Drift_out[0]*distrib[0];
       SWE_conc_lay[Sub][0] = (SWE_conc_lay[Sub][0]*SWE[0] + SWE_conc_lay[Sub][0]*Drft)/(SWE[0] + Drft);
       SWE[0] += Drft;
       cumDriftIn[0] += Drft;
@@ -3216,7 +3223,7 @@ void ClassWQ_pbsm::run(void){
 
           if(hh == nn) { // handle last HRU
             if(distrib[nn] > 0){
-              float In = SumDrift/hru_basin[hh]; // remaining drift
+              double In = SumDrift/hru_basin[hh]; // remaining drift
               Drift_in_conc_lay[Sub][hh] = SumDrift_conc;
               if(SWE_max[hh] > SWE[hh] + In){ // fill snowpack, remainder leaves basin
                 Drift_in[hh] = In;
@@ -3227,7 +3234,7 @@ void ClassWQ_pbsm::run(void){
                 transport = 0.0;
               }
               else if(SWE_max[hh] > SWE[hh]){ // cannot handle all
-                float used = SWE_max[hh] - SWE[hh];
+                double used = SWE_max[hh] - SWE[hh];
                 Drift_in[hh] = used;
                 Drift_in_conc_lay[Sub][hh] = SumDrift_conc;
                 cumDriftIn[hh] += Drift_in[hh];
@@ -3240,7 +3247,7 @@ void ClassWQ_pbsm::run(void){
                 transport = SumDrift;
             }
             else if(distrib[nn] < 0){ // all drift deposited
-                float used = SumDrift/hru_basin[hh];
+                double used = SumDrift/hru_basin[hh];
                 SWE_conc_lay[Sub][hh] = (SWE_conc_lay[Sub][hh]*SWE[hh] + SumDrift_conc*used)/(SWE[hh] + used);
                 Drift_in[hh] = used;
                 Drift_in_conc_lay[Sub][hh] = SumDrift_conc;
@@ -3309,8 +3316,8 @@ void ClassWQ_pbsm::finish(bool good) {
 
   if(!good) return;
 
-  float AllcumSubl = 0.0;
-  float AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
+  double AllcumSubl = 0.0;
+  double AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
   long Sub = 0;
 
   for(hh = 0; chkStruct(); ++hh) {
@@ -3347,13 +3354,13 @@ void ClassWQ_pbsm::finish(bool good) {
 
 }
 
-void ClassWQ_pbsm::Reset_WQ(long hru, float *var, float **var_WQ_lay){
+void ClassWQ_pbsm::Reset_WQ(long hru, double *var, double **var_WQ_lay){
   var[hru] = 0.0;
   for(long Sub = 0; Sub < numsubstances; ++Sub)
     var_WQ_lay[Sub][hru] = 0.0;
 }
 
-void ClassWQ_pbsm::copy_array(float *from, float *to){
+void ClassWQ_pbsm::copy_array(double *from, double *to){
   for(hh = 0; chkStruct(); ++hh)
     to[hh] = from[hh];
 }
@@ -3363,11 +3370,11 @@ void ClassWQ_pbsm::copy_array(long *from, long *to){
     to[hh] = from[hh];
 }
 
-void ClassWQ_pbsm::copy_basin(float *from, float *to){
+void ClassWQ_pbsm::copy_basin(double *from, double *to){
   to[0] = from[0];
 }
 
-void ClassWQ_pbsm::restore_hru(float *from, float *to, long hh){
+void ClassWQ_pbsm::restore_hru(double *from, double *to, long hh){
   to[hh] = from[hh];
 }
 
@@ -3431,183 +3438,183 @@ void ClassWQ_Netroute_M_D::decl(void) {
                     'uses Muskingum,' \
                     'uses Clark.'";
 
-  declvar("inflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &inflow);
+  declvar("inflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &inflow);
 
-  declvar("inflow_mWQ", NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
+  declvar("inflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
 
-  declstatvar("cuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &cuminflow);
+  declstatvar("cuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &cuminflow);
 
-  declstatvar("cuminflow_mWQ", NDEFN, "cumulative mass of solute inflow from other HRUs", "(g*km^2)", &cuminflow_mWQ, &cuminflow_mWQ_lay, numsubstances);
+  declstatvar("cuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute inflow from other HRUs", "(g*km^2)", &cuminflow_mWQ, &cuminflow_mWQ_lay, numsubstances);
 
-  declvar("outflow", NHRU, "HRU outflow", "(mm*km^2/int)", &outflow);
+  declvar("outflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &outflow);
 
-  declvar("outflow_mWQ", NDEFN, "Substance mass: HRU outflow", "(mg/l * mm*km^2/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
+  declvar("outflow_mWQ", TDim::NDEFN, "Substance mass: HRU outflow", "(mg/l * mm*km^2/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
   
-  declvar("outflow_cWQ", NDEFN, "Substance concentration: HRU outflow", "(mg/l * mm*km^2/int)", &outflow_cWQ, &outflow_cWQ_lay, numsubstances);
+  declvar("outflow_cWQ", TDim::NDEFN, "Substance concentration: HRU outflow", "(mg/l * mm*km^2/int)", &outflow_cWQ, &outflow_cWQ_lay, numsubstances);
 
-  declstatvar("cumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &cumoutflow);
+  declstatvar("cumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &cumoutflow);
 
-  declstatvar("cumoutflow_mWQ", NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &cumoutflow_mWQ, &cumoutflow_mWQ_lay, numsubstances);
+  declstatvar("cumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &cumoutflow_mWQ, &cumoutflow_mWQ_lay, numsubstances);
 
-  declvar("outflow_diverted", NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
+  declvar("outflow_diverted", TDim::NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
 
-  declvar("outflow_diverted_conc", NDEFN, "Concentration: HRU outflow diverted to another HRU", "(g/l)", &outflow_diverted_conc, &outflow_diverted_conc_lay, numsubstances);
+  declvar("outflow_diverted_conc", TDim::NDEFN, "Concentration: HRU outflow diverted to another HRU", "(g/l)", &outflow_diverted_conc, &outflow_diverted_conc_lay, numsubstances);
 
-  declstatvar("cumoutflow_diverted", NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
+  declstatvar("cumoutflow_diverted", TDim::NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
 
-  declstatvar("cumoutflow_diverted_mWQ", NDEFN, "cumulative mass of solute HRU outflow diverted to another HRU", "(mg/l * mm*km^2/int)", &cumoutflow_diverted_mWQ, &cumoutflow_diverted_mWQ_lay, numsubstances);
+  declstatvar("cumoutflow_diverted_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow diverted to another HRU", "(mg/l * mm*km^2/int)", &cumoutflow_diverted_mWQ, &cumoutflow_diverted_mWQ_lay, numsubstances);
 
-  declstatvar("cum_to_Sd", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
+  declstatvar("cum_to_Sd", TDim::NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
 
-  declstatvar("cum_to_Sd_mWQ", NDEFN, "cumulative mass of solute from other HRU to depressional storage (Sd) of this HRU", "(mg/l * mm*km^2/int)", &cum_to_Sd_mWQ, &cum_to_Sd_mWQ_lay, numsubstances);
+  declstatvar("cum_to_Sd_mWQ", TDim::NDEFN, "cumulative mass of solute from other HRU to depressional storage (Sd) of this HRU", "(mg/l * mm*km^2/int)", &cum_to_Sd_mWQ, &cum_to_Sd_mWQ_lay, numsubstances);
 
-  declstatvar("cum_to_soil_rechr", NHRU, "cumulative other HRU to soil_rechr of this HRU", "(mm)", &cum_to_soil_rechr);
+  declstatvar("cum_to_soil_rechr", TDim::NHRU, "cumulative other HRU to soil_rechr of this HRU", "(mm)", &cum_to_soil_rechr);
 
-  declstatvar("cum_to_soil_rechr_mWQ", NDEFN, "cumulative mass of solute from other HRU to soil_rechr of this HRU", "(mg/l * mm*km^2/int)", &cum_to_soil_rechr_mWQ, &cum_to_soil_rechr_mWQ_lay, numsubstances);
+  declstatvar("cum_to_soil_rechr_mWQ", TDim::NDEFN, "cumulative mass of solute from other HRU to soil_rechr of this HRU", "(mg/l * mm*km^2/int)", &cum_to_soil_rechr_mWQ, &cum_to_soil_rechr_mWQ_lay, numsubstances);
 
-  declvar("gwinflow", NHRU, "ground water inflow", "(mm*km^2/int)", &gwinflow);
+  declvar("gwinflow", TDim::NHRU, "ground water inflow", "(mm*km^2/int)", &gwinflow);
 
-  declvar("gwinflow_mWQ", NDEFN, "Concentration: ground water inflow", "(mg/l * mm*km^2/int)", &gwinflow_mWQ, &gwinflow_mWQ_lay, numsubstances);
+  declvar("gwinflow_mWQ", TDim::NDEFN, "Concentration: ground water inflow", "(mg/l * mm*km^2/int)", &gwinflow_mWQ, &gwinflow_mWQ_lay, numsubstances);
 
-  declstatvar("gwcuminflow", NHRU, "cumulative gw inflow", "(mm*km^2)", &gwcuminflow);
+  declstatvar("gwcuminflow", TDim::NHRU, "cumulative gw inflow", "(mm*km^2)", &gwcuminflow);
 
-  declstatvar("gwcuminflow_mWQ", NDEFN, "cumulative mass of solute gw inflow", "(mg/l * mm*km^2/int)", &gwcuminflow_mWQ, &gwcuminflow_mWQ_lay, numsubstances);
+  declstatvar("gwcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute gw inflow", "(mg/l * mm*km^2/int)", &gwcuminflow_mWQ, &gwcuminflow_mWQ_lay, numsubstances);
 
-  declvar("gwoutflow", NHRU, "HRU gw outflow", "(mm*km^2/int)", &gwoutflow);
+  declvar("gwoutflow", TDim::NHRU, "HRU gw outflow", "(mm*km^2/int)", &gwoutflow);
 
-  declvar("gwoutflow_mWQ", NDEFN, "Concentration: HRU gw outflow", "(mg/l * mm*km^2/int)", &gwoutflow_mWQ, &gwoutflow_mWQ_lay, numsubstances);
+  declvar("gwoutflow_mWQ", TDim::NDEFN, "Concentration: HRU gw outflow", "(mg/l * mm*km^2/int)", &gwoutflow_mWQ, &gwoutflow_mWQ_lay, numsubstances);
 
-  declstatvar("gwcumoutflow", NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
+  declstatvar("gwcumoutflow", TDim::NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
 
-  declstatvar("gwcumoutflow_mWQ", NDEFN, "cumulative mass of solute HRU gw outflow", "(mg/l * mm*km^2/int)", &gwcumoutflow_mWQ, &gwcumoutflow_mWQ_lay, numsubstances);
+  declstatvar("gwcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU gw outflow", "(mg/l * mm*km^2/int)", &gwcumoutflow_mWQ, &gwcumoutflow_mWQ_lay, numsubstances);
 
-  decldiag("gwoutflow_diverted", NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
+  decldiag("gwoutflow_diverted", TDim::NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
 
-  decldiag("gwoutflow_diverted_conc", NDEFN, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted_conc, &gwoutflow_diverted_conc_lay, numsubstances);
+  decldiag("gwoutflow_diverted_conc", TDim::NDEFN, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted_conc, &gwoutflow_diverted_conc_lay, numsubstances);
 
-  declstatvar("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
+  declstatvar("gwcumoutflow_diverted", TDim::NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
 
-  declstatvar("gwcumoutflow_diverted_mWQ", NDEFN, "cumulative mass of solute HRU gw outflow diverted to another HRU", "(mg/l * mm*km^2/int)", &gwcumoutflow_diverted_mWQ, &gwcumoutflow_diverted_mWQ_lay, numsubstances);
+  declstatvar("gwcumoutflow_diverted_mWQ", TDim::NDEFN, "cumulative mass of solute HRU gw outflow diverted to another HRU", "(mg/l * mm*km^2/int)", &gwcumoutflow_diverted_mWQ, &gwcumoutflow_diverted_mWQ_lay, numsubstances);
 
-  declvar("ssrinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
+  declvar("ssrinflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
 
-  declvar("ssrinflow_mWQ", NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &ssrinflow_mWQ, &ssrinflow_mWQ_lay, numsubstances);
+  declvar("ssrinflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &ssrinflow_mWQ, &ssrinflow_mWQ_lay, numsubstances);
 
-  declstatvar("ssrcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
+  declstatvar("ssrcuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
 
-  declstatvar("ssrcuminflow_mWQ", NDEFN, "cumulative mass of solute of inflow from other HRUs", "(mg/l * mm*km^2/int)", &ssrcuminflow_mWQ, &ssrcuminflow_mWQ_lay, numsubstances);
+  declstatvar("ssrcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute of inflow from other HRUs", "(mg/l * mm*km^2/int)", &ssrcuminflow_mWQ, &ssrcuminflow_mWQ_lay, numsubstances);
 
-  declvar("ssroutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
+  declvar("ssroutflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
 
-  declvar("ssroutflow_mWQ", NDEFN, "Concentration: HRU outflow", "(mg/l * mm*km^2/int)", &ssroutflow_mWQ, &ssroutflow_mWQ_lay, numsubstances);
+  declvar("ssroutflow_mWQ", TDim::NDEFN, "Concentration: HRU outflow", "(mg/l * mm*km^2/int)", &ssroutflow_mWQ, &ssroutflow_mWQ_lay, numsubstances);
 
-  declstatvar("ssrcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
+  declstatvar("ssrcumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
 
-  declstatvar("ssrcumoutflow_mWQ", NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &ssrcumoutflow_mWQ, &ssrcumoutflow_mWQ_lay, numsubstances);
+  declstatvar("ssrcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &ssrcumoutflow_mWQ, &ssrcumoutflow_mWQ_lay, numsubstances);
 
-  declstatvar("HRU_cumbasinflow", NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
+  declstatvar("HRU_cumbasinflow", TDim::NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
 
-  declstatvar("HRU_cumbasinflow_mWQ", NDEFN, "cumulative HRU to basinflow", "(mg/l * mm*km^2/int)", &HRU_cumbasinflow_mWQ, &HRU_cumbasinflow_mWQ_lay, numsubstances);
+  declstatvar("HRU_cumbasinflow_mWQ", TDim::NDEFN, "cumulative HRU to basinflow", "(mg/l * mm*km^2/int)", &HRU_cumbasinflow_mWQ, &HRU_cumbasinflow_mWQ_lay, numsubstances);
 
-  declvar("runinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
+  declvar("runinflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
 
-  declvar("runinflow_mWQ", NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &runinflow_mWQ, &runinflow_mWQ_lay, numsubstances);
+  declvar("runinflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &runinflow_mWQ, &runinflow_mWQ_lay, numsubstances);
 
-  declstatvar("runcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
+  declstatvar("runcuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
 
-  declstatvar("runcuminflow_mWQ", NDEFN, "cumulative mass of solute inflow from other HRUs", "(mg/l * mm*km^2/int)", &runcuminflow_mWQ, &runcuminflow_mWQ_lay, numsubstances);
+  declstatvar("runcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute inflow from other HRUs", "(mg/l * mm*km^2/int)", &runcuminflow_mWQ, &runcuminflow_mWQ_lay, numsubstances);
 
-  declvar("runoutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
+  declvar("runoutflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
 
-  declvar("runoutflow_mWQ", NDEFN, "Concentration: HRU outflow", "(mg/l * mm*km^2/int)", &runoutflow_mWQ, &runoutflow_mWQ_lay, numsubstances);
+  declvar("runoutflow_mWQ", TDim::NDEFN, "Concentration: HRU outflow", "(mg/l * mm*km^2/int)", &runoutflow_mWQ, &runoutflow_mWQ_lay, numsubstances);
 
-  declstatvar("runcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
+  declstatvar("runcumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
 
-  declstatvar("runcumoutflow_mWQ", NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &runcumoutflow_mWQ, &runcumoutflow_mWQ_lay, numsubstances);
+  declstatvar("runcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &runcumoutflow_mWQ, &runcumoutflow_mWQ_lay, numsubstances);
 
-  declstatvar("cum_preferential_flow_to_gw", NHRU, "cumulative other HRU's runoff to gw of this HRU via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
+  declstatvar("cum_preferential_flow_to_gw", TDim::NHRU, "cumulative other HRU's runoff to gw of this HRU via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
 
 
-  declvar("basinflow", BASIN, "basin surface and sub-surface outflow", "(m^3/int)", &basinflow);
+  declvar("basinflow", TDim::BASIN, "basin surface and sub-surface outflow", "(m^3/int)", &basinflow);
 
-  declvar("basinflow_conc", NDEF, "basin surface and sub-surface outflow", "(g/l)", &basinflow_conc, &basinflow_conc_lay, numsubstances);
+  declvar("basinflow_conc", TDim::NDEF, "basin surface and sub-surface outflow", "(g/l)", &basinflow_conc, &basinflow_conc_lay, numsubstances);
 
-  declvar("Used", NHRU, "directed to basinbasin surface and sub-surface outflow", "()", &Used);
+  declvar("Used", TDim::NHRU, "directed to basinbasin surface and sub-surface outflow", "()", &Used);
 
-  declvar("Used_mWQ", NDEFN, "directed to basinbasin surface and sub-surface outflow", "(mg/l * mm*km^2/int)", &Used_mWQ, &Used_mWQ_lay, numsubstances);
+  declvar("Used_mWQ", TDim::NDEFN, "directed to basinbasin surface and sub-surface outflow", "(mg/l * mm*km^2/int)", &Used_mWQ, &Used_mWQ_lay, numsubstances);
 
-  decldiag("basinflow_s", BASIN, "basin surface and sub-surface outflow", "(m^3/s)", &basinflow_s);
+  decldiag("basinflow_s", TDim::BASIN, "basin surface and sub-surface outflow", "(m^3/s)", &basinflow_s);
 
-  declstatvar("cumbasinflow", BASIN, "cumulative basin surface and sub-surface outflow", "(m^3)", &cumbasinflow);
+  declstatvar("cumbasinflow", TDim::BASIN, "cumulative basin surface and sub-surface outflow", "(m^3)", &cumbasinflow);
 
-  declvar("cumbasinflow_mWQ", NDEF, "cumulative mass of solute basin surface and sub-surface outflow", "(mg/l * mm*km^2/int)", &cumbasinflow_mWQ, &cumbasinflow_mWQ_lay, numsubstances);
+  declvar("cumbasinflow_mWQ", TDim::NDEF, "cumulative mass of solute basin surface and sub-surface outflow", "(mg/l * mm*km^2/int)", &cumbasinflow_mWQ, &cumbasinflow_mWQ_lay, numsubstances);
 
-  declvar("basingw", BASIN, "cumulative basin groundwater outflow", "(m^3/int)", &basingw);
+  declvar("basingw", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3/int)", &basingw);
 
-  declvar("basingw_conc", NDEF, "cumulative basin groundwater outflow", "(m^3/int)", &basingw_conc, &basingw_conc_lay, numsubstances);
+  declvar("basingw_conc", TDim::NDEF, "cumulative basin groundwater outflow", "(m^3/int)", &basingw_conc, &basingw_conc_lay, numsubstances);
 
-  decldiag("basingw_s", BASIN, "cumulative basin groundwater outflow", "(m^3/s)", &basingw_s);
+  decldiag("basingw_s", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3/s)", &basingw_s);
 
-  declstatvar("cumbasingw", BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
+  declstatvar("cumbasingw", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
 
-  declstatvar("cumbasingw_mWQ", NDEF, "cumulative mass of solute basin groundwater outflow", "(mg/l * mm*km^2/int)", &cumbasingw_mWQ, &cumbasingw_mWQ_lay, numsubstances);
+  declstatvar("cumbasingw_mWQ", TDim::NDEF, "cumulative mass of solute basin groundwater outflow", "(mg/l * mm*km^2/int)", &cumbasingw_mWQ, &cumbasingw_mWQ_lay, numsubstances);
 
 
-  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
+  decllocal("soil_ssr_Buf", TDim::NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
 
-  declvar("soil_ssr_Buf_conc", NDEFN, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf_conc, &soil_ssr_Buf_conc_lay, numsubstances);
+  declvar("soil_ssr_Buf_conc", TDim::NDEFN, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf_conc, &soil_ssr_Buf_conc_lay, numsubstances);
 
-  decllocal("soil_runoff_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
+  decllocal("soil_runoff_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
 
-  declvar("soil_runoff_Buf_conc", NDEFN, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf_conc, &soil_runoff_Buf_conc_lay, numsubstances);
+  declvar("soil_runoff_Buf_conc", TDim::NDEFN, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf_conc, &soil_runoff_Buf_conc_lay, numsubstances);
 
-  decllocal("soil_gw_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
+  decllocal("soil_gw_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
 
-  declvar("soil_gw_Buf_conc", NDEFN, "buffer soil_gw(gw_flow) runoff", "(mm/d)", &soil_gw_Buf_conc, &soil_gw_Buf_conc_lay, numsubstances);
+  declvar("soil_gw_Buf_conc", TDim::NDEFN, "buffer soil_gw(gw_flow) runoff", "(mm/d)", &soil_gw_Buf_conc, &soil_gw_Buf_conc_lay, numsubstances);
 
-  decllocal("distrib_sum", NHRU, "HRU distribution sum", "()", &distrib_sum);
+  decllocal("distrib_sum", TDim::NHRU, "HRU distribution sum", "()", &distrib_sum);
 
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e09", "Total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e09", "Total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e09", "HRU area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e09", "HRU area", "(km^2)", &hru_area);
 
-  declparam("Kstorage", NHRU, "[0.0]", "0.0","200.0", "HRU storage constant", "(d)", &Kstorage);
+  declparam("Kstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "HRU storage constant", "(d)", &Kstorage);
 
-  declparam("Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "HRU lag delay", "(h)", &Lag);
+  declparam("Lag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "HRU lag delay", "(h)", &Lag);
 
-  declparam("ssrKstorage", NHRU, "[0.0]", "0.0","200.0", "subsurface runoff storage constant", "(d)", &ssrKstorage);
+  declparam("ssrKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "subsurface runoff storage constant", "(d)", &ssrKstorage);
 
-  declparam("ssrLag", NHRU, "[0.0]", "0.0","1.0E4.0", "subsurface runoff lag delay", "(h)", &ssrLag);
+  declparam("ssrLag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "subsurface runoff lag delay", "(h)", &ssrLag);
 
-  declparam("runKstorage", NHRU, "[0.0]", "0.0","200.0", "runoff storage constant", "(d)", &runKstorage);
+  declparam("runKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "runoff storage constant", "(d)", &runKstorage);
 
-  declparam("runLag", NHRU, "[0.0]", "0.0","1.0E4", "runoff lag delay", "(h)", &runLag);
+  declparam("runLag", TDim::NHRU, "[0.0]", "0.0","1.0E4", "runoff lag delay", "(h)", &runLag);
 
-  declparam("gwKstorage", NHRU, "[0.0]", "0.0","200.0", "gw storage constant", "(d)", &gwKstorage);
+  declparam("gwKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "gw storage constant", "(d)", &gwKstorage);
 
-  declparam("gwLag", NHRU, "[0.0]", "0.0","1.0E4", "gw lag delay", "(h)", &gwLag);
+  declparam("gwLag", TDim::NHRU, "[0.0]", "0.0","1.0E4", "gw lag delay", "(h)", &gwLag);
 
-  declparam("gwwhereto", NHRU, "[0]", "-1000", "1000", "send to: 0 - basingw, >0 - other HRU surface input <0 - other abs(-HRU) gw input, or (< -HRUmax or > +HRUmax) - surface basinflow", "()", &gwwhereto);
+  declparam("gwwhereto", TDim::NHRU, "[0]", "-1000", "1000", "send to: 0 - basingw, >0 - other HRU surface input <0 - other abs(-HRU) gw input, or (< -HRUmax or > +HRUmax) - surface basinflow", "()", &gwwhereto);
 
-  declparam("order", NHRU, "[1,2,3,4,5!]", "1","1000", "HRU routing process order", "()", &order);
+  declparam("order", TDim::NHRU, "[1,2,3,4,5!]", "1","1000", "HRU routing process order", "()", &order);
 
-  declparam("distrib_Route", NDEFN, "[0.0]", "-1.0E6.0", "1.0E6.0", "route this HRU to these HRUs (distribute by area otherwise by fraction)", "()", &distrib, &distrib_hru, nhru);
+  declparam("distrib_Route", TDim::NDEFN, "[0.0]", "-1.0E6.0", "1.0E6.0", "route this HRU to these HRUs (distribute by area otherwise by fraction)", "()", &distrib, &distrib_hru, nhru);
 
-  declparam("distrib_Basin", NHRU, "[1.0]", "0.0", "100.0", "route this HRU to basin (and other HRU(s) determined by 'distrib_hru')", "()", &distrib_Basin);
+  declparam("distrib_Basin", TDim::NHRU, "[1.0]", "0.0", "100.0", "route this HRU to basin (and other HRU(s) determined by 'distrib_hru')", "()", &distrib_Basin);
 
-  declparam("Sdmax", NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
+  declparam("Sdmax", TDim::NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
 
-  declparam("soil_rechr_max", NHRU, "[60.0]", "0.0", "350.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
+  declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
 
-  declparam("Sd_ByPass", NHRU, "[0]", "0", "1","0 - normal, 1 - Bypass Pond/Depressional storage (i.e. Sd).", "()", &Sd_ByPass);
+  declparam("Sd_ByPass", TDim::NHRU, "[0]", "0", "1","0 - normal, 1 - Bypass Pond/Depressional storage (i.e. Sd).", "()", &Sd_ByPass);
 
-  declparam("soil_rechr_ByPass", NHRU, "[1]", "0", "1","0 - normal, 1 - Bypass recharge layer (i.e. soil_rechr).", "()", &soil_rechr_ByPass);
+  declparam("soil_rechr_ByPass", TDim::NHRU, "[1]", "0", "1","0 - normal, 1 - Bypass recharge layer (i.e. soil_rechr).", "()", &soil_rechr_ByPass);
 
 
-  declparam("order", NHRU, "[1,2,3,4,5!]", "1","1000", "HRU routing process order", "()", &order);
+  declparam("order", TDim::NHRU, "[1,2,3,4,5!]", "1","1000", "HRU routing process order", "()", &order);
 
-  declparam("preferential_flow", NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
+  declparam("preferential_flow", TDim::NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
 
 
   soil_gwDiv = declgetvar("*", "gw_flow", "(mm/int)", &soil_gw);
@@ -3654,31 +3661,31 @@ void ClassWQ_Netroute_M_D::decl(void) {
   declputvar("*", "conc_soil_lower", "(mg/l)", &conc_soil_lower, &conc_soil_lower_lay);
 
 
-  decllocal("gwoutflow_0", NHRU, "", "", &gwoutflow_0);
+  decllocal("gwoutflow_0", TDim::NHRU, "", "", &gwoutflow_0);
 
-  decllocal("outflow_0", NHRU, "", "", &outflow_0);
+  decllocal("outflow_0", TDim::NHRU, "", "", &outflow_0);
 
 
   variation_set = VARIATION_0;
 
-  decllocal("Ktravel", NHRU, "travel time", "(d)", &Ktravel);
+  decllocal("Ktravel", TDim::NHRU, "travel time", "(d)", &Ktravel);
 
-  declparam("route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &route_n);
+  declparam("route_n", TDim::NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &route_n);
 
-  declparam("route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &route_R);
+  declparam("route_R", TDim::NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &route_R);
 
-  declparam("route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &route_S0);
+  declparam("route_S0", TDim::NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &route_S0);
 
-  declparam("route_L", NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
+  declparam("route_L", TDim::NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
 
-  declparam("route_X_M", NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &route_X_M);
+  declparam("route_X_M", TDim::NHRU, "[0.25]", "0.0","0.5", "dimensionless weighting factor", "()", &route_X_M);
 
-  declparam("Channel_shp", NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
+  declparam("Channel_shp", TDim::NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
 
 
   variation_set = VARIATION_1;
 
-  declparam("Kstorage", NHRU, "[0.0]", "0.0","200.0", "aggregated storage constant", "(d)", &Kstorage);
+  declparam("Kstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "aggregated storage constant", "(d)", &Kstorage);
 
 
   variation_set = VARIATION_ORG;
@@ -3687,7 +3694,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
 void ClassWQ_Netroute_M_D::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   try {
     ssrDelay = new ClassClark(ssrinflow, ssroutflow, ssrKstorage, ssrLag, nhru);
@@ -3713,10 +3720,10 @@ void ClassWQ_Netroute_M_D::init(void) {
         Clark_hruDelay_mWQ[Sub] = new ClassClark(inflow_mWQ_lay[Sub], outflow_mWQ_lay[Sub], Kstorage, Lag, nhru);
     }
     else if(variation == VARIATION_ORG){
-      const float Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
+      const double Vw[3] = {1.67, 1.44, 1.33}; // rectangular - 0/parabolic - 1/triangular - 2
 
       for(hh = 0; hh < nhru; ++hh){
-        float Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
+        double Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
         Ktravel[hh] = route_L[hh]/(Vw[route_Cshp[hh]]*Vavg)/86400.0; // (d)
       }
 
@@ -3725,7 +3732,7 @@ void ClassWQ_Netroute_M_D::init(void) {
       for(hh = 0; hh < nhru; ++hh){
         if(Ktravel[hh] >= (Global::Interval/(2.0*route_X_M[hh]))){
           string S = string("'" + Name + " (Netroute_M_D) Muskingum coefficient negative in HRU ").c_str() + to_string(hh+1);
-          CRHMException TExcept(S.c_str(), WARNING);
+          CRHMException TExcept(S.c_str(), TExcept::WARNING);
           LogError(TExcept);
         }
       } // for
@@ -3752,26 +3759,26 @@ void ClassWQ_Netroute_M_D::init(void) {
     } // VARIATION_ORG
   } // try
   catch (std::bad_alloc) {
-    CRHMException Except("Could not allocate in module Netroute_M_D." ,TERMINATE);
+    CRHMException Except("Could not allocate in module Netroute_M_D." , TExcept::TERMINATE);
     LogError(Except);
     throw Except;
   }
 
   if(soil_ssrDiv > 1){
     string S = "WQ_Netroute_M_D:  \"soil_ssr\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(soil_runoffDiv > 1){
     string S = "WQ_Netroute_M_D:  \"soil_runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(soil_gwDiv > 1){
     string S = "WQ_Netroute_M_D:  \"gw_flow\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -3847,7 +3854,7 @@ void ClassWQ_Netroute_M_D::init(void) {
 
     if(!OK){
         string SS = string("'" + Name + " (Netroute)' the 'order' parameter does not have a unique value for each HRU");
-        CRHMException Except(SS.c_str() ,ERR);
+        CRHMException Except(SS.c_str() , TExcept::ERR);
         LogError(Except);
         throw Except;
     }
@@ -3859,11 +3866,11 @@ void ClassWQ_Netroute_M_D::run(void) {
   long step = getstep();
   long nstep = step%Global::Freq;
 
-  float Amount = 0.0;
-  float Amount_mWQ = 0.0;
+  double Amount = 0.0;
+  double Amount_mWQ = 0.0;
 
-  float gw_Amount = 0.0;
-  float gw_Amount_mWQ = 0.0;
+  double gw_Amount = 0.0;
+  double gw_Amount_mWQ = 0.0;
 
   for(hh = 0; chkStruct(hh); ++hh) { // do HRUs in sequence.
     if(nstep == 1){
@@ -3871,12 +3878,12 @@ void ClassWQ_Netroute_M_D::run(void) {
 
       for(long hhh = 0; chkStruct(hhh); ++hhh) { // do HRUs in sequence
         if(distrib_hru[hh][hhh] < 0.0) // distribute by area otherwise by fraction
-          const_cast<float **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
+          const_cast<double **> (distrib_hru) [hh][hhh] = -distrib_hru[hh][hhh]*hru_area[hh];
         distrib_sum[hh] += distrib_hru[hh][hhh];
       }
 
       if(distrib_sum[hh] <= 0 && distrib_Basin[hh] <= 0.0){
-        const_cast<float *> (distrib_Basin) [hh] = 1;
+        const_cast<double *> (distrib_Basin) [hh] = 1;
       }
 
       distrib_sum[hh] += distrib_Basin[hh];
@@ -3954,9 +3961,9 @@ void ClassWQ_Netroute_M_D::run(void) {
             gw_Amount_mWQ /= hru_area[hh];
 
             if(gwwhereto[hhh] > 0){ // direct to HRU surface
-              float Excess = soil_rechr_max[hh] + gw_Amount - soil_rechr[hh];
-              float Free = gw_Amount - Excess;
-              float Free_mWQ = gw_Amount_mWQ*Free/gw_Amount;
+              double Excess = soil_rechr_max[hh] + gw_Amount - soil_rechr[hh];
+              double Free = gw_Amount - Excess;
+              double Free_mWQ = gw_Amount_mWQ*Free/gw_Amount;
 
               if(Free > 0.0 && !soil_rechr_ByPass[hh]){
                 if(Free > gw_Amount){ // units (mm*km^2/int)
@@ -4191,8 +4198,8 @@ void ClassWQ_Netroute_M_D::run(void) {
             }
             else if(!soil_rechr_ByPass[To] && Amount > 0.0){ // assumes both Amount and Amount_mWQ divided by hru_area
               if(soil_rechr[To] + Amount >= soil_rechr_max[To]){ // units (mm*km^2/int)
-                float Excess = soil_rechr[To] + Amount - soil_rechr_max[To];
-                float Free = Amount - Excess;
+                double Excess = soil_rechr[To] + Amount - soil_rechr_max[To];
+                double Free = Amount - Excess;
 
                 if (soil_rechr[To] + Amount > minFlow_WQ){
                   conc_soil_rechr_lay[Sub][To] = conc_soil_rechr_lay[Sub][To]*soil_rechr[To] + Amount_mWQ;
@@ -4246,8 +4253,8 @@ void ClassWQ_Netroute_M_D::run(void) {
             else if(!Sd_ByPass[To] && Amount > 0.0){
 
               if(Sd[To] + Amount >= Sdmax[To]){ // units (mm*km^2/int)
-                float Excess = Sd[To] + Amount - Sdmax[To];
-                float Free = Amount - Excess;
+                double Excess = Sd[To] + Amount - Sdmax[To];
+                double Free = Amount - Excess;
 
                 if (Sd[To] + Amount>minFlow_WQ){
                   Sd_conc_lay[Sub][To] = Sd_conc_lay[Sub][To]*Sd[To] + Amount_mWQ * Free/Amount;
@@ -4352,39 +4359,39 @@ void ClassWQ_Netroute_M_D::run(void) {
 void ClassWQ_Netroute_M_D::finish(bool good){
 
 
-  float Allcuminflow = 0.0;
-  float Allcumoutflow = 0.0;
-  float Allcumoutflowdiverted = 0.0;
+  double Allcuminflow = 0.0;
+  double Allcumoutflow = 0.0;
+  double Allcumoutflowdiverted = 0.0;
 
-  float Allcuminflow_mWQ = 0.0;
-  float Allcumoutflow_mWQ = 0.0;
-  float Allcumoutflowdiverted_mWQ = 0.0;
+  double Allcuminflow_mWQ = 0.0;
+  double Allcumoutflow_mWQ = 0.0;
+  double Allcumoutflowdiverted_mWQ = 0.0;
 
-  float Allgwcuminflow = 0.0;
-  float Allgwcumoutflow = 0.0;
-  float Allgwcumoutflowdiverted = 0.0;
+  double Allgwcuminflow = 0.0;
+  double Allgwcumoutflow = 0.0;
+  double Allgwcumoutflowdiverted = 0.0;
 
-  float Allgwcuminflow_mWQ = 0.0;
-  float Allgwcumoutflow_mWQ = 0.0;
-  float Allgwcumoutflowdiverted_mWQ = 0.0;
+  double Allgwcuminflow_mWQ = 0.0;
+  double Allgwcumoutflow_mWQ = 0.0;
+  double Allgwcumoutflowdiverted_mWQ = 0.0;
 
-  float Allssrcuminflow = 0.0;
-  float Allssrcumoutflow = 0.0;
-  float Allruncuminflow = 0.0;
-  float Allruncumoutflow = 0.0;
+  double Allssrcuminflow = 0.0;
+  double Allssrcumoutflow = 0.0;
+  double Allruncuminflow = 0.0;
+  double Allruncumoutflow = 0.0;
 
-  float Allssrcuminflow_mWQ = 0.0;
-  float Allssrcumoutflow_mWQ = 0.0;
-  float Allruncuminflow_mWQ = 0.0;
-  float Allruncumoutflow_mWQ = 0.0;
+  double Allssrcuminflow_mWQ = 0.0;
+  double Allssrcumoutflow_mWQ = 0.0;
+  double Allruncuminflow_mWQ = 0.0;
+  double Allruncumoutflow_mWQ = 0.0;
 
-  float AllSdcuminflow = 0.0;
-  float Allrechrcuminflow = 0.0;
+  double AllSdcuminflow = 0.0;
+  double Allrechrcuminflow = 0.0;
 
-  float AllSdcuminflow_mWQ = 0.0;
-  float Allrechrcuminflow_mWQ = 0.0;
-  float AllTotal = 0.0;
-  float Total;
+  double AllSdcuminflow_mWQ = 0.0;
+  double Allrechrcuminflow_mWQ = 0.0;
+  double AllTotal = 0.0;
+  double Total = 0.0;
 
   string S = string("*H2O*");
   LogDebug(S.c_str());
@@ -4603,14 +4610,14 @@ void ClassWQ_Netroute_M_D::finish(bool good){
 }
 
 
-void ClassWQ_Netroute_M_D::Reset_WQ(long hru, float *var, float **var_WQ_lay){
+void ClassWQ_Netroute_M_D::Reset_WQ(long hru, double *var, double **var_WQ_lay){
   var[hru] = 0.0;
   for(long Sub = 0; Sub < numsubstances; ++Sub){
     var_WQ_lay[Sub][hru] = 0.0;
   }
 }
 
-void ClassWQ_Netroute_M_D::Set_WQ(const long hru, float *var, float *var_conc, float Amount, float amount_conc){
+void ClassWQ_Netroute_M_D::Set_WQ(const long hru, double *var, double *var_conc, double Amount, double amount_conc){
 
   var[hru] = Amount;
   if(Amount > 0.0)
@@ -4619,12 +4626,12 @@ void ClassWQ_Netroute_M_D::Set_WQ(const long hru, float *var, float *var_conc, f
     var_conc[hru] = 0.0;
 }
 
-void ClassWQ_Netroute_M_D::copy_array(float *from, float *to){
+void ClassWQ_Netroute_M_D::copy_array(double *from, double *to){
   for(hh = 0; chkStruct(); ++hh)
     to[hh] = from[hh];
 }
 
-void ClassWQ_Netroute_M_D::restore_hru(float *from, float *to, long hh){
+void ClassWQ_Netroute_M_D::restore_hru(double *from, double *to, long hh){
   to[hh] = from[hh];
 }
 
@@ -4644,11 +4651,11 @@ ClassWQ_Netroute_M_D* ClassWQ_Netroute_M_D::klone(string name) const{
   return new ClassWQ_Netroute_M_D(name);
 }
 
-float ClassWQ_Netroute_M_D::Function1(float *I, long hh) {
+double ClassWQ_Netroute_M_D::Function1(double *I, long hh) {
   return runDelay->ChangeLag(I, hh);
 }
 
-float ClassWQ_Netroute_M_D::Function2(float *X, long hh) {
+double ClassWQ_Netroute_M_D::Function2(double *X, long hh) {
   return runDelay->ChangeStorage(X, hh);
 }
 
@@ -4664,51 +4671,51 @@ void ClassWQ_Test_Hype::decl(void) {
 
   variation_set = VARIATION_1;
 
-  declvar("soil_moist", NHRU, "moisture content of soil of the HRU.", "(mm)", &soil_moist);
-  declvar("soil_rechr", NHRU, "moisture content of soil recharge zone of the HRU.", "(mm)", &soil_rechr);
-  declparam("soil_moist_0", NHRU, "[60]", "0","1000", "initial soil moisture.", "()", &soil_moist_0);
-  declparam("soil_rechr_0", NHRU, "[30]", "0","1000", "initial soil recharge.", "()", &soil_rechr_0);
-  declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile.", "(mm)", &soil_moist_max);
-  declparam("soil_rechr_max", NHRU, "[375.0]", "0.0", "5000.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
+  declvar("soil_moist", TDim::NHRU, "moisture content of soil of the HRU.", "(mm)", &soil_moist);
+  declvar("soil_rechr", TDim::NHRU, "moisture content of soil recharge zone of the HRU.", "(mm)", &soil_rechr);
+  declparam("soil_moist_0", TDim::NHRU, "[60]", "0","1000", "initial soil moisture.", "()", &soil_moist_0);
+  declparam("soil_rechr_0", TDim::NHRU, "[30]", "0","1000", "initial soil recharge.", "()", &soil_rechr_0);
+  declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile.", "(mm)", &soil_moist_max);
+  declparam("soil_rechr_max", TDim::NHRU, "[375.0]", "0.0", "5000.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
 
   variation_set = VARIATION_ORG;
 
-  declvar("infil", NHRU, "infil", "(mm/int)", &infil);
-  declvar("snowinfil", NHRU, "snowinfil", "(mm/int)", &snowinfil);
-  declvar("runoff", NHRU, "runoff", "(mm/int)", &runoff);
-  declvar("meltrunoff", NHRU, "meltrunoff", "(mm/int)", &meltrunoff);
-  declvar("hru_evap", NHRU, "hru_evap", "(mm/int)", &hru_evap);
-  declvar("hru_cum_evap", NHRU, "hru_cum_evap", "(mm)", &hru_cum_evap);
-  declvar("hru_cum_actet", NHRU, "hru_cum_actet", "(mm)", &hru_cum_actet);
-  declvar("hru_actet", NHRU, "hru_actet", "(mm/int)", &hru_actet);
-  declvar("net_rain", NHRU, "net_rain", "(mm/int)", &net_rain);
-  declvar("SWE", NHRU, "SWE", "(mm)", &SWE);
-  declvar("SWE_max", NHRU, "maximum seasonal SWE", "(mm)", &SWE_max);
-  declvar("hru_t", NHRU, "hru_t", "(mm/int)", &hru_t);
-  declvar("SWE_conc", NDEFN, "SWE_conc", "(mg/l)", &SWE_conc, &SWE_conc_lay, numsubstances);
+  declvar("infil", TDim::NHRU, "infil", "(mm/int)", &infil);
+  declvar("snowinfil", TDim::NHRU, "snowinfil", "(mm/int)", &snowinfil);
+  declvar("runoff", TDim::NHRU, "runoff", "(mm/int)", &runoff);
+  declvar("meltrunoff", TDim::NHRU, "meltrunoff", "(mm/int)", &meltrunoff);
+  declvar("hru_evap", TDim::NHRU, "hru_evap", "(mm/int)", &hru_evap);
+  declvar("hru_cum_evap", TDim::NHRU, "hru_cum_evap", "(mm)", &hru_cum_evap);
+  declvar("hru_cum_actet", TDim::NHRU, "hru_cum_actet", "(mm)", &hru_cum_actet);
+  declvar("hru_actet", TDim::NHRU, "hru_actet", "(mm/int)", &hru_actet);
+  declvar("net_rain", TDim::NHRU, "net_rain", "(mm/int)", &net_rain);
+  declvar("SWE", TDim::NHRU, "SWE", "(mm)", &SWE);
+  declvar("SWE_max", TDim::NHRU, "maximum seasonal SWE", "(mm)", &SWE_max);
+  declvar("hru_t", TDim::NHRU, "hru_t", "(mm/int)", &hru_t);
+  declvar("SWE_conc", TDim::NDEFN, "SWE_conc", "(mg/l)", &SWE_conc, &SWE_conc_lay, numsubstances);
 
 
-  declparam("runoff_0", NHRU, "[0.0]", "0.0", "100.0", "runoff_0", "(mm/int)", &runoff_0);
-  declparam("infil_0", NHRU, "[0.0]", "0.0", "100.0", "infil_0", "(mm/int)", &infil_0);
-  declparam("snowinfil_0", NHRU, "[0.0]", "0.0", "100.0", "snowinfil_0", "(mm/int)", &snowinfil_0);
-  declparam("runoff_0", NHRU, "[0.0]", "0.0", "100.0", "runoff_0", "(mm/int)", &runoff_0);
-  declparam("meltrunoff_0", NHRU, "[0.0]", "0.0", "100.0", "meltrunoff_0", "(mm/int)", &meltrunoff_0);
-  declparam("hru_evap_0", NHRU, "[0.0]", "0.0", "100.0", "hru_evap_0", "(mm/int)", &hru_evap_0);
-  declparam("hru_actet_0", NHRU, "[0.0]", "0.0", "100.0", "hru_actet_0", "(mm/int)", &hru_actet_0);
-  declparam("hru_cum_evap_0", NHRU, "[0.0]", "0.0", "100.0", "hru_cum_evap_0", "(mm/int)", &hru_cum_evap_0);
-  declparam("hru_cum_actet_0", NHRU, "[0.0]", "0.0", "100.0", "hru_cum_actet_0", "(mm/int)", &hru_cum_evap_0);
-  declparam("net_rain_0", NHRU, "[0.0]", "0.0", "100.0", "net rain", "(mm/int)", &net_rain_0);
-  declparam("SWE_0", NHRU, "[0.0]", "0.0", "500.0", "SWE", "(mm)", &SWE_0);
-  declparam("hru_t_0", NHRU, "[20.0]", "-50.0", "100.0", "hru_t_0", "(mm/int)", &hru_t_0);
-  declparam("SWE_conc_0", NDEFN, "[0.0]", "0.0", "100.0", "SWE_conc_0", "(mg/l)", &SWE_conc_0, &SWE_conc_lay_0, numsubstances);
-  declparam("Julian_start", NHRU, "[30]", "0","366", "enable input.", "()", &Julian_start);
-  declparam("Julian_end", NHRU, "[30]", "0","366", "disable input.", "()", &Julian_end);
+  declparam("runoff_0", TDim::NHRU, "[0.0]", "0.0", "100.0", "runoff_0", "(mm/int)", &runoff_0);
+  declparam("infil_0", TDim::NHRU, "[0.0]", "0.0", "100.0", "infil_0", "(mm/int)", &infil_0);
+  declparam("snowinfil_0", TDim::NHRU, "[0.0]", "0.0", "100.0", "snowinfil_0", "(mm/int)", &snowinfil_0);
+  declparam("runoff_0", TDim::NHRU, "[0.0]", "0.0", "100.0", "runoff_0", "(mm/int)", &runoff_0);
+  declparam("meltrunoff_0", TDim::NHRU, "[0.0]", "0.0", "100.0", "meltrunoff_0", "(mm/int)", &meltrunoff_0);
+  declparam("hru_evap_0", TDim::NHRU, "[0.0]", "0.0", "100.0", "hru_evap_0", "(mm/int)", &hru_evap_0);
+  declparam("hru_actet_0", TDim::NHRU, "[0.0]", "0.0", "100.0", "hru_actet_0", "(mm/int)", &hru_actet_0);
+  declparam("hru_cum_evap_0", TDim::NHRU, "[0.0]", "0.0", "100.0", "hru_cum_evap_0", "(mm/int)", &hru_cum_evap_0);
+  declparam("hru_cum_actet_0", TDim::NHRU, "[0.0]", "0.0", "100.0", "hru_cum_actet_0", "(mm/int)", &hru_cum_evap_0);
+  declparam("net_rain_0", TDim::NHRU, "[0.0]", "0.0", "100.0", "net rain", "(mm/int)", &net_rain_0);
+  declparam("SWE_0", TDim::NHRU, "[0.0]", "0.0", "500.0", "SWE", "(mm)", &SWE_0);
+  declparam("hru_t_0", TDim::NHRU, "[20.0]", "-50.0", "100.0", "hru_t_0", "(mm/int)", &hru_t_0);
+  declparam("SWE_conc_0", TDim::NDEFN, "[0.0]", "0.0", "100.0", "SWE_conc_0", "(mg/l)", &SWE_conc_0, &SWE_conc_lay_0, numsubstances);
+  declparam("Julian_start", TDim::NHRU, "[30]", "0","366", "enable input.", "()", &Julian_start);
+  declparam("Julian_end", TDim::NHRU, "[30]", "0","366", "disable input.", "()", &Julian_end);
 
 }
 
 void ClassWQ_Test_Hype::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
   for(hh = 0; hh < nhru; ++hh) {
     infil[hh] = 0.0;
     snowinfil[hh] = 0.0;
@@ -4816,151 +4823,151 @@ void ClassWQ_pbsmSnobal::decl(void) {
 
   variation_set = VARIATION_2 + VARIATION_3;
 
-  declparam("u_D", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed correction", "()", &u_D);
+  declparam("u_D", TDim::NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed correction", "()", &u_D);
 
-  declparam("Drift_offset", NHRU, "[0.0]", "-100.0", "100.0", "Daily windspeed drift offset correction", "()", &Drift_offset);
+  declparam("Drift_offset", TDim::NHRU, "[0.0]", "-100.0", "100.0", "Daily windspeed drift offset correction", "()", &Drift_offset);
 
-  declparam("Drift_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed drift slope correction", "()", &Drift_slope);
+  declparam("Drift_slope", TDim::NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed drift slope correction", "()", &Drift_slope);
 
-  declparam("Subl_offset", NHRU, "[0.0]", "-100.0", "100.0", "Daily windspeed sublimation offset correction", "()", &Subl_offset);
+  declparam("Subl_offset", TDim::NHRU, "[0.0]", "-100.0", "100.0", "Daily windspeed sublimation offset correction", "()", &Subl_offset);
 
-  declparam("Subl_slope", NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed sublimation slope correction", "()", &Subl_slope);
+  declparam("Subl_slope", TDim::NHRU, "[1.0]", "0.5", "2.0", "Daily windspeed sublimation slope correction", "()", &Subl_slope);
 
 
   variation_set = VARIATION_ORG;
 
-  declstatvar("SWE_max", NHRU, "snow water equivalent seasonal maximum", "(mm)", &SWE_max);
+  declstatvar("SWE_max", TDim::NHRU, "snow water equivalent seasonal maximum", "(mm)", &SWE_max);
 
-  declvar("SWE_conc", NDEFN, "snow water equivalent", "(mg/l)", &SWE_conc, &SWE_conc_lay, numsubstances);
+  declvar("SWE_conc", TDim::NDEFN, "snow water equivalent", "(mg/l)", &SWE_conc, &SWE_conc_lay, numsubstances);
 
-  declvar("Subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
+  declvar("Subl", TDim::NHRU, "interval sublimation", "(mm/int)", &Subl);
 
-  declvar("Subl_conc", NDEFN, "interval sublimation", "(mm/int)", &Subl_conc, &Subl_conc_lay, numsubstances);
+  declvar("Subl_conc", TDim::NDEFN, "interval sublimation", "(mm/int)", &Subl_conc, &Subl_conc_lay, numsubstances);
 
-  declvar("cumDriftOut", NHRU, "cumulative transport from HRU", "(mm)", &cumDriftOut);
+  declvar("cumDriftOut", TDim::NHRU, "cumulative transport from HRU", "(mm)", &cumDriftOut);
 
-  declvar("cumDriftOut_mWQ", NDEFN, "mass solute from HRU", "(mg/l * mm*km^2/int)", &cumDriftOut_mWQ, &cumDriftOut_mWQ_lay, numsubstances);
+  declvar("cumDriftOut_mWQ", TDim::NDEFN, "mass solute from HRU", "(mg/l * mm*km^2/int)", &cumDriftOut_mWQ, &cumDriftOut_mWQ_lay, numsubstances);
 
-  declvar("Drift_out", NHRU, "interval transport out of HRU", "(mm/int)", &Drift_out);
+  declvar("Drift_out", TDim::NHRU, "interval transport out of HRU", "(mm/int)", &Drift_out);
 
-  declvar("Drift_out_conc", NDEFN, "interval transport out of HRU", "(mg/l)", &Drift_out_conc, &Drift_out_conc_lay, numsubstances);
+  declvar("Drift_out_conc", TDim::NDEFN, "interval transport out of HRU", "(mg/l)", &Drift_out_conc, &Drift_out_conc_lay, numsubstances);
 
-  declvar("hru_subl", NHRU, "interval sublimation", "(mm/int)", &Subl);
+  declvar("hru_subl", TDim::NHRU, "interval sublimation", "(mm/int)", &Subl);
 
-  declvar("hru_drift", NHRU, "interval composite transport", "(mm/int)", &Drift);
+  declvar("hru_drift", TDim::NHRU, "interval composite transport", "(mm/int)", &Drift);
 
-  declvar("Drift_in", NHRU, "interval transport into HRU", "(mm/int)", &Drift_in);
+  declvar("Drift_in", TDim::NHRU, "interval transport into HRU", "(mm/int)", &Drift_in);
 
-  declvar("Drift_in_conc", NDEFN, "interval transport into HRU", "(mg/l)", &Drift_in_conc, &Drift_in_conc_lay, numsubstances);
+  declvar("Drift_in_conc", TDim::NDEFN, "interval transport into HRU", "(mg/l)", &Drift_in_conc, &Drift_in_conc_lay, numsubstances);
 
-  decldiag("DriftH", NHRU, "interval transport", "(mm/int)", &DriftH);
+  decldiag("DriftH", TDim::NHRU, "interval transport", "(mm/int)", &DriftH);
 
-  decldiag("SublH", NHRU, "interval sublimation", "(mm/int)", &SublH);
+  decldiag("SublH", TDim::NHRU, "interval sublimation", "(mm/int)", &SublH);
 
-  decldiag("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
+  decldiag("BasinSnowLoss", TDim::BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
 
-  decldiag("BasinSnowLoss_mWQ", NDEF, "transport out of basin", "(mg/l * mm*km^2/int)", &BasinSnowLoss_mWQ, &BasinSnowLoss_mWQ_lay, numsubstances);
+  decldiag("BasinSnowLoss_mWQ", TDim::NDEF, "transport out of basin", "(mg/l * mm*km^2/int)", &BasinSnowLoss_mWQ, &BasinSnowLoss_mWQ_lay, numsubstances);
 
-  decldiag("BasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm/int)", &BasinSnowGain);
+  decldiag("BasinSnowGain", TDim::BASIN, "cumulative transport to basin estimated from HRU 1", "(mm/int)", &BasinSnowGain);
 
-  decldiag("BasinSnowGain_mWQ", NDEF, "cumulative transport to basin estimated from HRU 1", "(mg/l * mm*km^2/int)", &BasinSnowGain_mWQ, &BasinSnowGain_mWQ_lay, numsubstances);
+  decldiag("BasinSnowGain_mWQ", TDim::NDEF, "cumulative transport to basin estimated from HRU 1", "(mg/l * mm*km^2/int)", &BasinSnowGain_mWQ, &BasinSnowGain_mWQ_lay, numsubstances);
 
-  declvar("BasinSnowLoss", BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
+  declvar("BasinSnowLoss", TDim::BASIN, "transport out of basin", "(mm/int)", &BasinSnowLoss);
 
-  declvar("cumSubl", NHRU, "cumulative sublimation", "(mm)", &cumSubl);
+  declvar("cumSubl", TDim::NHRU, "cumulative sublimation", "(mm)", &cumSubl);
 
-  declvar("cumSubl_mWQ", NDEFN, "cumulative sublimation solute", "(mg/l * mm*km^2/int)", &cumSubl_mWQ, &cumSubl_mWQ_lay, numsubstances);
+  declvar("cumSubl_mWQ", TDim::NDEFN, "cumulative sublimation solute", "(mg/l * mm*km^2/int)", &cumSubl_mWQ, &cumSubl_mWQ_lay, numsubstances);
 
-  declvar("cumDrift", NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
+  declvar("cumDrift", TDim::NHRU, "cumulative transport from HRU", "(mm)", &cumDrift);
 
-  declvar("cumBasinSnowLoss", BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
+  declvar("cumBasinSnowLoss", TDim::BASIN, "cumulative transport out of basin", "(mm)", &cumBasinSnowLoss);
 
-  declvar("cumBasinSnowLoss_mWQ", NDEF, "cumulative mass of solute transport out of basin", "(mg/l * mm*km^2/int)", &cumBasinSnowLoss_mWQ, &cumBasinSnowLoss_mWQ_lay, numsubstances);
+  declvar("cumBasinSnowLoss_mWQ", TDim::NDEF, "cumulative mass of solute transport out of basin", "(mg/l * mm*km^2/int)", &cumBasinSnowLoss_mWQ, &cumBasinSnowLoss_mWQ_lay, numsubstances);
 
-  declvar("cumBasinSnowGain", BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
+  declvar("cumBasinSnowGain", TDim::BASIN, "cumulative transport to basin estimated from HRU 1", "(mm)", &cumBasinSnowGain);
 
-  declvar("cumBasinSnowGain_mWQ", NDEF, "cumulative mass of solute transport to basin estimated from HRU 1", "(mg/l * mm*km^2/int)", &cumBasinSnowGain_mWQ, &cumBasinSnowGain_mWQ_lay, numsubstances);
+  declvar("cumBasinSnowGain_mWQ", TDim::NDEF, "cumulative mass of solute transport to basin estimated from HRU 1", "(mg/l * mm*km^2/int)", &cumBasinSnowGain_mWQ, &cumBasinSnowGain_mWQ_lay, numsubstances);
 
-  declvar("cumDriftIn", NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
+  declvar("cumDriftIn", TDim::NHRU, "cumulative transport to HRU", "(mm)", &cumDriftIn);
 
-  declvar("cumDriftIn_mWQ", NDEFN, "cumulative mass of solute transport to HRU", "(mg/l * mm*km^2/int)", &cumDriftIn_mWQ, &cumDriftIn_mWQ_lay, numsubstances);
+  declvar("cumDriftIn_mWQ", TDim::NDEFN, "cumulative mass of solute transport to HRU", "(mg/l * mm*km^2/int)", &cumDriftIn_mWQ, &cumDriftIn_mWQ_lay, numsubstances);
 
-  decllocal("hru_basin", NHRU, "conversion factor", "()", &hru_basin);
+  decllocal("hru_basin", TDim::NHRU, "conversion factor", "()", &hru_basin);
 
-  decldiag("DrySnow", NHRU, "DrySnow", "()", &DrySnow);
+  decldiag("DrySnow", TDim::NHRU, "DrySnow", "()", &DrySnow);
 
-  declvar("SnowAge", NHRU, "SnowAge", "()", &SnowAge);
+  declvar("SnowAge", TDim::NHRU, "SnowAge", "()", &SnowAge);
 
-  declvar("cumSno", NHRU, "cumulative snow", "(mm)", &cumSno);
+  declvar("cumSno", TDim::NHRU, "cumulative snow", "(mm)", &cumSno);
 
-  declvar("cumSno_mWQ", NDEFN, "cumulative mass of solute snow", "(mg/l * mm*km^2/int)", &cumSno_mWQ, &cumSno_mWQ_lay, numsubstances);
+  declvar("cumSno_mWQ", TDim::NDEFN, "cumulative mass of solute snow", "(mg/l * mm*km^2/int)", &cumSno_mWQ, &cumSno_mWQ_lay, numsubstances);
 
-  decldiag("Prob", NHRU, "Probability", "()", &Prob);
+  decldiag("Prob", TDim::NHRU, "Probability", "()", &Prob);
 
-  decldiag("snowdepth", NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
+  decldiag("snowdepth", TDim::NHRU, "depth of snow using Gray/Pomeroy", "(m)", &snowdepth);
 
-  decllocal("SWE_Init", NHRU, "initial SWE", "(mm)", &SWE_Init);
+  decllocal("SWE_Init", TDim::NHRU, "initial SWE", "(mm)", &SWE_Init);
 
 // parameters
 
-  declparam("fetch", NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
+  declparam("fetch", TDim::NHRU, "[1000.0]", "300.0", "10000.0", "fetch distance", "(m)", &fetch);
 
-  declparam("Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
+  declparam("Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "vegetation height(m)", "(m)", &Ht);
 
-  declparam("distrib", NHRU, "[0.0, 1.0]", "-10.0", "10.0", "distribution fractions - can sum to 1", "()", &distrib);
+  declparam("distrib", TDim::NHRU, "[0.0, 1.0]", "-10.0", "10.0", "distribution fractions - can sum to 1", "()", &distrib);
 
-  declparam("N_S", NHRU, "[320]", "1", "500", "vegetation number density", "(1/m^2)", &N_S);
+  declparam("N_S", TDim::NHRU, "[320]", "1", "500", "vegetation number density", "(1/m^2)", &N_S);
 
-  declparam("A_S", NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
+  declparam("A_S", TDim::NHRU, "[0.003]", "0.0", "2.0", "stalk diameter", "(m)", &A_S);
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporatation, 1 -> inhibit", "()", &inhibit_evap);
+  declparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporatation, 1 -> inhibit", "()", &inhibit_evap);
 
-  declparam("inhibit_bs", NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
+  declparam("inhibit_bs", TDim::NHRU, "[0]", "0", "1", "inhibit blowing snow, 1 -> inhibit", "()", &inhibit_bs);
 
-  declparam("inhibit_subl", NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
+  declparam("inhibit_subl", TDim::NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
 
-  declparam("rain_conc", NDEFN, "0", "0", "1000", "rain solute concentration", "(mg/l)", &rain_conc, &rain_conc_lay, numsubstances);
+  declparam("rain_conc", TDim::NDEFN, "0", "0", "1000", "rain solute concentration", "(mg/l)", &rain_conc, &rain_conc_lay, numsubstances);
 
-  declparam("snow_conc", NDEFN, "0", "0", "1000", "snow solute concentration", "(mg/l)", &snow_conc, &snow_conc_lay, numsubstances);
+  declparam("snow_conc", TDim::NDEFN, "0", "0", "1000", "snow solute concentration", "(mg/l)", &snow_conc, &snow_conc_lay, numsubstances);
 
-  declparam("atmos_mWQ", NDEFN, "0", "0", "10", "total basin area", "(mg/int??)", &atmos_mWQ, &atmos_mWQ_lay, numsubstances);
+  declparam("atmos_mWQ", TDim::NDEFN, "0", "0", "10", "total basin area", "(mg/int??)", &atmos_mWQ, &atmos_mWQ_lay, numsubstances);
 
 
-  decllocal("DrySnow_0", NHRU, "", "", &DrySnow_0);
+  decllocal("DrySnow_0", TDim::NHRU, "", "", &DrySnow_0);
 
-  decllocal("SnowAge_0", NHRU, "", "", &SnowAge_0);
+  decllocal("SnowAge_0", TDim::NHRU, "", "", &SnowAge_0);
 
-  decllocal("BasinSnowGain_0", NHRU, "", "", &BasinSnowGain_0);
+  decllocal("BasinSnowGain_0", TDim::NHRU, "", "", &BasinSnowGain_0);
 
-  decllocal("cumBasinSnowGain_0", NHRU, "", "", &cumBasinSnowGain_0);
+  decllocal("cumBasinSnowGain_0", TDim::NHRU, "", "", &cumBasinSnowGain_0);
 
-  decllocal("BasinSnowLoss_0", NHRU, "", "", &BasinSnowLoss_0);
+  decllocal("BasinSnowLoss_0", TDim::NHRU, "", "", &BasinSnowLoss_0);
 
-  decllocal("cumBasinSnowLoss_0", NHRU, "", "", &cumBasinSnowLoss_0);
+  decllocal("cumBasinSnowLoss_0", TDim::NHRU, "", "", &cumBasinSnowLoss_0);
 
-  decllocal("Subl_0", NHRU, "", "", &Subl_0);
+  decllocal("Subl_0", TDim::NHRU, "", "", &Subl_0);
 
-  decllocal("Subl_0", NHRU, "", "", &Subl_0);
+  decllocal("Subl_0", TDim::NHRU, "", "", &Subl_0);
 
-  decllocal("cumSubl_0", NHRU, "", "", &cumSubl_0);
+  decllocal("cumSubl_0", TDim::NHRU, "", "", &cumSubl_0);
 
-  decllocal("Drift_in_0", NHRU, "", "", &Drift_in_0);
+  decllocal("Drift_in_0", TDim::NHRU, "", "", &Drift_in_0);
 
-  decllocal("cumDriftIn_0", NHRU, "", "", &cumDriftIn_0);
+  decllocal("cumDriftIn_0", TDim::NHRU, "", "", &cumDriftIn_0);
 
-  decllocal("Drift_out_0", NHRU, "", "", &Drift_out_0);
+  decllocal("Drift_out_0", TDim::NHRU, "", "", &Drift_out_0);
 
-  decllocal("cumDriftOut_0", NHRU, "", "", &cumDriftOut_0);
+  decllocal("cumDriftOut_0", TDim::NHRU, "", "", &cumDriftOut_0);
 
-  decllocal("SWE_0", NHRU, "", "", &SWE_0);
+  decllocal("SWE_0", TDim::NHRU, "", "", &SWE_0);
 
-  decllocal("SWE_Init_0", NHRU, "", "", &SWE_Init_0);
+  decllocal("SWE_Init_0", TDim::NHRU, "", "", &SWE_Init_0);
 
-  decllocal("cumSno_0", NHRU, "", "", &cumSno_0);
+  decllocal("cumSno_0", TDim::NHRU, "", "", &cumSno_0);
 
   declputvar("*", "SWE", "(kg/m^2)", &SWE);
   declgetvar("*", "z_s", "(m)", &z_s);
@@ -4975,7 +4982,7 @@ void ClassWQ_pbsmSnobal::decl(void) {
 
 void ClassWQ_pbsmSnobal::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   Reset_WQ(0, cumBasinSnowLoss, cumBasinSnowLoss_mWQ_lay);
   Reset_WQ(0, cumBasinSnowGain, cumBasinSnowGain_mWQ_lay);
@@ -5004,7 +5011,7 @@ void ClassWQ_pbsmSnobal::init(void) {
     hru_basin[hh] = hru_area[hh]/basin_area[0];
 
     if((hh > 0) && (Ht[hh] < Ht[hh-1]) && distrib[hh-1] > 0){
-      CRHMException TExcept(string("'" + Name + " (pbsmSnobal)' vegetation heights not in ascending order.").c_str(), WARNING);
+      CRHMException TExcept(string("'" + Name + " (pbsmSnobal)' vegetation heights not in ascending order.").c_str(), TExcept::WARNING);
       LogError(TExcept);
     }
   }
@@ -5012,8 +5019,8 @@ void ClassWQ_pbsmSnobal::init(void) {
 
 void ClassWQ_pbsmSnobal::run(void){
 
-  float Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  float SumDrift, SumDrift_mWQ, total, transport, transport_mWQ;
+  double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
+  double SumDrift, SumDrift_mWQ, total, transport, transport_mWQ;
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
     if(getstep() == 1)
@@ -5077,7 +5084,7 @@ void ClassWQ_pbsmSnobal::run(void){
        if (Prob[hh] > 0.001) {
          Ut = Ut * 0.8;
 
-         float RH = hru_ea[hh]/Common::estar(hru_t[hh]); // Snobal uses Pascals
+         double RH = hru_ea[hh]/Common::estar(hru_t[hh]); // Snobal uses Pascals
 
          Pbsm(E_StubHt, Ut, DriftH[hh], SublH[hh], hru_t[hh], hru_u_, RH, fetch[hh], N_S[hh], A_S[hh]);
 
@@ -5117,7 +5124,7 @@ void ClassWQ_pbsmSnobal::run(void){
 // distribute drift
 
     if(distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
-      float Drft = Drift_out[0]*distrib[0];
+      double Drft = Drift_out[0]*distrib[0];
       SWE_conc_lay[Sub][0] = SWE_conc_lay[Sub][0]*SWE[0] + Drift_out_conc_lay[Sub][0]*Drft;
       SWE[0] += Drft;
       SWE_conc_lay[Sub][0] /= SWE[0];
@@ -5159,7 +5166,7 @@ void ClassWQ_pbsmSnobal::run(void){
 
           if(hh == nn) { // handle last HRU
             if(distrib[nn] > 0){
-              float In = SumDrift/hru_basin[hh]; // remaining drift
+              double In = SumDrift/hru_basin[hh]; // remaining drift
               if(SWE_max[hh] > SWE[hh] + In){ // fill snowpack, remainder leaves basin
                 Drift_in[hh] = In; // can handle all
                 Drift_in_conc_lay[Sub][hh] = SumDrift_mWQ/hru_basin[hh]/In;
@@ -5170,7 +5177,7 @@ void ClassWQ_pbsmSnobal::run(void){
               }
               else if(SWE_max[hh] > SWE[hh]){ // cannot handle all
                 Drift_in[hh] = SWE_max[hh] - SWE[hh];
-                float used = Drift_in[hh]/In;
+                double used = Drift_in[hh]/In;
                 Drift_in_conc_lay[Sub][hh] = SumDrift_mWQ*used/Drift_in[hh];
                 cumDriftIn[hh] += Drift_in[hh];
                 cumDriftIn_mWQ_lay[Sub][hh] += SumDrift_mWQ*used;
@@ -5183,7 +5190,7 @@ void ClassWQ_pbsmSnobal::run(void){
               }
             }
             else if(distrib[nn] < 0){ // all drift deposited
-                float In = SumDrift/hru_basin[hh]; // remaining drift
+                double In = SumDrift/hru_basin[hh]; // remaining drift
                 Drift_in[hh] = SumDrift/hru_basin[hh]; // can handle all
                 Drift_in_conc_lay[Sub][hh] = SumDrift_mWQ/hru_basin[hh]/In;
                 cumDriftIn[hh] += Drift_in[hh];
@@ -5249,8 +5256,8 @@ void ClassWQ_pbsmSnobal::finish(bool good) {
 
   if(!good) return;
 
-  float AllcumSubl = 0.0;
-  float AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
+  double AllcumSubl = 0.0;
+  double AllcumCover = cumBasinSnowGain[0] - cumBasinSnowLoss[0];
   long Sub = 0;
 
   for(hh = 0; chkStruct(); ++hh) {
@@ -5286,13 +5293,13 @@ void ClassWQ_pbsmSnobal::finish(bool good) {
   LogDebug(" ");
 }
 
-void ClassWQ_pbsmSnobal::Reset_WQ(long hru, float *var, float **var_WQ_lay){
+void ClassWQ_pbsmSnobal::Reset_WQ(long hru, double *var, double **var_WQ_lay){
   var[hru] = 0.0;
   for(long Sub = 0; Sub < numsubstances; ++Sub)
     var_WQ_lay[Sub][hru] = 0.0;
 }
 
-void ClassWQ_pbsmSnobal::copy_array(float *from, float *to){
+void ClassWQ_pbsmSnobal::copy_array(double *from, double *to){
   for(hh = 0; chkStruct(); ++hh)
     to[hh] = from[hh];
 }
@@ -5302,11 +5309,11 @@ void ClassWQ_pbsmSnobal::copy_array(long *from, long *to){
     to[hh] = from[hh];
 }
 
-void ClassWQ_pbsmSnobal::copy_basin(float *from, float *to){
+void ClassWQ_pbsmSnobal::copy_basin(double *from, double *to){
   to[0] = from[0];
 }
 
-void ClassWQ_pbsmSnobal::restore_hru(float *from, float *to, long hh){
+void ClassWQ_pbsmSnobal::restore_hru(double *from, double *to, long hh){
   to[hh] = from[hh];
 }
 
@@ -5364,11 +5371,11 @@ void ClassWQ_mass_conc::decl(void) {
 
   Description = "'converts _mWQ to concentrations'";
 
-  declvar("inflow_conc", NDEFN, "Mass: inflow from other HRUs", "(mg)", &inflow_conc, &inflow_conc_lay, numsubstances);
-  declvar("outflow_conc", NDEFN, "Mass: inflow from other HRUs", "(mg)", &outflow_conc, &outflow_conc_lay, numsubstances);
-  declvar("runflow_conc", NDEFN, "Mass: inflow from other HRUs", "(mg)", &runoutflow_conc, &runoutflow_conc_lay, numsubstances);
-  declvar("ssrflow_conc", NDEFN, "Mass: inflow from other HRUs", "(mg)", &ssroutflow_conc, &ssroutflow_conc_lay, numsubstances);
-  declvar("gwoutflow_conc", NDEFN, "Mass: inflow from other HRUs", "(mg)", &gwoutflow_conc, &gwoutflow_conc_lay, numsubstances);
+  declvar("inflow_conc", TDim::NDEFN, "Mass: inflow from other HRUs", "(mg)", &inflow_conc, &inflow_conc_lay, numsubstances);
+  declvar("outflow_conc", TDim::NDEFN, "Mass: inflow from other HRUs", "(mg)", &outflow_conc, &outflow_conc_lay, numsubstances);
+  declvar("runflow_conc", TDim::NDEFN, "Mass: inflow from other HRUs", "(mg)", &runoutflow_conc, &runoutflow_conc_lay, numsubstances);
+  declvar("ssrflow_conc", TDim::NDEFN, "Mass: inflow from other HRUs", "(mg)", &ssroutflow_conc, &ssroutflow_conc_lay, numsubstances);
+  declvar("gwoutflow_conc", TDim::NDEFN, "Mass: inflow from other HRUs", "(mg)", &gwoutflow_conc, &gwoutflow_conc_lay, numsubstances);
 
 
   declgetvar("*", "inflow", "(mm/int)", &inflow);
@@ -5387,7 +5394,7 @@ void ClassWQ_mass_conc::decl(void) {
 
 void ClassWQ_mass_conc::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
   Reset_WQ(inflow_conc_lay);
   Reset_WQ(outflow_conc_lay);
   Reset_WQ(runoutflow_conc_lay);
@@ -5404,7 +5411,7 @@ void ClassWQ_mass_conc::run(void) {
   mass_to_conc(gwoutflow, gwoutflow_mWQ_lay, gwoutflow_conc_lay);
 }
 
-void ClassWQ_mass_conc::mass_to_conc(const float *var, const float **var_mWQ, float **var_conc) {
+void ClassWQ_mass_conc::mass_to_conc(const double *var, const double **var_mWQ, double **var_conc) {
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
     for(long hh = 0; hh < nhru; ++hh) {
@@ -5416,7 +5423,7 @@ void ClassWQ_mass_conc::mass_to_conc(const float *var, const float **var_mWQ, fl
   }
 }
 
-void ClassWQ_mass_conc::Reset_WQ(float **var_lay){
+void ClassWQ_mass_conc::Reset_WQ(double **var_lay){
   for(long hh = 0; hh < nhru; ++hh) {
     for(long Sub = 0; Sub < numsubstances; ++Sub)
       var_lay[Sub][hh] = 0.0;
@@ -5431,17 +5438,17 @@ void ClassWQ_Substitute_Hype::decl(void) {
 
   Description = "'Provides necessary Hype variables conc_soil_rechr, conc_soil_lower and conc_soil_moist to run other WQ modules to run without proper Hype module.'";
 
-  declstatvar("conc_soil_rechr", NDEFN, "concentration of inorganic nitrogen in soil moisture per land-soil", "(mg/l)", &conc_soil_rechr, &conc_soil_rechr_lay, numsubstances); //
+  declstatvar("conc_soil_rechr", TDim::NDEFN, "concentration of inorganic nitrogen in soil moisture per land-soil", "(mg/l)", &conc_soil_rechr, &conc_soil_rechr_lay, numsubstances); //
 
-  declstatvar("conc_soil_lower", NDEFN, "concentration of organic nitrogen in soil moisture per land-soil", "(mg/l)", &conc_soil_lower, &conc_soil_lower_lay, numsubstances);
+  declstatvar("conc_soil_lower", TDim::NDEFN, "concentration of organic nitrogen in soil moisture per land-soil", "(mg/l)", &conc_soil_lower, &conc_soil_lower_lay, numsubstances);
 
-  declstatvar("conc_soil_moist", NDEFN, "concentration of soluble (reactive) phosphorus, i.e. phosphate in soil moisture per land-soil", "(mg/l)", &conc_soil_moist, &conc_soil_moist_lay, numsubstances);
+  declstatvar("conc_soil_moist", TDim::NDEFN, "concentration of soluble (reactive) phosphorus, i.e. phosphate in soil moisture per land-soil", "(mg/l)", &conc_soil_moist, &conc_soil_moist_lay, numsubstances);
 
 }
 
 void ClassWQ_Substitute_Hype::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
   for(hh = 0; hh < nhru; ++hh) {
     for(long Sub = 0; Sub < numsubstances; ++Sub){
       conc_soil_rechr_lay[Sub][hh] = 0.0;
@@ -5477,47 +5484,47 @@ void ClassWQ_Gen_Mass_Var_Soil::decl(void) {
 
   Description = "'Generates variable mWQ balances.'";
 
-  declstatvar("soil_top_change_mWQ", NDEFN, "mass of solute soil_rechr change.", "(mg/l * mm*km^2/int)", &soil_top_change_mWQ, &soil_top_change_mWQ_lay, numsubstances);
+  declstatvar("soil_top_change_mWQ", TDim::NDEFN, "mass of solute soil_rechr change.", "(mg/l * mm*km^2/int)", &soil_top_change_mWQ, &soil_top_change_mWQ_lay, numsubstances);
 
-  declstatvar("soil_moist_change_mWQ", NDEFN, "mass of solute soil_moist change.", "(mg/l * mm*km^2/int)", &soil_moist_change_mWQ, &soil_moist_change_mWQ_lay, numsubstances);
+  declstatvar("soil_moist_change_mWQ", TDim::NDEFN, "mass of solute soil_moist change.", "(mg/l * mm*km^2/int)", &soil_moist_change_mWQ, &soil_moist_change_mWQ_lay, numsubstances);
 
-  declstatvar("soil_bottom_change_mWQ", NDEFN, "mass of solute soil_bottom change.", "(mg/l * mm*km^2/int)", &soil_bottom_change_mWQ, &soil_bottom_change_mWQ_lay, numsubstances);
+  declstatvar("soil_bottom_change_mWQ", TDim::NDEFN, "mass of solute soil_bottom change.", "(mg/l * mm*km^2/int)", &soil_bottom_change_mWQ, &soil_bottom_change_mWQ_lay, numsubstances);
 
-  declstatvar("soil_ssr_change_mWQ", NDEFN, "mass of solute soil_bottom change.", "(mg/l * mm*km^2/int)", &soil_ssr_change_mWQ, &soil_ssr_change_mWQ_lay, numsubstances);
+  declstatvar("soil_ssr_change_mWQ", TDim::NDEFN, "mass of solute soil_bottom change.", "(mg/l * mm*km^2/int)", &soil_ssr_change_mWQ, &soil_ssr_change_mWQ_lay, numsubstances);
 
-  declstatvar("Sd_change_mWQ", NDEFN, "mass of solute Sd change.", "(mg/l * mm*km^2/int)", &Sd_change_mWQ, &Sd_change_mWQ_lay, numsubstances);
+  declstatvar("Sd_change_mWQ", TDim::NDEFN, "mass of solute Sd change.", "(mg/l * mm*km^2/int)", &Sd_change_mWQ, &Sd_change_mWQ_lay, numsubstances);
 
-  declstatvar("gw_change_mWQ", NDEFN, "mass of solute gw change.", "(mg/l * mm*km^2/int)", &gw_change_mWQ, &gw_change_mWQ_lay, numsubstances);
+  declstatvar("gw_change_mWQ", TDim::NDEFN, "mass of solute gw change.", "(mg/l * mm*km^2/int)", &gw_change_mWQ, &gw_change_mWQ_lay, numsubstances);
 
-  declstatvar("soil_gw_change_mWQ", NDEFN, "mass of solute soil_gw change.", "(mg/l * mm*km^2/int)", &soil_gw_change_mWQ, &soil_gw_change_mWQ_lay, numsubstances);
+  declstatvar("soil_gw_change_mWQ", TDim::NDEFN, "mass of solute soil_gw change.", "(mg/l * mm*km^2/int)", &soil_gw_change_mWQ, &soil_gw_change_mWQ_lay, numsubstances);
 
-  declstatvar("gw_flow_change_mWQ", NDEFN, "mass of solute gw_flow change.", "(mg/l * mm*km^2/int)", &gw_flow_change_mWQ, &gw_flow_change_mWQ_lay, numsubstances);
+  declstatvar("gw_flow_change_mWQ", TDim::NDEFN, "mass of solute gw_flow change.", "(mg/l * mm*km^2/int)", &gw_flow_change_mWQ, &gw_flow_change_mWQ_lay, numsubstances);
 
-  declstatvar("infil_act_change_mWQ", NDEFN, "mass of solute infil_act change.", "(mg/l * mm*km^2/int)", &infil_act_change_mWQ, &infil_act_change_mWQ_lay, numsubstances);
+  declstatvar("infil_act_change_mWQ", TDim::NDEFN, "mass of solute infil_act change.", "(mg/l * mm*km^2/int)", &infil_act_change_mWQ, &infil_act_change_mWQ_lay, numsubstances);
 
-  declstatvar("redirected_residual_change_mWQ", NDEFN, "mass of solute redirected_residual change.", "(mg/l * mm*km^2/int)", &redirected_residual_change_mWQ, &redirected_residual_change_mWQ_lay, numsubstances);
+  declstatvar("redirected_residual_change_mWQ", TDim::NDEFN, "mass of solute redirected_residual change.", "(mg/l * mm*km^2/int)", &redirected_residual_change_mWQ, &redirected_residual_change_mWQ_lay, numsubstances);
 
-  declstatvar("soil_runoff_change_mWQ", NDEFN, "mass of solute soil_runoff change.", "(mg/l * mm*km^2/int)", &soil_runoff_change_mWQ, &soil_runoff_change_mWQ_lay, numsubstances);
+  declstatvar("soil_runoff_change_mWQ", TDim::NDEFN, "mass of solute soil_runoff change.", "(mg/l * mm*km^2/int)", &soil_runoff_change_mWQ, &soil_runoff_change_mWQ_lay, numsubstances);
 
-  declstatvar("soil_top_mWQ_last", NDEFN, "mass of solute soil_rechr.", "(mg/l * mm*km^2/int)", &soil_top_mWQ_last, &soil_top_mWQ_lay_last, numsubstances);
+  declstatvar("soil_top_mWQ_last", TDim::NDEFN, "mass of solute soil_rechr.", "(mg/l * mm*km^2/int)", &soil_top_mWQ_last, &soil_top_mWQ_lay_last, numsubstances);
 
-  declstatvar("soil_bottom_mWQ_last", NDEFN, "mass of solute soil_bottom.", "(mmg/l * mm*km^2/intg)", &soil_bottom_mWQ_last, &soil_bottom_mWQ_lay_last, numsubstances);
+  declstatvar("soil_bottom_mWQ_last", TDim::NDEFN, "mass of solute soil_bottom.", "(mmg/l * mm*km^2/intg)", &soil_bottom_mWQ_last, &soil_bottom_mWQ_lay_last, numsubstances);
 
-  declstatvar("soil_ssr_mWQ_last", NDEFN, "mass of solute soil_ssr.", "(mg/l * mm*km^2/int)", &soil_ssr_mWQ_last, &soil_ssr_mWQ_lay_last, numsubstances);
+  declstatvar("soil_ssr_mWQ_last", TDim::NDEFN, "mass of solute soil_ssr.", "(mg/l * mm*km^2/int)", &soil_ssr_mWQ_last, &soil_ssr_mWQ_lay_last, numsubstances);
 
-  declstatvar("Sd_mWQ_last", NDEFN, "mass of solute Sd.", "(mg/l * mm*km^2/int)", &Sd_mWQ_last, &Sd_mWQ_lay_last, numsubstances);
+  declstatvar("Sd_mWQ_last", TDim::NDEFN, "mass of solute Sd.", "(mg/l * mm*km^2/int)", &Sd_mWQ_last, &Sd_mWQ_lay_last, numsubstances);
 
-  declstatvar("gw_mWQ_last", NDEFN, "mass of solute gw.", "(mg/l * mm*km^2/int)", &gw_mWQ_last, &gw_mWQ_lay_last, numsubstances);
+  declstatvar("gw_mWQ_last", TDim::NDEFN, "mass of solute gw.", "(mg/l * mm*km^2/int)", &gw_mWQ_last, &gw_mWQ_lay_last, numsubstances);
 
-  declstatvar("soil_gw_mWQ_last", NDEFN, "mass of solute soil_gw.", "(mg/l * mm*km^2/int)", &soil_gw_mWQ_last, &soil_gw_mWQ_lay_last, numsubstances);
+  declstatvar("soil_gw_mWQ_last", TDim::NDEFN, "mass of solute soil_gw.", "(mg/l * mm*km^2/int)", &soil_gw_mWQ_last, &soil_gw_mWQ_lay_last, numsubstances);
 
-  declstatvar("gw_flow_mWQ_last", NDEFN, "mass of solute gw_flow.", "(mg/l * mm*km^2/int)", &gw_flow_mWQ_last, &gw_flow_mWQ_lay_last, numsubstances);
+  declstatvar("gw_flow_mWQ_last", TDim::NDEFN, "mass of solute gw_flow.", "(mg/l * mm*km^2/int)", &gw_flow_mWQ_last, &gw_flow_mWQ_lay_last, numsubstances);
 
-  declstatvar("infil_act_mWQ_last", NDEFN, "mass of solute infil_act.", "(mg/l * mm*km^2/int)", &infil_act_mWQ_last, &infil_act_mWQ_lay_last, numsubstances);
+  declstatvar("infil_act_mWQ_last", TDim::NDEFN, "mass of solute infil_act.", "(mg/l * mm*km^2/int)", &infil_act_mWQ_last, &infil_act_mWQ_lay_last, numsubstances);
 
-  declstatvar("redirected_residual_mWQ_last", NDEFN, "mass of solute redirected_residual.", "(mg/l * mm*km^2/int)", &redirected_residual_mWQ_last, &redirected_residual_mWQ_lay_last, numsubstances);
+  declstatvar("redirected_residual_mWQ_last", TDim::NDEFN, "mass of solute redirected_residual.", "(mg/l * mm*km^2/int)", &redirected_residual_mWQ_last, &redirected_residual_mWQ_lay_last, numsubstances);
 
-  declstatvar("soil_runoff_mWQ_last", NDEFN, "mass of solute soil_runoff.", "(mg/l * mm*km^2/int)", &soil_runoff_mWQ_last, &soil_runoff_mWQ_lay_last, numsubstances);
+  declstatvar("soil_runoff_mWQ_last", TDim::NDEFN, "mass of solute soil_runoff.", "(mg/l * mm*km^2/int)", &soil_runoff_mWQ_last, &soil_runoff_mWQ_lay_last, numsubstances);
 
   declgetvar("*", "soil_rechr", "(mm)", &soil_rechr);
 
@@ -5565,7 +5572,7 @@ void ClassWQ_Gen_Mass_Var_Soil::decl(void) {
 
 void ClassWQ_Gen_Mass_Var_Soil::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(hh = 0; chkStruct(); ++hh) {
     for(long Sub = 0; Sub < numsubstances; ++Sub){
@@ -5598,7 +5605,7 @@ void ClassWQ_Gen_Mass_Var_Soil::init(void) {
 void ClassWQ_Gen_Mass_Var_Soil::run(void) {
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
-    float temp;
+    double temp;
     for(hh = 0; chkStruct(); ++hh) {
       temp = soil_rechr[hh]*conc_soil_rechr_lay[Sub][hh]; // using "conc"
       soil_top_change_mWQ_lay[Sub][hh] = temp - soil_top_mWQ_lay_last[Sub][hh];
@@ -5668,74 +5675,74 @@ void ClassGrow_crops_annually::decl(void) {
 
   variation_set = VARIATION_1 + VARIATION_3;
 
-  declvar("Fert_N_amount_up", NHRU, "current hru N fertilizer amount", "(kg/km^2)", &Fert_N_amount_up);
+  declvar("Fert_N_amount_up", TDim::NHRU, "current hru N fertilizer amount", "(kg/km^2)", &Fert_N_amount_up);
 
-  declvar("Fert_P_amount_up", NHRU, "current hru P fertilizer amount", "(kg/km^2)", &Fert_P_amount_up);
+  declvar("Fert_P_amount_up", TDim::NHRU, "current hru P fertilizer amount", "(kg/km^2)", &Fert_P_amount_up);
 
-  declvar("Man_N_amount_up", NHRU, "current hru N manure amount", "(kg/km^2)", &Man_N_amount_up);
+  declvar("Man_N_amount_up", TDim::NHRU, "current hru N manure amount", "(kg/km^2)", &Man_N_amount_up);
 
-  declvar("Man_P_amount_up", NHRU, "current hru P manure amount", "(kg/km^2)", &Man_P_amount_up);
+  declvar("Man_P_amount_up", TDim::NHRU, "current hru P manure amount", "(kg/km^2)", &Man_P_amount_up);
 
-  declvar("Res_N_amount_up", NHRU, "current hru N residue amount", "(kg/km^2)", &Res_N_amount_up);
+  declvar("Res_N_amount_up", TDim::NHRU, "current hru N residue amount", "(kg/km^2)", &Res_N_amount_up);
 
-  declvar("Res_P_amount_up", NHRU, "current hru P residue amount", "(kg/km^2)", &Res_P_amount_up);
+  declvar("Res_P_amount_up", TDim::NHRU, "current hru P residue amount", "(kg/km^2)", &Res_P_amount_up);
 
-  declvar("Fert_N_amount_down", NHRU, "current hru N fertilizer amount", "(kg/km^2)", &Fert_N_amount_down);
+  declvar("Fert_N_amount_down", TDim::NHRU, "current hru N fertilizer amount", "(kg/km^2)", &Fert_N_amount_down);
 
-  declvar("Fert_P_amount_down", NHRU, "current hru P fertilizer amount", "(kg/km^2)", &Fert_P_amount_down);
+  declvar("Fert_P_amount_down", TDim::NHRU, "current hru P fertilizer amount", "(kg/km^2)", &Fert_P_amount_down);
 
-  declvar("Man_N_amount_down", NHRU, "current hru N manure amount", "(kg/km^2)", &Man_N_amount_down);
+  declvar("Man_N_amount_down", TDim::NHRU, "current hru N manure amount", "(kg/km^2)", &Man_N_amount_down);
 
-  declvar("Man_P_amount_down", NHRU, "current hru P manure amount", "(kg/km^2)", &Man_P_amount_down);
+  declvar("Man_P_amount_down", TDim::NHRU, "current hru P manure amount", "(kg/km^2)", &Man_P_amount_down);
 
-  declvar("Res_N_amount_down", NHRU, "current hru N residue amount", "(kg/km^2)", &Res_N_amount_down);
+  declvar("Res_N_amount_down", TDim::NHRU, "current hru N residue amount", "(kg/km^2)", &Res_N_amount_down);
 
-  declvar("Res_P_amount_down", NHRU, "current hru P residue amount", "(kg/km^2)", &Res_P_amount_down);
+  declvar("Res_P_amount_down", TDim::NHRU, "current hru P residue amount", "(kg/km^2)", &Res_P_amount_down);
 
-  declvar("Fertperiod", NHRU, "current period for spreading fertilizer and manure amount", "()", &Fertperiod);
+  declvar("Fertperiod", TDim::NHRU, "current period for spreading fertilizer and manure amount", "()", &Fertperiod);
 
-  declvar("Litterperiod", NHRU, "current period for residue amount", "()", &Litterperiod);
+  declvar("Litterperiod", TDim::NHRU, "current period for residue amount", "()", &Litterperiod);
 
-  //declvar("Fertday", NHRU, "day to apply fertilizer", "()", &Fertday);
+  //declvar("Fertday", TDim::NHRU, "day to apply fertilizer", "()", &Fertday);
 
-  //declvar("Manday", NHRU, "day to apply manure", "()", &Manday);
+  //declvar("Manday", TDim::NHRU, "day to apply manure", "()", &Manday);
 
-  //declvar("Resdayno", NHRU, "day to apply residue", "()", &Resdayno);
+  //declvar("Resdayno", TDim::NHRU, "day to apply residue", "()", &Resdayno);
 
-  declvar("LockOut", NHRU, "prevents changes of fertilizer and manure amounts on multi day periods", "()", &LockOut);
+  declvar("LockOut", TDim::NHRU, "prevents changes of fertilizer and manure amounts on multi day periods", "()", &LockOut);
 
-  //declvar("SecondDown_fert", NHRU, "second down", "()", &SecondDown_fert);
+  //declvar("SecondDown_fert", TDim::NHRU, "second down", "()", &SecondDown_fert);
 
-  //declvar("SecondDown_man", NHRU, "second down", "()", &SecondDown_man);
+  //declvar("SecondDown_man", TDim::NHRU, "second down", "()", &SecondDown_man);
 
-  ObsCnt_N_up = declreadobs("Fert_N_up", NHRU, "annual N fertilizer dates and amount", "(kg/km^2)", &Fert_N_up, HRU_OBS_Q, true);
+  ObsCnt_N_up = declreadobs("Fert_N_up", TDim::NHRU, "annual N fertilizer dates and amount", "(kg/km^2)", &Fert_N_up, HRU_OBS_Q, true);
 
-  ObsCnt_P_up = declreadobs("Fert_P_up", NHRU, "annual P fertilizer dates and amount", "(kg/km^2)", &Fert_P_up, HRU_OBS_Q, true);
+  ObsCnt_P_up = declreadobs("Fert_P_up", TDim::NHRU, "annual P fertilizer dates and amount", "(kg/km^2)", &Fert_P_up, HRU_OBS_Q, true);
 
-  ObsCntMan_N_up = declreadobs("Man_N_up", NHRU, "annual N Manure dates and amount", "(kg/km^2)", &Man_N_up, HRU_OBS_Q, true);
+  ObsCntMan_N_up = declreadobs("Man_N_up", TDim::NHRU, "annual N Manure dates and amount", "(kg/km^2)", &Man_N_up, HRU_OBS_Q, true);
 
-  ObsCntMan_P_up = declreadobs("Man_P_up", NHRU, "annual P Manure dates and amount", "(kg/km^2)", &Man_P_up, HRU_OBS_Q, true);
+  ObsCntMan_P_up = declreadobs("Man_P_up", TDim::NHRU, "annual P Manure dates and amount", "(kg/km^2)", &Man_P_up, HRU_OBS_Q, true);
 
-  ObsCntRes_N_up = declreadobs("Res_N_up", NHRU, "annual N Residues dates and amount", "(kg/km^2)", &Res_N_up, HRU_OBS_Q, true);
+  ObsCntRes_N_up = declreadobs("Res_N_up", TDim::NHRU, "annual N Residues dates and amount", "(kg/km^2)", &Res_N_up, HRU_OBS_Q, true);
 
-  ObsCntRes_P_up = declreadobs("Res_P_up", NHRU, "annual P Residues dates and amount", "(kg/km^2)", &Res_P_up, HRU_OBS_Q, true);
+  ObsCntRes_P_up = declreadobs("Res_P_up", TDim::NHRU, "annual P Residues dates and amount", "(kg/km^2)", &Res_P_up, HRU_OBS_Q, true);
 
-  ObsCnt_N_down = declreadobs("Fert_N_down", NHRU, "annual N fertilizer dates and amount", "(kg/km^2)", &Fert_N_down, HRU_OBS_Q, true);
+  ObsCnt_N_down = declreadobs("Fert_N_down", TDim::NHRU, "annual N fertilizer dates and amount", "(kg/km^2)", &Fert_N_down, HRU_OBS_Q, true);
 
-  ObsCnt_P_down = declreadobs("Fert_P_down", NHRU, "annual P fertilizer dates and amount", "(kg/km^2)", &Fert_P_down, HRU_OBS_Q, true);
+  ObsCnt_P_down = declreadobs("Fert_P_down", TDim::NHRU, "annual P fertilizer dates and amount", "(kg/km^2)", &Fert_P_down, HRU_OBS_Q, true);
 
-  ObsCntMan_N_down = declreadobs("Man_N_down", NHRU, "annual N Manure dates and amount", "(kg/km^2)", &Man_N_down, HRU_OBS_Q, true);
+  ObsCntMan_N_down = declreadobs("Man_N_down", TDim::NHRU, "annual N Manure dates and amount", "(kg/km^2)", &Man_N_down, HRU_OBS_Q, true);
 
-  ObsCntMan_P_down = declreadobs("Man_P_down", NHRU, "annual P Manure dates and amount", "(kg/km^2)", &Man_P_down, HRU_OBS_Q, true);
+  ObsCntMan_P_down = declreadobs("Man_P_down", TDim::NHRU, "annual P Manure dates and amount", "(kg/km^2)", &Man_P_down, HRU_OBS_Q, true);
 
-  ObsCntRes_N_down = declreadobs("Res_N_down", NHRU, "annual N Residues dates and amount", "(kg/km^2)", &Res_N_down, HRU_OBS_Q, true);
+  ObsCntRes_N_down = declreadobs("Res_N_down", TDim::NHRU, "annual N Residues dates and amount", "(kg/km^2)", &Res_N_down, HRU_OBS_Q, true);
 
-  ObsCntRes_P_down = declreadobs("Res_P_down", NHRU, "annual P Residues dates and amount", "(kg/km^2)", &Res_P_down, HRU_OBS_Q, true);
+  ObsCntRes_P_down = declreadobs("Res_P_down", TDim::NHRU, "annual P Residues dates and amount", "(kg/km^2)", &Res_P_down, HRU_OBS_Q, true);
 
-  ObsCnt_fertperiod = declreadobs("Fert_period", NHRU, "spreading period for feritilzer and manure", "(d)", &Fert_period, HRU_OBS_Q, true);
+  ObsCnt_fertperiod = declreadobs("Fert_period", TDim::NHRU, "spreading period for feritilzer and manure", "(d)", &Fert_period, HRU_OBS_Q, true);
 
 
-  declparam("Ag_YearStart", NHRU, "[0]", "0", "10", " suggestions for northern hemisphere - 0, southern hemisphere - 183", "()", &Ag_YearStart);
+  declparam("Ag_YearStart", TDim::NHRU, "[0]", "0", "10", " suggestions for northern hemisphere - 0, southern hemisphere - 183", "()", &Ag_YearStart);
 
   declputparam("*", "fertNamount_up", "(kg/km^2)", &fertNamount_up);
 
@@ -5779,27 +5786,27 @@ void ClassGrow_crops_annually::decl(void) {
 
   variation_set = VARIATION_2 + VARIATION_3;
 
-  declparam("Htmax", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "maximum vegetation height", "(m)", &Htmax);
+  declparam("Htmax", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "maximum vegetation height", "(m)", &Htmax);
 
-  declparam("Init_Crop_Ht_1", NHRU, "[0.1]", "0.001", "100.0", "initial crop height (1)", "(m)", &Init_Crop_Ht_1);
+  declparam("Init_Crop_Ht_1", TDim::NHRU, "[0.1]", "0.001", "100.0", "initial crop height (1)", "(m)", &Init_Crop_Ht_1);
 
-  declparam("Crop_Grow_Rate_1", NHRU, "[0.8]", "0.0", "1.0", "crop growth rate (1)", "(m/d)", &Crop_Grow_Rate_1);
+  declparam("Crop_Grow_Rate_1", TDim::NHRU, "[0.8]", "0.0", "1.0", "crop growth rate (1)", "(m/d)", &Crop_Grow_Rate_1);
 
-  declparam("JCrop_Start_1", NHRU, "[250]", "0", "366", "start Julian day (1); JCrop_Start_1 = 0 if no crop", "()", &JCrop_Start_1);
+  declparam("JCrop_Start_1", TDim::NHRU, "[250]", "0", "366", "start Julian day (1); JCrop_Start_1 = 0 if no crop", "()", &JCrop_Start_1);
 
-  declparam("JCrop_Harvest_1", NHRU, "[228]", "0", "366", "harvest Julian day (1); JCrop_Harvest_1 = 0 if no crop", "()", &JCrop_Harvest_1);
+  declparam("JCrop_Harvest_1", TDim::NHRU, "[228]", "0", "366", "harvest Julian day (1); JCrop_Harvest_1 = 0 if no crop", "()", &JCrop_Harvest_1);
 
-  declparam("Crop_Htmax_1", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "maximum vegetation height (1)", "(m)", &Crop_Htmax_1);
+  declparam("Crop_Htmax_1", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "maximum vegetation height (1)", "(m)", &Crop_Htmax_1);
 
-  declparam("Init_Crop_Ht_2", NHRU, "[0.1]", "0.001", "100.0", "initial crop height (2)", "(m)", &Init_Crop_Ht_2);
+  declparam("Init_Crop_Ht_2", TDim::NHRU, "[0.1]", "0.001", "100.0", "initial crop height (2)", "(m)", &Init_Crop_Ht_2);
 
-  declparam("Crop_Grow_Rate_2", NHRU, "[0.8]", "0.0", "1.0", "crop growth rate (2)", "(m/d)", &Crop_Grow_Rate_2);
+  declparam("Crop_Grow_Rate_2", TDim::NHRU, "[0.8]", "0.0", "1.0", "crop growth rate (2)", "(m/d)", &Crop_Grow_Rate_2);
 
-  declparam("JCrop_Start_2", NHRU, "[250]", "0", "366", "start Julian day (2); JCrop_Start_2 = 0 if no crop", "()", &JCrop_Start_2);
+  declparam("JCrop_Start_2", TDim::NHRU, "[250]", "0", "366", "start Julian day (2); JCrop_Start_2 = 0 if no crop", "()", &JCrop_Start_2);
 
-  declparam("JCrop_Harvest_2", NHRU, "[228]" , "0", "366", "harvest Julian day (2); JCrop_Harvest_2 = 0 if no crop", "()", &JCrop_Harvest_2);
+  declparam("JCrop_Harvest_2", TDim::NHRU, "[228]" , "0", "366", "harvest Julian day (2); JCrop_Harvest_2 = 0 if no crop", "()", &JCrop_Harvest_2);
 
-  declparam("Crop_Htmax_2", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "maximum vegetation height (2)", "(m)", &Crop_Htmax_2);
+  declparam("Crop_Htmax_2", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "maximum vegetation height (2)", "(m)", &Crop_Htmax_2);
 
   declputparam("*", "Ht", "(m)", &Ht);
 
@@ -5808,41 +5815,41 @@ void ClassGrow_crops_annually::decl(void) {
 
 void ClassGrow_crops_annually::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   if(variation == VARIATION_1 || variation == VARIATION_3){
     if(ObsCnt_N_up > -1){
-      CRHMException TExcept("Handling N fertilizer from (Fert_N_up) observation.", WARNING);
+      CRHMException TExcept("Handling N fertilizer from (Fert_N_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCnt_P_up > -1){
-      CRHMException TExcept("Handling P fertilizer from (Fert_P_up) observation.", WARNING);
+      CRHMException TExcept("Handling P fertilizer from (Fert_P_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntMan_N_up > -1){
-      CRHMException TExcept("Handling N manure from (Man_N_up) observation.", WARNING);
+      CRHMException TExcept("Handling N manure from (Man_N_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntMan_P_up > -1){
-      CRHMException TExcept("Handling P manure from (Man_P_up) observation.", WARNING);
+      CRHMException TExcept("Handling P manure from (Man_P_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntRes_N_up > -1){
-      CRHMException TExcept("Handling N residues from (Res_N_up) observation.", WARNING);
+      CRHMException TExcept("Handling N residues from (Res_N_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCntRes_P_up > -1){
-      CRHMException TExcept("Handling P residues from (Res_P_up) observation.", WARNING);
+      CRHMException TExcept("Handling P residues from (Res_P_up) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
     if(ObsCnt_fertperiod > -1){
-      CRHMException TExcept("Handling fertilizer and manure period (Fert_period) observation.", WARNING);
+      CRHMException TExcept("Handling fertilizer and manure period (Fert_period) observation.", TExcept::WARNING);
       LogError(TExcept);
     }
 
@@ -5871,26 +5878,26 @@ void ClassGrow_crops_annually::init(void) {
   if(variation == VARIATION_2 || variation == VARIATION_3){
 
     if(Good_Dates(JCrop_Start_1)){
-      CRHMException TExcept("JCrop_Start_1 dates out of range!", TERMINATE);
+      CRHMException TExcept("JCrop_Start_1 dates out of range!", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
     if(Good_Dates(JCrop_Harvest_1)){
-      CRHMException TExcept("JCrop_Harvest_1 dates out of range!", TERMINATE);
+      CRHMException TExcept("JCrop_Harvest_1 dates out of range!", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
     if(Good_Dates(JCrop_Start_2)){
-      CRHMException TExcept("JCrop_Start_2 dates out of range!", TERMINATE);
+      CRHMException TExcept("JCrop_Start_2 dates out of range!", TExcept::TERMINATE);
       LogError(TExcept);
     }
 
     if(Good_Dates(JCrop_Harvest_2)){
-      CRHMException TExcept("JCrop_Harvest_2 dates out of range!", TERMINATE);
+      CRHMException TExcept("JCrop_Harvest_2 dates out of range!", TExcept::TERMINATE);
       LogError(TExcept);
     }
     for(hh = 0; hh < nhru; ++hh)
-       const_cast<float *> (Ht)[hh] = Init_Crop_Ht_1[hh];
+       const_cast<double *> (Ht)[hh] = Init_Crop_Ht_1[hh];
   } // VARIATION_2
 }
 
@@ -5906,75 +5913,75 @@ void ClassGrow_crops_annually::run(void) {
       if(variation == VARIATION_1 || variation == VARIATION_3){
         if(ObsCnt_N_up >= hh){ // file open
           declputparam("*", "fertNamount_up", "(kg/km^2)", &fertNamount_up);
-          const_cast<float *> (fertNamount_up)[hh] = 0.0; // set by module
+          const_cast<double *> (fertNamount_up)[hh] = 0.0; // set by module
         }
         if(ObsCnt_P_up >= hh){ // file open
           declputparam("*", "fertPamount_up", "(kg/km^2)", &fertPamount_up);
-          const_cast<float *> (fertPamount_up)[hh] = 0.0; // set by module
+          const_cast<double *> (fertPamount_up)[hh] = 0.0; // set by module
         }
         if(ObsCntMan_N_up >= hh){ // file open
           declputparam("*", "manNamount_up", "(kg/km^2)", &manNamount_up);
-          const_cast<float *> (manNamount_up)[hh] = 0.0; // set by module
+          const_cast<double *> (manNamount_up)[hh] = 0.0; // set by module
         }
         if(ObsCntMan_P_up >= hh){ // file open
           declputparam("*", "manPamount_up", "(kg/km^2)", &manPamount_up);
-          const_cast<float *> (manPamount_up)[hh] = 0.0; // not used
+          const_cast<double *> (manPamount_up)[hh] = 0.0; // not used
         }
         if(ObsCntRes_N_up >= hh){ // file open
           declputparam("*", "resNamount_up", "(kg/km^2)", &resNamount_up);
-          const_cast<float *> (resNamount_up)[hh] = 0.0;  // set by this module
+          const_cast<double *> (resNamount_up)[hh] = 0.0;  // set by this module
         }
         if(ObsCntRes_P_up >= hh){ // file open
           declputparam("*", "resPamount_up", "(kg/km^2)", &resPamount_up);
-          const_cast<float *> (resPamount_up)[hh] = 0.0;  // set by this module
+          const_cast<double *> (resPamount_up)[hh] = 0.0;  // set by this module
         }
         if(ObsCnt_N_up >= hh || ObsCnt_P_up >= hh){ // file open
           declputparam("*", "fertday_up", "(d)", &fertday_up);
-          const_cast<float *> (fertday_up)[hh] = 0; // set by this module
+          const_cast<double *> (fertday_up)[hh] = 0; // set by this module
         }
         if(ObsCntMan_N_up >= hh || ObsCntMan_P_up >= hh){ // file open
           declputparam("*", "manday_up", "(d)", &manday_up);
-          const_cast<float *> (manday_up)[hh] = 0; // set by this module
+          const_cast<double *> (manday_up)[hh] = 0; // set by this module
         }
         if(ObsCnt_N_down >= hh){ // file open
           declputparam("*", "fertNamount_down", "(kg/km^2)", &fertNamount_down);
-          const_cast<float *> (fertNamount_down)[hh] = 0.0; // set by module
+          const_cast<double *> (fertNamount_down)[hh] = 0.0; // set by module
         }
         if(ObsCnt_P_down >= hh){ // file open
           declputparam("*", "fertPamount_down", "(kg/km^2)", &fertPamount_down);
-          const_cast<float *> (fertPamount_down)[hh] = 0.0; // set by module
+          const_cast<double *> (fertPamount_down)[hh] = 0.0; // set by module
         }
         if(ObsCntMan_N_down >= hh){ // file open
           declputparam("*", "manNamount_down", "(kg/km^2)", &manNamount_down);
-          const_cast<float *> (manNamount_down)[hh] = 0.0; // set by module
+          const_cast<double *> (manNamount_down)[hh] = 0.0; // set by module
         }
         if(ObsCntMan_P_down >= hh){ // file open
           declputparam("*", "manPamount_down", "(kg/km^2)", &manPamount_down);
-          const_cast<float *> (manPamount_down)[hh] = 0.0; // not used
+          const_cast<double *> (manPamount_down)[hh] = 0.0; // not used
         }
         if(ObsCntRes_N_down >= hh){ // file open
           declputparam("*", "resNamount_down", "(kg/km^2)", &resNamount_down);
-          const_cast<float *> (resNamount_down)[hh] = 0.0;  // set by this module
+          const_cast<double *> (resNamount_down)[hh] = 0.0;  // set by this module
         }
         if(ObsCntRes_P_down >= hh){ // file open
           declputparam("*", "resPamount_down", "(kg/km^2)", &resPamount_down);
-          const_cast<float *> (resPamount_down)[hh] = 0.0;  // set by this module
+          const_cast<double *> (resPamount_down)[hh] = 0.0;  // set by this module
         }
         if(ObsCnt_N_down >= hh || ObsCnt_P_down >= hh){ // file open
           declputparam("*", "fertday_down", "(d)", &fertday_down);
-          const_cast<float *> (fertday_down)[hh] = 0; // set by this module
+          const_cast<double *> (fertday_down)[hh] = 0; // set by this module
         }
         if(ObsCntMan_N_down >= hh || ObsCntMan_P_down >= hh){ // file open
           declputparam("*", "manday_down", "(d)", &manday_down);
-          const_cast<float *> (manday_down)[hh] = 0; // set by this module
+          const_cast<double *> (manday_down)[hh] = 0; // set by this module
         }
         if(ObsCnt_fertperiod >= hh){ // file open
           declputparam("*", "fertperiod", "(d)", &fertperiod);
-          const_cast<float *> (fertperiod)[hh] = 0; // set by this module
+          const_cast<long *> (fertperiod)[hh] = 0; // set by this module
         }
 //        if(ObsCnt_litterperiod >= hh){ // file open  check ????
           declputparam("*", "litterperiod", "(d)", &litterperiod);
-//          const_cast<float *> (litterperiod)[hh] = 0; // set by module
+//          const_cast<double *> (litterperiod)[hh] = 0; // set by module
 //        }
       } // VARIATION_1 or VARIATION_3
     } // for hh
@@ -5998,7 +6005,7 @@ void ClassGrow_crops_annually::run(void) {
           if(ObsCnt_fertperiod > 0){ // file open
             if(!(Fert_period[hh] >= fLimit || !Fert_period[hh])){
                fertperiod[hh] = 1;
-               if(Fert_period[hh] > 1.0 && Fert_period[hh] < 366){
+               if(Fert_period[hh] > 1 && Fert_period[hh] < 366){
                 fertperiod[hh] = Fert_period[hh];
                }
                Fertperiod[hh] = Fert_period[hh];
@@ -6251,29 +6258,29 @@ void ClassGrow_crops_annually::run(void) {
 
       if(variation == VARIATION_2 || variation == VARIATION_3){
         if(today == JCrop_Start_1[hh])
-          const_cast<float *> (Ht)[hh] = Init_Crop_Ht_1[hh];
+          const_cast<double *> (Ht)[hh] = Init_Crop_Ht_1[hh];
 
         if(JCrop_Start_1[hh] != 0 && today >= JCrop_Start_1[hh] && today <= JCrop_Harvest_1[hh])
-          const_cast<float *> (Htmax)[hh] = Crop_Htmax_1[hh];
+          const_cast<double *> (Htmax)[hh] = Crop_Htmax_1[hh];
 
         if(Ht[hh] < Crop_Htmax_1[hh])
-          const_cast<float *> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate_1[hh];
+          const_cast<double *> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate_1[hh];
         else
-          const_cast<float *> (Ht)[hh] = Htmax[hh];
+          const_cast<double *> (Ht)[hh] = Htmax[hh];
 
         if(today == JCrop_Harvest_1[hh])
-          const_cast<float *> (Ht)[hh] =  Init_Crop_Ht_1[hh];
+          const_cast<double *> (Ht)[hh] =  Init_Crop_Ht_1[hh];
 
         if(today == JCrop_Start_2[hh])
-          const_cast<float *> (Ht)[hh] = Init_Crop_Ht_2[hh];
+          const_cast<double *> (Ht)[hh] = Init_Crop_Ht_2[hh];
 
         if(Ht[hh] < Crop_Htmax_2[hh])
-          const_cast<float *> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate_2[hh];
+          const_cast<double *> (Ht)[hh] =  Ht[hh] + Crop_Grow_Rate_2[hh];
         else
-          const_cast<float *> (Ht)[hh] = Htmax[hh];
+          const_cast<double *> (Ht)[hh] = Htmax[hh];
 
         if(today == JCrop_Harvest_2[hh])
-          const_cast<float *> (Ht)[hh] =  Init_Crop_Ht_2[hh];
+          const_cast<double *> (Ht)[hh] =  Init_Crop_Ht_2[hh];
       } // VARIATION_2 or VARIATION_3
     } // for hh
   } // start of day
@@ -6288,11 +6295,12 @@ void ClassGrow_crops_annually::finish(bool good) {
   LogDebug(" ");
 }
 
-bool ClassGrow_crops_annually::Good_Dates(const float* dates) {
+bool ClassGrow_crops_annually::Good_Dates(const double* dates) {
 
   for(hh = 0; hh < nhru; ++hh) {
-    if(dates[hh] > 366 || dates[hh] < 0);
-    return false; // error
+      if (dates[hh] > 366 || dates[hh] < 0) {
+          return false; // error
+      };
   }
   return true;
 }
@@ -6305,22 +6313,22 @@ void ClassWQ_Gen_Mass_Var_Netroute::decl(void) {
 
   Description = "'Generates variable mWQ balances in Netroute*.'";
 
-  declvar("basinflow_change_mWQ", NDEFN, "mass of solute basinflow change.", "(mg)", &basinflow_change_mWQ, &basinflow_change_mWQ_lay, numsubstances);
+  declvar("basinflow_change_mWQ", TDim::NDEFN, "mass of solute basinflow change.", "(mg)", &basinflow_change_mWQ, &basinflow_change_mWQ_lay, numsubstances);
 
-  declvar("basingw_change_mWQ", NDEFN, "mass of solute basingwflow change.", "(mg)", &basingw_change_mWQ, &basingw_change_mWQ_lay, numsubstances);
+  declvar("basingw_change_mWQ", TDim::NDEFN, "mass of solute basingwflow change.", "(mg)", &basingw_change_mWQ, &basingw_change_mWQ_lay, numsubstances);
 
-  declvar("outflow_diverted_change_mWQ", NDEFN, "mass of solute outflow_diverted change.", "(mg)", &outflow_diverted_change_mWQ, &outflow_diverted_change_mWQ_lay, numsubstances);
+  declvar("outflow_diverted_change_mWQ", TDim::NDEFN, "mass of solute outflow_diverted change.", "(mg)", &outflow_diverted_change_mWQ, &outflow_diverted_change_mWQ_lay, numsubstances);
 
-  declvar("gwoutflow_diverted_change_mWQ", NDEFN, "mass of solute outflow_diverted change.", "(mg)", &gwoutflow_diverted_change_mWQ, &gwoutflow_diverted_change_mWQ_lay, numsubstances);
+  declvar("gwoutflow_diverted_change_mWQ", TDim::NDEFN, "mass of solute outflow_diverted change.", "(mg)", &gwoutflow_diverted_change_mWQ, &gwoutflow_diverted_change_mWQ_lay, numsubstances);
 
 
-  declvar("basinflow_conc_last", NDEFN, "last mass of solute basinflow.", "(mg)", &basinflow_mWQ_last, &basinflow_mWQ_lay_last, numsubstances);
+  declvar("basinflow_conc_last", TDim::NDEFN, "last mass of solute basinflow.", "(mg)", &basinflow_mWQ_last, &basinflow_mWQ_lay_last, numsubstances);
 
-  declvar("basingw_conc_last", NDEFN, "last mass of solute basin gw flow.", "(mg)", &basingw_mWQ_last, &basingw_mWQ_lay_last, numsubstances);
+  declvar("basingw_conc_last", TDim::NDEFN, "last mass of solute basin gw flow.", "(mg)", &basingw_mWQ_last, &basingw_mWQ_lay_last, numsubstances);
 
-  declvar("outflow_diverted_conc_last", NDEFN, "last mass of solute outflow_diverted.", "(mg)", &outflow_diverted_mWQ_last, &outflow_diverted_mWQ_lay_last, numsubstances);
+  declvar("outflow_diverted_conc_last", TDim::NDEFN, "last mass of solute outflow_diverted.", "(mg)", &outflow_diverted_mWQ_last, &outflow_diverted_mWQ_lay_last, numsubstances);
 
-  declvar("gwoutflow_diverted_conc_last", NDEFN, "last mass of solute outflow_diverted.", "(mg)", &gwoutflow_diverted_mWQ_last, &gwoutflow_diverted_mWQ_lay_last, numsubstances);
+  declvar("gwoutflow_diverted_conc_last", TDim::NDEFN, "last mass of solute outflow_diverted.", "(mg)", &gwoutflow_diverted_mWQ_last, &gwoutflow_diverted_mWQ_lay_last, numsubstances);
 
 
   declputvar("*", "basinflow", "(mm)", &basinflow);
@@ -6343,7 +6351,7 @@ void ClassWQ_Gen_Mass_Var_Netroute::decl(void) {
 
 void ClassWQ_Gen_Mass_Var_Netroute::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
       basinflow_change_mWQ_lay[Sub][0] = 0.0;
@@ -6365,7 +6373,7 @@ void ClassWQ_Gen_Mass_Var_Netroute::init(void) {
 
 void ClassWQ_Gen_Mass_Var_Netroute::run(void) {
 
-  float temp;
+  double temp;
 
   for(long Sub = 0; Sub < numsubstances; ++Sub){
     temp = basinflow[0]*basinflow_conc_lay[Sub][0]; // using "conc"
@@ -6400,8 +6408,8 @@ Classlapse_rate_Monthly_Mod* Classlapse_rate_Monthly_Mod::klone(string name) con
 }
 
 void Classlapse_rate_Monthly_Mod::decl(void){
-  declvar("lapse_rate_Mthly", NHRU, "temperature lapse rate Mthly.", "(°C/100m)", &lapse_rate_Mthly);
-  declvar("lapse_rate", NHRU, "temperature lapse rate.", "(°C/100m)", &lapse_rate);
+  declvar("lapse_rate_Mthly", TDim::NHRU, "temperature lapse rate Mthly.", "(°C/100m)", &lapse_rate_Mthly);
+  declvar("lapse_rate", TDim::NHRU, "temperature lapse rate.", "(°C/100m)", &lapse_rate);
 //  declparam("lapse_rate", NHRU, "[0.75]", "0", "2", "temperature lapse rate.", "(°C/100m)", &lapse_rate);
 }
 
@@ -6459,43 +6467,43 @@ void ClassGlacier_melt_debris_cover_estimate_Mod::decl(void){
   long step = getstep();
   long nstep = step%Global::Freq;
 
-  declvar("lagT", NHRU, "lagged temperature.", "(°C)", &lagT);
+  declvar("lagT", TDim::NHRU, "lagged temperature.", "(°C)", &lagT);
 
-  declvar("lagSW", NHRU, "lagged shortwave radiation.", "(W/m^2)", &lagSW);
+  declvar("lagSW", TDim::NHRU, "lagged shortwave radiation.", "(W/m^2)", &lagSW);
 
-  declvar("Gmelt_energy", NHRU, "Energy available for glacier melt.", "(W/m^2)", &Gmelt_energy);
+  declvar("Gmelt_energy", TDim::NHRU, "Energy available for glacier melt.", "(W/m^2)", &Gmelt_energy);
 
-  declvar("den_air", NHRU, "air density.", "(kg/m^-3)", &den_air);
+  declvar("den_air", TDim::NHRU, "air density.", "(kg/m^-3)", &den_air);
 
-  declvar("K_kat", NHRU, "katabatic bulk exchange coefficient.", "()", &K_kat);
+  declvar("K_kat", TDim::NHRU, "katabatic bulk exchange coefficient.", "()", &K_kat);
 
-  declvar("Cp_water", NHRU, "specific heat of water.", "(J/(kg*K))", &Cp_water);
+  declvar("Cp_water", TDim::NHRU, "specific heat of water.", "(J/(kg*K))", &Cp_water);
 
-  declvar("Xmelt", NHRU, "Experimental Firn and Ice melt at daily timestepe.", "(mm/d)", &Xmelt);
+  declvar("Xmelt", TDim::NHRU, "Experimental Firn and Ice melt at daily timestepe.", "(mm/d)", &Xmelt);
 
-  declvar("Xmelt_int", NHRU, "Experimental Firn and Ice melt at interval timestep.", "(mm/int)", &Xmelt_int);
+  declvar("Xmelt_int", TDim::NHRU, "Experimental Firn and Ice melt at interval timestep.", "(mm/int)", &Xmelt_int);
 
-  declvar("Xmelt_acc", NHRU, "Experimental Firn and Ice melt daily accumulator.", "(mm)", &Xmelt_acc);
+  declvar("Xmelt_acc", TDim::NHRU, "Experimental Firn and Ice melt daily accumulator.", "(mm)", &Xmelt_acc);
 
-  declvar("Xmelt_V5", NHRU, "Version 5 Firn and Ice melt daily variable.", "(mm)", &Xmelt_V5);
+  declvar("Xmelt_V5", TDim::NHRU, "Version 5 Firn and Ice melt daily variable.", "(mm)", &Xmelt_V5);
 
 
 
-  declparam("debris_h", NHRU, "[0.0]", "0", "10", "debris thickness.", "(m)", &debris_h);
+  declparam("debris_h", TDim::NHRU, "[0.0]", "0", "10", "debris thickness.", "(m)", &debris_h);
 
-  declparam("T_threshold", NHRU, "[1.0]", "-30", "30", "threshold temperature for melt to occur.", "(°C)", &T_threshold);
+  declparam("T_threshold", TDim::NHRU, "[1.0]", "-30", "30", "threshold temperature for melt to occur.", "(°C)", &T_threshold);
 
-  declreadobs("lagT1", NHRU, "lagged temperature 1", "(°C)", &lagT1, HRU_OBS_Q, true);
-  declreadobs("lagT2", NHRU, "lagged temperature 2", "(°C)", &lagT2, HRU_OBS_Q, true);
-  declreadobs("lagT3", NHRU, "lagged temperature 3", "(°C)", &lagT3, HRU_OBS_Q, true);
-  declreadobs("lagT4", NHRU, "lagged temperature 4", "(°C)", &lagT4, HRU_OBS_Q, true);
+  declreadobs("lagT1", TDim::NHRU, "lagged temperature 1", "(°C)", &lagT1, HRU_OBS_Q, true);
+  declreadobs("lagT2", TDim::NHRU, "lagged temperature 2", "(°C)", &lagT2, HRU_OBS_Q, true);
+  declreadobs("lagT3", TDim::NHRU, "lagged temperature 3", "(°C)", &lagT3, HRU_OBS_Q, true);
+  declreadobs("lagT4", TDim::NHRU, "lagged temperature 4", "(°C)", &lagT4, HRU_OBS_Q, true);
 
-  declreadobs("lagSW1", NHRU, "lagged shortwave radiation 1", "(W/m^2)", &lagSW1, HRU_OBS_Q, true);
-  declreadobs("lagSW2", NHRU, "lagged shortwave radiation 2", "(W/m^2)", &lagSW2, HRU_OBS_Q, true);
-  declreadobs("lagSW3", NHRU, "lagged shortwave radiation 3", "(W/m^2)", &lagSW3, HRU_OBS_Q, true);
-  declreadobs("lagSW4", NHRU, "lagged shortwave radiation 4", "(W/m^2)", &lagSW4, HRU_OBS_Q, true);
-  declreadobs("lagSW5", NHRU, "lagged shortwave radiation 5", "(W/m^2)", &lagSW5, HRU_OBS_Q, true);
-  declreadobs("lagSW6", NHRU, "lagged shortwave radiation 6", "(W/m^2)", &lagSW6, HRU_OBS_Q, true);
+  declreadobs("lagSW1", TDim::NHRU, "lagged shortwave radiation 1", "(W/m^2)", &lagSW1, HRU_OBS_Q, true);
+  declreadobs("lagSW2", TDim::NHRU, "lagged shortwave radiation 2", "(W/m^2)", &lagSW2, HRU_OBS_Q, true);
+  declreadobs("lagSW3", TDim::NHRU, "lagged shortwave radiation 3", "(W/m^2)", &lagSW3, HRU_OBS_Q, true);
+  declreadobs("lagSW4", TDim::NHRU, "lagged shortwave radiation 4", "(W/m^2)", &lagSW4, HRU_OBS_Q, true);
+  declreadobs("lagSW5", TDim::NHRU, "lagged shortwave radiation 5", "(W/m^2)", &lagSW5, HRU_OBS_Q, true);
+  declreadobs("lagSW6", TDim::NHRU, "lagged shortwave radiation 6", "(W/m^2)", &lagSW6, HRU_OBS_Q, true);
 
   declgetvar("*", "Albedo", "()", &Albedo);
   declgetvar("*", "T_rain", "(°C)", &T_rain);
@@ -6525,22 +6533,22 @@ void ClassGlacier_melt_debris_cover_estimate_Mod::init(void){
 }
 
 void ClassGlacier_melt_debris_cover_estimate_Mod::run(void){
-const float Cp_air = 1006;
-const float MOL_wt_ratio_h2o_to_air = 0.622;
-const float Lv = 2.5e6;
-const float Ts_glacier = 273.15;
-const float e_s = 0.6113;
-const float Pr = 5;
-const float Katabatic = 0.0004;
-const float g = 9.8;
-const float FREEZE = 273.15;
-const float Cp_W0 = 4217.7;
-const float rho_h2o =  1000.0;
-const float B = 0.95;
-const float lapse_rate = 0.005;
-const float LH_fusion = 333.5;
-float TF = 0.0;
-float SRF = 0.0;
+const double Cp_air = 1006;
+const double MOL_wt_ratio_h2o_to_air = 0.622;
+const double Lv = 2.5e6;
+const double Ts_glacier = 273.15;
+const double e_s = 0.6113;
+const double Pr = 5;
+const double Katabatic = 0.0004;
+const double g = 9.8;
+const double FREEZE = 273.15;
+const double Cp_W0 = 4217.7;
+const double rho_h2o =  1000.0;
+const double B = 0.95;
+const double lapse_rate = 0.005;
+const double LH_fusion = 333.5;
+double TF = 0.0;
+double SRF = 0.0;
 
   long nstep = getstep();
   nstep = nstep%Global::Freq;
@@ -6557,7 +6565,7 @@ float SRF = 0.0;
         Gh_ebsm[hh] = den_air[hh] * Cp_air * ((0.01 + K_kat[hh])/2) * ((hru_t[hh] + 273.15) - Ts_glacier);
         Ge_ebsm[hh] = (MOL_wt_ratio_h2o_to_air * den_air[hh] * Lv) / (Pa[hh]*10) * ((0.01 + K_kat[hh])/2) * (hru_ea[hh] - e_s)*0.1;
         Cp_water[hh] = Cp_W0 - 2.55 * ((T_rain[hh] + 273.15) - FREEZE);
-        Gp_ebsm[hh] = Cp_water[hh] * rho_h2o * net_rain[hh] / 1000 * ((T_rain[hh] + 273.15) - Ts_glacier) / (24 / Global::Freq * 3600);
+        Gp_ebsm[hh] = Cp_water[hh] * rho_h2o * net_rain[hh] / 1000 * ((T_rain[hh] + 273.15) - Ts_glacier) / (24ll / (long long)Global::Freq * 3600ll);
         Gmelt_energy[hh] = Gn_ebsm[hh] + Gh_ebsm[hh] + Ge_ebsm[hh] + Gp_ebsm[hh];
         Xmelt_int[hh] = Gmelt_energy[hh]/(996.0*334000.0)*1000.0*3600.0; // (996*334000) * 1000*3600;
         if(Xmelt_int[hh] < 0.0)
@@ -6640,199 +6648,199 @@ void ClassSoilPrairie::decl(void) {
     Global::maxlay = 2;
   }
 
-  declvar("redirected_residual", NHRU, "redirected residual after topping up Sd and soil_rechar in Netroute/_D/_M/_M_D.", "(mm*km^2/int)", &redirected_residual);
+  declvar("redirected_residual", TDim::NHRU, "redirected residual after topping up Sd and soil_rechar in Netroute/_D/_M/_M_D.", "(mm*km^2/int)", &redirected_residual);
 
-  declstatdiag("cum_redirected_residual", NHRU, "cumulative HRU redirected_residual to another HRU.", "(mm*km^2)", &cum_redirected_residual);
+  declstatdiag("cum_redirected_residual", TDim::NHRU, "cumulative HRU redirected_residual to another HRU.", "(mm*km^2)", &cum_redirected_residual);
 
-  declvar("direct_rain", NHRU, "direct rainfall through canopy", "(mm/int)", &direct_rain);
+  declvar("direct_rain", TDim::NHRU, "direct rainfall through canopy", "(mm/int)", &direct_rain);
 
-  declstatvar("Sd", NHRU, "Depression storage.", "(mm)", &Sd);
+  declstatvar("Sd", TDim::NHRU, "Depression storage.", "(mm)", &Sd);
 
-  declstatvar("gw", NHRU, "ground water storage.", "(mm)", &gw);
+  declstatvar("gw", TDim::NHRU, "ground water storage.", "(mm)", &gw);
 
-  declstatvar("soil_rechr", NHRU, "moisture content of soil recharge zone, ie, the"//
+  declstatvar("soil_rechr", TDim::NHRU, "moisture content of soil recharge zone, ie, the"//
     "portion of the soil profile from which evaporation can take place.", "(mm)", &soil_rechr);
 
-  declstatvar("soil_moist", NHRU, "moisture content of soil profile to the depth"//
+  declstatvar("soil_moist", TDim::NHRU, "moisture content of soil profile to the depth"//
     "of the rooting zone of the major vegetation type on the HRU.", "(mm)", &soil_moist);
 
-  decllocal("cum_hru_condense", NHRU, "cumulative condensation over HRU.", "(mm)", &cum_hru_condense);
+  decllocal("cum_hru_condense", TDim::NHRU, "cumulative condensation over HRU.", "(mm)", &cum_hru_condense);
 
-  declvar("soil_gw", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/int)", &soil_gw);
+  declvar("soil_gw", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/int)", &soil_gw);
 
-  declvar("soil_gw_D", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_gw_D);
+  declvar("soil_gw_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_gw_D);
 
-  declvar("gw_flow", NHRU, "Drainage from HRU ground water reservoir.", "(mm/int)", &gw_flow);
+  declvar("gw_flow", TDim::NHRU, "Drainage from HRU ground water reservoir.", "(mm/int)", &gw_flow);
 
-  declvar("gw_flow_D", NHRU, "Daily drainage from HRU ground water reservoir.", "(mm/d)", &gw_flow_D);
+  declvar("gw_flow_D", TDim::NHRU, "Daily drainage from HRU ground water reservoir.", "(mm/d)", &gw_flow_D);
 
-  declvar("infil_act", NHRU, "Actual amount of water infiltrating the soil on each HRU.", "(mm/int)", &infil_act);
+  declvar("infil_act", TDim::NHRU, "Actual amount of water infiltrating the soil on each HRU.", "(mm/int)", &infil_act);
 
-  declvar("cum_infil_act", NHRU, "Accumulation of the actual amount of water infiltrating the soil on each HRU.", "(mm)", &cum_infil_act);
+  declvar("cum_infil_act", TDim::NHRU, "Accumulation of the actual amount of water infiltrating the soil on each HRU.", "(mm)", &cum_infil_act);
 
-  declvar("infil_act_D", NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
+  declvar("infil_act_D", TDim::NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
 
-  declstatdiag("cum_gw_flow", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
+  declstatdiag("cum_gw_flow", TDim::NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
 
-  declvar("soil_ssr", NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
+  declvar("soil_ssr", TDim::NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
 
-  declvar("rechr_ssr", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
+  declvar("rechr_ssr", TDim::NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
 
-  declstatdiag("cum_soil_ssr", NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
+  declstatdiag("cum_soil_ssr", TDim::NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
 
-  declstatdiag("cum_rechr_ssr", NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
+  declstatdiag("cum_rechr_ssr", TDim::NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
 
-  declvar("soil_ssr_D", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
+  declvar("soil_ssr_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
 
-  declvar("soil_runoff", NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
+  declvar("soil_runoff", TDim::NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
 
-  declstatdiag("cum_soil_runoff", NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
+  declstatdiag("cum_soil_runoff", TDim::NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
-  declvar("soil_runoff_D", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
+  declvar("soil_runoff_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
 
-  declvar("Pond_water_frac", NHRU, "fraction of the maximum possible Sd HRU fraction that is under water.", "()", &Pond_water_frac);
+  declvar("Pond_water_frac", TDim::NHRU, "fraction of the maximum possible Sd HRU fraction that is under water.", "()", &Pond_water_frac);
 
-  declvar("Small_Ponds_water_frac", NHRU, "fraction of the maximum possible Small_Ponds HRU fraction that is under water.", "()", &Small_Ponds_water_frac);
+  declvar("Small_Ponds_water_frac", TDim::NHRU, "fraction of the maximum possible Small_Ponds HRU fraction that is under water.", "()", &Small_Ponds_water_frac);
 
-  decldiag("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
+  decldiag("cum_runoff_to_Sd", TDim::NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
 
-  decldiag("cum_soil_gw", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
+  decldiag("cum_soil_gw", TDim::NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
 
-  declvar("Sd_water_frac", NHRU, "fraction of the maximum possible Sd HRU fraction that is under water.", "()", &Sd_water_frac);
+  declvar("Sd_water_frac", TDim::NHRU, "fraction of the maximum possible Sd HRU fraction that is under water.", "()", &Sd_water_frac);
 
-  declvar("Pond_water_frac", NHRU, "Fraction of the wetlands contributing water.", "()", &Pond_water_frac);
+  declvar("Pond_water_frac", TDim::NHRU, "Fraction of the wetlands contributing water.", "()", &Pond_water_frac);
 
-  declvar("Small_Ponds_water_frac", NHRU, "Small Ponds contrib fraction", "()", &Small_Ponds_water_frac);
+  declvar("Small_Ponds_water_frac", TDim::NHRU, "Small Ponds contrib fraction", "()", &Small_Ponds_water_frac);
 
-  declvar("wetlands_evap", NHRU, "Depth of water evaporating from wetlands using Priestley-Taylor.", "(mm/int)", &wetlands_evap);
+  declvar("wetlands_evap", TDim::NHRU, "Depth of water evaporating from wetlands using Priestley-Taylor.", "(mm/int)", &wetlands_evap);
 
-  declvar("Pond_evap", NHRU, "pond evaporation.", "(mm)", &Pond_evap);
+  declvar("Pond_evap", TDim::NHRU, "pond evaporation.", "(mm)", &Pond_evap);
 
-  declvar("Pond_area", NHRU, "pond surface area.", "(mm^2)", &Pond_area);
+  declvar("Pond_area", TDim::NHRU, "pond surface area.", "(mm^2)", &Pond_area);
 
-  declvar("Pond_volume", NHRU, "pond volume.", "(mm^3)", &Pond_volume);
+  declvar("Pond_volume", TDim::NHRU, "pond volume.", "(mm^3)", &Pond_volume);
 
-  declvar("Pond_s", NHRU, "link between the shape of the basin and A-h relation. p = 2 corresponds to a paraboloid basin and p = 10 a flat bottom.", "(mm^3)", &Pond_s);
+  declvar("Pond_s", TDim::NHRU, "link between the shape of the basin and A-h relation. p = 2 corresponds to a paraboloid basin and p = 10 a flat bottom.", "(mm^3)", &Pond_s);
 
-  declvar("Pond_h", NHRU, "pond depth.", "(mm)", &Pond_h);
+  declvar("Pond_h", TDim::NHRU, "pond depth.", "(mm)", &Pond_h);
 
-  declvar("Pond_hmax", NHRU, "pond maximum depth ", "(m)", &Pond_hmax);
+  declvar("Pond_hmax", TDim::NHRU, "pond maximum depth ", "(m)", &Pond_hmax);
 
-  declvar("runoff_to_Pond", NHRU, "runoff to pond", "(mm)", &runoff_to_Pond);
+  declvar("runoff_to_Pond", TDim::NHRU, "runoff to pond", "(mm)", &runoff_to_Pond);
 
-  declvar("Small_Ponds_runoff_to_Pond", NHRU, "Small pond runoff to pond", "(mm)", &Small_Ponds_runoff_to_Pond);
+  declvar("Small_Ponds_runoff_to_Pond", TDim::NHRU, "Small pond runoff to pond", "(mm)", &Small_Ponds_runoff_to_Pond);
 
-  declvar("Small_Ponds_evap", NHRU, "Small pond evaporation.", "(mm)", &Small_Ponds_evap);
+  declvar("Small_Ponds_evap", TDim::NHRU, "Small pond evaporation.", "(mm)", &Small_Ponds_evap);
 
-  declvar("Small_Ponds_area", NHRU, "pond surface area.", "(mm^2)", &Small_Ponds_area);
+  declvar("Small_Ponds_area", TDim::NHRU, "pond surface area.", "(mm^2)", &Small_Ponds_area);
 
-  declstatvar("Small_Ponds_Sd", NHRU, "Small Ponds depression storage.", "(mm)", &Small_Ponds_Sd);
+  declstatvar("Small_Ponds_Sd", TDim::NHRU, "Small Ponds depression storage.", "(mm)", &Small_Ponds_Sd);
 
-  declvar("runoff_to_Small_Ponds", NHRU, "runoff to small ponds", "(mm)", &runoff_to_Small_Ponds);
-
-
-  decllocal("snowinfil_buf", NHRU, "buffer snow infiltration.", "(mm/d)", &snowinfil_buf);
-
-  decllocal("runoff_buf", NHRU, "buffer runoff.", "(mm/d)", &runoff_buf);
-
-  decllocal("meltrunoff_buf", NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
-
-  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
-
-  decllocal("soil_moist_Init", NHRU, "initial soil moisture.", "(mm)", &soil_moist_Init);
-
-  decllocal("soil_rechr_Init", NHRU, "initial soil recharge.", "(mm)", &soil_rechr_Init);
-
-  decllocal("Sd_Init", NHRU, "initial Depression storage.", "(mm)", &Sd_Init);
-
-  decllocal("gw_Init", NHRU, "initial ground water storage.", "(mm)", &gw_Init);
+  declvar("runoff_to_Small_Ponds", TDim::NHRU, "runoff to small ponds", "(mm)", &runoff_to_Small_Ponds);
 
 
-  declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area.", "(km^2)", &basin_area);
+  decllocal("snowinfil_buf", TDim::NHRU, "buffer snow infiltration.", "(mm/d)", &snowinfil_buf);
 
-  declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area.", "(km^2)", &hru_area);
+  decllocal("runoff_buf", TDim::NHRU, "buffer runoff.", "(mm/d)", &runoff_buf);
 
-  declparam("Sdmax", NHRU, "[0]", "0.0", "5000.0", "Maximum depression storage.", "(mm)", &Sdmax);
+  decllocal("meltrunoff_buf", TDim::NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
 
-  declparam("Sdinit", NHRU, "[0]", "0.0", "5000.0", "Initial depression storage.", "(mm)", &Sdinit);
+  decllocal("hru_evap_buf", TDim::NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
 
-  declparam("Small_Ponds_Sdmax", NHRU, "[0]", "0.0", "5000.0", "Maximum depression storage.", "(mm)", &Small_Ponds_Sdmax);
+  decllocal("soil_moist_Init", TDim::NHRU, "initial soil moisture.", "(mm)", &soil_moist_Init);
 
-  declparam("Small_Ponds_Sdinit", NHRU, "[0]", "0.0", "5000.0", "Initial depression storage.", "(mm)", &Small_Ponds_Sdinit);
+  decllocal("soil_rechr_Init", TDim::NHRU, "initial soil recharge.", "(mm)", &soil_rechr_Init);
 
-  declparam("soil_rechr_max", NHRU, "[60.0]", "0.0", "350.0",
+  decllocal("Sd_Init", TDim::NHRU, "initial Depression storage.", "(mm)", &Sd_Init);
+
+  decllocal("gw_Init", TDim::NHRU, "initial ground water storage.", "(mm)", &gw_Init);
+
+
+  declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area.", "(km^2)", &basin_area);
+
+  declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area.", "(km^2)", &hru_area);
+
+  declparam("Sdmax", TDim::NHRU, "[0]", "0.0", "5000.0", "Maximum depression storage.", "(mm)", &Sdmax);
+
+  declparam("Sdinit", TDim::NHRU, "[0]", "0.0", "5000.0", "Initial depression storage.", "(mm)", &Sdinit);
+
+  declparam("Small_Ponds_Sdmax", TDim::NHRU, "[0]", "0.0", "5000.0", "Maximum depression storage.", "(mm)", &Small_Ponds_Sdmax);
+
+  declparam("Small_Ponds_Sdinit", TDim::NHRU, "[0]", "0.0", "5000.0", "Initial depression storage.", "(mm)", &Small_Ponds_Sdinit);
+
+  declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0",
     "Maximum value for soil recharge zone (upper portion of soil_moist where losses occur as both evaporation "//
     "and transpiration).  Must be less than or equal to soil_moist.","(mm)", &soil_rechr_max);
 
-  declparam("soil_rechr_init", NHRU, "[30.0]", "0.0", "250.0", "Initial value for soil recharge zone (upper part of "//
+  declparam("soil_rechr_init", TDim::NHRU, "[30.0]", "0.0", "250.0", "Initial value for soil recharge zone (upper part of "//
     "soil_moist).  Must be less than or equal to soil_moist_init.", "(mm)", &soil_rechr_init);
 
-  declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile."//
+  declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile."//
     "Soil profile is surface to bottom of rooting zone.", "(mm)", &soil_moist_max);
 
-  declparam("soil_moist_init", NHRU, "[187.0]", "0.0", "5000.0",
+  declparam("soil_moist_init", TDim::NHRU, "[187.0]", "0.0", "5000.0",
     "Initial value of available water in soil profile.", "(mm)", &soil_moist_init);
 
-  declparam("Small_Ponds_area_max", NHRU, "3", "1e-6", "1e+09", "small pond maximum area.", "(km^2)", &Small_Ponds_area_max);
+  declparam("Small_Ponds_area_max", TDim::NHRU, "3", "1e-6", "1e+09", "small pond maximum area.", "(km^2)", &Small_Ponds_area_max);
 
-  declparam("Pond_area_max", NHRU, "3", "1e-6", "1e+09", "pond maximum area.", "(km^2)", &Pond_area_max);
+  declparam("Pond_area_max", TDim::NHRU, "3", "1e-6", "1e+09", "pond maximum area.", "(km^2)", &Pond_area_max);
 
-  declparam("soil_gw_K", NHRU, "[0.0]", "0.", "100.0", "The maximum amount of the soil water excess for an HRU "//
+  declparam("soil_gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "The maximum amount of the soil water excess for an HRU "//
     "that is routed directly to the associated groundwater reservoir each day.", "(mm/d)", &soil_gw_K);
 
-  declparam("gw_max", NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of ground water reservoir.", "(mm)", &gw_max);
+  declparam("gw_max", TDim::NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of ground water reservoir.", "(mm)", &gw_max);
 
-  declparam("gw_init", NHRU, "[187.0]", "0.0", "5000.0", "Initial value of available water in ground water reservoir.", "(mm)", &gw_init);
+  declparam("gw_init", TDim::NHRU, "[187.0]", "0.0", "5000.0", "Initial value of available water in ground water reservoir.", "(mm)", &gw_init);
 
-  declparam("gw_K", NHRU, "[0.0]", "0.", "100.0", "daily ground water drainage from gw reservoir.", "(mm/d)", &gw_K);
+  declparam("gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ground water drainage from gw reservoir.", "(mm/d)", &gw_K);
 
-  declparam("rechr_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge.", "(mm/d)", &rechr_ssr_K);
+  declparam("rechr_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge.", "(mm/d)", &rechr_ssr_K);
 
-  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column.", "(mm/d)", &lower_ssr_K);
+  declparam("lower_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column.", "(mm/d)", &lower_ssr_K);
 
-  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor.", "(mm/d)", &Sd_ssr_K);
+  declparam("Sd_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor.", "(mm/d)", &Sd_ssr_K);
 
-  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
+  declparam("Sd_gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
 
-  declparam("Sd_water_frac_max", NHRU, "[0.24]", "0.0", "1.0", "Maximum fraction of the HRU area that can be water.", "()", &Sd_water_frac_max);
+  declparam("Sd_water_frac_max", TDim::NHRU, "[0.24]", "0.0", "1.0", "Maximum fraction of the HRU area that can be water.", "()", &Sd_water_frac_max);
 
-  declparam("evap_threshold", NHRU, "[10]", "0.0", "20.0", "Threshold evaporation necessary for setting the contribution fraction to zero.", "(mm)", &evap_threshold);
+  declparam("evap_threshold", TDim::NHRU, "[10]", "0.0", "20.0", "Threshold evaporation necessary for setting the contribution fraction to zero.", "(mm)", &evap_threshold);
 
-  declparam("soil_withdrawal", NDEFN, "[3]", "1", "4",
+  declparam("soil_withdrawal", TDim::NDEFN, "[3]", "1", "4",
       "Select water withdrawal function for soil type: 1 = sand, 2 = loam, 3 = clay, 4 = organic. soil_withdrawal[1] - rechr layer, soil_withdrawal[2] - lower layer", "()",
       &soil_withdrawal, &soil_withdrawal_Tables, 2);
 
-  declparam("cov_type", NHRU,
+  declparam("cov_type", TDim::NHRU,
     "[1]", "0", "2", "Vegetation evaporation type designation for HRU:  "//
     "0 = bare soil (no evaporation), 1 = crops (recharge layer), 2 = grasses & shrubs (all soil moisture).", "()", &cov_type);
 
-  declparam("transp_limited", NHRU, "[0]", "0", "1", "limit transpiration to recharge layer only  on-1/off-0.", "()", &transp_limited);
+  declparam("transp_limited", TDim::NHRU, "[0]", "0", "1", "limit transpiration to recharge layer only  on-1/off-0.", "()", &transp_limited);
 
-  declparam("soil_ssr_runoff", NHRU, "[1]", "0", "1", "soil column excess to interflow(ssr)/runoff (and possibly Sd)  interflow-0/runoff-1.", "()", &soil_ssr_runoff);
+  declparam("soil_ssr_runoff", TDim::NHRU, "[1]", "0", "1", "soil column excess to interflow(ssr)/runoff (and possibly Sd)  interflow-0/runoff-1.", "()", &soil_ssr_runoff);
 
-  decldiagparam("inhibit_evap", NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit.", "()", &inhibit_evap);
+  decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit.", "()", &inhibit_evap);
 
-  declparam("Sd_normal", NHRU, "[0]", "0", "1", "inhibit pond handling of depressional storage", "()", &Sd_normal);
+  declparam("Sd_normal", TDim::NHRU, "[0]", "0", "1", "inhibit pond handling of depressional storage", "()", &Sd_normal);
 
-  declparam("Pond_contrib_frac", NHRU, "[0.0]", "0", "1", "Pond contrib fraction of basin", "()", &Pond_contrib_frac);
+  declparam("Pond_contrib_frac", TDim::NHRU, "[0.0]", "0", "1", "Pond contrib fraction of basin", "()", &Pond_contrib_frac);
 
-  declparam("Pond_p", NHRU, "[2]", ".1", "10", "link between the shape of the basin and A-h relation. p = 2 corresponds to a paraboloid basin and p = 10 a flat bottom", "()", &Pond_p);
+  declparam("Pond_p", TDim::NHRU, "[2]", ".1", "10", "link between the shape of the basin and A-h relation. p = 2 corresponds to a paraboloid basin and p = 10 a flat bottom", "()", &Pond_p);
 
-  declparam("Pond_C1", NHRU, "[-0.254337]", "-1.0", "10", "coefficient 1 to calculate pond area from Sd/Sdmax", "()", &Pond_C1);
+  declparam("Pond_C1", TDim::NHRU, "[-0.254337]", "-1.0", "10", "coefficient 1 to calculate pond area from Sd/Sdmax", "()", &Pond_C1);
 
-  declparam("Pond_C2", NHRU, "[1.22233]", "0.1", "10", "coefficient 2 to calculate pond area from Sd/Sdmax", "()", &Pond_C2);
+  declparam("Pond_C2", TDim::NHRU, "[1.22233]", "0.1", "10", "coefficient 2 to calculate pond area from Sd/Sdmax", "()", &Pond_C2);
 
-  declparam("Pond_C3", NHRU, "[0.0261854]", "0.1", "10", "coefficient 3 to calculate pond area from Sd/Sdmax", "()", &Pond_C3);
+  declparam("Pond_C3", TDim::NHRU, "[0.0261854]", "0.1", "10", "coefficient 3 to calculate pond area from Sd/Sdmax", "()", &Pond_C3);
 
-  declparam("Small_Ponds_contrib_frac", NHRU, "[0.0]", "0", "1", "Small_Ponds contrib fraction of basin", "()", &Small_Ponds_contrib_frac);
+  declparam("Small_Ponds_contrib_frac", TDim::NHRU, "[0.0]", "0", "1", "Small_Ponds contrib fraction of basin", "()", &Small_Ponds_contrib_frac);
 
-  declparam("Small_Ponds_p", NHRU, "[2]", ".1", "10", "link between the shape of the basin and A-h relation. p = 2 corresponds to a paraboloid basin and p = 10 a flat bottom", "()", &Small_Ponds_p);
+  declparam("Small_Ponds_p", TDim::NHRU, "[2]", ".1", "10", "link between the shape of the basin and A-h relation. p = 2 corresponds to a paraboloid basin and p = 10 a flat bottom", "()", &Small_Ponds_p);
 
-  declparam("Small_Ponds_C1", NHRU, "[-0.254337]", "-1.0", "10", "coefficient 1 to calculate small pond area from Sd/Sdmax", "()", &Small_Ponds_C1);
+  declparam("Small_Ponds_C1", TDim::NHRU, "[-0.254337]", "-1.0", "10", "coefficient 1 to calculate small pond area from Sd/Sdmax", "()", &Small_Ponds_C1);
 
-  declparam("Small_Ponds_C2", NHRU, "[1.22233]", "0.1", "10", "coefficient 2 to calculate small area from Sd/Sdmax", "()", &Small_Ponds_C2);
+  declparam("Small_Ponds_C2", TDim::NHRU, "[1.22233]", "0.1", "10", "coefficient 2 to calculate small area from Sd/Sdmax", "()", &Small_Ponds_C2);
 
-  declparam("Small_Ponds_C3", NHRU, "[0.0261854]", "0.1", "10", "coefficient 3 to calculate small area from Sd/Sdmax", "()", &Small_Ponds_C3);
+  declparam("Small_Ponds_C3", TDim::NHRU, "[0.0261854]", "0.1", "10", "coefficient 3 to calculate small area from Sd/Sdmax", "()", &Small_Ponds_C3);
 
 
 
@@ -6858,29 +6866,29 @@ void ClassSoilPrairie::decl(void) {
 
 void ClassSoilPrairie::init(void) {
 
-  nhru = getdim(NHRU);
+  nhru = getdim(TDim::NHRU);
 
   if(snowinfilDiv > 1){
     string S = "Soil:  \"snowinfil\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(evapDiv > 1){
     string S = "Soil:  \"hru_evap\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(meltrunoffDiv > 1){
     string S = "Netroute:  \"meltrunoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
   if(runoffDiv > 1){
     string S = "Netroute:  \"runoff\". Converting to mm/int";
-    CRHMException TExcept(S.c_str(), WARNING);
+    CRHMException TExcept(S.c_str(), TExcept::WARNING);
     LogError(TExcept);
   }
 
@@ -6888,34 +6896,34 @@ void ClassSoilPrairie::init(void) {
 
     if(soil_moist[hh] > soil_moist_max[hh]) {
       string S = string("'") + Name + " (Soil)' soil_moist cannot be greater than soil_moist_max in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), TERMINATE);
+      CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
       LogError(TExcept);
       throw TExcept;
     }
 
     if(soil_rechr[hh] > soil_rechr_max[hh]) {
       string S = string("'") + Name + " (Soil)' soil_rechr cannot be greater than soil_rechr_max in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), TERMINATE);
+      CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
       LogError(TExcept);
       throw TExcept;
     }
     if(soil_rechr_max[hh] > soil_moist_max[hh]) {
       string S = string("'") + Name + " (Soil)' Soil_rechr_max cannot be greater than soil_moist_max in hru = " + to_string(hh+1).c_str();
-      CRHMException TExcept(S.c_str(), WARNING);
+      CRHMException TExcept(S.c_str(), TExcept::WARNING);
       LogError(TExcept);
       throw TExcept;
     }
 
     if(Sdinit[hh] > Sdmax[hh]) {
       string S = string("'") + Name + " (Soil)' Initial value of depression storage is greater than the maximum value in hru = " + to_string(hh+1).c_str();
-      CRHMException Except(S.c_str() ,TERMINATE);
+      CRHMException Except(S.c_str() , TExcept::TERMINATE);
       LogError(Except);
       throw Except;
     }
 
     if(gw_init[hh] > gw_max[hh]) {
       string S = string("'") + Name + " (Soil)' Initial value of gw storage is greater than the maximum value in hru = " + to_string(hh+1).c_str();
-      CRHMException Except(S.c_str() ,TERMINATE);
+      CRHMException Except(S.c_str() , TExcept::TERMINATE);
       LogError(Except);
       throw Except;
     }
@@ -6980,8 +6988,8 @@ void ClassSoilPrairie::init(void) {
 
 void ClassSoilPrairie::run(void) {
 
-  float soil_lower, excs, condense;
-  float et;                                            
+  double soil_lower, excs, condense;
+  double et;                                            
 
   long nstep = getstep();
 
@@ -7044,7 +7052,7 @@ void ClassSoilPrairie::run(void) {
     if(soil_moist_max[hh] > 0.0){
       soil_lower = soil_moist[hh] - soil_rechr[hh];
 
-      float potential = infil[hh] + snowinfil_buf[hh] + condense;
+      double potential = infil[hh] + snowinfil_buf[hh] + condense;
 
       soil_rechr[hh] = soil_rechr[hh] + potential;
 
@@ -7085,7 +7093,7 @@ void ClassSoilPrairie::run(void) {
         cum_rechr_ssr[hh] += rechr_ssr[hh];
       }
 
-      float s2gw_k = soil_gw_K[hh]/Global::Freq;
+      double s2gw_k = soil_gw_K[hh]/Global::Freq;
 
 //  Handle excess to gw
 
@@ -7198,7 +7206,7 @@ void ClassSoilPrairie::run(void) {
     cum_runoff_to_Sd[hh] += runoff_to_Pond[hh];
 
     if(Sd[hh] > 0.0 && Sd_gw_K[hh] > 0.0){
-      float Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
+      double Sd2gw_k = Sd_gw_K[hh]/Global::Freq;
       if(Sd2gw_k > Sd[hh])
         Sd2gw_k = Sd[hh];
       soil_gw[hh] += Sd2gw_k;
@@ -7218,7 +7226,7 @@ void ClassSoilPrairie::run(void) {
     }
 
     if(gw_max[hh] > 0.0){ // prevents divide by zero error
-      float spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
+      double spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
       gw[hh] -= spill;
       gw_flow[hh] += spill;
     }
@@ -7227,7 +7235,7 @@ void ClassSoilPrairie::run(void) {
     cum_gw_flow[hh] += gw_flow[hh];
 
     if(Sd[hh] > 0.0 && Sd_ssr_K[hh] > 0.0){
-      float Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq;
+      double Sd2ssr_k = Sd_ssr_K[hh]/Global::Freq;
       if(Sd2ssr_k >= Sd[hh])
         Sd2ssr_k = Sd[hh];
       soil_ssr[hh] += Sd2ssr_k;
@@ -7236,9 +7244,9 @@ void ClassSoilPrairie::run(void) {
         Sd[hh] = 0.0;
     }
 
-    float s2ssr_k = lower_ssr_K[hh]/Global::Freq;
+    double s2ssr_k = lower_ssr_K[hh]/Global::Freq;
     if(s2ssr_k > 0.0){
-      float avail = soil_moist[hh] - soil_rechr[hh];
+      double avail = soil_moist[hh] - soil_rechr[hh];
       if(s2ssr_k >= avail)
         s2ssr_k = avail;
       soil_moist[hh] -= s2ssr_k;
@@ -7250,11 +7258,12 @@ void ClassSoilPrairie::run(void) {
 
 //   ***Compute actual evapotranspiration
 
-    float avail_evap = hru_evap_buf[hh]*(1.0 - (Pond_water_frac[hh] + Small_Ponds_water_frac[hh])); // N.B. Pond and Small_Ponds handled earlier with "wetlands_evap" variable.
+    double avail_evap = hru_evap_buf[hh]*(1.0 - (Pond_water_frac[hh] + Small_Ponds_water_frac[hh])); // N.B. Pond and Small_Ponds handled earlier with "wetlands_evap" variable.
 
     if(avail_evap > 0.0 && soil_moist[hh] > 0.0 && cov_type[hh] > 0){
 
-      float pctl, pctr, etl, ets, etr;
+      double pctl, pctr, etl, etr;
+      //double ets; varible is unreferenced commenting out for now - jhs507
 
       if((soil_moist_max[hh] - soil_rechr_max[hh]) > 0.0)
         pctl = (soil_moist[hh] - soil_rechr[hh])/(soil_moist_max[hh] - soil_rechr_max[hh]);
@@ -7387,15 +7396,15 @@ void ClassSoilPrairie::run(void) {
 
 void ClassSoilPrairie::finish(bool good) {
 
-  float Allcum_soil_runoff = 0.0;
-  float Allcum_soil_ssr = 0.0;
-  float Allcum_rechr_ssr = 0.0;
-  float Allcum_soil_gw = 0.0;
-  float Allcum_gw_flow = 0.0;
-  float Allcum_infil_act = 0.0;
-  float Allcum_soil_moist_change = 0.0;
-  float Allcum_Sd_change = 0.0;
-  float Allcum_gw_change = 0.0;
+  double Allcum_soil_runoff = 0.0;
+  double Allcum_soil_ssr = 0.0;
+  double Allcum_rechr_ssr = 0.0;
+  double Allcum_soil_gw = 0.0;
+  double Allcum_gw_flow = 0.0;
+  double Allcum_infil_act = 0.0;
+  double Allcum_soil_moist_change = 0.0;
+  double Allcum_Sd_change = 0.0;
+  double Allcum_gw_change = 0.0;
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (SoilPrairie)' soil_rechr         (mm) (mm*hru) (mm*hru/basin): ").c_str(), soil_rechr[hh], hru_area[hh], basin_area[0], " *** information only - already included in 'soil_moist'.");
@@ -7442,11 +7451,11 @@ void ClassSoilPrairie::finish(bool good) {
   LogDebug(" ");
 }
 
-float ClassSoilPrairie::Pond_area_frac(const float area_frac, const long hh){
+double ClassSoilPrairie::Pond_area_frac(const double area_frac, const long hh){
 
 // calculates maximum water area fraction from water volume fraction using simple scaling curve
 
-  float ZZ = Pond_C1[hh] * sqr(area_frac) + Pond_C2[hh]*area_frac + Pond_C3[hh]; // area_frac
+  double ZZ = Pond_C1[hh] * sqr(area_frac) + Pond_C2[hh]*area_frac + Pond_C3[hh]; // area_frac
 
   if(ZZ < 0.0)
     ZZ = 0.0;
@@ -7456,11 +7465,11 @@ float ClassSoilPrairie::Pond_area_frac(const float area_frac, const long hh){
   return ZZ;
 }
 
-float ClassSoilPrairie::Small_Ponds_area_frac(const float area_frac, const long hh){
+double ClassSoilPrairie::Small_Ponds_area_frac(const double area_frac, const long hh){
 
 // calculates maximum water area fraction from water volume fraction using simple scaling curve
 
-  float ZZ = Small_Ponds_C1[hh] * sqr(area_frac) + Small_Ponds_C2[hh]*area_frac + Small_Ponds_C3[hh]; // area_frac
+  double ZZ = Small_Ponds_C1[hh] * sqr(area_frac) + Small_Ponds_C2[hh]*area_frac + Small_Ponds_C3[hh]; // area_frac
 
   if(ZZ < 0.0)
     ZZ = 0.0;
@@ -7470,11 +7479,11 @@ float ClassSoilPrairie::Small_Ponds_area_frac(const float area_frac, const long 
   return ZZ;
 }
 
-float ClassSoilPrairie::Small_Ponds_runoff_frac(const float Sd_Sdmax, const long hh){
+double ClassSoilPrairie::Small_Ponds_runoff_frac(const double Sd_Sdmax, const long hh){
 
 // calculates maximum water area fraction from water volume fraction using simple scaling curve
 
-  float ZZ = Sd_Sdmax; // area_frac
+  double ZZ = Sd_Sdmax; // area_frac
 
   if(ZZ < 0.0)
     ZZ = 0.0;
@@ -7484,7 +7493,7 @@ float ClassSoilPrairie::Small_Ponds_runoff_frac(const float Sd_Sdmax, const long
   return ZZ;
 }
 
-void ClassSoilPrairie::Pond_calc_h_A(const float volume, const float s, const float p, float &h, float &area){
+void ClassSoilPrairie::Pond_calc_h_A(const double volume, const double s, const double p, double &h, double &area){
 
 // calculate current depth & area from s, p, maxarea and desired volume
 
@@ -7494,12 +7503,12 @@ void ClassSoilPrairie::Pond_calc_h_A(const float volume, const float s, const fl
 
 } // end  Pond_calc_h_A
 
-void ClassSoilPrairie::calc_h_and_S(const float maxvolume, const float maxarea, const float pval, float &S, float &h){
+void ClassSoilPrairie::calc_h_and_S(const double maxvolume, const double maxarea, const double pval, double &S, double &h){
 
-const float maxerror = 0.000001;
-const float  maxiterations = 100;
+const double maxerror = 0.000001;
+const double  maxiterations = 100;
 
-float est_area, area_error;
+double est_area, area_error;
 long iterations;
 long done;
 // does iterative calculations to find h and S
@@ -7528,32 +7537,32 @@ void ClassGlacier_debris_cover::decl(void){
   long step = getstep();
   long nstep = step%Global::Freq;
 
-  declvar("lagT", NHRU, "lagged temperature.", "(°C)", &lagT);
+  declvar("lagT", TDim::NHRU, "lagged temperature.", "(°C)", &lagT);
 
-  declvar("lagSW", NHRU, "lagged shortwave radiation.", "(W/m^2)", &lagSW);
+  declvar("lagSW", TDim::NHRU, "lagged shortwave radiation.", "(W/m^2)", &lagSW);
 
-  declvar("Xmelt", NHRU, "Experimental Firn and Ice melt at daily timestepe.", "(mm/d)", &Xmelt);
+  declvar("Xmelt", TDim::NHRU, "Experimental Firn and Ice melt at daily timestepe.", "(mm/d)", &Xmelt);
 
-  declvar("Xmelt_int", NHRU, "Experimental Firn and Ice melt at interval timestep.", "(mm/int)", &Xmelt_int);
+  declvar("Xmelt_int", TDim::NHRU, "Experimental Firn and Ice melt at interval timestep.", "(mm/int)", &Xmelt_int);
 
-  declvar("Xmelt_acc", NHRU, "Experimental Firn and Ice melt daily accumulator.", "(mm)", &Xmelt_acc);
+  declvar("Xmelt_acc", TDim::NHRU, "Experimental Firn and Ice melt daily accumulator.", "(mm)", &Xmelt_acc);
 
 
-  declparam("debris_h", NHRU, "[0.0]", "0", "10", "debris thickness.", "(m)", &debris_h);
+  declparam("debris_h", TDim::NHRU, "[0.0]", "0", "10", "debris thickness.", "(m)", &debris_h);
 
-  declparam("T_threshold", NHRU, "[1.0]", "-30", "30", "threshold temperature for melt to occur.", "(°C)", &T_threshold);
+  declparam("T_threshold", TDim::NHRU, "[1.0]", "-30", "30", "threshold temperature for melt to occur.", "(°C)", &T_threshold);
 
-  declreadobs("lagT1", NHRU, "lagged temperature 1", "(°C)", &lagT1, HRU_OBS_Q, true);
-  declreadobs("lagT2", NHRU, "lagged temperature 2", "(°C)", &lagT2, HRU_OBS_Q, true);
-  declreadobs("lagT3", NHRU, "lagged temperature 3", "(°C)", &lagT3, HRU_OBS_Q, true);
-  declreadobs("lagT4", NHRU, "lagged temperature 4", "(°C)", &lagT4, HRU_OBS_Q, true);
+  declreadobs("lagT1", TDim::NHRU, "lagged temperature 1", "(°C)", &lagT1, HRU_OBS_Q, true);
+  declreadobs("lagT2", TDim::NHRU, "lagged temperature 2", "(°C)", &lagT2, HRU_OBS_Q, true);
+  declreadobs("lagT3", TDim::NHRU, "lagged temperature 3", "(°C)", &lagT3, HRU_OBS_Q, true);
+  declreadobs("lagT4", TDim::NHRU, "lagged temperature 4", "(°C)", &lagT4, HRU_OBS_Q, true);
 
-  declreadobs("lagSW1", NHRU, "lagged shortwave radiation 1", "(W/m^2)", &lagSW1, HRU_OBS_Q, true);
-  declreadobs("lagSW2", NHRU, "lagged shortwave radiation 2", "(W/m^2)", &lagSW2, HRU_OBS_Q, true);
-  declreadobs("lagSW3", NHRU, "lagged shortwave radiation 3", "(W/m^2)", &lagSW3, HRU_OBS_Q, true);
-  declreadobs("lagSW4", NHRU, "lagged shortwave radiation 4", "(W/m^2)", &lagSW4, HRU_OBS_Q, true);
-  declreadobs("lagSW5", NHRU, "lagged shortwave radiation 5", "(W/m^2)", &lagSW5, HRU_OBS_Q, true);
-  declreadobs("lagSW6", NHRU, "lagged shortwave radiation 6", "(W/m^2)", &lagSW6, HRU_OBS_Q, true);
+  declreadobs("lagSW1", TDim::NHRU, "lagged shortwave radiation 1", "(W/m^2)", &lagSW1, HRU_OBS_Q, true);
+  declreadobs("lagSW2", TDim::NHRU, "lagged shortwave radiation 2", "(W/m^2)", &lagSW2, HRU_OBS_Q, true);
+  declreadobs("lagSW3", TDim::NHRU, "lagged shortwave radiation 3", "(W/m^2)", &lagSW3, HRU_OBS_Q, true);
+  declreadobs("lagSW4", TDim::NHRU, "lagged shortwave radiation 4", "(W/m^2)", &lagSW4, HRU_OBS_Q, true);
+  declreadobs("lagSW5", TDim::NHRU, "lagged shortwave radiation 5", "(W/m^2)", &lagSW5, HRU_OBS_Q, true);
+  declreadobs("lagSW6", TDim::NHRU, "lagged shortwave radiation 6", "(W/m^2)", &lagSW6, HRU_OBS_Q, true);
 
   declgetvar("*", "Albedo", "()", &Albedo);
   declgetvar("*", "hru_t", "(°C)", &hru_t);
@@ -7572,8 +7581,8 @@ void ClassGlacier_debris_cover::init(void){
 
 void ClassGlacier_debris_cover::run(void){
 
-float TF = 0.0;
-float SRF = 0.0;
+double TF = 0.0;
+double SRF = 0.0;
 
   long nstep = getstep();
   nstep = nstep%Global::Freq;
@@ -7647,8 +7656,8 @@ Class_lapse_rate_Monthly* Class_lapse_rate_Monthly::klone(string name) const{
 }
 
 void Class_lapse_rate_Monthly::decl(void){
-  declvar("lapse_rate_Mthly", NHRU, "temperature lapse rate Mthly.", "(°C/100m)", &lapse_rate_Mthly);
-  declvar("lapse_rate", NHRU, "temperature lapse rate.", "(°C/100m)", &lapse_rate);
+  declvar("lapse_rate_Mthly", TDim::NHRU, "temperature lapse rate Mthly.", "(°C/100m)", &lapse_rate_Mthly);
+  declvar("lapse_rate", TDim::NHRU, "temperature lapse rate.", "(°C/100m)", &lapse_rate);
 //  declparam("lapse_rate", NHRU, "[0.75]", "0", "2", "temperature lapse rate.", "(°C/100m)", &lapse_rate);
 }
 

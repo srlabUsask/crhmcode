@@ -16,12 +16,12 @@ using namespace std;
 
 extern "C" void  MoveModulesToGlobal(string DLLName = "CRHM");
 
-float DepthofSnow(float SWE);
-float SWEfromDepth(float Snow_Depth);
-void ProbabilityThresholdNew(float SWE, float t, float Uten_Prob, float & Probability, float & Threshold, long Snow, float & SnowAge, long & DrySnow);
-void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH);
-void Pbsm (float E_StubHt, float Uthr, float & DriftH, float & SublH,
-           float t, float u, float rh, float Fetch, long N_S, float A_S);
+double DepthofSnow(double SWE);
+double SWEfromDepth(double Snow_Depth);
+void ProbabilityThresholdNew(double SWE, double t, double Uten_Prob, double & Probability, double & Threshold, long Snow, double & SnowAge, long & DrySnow);
+void Sum(double TQsalt, double TQsusp, double SBsum, double SBsalt, double & DriftH, double & SublH);
+void Pbsm (double E_StubHt, double Uthr, double & DriftH, double & SublH,
+           double t, double u, double rh, double Fetch, long N_S, double A_S);
 
 class Classshared : public ClassModule {
 public:
@@ -64,13 +64,13 @@ const long *RUN_ID;
 const long *RUN_START;
 const long *RUN_END;
 
-const float *Meyer_B;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_lat;
-const float *hru_elev;
-const float *hru_GSL;
-const float *hru_ASL;
+const double *Meyer_B;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *hru_lat;
+const double *hru_elev;
+const double *hru_GSL;
+const double *hru_ASL;
 
 TStringList *basin_name;
 TStringList *INIT_STATE;
@@ -95,45 +95,45 @@ public:
 Classglobal(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *QdroD;
-float *QdroDext;
-float *QdfoD;
-float *Qdro;
-float *Qdfo;
-float *Qdflat;
-float *QdflatD;
-float *QdflatE;
-float *SolAng;
-float *SunMax;
-float *cosxs;
-float *cosxsflat;
-float *pQdro;
-float **pQdro_FREQ;
-float *pQdfo;
-float **pQdfo_FREQ;
-float *pQdflat;
-float **pQdflat_FREQ;
-float *pQdflatE;
-float **pQdflatE_FREQ;
-float *pSol;
-float **pSol_FREQ;
-float *pCosxs;
-float **pCosxs_FREQ;
-float *pCosxs0;
-float **pCosxs0_FREQ;
+double *QdroD;
+double *QdroDext;
+double *QdfoD;
+double *Qdro;
+double *Qdfo;
+double *Qdflat;
+double *QdflatD;
+double *QdflatE;
+double *SolAng;
+double *SunMax;
+double *cosxs;
+double *cosxsflat;
+double *pQdro;
+double **pQdro_FREQ;
+double *pQdfo;
+double **pQdfo_FREQ;
+double *pQdflat;
+double **pQdflat_FREQ;
+double *pQdflatE;
+double **pQdflatE_FREQ;
+double *pSol;
+double **pSol_FREQ;
+double *pCosxs;
+double **pCosxs_FREQ;
+double *pCosxs0;
+double **pCosxs0_FREQ;
 
 // declared parameters
-const float *hru_lat;
-const float *hru_elev;
-const float *hru_GSL;
-const float *hru_ASL;
-const float *Time_Offset;
+const double *hru_lat;
+const double *hru_elev;
+const double *hru_GSL;
+const double *hru_ASL;
+const double *Time_Offset;
 
 //const long  *Extra;
 
 // variable inputs
 
-void air_mass (const float czen, float &oam);
+void air_mass (const double czen, double &oam);
 
 void decl(void);
 void init(void);
@@ -151,74 +151,74 @@ long Exist;
 long Exist2;
 
 // declared observation variables
-const float *p;      // interval data
-const float *ppt;    // daily data
-const float *t;
-float **tday_intvls;
-const float *rh;
-float **rhday_intvls;
-const float *ea;
-float **eaday_intvls;
-const float *u;
-const float *t_max;
-const float *t_min;
-const float *obs_snow;
-const float *obs_rain;
+const double *p;      // interval data
+const double *ppt;    // daily data
+const double *t;
+double **tday_intvls;
+const double *rh;
+double **rhday_intvls;
+const double *ea;
+double **eaday_intvls;
+const double *u;
+const double *t_max;
+const double *t_min;
+const double *obs_snow;
+const double *obs_rain;
 
 // declared observation functions
-float *tmean;
-float *tmin;
-float *tmax;
-float *umean;
-float *pptD;
-//float *p;      // interval data
-float *NotUsed;
+double *tmean;
+double *tmin;
+double *tmax;
+double *umean;
+double *pptD;
+//double *p;      // interval data
+double *NotUsed;
 
 // declared variables
-float *hru_t;
-float *hru_rh;
-float *hru_ea;
-float *hru_estar;
-float *hru_u;
-float *hru_p;
-// float *hru_icebulb;
-float *Pa;
-float *DTnow;
+double *hru_t;
+double *hru_rh;
+double *hru_ea;
+double *hru_estar;
+double *hru_u;
+double *hru_p;
+// double *hru_icebulb;
+double *Pa;
+double *DTnow;
 long  *DTindx;
-float *hru_rain;
-float *cumhru_rain;
-float *hru_snow;
-float *cumhru_snow;
-float *cumhru_snow_meas;
-float *hru_tmax;
-float *hru_tmin;
-float *hru_tmean;
-float *hru_eamean;
-float *hru_umean;
-float *hru_rhmean;
+double *hru_rain;
+double *cumhru_rain;
+double *hru_snow;
+double *cumhru_snow;
+double *cumhru_snow_meas;
+double *hru_tmax;
+double *hru_tmin;
+double *hru_tmean;
+double *hru_eamean;
+double *hru_umean;
+double *hru_rhmean;
 
-float *t_obs;
-float **t_obs_lay;
+double *t_obs;
+double **t_obs_lay;
 
 long  *hru_newsnow;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *tmax_allrain;
-const float *tmax_allsnow;
-const float *lapse_rate;
-const float *precip_elev_adj;
-const float *hru_elev;
-const float *ClimChng_t;
-const float *ClimChng_precip;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *tmax_allrain;
+const double *tmax_allsnow;
+const double *lapse_rate;
+const double *precip_elev_adj;
+const double *hru_elev;
+const double *ClimChng_t;
+const double *ClimChng_precip;
 const long  *catchadjust;
 const long  *ppt_daily_distrib;
 const long  *snow_rain_determination;
 const long  *HRU_OBS;
 const long  **HRU_OBS_Tables;
-const float *obs_elev;
-const float  **obs_elev_Tables;
+const double *obs_elev;
+const double  **obs_elev_Tables;
 const long  *ElevChng_flag;
 const long  *ClimChng_flag;
 
@@ -240,21 +240,21 @@ public:
 Classintcp(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *net_rain;
-float *cumnet_rain;
-float *cumnet_snow;
-float *net_snow;
-float *net_p;
-float *intcp_evap;
+double *net_rain;
+double *cumnet_rain;
+double *cumnet_snow;
+double *net_snow;
+double *net_p;
+double *intcp_evap;
 
 // declared parameters
-const float *basin_area;
-const float *hru_area;
+const double *basin_area;
+const double *hru_area;
 
 // variable inputs
-const float *hru_rain;
-const float *hru_snow;
-const float *hru_p;
+const double *hru_rain;
+const double *hru_snow;
+const double *hru_p;
 
 void decl(void);
 void init(void);
@@ -269,58 +269,58 @@ public:
 
 Classpbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
 
-float hru_u_;
+double hru_u_;
 
 // declared variables
 
-float *SWE;
-float *Subl;
-float *Drift;
-float *SublH;
-float *DriftH;
-float *cumSubl;
-float *cumDrift;
-float *cumDriftIn;
-float *cumSno;
-float *Prob;
-float *snowdepth;
-float *BasinSnowLoss;
-float *cumBasinSnowLoss;
-float *cumBasinSnowGain;
-float *SnowAge;
-float *SWE_Init;
-float *rain_on_snow;
-float *cumrain_on_snow;
+double *SWE;
+double *Subl;
+double *Drift;
+double *SublH;
+double *DriftH;
+double *cumSubl;
+double *cumDrift;
+double *cumDriftIn;
+double *cumSno;
+double *Prob;
+double *snowdepth;
+double *BasinSnowLoss;
+double *cumBasinSnowLoss;
+double *cumBasinSnowGain;
+double *SnowAge;
+double *SWE_Init;
+double *rain_on_snow;
+double *cumrain_on_snow;
 long  *DrySnow;
 
 // declared parameters
-const float *fetch;
-const float *Ht;
-const float *distrib;
-const float *basin_area;
-const float *hru_area;
-const float *A_S;
-const float *u_D;
-const float *Drift_offset;
-const float *Drift_slope;
-const float *Subl_offset;
-const float *Subl_slope;
-const float *N_S;
+const double *fetch;
+const double *Ht;
+const double *distrib;
+const double *basin_area;
+const double *hru_area;
+const double *A_S;
+const double *u_D;
+const double *Drift_offset;
+const double *Drift_slope;
+const double *Subl_offset;
+const double *Subl_slope;
+const double *N_S;
 const long *inhibit_evap;
 const long *inhibit_bs;
 const long *inhibit_subl;
 
 // variable inputs
-const float *hru_t;
-const float *hru_rh;
-const float *hru_u;
-const float *hru_Uadjust;
-const float *net_snow;
-const float *net_rain;
+const double *hru_t;
+const double *hru_rh;
+const double *hru_u;
+const double *hru_Uadjust;
+const double *net_snow;
+const double *net_rain;
 const long  *hru_newsnow;
 
 // local allocated arrays
-float *hru_basin;
+double *hru_basin;
 
 
 void decl(void);
@@ -337,21 +337,21 @@ public:
 ClassNO_pbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
                                   hru_basin(NULL) {};
 // declared variables
-float *SWE;
-float *cumSno;
-float *snowdepth;
+double *SWE;
+double *cumSno;
+double *snowdepth;
 
 // declared parameters
-const float *basin_area;
-const float *hru_area;
+const double *basin_area;
+const double *hru_area;
 const long *inhibit_evap;
 
 // variable inputs
-const float *net_snow;
+const double *net_snow;
 const long  *hru_newsnow;
 
 // local allocated arrays
-float *hru_basin;
+double *hru_basin;
 
 
 void decl(void);
@@ -368,43 +368,43 @@ public:
 Classtsurface(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *hru_tsf;
-float *hru_tsf_D;
-float *hru_tsf_acc;
-float *n_factor;
-float *n_factor_T;
-float *Zdt_last;
-float *SWE_tc;
-float *SWE_density;
-float *hru_t_D;
-float *hru_T_s_D;
-float *hru_t_acc;
-float *hru_T_s_acc;
+double *hru_tsf;
+double *hru_tsf_D;
+double *hru_tsf_acc;
+double *n_factor;
+double *n_factor_T;
+double *Zdt_last;
+double *SWE_tc;
+double *SWE_density;
+double *hru_t_D;
+double *hru_T_s_D;
+double *hru_t_acc;
+double *hru_T_s_acc;
 
 // put inputs
-float *Zdt; // not used as put. Allows Classtsurface to load before ClassXG
+double *Zdt; // not used as put. Allows Classtsurface to load before ClassXG
 
 // declared parameters
-const float *W_a; // Williams
-const float *W_b;
-const float *W_c;
-const float *W_d;
+const double *W_a; // Williams
+const double *W_b;
+const double *W_c;
+const double *W_d;
 
-const float *n_factor_a; // Woo
-const float *n_factor_b;
-const float *n_factor_c;
+const double *n_factor_a; // Woo
+const double *n_factor_b;
+const double *n_factor_c;
 
 // variable inputs
-const float *SWE;
-const float *hru_t;
-const float *netD;
-const float *z_s;
-const float *rho;
-const float *T_s;
-const float *G;
-const float *tmin;
-const float *snowdepth;
-const float *xx;
+const double *SWE;
+const double *hru_t;
+const double *netD;
+const double *z_s;
+const double *rho;
+const double *T_s;
+const double *G;
+const double *tmin;
+const double *snowdepth;
+const double *xx;
 
 void decl(void);
 void init(void);
@@ -419,23 +419,23 @@ public:
 Classalbedo(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *Albedo;
-float *net_snowD;  // daily value sum(newsnow)
+double *Albedo;
+double *net_snowD;  // daily value sum(newsnow)
 long *meltflag;
 long *winter;
 long  *newsnowcnt;
 
 // declared parameters
-const float *Albedo_bare;
-const float *Albedo_snow;
-const float *hru_lat;
+const double *Albedo_bare;
+const double *Albedo_snow;
+const double *hru_lat;
 
 // variable inputs
-const float *hru_tmax;
-const float *hru_tmin;
-const float *QdroD;
-const float *SWE;
-const float *net_snow;
+const double *hru_tmax;
+const double *hru_tmin;
+const double *QdroD;
+const double *SWE;
+const double *net_snow;
 const long  *hru_newsnow;
 
 void decl(void);
@@ -451,34 +451,34 @@ public:
 Classnetall(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observation variables
-const float *t;
-const float *ea;
-const float **tday_intvls;
-const float **eaday_intvls;
-const float *NotUsed;
+const double *t;
+const double *ea;
+const double **tday_intvls;
+const double **eaday_intvls;
+const double *NotUsed;
 
 // declared variables
-float *net;
-float *Rn; // net converted to mm
-float *netD;
-float *RnD; // netD converted to mm
-float *RnD_POS;
-float *cum_net;
+double *net;
+double *Rn; // net converted to mm
+double *netD;
+double *RnD; // netD converted to mm
+double *RnD_POS;
+double *cum_net;
 
 // declared parameters
 
 // variable inputs
-const float *hru_t;
-const float *hru_ea;
-const float *Albedo;
-const float *hru_SunAct;
-const float *SunMax;
-const float *Qdro;
-const float *Qdfo;
-const float *pQdro;
-const float *pQdfo;
-const float **pQdro_FREQ;
-const float **pQdfo_FREQ;
+const double *hru_t;
+const double *hru_ea;
+const double *Albedo;
+const double *hru_SunAct;
+const double *SunMax;
+const double *Qdro;
+const double *Qdfo;
+const double *pQdro;
+const double *pQdfo;
+const double **pQdro_FREQ;
+const double **pQdfo_FREQ;
 
 void decl(void);
 void init(void);
@@ -493,47 +493,47 @@ public:
 Classebsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , Qnsn_Var, , "){};
 
 // declared observation variables
-const float *Qnsn;
-const float *QnD;
+const double *Qnsn;
+const double *QnD;
 
 // declared variables
-float *snowmeltD;
-float *cumsnowmelt;
-float *LW_ebsm;
-float *u_ebsm;
-float *Qmelt;
-float *Qn_ebsm;
-float *Qh_ebsm;
-float *Qe_ebsm;
-float *Qe_subl;
-float *cumQe_subl;
-float *Qp_ebsm;
-float *Qnsn_Acc;
+double *snowmeltD;
+double *cumsnowmelt;
+double *LW_ebsm;
+double *u_ebsm;
+double *Qmelt;
+double *Qn_ebsm;
+double *Qh_ebsm;
+double *Qe_ebsm;
+double *Qe_subl;
+double *cumQe_subl;
+double *Qp_ebsm;
+double *Qnsn_Acc;
 
-float *LWmax;
-float *net_rainD;
+double *LWmax;
+double *net_rainD;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *tfactor;
-const float *nfactor;
-const float *Use_QnD;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *tfactor;
+const double *nfactor;
+const double *Use_QnD;
 
 // variable inputs
-float *SWE;
-const float *tmean;
-const float *tmax;
-const float *tmin;
-const float *umean;
-const float *rhmean;
-const float *net_rain;
-const float *Albedo;
-const float *sunact;
-const float *QdroD;
-const float *QdfoD;
-const float *sunmax;
-const float *Qnsn_Var;
+double *SWE;
+const double *tmean;
+const double *tmax;
+const double *tmin;
+const double *umean;
+const double *rhmean;
+const double *net_rain;
+const double *Albedo;
+const double *sunact;
+const double *QdroD;
+const double *QdfoD;
+const double *sunmax;
+const double *Qnsn_Var;
 
 const long  *meltflag;
 const long  *delay_melt;
@@ -556,43 +556,43 @@ class ClassTs : public ClassModule {
     ClassTs(string Name, string Version = "Radiation", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, "QliVt_Var, ") {};
 
 // declared observations
-    float *Ts;
+    double *Ts;
 
 // declared observation variables
 
-    const float *hru_u;
+    const double *hru_u;
 
-    const float *hru_t;
+    const double *hru_t;
 
-    const float *hru_rh;
+    const double *hru_rh;
 
-    const float *Qli;
+    const double *Qli;
 
-    const float *QliVt_Var;
+    const double *QliVt_Var;
 
 // declared variables
 
-   float *hru_Ts;
+   double *hru_Ts;
 
-   float *Pa;
+   double *Pa;
 
-   float *q;
+   double *q;
 
-   float *ra;
+   double *ra;
 
-   float *Qli_;
+   double *Qli_;
 
 // declared parameters
 
-   const float *Ht;
+   const double *Ht;
 
-   const float *Zref;
+   const double *Zref;
 
-   const float *Zwind;
+   const double *Zwind;
 
-   const float *hru_elev;
+   const double *hru_elev;
 
-   const float *Z0snow; // snow roughness length (m)
+   const double *Z0snow; // snow roughness length (m)
 
 // variable inputs
 
@@ -610,76 +610,76 @@ class ClassNeedle : public ClassModule {
 
     ClassNeedle(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
-    float Qli_;
+    double Qli_;
 
-    float Qsi_;
+    double Qsi_;
 
 // declared observations
 
-    float *Ts;
+    double *Ts;
 
-    float *Qnsn;
+    double *Qnsn;
 
-    float *Qsisn;
+    double *Qsisn;
 
-    float *Qlisn;
+    double *Qlisn;
 
-    float *Qlosn;
+    double *Qlosn;
 
 // declared observation variables
 
-    const float *Qsi;
+    const double *Qsi;
 
-    const float *Qli;
+    const double *Qli;
 
-    const float *QsiA_Var;
+    const double *QsiA_Var;
 
-    const float *QsiS_Var;
+    const double *QsiS_Var;
 
-    const float *QliVt_Var;
+    const double *QliVt_Var;
 
 // declared variables
 
-   float *Pa;
+   double *Pa;
 
-   float *k;
+   double *k;
 
-   float *Tauc;
+   double *Tauc;
 
-   float *ra;
+   double *ra;
 
-   float *Qnsn_Var;
+   double *Qnsn_Var;
 
 // declared parameters
 
-   const float *LAI;
+   const double *LAI;
 
-   const float *Ht;
+   const double *Ht;
 
-   const float *Zwind;
+   const double *Zwind;
 
-   const float *Zref;
+   const double *Zref;
 
-   const float *hru_elev;
+   const double *hru_elev;
 
-   const float *Z0snow; // snow roughness length (m)
+   const double *Z0snow; // snow roughness length (m)
 
 
 // variable inputs
 
-    const float *beta;
+    const double *beta;
 
-    const float *SWE;
+    const double *SWE;
 
-    const float *Albedo;
+    const double *Albedo;
 
-    const float *hru_t;
+    const double *hru_t;
 
-    const float *hru_u;
+    const double *hru_u;
 
-    const float *hru_ea;
+    const double *hru_ea;
 
-    const float *hru_rh;
+    const double *hru_rh;
 
 
     void decl(void);
@@ -699,41 +699,41 @@ class ClassSimpleRichard : public ClassModule {
 
 // declared observation variables
 
-    const float *Qsi;  // Downward shortwave radiation (W/m2)
-    const float *Qli;  // Downward longwave radiation (W/m2)
-    const float *snow; // Snowfall (kg/m2/s)
-    const float *t;    // Air temperature (°K)
-    const float *u;    // Wind speed (m/s)
-    const float *rh;   // Relative humidity (%)
+    const double *Qsi;  // Downward shortwave radiation (W/m2)
+    const double *Qli;  // Downward longwave radiation (W/m2)
+    const double *snow; // Snowfall (kg/m2/s)
+    const double *t;    // Air temperature (°K)
+    const double *u;    // Wind speed (m/s)
+    const double *rh;   // Relative humidity (%)
 
 // declared variables
 
-    float *SWE;       // (kg/m2)
-    float *alb;       // Snow albedo
-    float *snowmelt;  // (kg/m2)
-    float *meltclark; // (kg/m2)
-    float *sursubl;   // (kg/m2)
-    float *T0;   // Surface temperature (°K)
+    double *SWE;       // (kg/m2)
+    double *alb;       // Snow albedo
+    double *snowmelt;  // (kg/m2)
+    double *meltclark; // (kg/m2)
+    double *sursubl;   // (kg/m2)
+    double *T0;   // Surface temperature (°K)
 
-    float *LE;   // Latent heat flux (W/m^2)
-    float *H;    // Sensible heat flux (W/m^2)
-    float *Hsm;  // Snowmelt heat flux (W/m^2)
-    float *LWn;  // Net longwave radiation (W/m^2)
-    float *SWn;  // Net shortwave radiation (W/m^2)
+    double *LE;   // Latent heat flux (W/m^2)
+    double *H;    // Sensible heat flux (W/m^2)
+    double *Hsm;  // Snowmelt heat flux (W/m^2)
+    double *LWn;  // Net longwave radiation (W/m^2)
+    double *SWn;  // Net shortwave radiation (W/m^2)
 
 // declared parameters
 
-    const float *a1;   // Albedo decay time constant for cold snow (s)
-    const float *a2;   // Albedo decay time constant for melting snow (s)
-    const float *amin; // Minimum albedo for aged snow
-    const float *amax; // Maximum albedo for fresh snow
-    const float *smin; // Minimum snowfall to refresh snow albedo (mm)
-    const float *Ht;   // Roughness length
-    const float *Zref;   // Reference height
-    const float *Pa;   // Average surface pressure (KPa)
-    const float *Kstorage; // [nhru]
-    const float *Lag;      // [nhru]
-    const float *Z0snow;   // snow roughness length (m)
+    const double *a1;   // Albedo decay time constant for cold snow (s)
+    const double *a2;   // Albedo decay time constant for melting snow (s)
+    const double *amin; // Minimum albedo for aged snow
+    const double *amax; // Maximum albedo for fresh snow
+    const double *smin; // Minimum snowfall to refresh snow albedo (mm)
+    const double *Ht;   // Roughness length
+    const double *Zref;   // Reference height
+    const double *Pa;   // Average surface pressure (KPa)
+    const double *Kstorage; // [nhru]
+    const double *Lag;      // [nhru]
+    const double *Z0snow;   // snow roughness length (m)
 
 // variable inputs
 
@@ -747,17 +747,17 @@ class ClassSimpleRichard : public ClassModule {
 
     ClassSimpleRichard* klone(string name) const;
 
-    void EXCH(long hh, float Q1, float U1, float &CH);
+    void EXCH(long hh, double Q1, double U1, double &CH);
 
     void ALBEDO(long hh);
 
-    void SURF(long hh, float Q1, float U1);
+    void SURF(long hh, double Q1, double U1);
 
 // local class
 
     ClassClark *Delays;
 
-    float dt;
+    double dt;
 };
 
 class Classevap : public ClassModule {
@@ -766,42 +766,42 @@ public:
 Classevap(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evap;
-float *hru_evap_PT;
-float *evapD;
-float *cum_evap;
-float *evapGrangerD;
-float *G;
-float *D;
+double *hru_actet;
+double *hru_cum_actet;
+double *evap;
+double *hru_evap_PT;
+double *evapD;
+double *cum_evap;
+double *evapGrangerD;
+double *G;
+double *D;
 
 // local allocated arrays
-float *Pa;
+double *Pa;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *Ht;
-const float *hru_elev;
-const float *F_Qg;
-const float *rs;
-const float *Zwind;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *Ht;
+const double *hru_elev;
+const double *F_Qg;
+const double *rs;
+const double *Zwind;
 
 const long *evap_type;
 const long *inhibit_evap;
 const long *inhibit_evap_User;
 
 // variable inputs
-const float *Rn;
-const float *RnD;
-const float *RnD_POS;
-const float *hru_t;
-const float *hru_u;
-const float *hru_ea;
-const float *hru_tmean;
-const float *hru_umean;
-const float *hru_eamean;
+const double *Rn;
+const double *RnD;
+const double *RnD_POS;
+const double *hru_t;
+const double *hru_u;
+const double *hru_ea;
+const double *hru_tmean;
+const double *hru_umean;
+const double *hru_eamean;
 
 // declared observations variable
 
@@ -812,11 +812,11 @@ void finish(bool good);
 
 Classevap* klone(string name) const;
 
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double fdaily(float u, float Ht);        // Drying power f(u) - interval
+double gamma(double Pa, double t);         // Psychrometric constant
+double lambda(double t);                   // Latent heat of vaporization
+double delta(double t);                   // Slope of sat vap p vs t, kPa/°C
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double fdaily(double u, double Ht);        // Drying power f(u) - interval
 };
 
 class ClassevapD : public ClassModule {
@@ -825,32 +825,32 @@ public:
 ClassevapD(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evapD;
-float *cum_evap;
-float *G;
-float *D;
+double *hru_actet;
+double *hru_cum_actet;
+double *evapD;
+double *cum_evap;
+double *G;
+double *D;
 
 // local allocated arrays
-float *Pa;
+double *Pa;
 
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *Ht;
-const float *hru_elev;
-const float *F_Qg;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *Ht;
+const double *hru_elev;
+const double *F_Qg;
 
 const long *evap_type;
 const long *inhibit_evap;
 
 // variable inputs
-const float *RnD;
-const float *hru_tmean;
-const float *hru_umean;
-const float *hru_eamean;
+const double *RnD;
+const double *hru_tmean;
+const double *hru_umean;
+const double *hru_eamean;
 
 // variable puts
 
@@ -863,11 +863,11 @@ void finish(bool good);
 
 ClassevapD* klone(string name) const;
 
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double fdaily(float u, float Ht);        // Drying power f(u) - interval
+double gamma(double Pa, double t);         // Psychrometric constant
+double lambda(double t);                   // Latent heat of vaporization
+double delta(double t);                   // Slope of sat vap p vs t, kPa/°C
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double fdaily(double u, double Ht);        // Drying power f(u) - interval
 };
 
 class Classsbsm : public ClassModule {
@@ -875,43 +875,43 @@ public:
 
 Classsbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001), // setting PeerRank =1
                                   hru_basin(NULL) {};
-float dt;
+double dt;
 
 // declared variables
-float *SWE;
-float *wet_snow;
-float *Subl;
-float *Drift;
-float *cumSubl;
-float *cumDrift;
-float *cumDriftIn;
-float *cumSno;
-float *Prob;
-float *snow_age;
-float *BasinSnowLoss;
-float *cumBasinSnowLoss;
-float *cumBasinSnowGain;
-float *snowdepth;
+double *SWE;
+double *wet_snow;
+double *Subl;
+double *Drift;
+double *cumSubl;
+double *cumDrift;
+double *cumDriftIn;
+double *cumSno;
+double *Prob;
+double *snow_age;
+double *BasinSnowLoss;
+double *cumBasinSnowLoss;
+double *cumBasinSnowGain;
+double *snowdepth;
 
 // declared parameters
-const float *basin_area;
-const float *hru_area;
-const float *Ht;
-const float *zr;
-const float *distrib;
-const float *fetch;
+const double *basin_area;
+const double *hru_area;
+const double *Ht;
+const double *zr;
+const double *distrib;
+const double *fetch;
 const long *inhibit_evap;
 const long *inhibit_subl;
 
 // variable inputs
-const float *hru_t;
-const float *hru_rh;
-const float *hru_u;
-const float *net_snow;
+const double *hru_t;
+const double *hru_rh;
+const double *hru_u;
+const double *net_snow;
 const long  *hru_newsnow;
 
 // local allocated arrays
-float *hru_basin;
+double *hru_basin;
 
 
 void decl(void);
@@ -921,9 +921,9 @@ void finish(bool good);
 
 Classsbsm* klone(string name) const;
 
-float transport(void);
-float sublimation(void);
-float scale(void);
+double transport(void);
+double sublimation(void);
+double scale(void);
 void  prob(void);
 };
 
@@ -934,34 +934,34 @@ Classcrack(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables
-float *snowinfil;
-float *cumsnowinfil;
-float *infil;
-float *cuminfil;
-float *meltrunoff;
-float *cummeltrunoff;
-float *runoff;
-float *cumrunoff;
-float *RainOnSnow;
-float *RainOnSnowA;
+double *snowinfil;
+double *cumsnowinfil;
+double *infil;
+double *cuminfil;
+double *meltrunoff;
+double *cummeltrunoff;
+double *runoff;
+double *cumrunoff;
+double *RainOnSnow;
+double *RainOnSnowA;
 long  *crackstat;
 long  *crackon;
 
 // declared parameters
-const float *basin_area; // [BASIN]
-const float *hru_area;
-const float *fallstat;
-const float *Major;      // threshold for major melt event(default is 5 mm/day)
+const double *basin_area; // [BASIN]
+const double *hru_area;
+const double *fallstat;
+const double *Major;      // threshold for major melt event(default is 5 mm/day)
 const long  *PriorInfiltration;
 
 // variable inputs
-const float *hru_tmax;
-const float *snowmelt;
-const float *SWE;
-const float *net_rain;
+const double *hru_tmax;
+const double *snowmelt;
+const double *SWE;
+const double *net_rain;
 
 // local allocated arrays
-float **Xinfil; // [3] [nhru]
+double **Xinfil; // [3] [nhru]
 long *timer;
 
 void decl(void);
@@ -981,42 +981,42 @@ ClassKevin(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::
 // declared observation variables
 
 // declared variables
-float *albedo;
-float *sca;
-float *snowmelt;
-float *snowmeltD;
-float *cumsnowmelt;
-float *netLong;
-float *netShort;
+double *albedo;
+double *sca;
+double *snowmelt;
+double *snowmeltD;
+double *cumsnowmelt;
+double *netLong;
+double *netShort;
 long  *winter;
 long  *SnowStat;
 
 // declared parameters
-const float *Asnow1;
-const float *Asnow2;
-const float *Asoil;
-const float *cv;
-const float *tfactor;
-const float *nfactor;
-const float *meltthresh;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_lat;
+const double *Asnow1;
+const double *Asnow2;
+const double *Asoil;
+const double *cv;
+const double *tfactor;
+const double *nfactor;
+const double *meltthresh;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *hru_lat;
 
 // variable inputs
-float *SWE;
-const float *hru_t;
-const float *hru_tmean;
-const float *hru_eamean;
-const float *hru_Qn;
-const float *hru_SunAct;
-const float *Qdro;
-const float *Qdfo;
-const float *SunMax;
+double *SWE;
+const double *hru_t;
+const double *hru_tmean;
+const double *hru_eamean;
+const double *hru_Qn;
+const double *hru_SunAct;
+const double *Qdro;
+const double *Qdfo;
+const double *SunMax;
 
 // local allocated arrays
-float   *SWEpeak;
-float   *SWElast;
+double   *SWEpeak;
+double   *SWElast;
 
 void decl(void);
 void init(void);
@@ -1033,53 +1033,53 @@ ClassGreencrack(string Name, string Version = "undefined", CRHM::LMODULE Lvl = C
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables
-float *infil;
-float *cuminfil;
-float *meltrunoff;
-float *cummeltrunoff;
-float *runoff;
-float *cumrunoff;
-float *snowinfil;
-float *cumsnowinfil;
+double *infil;
+double *cuminfil;
+double *meltrunoff;
+double *cummeltrunoff;
+double *runoff;
+double *cumrunoff;
+double *snowinfil;
+double *cumsnowinfil;
 long  *crackstat;
 long  *crackon;
-float *RainOnSnow;
-float *RainOnSnowA;
+double *RainOnSnow;
+double *RainOnSnowA;
 
 // local variables
-float *k;
-float *F0;
-float *f0;
-float *F1;
-float *f1;
-float *dthbot;
-float *psidthbot;
+double *k;
+double *F0;
+double *f0;
+double *F1;
+double *f1;
+double *dthbot;
+double *psidthbot;
 long  *timer;
 
 // declared parameters
-const float *basin_area; // [BASIN]
-const float *hru_area;
-const float *fallstat;
-const float *Major;      // threshold for major melt event(default is 5 mm/day)
-const float *soil_moist_max;
-const float *soil_moist_init;
+const double *basin_area; // [BASIN]
+const double *hru_area;
+const double *fallstat;
+const double *Major;      // threshold for major melt event(default is 5 mm/day)
+const double *soil_moist_max;
+const double *soil_moist_init;
 const long  *soil_type;
 const long  *PriorInfiltration;
 
 // variable inputs
-const float *hru_tmax;
-const float *snowmelt;
-const float *SWE;
-const float *net_rain;
-float *soil_moist; // changed tp PUT
+const double *hru_tmax;
+const double *snowmelt;
+const double *SWE;
+const double *net_rain;
+double *soil_moist; // changed tp PUT
 
 // class allocated
-float garain;      // precipitation/int
-float intensity;   // precipitation/int converted to mm/h
-float pond;        // mm
+double garain;      // precipitation/int
+double intensity;   // precipitation/int converted to mm/h
+double pond;        // mm
 
 // class allocated arrays
-float **Xinfil; // [3] [nhru]
+double **Xinfil; // [3] [nhru]
 
 void decl(void);
 void init(void);
@@ -1091,9 +1091,9 @@ ClassGreencrack* klone(string name) const;
 void infiltrate(void);
 void ponding(void);
 void startponding(void);
-void howmuch(float F0, float dt);
+void howmuch(double F0, double dt);
 
-float calcf1(float F, float psidth);
+double calcf1(double F, double psidth);
 };
 
 class Classfrostdepth : public ClassModule {
@@ -1107,34 +1107,34 @@ Classfrostdepth(string Name, string Version = "undefined", CRHM::LMODULE Lvl = C
                                         Cacc(NULL),
                                         Kacc(NULL) {};
 // declared variables
-float *Findex;   // freezing index (days * frost °C)
+double *Findex;   // freezing index (days * frost °C)
 long *Tfreeze;   // duration of freezing period in days
-float *frostdepth;
+double *frostdepth;
 
 // declared parameters
-const float *Ta;        // mean annual air temperature
-const float *d;         // depth of layer  m
-const float **d_lay;    // depth of layer  m
-const float *por;       // porosity m3/m3
-const float **por_lay;  // porosity m3/m3
-const float *theta;       // theta m3/m3  theta/porosity
-const float **theta_lay;  // theta m3/m3
+const double *Ta;        // mean annual air temperature
+const double *d;         // depth of layer  m
+const double **d_lay;    // depth of layer  m
+const double *por;       // porosity m3/m3
+const double **por_lay;  // porosity m3/m3
+const double *theta;       // theta m3/m3  theta/porosity
+const double **theta_lay;  // theta m3/m3
 const long  *soil_type;
 const long  **soil_type_lay;
-const float *hru_lat;
+const double *hru_lat;
 
 // variable inputs
-const float *hru_tmean;  // daily average temperature (°C)
-const float *SWE;
-const float *snowdepth;
+const double *hru_tmean;  // daily average temperature (°C)
+const double *SWE;
+const double *snowdepth;
 
 // local allocated arrays
-float **k_lay;    // J/(m.K.s)
-float **L_lay;    // MJ/m3
-float **c_lay;    // MJ/(m3 K)
-float *Lacc; // effective value
-float *Cacc; // effective value
-float *Kacc; // effective value
+double **k_lay;    // J/(m.K.s)
+double **L_lay;    // MJ/m3
+double **c_lay;    // MJ/(m3 K)
+double *Lacc; // effective value
+double *Cacc; // effective value
+double *Kacc; // effective value
 
 void decl(void);
 void init(void);
@@ -1153,49 +1153,49 @@ bool SetOpportunityTime;
 bool Update_infil;
 
 // declared observation variables
-const float *t0_inhibit;   // (mm/day)
+const double *t0_inhibit;   // (mm/day)
 
 // declared variables
-float *infil;         // unfrozen infiltration
-float *cuminfil;      // cumulative unfrozen infiltration
-float *snowinfil;     // frozen infiltration
-float *cumsnowinfil;  // cumulative frozen infiltration
-float *cummeltrunoff; // cumulative frozen melt runoff
-float *runoff;        // cumulative runoff
-float *cumrunoff;     // cumulative melt runoff
-float *t0_Acc;        // infiltration opportunity time accumulation
-float *t0_Var;        // infiltration opportunity value used in calculation
-float *INF;
-float *SWEPk;           //
-float *snowmeltD_last; //
+double *infil;         // unfrozen infiltration
+double *cuminfil;      // cumulative unfrozen infiltration
+double *snowinfil;     // frozen infiltration
+double *cumsnowinfil;  // cumulative frozen infiltration
+double *cummeltrunoff; // cumulative frozen melt runoff
+double *runoff;        // cumulative runoff
+double *cumrunoff;     // cumulative melt runoff
+double *t0_Acc;        // infiltration opportunity time accumulation
+double *t0_Var;        // infiltration opportunity value used in calculation
+double *INF;
+double *SWEPk;           //
+double *snowmeltD_last; //
 long  *Julian_window; // currently in Julian window.
 long  *Julian_lockout;    // Julian window end date.
 
 // variable put
-const float *soil_moist;    //
-float *meltrunoff;      // [nhru]
+const double *soil_moist;    //
+double *meltrunoff;      // [nhru]
 
 // local variables
 long *infiltype;
 
 // declared parameters
-const float *basin_area;  // [BASIN]
-const float *hru_area;
-const float *S0;          // surface saturation (mm3/mm3)
-const float *Si;          // initial average soil saturation (mm3/mm3)
-const float *C;           // coefficient
-const float *hru_tsoil;   // soil temperature(°K) of 0-40cm soil layer at start of infiltration
-const float *t_ice_lens;   // overnight minimum to cause ice lens after major melt
-const float *t0;          // infiltration opportunity time. Set at end of calibration run.
-const float *soil_moist_max; // common to smbal to control maximum inflitration.
+const double *basin_area;  // [BASIN]
+const double *hru_area;
+const double *S0;          // surface saturation (mm3/mm3)
+const double *Si;          // initial average soil saturation (mm3/mm3)
+const double *C;           // coefficient
+const double *hru_tsoil;   // soil temperature(°K) of 0-40cm soil layer at start of infiltration
+const double *t_ice_lens;   // overnight minimum to cause ice lens after major melt
+const double *t0;          // infiltration opportunity time. Set at end of calibration run.
+const double *soil_moist_max; // common to smbal to control maximum inflitration.
 const long  *t0_Julian;    // Julian date when t0 is primed. '0' value - never reset.
 
 // variable inputs
-const float *snowmeltD;   // (mm/day)
-const float *SWE;         // (mm)
-const float *frostdepth;
-const float *net_rain;
-const float *hru_tmin;
+const double *snowmeltD;   // (mm/day)
+const double *SWE;         // (mm)
+const double *frostdepth;
+const double *net_rain;
+const double *hru_tmin;
 
 void decl(void);
 void init(void);
@@ -1216,45 +1216,45 @@ long soil_runoffDiv;
 long soil_gwDiv;
 
 // declared variables
-float *inflow;        // [nhru]
-float *cuminflow;     // [nhru]
-float *outflow;       // [nhru]
-float *outflow_diverted; // [nhru]
-float *cumoutflow_diverted; // [nhru]
-float *cumoutflow;    // [nhru]
-float *gwinflow;        // [nhru]
-float *gwoutflow_diverted; // [nhru]
-float *gwcumoutflow_diverted; // [nhru]
-float *HRU_cumbasinflow; // [nhru]
+double *inflow;        // [nhru]
+double *cuminflow;     // [nhru]
+double *outflow;       // [nhru]
+double *outflow_diverted; // [nhru]
+double *cumoutflow_diverted; // [nhru]
+double *cumoutflow;    // [nhru]
+double *gwinflow;        // [nhru]
+double *gwoutflow_diverted; // [nhru]
+double *gwcumoutflow_diverted; // [nhru]
+double *HRU_cumbasinflow; // [nhru]
 
-float *ssrinflow;        // [nhru]
-float *ssrcuminflow;     // [nhru]
-float *ssroutflow;       // [nhru]
-float *ssrcumoutflow;    // [nhru]
+double *ssrinflow;        // [nhru]
+double *ssrcuminflow;     // [nhru]
+double *ssroutflow;       // [nhru]
+double *ssrcumoutflow;    // [nhru]
 
-float *runinflow;        // [nhru]
-float *runcuminflow;     // [nhru]
-float *runoutflow;       // [nhru]
-float *runcumoutflow;    // [nhru]
+double *runinflow;        // [nhru]
+double *runcuminflow;     // [nhru]
+double *runoutflow;       // [nhru]
+double *runcumoutflow;    // [nhru]
 
-float *gwoutflow;       // [nhru]
-float *gwcuminflow;    // [nhru]
-float *gwcumoutflow;    // [nhru]
+double *gwoutflow;       // [nhru]
+double *gwcuminflow;    // [nhru]
+double *gwcumoutflow;    // [nhru]
 
-float *basinflow;     // [BASIN] all HRUs
-float *basinflow_s;   // [BASIN] all HRUs
-float *cumbasinflow;  // [BASIN] all HRUs
-float *basingw;       // [BASIN} all HRUs
-float *basingw_s;     // [BASIN} all HRUs
-float *cumbasingw;    // [BASIN} all HRUs
+double *basinflow;     // [BASIN] all HRUs
+double *basinflow_s;   // [BASIN] all HRUs
+double *cumbasinflow;  // [BASIN] all HRUs
+double *basingw;       // [BASIN} all HRUs
+double *basingw_s;     // [BASIN} all HRUs
+double *cumbasingw;    // [BASIN} all HRUs
 
-float *soil_ssr_Buf;    // buffered
-float *soil_runoff_Buf; // buffered
-float *soil_gw_Buf;     // buffered
+double *soil_ssr_Buf;    // buffered
+double *soil_runoff_Buf; // buffered
+double *soil_gw_Buf;     // buffered
 
-float *cum_to_Sd;         // [nhru]
-float *cum_to_soil_rechr; // [nhru]
-float *cum_preferential_flow_to_gw;
+double *cum_to_Sd;         // [nhru]
+double *cum_to_soil_rechr; // [nhru]
+double *cum_preferential_flow_to_gw;
 
 ClassClark *hruDelay;
 ClassClark *ssrDelay;
@@ -1262,38 +1262,38 @@ ClassClark *runDelay;
 ClassClark *gwDelay;
 
 // declared parameters
-const float *Kstorage;         // [nhru]
-const float *Lag;              // [nhru]
-const float *ssrKstorage;      // [nhru]
-const float *ssrLag;           // [nhru]
-const float *runKstorage;      // [nhru]
-const float *runLag;           // [nhru]
-const float *gwKstorage;      // [nhru]
-const float *gwLag;           // [nhru]
+const double *Kstorage;         // [nhru]
+const double *Lag;              // [nhru]
+const double *ssrKstorage;      // [nhru]
+const double *ssrLag;           // [nhru]
+const double *runKstorage;      // [nhru]
+const double *runLag;           // [nhru]
+const double *gwKstorage;      // [nhru]
+const double *gwLag;           // [nhru]
 
-const float *basin_area;        // [BASIN]
-const float *hru_area;          // [nhru]
+const double *basin_area;        // [BASIN]
+const double *hru_area;          // [nhru]
 const long  *whereto;           // [nhru]
 const long  *order;             // [nhru]
 const long  *gwwhereto;             // [nhru]
-const float *Sdmax;             // [nhru]
-const float *soil_rechr_max;    // [nhru]
+const double *Sdmax;             // [nhru]
+const double *soil_rechr_max;    // [nhru]
 
 const long  *Sd_ByPass;         // [nhru]
 const long  *soil_rechr_ByPass; // [nhru]
 const long  *preferential_flow; // [nhru]
 
 // variable inputs
-const float *soil_gw;   // [nhru]
-const float *soil_ssr;    // [nhru]
-const float *soil_runoff; // [nhru]
+const double *soil_gw;   // [nhru]
+const double *soil_ssr;    // [nhru]
+const double *soil_runoff; // [nhru]
 
 // variable puts
-float *Sd;
-float *soil_moist;
-float *soil_rechr;
-float *redirected_residual;
-float *gw;
+double *Sd;
+double *soil_moist;
+double *soil_rechr;
+double *redirected_residual;
+double *gw;
 
 // local allocated arrays
 
@@ -1301,8 +1301,8 @@ void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
-virtual float Function1(float *I, long hh);
-virtual float Function2(float *X, long hh);
+virtual double Function1(double *I, long hh);
+virtual double Function2(double *X, long hh);
 
 ClassNetroute* klone(string name) const;
 };
@@ -1313,33 +1313,33 @@ public:
 Classinterception(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observations
-const float *Qsi;
+const double *Qsi;
 
 // variable inputs
-const float *hru_t;
-const float *hru_snow;
-const float *hru_rain;
-const float *hru_u;
-const float *hru_rh;
+const double *hru_t;
+const double *hru_snow;
+const double *hru_rain;
+const double *hru_u;
+const double *hru_rh;
 
 // declared variables
-float *SI_Lo;
-float *net_snow;
-float *net_rain;
-float *SI_Subl;
-float *Cum_Subl;
-float *Cum_net_snow;
-float *v;
+double *SI_Lo;
+double *net_snow;
+double *net_rain;
+double *SI_Subl;
+double *Cum_Subl;
+double *Cum_net_snow;
+double *v;
 
 // declared parameters
-const float *Sbar;
-const float *LAI;
-const float *k;
-const float *velw;
-const float *Ht;
-const float *WidthJ;
-const float *basin_area;
-const float *hru_area;
+const double *Sbar;
+const double *LAI;
+const double *k;
+const double *velw;
+const double *Ht;
+const double *WidthJ;
+const double *basin_area;
+const double *hru_area;
 
 // variable inputs
 
@@ -1358,40 +1358,40 @@ public:
 
 ClassGreenAmpt(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 // declared variables
-float *infil;
-float *cuminfil;
-float *runoff;
-float *cumrunoff;
-float *snowinfil;
-float *cumsnowinfil;
-float *meltrunoff;
-float *cummeltrunoff;
+double *infil;
+double *cuminfil;
+double *runoff;
+double *cumrunoff;
+double *snowinfil;
+double *cumsnowinfil;
+double *meltrunoff;
+double *cummeltrunoff;
 
 // local variables
-float *k;
-float *F0;
-float *f0;
-float *F1;
-float *f1;
-float *dthbot;
-float *psidthbot;
+double *k;
+double *F0;
+double *f0;
+double *F1;
+double *f1;
+double *dthbot;
+double *psidthbot;
 
 // declared parameters
-const float *basin_area; // [BASIN]
-const float *hru_area;
-const float *soil_moist_max;
-const float *soil_moist_init;
+const double *basin_area; // [BASIN]
+const double *hru_area;
+const double *soil_moist_max;
+const double *soil_moist_init;
 const long  *soil_type;
 
 // variable inputs
-const float *net_rain;
-const float *snowmelt;
-float *soil_moist; // changed to PUT
+const double *net_rain;
+const double *snowmelt;
+double *soil_moist; // changed to PUT
 
 // class allocated
-float garain;      // precipitation/int
-float intensity;   // precipitation/int converted to mm/h
-float pond;        // mm
+double garain;      // precipitation/int
+double intensity;   // precipitation/int converted to mm/h
+double pond;        // mm
 
 void decl(void);
 void init(void);
@@ -1403,9 +1403,9 @@ ClassGreenAmpt* klone(string name) const;
 void infiltrate(void);
 void ponding(void);
 void startponding(void);
-void howmuch(float F0, float dt);
+void howmuch(double F0, double dt);
 
-float calcf1(float F, float psidth);
+double calcf1(double F, double psidth);
 };
 
 class Classalbedoparam : public ClassModule {
@@ -1414,10 +1414,10 @@ public:
 Classalbedoparam(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *Albedo;
+double *Albedo;
 
 // declared parameters
-const float *Albedo_Value;
+const double *Albedo_Value;
 
 void decl(void);
 void init(void);
@@ -1432,13 +1432,13 @@ public:
 Classalbedoobs(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *Albedo;
+double *Albedo;
 
 // declared observation variables
-const float *Albedo_obs;      // interval data
+const double *Albedo_obs;      // interval data
 
 // declared parameters
-const float *Albedo_Value;
+const double *Albedo_Value;
 
 void decl(void);
 void init(void);
@@ -1453,14 +1453,14 @@ public:
 ClassHtobs(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *Ht_var;
+double *Ht_var;
 
 // declared observation variables
-const float *Ht_obs;      // interval data
+const double *Ht_obs;      // interval data
 
 // declared parameters
-//const float *Ht;
-float *Ht;
+//const double *Ht;
+double *Ht;
 
 void decl(void);
 void init(void);
@@ -1496,7 +1496,7 @@ class TSTEP_REC{ // time step information
 
   int intervals;    // # of these timestep that are in the previous-level's timestep (not used for level 0: data tstep)
 
-  float threshold;  // mass threshold for a layer to use this timestep (not used for level 0: data tstep)
+  double threshold;  // mass threshold for a layer to use this timestep (not used for level 0: data tstep)
 
   TSTEP_REC() : level(0), time_step(24*3600/Global::Freq), intervals(1), threshold(0.0) {};
 
@@ -1505,24 +1505,24 @@ class TSTEP_REC{ // time step information
 class  INPUT_REC{ // climate-data input records
   public:
 
-  float S_n;	// net solar radiation (W/m^2)
-  float I_lw;	// incoming longwave (thermal) rad (W/m^2)
-  float T_a;	// air temp (C)
-  float e_a;	// vapor pressure (Pa)
-  float u;	// wind speed (m/sec)
-  float T_g;	// soil temp at depth z_g (C)
-  float F_g;	// soil flux at depth z_g (W/m^2)
+  double S_n;	// net solar radiation (W/m^2)
+  double I_lw;	// incoming longwave (thermal) rad (W/m^2)
+  double T_a;	// air temp (C)
+  double e_a;	// vapor pressure (Pa)
+  double u;	// wind speed (m/sec)
+  double T_g;	// soil temp at depth z_g (C)
+  double F_g;	// soil flux at depth z_g (W/m^2)
 };
 
 class  PRECIP_REC{ // precip-data input records
   public:
 
-  float	  m_pp;		// total precipitation mass (kg/m^2)
-  float	  m_rain;	// mass of rain in precip   (kg/m^2)
-  float	  m_snow;	// mass of snow in precip   (kg/m^2)
-  float	  m_drift;	// mass of snow drift       (kg/m^2)
-  float	  m_subl;	// mass of snow drift       (kg/m^2)
-  float	  z_snow;	// depth of snow in precip  (m)
+  double	  m_pp;		// total precipitation mass (kg/m^2)
+  double	  m_rain;	// mass of rain in precip   (kg/m^2)
+  double	  m_snow;	// mass of snow in precip   (kg/m^2)
+  double	  m_drift;	// mass of snow drift       (kg/m^2)
+  double	  m_subl;	// mass of snow drift       (kg/m^2)
+  double	  z_snow;	// depth of snow in precip  (m)
 };
 
 class ClassSnobalBase : public ClassModule {
@@ -1536,115 +1536,115 @@ class ClassSnobalBase : public ClassModule {
 //   snowpack information
 
     long*   layer_count;    // number of layers in snowcover: 0, 1, or 2
-    float*  z_s;            // total snowcover thickness (m)
-    float*  z_s_0;          // active layer depth (m)
-    float*  z_s_l;          // lower layer depth (m)
-    float*  rho;            // average snowcover density (kg/m^3)
-    float*  m_s;            // snowcover's specific mass (kg/m^2). Init by init_snow.
-    float*  m_s_0;          // active layer specific mass (kg/m^2). Init by init_snow.
-    float*  m_s_l;          // lower layer specific mass (kg/m^2). Init by init_snow.
-    float*  T_s;            // average snowcover temp (K). Init by init_snow
-    float*  T_s_0;          // active snow layer temp (K)
-    float*  T_s_l;          // lower layer temp (C)
-    float*  cc_s;           // snowcover's cold content (J/m^2). Init by init_snow.
-    float*  cc_s_0;         // active layer cold content (J/m^2). Init by init_snow.
-    float*  cc_s_l;         // lower layer cold content (J/m^2). Init by init_snow.
-    float*  h2o_sat;        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
+    double*  z_s;            // total snowcover thickness (m)
+    double*  z_s_0;          // active layer depth (m)
+    double*  z_s_l;          // lower layer depth (m)
+    double*  rho;            // average snowcover density (kg/m^3)
+    double*  m_s;            // snowcover's specific mass (kg/m^2). Init by init_snow.
+    double*  m_s_0;          // active layer specific mass (kg/m^2). Init by init_snow.
+    double*  m_s_l;          // lower layer specific mass (kg/m^2). Init by init_snow.
+    double*  T_s;            // average snowcover temp (K). Init by init_snow
+    double*  T_s_0;          // active snow layer temp (K)
+    double*  T_s_l;          // lower layer temp (C)
+    double*  cc_s;           // snowcover's cold content (J/m^2). Init by init_snow.
+    double*  cc_s_0;         // active layer cold content (J/m^2). Init by init_snow.
+    double*  cc_s_l;         // lower layer cold content (J/m^2). Init by init_snow.
+    double*  h2o_sat;        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
 //                                 to water that snowcover could hold at saturation)
-    float*  h2o_vol;        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow
-    float*  h2o;            // liquid h2o content as specific mass(kg/m^2)
-    float*  h2o_max;        // max liquid h2o content as specific mass(kg/m^2)
-    float*  h2o_total;      // total liquid h2o: includes h2o in snowcover, melt, and rainfall (kg/m^2)
+    double*  h2o_vol;        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow
+    double*  h2o;            // liquid h2o content as specific mass(kg/m^2)
+    double*  h2o_max;        // max liquid h2o content as specific mass(kg/m^2)
+    double*  h2o_total;      // total liquid h2o: includes h2o in snowcover, melt, and rainfall (kg/m^2)
 
 //   energy balance info for current timestep
 
-    float  *R_n;            // net allwave radiation (W/m^2)
-    float  *H;              // sensible heat xfr (W/m^2)
-    float  *L_v_E;          // latent heat xfr (W/m^2)
-    float  *G;              // heat xfr by conduction & diffusion from soil to snowcover (W/m^2)
-    float  *G_0;            // heat xfr by conduction & diffusion from soil or lower layer to active layer (W/m^2)
-    float  *M;              // advected heat from precip (W/m^2)
-    float  *delta_Q;        // change in snowcover's energy (W/m^2)
-    float  *delta_Q_0;      // change in active layer's energy (W/m^2)
+    double  *R_n;            // net allwave radiation (W/m^2)
+    double  *H;              // sensible heat xfr (W/m^2)
+    double  *L_v_E;          // latent heat xfr (W/m^2)
+    double  *G;              // heat xfr by conduction & diffusion from soil to snowcover (W/m^2)
+    double  *G_0;            // heat xfr by conduction & diffusion from soil or lower layer to active layer (W/m^2)
+    double  *M;              // advected heat from precip (W/m^2)
+    double  *delta_Q;        // change in snowcover's energy (W/m^2)
+    double  *delta_Q_0;      // change in active layer's energy (W/m^2)
 
 //   mass balance vars for current timestep
 
-    float  *melt_direct_int;       // specific melt (kg/m^2 or m)
-    float  *sum;       // specific melt (kg/m^2 or m)
-    float  *SWE_change;       // interval change in SWE
-    float  *E_int;	    // mass flux by evap into air from active layer (kg/m^2/s)
-    float  *E_s_int;	    // mass of evap into air & soil from snowcover (kg/m^2)
-    float  *snowmelt_int;   // predicted specific runoff (m/sec)
-    float  *snowmeltD;      // daily predicted specific runoff (m/sec)
-    float  *snowmeltD_acc;      // daily predicted specific runoff accumulator (m/sec)
+    double  *melt_direct_int;       // specific melt (kg/m^2 or m)
+    double  *sum;       // specific melt (kg/m^2 or m)
+    double  *SWE_change;       // interval change in SWE
+    double  *E_int;	    // mass flux by evap into air from active layer (kg/m^2/s)
+    double  *E_s_int;	    // mass of evap into air & soil from snowcover (kg/m^2)
+    double  *snowmelt_int;   // predicted specific runoff (m/sec)
+    double  *snowmeltD;      // daily predicted specific runoff (m/sec)
+    double  *snowmeltD_acc;      // daily predicted specific runoff accumulator (m/sec)
 
 //   mass balance vars for variable timestep
 
-    float  *melt;        // specific melt (kg/m^2 or m)
-    float  *E;		 // mass flux by evap into air from active layer (kg/m^2/s)
-    float  *E_s;	 // mass of evap into air & soil from snowcover (kg/m^2)
-    float  *ro_predict;  // predicted specific runoff (m/sec)
+    double  *melt;        // specific melt (kg/m^2 or m)
+    double  *E;		 // mass flux by evap into air from active layer (kg/m^2/s)
+    double  *E_s;	 // mass of evap into air & soil from snowcover (kg/m^2)
+    double  *ro_predict;  // predicted specific runoff (m/sec)
 
-    float  *E_s_0;        // mass of evaporation to air (kg/m^2)
-    float  *E_s_l;        // mass of evaporation to soil (kg/m^2)
-    float  *E_l;	  // mass flux by evap/cond to soil (kg/m^2/s)
+    double  *E_s_0;        // mass of evaporation to air (kg/m^2)
+    double  *E_s_l;        // mass of evaporation to soil (kg/m^2)
+    double  *E_l;	  // mass flux by evap/cond to soil (kg/m^2/s)
 
-    float  *E_s_0_int;        // mass of evaporation to air (kg/m^2)
-    float  *E_s_l_int;        // mass of evaporation to soil (kg/m^2)
-    float  *E_l_int;	  // mass flux by evap/cond to soil (kg/m^2/s)
+    double  *E_s_0_int;        // mass of evaporation to air (kg/m^2)
+    double  *E_s_l_int;        // mass of evaporation to soil (kg/m^2)
+    double  *E_l_int;	  // mass flux by evap/cond to soil (kg/m^2/s)
 
 //   precipitation info adjusted for current run timestep
 
-    float  *m_precip;	// specific mass of total precip (kg/m^2)
-    float  *m_rain;	// specific mass of rain in precip (kg/m^2)
-    float  *m_snow;	// specific mass in snow in precip (kg/m^2)
-    float  *m_drift;	// specific mass in snow drift (kg/m^2)
-    float  *m_subl;	// specific mass in snow sublimation (kg/m^2)
-    float  *rho_snow;   // density of snowfall (kg/m^3)
-    float  *T_pp;       // precip temp (K)
-    float  *z_snow;	// depth of snow in precip (m)
+    double  *m_precip;	// specific mass of total precip (kg/m^2)
+    double  *m_rain;	// specific mass of rain in precip (kg/m^2)
+    double  *m_snow;	// specific mass in snow in precip (kg/m^2)
+    double  *m_drift;	// specific mass in snow drift (kg/m^2)
+    double  *m_subl;	// specific mass in snow sublimation (kg/m^2)
+    double  *rho_snow;   // density of snowfall (kg/m^3)
+    double  *T_pp;       // precip temp (K)
+    double  *z_snow;	// depth of snow in precip (m)
 
 //   precipitation info for the current DATA timestep
 
     long   *precip_now;	// precipitation occur for current timestep?
-    float  *T_rain;	// rain's temp (K)
-    float  *T_snow;	// snowfall's temp (K)
-    float  *h2o_sat_snow; // snowfall's % of liquid H2O saturation
+    double  *T_rain;	// rain's temp (K)
+    double  *T_snow;	// snowfall's temp (K)
+    double  *h2o_sat_snow; // snowfall's % of liquid H2O saturation
 
 //   local climate-data values for the current run timestep
-    float  *S_n;      // net solar radiation (W/m^2)
-    float  *I_lw;     // incoming longwave (thermal) rad (W/m^2)
-    float  *T_a;      // air temp (K)
-    float  *e_a;      // vapor pressure (Pa)
-    float  *u;        // wind speed (m/sec)
-    float  *T_g;      // soil temp at depth z_g (C)
-    float  *F_g;      // soil flux at depth z_g (W/m^2)
+    double  *S_n;      // net solar radiation (W/m^2)
+    double  *I_lw;     // incoming longwave (thermal) rad (W/m^2)
+    double  *T_a;      // air temp (K)
+    double  *e_a;      // vapor pressure (Pa)
+    double  *u;        // wind speed (m/sec)
+    double  *T_g;      // soil temp at depth z_g (C)
+    double  *F_g;      // soil flux at depth z_g (W/m^2)
 
     long *isothermal; // melting?
     long *snowcover;  // snow on gnd at start of current timestep?
     long  *stop_no_snow;       //
 
 //   local variables
-    float  *P_a;            // air pressure (Pa)
-    float  *m_precip_cum;   //
-    float  *m_rain_cum;     //
-    float  *m_snow_cum;     //
-    float  *m_drift_cum;    //
-    float  *m_subl_cum;    //
-    float  *E_s_cum;        //
-    float  *cumsnowmelt;    //
-    float  *melt_direct_cum;       //
-    float  *Fault;       //
+    double  *P_a;            // air pressure (Pa)
+    double  *m_precip_cum;   //
+    double  *m_rain_cum;     //
+    double  *m_snow_cum;     //
+    double  *m_drift_cum;    //
+    double  *m_subl_cum;    //
+    double  *E_s_cum;        //
+    double  *cumsnowmelt;    //
+    double  *melt_direct_cum;       //
+    double  *Fault;       //
 
 // debug variables
-/*    float *Length;
-    float **Length_array;
-    float *Ustar;
-    float **Ustar_array;
-    float *e;
-    float **e_array;
-    float *h;
-    float **h_array;
+/*    double *Length;
+    double **Length_array;
+    double *Ustar;
+    double **Ustar_array;
+    double *e;
+    double **e_array;
+    double *h;
+    double **h_array;
     long *ier;
     long **ier_array;
     long  *ArrayCnt; */
@@ -1653,20 +1653,20 @@ class ClassSnobalBase : public ClassModule {
 
 //   measurement heights/depths
 
-    const float *hru_elev;    // HRU elevation
-    const float *basin_area;  // [BASIN]
-    const float *hru_area;
-    const float *KT_sand; // thermal conductivity of wet sand
+    const double *hru_elev;    // HRU elevation
+    const double *basin_area;  // [BASIN]
+    const double *hru_area;
+    const double *KT_sand; // thermal conductivity of wet sand
 
     const long *relative_hts; // true if measurements heights, z_T and z_u, are relative to snow surface
                               // false if they are absolute heights above the ground
-    const float  *T_g_or_G_flux;    // soil temp or ground flux option
-    const float *z_g;         // depth of soil temp meas (m)
-    const float *z_u;         // height of wind measurement (m)
-    const float *z_T;         // height of air temp & vapor pressure measurement (m)
-    const float *z_0;         // roughness length
-    const float *max_z_s_0;   // maximum active layer thickness (m)
-    const float *max_h2o_vol; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
+    const double  *T_g_or_G_flux;    // soil temp or ground flux option
+    const double *z_g;         // depth of soil temp meas (m)
+    const double *z_u;         // height of wind measurement (m)
+    const double *z_T;         // height of air temp & vapor pressure measurement (m)
+    const double *z_0;         // roughness length
+    const double *max_z_s_0;   // maximum active layer thickness (m)
+    const double *max_h2o_vol; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
 
 //    void decl(void);
 
@@ -1682,13 +1682,13 @@ class ClassSnobalBase : public ClassModule {
 
   void _layer_mass(void);
 
-  float _cold_content(float	temp, float	mass); // temperature of layer specific mass of layer
+  double _cold_content(double	temp, double	mass); // temperature of layer specific mass of layer
 
   void do_data_tstep(void);
 
   int _divide_tstep(TSTEP_REC *tstep); // record of timestep to be divided
 
-  int _below_thold(float threshold);	 // current timestep's threshold for a layer's mass
+  int _below_thold(double threshold);	 // current timestep's threshold for a layer's mass
 
   int _do_tstep(TSTEP_REC *tstep); // timestep's record
 
@@ -1698,22 +1698,22 @@ class ClassSnobalBase : public ClassModule {
 
   int _h_le(void);
 
-  float g_soil(
-  float	rho,	// snow layer's density (kg/m^3)
-  float	tsno,	// snow layer's temperature (K)
-  float	tg,	// soil temperature (K)
-  float	ds,	// snow layer's thickness (m)
-  float	dg,	// dpeth of soil temperature measurement (m)
-  float	pa);	// air pressure (Pa)
+  double g_soil(
+  double	rho,	// snow layer's density (kg/m^3)
+  double	tsno,	// snow layer's temperature (K)
+  double	tg,	// soil temperature (K)
+  double	ds,	// snow layer's thickness (m)
+  double	dg,	// dpeth of soil temperature measurement (m)
+  double	pa);	// air pressure (Pa)
 
-  float g_snow(
-  float	rho1,	// upper snow layer's density (kg/m^3)
-  float	rho2,	// lower  "     "        "    (kg/m^3)
-  float	ts1,	// upper snow layer's temperature (K)
-  float	ts2,	// lower  "     "         "       (K)
-  float	ds1,	// upper snow layer's thickness (m)
-  float	ds2,	// lower  "     "         "     (m)
-  float	pa);	// air pressure (Pa)
+  double g_snow(
+  double	rho1,	// upper snow layer's density (kg/m^3)
+  double	rho2,	// lower  "     "        "    (kg/m^3)
+  double	ts1,	// upper snow layer's temperature (K)
+  double	ts2,	// lower  "     "         "       (K)
+  double	ds1,	// upper snow layer's thickness (m)
+  double	ds2,	// lower  "     "         "     (m)
+  double	pa);	// air pressure (Pa)
 
   void _advec(void);
 
@@ -1729,7 +1729,7 @@ class ClassSnobalBase : public ClassModule {
 
   void _new_density(void);
 
-  void _adj_snow(float delta_z_s, float delta_m_s); // change in snowcover's depth change is snowcover's mass
+  void _adj_snow(double delta_z_s, double delta_m_s); // change in snowcover's depth change is snowcover's mass
 
   void _evap_cond(void);
 
@@ -1739,18 +1739,18 @@ class ClassSnobalBase : public ClassModule {
 
   void _runoff(void);
 
-  float new_tsno(float spm, float t0, float ccon);
+  double new_tsno(double spm, double t0, double ccon);
 
-  float heat_stor(float cp, float spm, float tdif);
+  double heat_stor(double cp, double spm, double tdif);
 
-  float sati(float tk);
+  double sati(double tk);
 
-  float ssxfr(float  k1, float  k2, float  t1, float  t2, float  d1, float  d2);
+  double ssxfr(double  k1, double  k2, double  t1, double  t2, double  d1, double  d2);
 
-  float efcon(float k, float t, float p);
+  double efcon(double k, double t, double p);
 
-  int hle1(float press, float ta, float ts, float za, float ea, float es, float zq, float u, float zu,
-                   float z0, float &h, float &le, float &e);
+  int hle1(double press, double ta, double ts, double za, double ea, double es, double zq, double u, double zu,
+                   double z0, double &h, double &le, double &e);
 
 // time step information
 
@@ -1789,23 +1789,23 @@ class ClassSnobalX : public ClassSnobalBase {
 
 // variable climate-data inputs
 
-    const float  *S_n_X;      // net solar radiation (W/m^2)
-    const float  *I_lw_X;     // incoming longwave (thermal) rad (W/m^2)
-    const float  *T_a_X;      // air temp (C)
-    const float  *e_a_X;      // vapor pressure (Pa)
-    const float  *u_X;        // wind speed (m/sec)
-    const float  *T_g_X;      // soil temp at depth z_g (C)
-    const float  *F_g_X;      // soil flux at depth z_g ()
+    const double  *S_n_X;      // net solar radiation (W/m^2)
+    const double  *I_lw_X;     // incoming longwave (thermal) rad (W/m^2)
+    const double  *T_a_X;      // air temp (C)
+    const double  *e_a_X;      // vapor pressure (Pa)
+    const double  *u_X;        // wind speed (m/sec)
+    const double  *T_g_X;      // soil temp at depth z_g (C)
+    const double  *F_g_X;      // soil flux at depth z_g ()
 
 // variable precipitation inputs
 
-    const float  *m_precip_X;	// specific mass of total precip     (kg/m^2)
-    const float  *m_rain_X;	// specific mass of rain in precip   (kg/m^2)
-    const float  *m_snow_X;	// specific mass in snow in precip   (kg/m^2)
-    const float  *m_drift_X;	// specific mass in snow drift       (kg/m^2)
-    const float  *m_subl_X;	// specific mass of snow sublimation (kg/m^2)
-    const float  *rho_snow_X;   // density of snowfall               (kg/m^3)
-    const float  *T_pp_X;       // precip temp (C)
+    const double  *m_precip_X;	// specific mass of total precip     (kg/m^2)
+    const double  *m_rain_X;	// specific mass of rain in precip   (kg/m^2)
+    const double  *m_snow_X;	// specific mass in snow in precip   (kg/m^2)
+    const double  *m_drift_X;	// specific mass in snow drift       (kg/m^2)
+    const double  *m_subl_X;	// specific mass of snow sublimation (kg/m^2)
+    const double  *rho_snow_X;   // density of snowfall               (kg/m^3)
+    const double  *T_pp_X;       // precip temp (C)
 
 
     void decl(void);
@@ -1822,57 +1822,57 @@ public:
 
 ClasspbsmSnobal(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust"), // setting PeerRank
                                   hru_basin(NULL) {};
-float hru_u_;
+double hru_u_;
 
 // declared variables
-float *Subl;
-float *Drift;     // HRU composite drift
-float *SublH;
-float *DriftH;
-float *Drift_out; // HRU drift out
-float *Drift_in;  // HRU drift in
-float *cumSubl;
-float *cumDrift;
-float *cumDriftIn;
-float *Prob;
-float *snowdepth;
-float *BasinSnowLoss;
-float *cumBasinSnowLoss;
-float *cumBasinSnowGain;
-float *SnowAge;
+double *Subl;
+double *Drift;     // HRU composite drift
+double *SublH;
+double *DriftH;
+double *Drift_out; // HRU drift out
+double *Drift_in;  // HRU drift in
+double *cumSubl;
+double *cumDrift;
+double *cumDriftIn;
+double *Prob;
+double *snowdepth;
+double *BasinSnowLoss;
+double *cumBasinSnowLoss;
+double *cumBasinSnowGain;
+double *SnowAge;
 long  *DrySnow;
 
 // declared parameters
-const float *fetch;
-const float *Ht;
-const float *distrib;
-const float *basin_area;
-const float *hru_area;
-const float *A_S;
-const float *N_S;
-const float *u_D;
-const float *Drift_offset;
-const float *Drift_slope;
-const float *Subl_offset;
-const float *Subl_slope;
+const double *fetch;
+const double *Ht;
+const double *distrib;
+const double *basin_area;
+const double *hru_area;
+const double *A_S;
+const double *N_S;
+const double *u_D;
+const double *Drift_offset;
+const double *Drift_slope;
+const double *Subl_offset;
+const double *Subl_slope;
 const long *inhibit_evap;
 const long *inhibit_bs;
 const long *inhibit_subl;
 
 // variable inputs
-const float *hru_t;
-const float *hru_ea;
-const float *hru_u;
-const float *hru_Uadjust;
-const float *net_snow;
+const double *hru_t;
+const double *hru_ea;
+const double *hru_u;
+const double *hru_Uadjust;
+const double *net_snow;
 
 // put variable inputs
-float *SWE; // actually m_s
-float *z_s;
-float *rho;
+double *SWE; // actually m_s
+double *z_s;
+double *rho;
 
 // local allocated arrays
-float *hru_basin;
+double *hru_basin;
 
 
 void decl(void);
@@ -1891,28 +1891,28 @@ ClassalbedoRichard(string Name, string Version = "undefined", CRHM::LMODULE Lvl 
 
 // local class
 
-    float dt;
+    double dt;
 
 // declared variables
-float *Albedo;
+double *Albedo;
 
 // put variables:
 
 // get variables:
 
- const float *net_snow;
- const float *SWE;
+ const double *net_snow;
+ const double *SWE;
 
-const float *T0;
+const double *T0;
 
 // declared parameters
-  const float *Albedo_Bare;
-  const float *Albedo_Snow;
-  const float *a1;       // Albedo decay time constant for cold snow (s)
-  const float *a2;       // Albedo decay time constant for melting snow (s)
-  const float *amin;     // Minimum albedo for aged snow
-  const float *amax;     // Maximum albedo for fresh snow
-  const float *smin;     // Minimum snowfall to refresh snow albedo (mm)
+  const double *Albedo_Bare;
+  const double *Albedo_Snow;
+  const double *a1;       // Albedo decay time constant for cold snow (s)
+  const double *a2;       // Albedo decay time constant for melting snow (s)
+  const double *amin;     // Minimum albedo for aged snow
+  const double *amax;     // Maximum albedo for fresh snow
+  const double *smin;     // Minimum snowfall to refresh snow albedo (mm)
 
 void decl(void);
 void init(void);
@@ -1927,21 +1927,21 @@ public:
 ClassalbedoBaker(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-  float *Albedo;
-  float *Ab_t;
+  double *Albedo;
+  double *Ab_t;
 
 // get variables:
 
 
- const float *net_snow;
- const float *SWE;
+ const double *net_snow;
+ const double *SWE;
 
 // put variables:
 
 // declared parameters
-  const float *Albedo_Bare;
-  const float *Albedo_Snow;
-  const float *refresh;
+  const double *Albedo_Bare;
+  const double *Albedo_Snow;
+  const double *refresh;
 
 void decl(void);
 void init(void);
@@ -1955,78 +1955,78 @@ public:
 
 ClassHMSA(string Name = "HMSA", string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " hru_t, "){};
 
-float Soil_Temp;
+double Soil_Temp;
 
 long MaxFrontCnt;
 long Liqcnt;
 long Totcnt;
 
 // declared observation variables
-const float *Tsurf_obs;
-const float *LiqWat;
-const float *TotMoist;
+const double *Tsurf_obs;
+const double *LiqWat;
+const double *TotMoist;
 
 // variable inputs
-const float *Tsurf_var;
-const float *hru_t;
+const double *Tsurf_var;
+const double *hru_t;
 
-//const float *theta;
+//const double *theta;
 
 // declared variables
-float *Cum_Thaw;
-float *Cum_Frozen;
-float *Lamda_b;
-float *Frozen_D;
-float *Thaw_D;
-float *Last_Tsurf;
+double *Cum_Thaw;
+double *Cum_Frozen;
+double *Lamda_b;
+double *Frozen_D;
+double *Thaw_D;
+double *Last_Tsurf;
 
-float *C_K0;
-float *Total_Moisture;
-float **Total_Moisture_lay;
-float *Cum_d;
-float **Cum_d_lay;
+double *C_K0;
+double *Total_Moisture;
+double **Total_Moisture_lay;
+double *Cum_d;
+double **Cum_d_lay;
 long *Frozen_ID;
 long **Frozen_ID_lay;
-float *FrntDepth;
-float **FrntDepth_array;
-float *ThawCum;
-float **ThawCum_array;
-float *FreezeCum;
-float **FreezeCum_array;
+double *FrntDepth;
+double **FrntDepth_array;
+double *ThawCum;
+double **ThawCum_array;
+double *FreezeCum;
+double **FreezeCum_array;
 long *FrntDepthType;
 long **FrntDepthType_array;
 long *FrontCnt;
 
 // local
-float *Tsurface;
+double *Tsurface;
 
 // declared parameters
-const float *Alpha_T;
-const float *Alpha_F;
-const float *d_lay;
-const float *BulkDensityLayer;
-const float *InitThaw_D;
-const float *InitFrozen_D;
-const float *D_Top;
-const float *TMPB_W;
-const float **TMPB_W_NDEF;
+const double *Alpha_T;
+const double *Alpha_F;
+const double *d_lay;
+const double *BulkDensityLayer;
+const double *InitThaw_D;
+const double *InitFrozen_D;
+const double *D_Top;
+const double *TMPB_W;
+const double **TMPB_W_NDEF;
 const long *Alpha_ID;
 const long *Soil_ID;
 const long **Soil_ID_lay;
 
-const float *Soil_Depths;
-const float **Soil_depths_lay; // [nn][hh]
-const float *Organic;
-const float **Organic_lay; // [nn][hh]
-const float *Porosity;
-const float **Porosity_lay; // [nn][hh
-const float *BulkDensity;
-const float **BulkDensity_lay; // [nn][hh]
-float *f;
-float *Soil_Ice;
-float **Soil_Ice_lay;
-float *Soil_Water;
-float **Soil_Water_lay;
+const double *Soil_Depths;
+const double **Soil_depths_lay; // [nn][hh]
+const double *Organic;
+const double **Organic_lay; // [nn][hh]
+const double *Porosity;
+const double **Porosity_lay; // [nn][hh
+const double *BulkDensity;
+const double **BulkDensity_lay; // [nn][hh]
+double *f;
+double *Soil_Ice;
+double **Soil_Ice_lay;
+double *Soil_Water;
+double **Soil_Water_lay;
 
 const long *Soil_Layers;
 const long *Method_ID;
@@ -2034,7 +2034,7 @@ const long *Method_ID;
 void decl(void);
 void init(void);
 void run(void);
-void Get_Heat_Param_Soil(float Soil_temp, long nn);
+void Get_Heat_Param_Soil(double Soil_temp, long nn);
 void Get_Heat_Chad(long nn);
 
 ClassHMSA* klone(string name) const;
@@ -2045,19 +2045,19 @@ public:
 Classwalmsley_wind(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *hru_Uadjust;
-float *hru_Uchange;
-float *WR;
+double *hru_Uadjust;
+double *hru_Uchange;
+double *WR;
 
 // declared parameters
-const float *Zwind;
-const float *Ax;
-const float *Bx;
-const float *L;
-const float *Walmsley_Ht;
+const double *Zwind;
+const double *Ax;
+const double *Bx;
+const double *L;
+const double *Walmsley_Ht;
 
 // varaible inputs
-const float *hru_u;
+const double *hru_u;
 
 void decl(void);
 void init(void);
@@ -2077,47 +2077,47 @@ long soil_runoffDiv;
 long soil_gwDiv;
 
 // declared variables
-float *inflow;        // [nhru]
-float *cuminflow;     // [nhru]
-float *outflow;       // [nhru]
-float *outflow_diverted; // [nhru]
-float *cumoutflow_diverted; // [nhru]
-float *cumoutflow;    // [nhru]
-float *gwinflow;        // [nhru]
+double *inflow;        // [nhru]
+double *cuminflow;     // [nhru]
+double *outflow;       // [nhru]
+double *outflow_diverted; // [nhru]
+double *cumoutflow_diverted; // [nhru]
+double *cumoutflow;    // [nhru]
+double *gwinflow;        // [nhru]
 
-float *ssrinflow;        // [nhru]
-float *ssrcuminflow;     // [nhru]
-float *ssroutflow;       // [nhru]
-float *ssrcumoutflow;    // [nhru]
-float *HRU_cumbasinflow; // [nhru]
+double *ssrinflow;        // [nhru]
+double *ssrcuminflow;     // [nhru]
+double *ssroutflow;       // [nhru]
+double *ssrcumoutflow;    // [nhru]
+double *HRU_cumbasinflow; // [nhru]
 
-float *runinflow;        // [nhru]
-float *runcuminflow;     // [nhru]
-float *runoutflow;       // [nhru]
-float *runcumoutflow;    // [nhru]
+double *runinflow;        // [nhru]
+double *runcuminflow;     // [nhru]
+double *runoutflow;       // [nhru]
+double *runcumoutflow;    // [nhru]
 
-float *gwoutflow;       // [nhru]
-float *gwoutflow_diverted; // [nhru]
-float *gwcuminflow;     // [nhru]
-float *gwcumoutflow;    // [nhru]
-float *gwcumoutflow_diverted; // [nhru]
+double *gwoutflow;       // [nhru]
+double *gwoutflow_diverted; // [nhru]
+double *gwcuminflow;     // [nhru]
+double *gwcumoutflow;    // [nhru]
+double *gwcumoutflow_diverted; // [nhru]
 
-float *basinflow;     // [BASIN] all HRUs
-float *basinflow_s;   // [BASIN] all HRUs
-float *cumbasinflow;  // [BASIN] all HRUs
-float *basingw;       // [BASIN} all HRUs
-float *basingw_s;     // [BASIN} all HRUs
-float *cumbasingw;    // [BASIN} all HRUs
+double *basinflow;     // [BASIN] all HRUs
+double *basinflow_s;   // [BASIN] all HRUs
+double *cumbasinflow;  // [BASIN] all HRUs
+double *basingw;       // [BASIN} all HRUs
+double *basingw_s;     // [BASIN} all HRUs
+double *cumbasingw;    // [BASIN} all HRUs
 
-float *soil_ssr_Buf;    // buffered
-float *soil_runoff_Buf; // buffered
-float *soil_gw_Buf;     // buffered
+double *soil_ssr_Buf;    // buffered
+double *soil_runoff_Buf; // buffered
+double *soil_gw_Buf;     // buffered
 
-float *cum_to_Sd;         // [nhru]
-float *cum_to_soil_rechr; // [nhru]
+double *cum_to_Sd;         // [nhru]
+double *cum_to_soil_rechr; // [nhru]
 
-float *Ktravel;         // [nhru] Muskingum
-float *cum_preferential_flow_to_gw;
+double *Ktravel;         // [nhru] Muskingum
+double *cum_preferential_flow_to_gw;
 
 ClassMuskingum *hruDelay;
 ClassClark *ssrDelay;
@@ -2125,43 +2125,43 @@ ClassClark *runDelay;
 ClassClark *gwDelay;
 
 // declared parameters
-const float *route_n;         // [nhru]
-const float *route_R;         // [nhru]
-const float *route_S0;        // [nhru]
-const float *route_L;         // [nhru]
-const float *route_X_M;       // [nhru]
+const double *route_n;         // [nhru]
+const double *route_R;         // [nhru]
+const double *route_S0;        // [nhru]
+const double *route_L;         // [nhru]
+const double *route_X_M;       // [nhru]
 const long  *route_Cshp;      // [nhru]
 
-const float *Lag;              // [nhru]
-const float *ssrKstorage;      // [nhru]
-const float *ssrLag;           // [nhru]
-const float *runKstorage;      // [nhru]
-const float *runLag;           // [nhru]
-const float *gwKstorage;       // [nhru]
-const float *gwLag;            // [nhru]
+const double *Lag;              // [nhru]
+const double *ssrKstorage;      // [nhru]
+const double *ssrLag;           // [nhru]
+const double *runKstorage;      // [nhru]
+const double *runLag;           // [nhru]
+const double *gwKstorage;       // [nhru]
+const double *gwLag;            // [nhru]
 
-const float *basin_area;        // [BASIN]
-const float *hru_area;          // [nhru]
+const double *basin_area;        // [BASIN]
+const double *hru_area;          // [nhru]
 const long  *whereto;           // [nhru]
 const long  *gwwhereto;         // [nhru]
 const long  *order;             // [nhru]
-const float *Sdmax;             // [nhru]
-const float *soil_rechr_max;    // [nhru]
+const double *Sdmax;             // [nhru]
+const double *soil_rechr_max;    // [nhru]
 const long  *Sd_ByPass;         // [nhru]
 const long  *soil_rechr_ByPass; // [nhru]
 const long  *preferential_flow; // [nhru]
 
 // variable inputs
-const float *soil_gw;     // [nhru]
-const float *soil_ssr;    // [nhru]
-const float *soil_runoff; // [nhru]
+const double *soil_gw;     // [nhru]
+const double *soil_ssr;    // [nhru]
+const double *soil_runoff; // [nhru]
 
 // variable puts
-float *Sd;
-float *soil_moist;
-float *soil_rechr;
-float *redirected_residual;
-float *gw;
+double *Sd;
+double *soil_moist;
+double *soil_rechr;
+double *redirected_residual;
+double *gw;
 
 // local allocated arrays
 
@@ -2169,8 +2169,8 @@ void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
-virtual float Function1(float *I, long hh);
-virtual float Function2(float *X, long hh);
+virtual double Function1(double *I, long hh);
+virtual double Function2(double *X, long hh);
 
 ClassNetroute_M* klone(string name) const;
 };
@@ -2184,42 +2184,42 @@ long inflowCnt;
 long gwCnt;
 
 // declared variables
-float *rew;
-float *gwrew;
+double *rew;
+double *gwrew;
 
-float **inflow_All;
-float **gw_All;
+double **inflow_All;
+double **gw_All;
 
-float *inflow;        // [nhru]
-float *cuminflow;     // [nhru]
-float *outflow;       // [nhru]
-float *cumoutflow;    // [nhru]
+double *inflow;        // [nhru]
+double *cuminflow;     // [nhru]
+double *outflow;       // [nhru]
+double *cumoutflow;    // [nhru]
 
-float *gwinflow;        // [nhru]
-float *cumgwinflow;     // [nhru]
-float *gwoutflow;       // [nhru]
-float *cumgwoutflow;    // [nhru]
+double *gwinflow;        // [nhru]
+double *cumgwinflow;     // [nhru]
+double *gwoutflow;       // [nhru]
+double *cumgwoutflow;    // [nhru]
 
-float *flow;     // [BASIN] all HRUs
-float *flow_s;   // [BASIN] all HRUs
-float *cumflow;  // [BASIN] all HRUs
+double *flow;     // [BASIN] all HRUs
+double *flow_s;   // [BASIN] all HRUs
+double *cumflow;  // [BASIN] all HRUs
 
-float *gwflow;     // [BASIN] all HRUs
-float *gwflow_s;   // [BASIN] all HRUs
-float *cumgwflow;  // [BASIN] all HRUs
+double *gwflow;     // [BASIN] all HRUs
+double *gwflow_s;   // [BASIN] all HRUs
+double *cumgwflow;  // [BASIN] all HRUs
 
-float *WS_Ktravel_var;         // [nhru]
-float *WS_gwKtravel_var;         // [nhru]
+double *WS_Ktravel_var;         // [nhru]
+double *WS_gwKtravel_var;         // [nhru]
 
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_over_Q;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
+double *culvert_Q;
+double *culvert_water_H;
+double *culvert_water_A;
+double *culvert_water_V;
+double *culvert_over_Q;
+double *culvert_evap;
+double *cum_culvert;
+double *cum_culvert_over;
+double *HD;
 
 ClassMuskingum *inflowDelay;
 ClassMuskingum *gwDelay;
@@ -2229,30 +2229,30 @@ ClassClark *Clark_gwDelay;
 
 // declared parameters
 
-const float *WS_route_n;         // [nhru]
-const float *WS_route_R;         // [nhru]
-const float *WS_route_S0;        // [nhru]
-const float *WS_route_L;         // [nhru]
+const double *WS_route_n;         // [nhru]
+const double *WS_route_R;         // [nhru]
+const double *WS_route_S0;        // [nhru]
+const double *WS_route_L;         // [nhru]
 const long  *WS_Channel_shp;      // [nhru]
 
-const float *WS_Lag;             // [nhru]
-const float *WS_route_X_M;       // [nhru]
+const double *WS_Lag;             // [nhru]
+const double *WS_route_X_M;       // [nhru]
 const long  *WS_whereto;         // [nhru]
 const long  *WS_order;           // [nhru]
 
-const float *WS_gwLag;           // [nhru]
-const float *WS_gwroute_X_M;     // [nhru]
+const double *WS_gwLag;           // [nhru]
+const double *WS_gwroute_X_M;     // [nhru]
 const long  *WS_gwwhereto;       // [nhru]
 const long  *WS_gworder;         // [nhru]
 
-const float *WS_Kstorage;     // [nhru]
-const float *WS_gwKstorage;   // [nhru]
+const double *WS_Kstorage;     // [nhru]
+const double *WS_gwKstorage;   // [nhru]
 
-const float *WS_channel_slope;
-const float *WS_side_slope;
-const float *WS_culvert_diam;
-const float *WS_culvert_water_Dmax;
-const float *WS_number_culverts;
+const double *WS_channel_slope;
+const double *WS_side_slope;
+const double *WS_culvert_diam;
+const double *WS_culvert_water_Dmax;
+const double *WS_number_culverts;
 
 const long *WS_culvert_type;
 
@@ -2266,7 +2266,7 @@ ClassREWroute2* klone(string name) const;
 };
 
 
-float Farouki_a(float fract_por);
+double Farouki_a(double fract_por);
 
 class ClassLongVt : public ClassModule {
 public:
@@ -2274,33 +2274,33 @@ public:
 ClassLongVt(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , , QsiD_Var, ") {};
 
 // declared observation variables
-  const float *Qsi;
-  const float *QsiD;
-  const float *Qli;
+  const double *Qsi;
+  const double *QsiD;
+  const double *Qli;
 
 // declared observation functions
-  float *QsiDavg;
+  double *QsiDavg;
 
 // declared observations
-  float *Qli_out;
+  double *Qli_out;
 
 // declared variables
-  float *Qli_Var;
-  float *QliVt_Var;
-  float *tau;
+  double *Qli_Var;
+  double *QliVt_Var;
+  double *tau;
 
 // declared parameters
-  const float *Vt;
+  const double *Vt;
 
-//  const float *epsilon_clear;
-  const float *epsilon_s;
+//  const double *epsilon_clear;
+  const double *epsilon_s;
 
 // variable inputs
-  const float *hru_t;
-  const float *hru_ea;
-  const float *hru_rh;
-  const float *QdroDext;
-  const float *QsiD_Var;
+  const double *hru_t;
+  const double *hru_ea;
+  const double *hru_rh;
+  const double *QdroDext;
+  const double *QsiD_Var;
 
 void decl(void);
 void init(void);
@@ -2315,53 +2315,53 @@ public:
 Classpbsm_M(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust"), // setting PeerRank
                                   hru_basin(NULL) {};
 // declared variables
-float *SWE;
-float *Subl;
-float *Drift;
-float *cumSubl;
-float *cumDrift;
-float *cumDriftIn;
-float *cumSno;
-float *Prob;
-float *snowdepth;
-float *BasinSnowLoss;
-float *cumBasinSnowLoss;
-float *cumBasinSnowGain;
-float *SnowAge;
-float *this_distrib;
-float *Results;
-float **Results_lay;
-float *Q_leeslope;
-float *Q_valley;
+double *SWE;
+double *Subl;
+double *Drift;
+double *cumSubl;
+double *cumDrift;
+double *cumDriftIn;
+double *cumSno;
+double *Prob;
+double *snowdepth;
+double *BasinSnowLoss;
+double *cumBasinSnowLoss;
+double *cumBasinSnowGain;
+double *SnowAge;
+double *this_distrib;
+double *Results;
+double **Results_lay;
+double *Q_leeslope;
+double *Q_valley;
 long  *DrySnow;
 
 // declared parameters
-const float *fetch;
-const float *Ht;
-const float *hru_Ht;
-const float *distrib;
-const float **distrib_hru;
-const float *basin_area;
-const float *hru_area;
-const float *A_S;
-const float *N_S;
-const float *Zwind;
-const float *hru_GSL;
-const float *Beta_M;
+const double *fetch;
+const double *Ht;
+const double *hru_Ht;
+const double *distrib;
+const double **distrib_hru;
+const double *basin_area;
+const double *hru_area;
+const double *A_S;
+const double *N_S;
+const double *Zwind;
+const double *hru_GSL;
+const double *Beta_M;
 const long *inhibit_evap;
 const long *inhibit_bs;
 const long *inhibit_subl;
 const long *eq_prof;
 
 // variable inputs
-const float *hru_t;
-const float *hru_rh;
-const float *hru_u;
-const float *net_snow;
+const double *hru_t;
+const double *hru_rh;
+const double *hru_u;
+const double *net_snow;
 const long  *hru_newsnow;
 
 // local allocated arrays
-float *hru_basin;
+double *hru_basin;
 
 
 void decl(void);
@@ -2370,9 +2370,9 @@ void run(void);
 void finish(bool good);
 
 Classpbsm_M* klone(string name) const;
-void Sum(float TQsalt, float TQsusp, float SBsum, float SBsalt, float & DriftH, float & SublH);
-void Pbsm(float E_StubHt, float Uthr, float & DriftH, float & SublH, float t, float u, float rh, float Fetch,
-            long N_S, float A_S, float GSL, float height, float Beta_M, float & Qdist_leeslope, float & Qdist_valley);
+void Sum(double TQsalt, double TQsusp, double SBsum, double SBsalt, double & DriftH, double & SublH);
+void Pbsm(double E_StubHt, double Uthr, double & DriftH, double & SublH, double t, double u, double rh, double Fetch,
+            long N_S, double A_S, double GSL, double height, double Beta_M, double & Qdist_leeslope, double & Qdist_valley);
 };
 
 class ClassNetroute_D : public ClassModule {
@@ -2386,48 +2386,48 @@ long soil_runoffDiv;
 long soil_gwDiv;
 
 // declared variables
-float *inflow;           // [nhru]
-float *cuminflow;        // [nhru]
-float *outflow;          // [nhru]
-float *outflow_diverted; // [nhru]
-float *cumoutflow_diverted; // [nhru]
-float *cumoutflow;       // [nhru]
-float *cumscaling_boost; // [nhru]
-float *gwinflow;         // [nhru]
-float *gwoutflow_diverted; // [nhru]
-float *gwcumoutflow_diverted; // [nhru]
-float *HRU_cumbasinflow; // [nhru]
+double *inflow;           // [nhru]
+double *cuminflow;        // [nhru]
+double *outflow;          // [nhru]
+double *outflow_diverted; // [nhru]
+double *cumoutflow_diverted; // [nhru]
+double *cumoutflow;       // [nhru]
+double *cumscaling_boost; // [nhru]
+double *gwinflow;         // [nhru]
+double *gwoutflow_diverted; // [nhru]
+double *gwcumoutflow_diverted; // [nhru]
+double *HRU_cumbasinflow; // [nhru]
 
-float *ssrinflow;        // [nhru]
-float *ssrcuminflow;     // [nhru]
-float *ssroutflow;       // [nhru]
-float *ssrcumoutflow;    // [nhru]
+double *ssrinflow;        // [nhru]
+double *ssrcuminflow;     // [nhru]
+double *ssroutflow;       // [nhru]
+double *ssrcumoutflow;    // [nhru]
 
-float *runinflow;        // [nhru]
-float *runcuminflow;     // [nhru]
-float *runoutflow;       // [nhru]
-float *runcumoutflow;    // [nhru]
+double *runinflow;        // [nhru]
+double *runcuminflow;     // [nhru]
+double *runoutflow;       // [nhru]
+double *runcumoutflow;    // [nhru]
 
-float *gwoutflow;       // [nhru]
-float *gwcuminflow;    // [nhru]
-float *gwcumoutflow;    // [nhru]
+double *gwoutflow;       // [nhru]
+double *gwcuminflow;    // [nhru]
+double *gwcumoutflow;    // [nhru]
 
-float *basinflow;     // [BASIN] all HRUs
-float *basinflow_s;   // [BASIN] all HRUs
-float *cumbasinflow;  // [BASIN] all HRUs
-float *basingw;       // [BASIN} all HRUs
-float *basingw_s;     // [BASIN} all HRUs
-float *cumbasingw;    // [BASIN} all HRUs
+double *basinflow;     // [BASIN] all HRUs
+double *basinflow_s;   // [BASIN] all HRUs
+double *cumbasinflow;  // [BASIN] all HRUs
+double *basingw;       // [BASIN} all HRUs
+double *basingw_s;     // [BASIN} all HRUs
+double *cumbasingw;    // [BASIN} all HRUs
 
-float *soil_ssr_Buf;    // buffered
-float *soil_runoff_Buf; // buffered
-float *soil_gw_Buf;     // buffered
+double *soil_ssr_Buf;    // buffered
+double *soil_runoff_Buf; // buffered
+double *soil_gw_Buf;     // buffered
 
-float *cum_to_Sd;         // [nhru]
-float *cum_to_soil_rechr; // [nhru]
+double *cum_to_Sd;         // [nhru]
+double *cum_to_soil_rechr; // [nhru]
 
-float *distrib_sum;
-float *cum_preferential_flow_to_gw;
+double *distrib_sum;
+double *cum_preferential_flow_to_gw;
 
 ClassClark *hruDelay;
 ClassClark *ssrDelay;
@@ -2435,41 +2435,41 @@ ClassClark *runDelay;
 ClassClark *gwDelay;
 
 // declared parameters
-const float *Kstorage;         // [nhru]
-const float *Lag;              // [nhru]
-const float *ssrKstorage;      // [nhru]
-const float *ssrLag;           // [nhru]
-const float *runKstorage;      // [nhru]
-const float *runLag;           // [nhru]
-const float *gwKstorage;       // [nhru]
-const float *gwLag;            // [nhru]
+const double *Kstorage;         // [nhru]
+const double *Lag;              // [nhru]
+const double *ssrKstorage;      // [nhru]
+const double *ssrLag;           // [nhru]
+const double *runKstorage;      // [nhru]
+const double *runLag;           // [nhru]
+const double *gwKstorage;       // [nhru]
+const double *gwLag;            // [nhru]
 const long  *gwwhereto;        // [nhru]
 
-const float *basin_area;        // [BASIN]
-const float *hru_area;          // [nhru]
-const float *distrib;
-const float **distrib_hru;
-const float *distrib_Basin;
-const float *Sdmax;             // [nhru]
-const float *soil_rechr_max;    // [nhru]
+const double *basin_area;        // [BASIN]
+const double *hru_area;          // [nhru]
+const double *distrib;
+const double **distrib_hru;
+const double *distrib_Basin;
+const double *Sdmax;             // [nhru]
+const double *soil_rechr_max;    // [nhru]
 const long  *Sd_ByPass;         // [nhru]
 const long  *soil_rechr_ByPass; // [nhru]
 const long  *order; // [nhru]
 const long  *preferential_flow; // [nhru]
 
-const float *scaling_factor;    // temporary modification
+const double *scaling_factor;    // temporary modification
 
 // variable inputs
-const float *soil_gw;   // [nhru]
-const float *soil_ssr;    // [nhru]
-const float *soil_runoff; // [nhru]
+const double *soil_gw;   // [nhru]
+const double *soil_ssr;    // [nhru]
+const double *soil_runoff; // [nhru]
 
 // variable puts
-float *Sd;
-float *soil_moist;
-float *soil_rechr;
-float *redirected_residual;
-float *gw;
+double *Sd;
+double *soil_moist;
+double *soil_rechr;
+double *redirected_residual;
+double *gw;
 
 // local allocated arrays
 
@@ -2477,8 +2477,8 @@ void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
-virtual float Function1(float *I, long hh);
-virtual float Function2(float *X, long hh);
+virtual double Function1(double *I, long hh);
+virtual double Function2(double *X, long hh);
 
 ClassNetroute_D* klone(string name) const;
 };
@@ -2494,50 +2494,50 @@ long soil_runoffDiv;
 long soil_gwDiv;
 
 // declared variables
-float *inflow;        // [nhru]
-float *cuminflow;     // [nhru]
-float *outflow;       // [nhru]
-float *outflow_diverted;    // [nhru]
-float *cumoutflow_diverted; // [nhru]
-float *cumoutflow;    // [nhru]
-float *cumscaling_boost;    // [nhru]
-float *gwinflow;         // [nhru]
-float *gwoutflow_diverted; // [nhru]
-float *gwcumoutflow_diverted; // [nhru]
-float *HRU_cumbasinflow; // [nhru]
+double *inflow;        // [nhru]
+double *cuminflow;     // [nhru]
+double *outflow;       // [nhru]
+double *outflow_diverted;    // [nhru]
+double *cumoutflow_diverted; // [nhru]
+double *cumoutflow;    // [nhru]
+double *cumscaling_boost;    // [nhru]
+double *gwinflow;         // [nhru]
+double *gwoutflow_diverted; // [nhru]
+double *gwcumoutflow_diverted; // [nhru]
+double *HRU_cumbasinflow; // [nhru]
 
-float *ssrinflow;        // [nhru]
-float *ssrcuminflow;     // [nhru]
-float *ssroutflow;       // [nhru]
-float *ssrcumoutflow;    // [nhru]
+double *ssrinflow;        // [nhru]
+double *ssrcuminflow;     // [nhru]
+double *ssroutflow;       // [nhru]
+double *ssrcumoutflow;    // [nhru]
 
-float *runinflow;        // [nhru]
-float *runcuminflow;     // [nhru]
-float *runoutflow;       // [nhru]
-float *runcumoutflow;    // [nhru]
+double *runinflow;        // [nhru]
+double *runcuminflow;     // [nhru]
+double *runoutflow;       // [nhru]
+double *runcumoutflow;    // [nhru]
 
-float *gwoutflow;       // [nhru]
-float *gwcuminflow;    // [nhru]
-float *gwcumoutflow;    // [nhru]
+double *gwoutflow;       // [nhru]
+double *gwcuminflow;    // [nhru]
+double *gwcumoutflow;    // [nhru]
 
-float *basinflow;     // [BASIN] all HRUs
-float *basinflow_s;   // [BASIN] all HRUs
-float *cumbasinflow;  // [BASIN] all HRUs
-float *basingw;       // [BASIN} all HRUs
-float *basingw_s;     // [BASIN} all HRUs
-float *cumbasingw;    // [BASIN} all HRUs
+double *basinflow;     // [BASIN] all HRUs
+double *basinflow_s;   // [BASIN] all HRUs
+double *cumbasinflow;  // [BASIN] all HRUs
+double *basingw;       // [BASIN} all HRUs
+double *basingw_s;     // [BASIN} all HRUs
+double *cumbasingw;    // [BASIN} all HRUs
 
-float *soil_ssr_Buf;    // buffered
-float *soil_runoff_Buf; // buffered
-float *soil_gw_Buf;     // buffered
+double *soil_ssr_Buf;    // buffered
+double *soil_runoff_Buf; // buffered
+double *soil_gw_Buf;     // buffered
 
-float *cum_to_Sd;         // [nhru]
-float *cum_to_soil_rechr; // [nhru]
+double *cum_to_Sd;         // [nhru]
+double *cum_to_soil_rechr; // [nhru]
 
-float *Ktravel;         // [nhru] Muskingum
+double *Ktravel;         // [nhru] Muskingum
 
-float *distrib_sum;
-float *cum_preferential_flow_to_gw;
+double *distrib_sum;
+double *cum_preferential_flow_to_gw;
 
 ClassMuskingum *hruDelay;
 ClassClark *ssrDelay;
@@ -2545,47 +2545,47 @@ ClassClark *runDelay;
 ClassClark *gwDelay;
 
 // declared parameters
-const float *route_n;         // [nhru]
-const float *route_R;         // [nhru]
-const float *route_S0;        // [nhru]
-const float *route_L;         // [nhru]
-const float *route_X_M;       // [nhru]
+const double *route_n;         // [nhru]
+const double *route_R;         // [nhru]
+const double *route_S0;        // [nhru]
+const double *route_L;         // [nhru]
+const double *route_X_M;       // [nhru]
 const long  *route_Cshp;      // [nhru]
 
-const float *Lag;             // [nhru]
-const float *ssrKstorage;     // [nhru]
-const float *ssrLag;          // [nhru]
-const float *runKstorage;     // [nhru]
-const float *runLag;          // [nhru]
-const float *gwKstorage;      // [nhru]
-const float *gwLag;           // [nhru]
+const double *Lag;             // [nhru]
+const double *ssrKstorage;     // [nhru]
+const double *ssrLag;          // [nhru]
+const double *runKstorage;     // [nhru]
+const double *runLag;          // [nhru]
+const double *gwKstorage;      // [nhru]
+const double *gwLag;           // [nhru]
 const long  *gwwhereto;       // [nhru]
 
-const float *basin_area;      // [BASIN]
-const float *hru_area;        // [nhru]
-const float *distrib;
-const float *distrib_Basin;
-const float **distrib_hru;
-const float *Sdmax;           // [nhru]
-const float *soil_rechr_max;  // [nhru]
+const double *basin_area;      // [BASIN]
+const double *hru_area;        // [nhru]
+const double *distrib;
+const double *distrib_Basin;
+const double **distrib_hru;
+const double *Sdmax;           // [nhru]
+const double *soil_rechr_max;  // [nhru]
 const long  *Sd_ByPass;       // [nhru]
 const long  *soil_rechr_ByPass; // [nhru]
 const long  *order;
 const long  *preferential_flow; // [nhru]
 
-const float *scaling_factor;    // temporary modification
+const double *scaling_factor;    // temporary modification
 
 // variable inputs
-const float *soil_gw;   // [nhru]
-const float *soil_ssr;    // [nhru]
-const float *soil_runoff; // [nhru]
+const double *soil_gw;   // [nhru]
+const double *soil_ssr;    // [nhru]
+const double *soil_runoff; // [nhru]
 
 // variable puts
-float *Sd;
-float *soil_moist;
-float *soil_rechr;
-float *redirected_residual;
-float *gw;
+double *Sd;
+double *soil_moist;
+double *soil_rechr;
+double *redirected_residual;
+double *gw;
 
 // local allocated arrays
 
@@ -2593,8 +2593,8 @@ void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
-virtual float Function1(float *I, long hh);
-virtual float Function2(float *X, long hh);
+virtual double Function1(double *I, long hh);
+virtual double Function2(double *X, long hh);
 
 ClassNetroute_M_D* klone(string name) const;
 };
@@ -2606,23 +2606,23 @@ ClassSetSoil(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM
 
 // declared parameters
 
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_lat;
-const float *hru_elev;
-const float *hru_GSL;
-const float *hru_ASL;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *hru_lat;
+const double *hru_elev;
+const double *hru_GSL;
+const double *hru_ASL;
 const long *RUN_ID;
 const long *RUN_START;
 const long *RUN_END;
 
-const float *soil_Depth;
-const float *soil_Depth_rechr;
-const float *Vol_h2o_content;
-const float *soil_rechr_max;
-const float *soil_rechr_init;
-const float *soil_moist_max;
-const float *soil_moist_init;
+const double *soil_Depth;
+const double *soil_Depth_rechr;
+const double *Vol_h2o_content;
+const double *soil_rechr_max;
+const double *soil_rechr_init;
+const double *soil_moist_max;
+const double *soil_moist_init;
 
 const long *soil_type;
 const long *soiltype_rechr;
@@ -2652,22 +2652,22 @@ public:
 ClassVolumetric(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "soil_gw") {}; // setting PeerVar. Cannot be "STATE" var
 
 // declared parameters
-const float *soil_Depth;
-float *fallstat;
-const float *Si;
-const float *Si_correction;
-const float *soil_moist_max;
+const double *soil_Depth;
+double *fallstat;
+const double *Si;
+const double *Si_correction;
+const double *soil_moist_max;
 const long *soil_type;
 const long *set_fallstat;
 //const long *fallstat_Si;
 
 // declared variables
-float *Volumetric;
-float *fallstat_V;
-float *Si_V;
+double *Volumetric;
+double *fallstat_V;
+double *Si_V;
 
 // variable inputs
-const float *soil_moist;
+const double *soil_moist;
 
 void decl(void);
 void init(void);
@@ -2679,38 +2679,38 @@ ClassVolumetric* klone(string name) const;
 class ClassAnnan : public ClassModule {
 public:
 
-  float QsiDT, TauAT;
+  double QsiDT, TauAT;
 
   ClassAnnan(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observation variables
-//const float *SunAct;
+//const double *SunAct;
 
 // declared variables
-float *hru_SunAct;
-float *QsiA_Var;
-float *QsiD_Var;
-float *QsiS_Var;
+double *hru_SunAct;
+double *QsiA_Var;
+double *QsiD_Var;
+double *QsiS_Var;
 
 // declared parameters
-const float *krs;
-const float *hru_elev;
+const double *krs;
+const double *hru_elev;
 
 // declared observations
-float *QsiA;
-float *QsiD;
-float *QsiS;
+double *QsiA;
+double *QsiD;
+double *QsiS;
 
 // variable inputs
-const float *QdflatE;
-const float *QdflatD;
-const float *QdroDext;
-const float *Qdro;
-const float *Qdfo;
-const float *QdfoD;
-const float *SunMax;
-const float *hru_tmax;
-const float *hru_tmin;
+const double *QdflatE;
+const double *QdflatD;
+const double *QdroDext;
+const double *Qdro;
+const double *Qdfo;
+const double *QdfoD;
+const double *SunMax;
+const double *hru_tmax;
+const double *hru_tmin;
 
 void decl(void);
 void init(void);
@@ -2725,23 +2725,23 @@ public:
 Classcalcsun(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , , , QsiD_Var") {};
 
 // declared observation variables
-const float *Qsi;
-const float *QsiD_Obs;
-const float *SunAct;
+const double *Qsi;
+const double *QsiD_Obs;
+const double *SunAct;
 
 // declared observation functions
-float *Qsitot;
+double *Qsitot;
 
 // declared variables
-float *hru_SunAct;
+double *hru_SunAct;
 
 // declared parameters
 
 // variable inputs
-const float *QdflatD;
-const float *QdfoD;
-const float *SunMax;
-const float *QsiD_Var;
+const double *QdflatD;
+const double *QdfoD;
+const double *SunMax;
+const double *QsiD_Var;
 
 void decl(void);
 void init(void);
@@ -2758,16 +2758,16 @@ long Ht_obsCnt;
 ClassObstoPar(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *Ht_var;
+double *Ht_var;
 
 // declared observation variables
-const float *Ht_obs;      // interval data
+const double *Ht_obs;      // interval data
 
 // declared parameters
 TStringList *obs_name;
 TStringList *par_name;
 
-float *Ht;
+double *Ht;
 
 void decl(void);
 void init(void);
@@ -2784,36 +2784,36 @@ ClassPrairieInfil(string Name, string Version = "undefined", CRHM::LMODULE Lvl =
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables
-float *snowinfil;
-float *cumsnowinfil;
-float *infil;
-float *cuminfil;
-float *meltrunoff;
-float *cummeltrunoff;
-float *runoff;
-float *cumrunoff;
-float *RainOnSnow;
-float *RainOnSnowA;
+double *snowinfil;
+double *cumsnowinfil;
+double *infil;
+double *cuminfil;
+double *meltrunoff;
+double *cummeltrunoff;
+double *runoff;
+double *cumrunoff;
+double *RainOnSnow;
+double *RainOnSnowA;
 long  *crackstat;
 long  *crackon;
 
 // declared parameters
-const float *basin_area; // [BASIN]
-const float *hru_area;
-const float *fallstat;
-const float *Major;      // threshold for major melt event(default is 5 mm/day)
+const double *basin_area; // [BASIN]
+const double *hru_area;
+const double *fallstat;
+const double *Major;      // threshold for major melt event(default is 5 mm/day)
 const long  *PriorInfiltration;
 const long  *texture;
 const long  *groundcover;
 
 // variable inputs
-const float *hru_tmax;
-const float *snowmelt;
-const float *SWE;
-const float *net_rain;
+const double *hru_tmax;
+const double *snowmelt;
+const double *SWE;
+const double *net_rain;
 
 // local allocated arrays
-float **Xinfil; // [3] [nhru]
+double **Xinfil; // [3] [nhru]
 long *timer;
 
 void decl(void);
@@ -2830,94 +2830,94 @@ public:
 
 ClassCRHMCanopy(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 2000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
-float Qsi_, Qli_;
+double Qsi_, Qli_;
 
 // observation variables
 
-const float *Qsi;
-const float *Qli;
+const double *Qsi;
+const double *Qli;
 
 // declared observation variables
 
-float *Ts;
-float *Qnsn;
-float *Qsisn;
-float *Qlisn;
-float *Qlosn;
+double *Ts;
+double *Qnsn;
+double *Qsisn;
+double *Qlisn;
+double *Qlosn;
 
 // put variables
 
-float *SWE;
+double *SWE;
 
 // declared variables
 
-float *drip_Cpy;
-float *thrufall_Cpy;
-float *netRain_Cpy;
-float *direct_rain;
-float *rain_load;
-float *Snow_load;
-float *direct_snow;
-float *SUnload;
-float *SUnload_H2O;
-float *Qnsn_Var;
+double *drip_Cpy;
+double *thrufall_Cpy;
+double *netRain_Cpy;
+double *direct_rain;
+double *rain_load;
+double *Snow_load;
+double *direct_snow;
+double *SUnload;
+double *SUnload_H2O;
+double *Qnsn_Var;
 
-float *net_rain;
-float *cum_net_rain;
-float *net_snow;
-float *cum_net_snow;
-float *net_p;
-float *intcp_evap;
-float *cum_intcp_evap;
-float *Subl_Cpy;
-float *cum_Subl_Cpy;           
-float *cum_SUnload;
-float *cum_SUnload_H2O;
+double *net_rain;
+double *cum_net_rain;
+double *net_snow;
+double *cum_net_snow;
+double *net_p;
+double *intcp_evap;
+double *cum_intcp_evap;
+double *Subl_Cpy;
+double *cum_Subl_Cpy;           
+double *cum_SUnload;
+double *cum_SUnload_H2O;
 
-float *Cc;
-float *k;
-float *Tauc;
-float *Pa;
-float *ra;
-float *u_FHt;
-float *Pevap;
-float *Qsisn_Var;
-float *Qlisn_Var;
+double *Cc;
+double *k;
+double *Tauc;
+double *Pa;
+double *ra;
+double *u_FHt;
+double *Pevap;
+double *Qsisn_Var;
+double *Qlisn_Var;
 
 // variable inputs
 
-const float *hru_t;
-const float *hru_u;
-const float *hru_rh;
-const float *hru_ea;
-const float *Albedo;
+const double *hru_t;
+const double *hru_u;
+const double *hru_rh;
+const double *hru_ea;
+const double *Albedo;
 
-const float *hru_snow;
-const float *hru_rain;
-const float *hru_evap;
+const double *hru_snow;
+const double *hru_rain;
+const double *hru_evap;
 
-const float *SolAng;
+const double *SolAng;
 
-const float *QsiS_Var;
-const float *QsiA_Var;
-const float *QliVt_Var;
+const double *QsiS_Var;
+const double *QsiA_Var;
+const double *QliVt_Var;
 
 // declared parameters:
 
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_elev;
-const float *Ht;
-const float *LAI;
-const float *Sbar;
-const float *Z0snow;
-const float *Zref;
-const float *Zwind;
-const float *Zvent;
-const float *unload_t;
-const float *unload_t_water;
-const float *B_canopy;
-const float *Alpha_c;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *hru_elev;
+const double *Ht;
+const double *LAI;
+const double *Sbar;
+const double *Z0snow;
+const double *Zref;
+const double *Zwind;
+const double *Zvent;
+const double *unload_t;
+const double *unload_t_water;
+const double *B_canopy;
+const double *Alpha_c;
 
 const long *inhibit_evap;
 
@@ -2927,10 +2927,10 @@ void init(void);
 void run(void);
 void finish(bool good);
 
-double delta(float t); // Slope of sat vap p vs t, kPa/°C
-double gamma(float Pa, float t); // Psychrometric constant (kPa/°C)
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-float lambda(float t); // Latent heat of vaporization (mJ/(kg °C))
+double delta(double t); // Slope of sat vap p vs t, kPa/°C
+double gamma(double Pa, double t); // Psychrometric constant (kPa/°C)
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double lambda(double t); // Latent heat of vaporization (mJ/(kg °C))
 
 ClassCRHMCanopy* klone(string name) const;
 
@@ -2942,41 +2942,41 @@ public:
 ClassPSPnew(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 2000) {};
 
 // declared observation variables
-const float *TsnowG;
-const float *Lnot;
+const double *TsnowG;
+const double *Lnot;
 
 // declared variables
-float *Qsubl;
-float *Load;
-float *Thru;
-float *TCanSnow;
-float *Tbiomass;
+double *Qsubl;
+double *Load;
+double *Thru;
+double *TCanSnow;
+double *Tbiomass;
 
 // declared parameters
-const float *Sbar;
-const float *LAI;
-const float *Zcan;
-const float *Zref;
-const float *Ht;
-const float *Biomass;
-const float *k;
-const float *HeightH;
-const float *WidthJ;
+const double *Sbar;
+const double *LAI;
+const double *Zcan;
+const double *Zref;
+const double *Ht;
+const double *Biomass;
+const double *k;
+const double *HeightH;
+const double *WidthJ;
 const long *InitN;
 
 // variable inputs
-const float *RHref;
-const float *Qn;
-const float *QsIn;
-const float *QsOut;
-const float *hru_u;
-const float *hru_p;
-const float *TAref;
-const float *SolarAng;
+const double *RHref;
+const double *Qn;
+const double *QsIn;
+const double *QsOut;
+const double *hru_u;
+const double *hru_p;
+const double *TAref;
+const double *SolarAng;
 
 // local allocated arrays
-float *T0CanSnow;
-float *T0biomass;
+double *T0CanSnow;
+double *T0biomass;
 
 void decl(void);
 void init(void);
@@ -2993,41 +2993,41 @@ public:
 Classbrushintcp(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 2000) {};
 
 // declared variables
-float *net_rain;
-float *cum_net_rain;
-float *net_snow;
-float *net_p;
-float *Load;
-float *Thru;
-float *cumThru;
-float *brushsubl;
-float *spherecoeff;
-float *cumbrushsubl;
-float *intcp_evap;
+double *net_rain;
+double *cum_net_rain;
+double *net_snow;
+double *net_p;
+double *Load;
+double *Thru;
+double *cumThru;
+double *brushsubl;
+double *spherecoeff;
+double *cumbrushsubl;
+double *intcp_evap;
 
 // declared parameters
-const float *basin_area;   // [ONE]
-const float *hru_area;
-const float *Ht;
-const float *Zref;
-const float *Zcan;
-const float *brushAtten;
-const float *Sbar;
-const float *LAI;
-const float *WidthJ;
-const float *Tunload;
+const double *basin_area;   // [ONE]
+const double *hru_area;
+const double *Ht;
+const double *Zref;
+const double *Zcan;
+const double *brushAtten;
+const double *Sbar;
+const double *LAI;
+const double *WidthJ;
+const double *Tunload;
 
 // variable inputs
-const float *hru_t;
-const float *hru_tmean;
-const float *hru_rh;
-const float *hru_u;
-const float *hru_p;
-const float *hru_rain;
-const float *hru_snow;
+const double *hru_t;
+const double *hru_tmean;
+const double *hru_rh;
+const double *hru_u;
+const double *hru_p;
+const double *hru_rain;
+const double *hru_snow;
 
 // variable inputs/outputs
-float *cumSubl;
+double *cumSubl;
 
 // local allocated arrays
 
@@ -3046,25 +3046,25 @@ public:
 ClassAyers(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *infil;
-float *cuminfil;
-float *runoff;
-float *cumrunoff;
-float *snowinfil;
-float *cumsnowinfil;
-float *meltrunoff;
-float *cummeltrunoff;
-float *melt_int; // interval melt - from snowmelD
+double *infil;
+double *cuminfil;
+double *runoff;
+double *cumrunoff;
+double *snowinfil;
+double *cumsnowinfil;
+double *meltrunoff;
+double *cummeltrunoff;
+double *melt_int; // interval melt - from snowmelD
 
 // declared parameters
-const float *basin_area; // [BASIN]
-const float *hru_area;
+const double *basin_area; // [BASIN]
+const double *hru_area;
 const long  *texture;
 const long  *groundcover;
 
 // variable inputs
-const float *net_rain;
-const float *snowmeltD;
+const double *net_rain;
+const double *snowmeltD;
 
 // local allocated arrays
 
@@ -3084,46 +3084,46 @@ class ClassSnobalCRHM : public ClassSnobalBase {
 
     ClassSnobalCRHM* klone(string name) const;
 
-    float Qsi_;
-    float Qli_;
+    double Qsi_;
+    double Qli_;
 
 // Observations
 
-    const float *Qsi; // incoming solar radiation (W/m^2)
-    const float *Qli; // incoming longwave (thermal) rad (W/m^2) long
-    const float *T_g_Obs; // ground temperature at depth
-    const float *F_g_Obs; // ground flux at depth
+    const double *Qsi; // incoming solar radiation (W/m^2)
+    const double *Qli; // incoming longwave (thermal) rad (W/m^2) long
+    const double *T_g_Obs; // ground temperature at depth
+    const double *F_g_Obs; // ground flux at depth
 
 // variable climate-data inputs
 
-    const float  *T_a_X;      // air temp (C) hru_t
-    const float  *T_pp_X;       // precip temp (C) hru_t
-    const float  *e_a_X;      // vapor pressure (Pa) hru_ea
-    const float  *u_X;        // wind speed (m/sec)  hru_u
-    const float  *Albedo;     // albedo ()
-    const float  *Qsisn_Var;  // short wave at snow surface
-    const float  *QsiS_Var;  // short wave at snow surface from Slope_Qsi
-    const float  *Qlisn_Var;  // long wave at snow surface - through canopy
-    const float  *QliVt_Var;  // long wave at snow surface - no canopy
+    const double  *T_a_X;      // air temp (C) hru_t
+    const double  *T_pp_X;       // precip temp (C) hru_t
+    const double  *e_a_X;      // vapor pressure (Pa) hru_ea
+    const double  *u_X;        // wind speed (m/sec)  hru_u
+    const double  *Albedo;     // albedo ()
+    const double  *Qsisn_Var;  // short wave at snow surface
+    const double  *QsiS_Var;  // short wave at snow surface from Slope_Qsi
+    const double  *Qlisn_Var;  // long wave at snow surface - through canopy
+    const double  *QliVt_Var;  // long wave at snow surface - no canopy
 
 // variable precipitation inputs
 
-    const float  *m_precip_X;	// specific mass of total precip     (kg/m^2) net_p
-    const float  *m_snow_X;	// specific mass in snow in precip   (kg/m^2) net_snow
-    const float  *m_drift_X;	// specific mass in snow drift       (kg/m^2) Drift
-    const float  *m_subl_X;	// specific mass of snow sublimation (kg/m^2) Subl
+    const double  *m_precip_X;	// specific mass of total precip     (kg/m^2) net_p
+    const double  *m_snow_X;	// specific mass in snow in precip   (kg/m^2) net_snow
+    const double  *m_drift_X;	// specific mass in snow drift       (kg/m^2) Drift
+    const double  *m_subl_X;	// specific mass of snow sublimation (kg/m^2) Subl
 
 // put variable precipitation inputs
 
-    float  *m_rain_X;	// specific mass of rain in precip   (kg/m^2) net_rain
+    double  *m_rain_X;	// specific mass of rain in precip   (kg/m^2) net_rain
 
 // parameters
 
-    const float  *rho_snow_X;       // density of snowfall               (kg/m^3)
-    const float  *T_g_X;            // soil temp at depth z_g (C)
-    const float  *F_g_X;            // soil flux at depth z_g (C)
+    const double  *rho_snow_X;       // density of snowfall               (kg/m^3)
+    const double  *T_g_X;            // soil temp at depth z_g (C)
+    const double  *F_g_X;            // soil flux at depth z_g (C)
     const long   *rain_soil_snow;  //
-    float *snow_store; // accumulates snow till > 1+mm
+    double *snow_store; // accumulates snow till > 1+mm
 
     void decl(void);
 
@@ -3140,21 +3140,21 @@ public:
 ClassSlope_Qsi(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *QsiS_Var;
-float *QsiD_Var;
+double *QsiS_Var;
+double *QsiD_Var;
 
 // declared observations variable
-const float *Qsi;
+const double *Qsi;
 
 // declared observations
-float *QsiS;
-float *QsiD;
-float *QsiD_Obs;
+double *QsiS;
+double *QsiD;
+double *QsiD_Obs;
 
 // variable inputs
-const float *Qdro;
-const float *Qdfo;
-const float *Qdflat;
+const double *Qdro;
+const double *Qdfo;
+const double *Qdflat;
 
 void decl(void);
 void init(void);
@@ -3172,52 +3172,52 @@ bool SetOpportunityTime;
 bool Update_infil;
 
 // declared observation variables
-const float *t0_inhibit;   // (mm/day)
+const double *t0_inhibit;   // (mm/day)
 
 // declared variables
-float *infil;         // unfrozen infiltration
-float *cuminfil;      // cumulative unfrozen infiltration
-float *snowinfil;     // frozen infiltration
-float *cumsnowinfil;  // cumulative frozen infiltration
-float *cumsnowinfil_0;  // cumulative frozen infiltration at beginning of frozen cycle
-float *cummeltrunoff; // cumulative frozen melt runoff
-float *runoff;        // cumulative runoff
-float *cumrunoff;     // cumulative melt runoff
-float *t0_Acc;        // infiltration opportunity time accumulation
-float *t0_Var;        // infiltration opportunity time used
-float *INF;           //
-float *SWEPk;           //
-float *snowmeltD_last; //
+double *infil;         // unfrozen infiltration
+double *cuminfil;      // cumulative unfrozen infiltration
+double *snowinfil;     // frozen infiltration
+double *cumsnowinfil;  // cumulative frozen infiltration
+double *cumsnowinfil_0;  // cumulative frozen infiltration at beginning of frozen cycle
+double *cummeltrunoff; // cumulative frozen melt runoff
+double *runoff;        // cumulative runoff
+double *cumrunoff;     // cumulative melt runoff
+double *t0_Acc;        // infiltration opportunity time accumulation
+double *t0_Var;        // infiltration opportunity time used
+double *INF;           //
+double *SWEPk;           //
+double *snowmeltD_last; //
 long  *Julian_window; // currently in Julian window.
 long  *Julian_lockout;    // Julian window end date.
 
 // variable put
-const float *soil_moist;    //
-float *meltrunoff;      // [nhru]
+const double *soil_moist;    //
+double *meltrunoff;      // [nhru]
 
 // local variables
 long *infiltype;
 
 // declared parameters
-const float *basin_area;  // [BASIN]
-const float *hru_area;
-const float *S0;          // surface saturation (mm3/mm3)
-const float *Si;          // initial average soil saturation (mm3/mm3)
-const float *C;           // coefficient
-const float *hru_tsoil;   // soil temperature(°K) of 0-40cm soil layer at start of infiltration
-const float *t_ice_lens;   // overnight minimum to cause ice lens after major melt
-const float *t0;          // infiltration opportunity time. Set at end of calibration run.
-const float *soil_moist_max; // common to smbal to control maximum inflitration.
+const double *basin_area;  // [BASIN]
+const double *hru_area;
+const double *S0;          // surface saturation (mm3/mm3)
+const double *Si;          // initial average soil saturation (mm3/mm3)
+const double *C;           // coefficient
+const double *hru_tsoil;   // soil temperature(°K) of 0-40cm soil layer at start of infiltration
+const double *t_ice_lens;   // overnight minimum to cause ice lens after major melt
+const double *t0;          // infiltration opportunity time. Set at end of calibration run.
+const double *soil_moist_max; // common to smbal to control maximum inflitration.
 const long  *t0_Julian;    // Julian date when t0 is primed. '0' value - never reset.
 const long  *texture;
 const long  *groundcover;
 
 // variable inputs
-const float *snowmeltD;   // (mm/day)
-const float *SWE;         // (mm)
-const float *frostdepth;
-const float *net_rain;
-const float *hru_tmin;
+const double *snowmeltD;   // (mm/day)
+const double *SWE;         // (mm)
+const double *frostdepth;
+const double *net_rain;
+const double *hru_tmin;
 
 void decl(void);
 void init(void);
@@ -3241,109 +3241,109 @@ long evapDiv;
 
 // declared variables
 long *current_getstep;
-float *Sd;
-float *gw;
-float *soil_rechr;
-float *soil_moist;
-float *soil_gw;
-float *Sd_gw;
-float *gw_flow;
-float *soil_ssr;
-float *rechr_ssr;
-float *soil_runoff;
-float *cum_soil_ssr;
-float *cum_rechr_ssr;
-float *cum_soil_runoff;
-float *cum_runoff_to_Sd;
-float *cum_redirected_residual;
-float *soil_gw_D;
-float *soil_ssr_D;
-float *gw_flow_D;
-float *soil_runoff_D;
-float *HK_V;
-float *HK_A;
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_over_Q;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
-float *redirected_residual;
-float *infil_act;
-float *cum_infil_act;
-float *infil_act_D;
+double *Sd;
+double *gw;
+double *soil_rechr;
+double *soil_moist;
+double *soil_gw;
+double *Sd_gw;
+double *gw_flow;
+double *soil_ssr;
+double *rechr_ssr;
+double *soil_runoff;
+double *cum_soil_ssr;
+double *cum_rechr_ssr;
+double *cum_soil_runoff;
+double *cum_runoff_to_Sd;
+double *cum_redirected_residual;
+double *soil_gw_D;
+double *soil_ssr_D;
+double *gw_flow_D;
+double *soil_runoff_D;
+double *HK_V;
+double *HK_A;
+double *culvert_Q;
+double *culvert_water_H;
+double *culvert_water_A;
+double *culvert_water_V;
+double *culvert_over_Q;
+double *culvert_evap;
+double *cum_culvert;
+double *cum_culvert_over;
+double *HD;
+double *redirected_residual;
+double *infil_act;
+double *cum_infil_act;
+double *infil_act_D;
 
-float *soil_runoff_stream;
-float *weir_outflow;
-float *weir_outflow_m3s;
-float *weir_water_A;
-float *weir_water_V;
-float *weir_water_h;
-float *weir_evap;
-float *cum_weir_over_m3;
-float *weir_crest_volume;
-float *stream;
-float *stream_to_Sd;
-float *cum_stream;
-float *stream_Grp_in;
-float *stream_Grp_loss;
-float *cum_stream_Grp_loss;
+double *soil_runoff_stream;
+double *weir_outflow;
+double *weir_outflow_m3s;
+double *weir_water_A;
+double *weir_water_V;
+double *weir_water_h;
+double *weir_evap;
+double *cum_weir_over_m3;
+double *weir_crest_volume;
+double *stream;
+double *stream_to_Sd;
+double *cum_stream;
+double *stream_Grp_in;
+double *stream_Grp_loss;
+double *cum_stream_Grp_loss;
 
 // local variables
-float *cum_soil_gw;
-float *cum_Sd_gw;
-float *cum_gw_flow;
-float *cum_hru_condense;
-float *cum_Sd_evap;
-float *soil_moist_Init;
-float *soil_rechr_Init;
-float *Sd_Init;
-float *gw_Init;
-float *SWE_Init;
+double *cum_soil_gw;
+double *cum_Sd_gw;
+double *cum_gw_flow;
+double *cum_hru_condense;
+double *cum_Sd_evap;
+double *soil_moist_Init;
+double *soil_rechr_Init;
+double *Sd_Init;
+double *gw_Init;
+double *SWE_Init;
 
-float *snowinfil_buf;
-float *runoff_buf;
-float *meltrunoff_buf;
-float *hru_evap_buf;
+double *snowinfil_buf;
+double *runoff_buf;
+double *meltrunoff_buf;
+double *hru_evap_buf;
 
 // declared parameters
-const float *Sdmax;
-const float *Sdinit;
-const float *gw_max;
-const float *gw_init;
-const float *gw_K;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *soil_rechr_max;
-const float *soil_rechr_init;
-const float *soil_moist_max;
-const float *soil_moist_init;
-const float *soil_gw_K;
-const float *rechr_ssr_K;
-const float *lower_ssr_K;
-const float *Sd_ssr_K;
-const float *Sd_gw_K;
-const float *channel_slope;
-const float *side_slope;
-const float *culvert_diam;
-const float *culvert_water_Dmax;
-const float *number_culverts;
+const double *Sdmax;
+const double *Sdinit;
+const double *gw_max;
+const double *gw_init;
+const double *gw_K;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *soil_rechr_max;
+const double *soil_rechr_init;
+const double *soil_moist_max;
+const double *soil_moist_init;
+const double *soil_gw_K;
+const double *rechr_ssr_K;
+const double *lower_ssr_K;
+const double *Sd_ssr_K;
+const double *Sd_gw_K;
+const double *channel_slope;
+const double *side_slope;
+const double *culvert_diam;
+const double *culvert_water_Dmax;
+const double *number_culverts;
 
-const float *weir_crest;
-const float *weir_coefficient;
-const float *weir_mult;
-const float *weir_b;
-const float *lake_mult;
-const float *lake_power;
-const float *lake_p;
-const float *lake_S;
-const float *runoff_stream;
-const float *stream_runoff;
-const float *stream_Sd;
-const float *Wetlands_scaling_factor;    // temporary modification
+const double *weir_crest;
+const double *weir_coefficient;
+const double *weir_mult;
+const double *weir_b;
+const double *lake_mult;
+const double *lake_power;
+const double *lake_p;
+const double *lake_S;
+const double *runoff_stream;
+const double *stream_runoff;
+const double *stream_Sd;
+const double *Wetlands_scaling_factor;    // temporary modification
 
 const long *culvert_type;
 const long *cov_type;
@@ -3354,16 +3354,16 @@ const long *soil_withdrawal;
 const long **soil_withdrawal_Tables;
 
 // variable inputs
-const float *infil;
-const float *snowinfil;
-const float *meltrunoff; // frozen melt runoff
-const float *runoff;     // liquid runoff
-const float *hru_evap;
-const float *SD;
+const double *infil;
+const double *snowinfil;
+const double *meltrunoff; // frozen melt runoff
+const double *runoff;     // liquid runoff
+const double *hru_evap;
+const double *SD;
 
 // variable put inputs
-float *hru_actet;      // [nhru]
-float *hru_cum_actet;
+double *hru_actet;      // [nhru]
+double *hru_cum_actet;
 
 
 // local allocated arrays
@@ -3381,60 +3381,60 @@ public:
 
 Classevap_Resist(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QsiS_Var, QsiA_Var") {};
 
-float Qsi_;
+double Qsi_;
 long QsiCnt;
 long TsCnt;
 long RnObsCnt;
 bool BeforeCorrectionRCS;
 
 // declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evap;
-float *evapD;
-float *cum_evap;
-float *rc;
+double *hru_actet;
+double *hru_cum_actet;
+double *evap;
+double *evapD;
+double *cum_evap;
+double *rc;
 
 // local allocated arrays
-float *Pa;
+double *Pa;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *Ht;
-const float *Htmax;
-const float *Zwind;
-const float *hru_elev;
-const float *F_Qg;
-const float *rcs;
-const float *LAImax;
-const float *LAImin;
-const float *soil_Depth;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *Ht;
+const double *Htmax;
+const double *Zwind;
+const double *hru_elev;
+const double *F_Qg;
+const double *rcs;
+const double *LAImax;
+const double *LAImin;
+const double *soil_Depth;
 
 const long *evap_type;
 const long *inhibit_evap;
 const long *soil_type;
-const float *s;
+const double *s;
 const long *PM_method;
 
 // variable inputs
-const float *Rn;
-const float *RnD;
-const float *RnD_POS;
-const float *hru_t;
-const float *hru_u;
-const float *hru_ea;
-const float *hru_tmean;
-const float *hru_umean;
-const float *hru_eamean;
-const float *soil_moist;
-const float *QsiS_Var;
-const float *QsiA_Var;
+const double *Rn;
+const double *RnD;
+const double *RnD_POS;
+const double *hru_t;
+const double *hru_u;
+const double *hru_ea;
+const double *hru_tmean;
+const double *hru_umean;
+const double *hru_eamean;
+const double *soil_moist;
+const double *QsiS_Var;
+const double *QsiA_Var;
 
 // declared observations variable
-const float *Qsi;
-const float *Ts;
-const float *RnObs;
+const double *Qsi;
+const double *Ts;
+const double *RnObs;
 
 void decl(void);
 void init(void);
@@ -3443,11 +3443,11 @@ void finish(bool good);
 
 Classevap_Resist* klone(string name) const;
 
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double fdaily(float u, float Ht);        // Drying power f(u) - interval
+double gamma(double Pa, double t);         // Psychrometric constant
+double lambda(double t);                   // Latent heat of vaporization
+double delta(double t);                   // Slope of sat vap p vs t, kPa/°C
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double fdaily(double u, double Ht);        // Drying power f(u) - interval
 };
 
 class ClassevapD_Resist : public ClassModule {
@@ -3459,48 +3459,48 @@ long QsiCnt;
 long TsCnt;
 
 // declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evapD;
-float *cum_evap;
-float *rc;
+double *hru_actet;
+double *hru_cum_actet;
+double *evapD;
+double *cum_evap;
+double *rc;
 
 // local allocated arrays
-float *Pa;
+double *Pa;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *Ht;
-const float *Htmax;
-const float *Zwind;
-const float *hru_elev;
-const float *F_Qg;
-const float *rcs;
-const float *LAImax;
-const float *LAImin;
-const float *soil_Depth;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *Ht;
+const double *Htmax;
+const double *Zwind;
+const double *hru_elev;
+const double *F_Qg;
+const double *rcs;
+const double *LAImax;
+const double *LAImin;
+const double *soil_Depth;
 
 const long *evap_type;
 const long *inhibit_evap;
 const long *soil_type;
-const float *s;
+const double *s;
 const long *PM_method;
 
 // variable inputs
-const float *RnD;
-const float *hru_tmean;
-const float *hru_umean;
-const float *hru_eamean;
-const float *soil_moist;
+const double *RnD;
+const double *hru_tmean;
+const double *hru_umean;
+const double *hru_eamean;
+const double *soil_moist;
 
 // declared observations variable
-const float *Qsi;
-const float *Ts;
+const double *Qsi;
+const double *Ts;
 
 // declared observation functions
-float *Qsi_mean;
-float *Tsmean;
+double *Qsi_mean;
+double *Tsmean;
 
 void decl(void);
 void init(void);
@@ -3509,11 +3509,11 @@ void finish(bool good);
 
 ClassevapD_Resist* klone(string name) const;
 
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double fdaily(float u, float Ht);        // Drying power f(u) - interval
+double gamma(double Pa, double t);         // Psychrometric constant
+double lambda(double t);                   // Latent heat of vaporization
+double delta(double t);                   // Slope of sat vap p vs t, kPa/°C
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double fdaily(double u, double Ht);        // Drying power f(u) - interval
 };
 
 class ClassShutWall : public ClassModule {
@@ -3523,57 +3523,57 @@ ClassShutWall(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRH
 
 long Qn_Cnt;
 long Qg_Cnt;
-float z0;
-float d;
-float n;
+double z0;
+double d;
+double n;
 
 
 // declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evap;
-float *evapD;
-float *cum_evap;
-float *Cc;
-float *Cs;
-float *Ra;
-float *Rc;
-float *Rs;
-float *ETc;
-float *ETs;
-float *raa;
-float *rca;
-float *rcs;
-float *rsa;
-float *rss;
+double *hru_actet;
+double *hru_cum_actet;
+double *evap;
+double *evapD;
+double *cum_evap;
+double *Cc;
+double *Cs;
+double *Ra;
+double *Rc;
+double *Rs;
+double *ETc;
+double *ETs;
+double *raa;
+double *rca;
+double *rcs;
+double *rsa;
+double *rss;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *rs;
-const float *hru_elev;
-const float *Cr;
-const float *LAI;
-const float *Ht;
-const float *Zwind;
-const float *w;
-const float *rst;
-const float *z0g;
-const float *gammab;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *rs;
+const double *hru_elev;
+const double *Cr;
+const double *LAI;
+const double *Ht;
+const double *Zwind;
+const double *w;
+const double *rst;
+const double *z0g;
+const double *gammab;
 
 const long *inhibit_evap;
 
 // declared observations
-const float *hru_u;
-const float *hru_t;
-const float *hru_ea;
-const float *Qn;
-const float *Qg;
+const double *hru_u;
+const double *hru_t;
+const double *hru_ea;
+const double *Qn;
+const double *Qg;
 
 // variable inputs
 
 // local allocated arrays
-float *Pa;
+double *Pa;
 
 void decl(void);
 void init(void);
@@ -3582,10 +3582,10 @@ void finish(bool good);
 
 ClassShutWall* klone(string name) const;
 
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double gamma(double Pa, double t);         // Psychrometric constant
+double lambda(double t);                   // Latent heat of vaporization
+double delta(double t);                   // Slope of sat vap p vs t, kPa/°C
 };
 
 class ClassShutWallD : public ClassModule {
@@ -3597,54 +3597,54 @@ long Qn_Cnt;
 long Qg_Cnt;
 
 // declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evapD;
-float *cum_evap;
-float *Cc;
-float *Cs;
-float *Ra;
-float *Rc;
-float *Rs;
-float *ETc;
-float *ETs;
-float *raa;
-float *rca;
-float *rcs;
-float *rsa;
-float *rss;
+double *hru_actet;
+double *hru_cum_actet;
+double *evapD;
+double *cum_evap;
+double *Cc;
+double *Cs;
+double *Ra;
+double *Rc;
+double *Rs;
+double *ETc;
+double *ETs;
+double *raa;
+double *rca;
+double *rcs;
+double *rsa;
+double *rss;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *rs;
-const float *hru_elev;
-const float *Cr;
-const float *LAI;
-const float *Ht;
-const float *Zwind;
-const float *w;
-const float *rst;
-const float *z0g;
-const float *gammab;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *rs;
+const double *hru_elev;
+const double *Cr;
+const double *LAI;
+const double *Ht;
+const double *Zwind;
+const double *w;
+const double *rst;
+const double *z0g;
+const double *gammab;
 
 const long *inhibit_evap;
 
 // declared observations
-const float *hru_umean;
-const float *hru_tmean;
-const float *hru_eamean;
-const float *Qn;
-const float *Qg;
+const double *hru_umean;
+const double *hru_tmean;
+const double *hru_eamean;
+const double *Qn;
+const double *Qg;
 
 // declared observation functions
-float *Qnmean;
-float *Qgmean;
+double *Qnmean;
+double *Qgmean;
 
 // variable inputs
 
 // local allocated arrays
-float *Pa;
+double *Pa;
 
 void decl(void);
 void init(void);
@@ -3653,10 +3653,10 @@ void finish(bool good);
 
 ClassShutWallD* klone(string name) const;
 
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double gamma(double Pa, double t);         // Psychrometric constant
+double lambda(double t);                   // Latent heat of vaporization
+double delta(double t);                   // Slope of sat vap p vs t, kPa/°C
 };
 
 class ClassIceBulb : public ClassModule {
@@ -3665,23 +3665,23 @@ public:
 ClassIceBulb(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *hru_icebulb;
-float *hru_rainI;
-float *cumhru_rainI;
-float *hru_snowI;
-float *cumhru_snowI;
-float *cumhru_pI;
-float *Pa;
+double *hru_icebulb;
+double *hru_rainI;
+double *cumhru_rainI;
+double *hru_snowI;
+double *cumhru_snowI;
+double *cumhru_pI;
+double *Pa;
 
 // variable inputs
-const float *hru_t;
-const float *hru_rh;
-const float *hru_p;
+const double *hru_t;
+const double *hru_rh;
+const double *hru_p;
 
 // declared parameters
-const float *hru_elev;
-const float *tmaxI_allrain;
-const float *tmaxI_allsnow;
+const double *hru_elev;
+const double *tmaxI_allrain;
+const double *tmaxI_allsnow;
 
 void decl(void);
 void init(void);
@@ -3703,37 +3703,37 @@ Classlake(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::P
   long itime[6];
 
 // declared variables
-  float *hru_evap;
-  float *hru_cum_evap;
-  float *hru_actet;
-  float *hru_cum_actet;
-  float *lake_evap_month;
-  float *hru_t_Mmean;
-  float *hru_rh_Mmean;
-  float *hru_u_Mmean;
-  float *hru_t_acc;
-  float *hru_rh_acc;
-  float *hru_u_acc;
-  float *Vw;
-  float *Va;
+  double *hru_evap;
+  double *hru_cum_evap;
+  double *hru_actet;
+  double *hru_cum_actet;
+  double *lake_evap_month;
+  double *hru_t_Mmean;
+  double *hru_rh_Mmean;
+  double *hru_u_Mmean;
+  double *hru_t_acc;
+  double *hru_rh_acc;
+  double *hru_u_acc;
+  double *Vw;
+  double *Va;
   long  *start_open_day;
   long  *end_open_day;
 
 // get variables:
-  const float *hru_t;
-  const float *hru_rh;
-  const float *hru_u;
+  const double *hru_t;
+  const double *hru_rh;
+  const double *hru_u;
 
 // put variables:
 
 // declared parameters
-  const float *Meyer_C;
-  const float *Meyer_B;
-  const float **Meyer_B_def;
-  const float *hru_area;
-  const float *basin_area;
-  const float *hru_lat;
-  const float *hru_elev;
+  const double *Meyer_C;
+  const double *Meyer_B;
+  const double **Meyer_B_def;
+  const double *hru_area;
+  const double *basin_area;
+  const double *hru_lat;
+  const double *hru_elev;
 
   const long *start_open_water;
   const long *end_open_water;
@@ -3754,25 +3754,25 @@ public:
 ClassalbedoWinstral(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-  float *Albedo;
-  float *irdalb;
-  float *vdalb;
-//  float *balbx;
-  float *Ab_t;
+  double *Albedo;
+  double *irdalb;
+  double *vdalb;
+//  double *balbx;
+  double *Ab_t;
 
 // get variables:
 
-  const float *net_snow;
-  const float *SWE;
+  const double *net_snow;
+  const double *SWE;
 
 // put variables:
 
 // declared parameters
-  const float *maxdecay;
-  const float *power;
-  const float *decay_period;
-  const float *refresh;
-  const float *Albedo_Bare;
+  const double *maxdecay;
+  const double *power;
+  const double *decay_period;
+  const double *refresh;
+  const double *Albedo_Bare;
 
 void decl(void);
 void init(void);
@@ -3788,68 +3788,68 @@ public:
 ClassK_Estimate(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-  float *Ht_var;
-  float *v_L_upper;
-  float *v_L_lower;
-  float *v_V_sd;
-  float *v_V_soil;
-  float *v_L_gw;
-  float *rechr_ssr_K_V;
-  float *lower_ssr_K_V;
-  float *Sd_ssr_K_V;
-  float *Sd_gw_K_V;
-  float *soil_gw_K_V;
-  float *gw_K_V;
-  float *Dts_organic_runoff_K_V;
-  float *Dts_snow_runoff_K_V;
-  float *Ks_snow;
-  float *v_L_organic;
-  float *v_L_snow;
+  double *Ht_var;
+  double *v_L_upper;
+  double *v_L_lower;
+  double *v_V_sd;
+  double *v_V_soil;
+  double *v_L_gw;
+  double *rechr_ssr_K_V;
+  double *lower_ssr_K_V;
+  double *Sd_ssr_K_V;
+  double *Sd_gw_K_V;
+  double *soil_gw_K_V;
+  double *gw_K_V;
+  double *Dts_organic_runoff_K_V;
+  double *Dts_snow_runoff_K_V;
+  double *Ks_snow;
+  double *v_L_organic;
+  double *v_L_snow;
 
 // declared observation variables
 
 // declared parameters
-  const float *Ks_lower;
-  const float *Ks_upper;
-  const float *Ks_gw;
-  const float *hru_GSL;
-//  const float *porosity;
-  const float *PSD;
-  const float *soil_rechr_max;
-  const float *soil_moist_max;
-//  const float *gw_max;
+  const double *Ks_lower;
+  const double *Ks_upper;
+  const double *Ks_gw;
+  const double *hru_GSL;
+//  const double *porosity;
+  const double *PSD;
+  const double *soil_rechr_max;
+  const double *soil_moist_max;
+//  const double *gw_max;
 
   const long *inhibit_evap;
 
 // declared parameters
-  const float *d_g;
-  const float *Ks_organic;
-  const float *PSD_org;
-  const float *S_I;
+  const double *d_g;
+  const double *Ks_organic;
+  const double *PSD_org;
+  const double *S_I;
   const long  *Inhibit_K_set;
 
 // put parameters
 
-  float *rechr_ssr_K;
-  float *lower_ssr_K;
-  float *Sd_ssr_K;
-  float *Sd_gw_K;
-  float *soil_gw_K;
-  float *gw_K;
-  float *Dts_organic_runoff_K;
-  float *Dts_snow_runoff_K;
+  double *rechr_ssr_K;
+  double *lower_ssr_K;
+  double *Sd_ssr_K;
+  double *Sd_gw_K;
+  double *soil_gw_K;
+  double *gw_K;
+  double *Dts_organic_runoff_K;
+  double *Dts_snow_runoff_K;
 
 // put variables:
 
-float *soil_rechr;
-float *soil_moist;
-float *gw;
+double *soil_rechr;
+double *soil_moist;
+double *gw;
 
 // get variables:
 
-const float *Dts;
-const float *Dts_max;
-const float *rho;
+const double *Dts;
+const double *Dts_max;
+const double *rho;
 
 void decl(void);
 void init(void);
@@ -3865,55 +3865,55 @@ public:
 ClassevapX(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *hru_actet;
-float *hru_cum_actet;
-float *evap;
-float *evap_D;
-float *cum_evap;
-float *Granger_D;
-float *rc;
+double *hru_actet;
+double *hru_cum_actet;
+double *evap;
+double *evap_D;
+double *cum_evap;
+double *Granger_D;
+double *rc;
 
 // local allocated arrays
-float *Pa;
+double *Pa;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *Ht;
-const float *hru_elev;
-const float *F_Qg;
-const float *Zwind;
-const float *rcs;
-const float *Htmax;
-const float *LAImax;
-const float *LAImin;
-const float *s;
-const float *PM_method;
-const float *soil_Depth;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *Ht;
+const double *hru_elev;
+const double *F_Qg;
+const double *Zwind;
+const double *rcs;
+const double *Htmax;
+const double *LAImax;
+const double *LAImin;
+const double *s;
+const double *PM_method;
+const double *soil_Depth;
 
 const long *soil_type;
 const long *evap_type;
 const long *inhibit_evap;
 
 // variable inputs
-const float *soil_moist;
-const float *Rn;
-const float *RnD;
-const float *RnD_POS;
-const float *hru_t;
-const float *hru_u;
-const float *hru_ea;
-const float *hru_tmean;
-const float *hru_umean;
-const float *hru_eamean;
+const double *soil_moist;
+const double *Rn;
+const double *RnD;
+const double *RnD_POS;
+const double *hru_t;
+const double *hru_u;
+const double *hru_ea;
+const double *hru_tmean;
+const double *hru_umean;
+const double *hru_eamean;
 
 // declared observations variable
-const float *Qsi;
-const float *RnObs;
+const double *Qsi;
+const double *RnObs;
 
 // declared observation functions
-//float *Qsi_mean;
-float *Tsmean;
+//double *Qsi_mean;
+double *Tsmean;
 
 void decl(void);
 void init(void);
@@ -3922,11 +3922,11 @@ void finish(bool good);
 
 ClassevapX* klone(string name) const;
 
-double gamma(float Pa, float t);         // Psychrometric constant
-float lambda(float t);                   // Latent heat of vaporization
-double delta(float t);                   // Slope of sat vap p vs t, kPa/°C
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-double fdaily(float u, float Ht);        // Drying power f(u) - interval
+double gamma(double Pa, double t);         // Psychrometric constant
+double lambda(double t);                   // Latent heat of vaporization
+double delta(double t);                   // Slope of sat vap p vs t, kPa/°C
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double fdaily(double u, double Ht);        // Drying power f(u) - interval
 };
 
 class Class3D_param : public ClassModule {
@@ -3935,10 +3935,10 @@ public:
 Class3D_param(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *Var_3D;
+double *Var_3D;
 
 // declared parameters
-const float *Param_3D;
+const double *Param_3D;
 
 void decl(void);
 void init(void);
@@ -3957,17 +3957,17 @@ ClassMeltRunoff_Lag(string Name, string Version = "undefined", CRHM::LMODULE Lvl
 ClassModule* Netroute_module; // used to call preser for simple projects
 
 // declared variables
-float *In_Lagstorage;
+double *In_Lagstorage;
 long *Tf;
 
 // get variables:
-const float *snowmelt_int;
+const double *snowmelt_int;
 
 // put variables
-float *runLag;
+double *runLag;
 
 // declared parameters
-const float *hru_area;
+const double *hru_area;
 const long  *inhibit_MeltRunoff_Lag;
 
 void decl(void);
@@ -3986,21 +3986,21 @@ ClassMeltRunoff_Kstorage(string Name, string Version = "undefined", CRHM::LMODUL
 ClassModule* Netroute_module; // used to call preser for simple projects
 
 // declared variables
-float *Ksat;
-float *Meltrunoff_K;
-float *In_storage;
+double *Ksat;
+double *Meltrunoff_K;
+double *In_storage;
 
 // get variables:
-const float *rho;
+const double *rho;
 
 // put variables
-float *runKstorage;
+double *runKstorage;
 
 // declared parameters
-const float *d_g;
-const float *hru_GSL;
-const float *runLag;
-const float *route_L;
+const double *d_g;
+const double *hru_GSL;
+const double *runLag;
+const double *route_L;
 const long  *inhibit_evap;
 const long  *inhibit_MeltRunoff_Kstorage;
 
@@ -4020,42 +4020,42 @@ long inflowCnt;
 long gwCnt;
 
 // declared variables
-float *rew;
-float *gwrew;
+double *rew;
+double *gwrew;
 
-float **inflow_All;
-float **gw_All;
+double **inflow_All;
+double **gw_All;
 
-float *inflow;        // [nhru]
-float *cuminflow;     // [nhru]
-float *outflow;       // [nhru]
-float *cumoutflow;    // [nhru]
+double *inflow;        // [nhru]
+double *cuminflow;     // [nhru]
+double *outflow;       // [nhru]
+double *cumoutflow;    // [nhru]
 
-float *gwinflow;        // [nhru]
-float *cumgwinflow;     // [nhru]
-float *gwoutflow;       // [nhru]
-float *cumgwoutflow;    // [nhru]
+double *gwinflow;        // [nhru]
+double *cumgwinflow;     // [nhru]
+double *gwoutflow;       // [nhru]
+double *cumgwoutflow;    // [nhru]
 
-float *flow;     // [BASIN] all HRUs
-float *flow_s;   // [BASIN] all HRUs
-float *cumflow;  // [BASIN] all HRUs
+double *flow;     // [BASIN] all HRUs
+double *flow_s;   // [BASIN] all HRUs
+double *cumflow;  // [BASIN] all HRUs
 
-float *gwflow;     // [BASIN] all HRUs
-float *gwflow_s;   // [BASIN] all HRUs
-float *cumgwflow;  // [BASIN] all HRUs
+double *gwflow;     // [BASIN] all HRUs
+double *gwflow_s;   // [BASIN] all HRUs
+double *cumgwflow;  // [BASIN] all HRUs
 
-float *WS_Ktravel_var;         // [nhru]
-float *WS_gwKtravel_var;         // [nhru]
+double *WS_Ktravel_var;         // [nhru]
+double *WS_gwKtravel_var;         // [nhru]
 
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_water_O;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
+double *culvert_Q;
+double *culvert_water_H;
+double *culvert_water_A;
+double *culvert_water_V;
+double *culvert_water_O;
+double *culvert_evap;
+double *cum_culvert;
+double *cum_culvert_over;
+double *HD;
 
 ClassMuskingum *inflowDelay;
 ClassMuskingum *gwDelay;
@@ -4065,30 +4065,30 @@ ClassClark *Clark_gwDelay;
 
 // declared parameters
 
-const float *WS_route_n;         // [nhru]
-const float *WS_route_R;         // [nhru]
-const float *WS_route_S0;        // [nhru]
-const float *WS_route_L;         // [nhru]
+const double *WS_route_n;         // [nhru]
+const double *WS_route_R;         // [nhru]
+const double *WS_route_S0;        // [nhru]
+const double *WS_route_L;         // [nhru]
 const long  *WS_Channel_shp;      // [nhru]
 
-const float *WS_Lag;             // [nhru]
-const float *WS_route_X_M;       // [nhru]
+const double *WS_Lag;             // [nhru]
+const double *WS_route_X_M;       // [nhru]
 const long  *WS_whereto;         // [nhru]
 const long  *WS_order;           // [nhru]
 
-const float *WS_gwLag;           // [nhru]
-const float *WS_gwroute_X_M;     // [nhru]
+const double *WS_gwLag;           // [nhru]
+const double *WS_gwroute_X_M;     // [nhru]
 const long  *WS_gwwhereto;       // [nhru]
 const long  *WS_gworder;         // [nhru]
 
-const float *WS_Kstorage;     // [nhru]
-const float *WS_gwKstorage;   // [nhru]
+const double *WS_Kstorage;     // [nhru]
+const double *WS_gwKstorage;   // [nhru]
 
-const float *WS_channel_slope;
-const float *WS_side_slope;
-const float *WS_culvert_diam;
-const float *WS_culvert_water_Dmax;
-const float *WS_number_culverts;
+const double *WS_channel_slope;
+const double *WS_side_slope;
+const double *WS_culvert_diam;
+const double *WS_culvert_water_Dmax;
+const double *WS_number_culverts;
 
 const long *WS_culvert_type;
 
@@ -4110,60 +4110,60 @@ ClassXG(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PRO
 
 // constants
 
-float ko;
-float km;
-float ka;
-float ki;
-float kw;
+double ko;
+double km;
+double ka;
+double ki;
+double kw;
 
 // declared variables
-float *Zdf;
-float *Zdt;
+double *Zdf;
+double *Zdt;
 long *Th_low_lay;
 long *Fz_low_lay;
-float *Bfr;
-float *Bth;
-float *TrigAcc;
-float *B;
+double *Bfr;
+double *Bth;
+double *TrigAcc;
+double *B;
 long *TrigState;
-float *pf;
-float **pf_lay;
-float *pt;
-float **pt_lay;
-float *ttc;
-float **ttc_lay;
-float *ftc;
-float **ftc_lay;
-float *SWE_tc;
-float *SWE_density;
-float *XG_moist_d;
-float *XG_rechr_d;
-float *XG_moist;
-float *check_XG_moist;
-float **XG_moist_lay;
-float *XG_max;
-float **XG_max_lay;
-float *layer_h2o;
-float **h2o_lay;
-float *theta;
-float **theta_lay;
-float *rechr_fract;
-float **rechr_fract_lay;
-float *moist_fract;
-float **moist_fract_lay;
-float *default_fract;
-float **default_fract_lay;
-float *tc_composite;
-float **tc_composite_lay;
-float *tc_composite2;
-float **tc_composite2_lay;
+double *pf;
+double **pf_lay;
+double *pt;
+double **pt_lay;
+double *ttc;
+double **ttc_lay;
+double *ftc;
+double **ftc_lay;
+double *SWE_tc;
+double *SWE_density;
+double *XG_moist_d;
+double *XG_rechr_d;
+double *XG_moist;
+double *check_XG_moist;
+double **XG_moist_lay;
+double *XG_max;
+double **XG_max_lay;
+double *layer_h2o;
+double **h2o_lay;
+double *theta;
+double **theta_lay;
+double *rechr_fract;
+double **rechr_fract_lay;
+double *moist_fract;
+double **moist_fract_lay;
+double *default_fract;
+double **default_fract_lay;
+double *tc_composite;
+double **tc_composite_lay;
+double *tc_composite2;
+double **tc_composite2_lay;
 
-float *Zd_front;
-float **Zd_front_array;
-float *n_factor;
-float *n_factor_T;
-float *check_t;
-float *t_trend;
+double *Zd_front;
+double **Zd_front_array;
+double *n_factor;
+double *n_factor_T;
+double *check_t;
+double *t_trend;
 long *ttc_contents;
 long **ttc_contents_lay;
 long *ftc_contents;
@@ -4171,41 +4171,41 @@ long **ftc_contents_lay;
 long  *nfront;
 
 // declared parameters
-const float *SWE_k;
-const float *soil_solid_km;
-const float **soil_solid_km_lay;
-const float *soil_solid_km_ki;
-const float **soil_solid_km_ki_lay;
-const float *soil_solid_km_kw;
-const float **soil_solid_km_kw_lay;
-const float *depths;
-const float **depths_lay;
-const float *por;
-const float **por_lay;
-const float *theta_default;
-const float **theta_default_lay;
-const float *Zdf_init;
-const float *Zdt_init;
-const float *Zpf_init;
-const float *n_factor_a;
-const float *n_factor_b;
-const float *n_factor_c;
-const float *Trigthrhld;
+const double *SWE_k;
+const double *soil_solid_km;
+const double **soil_solid_km_lay;
+const double *soil_solid_km_ki;
+const double **soil_solid_km_ki_lay;
+const double *soil_solid_km_kw;
+const double **soil_solid_km_kw_lay;
+const double *depths;
+const double **depths_lay;
+const double *por;
+const double **por_lay;
+const double *theta_default;
+const double **theta_default_lay;
+const double *Zdf_init;
+const double *Zdt_init;
+const double *Zpf_init;
+const double *n_factor_a;
+const double *n_factor_b;
+const double *n_factor_c;
+const double *Trigthrhld;
 const long *N_Soil_layers;
 const long *calc_coductivity;
 const long *freeze_kw_ki_update;
 const long *thaw_ki_kw_update;
 const long *k_update;
-const float *soil_moist_max;
-const float *soil_rechr_max;
-const float *theta_min;
+const double *soil_moist_max;
+const double *soil_rechr_max;
+const double *theta_min;
 
 // variable inputs
-const float *hru_t;
-const float *hru_tsf;
-const float *SWE;
-const float *soil_moist;
-const float *soil_rechr;
+const double *hru_t;
+const double *hru_tsf;
+const double *SWE;
+const double *soil_moist;
+const double *soil_rechr;
 
 void decl(void);
 void init(void);
@@ -4213,16 +4213,16 @@ void run(void);
 void finish(bool good);
 void freeze(void);
 void thaw(void);
-void find_freeze_D(float df);
-void find_thaw_D(float dt);
-void push_front(float D);
-float pop_front(void);
-float last_front(void);
-float Interpolated_ftc_lay(float Za, long lay);
-float Interpolated_ttc_lay(float Za, long lay);
-float SWE_to_rho(float SWE);
-float get_ftc_lay(long lay);
-float get_ttc_lay(long lay);
+void find_freeze_D(double df);
+void find_thaw_D(double dt);
+void push_front(double D);
+double pop_front(void);
+double last_front(void);
+double Interpolated_ftc_lay(double Za, long lay);
+double Interpolated_ttc_lay(double Za, long lay);
+double SWE_to_rho(double SWE);
+double get_ftc_lay(long lay);
+double get_ttc_lay(long lay);
 
 ClassXG* klone(string name) const;
 };
@@ -4235,27 +4235,27 @@ Classcontribution(string Name, string Version = "undefined", CRHM::LMODULE Lvl =
 long soil_runoffDiv;
 
 // declared variables
-float *contrib_area;
-float *pre_contrib_area;
-float *connected;
+double *contrib_area;
+double *pre_contrib_area;
+double *connected;
 long  *N_connected;
 long  *connectedTo;
-float *Results;
-float **Results_lay;
-float *distrib_sum;
-const float *distrib_Basin;
-float *soil_runoff_Buf; // buffered
+double *Results;
+double **Results_lay;
+double *distrib_sum;
+const double *distrib_Basin;
+double *soil_runoff_Buf; // buffered
 
 // declared parameters
-const float *basin_area;
-const float *hru_area;
-const float *Sdmax;
-const float *distrib;
-const float **distrib_hru;
+const double *basin_area;
+const double *hru_area;
+const double *Sdmax;
+const double *distrib;
+const double **distrib_hru;
 
 // variable inputs
-const float *soil_runoff;
-const float *Sd;
+const double *soil_runoff;
+const double *Sd;
 
 void decl(void);
 void init(void);
@@ -4279,93 +4279,93 @@ long depths_size; // handles recharge and lower layers
 // declared observation variables
 
 // declared variables
-float *Sd;
-float *gw;
-float *soil_rechr;
-float *soil_moist;
-float *soil_gw;
-float *gw_flow;
-float *soil_ssr;
-float *rechr_ssr;
-float *soil_runoff;
-float *cum_soil_ssr;
-float *cum_rechr_ssr;
-float *cum_soil_runoff;
-float *cum_runoff_to_Sd;
-float *cum_redirected_residual;
-float *soil_gw_D;
-float *soil_ssr_D;
-float *gw_flow_D;
-float *soil_runoff_D;
-float *HK_V;
-float *HK_A;
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_over_Q;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
-float *redirected_residual;
-float *infil_act;
-float *cum_infil_act;
-float *infil_act_D;
+double *Sd;
+double *gw;
+double *soil_rechr;
+double *soil_moist;
+double *soil_gw;
+double *gw_flow;
+double *soil_ssr;
+double *rechr_ssr;
+double *soil_runoff;
+double *cum_soil_ssr;
+double *cum_rechr_ssr;
+double *cum_soil_runoff;
+double *cum_runoff_to_Sd;
+double *cum_redirected_residual;
+double *soil_gw_D;
+double *soil_ssr_D;
+double *gw_flow_D;
+double *soil_runoff_D;
+double *HK_V;
+double *HK_A;
+double *culvert_Q;
+double *culvert_water_H;
+double *culvert_water_A;
+double *culvert_water_V;
+double *culvert_over_Q;
+double *culvert_evap;
+double *cum_culvert;
+double *cum_culvert_over;
+double *HD;
+double *redirected_residual;
+double *infil_act;
+double *cum_infil_act;
+double *infil_act_D;
 
 // local variables
-float *cum_soil_gw;
-float *cum_gw_flow;
-float *cum_hru_condense;
-float *soil_moist_Init;
-float *soil_rechr_Init;
-float *Sd_Init;
-float *gw_Init;
-float *SWE_Init;
-float *Dts_runoff_K; // from Dts_snow_runoff_K or Dts_organic_runoff_K
+double *cum_soil_gw;
+double *cum_gw_flow;
+double *cum_hru_condense;
+double *soil_moist_Init;
+double *soil_rechr_Init;
+double *Sd_Init;
+double *gw_Init;
+double *SWE_Init;
+double *Dts_runoff_K; // from Dts_snow_runoff_K or Dts_organic_runoff_K
 
-float *snowinfil_buf;
-float *runoff_buf;
-float *meltrunoff_buf;
-float *hru_evap_buf;
+double *snowinfil_buf;
+double *runoff_buf;
+double *meltrunoff_buf;
+double *hru_evap_buf;
 
-float *thaw_layers;
-float **thaw_layers_lay;
-float *depth_layers;
-float **depth_layers_lay;
-float *thaw_all;
+double *thaw_layers;
+double **thaw_layers_lay;
+double *depth_layers;
+double **depth_layers_lay;
+double *thaw_all;
 
 // declared parameters
-const float *Sdmax;
-const float *Sdinit;
-const float *gw_max;
-const float *gw_init;
-const float *gw_K;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *soil_rechr_max;
-const float *soil_rechr_init;
-const float *soil_moist_max;
-const float *soil_moist_init;
-const float *soil_gw_K;
-const float *rechr_ssr_K;
-const float *lower_ssr_K;
-const float *Sd_ssr_K;
-const float *Sd_gw_K;
-const float *channel_slope;
-const float *side_slope;
-const float *culvert_diam;
-const float *culvert_water_Dmax;
-const float *number_culverts;
-const float *porosity_upper;
-const float *porosity_lower;
-const float *evap_from_runoff;
-const float *Dts_snow_max;
-const float *Dts_organic_max;
-const float *Dts_snow_init;
-const float *Dts_snow_runoff_K;
-const float *Dts_organic_runoff_K;
-const float *Dts_organic_init;
+const double *Sdmax;
+const double *Sdinit;
+const double *gw_max;
+const double *gw_init;
+const double *gw_K;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *soil_rechr_max;
+const double *soil_rechr_init;
+const double *soil_moist_max;
+const double *soil_moist_init;
+const double *soil_gw_K;
+const double *rechr_ssr_K;
+const double *lower_ssr_K;
+const double *Sd_ssr_K;
+const double *Sd_gw_K;
+const double *channel_slope;
+const double *side_slope;
+const double *culvert_diam;
+const double *culvert_water_Dmax;
+const double *number_culverts;
+const double *porosity_upper;
+const double *porosity_lower;
+const double *evap_from_runoff;
+const double *Dts_snow_max;
+const double *Dts_organic_max;
+const double *Dts_snow_init;
+const double *Dts_snow_runoff_K;
+const double *Dts_organic_runoff_K;
+const double *Dts_organic_init;
 const long *soil_withdrawal;
 const long **soil_withdrawal_Tables;
 
@@ -4377,22 +4377,22 @@ const long *NO_Freeze;
 const long *inhibit_evap;
 
 // variable inputs
-const float *infil;
-const float *snowinfil;
-const float *meltrunoff; // frozen melt runoff
-const float *runoff;     // liquid runoff
-const float *hru_evap;
-const float *Zdt;
-const float *Zdf;
-const float *Zd_front;
-const float **Zd_front_array;
+const double *infil;
+const double *snowinfil;
+const double *meltrunoff; // frozen melt runoff
+const double *runoff;     // liquid runoff
+const double *hru_evap;
+const double *Zdt;
+const double *Zdf;
+const double *Zd_front;
+const double **Zd_front_array;
 
-float *Dts;
-float *Dts_max;
+double *Dts;
+double *Dts_max;
 
 // variable put inputs
-float *hru_actet;      // [nhru]
-float *hru_cum_actet;
+double *hru_actet;      // [nhru]
+double *hru_cum_actet;
 
 
 // local allocated arrays
@@ -4417,7 +4417,7 @@ ClassMod_Exec(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRH
   long Vars_Cnt;
   long Pars_Cnt;
 
-  typedef  long LoadModuleTypeInit(const char *Grp, long GrpNo, long hru_cnt, const char *S_Vars, long VarsNo, float **V, const char *V_Pars, long ParsNo, float **P);
+  typedef  long LoadModuleTypeInit(const char *Grp, long GrpNo, long hru_cnt, const char *S_Vars, long VarsNo, double **V, const char *V_Pars, long ParsNo, double **P);
   typedef  long LoadModuleTypeStep(double DTnow); // time step. Zero at end of run.
 
   LoadModuleTypeInit *LoadUserInit;
@@ -4425,12 +4425,12 @@ ClassMod_Exec(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRH
 
 // Lingage arrays
 
-  float **VarArray;
-  float **ParArray;
+  double **VarArray;
+  double **ParArray;
 
 // declared variables
-float *Dummy;
-float *Dummy2;
+double *Dummy;
+double *Dummy2;
 long *statusInit;
 long *statusStep;
 
@@ -4460,33 +4460,33 @@ ClassFlowInSnow(string Name, string Version = "undefined", CRHM::LMODULE Lvl = C
 ClassModule* Netroute_module; // used to call preser for simple projects
 
 // declared variables
-float *Ksat_snow;
-float *K_snow;
-float *u_down;
-float *K_down;
-float *K_slope;
-float *Meltrunoff_K;
-float *In_storage;
-float *runKstorage_var;
+double *Ksat_snow;
+double *K_snow;
+double *u_down;
+double *K_down;
+double *K_slope;
+double *Meltrunoff_K;
+double *In_storage;
+double *runKstorage_var;
 
 // get variables:
-const float *rho;
-const float *h2o_sat;
-const float *T_s_l;
-const float *z_s;
+const double *rho;
+const double *h2o_sat;
+const double *T_s_l;
+const double *z_s;
 
 // put variables
-float  *runKstorage;
+double  *runKstorage;
 
 // declared parameters
-const float *S_I;
-const float *d_g;
-const float *t_inhibit_flow;
-const float *runKstorage_winter;
-const float *runKstorage_summer;
-const float *Sr;
-const float  *hru_GSL;
-const float  *route_L;
+const double *S_I;
+const double *d_g;
+const double *t_inhibit_flow;
+const double *runKstorage_winter;
+const double *runKstorage_summer;
+const double *Sr;
+const double  *hru_GSL;
+const double  *route_L;
 const long  *inhibit_MeltRunoff_Kstorage;
 
 void decl(void);
@@ -4509,86 +4509,86 @@ long evapDiv;
 // declared observation variables
 
 // declared variables
-float *Sd;
-float *gw;
-float *soil_rechr;
-float *soil_moist;
-float *soil_gw;
-float *gw_flow;
-float *soil_ssr;
-float *rechr_ssr;
-float *soil_runoff;
-float *cum_soil_ssr;
-float *cum_rechr_ssr;
-float *cum_soil_runoff;
-float *cum_runoff_to_Sd;
-float *cum_redirected_residual;
-float *soil_gw_D;
-float *soil_ssr_D;
-float *gw_flow_D;
-float *soil_runoff_D;
-float *HK_V;
-float *HK_A;
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_over_Q;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
-float *redirected_residual;
-float *infil_act;
-float *cum_infil_act;
-float *infil_act_D;
-float *Dts;
-float *Dts_max;
+double *Sd;
+double *gw;
+double *soil_rechr;
+double *soil_moist;
+double *soil_gw;
+double *gw_flow;
+double *soil_ssr;
+double *rechr_ssr;
+double *soil_runoff;
+double *cum_soil_ssr;
+double *cum_rechr_ssr;
+double *cum_soil_runoff;
+double *cum_runoff_to_Sd;
+double *cum_redirected_residual;
+double *soil_gw_D;
+double *soil_ssr_D;
+double *gw_flow_D;
+double *soil_runoff_D;
+double *HK_V;
+double *HK_A;
+double *culvert_Q;
+double *culvert_water_H;
+double *culvert_water_A;
+double *culvert_water_V;
+double *culvert_over_Q;
+double *culvert_evap;
+double *cum_culvert;
+double *cum_culvert_over;
+double *HD;
+double *redirected_residual;
+double *infil_act;
+double *cum_infil_act;
+double *infil_act_D;
+double *Dts;
+double *Dts_max;
 
 // local variables
-float *cum_soil_gw;
-float *cum_gw_flow;
-float *cum_hru_condense;
-float *soil_moist_Init;
-float *soil_rechr_Init;
-float *Sd_Init;
-float *gw_Init;
-float *SWE_Init;
-float *Dts_runoff_K;
+double *cum_soil_gw;
+double *cum_gw_flow;
+double *cum_hru_condense;
+double *soil_moist_Init;
+double *soil_rechr_Init;
+double *Sd_Init;
+double *gw_Init;
+double *SWE_Init;
+double *Dts_runoff_K;
 
-float *snowinfil_buf;
-float *runoff_buf;
-float *meltrunoff_buf;
-float *hru_evap_buf;
+double *snowinfil_buf;
+double *runoff_buf;
+double *meltrunoff_buf;
+double *hru_evap_buf;
 
 // declared parameters
-const float *Sdmax;
-const float *Sdinit;
-const float *gw_max;
-const float *gw_init;
-const float *gw_K;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *soil_rechr_max;
-const float *soil_rechr_init;
-const float *soil_moist_max;
-const float *soil_moist_init;
-const float *soil_gw_K;
-const float *rechr_ssr_K;
-const float *lower_ssr_K;
-const float *Sd_ssr_K;
-const float *Sd_gw_K;
-const float *channel_slope;
-const float *side_slope;
-const float *culvert_diam;
-const float *culvert_water_Dmax;
-const float *number_culverts;
-const float *Dts_snow_max;
-const float *Dts_organic_max;
-const float *Dts_snow_init;
-const float *Dts_snow_runoff_K;
-const float *Dts_organic_runoff_K;
-const float *Dts_organic_init;
+const double *Sdmax;
+const double *Sdinit;
+const double *gw_max;
+const double *gw_init;
+const double *gw_K;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *soil_rechr_max;
+const double *soil_rechr_init;
+const double *soil_moist_max;
+const double *soil_moist_init;
+const double *soil_gw_K;
+const double *rechr_ssr_K;
+const double *lower_ssr_K;
+const double *Sd_ssr_K;
+const double *Sd_gw_K;
+const double *channel_slope;
+const double *side_slope;
+const double *culvert_diam;
+const double *culvert_water_Dmax;
+const double *number_culverts;
+const double *Dts_snow_max;
+const double *Dts_organic_max;
+const double *Dts_snow_init;
+const double *Dts_snow_runoff_K;
+const double *Dts_organic_runoff_K;
+const double *Dts_organic_init;
 const long *soil_withdrawal;
 const long **soil_withdrawal_Tables;
 
@@ -4599,15 +4599,15 @@ const long *soil_ssr_runoff;
 const long *inhibit_evap;
 
 // variable inputs
-const float *infil;
-const float *snowinfil;
-const float *meltrunoff; // frozen melt runoff
-const float *runoff;     // liquid runoff
-const float *hru_evap;
+const double *infil;
+const double *snowinfil;
+const double *meltrunoff; // frozen melt runoff
+const double *runoff;     // liquid runoff
+const double *hru_evap;
 
 // variable put inputs
-float *hru_actet;      // [nhru]
-float *hru_cum_actet;
+double *hru_actet;      // [nhru]
+double *hru_cum_actet;
 
 
 // local allocated arrays
@@ -4626,33 +4626,33 @@ public:
 Classalbedoobs2(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared observation variables
-const float *Albedo_obs;      // interval data
+const double *Albedo_obs;      // interval data
 
 // declared variables
-float *Albedo;
-float *net_snowD;  // daily value sum(newsnow)
+double *Albedo;
+double *net_snowD;  // daily value sum(newsnow)
 long *meltflag;
 long *winter;
 long  *newsnowcnt;
 
 // declared parameters
-const float *Albedo_bare;
-const float *Albedo_snow;
-const float *hru_lat;
+const double *Albedo_bare;
+const double *Albedo_snow;
+const double *hru_lat;
 
 // variable inputs
-const float *hru_tmax;
-const float *hru_tmin;
-const float *QdroD;
-const float *SWE;
-const float *net_snow;
+const double *hru_tmax;
+const double *hru_tmin;
+const double *QdroD;
+const double *SWE;
+const double *net_snow;
 const long  *hru_newsnow;
 
 void decl(void);
 void init(void);
 void run(void);
 
-void albedo(long jday, float Qnc);
+void albedo(long jday, double Qnc);
 
 Classalbedoobs2* klone(string name) const;
 };
@@ -4667,15 +4667,15 @@ long *meltflag;
 long *winter;
 
 // declared parameters
-const float *hru_lat;
+const double *hru_lat;
 
 // variable inputs
-const float *hru_tmax;
-const float *hru_tmin;
-const float *QdroD;
-const float *SWE;
+const double *hru_tmax;
+const double *hru_tmin;
+const double *QdroD;
+const double *SWE;
 const long  *hru_newsnow;
-const float *Albedo;
+const double *Albedo;
 
 void decl(void);
 void init(void);
@@ -4690,11 +4690,11 @@ public:
 Class_z_s_rho(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-  float*  z_s;            // total snowcover thickness (m)
-  float*  rho;            // average snowcover density (kg/m^3)
+  double*  z_s;            // total snowcover thickness (m)
+  double*  rho;            // average snowcover density (kg/m^3)
 
 // variable inputs
-const float *SWE;
+const double *SWE;
 
 void decl(void);
 void init(void);
@@ -4709,26 +4709,26 @@ public:
 Classqmelt(string Name = "Qmelt", string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl){};
 
 // declared variables
-float *Qm;      // MJ/m2/Int
-float *Qg;      // MJ/m2/Int
-float *cum_Qm;  // MJ/m2
-float *cum_Qg;  // MJ/m2
-float *QmD;     // MJ/m2
-float *QgD;     // MJ/m2
+double *Qm;      // MJ/m2/Int
+double *Qg;      // MJ/m2/Int
+double *cum_Qm;  // MJ/m2
+double *cum_Qg;  // MJ/m2
+double *QmD;     // MJ/m2
+double *QgD;     // MJ/m2
 
 // declared parameters
-const float *TIa0Mn;
-const float *TIa1Mn;
-const float *TIs0Mn;
-const float *TIs1Mn;
+const double *TIa0Mn;
+const double *TIa1Mn;
+const double *TIs0Mn;
+const double *TIs1Mn;
 
 // declared observations
-const float *t;      // °C
-const float *ts;     // °C
-float *tmean;  // °C
-float *tpos;   // °C
-float *tsmean; // °C
-float *tspos;  // °C
+const double *t;      // °C
+const double *ts;     // °C
+double *tmean;  // °C
+double *tpos;   // °C
+double *tsmean; // °C
+double *tspos;  // °C
 
 void decl(void);
 void init(void);
@@ -4746,96 +4746,96 @@ ClassClark *Delayrunoff;
 ClassClark *Delayflow;
 
 // declared observation variables
-const float *p;
+const double *p;
 
 // input variables
-const float *Qg;        // MJ/m2
-const float *driftmelt; // melt depth from upstream drift
-const float *hru_p;
+const double *Qg;        // MJ/m2
+const double *driftmelt; // melt depth from upstream drift
+const double *hru_p;
 
 // declared parameters
 const long *Type;           // NOTUSED, DRIFT or HUMMOCK
 //const long *k_range;        // normal, high or low
 const long *DrainTo;        // drain to HRU
-const float *slope;         // (m/m)
-const float *length;        // length normal to creek
-const float *Kbtm;         // bottom hydraulic conductivity (m/d)
-const float *Ktop;         // bottom hydraulic conductivity (m/d)
-const float *ztrn;         // transition depth (m)
-const float *Residual;      // Organic non-drainable porosity ()
-const float **Residual_lay; // Organic non-drainable porosity ()
-const float *n_const;       // Van Genutchen constant
-const float **n_const_lay;  // Van Genutchen constant
-const float *a_const;       // Van Genutchen constant
-const float **a_const_lay;  // Van Genutchen constant
-const float *Drained;       // depth of surface drained organic material (m)
-const float *FrozenTo;      // initial depth of frost table (m)
-const float *runoffstorage; // runoff parameter ()
-const float *runoffLag;     // runoff parameter ()
-const float *flowstorage;   // flow parameter ()
-const float *flowLag;       // flow parameter ()
+const double *slope;         // (m/m)
+const double *length;        // length normal to creek
+const double *Kbtm;         // bottom hydraulic conductivity (m/d)
+const double *Ktop;         // bottom hydraulic conductivity (m/d)
+const double *ztrn;         // transition depth (m)
+const double *Residual;      // Organic non-drainable porosity ()
+const double **Residual_lay; // Organic non-drainable porosity ()
+const double *n_const;       // Van Genutchen constant
+const double **n_const_lay;  // Van Genutchen constant
+const double *a_const;       // Van Genutchen constant
+const double **a_const_lay;  // Van Genutchen constant
+const double *Drained;       // depth of surface drained organic material (m)
+const double *FrozenTo;      // initial depth of frost table (m)
+const double *runoffstorage; // runoff parameter ()
+const double *runoffLag;     // runoff parameter ()
+const double *flowstorage;   // flow parameter ()
+const double *flowLag;       // flow parameter ()
 
-const float *d;             // depth of layer  (m)
-const float **d_lay;        // depth of layer  (m)
-const float *Pors;          // filler only gives first value
-const float **Pors_def;     // array of all values
+const double *d;             // depth of layer  (m)
+const double **d_lay;        // depth of layer  (m)
+const double *Pors;          // filler only gives first value
+const double **Pors_def;     // array of all values
 const long  *soil_type;
 const long  **soil_type_lay;
-const float *tinit;         // initial layer temperature (°C)
-const float **tinit_lay;    // initial layer temperature (°C)
+const double *tinit;         // initial layer temperature (°C)
+const double **tinit_lay;    // initial layer temperature (°C)
 
 // declared variables
-float *Depth;          // hydraulic conductivity (m/day)
-float *k;              // hydraulic conductivity (m/day)
-float *d_surface;      // debug
-float *watertable;     // water table depth (m)
-float *dmelt;          // melt depth (m)
-float *flowin;         // flowin depth (m/m2)
-float *flowinm3;       // flowin depth (m3)
-float *cumflowin;      // cumulative flowin depth (m)
-float *runoff;         // runoff ((m/m2)/int)
-float *runoffDly;      // runoff ((m/m2)/int)
-float *runoffm3Dly;    // runoff (m3/int)
-float *cumrunoff;      // cumulative runoff (m)
-float *flow;           // total flow (m/int)
-float *flowDly;        // total flow (m/int)
-float *flowm3Dly;      // total flow (m3/int)
-float *cumflow;        // cumulative total flow from all layers(m3/s)
-float *loss;           // total loss (m/int)
-float *transit;        // transit time through HRU (hr)
-float *theta;          // soil moisture (m3/m3)
-float **theta_lay;     // soil moisture (m3/m3)
-float *layerwater;      // thawed water depth in layer (m)
-float **layerwater_lay; // thawed water depth in layer (m)
-float *capillary;      // locked thawed water depth in layer (m)
-float **capillary_lay; // locked thawed water depth in layer (m)
-float *tension;        // capillary tension (m)
-float **tension_lay;   // capillary tension (m)
-float *wDrained;       // working depth of surface drained organic material (m)
+double *Depth;          // hydraulic conductivity (m/day)
+double *k;              // hydraulic conductivity (m/day)
+double *d_surface;      // debug
+double *watertable;     // water table depth (m)
+double *dmelt;          // melt depth (m)
+double *flowin;         // flowin depth (m/m2)
+double *flowinm3;       // flowin depth (m3)
+double *cumflowin;      // cumulative flowin depth (m)
+double *runoff;         // runoff ((m/m2)/int)
+double *runoffDly;      // runoff ((m/m2)/int)
+double *runoffm3Dly;    // runoff (m3/int)
+double *cumrunoff;      // cumulative runoff (m)
+double *flow;           // total flow (m/int)
+double *flowDly;        // total flow (m/int)
+double *flowm3Dly;      // total flow (m3/int)
+double *cumflow;        // cumulative total flow from all layers(m3/s)
+double *loss;           // total loss (m/int)
+double *transit;        // transit time through HRU (hr)
+double *theta;          // soil moisture (m3/m3)
+double **theta_lay;     // soil moisture (m3/m3)
+double *layerwater;      // thawed water depth in layer (m)
+double **layerwater_lay; // thawed water depth in layer (m)
+double *capillary;      // locked thawed water depth in layer (m)
+double **capillary_lay; // locked thawed water depth in layer (m)
+double *tension;        // capillary tension (m)
+double **tension_lay;   // capillary tension (m)
+double *wDrained;       // working depth of surface drained organic material (m)
 
-float *Cvis;         // frozen/saturated
-float **Cvis_lay;    // heat capacity (J/m3/K)
+double *Cvis;         // frozen/saturated
+double **Cvis_lay;    // heat capacity (J/m3/K)
 
-float *Cvisa;       // frozen/unsaturated
-float **Cvisa_lay;  // heat capacity (J/m3/K)
+double *Cvisa;       // frozen/unsaturated
+double **Cvisa_lay;  // heat capacity (J/m3/K)
 
-float *Cvws;        // unfrozen/saturated
-float **Cvws_lay;   // heat capacity (J/m3/K)
+double *Cvws;        // unfrozen/saturated
+double **Cvws_lay;   // heat capacity (J/m3/K)
 
-float *Cvwsa;       // unfrozen/unsaturated
-float **Cvwsa_lay;  // heat capacity (J/m3/K)
+double *Cvwsa;       // unfrozen/unsaturated
+double **Cvwsa_lay;  // heat capacity (J/m3/K)
 
-float *lamis;       // frozen/saturated
-float **lamis_lay;  // thermal conductivity (W/m/K)
+double *lamis;       // frozen/saturated
+double **lamis_lay;  // thermal conductivity (W/m/K)
 
-float *lamws;       // unfrozen/saturated
-float **lamws_lay;  // thermal conductivity (W/m/K)
+double *lamws;       // unfrozen/saturated
+double **lamws_lay;  // thermal conductivity (W/m/K)
 
-float *lamwsa;      // unfrozen/unsaturated
-float **lamwsa_lay; // thermal conductivity (W/m/K)
+double *lamwsa;      // unfrozen/unsaturated
+double **lamwsa_lay; // thermal conductivity (W/m/K)
 
-float *tlayer;         // layer temperature (°C)
-float **tlayer_lay;    // layer temperature (°C)
+double *tlayer;         // layer temperature (°C)
+double **tlayer_lay;    // layer temperature (°C)
 
 // local constants
 
@@ -4847,7 +4847,7 @@ void finish(bool good);
 Classquinton* klone(string name) const;
 };
 
-float Farouki_a(float fract_por);
+double Farouki_a(double fract_por);
 
 class Classqdrift : public ClassModule {
 public:
@@ -4857,30 +4857,30 @@ Classqdrift(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM:
 ClassClark *Delaymelt;
 
 // declared observation variables
-const float *p;
+const double *p;
 
 // input variables
-const float *hru_p;
+const double *hru_p;
 
 // declared variables
-float *SWE;
-float *driftmelt;
-float *driftmeltDly;
-float *cumdriftmelt;
-float *cumdriftmeltDly;
-float *driftmeltD;
-float *snowmeltD;
+double *SWE;
+double *driftmelt;
+double *driftmeltDly;
+double *cumdriftmelt;
+double *cumdriftmeltDly;
+double *driftmeltD;
+double *snowmeltD;
 
 // declared parameters
 const long *Type;      // NOTUSED, DRIFT or HUMMOCK
 const long *DrainTo;   // drain to HRU
-const float *InitSWE;  // initial SWE
-const float *length;   // length normal to creek
-const float *meltstorage;  // delay parameter (days)
-const float *meltLag;      // delay parameter (days)
+const double *InitSWE;  // initial SWE
+const double *length;   // length normal to creek
+const double *meltstorage;  // delay parameter (days)
+const double *meltLag;      // delay parameter (days)
 
 // variable inputs
-const float *Qm;
+const double *Qm;
 
 // local allocated arrays
 
@@ -4901,14 +4901,14 @@ ClassXGAyers(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM
 // declared observation variables
 
 // declared variables
-float *infil;         // unfrozen infiltration
-float *cuminfil;      // cumulative unfrozen infiltration
-float *snowinfil;     // frozen infiltration
-float *cumsnowinfil;  // cumulative frozen infiltration
-float *meltrunoff;      // [nhru]
-float *cummeltrunoff; // cumulative frozen melt runoff
-float *runoff;        // cumulative runoff
-float *cumrunoff;     // cumulative melt runoff
+double *infil;         // unfrozen infiltration
+double *cuminfil;      // cumulative unfrozen infiltration
+double *snowinfil;     // frozen infiltration
+double *cumsnowinfil;  // cumulative frozen infiltration
+double *meltrunoff;      // [nhru]
+double *cummeltrunoff; // cumulative frozen melt runoff
+double *runoff;        // cumulative runoff
+double *cumrunoff;     // cumulative melt runoff
 
 // variable put
 
@@ -4916,14 +4916,14 @@ float *cumrunoff;     // cumulative melt runoff
 long *infiltype;
 
 // declared parameters
-const float *basin_area;  // [BASIN]
-const float *hru_area;
+const double *basin_area;  // [BASIN]
+const double *hru_area;
 const long  *texture;
 const long  *groundcover;
 
 // variable inputs
-const float *snowmeltD;   // (mm/day)
-const float *net_rain;
+const double *snowmeltD;   // (mm/day)
+const double *net_rain;
 
 void decl(void);
 void init(void);
@@ -4939,94 +4939,94 @@ public:
 
 ClassCRHMCanopyClearing(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 2000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
-float Qsi_, Qli_;
+double Qsi_, Qli_;
 
 // observation variables
 
-const float *Qsi;
-const float *Qli;
+const double *Qsi;
+const double *Qli;
 
 // declared observation variables
 
-float *Ts;
-float *Qnsn;
-float *Qsisn;
-float *Qlisn;
-float *Qlosn;
+double *Ts;
+double *Qnsn;
+double *Qsisn;
+double *Qlisn;
+double *Qlosn;
 
 // put variables
 
-float *SWE;
+double *SWE;
 
 // declared variables
 
-float *drip_Cpy;
-float *thrufall_Cpy;
-float *netRain_Cpy;
-float *direct_rain;
-float *rain_load;
-float *Snow_load;
-float *direct_snow;
-float *SUnload;
-float *SUnload_H2O;
-float *Qnsn_Var;
-float *Qsisn_Var;
-float *Qlisn_Var;
+double *drip_Cpy;
+double *thrufall_Cpy;
+double *netRain_Cpy;
+double *direct_rain;
+double *rain_load;
+double *Snow_load;
+double *direct_snow;
+double *SUnload;
+double *SUnload_H2O;
+double *Qnsn_Var;
+double *Qsisn_Var;
+double *Qlisn_Var;
 
-float *net_rain;
-float *cum_net_rain;
-float *net_snow;
-float *cum_net_snow;
-float *net_p;
-float *intcp_evap;
-float *cum_intcp_evap;
-float *Subl_Cpy;
-float *cum_Subl_Cpy;
-float *cum_SUnload;
-float *cum_SUnload_H2O;
+double *net_rain;
+double *cum_net_rain;
+double *net_snow;
+double *cum_net_snow;
+double *net_p;
+double *intcp_evap;
+double *cum_intcp_evap;
+double *Subl_Cpy;
+double *cum_Subl_Cpy;
+double *cum_SUnload;
+double *cum_SUnload_H2O;
 
-float *Cc;
-float *k;
-float *Tauc;
-float *Pa;
-float *ra;
-float *u_FHt;
-float *Pevap;
+double *Cc;
+double *k;
+double *Tauc;
+double *Pa;
+double *ra;
+double *u_FHt;
+double *Pevap;
 
 // variable inputs
 
-const float *hru_t;
-const float *hru_u;
-const float *hru_rh;
-const float *hru_ea;
-const float *Albedo;
+const double *hru_t;
+const double *hru_u;
+const double *hru_rh;
+const double *hru_ea;
+const double *Albedo;
 
-const float *hru_snow;
-const float *hru_rain;
-const float *hru_evap;
+const double *hru_snow;
+const double *hru_rain;
+const double *hru_evap;
 
-const float *SolAng;
+const double *SolAng;
 
-const float *QsiS_Var;
-const float *QsiA_Var;
-const float *QliVt_Var;
+const double *QsiS_Var;
+const double *QsiA_Var;
+const double *QliVt_Var;
 
 // declared parameters:
 
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_elev;
-const float *Ht;
-const float *LAI;
-const float *Sbar;
-const float *Z0snow;
-const float *Zref;
-const float *Zwind;
-const float *Zvent;
-const float *unload_t;
-const float *unload_t_water;
-const float *Alpha_c;
-const float *B_canopy;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *hru_elev;
+const double *Ht;
+const double *LAI;
+const double *Sbar;
+const double *Z0snow;
+const double *Zref;
+const double *Zwind;
+const double *Zvent;
+const double *unload_t;
+const double *unload_t_water;
+const double *Alpha_c;
+const double *B_canopy;
 
 const long *CanopyClearing;
 const long *inhibit_evap;
@@ -5037,10 +5037,10 @@ void init(void);
 void run(void);
 void finish(bool good);
 
-double delta(float t); // Slope of sat vap p vs t, kPa/°C
-double gamma(float Pa, float t); // Psychrometric constant (kPa/°C)
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-float lambda(float t); // Latent heat of vaporization (mJ/(kg °C))
+double delta(double t); // Slope of sat vap p vs t, kPa/°C
+double gamma(double Pa, double t); // Psychrometric constant (kPa/°C)
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double lambda(double t); // Latent heat of vaporization (mJ/(kg °C))
 
 ClassCRHMCanopyClearing* klone(string name) const;
 
@@ -5052,99 +5052,99 @@ public:
 
 ClassCRHMCanopyClearingGap(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
-float Qsi_, Qli_;
+double Qsi_, Qli_;
 
 // observation variables
 
-const float *Qsi;
-const float *Qli;
+const double *Qsi;
+const double *Qli;
 
 // declared observation variables
 
-float *Ts;
-float *Qnsn;
-float *Qsisn;
-float *Qlisn;
-float *Qlosn;
+double *Ts;
+double *Qnsn;
+double *Qsisn;
+double *Qlisn;
+double *Qlosn;
 
 // put variables
 
-float *SWE;
+double *SWE;
 
 // declared variables
 
-float *drip_Cpy;
-float *thrufall_Cpy;
-float *netRain_Cpy;
-float *direct_rain;
-float *rain_load;
-float *Snow_load;
-float *direct_snow;
-float *SUnload;
-float *SUnload_H2O;
-float *Qnsn_Var;
-float *Qsisn_Var;
-float *Qlisn_Var;
+double *drip_Cpy;
+double *thrufall_Cpy;
+double *netRain_Cpy;
+double *direct_rain;
+double *rain_load;
+double *Snow_load;
+double *direct_snow;
+double *SUnload;
+double *SUnload_H2O;
+double *Qnsn_Var;
+double *Qsisn_Var;
+double *Qlisn_Var;
 
-float *net_rain;
-float *cum_net_rain;
-float *net_snow;
-float *cum_net_snow;
-float *net_p;
-float *intcp_evap;
-float *cum_intcp_evap;
-float *Subl_Cpy;
-float *cum_Subl_Cpy;
-float *cum_SUnload;
-float *cum_SUnload_H2O;
+double *net_rain;
+double *cum_net_rain;
+double *net_snow;
+double *cum_net_snow;
+double *net_p;
+double *intcp_evap;
+double *cum_intcp_evap;
+double *Subl_Cpy;
+double *cum_Subl_Cpy;
+double *cum_SUnload;
+double *cum_SUnload_H2O;
 
-float *Cc;
-float *k;
-float *Tauc;
-float *Pa;
-float *ra;
-float *u_FHt;
-float *Pevap;
+double *Cc;
+double *k;
+double *Tauc;
+double *Pa;
+double *ra;
+double *u_FHt;
+double *Pevap;
 
 // variable inputs
 
-const float *hru_t;
-const float *hru_u;
-const float *hru_rh;
-const float *hru_ea;
-const float *Albedo;
+const double *hru_t;
+const double *hru_u;
+const double *hru_rh;
+const double *hru_ea;
+const double *Albedo;
 
-const float *hru_snow;
-const float *hru_rain;
-const float *hru_evap;
+const double *hru_snow;
+const double *hru_rain;
+const double *hru_evap;
 
-const float *SolAng;
-const float *cosxs;
-const float *cosxsflat;
-const float *Qdfo;
+const double *SolAng;
+const double *cosxs;
+const double *cosxsflat;
+const double *Qdfo;
 
-const float *QsiS_Var;
-const float *QsiA_Var;
-const float *QliVt_Var;
+const double *QsiS_Var;
+const double *QsiA_Var;
+const double *QliVt_Var;
 
 // declared parameters:
 
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *hru_elev;
-const float *Ht;
-const float *LAI;
-const float *Sbar;
-const float *Z0snow;
-const float *Zref;
-const float *Zwind;
-const float *Zvent;
-const float *unload_t;
-const float *unload_t_water;
-const float *Surrounding_Ht;
-const float *Gap_diameter;
-const float *Alpha_c;
-const float *B_canopy;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *hru_elev;
+const double *Ht;
+const double *LAI;
+const double *Sbar;
+const double *Z0snow;
+const double *Zref;
+const double *Zwind;
+const double *Zvent;
+const double *unload_t;
+const double *unload_t_water;
+const double *Surrounding_Ht;
+const double *Gap_diameter;
+const double *Alpha_c;
+const double *B_canopy;
 
 const long *CanopyClearing;
 const long *inhibit_evap;
@@ -5155,10 +5155,10 @@ void init(void);
 void run(void);
 void finish(bool good);
 
-double delta(float t); // Slope of sat vap p vs t, kPa/°C
-double gamma(float Pa, float t); // Psychrometric constant (kPa/°C)
-float RHOa(float t, float ea, float Pa); // atmospheric density (kg/m^3)
-float lambda(float t); // Latent heat of vaporization (mJ/(kg °C))
+double delta(double t); // Slope of sat vap p vs t, kPa/°C
+double gamma(double Pa, double t); // Psychrometric constant (kPa/°C)
+double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
+double lambda(double t); // Latent heat of vaporization (mJ/(kg °C))
 
 ClassCRHMCanopyClearingGap* klone(string name) const;
 };
@@ -5169,15 +5169,15 @@ public:
 ClassGrow_Crop(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *Crop_Ht;
+double *Crop_Ht;
 
 // declared parameters
-const float *Ht;
-const float *Crop_Grow_Rate;
-const float *JCrop_Start;
-const float *JCrop_Mature;
-const float *JCrop_Harvest;
-const float *Init_Crop_Ht;
+const double *Ht;
+const double *Crop_Grow_Rate;
+const double *JCrop_Start;
+const double *JCrop_Mature;
+const double *JCrop_Harvest;
+const double *Init_Crop_Ht;
 
 // variable inputs
 
@@ -5197,31 +5197,31 @@ long instreamflowCnt;
 long gwCnt;
 
 // declared variables
-float *rew;
+double *rew;
 
-float **instreamflow_All;
-float **instreamflow_Grp_out_All;
+double **instreamflow_All;
+double **instreamflow_Grp_out_All;
 
-float *instreamflow;        // [nhru]
-float *cuminstreamflow;     // [nhru]
-float *outstreamflow;       // [nhru]
-float *cumoutstreamflow;    // [nhru]
+double *instreamflow;        // [nhru]
+double *cuminstreamflow;     // [nhru]
+double *outstreamflow;       // [nhru]
+double *cumoutstreamflow;    // [nhru]
 
-float *streamflow;     // [BASIN] all HRUs
-float *streamflow_s;   // [BASIN] all HRUs
-float *cumstreamflow;  // [BASIN] all HRUs
+double *streamflow;     // [BASIN] all HRUs
+double *streamflow_s;   // [BASIN] all HRUs
+double *cumstreamflow;  // [BASIN] all HRUs
 
-float *WS_stream_Ktravel_var;         // [nhru]
+double *WS_stream_Ktravel_var;         // [nhru]
 
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_water_O;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
+double *culvert_Q;
+double *culvert_water_H;
+double *culvert_water_A;
+double *culvert_water_V;
+double *culvert_water_O;
+double *culvert_evap;
+double *cum_culvert;
+double *cum_culvert_over;
+double *HD;
 
 ClassMuskingum *instreamflowDelay;
 
@@ -5229,26 +5229,26 @@ ClassClark *Clark_instreamflowDelay;
 
 // declared parameters
 
-const float *WS_stream_route_n;         // [nhru]
-const float *WS_stream_route_R;         // [nhru]
-const float *WS_stream_route_S0;        // [nhru]
-const float *WS_stream_route_L;         // [nhru]
+const double *WS_stream_route_n;         // [nhru]
+const double *WS_stream_route_R;         // [nhru]
+const double *WS_stream_route_S0;        // [nhru]
+const double *WS_stream_route_L;         // [nhru]
 const long  *WS_stream_Channel_shp;      // [nhru]
 
-const float *WS_stream_Lag;             // [nhru]
-const float *WS_stream_route_X_M;       // [nhru]
+const double *WS_stream_Lag;             // [nhru]
+const double *WS_stream_route_X_M;       // [nhru]
 const long  *WS_stream_whereto_Grp;     // [nhru]
 const long  *WS_stream_wherefrom_HRU;   // [nhru]
 const long  *WS_stream_whereto_HRU;     // [nhru]
 const long  *WS_stream_order;           // [nhru]
 
-const float *WS_stream_Kstorage;     // [nhru]
+const double *WS_stream_Kstorage;     // [nhru]
 
-const float *WS_stream_channel_slope;
-const float *WS_stream_side_slope;
-const float *WS_stream_culvert_diam;
-const float *WS_stream_culvert_water_Dmax;
-const float *WS_stream_number_culverts;
+const double *WS_stream_channel_slope;
+const double *WS_stream_side_slope;
+const double *WS_stream_culvert_diam;
+const double *WS_stream_culvert_water_Dmax;
+const double *WS_stream_number_culverts;
 
 const long *WS_stream_culvert_type;
 
@@ -5267,40 +5267,40 @@ public:
 ClassICEflow(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "") {};
 
 // declared variables
-float *Ux;
-float *Ub;
-float *Utot;
-float *Ice_in;
-float *Ice_out;
-float *cumIce_in;
-float *cumIce_out;
-float *cumulative_net_rain;
+double *Ux;
+double *Ub;
+double *Utot;
+double *Ice_in;
+double *Ice_out;
+double *cumIce_in;
+double *cumIce_out;
+double *cumulative_net_rain;
 
 // declared parameters
-const float *distrib;
-const float *radius_glacier;
-const float *Arrhenius_const;
-const float *slip_c;
-const float *slip_m;
-const float *slip_sf;
-const float *slip_fs;
-const float **distrib_hru;
-const float *basin_area;   // [BASIN]
-const float *hru_area; // [nhru]
-const float *test_option; // [nhru]
+const double *distrib;
+const double *radius_glacier;
+const double *Arrhenius_const;
+const double *slip_c;
+const double *slip_m;
+const double *slip_sf;
+const double *slip_fs;
+const double **distrib_hru;
+const double *basin_area;   // [BASIN]
+const double *hru_area; // [nhru]
+const double *test_option; // [nhru]
 const long  *SWE_to_firn_Julian;
 const long  *order; // [nhru]
 const long *Disable_ICEflow; // [nhru]
 const long  *channel_option; // [nhru]
-const float *basal_option; // [nhru]
+const double *basal_option; // [nhru]
 
 // variable get inputs
-const float *firn;
-const float *net_rain;
-const float *hru_GSL;
+const double *firn;
+const double *net_rain;
+const double *hru_GSL;
 
 // variable get/put inputs
-float *ice;
+double *ice;
 
 void decl(void);
 void init(void);
@@ -5318,89 +5318,89 @@ Classglacier(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM
 long ObsCnt_Albedo;
 
 // declared observation variables
-const float *Qnsn;
-const float *QnD;
+const double *Qnsn;
+const double *QnD;
 
 // declared variables
-float *SWEmelt;         // SWE snowmelt
-float *SWEmelt_delayed; // SWE snowmelt delayed
-float *cumSWEmelt;      // cumulative SWE snowmelt (same as snowmeltD_org}
-float *firnmelt;         // firn snowmelt
-float *firnmelt_delayed; // firn snowmelt delayed
-float *cumfirnmelt;      // cumulative firn snowmelt runoff
-float *icemelt;         // ice melt
-float *icemelt_delayed; // ice melt delayed
-float *cumicemelt;      // cumulative ice melt runoff
-float *cumnet_rain_glacier; // cumulative net_rain + firn and ice melt
-float *cumsnowmeltD_glacier; // cumulative snowmeltD + firn and ice melt
+double *SWEmelt;         // SWE snowmelt
+double *SWEmelt_delayed; // SWE snowmelt delayed
+double *cumSWEmelt;      // cumulative SWE snowmelt (same as snowmeltD_org}
+double *firnmelt;         // firn snowmelt
+double *firnmelt_delayed; // firn snowmelt delayed
+double *cumfirnmelt;      // cumulative firn snowmelt runoff
+double *icemelt;         // ice melt
+double *icemelt_delayed; // ice melt delayed
+double *cumicemelt;      // cumulative ice melt runoff
+double *cumnet_rain_glacier; // cumulative net_rain + firn and ice melt
+double *cumsnowmeltD_glacier; // cumulative snowmeltD + firn and ice melt
 
-float *glacier_Albedo;
-float *glacier_h2o;
-float *glacier_Surf;
-float *firn;
-float *firn_depth;
-float *firn_init;
-float *firn_h;
-float **firn_h_array;
-float *firn_yr;
-float **firn_yr_array;
-float *firn_dens;
-float **firn_dens_array;
-float *SWE_2firn;
-float *cumSWE_2firn;
-float *SWE_2firn_dens;
-float *firn_2ice;
-float *cumfirn_2ice;
-float *firn_2ice_dens;
+double *glacier_Albedo;
+double *glacier_h2o;
+double *glacier_Surf;
+double *firn;
+double *firn_depth;
+double *firn_init;
+double *firn_h;
+double **firn_h_array;
+double *firn_yr;
+double **firn_yr_array;
+double *firn_dens;
+double **firn_dens_array;
+double *SWE_2firn;
+double *cumSWE_2firn;
+double *SWE_2firn_dens;
+double *firn_2ice;
+double *cumfirn_2ice;
+double *firn_2ice_dens;
 
-float *Qmelt;
-float *cumQmelt;
-float *ice;
-float *Qn_ebsm;
-float *Qh_ebsm;
-float *Qe_ebsm;
-float *Qp_ebsm;
-float *Qnsn_Acc;
+double *Qmelt;
+double *cumQmelt;
+double *ice;
+double *Qn_ebsm;
+double *Qh_ebsm;
+double *Qe_ebsm;
+double *Qp_ebsm;
+double *Qnsn_Acc;
 
-float *Gnet_rainD;
-float *net_rain_org;
-float *cumnet_rain_org;
-float *SWE;
-float *topo_elev;
-float *glacier_depth;
-float *rho_snow;
+double *Gnet_rainD;
+double *net_rain_org;
+double *cumnet_rain_org;
+double *SWE;
+double *topo_elev;
+double *glacier_depth;
+double *rho_snow;
 long *nfirn;
 long *GlacierMode; // 0 - glacier, 1 - tongue
 
 // declared put variable
-float *Pa;
-float *net_rain;
-float *Albedo;
+double *Pa;
+double *net_rain;
+double *Albedo;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *tfactor;
-const float *nfactor;
-const float *Use_QnD;
-const float *firn_Albedo;
-const float *ice_init;
-const float *ice_Albedo;
-const float *ice_dens;
-const float *TKMA;
-const float *SWEAA;
-const float *SWEstorage;
-const float *SWELag;
-const float *firnstorage;
-const float *firnLag;
-const float *icestorage;
-const float *iceLag;
-const float *topo_elev_init;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *tfactor;
+const double *nfactor;
+const double *Use_QnD;
+const double *firn_Albedo;
+const double *ice_init;
+const double *ice_Albedo;
+const double *ice_dens;
+const double *TKMA;
+const double *SWEAA;
+const double *SWEstorage;
+const double *SWELag;
+const double *firnstorage;
+const double *firnLag;
+const double *icestorage;
+const double *iceLag;
+const double *topo_elev_init;
 
-const float *firn_h_init;
-const float **firn_h_array_init;
-const float *firn_dens_init;
-const float **firn_dens_array_init;
+const double *firn_h_init;
+const double **firn_h_array_init;
+const double *firn_dens_init;
+const double **firn_dens_array_init;
 const long  *Elev_Adj_glacier_surf;
 const long  *delay_melt;
 const long  *SWE_to_firn_Julian;
@@ -5408,26 +5408,26 @@ const long  *inhibit_evap;
 const long  *inhibit_firnmelt;
 const long  *inhibit_icemelt; 
 const long  *Densification;
-const float *Densification_550;
-const float *Densification_above_550;
+const double *Densification_550;
+const double *Densification_above_550;
 
 // declared put parameters
-float *hru_elev;
-float *snowmeltD;
+double *hru_elev;
+double *snowmeltD;
 
 // variable inputs
-const float *tmean;
-const float *tmax;
-const float *tmin;
-const float *umean;
-const float *rhmean;
-const float *sunact;
-const float *QdroD;
-const float *QdfoD;
-const float *sunmax;
-const float *Qnsn_Var;
-const float *Xmelt;
-const float *glacier_Albedo_obs;
+const double *tmean;
+const double *tmax;
+const double *tmin;
+const double *umean;
+const double *rhmean;
+const double *sunact;
+const double *QdroD;
+const double *QdfoD;
+const double *sunmax;
+const double *Qnsn_Var;
+const double *Xmelt;
+const double *glacier_Albedo_obs;
 
 ClassClark *SWEDelay;
 ClassClark *firnDelay;
@@ -5441,7 +5441,7 @@ void run(void);
 void finish(bool good);
 
 Classglacier* klone(string name) const;
-float DepthofSnow(float SWE);
+double DepthofSnow(double SWE);
 };
 
 class Classglacier_debris : public ClassModule {
@@ -5452,92 +5452,92 @@ Classglacier_debris(string Name, string Version = "undefined", CRHM::LMODULE Lvl
 long ObsCnt_Albedo;
 
 // declared observation variables
-const float *Qnsn;
-const float *QnD;
+const double *Qnsn;
+const double *QnD;
 
 // declared variables
-float *SWEmelt;         // SWE snowmelt
-float *SWEmelt_delayed; // SWE snowmelt delayed
-float *cumSWEmelt;      // cumulative SWE snowmelt (same as snowmeltD_org}
-float *firnmelt;         // firn snowmelt
-float *firnmelt_delayed; // firn snowmelt delayed
-float *cumfirnmelt;      // cumulative firn snowmelt runoff
-float *icemelt;         // ice melt
-float *icemelt_delayed; // ice melt delayed
-float *cumicemelt;      // cumulative ice melt runoff
-float *cumnet_rain_glacier; // cumulative net_rain + firn and ice melt
-float *cumsnowmeltD_glacier; // cumulative snowmeltD + firn and ice melt
+double *SWEmelt;         // SWE snowmelt
+double *SWEmelt_delayed; // SWE snowmelt delayed
+double *cumSWEmelt;      // cumulative SWE snowmelt (same as snowmeltD_org}
+double *firnmelt;         // firn snowmelt
+double *firnmelt_delayed; // firn snowmelt delayed
+double *cumfirnmelt;      // cumulative firn snowmelt runoff
+double *icemelt;         // ice melt
+double *icemelt_delayed; // ice melt delayed
+double *cumicemelt;      // cumulative ice melt runoff
+double *cumnet_rain_glacier; // cumulative net_rain + firn and ice melt
+double *cumsnowmeltD_glacier; // cumulative snowmeltD + firn and ice melt
 
-float *glacier_Albedo;
-float *glacier_h2o;
-float *glacier_Surf;
-float *firn;
-float *firn_depth;
-float *firn_init;
-float *firn_h;
-float **firn_h_array;
-float *firn_yr;
-float **firn_yr_array;
-float *firn_dens;
-float **firn_dens_array;
-float *SWE_2firn;
-float *cumSWE_2firn;
-float *SWE_2firn_dens;
-float *firn_2ice;
-float *cumfirn_2ice;
-float *firn_2ice_dens;
+double *glacier_Albedo;
+double *glacier_h2o;
+double *glacier_Surf;
+double *firn;
+double *firn_depth;
+double *firn_init;
+double *firn_h;
+double **firn_h_array;
+double *firn_yr;
+double **firn_yr_array;
+double *firn_dens;
+double **firn_dens_array;
+double *SWE_2firn;
+double *cumSWE_2firn;
+double *SWE_2firn_dens;
+double *firn_2ice;
+double *cumfirn_2ice;
+double *firn_2ice_dens;
 
-float *Qmelt;
-float *Xmelt_int;
-float *Xmelt_acc;
-float *Xmelt_V5;
-float *cumQmelt;
-float *ice;
-float *Qn_ebsm;
-float *Qh_ebsm;
-float *Qe_ebsm;
-float *Qp_ebsm;
-float *Qnsn_Acc;
+double *Qmelt;
+double *Xmelt_int;
+double *Xmelt_acc;
+double *Xmelt_V5;
+double *cumQmelt;
+double *ice;
+double *Qn_ebsm;
+double *Qh_ebsm;
+double *Qe_ebsm;
+double *Qp_ebsm;
+double *Qnsn_Acc;
 
-float *Gnet_rainD;
-float *net_rain_org;
-float *cumnet_rain_org;
-float *SWE;
-float *topo_elev;
-float *glacier_depth;
-float *rho_snow;
+double *Gnet_rainD;
+double *net_rain_org;
+double *cumnet_rain_org;
+double *SWE;
+double *topo_elev;
+double *glacier_depth;
+double *rho_snow;
 long *nfirn;
 long *GlacierMode; // 0 - glacier, 1 - tongue
 
 // declared put variable
-float *Pa;
-float *net_rain;
-float *Albedo;
+double *Pa;
+double *net_rain;
+double *Albedo;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *tfactor;
-const float *nfactor;
-const float *Use_QnD;
-const float *firn_Albedo;
-const float *ice_init;
-const float *ice_Albedo;
-const float *ice_dens;
-const float *TKMA;
-const float *SWEAA;
-const float *SWEstorage;
-const float *SWELag;
-const float *firnstorage;
-const float *firnLag;
-const float *icestorage;
-const float *iceLag;
-const float *topo_elev_init;
+const double *basin_area;   // [BASIN]
+const double *hru_area;
+const double *tfactor;
+const double *nfactor;
+const double *Use_QnD;
+const double *firn_Albedo;
+const double *ice_init;
+const double *ice_Albedo;
+const double *ice_dens;
+const double *TKMA;
+const double *SWEAA;
+const double *SWEstorage;
+const double *SWELag;
+const double *firnstorage;
+const double *firnLag;
+const double *icestorage;
+const double *iceLag;
+const double *topo_elev_init;
 
-const float *firn_h_init;
-const float **firn_h_array_init;
-const float *firn_dens_init;
-const float **firn_dens_array_init;
+const double *firn_h_init;
+const double **firn_h_array_init;
+const double *firn_dens_init;
+const double **firn_dens_array_init;
 const long  *Elev_Adj_glacier_surf;
 const long  *delay_melt;
 const long  *SWE_to_firn_Julian;
@@ -5545,52 +5545,52 @@ const long  *inhibit_evap;
 const long  *inhibit_firnmelt;
 const long  *inhibit_icemelt;
 const long  *Densification;
-const float *Densification_550;
-const float *Densification_above_550;
+const double *Densification_550;
+const double *Densification_above_550;
 
-const float* debris_h; // not variation 4
-const float* T_threshold; // not variation 4
-const float* lagT1; // not variation 4
-const float* lagT2; // not variation 4
-const float* lagT3; // not variation 4
-const float* lagT4; // not variation 4
-const float* lagSW1; // not variation 4
-const float* lagSW2; // not variation 4
-const float* lagSW3; // not variation 4
-const float* lagSW4; // not variation 4
-const float* lagSW5; // not variation 4
-const float* lagSW6; // not variation 4
+const double* debris_h; // not variation 4
+const double* T_threshold; // not variation 4
+const double* lagT1; // not variation 4
+const double* lagT2; // not variation 4
+const double* lagT3; // not variation 4
+const double* lagT4; // not variation 4
+const double* lagSW1; // not variation 4
+const double* lagSW2; // not variation 4
+const double* lagSW3; // not variation 4
+const double* lagSW4; // not variation 4
+const double* lagSW5; // not variation 4
+const double* lagSW6; // not variation 4
 
 // declared variables
 
-float* lagTB;  // not variation 4
-float* lagT;  // not variation 4
-float* lagSW; // not variation 4
-float* Gmelt_energy; // not variation 4
-float* den_air; // not variation 4
-float* K_kat; // not variation 4
-float* Cp_water; // not variation 4
+double* lagTB;  // not variation 4
+double* lagT;  // not variation 4
+double* lagSW; // not variation 4
+double* Gmelt_energy; // not variation 4
+double* den_air; // not variation 4
+double* K_kat; // not variation 4
+double* Cp_water; // not variation 4
 
 // declared put parameters
-float *hru_elev;
-float *snowmeltD;
+double *hru_elev;
+double *snowmeltD;
 
 // variable inputs
-const float *tmean;
-const float *tmax;
-const float *tmin;
-const float *umean;
-const float *rhmean;
-const float *sunact;
-const float *QdroD;
-const float *QdfoD;
-const float *sunmax;
-const float *Qnsn_Var;
-const float *Xmelt;
-const float *hru_t; // variation 5
-const float *T_rain; // variation 5
-const float *hru_ea; // variation 5
-const float *glacier_Albedo_obs;
+const double *tmean;
+const double *tmax;
+const double *tmin;
+const double *umean;
+const double *rhmean;
+const double *sunact;
+const double *QdroD;
+const double *QdfoD;
+const double *sunmax;
+const double *Qnsn_Var;
+const double *Xmelt;
+const double *hru_t; // variation 5
+const double *T_rain; // variation 5
+const double *hru_ea; // variation 5
+const double *glacier_Albedo_obs;
 
 ClassClark *SWEDelay;
 ClassClark *firnDelay;
@@ -5604,7 +5604,7 @@ void run(void);
 void finish(bool good);
 
 Classglacier_debris* klone(string name) const;
-float DepthofSnow(float SWE);
+double DepthofSnow(double SWE);
 };
 
 class ClassSWEslope : public ClassModule {
@@ -5613,29 +5613,29 @@ public:
 ClassSWEslope(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, "glacier_h2o, snowmeltD") {};
 
 // declared variables
-float *SWE_in;
-float *SWE_out;
-float *cumSWE_in;
-float *cumSWE_out;
-float *Hd;
+double *SWE_in;
+double *SWE_out;
+double *cumSWE_in;
+double *cumSWE_out;
+double *Hd;
 
 // declared parameters
-const float *basin_area;   // [BASIN]
-const float *hru_area; // [nhru]
-const float *hru_GSL;    // [nhru]
-const float *use_rho;    // [nhru]
-const float *snow_density;    // [nhru]
-const float *Hd_min;    // [nhru]
+const double *basin_area;   // [BASIN]
+const double *hru_area; // [nhru]
+const double *hru_GSL;    // [nhru]
+const double *use_rho;    // [nhru]
+const double *snow_density;    // [nhru]
+const double *Hd_min;    // [nhru]
 const long *order; // [nhru]
-const float *distrib_SWEslope;
-const float **distrib_hru;
+const double *distrib_SWEslope;
+const double **distrib_hru;
 const long *Disable_SWEslope; // [nhru]
 
 // variable put inputs
-float *SWE;
+double *SWE;
 
 // variable inputs 
-const float *rho;
+const double *rho;
 
 void decl(void);
 void init(void);
@@ -5666,34 +5666,34 @@ long ObsCnt_fertperiod;
 long ObsCnt_litterperiod;
 
 // declared variables
-float *Fert_N_Var;
-float *Fert_P_Var;
-float *Man_N_Var;
-float *Man_P_Var;
-float *Res_N_Var;
-float *Res_P_Var;
-float *Fert_period_Var;
-float *Litter_period_Var;
+double *Fert_N_Var;
+double *Fert_P_Var;
+double *Man_N_Var;
+double *Man_P_Var;
+double *Res_N_Var;
+double *Res_P_Var;
+double *Fert_period_Var;
+double *Litter_period_Var;
 
 // declared parameters
 
 // put parameters
 
 // declared observation variables
-const float *Fert_N_up;
-const float *Fert_P_up;
-const float *Man_N_up;
-const float *Man_P_up;
-const float *Res_N_up;
-const float *Res_P_up;
-const float *Fert_N_down;
-const float *Fert_P_down;
-const float *Man_N_down;
-const float *Man_P_down;
-const float *Res_N_down;
-const float *Res_P_down;
-const float *Fert_period;
-const float *Litter_period;
+const double *Fert_N_up;
+const double *Fert_P_up;
+const double *Man_N_up;
+const double *Man_P_up;
+const double *Res_N_up;
+const double *Res_P_up;
+const double *Fert_N_down;
+const double *Fert_P_down;
+const double *Man_N_down;
+const double *Man_P_down;
+const double *Res_N_down;
+const double *Res_P_down;
+const double *Fert_period;
+const double *Litter_period;
 
 void decl(void);
 void init(void);

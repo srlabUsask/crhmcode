@@ -14,485 +14,485 @@ using namespace std;
 class ClassWQ_Soil : public ClassModule {
 public:
 
-ClassWQ_Soil(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Soil(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long snowinfilDiv;
-long meltrunoffDiv;
-long runoffDiv;
-long evapDiv;
-long Sub;
-long FaultsAllowed;
+long snowinfilDiv{0};
+long meltrunoffDiv{0};
+long runoffDiv{0};
+long evapDiv{0};
+long Sub{0};
+long FaultsAllowed{0};
 
 // declared variables
-long *current_getstep;
-float *scf;
-float *Sd;
-float *Sd_conc;
-float **Sd_conc_lay;
-float *gw;
-float *gw_conc;
-float **gw_conc_lay;
-float *solute_deposit;
-float *cum_solute_deposit;
-float *soil_rechr;
-float *soil_rechr_conc;
-float **soil_rechr_conc_lay;
-float *potential;
-float *potential_mWQ;
-float **potential_mWQ_lay;
-float *direct_excs;
-float *direct_excs_mWQ;
-float **direct_excs_mWQ_lay;
-float *soil_moist;
-float *soil_moist_conc;
-float **soil_moist_conc_lay;
-float *soil_lower_max;
-float *soil_lower;
-float *soil_lower_conc;
-float **soil_lower_conc_lay;
-float *soil_gw;
-float *soil_gw_conc;
-float **soil_gw_conc_lay;
-float *gw_flow;
-float *gw_flow_conc;
-float **gw_flow_conc_lay;
-float *soil_ssr;
-float *soil_ssr_conc;
-float **soil_ssr_conc_lay;
-float *rechr_ssr;
-float *rechr_ssr_conc;
-float **rechr_ssr_conc_lay;
-float *soil_runoff;
-float *soil_runoff_cWQ;
-float **soil_runoff_cWQ_lay;
-float *cum_soil_ssr;
-float *cum_soil_ssr_mWQ;
-float **cum_soil_ssr_mWQ_lay;
-float *cum_rechr_ssr;
-float *cum_Sd_ssr;
-float *cum_Sd_gw;
-float *cum_lower_ssr;
-float *cum_rechr_ssr_mWQ;
-float **cum_rechr_ssr_mWQ_lay;
-float *cum_soil_runoff;
-float *cum_soil_runoff_mWQ;
-float **cum_soil_runoff_mWQ_lay;
-float *cum_runoff_to_ssr;
-float *cum_runoff_to_Sd;
-float *cum_runoff_to_Sd_mWQ;
-float **cum_runoff_to_Sd_mWQ_lay;
-float *cum_redirected_residual;
-float *cum_redirected_residual_mWQ;
-float **cum_redirected_residual_mWQ_lay;
-float *soil_gw_D;
-float *soil_ssr_D;
-float *gw_flow_D;
-float *soil_runoff_D;
-float *HK_V;
-float *HK_A;
-float *culvert_Q;
-float *culvert_water_H;
-float *culvert_water_A;
-float *culvert_water_V;
-float *culvert_over_Q;
-float *culvert_evap;
-float *cum_culvert;
-float *cum_culvert_over;
-float *HD;
-float *redirected_residual;
-float *redirected_residual_conc;
-float **redirected_residual_conc_lay;
-float *infil_act;
-float *infil_act_conc;
-float **infil_act_conc_lay;
-float *cum_infil_act;
-float *cum_infil_act_mWQ;
-float **cum_infil_act_mWQ_lay;
-float *infil_act_D;
-float *tile_flow;
-float *tile_flow_conc;
-float **tile_flow_conc_lay;
-float *Dequiv_depth;
-float *x;
-float *Dw;
+long* current_getstep{NULL};
+double *scf{ NULL };
+double *Sd{ NULL };
+double *Sd_conc{ NULL };
+double **Sd_conc_lay{ NULL };
+double *gw{ NULL };
+double *gw_conc{ NULL };
+double **gw_conc_lay{ NULL };
+double *solute_deposit{ NULL };
+double *cum_solute_deposit{ NULL };
+double *soil_rechr{ NULL };
+double *soil_rechr_conc{ NULL };
+double **soil_rechr_conc_lay{ NULL };
+double *potential{ NULL };
+double *potential_mWQ{ NULL };
+double **potential_mWQ_lay{ NULL };
+double *direct_excs{ NULL };
+double *direct_excs_mWQ{ NULL };
+double **direct_excs_mWQ_lay{ NULL };
+double *soil_moist{ NULL };
+double *soil_moist_conc{ NULL };
+double **soil_moist_conc_lay{ NULL };
+double *soil_lower_max{ NULL };
+double *soil_lower{ NULL };
+double *soil_lower_conc{ NULL };
+double **soil_lower_conc_lay{ NULL };
+double *soil_gw{ NULL };
+double *soil_gw_conc{ NULL };
+double **soil_gw_conc_lay{ NULL };
+double *gw_flow{ NULL };
+double *gw_flow_conc{ NULL };
+double **gw_flow_conc_lay{ NULL };
+double *soil_ssr{ NULL };
+double *soil_ssr_conc{ NULL };
+double **soil_ssr_conc_lay{ NULL };
+double *rechr_ssr{ NULL };
+double *rechr_ssr_conc{ NULL };
+double **rechr_ssr_conc_lay{ NULL };
+double *soil_runoff{ NULL };
+double *soil_runoff_cWQ{ NULL };
+double **soil_runoff_cWQ_lay{ NULL };
+double *cum_soil_ssr{ NULL };
+double *cum_soil_ssr_mWQ{ NULL };
+double **cum_soil_ssr_mWQ_lay{ NULL };
+double *cum_rechr_ssr{ NULL };
+double *cum_Sd_ssr{ NULL };
+double *cum_Sd_gw{ NULL };
+double *cum_lower_ssr{ NULL };
+double *cum_rechr_ssr_mWQ{ NULL };
+double **cum_rechr_ssr_mWQ_lay{ NULL };
+double *cum_soil_runoff{ NULL };
+double *cum_soil_runoff_mWQ{ NULL };
+double **cum_soil_runoff_mWQ_lay{ NULL };
+double *cum_runoff_to_ssr{ NULL };
+double *cum_runoff_to_Sd{ NULL };
+double *cum_runoff_to_Sd_mWQ{ NULL };
+double **cum_runoff_to_Sd_mWQ_lay{ NULL };
+double *cum_redirected_residual{ NULL };
+double *cum_redirected_residual_mWQ{ NULL };
+double **cum_redirected_residual_mWQ_lay{ NULL };
+double *soil_gw_D{ NULL };
+double *soil_ssr_D{ NULL };
+double *gw_flow_D{ NULL };
+double *soil_runoff_D{ NULL };
+double *HK_V{ NULL };
+double *HK_A{ NULL };
+double *culvert_Q{ NULL };
+double *culvert_water_H{ NULL };
+double *culvert_water_A{ NULL };
+double *culvert_water_V{ NULL };
+double *culvert_over_Q{ NULL };
+double *culvert_evap{ NULL };
+double *cum_culvert{ NULL };
+double *cum_culvert_over{ NULL };
+double *HD{ NULL };
+double *redirected_residual{ NULL };
+double *redirected_residual_conc{ NULL };
+double **redirected_residual_conc_lay{ NULL };
+double *infil_act{ NULL };
+double *infil_act_conc{ NULL };
+double **infil_act_conc_lay{ NULL };
+double *cum_infil_act{ NULL };
+double *cum_infil_act_mWQ{ NULL };
+double **cum_infil_act_mWQ_lay{ NULL };
+double *infil_act_D{ NULL };
+double *tile_flow{ NULL };
+double *tile_flow_conc{ NULL };
+double **tile_flow_conc_lay{ NULL };
+double *Dequiv_depth{ NULL };
+double *x{ NULL };
+double *Dw{ NULL };
 
 // local variables
-float *cum_soil_gw;
-float *cum_soil_gw_mWQ;
-float **cum_soil_gw_mWQ_lay;
-float *cum_gw_flow;
-float *cum_gw_flow_mWQ;
-float **cum_gw_flow_mWQ_lay;
-float *cum_hru_condense;
-float *cum_Sd_evap;
-float *soil_moist_Init;
-float **soil_moist_conc_Init_lay;
-float *soil_bottom_Init;
-float **soil_bottom_conc_Init_lay;
-float *soil_rechr_Init;
-float **soil_top_conc_Init_lay;
-float *Sd_Init;
-float *gw_Init;
-float *soil_moist_conc_Init;
-float *soil_bottom_conc_Init;
-float *soil_top_conc_Init;
-float *Sd_conc_Init;
-float **Sd_conc_Init_lay;
-float *gw_conc_Init;
-float **gw_conc_Init_lay;
+double *cum_soil_gw{ NULL };
+double *cum_soil_gw_mWQ{ NULL };
+double **cum_soil_gw_mWQ_lay{ NULL };
+double *cum_gw_flow{ NULL };
+double *cum_gw_flow_mWQ{ NULL };
+double **cum_gw_flow_mWQ_lay{ NULL };
+double *cum_hru_condense{ NULL };
+double *cum_Sd_evap{ NULL };
+double *soil_moist_Init{ NULL };
+double **soil_moist_conc_Init_lay{ NULL };
+double *soil_bottom_Init{ NULL };
+double **soil_bottom_conc_Init_lay{ NULL };
+double *soil_rechr_Init{ NULL };
+double **soil_top_conc_Init_lay{ NULL };
+double *Sd_Init{ NULL };
+double *gw_Init{ NULL };
+double *soil_moist_conc_Init{ NULL };
+double *soil_bottom_conc_Init{ NULL };
+double *soil_top_conc_Init{ NULL };
+double *Sd_conc_Init{ NULL };
+double **Sd_conc_Init_lay{ NULL };
+double *gw_conc_Init{ NULL };
+double **gw_conc_Init_lay{ NULL };
 
-float *snowinfil_buf;
-float *runoff_buf;
-float *meltrunoff_buf;
-float *hru_evap_buf;
+double *snowinfil_buf{ NULL };
+double *runoff_buf{ NULL };
+double *meltrunoff_buf{ NULL };
+double *hru_evap_buf{ NULL };
 
 // declared parameters
 
-const float *Sdmax;
-const float *Sdinit;
-const float *Sd_conc_init;
-const float **Sd_conc_init_lay;
-const float *gw_max;
-const float *gw_init;
-const float *gw_conc_init;
-const float **gw_conc_init_lay;
-const float *gw_K;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *soil_rechr_max;
-const float *soil_rechr_init;
-const float *soil_moist_max;
-const float *soil_moist_init;
-const float *soil_gw_K;
-const float *rechr_ssr_K;
-const float *lower_ssr_K;
-const float *Sd_ssr_K;
-const float *Sd_gw_K;
-const float *rain_conc;
-const float **rain_conc_lay;
-const float *atmos_mWQ;
-const float **atmos_mWQ_lay;
-const float *sr_mix_rate;
-const float *parleach;
-const float *channel_slope;
-const float *CV_SWE;
-const float *side_slope;
-const float *culvert_diam;
-const float *culvert_water_Dmax;
-const float *number_culverts;
+const double *Sdmax{ NULL };
+const double *Sdinit{ NULL };
+const double *Sd_conc_init{ NULL };
+const double **Sd_conc_init_lay{ NULL };
+const double *gw_max{ NULL };
+const double *gw_init{ NULL };
+const double *gw_conc_init{ NULL };
+const double **gw_conc_init_lay{ NULL };
+const double *gw_K{ NULL };
+const double *basin_area{ NULL };   // [BASIN]
+const double *hru_area{ NULL };
+const double *soil_rechr_max{ NULL };
+const double *soil_rechr_init{ NULL };
+const double *soil_moist_max{ NULL };
+const double *soil_moist_init{ NULL };
+const double *soil_gw_K{ NULL };
+const double *rechr_ssr_K{ NULL };
+const double *lower_ssr_K{ NULL };
+const double *Sd_ssr_K{ NULL };
+const double *Sd_gw_K{ NULL };
+const double *rain_conc{ NULL };
+const double **rain_conc_lay{ NULL };
+const double *atmos_mWQ{ NULL };
+const double **atmos_mWQ_lay{ NULL };
+const double *sr_mix_rate{ NULL };
+const double *parleach{ NULL };
+const double *channel_slope{ NULL };
+const double *CV_SWE{ NULL };
+const double *side_slope{ NULL };
+const double *culvert_diam{ NULL };
+const double *culvert_water_Dmax{ NULL };
+const double *number_culverts{ NULL };
 
-const float *Ka;
-const float *Kb;
-const float *Di;
-const float *Dd;
-const float *soil_poro_moist;
-const float *L;
-const float *r;
+const double *Ka{ NULL };
+const double *Kb{ NULL };
+const double *Di{ NULL };
+const double *Dd{ NULL };
+const double *soil_poro_moist{ NULL };
+const double *L{ NULL };
+const double *r{ NULL };
 
 
-const long *soil_withdrawal;
-const long **soil_withdrawal_Tables;
-const long *culvert_type;
-const long *cov_type;
-const long *transp_limited;
-const long *soil_ssr_runoff;
-const long *inhibit_evap;
-const long *calcN; // Status of nitrogen simulation
-const long *calcP; // Status of phosphorus simulation
-const long *calcC; // Status of organic carbon simulation
+const long *soil_withdrawal{ NULL };
+const long **soil_withdrawal_Tables{ NULL };
+const long *culvert_type{ NULL };
+const long *cov_type{ NULL };
+const long *transp_limited{ NULL };
+const long *soil_ssr_runoff{ NULL };
+const long *inhibit_evap{ NULL };
+const long *calcN{ NULL }; // Status of nitrogen simulation
+const long *calcP{ NULL }; // Status of phosphorus simulation
+const long *calcC{ NULL }; // Status of organic carbon simulation
 
 
 // variable inputs
-const float *infil;
-const float *snowinfil;
-const float *meltrunoff; // frozen melt runoff
-const float *runoff;     // liquid runoff
-const float *hru_evap;
-const float *SWE;
-const float *SWE_max;
-const float *SWE_conc;
-const float **SWE_conc_lay;
+const double *infil{ NULL };
+const double *snowinfil{ NULL };
+const double *meltrunoff{ NULL }; // frozen melt runoff
+const double *runoff{ NULL };     // liquid runoff
+const double *hru_evap{ NULL };
+const double *SWE{ NULL };
+const double *SWE_max{ NULL };
+const double *SWE_conc{ NULL };
+const double **SWE_conc_lay{ NULL };
 
 // variable put inputs
-float *conc_soil_rechr;
-float **conc_soil_rechr_lay;
-float *conc_soil_lower;
-float **conc_soil_lower_lay;
-float *conc_soil_moist;
-float **conc_soil_moist_lay;
-float *surfsoil_solub_mWQ;
-float **surfsoil_solub_mWQ_lay;
+double *conc_soil_rechr{ NULL };
+double **conc_soil_rechr_lay{ NULL };
+double *conc_soil_lower{ NULL };
+double **conc_soil_lower_lay{ NULL };
+double *conc_soil_moist{ NULL };
+double **conc_soil_moist_lay{ NULL };
+double *surfsoil_solub_mWQ{ NULL };
+double **surfsoil_solub_mWQ_lay{ NULL };
 
 // variable put inputs
-float *hru_actet;
-float *hru_cum_actet;
+double *hru_actet{ NULL };
+double *hru_cum_actet{ NULL };
 
 // local allocated arrays
 
-float *redirected_residual_0;
-float *Sd_0;
-float *gw_0;
-float *soil_rechr_0;
-float *soil_moist_0;
-float *soil_lower_0;
-float *hru_evap_0;
-float *gw_flow_0;
-float *hru_actet_0;
-float *hru_cum_actet_0;
-float *cum_redirected_residual_0;
-float *cum_hru_condense_0;
-float *cum_Sd_evap_0;
-float *cum_Sd_ssr_0;
-float *cum_Sd_gw_0;
-float *cum_lower_ssr_0;
-float *cum_infil_act_0;
-float *cum_gw_flow_0;
-float *cum_soil_ssr_0;
-float *cum_rechr_ssr_0;
-float *cum_soil_runoff_0;
-float *cum_runoff_to_Sd_0;
-float *cum_runoff_to_ssr_0;
-float *cum_soil_gw_0;
-float *cum_solute_deposit_0;
+double *redirected_residual_0{ NULL };
+double *Sd_0{ NULL };
+double *gw_0{NULL};
+double *soil_rechr_0{ NULL };
+double *soil_moist_0{ NULL };
+double *soil_lower_0{ NULL };
+double *hru_evap_0{ NULL };
+double *gw_flow_0{ NULL };
+double *hru_actet_0{ NULL };
+double *hru_cum_actet_0{ NULL };
+double *cum_redirected_residual_0{ NULL };
+double *cum_hru_condense_0{ NULL };
+double *cum_Sd_evap_0{ NULL };
+double *cum_Sd_ssr_0{ NULL };
+double *cum_Sd_gw_0{ NULL };
+double *cum_lower_ssr_0{ NULL };
+double *cum_infil_act_0{ NULL };
+double *cum_gw_flow_0{ NULL };
+double *cum_soil_ssr_0{ NULL };
+double *cum_rechr_ssr_0{ NULL };
+double *cum_soil_runoff_0{ NULL };
+double *cum_runoff_to_Sd_0{ NULL };
+double *cum_runoff_to_ssr_0{ NULL };
+double *cum_soil_gw_0{ NULL };
+double *cum_solute_deposit_0{ NULL };
 
 void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
 
-void Add_WQ(const long hru, float *var, float **var_cWQ, float *var2, float **var2_cWQ, float *var3, float **var3_cWQ);
-void Set_WQ(const long hru, float *var, float *var_cWQ, float amount, float amount_cWQ);
-void Reset_Basin_WQ(const long hru, float *var, float *var_cWQ);
-void Reset_WQ(const long hru, float *var, float *var_cWQ);
-void Reset_WQ(const long hru, float *var, float **var_cWQ_lay);
+void Add_WQ(const long hru, double *var, double **var_cWQ, double *var2, double **var2_cWQ, double *var3, double **var3_cWQ);
+void Set_WQ(const long hru, double *var, double *var_cWQ, double amount, double amount_cWQ);
+void Reset_Basin_WQ(const long hru, double *var, double *var_cWQ);
+void Reset_WQ(const long hru, double *var, double *var_cWQ);
+void Reset_WQ(const long hru, double *var, double **var_cWQ_lay);
 
 void Save();
 void Restore(const long hh);
-void copy_array(float *from, float *to);
-void restore_hru(float *from, float *to, const long hh);
+void copy_array(double *from, double *to);
+void restore_hru(double *from, double *to, const long hh);
 
-float FunctX(const float x);
-void Sd_to_soil_mass(float Sdmass_2_soil);
+double FunctX(const double x);
+void Sd_to_soil_mass(double Sdmass_2_soil);
 ClassWQ_Soil* klone(string name) const;
 };
 
 class ClassWQ_Netroute : public ClassModule {
 public:
 
-ClassWQ_Netroute(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Netroute(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long meltrunoffDiv;
-long soil_ssrDiv;
-long soil_runoffDiv;
-long soil_gwDiv;
+long meltrunoffDiv{0};
+long soil_ssrDiv{0};
+long soil_runoffDiv{0};
+long soil_gwDiv{0};
 //long Sub;
 
 // declared variables
-float *ssrinflow;
-float *ssrinflow_mWQ;
-float **ssrinflow_mWQ_lay;
-float *ssrcuminflow;
-float *ssrcuminflow_mWQ;
-float **ssrcuminflow_mWQ_lay;
-float *ssroutflow;
-float *ssroutflow_mWQ;
-float **ssroutflow_mWQ_lay;
-float *ssrcumoutflow;
-float *ssrcumoutflow_mWQ;
-float **ssrcumoutflow_mWQ_lay;
+double *ssrinflow{ NULL };
+double *ssrinflow_mWQ{ NULL };
+double **ssrinflow_mWQ_lay{ NULL };
+double *ssrcuminflow{ NULL };
+double *ssrcuminflow_mWQ{ NULL };
+double **ssrcuminflow_mWQ_lay{ NULL };
+double *ssroutflow{ NULL };
+double *ssroutflow_mWQ{ NULL };
+double **ssroutflow_mWQ_lay{ NULL };
+double *ssrcumoutflow{ NULL };
+double *ssrcumoutflow_mWQ{ NULL };
+double **ssrcumoutflow_mWQ_lay{ NULL };
 
-float *runinflow;
-float *runinflow_mWQ;
-float **runinflow_mWQ_lay;
-float *runcuminflow;
-float *runcuminflow_mWQ;
-float **runcuminflow_mWQ_lay;
-float *runoutflow;
-float *runoutflow_mWQ;
-float **runoutflow_mWQ_lay;
-float *runcumoutflow;
-float *runcumoutflow_mWQ;
-float **runcumoutflow_mWQ_lay;
+double *runinflow{ NULL };
+double *runinflow_mWQ{ NULL };
+double **runinflow_mWQ_lay{ NULL };
+double *runcuminflow{ NULL };
+double *runcuminflow_mWQ{ NULL };
+double **runcuminflow_mWQ_lay{ NULL };
+double *runoutflow{ NULL };
+double *runoutflow_mWQ{ NULL };
+double **runoutflow_mWQ_lay{ NULL };
+double *runcumoutflow{ NULL };
+double *runcumoutflow_mWQ{ NULL };
+double **runcumoutflow_mWQ_lay{ NULL };
 
-float *inflow;
-float *inflow_mWQ;
-float **inflow_mWQ_lay;
-float *cuminflow;
-float *cuminflow_mWQ;
-float **cuminflow_mWQ_lay;
-float *outflow;
-float *outflow_mWQ;
-float **outflow_mWQ_lay;
-float *outflow_cWQ;
-float **outflow_cWQ_lay;
-float *cumoutflow;
-float *cumoutflow_mWQ;
-float **cumoutflow_mWQ_lay;
-float *outflow_diverted;
-float *outflow_diverted_conc;
-float **outflow_diverted_conc_lay;
-float *cumoutflow_diverted;
-float *cumoutflow_diverted_mWQ;
-float **cumoutflow_diverted_mWQ_lay;
+double *inflow{ NULL };
+double *inflow_mWQ{ NULL };
+double **inflow_mWQ_lay{ NULL };
+double *cuminflow{ NULL };
+double *cuminflow_mWQ{ NULL };
+double **cuminflow_mWQ_lay{ NULL };
+double *outflow{ NULL };
+double *outflow_mWQ{ NULL };
+double **outflow_mWQ_lay{ NULL };
+double *outflow_cWQ{ NULL };
+double **outflow_cWQ_lay{ NULL };
+double *cumoutflow{ NULL };
+double *cumoutflow_mWQ{ NULL };
+double **cumoutflow_mWQ_lay{ NULL };
+double *outflow_diverted{ NULL };
+double *outflow_diverted_conc{ NULL };
+double **outflow_diverted_conc_lay{ NULL };
+double *cumoutflow_diverted{ NULL };
+double *cumoutflow_diverted_mWQ{ NULL };
+double **cumoutflow_diverted_mWQ_lay{ NULL };
 
-float *gwinflow;
-float *gwinflow_mWQ;
-float **gwinflow_mWQ_lay;
-float *gwcuminflow;
-float *gwcuminflow_mWQ;
-float **gwcuminflow_mWQ_lay;
-float *gwoutflow;
-float *gwoutflow_mWQ;
-float **gwoutflow_mWQ_lay;
-float *gwcumoutflow;
-float *gwcumoutflow_mWQ;
-float **gwcumoutflow_mWQ_lay;
-float *gwoutflow_diverted;
-float *gwoutflow_diverted_conc;
-float **gwoutflow_diverted_conc_lay;
-float *gwcumoutflow_diverted;
-float *gwcumoutflow_diverted_mWQ;
-float **gwcumoutflow_diverted_mWQ_lay;
+double *gwinflow{ NULL };
+double *gwinflow_mWQ{ NULL };
+double **gwinflow_mWQ_lay{ NULL };
+double *gwcuminflow{ NULL };
+double *gwcuminflow_mWQ{ NULL };
+double **gwcuminflow_mWQ_lay{ NULL };
+double *gwoutflow{ NULL };
+double *gwoutflow_mWQ{ NULL };
+double **gwoutflow_mWQ_lay{ NULL };
+double *gwcumoutflow{ NULL };
+double *gwcumoutflow_mWQ{ NULL };
+double **gwcumoutflow_mWQ_lay{ NULL };
+double *gwoutflow_diverted{ NULL };
+double *gwoutflow_diverted_conc{ NULL };
+double **gwoutflow_diverted_conc_lay{ NULL };
+double *gwcumoutflow_diverted{ NULL };
+double *gwcumoutflow_diverted_mWQ{ NULL };
+double **gwcumoutflow_diverted_mWQ_lay{ NULL };
 
-float *basinflow;     // [BASIN] all HRUs
-float *basinflow_conc;     // [BASIN] all HRUs
-float **basinflow_conc_lay;     // [BASIN] all HRUs
-float *basinflow_s;   // [BASIN] all HRUs
-float *cumbasinflow;  // [BASIN] all HRUs
-float *cumbasinflow_mWQ;  // [BASIN] all HRUs
-float **cumbasinflow_mWQ_lay;  // [BASIN] all HRUs
-float *basingw;       // [BASIN} all HRUs
-float *basingw_conc;       // [BASIN} all HRUs
-float **basingw_conc_lay;       // [BASIN} all HRUs
-float *basingw_s;     // [BASIN} all HRUs
-float *cumbasingw;    // [BASIN} all HRUs
-float *cumbasingw_mWQ;    // [BASIN} all HRUs
-float **cumbasingw_mWQ_lay;    // [BASIN} all HRUs
+double *basinflow{ NULL };     // [BASIN] all HRUs
+double *basinflow_conc{ NULL };     // [BASIN] all HRUs
+double **basinflow_conc_lay{ NULL };     // [BASIN] all HRUs
+double *basinflow_s{ NULL };   // [BASIN] all HRUs
+double *cumbasinflow{ NULL };  // [BASIN] all HRUs
+double *cumbasinflow_mWQ{ NULL };  // [BASIN] all HRUs
+double **cumbasinflow_mWQ_lay{ NULL };  // [BASIN] all HRUs
+double *basingw{ NULL };       // [BASIN} all HRUs
+double *basingw_conc{ NULL };       // [BASIN} all HRUs
+double **basingw_conc_lay{ NULL };       // [BASIN} all HRUs
+double *basingw_s{ NULL };     // [BASIN} all HRUs
+double *cumbasingw{ NULL };    // [BASIN} all HRUs
+double *cumbasingw_mWQ{ NULL };    // [BASIN} all HRUs
+double **cumbasingw_mWQ_lay{ NULL };    // [BASIN} all HRUs
 
-float *soil_ssr_Buf;    // buffered
-float *soil_ssr_Buf_conc;    // buffered
-float **soil_ssr_Buf_conc_lay;    // buffered
-float *soil_runoff_Buf; // buffered
-float *soil_runoff_Buf_conc; // buffered
-float **soil_runoff_Buf_conc_lay; // buffered
-float *soil_gw_Buf;     // buffered
-float *soil_gw_Buf_conc;     // buffered
-float **soil_gw_Buf_conc_lay;     // buffered
+double *soil_ssr_Buf{ NULL };    // buffered
+double *soil_ssr_Buf_conc{ NULL };    // buffered
+double **soil_ssr_Buf_conc_lay{ NULL };    // buffered
+double *soil_runoff_Buf{ NULL }; // buffered
+double *soil_runoff_Buf_conc{ NULL }; // buffered
+double **soil_runoff_Buf_conc_lay{ NULL }; // buffered
+double *soil_gw_Buf{ NULL };     // buffered
+double *soil_gw_Buf_conc{ NULL };     // buffered
+double **soil_gw_Buf_conc_lay{ NULL };     // buffered
 
-float *HRU_cumbasinflow;
-float *HRU_cumbasinflow_mWQ;
-float **HRU_cumbasinflow_mWQ_lay;
-float *cum_to_Sd;
-float *cum_to_Sd_mWQ;
-float **cum_to_Sd_mWQ_lay;
-float *cum_to_soil_rechr;
-float *cum_to_soil_rechr_mWQ;
-float **cum_to_soil_rechr_mWQ_lay;
-float *Ktravel;         // [nhru] Muskingum
-float *cum_preferential_flow_to_gw;
+double *HRU_cumbasinflow{ NULL };
+double *HRU_cumbasinflow_mWQ{ NULL };
+double **HRU_cumbasinflow_mWQ_lay{ NULL };
+double *cum_to_Sd{ NULL };
+double *cum_to_Sd_mWQ{ NULL };
+double **cum_to_Sd_mWQ_lay{ NULL };
+double *cum_to_soil_rechr{ NULL };
+double *cum_to_soil_rechr_mWQ{ NULL };
+double **cum_to_soil_rechr_mWQ_lay{ NULL };
+double *Ktravel{ NULL };         // [nhru] Muskingum
+double *cum_preferential_flow_to_gw{ NULL };
 
 // local allocated arrays
 
-float *outflow_0;
-float *gwoutflow_0;
-//float *soil_gw_Buf_0;
+double *outflow_0{ NULL };
+double *gwoutflow_0{ NULL };
+//double *soil_gw_Buf_0;
 
 // declared parameters
-const float *route_n;         // [nhru]
-const float *route_R;         // [nhru]
-const float *route_S0;        // [nhru]
-const float *route_L;         // [nhru]
-const float *route_X_M;       // [nhru]
-const long  *route_Cshp;      // [nhru]
+const double *route_n{ NULL };         // [nhru]
+const double *route_R{ NULL };         // [nhru]
+const double *route_S0{ NULL };        // [nhru]
+const double *route_L{ NULL };         // [nhru]
+const double *route_X_M{ NULL };       // [nhru]
+const long  *route_Cshp{ NULL };      // [nhru]
 
-const float *Kstorage;
-const float *Lag;
-const float *ssrKstorage;
-const float *ssrLag;
-const float *runKstorage;
-const float *runLag;
-const float *gwKstorage;
-const float *gwLag;
+const double *Kstorage{ NULL };
+const double *Lag{ NULL };
+const double *ssrKstorage{ NULL };
+const double *ssrLag{ NULL };
+const double *runKstorage{ NULL };
+const double *runLag{ NULL };
+const double *gwKstorage{ NULL };
+const double *gwLag{ NULL };
 
-const float *basin_area;        // [BASIN]
-const float *hru_area;
-const long  *whereto;
-const long  *order;
-const long  *gwwhereto;
-const float *Sdmax;
-const float *soil_rechr_max;
-const long  *preferential_flow; // [nhru]
-const long  *Sd_ByPass;
-const long  *soil_rechr_ByPass;
+const double *basin_area{ NULL };        // [BASIN]
+const double *hru_area{ NULL };
+const long  *whereto{ NULL };
+const long  *order{ NULL };
+const long  *gwwhereto{ NULL };
+const double *Sdmax{ NULL };
+const double *soil_rechr_max{ NULL };
+const long  *preferential_flow{ NULL }; // [nhru]
+const long  *Sd_ByPass{ NULL };
+const long  *soil_rechr_ByPass{ NULL };
 
 // variable inputs
 
-const float *soil_gw; // N.B. gw_flow in original CRHM
-const float *soil_gw_conc;
-const float **soil_gw_conc_lay;
-const float *soil_ssr;
-const float *soil_ssr_conc;
-const float **soil_ssr_conc_lay;
-const float *soil_runoff;
-const float *soil_runoff_cWQ;
-const float **soil_runoff_cWQ_lay;
+const double *soil_gw{ NULL }; // N.B. gw_flow in original CRHM
+const double *soil_gw_conc{ NULL };
+const double **soil_gw_conc_lay{ NULL };
+const double *soil_ssr{ NULL };
+const double *soil_ssr_conc{ NULL };
+const double **soil_ssr_conc_lay{ NULL };
+const double *soil_runoff{ NULL };
+const double *soil_runoff_cWQ{ NULL };
+const double **soil_runoff_cWQ_lay{ NULL };
 
 // variable puts
-float *Sd;
-float *Sd_conc;
-float **Sd_conc_lay;
-float *soil_moist;
-float *soil_moist_conc;
-float **soil_moist_conc_lay;
-float *soil_lower;
-float *soil_lower_conc;
-float **soil_lower_conc_lay;
-float *soil_rechr;
-float *soil_rechr_conc;
-float **soil_rechr_conc_lay;
-float *redirected_residual;
-float *redirected_residual_conc;
-float **redirected_residual_conc_lay;
-float *cum_redirected_residual;
-float *cum_redirected_residual_mWQ;
-float **cum_redirected_residual_mWQ_lay;
-float *gw;
-float *gw_conc;
-float **gw_conc_lay;
-float *conc_soil_rechr;
-float **conc_soil_rechr_lay;
-float *conc_soil_lower;
-float **conc_soil_lower_lay;
-float *conc_soil_moist;
-float **conc_soil_moist_lay;
+double *Sd{ NULL };
+double *Sd_conc{ NULL };
+double **Sd_conc_lay{ NULL };
+double *soil_moist{ NULL };
+double *soil_moist_conc{ NULL };
+double **soil_moist_conc_lay{ NULL };
+double *soil_lower{ NULL };
+double *soil_lower_conc{ NULL };
+double **soil_lower_conc_lay{ NULL };
+double *soil_rechr{ NULL };
+double *soil_rechr_conc{ NULL };
+double **soil_rechr_conc_lay{ NULL };
+double *redirected_residual{ NULL };
+double *redirected_residual_conc{ NULL };
+double **redirected_residual_conc_lay{ NULL };
+double *cum_redirected_residual{ NULL };
+double *cum_redirected_residual_mWQ{ NULL };
+double **cum_redirected_residual_mWQ_lay{ NULL };
+double *gw{ NULL };
+double *gw_conc{ NULL };
+double **gw_conc_lay{ NULL };
+double *conc_soil_rechr{ NULL };
+double **conc_soil_rechr_lay{ NULL };
+double *conc_soil_lower{ NULL };
+double **conc_soil_lower_lay{ NULL };
+double *conc_soil_moist{ NULL };
+double **conc_soil_moist_lay{ NULL };
 
-ClassMuskingum **hruDelay_mWQ; // [numsubstances] handled locally
-ClassClark **Clark_hruDelay_mWQ;
-ClassClark **ssrDelay_mWQ;
-ClassClark **runDelay_mWQ;
-ClassClark **gwDelay_mWQ;
+ClassMuskingum **hruDelay_mWQ{ NULL }; // [numsubstances] handled locally
+ClassClark **Clark_hruDelay_mWQ{ NULL };
+ClassClark **ssrDelay_mWQ{ NULL };
+ClassClark **runDelay_mWQ{ NULL };
+ClassClark **gwDelay_mWQ{ NULL };
 
-ClassMuskingum *hruDelay;
-ClassClark *Clark_hruDelay;
-ClassClark *ssrDelay;
-ClassClark *runDelay;
-ClassClark *gwDelay;
+ClassMuskingum *hruDelay{ NULL };
+ClassClark *Clark_hruDelay{ NULL };
+ClassClark *ssrDelay{ NULL };
+ClassClark *runDelay{ NULL };
+ClassClark *gwDelay{ NULL };
 
 void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
 
-void Set_WQ(long hru, float *var, float *var_conc, float amount_conc, float amount);
-void Reset_WQ(long hru, float *var, float **var_cWQ_lay);
+void Set_WQ(long hru, double *var, double *var_conc, double amount_conc, double amount);
+void Reset_WQ(long hru, double *var, double **var_cWQ_lay);
 
 void Save();
 void Restore(const long hh);
-void copy_array(float *from, float *to);
-void restore_hru(float *from, float *to, const long hh);
+void copy_array(double *from, double *to);
+void restore_hru(double *from, double *to, const long hh);
 
-virtual float Function1(float *I, long hh);
-virtual float Function2(float *X, long hh);
+virtual double Function1(double *I, long hh);
+virtual double Function2(double *X, long hh);
 
 ClassWQ_Netroute* klone(string name) const;
 };
@@ -500,125 +500,125 @@ ClassWQ_Netroute* klone(string name) const;
 class ClassWQ_pbsm : public ClassModule {
 public:
 
-ClassWQ_pbsm(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
+ClassWQ_pbsm(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
 
-float hru_u_;
+double hru_u_{0.0};
 
 // declared variables
 
-float *SWE_max;
-float *SWE;
-float *SWE_conc;
-float **SWE_conc_lay;
-float *Subl;
-float *Subl_conc;
-float **Subl_conc_lay;
-float *Drift_in;
-float *Drift_in_conc;
-float **Drift_in_conc_lay;
-float *Drift_out;       // HRU composite drift
-float *Drift_out_conc;  // HRU composite drift
-float **Drift_out_conc_lay;  // HRU composite drift
-float *cumSubl;
-float *cumSubl_mWQ;
-float **cumSubl_mWQ_lay;
-float *cumDriftOut;
-float *cumDriftOut_mWQ;
-float **cumDriftOut_mWQ_lay;
-float *cumDriftIn;
-float *cumDriftIn_mWQ;
-float **cumDriftIn_mWQ_lay;
-float *cumSno;
-float *cumSno_mWQ;
-float **cumSno_mWQ_lay;
-float *snowdepth;
-float *BasinSnowLoss;
-float *BasinSnowLoss_mWQ;
-float **BasinSnowLoss_mWQ_lay;
-float *BasinSnowGain;
-float *BasinSnowGain_mWQ;
-float **BasinSnowGain_mWQ_lay;
-float *cumBasinSnowLoss;
-float *cumBasinSnowLoss_mWQ;
-float **cumBasinSnowLoss_mWQ_lay;
-float *cumBasinSnowGain;
-float *cumBasinSnowGain_mWQ;
-float **cumBasinSnowGain_mWQ_lay;
-float *SublH;
-float *DriftH;
-float *Prob;
-float *SnowAge;
-float *SWE_Init;
-long  *DrySnow;
+double *SWE_max{ NULL };
+double *SWE{ NULL };
+double *SWE_conc{ NULL };
+double **SWE_conc_lay{ NULL };
+double *Subl{ NULL };
+double *Subl_conc{ NULL };
+double **Subl_conc_lay{ NULL };
+double *Drift_in{ NULL };
+double *Drift_in_conc{ NULL };
+double **Drift_in_conc_lay{ NULL };
+double *Drift_out{ NULL };       // HRU composite drift
+double *Drift_out_conc{ NULL };  // HRU composite drift
+double **Drift_out_conc_lay{ NULL };  // HRU composite drift
+double *cumSubl{ NULL };
+double *cumSubl_mWQ{ NULL };
+double **cumSubl_mWQ_lay{ NULL };
+double *cumDriftOut{ NULL };
+double *cumDriftOut_mWQ{ NULL };
+double **cumDriftOut_mWQ_lay{ NULL };
+double *cumDriftIn{ NULL };
+double *cumDriftIn_mWQ{ NULL };
+double **cumDriftIn_mWQ_lay{ NULL };
+double *cumSno{ NULL };
+double *cumSno_mWQ{ NULL };
+double **cumSno_mWQ_lay{ NULL };
+double *snowdepth{ NULL };
+double *BasinSnowLoss{ NULL };
+double *BasinSnowLoss_mWQ{ NULL };
+double **BasinSnowLoss_mWQ_lay{ NULL };
+double *BasinSnowGain{ NULL };
+double *BasinSnowGain_mWQ{ NULL };
+double **BasinSnowGain_mWQ_lay{ NULL };
+double *cumBasinSnowLoss{ NULL };
+double *cumBasinSnowLoss_mWQ{ NULL };
+double **cumBasinSnowLoss_mWQ_lay{ NULL };
+double *cumBasinSnowGain{ NULL };
+double *cumBasinSnowGain_mWQ{ NULL };
+double **cumBasinSnowGain_mWQ_lay{ NULL };
+double *SublH{ NULL };
+double *DriftH{ NULL };
+double *Prob{ NULL };
+double *SnowAge{ NULL };
+double *SWE_Init{ NULL };
+long  *DrySnow{ NULL };
 
 // declared parameters
-const float *fetch;
-const float *Ht;
-const float *distrib;
-const float *basin_area;
-const float *hru_area;
-const float *A_S;
-const float *u_D;
-const float *Drift_offset;
-const float *Drift_slope;
-const float *Subl_offset;
-const float *Subl_slope;
-const float *N_S;
-const float *rain_conc;
-const float **rain_conc_lay;
-const float *snow_conc;
-const float **snow_conc_lay;
-const float *atmos_mWQ;
-const float **atmos_mWQ_lay;
-const long *inhibit_evap;
-const long *inhibit_bs;
-const long *inhibit_subl;
+const double *fetch{ NULL };
+const double *Ht{ NULL };
+const double *distrib{ NULL };
+const double *basin_area{ NULL };
+const double *hru_area{ NULL };
+const double *A_S{ NULL };
+const double *u_D{ NULL };
+const double *Drift_offset{ NULL };
+const double *Drift_slope{ NULL };
+const double *Subl_offset{ NULL };
+const double *Subl_slope{ NULL };
+const long *N_S{ NULL };
+const double *rain_conc{ NULL };
+const double **rain_conc_lay{ NULL };
+const double *snow_conc{ NULL };
+const double **snow_conc_lay{ NULL };
+const double *atmos_mWQ{ NULL };
+const double **atmos_mWQ_lay{ NULL };
+const long *inhibit_evap{ NULL };
+const long *inhibit_bs{ NULL };
+const long *inhibit_subl{ NULL };
 
 // variable inputs
-const float *hru_t;
-const float *hru_rh;
-const float *hru_u;
-const float *hru_Uadjust;
-const float *net_snow;
-const long  *hru_newsnow;
+const double *hru_t{ NULL };
+const double *hru_rh{ NULL };
+const double *hru_u{ NULL };
+const double *hru_Uadjust{ NULL };
+const double *net_snow{ NULL };
+const long  *hru_newsnow{ NULL };
 
 // local allocated arrays
-float *BasinSnowGain_0;
-float *cumBasinSnowGain_0;
-float *BasinSnowLoss_0;
-float *cumBasinSnowLoss_0;
+double *BasinSnowGain_0{ NULL };
+double *cumBasinSnowGain_0{ NULL };
+double *BasinSnowLoss_0{ NULL };
+double *cumBasinSnowLoss_0{ NULL };
 
-float *hru_basin;
-float *SWE_0;
-float *SWE_Init_0;
-float *z_s_0;
-float *rho_0;
+double *hru_basin{ NULL };
+double *SWE_0{ NULL };
+double *SWE_Init_0{ NULL };
+double *z_s_0{ NULL };
+double *rho_0{ NULL };
 
-float *Drift_out_0;
-float *Drift_in_0;
-float *cumDriftIn_0;
-float *cumDriftOut_0;
-float *cumSubl_0;
-float *Subl_0;
-float *SublH_0;
-float *DriftH_0;
-float *cumSno_0;
-float *Prob_0;
-float *SnowAge_0;
-long  *DrySnow_0;
+double *Drift_out_0{ NULL };
+double *Drift_in_0{ NULL };
+double *cumDriftIn_0{ NULL };
+double *cumDriftOut_0{ NULL };
+double *cumSubl_0{ NULL };
+double *Subl_0{ NULL };
+double *SublH_0{ NULL };
+double *DriftH_0{ NULL };
+double *cumSno_0{ NULL };
+double *Prob_0{ NULL };
+double *SnowAge_0{ NULL };
+long  *DrySnow_0{ NULL };
 
 void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
 
-void Reset_WQ(long hru, float *var, float **var_WQ_lay);
+void Reset_WQ(long hru, double *var, double **var_WQ_lay);
 void Save();
 void Restore(const long hh);
 void copy_array(long *from, long *to);
-void copy_array(float *from, float *to);
-void copy_basin(float *from, float *to);
-void restore_hru(float *from, float *to, const long hh);
+void copy_array(double *from, double *to);
+void copy_basin(double *from, double *to);
+void restore_hru(double *from, double *to, const long hh);
 void restore_hru(long *from, long *to, const long hh);
 
 ClassWQ_pbsm* klone(string name) const;
@@ -627,229 +627,229 @@ ClassWQ_pbsm* klone(string name) const;
 class ClassWQ_Netroute_M_D : public ClassModule {
 public:
 
-ClassWQ_Netroute_M_D(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Netroute_M_D(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long meltrunoffDiv;
-long soil_ssrDiv;
-long soil_runoffDiv;
-long soil_gwDiv;
+long meltrunoffDiv{0};
+long soil_ssrDiv{0};
+long soil_runoffDiv{0};
+long soil_gwDiv{0};
 
 // declared variables
 
-float *ssrinflow;
-float *ssrinflow_mWQ;
-float **ssrinflow_mWQ_lay;
-float *ssrcuminflow;
-float *ssrcuminflow_mWQ;
-float **ssrcuminflow_mWQ_lay;
-float *ssroutflow;
-float *ssroutflow_mWQ;
-float **ssroutflow_mWQ_lay;
-float *ssrcumoutflow;
-float *ssrcumoutflow_mWQ;
-float **ssrcumoutflow_mWQ_lay;
+double* ssrinflow{NULL};
+double *ssrinflow_mWQ{ NULL };
+double **ssrinflow_mWQ_lay{ NULL };
+double *ssrcuminflow{ NULL };
+double *ssrcuminflow_mWQ{ NULL };
+double **ssrcuminflow_mWQ_lay{ NULL };
+double *ssroutflow{ NULL };
+double *ssroutflow_mWQ{ NULL };
+double **ssroutflow_mWQ_lay{ NULL };
+double *ssrcumoutflow{ NULL };
+double *ssrcumoutflow_mWQ{ NULL };
+double **ssrcumoutflow_mWQ_lay{ NULL };
 
-float *runinflow;
-float *runinflow_mWQ;
-float **runinflow_mWQ_lay;
-float *runcuminflow;
-float *runcuminflow_mWQ;
-float **runcuminflow_mWQ_lay;
-float *runoutflow;
-float *runoutflow_mWQ;
-float **runoutflow_mWQ_lay;
-float *runcumoutflow;
-float *runcumoutflow_mWQ;
-float **runcumoutflow_mWQ_lay;
+double *runinflow{ NULL };
+double *runinflow_mWQ{ NULL };
+double **runinflow_mWQ_lay{ NULL };
+double *runcuminflow{ NULL };
+double *runcuminflow_mWQ{ NULL };
+double **runcuminflow_mWQ_lay{ NULL };
+double *runoutflow{ NULL };
+double *runoutflow_mWQ{ NULL };
+double **runoutflow_mWQ_lay{ NULL };
+double *runcumoutflow{ NULL };
+double *runcumoutflow_mWQ{ NULL };
+double **runcumoutflow_mWQ_lay{ NULL };
 
-float *inflow;
-float *inflow_mWQ;
-float **inflow_mWQ_lay;
-float *cuminflow;
-float *cuminflow_mWQ;
-float **cuminflow_mWQ_lay;
-float *outflow;
-float *outflow_mWQ;
-float **outflow_mWQ_lay;
-float *outflow_cWQ;
-float **outflow_cWQ_lay;
-float *outflow_diverted;
-float *outflow_diverted_conc;
-float **outflow_diverted_conc_lay;
-float *cumoutflow_diverted;
-float *cumoutflow_diverted_mWQ;
-float **cumoutflow_diverted_mWQ_lay;
-float *cumoutflow;
-float *cumoutflow_mWQ;
-float **cumoutflow_mWQ_lay;
+double *inflow{ NULL };
+double *inflow_mWQ{ NULL };
+double **inflow_mWQ_lay{ NULL };
+double *cuminflow{ NULL };
+double *cuminflow_mWQ{ NULL };
+double **cuminflow_mWQ_lay{ NULL };
+double *outflow{ NULL };
+double *outflow_mWQ{ NULL };
+double **outflow_mWQ_lay{ NULL };
+double *outflow_cWQ{ NULL };
+double **outflow_cWQ_lay{ NULL };
+double *outflow_diverted{ NULL };
+double *outflow_diverted_conc{ NULL };
+double **outflow_diverted_conc_lay{ NULL };
+double *cumoutflow_diverted{ NULL };
+double *cumoutflow_diverted_mWQ{ NULL };
+double **cumoutflow_diverted_mWQ_lay{ NULL };
+double *cumoutflow{ NULL };
+double *cumoutflow_mWQ{ NULL };
+double **cumoutflow_mWQ_lay{ NULL };
 
-float *gwinflow;
-float *gwinflow_mWQ;
-float **gwinflow_mWQ_lay;
-float *gwoutflow_diverted;
-float *gwoutflow_diverted_conc;
-float **gwoutflow_diverted_conc_lay;
-float *gwcumoutflow_diverted;
-float *gwcumoutflow_diverted_mWQ;
-float **gwcumoutflow_diverted_mWQ_lay;
-float *gwoutflow;
-float *gwoutflow_mWQ;
-float **gwoutflow_mWQ_lay;
-float *gwcuminflow;
-float *gwcuminflow_mWQ;
-float **gwcuminflow_mWQ_lay;
-float *gwcumoutflow;
-float *gwcumoutflow_mWQ;
-float **gwcumoutflow_mWQ_lay;
+double *gwinflow{ NULL };
+double *gwinflow_mWQ{ NULL };
+double **gwinflow_mWQ_lay{ NULL };
+double *gwoutflow_diverted{ NULL };
+double *gwoutflow_diverted_conc{ NULL };
+double **gwoutflow_diverted_conc_lay{ NULL };
+double *gwcumoutflow_diverted{ NULL };
+double *gwcumoutflow_diverted_mWQ{ NULL };
+double **gwcumoutflow_diverted_mWQ_lay{ NULL };
+double *gwoutflow{ NULL };
+double *gwoutflow_mWQ{ NULL };
+double **gwoutflow_mWQ_lay{ NULL };
+double *gwcuminflow{ NULL };
+double *gwcuminflow_mWQ{ NULL };
+double **gwcuminflow_mWQ_lay{ NULL };
+double *gwcumoutflow{ NULL };
+double *gwcumoutflow_mWQ{ NULL };
+double **gwcumoutflow_mWQ_lay{ NULL };
 
-float *basinflow;     // [BASIN] all HRUs
-float *basinflow_conc;     // [BASIN] all HRUs
-float **basinflow_conc_lay;     // [BASIN] all HRUs
-float *basinflow_s;   // [BASIN] all HRUs
-float *cumbasinflow;  // [BASIN] all HRUs
-float *cumbasinflow_mWQ;  // [BASIN] all HRUs
-float **cumbasinflow_mWQ_lay;  // [BASIN] all HRUs
-float *basingw;       // [BASIN} all HRUs
-float *basingw_conc;       // [BASIN} all HRUs
-float **basingw_conc_lay;       // [BASIN} all HRUs
-float *basingw_s;     // [BASIN} all HRUs
-float *cumbasingw;    // [BASIN} all HRUs
-float *cumbasingw_mWQ;    // [BASIN} all HRUs
-float **cumbasingw_mWQ_lay;    // [BASIN} all HRUs
+double *basinflow{ NULL };     // [BASIN] all HRUs
+double *basinflow_conc{ NULL };     // [BASIN] all HRUs
+double **basinflow_conc_lay{ NULL };     // [BASIN] all HRUs
+double *basinflow_s{ NULL };   // [BASIN] all HRUs
+double *cumbasinflow{ NULL };  // [BASIN] all HRUs
+double *cumbasinflow_mWQ{ NULL };  // [BASIN] all HRUs
+double **cumbasinflow_mWQ_lay{ NULL };  // [BASIN] all HRUs
+double *basingw{ NULL };       // [BASIN} all HRUs
+double *basingw_conc{ NULL };       // [BASIN} all HRUs
+double **basingw_conc_lay{ NULL };       // [BASIN} all HRUs
+double *basingw_s{ NULL };     // [BASIN} all HRUs
+double *cumbasingw{ NULL };    // [BASIN} all HRUs
+double *cumbasingw_mWQ{ NULL };    // [BASIN} all HRUs
+double **cumbasingw_mWQ_lay{ NULL };    // [BASIN} all HRUs
 
-float *soil_ssr_Buf;    // buffered
-float *soil_ssr_Buf_conc;    // buffered
-float **soil_ssr_Buf_conc_lay;    // buffered
-float *soil_runoff_Buf; // buffered
-float *soil_runoff_Buf_conc; // buffered
-float **soil_runoff_Buf_conc_lay; // buffered
-float *soil_gw_Buf;     // buffered
-float *soil_gw_Buf_conc;     // buffered
-float **soil_gw_Buf_conc_lay;     // buffered
+double *soil_ssr_Buf{ NULL };    // buffered
+double *soil_ssr_Buf_conc{ NULL };    // buffered
+double **soil_ssr_Buf_conc_lay{ NULL };    // buffered
+double *soil_runoff_Buf{ NULL }; // buffered
+double *soil_runoff_Buf_conc{ NULL }; // buffered
+double **soil_runoff_Buf_conc_lay{ NULL }; // buffered
+double *soil_gw_Buf{ NULL };     // buffered
+double *soil_gw_Buf_conc{ NULL };     // buffered
+double **soil_gw_Buf_conc_lay{ NULL };     // buffered
 
-float *HRU_cumbasinflow;
-float *HRU_cumbasinflow_mWQ;
-float **HRU_cumbasinflow_mWQ_lay;
-float *cum_to_Sd;
-float *cum_to_Sd_mWQ;
-float **cum_to_Sd_mWQ_lay;
-float *cum_to_soil_rechr;
-float *cum_to_soil_rechr_mWQ;
-float **cum_to_soil_rechr_mWQ_lay;
-float *Used;    // [BASIN}
-float *Used_mWQ;    // [BASIN}
-float **Used_mWQ_lay;    // [BASIN}
+double *HRU_cumbasinflow{ NULL };
+double *HRU_cumbasinflow_mWQ{ NULL };
+double **HRU_cumbasinflow_mWQ_lay{ NULL };
+double *cum_to_Sd{ NULL };
+double *cum_to_Sd_mWQ{ NULL };
+double **cum_to_Sd_mWQ_lay{ NULL };
+double *cum_to_soil_rechr{ NULL };
+double *cum_to_soil_rechr_mWQ{ NULL };
+double **cum_to_soil_rechr_mWQ_lay{ NULL };
+double *Used{ NULL };    // [BASIN}
+double *Used_mWQ{ NULL };    // [BASIN}
+double **Used_mWQ_lay{ NULL };    // [BASIN}
 
-float *distrib_sum;
-float *Ktravel;         // [nhru] Muskingum
-float *cum_preferential_flow_to_gw;
-float *cumscaling_boost;    // [nhru]
+double *distrib_sum{ NULL };
+double *Ktravel{ NULL };         // [nhru] Muskingum
+double *cum_preferential_flow_to_gw{ NULL };
+double *cumscaling_boost{ NULL };    // [nhru]
 
 // local allocated arrays
 
-float *outflow_0;
-float *gwoutflow_0;
-//float *soil_gw_Buf_0;
+double *outflow_0{ NULL };
+double *gwoutflow_0{ NULL };
+//double *soil_gw_Buf_0;
 
 // declared parameters
-const float *route_n;         // [nhru]
-const float *route_R;         // [nhru]
-const float *route_S0;        // [nhru]
-const float *route_L;         // [nhru]
-const float *route_X_M;       // [nhru]
-const long  *route_Cshp;      // [nhru]
+const double *route_n{ NULL };         // [nhru]
+const double *route_R{ NULL };         // [nhru]
+const double *route_S0{ NULL };        // [nhru]
+const double *route_L{ NULL };         // [nhru]
+const double *route_X_M{ NULL };       // [nhru]
+const long  *route_Cshp{ NULL };      // [nhru]
 
-const float *Kstorage;
-const float *Lag;             // [nhru]
-const float *ssrKstorage;     // [nhru]
-const float *ssrLag;          // [nhru]
-const float *runKstorage;     // [nhru]
-const float *runLag;          // [nhru]
-const float *gwKstorage;
-const float *gwLag;
-const long  *gwwhereto;       // [nhru]
+const double *Kstorage{ NULL };
+const double *Lag{ NULL };             // [nhru]
+const double *ssrKstorage{ NULL };     // [nhru]
+const double *ssrLag{ NULL };          // [nhru]
+const double *runKstorage{ NULL };     // [nhru]
+const double *runLag{ NULL };          // [nhru]
+const double *gwKstorage{ NULL };
+const double *gwLag{ NULL };
+const long  *gwwhereto{ NULL };       // [nhru]
 
-const float *basin_area;      // [BASIN]
-const float *hru_area;        // [nhru]
-const float *distrib;
-const float *distrib_Basin;
-const float **distrib_hru;
-const float *Sdmax;           // [nhru]
-const float *soil_rechr_max;  // [nhru]
-const long  *order;
-const long  *preferential_flow; // [nhru]
-const long  *Sd_ByPass;       // [nhru]
-const long  *soil_rechr_ByPass;
+const double *basin_area{ NULL };      // [BASIN]
+const double *hru_area{ NULL };        // [nhru]
+const double *distrib{ NULL };
+const double *distrib_Basin{ NULL };
+const double **distrib_hru{ NULL };
+const double *Sdmax{ NULL };           // [nhru]
+const double *soil_rechr_max{ NULL };  // [nhru]
+const long  *order{ NULL };
+const long  *preferential_flow{ NULL }; // [nhru]
+const long  *Sd_ByPass{ NULL };       // [nhru]
+const long  *soil_rechr_ByPass{ NULL };
 
-const float *scaling_factor;    // temporary modification
+const double *scaling_factor{ NULL };    // temporary modification
 
 // variable inputs
-const float *soil_gw; // N.B. gw_flow in original CRHM
-const float *soil_gw_conc;
-const float **soil_gw_conc_lay;
-const float *soil_ssr;
-const float *soil_ssr_conc;
-const float **soil_ssr_conc_lay;
-const float *soil_runoff;
-const float *soil_runoff_cWQ;
-const float **soil_runoff_cWQ_lay;
+const double *soil_gw{ NULL }; // N.B. gw_flow in original CRHM
+const double *soil_gw_conc{ NULL };
+const double **soil_gw_conc_lay{ NULL };
+const double *soil_ssr{ NULL };
+const double *soil_ssr_conc{ NULL };
+const double **soil_ssr_conc_lay{ NULL };
+const double *soil_runoff{ NULL };
+const double *soil_runoff_cWQ{ NULL };
+const double **soil_runoff_cWQ_lay{ NULL };
 
 // variable puts
-float *Sd;
-float *Sd_conc;
-float **Sd_conc_lay;
-float *soil_moist;
-float *soil_moist_conc;
-float **soil_moist_conc_lay;
-float *soil_lower;
-float *soil_lower_conc;
-float **soil_lower_conc_lay;
-float *soil_rechr;
-float *soil_rechr_conc;
-float **soil_rechr_conc_lay;
-float *redirected_residual;
-float *redirected_residual_conc;
-float **redirected_residual_conc_lay;
-float *cum_redirected_residual;
-float *cum_redirected_residual_mWQ;
-float **cum_redirected_residual_mWQ_lay;
-float *gw;
-float *gw_conc;
-float **gw_conc_lay;
-float *conc_soil_rechr;
-float **conc_soil_rechr_lay;
-float *conc_soil_lower;
-float **conc_soil_lower_lay;
-float *conc_soil_moist;
-float **conc_soil_moist_lay;
+double *Sd{ NULL };
+double *Sd_conc{ NULL };
+double **Sd_conc_lay{ NULL };
+double *soil_moist{ NULL };
+double *soil_moist_conc{ NULL };
+double **soil_moist_conc_lay{ NULL };
+double *soil_lower{ NULL };
+double *soil_lower_conc{ NULL };
+double **soil_lower_conc_lay{ NULL };
+double *soil_rechr{ NULL };
+double *soil_rechr_conc{ NULL };
+double **soil_rechr_conc_lay{ NULL };
+double *redirected_residual{ NULL };
+double *redirected_residual_conc{ NULL };
+double **redirected_residual_conc_lay{ NULL };
+double *cum_redirected_residual{ NULL };
+double *cum_redirected_residual_mWQ{ NULL };
+double **cum_redirected_residual_mWQ_lay{ NULL };
+double *gw{ NULL };
+double *gw_conc{ NULL };
+double **gw_conc_lay{ NULL };
+double *conc_soil_rechr{ NULL };
+double **conc_soil_rechr_lay{ NULL };
+double *conc_soil_lower{ NULL };
+double **conc_soil_lower_lay{ NULL };
+double *conc_soil_moist{ NULL };
+double **conc_soil_moist_lay{ NULL };
 
-ClassMuskingum *hruDelay;
-ClassClark *Clark_hruDelay;
-ClassClark *ssrDelay;
-ClassClark *runDelay;
-ClassClark *gwDelay;
+ClassMuskingum *hruDelay{ NULL };
+ClassClark *Clark_hruDelay{ NULL };
+ClassClark *ssrDelay{ NULL };
+ClassClark *runDelay{ NULL };
+ClassClark *gwDelay{ NULL };
 
-ClassMuskingum **hruDelay_mWQ; // [numsubstances] handled locally
-ClassClark **Clark_hruDelay_mWQ;
-ClassClark **ssrDelay_mWQ;
-ClassClark **runDelay_mWQ;
-ClassClark **gwDelay_mWQ;
+ClassMuskingum **hruDelay_mWQ{ NULL }; // [numsubstances] handled locally
+ClassClark **Clark_hruDelay_mWQ{ NULL };
+ClassClark **ssrDelay_mWQ{ NULL };
+ClassClark **runDelay_mWQ{ NULL };
+ClassClark **gwDelay_mWQ{ NULL };
 
 void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
 
-void Set_WQ(long hru, float *var, float *var_conc, float amount_conc, float amount);
-void Reset_WQ(long hru, float *var, float **var_conc_lay);
+void Set_WQ(long hru, double *var, double *var_conc, double amount_conc, double amount);
+void Reset_WQ(long hru, double *var, double **var_conc_lay);
 
 void Save();
 void Restore(const long hh);
-void copy_array(float *from, float *to);
-void restore_hru(float *from, float *to, const long hh);
+void copy_array(double *from, double *to);
+void restore_hru(double *from, double *to, const long hh);
 
-virtual float Function1(float *I, long hh);
-virtual float Function2(float *X, long hh);
+virtual double Function1(double *I, long hh);
+virtual double Function2(double *X, long hh);
 
 ClassWQ_Netroute_M_D* klone(string name) const;
 };
@@ -857,49 +857,49 @@ ClassWQ_Netroute_M_D* klone(string name) const;
 class ClassWQ_Test_Hype : public ClassModule {
 public:
 
-ClassWQ_Test_Hype(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Test_Hype(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *infil;
-float *snowinfil;
-float *runoff;
-float *meltrunoff;
-float *hru_evap;
-float *hru_cum_evap;
-float *hru_cum_actet;
-float *hru_actet;
-float *net_rain;
-float *SWE;
-float *SWE_max;
-float *hru_t;
-float *SWE_conc;
-float **SWE_conc_lay;
+double *infil{ NULL };
+double *snowinfil{ NULL };
+double *runoff{ NULL };
+double *meltrunoff{ NULL };
+double *hru_evap{ NULL };
+double *hru_cum_evap{ NULL };
+double *hru_cum_actet{ NULL };
+double *hru_actet{ NULL };
+double *net_rain{ NULL };
+double *SWE{ NULL };
+double *SWE_max{ NULL };
+double *hru_t{ NULL };
+double *SWE_conc{ NULL };
+double **SWE_conc_lay{ NULL };
 
-float *soil_moist;
-float *soil_rechr;
+double *soil_moist{ NULL };
+double *soil_rechr{ NULL };
 
 // declared parameters
-const float* infil_0;
-const float* snowinfil_0;
-const float* runoff_0;
-const float* meltrunoff_0;
-const float* hru_evap_0;
-const float* hru_actet_0;
-const float* hru_cum_evap_0;
-const float* hru_cum_actet_0;
-const float* net_rain_0;
-const float* SWE_0;
-const float* hru_t_0;
-const float* SWE_conc_0;
-const float** SWE_conc_lay_0;
+const double* infil_0{ NULL };
+const double* snowinfil_0{ NULL };
+const double* runoff_0{ NULL };
+const double* meltrunoff_0{ NULL };
+const double* hru_evap_0{ NULL };
+const double* hru_actet_0{ NULL };
+const double* hru_cum_evap_0{ NULL };
+const double* hru_cum_actet_0{ NULL };
+const double* net_rain_0{ NULL };
+const double* SWE_0{ NULL };
+const double* hru_t_0{ NULL };
+const double* SWE_conc_0{ NULL };
+const double** SWE_conc_lay_0{ NULL };
 
-const float* soil_rechr_0;
-const float* soil_moist_0;
-const float* soil_rechr_max;
-const float* soil_moist_max;
+const double* soil_rechr_0{ NULL };
+const double* soil_moist_0{ NULL };
+const double* soil_rechr_max{ NULL };
+const double* soil_moist_max{ NULL };
 
-const long  *Julian_start;
-const long  *Julian_end;
+const long  *Julian_start{ NULL };
+const long  *Julian_end{ NULL };
 
 void decl(void);
 void init(void);
@@ -912,129 +912,129 @@ ClassWQ_Test_Hype* klone(string name) const;
 class ClassWQ_pbsmSnobal : public ClassModule {
 public:
 
-ClassWQ_pbsmSnobal(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
+ClassWQ_pbsmSnobal(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001, " hru_u, hru_Uadjust, hru_u, hru_Uadjust") {};
 
-float hru_u_;
+double hru_u_{0.0};
 
 // declared variables
 
-float *SWE_max;
-float *SWE_conc;
-float **SWE_conc_lay;
-float *Subl;
-float *Subl_conc;
-float **Subl_conc_lay;
-float *Drift;
-float *Drift_in;
-float *Drift_in_conc;
-float **Drift_in_conc_lay;
-float *Drift_out;       // HRU composite drift
-float *Drift_out_conc;  // HRU composite drift
-float **Drift_out_conc_lay;  // HRU composite drift
-float *cumSubl;
-float *cumSubl_mWQ;
-float **cumSubl_mWQ_lay;
-float *cumDriftOut;
-float *cumDriftOut_mWQ;
-float **cumDriftOut_mWQ_lay;
-float *cumDrift;
-float *cumDriftIn;
-float *cumDriftIn_mWQ;
-float **cumDriftIn_mWQ_lay;
-float *cumSno;
-float *cumSno_mWQ;
-float **cumSno_mWQ_lay;
-float *snowdepth;
-float *BasinSnowLoss;
-float *BasinSnowLoss_mWQ;
-float **BasinSnowLoss_mWQ_lay;
-float *BasinSnowGain;
-float *BasinSnowGain_mWQ;
-float **BasinSnowGain_mWQ_lay;
-float *cumBasinSnowLoss;
-float *cumBasinSnowLoss_mWQ;
-float **cumBasinSnowLoss_mWQ_lay;
-float *cumBasinSnowGain;
-float *cumBasinSnowGain_mWQ;
-float **cumBasinSnowGain_mWQ_lay;
-float *SublH;
-float *DriftH;
-float *Prob;
-float *SnowAge;
-float *SWE_Init;
-long  *DrySnow;
+double *SWE_max{ NULL };
+double *SWE_conc{ NULL };
+double **SWE_conc_lay{ NULL };
+double *Subl{ NULL };
+double *Subl_conc{ NULL };
+double **Subl_conc_lay{ NULL };
+double *Drift{ NULL };
+double *Drift_in{ NULL };
+double *Drift_in_conc{ NULL };
+double **Drift_in_conc_lay{ NULL };
+double *Drift_out{ NULL };       // HRU composite drift
+double *Drift_out_conc{ NULL };  // HRU composite drift
+double **Drift_out_conc_lay{ NULL };  // HRU composite drift
+double *cumSubl{ NULL };
+double *cumSubl_mWQ{ NULL };
+double **cumSubl_mWQ_lay{ NULL };
+double *cumDriftOut{ NULL };
+double *cumDriftOut_mWQ{ NULL };
+double **cumDriftOut_mWQ_lay{ NULL };
+double *cumDrift{ NULL };
+double *cumDriftIn{ NULL };
+double *cumDriftIn_mWQ{ NULL };
+double **cumDriftIn_mWQ_lay{ NULL };
+double *cumSno{ NULL };
+double *cumSno_mWQ{ NULL };
+double **cumSno_mWQ_lay{ NULL };
+double *snowdepth{ NULL };
+double *BasinSnowLoss{ NULL };
+double *BasinSnowLoss_mWQ{ NULL };
+double **BasinSnowLoss_mWQ_lay{ NULL };
+double *BasinSnowGain{ NULL };
+double *BasinSnowGain_mWQ{ NULL };
+double **BasinSnowGain_mWQ_lay{ NULL };
+double *cumBasinSnowLoss{ NULL };
+double *cumBasinSnowLoss_mWQ{ NULL };
+double **cumBasinSnowLoss_mWQ_lay{ NULL };
+double *cumBasinSnowGain{ NULL };
+double *cumBasinSnowGain_mWQ{ NULL };
+double **cumBasinSnowGain_mWQ_lay{ NULL };
+double *SublH{ NULL };
+double *DriftH{ NULL };
+double *Prob{ NULL };
+double *SnowAge{ NULL };
+double *SWE_Init{ NULL };
+long  *DrySnow{ NULL };
 
 // declared parameters
-const float *fetch;
-const float *Ht;
-const float *distrib;
-const float *basin_area;
-const float *hru_area;
-const float *A_S;
-const float *u_D;
-const float *Drift_offset;
-const float *Drift_slope;
-const float *Subl_offset;
-const float *Subl_slope;
-const float *N_S;
-const float *rain_conc;
-const float **rain_conc_lay;
-const float *snow_conc;
-const float **snow_conc_lay;
-const float *atmos_mWQ;
-const float **atmos_mWQ_lay;
-const long *inhibit_evap;
-const long *inhibit_bs;
-const long *inhibit_subl;
+const double *fetch{ NULL };
+const double *Ht{ NULL };
+const double *distrib{ NULL };
+const double *basin_area{ NULL };
+const double *hru_area{ NULL };
+const double *A_S{ NULL };
+const double *u_D{ NULL };
+const double *Drift_offset{ NULL };
+const double *Drift_slope{ NULL };
+const double *Subl_offset{ NULL };
+const double *Subl_slope{ NULL };
+const long *N_S{ NULL };
+const double *rain_conc{ NULL };
+const double **rain_conc_lay{ NULL };
+const double *snow_conc{ NULL };
+const double **snow_conc_lay{ NULL };
+const double *atmos_mWQ{ NULL };
+const double **atmos_mWQ_lay{ NULL };
+const long *inhibit_evap{ NULL };
+const long *inhibit_bs{ NULL };
+const long *inhibit_subl{ NULL };
 
 // put variable inputs
-float *SWE; // actually m_s
+double *SWE{ NULL }; // actually m_s
 
 // variable inputs
-const float *z_s;
-const float *rho;
-const float *hru_t;
-const float *hru_u;
-const float *hru_Uadjust;
-const float *net_snow;
-const long  *hru_newsnow;
-const float *hru_ea;
+const double *z_s{ NULL };
+const double *rho{ NULL };
+const double *hru_t{ NULL };
+const double *hru_u{ NULL };
+const double *hru_Uadjust{ NULL };
+const double *net_snow{ NULL };
+const long  *hru_newsnow{ NULL };
+const double *hru_ea{ NULL };
 
 // local allocated arrays
 
-float *BasinSnowGain_0;
-float *cumBasinSnowGain_0;
-float *BasinSnowLoss_0;
-float *cumBasinSnowLoss_0;
+double *BasinSnowGain_0{ NULL };
+double *cumBasinSnowGain_0{ NULL };
+double *BasinSnowLoss_0{ NULL };
+double *cumBasinSnowLoss_0{ NULL };
 
-float *hru_basin;
-float *SWE_0;
-float *SWE_Init_0;
-float *z_s_0;
-float *rho_0;
+double *hru_basin{ NULL };
+double *SWE_0{ NULL };
+double *SWE_Init_0{ NULL };
+double *z_s_0{ NULL };
+double *rho_0{ NULL };
 
-float *Drift_out_0;
-float *Drift_in_0;
-float *cumDriftIn_0;
-float *cumDriftOut_0;
-float *cumSubl_0;
-float *Subl_0;
-float *cumSno_0;
-float *SnowAge_0;
-long *DrySnow_0;
+double *Drift_out_0{ NULL };
+double *Drift_in_0{ NULL };
+double *cumDriftIn_0{ NULL };
+double *cumDriftOut_0{ NULL };
+double *cumSubl_0{ NULL };
+double *Subl_0{ NULL };
+double *cumSno_0{ NULL };
+double *SnowAge_0{ NULL };
+long *DrySnow_0{ NULL };
 
 void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
 
-void Reset_WQ(long hru, float *var, float **var_WQ_lay);
+void Reset_WQ(long hru, double *var, double **var_WQ_lay);
 void Save();
 void Restore(const long hh);
-void copy_array(float *from, float *to);
+void copy_array(double *from, double *to);
 void copy_array(long *from, long *to);
-void copy_basin(float *from, float *to);
-void restore_hru(float *from, float *to, const long hh);
+void copy_basin(double *from, double *to);
+void restore_hru(double *from, double *to, const long hh);
 void restore_hru(long *from, long *to, const long hh);
 
 ClassWQ_pbsmSnobal* klone(string name) const;
@@ -1043,47 +1043,47 @@ ClassWQ_pbsmSnobal* klone(string name) const;
 class ClassWQ_mass_conc : public ClassModule {
 public:
 
-ClassWQ_mass_conc(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_mass_conc(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *inflow_conc;
-float **inflow_conc_lay;
-float *outflow_conc;
-float **outflow_conc_lay;
-float *runoutflow_conc;
-float **runoutflow_conc_lay;
-float *ssroutflow_conc;
-float **ssroutflow_conc_lay;
-float *gwoutflow_conc;
-float **gwoutflow_conc_lay;
+double *inflow_conc{ NULL };
+double **inflow_conc_lay{ NULL };
+double *outflow_conc{ NULL };
+double **outflow_conc_lay{ NULL };
+double *runoutflow_conc{ NULL };
+double **runoutflow_conc_lay{ NULL };
+double *ssroutflow_conc{ NULL };
+double **ssroutflow_conc_lay{ NULL };
+double *gwoutflow_conc{ NULL };
+double **gwoutflow_conc_lay{ NULL };
 
 // declared parameters
 
 // variable inputs
-const float *inflow;
-const float *inflow_mWQ;
-const float **inflow_mWQ_lay;
-const float *outflow;
-const float *outflow_mWQ;
-const float **outflow_mWQ_lay;
-const float *outflow_cWQ;
-const float **outflow_cWQ_lay;
-const float *runoutflow;
-const float *runoutflow_mWQ;
-const float **runoutflow_mWQ_lay;
-const float *ssroutflow;
-const float *ssroutflow_mWQ;
-const float **ssroutflow_mWQ_lay;
-const float *gwoutflow;
-const float *gwoutflow_mWQ;
-const float **gwoutflow_mWQ_lay;
+const double *inflow{ NULL };
+const double *inflow_mWQ{ NULL };
+const double **inflow_mWQ_lay{ NULL };
+const double *outflow{ NULL };
+const double *outflow_mWQ{ NULL };
+const double **outflow_mWQ_lay{ NULL };
+const double *outflow_cWQ{ NULL };
+const double **outflow_cWQ_lay{ NULL };
+const double *runoutflow{ NULL };
+const double *runoutflow_mWQ{ NULL };
+const double **runoutflow_mWQ_lay{ NULL };
+const double *ssroutflow{ NULL };
+const double *ssroutflow_mWQ{ NULL };
+const double **ssroutflow_mWQ_lay{ NULL };
+const double *gwoutflow{ NULL };
+const double *gwoutflow_mWQ{ NULL };
+const double **gwoutflow_mWQ_lay{ NULL };
 
 void decl(void);
 void init(void);
 void run(void);
 
-void Reset_WQ(float **var_lay);
-void mass_to_conc(const float *var, const float **var_mWQ, float **var_conc);
+void Reset_WQ(double **var_lay);
+void mass_to_conc(const double *var, const double **var_mWQ, double **var_conc);
 
 ClassWQ_mass_conc* klone(string name) const;
 };
@@ -1091,15 +1091,15 @@ ClassWQ_mass_conc* klone(string name) const;
 class ClassWQ_Substitute_Hype : public ClassModule {
 public:
 
-ClassWQ_Substitute_Hype(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Substitute_Hype(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float *conc_soil_rechr;   // concentration of inorganic nitrogen *** from soilstate
-float **conc_soil_rechr_lay;
-float *conc_soil_lower;   // concentration of organic nitrogen *** from soilstate
-float **conc_soil_lower_lay;
-float *conc_soil_moist;   // concentration of soluble (reactive) phosphorus, i.e. phosphate *** from soilstate
-float **conc_soil_moist_lay;
+double *conc_soil_rechr{ NULL };   // concentration of inorganic nitrogen *** from soilstate
+double **conc_soil_rechr_lay{ NULL };
+double *conc_soil_lower{ NULL };   // concentration of organic nitrogen *** from soilstate
+double **conc_soil_lower_lay{ NULL };
+double *conc_soil_moist{ NULL };   // concentration of soluble (reactive) phosphorus, i.e. phosphate *** from soilstate
+double **conc_soil_moist_lay{ NULL };
 
 // declared parameters
 
@@ -1114,99 +1114,99 @@ ClassWQ_Substitute_Hype* klone(string name) const;
 class ClassWQ_Gen_Mass_Var_Soil : public ClassModule {
 public:
 
-ClassWQ_Gen_Mass_Var_Soil(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Gen_Mass_Var_Soil(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameters
 
-float *soil_moist_change_mWQ;
-float **soil_moist_change_mWQ_lay;
+double *soil_moist_change_mWQ{ NULL };
+double **soil_moist_change_mWQ_lay{ NULL };
 
-float *soil_top_change_mWQ;
-float **soil_top_change_mWQ_lay;
-float *soil_top_mWQ_last;
-float **soil_top_mWQ_lay_last;
+double *soil_top_change_mWQ{ NULL };
+double **soil_top_change_mWQ_lay{ NULL };
+double *soil_top_mWQ_last{ NULL };
+double **soil_top_mWQ_lay_last{ NULL };
 
-float *soil_bottom_change_mWQ;
-float **soil_bottom_change_mWQ_lay;
-float *soil_bottom_mWQ_last;
-float **soil_bottom_mWQ_lay_last;
+double *soil_bottom_change_mWQ{ NULL };
+double **soil_bottom_change_mWQ_lay{ NULL };
+double *soil_bottom_mWQ_last{ NULL };
+double **soil_bottom_mWQ_lay_last{ NULL };
 
-float *soil_ssr_change_mWQ;
-float **soil_ssr_change_mWQ_lay;
-float *soil_ssr_mWQ_last;
-float **soil_ssr_mWQ_lay_last;
+double *soil_ssr_change_mWQ{ NULL };
+double **soil_ssr_change_mWQ_lay{ NULL };
+double *soil_ssr_mWQ_last{ NULL };
+double **soil_ssr_mWQ_lay_last{ NULL };
 
-float *Sd_change_mWQ;
-float **Sd_change_mWQ_lay;
-float *Sd_mWQ_last;
-float **Sd_mWQ_lay_last;
+double *Sd_change_mWQ{ NULL };
+double **Sd_change_mWQ_lay{ NULL };
+double *Sd_mWQ_last{ NULL };
+double **Sd_mWQ_lay_last{ NULL };
 
-float *gw_change_mWQ;
-float **gw_change_mWQ_lay;
-float *gw_mWQ_last;
-float **gw_mWQ_lay_last;
+double *gw_change_mWQ{ NULL };
+double **gw_change_mWQ_lay{ NULL };
+double *gw_mWQ_last{ NULL };
+double **gw_mWQ_lay_last{ NULL };
 
-float *soil_gw_change_mWQ;
-float **soil_gw_change_mWQ_lay;
-float *soil_gw_mWQ_last;
-float **soil_gw_mWQ_lay_last;
+double *soil_gw_change_mWQ{ NULL };
+double **soil_gw_change_mWQ_lay{ NULL };
+double *soil_gw_mWQ_last{ NULL };
+double **soil_gw_mWQ_lay_last{ NULL };
 
-float *gw_flow_change_mWQ;
-float **gw_flow_change_mWQ_lay;
-float *gw_flow_mWQ_last;
-float **gw_flow_mWQ_lay_last;
+double *gw_flow_change_mWQ{ NULL };
+double **gw_flow_change_mWQ_lay{ NULL };
+double *gw_flow_mWQ_last{ NULL };
+double **gw_flow_mWQ_lay_last{ NULL };
 
-float *infil_act_change_mWQ;
-float **infil_act_change_mWQ_lay;
-float *infil_act_mWQ_last;
-float **infil_act_mWQ_lay_last;
+double *infil_act_change_mWQ{ NULL };
+double **infil_act_change_mWQ_lay{ NULL };
+double *infil_act_mWQ_last{ NULL };
+double **infil_act_mWQ_lay_last{ NULL };
 
-float *redirected_residual_change_mWQ;
-float **redirected_residual_change_mWQ_lay;
-float *redirected_residual_mWQ_last;
-float **redirected_residual_mWQ_lay_last;
+double *redirected_residual_change_mWQ{ NULL };
+double **redirected_residual_change_mWQ_lay{ NULL };
+double *redirected_residual_mWQ_last{ NULL };
+double **redirected_residual_mWQ_lay_last{ NULL };
 
-float *soil_runoff_change_mWQ;
-float **soil_runoff_change_mWQ_lay;
-float *soil_runoff_mWQ_last;
-float **soil_runoff_mWQ_lay_last;
+double *soil_runoff_change_mWQ{ NULL };
+double **soil_runoff_change_mWQ_lay{ NULL };
+double *soil_runoff_mWQ_last{ NULL };
+double **soil_runoff_mWQ_lay_last{ NULL };
 
 // variable get inputs
-const float *soil_rechr;
-const float *soil_lower;
-const float *soil_moist;
-const float *soil_ssr;
-const float *Sd;
-const float *gw;
-const float *soil_gw;
-const float *gw_flow;
-const float *infil_act;
-const float *redirected_residual;
-const float *soil_runoff;
+const double *soil_rechr{ NULL };
+const double *soil_lower{ NULL };
+const double *soil_moist{ NULL };
+const double *soil_ssr{ NULL };
+const double *Sd{ NULL };
+const double *gw{ NULL };
+const double *soil_gw{ NULL };
+const double *gw_flow{ NULL };
+const double *infil_act{ NULL };
+const double *redirected_residual{ NULL };
+const double *soil_runoff{ NULL };
 
-const float *conc_soil_rechr;
-const float **conc_soil_rechr_lay;
-const float *conc_soil_lower;
-const float **conc_soil_lower_lay;
-const float *soil_ssr_conc;
-const float **soil_ssr_conc_lay;
-const float *Sd_conc;
-const float **Sd_conc_lay;
-const float *gw_conc;
-const float **gw_conc_lay;
-const float *soil_gw_conc;
-const float **soil_gw_conc_lay;
-const float *gw_flow_conc;
-const float **gw_flow_conc_lay;
-const float *infil_act_conc;
-const float **infil_act_conc_lay;
-const float *redirected_residual_conc;
-const float **redirected_residual_conc_lay;
-const float *soil_runoff_cWQ;
-const float **soil_runoff_cWQ_lay;
+const double *conc_soil_rechr{ NULL };
+const double **conc_soil_rechr_lay{ NULL };
+const double *conc_soil_lower{ NULL };
+const double **conc_soil_lower_lay{ NULL };
+const double *soil_ssr_conc{ NULL };
+const double **soil_ssr_conc_lay{ NULL };
+const double *Sd_conc{ NULL };
+const double **Sd_conc_lay{ NULL };
+const double *gw_conc{ NULL };
+const double **gw_conc_lay{ NULL };
+const double *soil_gw_conc{ NULL };
+const double **soil_gw_conc_lay{ NULL };
+const double *gw_flow_conc{ NULL };
+const double **gw_flow_conc_lay{ NULL };
+const double *infil_act_conc{ NULL };
+const double **infil_act_conc_lay{ NULL };
+const double *redirected_residual_conc{ NULL };
+const double **redirected_residual_conc_lay{ NULL };
+const double *soil_runoff_cWQ{ NULL };
+const double **soil_runoff_cWQ_lay{ NULL };
 
 //declared variables
-long *run_ID;
+long *run_ID{ NULL };
 
 void decl(void);
 void init(void);
@@ -1219,105 +1219,105 @@ ClassWQ_Gen_Mass_Var_Soil* klone(string name) const;
 class ClassGrow_crops_annually : public ClassModule {
 public:
 
-ClassGrow_crops_annually(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassGrow_crops_annually(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long ObsCnt_N_up;
-long ObsCnt_P_up;
-long ObsCntMan_N_up;
-long ObsCntMan_P_up;
-long ObsCntRes_N_up;
-long ObsCntRes_P_up;
-long ObsCnt_N_down;
-long ObsCnt_P_down;
-long ObsCntMan_N_down;
-long ObsCntMan_P_down;
-long ObsCntRes_N_down;
-long ObsCntRes_P_down;
-long ObsCnt_fertperiod;
-long ObsCnt_litterperiod;
+long ObsCnt_N_up{0};
+long ObsCnt_P_up{0};
+long ObsCntMan_N_up{0};
+long ObsCntMan_P_up{0};
+long ObsCntRes_N_up{0};
+long ObsCntRes_P_up{0};
+long ObsCnt_N_down{0};
+long ObsCnt_P_down{0};
+long ObsCntMan_N_down{0};
+long ObsCntMan_P_down{0};
+long ObsCntRes_N_down{0};
+long ObsCntRes_P_down{0};
+long ObsCnt_fertperiod{0};
+long ObsCnt_litterperiod{0};
 
 // declared variables
-float *Fert_N_amount_up;
-float *Fert_P_amount_up;
-float *Man_N_amount_up;
-float *Man_P_amount_up;
-float *Fert_N_amount_down;
-float *Fert_P_amount_down;
-float *Man_N_amount_down;
-float *Man_P_amount_down;
-float *Res_N_amount_up;
-float *Res_P_amount_up;
-float *Res_N_amount_down;
-float *Res_P_amount_down;
-//float *Fertday;
-//float *Manday;
-//float *Resday_up;
-float *Fertperiod;
-float *Litterperiod;
-long *LockOut;
+double *Fert_N_amount_up{ NULL };
+double *Fert_P_amount_up{ NULL };
+double *Man_N_amount_up{ NULL };
+double *Man_P_amount_up{ NULL };
+double *Fert_N_amount_down{ NULL };
+double *Fert_P_amount_down{ NULL };
+double *Man_N_amount_down{ NULL };
+double *Man_P_amount_down{ NULL };
+double *Res_N_amount_up{ NULL };
+double *Res_P_amount_up{ NULL };
+double *Res_N_amount_down{ NULL };
+double *Res_P_amount_down{ NULL };
+//double *Fertday;
+//double *Manday;
+//double *Resday_up;
+double *Fertperiod{ NULL };
+double *Litterperiod{ NULL };
+long *LockOut{ NULL };
 
 //long  *SecondDown_fert;
 //long  *SecondDown_man;
 
 // declared parameters
-const long  *Ag_YearStart;
+const long  *Ag_YearStart{ NULL };
 
 // put parameters
-const float *Htmax;
-const float *Init_Crop_Ht_1;
-const float *Crop_Grow_Rate_1;
-const float *JCrop_Start_1;
-const float *JCrop_Harvest_1;
-const float *Crop_Htmax_1;
-const float *Init_Crop_Ht_2;
-const float *Crop_Grow_Rate_2;
-const float *JCrop_Start_2;
-const float *JCrop_Harvest_2;
-const float *Crop_Htmax_2;
+const double *Htmax{ NULL };
+const double *Init_Crop_Ht_1{ NULL };
+const double *Crop_Grow_Rate_1{ NULL };
+const double *JCrop_Start_1{ NULL };
+const double *JCrop_Harvest_1{ NULL };
+const double *Crop_Htmax_1{ NULL };
+const double *Init_Crop_Ht_2{ NULL };
+const double *Crop_Grow_Rate_2{ NULL };
+const double *JCrop_Start_2{ NULL };
+const double *JCrop_Harvest_2{ NULL };
+const double *Crop_Htmax_2{ NULL };
 
-float *Ht;
-float *fertNamount_up;
-float *fertPamount_up;
-float *fertNamount_down;
-float *fertPamount_down;
-float *manNamount_up;
-float *manPamount_up;
-float *manNamount_down;
-float *manPamount_down;
-float *resNamount_up;
-float *resPamount_up;
-float *resNamount_down;
-float *resPamount_down;
+double *Ht{ NULL };
+double *fertNamount_up{ NULL };
+double *fertPamount_up{ NULL };
+double *fertNamount_down{ NULL };
+double *fertPamount_down{ NULL };
+double *manNamount_up{ NULL };
+double *manPamount_up{ NULL };
+double *manNamount_down{ NULL };
+double *manPamount_down{ NULL };
+double *resNamount_up{ NULL };
+double *resPamount_up{ NULL };
+double *resNamount_down{ NULL };
+double *resPamount_down{ NULL };
 
-float *manday_up;
-float *manday_down;
-float *fertday_up;
-float *fertday_down;
-float *resday_up;
-float *resday_down;
-float *fertperiod;
-long *litterperiod;
+double *manday_up{ NULL };
+double *manday_down{ NULL };
+double *fertday_up{ NULL };
+double *fertday_down{ NULL };
+double *resday_up{ NULL };
+double *resday_down{ NULL };
+long *fertperiod{ NULL };
+long *litterperiod{ NULL };
 
 // declared observation variables
-const float *Fert_N_up;
-const float *Fert_P_up;
-const float *Man_N_up;
-const float *Man_P_up;
-const float *Res_N_up;
-const float *Res_P_up;
-const float *Fert_N_down;
-const float *Fert_P_down;
-const float *Man_N_down;
-const float *Man_P_down;
-const float *Res_N_down;
-const float *Res_P_down;
-const float *Fert_period;
+const double *Fert_N_up{ NULL };
+const double *Fert_P_up{ NULL };
+const double *Man_N_up{ NULL };
+const double *Man_P_up{ NULL };
+const double *Res_N_up{ NULL };
+const double *Res_P_up{ NULL };
+const double *Fert_N_down{ NULL };
+const double *Fert_P_down{ NULL };
+const double *Man_N_down{ NULL };
+const double *Man_P_down{ NULL };
+const double *Res_N_down{ NULL };
+const double *Res_P_down{ NULL };
+const long *Fert_period{ NULL };
 
 void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
-bool Good_Dates(const float* date);
+bool Good_Dates(const double* date);
 
 ClassGrow_crops_annually* klone(string name) const;
 };
@@ -1325,44 +1325,44 @@ ClassGrow_crops_annually* klone(string name) const;
 class ClassWQ_Gen_Mass_Var_Netroute : public ClassModule {
 public:
 
-ClassWQ_Gen_Mass_Var_Netroute(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassWQ_Gen_Mass_Var_Netroute(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameters
 
-float *basinflow_change_mWQ;
-float **basinflow_change_mWQ_lay;
-float *basinflow_mWQ_last;
-float **basinflow_mWQ_lay_last;
+double *basinflow_change_mWQ{ NULL };
+double **basinflow_change_mWQ_lay{ NULL };
+double *basinflow_mWQ_last{ NULL };
+double **basinflow_mWQ_lay_last{ NULL };
 
-float *basingw_change_mWQ;
-float **basingw_change_mWQ_lay;
-float *basingw_mWQ_last;
-float **basingw_mWQ_lay_last;
+double *basingw_change_mWQ{ NULL };
+double **basingw_change_mWQ_lay{ NULL };
+double *basingw_mWQ_last{ NULL };
+double **basingw_mWQ_lay_last{ NULL };
 
-float *outflow_diverted_change_mWQ;
-float **outflow_diverted_change_mWQ_lay;
-float *outflow_diverted_mWQ_last;
-float **outflow_diverted_mWQ_lay_last;
+double *outflow_diverted_change_mWQ{ NULL };
+double **outflow_diverted_change_mWQ_lay{ NULL };
+double *outflow_diverted_mWQ_last{ NULL };
+double **outflow_diverted_mWQ_lay_last{ NULL };
 
-float *gwoutflow_diverted_change_mWQ;
-float **gwoutflow_diverted_change_mWQ_lay;
-float *gwoutflow_diverted_mWQ_last;
-float **gwoutflow_diverted_mWQ_lay_last;
+double *gwoutflow_diverted_change_mWQ{ NULL };
+double **gwoutflow_diverted_change_mWQ_lay{ NULL };
+double *gwoutflow_diverted_mWQ_last{ NULL };
+double **gwoutflow_diverted_mWQ_lay_last{ NULL };
 
 // variable get inputs
-float *basinflow;
-float *basingw;
-float *outflow_diverted;
-float *gwoutflow_diverted;
+double *basinflow{ NULL };
+double *basingw{ NULL };
+double *outflow_diverted{ NULL };
+double *gwoutflow_diverted{ NULL };
 
-float *basinflow_conc;
-float **basinflow_conc_lay;
-float *basingw_conc;
-float **basingw_conc_lay;
-float *outflow_diverted_conc;
-float **outflow_diverted_conc_lay;
-float *gwoutflow_diverted_conc;
-float **gwoutflow_diverted_conc_lay;
+double *basinflow_conc{ NULL };
+double **basinflow_conc_lay{ NULL };
+double *basingw_conc{ NULL };
+double **basingw_conc_lay{ NULL };
+double *outflow_diverted_conc{ NULL };
+double **outflow_diverted_conc_lay{ NULL };
+double *gwoutflow_diverted_conc{ NULL };
+double **gwoutflow_diverted_conc_lay{ NULL };
 
 void decl(void);
 void init(void);
@@ -1375,11 +1375,11 @@ ClassWQ_Gen_Mass_Var_Netroute* klone(string name) const;
 class Classlapse_rate_Monthly_Mod : public ClassModule {
 public:
 
-Classlapse_rate_Monthly_Mod(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Classlapse_rate_Monthly_Mod(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float* lapse_rate;
-float* lapse_rate_Mthly;
+double* lapse_rate{ NULL };
+double* lapse_rate_Mthly{ NULL };
 
 void decl(void);
 void init(void);
@@ -1391,55 +1391,55 @@ Classlapse_rate_Monthly_Mod* klone(string name) const;
 class ClassGlacier_melt_debris_cover_estimate_Mod : public ClassModule {
 public:
 
-ClassGlacier_melt_debris_cover_estimate_Mod(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassGlacier_melt_debris_cover_estimate_Mod(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameters
 
-const float* debris_h;
-const float* T_threshold;
+const double* debris_h{ NULL };
+const double* T_threshold{ NULL };
 
 // declared variables
 
-float* lagT;
-float* lagSW;
-float* Gmelt_energy;
-float* den_air;
-float* K_kat;
-float* Cp_water;
-float* Xmelt;
-float* Xmelt_int;
-float* Xmelt_acc;
-float* Xmelt_V5;
+double* lagT{ NULL };
+double* lagSW{ NULL };
+double* Gmelt_energy{ NULL };
+double* den_air{ NULL };
+double* K_kat{ NULL };
+double* Cp_water{ NULL };
+double* Xmelt{ NULL };
+double* Xmelt_int{ NULL };
+double* Xmelt_acc{ NULL };
+double* Xmelt_V5{ NULL };
 
 // put variables
 
-float* Gn_ebsm;
-float* Gh_ebsm;
-float* Ge_ebsm;
-float* Gp_ebsm;
+double* Gn_ebsm{ NULL };
+double* Gh_ebsm{ NULL };
+double* Ge_ebsm{ NULL };
+double* Gp_ebsm{ NULL };
 
 // get variables
 
-const float* Albedo;
-const float* T_rain;
-const float* hru_t;
-const float* hru_ea;
-const float* net_rain;
-const float* Pa;
-const float* Qnsn_Var;
+const double* Albedo{ NULL };
+const double* T_rain{ NULL };
+const double* hru_t{ NULL };
+const double* hru_ea{ NULL };
+const double* net_rain{ NULL };
+const double* Pa{ NULL };
+const double* Qnsn_Var{ NULL };
 
 // observations
 
-const float* lagT1;
-const float* lagT2;
-const float* lagT3;
-const float* lagT4;
-const float* lagSW1;
-const float* lagSW2;
-const float* lagSW3;
-const float* lagSW4;
-const float* lagSW5;
-const float* lagSW6;
+const double* lagT1{ NULL };
+const double* lagT2{ NULL };
+const double* lagT3{ NULL };
+const double* lagT4{ NULL };
+const double* lagSW1{ NULL };
+const double* lagSW2{ NULL };
+const double* lagSW3{ NULL };
+const double* lagSW4{ NULL };
+const double* lagSW5{ NULL };
+const double* lagSW6{ NULL };
 
 void decl(void);
 void init(void);
@@ -1451,144 +1451,144 @@ ClassGlacier_melt_debris_cover_estimate_Mod* klone(string name) const;
 class ClassSoilPrairie : public ClassModule {
 public:
 
-ClassSoilPrairie(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassSoilPrairie(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-long snowinfilDiv;
-long meltrunoffDiv;
-long runoffDiv;
-long evapDiv;
+long snowinfilDiv{0};
+long meltrunoffDiv{0};
+long runoffDiv{0};
+long evapDiv{0};
 
 // allocated storage
-float **current_area; // [NumSloughs] [nhru]
-float **current_depth; // [NumSloughs] [nhru]
-float **current_volume; // [NumSloughs] [nhru]
-float **S_values; // [NumSloughs] [nhru]
-float **h_values; // [NumSloughs] [nhru]
-float **wetland_drainage; // [NumSloughs] [nhru]
+double **current_area{ NULL }; // [NumSloughs] [nhru]
+double **current_depth{ NULL }; // [NumSloughs] [nhru]
+double **current_volume{ NULL }; // [NumSloughs] [nhru]
+double **S_values{ NULL }; // [NumSloughs] [nhru]
+double **h_values{ NULL }; // [NumSloughs] [nhru]
+double **wetland_drainage{ NULL }; // [NumSloughs] [nhru]
 
 
 // declared observation variables
 
 // declared variables
-float *gw;
-float *soil_rechr;
-float *soil_moist;
-float *soil_gw;
-float *gw_flow;
-float *soil_ssr;
-float *rechr_ssr;
-float *soil_runoff;
-float *cum_soil_ssr;
-float *cum_rechr_ssr;
-float *cum_soil_runoff;
-float *cum_runoff_to_Sd;
-float *cum_redirected_residual;
-float *soil_gw_D;
-float *soil_ssr_D;
-float *gw_flow_D;
-float *soil_runoff_D;
-float *HK_V;
-float *HK_A;
-float *HD;
-float *redirected_residual;
-float *infil_act;
-float *cum_infil_act;
-float *infil_act_D;
-float *Sd_water_frac;
-float *contrib_frac;
-float *wetlands_evap;
-float *total_evap;
-float *direct_rain;
+double *gw{ NULL };
+double *soil_rechr{ NULL };
+double *soil_moist{ NULL };
+double *soil_gw{ NULL };
+double *gw_flow{ NULL };
+double *soil_ssr{ NULL };
+double *rechr_ssr{ NULL };
+double *soil_runoff{ NULL };
+double *cum_soil_ssr{ NULL };
+double *cum_rechr_ssr{ NULL };
+double *cum_soil_runoff{ NULL };
+double *cum_runoff_to_Sd{ NULL };
+double *cum_redirected_residual{ NULL };
+double *soil_gw_D{ NULL };
+double *soil_ssr_D{ NULL };
+double *gw_flow_D{ NULL };
+double *soil_runoff_D{ NULL };
+double *HK_V{ NULL };
+double *HK_A{ NULL };
+double *HD{ NULL };
+double *redirected_residual{ NULL };
+double *infil_act{ NULL };
+double *cum_infil_act{ NULL };
+double *infil_act_D{ NULL };
+double *Sd_water_frac{ NULL };
+double *contrib_frac{ NULL };
+double *wetlands_evap{ NULL };
+double *total_evap{ NULL };
+double *direct_rain{ NULL };
 
-float *Pond_water_frac; // Sd[hh]/Sdmax[hh]
-float *Pond_evap;
-float *Pond_area;
-float *Pond_volume;
-float *Pond_h;
-float *Pond_hmax;
-float *Pond_s;
-float *Sd;
-float *runoff_to_Pond;
+double *Pond_water_frac{ NULL }; // Sd[hh]/Sdmax[hh]
+double *Pond_evap{ NULL };
+double *Pond_area{ NULL };
+double *Pond_volume{ NULL };
+double *Pond_h{ NULL };
+double *Pond_hmax{ NULL };
+double *Pond_s{ NULL };
+double *Sd{ NULL };
+double *runoff_to_Pond{ NULL };
 
-float *Small_Ponds_water_frac; // Small_Ponds_Sd[hh]/Small_Ponds_Sdmax[hh]
-float *Small_Ponds_evap;
-float *Small_Ponds_area;
-float *Small_Ponds_Sd;
-float *runoff_to_Small_Ponds;
-float *Small_Ponds_runoff_to_Pond;
+double *Small_Ponds_water_frac{ NULL }; // Small_Ponds_Sd[hh]/Small_Ponds_Sdmax[hh]
+double *Small_Ponds_evap{ NULL };
+double *Small_Ponds_area{ NULL };
+double *Small_Ponds_Sd{ NULL };
+double *runoff_to_Small_Ponds{ NULL };
+double *Small_Ponds_runoff_to_Pond{ NULL };
 
 // local variables
-float *cum_soil_gw;
-float *cum_gw_flow;
-float *cum_hru_condense;
-float *soil_moist_Init;
-float *soil_rechr_Init;
-float *Sd_Init;
-float *gw_Init;
-float *SWE_Init;
+double *cum_soil_gw{ NULL };
+double *cum_gw_flow{ NULL };
+double *cum_hru_condense{ NULL };
+double *soil_moist_Init{ NULL };
+double *soil_rechr_Init{ NULL };
+double *Sd_Init{ NULL };
+double *gw_Init{ NULL };
+double *SWE_Init{ NULL };
 
-float *snowinfil_buf;
-float *runoff_buf;
-float *meltrunoff_buf;
-float *hru_evap_buf;
+double *snowinfil_buf{ NULL };
+double *runoff_buf{ NULL };
+double *meltrunoff_buf{ NULL };
+double *hru_evap_buf{ NULL };
 
 // declared parameters
-const float *Sdmax;
-const float *Sdinit;
-const float *gw_max;
-const float *gw_init;
-const float *gw_K;
-const float *basin_area;   // [BASIN]
-const float *hru_area;
-const float *soil_rechr_max;
-const float *soil_rechr_init;
-const float *soil_moist_max;
-const float *soil_moist_init;
-const float *soil_gw_K;
-const float *rechr_ssr_K;
-const float *lower_ssr_K;
-const float *Sd_ssr_K;
-const float *Sd_gw_K;
-const float *Sd_water_frac_max;
-const float *evap_threshold;
-const long *soil_withdrawal;
-const long **soil_withdrawal_Tables;
+const double *Sdmax{ NULL };
+const double *Sdinit{ NULL };
+const double *gw_max{ NULL };
+const double *gw_init{ NULL };
+const double *gw_K{ NULL };
+const double *basin_area{ NULL };   // [BASIN]
+const double *hru_area{ NULL };
+const double *soil_rechr_max{ NULL };
+const double *soil_rechr_init{ NULL };
+const double *soil_moist_max{ NULL };
+const double *soil_moist_init{ NULL };
+const double *soil_gw_K{ NULL };
+const double *rechr_ssr_K{ NULL };
+const double *lower_ssr_K{ NULL };
+const double *Sd_ssr_K{ NULL };
+const double *Sd_gw_K{ NULL };
+const double *Sd_water_frac_max{ NULL };
+const double *evap_threshold{ NULL };
+const long *soil_withdrawal{ NULL };
+const long **soil_withdrawal_Tables{ NULL };
 
-const long *cov_type;
-const long *transp_limited;
-const long *soil_ssr_runoff;
-const long *inhibit_evap;
-const long *Sd_normal;
+const long *cov_type{ NULL };
+const long *transp_limited{ NULL };
+const long *soil_ssr_runoff{ NULL };
+const long *inhibit_evap{ NULL };
+const long *Sd_normal{ NULL };
 
-const float *Pond_p;
-const float *Pond_C1;
-const float *Pond_C2;
-const float *Pond_C3;
-const float *Pond_contrib_frac; // Pond fraction of basin
-const float *Pond_area_max;
+const double *Pond_p{ NULL };
+const double *Pond_C1{ NULL };
+const double *Pond_C2{ NULL };
+const double *Pond_C3{ NULL };
+const double *Pond_contrib_frac{ NULL }; // Pond fraction of basin
+const double *Pond_area_max{ NULL };
 
-const float *Small_Ponds_Sdmax;
-const float *Small_Ponds_Sdinit;
-const float *Small_Ponds_p;
-const float *Small_Ponds_C1;
-const float *Small_Ponds_C2;
-const float *Small_Ponds_C3;
-const float *Small_Ponds_contrib_frac; // Small Ponds fraction of basin
-const float *Small_Ponds_area_max;
+const double *Small_Ponds_Sdmax{ NULL };
+const double *Small_Ponds_Sdinit{ NULL };
+const double *Small_Ponds_p{ NULL };
+const double *Small_Ponds_C1{ NULL };
+const double *Small_Ponds_C2{ NULL };
+const double *Small_Ponds_C3{ NULL };
+const double *Small_Ponds_contrib_frac{ NULL }; // Small Ponds fraction of basin
+const double *Small_Ponds_area_max{ NULL };
 
 
 
 // variable inputs
-const float *infil;
-const float *snowinfil;
-const float *meltrunoff; // frozen melt runoff
-const float *runoff;     // liquid runoff
-const float *hru_evap;
-const float *hru_evap_PT;
+const double *infil{ NULL };
+const double *snowinfil{ NULL };
+const double *meltrunoff{ NULL }; // frozen melt runoff
+const double *runoff{ NULL };     // liquid runoff
+const double *hru_evap{ NULL };
+const double *hru_evap_PT{ NULL };
 
 // variable put inputs
-float *hru_actet;      // [nhru]
-float *hru_cum_actet;
+double *hru_actet{ NULL };      // [nhru]
+double *hru_cum_actet{ NULL };
 
 
 // local allocated arrays
@@ -1600,50 +1600,50 @@ void finish(bool good);
 
 ClassSoilPrairie* klone(string name) const;
 
-float area_frac(const float area_frac);
-void Pond_calc_h_A(const float s, const float p, const float volume, float &h, float &area);
-void calc_h_and_S(const float maxvolume, const float maxarea, const float pval, float &S, float &h);
-float Pond_area_frac(const float vol_frac, const long hh);
-float Small_Ponds_area_frac(const float vol_frac, const long hh);
-float Small_Ponds_runoff_frac(const float Sd_Sdmax, const long hh);
+double area_frac(const double area_frac);
+void Pond_calc_h_A(const double s, const double p, const double volume, double &h, double &area);
+void calc_h_and_S(const double maxvolume, const double maxarea, const double pval, double &S, double &h);
+double Pond_area_frac(const double vol_frac, const long hh);
+double Small_Ponds_area_frac(const double vol_frac, const long hh);
+double Small_Ponds_runoff_frac(const double Sd_Sdmax, const long hh);
 };
 
 class ClassGlacier_debris_cover : public ClassModule {
 public:
 
-ClassGlacier_debris_cover(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassGlacier_debris_cover(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared parameters
 
-const float* debris_h;
-const float* T_threshold;
+const double* debris_h{ NULL };
+const double* T_threshold{ NULL };
 
 // declared variables
 
-float* lagT;
-float* lagSW;
-float* Xmelt;
-float* Xmelt_int;
-float* Xmelt_acc;
+double* lagT{ NULL };
+double* lagSW{ NULL };
+double* Xmelt{ NULL };
+double* Xmelt_int{ NULL };
+double* Xmelt_acc{ NULL };
 
 // get variables
 
-const float* Albedo;
-const float* hru_t;
-const float* Qnsn_Var;
+const double* Albedo{ NULL };
+const double* hru_t{ NULL };
+const double* Qnsn_Var{ NULL };
 
 // observations
 
-const float* lagT1;
-const float* lagT2;
-const float* lagT3;
-const float* lagT4;
-const float* lagSW1;
-const float* lagSW2;
-const float* lagSW3;
-const float* lagSW4;
-const float* lagSW5;
-const float* lagSW6;
+const double* lagT1{ NULL };
+const double* lagT2{ NULL };
+const double* lagT3{ NULL };
+const double* lagT4{ NULL };
+const double* lagSW1{ NULL };
+const double* lagSW2{ NULL };
+const double* lagSW3{ NULL };
+const double* lagSW4{ NULL };
+const double* lagSW5{ NULL };
+const double* lagSW6{ NULL };
 
 void decl(void);
 void init(void);
@@ -1655,11 +1655,11 @@ ClassGlacier_debris_cover* klone(string name) const;
 class Class_lapse_rate_Monthly : public ClassModule {
 public:
 
-Class_lapse_rate_Monthly(string Name, string Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+Class_lapse_rate_Monthly(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 // declared variables
-float* lapse_rate;
-float* lapse_rate_Mthly;
+double* lapse_rate{ NULL };
+double* lapse_rate_Mthly{ NULL };
 
 void decl(void);
 void init(void);

@@ -63,7 +63,7 @@ enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll
 
 
 
-static double xLimit = (numeric_limits<float>::max)();
+static double xLimit = (numeric_limits<double>::max)();
 static long lLimit = (numeric_limits<long>::max)();
 
 //static double xLimit = 3.14E20;
@@ -116,10 +116,10 @@ namespace CRHM {
 #define M_PI	3.14159265358979323846  /* pi */
 #endif
 
-const float a1 = (float)0.4361836;   //constants of approximation
-const float a2 = (float)-0.1201676;
-const float a3 = (float)0.937298;
-const float little_p = (float)0.33267;
+const double a1 = (double)0.4361836;   //constants of approximation
+const double a2 = (double)-0.1201676;
+const double a3 = (double)0.937298;
+const double little_p = (double)0.33267;
 
 
 enum TFloatFormat { ffGeneral, ffExponent, ffFixed, ffNumber, ffCurrency };
@@ -128,10 +128,10 @@ enum TFloatFormat { ffGeneral, ffExponent, ffFixed, ffNumber, ffCurrency };
 
 class snowcover {
 public:
-	float *data;
+	double *data;
 	long  N;
-	snowcover(float SWEmean, float cv);
-	float lookup(float melt) { return 0; };
+	snowcover(double SWEmean, double cv);
+	double lookup(double melt) { return 0; };
 	~snowcover() { delete[] data; };
 };
 
@@ -144,8 +144,8 @@ public:
 		Message(Message), Kind(Kind) {};
 };
 
-//float sqr(float X);
-float static sqr(float X) { return X * X; }
+//double sqr(double X);
+double static sqr(double X) { return X * X; }
 
 
 //bool static EqualUpper(std::string s1, std::string s2);
@@ -167,60 +167,60 @@ public:
 
 namespace CRHM_constants {
 
-	const float Cs = 1.28E+06; // (J/m3/K) volumetric heat capacity of soil
-	const float Cp = 1005;     // (J/kg/K) volumetric heat capacity of dry air
-	const float Rgas = 287.0;  // Gas constant for dry air (J/kg/K)
-	const float Tm = (float)273.15;   // Melting point (K)
+	const double Cs = 1.28E+06; // (J/m3/K) volumetric heat capacity of soil
+	const double Cp = 1005;     // (J/kg/K) volumetric heat capacity of dry air
+	const double Rgas = 287.0;  // Gas constant for dry air (J/kg/K)
+	const double Tm = (double)273.15;   // Melting point (K)
 
-	const float Ls = 2.845e6;  // Latent heat of sublimation (J/kg)
-	const float Lv = 2.50e6;  // Latent heat of vaporization (J/kg)
-	const float Lf = 0.334e6;  // Latent heat of fusion (J/kg)
-	const float kappa = (float)0.4;
+	const double Ls = 2.845e6;  // Latent heat of sublimation (J/kg)
+	const double Lv = 2.50e6;  // Latent heat of vaporization (J/kg)
+	const double Lf = 0.334e6;  // Latent heat of fusion (J/kg)
+	const double kappa = (double)0.4;
 
-	const float sbc = (float)5.67E-8; // Stephan-Boltzmann constant W/m^2/k4
-	const float SB = (float)4.899e-09; // Stephan-Boltzmann constant MJ/m^2-d
+	const double sbc = (double)5.67E-8; // Stephan-Boltzmann constant W/m^2/k4
+	const double SB = (double)4.899e-09; // Stephan-Boltzmann constant MJ/m^2-d
 
-	const float emiss = (float)0.985; // emissivity of the atmosphere and snowpack
-	const float emiss_c = (float)0.96; // emissivity of the canopy
-	const float em = (float)0.622;     //
+	const double emiss = (double)0.985; // emissivity of the atmosphere and snowpack
+	const double emiss_c = (double)0.96; // emissivity of the canopy
+	const double em = (double)0.622;     //
 }
 
 //     define constants for equations
 
 namespace PBSM_constants {
 
-	const float rho = (float)1.23;     // (kg/m3) density of dry air
-	const float Qstar = 120;    //{Solar Radiation Input}
-	const float M = (float)18.01;      //{molecular weight of water (kg/kmole)}
-	const float R = 8313;       //{universal gas constant (J/(kmole K))}
-	const float LATH = 2.838E6; //{latent heat of sublimation (J/kg) List 1949}
-	const float DICE = 900;     //{density of ice, assumed equal to blowing snow part (kg/m3)}
-	const float ZD = (float)0.3;       //{height of boundary-layer at xd (m) Takeuchi (1980)}
-	const float XD = 300;       //{Fetch to develop b-l to ZD (m)}
-	const float g = (float)9.80;       //{m/s2}
-	const float Beta = 170;     // Beta ratio of element to surface drag for vegetation Cr/Cs
-	const float C1 = (float)2.8;       //{2.3}
-	const float C2 = (float)1.6;
-	const float C3 = (float)4.2;       //{3.25} {e = 1/(C3*Ustar)}
-	const float KARMAN = (float)0.4;
-	const float KARMAN2 = (float)0.16;
+	const double rho = (double)1.23;     // (kg/m3) density of dry air
+	const double Qstar = 120;    //{Solar Radiation Input}
+	const double M = (double)18.01;      //{molecular weight of water (kg/kmole)}
+	const double R = 8313;       //{universal gas constant (J/(kmole K))}
+	const double LATH = 2.838E6; //{latent heat of sublimation (J/kg) List 1949}
+	const double DICE = 900;     //{density of ice, assumed equal to blowing snow part (kg/m3)}
+	const double ZD = (double)0.3;       //{height of boundary-layer at xd (m) Takeuchi (1980)}
+	const double XD = 300;       //{Fetch to develop b-l to ZD (m)}
+	const double g = (double)9.80;       //{m/s2}
+	const double Beta = 170;     // Beta ratio of element to surface drag for vegetation Cr/Cs
+	const double C1 = (double)2.8;       //{2.3}
+	const double C2 = (double)1.6;
+	const double C3 = (double)4.2;       //{3.25} {e = 1/(C3*Ustar)}
+	const double KARMAN = (double)0.4;
+	const double KARMAN2 = (double)0.16;
 }
 
 namespace CHAD_constants {
 	// Constants:
-	const float emm = (float)0.985; 		// emissivity [ ]
-	const float sbc = (float)5.67e-8; 		//Stephan-Boltzmann constant [W m-2 K-4]
-	const float solarconst = 1367; 	// solar constant [W m-2]
-	const float ca = 1013;  		//specific heat of air [J kg-1 K-1]
-	const float cf = 2470;  		//specific heat of forest biomass [J kg-1 K-1]
-	const float pa = (float)1.22;  		//typical air density [kg m-3]
-	const float pf = 686;   		//typical forest biomass density [kg m-3]
-	const float kf = (float)0.17;		//typical thermal conductivity of wood biomass [J m-1 K-1]
-	const float dv = (float)1.983e-5;  		//dynamic viscosity of air (typical value for 300K) [kg m-1 s-1]
-	const float kv = (float)1.88e-5;  		//kinematic viscosity of air (typical value for Sask.) [m2 s-1]
-	const float dh = (float)2.216e-5; 		//thermal diffusivity of air (1 atm; 300 K) [m2 s-1]
-	const float tca = (float)0.024;              //typical thermal conductivity of air (at 25ï¿½C) [J m-1 K-1]
-	const float DTOR = (float)3.1416 / (float)180.0;
+	const double emm = (double)0.985; 		// emissivity [ ]
+	const double sbc = (double)5.67e-8; 		//Stephan-Boltzmann constant [W m-2 K-4]
+	const double solarconst = 1367; 	// solar constant [W m-2]
+	const double ca = 1013;  		//specific heat of air [J kg-1 K-1]
+	const double cf = 2470;  		//specific heat of forest biomass [J kg-1 K-1]
+	const double pa = (double)1.22;  		//typical air density [kg m-3]
+	const double pf = 686;   		//typical forest biomass density [kg m-3]
+	const double kf = (double)0.17;		//typical thermal conductivity of wood biomass [J m-1 K-1]
+	const double dv = (double)1.983e-5;  		//dynamic viscosity of air (typical value for 300K) [kg m-1 s-1]
+	const double kv = (double)1.88e-5;  		//kinematic viscosity of air (typical value for Sask.) [m2 s-1]
+	const double dh = (double)2.216e-5; 		//thermal diffusivity of air (1 atm; 300 K) [m2 s-1]
+	const double tca = (double)0.024;              //typical thermal conductivity of air (at 25ï¿½C) [J m-1 K-1]
+	const double DTOR = (double)3.1416 / (double)180.0;
 }
 
 
@@ -238,15 +238,15 @@ string static GetCurrentDir(void) {
 class Common
 {
 public:
-	double static estar(float t);
-	static float Qs(float P, float tc);
-	float static Qswater(float P, float tc);
-	float static DepthofSnow(float SWE);
+	double static estar(double t);
+	static double Qs(double P, double tc);
+	double static Qswater(double P, double tc);
+	double static DepthofSnow(double SWE);
 
-	float static SWE_prob(float SWEmean, float SWE, float CV);
-	float static SVDens(float Temp);
+	double static SWE_prob(double SWEmean, double SWE, double CV);
+	double static SVDens(double Temp);
 	void static GroupEnding(string &AA, int Cnt);
-	float static Ice_Bulb(float Tc, float RH, float Pa);
+	double static Ice_Bulb(double Tc, double RH, double Pa);
 	void static  Message(const char *s1, const char *s2);
 	void static Message(const string s1, const string s2);
 	string static lowercase(string &s);
@@ -257,8 +257,8 @@ public:
 	string static trim(string& str);
 	double static StrtoDt(string s);
 	bool static EqualUpper(string s1, string s2);
-	float static KyValue(float probability, float guess);
-	float static K(float Ky, float LogStDev);
+	double static KyValue(double probability, double guess);
+	double static K(double Ky, double LogStDev);
 	string static GetCurrentPath(void);
 	bool static Variation_Decide(int Variation_set, long Variation);
 	void static writefile(string filepath, string content);

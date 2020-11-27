@@ -17,23 +17,24 @@
 
 using namespace std;
 
-snowcover::snowcover(float SWEmean, float cv) {  //Manishankar: this is only being used in NewModules.cpp
-	float x, sca;
-
-	const long N = 150;
-	data = new float[N];
+snowcover::snowcover(double SWEmean, double cv) {  //Manishankar: this is only being used in NewModules.cpp
+	double x;
+ 	//double sca; (unreferenced commented out for now (jsh507)
+	N = 150;
+	//const long N = 150; (removed in favor of member variable N - jhs507)
+	data = new double[N];
 
 	for (int ii = 0; ii < N; ii++) {
-		x = SWEmean * 2.0*(ii + 1) / N;
-		float K = (x - SWEmean) / (SWEmean*cv);
+		x = SWEmean * 2.0*((long long)ii + 1) / N;
+		double K = (x - SWEmean) / (SWEmean*cv);
 
-		float Sy = sqrt(log(cv*cv + 1.0));
+		double Sy = sqrt(log(cv*cv + 1.0));
 
-		float Ky = (log(K*sqrt(exp(Sy*Sy) - 1.0) + 1.0) + Sy * Sy / 2.0) / Sy;
+		double Ky = (log(K*sqrt(exp(Sy*Sy) - 1.0) + 1.0) + Sy * Sy / 2.0) / Sy;
 
-		float t = 1 / (1 + little_p * Ky);
+		double t = 1 / (1 + little_p * Ky);
 
-		float P = (exp(-Ky * Ky / 2) / sqrt(2 * M_PI)) * (a1*t + a2 * pow(t, 2) + a3 * pow(t, 3));
+		double P = (exp(-Ky * Ky / 2) / sqrt(2 * M_PI)) * (a1*t + a2 * pow(t, 2) + a3 * pow(t, 3));
 
 		data[ii] = P;
 	}
@@ -42,7 +43,7 @@ snowcover::snowcover(float SWEmean, float cv) {  //Manishankar: this is only bei
 
 // Saturation vapour pressure (kPa)
 // Saturation humidity (kg/kg) Over ice and water
-double Common::estar(float t) /* Saturation vapour pressure kPa*/
+double Common::estar(double t) /* Saturation vapour pressure kPa*/
 {
 	if (t > 0.0)
 		return 0.611 * exp(17.27*t / (t + 237.3));
@@ -50,9 +51,9 @@ double Common::estar(float t) /* Saturation vapour pressure kPa*/
 		return 0.611 * exp(21.88*t / (t + 265.5));
 }
 
-float Common::Qs(float P, float tc) { // P (KPa)  //Manishankar: this function is only being used in NewModules.cpp.
+double Common::Qs(double P, double tc) { // P (KPa)  //Manishankar: this function is only being used in NewModules.cpp.
 
-	float es; // Vapour pressure (Pa)
+	double es; // Vapour pressure (Pa)
 
 	if (tc >= 0)
 		es = 0.611213*exp(17.5043*tc / (241.3 + tc));
@@ -63,20 +64,20 @@ float Common::Qs(float P, float tc) { // P (KPa)  //Manishankar: this function i
 }
 
 // Saturation humidity (kg/kg) Over water
-float Common::Qswater(float P, float tc) { // P (KPa)
+double Common::Qswater(double P, double tc) { // P (KPa)
 
-	float es; // Vapour pressure (KPa)
+	double es; // Vapour pressure (KPa)
 
 	es = 0.611213*exp(17.5043*tc / (241.3 + tc));
 
 	return(0.622*es / P);
 }
 
-float Common::DepthofSnow(float SWE)
+double Common::DepthofSnow(double SWE)
 {
 	/* 3/5/98
 	Calculates Snow Depth(m) from SWE(mm) */
-	float Snow_Depth;
+	double Snow_Depth;
 
 	if (SWE > 2.05) {
 		if (SWE <= 145.45) /* SWE 145.45 mm equivalent to 60 cm*/
@@ -90,20 +91,20 @@ float Common::DepthofSnow(float SWE)
 	return Snow_Depth / 100.0;
 } /* DepthofSnow*/
 
-float Common::SWE_prob(float SWEmean, float SWE, float CV) { //Manishankar: This function is only being used in NewModules.cpp
+double Common::SWE_prob(double SWEmean, double SWE, double CV) { //Manishankar: This function is only being used in NewModules.cpp
 
 	if (SWE <= 0.01) return 0.0; // handle log(0) error
 	if (SWE >= SWEmean) return 1.0; //
 
-	float K = -SWE / (SWEmean*CV);
+	double K = -SWE / (SWEmean*CV);
 
-	float Sy = sqrt(log(1.0 + CV * CV));
+	double Sy = sqrt(log(1.0 + CV * CV));
 
-	float Ky = log(1.0 + K * CV) / Sy + Sy / 2.0;
+	double Ky = log(1.0 + K * CV) / Sy + Sy / 2.0;
 
-	float t = 1 / (1 + little_p * Ky);
+	double t = 1 / (1 + little_p * Ky);
 
-	float P = (exp(-Ky * Ky / 2) / sqrt(2 * M_PI)) * (a1*t + a2 * t*t + a3 * t*t*t);
+	double P = (exp(-Ky * Ky / 2) / sqrt(2 * M_PI)) * (a1*t + a2 * t*t + a3 * t*t*t);
 
 	if (P > 1.0 || P < 0.001) // handle discontinuity
 		P = 1.0;
@@ -111,7 +112,7 @@ float Common::SWE_prob(float SWEmean, float SWE, float CV) { //Manishankar: This
 	return P;
 }
 
-float Common::SVDens(float Temp)
+double Common::SVDens(double Temp)
 
 {
 	return 1.324*exp(22.452*Temp / (Temp + 273.15)) / (Temp + 273.15);
@@ -136,25 +137,25 @@ void Common::GroupEnding(string &AA, int Cnt) {
 	}
 }
 
-float Common::Ice_Bulb(float Tc, float RH, float Pa) {
+double Common::Ice_Bulb(double Tc, double RH, double Pa) {
 
-	float Tk = Tc + CRHM_constants::Tm;
+	double Tk = Tc + CRHM_constants::Tm;
 
-	float D = 0.0000206*pow(Tk / CRHM_constants::Tm, 1.75);
+	double D = 0.0000206*pow(Tk / CRHM_constants::Tm, 1.75);
 
-	float RHO = Pa * 1000.0 / (CRHM_constants::Rgas*Tk);
+	double RHO = Pa * 1000.0 / (CRHM_constants::Rgas*Tk);
 
-	float qt = CRHM_constants::em / (Pa*1000.0)*611.213*exp(22.4422*Tc / (CRHM_constants::Tm + Tc));
+	double qt = CRHM_constants::em / (Pa*1000.0)*611.213*exp(22.4422*Tc / (CRHM_constants::Tm + Tc));
 
-	float lamda = 0.000076843*Tk + 0.003130762;
+	double lamda = 0.000076843*Tk + 0.003130762;
 
-	float L;
+	double L;
 	if (Tc > 0.0)
 		L = CRHM_constants::Lv;
 	else
 		L = CRHM_constants::Ls;
 
-	float delta = CRHM_constants::em*L*qt / (CRHM_constants::Rgas*sqr(Tk));
+	double delta = CRHM_constants::em*L*qt / (CRHM_constants::Rgas*sqr(Tk));
 
 	return Tc - L * (1.0 - RH / 100.0)*qt / (CRHM_constants::Cp + L * delta) *(RHO*CRHM_constants::Cp*D / lamda);
 } // returns ice bulb temperature, Pa (kPa), RH(%).
@@ -249,15 +250,15 @@ bool Common::EqualUpper(string s1, string s2) {
 	return (bool)(s1 == s2);
 }
 
-float Common::KyValue(float probability, float guess) {
+double Common::KyValue(double probability, double guess) {
 	// finds location of probability, using polynomial approx to normal dist
 	//   from "Handbook of Mathematical Functions" by Abramowitz and Stegun}
 
-	float Ky, TempP, t;
+	double Ky, TempP, t;
 	bool  done = false;
-	float direction = -1;       // increasing
-	float tolerance = 0.0001;
-	float dKy = 0.1;      // increment
+	double direction = -1;       // increasing
+	double tolerance = 0.0001;
+	double dKy = 0.1;      // increment
 	long  iterations = 0;
 
 	Ky = guess;        // start value
@@ -291,7 +292,7 @@ float Common::KyValue(float probability, float guess) {
 	return Ky;
 }
 
-float Common::K(float Ky, float LogStDev) {
+double Common::K(double Ky, double LogStDev) {
 
 	return (exp(LogStDev*Ky - (sqr(LogStDev) / 2)) - 1) / (sqrt(exp(sqr(LogStDev)) - 1));
 }
