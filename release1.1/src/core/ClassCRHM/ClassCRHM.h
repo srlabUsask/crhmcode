@@ -14,6 +14,12 @@ using namespace std;
 #include "ClassVar.h"
 #include "ClassPar.h"
 #include "Classfilter.h"
+#include "Classmacro.h"
+#include "ClassModel.h"
+#include "Tresult.h"
+#include "Unit_Info.h"
+#include "Multiplier_Info.h"
+#include "Convert.h"
 #include <string>
 #include <iostream>
 #include <map>
@@ -21,39 +27,14 @@ using namespace std;
 
 enum types { DELIMITER = 1, NUMBER };
 
-class Classmacro;
-class parser;
-class ClassModule;
-//TStringList *Strings;
+//class Classmacro; removed forward declaration - jhs507
+//class parser; removed forward declaration - jhs507
+//class ClassModule; removed forward declaration - jhs507
+
+//TStringList *Strings; 
 
 typedef unsigned long Word;
 typedef int INT;
-
-
-
-
-
-class Classmacro {
-public:
-	Classmacro(ClassData *File);
-	~Classmacro();
-
-	ClassData *File;
-	TStringList *FilterList;
-	long Interpolation;
-	void addfilter(string Line);
-	void fixup(void);
-	void execute(long Line);
-};
-
-class ClassModel {
-public:
-	string ModelName;
-	string ModelModules;
-
-	ClassModel(string ModelName, string ModelModules) :
-		ModelName(ModelName), ModelModules(ModelModules) {};
-};
 
 void   LogError(CRHMException Except);
 void   LogError(string S, TExcept Kind);
@@ -137,75 +118,6 @@ void ClassParSet(ClassPar *p);
 
 //double sqr(double x);
 
-class Tresult {
-public:
-	double k;
-	char *aExp;
-
-	Tresult(int size) : k(1.0) {
-		aExp = new char[size];
-		::memset(aExp, 0, sizeof(char)*size);
-	}
-	~Tresult() { delete[] aExp; }
-};
-
-class Unit_Info {
-public:
-	string Abbr;
-	string Name;
-	double k;
-	string Expr;
-
-	Unit_Info() :
-		Abbr(""), Name(""), k(0.0), Expr("") {};
-
-	Unit_Info(string Abbr_, string Name_, double k_, string Expr_) :
-		Abbr(Abbr_), Name(Name_), k(k_), Expr(Expr_) {};
-};
-
-class Multiplier_Info {
-public:
-	char Abbr;
-	string Name;
-	double k;
-	Multiplier_Info(char Abbr_, string Name_, double k_) :
-		Abbr(Abbr_), Name(Name_), k(k_) {};
-};
-
-class Convert {
-	static Unit_Info Infos[];
-	static Multiplier_Info Multipliers[];
-
-	int NumBasicUnits;
-	int NumUnits;
-	int NumMultipliers;
-
-public:
-	Convert();
-
-	bool ConvertUnit(double& dValue, string pszSrcUnit, string pszDstUnit);
-
-	double quickPow(double k, int nPow);
-	int LookupUnit(string pszIn);
-	void DivUnit(Tresult& u1, const Tresult& u2);
-	void MulUnit(Tresult& u1, const Tresult& u2);
-	void MulUnitK(Tresult& u, double k);
-	void PowUnit(Tresult& u, char nPow);
-	void SetBasicUnit(Tresult& u, double k, int iBasicUnit);
-	void ExpandUnitExpr(Tresult& u, double k, string pszExpr);
-
-	string ParseDivUnitExpr(string pszIn, Tresult& u);
-	string ParseMulUnitExpr(string pszIn, Tresult& u);
-	string ParsePowUnitExpr(string pszIn, Tresult& u);
-	string ParseUnitPhase1(string pszIn, Tresult& u);
-	string ParseUnitPhase2(string pszIn, Tresult& u);
-
-	void CheckUnitsString(string Name, string variable, string units);
-	void CheckUnitsObs(string Vunits, string Munits, string declaration); // check original observation units
-
-	bool CheckUnitsTable();
-
-};
 string extract_units(string& Comment);
 
 void   LogDebug(const char *S);

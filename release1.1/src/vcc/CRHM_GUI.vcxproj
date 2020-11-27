@@ -683,8 +683,10 @@
     <ClCompile Include="..\core\ClassCRHM\ClassCRHM.cpp" />
     <ClCompile Include="..\core\ClassCRHM\ClassData.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Classfilter.cpp" />
+    <ClCompile Include="..\core\ClassCRHM\Classmacro.cpp" />
     <ClCompile Include="..\core\ClassCRHM\ClassPar.cpp" />
     <ClCompile Include="..\core\ClassCRHM\ClassVar.cpp" />
+    <ClCompile Include="..\core\ClassCRHM\Convert.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classabs.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classadd.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classaddv.cpp" />
