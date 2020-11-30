@@ -24,7 +24,13 @@
 #include "TStringList/TStringList.h"
 
 #include "time.h"
-
+#include "CRHM_namespace.h"
+#include "snowcover.h"
+#include "CRHMException.h"
+#include "VandP.h"
+#include "CRHM_constants.h"
+#include "PBSM_constants.h"
+#include "CHAD_constants.h"
 
 #define WM_CRHM_LOG_EXCEPTION  (WM_APP + 900)
 #define WM_CRHM_LOG_EXCEPTION1 (WM_APP + 901)
@@ -49,54 +55,6 @@
 #define VARIATION_0  2048    // include in basic module
 #define VARIATION_WQ 4096    // include for WQ
 
-using namespace std;
-
-enum class TMemoSel { LOG, DEBUG };
-enum class TExcept { NONE, ERR, DECLERR, WARNING, USER, TERMINATE };
-enum class TExtra { BLANK, DD, TT, DT };
-enum class TAKA { AKAERROR = -1, VARG, OBSR, VARD, OBSD, PARD, OBSF, AKAEND };
-enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll, mbNoToAll, mbYesToAll, mbHelp };
-
-
-
-
-static double xLimit = (numeric_limits<double>::max)();
-static long lLimit = (numeric_limits<long>::max)();
-
-//static double xLimit = 3.14E20;
-//static long lLimit = 2147483647;
-
-
-enum class TBuild { BUILD, DECL, INIT, RUN };
-
-enum class TIMEFORMAT { MS, MMDDYYYY, YYYYMMDD };
-
-enum class LMODULE { BASIC, MACRO, ADVANCE, SUPPORT, CUSTOM, PROTO, OBSOL };
-
-enum class TFun { FOBS, VP_SAT, W_MJ, MJ_W, AVG, MIN, MAX, TOT, POS, FIRST, LAST, CNT, CNT0, DLTA, INTVL, DAY, DTOT };
-
-enum class TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all variables/parameters
-
-enum class TVar { none, Int, Float, Txt, Read, ReadI, ReadF };
-
-// NREB only applies to variables. NDEFNZ only applies to parameters
-enum class TDim { BASIN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, NHRU, NOBS, NLAY, NDEF, NFREQ, NREB, NDEFN, NDEFNZ };
-
-
-namespace CRHM {
-	enum TFitType { POLY, FOURIER, POWER, EXPO, LOGARITHM, MLR };
-	enum TAgainst { myTIME, VARIABLE };
-	enum TDsply { FRACT, OBS, BOTH, MDY, XY };
-	enum TTiming { IDLE, EARLY, MELT, MELT2, MATURE, HOLD };
-	enum TValue { PSI, KSAT, WILT, FCAP, PORG, PORE, AIRENT, PORESZ, AVAIL };
-	enum TFrozen { PREMELT, RESTRICTED, LIMITED, UNLIMITED, SATURATED };
-	enum TSANDCLAY { LOAM1, LOAM2, LOAM3, SAND, CLAY };
-	enum { NOTUSED, DRIFT, HUMMOCK };
-	enum TCONDITION { FROZEN, ICEWATER, WATER, DRAINING };
-	enum CONTROLSTATES { SAVE, LOAD };
-	enum HRUOBSTYPES { HRU_OBS_t_rh_ea = 1, HRU_OBS_p_ppt, HRU_OBS_u, HRU_OBS_Q, HRU_OBS_misc };
-}
-
 #define MAXHRU 101
 #define MAXLAY 101
 #define WtoMJ_D 86400/1E6
@@ -106,115 +64,37 @@ namespace CRHM {
 #define M_PI	3.14159265358979323846  /* pi */
 #endif
 
+using namespace std;
+
+enum class TMemoSel { LOG, DEBUG };
+enum class TExtra { BLANK, DD, TT, DT };
+enum class TAKA { AKAERROR = -1, VARG, OBSR, VARD, OBSD, PARD, OBSF, AKAEND };
+enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll, mbNoToAll, mbYesToAll, mbHelp };
+enum class TBuild { BUILD, DECL, INIT, RUN };
+enum class TIMEFORMAT { MS, MMDDYYYY, YYYYMMDD };
+enum class LMODULE { BASIC, MACRO, ADVANCE, SUPPORT, CUSTOM, PROTO, OBSOL };
+enum class TFun { FOBS, VP_SAT, W_MJ, MJ_W, AVG, MIN, MAX, TOT, POS, FIRST, LAST, CNT, CNT0, DLTA, INTVL, DAY, DTOT };
+enum class TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all variables/parameters
+enum class TVar { none, Int, Float, Txt, Read, ReadI, ReadF };
+
+// NREB only applies to variables. NDEFNZ only applies to parameters
+enum class TDim { BASIN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, NHRU, NOBS, NLAY, NDEF, NFREQ, NREB, NDEFN, NDEFNZ };
+enum class TFloatFormat { ffGeneral, ffExponent, ffFixed, ffNumber, ffCurrency };
+
+static double xLimit = (numeric_limits<double>::max)();
+static long lLimit = (numeric_limits<long>::max)();
+
 const double a1 = 0.4361836;   //constants of approximation
 const double a2 = -0.1201676;
 const double a3 = 0.937298;
 const double little_p = 0.33267;
 
-
-enum class TFloatFormat { ffGeneral, ffExponent, ffFixed, ffNumber, ffCurrency };
-
 //void GroupEnding(string &AA, int Cnt);
-
-class snowcover {
-public:
-	double* data {NULL};
-	long  N {0};
-	snowcover(double SWEmean, double cv);
-	double lookup(double melt) { return 0; };
-	~snowcover() { delete[] data; };
-};
-
-class CRHMException {
-public:
-	std::string Message;
-	TExcept Kind;
-	CRHMException() : Message(""), Kind(TExcept::NONE) {};
-	CRHMException(std::string Message, TExcept Kind) :
-		Message(Message), Kind(Kind) {};
-};
-
+//static double xLimit = 3.14E20;
+//static long lLimit = 2147483647;
 //double sqr(double X);
 double static sqr(double X) { return X * X; }
-
-
 //bool static EqualUpper(std::string s1, std::string s2);
-
-union VandP {
-
-public:
-	VandP(long Long) : both(Long) {}; // constructor
-	VandP(void) : both(0) {}; // constructor
-
-	unsigned long both;
-	unsigned short int Module[2];
-	unsigned short int GetV(void) { return Module[0]; };
-	void PutV(unsigned short int V) { Module[0] = V; };
-	unsigned short int GetP(void) { return Module[1]; };
-	void PutP(unsigned short int P) { Module[1] = P; };
-	void Set(long Long) { both = Long; };
-};
-
-namespace CRHM_constants {
-
-	const double Cs = 1.28E+06; // (J/m3/K) volumetric heat capacity of soil
-	const double Cp = 1005;     // (J/kg/K) volumetric heat capacity of dry air
-	const double Rgas = 287.0;  // Gas constant for dry air (J/kg/K)
-	const double Tm = 273.15;   // Melting point (K)
-
-	const double Ls = 2.845e6;  // Latent heat of sublimation (J/kg)
-	const double Lv = 2.50e6;  // Latent heat of vaporization (J/kg)
-	const double Lf = 0.334e6;  // Latent heat of fusion (J/kg)
-	const double kappa = 0.4;
-
-	const double sbc = 5.67E-8; // Stephan-Boltzmann constant W/m^2/k4
-	const double SB = 4.899e-09; // Stephan-Boltzmann constant MJ/m^2-d
-
-	const double emiss = 0.985; // emissivity of the atmosphere and snowpack
-	const double emiss_c = 0.96; // emissivity of the canopy
-	const double em = 0.622;     //
-}
-
-//     define constants for equations
-
-namespace PBSM_constants {
-
-	const double rho = 1.23;     // (kg/m3) density of dry air
-	const double Qstar = 120;    //{Solar Radiation Input}
-	const double M = 18.01;      //{molecular weight of water (kg/kmole)}
-	const double R = 8313;       //{universal gas constant (J/(kmole K))}
-	const double LATH = 2.838E6; //{latent heat of sublimation (J/kg) List 1949}
-	const double DICE = 900;     //{density of ice, assumed equal to blowing snow part (kg/m3)}
-	const double ZD = 0.3;       //{height of boundary-layer at xd (m) Takeuchi (1980)}
-	const double XD = 300;       //{Fetch to develop b-l to ZD (m)}
-	const double g = 9.80;       //{m/s2}
-	const double Beta = 170;     // Beta ratio of element to surface drag for vegetation Cr/Cs
-	const double C1 = 2.8;       //{2.3}
-	const double C2 = 1.6;
-	const double C3 = 4.2;       //{3.25} {e = 1/(C3*Ustar)}
-	const double KARMAN = 0.4;
-	const double KARMAN2 = 0.16;
-}
-
-namespace CHAD_constants {
-	// Constants:
-	const double emm = 0.985; 		// emissivity [ ]
-	const double sbc = 5.67e-8; 		//Stephan-Boltzmann constant [W m-2 K-4]
-	const double solarconst = 1367; 	// solar constant [W m-2]
-	const double ca = 1013;  		//specific heat of air [J kg-1 K-1]
-	const double cf = 2470;  		//specific heat of forest biomass [J kg-1 K-1]
-	const double pa = 1.22;  		//typical air density [kg m-3]
-	const double pf = 686;   		//typical forest biomass density [kg m-3]
-	const double kf = 0.17;		//typical thermal conductivity of wood biomass [J m-1 K-1]
-	const double dv = 1.983e-5;  		//dynamic viscosity of air (typical value for 300K) [kg m-1 s-1]
-	const double kv = 1.88e-5;  		//kinematic viscosity of air (typical value for Sask.) [m2 s-1]
-	const double dh = 2.216e-5; 		//thermal diffusivity of air (1 atm; 300 K) [m2 s-1]
-	const double tca = 0.024;              //typical thermal conductivity of air (at 25ï¿½C) [J m-1 K-1]
-	const double DTOR = 3.1416 / 180.0;
-}
-
-
-//===========================================================================================================================================
 
 string static GetCurrentDir(void) {
 	char buff[FILENAME_MAX];
@@ -229,8 +109,6 @@ string static GetCurrentDir(void) {
 		return current_working_dir;
 	}
 }
-
-
 
 class Common
 {
@@ -260,23 +138,5 @@ public:
 	bool static Variation_Decide(int Variation_set, long Variation);
 	void static writefile(string filepath, string content);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif

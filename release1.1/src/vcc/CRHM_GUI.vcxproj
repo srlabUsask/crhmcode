@@ -194,6 +194,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\core\Common\CRHMException.h" />
+    <ClInclude Include="..\core\Common\VandP.h" />
     <ClInclude Include="CACFunction.h" />
     <ClInclude Include="CActivityDonut.h" />
     <ClInclude Include="CActivityGauge.h" />
@@ -738,6 +740,7 @@
     <ClCompile Include="..\core\ClassModule\ClassMuskingum.cpp" />
     <ClCompile Include="..\core\ClassModule\Myparser.cpp" />
     <ClCompile Include="..\core\Common\Common.cpp" />
+    <ClCompile Include="..\core\Common\snowcover.cpp" />
     <ClCompile Include="..\core\CRHMmain.cpp" />
     <ClCompile Include="..\core\CRHM_parse.cpp" />
     <ClCompile Include="..\core\GlobalDll.cpp" />
