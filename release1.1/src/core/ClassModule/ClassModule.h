@@ -10,6 +10,10 @@
 #include "GlobalCommon.h"
 #include "GlobalDll.h"
 #include "ClassCRHM/ClassCRHM.h"
+#include "Administer.h"
+#include "Myparser.h"
+#include "ClassClark.h"
+#include "ClassMuskingum.h"
 #include <cmath>
 #include <string>
 #include <time.h>
@@ -290,127 +294,6 @@ public:
 	bool UsingObservations(void);
 
 	long FindModule_from_parameter(string source, string param);
-};
-
-class   Administer {
-
-public:
-	TStringList * DLLModuleList;       // modules defined in DLL
-	TStringList *DLLModelList;        // models defined in DLL
-	TStringList *DLLModelModuleList;  // modules used in DLL models in CommaText
-	string Version;
-	string DLLName;
-	string HelpFile;
-
-	Administer(string Version, string _HelpFile);
-	~Administer();
-
-	void   MacroClear();
-	void   MacroUpdate();
-	void   AddModule(ClassModule *Module);
-	void   AddModel(string ModelName, string ModelModules);
-	void   LoadCRHM(string DllName);
-
-
-
-	//void   Accept(int Result = mbYes);
-	void   Accept(int Result = 0);
-
-
-
-};
-
-class Myparser {
-	const char *exp_ptr;  // points to the expression
-	char token[80]; // holds current token
-	char tok_type {'\0'};  // holds token's type
-
-	int row {0};
-	int col {0};
-	int repeat {0};
-	int rowrepeat {0};
-	int Bang {0};
-	bool repeatset {false};
-	ClassPar* LocalPar {NULL};
-
-	void eval_exp2(double &result);
-	void eval_exp3(double &result);
-	void eval_exp4(double &result);
-	void eval_exp5(double &result);
-	void eval_exp6(double &result);
-	void atom(double &result);
-	void get_token();
-	void serror(int error);
-	int isdelim(char c);
-public:
-	Myparser();
-	void eval_exp(ClassPar *Par);
-};
-
-class   ClassClark {
-
-public:
-	ClassClark(const double* inVar, double* outVar, const double* kstorage, const double* lag, const long nhru, const long setlag = -1);
-	~ClassClark();
-	void DoClark();
-	void DoClark(const long hh);
-	double ChangeStorage(const double* kstorage, const long hh);
-	double ChangeLag(const double *newlag, const long hh);
-	double Left(int hh);
-
-private:
-	const double* kstorage;
-	const  double* inVar;
-	double* outVar;
-
-	double** LagArray;
-
-	double* LastIn; //
-	double* LastOut; //
-
-	double* c01; // storage constant from K
-	double* c2;  // storage constant from K
-	double* NO_lag_release;  // released from storage when lag set to zero
-
-	long nhru;
-	long* maxlag; // maximum lag - i.e. storage
-
-	long* ilag; // lag interval (hours)
-	long* ulag; // lag interval (#intervals)
-
-};
-
-class   ClassMuskingum {
-
-public:
-	ClassMuskingum(const double* inVar, double* outVar, const double* kstorage, const double* route_X_M, const double* lag, const long nhru, const long setlag = -1);
-	~ClassMuskingum();
-	void DoMuskingum();
-	void DoMuskingum(const long hh);
-	void ChangeLag(const double *newlag, const long hh);
-	double Left(int hh);
-
-
-	double* c0; // storage constant from K
-	double* c1; // storage constant from K
-	double* c2; // storage constant from K
-	double prevdate {0.0};
-
-private:
-	const double* kstorage {NULL};
-	const  double* inVar;
-	double* outVar;
-
-	double** LagArray;
-
-	double* LastIn; //
-	double* LastOut; //
-
-	long nhru;
-	long* maxlag; // maximum lag - i.e. storage
-
-	long* ilag; // lag interval (hours)
-	long* ulag; // lag interval (#intervals)
 };
 
 
