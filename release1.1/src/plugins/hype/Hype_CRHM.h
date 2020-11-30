@@ -5,7 +5,7 @@
 #define Hype_CRHMH
 //---------------------------------------------------------------------------
 
-#include "ClassModule.h"
+#include "ClassModule/ClassModule.h"
 
 #define numsubstances 5
 #define maxsoillayers2 2

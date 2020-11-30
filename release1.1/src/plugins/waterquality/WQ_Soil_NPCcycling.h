@@ -4,7 +4,7 @@
 #define WQ_Soil_NPCcyclingH
 //---------------------------------------------------------------------------
 
-#include "ClassModule.h"
+#include "ClassModule/ClassModule.h"
 
 #define numsubstances 7
 #define maxsoillayers 2

@@ -732,7 +732,7 @@
     <ClCompile Include="..\core\ClassCRHM\Filters\ClasssubV.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classtime.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\ClassTimeshift.cpp" />
-    <ClCompile Include="..\core\ClassModule.cpp" />
+    <ClCompile Include="..\core\ClassModule\ClassModule.cpp" />
     <ClCompile Include="..\core\Common.cpp" />
     <ClCompile Include="..\core\CRHMmain.cpp" />
     <ClCompile Include="..\core\CRHM_parse.cpp" />

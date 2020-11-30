@@ -13,7 +13,7 @@
 //#include "boost/shared_ptr.hpp"
 #include "GlobalDll.h"
 //#include "ClassCRHM.h"
-#include "ClassModule.h"
+#include "ClassModule/ClassModule.h"
 #include "NewModules.h"
 #include "MacroUnit.h"
 #include "Common.h"

@@ -13,7 +13,7 @@
 
 #include "NewModules.h"
 #include "GlobalDll.h"
-//#include "ClassModule.h"
+//#include "ClassModule/ClassModule.h"
 #include <algorithm>
 
 //#include <values.h>

@@ -1523,9 +1523,6 @@
     <ClCompile Include="gui\CTChart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassModule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\core\Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1983,6 +1980,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\core\ClassCRHM\Convert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassModule\ClassModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

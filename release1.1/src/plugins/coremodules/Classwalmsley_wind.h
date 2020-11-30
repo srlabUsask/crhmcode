@@ -1,6 +1,6 @@
 //created by Manishankar Mondal
 
-#include "ClassModule.h"
+#include "ClassModule/ClassModule.h"
 
 class Classwalmsley_wind : public ClassModule {
 public:

@@ -6,8 +6,8 @@
 #define NewModulesH
 //---------------------------------------------------------------------------
 //#include "stdafx.h"
-#include "ClassModule.h"
-//#include "ClassModule.h"
+#include "ClassModule/ClassModule.h"
+//#include "ClassModule/ClassModule.h"
 #include "Hype_CRHM.h"
 #include "Hype_routines.h"
 #include "Hype_lake.h"

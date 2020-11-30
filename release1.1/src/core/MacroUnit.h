@@ -4,7 +4,7 @@
 //---------------------------------------------------------------------------
 
 #include "CRHM_parse.h"
-#include "ClassModule.h"
+#include "ClassModule/ClassModule.h"
 #include <string>
 //#include "boost/spirit/core/basics.hpp"
 
