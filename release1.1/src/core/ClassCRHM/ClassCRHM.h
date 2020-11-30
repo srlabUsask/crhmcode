@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#include "Common.h"
+#include "Common/Common.h"
 #include "GlobalCommon.h"
 #include "TStringList/TStringList.h"
 #include "ClassData.h"

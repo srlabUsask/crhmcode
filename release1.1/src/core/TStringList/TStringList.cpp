@@ -18,7 +18,7 @@
 #include <string>
 #include <limits>
 #include "ClassCRHM/ClassCRHM.h"
-#include "Common.h"
+#include "Common/Common.h"
 
 string TStringList::CommaText(void) 
 {
