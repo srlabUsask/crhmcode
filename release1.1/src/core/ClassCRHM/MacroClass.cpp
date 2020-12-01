@@ -2,7 +2,7 @@
 #include "Classfilter.h"
 
 
-void Classmacro::addfilter(string Line) {
+void MacroClass::addfilter(string Line) {
 
 	Classfilter* NewFilter;
 
@@ -104,28 +104,28 @@ void Classmacro::addfilter(string Line) {
 
 
 //---------------------------------------------------------------------------
-void Classmacro::execute(long Line) {
+void MacroClass::execute(long Line) {
 
 	for (int ii = 0; ii < FilterList->Count; ii++)
 		((Classfilter*)FilterList->Objects[ii])->doFunctions(Line);
 }
 
 //---------------------------------------------------------------------------
-void Classmacro::fixup(void) {
+void MacroClass::fixup(void) {
 
 	for (int ii = 0; ii < FilterList->Count; ii++)
 		((Classfilter*)FilterList->Objects[ii])->fixup();
 }
 
 //---------------------------------------------------------------------------
-Classmacro::Classmacro(ClassData* File) : File(File), Interpolation(0) {
+MacroClass::MacroClass(ClassData* File) : File(File), Interpolation(0) {
 
 	FilterList = new TStringList;
 	FilterList->Sorted = false;
 }
 
 //---------------------------------------------------------------------------
-Classmacro::~Classmacro() { // calls all filters to finalise data memory addresses
+MacroClass::~MacroClass() { // calls all filters to finalise data memory addresses
 
 	if (Interpolation > 0 && FilterList->Count > Interpolation)
 		LogError("Filter execution occurs before interpolation -> values may be incorrect." + File->DataFileName, TExcept::WARNING);

@@ -1970,9 +1970,6 @@
     <ClCompile Include="..\core\ClassCRHM\Filters\ClassMissingC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Classmacro.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\core\ClassCRHM\Convert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -2007,6 +2004,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\core\MacroUnit\MacroUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassCRHM\MacroClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,14 +1,14 @@
 #pragma once
 
-#ifndef CLASSMACRO
-#define CLASSMACRO
+#ifndef MACROCLASS
+#define MACROCLASS
 
 #include "ClassCRHM.h"
 
-class Classmacro {
+class MacroClass {
 public:
-	Classmacro(ClassData* File);
-	~Classmacro();
+	MacroClass(ClassData* File);
+	~MacroClass();
 
 	ClassData* File;
 	TStringList* FilterList;
@@ -18,4 +18,4 @@ public:
 	void execute(long Line);
 };
 
-#endif // !CLASSMACRO
+#endif // !MACROCLASS

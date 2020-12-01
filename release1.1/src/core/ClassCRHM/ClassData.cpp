@@ -149,7 +149,7 @@ bool ClassData::DataReadFile(void) {
 
 	getline(DataFile, Description);
 	HdrLen = 1;
-	myMacro = new Classmacro(this);
+	myMacro = new MacroClass(this);
 	while (!DataFile.eof()) {
 		char c = DataFile.peek();
 

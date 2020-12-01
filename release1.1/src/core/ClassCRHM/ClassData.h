@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class Classmacro;
+class MacroClass;
 
 class ClassData 
 {
@@ -27,7 +27,7 @@ public:
 	long DataCnt;
 	long FilterCnt;  // filter count
 
-	Classmacro* myMacro;
+	MacroClass* myMacro;
 	bool Simulation;
 	long ForceInterval;
 	bool GoodInterval{ false };

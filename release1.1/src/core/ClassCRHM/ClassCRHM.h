@@ -14,7 +14,7 @@ using namespace std;
 #include "ClassVar.h"
 #include "ClassPar.h"
 #include "Classfilter.h"
-#include "Classmacro.h"
+#include "MacroClass.h"
 #include "ClassModel.h"
 #include "Tresult.h"
 #include "Unit_Info.h"

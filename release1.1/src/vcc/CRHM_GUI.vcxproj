@@ -685,7 +685,6 @@
     <ClCompile Include="..\core\ClassCRHM\ClassCRHM.cpp" />
     <ClCompile Include="..\core\ClassCRHM\ClassData.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Classfilter.cpp" />
-    <ClCompile Include="..\core\ClassCRHM\Classmacro.cpp" />
     <ClCompile Include="..\core\ClassCRHM\ClassPar.cpp" />
     <ClCompile Include="..\core\ClassCRHM\ClassVar.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Convert.cpp" />
@@ -734,6 +733,7 @@
     <ClCompile Include="..\core\ClassCRHM\Filters\ClasssubV.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classtime.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\ClassTimeshift.cpp" />
+    <ClCompile Include="..\core\ClassCRHM\MacroClass.cpp" />
     <ClCompile Include="..\core\ClassModule\Administer.cpp" />
     <ClCompile Include="..\core\ClassModule\ClassClark.cpp" />
     <ClCompile Include="..\core\ClassModule\ClassModule.cpp" />
