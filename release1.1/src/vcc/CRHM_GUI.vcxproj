@@ -745,7 +745,7 @@
     <ClCompile Include="..\core\CRHM_parse\exec\execbase.cpp" />
     <ClCompile Include="..\core\CRHM_parse\VarCHRM.cpp" />
     <ClCompile Include="..\core\GlobalDll.cpp" />
-    <ClCompile Include="..\core\MacroUnit.cpp" />
+    <ClCompile Include="..\core\MacroUnit\MacroUnit.cpp" />
     <ClCompile Include="..\core\StandardConverterUtility.cpp" />
     <ClCompile Include="..\core\TStringList\TStringList.cpp" />
     <ClCompile Include="..\plugins\coremodules\Class3D_param.cpp" />

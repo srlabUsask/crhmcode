@@ -1544,9 +1544,6 @@
     <ClCompile Include="..\plugins\waterquality\WQ_Soil_NPCcycling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\plugins\coremodules\Class_z_s_rho.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -2007,6 +2004,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\core\CRHMmain\CRHMmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\MacroUnit\MacroUnit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

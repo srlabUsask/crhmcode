@@ -212,6 +212,9 @@ $(ODIR)/execbase.o: $(SDIR)/core/CRHM_parse/exec/execbase.cpp $(SDIR)/core/CRHM_
 $(ODIR)/CRHMmain.o: $(SDIR)/core/CRHMmain/CRHMmain.cpp $(SDIR)/core/CRHMmain/CRHMmain.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
+$(ODIR)/MacroUnit.o: $(SDIR)/core/MacroUnit/MacroUnit.cpp $(SDIR)/core/MacroUnit/MacroUnit.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
 $(ODIR)/%.o: $(SDIR)/core/%.cpp $(SDIR)/core/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
