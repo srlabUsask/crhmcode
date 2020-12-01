@@ -2003,7 +2003,10 @@
     <ClCompile Include="..\core\Common\snowcover.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\CRHM_parse\CRHM_parse.cpp">
+    <ClCompile Include="..\core\CRHM_parse\VarCHRM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\CRHM_parse\exec\execbase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
