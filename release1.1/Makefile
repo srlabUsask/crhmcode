@@ -203,6 +203,9 @@ $(ODIR)/Common.o: $(SDIR)/core/Common/Common.cpp $(SDIR)/core/Common/Common.h $(
 $(ODIR)/snowcover.o: $(SDIR)/core/Common/snowcover.cpp $(SDIR)/core/Common/snowcover.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
+$(ODIR)/CRHM_parse.o: $(SDIR)/core/CRHM_parse/CRHM_parse.cpp $(SDIR)/core/CRHM_parse/CRHM_parse.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
 $(ODIR)/%.o: $(SDIR)/core/%.cpp $(SDIR)/core/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 

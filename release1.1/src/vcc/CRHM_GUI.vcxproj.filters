@@ -1547,9 +1547,6 @@
     <ClCompile Include="..\plugins\waterquality\WQ_Soil_NPCcycling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\CRHM_parse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\core\MacroUnit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -2004,6 +2001,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\core\Common\snowcover.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\CRHM_parse\CRHM_parse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
