@@ -209,6 +209,9 @@ $(ODIR)/VarCHRM.o: $(SDIR)/core/CRHM_parse/VarCHRM.cpp $(SDIR)/core/CRHM_parse/V
 $(ODIR)/execbase.o: $(SDIR)/core/CRHM_parse/exec/execbase.cpp $(SDIR)/core/CRHM_parse/exec/execbase.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
+$(ODIR)/CRHMmain.o: $(SDIR)/core/CRHMmain/CRHMmain.cpp $(SDIR)/core/CRHMmain/CRHMmain.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
 $(ODIR)/%.o: $(SDIR)/core/%.cpp $(SDIR)/core/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 

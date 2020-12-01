@@ -1,6 +1,6 @@
 //#include "stdafx.h"
 #include <stdio.h>
-#include "CRHMmain.h"
+#include "../core/CRHMmain/CRHMmain.h"
 
 
 int main(int argc, char *argv[])

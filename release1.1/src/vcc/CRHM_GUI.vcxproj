@@ -741,7 +741,7 @@
     <ClCompile Include="..\core\ClassModule\Myparser.cpp" />
     <ClCompile Include="..\core\Common\Common.cpp" />
     <ClCompile Include="..\core\Common\snowcover.cpp" />
-    <ClCompile Include="..\core\CRHMmain.cpp" />
+    <ClCompile Include="..\core\CRHMmain\CRHMmain.cpp" />
     <ClCompile Include="..\core\CRHM_parse\exec\execbase.cpp" />
     <ClCompile Include="..\core\CRHM_parse\VarCHRM.cpp" />
     <ClCompile Include="..\core\GlobalDll.cpp" />

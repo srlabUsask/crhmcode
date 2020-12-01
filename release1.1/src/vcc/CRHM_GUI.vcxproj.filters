@@ -1529,9 +1529,6 @@
     <ClCompile Include="gui\CTChart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\CRHMmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\core\GlobalDll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -2007,6 +2004,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\core\CRHM_parse\exec\execbase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\CRHMmain\CRHMmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

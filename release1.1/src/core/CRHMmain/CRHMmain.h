@@ -12,41 +12,9 @@
 #include <map>
 #include <iostream>
 #include<list>
-
-
-class MMSData
-{
-public:
-	double** mmsData {NULL};
-	long** mmsDataL {NULL};
-	bool GoodRun {false};
-	ClassModule* obs_preset {NULL};
-	string S;
-};
-
-
-
-class TSeries {
-public:
-	double *XValues;
-	double *YValues;
-	ClassVar* Tag {NULL};
-	int MaxCnt;
-	int Used;
-	string Title;
-	TSeries(int Cnt) { MaxCnt = Cnt; XValues = new double[MaxCnt]; YValues = new double[MaxCnt]; Used = 0; };
-	~TSeries() { delete[] XValues; delete[] YValues; };
-	void AddXY(double X, double Y) 
-	{ 
-		XValues[Used] = X; 
-		YValues[Used++] = Y; 
-	};
-	int Count(void) { return Used; };
-	double XValue(int nn) { return XValues[nn]; };
-	double YValue(int nn) { return YValues[nn]; };
-};
-
-
+#include "MMSData.h"
+#include "TSeries.h"
+#include "Classinfo.h"
 
 //class ObsFileInfo {
 //private:
@@ -61,21 +29,8 @@ public:
 //	void setFilePath(string filepath);
 //};
 
-class Classinfo {
-public:
-	Classinfo() : thisPar(NULL), rootinfo(NULL), matched(false), cnt(0) {};
-	Classinfo(ClassPar *thisPar) : thisPar(thisPar), rootinfo(NULL), matched(false), cnt(0) {};
-	ClassPar *thisPar;
-	Classinfo *rootinfo;
-	long cnt;
-	bool matched;
-};
-
-
 class CRHMmain
 {
-
-
 	static CRHMmain* instance;
 
 public:
@@ -251,10 +206,4 @@ public:
 
 };
 
-
-
 //class Classinfo; // used to process shared parameters
-
-
-
-
