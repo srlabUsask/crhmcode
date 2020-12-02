@@ -856,6 +856,22 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\waterquality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\postdoc\CRHM\GIT\crhmcode\codebase\src\plugins\waterquality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\plugins\waterquality\ClassGlacier_debris_cover.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassGlacier_melt_debris_cover_estimate_Mod.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassGrow_crops_annually.cpp" />
+    <ClCompile Include="..\plugins\waterquality\Classlapse_rate_Monthly_Mod.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassSoilPrairie.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassWQ_Gen_Mass_Var_Netroute.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassWQ_Gen_Mass_Var_Soil.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassWQ_mass_conc.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassWQ_Netroute.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassWQ_Netroute_M_D.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassWQ_pbsm.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassWQ_pbsmSnobal.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassWQ_Soil.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassWQ_Substitute_Hype.cpp" />
+    <ClCompile Include="..\plugins\waterquality\ClassWQ_Test_Hype.cpp" />
+    <ClCompile Include="..\plugins\waterquality\Class_lapse_rate_Monthly.cpp" />
     <ClCompile Include="..\plugins\waterquality\WQ_CRHM.cpp" />
     <ClCompile Include="..\plugins\waterquality\WQ_Soil_NPCcycling.cpp" />
     <ClCompile Include="gui\CConstruct.cpp" />
