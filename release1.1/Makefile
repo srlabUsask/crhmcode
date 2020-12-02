@@ -13,7 +13,7 @@ DFLAGS =
 #_DEPS = core/ClassCRHM.h core/ClassModule.h core/Common.h macro/CRHM_parse.h core/CRHMMain.h core/GlobalCommon.h core/GlobalDll.h plugins/waterquality/WQ_CRHM.h plugins/waterquality/WQ_Soil_NPCcycling.h macro/MacroUnit.h plugins/newmodules/NewModules.h plugins/newmodules/SnobalDefines.h core/StandardConverterUtility.h core/TStringList.h
 #DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = Administer.o ClassCRHM.o ClassData.o ClassVar.o ClassPar.o Classfilter.o ClassFtoC.o ClassCtoK.o ClassReplace.o ClassKtoC.o Classlog.o Classlogv.o ClassTimeshift.o ClassRH_WtoI.o Classea.o Classrh.o Classsin.o Classcos.o ClassModule.o Common.o CRHMmain.o GlobalDll.o WQ_CRHM.o WQ_Soil_NPCcycling.o MacroUnit.o main.o NewModules.o StandardConverterUtility.o TStringList.o ClassBasin.o ClassGlobal.o ClassObs.o ClassIntcp.o Classpbsm.o ClassNO_pbsm.o Classtsurface.o Classalbedo.o Classnetall.o MacroClass.o Classebsm.o ClassTs.o Classabs.o Classexp.o Classexpv.o Classpulse.o Classrandom.o Classrefwind.o ClassMissing.o ClassMissingInter.o Classsquare.o Classramp.o Classpoly.o Classpolyv.o Classpow.o Classpowv.o Classtime.o Classjulian.o ClassNeedle.o ClassSimpleRichard.o Classevap.o ClassevapD.o Classsbsm.o Classcrack.o ClassKevin.o ClassGreencrack.o Classfrostdepth.o Classfrozen.o ClassNetroute.o Classinterception.o ClassGreenAmpt.o Classalbedoparam.o Classalbedoobs.o snowcover.o ClassClark.o ClassMuskingum.o VarCHRM.o execbase.o ClassHtobs.o Myparser.o ClasspbsmSnobal.o Convert.o ClassalbedoRichard.o ClassMissingrepl.o ClassForce.o Classadd.o Classsub.o Classmul.o Classdiv.o ClassaddV.o ClasssubV.o ClassMissing0.o ClassMissingC.o ClassMissingFlagAfter.o ClassMissingFlag.o ClassmulV.o ClassdivV.o ClassalbedoBaker.o ClassHMSA.o Classwalmsley_wind.o ClassNetroute_M.o ClassREWroute2.o ClassLongVt.o Classpbsm_M.o ClassNetroute_D.o ClassNetroute_M_D.o ClassSetSoil.o ClassVolumetric.o ClassAnnan.o Classcalcsun.o ClassObstoPar.o ClassPrairieInfil.o ClassCRHMCanopy.o ClassPSPnew.o Classbrushintcp.o ClassAyers.o ClassSlope_Qsi.o ClassfrozenAyers.o ClassSoil.o Classevap_Resist.o ClassevapD_Resist.o ClassShutWall.o Classconst.o ClassSim.o ClassSmear.o ClassShutWallD.o ClassIceBulb.o Classlake.o ClassalbedoWinstral.o ClassK_Estimate.o ClassevapX.o Class3D_param.o ClassMeltRunoff_Lag.o ClassMeltRunoff_Kstorage.o ClassREWroute.o ClassXG.o Classcontribution.o ClassSoilX.o ClassMod_Exec.o ClassFlowInSnow.o ClassSoilDS.o Classalbedoobs2.o Classwinter_meltflag.o Class_z_s_rho.o Classqmelt.o Classquinton.o Classqdrift.o ClassXGAyers.o ClassCRHMCanopyClearing.o ClassCRHMCanopyClearingGap.o ClassREWroute_stream.o ClassICEflow.o Classglacier.o Classglacier_debris.o ClassSWEslope.o ClassTestSparse.o ClassGrow_Crop.o ClassSnobalX.o ClassSnobalCRHM.o Classshared.o ClassNOP.o ClassSnobalBase.o
+_OBJ = Administer.o ClassCRHM.o ClassData.o ClassVar.o ClassPar.o Classfilter.o ClassFtoC.o ClassCtoK.o ClassReplace.o ClassKtoC.o Classlog.o Classlogv.o ClassTimeshift.o ClassRH_WtoI.o Classea.o Classrh.o Classsin.o Classcos.o ClassModule.o Common.o CRHMmain.o GlobalDll.o WQ_CRHM.o WQ_Soil_NPCcycling.o MacroUnit.o main.o NewModules.o StandardConverterUtility.o TStringList.o ClassBasin.o ClassGlobal.o ClassObs.o ClassIntcp.o Classpbsm.o ClassNO_pbsm.o Classtsurface.o Classalbedo.o Classnetall.o MacroClass.o ClassMacro.o Classebsm.o ClassTs.o Classabs.o Classexp.o Classexpv.o Classpulse.o Classrandom.o Classrefwind.o ClassMissing.o ClassMissingInter.o Classsquare.o Classramp.o Classpoly.o Classpolyv.o Classpow.o Classpowv.o Classtime.o Classjulian.o ClassNeedle.o ClassSimpleRichard.o Classevap.o ClassevapD.o Classsbsm.o Classcrack.o ClassKevin.o ClassGreencrack.o Classfrostdepth.o Classfrozen.o ClassNetroute.o Classinterception.o ClassGreenAmpt.o Classalbedoparam.o Classalbedoobs.o snowcover.o ClassClark.o ClassMuskingum.o VarCHRM.o execbase.o ClassHtobs.o Myparser.o ClasspbsmSnobal.o Convert.o ClassalbedoRichard.o ClassMissingrepl.o ClassForce.o Classadd.o Classsub.o Classmul.o Classdiv.o ClassaddV.o ClasssubV.o ClassMissing0.o ClassMissingC.o ClassMissingFlagAfter.o ClassMissingFlag.o ClassmulV.o ClassdivV.o ClassalbedoBaker.o ClassHMSA.o Classwalmsley_wind.o ClassNetroute_M.o ClassREWroute2.o ClassLongVt.o Classpbsm_M.o ClassNetroute_D.o ClassNetroute_M_D.o DefCRHM.o Defdeclparam.o Defdeclvar.o Defdecldiag.o Defdeclstatvar.o Defdecllocal.o Defdeclobs.o Defdeclgetvar.o Defdeclputvar.o Defdeclputparam.o Defdeclreadobs.o Defdeclobsfunc.o ClassSetSoil.o ClassVolumetric.o ClassAnnan.o Classcalcsun.o ClassObstoPar.o ClassPrairieInfil.o ClassCRHMCanopy.o ClassPSPnew.o Classbrushintcp.o ClassAyers.o ClassSlope_Qsi.o ClassfrozenAyers.o ClassSoil.o Classevap_Resist.o ClassevapD_Resist.o ClassShutWall.o Classconst.o ClassSim.o ClassSmear.o ClassShutWallD.o ClassIceBulb.o Classlake.o ClassalbedoWinstral.o ClassK_Estimate.o ClassevapX.o Class3D_param.o ClassMeltRunoff_Lag.o ClassMeltRunoff_Kstorage.o ClassREWroute.o ClassXG.o Classcontribution.o ClassSoilX.o ClassMod_Exec.o ClassFlowInSnow.o ClassSoilDS.o Classalbedoobs2.o Classwinter_meltflag.o Class_z_s_rho.o Classqmelt.o Classquinton.o Classqdrift.o ClassXGAyers.o ClassCRHMCanopyClearing.o ClassCRHMCanopyClearingGap.o ClassREWroute_stream.o ClassICEflow.o Classglacier.o Classglacier_debris.o ClassSWEslope.o ClassTestSparse.o ClassGrow_Crop.o ClassSnobalX.o ClassSnobalCRHM.o Classshared.o ClassNOP.o ClassSnobalBase.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 
@@ -213,6 +213,45 @@ $(ODIR)/CRHMmain.o: $(SDIR)/core/CRHMmain/CRHMmain.cpp $(SDIR)/core/CRHMmain/CRH
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
 $(ODIR)/MacroUnit.o: $(SDIR)/core/MacroUnit/MacroUnit.cpp $(SDIR)/core/MacroUnit/MacroUnit.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/ClassMacro.o: $(SDIR)/core/MacroUnit/ClassMacro.cpp $(SDIR)/core/MacroUnit/ClassMacro.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/DefCRHM.o: $(SDIR)/core/MacroUnit/DefCRHM/DefCRHM.cpp $(SDIR)/core/MacroUnit/DefCRHM/DefCRHM.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdeclparam.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdeclparam.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdeclparam.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdeclvar.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdeclvar.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdeclvar.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdecldiag.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdecldiag.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdecldiag.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdeclstatvar.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdeclstatvar.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdeclstatvar.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdecllocal.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdecllocal.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdecllocal.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdeclobs.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdeclobs.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdeclobs.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdeclgetvar.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdeclgetvar.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdeclgetvar.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdeclputvar.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdeclputvar.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdeclputvar.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdeclputparam.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdeclputparam.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdeclputparam.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdeclreadobs.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdeclreadobs.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdeclreadobs.h | $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
+
+$(ODIR)/Defdeclobsfunc.o: $(SDIR)/core/MacroUnit/DefCRHM/Defdeclobsfunc.cpp $(SDIR)/core/MacroUnit/DefCRHM/Defdeclobsfunc.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
 $(ODIR)/%.o: $(SDIR)/core/%.cpp $(SDIR)/core/%.h | $(ODIR)
