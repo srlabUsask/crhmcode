@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 6/5/2020 13:11
+###### Version NON DLL 4.02  Creation: 6/25/2020 0:57
 Dimensions:
 ######
 nhru 3
@@ -15,14 +15,14 @@ obs/Badlake73_76.obs
 ######
 Dates:
 ######
-1973 1 1
+1974 10 1
 1976 1 1
 ######
 Modules:
 ######
 basin CRHM 02/24/12
 global CRHM 04/19/13
-obs CRHM 11/28/17
+obs CRHM 04/17/18
 calcsun CRHM 10/01/13
 intcp CRHM 02/24/15
 pbsm CRHM 11/20/17
@@ -30,9 +30,9 @@ albedo CRHM 08/11/11
 ebsm CRHM 01/18/16
 netall CRHM 03/22/16
 crack CRHM 09/03/08
-evap CRHM 09/26/13
-Soil CRHM 11/28/17
-Netroute CRHM 04/24/17
+evap CRHM 07/17/19
+Soil CRHM 02/01/19
+Netroute CRHM 06/20/18
 ######
 Parameters:
 ###### 'basin' parameters always first
@@ -100,6 +100,8 @@ evap evap_type <0 to 2>
 0 0 0 
 evap F_Qg <0 to 1>
 0.05 0.05 0.05 
+evap inhibit_evap_User <0 to 1>
+0 0 0 
 evap rs <0 to 0.01>
 0 0 0 
 evap Zwind <0.01 to 100>
@@ -210,6 +212,8 @@ Soil soil_withdrawal <1 to 4>
 2 2 2 
 Soil transp_limited <0 to 1>
 0 0 0 
+Soil Wetlands_scaling_factor <-1 to 1>
+-1 -1 -1 
 ######
 Initial_State
 ######
@@ -226,4 +230,10 @@ Display_Observation:
 ######
 TChart:
 ######
+######
+Auto_Run
+######
+Auto_Exit
+######
+Log_All
 ######
