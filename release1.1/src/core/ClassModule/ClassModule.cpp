@@ -1907,11 +1907,11 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, TFun 
 
 	case TBuild::INIT: {
 		itVar = Global::MapVars.find(Name + " " + variable);
+        newVar = (itVar == Global::MapVars.end()) ? NULL : (*itVar).second;
 
-		try
-		{
+//		try
+//		{
 			if ((itVar = Global::MapVars.find(declModule + obs)) != Global::MapVars.end()) {
-				newVar = (*itVar).second;
 				obsVar = (*itVar).second;
 
 				if (!newVar) { // Applies to ppt, p etc. when building a new project with NO observations defined
@@ -2057,10 +2057,10 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, TFun 
 				else
 					*value = NULL;
 			}
-		}
-		catch (...) {
-			//do nothing.
-		}
+//		}
+//		catch (...) {
+//			//do nothing.
+//		}
 	}
 	default:
 		break;
@@ -2643,17 +2643,7 @@ void ClassModule::ReadObs(bool Reset) {
 
 			if (P->FunctVar->FileData->GoodDay)
 			{
-				(P->*(P->UserFunct))();
-
-				//manishankar. this is used for resolving the address related issue.
-				if (P->name == "t")
-				{
-					this->t_layvalues = P->layvalues;
-				}
-				else if (P->name == "rh")
-				{
-					this->rh_layvalues = P->layvalues;
-				}
+				(P->*(P->UserFunct))();				
 			}
 
 			if (P->CustomFunct) // execute any extra features except for nfreq observations   && !P->nfreq

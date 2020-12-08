@@ -114,7 +114,3 @@ double  **Global::obs_rh; // used for array observations adjustments
 double  **Global::obs_t_obs; // used for array observations adjustments
 
 TObject *Global::thisVar;
-
-//manishankar. this is used for resolving the address related issue.
-double** Global::t_layvalues;
-double** Global::rh_layvalues;

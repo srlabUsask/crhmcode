@@ -125,11 +125,6 @@ public:
 	static double ** obs_t_obs; // used for array observations adjustments
 
 	static TObject *thisVar;
-
-
-	//manishankar. this is used for resolving the address related issue.
-	static double** t_layvalues;
-	static double** rh_layvalues;
 };
 
 

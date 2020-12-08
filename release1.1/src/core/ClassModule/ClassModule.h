@@ -67,11 +67,6 @@ public:
 	long Var_NDEFN_cnt = 0;
 	long Par_NDEFN_cnt = 0;
 
-	//added by Manishankar to solve the address issue.
-	double** t_layvalues {NULL};
-	double** rh_layvalues {NULL};
-
-
 	// long Using_RH_EA_obs;
 
 	ClassModule(string Name, string Version, LMODULE Lvl = LMODULE::PROTO, long PeerRank = 1000, string PeerVar = "")

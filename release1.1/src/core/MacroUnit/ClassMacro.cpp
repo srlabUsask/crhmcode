@@ -511,10 +511,6 @@ void ClassMacro::run(void) { // executed every interval
 		while (iter != Modules.end()) {
 			ModulePtr Op = (*iter);
 
-			//manishankar did this for resolving the address related issue.
-			Op->t_layvalues = Global::t_layvalues;
-			Op->rh_layvalues = Global::rh_layvalues;
-
 			(*iter)->pre_run();
 			(*iter)->run();
 			++iter;
@@ -649,7 +645,7 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 				GroupCnt = ++Global::GroupCntTrk;
 				GrpStringList = new TStringList;
 
-				if (DefCRHM::DefStringList->Count > 1 && (DefCRHM::DefStringList->Strings[1].find("//") != string::npos)) // ignore comments
+				if (DefCRHM::DefStringList->Count > 1 && (DefCRHM::DefStringList->Strings[1].find("//") == string::npos)) // ignore comments
 					Grpnhru = Strtolong(DefCRHM::DefStringList->Strings[1]);
 				else
 					Grpnhru = nhru;
