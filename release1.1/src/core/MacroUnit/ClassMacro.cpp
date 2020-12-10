@@ -1,5 +1,6 @@
 #include "ClassMacro.h"
 
+
 double Fday() { // used for variable DAY
 	int year, month, day, h, m;
 	StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
@@ -116,6 +117,7 @@ void ClassMacro::decl(void) {
 			string S2 = typeid(*Test).name();
 #endif
 #if defined(__linux__) || defined(__APPLE__) //introspection issue resolved for linux and apple as was suggested by Dr. Kevin. Manishankar
+			#include <cxxabi.h>
 			int demangle_status = 0;
 			string S1 = abi::__cxa_demangle(typeid(*Mod).name(), 0, 0, &demangle_status);
 			auto Test_raw = Test.get(); //Dr. Kevin's edit for removing an warning.
