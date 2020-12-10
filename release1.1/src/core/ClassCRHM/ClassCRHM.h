@@ -5,8 +5,6 @@
 #define ClassCRHMH
 //---------------------------------------------------------------------------
 
-using namespace std;
-
 #include "Common/Common.h"
 #include "GlobalCommon.h"
 #include "TStringList/TStringList.h"
@@ -24,6 +22,8 @@ using namespace std;
 #include <iostream>
 #include <map>
 #include <typeinfo>
+
+using namespace std;
 
 enum types { DELIMITER = 1, NUMBER };
 
