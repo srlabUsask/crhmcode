@@ -14,7 +14,7 @@ CFLAGS = -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses \
 
 CFLAGS = -I$(BOOST) -I$(SDIR)/core -I$(SDIR)/macro \
 -I$(SDIR)/modules/waterquality -I$(SDIR)/modules/newmodules \
--I$(SDIR)/modules/coremodules -I$(SDIR)/gcc -std=c++11 -lboost_system
+-I$(SDIR)/modules/coremodules -I$(SDIR)/gcc -std=c++11
 
 CORE_OBJS = GlobalDll.o StandardConverterUtility.o
 
@@ -45,7 +45,7 @@ MacroUnit_OBJS = ClassMacro.o MacroUnit.o
 
 DefCRHM_OBJS = DefCRHM.o Defdecldiag.o Defdeclgetvar.o Defdecllocal.o \
 Defdeclobs.o Defdeclobsfunc.o Defdeclparam.o Defdeclputparam.o \
-Defdeclputvar.o Defdeclreadobs.o Defdeclstatvar.o Defdeclvar.o 
+Defdeclputvar.o Defdeclreadobs.o Defdeclstatvar.o Defdeclvar.o
 
 TStringList_OBJS = TStringList.o
 
@@ -71,17 +71,17 @@ ClassREWroute2.o Classsbsm.o ClassSetSoil.o Classshared.o ClassShutWall.o \
 ClassShutWallD.o ClassSimpleRichard.o ClassSlope_Qsi.o ClassSnobalBase.o \
 ClassSnobalCRHM.o ClassSnobalX.o ClassSoil.o ClassSoilDS.o ClassSoilX.o ClassSWEslope.o \
 ClassTestSparse.o ClassTs.o Classtsurface.o ClassVolumetric.o Classwalmsley_wind.o \
-Classwinter_meltflag.o ClassXG.o ClassXGAyers.o 
+Classwinter_meltflag.o ClassXG.o ClassXGAyers.o
 
-NEWMODULES_OBJS = NewModules.o 
+NEWMODULES_OBJS = NewModules.o
 
 Waterquality_OBJS = Class_lapse_rate_Monthly.o ClassGlacier_debris_cover.o \
 ClassGlacier_melt_debris_cover_estimate_Mod.o ClassGrow_crops_annually.o \
 Classlapse_rate_Monthly_Mod.o ClassSoilPrairie.o ClassWQ_Gen_Mass_Var_Netroute.o \
 ClassWQ_Gen_Mass_Var_Soil.o ClassWQ_mass_conc.o ClassWQ_Netroute.o ClassWQ_Netroute_M_D.o \
 ClassWQ_pbsm.o ClassWQ_pbsmSnobal.o ClassWQ_Soil.o ClassWQ_Substitute_Hype.o \
-ClassWQ_Test_Hype.o WQ_CRHM.o WQ_Soil_NPCcycling.o 
- 
+ClassWQ_Test_Hype.o WQ_CRHM.o WQ_Soil_NPCcycling.o
+
 
 ALL_OBS = $(CORE_OBJS) $(ClassCRHM_OBJS) $(Filter_OBJS) $(ClassModule_OBJS) \
 $(Common_OBJS) $(CRHM_parse_OBJS) $(EXEC_OBJS) $(CRHMmain_OBJS) \
