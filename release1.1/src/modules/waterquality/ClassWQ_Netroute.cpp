@@ -545,9 +545,15 @@ void ClassWQ_Netroute::run(void) {
 
                             if (free > 0.0 && !Sd_ByPass[hh] && gw_Amount > 0.0) {
                                 if (free > gw_Amount) { // units (mm*km^2/int)
-                                    Sd_conc_lay[Sub][hh] = Sd_conc_lay[Sub][hh] * Sd[hh] + gw_Amount_mWQ;
-                                    Sd_conc_lay[Sub][hh] /= (Sd[hh] + gw_Amount);
-
+                                    if ((Sd[hh] + gw_Amount) > minFlow_WQ)
+                                    {
+                                        Sd_conc_lay[Sub][hh] /= (Sd[hh] + gw_Amount);
+                                    }
+                                    else 
+                                    {
+                                        Sd_conc_lay[Sub][hh] = 0.0f;
+                                    }
+                                        
                                     cum_to_Sd_mWQ_lay[Sub][hh] += gw_Amount_mWQ;
 
                                     if (Sub == numsubstances - 1) {
@@ -668,9 +674,15 @@ void ClassWQ_Netroute::run(void) {
                     Amount_mWQ = outflow_mWQ_lay[Sub][hhh] / hru_area[hh];
                     outflow[hhh] = 0.0;
 
-                    cumoutflow_mWQ_lay[Sub][hhh] += outflow_mWQ_lay[Sub][hhh];
-
-                    outflow_diverted_conc_lay[Sub][hhh] += Amount_mWQ / Amount;
+                    if (Amount > minFlow_WQ)
+                    {
+                        outflow_diverted_conc_lay[Sub][hhh] += Amount_mWQ / Amount;
+                    }
+                    else
+                    {
+                        outflow_diverted_conc_lay[Sub][hhh] = 0.0f;
+                    }
+                        
 
                     if (Sub == numsubstances - 1)
                         outflow_diverted[hhh] += Amount;
@@ -733,10 +745,18 @@ void ClassWQ_Netroute::run(void) {
                                     double Excess = Sd[hh] + Amount - Sdmax[hh];
                                     double Free = Amount - Excess;
 
-                                    Sd_conc_lay[Sub][hh] = Sd_conc_lay[Sub][hh] * Sd[hh] + Amount_mWQ * Free / Amount;
-                                    Sd_conc_lay[Sub][hh] /= (Sd[hh] + Free);
+                                    if ((Sd[hh] + Free) > minFlow_WQ) 
+                                    {
+                                        Sd_conc_lay[Sub][hh] = Sd_conc_lay[Sub][hh] * Sd[hh] + Amount_mWQ * Free / Amount;
+                                        Sd_conc_lay[Sub][hh] /= (Sd[hh] + Free);
+                                    }
 
-                                    cum_to_Sd_mWQ_lay[Sub][hh] += Amount_mWQ * Free / Amount;
+                                    if (Amount > minFlow_WQ) 
+                                    {
+                                        cum_to_Sd_mWQ_lay[Sub][hh] += Amount_mWQ * Free / Amount;
+                                    }
+
+                                        
 
                                     if (Sub == numsubstances - 1) {
                                         Sd[hh] += Free;
@@ -784,7 +804,16 @@ void ClassWQ_Netroute::run(void) {
                         cumbasinflow_mWQ_lay[Sub][0] += Amount_mWQ;
 
                         basinflow_conc_lay[Sub][0] = basinflow_conc_lay[Sub][0] * basinflow[0] + Amount_mWQ * 1000;
-                        basinflow_conc_lay[Sub][0] /= (basinflow[0] + Amount * 1000);
+                        if ((basinflow[0] + Amount * 1000) > minFlow_WQ)
+                        {
+                            basinflow_conc_lay[Sub][0] /= (basinflow[0] + Amount * 1000);
+                        }
+                        else 
+                        {
+                            basinflow_conc_lay[Sub][0] = 0;
+                        }
+                            
+
 
                         if (Sub == numsubstances - 1) {
                             basinflow[0] = Amount * 1000;
