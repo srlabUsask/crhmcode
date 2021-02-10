@@ -219,22 +219,22 @@ void ClassGrow_crops_annually::init(void) {
 
     if (variation == VARIATION_2 || variation == VARIATION_3) {
 
-        if (Good_Dates(JCrop_Start_1)) {
+        if (!Good_Dates(JCrop_Start_1)) {
             CRHMException TExcept("JCrop_Start_1 dates out of range!", TExcept::TERMINATE);
             LogError(TExcept);
         }
 
-        if (Good_Dates(JCrop_Harvest_1)) {
+        if (!Good_Dates(JCrop_Harvest_1)) {
             CRHMException TExcept("JCrop_Harvest_1 dates out of range!", TExcept::TERMINATE);
             LogError(TExcept);
         }
 
-        if (Good_Dates(JCrop_Start_2)) {
+        if (!Good_Dates(JCrop_Start_2)) {
             CRHMException TExcept("JCrop_Start_2 dates out of range!", TExcept::TERMINATE);
             LogError(TExcept);
         }
 
-        if (Good_Dates(JCrop_Harvest_2)) {
+        if (!Good_Dates(JCrop_Harvest_2)) {
             CRHMException TExcept("JCrop_Harvest_2 dates out of range!", TExcept::TERMINATE);
             LogError(TExcept);
         }
