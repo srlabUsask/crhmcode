@@ -5,8 +5,7 @@ ODIR = obj
 SDIR = src
 LIBS = -lstdc++
 
-DFLAGS = -g -O0 -fPIC -mstack-arg-probe -fstack-protector-all -fstack-check \
--fno-omit-frame-pointer
+DFLAGS =
 
 CFLAGS = -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses \
 -Wno-c++11-extra-semi -Wno-dangling-else -Wno-null-conversion \
