@@ -162,7 +162,7 @@ void ClassevapD_Resist::run(void) {
 
            f4 = 1.0;
            if(hru_tmean[hh] < 0.0 || hru_tmean[hh] > 40.0)
-             f4 = 5000/50;
+               f4 = 5000 / rcs[hh]; // 05/21/20 correcting f4 = 5000/50;
 
            rc[hh] = rcstar*f1*f2*f3*f4;
            if(rc[hh] > 5000.0)
