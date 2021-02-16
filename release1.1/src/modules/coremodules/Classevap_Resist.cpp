@@ -206,7 +206,7 @@ void Classevap_Resist::run(void) {
 
            f4 = 1.0;
            if(hru_t[hh] < 0.0 || hru_t[hh] > 40.0)
-             f4 = 5000/50;
+             f4 = 5000 / rcs[hh]; // 05/21/20 correcting f4 = 5000/50;
 
            if(RnObs != NULL && RnObs[hh] <= 0)
              rc[hh] = 5000.0;
@@ -245,7 +245,7 @@ void Classevap_Resist::run(void) {
            f2 = max <double> (1.0, 2.0*(Common::estar(hru_t[hh]) - hru_ea[hh]));
 
            p = soilproperties[soil_type[hh]][AIRENT]*
-             pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]);
+               pow(1.0 / Soil_Moist, soilproperties[soil_type[hh]][PORESZ]); // 05/21/20 correcting pow(soilproperties[soil_type[hh]][PORE]/Sil_Moist, soilproperties[soil_type[hh]][PORESZ]);
 
            f3 = max <double> (1.0, p/40.0);
 
