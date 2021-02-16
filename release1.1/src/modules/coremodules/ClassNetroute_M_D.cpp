@@ -373,7 +373,7 @@ void ClassNetroute_M_D::run(void) {
     } // for hhh
 
     gwcuminflow[hh] += gwinflow[hh];
-    gwcumoutflow[hh] += gwoutflow[hh];
+    //gwcumoutflow[hh] += gwoutflow[hh]; Removing to match borland version of code - jhs507
 
     inflow[hh] = gw_amount;
   } // for jj
