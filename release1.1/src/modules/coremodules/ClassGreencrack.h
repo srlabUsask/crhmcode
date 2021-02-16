@@ -41,6 +41,7 @@ const double *Major{ NULL };      // threshold for major melt event(default is 5
 const double *soil_moist_max{ NULL };
 const double *soil_moist_init{ NULL };
 const long  *soil_type{ NULL };
+const long* infDays{ NULL }; // maximum number of days of snowmelt infiltration to frozen soil
 const long  *PriorInfiltration{ NULL };
 
 // variable inputs

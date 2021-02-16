@@ -292,12 +292,12 @@ static double SWEfromDepth(double Snow_Depth) { // 3/5/98 Calculates SWE(mm) fro
 
 
 //taken from NewModules.cpp file.
-static void infil_index(double Theta, double SWE, double& Index, double& Pot) {
+static void infil_index(double Theta, double SWE, double& Index, double& Pot, const double infDays) {
 
 	Pot = 5 * (1 - Theta) * pow(SWE, 0.584f);
 	Index = Pot / SWE;
 	if (Index > 1.0) Index = 1;
-	Pot = Pot / 6;
+	Pot = Pot / infDays;
 }
 
 
