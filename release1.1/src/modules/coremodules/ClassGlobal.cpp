@@ -288,7 +288,7 @@ void Classglobal::run(void) {
             Sum_Id += Id;
           }
 
-          diffuse = diffuse*sqr(cos(hru_GSL[hh]/2.0)); // on slope
+          diffuse = diffuse*sqr(cos(hru_GSL[hh]/2.0 * DEGtoRAD)); // on slope
 
           Sum_Diff += diffuse;
 
