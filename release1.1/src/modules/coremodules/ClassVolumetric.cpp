@@ -25,7 +25,7 @@ void ClassVolumetric::decl(void) {
     declvar("Volumetric", TDim::NHRU, "volumetric soil moisture", "()", &Volumetric);
 
     declvar("Volumetric_rechr", TDim::NHRU, "volumetric soil moisture in soil recharge zone", "()", &Volumetric_rechr); // 04/14/2020: adding option for updating Si or fallstat based on Volumetric moisture content in recharge layer
-    
+
     declvar("fallstat_V", TDim::NHRU, "fallstat_V copy of parameter fallstat", "()", &fallstat_V);
 
     declvar("Si_V", TDim::NHRU, "Si_V copy of parameter Si", "()", &Si_V);
@@ -91,14 +91,14 @@ void ClassVolumetric::run(void) {
 
                 if (X < 0.0) {
                     X = 0.0;
-                } 
+                }
                 else if (X > 1.0) {
                     X = 1.0;
                 }
 
-                const_cast<double*> (Si)[hh] = X;
+                Si[hh] = X;
                 Si_V[hh] = Si[hh];
-                
+
             }
 
             if (fallstat[hh]) {
@@ -115,3 +115,4 @@ void ClassVolumetric::run(void) {
         }
     }
 }
+
