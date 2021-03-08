@@ -5,7 +5,7 @@ ODIR = obj
 SDIR = src
 LIBS = -lstdc++
 
-DFLAGS = 
+DFLAGS = -D ACTIVE_LOG_LEVEL=3
 
 CFLAGS = -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses \
 -Wno-c++11-extra-semi -Wno-dangling-else -Wno-null-conversion \

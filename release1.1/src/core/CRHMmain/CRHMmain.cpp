@@ -21,6 +21,13 @@
 
 #include <time.h>
 
+
+#define SPDLOG_ACTIVE_LEVEL ACTIVE_LOG_LEVEL
+
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
+
+
 //string ApplicationDir = ExtractFilePath(AnsiReplaceStr(Application->ExeName, "/", "\\"));
 
 
@@ -74,6 +81,28 @@ CRHMmain::CRHMmain()
 {
 
 	FormCreate();
+
+	try 
+	{
+		auto base_logger = spdlog::basic_logger_st("info_log", "info_log_test.txt");
+		base_logger->set_level(spdlog::level::level_enum::trace);
+	}
+	catch (const spdlog::spdlog_ex& ex)
+	{
+		std::cout << "Log initialization failed for base logger: " << ex.what() << std::endl;
+		exit(1);
+	}
+
+	auto base_logger = spdlog::get("info_log");
+
+	SPDLOG_LOGGER_TRACE(base_logger, "Trace");
+	SPDLOG_LOGGER_DEBUG(base_logger, "Debug");
+	SPDLOG_LOGGER_INFO(base_logger, "Info");
+	SPDLOG_LOGGER_WARN(base_logger, "Warn");
+	SPDLOG_LOGGER_ERROR(base_logger, "Error");
+	SPDLOG_LOGGER_CRITICAL(base_logger, "CRIT");
+
+	base_logger->flush();
 }
 
 
