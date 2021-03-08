@@ -5,7 +5,7 @@ ODIR = obj
 SDIR = src
 LIBS = -lstdc++
 
-DFLAGS = -D ACTIVE_LOG_LEVEL=3
+DFLAGS = -D ACTIVE_LOG_LEVEL=2
 
 CFLAGS = -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses \
 -Wno-c++11-extra-semi -Wno-dangling-else -Wno-null-conversion \
@@ -38,7 +38,7 @@ CRHM_parse_OBJS = CRHM_parse.o VarCHRM.o
 
 EXEC_OBJS = execbase.o
 
-CRHMmain_OBJS = CRHMmain.o
+CRHMmain_OBJS = CRHMmain.o CRHMLogger.o
 
 MacroUnit_OBJS = ClassMacro.o MacroUnit.o
 
