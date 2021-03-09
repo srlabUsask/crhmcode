@@ -79,15 +79,12 @@ CRHMmain::CRHMmain()
 	FormCreate();
 
 	std::shared_ptr<spdlog::logger> run_logger = CRHMLogger::instance()->get_run_logger();
-
-
 	SPDLOG_LOGGER_TRACE(run_logger, "Logger start up Trace on.");
 	SPDLOG_LOGGER_DEBUG(run_logger, "Logger start up Debug on.");
 	SPDLOG_LOGGER_INFO(run_logger, "Logger start up Info on.");
 	SPDLOG_LOGGER_WARN(run_logger, "Logger start up Warn on.");
 	SPDLOG_LOGGER_ERROR(run_logger, "Logger start up Error on.");
 	SPDLOG_LOGGER_CRITICAL(run_logger, "Logger start up Critical on.");
-
 	run_logger->flush();
 	
 }

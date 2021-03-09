@@ -30,3 +30,24 @@ std::shared_ptr<spdlog::logger> CRHMLogger::get_run_logger()
 {
     return runLogger;
 }
+
+void CRHMLogger::log_run_error(CRHMException exception)
+{
+
+    switch (exception.Kind) 
+    {
+        case TExcept::TERMINATE:
+            SPDLOG_LOGGER_CRITICAL(this->runLogger, exception.Message);
+            break;
+        case TExcept::ERR:
+            SPDLOG_LOGGER_ERROR(this->runLogger, exception.Message);
+            break;
+        case TExcept::WARNING:
+            SPDLOG_LOGGER_WARN(this->runLogger, exception.Message);
+            break;
+        default:
+            SPDLOG_LOGGER_ERROR(this->runLogger, exception.Message);
+            break;
+    }
+
+}

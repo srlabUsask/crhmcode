@@ -21,6 +21,7 @@
 #include "NewModules.h"
 #include "stddef.h"
 #include "GlobalDll.h"
+#include "../CRHMmain/CRHMLogger.h"
 
 using namespace std;
 
@@ -619,15 +620,34 @@ void setdim(TDim dimen, long dim) {
 }
 
 //---------------------------------------------------------------------------
-void   LogError(CRHMException Except) {
-	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION, (unsigned int)&Except, 0);
+void   LogError(CRHMException Except) 
+{
+	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION, (unsigned int)&Except, 0); Old handler for Visual Studio Messages
+	
+	CRHMLogger::instance()->log_run_error(Except);
+	
 	if (Except.Kind == TExcept::TERMINATE)
+	{
+
+		CRHMLogger::instance()->get_run_logger()->flush();
 		throw (Except);
+	}
 }
 
 //---------------------------------------------------------------------------
 void   LogError(string S, TExcept Kind) {
-	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION1, (unsigned int)&S, (unsigned int)&Kind);
+	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION1, (unsigned int)&S, (unsigned int)&Kind); Old handler for Visual Studio Messages
+
+	CRHMException Except = CRHMException(S, Kind);
+
+	CRHMLogger::instance()->log_run_error(Except);
+
+	if (Except.Kind == TExcept::TERMINATE)
+	{
+		CRHMLogger::instance()->get_run_logger()->flush();
+		throw (Except);
+	}
+
 }
 
 //---------------------------------------------------------------------------

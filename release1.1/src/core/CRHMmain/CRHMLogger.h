@@ -5,6 +5,8 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 
+#include "../Common/CRHMException.h"
+
 class CRHMLogger
 {
 
@@ -18,5 +20,7 @@ public:
 	static CRHMLogger* instance();
 
 	std::shared_ptr<spdlog::logger> get_run_logger();
+
+	void log_run_error(CRHMException exception);
 
 };
