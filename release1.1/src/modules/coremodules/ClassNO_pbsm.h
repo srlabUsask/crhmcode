@@ -16,6 +16,7 @@ double *snowdepth{ NULL };
 const double *basin_area{ NULL };
 const double *hru_area{ NULL };
 const long *inhibit_evap{ NULL };
+const double* SWEmin_inhibit_evap{ NULL }; // modification on 24Feb2021
 
 // variable inputs
 const double *net_snow{ NULL };

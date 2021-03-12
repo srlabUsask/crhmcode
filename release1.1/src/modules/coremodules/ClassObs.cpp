@@ -12,6 +12,7 @@
 #include <fstream>
 #include <bitset>
 
+
 using namespace CRHM;
 
 
@@ -495,23 +496,43 @@ void Classobs::Harder(void) {
 
   hru_icebulb = Ti1 - CRHM_constants::Tm;
 
-  if(hru_icebulb < -10.0) //Eoverflow if ratio calculated with icebulb < -39C
-
-    ratio = 0.0;
-
+  //E overflow if ratio calculated with icebulb < -39C 
+  //Calculate ratio of snow to rain?
+  if (hru_icebulb < -10.0) 
+  {
+      ratio = 0.0;
+  }
   else
+  {
+      ratio = 1.0 / (1.0 + 2.50286 * pow(0.125006, hru_icebulb));
+  }
 
-    ratio = 1.0/(1.0 + 2.50286*pow(0.125006, hru_icebulb));
+  double epsilon = 0.0001;
 
   hru_snow[hh] = 0.0;
 
   hru_rain[hh] = 0.0;
 
-  if(hru_p[hh] > 0.0) //rain or snow determined by ice bulb ratio
-
-    hru_rain[hh] = hru_p[hh]*ratio;
-
-  hru_snow[hh] = hru_p[hh]*(1.0-ratio);
+  if (hru_p[hh] > 0.0)  //rain or snow determined by ice bulb ratio
+  {
+      
+      if ( abs(1.0 - ratio) <= epsilon) {
+          //ratio is close enough to 1 that it should 100% rain
+          hru_rain[hh] = hru_p[hh];
+          hru_snow[hh] = 0.0;
+      }
+      else if (ratio <= epsilon) {
+          //ratio is close enough to 0 that it should be 100% snow
+          hru_rain[hh] = 0.0;
+          hru_snow[hh] = hru_p[hh];
+      }
+      else {
+          //calculate rain and snow normaly
+          hru_rain[hh] = hru_p[hh] * ratio;
+          //hru_snow[hh] = hru_p[hh] - hru_rain[hh]; //alternate snow calculation
+          hru_snow[hh] = hru_p[hh] * (1.0 - ratio);
+      }
+  }
 }
 
 void Classobs::finish(bool good) {
