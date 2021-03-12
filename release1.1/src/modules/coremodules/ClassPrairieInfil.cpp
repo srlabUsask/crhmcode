@@ -151,97 +151,140 @@ void ClassPrairieInfil::run(void) {
     }
   }
 
-  if(nstep  ==  0) // end of every day
-    for(hh = 0; chkStruct(); ++hh) {
+  if (nstep == 0) // end of every day
+  {
+      for (hh = 0; chkStruct(); ++hh) 
+      {
 
-      if(SWE[hh] > 25.0 && !crackon[hh]) {
-        crackstat[hh] = 0;
-        crackon[hh] = true; // initialise for current year
-        timer[hh] = 0;
-        Xinfil[0] [hh] = 0.0;
-        Xinfil[1] [hh] = 0.0;
-        Xinfil[2] [hh] = 0.0;
-      }
-
-      snowinfil[hh]= 0.0;
-      meltrunoff[hh] = 0.0;
-
-      if(crackon[hh] && snowmelt[hh] > 0.0) {
-
-        if(timer[hh] > 0 && crackstat[hh] > 0)
-
-  // ice lens forms, if next day below -10 limited
-
-          if(fallstat[hh] > 0.0 && hru_tmax[0] < -10.0) crackstat[hh] = 10;
-
-  // unlimited - (fallstat[hh].eq.0.0)
-
-        if(fallstat[hh] <= 0.0) {
-
-          snowinfil[hh] = snowmelt[hh];
-          crackstat[hh] = 1;
-        }
-
-  // limited - (0.0 < fallstat[hh] < 100.0)
-
-        else if(fallstat[hh] < 100.0){
-          if(snowmelt[hh] >= Major[hh] || crackstat[hh] >= 1) {
-            if(SWE[hh] > Xinfil[2][hh] && snowmelt[hh] >= Major[hh]) {
-              infil_index(fallstat[hh]/100.0, SWE[hh], Xinfil[0][hh], Xinfil[1][hh], infDays[hh]);
-              Xinfil[2][hh] = SWE[hh];
-            }
-            if(snowmelt[hh] >= Major[hh]) {
-              if(crackstat[hh] <= 0)
-                crackstat[hh] = 1;
-              else
-                crackstat[hh] = crackstat[hh] + 1;
-
-              timer[hh] = 1;
-              snowinfil[hh] = snowmelt[hh]*Xinfil[0][hh];
-              if(snowinfil[hh] > Xinfil[1][hh]) snowinfil[hh]=Xinfil[1][hh];
-            }
-            else
-              snowinfil[hh] = snowmelt[hh]*Xinfil[0][hh];
-
-            if(crackstat[hh] > infDays[hh])
-              snowinfil[hh] = 0;
+          //If snow is larger than 25 mm and the frozen soil routine is off then we need to turn it on.
+          if (SWE[hh] > 25.0 && !crackon[hh]) 
+          {
+              crackstat[hh] = 0;
+              crackon[hh] = true; // initialise for current year
+              timer[hh] = 0;
+              Xinfil[0][hh] = 0.0;
+              Xinfil[1][hh] = 0.0;
+              Xinfil[2][hh] = 0.0;
           }
-          else
-            if(PriorInfiltration[hh])
-              snowinfil[hh] = snowmelt[hh]; // zero by default
-        }
 
-  // restricted - (fallstat[hh].ge.100.0)
-
-        else if(fallstat[hh] >= 100.0) {
           snowinfil[hh] = 0.0;
-          crackstat[hh] = 1;
-        }
+          meltrunoff[hh] = 0.0;
 
-        meltrunoff[hh] = snowmelt[hh] - snowinfil[hh];
+          //If soil is frozen and we have some snowmelt.
+          if (crackon[hh] && snowmelt[hh] > 0.0) 
+          {
+              
 
-        if(snowinfil[hh] > 0.0)
-          snowinfil[hh] += RainOnSnowA[hh];
-        else
-          meltrunoff[hh] += RainOnSnowA[hh];
+              if (timer[hh] > 0 && crackstat[hh] > 0) 
+              {
+                  if (fallstat[hh] > 0.0 && hru_tmax[0] < -10.0)
+                  {
+                      crackstat[hh] = 10;
+                  }
+              }
 
-        cumsnowinfil[hh] += snowinfil[hh];
-        cummeltrunoff[hh] += meltrunoff[hh];
+              // ice lens forms, if next day below -10 limited
+              // unlimited - (fallstat[hh].eq.0.0)
 
-        RainOnSnow[hh] += RainOnSnowA[hh];
-        RainOnSnowA[hh] = 0.0;
+              if (fallstat[hh] <= 0.0) 
+              {
+                  snowinfil[hh] = snowmelt[hh];
+                  crackstat[hh] = 1;
+              }
 
-      } // end if
-      else if(snowmelt[hh] > 0.0){
-        snowinfil[hh] = snowmelt[hh];
-        cumsnowinfil[hh] += snowinfil[hh];
-      }
+              // limited - (0.0 < fallstat[hh] < 100.0)
 
-      if(crackstat[hh] > 0 && SWE[hh] <= 0.0){
-        crackon[hh] = false;
-        crackstat[hh] = 0;
-      }
-    }   // end for
+              else if (fallstat[hh] < 100.0) 
+              {
+                  if (snowmelt[hh] >= Major[hh] || crackstat[hh] >= 1) 
+                  {
+                      if (SWE[hh] > Xinfil[2][hh] && snowmelt[hh] >= Major[hh]) 
+                      {
+                          infil_index(fallstat[hh] / 100.0, SWE[hh], Xinfil[0][hh], Xinfil[1][hh], infDays[hh]);
+                          Xinfil[2][hh] = SWE[hh];
+                      }
+                      if (snowmelt[hh] >= Major[hh]) 
+                      {
+                          if (crackstat[hh] <= 0)
+                          {
+                              crackstat[hh] = 1;
+                          }
+                          else
+                          {
+                              crackstat[hh] = crackstat[hh] + 1;
+                          }
+
+                          timer[hh] = 1;
+                          snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
+                          
+                          if (snowinfil[hh] > Xinfil[1][hh])
+                          {
+                              snowinfil[hh] = Xinfil[1][hh];
+                          }
+                      }
+                      else 
+                      {
+                          snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
+                      }
+                          
+
+                      if (crackstat[hh] > infDays[hh])
+                      {
+                          snowinfil[hh] = 0;
+                      }
+                          
+                  }
+                  else
+                  {
+                      if (PriorInfiltration[hh])
+                      {
+                          snowinfil[hh] = snowmelt[hh]; // zero by default
+                      }
+                          
+                  }
+                      
+              }
+
+              // restricted - (fallstat[hh].ge.100.0)
+
+              else if (fallstat[hh] >= 100.0) 
+              {
+                  snowinfil[hh] = 0.0;
+                  crackstat[hh] = 1;
+              }
+
+              meltrunoff[hh] = snowmelt[hh] - snowinfil[hh];
+
+              if (snowinfil[hh] > 0.0)
+              {
+                  snowinfil[hh] += RainOnSnowA[hh];
+              }
+              else
+              {
+                  meltrunoff[hh] += RainOnSnowA[hh];
+              }
+                 
+              cumsnowinfil[hh] += snowinfil[hh];
+              cummeltrunoff[hh] += meltrunoff[hh];
+
+              RainOnSnow[hh] += RainOnSnowA[hh];
+              RainOnSnowA[hh] = 0.0;
+
+          } // end if
+          else if (snowmelt[hh] > 0.0) 
+          {
+              snowinfil[hh] = snowmelt[hh];
+              cumsnowinfil[hh] += snowinfil[hh];
+          }
+
+          if (crackstat[hh] > 0 && SWE[hh] <= 0.0) 
+          {
+              crackon[hh] = false;
+              crackstat[hh] = 0;
+          }
+      }   // end for
+  }
+    
 }
 
 void ClassPrairieInfil::finish(bool good) {

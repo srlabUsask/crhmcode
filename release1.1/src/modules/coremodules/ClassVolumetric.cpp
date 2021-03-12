@@ -101,14 +101,24 @@ void ClassVolumetric::run(void) {
 
             }
 
-            if (fallstat[hh]) {
+            if (fallstat[hh]) 
+            {
+
                 if (SetSoilproperties[soil_type[hh]][3] > 0.0)
+                {
                     if (Volumetric_option[hh])  // 04/14/2020
+                    {
                         fallstat[hh] = Volumetric_rechr[hh] / SetSoilproperties[soil_type[hh]][3] * 100000.0; // ie 100*1000
+                    }                        
                     else
+                    {
                         fallstat[hh] = Volumetric[hh] / SetSoilproperties[soil_type[hh]][3] * 100000.0; // ie 100*1000
+                    }
+                }
                 else
+                {
                     fallstat[hh] = 1.0;
+                }
 
                 fallstat_V[hh] = fallstat[hh];
             }
