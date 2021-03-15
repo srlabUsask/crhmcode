@@ -33,7 +33,6 @@ const double *zr{ NULL };
 const double *distrib{ NULL };
 const double *fetch{ NULL };
 const long *inhibit_evap{ NULL };
-const double* SWEmin_inhibit_evap{ NULL }; // modification on 24Feb2021
 const long *inhibit_subl{ NULL };
 
 // variable inputs

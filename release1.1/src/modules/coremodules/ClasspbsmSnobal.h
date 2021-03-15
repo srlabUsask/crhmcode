@@ -41,7 +41,6 @@ const double *Drift_slope{ NULL };
 const double *Subl_offset{ NULL };
 const double *Subl_slope{ NULL };
 const long *inhibit_evap{ NULL };
-const double* SWEmin_inhibit_evap{ NULL }; // modification on 24Feb2021
 const long *inhibit_bs{ NULL };
 const long *inhibit_subl{ NULL };
 
