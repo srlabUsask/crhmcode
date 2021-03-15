@@ -51,3 +51,13 @@ void CRHMLogger::log_run_error(CRHMException exception)
     }
 
 }
+
+void CRHMLogger::log_run_message(std::string msg) 
+{
+    SPDLOG_LOGGER_INFO(this->runLogger, msg);
+}
+
+void CRHMLogger::log_run_debug_message(std::string msg)
+{
+    SPDLOG_LOGGER_DEBUG(this->runLogger, msg);
+}

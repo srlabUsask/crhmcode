@@ -23,4 +23,8 @@ public:
 
 	void log_run_error(CRHMException exception);
 
+	void log_run_message(std::string msg);
+
+	void log_run_debug_message(std::string msg);
+
 };
