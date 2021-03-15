@@ -74,9 +74,15 @@ void ClassVolumetric::run(void) {
 
     for (hh = 0; chkStruct(); ++hh) {
 
-        Volumetric[hh] = (soil_moist[hh] / soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1]) / 1000.0;
+        if (soil_Depth[hh] > 0.0) // 03/15/2021: conditional statement to restrict divided by zero error
+            Volumetric[hh] = (soil_moist[hh] / soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1]) / 1000.0;
+        else
+            Volumetric[hh] = 0.0;
 
-        Volumetric_rechr[hh] = (soil_rechr[hh] / soil_rechr_max[hh] * SetSoilproperties[soil_type[hh]][3] + SetSoilproperties[soil_type[hh]][1]) / 1000.0;  // 04/14/2020
+        if (soil_rechr_max[hh] > 0.0) // 03/15/2021: conditional statement to restrict divided by zero error
+            Volumetric_rechr[hh] = (soil_rechr[hh] / soil_rechr_max[hh] * SetSoilproperties[soil_type[hh]][3] + SetSoilproperties[soil_type[hh]][1]) / 1000.0;  // 04/14/2020
+        else
+            Volumetric_rechr[hh] = 0.0;
 
         if (nstep == 0 && set_fallstat[hh] == Julian || (getstep() == 1 && Julian > set_fallstat[hh])) {
             if (Si) {
@@ -101,7 +107,7 @@ void ClassVolumetric::run(void) {
 
             }
 
-            if (fallstat[hh]) 
+            if (fallstat[hh])
             {
 
                 if (SetSoilproperties[soil_type[hh]][3] > 0.0)
@@ -109,7 +115,7 @@ void ClassVolumetric::run(void) {
                     if (Volumetric_option[hh])  // 04/14/2020
                     {
                         fallstat[hh] = Volumetric_rechr[hh] / SetSoilproperties[soil_type[hh]][3] * 100000.0; // ie 100*1000
-                    }                        
+                    }
                     else
                     {
                         fallstat[hh] = Volumetric[hh] / SetSoilproperties[soil_type[hh]][3] * 100000.0; // ie 100*1000
@@ -125,4 +131,5 @@ void ClassVolumetric::run(void) {
         }
     }
 }
+
 
