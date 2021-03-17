@@ -838,7 +838,9 @@ void ClassModule::declparam(string param, TDim dimen,
 
 	variation_max = variation_max | variation_set;
 
-	Convert convert; convert.CheckUnitsString(Name, param, units);
+	Convert convert; 
+	
+	convert.CheckUnitsString(Name, param, units);
 
 	AKAhook(TAKA::PARD, Name, param, param);
 
