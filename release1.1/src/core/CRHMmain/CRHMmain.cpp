@@ -2101,8 +2101,8 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 	((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
 
 	// deletes module allocated storage
-	//for (int ii = 0; ii < Global::OurModulesList->Count; ii++)
-	//	((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(true);
+	for (int ii = 0; ii < Global::OurModulesList->Count; ii++)
+		((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(true);
 
 	if (GoodRun) {
 		//    LogDebugT("\"end of run\".");
@@ -2116,6 +2116,8 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 	//ts->addTime("totaltime", timediff2);
 
 	//ts->writeStatistics();
+
+	CRHMLogger::instance()->get_run_logger()->flush();
 
 }
 
