@@ -58,7 +58,7 @@ void ClassCRHMCanopy::decl(void) {
 
 // get variables:
 
-  declgetvar("*",  "hru_t", "(°C)", &hru_t);
+  declgetvar("*",  "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
   declgetvar("*",  "hru_u", "(m/s)", &hru_u);
 

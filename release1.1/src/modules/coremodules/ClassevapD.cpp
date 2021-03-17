@@ -55,7 +55,7 @@ void ClassevapD::decl(void) {
 
   declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
 
-  declgetvar("*",  "hru_tmean", "(°C)", &hru_tmean);
+  declgetvar("*",  "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmean);
   declgetvar("*",  "hru_umean", "(m/s)", &hru_umean);
   declgetvar("*",  "hru_eamean", "(kPa)", &hru_eamean);
 }

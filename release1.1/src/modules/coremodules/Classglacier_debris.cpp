@@ -136,7 +136,7 @@ void Classglacier_debris::decl(void){
 
   declparam("ice_dens", TDim::NHRU, "[1000.0]", "200.0", "1000.0", "density of glacier ice", "(kg/m^3)", &ice_dens);
 
-  declparam("TKMA", TDim::NHRU, "[30]", "-50", "50", "Mean annual temperature of glacier", "(ºC)", &TKMA);
+  declparam("TKMA", TDim::NHRU, "[30]", "-50", "50", "Mean annual temperature of glacier", "(" + string(DEGREE_CELSIUS) + ")", &TKMA);
 
   declparam("SWEAA", TDim::NHRU, "[0.3]", "0.1", "10.0", "Mean annual accumulation of glacier SWE", "(m/yr)", &SWEAA);
 
@@ -176,11 +176,11 @@ void Classglacier_debris::decl(void){
 
   declgetvar("*", "QdfoD", "(MJ/m^2*d)", &QdfoD);
 
-  declgetvar("*", "hru_tmean", "(°C)",  &tmean);
+  declgetvar("*", "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")",  &tmean);
 
-  declgetvar("*", "hru_tmax", "(°C)",   &tmax);
+  declgetvar("*", "hru_tmax", "(" + string(DEGREE_CELSIUS) + ")",   &tmax);
 
-  declgetvar("*", "hru_tmin", "(°C)",   &tmin);
+  declgetvar("*", "hru_tmin", "(" + string(DEGREE_CELSIUS) + ")",   &tmin);
 
   declgetvar("*", "hru_umean", "(m/s)",  &umean);
 
@@ -196,9 +196,9 @@ void Classglacier_debris::decl(void){
 
   declgetvar("*",  "hru_ea", "(kPa)", &hru_ea);
 
-  declgetvar("*", "T_rain", "(°C)", &T_rain);
+  declgetvar("*", "T_rain", "(" + string(DEGREE_CELSIUS) + ")", &T_rain);
 
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
 
   declputparam("*", "hru_elev", "(m)", &hru_elev);
@@ -210,7 +210,7 @@ void Classglacier_debris::decl(void){
 
   variation_set = VARIATION_0;
 
-  decldiagparam("tfactor", TDim::NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*°C)", &tfactor);
+  decldiagparam("tfactor", TDim::NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*"+string(DEGREE_CELSIUS)+")", &tfactor);
 
   decldiagparam("nfactor", TDim::NHRU, "[0.0]", "0.0","10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
 
@@ -249,7 +249,7 @@ void Classglacier_debris::decl(void){
 // debris 
 
 
-  declvar("lagT", TDim::NHRU, "lagged temperature.", "(°C)", &lagT);
+  declvar("lagT", TDim::NHRU, "lagged temperature.", "(" + string(DEGREE_CELSIUS) + ")", &lagT);
 
   declvar("lagSW", TDim::NHRU, "lagged shortwave radiation.", "(W/m^2)", &lagSW);
 
@@ -269,15 +269,15 @@ void Classglacier_debris::decl(void){
 
   declparam("debris_h", TDim::NHRU, "[0.0]", "0", "10", "debris thickness.", "(m)", &debris_h);
 
-  declparam("T_threshold", TDim::NHRU, "[1.0]", "-30", "30", "threshold temperature for melt to occur.", "(°C)", &T_threshold);
+  declparam("T_threshold", TDim::NHRU, "[1.0]", "-30", "30", "threshold temperature for melt to occur.", "(" + string(DEGREE_CELSIUS) + ")", &T_threshold);
 
-  declreadobs("lagT1", TDim::NHRU, "lagged temperature 1", "(°C)", &lagT1, HRU_OBS_Q, true);
+  declreadobs("lagT1", TDim::NHRU, "lagged temperature 1", "(" + string(DEGREE_CELSIUS) + ")", &lagT1, HRU_OBS_Q, true);
 
-  declreadobs("lagT2", TDim::NHRU, "lagged temperature 2", "(°C)", &lagT2, HRU_OBS_Q, true);
+  declreadobs("lagT2", TDim::NHRU, "lagged temperature 2", "(" + string(DEGREE_CELSIUS) + ")", &lagT2, HRU_OBS_Q, true);
 
-  declreadobs("lagT3", TDim::NHRU, "lagged temperature 3", "(°C)", &lagT3, HRU_OBS_Q, true);
+  declreadobs("lagT3", TDim::NHRU, "lagged temperature 3", "(" + string(DEGREE_CELSIUS) + ")", &lagT3, HRU_OBS_Q, true);
 
-  declreadobs("lagT4", TDim::NHRU, "lagged temperature 4", "(°C)", &lagT4, HRU_OBS_Q, true);
+  declreadobs("lagT4", TDim::NHRU, "lagged temperature 4", "(" + string(DEGREE_CELSIUS) + ")", &lagT4, HRU_OBS_Q, true);
 
   declreadobs("lagSW1", TDim::NHRU, "lagged shortwave radiation 1", "(W/m^2)", &lagSW1, HRU_OBS_Q, true);
 

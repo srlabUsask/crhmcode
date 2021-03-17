@@ -58,7 +58,7 @@ void Classinterception::decl(void) {
 
   declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
 
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
   declgetvar("*", "hru_snow", "(mm/int)", &hru_snow);
   declgetvar("*", "hru_rain", "(mm/int)", &hru_rain);
   declgetvar("*", "hru_rh", "()", &hru_rh);

@@ -29,39 +29,39 @@ void Classtsurface::decl(void) {
     'use previous daily mean snowpack temperature with thermal conductivity and energy of snowpack (***Snobal*** case) to estimate surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57).' \
     'use previous daily mean hru_t with thermal conductivity and energy of snowpack (***ebsm*** case) to estimate surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57). '";
 
-  declvar("hru_tsf", TDim::NHRU, "surface/skin temperature", "(°C)", &hru_tsf);
+  declvar("hru_tsf", TDim::NHRU, "surface/skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_tsf);
 
-  declvar("hru_tsf_D", TDim::NHRU, "mean daily surface/skin temperature", "(°C)", &hru_tsf_D);
+  declvar("hru_tsf_D", TDim::NHRU, "mean daily surface/skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_tsf_D);
 
-  decldiag("hru_tsf_acc", TDim::NHRU, "mean daily surface/skin temperature", "(°C)", &hru_tsf_acc);
+  decldiag("hru_tsf_acc", TDim::NHRU, "mean daily surface/skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_tsf_acc);
 
   declgetvar("*", "SWE", "(m)", &SWE);
 
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
 
   variation_set = VARIATION_2 + VARIATION_4; // Snobal
 
-  decllocal("hru_T_s_D", TDim::NHRU, "mean daily surface/skin temperature", "(°C)", &hru_T_s_D);
+  decllocal("hru_T_s_D", TDim::NHRU, "mean daily surface/skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_T_s_D);
 
-  decllocal("hru_T_s_acc", TDim::NHRU, "sum interval air temperature from previous day", "(°C)", &hru_T_s_acc);
+  decllocal("hru_T_s_acc", TDim::NHRU, "sum interval air temperature from previous day", "(" + string(DEGREE_CELSIUS) + ")", &hru_T_s_acc);
 
   declgetvar("*", "z_s", "(m)", &z_s);
 
   declgetvar("*", "rho", "(kg/m^3)", &rho);
 
-  declgetvar("*", "T_s", "( °C)", &T_s);
+  declgetvar("*", "T_s", "(" + string(DEGREE_CELSIUS) + ")", &T_s);
 
   declgetvar("*", "G", "(W/m^2)", &G);
 
 
   variation_set = VARIATION_3 + VARIATION_5; // ebsm
 
-  decllocal("hru_t_D", TDim::NHRU, "mean daily snowpack temperature from previous day", "(°C)", &hru_t_D);
+  decllocal("hru_t_D", TDim::NHRU, "mean daily snowpack temperature from previous day", "(" + string(DEGREE_CELSIUS) + ")", &hru_t_D);
 
-  decllocal("hru_t_acc", TDim::NHRU, "sum interval air temperature from previous day", "(°C)", &hru_t_acc);
+  decllocal("hru_t_acc", TDim::NHRU, "sum interval air temperature from previous day", "(" + string(DEGREE_CELSIUS) + ")", &hru_t_acc);
 
-  declgetvar("*", "hru_tmin", "(°C)",   &tmin);
+  declgetvar("*", "hru_tmin", "(" + string(DEGREE_CELSIUS) + ")",   &tmin);
 
   declgetvar("*", "snowdepth", "(m)", &snowdepth);
 

@@ -58,7 +58,7 @@ void ClassCRHMCanopyClearing::decl(void) {
 
 // get variables:
 
-  declgetvar("*",  "hru_t", "(°C)", &hru_t);
+  declgetvar("*",  "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
   declgetvar("*",  "hru_u", "(m/s)", &hru_u);
 
@@ -80,7 +80,7 @@ void ClassCRHMCanopyClearing::decl(void) {
 
 // declared observations
 
-  declobs("Ts", TDim::NHRU, "snow surface temperature", "(°C)", &Ts);
+  declobs("Ts", TDim::NHRU, "snow surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &Ts);
 
   declobs("Qnsn", TDim::NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
 
@@ -174,9 +174,9 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declparam("Zvent", TDim::NHRU, "[0.75]", "0.0", "1.0", "ventilation wind speed height (z/Ht)", "()", &Zvent);
 
-  declparam("unload_t", TDim::NHRU, "[1.0]", "-10.0", "20.0", "if ice-bulb temp >= t : canopy snow is unloaded as snow", "(°C)", &unload_t);
+  declparam("unload_t", TDim::NHRU, "[1.0]", "-10.0", "20.0", "if ice-bulb temp >= t : canopy snow is unloaded as snow", "(" + string(DEGREE_CELSIUS) + ")", &unload_t);
 
-  declparam("unload_t_water", TDim::NHRU, "[4.0]", "-10.0", "20.0", "if ice-bulb temp >= t: canopy snow is unloaded as water", "(°C)", &unload_t_water);
+  declparam("unload_t_water", TDim::NHRU, "[4.0]", "-10.0", "20.0", "if ice-bulb temp >= t: canopy snow is unloaded as water", "(" + string(DEGREE_CELSIUS) + ")", &unload_t_water);
 
   declparam("CanopyClearing", TDim::NHRU, "[0]", "0", "1", "canopy - 0/clearing - 1", "()", &CanopyClearing);
 

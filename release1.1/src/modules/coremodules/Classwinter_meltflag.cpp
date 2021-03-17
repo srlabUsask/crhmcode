@@ -26,10 +26,10 @@ void Classwinter_meltflag::decl(void) {
 
   declvar("winter", TDim::NHRU, "winter = 1 - true", "()", &winter);
 
-  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
+  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(" + string(DEGREE) + ")", &hru_lat);
 
-  declgetvar("*",    "hru_tmax", "(°C)", &hru_tmax);
-  declgetvar("*",    "hru_tmin", "(°C)", &hru_tmin);
+  declgetvar("*",    "hru_tmax", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmax);
+  declgetvar("*",    "hru_tmin", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmin);
   declgetvar("*",    "SWE", "(mm)", &SWE);
   declgetvar("*",    "QdroD", "(MJ/m^2*d)", &QdroD);
   declgetvar("*",    "Albedo", "()", &Albedo);

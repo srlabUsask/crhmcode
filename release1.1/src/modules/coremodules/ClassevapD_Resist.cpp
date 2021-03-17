@@ -70,7 +70,7 @@ void ClassevapD_Resist::decl(void) {
   declparam("soil_Depth", TDim::NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
 
   declgetvar("*",  "RnD", "(mm/m^2*d)", &RnD);
-  declgetvar("*",  "hru_tmean", "(°C)", &hru_tmean);
+  declgetvar("*",  "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmean);
   declgetvar("*",  "hru_umean", "(m/s)", &hru_umean);
   declgetvar("*",  "hru_eamean", "(kPa)", &hru_eamean);
 
@@ -80,7 +80,7 @@ void ClassevapD_Resist::decl(void) {
 
   declobsfunc("Qsi", "Qsi_mean", &Qsi_mean, TFun::AVG, NULL, false);
 
-  declreadobs("Ts", TDim::NHRU, "surface temperature", "(°C)", &Ts, HRU_OBS_misc, true);
+  declreadobs("Ts", TDim::NHRU, "surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &Ts, HRU_OBS_misc, true);
 
   declobsfunc("Ts", "Tsmean", &Tsmean, TFun::AVG, NULL, true);
 }

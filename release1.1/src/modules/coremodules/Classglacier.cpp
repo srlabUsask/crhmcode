@@ -135,7 +135,7 @@ void Classglacier::decl(void){
 
   declparam("ice_dens", TDim::NHRU, "[1000.0]", "200.0", "1000.0", "density of glacier ice", "(kg/m^3)", &ice_dens);
 
-  declparam("TKMA", TDim::NHRU, "[30]", "-50", "50", "Mean annual temperature of glacier", "(ºC)", &TKMA);
+  declparam("TKMA", TDim::NHRU, "[30]", "-50", "50", "Mean annual temperature of glacier", "(" + string(DEGREE_CELSIUS) + ")", &TKMA);
 
   declparam("SWEAA", TDim::NHRU, "[0.3]", "0.1", "10.0", "Mean annual accumulation of glacier SWE", "(m/yr)", &SWEAA);
 
@@ -172,9 +172,9 @@ void Classglacier::decl(void){
   declgetvar("*", "SunMax", "(h)",       &sunmax);
   declgetvar("*", "QdroD", "(MJ/m^2*d)", &QdroD);
   declgetvar("*", "QdfoD", "(MJ/m^2*d)", &QdfoD);
-  declgetvar("*", "hru_tmean", "(°C)",  &tmean);
-  declgetvar("*", "hru_tmax", "(°C)",   &tmax);
-  declgetvar("*", "hru_tmin", "(°C)",   &tmin);
+  declgetvar("*", "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")",  &tmean);
+  declgetvar("*", "hru_tmax", "(" + string(DEGREE_CELSIUS) + ")",   &tmax);
+  declgetvar("*", "hru_tmin", "(" + string(DEGREE_CELSIUS) + ")",   &tmin);
   declgetvar("*", "hru_umean", "(m/s)",  &umean);
   declgetvar("*", "hru_rhmean", "(%)", &rhmean);
   declgetvar("*", "hru_SunAct", "(h)", &sunact);
@@ -190,7 +190,7 @@ void Classglacier::decl(void){
 
   variation_set = VARIATION_0;
 
-  decldiagparam("tfactor", TDim::NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*°C)", &tfactor);
+  decldiagparam("tfactor", TDim::NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*"+string(DEGREE_CELSIUS)+")", &tfactor);
 
   decldiagparam("nfactor", TDim::NHRU, "[0.0]", "0.0","10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
 

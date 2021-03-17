@@ -24,7 +24,7 @@ void Classfrostdepth::decl(void) {
 
   declstatvar("frostdepth", TDim::NHRU, "frost penetration", "(m)", &frostdepth);
 
-  declstatvar("Findex", TDim::NHRU, "freezing index", "(d* °C)", &Findex);
+  declstatvar("Findex", TDim::NHRU, "freezing index", "(d* "+string(DEGREE_CELSIUS)+")", &Findex);
 
   declstatvar("Tfreeze", TDim::NHRU, "duration of freezing period in days", "(d)", &Tfreeze);
 
@@ -35,7 +35,7 @@ void Classfrostdepth::decl(void) {
   declstatvar("Kacc", TDim::NHRU, "cumulative effective thermal conductivity", "(W/(m*K))", &Kacc);
 
 
-  declparam("Ta", TDim::NHRU, "[10]", "-10.0", "50.0", "annual air temperature", "(°C)", &Ta);
+  declparam("Ta", TDim::NHRU, "[10]", "-10.0", "50.0", "annual air temperature", "(" + string(DEGREE_CELSIUS) + ")", &Ta);
 
   declparam("soil_type", TDim::NLAY, "[2]", "1", "4",
             "HRU soil type: 1= sand, 2= loam, 3= clay, 4 = organic", "()", &soil_type, &soil_type_lay);
@@ -46,10 +46,10 @@ void Classfrostdepth::decl(void) {
 
   declparam("d", TDim::NLAY, "[2.0]", "0.0", "100.0", "layer depth", "(m)", &d, &d_lay);
 
-  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
+  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(" + string(DEGREE) + ")", &hru_lat);
 
 
-  declgetvar("*", "hru_tmean", "(°C)", &hru_tmean);
+  declgetvar("*", "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmean);
 
   declgetvar("*",   "SWE", "(mm)", &SWE);
 

@@ -9,7 +9,7 @@ void ClassGlacier_debris_cover::decl(void) {
     long step = getstep();
     long nstep = step % Global::Freq;
 
-    declvar("lagT", TDim::NHRU, "lagged temperature.", "(°C)", &lagT);
+    declvar("lagT", TDim::NHRU, "lagged temperature.", "(" + string(DEGREE_CELSIUS) + ")", &lagT);
 
     declvar("lagSW", TDim::NHRU, "lagged shortwave radiation.", "(W/m^2)", &lagSW);
 
@@ -22,12 +22,12 @@ void ClassGlacier_debris_cover::decl(void) {
 
     declparam("debris_h", TDim::NHRU, "[0.0]", "0", "10", "debris thickness.", "(m)", &debris_h);
 
-    declparam("T_threshold", TDim::NHRU, "[1.0]", "-30", "30", "threshold temperature for melt to occur.", "(°C)", &T_threshold);
+    declparam("T_threshold", TDim::NHRU, "[1.0]", "-30", "30", "threshold temperature for melt to occur.", "(" + string(DEGREE_CELSIUS) + ")", &T_threshold);
 
-    declreadobs("lagT1", TDim::NHRU, "lagged temperature 1", "(°C)", &lagT1, HRU_OBS_Q, true);
-    declreadobs("lagT2", TDim::NHRU, "lagged temperature 2", "(°C)", &lagT2, HRU_OBS_Q, true);
-    declreadobs("lagT3", TDim::NHRU, "lagged temperature 3", "(°C)", &lagT3, HRU_OBS_Q, true);
-    declreadobs("lagT4", TDim::NHRU, "lagged temperature 4", "(°C)", &lagT4, HRU_OBS_Q, true);
+    declreadobs("lagT1", TDim::NHRU, "lagged temperature 1", "(" + string(DEGREE_CELSIUS) + ")", &lagT1, HRU_OBS_Q, true);
+    declreadobs("lagT2", TDim::NHRU, "lagged temperature 2", "(" + string(DEGREE_CELSIUS) + ")", &lagT2, HRU_OBS_Q, true);
+    declreadobs("lagT3", TDim::NHRU, "lagged temperature 3", "(" + string(DEGREE_CELSIUS) + ")", &lagT3, HRU_OBS_Q, true);
+    declreadobs("lagT4", TDim::NHRU, "lagged temperature 4", "(" + string(DEGREE_CELSIUS) + ")", &lagT4, HRU_OBS_Q, true);
 
     declreadobs("lagSW1", TDim::NHRU, "lagged shortwave radiation 1", "(W/m^2)", &lagSW1, HRU_OBS_Q, true);
     declreadobs("lagSW2", TDim::NHRU, "lagged shortwave radiation 2", "(W/m^2)", &lagSW2, HRU_OBS_Q, true);
@@ -37,7 +37,7 @@ void ClassGlacier_debris_cover::decl(void) {
     declreadobs("lagSW6", TDim::NHRU, "lagged shortwave radiation 6", "(W/m^2)", &lagSW6, HRU_OBS_Q, true);
 
     declgetvar("*", "Albedo", "()", &Albedo);
-    declgetvar("*", "hru_t", "(°C)", &hru_t);
+    declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
     declgetvar("*", "Qnsn_Var", "(W/m^2*int)", &Qnsn_Var);
 }
 

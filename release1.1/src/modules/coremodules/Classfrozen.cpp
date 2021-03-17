@@ -66,7 +66,7 @@ void Classfrozen::decl(void) {
 
   declparam("hru_tsoil", TDim::NHRU, "[269.15]", "223.0", "273.15", "soil average temperature at start of infiltration (0 - 0.4m)", "(ºK)", &hru_tsoil);
 
-  decldiagparam("t_ice_lens", TDim::NHRU, "[-20]", "-50.0", "0.0", "overnight minimum to cause ice lens after major melt", "(ºC)", &t_ice_lens);
+  decldiagparam("t_ice_lens", TDim::NHRU, "[-20]", "-50.0", "0.0", "overnight minimum to cause ice lens after major melt", "(" + string(DEGREE_CELSIUS) + ")", &t_ice_lens);
 
   declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
@@ -87,7 +87,7 @@ void Classfrozen::decl(void) {
 
   declgetvar("*", "net_rain", "(mm/int)", &net_rain);
 
-  declgetvar("*",  "hru_tmin", "(°C)", &hru_tmin);
+  declgetvar("*",  "hru_tmin", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmin);
 
 
   declreadobs("t0_inhibit", TDim::NHRU, "opportunity time inhibit", "()", &t0_inhibit, 0, true);

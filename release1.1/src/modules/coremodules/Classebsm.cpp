@@ -83,7 +83,7 @@ void Classebsm::decl(void) {
 
     variation_set = VARIATION_0;
 
-    decldiagparam("tfactor", TDim::NHRU, "[0.0]", "0.0", "10.0", "degree day melt factor", "(mm/d*°C)", &tfactor);
+    decldiagparam("tfactor", TDim::NHRU, "[0.0]", "0.0", "10.0", "degree day melt factor", "(mm/d*"+string(DEGREE_CELSIUS)+")", &tfactor);
 
     decldiagparam("nfactor", TDim::NHRU, "[0.0]", "0.0", "10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
 

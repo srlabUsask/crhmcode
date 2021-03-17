@@ -68,9 +68,9 @@ void ClassSnobalX::decl(void) {
     declstatvar("m_s_l", TDim::NHRU, "lower layer specific mass", "(kg/m^2)", &m_s_l);
     declstatvar("SWE", TDim::NHRU, "snowcover's specific mass", "(kg/m^2)", &m_s);
 
-    declstatvar("T_s_0", TDim::NHRU, "active snow layer temp", "(°C)", &T_s_0);
-    declstatvar("T_s_l", TDim::NHRU, "lower layer temp", "(°C)", &T_s_l);
-    declstatvar("T_s", TDim::NHRU, "average snowcover temp", "(°C)", &T_s);
+    declstatvar("T_s_0", TDim::NHRU, "active snow layer temp", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0);
+    declstatvar("T_s_l", TDim::NHRU, "lower layer temp", "(" + string(DEGREE_CELSIUS) + ")", &T_s_l);
+    declstatvar("T_s", TDim::NHRU, "average snowcover temp", "(" + string(DEGREE_CELSIUS) + ")", &T_s);
 
     declvar("h2o_sat", TDim::NHRU, "fraction of liquid H2O saturation (0 to 1.0)", "()", &h2o_sat);
     declvar("h2o_vol", TDim::NHRU, "liquid h2o content as volume ratio: V_water/(V_snow - V_ice)", "()", &h2o_vol);
@@ -80,15 +80,15 @@ void ClassSnobalX::decl(void) {
     declvar("h2o_sat_snow", TDim::NHRU, "snowfall's % of liquid H2O saturation", "()", &h2o_sat_snow);
 
     declvar("precip_now", TDim::NHRU, "precipitation occur for current timestep - 0/1", "()", &precip_now);
-    declvar("T_rain", TDim::NHRU, "rain's temp", "(°C)", &T_rain);
-    declvar("T_snow", TDim::NHRU, "snowfall's temp", "(°C)", &T_snow);
+    declvar("T_rain", TDim::NHRU, "rain's temp", "(" + string(DEGREE_CELSIUS) + ")", &T_rain);
+    declvar("T_snow", TDim::NHRU, "snowfall's temp", "(" + string(DEGREE_CELSIUS) + ")", &T_snow);
 
     decllocal("S_n_L", TDim::NHRU, "net solar radiation", "(W/m^2)", &S_n);
     decllocal("I_lw_L", TDim::NHRU, "incoming longwave (thermal) rad ", "(W/m^2)", &I_lw);
-    decllocal("T_a_L", TDim::NHRU, "air temp", "(°C)", &T_a);
+    decllocal("T_a_L", TDim::NHRU, "air temp", "(" + string(DEGREE_CELSIUS) + ")", &T_a);
     decllocal("e_a_L", TDim::NHRU, "vapor pressure", "(Pa)", &e_a);
     decllocal("u_L", TDim::NHRU, "wind speed", "(m/s)", &u);
-    decllocal("T_g_L", TDim::NHRU, "soil temp at depth z_g", "(°C)", &T_g); // should be K but causes unit fault
+    decllocal("T_g_L", TDim::NHRU, "soil temp at depth z_g", "(" + string(DEGREE_CELSIUS) + ")", &T_g); // should be K but causes unit fault
 
     decllocal("m_precip_L", TDim::NHRU, "specific mass of total precip", "(kg/m^2)", &m_precip);
     decllocal("m_rain_L", TDim::NHRU, "specific mass of rain in precip", "(kg/m^2)", &m_rain);
@@ -96,7 +96,7 @@ void ClassSnobalX::decl(void) {
     decllocal("m_drift_L", TDim::NHRU, "specific mass of drifting snow", "(kg/m^2)", &m_drift);
     decllocal("m_subl_L", TDim::NHRU, "specific mass of drifting snow", "(kg/m^2)", &m_subl);
     decllocal("rho_snow_L", TDim::NHRU, "density of snowfall", "(kg/m^2)", &rho_snow);
-    decllocal("T_pp_L", TDim::NHRU, "precip temp", "(°C)", &T_pp);
+    decllocal("T_pp_L", TDim::NHRU, "precip temp", "(" + string(DEGREE_CELSIUS) + ")", &T_pp);
 
     decllocal("P_a", TDim::NHRU, "air pressure", "(Pa)", &P_a);
 
@@ -128,10 +128,10 @@ void ClassSnobalX::decl(void) {
 
     declgetvar("*", "hru_S_n", "(W/m^2)", &S_n_X);
     declgetvar("*", "hru_I_lw", "(W/m^2)", &I_lw_X);
-    declgetvar("*", "hru_t", "(°C)", &T_a_X);
+    declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &T_a_X);
     declgetvar("*", "hru_ea", "(kPa)", &e_a_X);
     declgetvar("*", "hru_u", "(m/s)", &u_X);
-    declgetvar("*", "hru_T_g", "(°C)", &T_g_X);
+    declgetvar("*", "hru_T_g", "(" + string(DEGREE_CELSIUS) + ")", &T_g_X);
 
     declgetvar("*", "net_p", "(kg/m^2)", &m_precip_X);
     declgetvar("*", "net_rain", "(kg/m^2)", &m_rain_X);
@@ -139,7 +139,7 @@ void ClassSnobalX::decl(void) {
     declgetvar("*", "hru_drift", "(kg/m^2)", &m_drift_X);
     declgetvar("*", "hru_subl", "(kg/m^2)", &m_subl_X);
     declgetvar("*", "hru_rho_snow", "(kg/m^3)", &rho_snow_X);
-    declgetvar("*", "hru_T_pp", "(°C)", &T_pp_X);
+    declgetvar("*", "hru_T_pp", "(" + string(DEGREE_CELSIUS) + ")", &T_pp_X);
 }
 
 

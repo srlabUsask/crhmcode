@@ -76,7 +76,7 @@ void Classpbsm_M::decl(void) {
 
   declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(" + string(DEGREE) + ")", &hru_GSL);
 
   decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit", "()", &inhibit_evap);
 
@@ -92,7 +92,7 @@ void Classpbsm_M::decl(void) {
 
   declparam("hru_Ht", TDim::NHRU, "[0.0]", "0.0", "1000.0", "HRU feature height(m)", "(m)", &hru_Ht);
 
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
   declgetvar("*", "hru_rh", "(%)", &hru_rh);
   declgetvar("*", "hru_u", "(m/s)", &hru_u);
   declgetvar("*", "hru_newsnow", "()", &hru_newsnow);

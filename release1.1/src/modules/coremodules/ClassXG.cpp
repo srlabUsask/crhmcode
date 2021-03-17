@@ -21,8 +21,8 @@ ClassXG* ClassXG::klone(string name) const{
 void ClassXG::decl(void) {
 
   Description = "'A Simple Thaw-Freeze Algorithm (Changwei, 2013).' \
-                 'using variable surface temperature hru_tsf (°C),' \
-                 'using variable air temperature hru_t (°C) and uses parameter n_factor (Woo (2012, p. 57) to estimate surface temperature from the air temperature during snow free periods.'";
+                 'using variable surface temperature hru_tsf ("+string(DEGREE_CELSIUS)+"),' \
+                 'using variable air temperature hru_t ("+string(DEGREE_CELSIUS)+") and uses parameter n_factor (Woo (2012, p. 57) to estimate surface temperature from the air temperature during snow free periods.'";
 
   ko = 0.21;  // W/(m K) organic material
   km = 2.50;  // W/(m K) mineral
@@ -44,9 +44,9 @@ void ClassXG::decl(void) {
 
   declstatvar("nfront", TDim::NHRU, "number of freezing/thawing fronts", "()", &nfront);
 
-  declstatvar("Bfr", TDim::NHRU, "freeze degree days", "(ºC*d)", &Bfr);
+  declstatvar("Bfr", TDim::NHRU, "freeze degree days", "(" + string(DEGREE_CELSIUS) + "*d)", &Bfr);
 
-  declstatvar("Bth", TDim::NHRU, "thaw degree days", "(ºC*d)", &Bth);
+  declstatvar("Bth", TDim::NHRU, "thaw degree days", "(" + string(DEGREE_CELSIUS) + "*d)", &Bth);
 
   declvar("pf", TDim::NDEFN, "freezing ratios", "()", &pf, &pf_lay, Global::nlay);
 
@@ -78,9 +78,9 @@ void ClassXG::decl(void) {
 
   decllocal("check_XG_moist", TDim::NHRU, "sum of XG soil_moist should equal SoilX soil_moist", "()", &check_XG_moist);
 
-  decllocal("t_trend", TDim::NHRU, "temperature long term trend", "(°C)", &t_trend);
+  decllocal("t_trend", TDim::NHRU, "temperature long term trend", "(" + string(DEGREE_CELSIUS) + ")", &t_trend);
 
-  decllocal("check_t", TDim::NHRU, "check temperature source", "(°C)", &check_t);
+  decllocal("check_t", TDim::NHRU, "check temperature source", "(" + string(DEGREE_CELSIUS) + ")", &check_t);
 
   declstatvar("XG_max", TDim::NDEFN, "layer maximum soil moisture content", "(mm)", &XG_max, &XG_max_lay, Global::nlay);
 
@@ -95,7 +95,7 @@ void ClassXG::decl(void) {
   declstatvar("default_fract", TDim::NDEFN, "below defined soil_moist profile - use default ", "()", &default_fract, &default_fract_lay, Global::nlay);
 
 
-  decldiagparam("Trigthrhld", TDim::NHRU, "[100.0]", "50.0", "1000.0", "Trigger reference level in degree days", "(ºC*d)", &Trigthrhld);
+  decldiagparam("Trigthrhld", TDim::NHRU, "[100.0]", "50.0", "1000.0", "Trigger reference level in degree days", "(" + string(DEGREE_CELSIUS) + "*d)", &Trigthrhld);
 
   declparam("N_Soil_layers", TDim::NHRU, "[2]", "1", "20", "number of soil layers. Must be less than or equal nlay. Define Parameters for layers used. All others are ignored", "()", &N_Soil_layers);
 
@@ -141,7 +141,7 @@ void ClassXG::decl(void) {
 
   variation_set = VARIATION_0;
 
-  declgetvar("*", "hru_tsf", "(°C)", &hru_tsf);
+  declgetvar("*", "hru_tsf", "(" + string(DEGREE_CELSIUS) + ")", &hru_tsf);
 
 
   variation_set = VARIATION_1;
@@ -156,7 +156,7 @@ void ClassXG::decl(void) {
 
   decllocal("n_factor", TDim::NHRU, "calculated value of n_factor from parameters. Woo (2012), p. 57", "()", &n_factor);
 
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
   declgetvar("*", "SWE", "(mm)", &SWE);
 

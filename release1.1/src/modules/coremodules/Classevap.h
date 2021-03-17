@@ -56,7 +56,7 @@ Classevap* klone(string name) const;
 
 double gamma(double Pa, double t);         // Psychrometric constant
 double lambda(double t);                   // Latent heat of vaporization
-double delta(double t);                   // Slope of sat vap p vs t, kPa/°C
+double delta(double t);                   // Slope of sat vap p vs t, kPa/DEGREE_CELSIUS
 double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
 double fdaily(double u, double Ht);        // Drying power f(u) - interval
 };

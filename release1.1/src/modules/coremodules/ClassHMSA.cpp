@@ -27,8 +27,8 @@ ClassHMSA* ClassHMSA::klone(string name) const{
 void ClassHMSA::decl(void) {
 
   Description = "'Estimation of frost table (Masaki Hayashi 2007).' \
-                 'ebsm using variable hru_t (°C),' \
-                 'ebsm using observation Tsurf_obs (°C).'";
+                 'ebsm using variable hru_t ("+string(DEGREE_CELSIUS)+"),' \
+                 'ebsm using observation Tsurf_obs ("+string(DEGREE_CELSIUS)+").'";
 
   MaxFrontCnt = 10;
 
@@ -41,7 +41,7 @@ void ClassHMSA::decl(void) {
   declvar("Thaw_D", TDim::NHRU, "thaw table depth below surface", "(m)", &Thaw_D);
   declvar("Frozen_D", TDim::NHRU, "frost table depth below surface", "(m)", &Frozen_D);
   declvar("C_K0", TDim::NHRU, "Conductivity", "()", &C_K0);
-  declvar("Last_Tsurf", TDim::NHRU, "last surface temperature", "(°C)", &Last_Tsurf);
+  declvar("Last_Tsurf", TDim::NHRU, "last surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &Last_Tsurf);
 
   declvar("f", TDim::NHRU, "Vol fraction of ice (or water)", "(m^3/m^3)", &f);
   declvar("Soil_Ice", TDim::NLAY, "Ice fraction in soil", "()", &Soil_Ice, &Soil_Ice_lay);
@@ -81,13 +81,13 @@ void ClassHMSA::decl(void) {
   variation_set = VARIATION_0;
 
 // driving variable:
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
   variation_set = VARIATION_1;
 
   Liqcnt = declreadobs("LiqWat", TDim::NOBS, "liquid water at depth observation", "()", &LiqWat, HRU_OBS_misc); // # layers
   Totcnt = declreadobs("TotMoist", TDim::NOBS, "total moisture at depth observation", "()", &TotMoist, HRU_OBS_misc); // # layers
-  declreadobs("Tsurf_obs", TDim::NHRU, "soil surface temperature observation", "(°C)", &Tsurf_obs, HRU_OBS_misc);
+  declreadobs("Tsurf_obs", TDim::NHRU, "soil surface temperature observation", "(" + string(DEGREE_CELSIUS) + ")", &Tsurf_obs, HRU_OBS_misc);
 
   variation_set = VARIATION_ORG;
 }

@@ -75,9 +75,9 @@ void ClassSnobalCRHM::decl(void) {
     declstatvar("m_s_l", TDim::NHRU, "lower layer specific mass", "(kg/m^2)", &m_s_l);
     declstatvar("SWE", TDim::NHRU, "snowcover's specific mass", "(kg/m^2)", &m_s);
 
-    declstatvar("T_s_0", TDim::NHRU, "active snow layer temp", "(°C)", &T_s_0);
-    declstatvar("T_s_l", TDim::NHRU, "lower layer temp", "(°C)", &T_s_l);
-    declstatvar("T_s", TDim::NHRU, "average snowcover temp", "(°C)", &T_s);
+    declstatvar("T_s_0", TDim::NHRU, "active snow layer temp", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0);
+    declstatvar("T_s_l", TDim::NHRU, "lower layer temp", "(" + string(DEGREE_CELSIUS) + ")", &T_s_l);
+    declstatvar("T_s", TDim::NHRU, "average snowcover temp", "(" + string(DEGREE_CELSIUS) + ")", &T_s);
 
     declstatvar("h2o_sat", TDim::NHRU, "fraction of liquid H2O saturation (0 to 1.0)", "()", &h2o_sat);
     declvar("h2o_vol", TDim::NHRU, "liquid h2o content as volume ratio: V_water/(V_snow - V_ice)", "()", &h2o_vol);
@@ -87,15 +87,15 @@ void ClassSnobalCRHM::decl(void) {
     declvar("h2o_sat_snow", TDim::NHRU, "snowfall's % of liquid H2O saturation", "()", &h2o_sat_snow);
 
     declvar("precip_now", TDim::NHRU, "precipitation occur for current timestep - 0/1", "()", &precip_now);
-    declvar("T_rain", TDim::NHRU, "rain's temp", "(°C)", &T_rain);
-    declvar("T_snow", TDim::NHRU, "snowfall's temp", "(°C)", &T_snow);
+    declvar("T_rain", TDim::NHRU, "rain's temp", "(" + string(DEGREE_CELSIUS) + ")", &T_rain);
+    declvar("T_snow", TDim::NHRU, "snowfall's temp", "(" + string(DEGREE_CELSIUS) + ")", &T_snow);
 
     decllocal("S_n_L", TDim::NHRU, "net solar radiation", "(W/m^2)", &S_n);
     decllocal("I_lw_L", TDim::NHRU, "incoming longwave (thermal) rad ", "(W/m^2)", &I_lw);
-    decllocal("T_a_L", TDim::NHRU, "air temp", "(°C)", &T_a);
+    decllocal("T_a_L", TDim::NHRU, "air temp", "(" + string(DEGREE_CELSIUS) + ")", &T_a);
     decllocal("e_a_L", TDim::NHRU, "vapor pressure", "(Pa)", &e_a);
     decllocal("u_L", TDim::NHRU, "wind speed", "(m/s)", &u);
-    decllocal("T_g_L", TDim::NHRU, "soil temp at depth z_g", "(°C)", &T_g);
+    decllocal("T_g_L", TDim::NHRU, "soil temp at depth z_g", "(" + string(DEGREE_CELSIUS) + ")", &T_g);
     decllocal("F_g_L", TDim::NHRU, "soil flux at depth z_g", "(W/m^2)", &F_g);
 
     decllocal("m_precip_L", TDim::NHRU, "specific mass of total precip", "(kg/m^2)", &m_precip);
@@ -104,7 +104,7 @@ void ClassSnobalCRHM::decl(void) {
     decllocal("m_drift_L", TDim::NHRU, "specific mass of drifting snow", "(kg/m^2)", &m_drift);
     decllocal("m_subl_L", TDim::NHRU, "specific mass of drifting snow", "(kg/m^2)", &m_subl);
     decllocal("rho_snow_L", TDim::NHRU, "density of snowfall", "(kg/m^2)", &rho_snow);
-    decllocal("T_pp_L", TDim::NHRU, "precip temp", "(°C)", &T_pp);
+    decllocal("T_pp_L", TDim::NHRU, "precip temp", "(" + string(DEGREE_CELSIUS) + ")", &T_pp);
 
     decllocal("P_a", TDim::NHRU, "air pressure", "(Pa)", &P_a);
 
@@ -133,7 +133,7 @@ void ClassSnobalCRHM::decl(void) {
     declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
     declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
     declparam("hru_rho_snow", TDim::NHRU, "[100]", "50", "1000", "rho of falling snow", "(kg/m^3)", &rho_snow_X);
-    declparam("hru_T_g", TDim::NHRU, "[-4]", "-50", "50", "ground temperature used when observation T_g not available", "(°C)", &T_g_X);
+    declparam("hru_T_g", TDim::NHRU, "[-4]", "-50", "50", "ground temperature used when observation T_g not available", "(" + string(DEGREE_CELSIUS) + ")", &T_g_X);
     declparam("hru_F_g", TDim::NHRU, "[0]", "-50", "50", "ground flux used when observation F_g not available", "(W/m^2)", &F_g_X);
     declparam("T_g_or_G_flux", TDim::NHRU, "[0]", "0", "1", "0 - calculate ground flux from ground temperature, 1 - use ground flux value", "()", &T_g_or_G_flux);
 
@@ -141,8 +141,8 @@ void ClassSnobalCRHM::decl(void) {
 
     declparam("KT_sand", TDim::NHRU, "[0.08]", "0.01", "3.0", "thermal conductivity of wet sand (J/(m sec K)(from Oke, 1978, pg. 38)", "()", &KT_sand);
 
-    declgetvar("*", "hru_t", "(°C)", &T_a_X);
-    declgetvar("*", "hru_t", "(°C)", &T_pp_X); // default precipitation temperature to air
+    declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &T_a_X);
+    declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &T_pp_X); // default precipitation temperature to air
     declgetvar("*", "hru_ea", "(kPa)", &e_a_X);
     declgetvar("*", "hru_u", "(m/s)", &u_X);
 
@@ -154,7 +154,7 @@ void ClassSnobalCRHM::decl(void) {
 
     declputvar("*", "net_rain", "(kg/m^2)", &m_rain_X);
 
-    declreadobs("T_g", TDim::NHRU, "ground temperature", "(°C)", &T_g_Obs, HRU_OBS_misc, true);
+    declreadobs("T_g", TDim::NHRU, "ground temperature", "(" + string(DEGREE_CELSIUS) + ")", &T_g_Obs, HRU_OBS_misc, true);
 
     declreadobs("F_g", TDim::NHRU, "ground flux", "(W/m^2)", &F_g_Obs, HRU_OBS_misc, true);
 

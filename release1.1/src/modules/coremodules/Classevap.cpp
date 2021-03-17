@@ -68,11 +68,11 @@ void Classevap::decl(void) {
   declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
   declgetvar("*", "RnD_POS", "(mm/m^2*d)", &RnD_POS);
 
-  declgetvar("*",  "hru_t", "(°C)", &hru_t);
+  declgetvar("*",  "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
   declgetvar("*",  "hru_u", "(m/s)", &hru_u);
   declgetvar("*",  "hru_ea", "(kPa)", &hru_ea);
 
-  declgetvar("*",  "hru_tmean", "(°C)", &hru_tmean);
+  declgetvar("*",  "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmean);
   declgetvar("*",  "hru_umean", "(m/s)", &hru_umean);
   declgetvar("*",  "hru_eamean", "kPa", &hru_eamean);
 }

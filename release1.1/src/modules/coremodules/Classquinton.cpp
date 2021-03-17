@@ -100,7 +100,7 @@ void Classquinton::decl(void) {
 
   declparam("d", TDim::NLAY, "[0.15] , [0.1], [0.1] ,[0.1]", "0.0", "100.0", "layer depth.", "(m)", &d, &d_lay);
 
-  declparam("tinit", TDim::NLAY, "[-8.0] , [-8.0], [-8.0] ,[-8.0]", "-40.0", "10.0", "initial layer temperature.", "(°C)", &tinit, &tinit_lay);
+  declparam("tinit", TDim::NLAY, "[-8.0] , [-8.0], [-8.0] ,[-8.0]", "-40.0", "10.0", "initial layer temperature.", "(" + string(DEGREE_CELSIUS) + ")", &tinit, &tinit_lay);
 
   declparam("slope", TDim::NHRU, "[0.01]", "0.0", "1.0", "slope.", "(m/m)", &slope);
 

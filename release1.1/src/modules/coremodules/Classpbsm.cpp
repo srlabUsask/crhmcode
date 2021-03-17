@@ -116,7 +116,7 @@ void Classpbsm::decl(void) {
 
     decldiagparam("inhibit_subl", TDim::NHRU, "[0]", "0", "1", "inhibit sublimation, 1 -> inhibit", "()", &inhibit_subl);
 
-    declgetvar("*", "hru_t", "(°C)", &hru_t);
+    declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
     declgetvar("*", "hru_rh", "(%)", &hru_rh);
     declgetvar("*", "hru_newsnow", "()", &hru_newsnow);
     declgetvar("*", "net_snow", "(mm/int)", &net_snow);
