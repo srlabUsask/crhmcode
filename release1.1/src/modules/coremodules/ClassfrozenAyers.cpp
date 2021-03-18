@@ -65,7 +65,7 @@ void ClassfrozenAyers::decl(void) {
 
   decldiagparam("C", TDim::NHRU, "[1.0]", "0.0", "3.0", "coefficient", "()", &C);
 
-  declparam("hru_tsoil", TDim::NHRU, "[269.15]", "223.0", "273.15", "soil average temperature at start of infiltration (0 - 0.4m)", "(ºK)", &hru_tsoil);
+  declparam("hru_tsoil", TDim::NHRU, "[269.15]", "223.0", "273.15", "soil average temperature at start of infiltration (0 - 0.4m)", "(K)", &hru_tsoil);
 
   decldiagparam("t_ice_lens", TDim::NHRU, "[-20]", "-50.0", "0.0", "overnight minimum to cause ice lens after major melt", "(" + string(DEGREE_CELSIUS) + ")", &t_ice_lens);
 
