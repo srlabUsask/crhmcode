@@ -224,7 +224,7 @@ void ClassSnobalCRHM::run(void) { // executed every interval
 
   for (hh = 0; chkStruct(); ++hh) {
 
-    T_s[hh]    += CRHM_constants::Tm; // temperatures inside Snobal model are °K
+    T_s[hh]    += CRHM_constants::Tm; // temperatures inside Snobal model are K
     T_s_0[hh]  += CRHM_constants::Tm;
     T_s_l[hh]  += CRHM_constants::Tm;
 
@@ -376,7 +376,7 @@ void ClassSnobalCRHM::run(void) { // executed every interval
     cumsnowmelt[hh] += snowmelt_int[hh];
     melt_direct_cum[hh] += melt_direct_int[hh];
 
-    T_s[hh]   -= CRHM_constants::Tm; // temperatures outside Snobal model are °C
+    T_s[hh]   -= CRHM_constants::Tm; // temperatures outside Snobal model are DEGREE_CELCIUS
     T_s_0[hh] -= CRHM_constants::Tm;
     T_s_l[hh] -= CRHM_constants::Tm;
 

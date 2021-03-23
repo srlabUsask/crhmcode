@@ -37,7 +37,7 @@ void ClassHMSA::decl(void) {
 // Variables:
   declstatvar("Cum_Thaw", TDim::NHRU, "Cumulative thaw depth", "(m)", &Cum_Thaw);
   declstatvar("Cum_Frozen", TDim::NHRU, "Cumulative frozen depth", "(m)", &Cum_Frozen);
-  declvar("Lamda_b", TDim::NHRU, "Thermal conductivity", "()", &Lamda_b); // (W/m.°C)
+  declvar("Lamda_b", TDim::NHRU, "Thermal conductivity", "()", &Lamda_b); // (W/m.DEGREE_CELCIUS)
   declvar("Thaw_D", TDim::NHRU, "thaw table depth below surface", "(m)", &Thaw_D);
   declvar("Frozen_D", TDim::NHRU, "frost table depth below surface", "(m)", &Frozen_D);
   declvar("C_K0", TDim::NHRU, "Conductivity", "()", &C_K0);

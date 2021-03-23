@@ -69,9 +69,9 @@ void Classebsm::decl(void) {
     declgetvar("*", "SunMax", "(h)", &sunmax);
     declgetvar("*", "QdroD", "(MJ/m^2*d)", &QdroD);
     declgetvar("*", "QdfoD", "(MJ/m^2*d)", &QdfoD);
-    declgetvar("*", "hru_tmean", "(°C)", &tmean);
-    declgetvar("*", "hru_tmax", "(°C)", &tmax);
-    declgetvar("*", "hru_tmin", "(°C)", &tmin);
+    declgetvar("*", "hru_tmean", "("+string(DEGREE_CELSIUS)+")", &tmean);
+    declgetvar("*", "hru_tmax", "(" + string(DEGREE_CELSIUS) + ")", &tmax);
+    declgetvar("*", "hru_tmin", "(" + string(DEGREE_CELSIUS) + ")", &tmin);
     declgetvar("*", "hru_umean", "(m/s)", &umean);
     declgetvar("*", "hru_rhmean", "(%)", &rhmean);
     declgetvar("*", "hru_SunAct", "(h)", &sunact);

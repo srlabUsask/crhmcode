@@ -111,7 +111,7 @@ void Classfrostdepth::init(void) {
 
 void Classfrostdepth::run(void) {
 
-  const double csnow = 0.25*Ci;       // MJ/(m3.°C)
+  const double csnow = 0.25*Ci;       // MJ/(m3.DEGREE_CELCIUS)
   const double ksnow = 0.25*ki+0.75*ka; // J/(m.K.s)
 
   double FrozenD;     // depth frozen of next layer

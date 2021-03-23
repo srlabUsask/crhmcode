@@ -86,7 +86,7 @@ void Classquinton::decl(void) {
 
   declvar("wDrained", TDim::NHRU, "depth of drained frozen organic material from surface.", "(m)", &wDrained);
 
-  decllocal("tlayer", TDim::NLAY, "layer temperature.", "(°C)", &tlayer, &tlayer_lay);
+  decllocal("tlayer", TDim::NLAY, "layer temperature.", "("+string(DEGREE_CELSIUS)+")", &tlayer, &tlayer_lay);
 
 
   declparam("Type", TDim::NHRU, "drift, [HUMMOCK]", "0", "2", "hru land type, 0=NOTUSED/1=DRIFT/2=HUMMOCK.", "()", &Type);

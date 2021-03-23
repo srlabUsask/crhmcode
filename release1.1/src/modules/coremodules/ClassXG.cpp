@@ -628,7 +628,7 @@ void ClassXG::freeze(void) { // XG-Algorithm - Freezing
 
   long lay = 1;
   double Za;
-  double L = 335000; // the latent heat of fusion of ice(3.35Ã?105J/kg);
+  double L = 335000; // the latent heat of fusion of ice(3.35 105J/kg);
 
   Zdf[hh] = 0.0;
 
@@ -665,7 +665,7 @@ void ClassXG::thaw(void) { // XG-Algorithm - Thawing
 
   long lay = 1;
   double Za;
-  double L = 335000;// the latent heat of fusion of ice(3.35Ã?105J/kg);
+  double L = 335000;// the latent heat of fusion of ice(3.35 105J/kg);
 
   Zdt[hh] = 0.0;
 
