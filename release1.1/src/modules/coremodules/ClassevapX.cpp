@@ -198,8 +198,8 @@ void ClassevapX::run(void) {
              Soil_Moist = (soil_moist[hh]/soil_Depth[hh] +
                SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3];
 
-             p = soilproperties[soil_type[hh]][AIRENT]*
-               pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]);
+             p = soilproperties[soil_type[hh]][AIRENT] *
+                 pow(1.0 / Soil_Moist, soilproperties[soil_type[hh]][PORESZ]); // 05/21/20 correcting pow(soilproperties[soil_type[hh]][PORE]/Soil_Moist, soilproperties[soil_type[hh]][PORESZ]);
 
              f3 = max <double> (1.0, p/40.0);
 

@@ -27,6 +27,7 @@ const double *basin_area{ NULL }; // [BASIN]
 const double *hru_area{ NULL };
 const double *fallstat{ NULL };
 const double *Major{ NULL };      // threshold for major melt event(default is 5 mm/day)
+const long* infDays{ NULL }; // maximum number of days of snowmelt infiltration to frozen soil
 const long  *PriorInfiltration{ NULL };
 const long  *texture{ NULL };
 const long  *groundcover{ NULL };

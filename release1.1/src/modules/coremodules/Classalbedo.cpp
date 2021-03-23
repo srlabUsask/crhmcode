@@ -114,10 +114,15 @@ void Classalbedo::run(void) {
         if(SWE[hh] > 60.0 && Albedo[hh] < 0.65)
           DR = 0.001;
 
-        if(net_snowD[hh] > 0.25) { // SF = SWE*2 if density 0.005 (0.5cm)
-          Albedo[hh] = Albedo[hh] + net_snowD[hh]*0.1*2.0; // daily value
+        double epsilon = 1e-5;
+
+        if(net_snowD[hh] > (0.25 - epsilon)) // SF = SWE*2 if density 0.005 (0.5cm) 
+        { 
+          Albedo[hh] = Albedo[hh] + net_snowD[hh] * 0.1 * 2.0; // daily value
           if(Albedo[hh] > Albedo_snow[hh])
-            Albedo[hh] = Albedo_snow[hh];
+          {
+              Albedo[hh] = Albedo_snow[hh];
+          }
           continue;
         }
 

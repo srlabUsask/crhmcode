@@ -421,7 +421,7 @@ void ClassSoil::run(void) {
 
   double soil_lower, excs, condense;
   double et;
-  double interval_secs = 86400/Global::Freq;
+  double interval_secs = static_cast<double>(86400l)/Global::Freq;
 
   long nstep = getstep();
   current_getstep[0] = nstep;

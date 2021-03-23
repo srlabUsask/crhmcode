@@ -58,6 +58,8 @@ void Classcrack::decl(void) {
 
   decldiagparam("PriorInfiltration", TDim::NHRU, "[1]", "0", "1", "allow limited melt to infiltrate prior to first major melt", "(mm/d)", &PriorInfiltration);
 
+  decldiagparam("infDays", TDim::NHRU, "[6]", "0", "20", " maximum number of days of snowmelt infiltration to frozen soil ", "(d)", &infDays);
+
   declgetvar("*",  "hru_tmax", "(°C)", &hru_tmax);
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmelt);
   declgetvar("*",  "SWE", "(mm)", &SWE);
@@ -159,7 +161,7 @@ void Classcrack::run(void) {
         else if(fallstat[hh] < 100.0){
           if(snowmelt[hh] >= Major[hh] || crackstat[hh] >= 1) {
             if(SWE[hh] > Xinfil[2][hh] && snowmelt[hh] >= Major[hh]) {
-              infil_index(fallstat[hh]/100.0, SWE[hh], Xinfil[0][hh], Xinfil[1][hh]);
+              infil_index(fallstat[hh]/100.0, SWE[hh], Xinfil[0][hh], Xinfil[1][hh], infDays[hh]);
               Xinfil[2][hh] = SWE[hh];
             }
             if(snowmelt[hh] >= Major[hh]) {
@@ -175,7 +177,7 @@ void Classcrack::run(void) {
             else
               snowinfil[hh] = snowmelt[hh]*Xinfil[0][hh];
 
-            if(crackstat[hh] > 6)
+            if(crackstat[hh] > infDays[hh])
               snowinfil[hh] = 0;
           }
           else
