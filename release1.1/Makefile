@@ -13,7 +13,7 @@ CFLAGS = -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses \
 
 CFLAGS = -I$(BOOST) -I$(SDIR)/core -I$(SDIR)/macro \
 -I$(SDIR)/modules/waterquality -I$(SDIR)/modules/newmodules \
--I$(SDIR)/modules/coremodules -I$(SDIR)/gcc -std=c++11
+-I$(SDIR)/modules/coremodules -I$(SDIR)/gcc -std=c++11 -static -static-libgcc -static-libstdc++
 
 CORE_OBJS = GlobalDll.o StandardConverterUtility.o
 
