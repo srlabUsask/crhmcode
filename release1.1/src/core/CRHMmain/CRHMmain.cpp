@@ -1,9 +1,11 @@
-#if defined(_WIN32)
+#include "CRHMmain.h"
+
+#if defined(VS_GUI)
 #include "stdafx.h"
 #include "CRHMAboutBox.h"
 #endif
 
-#include "CRHMmain.h"
+
 #include <map>
 #include <string>
 #include <iostream>
@@ -257,7 +259,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	ClassPar *thisPar = NULL;
 	ClassVar *thisVar;
 	ifstream DataFile;
-	long Variation;
+	long long Variation;
 
 	const int CharLength = 180; //added by Manishankar.
 	char module[CharLength], param[CharLength], Descrip[CharLength], Line[CharLength], name[CharLength];
@@ -468,7 +470,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 						DataFile.seekg(0, ios_base::end);  // cause break out
 					}
 					else {
-						Variation = ((long)Global::OurModulesList->Objects[ii]);
+						Variation = ((long long)Global::OurModulesList->Objects[ii]);
 						((ClassModule*)Global::AllModulesList->Objects[jj])->variation = (unsigned short) Variation;
 						Global::OurModulesList->Objects[ii] = Global::AllModulesList->Objects[jj];
 					}
@@ -1582,10 +1584,10 @@ MMSData *  CRHMmain::RunClick2Start()
 
 
 	if (Global::IndxMin != 0) {
-#if defined(_WIN32)
+#if defined(VS_GUI)
 		AfxMessageBox(_T("First observation day - not an entire day"));
 #endif
-#if defined(__linux__)|| defined(__APPLE__)
+#if defined(COMMAND_LINE)
 		string message = "First observation day - not an entire day";
 		LogMessageX(message.c_str());
 #endif
@@ -1594,10 +1596,10 @@ MMSData *  CRHMmain::RunClick2Start()
 	}
 
 	if (SelectedVariables->Count == 0) {
-#if defined(_WIN32)
+#if defined(VS_GUI)
 		AfxMessageBox(_T("No model output selected"));
 #endif
-#if defined(__linux__)|| defined(__APPLE__)
+#if defined(COMMAND_LINE)
 		string message = "No model output selected";
 		LogMessageX(message.c_str());
 #endif
@@ -2840,11 +2842,11 @@ void  CRHMmain::LogMessageX(const char *S)
 
 string CRHMmain::GetCaptionFromAboutBox()
 {
-#if defined(_WIN32)
+#if defined(VS_GUI)
 	CRHMAboutBox aboutbox;
 	return aboutbox.versionstring;
 #endif
-#if defined(__linux__)|| defined(__APPLE__)
+#if defined(COMMAND_LINE)
 	return "";
 #endif
 }
