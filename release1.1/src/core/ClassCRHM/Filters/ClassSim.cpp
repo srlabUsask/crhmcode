@@ -1,7 +1,3 @@
-#if defined(_WIN32)
-#include "stdafx.h"
-#endif
-
 #include "../Classfilter.h"
 #include "ClassSim.h"
 #include <GlobalDll.h>
