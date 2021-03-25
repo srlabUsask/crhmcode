@@ -114,6 +114,8 @@ void Classalbedo::run(void) {
         if(SWE[hh] > 60.0 && Albedo[hh] < 0.65)
           DR = 0.001;
 
+        //Subtracting a small epsilon to favor entering branch when values are close.
+        //This is done to account for double percision differences. 
         double epsilon = 1e-5;
 
         if(net_snowD[hh] > (0.25 - epsilon)) // SF = SWE*2 if density 0.005 (0.5cm) 
