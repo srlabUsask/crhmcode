@@ -9,11 +9,23 @@ CRHMLogger::CRHMLogger()
     {
         auto logger = spdlog::rotating_logger_st("run_log", "crhmRun.log", 1024 * 1024 * 10, 5, true);
         logger->set_level(spdlog::level::level_enum::trace);
-        runLogger = logger;
+        this->runLogger = logger;
     }
     catch (const spdlog::spdlog_ex& ex)
     {
-        std::cout << "Log initialization failed for base logger: " << ex.what() << std::endl;
+        std::cout << "Log initialization failed for run logger: " << ex.what() << std::endl;
+        exit(1);
+    }
+
+    try
+    {
+        auto console = spdlog::stdout_color_st("console");
+        console->set_pattern("%v");
+        this->consoleLogger = console;
+    }
+    catch (const spdlog::spdlog_ex& ex)
+    {
+        std::cout << "Log initialization failed for console logger: " << ex.what() << std::endl;
         exit(1);
     }
 }
@@ -29,6 +41,12 @@ CRHMLogger* CRHMLogger::instance()
 std::shared_ptr<spdlog::logger> CRHMLogger::get_run_logger()
 {
     return runLogger;
+}
+
+void CRHMLogger::log_to_console(std::string msg)
+{
+    this->consoleLogger->critical(msg);
+    this->consoleLogger->flush();
 }
 
 void CRHMLogger::log_run_error(CRHMException exception)
