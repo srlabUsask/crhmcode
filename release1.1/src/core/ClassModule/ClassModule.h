@@ -288,7 +288,7 @@ public:
 
 	bool UsingObservations(void);
 
-	long FindModule_from_parameter(string source, string param);
+	ClassModule* FindModule_from_parameter(string source, string param);
 };
 
 

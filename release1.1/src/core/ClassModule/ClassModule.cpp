@@ -1,8 +1,4 @@
 
-#if defined(_WIN32)
-#include "stdafx.h"
-#endif
-
 #include <stdio.h>
 //#include <tchar.h>
 #include "assert.h"
@@ -3193,7 +3189,7 @@ long ClassModule::declgetparam(string source, string param, string units, const 
 	return 0;  //warning resolved by Manishankar
 }
 //---------------------------------------------------------------------------
-long ClassModule::FindModule_from_parameter(string source, string param) {
+ClassModule* ClassModule::FindModule_from_parameter(string source, string param) {
 
 	MapPar::iterator itPar;
 	ClassPar *newPar = NULL;
@@ -3231,7 +3227,7 @@ long ClassModule::FindModule_from_parameter(string source, string param) {
 	}
 	else {
 		long ii = Global::OurModulesList->IndexOf(newPar->basemodule.c_str());
-		return    (long)Global::OurModulesList->array[ii].Object;
+		return    (ClassModule*)Global::OurModulesList->array[ii].Object;
 	}
 
 	CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
