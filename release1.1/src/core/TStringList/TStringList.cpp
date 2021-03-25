@@ -1,8 +1,4 @@
-// TStringList.cpp : Defines the entry point for the console application.
-//
-
 #if defined(_WIN32)
-#include "stdafx.h"
 #include <Windows.h>
 #include <direct.h>
 #endif

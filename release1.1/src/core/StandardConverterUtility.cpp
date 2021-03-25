@@ -1,6 +1,3 @@
-#if defined(_WIN32)
-#include "stdafx.h"
-#endif
 #include <cmath>
 #include "StandardConverterUtility.h"
 #include "TStringList/TStringList.h"

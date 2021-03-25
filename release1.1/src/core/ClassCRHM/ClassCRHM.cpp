@@ -1,11 +1,3 @@
-
-// 11/28/17
-//---------------------------------------------------------------------------
-
-#if defined(_WIN32)
-#include "stdafx.h"
-#endif
-
 #include <stdio.h>
 #include <cstring>
 #include <sstream>
