@@ -2838,9 +2838,8 @@ string CRHMmain::inttoStr(int I) {
 
 void  CRHMmain::LogMessageX(const char *S)
 {
-	//puts(S);
 	CRHMLogger::instance()->log_to_console(S);
-
+	CRHMLogger::instance()->log_run_message(S);
 }
 
 
