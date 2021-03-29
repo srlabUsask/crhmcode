@@ -1,7 +1,4 @@
-#if defined(_WIN32)
-#include <Windows.h>
-#include <direct.h>
-#endif
+
 
 #if defined(__linux__)|| defined(__APPLE__)
 #include <unistd.h>

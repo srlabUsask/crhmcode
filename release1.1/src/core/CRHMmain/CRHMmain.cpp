@@ -1,7 +1,10 @@
+#if defined(_WIN32) && !defined(__MINGW32__)
+#include "stdafx.h"
+#endif
+
 #include "CRHMmain.h"
 
 #if defined(VS_GUI)
-#include "stdafx.h"
 #include "CRHMAboutBox.h"
 #endif
 
@@ -393,7 +396,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 				}
 			}
 			else if (S == "Dates:") {
-				int D[3];
+				int D[3]{};
 				double DT;
 
 				for (int ii = 0; ii < 3; ii++)
@@ -441,7 +444,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 					idx = S.find('#');
 					if (idx != -1) {
-						Variation = (long)pow(2, S[idx + 1] - char('1'));
+						Variation = (long long)pow(2, S[idx + 1] - char('1'));
 						s = S.substr(0, idx);
 					}
 					else
@@ -2266,7 +2269,7 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 	DataFile.getline(Line, 80);
 
 	DataFile.getline(Line, 80); // read "TIME:"
-	int D[3];
+	int D[3]{};
 	DataFile >> D[0] >> D[1] >> D[2];
 	double DT = StandardConverterUtility::EncodeDateTime(D[0], D[1], D[2], 0, 0); // ????
 
@@ -2566,7 +2569,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 	getline(DataFile, Line);
 
 	getline(DataFile, Line); // read "TIME:"
-	int D[3];
+	int D[3]{};
 	DataFile >> D[0] >> D[1] >> D[2];
 
 	DataFile.ignore(180, '#'); // not working?
@@ -3477,9 +3480,9 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 	FILE * obfile = fopen(obsfilepath, "r");
 
 	char line[128];
-	char obsname[128]; 
+	char obsname[128]{};
 	//char * token; variable is unreferenced commenting out for now - jhs507
-	char obsnames[50][128];
+	char obsnames[50][128]{};
 	int obsindex = 0;
 	int j = 0;
 
@@ -3513,7 +3516,7 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 		//If this is found decriment j which has the effect of discarding the current obsname 
 		for (int i = 0; i < j; i++)
 		{
-			char test[128];
+			char test[128]{};
 			test[0] = '$'; 
 			test[1] = '\0';
 			
@@ -3553,8 +3556,8 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 	FILE * obfile = fopen(obsfilepath, "r");
 
 	char line[128];
-	char obsname[128];
-	char * token, obsnames[50][128];
+	char obsname[128]{};
+	char* token, obsnames[50][128]{};
 	int obsindex = 0;
 	int j = 0;
 
@@ -3595,7 +3598,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 		//If this is found decriment j which has the effect of discarding the current obsname 
 		for (int i = 0; i < j; i++)
 		{
-			char test[128]; 
+			char test[128]{};
 			test[0] = '$'; 
 			test[1] = '\0';
 
@@ -3614,7 +3617,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 	observationseries->Title = observationname;
 
 	int obscount = j;
-	char tokens[50][50];
+	char tokens[50][50]{};
 	int tokencount = 0;
 	double obsvalue = 0.0;
 	int dateelements = 0, year, month, day, hour;
