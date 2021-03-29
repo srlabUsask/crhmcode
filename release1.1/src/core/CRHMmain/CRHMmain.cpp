@@ -2465,8 +2465,8 @@ void CRHMmain::DoObsStatus(bool &First)
 
 			if (FileData->ModN == 0)
 			{
-				CRHMException e = CRHMException("Observation files are in a incompatable order." 
-					"Make sure the first observation file has the shorter intraval.", TExcept::TERMINATE);
+				CRHMException e = CRHMException("Observation files are in a incompatible order. "
+					"Make sure the first observation file has the shorter interval.", TExcept::TERMINATE);
 				LogError(e);
 			}
 

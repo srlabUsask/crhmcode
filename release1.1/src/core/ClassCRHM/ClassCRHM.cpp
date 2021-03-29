@@ -619,9 +619,10 @@ void   LogError(CRHMException Except)
 	
 	CRHMLogger::instance()->log_run_error(Except);
 	
+	
 	if (Except.Kind == TExcept::TERMINATE)
 	{
-
+		CRHMLogger::instance()->log_to_console(Except.Message);
 		CRHMLogger::instance()->get_run_logger()->flush();
 		throw (Except);
 	}
