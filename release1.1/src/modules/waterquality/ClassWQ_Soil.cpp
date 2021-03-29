@@ -1,4 +1,4 @@
-#include "ClassWQ_Soil.h"
+Ôªø#include "ClassWQ_Soil.h"
 
 
 ClassWQ_Soil* ClassWQ_Soil::klone(string name) const {
@@ -223,9 +223,9 @@ void ClassWQ_Soil::decl(void) {
 
     declvar("soil_top_conc_Init", TDim::NDEFN, "initial top soil moisture conc.", "(mg/l)", &soil_top_conc_Init, &soil_top_conc_Init_lay, numsubstances);
 
-    declvar("Sd_conc_Init", TDim::NDEFN, "initial concentration of nutrient species ìlayerî in the initial depression storage.", "(mg/l)", &Sd_conc_Init, &Sd_conc_Init_lay, numsubstances);
+    declvar("Sd_conc_Init", TDim::NDEFN, "initial concentration of nutrient species ‚Äúlayer‚Äù in the initial depression storage.", "(mg/l)", &Sd_conc_Init, &Sd_conc_Init_lay, numsubstances);
 
-    declvar("gw_conc_Init", TDim::NDEFN, "initial concentration of nutrient species ìlayerî  in the groundwater reservoir.", "(mg/l)", &gw_conc_Init, &gw_conc_Init_lay, numsubstances);
+    declvar("gw_conc_Init", TDim::NDEFN, "initial concentration of nutrient species ‚Äúlayer‚Äù  in the groundwater reservoir.", "(mg/l)", &gw_conc_Init, &gw_conc_Init_lay, numsubstances);
 
     declparam("calcN", TDim::NHRU, "[0]", "0", "1", "flag for nitrogen simulation", "()", &calcN);
 
@@ -237,7 +237,7 @@ void ClassWQ_Soil::decl(void) {
 
     declparam("parleach", TDim::NHRU, "[1]", "0", "1", "Leaching from surfsoil to soil_rechr", "(1/T)", &parleach);
 
-    declparam("CV_SWE", TDim::NHRU, "[1]", "0", "1", "Coefficient of variation: values can be taken from Gray, D. M., Toth, B., Zhao, L., Pomeroy, J. W., & Granger, R. J. (2001). Estimating areal snowmelt infiltration into frozen soils. Hydrological Processes, 15(16), 3095ñ3111. https://doi.org/10.1002/hyp.320", "()", &CV_SWE);
+    declparam("CV_SWE", TDim::NHRU, "[1]", "0", "1", "Coefficient of variation: values can be taken from Gray, D. M., Toth, B., Zhao, L., Pomeroy, J. W., & Granger, R. J. (2001). Estimating areal snowmelt infiltration into frozen soils. Hydrological Processes, 15(16), 3095‚Äì3111. https://doi.org/10.1002/hyp.320", "()", &CV_SWE);
 
     declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area.", "(km^2)", &basin_area);
 
