@@ -2459,6 +2459,13 @@ void CRHMmain::DoObsStatus(bool &First)
 		}
 		else { // normal observation file
 
+			if (FileData->ModN == 0)
+			{
+				CRHMException e = CRHMException("Observation files are in a incompatable order." 
+					"Make sure the first observation file has the shorter intraval.", TExcept::TERMINATE);
+				LogError(e);
+			}
+
 			long Index = Global::DTindx / FileData->ModN;
 
 			if (Index < FileData->IndxMin || Index > FileData->IndxMax) {
