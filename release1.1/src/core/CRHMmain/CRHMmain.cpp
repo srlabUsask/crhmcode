@@ -921,8 +921,8 @@ void CRHMmain::FormCreate(void) {
 	Global::NewModuleName->CommaText("longVt, CanopyClearingGap, WQ_pbsm, WQ_Soil, WQ_Netroute, WQ_Netroute_M_D");
 
 #if !defined NO_MODULES
-	for (long ii = 0; ii < Global::NewModuleName->Count; ++ii) {
-		long jj = Global::AllModulesList->IndexOf(Global::NewModuleName->Strings[ii]);
+	for (int ii = 0; ii < Global::NewModuleName->Count; ++ii) {
+		long long jj = Global::AllModulesList->IndexOf(Global::NewModuleName->Strings[ii]);
 		assert(jj != -1);
 		Global::OldModuleName->Objects[ii] = (TObject*)jj;
 	}
@@ -933,7 +933,7 @@ void CRHMmain::FormCreate(void) {
 	Global::CRHMControlSaveCnt = 0; // NewModules input
 
 	Global::HRU_OBS_DIRECT = new long*[5];
-	for (long jj = 0; jj < 5; ++jj) {
+	for (int jj = 0; jj < 5; ++jj) {
 		Global::HRU_OBS_DIRECT[jj] = new long[500];
 
 		for (long ii = 0; ii < 500; ++ii)
