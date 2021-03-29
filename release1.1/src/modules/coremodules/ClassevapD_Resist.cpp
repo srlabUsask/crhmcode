@@ -70,7 +70,7 @@ void ClassevapD_Resist::decl(void) {
   declparam("soil_Depth", TDim::NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
 
   declgetvar("*",  "RnD", "(mm/m^2*d)", &RnD);
-  declgetvar("*",  "hru_tmean", "(°C)", &hru_tmean);
+  declgetvar("*",  "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmean);
   declgetvar("*",  "hru_umean", "(m/s)", &hru_umean);
   declgetvar("*",  "hru_eamean", "(kPa)", &hru_eamean);
 
@@ -80,7 +80,7 @@ void ClassevapD_Resist::decl(void) {
 
   declobsfunc("Qsi", "Qsi_mean", &Qsi_mean, TFun::AVG, NULL, false);
 
-  declreadobs("Ts", TDim::NHRU, "surface temperature", "(°C)", &Ts, HRU_OBS_misc, true);
+  declreadobs("Ts", TDim::NHRU, "surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &Ts, HRU_OBS_misc, true);
 
   declobsfunc("Ts", "Tsmean", &Tsmean, TFun::AVG, NULL, true);
 }
@@ -230,18 +230,18 @@ void ClassevapD_Resist::finish(bool good) {
   }
 }
 
-double ClassevapD_Resist::gamma(double Pa, double t) // Psychrometric constant (kPa/°C)
+double ClassevapD_Resist::gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELSIUS)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
+   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg DEGREE_CELSIUS))
 }
 
 
-double ClassevapD_Resist::lambda(double t) // Latent heat of vaporization (mJ/(kg °C))
+double ClassevapD_Resist::lambda(double t) // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassevapD_Resist::delta(double t) // Slope of sat vap p vs t, kPa/°C
+double ClassevapD_Resist::delta(double t) // Slope of sat vap p vs t, kPa/DEGREE_CELSIUS
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));

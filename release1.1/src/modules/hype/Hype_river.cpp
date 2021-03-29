@@ -34,11 +34,11 @@ void ClassWQ_River::decl(void) {
 
 	declvar("TPmean_r", NHRU, "365-day mean Total Phosphorus concentration of lake (laketype,subbasin)", "(mg/m)", &TPmean_r);
 
-	declvar("temp_r", NHRU, "lake temperature (laketype,subbasin)", "(�C)", &temp_r);
+	declvar("temp_r", NHRU, "lake temperature (laketype,subbasin)", "(" + string(DEGREE_CELSIUS) + ")", &temp_r);
 
-	declvar("temp10_r", NHRU, "10-day mean lake temperature (laketype,subbasin)", "(�C)", &temp10_r);
+	declvar("temp10_r", NHRU, "10-day mean lake temperature (laketype,subbasin)", "(" + string(DEGREE_CELSIUS) + ")", &temp10_r);
 
-	declvar("temp20_r", NHRU, "20-day mean lake temperature (laketype,subbasin)", "(�C)", &temp20_r);
+	declvar("temp20_r", NHRU, "20-day mean lake temperature (laketype,subbasin)", "(" + string(DEGREE_CELSIUS) + ")", &temp20_r);
 
 	declvar("Psed", NHRU, "phosphorus sediment in river (rivertype, subbasin)", "(kg)", &Psed);
 
@@ -69,9 +69,9 @@ void ClassWQ_River::decl(void) {
 
 	declparam("limppar", NHRU, "[0.1]", "0.1", "100", "limitation of sedimentation parameter", "(mg/l)", &limppar);
 
-	declparam("watertemp", NHRU, "[25]", "0", "100", "water TP mean", "(�C)", &watertemp);
+	declparam("watertemp", NHRU, "[25]", "0", "100", "water TP mean", "(" + string(DEGREE_CELSIUS) + ")", &watertemp);
 
-	declparam("waterTPmean", NHRU, "[25]", "0", "100", "water temperature", "(�C)", &waterTPmean);
+	declparam("waterTPmean", NHRU, "[25]", "0", "100", "water temperature", "(" + string(DEGREE_CELSIUS) + ")", &waterTPmean);
 
 	declparam("i_in", NHRU, "[0]", "0", "5", " inorganic nitrogen", "(mm)", &i_in);
 
@@ -96,7 +96,7 @@ void ClassWQ_River::decl(void) {
 
 	declputvar("*", "conc", "(mg/l)", &conc, &conc_lay);
 
-	declgetvar("*", "hru_t", "(�C)", &hru_t);
+	declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
 	declgetvar("*", "SRP_conc", "(mg/l)", &SRP_conc, &SRP_conc_lay);
 

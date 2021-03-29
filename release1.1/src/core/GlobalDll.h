@@ -136,10 +136,18 @@ string static FloatToStrF(double value, string format, int precision, int digits
 	//double minVal = 3000.14159265359;
 
 	if (strcmp(format.c_str(), "ffFixed"))
-		format = "fixed";
-	stream << format << setprecision(precision) << value;
+	{
+		stream << std::fixed << std::setprecision(precision) << value;
+	}
+	else
+	{
+		stream << std::setprecision(precision) << value;
+	}
+
+	
 	return stream.str();
 };
+
 /** removed function overload due to Float to Double conversion jhs507
 string static FloatToStrF(double X, TFloatFormat Format, int Prec, int Digits) {
 	ostringstream temp;

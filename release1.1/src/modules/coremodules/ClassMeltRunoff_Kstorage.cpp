@@ -40,7 +40,7 @@ void ClassMeltRunoff_Kstorage::decl(void) {
 
   declparam("route_L", TDim::NHRU, "[200.0]", "0.01","1.0E10", "routing length", "(m)", &route_L);
 
-  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(" + string(DEGREE) + ")", &hru_GSL);
 
 
   declgetvar("*", "rho", "((kg/m^3))", &rho);

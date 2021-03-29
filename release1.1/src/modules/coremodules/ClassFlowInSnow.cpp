@@ -44,7 +44,7 @@ void ClassFlowInSnow::decl(void) {
 
   declparam("d_g", TDim::NHRU, "[3.0]", "0.0", "10.0", "snow grain diameter", "(mm)", &d_g);
 
-  declparam("t_inhibit_flow", TDim::NHRU, "[-2.0]", "-15", "5", "threshold temperature of inhibit flow in snow; i.e. inhibit when lower snowpack temperature is below this threshold temperature", "(°C)", &t_inhibit_flow);
+  declparam("t_inhibit_flow", TDim::NHRU, "[-2.0]", "-15", "5", "threshold temperature of inhibit flow in snow; i.e. inhibit when lower snowpack temperature is below this threshold temperature", "(" + string(DEGREE_CELSIUS) + ")", &t_inhibit_flow);
 
   declparam("runKstorage_winter", TDim::NHRU, "[2.0]", "0", "200.0", "runoff storage constant when lower snowpack temperature is below the threshold temperature", "(d)", &runKstorage_winter);
 
@@ -63,7 +63,7 @@ void ClassFlowInSnow::decl(void) {
 
   declgetvar("*", "h2o_sat", "()", &h2o_sat);
 
-  declgetvar("*", "T_s_l", "(°C)", &T_s_l);
+  declgetvar("*", "T_s_l", "(" + string(DEGREE_CELSIUS) + ")", &T_s_l);
 
   declgetvar("*", "z_s", "((kg/m^3))", &z_s);
 

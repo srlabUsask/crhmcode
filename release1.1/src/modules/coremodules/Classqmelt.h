@@ -22,12 +22,12 @@ const double *TIs0Mn{ NULL };
 const double *TIs1Mn{ NULL };
 
 // declared observations
-const double *t{ NULL };      // °C
-const double *ts{ NULL };     // °C
-double *tmean{ NULL };  // °C
-double *tpos{ NULL };   // °C
-double *tsmean{ NULL }; // °C
-double *tspos{ NULL };  // °C
+const double *t{ NULL };      // DEGREE_CELSIUS
+const double *ts{ NULL };     // DEGREE_CELSIUS
+double *tmean{ NULL };  // DEGREE_CELSIUS
+double *tpos{ NULL };   // DEGREE_CELSIUS
+double *tsmean{ NULL }; // DEGREE_CELSIUS
+double *tspos{ NULL };  // DEGREE_CELSIUS
 
 void decl(void);
 void init(void);

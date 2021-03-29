@@ -58,7 +58,7 @@ void ClassNeedle::decl(void) {
 
   variation_set = VARIATION_ORG;
 
-  declobs("Ts", TDim::NHRU, "snow surface temperature", "(°C)", &Ts);
+  declobs("Ts", TDim::NHRU, "snow surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &Ts);
 
   declobs("Qnsn", TDim::NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
 
@@ -94,7 +94,7 @@ void ClassNeedle::decl(void) {
   declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
 
 
-  declgetvar("*",  "hru_t", "(°C)", &hru_t);
+  declgetvar("*",  "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
   declgetvar("*",  "hru_u", "(m/s)", &hru_u);
 

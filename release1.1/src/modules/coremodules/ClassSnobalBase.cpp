@@ -36,7 +36,7 @@ void ClassSnobalBase::init(void) {
     for (hh = 0; chkStruct(); ++hh) {
         P_a[hh] = 101.3f * pow((293.0f - 0.0065f * hru_elev[hh]) / 293.0f, 5.26f) * 1000.0f;  // Pa
 
-        T_s[hh] = -75.0; // temperatures inside Snobal model are °K
+        T_s[hh] = -75.0; // temperatures inside Snobal model are K
         T_s_0[hh] = -75.0;
         T_s_l[hh] = -75.0;
 

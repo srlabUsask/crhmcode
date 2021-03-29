@@ -29,8 +29,8 @@ void ClassAnnan::decl(void) {
   declparam("krs", TDim::NHRU, "[0.16]", "0.15", "0.2", "location index, interior = 0.16/coastal = 0.19", "()", &krs);
   declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
-  declgetvar("*", "hru_tmax", "(°C)",  &hru_tmax);
-  declgetvar("*", "hru_tmin", "(°C)",  &hru_tmin);
+  declgetvar("*", "hru_tmax", "(" + string(DEGREE_CELSIUS) + ")",  &hru_tmax);
+  declgetvar("*", "hru_tmin", "(" + string(DEGREE_CELSIUS) + ")",  &hru_tmin);
 
   declgetvar("*", "QdroDext", "(MJ/m^2*d)", &QdroDext);
   declgetvar("*", "QdflatD", "(MJ/m^2*d)", &QdflatD);

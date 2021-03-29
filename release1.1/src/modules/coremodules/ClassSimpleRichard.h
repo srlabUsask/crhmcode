@@ -13,7 +13,7 @@ class ClassSimpleRichard : public ClassModule {
     const double *Qsi{ NULL };  // Downward shortwave radiation (W/m2)
     const double *Qli{ NULL };  // Downward longwave radiation (W/m2)
     const double *snow{ NULL }; // Snowfall (kg/m2/s)
-    const double *t{ NULL };    // Air temperature (°K)
+    const double *t{ NULL };    // Air temperature (K)
     const double *u{ NULL };    // Wind speed (m/s)
     const double *rh{ NULL };   // Relative humidity (%)
 
@@ -24,7 +24,7 @@ class ClassSimpleRichard : public ClassModule {
     double *snowmelt{ NULL };  // (kg/m2)
     double *meltclark{ NULL }; // (kg/m2)
     double *sursubl{ NULL };   // (kg/m2)
-    double *T0{ NULL };   // Surface temperature (°K)
+    double *T0{ NULL };   // Surface temperature (K)
 
     double *LE{ NULL };   // Latent heat flux (W/m^2)
     double *H{ NULL };    // Sensible heat flux (W/m^2)

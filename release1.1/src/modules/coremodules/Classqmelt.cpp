@@ -37,18 +37,18 @@ void Classqmelt::decl(void) {
 
   decllocal("QgD", TDim::NHRU, "daily ground flux from degree day/daily mean skin temperature", "(MJ/m^2)", &QgD);
 
-  declparam("TIa0Mn", TDim::NHRU, "[0.0]", "-10", "10", "Qm: degree day/daily mean air temperature", "(°C)", &TIa0Mn);
+  declparam("TIa0Mn", TDim::NHRU, "[0.0]", "-10", "10", "Qm: degree day/daily mean air temperature", "(" + string(DEGREE_CELSIUS) + ")", &TIa0Mn);
 
-  declparam("TIa1Mn", TDim::NHRU, "[0.8844, 0.0]", "0", "10", "Qm: degree day/daily mean air temperature", "(MJ/d*°C)", &TIa1Mn);
+  declparam("TIa1Mn", TDim::NHRU, "[0.8844, 0.0]", "0", "10", "Qm: degree day/daily mean air temperature", "(MJ/d*"+string(DEGREE_CELSIUS)+")", &TIa1Mn);
 
-  declparam("TIs0Mn", TDim::NHRU, "[0.0]", "-10", "10", "Qg: degree day/daily mean skin temperature", "(°C)", &TIs0Mn);
+  declparam("TIs0Mn", TDim::NHRU, "[0.0]", "-10", "10", "Qg: degree day/daily mean skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &TIs0Mn);
 
-  declparam("TIs1Mn", TDim::NHRU, "[0.0, 0.2]", "0", "10", "Qg: degree day/daily mean skin temperature", "(MJ/d*°C)", &TIs1Mn);
+  declparam("TIs1Mn", TDim::NHRU, "[0.0, 0.2]", "0", "10", "Qg: degree day/daily mean skin temperature", "(MJ/d*"+string(DEGREE_CELSIUS)+")", &TIs1Mn);
 
 
-  declreadobs("ta", TDim::NOBS, "air temperature", "(°C)", &t);
+  declreadobs("ta", TDim::NOBS, "air temperature", "(" + string(DEGREE_CELSIUS) + ")", &t);
 
-  declreadobs("ts", TDim::NOBS, "skin temperature", "(°C)", &ts);
+  declreadobs("ts", TDim::NOBS, "skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &ts);
 
 
   declobsfunc("ta",  "Tmean", &tmean, TFun::AVG);

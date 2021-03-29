@@ -43,7 +43,7 @@ const double *hru_area { NULL };
 const double *S0 { NULL };          // surface saturation (mm3/mm3)
 const double *Si { NULL };          // initial average soil saturation (mm3/mm3)
 const double *C { NULL };           // coefficient
-const double *hru_tsoil { NULL };   // soil temperature(°K) of 0-40cm soil layer at start of infiltration
+const double *hru_tsoil { NULL };   // soil temperature(K) of 0-40cm soil layer at start of infiltration
 const double *t_ice_lens { NULL };   // overnight minimum to cause ice lens after major melt
 const double *t0 { NULL };          // infiltration opportunity time. Set at end of calibration run.
 const double *soil_moist_max { NULL }; // common to smbal to control maximum inflitration.

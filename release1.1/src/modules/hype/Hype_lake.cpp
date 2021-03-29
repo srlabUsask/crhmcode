@@ -35,11 +35,11 @@ void ClassWQ_Lake::decl(void) {
 	declstatvar("concslow", NHRU, "concentration of soil moisture per land-soil", "(mg/m^2)", &concslow, &concslow_lay, numsubstances);
 
 
-	declvar("temp_l", NHRU, " (laketype,subbasin)", "(�C)", &temp_l);
+	declvar("temp_l", NHRU, " (laketype,subbasin)", "(" + string(DEGREE_CELSIUS) + ")", &temp_l);
 
-	declvar("temp10_l", NHRU, "lake temperature10-day mean lake temperature (laketype,subbasin)", "(�C)", &temp10_l);
+	declvar("temp10_l", NHRU, "lake temperature10-day mean lake temperature (laketype,subbasin)", "(" + string(DEGREE_CELSIUS) + ")", &temp10_l);
 
-	declvar("temp20_l", NHRU, "20-day mean lake temperature (laketype,subbasin)", "(�C)", &temp20_l);
+	declvar("temp20_l", NHRU, "20-day mean lake temperature (laketype,subbasin)", "(" + string(DEGREE_CELSIUS) + ")", &temp20_l);
 
 	declvar("TPmean_l", NHRU, "365-day mean Total Phosphorus concentration of lake (laketype,subbasin)", "(mg/m)", &TPmean_l);
 
@@ -108,7 +108,7 @@ void ClassWQ_Lake::decl(void) {
 
 	declgetvar("*", "soil_moisture", "(mm)", &water);
 
-	declgetvar("*", "hru_t", "(�C)", &hru_t);
+	declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
 	declgetvar("*", "SWE", "(mm)", &SWE);
 

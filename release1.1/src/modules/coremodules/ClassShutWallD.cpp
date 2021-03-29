@@ -189,9 +189,9 @@ void ClassShutWallD::finish(bool good) {
   }
 }
 
-double ClassShutWallD::gamma(double Pa, double t) // Psychrometric constant (kPa/°C)
+double ClassShutWallD::gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELCIUS)
 {
-   return(1.63 * Pa / lambda(t)); // lambda (kJ/(kg °C))
+   return(1.63 * Pa / lambda(t)); // lambda (kJ/(kg DEGREE_CELCIUS))
 }
 
 double ClassShutWallD::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
@@ -200,12 +200,12 @@ double ClassShutWallD::RHOa(double t, double ea, double Pa) // atmospheric densi
    return (1E4*Pa /(R*( 273.15 + t))*(1.0 - 0.379*(ea/Pa)) ); //
 }
 
-double ClassShutWallD::lambda(double t) // Latent heat of vaporization  (kJ/(kg °C))
+double ClassShutWallD::lambda(double t) // Latent heat of vaporization  (kJ/(kg DEGREE_CELCIUS))
 {
    return( 2501.0 - 2.361 * t );
 }
 
-double ClassShutWallD::delta(double t)  // Slope of sat vap p vs t, (kPa/°C)
+double ClassShutWallD::delta(double t)  // Slope of sat vap p vs t, (kPa/DEGREE_CELCIUS)
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));

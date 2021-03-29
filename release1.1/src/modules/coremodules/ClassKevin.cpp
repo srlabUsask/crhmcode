@@ -50,7 +50,7 @@ void ClassKevin::decl(void) {
 
   declparam("cv", TDim::NHRU, "0.33", "0.2", "0.7", "coefficient of variation", "()", &cv);
 
-  declparam("tfactor", TDim::NHRU, "0.1", "0.0", "10.0", "degree interval melt factor", "(mm/d*ºC)", &tfactor);
+  declparam("tfactor", TDim::NHRU, "0.1", "0.0", "10.0", "degree interval melt factor", "(mm/d*"+string(DEGREE_CELSIUS)+")", &tfactor);
 
   declparam("nfactor", TDim::NHRU, "0.0", "0.0","10.0", "net radiation factor (typical value 3.0 (mm/MJ*m^2*d))", "(mm/MJ*m^2*d)", &nfactor);
 
@@ -60,15 +60,15 @@ void ClassKevin::decl(void) {
 
   declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
+  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(" + string(DEGREE) + ")", &hru_lat);
 
   declputvar("*",    "SWE", "(mm)",   &SWE);
 
   declreadobs("hru_Qn", TDim::NHRU, "net radiation", "(W/m^2)", &hru_Qn, 0, true);
 
 
-  declgetvar("*",  "hru_t", "(°C)", &hru_t);
-  declgetvar("*",  "hru_tmean", "(°C)", &hru_tmean);
+  declgetvar("*",  "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
+  declgetvar("*",  "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmean);
   declgetvar("*",  "hru_eamean", "(kPa)", &hru_eamean);
   declgetvar("*",    "hru_SunAct", "(h)", &hru_SunAct);
   declgetvar("*",    "SunMax", "(h)", &SunMax);

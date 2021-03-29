@@ -106,10 +106,10 @@ void init(void);
 void run(void);
 void finish(bool good);
 
-double delta(double t); // Slope of sat vap p vs t, kPa/°C
-double gamma(double Pa, double t); // Psychrometric constant (kPa/°C)
+double delta(double t); // Slope of sat vap p vs t, kPa/DEGREE_CELSIUS
+double gamma(double Pa, double t); // Psychrometric constant (kPa/DEGREE_CELSIUS)
 double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
-double lambda(double t); // Latent heat of vaporization (mJ/(kg °C))
+double lambda(double t); // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
 
 ClassCRHMCanopyClearing* klone(string name) const;
 

@@ -13,7 +13,7 @@ Classfrostdepth(string Name, string Version = "undefined", LMODULE Lvl = LMODULE
                                         Cacc(NULL),
                                         Kacc(NULL) {};
 // declared variables
-double *Findex { NULL };   // freezing index (days * frost °C)
+double *Findex { NULL };   // freezing index (days * frost DEGREE_CELSIUS)
 long *Tfreeze { NULL };   // duration of freezing period in days
 double *frostdepth { NULL };
 
@@ -30,7 +30,7 @@ const long  **soil_type_lay { NULL };
 const double *hru_lat { NULL };
 
 // variable inputs
-const double *hru_tmean { NULL };  // daily average temperature (°C)
+const double *hru_tmean { NULL };  // daily average temperature (DEGREE_CELSIUS)
 const double *SWE { NULL };
 const double *snowdepth { NULL };
 

@@ -39,7 +39,7 @@ void ClassalbedoRichard::decl(void) {
 
   decldiagparam("smin", TDim::NHRU, "[10]", "0.0", "20", "Minimum snowfall to refresh snow albedo", "(mm/int)", &smin);
 
-  declgetvar("*", "hru_tmean", "(°C)", &T0);
+  declgetvar("*", "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")", &T0);
 
   declgetvar("*",  "SWE", "(mm)", &SWE);
 

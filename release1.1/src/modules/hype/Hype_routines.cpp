@@ -50,7 +50,7 @@ void ClassWQ_Hype::decl(void) {
 
 	declvar("water", NDEFN, "soil moisture", "(mm)", &water, &water_lay, maxsoillayers);
 
-	declvar("temp", NDEFN, " ", "(�C)", &temp, &temp_lay, maxsoillayers);
+	declvar("temp", NDEFN, " ", "(" + string(DEGREE_CELSIUS) + ")", &temp, &temp_lay, maxsoillayers);
 
 	declstatvar("PPrelpool", NDEFN, "pool of delayed PP in runoff", "(kg/km^2)", &PPrelpool, &PPrelpool_lay, maxsoillayers);
 
@@ -99,7 +99,7 @@ void ClassWQ_Hype::decl(void) {
 
 	declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-	declparam("hru_GSL", NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(�)", &hru_GSL);
+	declparam("hru_GSL", NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(" + string(DEGREE) + ")", &hru_GSL);
 
 	declparam("ccmax1", NHRU, "[0]", "0", "10", "crop cover during summer", "()", &ccmax1);
 
@@ -253,7 +253,7 @@ void ClassWQ_Hype::decl(void) {
 	declparam("P_uptake", NDEFN, "[1]", "0", "10", "plant P uptake per day.", "(kg/km^2)", &P_uptake, &P_uptake_lay, maxsoillayers2);
 
 
-	declgetvar("*", "hru_t", "(�C)", &hru_t);
+	declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
 	declgetvar("*", "SWE", "(mm)", &SWE);
 

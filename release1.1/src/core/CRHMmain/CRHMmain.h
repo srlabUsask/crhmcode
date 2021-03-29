@@ -27,6 +27,7 @@
 #include "MMSData.h"
 #include "TSeries.h"
 #include "Classinfo.h"
+#include "CRHMLogger.h"
 
 //class ObsFileInfo {
 //private:
@@ -46,6 +47,9 @@ class CRHMmain
 	static CRHMmain* instance;
 
 public:
+
+	CRHMLogger* Logger;
+
 	static CRHMmain *  getInstance();
 	CRHMmain();
 

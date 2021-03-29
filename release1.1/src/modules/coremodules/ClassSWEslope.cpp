@@ -40,7 +40,7 @@ void ClassSWEslope::decl(void) {
 
 /* parameters */
 
-  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "("+string(DEGREE_CELSIUS)+")", &hru_GSL);
 
   declparam("order", TDim::NHRU, "[1,2,3,4,5!]", "1","1000", "sequence of HRUs for slide routing ", "()", &order);
 

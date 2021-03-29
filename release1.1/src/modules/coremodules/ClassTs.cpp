@@ -27,10 +27,10 @@ void ClassTs::decl(void) {
 
   variation_set = VARIATION_ORG;
 
-  declvar("hru_Ts", TDim::NHRU, "snow surface temperature", "(°C)", &hru_Ts);
+  declvar("hru_Ts", TDim::NHRU, "snow surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_Ts);
 
 
-  declobs("Ts", TDim::NHRU, "snow surface temperature", "(°C)", &Ts);
+  declobs("Ts", TDim::NHRU, "snow surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &Ts);
 
 
   decllocal("Pa", TDim::NHRU, "average surface pressure", "(kPa)", &Pa);
@@ -49,7 +49,7 @@ void ClassTs::decl(void) {
   declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
 
 
-  declgetvar("*",  "hru_t", "(°C)", &hru_t);
+  declgetvar("*",  "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
   declgetvar("*",  "hru_rh", "()", &hru_rh);
 

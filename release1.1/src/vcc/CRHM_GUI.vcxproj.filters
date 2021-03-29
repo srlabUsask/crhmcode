@@ -2096,6 +2096,9 @@
     <ClCompile Include="..\modules\waterquality\WQ_Soil_NPCcycling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\core\CRHMmain\CRHMLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CRHMGUI.rc">

@@ -40,7 +40,7 @@ void Classobs::decl(void) {
 
   declparam("hru_elev", TDim::NHRU, "[0]", "0.0", "100000.0", "HRU altitude", "(m)", &hru_elev);
 
-  declparam("lapse_rate", TDim::NHRU, "[0.75]", "0", "2", "temperature lapse rate", "(°C/100m)", &lapse_rate);
+  declparam("lapse_rate", TDim::NHRU, "[0.75]", "0", "2", "temperature lapse rate", "("+ string(DEGREE_CELSIUS)+"/100m)", &lapse_rate);
 
   decldiagparam("precip_elev_adj", TDim::NHRU, "[0.0]", "-1.0", "1.0", "precipitation height adjustment {adjusted p(or ppt) = p(or ppt)*(1.0 + precip_elev_adj*elev_difference/100)}", "(1/100m)", &precip_elev_adj);
 
@@ -48,7 +48,7 @@ void Classobs::decl(void) {
 
   decldiagparam("ClimChng_flag", TDim::NHRU, "[0]", "0", "1", "Climate change control; 0 - maintain RH, 1 - keep Vp within Vsat maximum", "()", &ClimChng_flag);
 
-  decldiagparam("ClimChng_t", TDim::NHRU, "[0]", "-50", "+50", "Climate change additive temperature change.", "(°C)", &ClimChng_t);
+  decldiagparam("ClimChng_t", TDim::NHRU, "[0]", "-50", "+50", "Climate change additive temperature change.", "("+string(DEGREE_CELSIUS)+")", &ClimChng_t);
 
   decldiagparam("ClimChng_precip", TDim::NHRU, "[1]", "0.0", "10", "Climate change multiplative p/ppt change.", "()", &ClimChng_precip);
 
@@ -66,10 +66,10 @@ void Classobs::decl(void) {
   declreadobs("p", TDim::NHRU, "interval precipitation", "(mm/int)", &p, HRU_OBS_p_ppt, true);
 
 
-  decldiag("t_obs", TDim::NFREQ, "observation temperature before modification by lapse rate and global warning", "(°C)", &t_obs, &t_obs_lay);
+  decldiag("t_obs", TDim::NFREQ, "observation temperature before modification by lapse rate and global warning", "(" + string(DEGREE_CELSIUS) + ")", &t_obs, &t_obs_lay);
 
 
-  declvar("hru_t", TDim::NHRU, "temperature", "(°C)", &hru_t);
+  declvar("hru_t", TDim::NHRU, "temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
   declvar("hru_rh", TDim::NHRU, "relative humidity", "(%)", &hru_rh);
 
@@ -97,11 +97,11 @@ void Classobs::decl(void) {
 
   declstatdiag("cumhru_snow_meas", TDim::NHRU, "cumulative HRU snow catch adjustment", "(mm)", &cumhru_snow_meas);
 
-  declvar("hru_tmax", TDim::NHRU, "max daily temp", "(°C)", &hru_tmax);
+  declvar("hru_tmax", TDim::NHRU, "max daily temp", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmax);
 
-  declvar("hru_tmin", TDim::NHRU, "min daily temp", "(°C)", &hru_tmin);
+  declvar("hru_tmin", TDim::NHRU, "min daily temp", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmin);
 
-  declvar("hru_tmean", TDim::NHRU, "mean daily temp", "(°C)", &hru_tmean);
+  declvar("hru_tmean", TDim::NHRU, "mean daily temp", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmean);
 
   declvar("hru_eamean", TDim::NHRU, "mean daily vapour pressure", "(kPa)", &hru_eamean);
 
@@ -118,7 +118,7 @@ void Classobs::decl(void) {
 
   Global::RH_EA_obs = -1;
 
-  decldiag("Tday", TDim::NFREQ, "observation t unavailable", "(°C)", &NotUsed, &tday_intvls);
+  decldiag("Tday", TDim::NFREQ, "observation t unavailable", "(" + string(DEGREE_CELSIUS) + ")", &NotUsed, &tday_intvls);
   Exist = declobsfunc("t", "Tday", &NotUsed, TFun::INTVL, &tday_intvls);
 
   decldiag("RHday", TDim::NFREQ, "observation rh unavailable", "(kPa)", &NotUsed, &rhday_intvls);
@@ -155,17 +155,17 @@ void Classobs::decl(void) {
   declparam("snow_rain_determination", TDim::NHRU, "[0]", "0", "2", "snow/rain determination: 0 - air temperature, 1 - ice bulb temperature, 2 - Harder", "()", &snow_rain_determination);
 
   decldiagparam("tmax_allrain", TDim::NHRU, "[4.0]", "-10", "10", "precip all rain if HRU air/ice bulb temperature above or equal to this value. Not used in Harder method.",
-    "(°C)", &tmax_allrain);
+      "(" + string(DEGREE_CELSIUS) + ")", &tmax_allrain);
 
   decldiagparam("tmax_allsnow", TDim::NHRU, "[0.0]", "-10", "10", "precip all snow if HRU air/ice bulb temperature below this value. Not used in Harder method",
-    "(°C)", &tmax_allsnow);
+      "(" + string(DEGREE_CELSIUS) + ")", &tmax_allsnow);
 
 
   variation_set = VARIATION_1;
 
-  declreadobs("t_max", TDim::NHRU, " daily maximum temperature", "(°C)", &t_max, HRU_OBS_t_rh_ea);
+  declreadobs("t_max", TDim::NHRU, " daily maximum temperature", "(" + string(DEGREE_CELSIUS) + ")", &t_max, HRU_OBS_t_rh_ea);
 
-  declreadobs("t_min", TDim::NHRU, " daily minimumn temperature", "(°C)", &t_min, HRU_OBS_t_rh_ea);
+  declreadobs("t_min", TDim::NHRU, " daily minimumn temperature", "(" + string(DEGREE_CELSIUS) + ")", &t_min, HRU_OBS_t_rh_ea);
 
 
   variation_set = VARIATION_2;

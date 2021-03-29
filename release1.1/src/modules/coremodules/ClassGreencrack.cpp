@@ -89,7 +89,7 @@ void ClassGreencrack::decl(void) {
 
   decldiagparam("infDays", TDim::NHRU, "[6]", "0", "20", " maximum number of days of snowmelt infiltration to frozen soil ", "(d)", &infDays);
 
-  declgetvar("*",  "hru_tmax", "(°C)", &hru_tmax);
+  declgetvar("*",  "hru_tmax", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmax);
 
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmelt);
 

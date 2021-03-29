@@ -175,7 +175,7 @@ void ClassWQ_pbsmSnobal::decl(void) {
     declgetvar("*", "z_s", "(m)", &z_s);
     declgetvar("*", "rho", "(kg/m^3)", &rho);
 
-    declgetvar("*", "hru_t", "(°C)", &hru_t);
+    declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
     declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
     declgetvar("*", "hru_newsnow", "()", &hru_newsnow);
     declgetvar("*", "net_snow", "(mm/int)", &net_snow);

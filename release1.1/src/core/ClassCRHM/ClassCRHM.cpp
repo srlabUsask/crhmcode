@@ -13,6 +13,7 @@
 #include "NewModules.h"
 #include "stddef.h"
 #include "GlobalDll.h"
+#include "../CRHMmain/CRHMLogger.h"
 
 using namespace std;
 
@@ -611,15 +612,37 @@ void setdim(TDim dimen, long dim) {
 }
 
 //---------------------------------------------------------------------------
-void   LogError(CRHMException Except) {
-	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION, (unsigned int)&Except, 0);
+void   LogError(CRHMException Except) 
+{
+	//Old handler for Visual Studio Messages
+	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION, (unsigned int)&Except, 0); 
+	
+	CRHMLogger::instance()->log_run_error(Except);
+	
 	if (Except.Kind == TExcept::TERMINATE)
+	{
+
+		CRHMLogger::instance()->get_run_logger()->flush();
 		throw (Except);
+	}
 }
 
 //---------------------------------------------------------------------------
-void   LogError(string S, TExcept Kind) {
+void   LogError(string S, TExcept Kind) 
+{
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION1, (unsigned int)&S, (unsigned int)&Kind);
+
+	CRHMException Except = CRHMException(S, Kind);
+
+	CRHMLogger::instance()->log_run_error(Except);
+
+	if (Except.Kind == TExcept::TERMINATE)
+	{
+		CRHMLogger::instance()->get_run_logger()->flush();
+		throw (Except);
+	}
+
 }
 
 //---------------------------------------------------------------------------
@@ -654,6 +677,10 @@ void   LogMessage(const char *S, double V, TExtra Opt) {
 	else
 		SS = D + S + FloatToStrF(V, "ffFixed", 10, 4);
 
+
+	CRHMLogger::instance()->log_run_message(SS);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
 }
 
@@ -681,6 +708,9 @@ void   LogMessage(const char *S, long V, TExtra Opt) {
 	else
 		SS = D + S + to_string(V);
 
+	CRHMLogger::instance()->log_run_message(SS);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
 }
 
@@ -732,6 +762,11 @@ void   LogMessage(long hh, const char *S, double V, TExtra Opt) {
 	}
 
 	string SS = A + D + S + FloatToStrF(V, "ffFixed", 10, 4);
+	
+
+	CRHMLogger::instance()->log_run_message(SS);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
 }
 
@@ -756,6 +791,10 @@ void   LogMessage(long hh, const char *S, long V, TExtra Opt) {
 	}
 
 	string SS = A + D + S + to_string(V);
+	
+	CRHMLogger::instance()->log_run_message(SS);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
 }
 
@@ -780,6 +819,10 @@ void   LogMessage(long hh, const char *S, TExtra Opt) {
 	}
 
 	string SS = A + D + S;
+	
+	CRHMLogger::instance()->log_run_message(SS);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
 }
 
@@ -787,6 +830,10 @@ void   LogMessage(long hh, const char *S, TExtra Opt) {
 void   LogDebug(char *S) {
 
 	string SS = S;
+
+	CRHMLogger::instance()->log_run_debug_message(SS);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
 }
 
@@ -796,6 +843,10 @@ void   LogDebug(long h, char *Text, double v) {
 	string S = to_string(h) + to_string(1);
 	S += Text + to_string(v);
 
+
+	CRHMLogger::instance()->log_run_debug_message(S);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&S, (unsigned int)0);
 }
 
@@ -805,6 +856,10 @@ void   LogDebugD(char *S) {
 	string D = FormatString(Global::DTnow, "yy mm dd ");
 
 	string SS = D + S;
+
+	CRHMLogger::instance()->log_run_debug_message(SS);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
 }
 
@@ -815,6 +870,10 @@ void   LogDebugT(string S) {
 
 	string SS = "yy mm dd hh mm - ";
 	SS += D + " - " + S;
+
+	CRHMLogger::instance()->log_run_debug_message(SS);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
 }
 
@@ -944,10 +1003,18 @@ string extract_units(string& Comment)
 void   LogDebug(const char* S) {
 
 	string SS = S;
+
+	CRHMLogger::instance()->log_run_debug_message(SS);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
 }
 void   LogDebug(const string S) {
 
 	string SS = S;
+
+	CRHMLogger::instance()->log_run_debug_message(SS);
+
+	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_DEBUG, (unsigned int)&SS, (unsigned int)0);
 }

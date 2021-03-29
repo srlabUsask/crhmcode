@@ -38,7 +38,7 @@ ClassLongVt* ClassLongVt::klone(string name) const{
 
   declgetvar("*", "QdroDext", "(MJ/m^2*d)", &QdroDext);
 
-  declgetvar("*",  "hru_t", "(°C)", &hru_t);
+  declgetvar("*",  "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
   declgetvar("*",  "hru_ea", "(kPa)", &hru_ea);
 

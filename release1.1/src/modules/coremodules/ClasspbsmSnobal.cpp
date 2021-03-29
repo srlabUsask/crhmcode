@@ -112,9 +112,9 @@ void ClasspbsmSnobal::decl(void) {
   declputvar("*", "z_s", "(m)", &z_s);
   declputvar("*", "rho", "(kg/m^3)", &rho);
 
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
-  declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
-  declgetvar("*", "net_snow", "(mm/int)", &net_snow);
+    declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
+    declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
+    declgetvar("*", "net_snow", "(mm/int)", &net_snow);
 
 }
 

@@ -6,9 +6,9 @@ Classlapse_rate_Monthly_Mod* Classlapse_rate_Monthly_Mod::klone(string name) con
 }
 
 void Classlapse_rate_Monthly_Mod::decl(void) {
-    declvar("lapse_rate_Mthly", TDim::NHRU, "temperature lapse rate Mthly.", "(°C/100m)", &lapse_rate_Mthly);
-    declvar("lapse_rate", TDim::NHRU, "temperature lapse rate.", "(°C/100m)", &lapse_rate);
-    //  declparam("lapse_rate", NHRU, "[0.75]", "0", "2", "temperature lapse rate.", "(°C/100m)", &lapse_rate);
+    declvar("lapse_rate_Mthly", TDim::NHRU, "temperature lapse rate Mthly.", "(" + string(DEGREE_CELSIUS) + "/100m)", &lapse_rate_Mthly);
+    declvar("lapse_rate", TDim::NHRU, "temperature lapse rate.", "(" + string(DEGREE_CELSIUS) + "/100m)", &lapse_rate);
+    //  declparam("lapse_rate", NHRU, "[0.75]", "0", "2", "temperature lapse rate.", "("+string(DEGREE_CELSIUS)+"/100m)", &lapse_rate);
 }
 
 void Classlapse_rate_Monthly_Mod::init(void) {
