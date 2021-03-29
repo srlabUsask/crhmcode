@@ -102,7 +102,7 @@ void ClassWQ_SoilBGC::decl(void) {
   
   declvar("watermax", TDim::NDEFN, "soil moisture", "(mm)", &watermax, &watermax_lay, maxsoillayers);
 
-  declvar("Temp", TDim::NDEFN, "soil layer temperature", "(°C)", &Temp, &Temp_lay, maxsoillayers);
+  declvar("Temp", TDim::NDEFN, "soil layer temperature", "(" + string(DEGREE_CELSIUS) + ")", &Temp, &Temp_lay, maxsoillayers);
 
   declvar("denitrification", TDim::NDEFN, "denitrification (maxsoillayers", "(kg/int)", &denitrification, &denitrification_lay, maxsoillayers);
 
@@ -154,7 +154,7 @@ void ClassWQ_SoilBGC::decl(void) {
 
   declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "0.0", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(" + string(DEGREE) + ")", &hru_GSL);
 
   declparam("ccmax1", TDim::NHRU, "[0]", "0","10", "crop cover during summer", "()", &ccmax1);
 
@@ -324,7 +324,7 @@ void ClassWQ_SoilBGC::decl(void) {
 
   declparam("labileNmass_init", TDim::NDEFN, "[0.0]", "0", "1000000", "immobile pool of organic nitrogen in soil with rapid turnover.", "(kg/km^2)", &labileNmass_init, &labileNmass_init_lay, maxsoillayers);
 
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
   declgetvar("*", "snowmelt_int", "(mm/int)", &snowmelt_int);
 

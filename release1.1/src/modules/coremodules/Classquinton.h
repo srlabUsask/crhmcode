@@ -46,8 +46,8 @@ const double *Pors{ NULL };          // filler only gives first value
 const double **Pors_def{ NULL };     // array of all values
 const long  *soil_type{ NULL };
 const long  **soil_type_lay{ NULL };
-const double *tinit{ NULL };         // initial layer temperature (°C)
-const double **tinit_lay{ NULL };    // initial layer temperature (°C)
+const double *tinit{ NULL };         // initial layer temperature (DEGREE_CELSIUS)
+const double **tinit_lay{ NULL };    // initial layer temperature (DEGREE_CELSIUS)
 
 // declared variables
 double *Depth{ NULL };          // hydraulic conductivity (m/day)
@@ -99,8 +99,8 @@ double **lamws_lay{ NULL };  // thermal conductivity (W/m/K)
 double *lamwsa{ NULL };      // unfrozen/unsaturated
 double **lamwsa_lay{ NULL }; // thermal conductivity (W/m/K)
 
-double *tlayer{ NULL };         // layer temperature (°C)
-double **tlayer_lay{ NULL };    // layer temperature (°C)
+double *tlayer{ NULL };         // layer temperature (DEGREE_CELSIUS)
+double **tlayer_lay{ NULL };    // layer temperature (DEGREE_CELSIUS)
 
 // local constants
 

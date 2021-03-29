@@ -51,7 +51,7 @@ void ClassK_Estimate::decl(void) {
   declparam("Ks_lower", TDim::NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for lower soil", "(m/s)", &Ks_lower);
   declparam("Ks_upper", TDim::NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for upper soil layer", "(m/s)", &Ks_upper);
   declparam("Ks_gw", TDim::NHRU, "[6.9e-6]", "0", "100.0", "saturated hydraulic conductivity for groundwater layer", "(m/s)", &Ks_gw);
-  declparam("hru_GSL", TDim::NHRU, "[0.0]", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(°)", &hru_GSL);
+  declparam("hru_GSL", TDim::NHRU, "[0.0]", "0.0", "90.0", "ground slope - increasing the slope positively, tilts the plane to the north with ASL = 0", "(" + string(DEGREE) + ")", &hru_GSL);
   declparam("PSD", TDim::NHRU, "[0.252]", "0.0", "10.0", "pore size distribution", "()", &PSD);
   declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0", "Maximum value for soil recharge zone (upper portion of soil_moist where losses occur as both evaporation and transpiration). Must be less than or equal to soil_moist.", "(mm)", &soil_rechr_max);
   declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0", "Maximum available water holding capacity of soil profile. Soil profile is surface to bottom of rooting zone.", "(mm)", &soil_moist_max);

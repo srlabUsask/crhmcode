@@ -1,7 +1,3 @@
-#if defined(_WIN32)
-#include "stdafx.h"
-#endif
-
 #include "Common.h"
 //#include <math.h>
 #include <cmath>

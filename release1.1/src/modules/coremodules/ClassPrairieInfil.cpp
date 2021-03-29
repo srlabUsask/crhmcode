@@ -66,7 +66,7 @@ void ClassPrairieInfil::decl(void) {
   declparam("groundcover", TDim::NHRU, "[1]", "1","6",
      "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "(%)", &groundcover);
 
-  declgetvar("*",  "hru_tmax", "(°C)", &hru_tmax);
+  declgetvar("*",  "hru_tmax", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmax);
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmelt);
   declgetvar("*",  "SWE", "(mm)", &SWE);
   declgetvar("*",  "net_rain", "(mm/int)", &net_rain);

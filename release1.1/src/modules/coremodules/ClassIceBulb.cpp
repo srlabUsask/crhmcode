@@ -22,11 +22,11 @@ void ClassIceBulb::decl(void) {
 
   Description = "'Estimates ice bulb temperature.'";
 
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
   declgetvar("*", "hru_rh", "(%)", &hru_rh);
   declgetvar("*", "hru_p", "(mm/int)", &hru_p);
 
-  declvar("hru_icebulb", TDim::NHRU, "Estimates ice bulb temperature", "(°C)", &hru_icebulb);
+  declvar("hru_icebulb", TDim::NHRU, "Estimates ice bulb temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_icebulb);
 
   declvar("hru_rainI", TDim::NHRU, "rain", "(mm/int)", &hru_rainI);
 
@@ -44,10 +44,10 @@ void ClassIceBulb::decl(void) {
   declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
   decldiagparam("tmaxI_allrain", TDim::NHRU, "[1.0]", "-10", "10", "precip all rain if HRU ice bulb temperature above or equal to this value",
-    "(°C)", &tmaxI_allrain);
+      "(" + string(DEGREE_CELSIUS) + ")", &tmaxI_allrain);
 
   decldiagparam("tmaxI_allsnow", TDim::NHRU, "[-1.0]", "-10", "10", "precip all snow if HRUice bulb  temperature below this value",
-    "(°C)", &tmaxI_allsnow);
+      "(" + string(DEGREE_CELSIUS) + ")", &tmaxI_allsnow);
 
 }
 

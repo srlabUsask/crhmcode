@@ -36,13 +36,13 @@ void Classlake::decl(void) {
 
   declvar("lake_evap_month", TDim::NHRU, "monthly evaporation from rh", "(mm)", &lake_evap_month); // ***cannot be a state variable***
 
-  declvar("hru_t_Mmean", TDim::NHRU, "HRU temperature", "(°C)", &hru_t_Mmean);
+  declvar("hru_t_Mmean", TDim::NHRU, "HRU temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_t_Mmean);
 
   declvar("hru_rh_Mmean", TDim::NHRU, "HRU rh", "()", &hru_rh_Mmean);
 
   declvar("hru_u_Mmean", TDim::NHRU, "HRU wind speed", "(m/s)", &hru_u_Mmean);
 
-  decllocal("hru_t_acc", TDim::NHRU, "HRU t accumulated", "(°C)", &hru_t_acc);
+  decllocal("hru_t_acc", TDim::NHRU, "HRU t accumulated", "(" + string(DEGREE_CELSIUS) + ")", &hru_t_acc);
 
   decllocal("hru_rh_acc", TDim::NHRU, "HRU rh accumulated", "()", &hru_rh_acc);
 
@@ -64,11 +64,11 @@ void Classlake::decl(void) {
 
   declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
 
-  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(°)", &hru_lat);
+  declparam("hru_lat", TDim::NHRU, "[51.317]", "-90.0", "90.0", "latitude. Negative values for Southern Hemisphere.", "(" + string(DEGREE) + ")", &hru_lat);
 
   declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
 
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
   declgetvar("*", "hru_rh", "()", &hru_rh);
   declgetvar("*", "hru_u", "(m/s)", &hru_u);
 }

@@ -36,11 +36,11 @@ void Classnetall::decl(void) {
   declstatdiag("cum_net", TDim::NHRU, "cumulative all-wave net", "(MJ/m^2)", &cum_net);
 
 
-  declgetvar("*", "hru_t", "(°C)", &hru_t);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
   declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
   declgetvar("*", "hru_SunAct", "(h)", &hru_SunAct);
 
-  declgetvar("*", "Tday", "(°C)",   &NotUsed, &tday_intvls); // from obs
+  declgetvar("*", "Tday", "(" + string(DEGREE_CELSIUS) + ")",   &NotUsed, &tday_intvls); // from obs
   declgetvar("*", "EAday", "(kPa)", &NotUsed, &eaday_intvls); // from obs
 
   declgetvar("*", "SunMax", "(h)", &SunMax);

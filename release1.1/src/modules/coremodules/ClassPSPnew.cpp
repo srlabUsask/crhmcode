@@ -26,9 +26,9 @@ void ClassPSPnew::decl(void) {
 
   declvar("Thru", TDim::NHRU, "Canopy fall through", "(kg/m^2)", &Thru);
 
-  declvar("TCanSnow", TDim::NHRU, "snow Canopy temperature", "(°C)", &TCanSnow);
+  declvar("TCanSnow", TDim::NHRU, "snow Canopy temperature", "(" + string(DEGREE_CELSIUS) + ")", &TCanSnow);
 
-  declvar("Tbiomass", TDim::NHRU, "biomass temperature", "(°C)", &Tbiomass);
+  declvar("Tbiomass", TDim::NHRU, "biomass temperature", "(" + string(DEGREE_CELSIUS) + ")", &Tbiomass);
 
 
   declparam("InitN", TDim::NHRU, "0", "0", "200", "Number of periods before calculating sublimation", "()", &InitN);
@@ -52,12 +52,12 @@ void ClassPSPnew::decl(void) {
   declparam("WidthJ", TDim::NHRU, "75", "0.0", "100.0", "Canopy ", "(m)", &WidthJ);
 
   declgetvar("obs",    "hru_u",  "(m/s)",   &hru_u);
-  declgetvar("obs",    "hru_t",  "(°C)",   &TAref);
+  declgetvar("obs",    "hru_t", "(" + string(DEGREE_CELSIUS) + ")",   &TAref);
   declgetvar("obs",    "hru_rh", "(%)",  &RHref);
   declgetvar("obs",    "hru_p",  "(mm/int)",   &hru_p);
   declgetvar("*",      "SolAng", "(r)",  &SolarAng);
 
-  declreadobs("TsnowG", TDim::NHRU, "snow temperature", "(°C)", &TsnowG, HRU_OBS_misc);
+  declreadobs("TsnowG", TDim::NHRU, "snow temperature", "(" + string(DEGREE_CELSIUS) + ")", &TsnowG, HRU_OBS_misc);
   declreadobs("Lnot", TDim::NHRU, "tree weight",      "(kg/m^2)", &Lnot, HRU_OBS_misc);
   declreadobs("Qsi", TDim::NHRU, "Qsi",      "(W/m^2)", &QsIn, HRU_OBS_Q);
   declreadobs("Qso", TDim::NHRU, "Qso",      "(W/m^2)", &QsOut, HRU_OBS_Q);

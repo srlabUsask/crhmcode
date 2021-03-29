@@ -1,7 +1,3 @@
-#if defined(_WIN32)
-#include "stdafx.h"
-#endif
-
 #include <stdio.h>
 #include <cstring>
 #include <sstream>
@@ -125,7 +121,7 @@ bool ClassData::DataReadFile(void) {
 	bool DecimalTime;
 	FirstFile = !Global::DTstart;
 
-	int D[5];
+	int D[5]{};
 	long jj;
 	long MaxLines = 0;
 	bool SparseFlag = false;
@@ -340,7 +336,7 @@ bool ClassData::DataReadFile(void) {
 
 			DataFile.seekg(0, ios_base::end);
 			ifstream::pos_type Back = DataFile.tellg();// -3;
-			char c;
+			char c = '\0';
 
 			bool white = true;
 			long Fix = -3;

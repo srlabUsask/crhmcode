@@ -2,10 +2,6 @@
 
 // 12/19/16
 //---------------------------------------------------------------------------
-#if defined(_WIN32)
-#include "stdafx.h"
-#endif
-
 #include <stdio.h>
 //#include <tchar.h>
 

@@ -1,9 +1,14 @@
-#if defined(_WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__)
 #include "stdafx.h"
-#include "CRHMAboutBox.h"
 #endif
 
 #include "CRHMmain.h"
+
+#if defined(VS_GUI)
+#include "CRHMAboutBox.h"
+#endif
+
+
 #include <map>
 #include <string>
 #include <iostream>
@@ -259,7 +264,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	ClassPar *thisPar = NULL;
 	ClassVar *thisVar;
 	ifstream DataFile;
-	long Variation;
+	long long Variation;
 
 	const int CharLength = 180; //added by Manishankar.
 	char module[CharLength], param[CharLength], Descrip[CharLength], Line[CharLength], name[CharLength];
@@ -391,7 +396,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 				}
 			}
 			else if (S == "Dates:") {
-				int D[3];
+				int D[3]{};
 				double DT;
 
 				for (int ii = 0; ii < 3; ii++)
@@ -439,7 +444,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 					idx = S.find('#');
 					if (idx != -1) {
-						Variation = (long)pow(2, S[idx + 1] - char('1'));
+						Variation = (long long)pow(2, S[idx + 1] - char('1'));
 						s = S.substr(0, idx);
 					}
 					else
@@ -470,7 +475,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 						DataFile.seekg(0, ios_base::end);  // cause break out
 					}
 					else {
-						Variation = ((long)Global::OurModulesList->Objects[ii]);
+						Variation = ((long long)Global::OurModulesList->Objects[ii]);
 						((ClassModule*)Global::AllModulesList->Objects[jj])->variation = (unsigned short) Variation;
 						Global::OurModulesList->Objects[ii] = Global::AllModulesList->Objects[jj];
 					}
@@ -916,8 +921,8 @@ void CRHMmain::FormCreate(void) {
 	Global::NewModuleName->CommaText("longVt, CanopyClearingGap, WQ_pbsm, WQ_Soil, WQ_Netroute, WQ_Netroute_M_D");
 
 #if !defined NO_MODULES
-	for (long ii = 0; ii < Global::NewModuleName->Count; ++ii) {
-		long jj = Global::AllModulesList->IndexOf(Global::NewModuleName->Strings[ii]);
+	for (int ii = 0; ii < Global::NewModuleName->Count; ++ii) {
+		long long jj = Global::AllModulesList->IndexOf(Global::NewModuleName->Strings[ii]);
 		assert(jj != -1);
 		Global::OldModuleName->Objects[ii] = (TObject*)jj;
 	}
@@ -928,7 +933,7 @@ void CRHMmain::FormCreate(void) {
 	Global::CRHMControlSaveCnt = 0; // NewModules input
 
 	Global::HRU_OBS_DIRECT = new long*[5];
-	for (long jj = 0; jj < 5; ++jj) {
+	for (int jj = 0; jj < 5; ++jj) {
 		Global::HRU_OBS_DIRECT[jj] = new long[500];
 
 		for (long ii = 0; ii < 500; ++ii)
@@ -1584,10 +1589,10 @@ MMSData *  CRHMmain::RunClick2Start()
 
 
 	if (Global::IndxMin != 0) {
-#if defined(_WIN32)
+#if defined(VS_GUI)
 		AfxMessageBox(_T("First observation day - not an entire day"));
 #endif
-#if defined(__linux__)|| defined(__APPLE__)
+#if defined(COMMAND_LINE)
 		string message = "First observation day - not an entire day";
 		LogMessageX(message.c_str());
 #endif
@@ -1596,10 +1601,10 @@ MMSData *  CRHMmain::RunClick2Start()
 	}
 
 	if (SelectedVariables->Count == 0) {
-#if defined(_WIN32)
+#if defined(VS_GUI)
 		AfxMessageBox(_T("No model output selected"));
 #endif
-#if defined(__linux__)|| defined(__APPLE__)
+#if defined(COMMAND_LINE)
 		string message = "No model output selected";
 		LogMessageX(message.c_str());
 #endif
@@ -2264,7 +2269,7 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 	DataFile.getline(Line, 80);
 
 	DataFile.getline(Line, 80); // read "TIME:"
-	int D[3];
+	int D[3]{};
 	DataFile >> D[0] >> D[1] >> D[2];
 	double DT = StandardConverterUtility::EncodeDateTime(D[0], D[1], D[2], 0, 0); // ????
 
@@ -2461,6 +2466,13 @@ void CRHMmain::DoObsStatus(bool &First)
 		}
 		else { // normal observation file
 
+			if (FileData->ModN == 0)
+			{
+				CRHMException e = CRHMException("Observation files are in a incompatible order. "
+					"Make sure the first observation file has the shorter interval.", TExcept::TERMINATE);
+				LogError(e);
+			}
+
 			long Index = Global::DTindx / FileData->ModN;
 
 			if (Index < FileData->IndxMin || Index > FileData->IndxMax) {
@@ -2557,7 +2569,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 	getline(DataFile, Line);
 
 	getline(DataFile, Line); // read "TIME:"
-	int D[3];
+	int D[3]{};
 	DataFile >> D[0] >> D[1] >> D[2];
 
 	DataFile.ignore(180, '#'); // not working?
@@ -2838,19 +2850,18 @@ string CRHMmain::inttoStr(int I) {
 
 void  CRHMmain::LogMessageX(const char *S)
 {
-	//puts(S);
 	CRHMLogger::instance()->log_to_console(S);
-
+	CRHMLogger::instance()->log_run_message(S);
 }
 
 
 string CRHMmain::GetCaptionFromAboutBox()
 {
-#if defined(_WIN32)
+#if defined(VS_GUI)
 	CRHMAboutBox aboutbox;
 	return aboutbox.versionstring;
 #endif
-#if defined(__linux__)|| defined(__APPLE__)
+#if defined(COMMAND_LINE)
 	return "";
 #endif
 }
@@ -3469,9 +3480,9 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 	FILE * obfile = fopen(obsfilepath, "r");
 
 	char line[128];
-	char obsname[128]; 
+	char obsname[128]{};
 	//char * token; variable is unreferenced commenting out for now - jhs507
-	char obsnames[50][128];
+	char obsnames[50][128]{};
 	int obsindex = 0;
 	int j = 0;
 
@@ -3505,7 +3516,7 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 		//If this is found decriment j which has the effect of discarding the current obsname 
 		for (int i = 0; i < j; i++)
 		{
-			char test[128];
+			char test[128]{};
 			test[0] = '$'; 
 			test[1] = '\0';
 			
@@ -3545,8 +3556,8 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 	FILE * obfile = fopen(obsfilepath, "r");
 
 	char line[128];
-	char obsname[128];
-	char * token, obsnames[50][128];
+	char obsname[128]{};
+	char* token, obsnames[50][128]{};
 	int obsindex = 0;
 	int j = 0;
 
@@ -3587,7 +3598,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 		//If this is found decriment j which has the effect of discarding the current obsname 
 		for (int i = 0; i < j; i++)
 		{
-			char test[128]; 
+			char test[128]{};
 			test[0] = '$'; 
 			test[1] = '\0';
 
@@ -3606,7 +3617,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 	observationseries->Title = observationname;
 
 	int obscount = j;
-	char tokens[50][50];
+	char tokens[50][50]{};
 	int tokencount = 0;
 	double obsvalue = 0.0;
 	int dateelements = 0, year, month, day, hour;

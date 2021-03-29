@@ -3,6 +3,13 @@
 #ifndef CONVERT
 #define CONVERT 
 
+constexpr auto DEGREE = "\xBA";
+constexpr auto DEGREE_CELSIUS ="\xBA""C";
+constexpr auto DEGREE_FAHRENHEIT = "\xBA""F";
+constexpr auto DEGREE_RANKINE = "\xBA""R";
+constexpr auto MICRON = "\xB5";
+constexpr auto ANGSTROM = "\xC5";
+
 class Convert {
 	static Unit_Info Infos[];
 	static Multiplier_Info Multipliers[];

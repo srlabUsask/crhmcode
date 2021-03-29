@@ -30,7 +30,7 @@ void ClassSimpleRichard::decl(void) {
 
     declvar("meltclark", TDim::NHRU, "snow melt delayed", "(kg/m^2)", &meltclark);
 
-    declvar("T0", TDim::NHRU, "Surface temperature", "(°C)", &T0);
+    declvar("T0", TDim::NHRU, "Surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &T0);
 
 
     declvar("LE", TDim::NHRU, "Latent heat flux", "(W/m^2)", &LE);
@@ -51,7 +51,7 @@ void ClassSimpleRichard::decl(void) {
 
     declreadobs("snow", TDim::NHRU, "snowfall rate", "mm/int", &snow, HRU_OBS_misc);
 
-    declreadobs("t", TDim::NHRU, "air temperature", "(°C)", &t, HRU_OBS_t_rh_ea);
+    declreadobs("t", TDim::NHRU, "air temperature", "(" + string(DEGREE_CELSIUS) + ")", &t, HRU_OBS_t_rh_ea);
 
     declreadobs("u", TDim::NHRU, "windspeed", "m/s", &u, HRU_OBS_u);
 

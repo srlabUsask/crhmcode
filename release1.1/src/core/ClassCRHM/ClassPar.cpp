@@ -1,7 +1,3 @@
-#if defined(_WIN32)
-#include "stdafx.h"
-#endif
-
 #include <stdio.h>
 #include <cstring>
 #include <sstream>

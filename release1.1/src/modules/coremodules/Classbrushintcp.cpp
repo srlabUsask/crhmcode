@@ -57,14 +57,14 @@ void Classbrushintcp::decl(void) {
 
   declparam("brushAtten", TDim::NHRU, "[1.0]", "0.2", "10.0", "Brush attenuation coefficient", "()", &brushAtten);
 
-  declparam("Tunload", TDim::NHRU, "0.0", "-5.0", "5.0", "Canopy unload at daily mean temperature", "(°C)", &Tunload);
+  declparam("Tunload", TDim::NHRU, "0.0", "-5.0", "5.0", "Canopy unload at daily mean temperature", "(" + string(DEGREE_CELSIUS) + ")", &Tunload);
 
   declparam("basin_area", TDim::ONE, "3", "0.01", "1e+09", "total basin area", "(km^2)", &basin_area);
 
   declparam("hru_area", TDim::NHRU, "[1]", "0.01", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declgetvar("obs",  "hru_t", "(°C)", &hru_t);
-  declgetvar("obs",  "hru_tmean", ", (°C)", &hru_tmean);
+  declgetvar("obs",  "hru_t", "("+string(DEGREE_CELSIUS)+")", &hru_t);
+  declgetvar("obs",  "hru_tmean", ", ("+string(DEGREE_CELSIUS)+")", &hru_tmean);
   declgetvar("obs",  "hru_rh", "()", &hru_rh);
   declgetvar("obs",  "hru_u", "(m/s)", &hru_u);
   declgetvar("obs",  "hru_rain", "(mm)", &hru_rain);

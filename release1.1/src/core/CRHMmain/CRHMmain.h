@@ -1,5 +1,17 @@
 #pragma once
 
+/**
+* Detecting what platform is being compiled on and setting either the COMMAND_LINE or VS_GUI flag
+**/
+#if defined(__linux__) || defined(__APPLE__) || defined(__MINGW32__)
+#define COMMAND_LINE
+#endif
+#if defined(_WIN32) && defined(_MSC_VER )
+#define VS_GUI
+#endif
+
+
+
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -15,6 +27,7 @@
 #include "MMSData.h"
 #include "TSeries.h"
 #include "Classinfo.h"
+#include "CRHMLogger.h"
 
 //class ObsFileInfo {
 //private:
@@ -34,6 +47,9 @@ class CRHMmain
 	static CRHMmain* instance;
 
 public:
+
+	CRHMLogger* Logger;
+
 	static CRHMmain *  getInstance();
 	CRHMmain();
 

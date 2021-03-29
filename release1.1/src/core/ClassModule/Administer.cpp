@@ -69,7 +69,7 @@ void Administer::AddModel(string ModelName, string ModelModules) {
 
 	DLLModelModuleList->Add(ModelModules);
 	//DLLModelList->AddObject(ModelName, (TObject*)(DLLModelModuleList->Count - 1)); // removed this line and added the following two for resolving a warning.
-	long _object = DLLModelModuleList->Count - 1;
+	long long _object = DLLModelModuleList->Count - 1;
 	DLLModelList->AddObject(ModelName, (TObject*)_object);
 }
 
@@ -139,7 +139,7 @@ void Administer::Accept(int Result) {
 	for (int ii = 0; ii < DLLModelList->Count; ++ii) {
 
 		// when sorted index used to access ModelModulesList		
-		long _object = ii;
+		long long _object = ii;
 		Global::AllModelsList->AddObject(DLLModelList->Strings[ii], (TObject*)_object);
 
 		// Administer object used to find which DLL loaded model

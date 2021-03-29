@@ -177,7 +177,7 @@ void ClassWQ_pbsm::decl(void) {
 
     decllocal("z_s_0", TDim::NHRU, "", "", &z_s_0);
 
-    declgetvar("*", "hru_t", "(°C)", &hru_t);
+    declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
     declgetvar("*", "hru_rh", "(%)", &hru_rh);
     declgetvar("*", "hru_newsnow", "()", &hru_newsnow);
     declgetvar("*", "net_snow", "(mm/int)", &net_snow);
