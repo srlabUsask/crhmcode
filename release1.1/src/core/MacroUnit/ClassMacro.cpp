@@ -1,6 +1,6 @@
 #include "ClassMacro.h"
-#if defined(__linux__) || defined(__APPLE__) 
-#include <cxxabi.h>
+#if defined(__linux__) || defined(__APPLE__) || defined(__MINGW32__)
+	#include <cxxabi.h>
 #endif
 
 double Fday() { // used for variable DAY
@@ -113,12 +113,12 @@ void ClassMacro::decl(void) {
 			std::weak_ptr<ClassModule> MG(Test);
 
 
-#if defined(_WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__)
 
 			string S1 = typeid(*Mod).name();
 			string S2 = typeid(*Test).name();
 #endif
-#if defined(__linux__) || defined(__APPLE__) //introspection issue resolved for linux and apple as was suggested by Dr. Kevin. Manishankar
+#if defined(__linux__) || defined(__APPLE__) || defined(__MINGW32__) //introspection issue resolved for linux and apple as was suggested by Dr. Kevin. Manishankar
 			int demangle_status = 0;
 			string S1 = abi::__cxa_demangle(typeid(*Mod).name(), 0, 0, &demangle_status);
 			auto Test_raw = Test.get(); //Dr. Kevin's edit for removing an warning.
