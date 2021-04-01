@@ -13,6 +13,7 @@
 #include "NewModules.h"
 #include "stddef.h"
 #include "GlobalDll.h"
+#include "../CRHMmain/CRHMLogger.h"
 
 using namespace std;
 
@@ -134,11 +135,9 @@ bool ClassData::DataReadFile(void) {
 
 	DataFile.open(DataFileName, ios_base::in);
 	if (!DataFile) {
-		/*
-		CRHMException Except("Missing observation " + DataFileName, ERR);
-		Message(Except.Message.c_str(),
-		"Project observation file", mbOK);
-		LogError(Except);*/
+		CRHMException Except("Missing observation " + DataFileName, TExcept::ERR);
+		//Message(Except.Message.c_str(), "Project observation file", mbOK);
+		LogError(Except);
 		DataFile.close();
 		return false;
 	}
@@ -150,10 +149,9 @@ bool ClassData::DataReadFile(void) {
 		char c = DataFile.peek();
 
 		if (DataFile.fail()) {
-			/*       CRHMException Except("Errors in observation file header" + DataFileName, ERR);
-			Message(Except.Message.c_str(),
-			"Project observation file", mbOK);
-			LogError(Except);*/
+			CRHMException Except("Errors in observation file header" + DataFileName, TExcept::ERR);
+			//Message(Except.Message.c_str(), "Project observation file", mbOK);
+			LogError(Except);
 			DataFile.close();
 			return false;
 		}
@@ -173,10 +171,9 @@ bool ClassData::DataReadFile(void) {
 		}
 		else { // observation
 			if (FilterCnt != 0) {
-				/*          CRHMException Except("Filters must follow observations in file header " + DataFileName, ERR);
-				Message(Except.Message.c_str(),
-				"Project observation file", mbOK);
-				LogError(Except);*/
+				CRHMException Except("Filters must follow observations in file header " + DataFileName, TExcept::ERR);
+				//Message(Except.Message.c_str(), "Project observation file", mbOK);
+				LogError(Except);
 				DataFile.close();
 				return false;
 			}
@@ -194,8 +191,8 @@ bool ClassData::DataReadFile(void) {
 
 			if (!ThisVar) { // NULL if already defined
 				string S = string("Observation '") + Var + "' defined in earlier observation file";
-				/*          CRHMException Except("Observation variable already defined " + DataFileName, ERR);
-				Message(S.c_str(), Except.Message.c_str(), mbOK);*/
+				CRHMException Except(S + "Observation variable already defined " + DataFileName, TExcept::ERR);
+				//Message(S.c_str(), Except.Message.c_str(), mbOK);
 				DataFile.close();
 				return false;
 			}
@@ -230,19 +227,17 @@ bool ClassData::DataReadFile(void) {
 			Dt1 += TimeShiftFilter;
 
 			if (DataFile.eof()) {
-				/*          CRHMException Except("Error in observation file header " + DataFileName, ERR);
-				Message(Except.Message.c_str(),
-				"File observations end early!", mbOK);
-				LogError(Except);*/
+				CRHMException Except("Error in observation file header " + DataFileName, TExcept::ERR);
+				//Message(Except.Message.c_str(), "File observations end early!", mbOK);
+				LogError(Except);
 				DataFile.close();
 				return false;
 			}
 
 			if (Global::DTstart != 0.0 && Dt1 >= Global::DTend) {
-				/*         CRHMException Except("Error in observation file " + DataFileName, ERR);
-				Message(Except.Message.c_str(),
-				"File observations begin after period!", mbOK);
-				LogError(Except);*/
+				CRHMException Except("Error in observation file " + DataFileName, TExcept::ERR);
+				//Message(Except.Message.c_str(), "File observations begin after period!", mbOK);
+				LogError(Except);
 				DataFile.close();
 				return false;
 			}
@@ -260,28 +255,27 @@ bool ClassData::DataReadFile(void) {
 			}
 
 			if (Cols < DataCnt) {
-				/*          CRHMException Except("Observation file header Error " + DataFileName, ERR);
-				Message(Except.Message.c_str(),
-				string("Header of file defines more observations than data columns (" + string(Cols) + ")").c_str(), mbOK);
-				LogError(Except);*/
+				CRHMException Except("Header of file defines more observations than data columns. "
+					"Observation file header Error "+ DataFileName, TExcept::ERR);
+				//Message(Except.Message.c_str(), string("Header of file defines more observations than data columns (" + string(Cols) + ")").c_str(), mbOK);
+				LogError(Except);
 				DataFile.close();
 				return false;
 			}
 			else if (Cols > DataCnt) {
-				/*          CRHMException Except("Observation file header Warning - Column count > Data count " + DataFileName, WARNING);
-				Message(Except.Message.c_str(),
-				string("Header of file defines fewer observations than data columns (" + string(Cols) + ")").c_str(), mbOK);
-				LogError(Except);*/
+				CRHMException Except("Header of file defines fewer observations than data columns. "
+					"Observation file header Warning - Column count > Data count " + DataFileName, TExcept::WARNING);
+				//Message(Except.Message.c_str(), string("Header of file defines fewer observations than data columns (" + string(Cols) + ")").c_str(), mbOK);
+				LogError(Except);
 			}
 
 			char c = DataFile.peek();
 
 			if (DataFile.eof()) { // one line file
 				DataFile.clear();
-				/*          CRHMException Except("Observation file warning " + DataFileName, ERR);
-				Message(Except.Message.c_str(),
-				"ONE line observation file!", mbOK);
-				LogError(Except);*/
+				CRHMException Except("One line observation file. Observation file warning " + DataFileName, TExcept::ERR);
+				//Message(Except.Message.c_str(), "ONE line observation file!", mbOK);
+				LogError(Except);
 				OneLine = true;
 				Dt2 = Dt1 + 1.0;
 				Freq = 1;
@@ -325,13 +319,15 @@ bool ClassData::DataReadFile(void) {
 			double mid = floor(Dt1) + Interval;
 			double range = 0.00002;
 			if (Dt1 > mid + range || (Dt1 < mid - range && Interval < 1.0)) { // ensure data starts at first interval  //warning resolved by Manishankar
-																			/*          CRHMException Except("Observation file WARNING " + DataFileName, ERR);
-																			Message(Except.Message.c_str(),
-																			"First interval must start at midnight + interval! ", mbOK);
-																			LogError(Except);*/
+				CRHMException Except("Observation file WARNING " + DataFileName, TExcept::ERR);
+				//Message(Except.Message.c_str(), "First interval must start at midnight + interval! ", mbOK);
+				LogError(Except);
 
-				if (IndxMin == 0)
+				if (IndxMin == 0) 
+				{
 					IndxMin = (long)((Dt1 - floor(Dt1)) / Interval - 1);
+				}
+					
 			}
 
 			DataFile.seekg(0, ios_base::end);
@@ -469,12 +465,12 @@ bool ClassData::DataReadFile(void) {
 			Global::DTnow = Times[Position];
 
 			if (Position != 0 && Times[Position] <= Times[Position - 1]) {
-				string S;
-				//S.sprintf("Earlier Date at line: %u+, %5u %3u %3u %3u %3u in observation file ", Position, D[0], D[1], D[2], D[3], D[4]);
+				char S[160];
+				sprintf(S, "Earlier Date at line: %u+, %5u %3u %3u %3u %3u in observation file ", Position, D[0], D[1], D[2], D[3], D[4]);
 
-				//CRHMException Except(S + DataFileName, ERR);
+				CRHMException Except(S + DataFileName, TExcept::ERR);
 				//Message(S.c_str(), "Error in Observation File", mbOK);
-				//LogError(Except);
+				LogError(Except);
 				LineError = true;
 				break;
 			}
@@ -485,36 +481,43 @@ bool ClassData::DataReadFile(void) {
 
 				if (DataFile.peek() == '\n') { // handles short line
 
-											   //String S = String("Check line ") + String(HdrLen + Position + 1) + String(" for missing columns in ");
-											   //CRHMException Except(S.c_str() + DataFileName, ERR);
-					if (!SparseFlag) {
-						//Application->MessageBox(Except.Message.c_str(),
-						//"Project observation file - too few columns", MB_OK);
+					string S = string("Check line ") + to_string(HdrLen + Position + 1) + string(" for missing columns in ");
+					CRHMException Except(S.c_str() + DataFileName, TExcept::ERR);
+					if (!SparseFlag) 
+					{
+						//Application->MessageBox(Except.Message.c_str(),"Project observation file - too few columns", MB_OK);
 					}
 
-					if (FirstFile) { // definitely error
-									 //LogError(Except);
+					if (FirstFile) // definitely error
+					{ 
+						LogError(Except);
 						LineError = true; // will break out of loop
 					}
-					else if (ii == 0) { // assume sparse in first column
+					else if (ii == 0) // assume sparse in first column
+					{ 
 						SparseFlag = true;
 						--Position;
 						continue;
 					}
-					else // any column but the first - assume missing
+					else 
+					{
+						// any column but the first - assume missing
 						Data[ii][Position] = 35.93;//Data[ii][Position] = -999999;
+					}
 
 				}
-				else
+				else 
+				{
 					DataFile >> Data[ii][Position];
+				}
+				
 
 				if (DataFile.fail()) { // handles faulty data
-									   //String S = String("Faulty data at line ") + String(HdrLen + Position + 1)
-									   //+ String(" in observation file ");
-									   //CRHMException Except(S.c_str() + DataFileName, ERR);
-									   //Application->MessageBox(Except.Message.c_str(),
-									   //"Project observation file", MB_OK);
-									   //LogError(Except);
+					string S = string("Faulty data at line ") + to_string(HdrLen + Position + 1) + string(" in observation file ");
+					CRHMException Except(S.c_str() + DataFileName, TExcept::ERR);
+					//Application->MessageBox(Except.Message.c_str(),
+					//"Project observation file", MB_OK);
+					LogError(Except);
 					Lines = Position - 1;
 					LineError = true;
 					break;
@@ -563,10 +566,10 @@ bool ClassData::DataReadFile(void) {
 
 
 	if (!Simulation && Dt2 > Times[Position - 1] + Interval / 2.0 && !SparseFlag) {
-		/*     string S = string("Interval frequency increases ") + string(" in observation file ");
-		CRHMException Except(S + DataFileName, ERR);
-		Message(Except.Message.c_str(), "Project observation file", mbOK);
-		LogError(Except);*/
+		string S = string("Interval frequency increases ") + string(" in observation file ");
+		CRHMException Except(S + DataFileName, TExcept::ERR);
+		//Message(Except.Message.c_str(), "Project observation file", mbOK);
+		LogError(Except);
 		SparseFlag = true;
 	}
 
@@ -608,10 +611,10 @@ bool ClassData::DataReadFile(void) {
 			Times = NULL;
 
 			if ((ForceInterval == 96 && Freq == 144) || (ForceInterval == 144 && Freq == 96)) { // cannot convert 10 minute to 15 minute or vice versa  //warning resolved by Manishankar.
-																							/*          string S = string("cannot convert 10 minute interval to 15 minute or vice versa") + string(" in observation file ");
-																							CRHMException Except(S + DataFileName, ERR);
-																							Message(Except.Message.c_str(), "Project observation file", mbOK);
-																							LogError(Except);*/
+				string S = string("cannot convert 10 minute interval to 15 minute or vice versa") + string(" in observation file ");
+				CRHMException Except(S + DataFileName, TExcept::ERR);
+				//Message(Except.Message.c_str(), "Project observation file", mbOK);
+				LogError(Except);
 				ForceInterval = 0;
 			}
 
