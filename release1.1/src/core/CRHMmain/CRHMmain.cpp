@@ -266,8 +266,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	ifstream DataFile;
 	long long Variation;
 
-	const int CharLength = 180; //added by Manishankar.
-	char module[CharLength], param[CharLength], Descrip[CharLength], Line[CharLength], name[CharLength];
+	string module, param, Descrip, Line, name;
 	//string module, param, Descrip, Line, name;
 	string S, s;
 	string SS;
@@ -299,9 +298,12 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 	bool Prj = Common::lowercase(OpenNamePrj).find(".prj") != string::npos;
 
-	DataFile.getline(Descrip, CharLength);
-	DataFile.ignore(CharLength, '#');
-	DataFile.getline(Line, CharLength);
+	//DataFile.getline(Descrip, CharLength);
+	getline(DataFile, Descrip);
+
+	DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+	//DataFile.getline(Line, CharLength);
+	getline(DataFile, Line);
 
 	Global::MacroModulesList->Clear();
 
@@ -333,8 +335,9 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 			DataFile >> S;
 			if (DataFile.eof()) break;
 
-			DataFile.ignore(CharLength, '#');
-			DataFile.getline(Line, CharLength);
+			DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+			//DataFile.getline(Line, CharLength);
+			getline(DataFile, Line);
 
 			if (S == "AKAs:") {
 				string module, type, name, alias, source;
@@ -520,7 +523,8 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 					if (DataFile.eof()) return; // final exit
 
-					DataFile.ignore(CharLength, '\n'); // need for character input, why?
+					DataFile.ignore((numeric_limits<streamsize>::max)(), '\n'); // need for character input, why?
+
 					S = "";
 
 					do { // determine # columns
@@ -552,13 +556,13 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 						++Cols; // # of HRU's in Basin
 					}
 
-					if (string(module, strlen(module)) == "Shared") {
+					if (string(module, strlen(module.c_str())) == "Shared") {
 						// write Shared parameters to module parameters
 						// all parameter values are set to basin values.  If re-defined in a module will be changed.
 						MapPar::iterator itPar;
 						for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); ++itPar) {
 							thisPar = (*itPar).second;
-							if (thisPar->param == string(param, strlen(param))) {
+							if (thisPar->param == string(param, strlen(param.c_str()))) {
 								if (thisPar->dim == Cols / thisPar->lay) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
 									break;
 								//                else if(Cols > 0 && Cols%thisPar->lay == 0) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
@@ -568,7 +572,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 								else if (thisPar->param == "obs_elev" || thisPar->param == "soil_withdrawal")
 									break;
 								else { // Added to handle 2D parameters
-									if (thisPar->param == string(param, strlen(param)) && (thisPar->dim == Cols / thisPar->dim))
+									if (thisPar->param == string(param, strlen(param.c_str())) && (thisPar->dim == Cols / thisPar->dim))
 										break;
 									else
 										thisPar = NULL;
@@ -581,7 +585,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					else {
 						thisPar = ClassParFind(module, param); // find module parameter for template
 						if (thisPar)
-							strcpy(module, thisPar->module.c_str()); // set it to found name
+							module = thisPar->module.c_str(); // set it to found name
 					}
 
 					if (thisPar) {
@@ -793,7 +797,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					else
 						OpenNameState = "";
 
-					DataFile.ignore(CharLength, '#');
+					DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
 					DataFile >> S;
 				}
 			}
