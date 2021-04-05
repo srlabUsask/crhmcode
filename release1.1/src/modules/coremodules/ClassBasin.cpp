@@ -82,21 +82,35 @@ void Classbasin::init(void) {
   try{
 	  if (RapidAdvance_to->Count > 0)
 	  {
-		  if (RapidAdvance_to->Strings[0].length() > 0) {
-			  RapidAdvance_to->Strings[0] = Common::trim(RapidAdvance_to->Strings[0]);
+		  RapidAdvance_to->Strings[0] = Common::trim(RapidAdvance_to->Strings[0]);
+
+		  if (RapidAdvance_to->Strings[0].length() > 0) 
+		  {
+			  
 			  if (RapidAdvance_to->Strings[0].length() > 0)
+			  {
 				  Global::RapidAdvanceTo = StrToDate(RapidAdvance_to->Strings[0]);
+			  }
+				  
 		  }
 	  }
-	  if (Loop_to->Count > 0)
+	  if (Loop_to->Count > 1)
 	  {
-		  if (Loop_to->Strings[0].length() > 0) {
-			  Loop_to->Strings[0] = Common::trim(Loop_to->Strings[0]);
-			  Loop_to->Strings[1] = Common::trim(Loop_to->Strings[1]);
+		  Loop_to->Strings[0] = Common::trim(Loop_to->Strings[0]);
+		  Loop_to->Strings[1] = Common::trim(Loop_to->Strings[1]);
+
+		  if (Loop_to->Strings[0].length() > 0) 
+		  {
+			  
 			  if (Loop_to->Strings[0].length() > 0)
+			  {
 				  Global::LoopTo = StrToDate(Loop_to->Strings[0]);
+			  }  
 			  if (Loop_to->Strings[1].length() > 0)
+			  {
 				  Global::LoopCnt = Strtolong(Loop_to->Strings[1]);
+			  }
+				  
 		  }
 	  }
   }

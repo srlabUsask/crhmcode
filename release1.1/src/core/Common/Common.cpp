@@ -160,46 +160,62 @@ string Common::longtoStr(long L) { //Manishankar: in two or more files.
 	return temp.str();
 }
 
+void Common::ltrim(std::string& s) 
+{
+	s.erase(
+		s.begin(), 
+		std::find_if(
+			s.begin(), 
+			s.end(),
+			[](unsigned char ch) 
+			{
+				return !std::isspace(ch);
+			}
+		)
+	);
+}
+
+
+void Common::rtrim(std::string& s) 
+{
+	s.erase(
+		std::find_if(
+			s.rbegin(),
+			s.rend(),
+			[](unsigned char ch) 
+			{
+				return !std::isspace(ch);
+			}
+		).base(), 
+		s.end()
+	);
+
+}
+
 
 string Common::trimleft(string& str) {
 
-	string::size_type pos = str.find_first_not_of(" \t");
-
-	if (pos != string::npos)
-		if (pos > 0)
-			str.erase(0, pos);
-
+	Common::ltrim(str);
 	return str;
+
 }
 
-string Common::trimright(string& str) //
+
+string Common::trimright(string& str) 
 {
-	if (!str.empty()) {
-
-		string::size_type pos = str.find_last_not_of(" \t");
-
-		if (pos != string::npos)
-			if (pos < str.length() - 1)
-				str.erase(++pos);
-	}
-
-	if (!str.empty())
-	{
-		int l = str.length();
-		if (str[l - 1] == '\'') { str.erase(l - 1); }
-	}
-
+	Common::rtrim(str);
 	return str;
 }
 
 
 string Common::trim(string& str) { //Manishankar: in two or more files.
 
-	trimleft(str);
-	trimright(str);
+	str = trimleft(str);
+	str = trimright(str);
 
 	return str;
 }
+
 
 double Common::StrtoDt(string s) {  //Manishankar: this is being used in ClassCRHM.cpp only.
 

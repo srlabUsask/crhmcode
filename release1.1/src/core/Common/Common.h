@@ -127,9 +127,45 @@ public:
 	string static lowercase(string &s);
 	int static IndexOf(TStringList *Box, const string S);
 	string static longtoStr(long L);
+
+	/*
+	* Trim all whitespace from the start of a string to
+	*  the first non-whitepsace character in place
+	*/
+	static void ltrim(std::string& s);
+
+	/*
+	* Trim all whitespace from the end of a string to
+	*  the last non-whitepsace character in place
+	*/
+	static void rtrim(std::string& s);
+
+	/**
+	* Trim all whitespace from the start of a string to
+	*  the first non-whitepsace character
+	*
+	* @param str - a string to trim.
+	* @return the string with its beginning trimmed of white space characters.
+	**/
 	string static trimleft(string& str);
+
+	/**
+	* Trim all whitespace from the end of a string to
+	*  the last non-whitepsace character
+	*
+	* @param str - a string to trim.
+	* @return The string with its end trimmed of white space characters.
+	**/
 	string static trimright(string& str);
+
+	/**
+	* Trim all the whitespace from the begining and end of of a string.
+	*
+	* @param str - a string to trim.
+	* @return The string with its beginning and ending whitespace removed.
+	**/
 	string static trim(string& str);
+
 	double static StrtoDt(string s);
 	bool static EqualUpper(string s1, string s2);
 	double static KyValue(double probability, double guess);
