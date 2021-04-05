@@ -624,7 +624,7 @@ void   LogError(CRHMException Except)
 	{
 		CRHMLogger::instance()->log_to_console(Except.Message);
 		CRHMLogger::instance()->get_run_logger()->flush();
-		throw (Except);
+		exit(1);
 	}
 }
 
