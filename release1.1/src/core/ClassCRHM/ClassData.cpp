@@ -466,7 +466,7 @@ bool ClassData::DataReadFile(void) {
 
 			if (Position != 0 && Times[Position] <= Times[Position - 1]) {
 				char S[160];
-				sprintf(S, "Earlier Date at line: %u+, %5u %3u %3u %3u %3u in observation file ", Position, D[0], D[1], D[2], D[3], D[4]);
+				sprintf(S, "Earlier Date at line: %lu+, %5u %3u %3u %3u %3u in observation file ", Position, D[0], D[1], D[2], D[3], D[4]);
 
 				CRHMException Except(S + DataFileName, TExcept::ERR);
 				//Message(S.c_str(), "Error in Observation File", mbOK);
