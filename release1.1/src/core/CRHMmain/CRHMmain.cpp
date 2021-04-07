@@ -678,8 +678,8 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 							
 					}
 					else {
-						if (string(param) != "Use_Observations_As_Supplied") {
-							CRHMException Except("Unknown Module Parameter: " + string(module) + " -> " + string(param) +
+						if (param != "Use_Observations_As_Supplied") {
+							CRHMException Except("Unknown Module Parameter: " + module + " -> " + param +
 								" in " + OpenNamePrj, TExcept::ERR);
 							//Application->MessageBox(Except.Message.c_str(), "Unknown Parameter in project file", MB_OK);
 							LogError(Except);
