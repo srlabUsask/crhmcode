@@ -556,13 +556,13 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 						++Cols; // # of HRU's in Basin
 					}
 
-					if (string(module, strlen(module.c_str())) == "Shared") {
+					if ( module ==  "Shared") {
 						// write Shared parameters to module parameters
 						// all parameter values are set to basin values.  If re-defined in a module will be changed.
 						MapPar::iterator itPar;
 						for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); ++itPar) {
 							thisPar = (*itPar).second;
-							if (thisPar->param == string(param, strlen(param.c_str()))) {
+							if (thisPar->param == param) {
 								if (thisPar->dim == Cols / thisPar->lay) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
 									break;
 								//                else if(Cols > 0 && Cols%thisPar->lay == 0) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
@@ -572,10 +572,15 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 								else if (thisPar->param == "obs_elev" || thisPar->param == "soil_withdrawal")
 									break;
 								else { // Added to handle 2D parameters
-									if (thisPar->param == string(param, strlen(param.c_str())) && (thisPar->dim == Cols / thisPar->dim))
+									if ((thisPar->param == param) && (thisPar->dim == Cols / thisPar->dim))
+									{
 										break;
+									}
 									else
+									{
 										thisPar = NULL;
+									}
+										
 								}
 							}
 							else
@@ -662,16 +667,19 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 							} // for jj (Rows)
 						} // else
 
-						if (string(module) == "Shared") {// Shared parameters first - initially over-write all others
+						if (module == "Shared") {// Shared parameters first - initially over-write all others
 							SetSharedParams(newPar); // copy template parameter to basin module
 							delete newPar;
 						}
 						else
+						{
 							ClassParSet(newPar);  // can delete newPar!
+						}
+							
 					}
 					else {
-						if (string(param) != "Use_Observations_As_Supplied") {
-							CRHMException Except("Unknown Module Parameter: " + string(module) + " -> " + string(param) +
+						if (param != "Use_Observations_As_Supplied") {
+							CRHMException Except("Unknown Module Parameter: " + module + " -> " + param +
 								" in " + OpenNamePrj, TExcept::ERR);
 							//Application->MessageBox(Except.Message.c_str(), "Unknown Parameter in project file", MB_OK);
 							LogError(Except);
