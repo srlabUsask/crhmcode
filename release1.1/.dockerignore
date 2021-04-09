@@ -1,0 +1,16 @@
+.dockerignore
+Dockerfile
+boost_1_73_0/
+boost_1_74_0/
+doxygen_docks/
+obj/
+prj/
+test/
+*.md
+crhm
+*.log
+CRHM_output_1.obs
+*.exe
+*.vsconfig
+Doxyfile
+Makefile_old
