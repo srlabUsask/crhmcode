@@ -11,7 +11,7 @@ CFLAGS = -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses \
 -Wno-c++11-extra-semi -Wno-dangling-else -Wno-null-conversion \
 -Wno-pragma-once-outside-header -Wno-string-plus-int -Wno-string-plus-char
 
-CFLAGS = -I. -I$(BOOST) -I$(SDIR)/core -I$(SDIR)/macro \
+CFLAGS = -I. -L/usr/lib/x86_64-linux-gnu -lboost_system -I$(SDIR)/core -I$(SDIR)/macro \
 -I$(SDIR)/modules/waterquality -I$(SDIR)/modules/newmodules \
 -I$(SDIR)/modules/coremodules -I$(SDIR)/gcc -std=c++11 -static -static-libgcc -static-libstdc++
 
