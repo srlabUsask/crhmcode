@@ -18,7 +18,7 @@ double *Hd{ NULL };
 const double *basin_area{ NULL };   // [BASIN]
 const double *hru_area{ NULL }; // [nhru]
 const double *hru_GSL{ NULL };    // [nhru]
-const double *use_rho{ NULL };    // [nhru]
+const long* use_rho{NULL};    // [nhru], 12Apr2021: change from float to long
 const double *snow_density{ NULL };    // [nhru]
 const double *Hd_min{ NULL };    // [nhru]
 const long *order{ NULL }; // [nhru]
