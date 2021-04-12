@@ -1,10 +1,10 @@
-// 03/15/21 add conditional statement to restrict divided by zero error
-// in Volumetric module 02/01/21
+// 04/12/21 change float to long for use_rho parameter in NewModules.h
+// in SWEslope module 03/15/21
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "03/15/21"
+#define CurrentVersion "04/12/21"
 
 #include <stdexcept>
 #include "CRHMmain.h"
