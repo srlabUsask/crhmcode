@@ -1862,31 +1862,40 @@ psi(double zeta,		// z/lo
     int	code)		// which psi function? (see above)
 {
     double	x;		// height function variable
-    double	result = 0.0;
+    double	result{NULL};
 
-    if (zeta > 0) {		// stable
+    if (zeta > 0) // stable
+    {		
         if (zeta > 1)
+        {
             zeta = 1;
+        }
         result = -BETA_S * zeta;
     }
-    else if (zeta < 0) {	// unstable
+    else if (zeta < 0) // unstable
+    {	
         x = sqrt(sqrt(1.0 - BETA_U * zeta));
 
-        switch (code) {
-        case SM:
-            result = 2.0 * log((1.0 + x) / 2.0) + log((1.0 + x * x) / 2.0) -
-                2.0 * atan(x) + M_PI_2;
-            break;
+        switch (code) 
+        {
+            case SM:
+                result = 2.0 * log((1.0 + x) / 2.0) + log((1.0 + x * x) / 2.0) -
+                    2.0 * atan(x) + M_PI_2;
+                break;
 
-        case SH:
-        case SV:
-            result = 2.0 * log((1.0 + x * x) / 2.0);
-            break;
+            case SH:
+            case SV:
+                result = 2.0 * log((1.0 + x * x) / 2.0);
+                break;
 
-        default: // shouldn't reach
-            CRHMException TExcept("psi-function code not of these: SM, SH, SV", TExcept::TERMINATE);
-            LogError(TExcept);
+            default: // shouldn't reach
+                CRHMException TExcept("psi-function code not of these: SM, SH, SV", TExcept::TERMINATE);
+                LogError(TExcept);
         }
+    }
+    else //Zeta == 1, neutral 
+    {
+        result = 0.0;
     }
 
     return (result);
