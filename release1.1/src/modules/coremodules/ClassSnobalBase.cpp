@@ -1862,7 +1862,7 @@ psi(double zeta,		// z/lo
     int	code)		// which psi function? (see above)
 {
     double	x;		// height function variable
-    double	result{NULL};
+    double	result{};
 
     if (zeta > 0) // stable
     {		
