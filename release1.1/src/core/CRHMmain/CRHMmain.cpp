@@ -226,7 +226,7 @@ void CRHMmain::makeQuery(string statementtype, string statement, string fields, 
 	queryfile << "fields = " << fields << endl;
 	queryfile.close();
 
-	system("java -jar -min d:/javadatabaseaccess/DatabaseAccess.jar");
+	//system("java -jar -min d:/javadatabaseaccess/DatabaseAccess.jar");
 
 	ifstream resultfile;
 	string line = "";
@@ -3498,7 +3498,15 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 	int obsindex = 0;
 	int j = 0;
 
-	fgets(line, sizeof line, obfile); //reading the first line. discarding because first line is not an obsname
+	char* readErrorIndicator;
+
+	readErrorIndicator = fgets(line, sizeof line, obfile); //reading the first line. discarding because first line is not an obsname
+
+	if (readErrorIndicator == NULL) 
+	{
+		CRHMException e = CRHMException("Error reading and discarding the first line of an obsfile.", TExcept::TERMINATE);
+		CRHMLogger::instance()->log_run_error(e);
+	}
 
 	while (fgets(line, sizeof line, obfile) != NULL) //read a line, end loop if end of file is reached
 	{
@@ -3573,7 +3581,15 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 	int obsindex = 0;
 	int j = 0;
 
-	fgets(line, sizeof line, obfile); //reading the first line which gets discarded as the first line in the obsfile is a description 
+	char* readErrorIndicator;
+
+	readErrorIndicator = fgets(line, sizeof line, obfile); //reading the first line which gets discarded as the first line in the obsfile is a description 
+
+	if (readErrorIndicator == NULL)
+	{
+		CRHMException e = CRHMException("Error reading and discarding the first line of an obsfile.", TExcept::TERMINATE);
+		CRHMLogger::instance()->log_run_error(e);
+	}
 
 	while (fgets(line, sizeof line, obfile) != NULL) //reading lines from the file until the end of file is reached
 	{
