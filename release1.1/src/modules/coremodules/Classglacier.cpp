@@ -220,7 +220,7 @@ void Classglacier::decl(void) {
     declstatvar("Qnsn_Acc", TDim::NHRU, "accumulator for Qnsn_Var/Qnsn", "(W/m^2)", &Qnsn_Acc); // daily value
 
 
-    variation_set = VARIATION_1;
+    variation_set = VARIATION_1 + VARIATION_5; // katabatic parameterization, added on 15 June 2020;
 
     declgetvar("*", "Qnsn_Var", "(W/m^2*int)", &Qnsn_Var); // interval value
 
@@ -257,7 +257,7 @@ void Classglacier::decl(void) {
 
     declparam("katabatic_lapse_rate", TDim::NHRU, "[0.005]", "0", "2", "lapse rate for katabatic turbulent transfer calculation", "(�C/100m)", &katabatic_lapse_rate);
 
-    declgetvar("*", "T_rain", "(�C)", &T_rain);
+    declgetvar("*", "T_rain", "("+string(DEGREE_CELSIUS)+"C)", &T_rain);
 
     declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
 
