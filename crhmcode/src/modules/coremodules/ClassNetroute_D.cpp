@@ -132,7 +132,9 @@ void ClassNetroute_D::decl(void) {
 
   declparam("Sdmax", TDim::NHRU, "[0]", "0.0", "1000.0","Maximum depression storage", "(mm)", &Sdmax);
 
-  declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0", "soil recharge maximum (<= soil_moist_max).", "(mm)", &soil_rechr_max);
+  declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0",
+      "Maximum available water holding capacity for soil recharge zone (upper portion of soil_moist where losses occur as both evaporation "//
+      "and transpiration). Must be less than or equal to soil_moist.", "(mm)", &soil_rechr_max);
 
   decldiagparam("Sd_ByPass", TDim::NHRU, "[0]", "0", "1","0 - normal, 1 - Bypass Pond/Depressional storage (i.e. Sd).", "()", &Sd_ByPass);
 
