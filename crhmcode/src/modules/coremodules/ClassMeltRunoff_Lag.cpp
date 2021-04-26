@@ -42,7 +42,7 @@ void ClassMeltRunoff_Lag::init(void) {
   nhru = getdim(TDim::NHRU);
 
   for(hh = 0; chkStruct(); ++hh) {
-    Tf[hh] = 0;
+    Tf[hh] = 0.0;
     In_Lagstorage[hh] = 0.0;
   }
 
