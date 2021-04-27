@@ -256,6 +256,8 @@ string CRHMmain::getQueryValue(int row, int column)
 
 void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
+	CRHMLogger::instance()->log_phase_message("DoPrjOpenStart");
+
 
 	//saving the project file path. added by Manishankar.
 	OpenProjectPath = OpenNamePrj;
@@ -845,6 +847,9 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	}
 
 	DataFile.close();
+
+	CRHMLogger::instance()->log_phase_message("Do Project Open End");
+	CRHMLogger::instance()->get_phase_logger()->flush();
 }
 
 

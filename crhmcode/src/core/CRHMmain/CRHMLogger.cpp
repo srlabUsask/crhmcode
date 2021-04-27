@@ -28,6 +28,20 @@ CRHMLogger::CRHMLogger()
         std::cout << "Log initialization failed for console logger: " << ex.what() << std::endl;
         exit(1);
     }
+
+    try
+    {
+        auto phase = spdlog::basic_logger_st("phase_log", "phaseProfile.log");
+        phase->set_pattern("%o\t%v");
+        this->phaseLogger = phase;
+        
+
+    }
+    catch (const spdlog::spdlog_ex& ex)
+    {
+        std::cout << "Log initialization failed for phase logger: " << ex.what() << std::endl;
+        exit(1);
+    }
 }
 
 
@@ -41,6 +55,11 @@ CRHMLogger* CRHMLogger::instance()
 std::shared_ptr<spdlog::logger> CRHMLogger::get_run_logger()
 {
     return runLogger;
+}
+
+std::shared_ptr<spdlog::logger> CRHMLogger::get_phase_logger()
+{
+    return phaseLogger;
 }
 
 void CRHMLogger::log_to_console(std::string msg)
@@ -78,4 +97,9 @@ void CRHMLogger::log_run_message(std::string msg)
 void CRHMLogger::log_run_debug_message(std::string msg)
 {
     SPDLOG_LOGGER_DEBUG(this->runLogger, msg);
+}
+
+void CRHMLogger::log_phase_message(std::string msg)
+{
+    SPDLOG_LOGGER_INFO(this->phaseLogger, msg);
 }
