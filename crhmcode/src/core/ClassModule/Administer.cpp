@@ -69,7 +69,7 @@ void Administer::AddModel(string ModelName, string ModelModules) {
 
 	DLLModelModuleList->Add(ModelModules);
 	//DLLModelList->AddObject(ModelName, (TObject*)(DLLModelModuleList->Count - 1)); // removed this line and added the following two for resolving a warning.
-	long long _object = DLLModelModuleList->Count - 1;
+	long long _object =(long long) DLLModelModuleList->Count - 1;
 	DLLModelList->AddObject(ModelName, (TObject*)_object);
 }
 
