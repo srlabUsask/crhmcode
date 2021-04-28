@@ -5,19 +5,20 @@
 
 #include "WQ_CRHM.h"
 
-
 class ClassSoilPrairie : public ClassModule {
 public:
 
 	ClassSoilPrairie(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
-	long snowinfilDiv{ 0 };
-	long meltrunoffDiv{ 0 };
-	long runoffDiv{ 0 };
-	long evapDiv{ 0 };
+	long snowinfilDiv{0};
+	long meltrunoffDiv{0};
+	long runoffDiv{0};
+	long evapDiv{0};
+
+
 
 	// allocated storage
-	double** current_area{ NULL }; // [NumSloughs] [nhru]
+	double** current_area{NULL}; // [NumSloughs] [nhru]
 	double** current_depth{ NULL }; // [NumSloughs] [nhru]
 	double** current_volume{ NULL }; // [NumSloughs] [nhru]
 	double** S_values{ NULL }; // [NumSloughs] [nhru]
@@ -28,6 +29,7 @@ public:
 	// declared observation variables
 
 	// declared variables
+	double* Sd{ NULL };
 	double* gw{ NULL };
 	double* soil_rechr{ NULL };
 	double* soil_moist{ NULL };
@@ -58,23 +60,6 @@ public:
 	double* total_evap{ NULL };
 	double* direct_rain{ NULL };
 
-	double* Pond_water_frac{ NULL }; // Sd[hh]/Sdmax[hh]
-	double* Pond_evap{ NULL };
-	double* Pond_area{ NULL };
-	double* Pond_volume{ NULL };
-	double* Pond_h{ NULL };
-	double* Pond_hmax{ NULL };
-	double* Pond_s{ NULL };
-	double* Sd{ NULL };
-	double* runoff_to_Pond{ NULL };
-
-	double* Small_Ponds_water_frac{ NULL }; // Small_Ponds_Sd[hh]/Small_Ponds_Sdmax[hh]
-	double* Small_Ponds_evap{ NULL };
-	double* Small_Ponds_area{ NULL };
-	double* Small_Ponds_Sd{ NULL };
-	double* runoff_to_Small_Ponds{ NULL };
-	double* Small_Ponds_runoff_to_Pond{ NULL };
-
 	// local variables
 	double* cum_soil_gw{ NULL };
 	double* cum_gw_flow{ NULL };
@@ -85,10 +70,32 @@ public:
 	double* gw_Init{ NULL };
 	double* SWE_Init{ NULL };
 
+	// local variables for variation 1
+	double* total_basin_area{ NULL };
+	double* final_area{ NULL };
+	double* max_slough_area{ NULL };
+	double* outflow_volume{ NULL };
+	double* delta_vol{ NULL };
+	double* final_vol{ NULL };
+	double* max_slough_volume{ NULL };
+	double* volfrac{ NULL };
+	double* areafrac{ NULL };
+	double* runofffrac{ NULL };
+	double* PCM_runoff_multiplier{ NULL };
+	double* total_slough_basin_area{ NULL };
+	double* PCM_Sdmax{ NULL };
+	double* total_slough_volume{ NULL };
+	double* PCM_outflow{ NULL };
+
+	// local variables for variation 2
+	double* SPRE{ NULL };
+
+
 	double* snowinfil_buf{ NULL };
 	double* runoff_buf{ NULL };
 	double* meltrunoff_buf{ NULL };
 	double* hru_evap_buf{ NULL };
+	double* hru_evap_PT_buf{ NULL };
 
 	// declared parameters
 	const double* Sdmax{ NULL };
@@ -108,6 +115,7 @@ public:
 	const double* Sd_ssr_K{ NULL };
 	const double* Sd_gw_K{ NULL };
 	const double* Sd_water_frac_max{ NULL };
+	const double* contrib_frac_init{ NULL };
 	const double* evap_threshold{ NULL };
 	const long* soil_withdrawal{ NULL };
 	const long** soil_withdrawal_Tables{ NULL };
@@ -118,22 +126,33 @@ public:
 	const long* inhibit_evap{ NULL };
 	const long* Sd_normal{ NULL };
 
-	const double* Pond_p{ NULL };
-	const double* Pond_C1{ NULL };
-	const double* Pond_C2{ NULL };
-	const double* Pond_C3{ NULL };
-	const double* Pond_contrib_frac{ NULL }; // Pond fraction of basin
-	const double* Pond_area_max{ NULL };
+	// parameters for variation 1
+	const double* max_water_frac{ NULL };
+	const long* numSloughs{ NULL };
+	const double* Max_V{ NULL };
+	const double* Max_A{ NULL };
+	const double* Init_V{ NULL };
+	const long* Connect{ NULL };
+	const double* p1{ NULL };
+	const double* p2{ NULL };
+	const double* maxPondArea_p1{ NULL };
+	const double* minPondBasinArea{ NULL };
+	const double* minPondArea{ NULL };
+	const double* basinarea_c1{ NULL };
+	const double* basinarea_c2{ NULL };
+	const double** Max_V_N{ NULL };
+	const double** Max_A_N{ NULL };
+	const double** Init_V_N{ NULL };
+	const double* vol_frac_pt1{ NULL };
+	const double* vol_frac_pt2{ NULL };
+	const double* contrib_frac_pt1{ NULL };
+	const double* contrib_frac_pt2{ NULL };
+	const long** Connect_N{ NULL };
 
-	const double* Small_Ponds_Sdmax{ NULL };
-	const double* Small_Ponds_Sdinit{ NULL };
-	const double* Small_Ponds_p{ NULL };
-	const double* Small_Ponds_C1{ NULL };
-	const double* Small_Ponds_C2{ NULL };
-	const double* Small_Ponds_C3{ NULL };
-	const double* Small_Ponds_contrib_frac{ NULL }; // Small Ponds fraction of basin
-	const double* Small_Ponds_area_max{ NULL };
-
+	// parameters for variation 2
+	const double* CMAX{ NULL };
+	const double* CMIN{ NULL };
+	const double* B{ NULL };
 
 
 	// variable inputs
@@ -156,14 +175,30 @@ public:
 	void run(void);
 	void finish(bool good);
 
-	ClassSoilPrairie* klone(string name) const;
+	double parametric_contrib_frac_subtract(void);
+	double parametric_contrib_frac_add(const double contrib_frac_slice, const double delta_Sd);
 
-	double area_frac(const double area_frac);
-	void Pond_calc_h_A(const double s, const double p, const double volume, double& h, double& area);
-	void calc_h_and_S(const double maxvolume, const double maxarea, const double pval, double& S, double& h);
-	double Pond_area_frac(const double vol_frac, const long hh);
-	double Small_Ponds_area_frac(const double vol_frac, const long hh);
-	double Small_Ponds_runoff_frac(const double Sd_Sdmax, const long hh);
+	double parametric_Sd_add(const double applied_depth);
+	double parametric_Sd_subtract(const double applied_depth);
+
+	double parametric_area_frac(const double vol_frac);
+	void calc_total_evap(const double actual_evap, const double precip);
+
+	// functions for variation 1
+	double PCM_area_frac(double maxarea, double volume, double S, double h);
+	void PCM_calc_h_and_S(double maxvolume, double maxarea, double& S, double& h);
+	double PCM_wetland_drainage_area(double maxarea);
+	void PCM_evap(double evap);
+	void PCM_set_Sd();
+	void PCM_rain();
+	void PCM_runoff();
+	double PCM_route_excess();
+
+	// functions for variation 2
+	void PDMROF_add_subtract(double deltaSd);
+
+
+	ClassSoilPrairie* klone(string name) const;
 };
 
 
