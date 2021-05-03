@@ -80,7 +80,19 @@ CRHMmain* CRHMmain::getInstance()
 
 CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 {
-	FormCreate(arguments);
+	if (arguments == NULL)
+	{
+		//Use default values
+		Global::TimeFormat = TIMEFORMAT::MS;
+		this->ObsOut = false;
+	}
+	else
+	{
+		Global::TimeFormat = arguments->time_format;
+		this->ObsOut = arguments->obs_out;
+	}
+
+	FormCreate();
 }
 
 
@@ -865,20 +877,7 @@ void CRHMmain::SetSharedParams(ClassPar *basinPar) {
 }
 
 
-void CRHMmain::FormCreate(struct crhm_arguments* arguments) {
-
-	if (arguments == NULL)
-	{
-		//Use default values
-		Global::TimeFormat = TIMEFORMAT::MS;
-		this->ObsOut = false;
-	}
-	else
-	{
-		Global::TimeFormat = arguments->time_format;
-		this->ObsOut = arguments->obs_out;
-	}
-	
+void CRHMmain::FormCreate() {
 
 	Global::BuildFlag = TBuild::BUILD;
 
