@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
 {
 
     struct crhm_arguments arguments;
+    // Set Default Argument Values
     arguments.time_format = TIMEFORMAT::YYYYMMDD;
     arguments.obs_out = false;
 
