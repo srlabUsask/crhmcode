@@ -71,16 +71,16 @@ CRHMmain* CRHMmain::getInstance()
 {
 	if (instance == 0)
 	{
-		instance = new CRHMmain();
+		instance = new CRHMmain(NULL);
 	}
 
 	return instance;
 }
 
 
-CRHMmain::CRHMmain()
+CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 {
-	FormCreate();
+	FormCreate(arguments);
 }
 
 
@@ -865,7 +865,20 @@ void CRHMmain::SetSharedParams(ClassPar *basinPar) {
 }
 
 
-void CRHMmain::FormCreate(void) {
+void CRHMmain::FormCreate(struct crhm_arguments* arguments) {
+
+	if (arguments == NULL)
+	{
+		//Use default values
+		Global::TimeFormat = TIMEFORMAT::MS;
+		this->ObsOut = false;
+	}
+	else
+	{
+		Global::TimeFormat = arguments->time_format;
+		this->ObsOut = arguments->obs_out;
+	}
+	
 
 	Global::BuildFlag = TBuild::BUILD;
 
@@ -956,7 +969,7 @@ void CRHMmain::FormCreate(void) {
 
 	Global::NaNcheck = false;
 	Global::LOGVARLOAD = false;
-	Global::TimeFormat = TIMEFORMAT::MS;
+	
 
 }
 
@@ -2365,14 +2378,26 @@ void  CRHMmain::AllRprt(void)
 {
 	TStringList *LogList = new TStringList;
 
-	RprtHeader(LogList, SeriesCnt);
+	if (this->ObsOut) 
+	{
+		//.obs file output header
+		RprtHeaderObs(LogList, SeriesCnt);
+	}
+	else
+	{
+		//standard output header
+		RprtHeader(LogList, SeriesCnt);
+	}
+	
+
+
 
 	string Sx, Sy;
 
 	for (int nn = 0; nn < cdSeries[0]->Count(); ++nn) {
 
-		//Sx = FloatToStrF(cdSeries[0]->XValue(nn), ffGeneral, 10, 0);
-		//Sx = StandardConverterUtility::GetDateTimeInStringForOutput(cdSeries[0]->XValue(nn));
+		Sx = FloatToStrF(cdSeries[0]->XValue(nn), TFloatFormat::ffGeneral, 10, 0);
+		Sx = StandardConverterUtility::GetDateTimeInStringForOutput(cdSeries[0]->XValue(nn));
 
 		//added this switch statement according to Peter's code.
 		switch (Global::TimeFormat) {
@@ -2396,10 +2421,10 @@ void  CRHMmain::AllRprt(void)
 				ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
 				int prec = 7;
 				//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
-				/*
-				if (thisVar->varType == CRHM::Int || thisVar->varType == CRHM::ReadI)
+				
+				if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
 					prec = 7;
-				*/
+				
 				Sy = FloatToStrF(cdSeries[vv]->YValue(nn), TFloatFormat::ffGeneral, prec, 10);
 				Sx = Sx + "\t" + Sy;
 			}
@@ -2423,6 +2448,22 @@ void  CRHMmain::LastRprt(void)
 	int nn = cdSeries[0]->Count();
 
 	Sx = FloatToStrF(cdSeries[0]->XValue(nn - 1), TFloatFormat::ffGeneral, 10, 0);
+	Sx = StandardConverterUtility::GetDateTimeInStringForOutput(cdSeries[0]->XValue(nn-1));
+
+	//added this switch statement according to Peter's code.
+	switch (Global::TimeFormat) {
+	case TIMEFORMAT::MS:
+		Sx = FloatToStrF(cdSeries[0]->XValue(nn-1), TFloatFormat::ffGeneral, 10, 0);
+		break;
+	case TIMEFORMAT::MMDDYYYY:
+		Sx = StandardConverterUtility::FormatDateTime("mm/dd/yyyy hh:mm ", cdSeries[0]->XValue(nn-1));
+		break;
+	case TIMEFORMAT::YYYYMMDD:
+		Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn-1));
+		break;
+	default:
+		break;
+	}
 
 	for (int vv = 0; vv < SeriesCnt; ++vv) {
 		ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
@@ -2822,6 +2863,69 @@ void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
 			OpenNameReport += "_";
 			OpenNameReport += inttoStr(ID);
 		}
+		OpenNameReport += ".txt";
+	}
+	else if (ID < 0) {
+		ID = -ID;
+		OpenNameReport = OpenNamePrj.substr(0, OpenNamePrj.length() - 4) + "_" + Common::longtoStr(ID) + ".txt";
+	}
+
+	//LogList->Add("Future File Description");
+	/**
+	for (int vv = 0; vv < LocalCnt; ++vv) {
+		ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
+		Sx = cdSeries[vv]->Title;
+		Sx += string(" 1 ");
+		Sx += thisVar->units;
+		LogList->Add(Sx);
+	}
+	**/
+	Sx = "time";
+	for (int vv = 0; vv < LocalCnt; ++vv) {
+		string S = cdSeries[vv]->Title;
+		Sx += "\t" + S;
+	}
+	LogList->Add(Sx);
+
+	Sx = "units";
+	for (int vv = 0; vv < LocalCnt; ++vv) {
+		ClassVar* thisVar = (ClassVar*)cdSeries[vv]->Tag;
+		string S = thisVar->units;
+		Sx += "\t" + S;
+	}
+	LogList->Add(Sx);
+}
+
+void CRHMmain::RprtHeaderObs(TStringList* LogList, int LocalCnt)
+{
+
+	string Sx, Sy;
+
+	ClassPar* thisPar;
+	thisPar = ParFind("basin RUN_ID");
+
+	long ID = 0;
+
+	if (!thisPar) {
+		MapPar::iterator itPar;
+
+		for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
+			thisPar = (*itPar).second;
+			if (thisPar->param == "RUN_ID") {
+				ID = thisPar->ivalues[0];
+				break;
+			}
+		}
+	}
+	else
+		ID = thisPar->ivalues[0];
+
+	OpenNameReport = ProjectDirectory + "/CRHM_output"; //manishankar updated this line to make it suitable for both windows and linux.s
+	if (ID >= 0) {
+		if (ID > 0) {
+			OpenNameReport += "_";
+			OpenNameReport += inttoStr(ID);
+		}
 		OpenNameReport += ".obs";
 	}
 	else if (ID < 0) {
@@ -2830,22 +2934,23 @@ void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
 	}
 
 	LogList->Add("Future File Description");
-
+	
 	for (int vv = 0; vv < LocalCnt; ++vv) {
 		ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
 		Sx = cdSeries[vv]->Title;
 		Sx += string(" 1 ");
-		//gcc is showing segmentation fault here. thisVar remains null.
-		//Sx += thisVar->units;
+		Sx += thisVar->units;
 		LogList->Add(Sx);
 	}
-
-	Sx = "##### time";
+	
+	Sx = "time";
 	for (int vv = 0; vv < LocalCnt; ++vv) {
 		string S = cdSeries[vv]->Title;
 		Sx += "\t" + S;
 	}
 	LogList->Add(Sx);
+
+	Global::TimeFormat = TIMEFORMAT::MS;
 }
 
 string CRHMmain::DttoStr(double D) {

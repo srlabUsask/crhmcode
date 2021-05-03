@@ -197,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="..\core\Common\CRHMException.h" />
     <ClInclude Include="..\core\Common\VandP.h" />
+    <ClInclude Include="..\gcc\CRHMArguments.h" />
     <ClInclude Include="CACFunction.h" />
     <ClInclude Include="CActivityDonut.h" />
     <ClInclude Include="CActivityGauge.h" />

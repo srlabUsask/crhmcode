@@ -163,7 +163,7 @@ std::string StandardConverterUtility::FormatDateTime(std::string fmt, double dat
 	}
 	else if (fmt == "yyyy-mm-dd hh:mm ")
 	{
-		return to_string(y) + "-" + m1 + "-" + d1 + " " + h1 + ":" + min1;
+		return to_string(y) + "-" + m1 + "-" + d1 + "T" + h1 + ":" + min1;
 	}
 
 	return "";
