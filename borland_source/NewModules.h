@@ -1,4 +1,4 @@
-// 07/02/20 with changes to 04/14/20
+// 04/12/21 with changes to 07/02/20
 //---------------------------------------------------------------------------
 
 #ifndef OurModulesH
@@ -5837,7 +5837,7 @@ float *Hd;
 const float *basin_area;   // [BASIN]
 const float *hru_area; // [nhru]
 const float *hru_GSL;    // [nhru]
-const float *use_rho;    // [nhru]
+const long *use_rho;    // [nhru], 12Apr2021: change from float to long
 const float *snow_density;    // [nhru]
 const float *Hd_min;    // [nhru]
 const long *order; // [nhru]
