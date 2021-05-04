@@ -764,6 +764,7 @@
     <ClCompile Include="..\core\MacroUnit\MacroUnit.cpp" />
     <ClCompile Include="..\core\StandardConverterUtility.cpp" />
     <ClCompile Include="..\core\TStringList\TStringList.cpp" />
+    <ClCompile Include="..\gcc\main.cpp" />
     <ClCompile Include="..\modules\coremodules\Class3D_param.cpp" />
     <ClCompile Include="..\modules\coremodules\Classalbedo.cpp" />
     <ClCompile Include="..\modules\coremodules\ClassalbedoBaker.cpp" />

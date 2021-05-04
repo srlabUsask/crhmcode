@@ -1,6 +1,6 @@
 //#include "stdafx.h"
 #include <stdio.h>
-#include <argp.h>
+
 #include "../core/CRHMmain/CRHMmain.h"
 
 const char * argp_program_version =
@@ -12,60 +12,72 @@ static char doc[] = "CRHM";
 
 static char args_doc[] = "PROJECT_FILE [STRING...]";
 
-static struct argp_option options[] =
+std::string unrecongnized_option(char * option)
 {
-    {"time_format", 't', "TIME_FORMAT", 0, "Specify the desired time fromat in the output file."},
-    {"obs_out", 1000, 0, 0, "Produces output as an .obs file."},
-    {0}
-};
-
-static error_t
-parse_opt (int key, char *arg, struct argp_state *state)
-{
-    struct crhm_arguments *arguments = static_cast<struct crhm_arguments*>(state->input);
-    char microsoftDates[] = "MS";
-
-    switch (key)
-    {
-        case 't':
-            if(!strcmp(arg, microsoftDates))
-            {
-                arguments->time_format = TIMEFORMAT::MS;
-            }
-            else
-            {
-                std::cout << std::string(arg) + " - Not a recognized time format." << '\n';
-                return ARGP_ERR_UNKNOWN;
-            }
-
-            break;
-
-        case 1000: //obs_out is selected
-            arguments->obs_out = true;
-            break;
-
-        case ARGP_KEY_ARG:
-            if (state->arg_num >= 1)
-            {
-                argp_usage(state);
-            }
-            arguments->args[state->arg_num] = arg;
-            break;
-
-        case ARGP_KEY_END:
-            if (state->arg_num < 1)
-            {
-                argp_usage(state);
-            }
-            break;
-
-        default:
-            return ARGP_ERR_UNKNOWN;
-    }
-    return 0;
+    std::string message = 
+        "\nUnrecognized option \""
+        + std::string(option) 
+        + "\" given. Use option --help for usage information.\n";
+    return message;
 }
 
-static struct argp argp = {options, parse_opt, args_doc, doc};
+
+void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
+{
+
+
+    switch (argv[*i][1])
+    {
+    case 't':
+        *i = *i + 1;
+        if (!strcmp(argv[*i], "MS"))
+        {
+            arguments->time_format = TIMEFORMAT::MS;
+        }
+        else if (!strcmp(argv[*i], "YYYYMMDD"))
+        {
+            arguments->time_format = TIMEFORMAT::YYYYMMDD;
+        }
+        else if (!strcmp(argv[*i], "MMDDYYYY"))
+        {
+            arguments->time_format = TIMEFORMAT::MMDDYYYY;
+        }
+        else
+        {
+            std::cout << "\nUnable to read time format argument. "+ std::string(argv[*i]) +"\n";
+            std::cout << "-t must be followed directey by a valid time format.\n";
+            std::cout << "Valid formats are: \n\t\tMS \n\t\tYYYYMMDD \n\t\tMMDDYYYY\n";
+            exit(1);
+        }
+        break;
+    case 'h':
+        std::cout << USE_MESSAGE;
+        exit(1);
+    case '-':
+        switch (argv[*i][2])
+        {
+        case 'h':
+            if (!strcmp(argv[*i], "--help"))
+            {
+                std::cout << USE_MESSAGE;
+                exit(1);
+            }
+        default:
+            std::cout << unrecongnized_option(argv[*i]);
+            exit(1);
+        }
+        break;
+    default:
+        std::cout << unrecongnized_option(argv[*i]);
+        exit(1);
+    }
+
+}
+
+void read_argument(char* argument, struct crhm_arguments* arguments)
+{
+    arguments->project_name = std::string(argument);
+}
 
 
 int main(int argc, char *argv[])
@@ -73,14 +85,28 @@ int main(int argc, char *argv[])
 
     struct crhm_arguments arguments;
     // Set Default Argument Values
+    arguments.project_name = "";
     arguments.time_format = TIMEFORMAT::YYYYMMDD;
     arguments.obs_out = false;
 
-    argp_parse(&argp, argc, argv, 0, 0, &arguments);
+    /*
+    * Read the incoming argv[] vector
+    */
+    for (int i = 1; i < argc; i++) 
+    {
+        if (argv[i][0] == '-') 
+        {
+            read_option(argv, &arguments,  &i);
+        }
+        else
+        {
+            read_argument(argv[i], &arguments);
+        }
+    }
 
     CRHMmain * m = new CRHMmain(&arguments);
 
-    std::string projectArgument = arguments.args[0];
+    std::string projectArgument = arguments.project_name;
 
     m->OpenNamePrj = projectArgument;
     m->DoPrjOpen(projectArgument, "");
