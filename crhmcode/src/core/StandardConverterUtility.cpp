@@ -157,11 +157,7 @@ std::string StandardConverterUtility::FormatDateTime(std::string fmt, double dat
 	if (h < 10) { h1 = "0" + h1; }
 	if (min < 10) { min1 = "0" + min1; }
 
-	if (fmt == "mm/dd/yyyy hh:mm ")
-	{
-		return m1 + "/" + d1 + "/" + to_string(y) + " " + h1 + ":" + min1+" ";
-	}
-	else if (fmt == "yyyy-mm-dd hh:mm ")
+	if (fmt == "yyyy-mm-dd hh:mm ")
 	{
 		return to_string(y) + " " + m1 + " " + d1 + " " + h1 + " " + min1;
 	}

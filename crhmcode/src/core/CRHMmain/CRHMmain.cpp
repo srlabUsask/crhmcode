@@ -2407,9 +2407,6 @@ void  CRHMmain::AllRprt(void)
 		case TIMEFORMAT::MS:
 			Sx = FloatToStrF(cdSeries[0]->XValue(nn), TFloatFormat::ffGeneral, 10, 0);
 			break;
-		case TIMEFORMAT::MMDDYYYY:
-			Sx = StandardConverterUtility::FormatDateTime("mm/dd/yyyy hh:mm ", cdSeries[0]->XValue(nn));
-			break;
 		case TIMEFORMAT::YYYYMMDD:
 			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn));
 			break;
@@ -2460,9 +2457,6 @@ void  CRHMmain::LastRprt(void)
 	switch (Global::TimeFormat) {
 	case TIMEFORMAT::MS:
 		Sx = FloatToStrF(cdSeries[0]->XValue(nn-1), TFloatFormat::ffGeneral, 10, 0);
-		break;
-	case TIMEFORMAT::MMDDYYYY:
-		Sx = StandardConverterUtility::FormatDateTime("mm/dd/yyyy hh:mm ", cdSeries[0]->XValue(nn-1));
 		break;
 	case TIMEFORMAT::YYYYMMDD:
 		Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn-1));

@@ -42,10 +42,6 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
         {
             arguments->time_format = TIMEFORMAT::YYYYMMDD;
         }
-        else if (!strcmp(argv[*i], "MMDDYYYY"))
-        {
-            arguments->time_format = TIMEFORMAT::MMDDYYYY;
-        }
         else if (!strcmp(argv[*i], "ISO"))
         {
             arguments->time_format = TIMEFORMAT::ISO;
@@ -54,7 +50,7 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
         {
             std::cout << "\nUnable to read time format argument. "+ std::string(argv[*i]) +"\n";
             std::cout << "-t must be followed directly by a valid time format.\n";
-            std::cout << "Valid formats are: \n\tMS \n\tISO \n\tYYYYMMDD \n\tMMDDYYYY\n";
+            std::cout << "Valid formats are: \n\tMS \n\tISO \n\tYYYYMMDD\n";
             exit(1);
         }
         break;
