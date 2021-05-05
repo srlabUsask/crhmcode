@@ -26,6 +26,7 @@ struct crhm_arguments
 {
 	std::string project_name;
 	TIMEFORMAT time_format;
+	bool time_format_set{false};
 	OUTPUT_FORMAT output_format;
 };
 

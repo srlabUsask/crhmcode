@@ -32,6 +32,7 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
         std::cout << USE_MESSAGE;
         exit(1);
     case 't':
+        arguments->time_format_set = true;
         *i = *i + 1;
         if (!strcmp(argv[*i], "MS"))
         {
@@ -124,6 +125,27 @@ int main(int argc, char *argv[])
             read_argument(argv[i], &arguments);
         }
     }
+
+    if (arguments.output_format == OUTPUT_FORMAT::OBS)
+    {
+        if (arguments.time_format_set)
+        {
+            //Check that time format was set to MS or YYYYMMDD
+            if (!(arguments.time_format == TIMEFORMAT::MS || arguments.time_format == TIMEFORMAT::YYYYMMDD))
+            {
+                std::cout << "\nCannot use specified time format while requesting output format of OBS.\n"
+                    "Only MS and YYYYMMDD formats are compatible with OBS output file.\n";
+                exit(1);
+            }
+
+        }
+        else
+        {
+            //Default to MS time format.
+            arguments.time_format = TIMEFORMAT::MS;
+        }
+    }
+
 
     CRHMmain * m = new CRHMmain(&arguments);
 
