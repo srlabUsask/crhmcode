@@ -84,12 +84,18 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 	{
 		//Use default values
 		Global::TimeFormat = TIMEFORMAT::MS;
-		this->ObsOut = false;
+		this->OutputFormat = OUTPUT_FORMAT::STD;
 	}
 	else
 	{
 		Global::TimeFormat = arguments->time_format;
-		this->ObsOut = arguments->obs_out;
+		this->OutputFormat = arguments->output_format;
+
+		//Obs output format must have MS time format.
+		if (this->OutputFormat == OUTPUT_FORMAT::OBS)
+		{
+			Global::TimeFormat = TIMEFORMAT::MS;
+		}
 	}
 
 	FormCreate();
@@ -2377,20 +2383,24 @@ void  CRHMmain::AllRprt(void)
 {
 	TStringList *LogList = new TStringList;
 
-	if (this->ObsOut) 
-	{
-		//.obs file output header
-		RprtHeaderObs(LogList, SeriesCnt);
-	}
-	else
+	if (this->OutputFormat == OUTPUT_FORMAT::STD) 
 	{
 		//standard output header
 		RprtHeader(LogList, SeriesCnt);
 	}
+	else if (this->OutputFormat == OUTPUT_FORMAT::OBS)
+	{
+		//.obs file output header
+		RprtHeaderObs(LogList, SeriesCnt);
+	}
+	else 
+	{
+		CRHMException e = CRHMException("No output format was specified defaulting to STD.", TExcept::WARNING);
+		CRHMLogger::instance()->log_run_error(e);
+		//standard output header
+		RprtHeader(LogList, SeriesCnt);
+	}
 	
-
-
-
 	string Sx, Sy;
 
 	for (int nn = 0; nn < cdSeries[0]->Count(); ++nn) {
@@ -2942,14 +2952,12 @@ void CRHMmain::RprtHeaderObs(TStringList* LogList, int LocalCnt)
 		LogList->Add(Sx);
 	}
 	
-	Sx = "time";
+	Sx = "###### time";
 	for (int vv = 0; vv < LocalCnt; ++vv) {
 		string S = cdSeries[vv]->Title;
 		Sx += "\t" + S;
 	}
 	LogList->Add(Sx);
-
-	Global::TimeFormat = TIMEFORMAT::MS;
 }
 
 string CRHMmain::DttoStr(double D) {

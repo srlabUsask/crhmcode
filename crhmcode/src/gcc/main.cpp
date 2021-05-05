@@ -28,6 +28,9 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
 
     switch (argv[*i][1])
     {
+    case 'h':
+        std::cout << USE_MESSAGE;
+        exit(1);
     case 't':
         *i = *i + 1;
         if (!strcmp(argv[*i], "MS"))
@@ -45,14 +48,29 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
         else
         {
             std::cout << "\nUnable to read time format argument. "+ std::string(argv[*i]) +"\n";
-            std::cout << "-t must be followed directey by a valid time format.\n";
-            std::cout << "Valid formats are: \n\t\tMS \n\t\tYYYYMMDD \n\t\tMMDDYYYY\n";
+            std::cout << "-t must be followed directly by a valid time format.\n";
+            std::cout << "Valid formats are: \n\tMS \n\tYYYYMMDD \n\tMMDDYYYY\n";
             exit(1);
         }
         break;
-    case 'h':
-        std::cout << USE_MESSAGE;
-        exit(1);
+    case 'f':
+        *i = *i + 1;
+        if (!strcmp(argv[*i], "STD"))
+        {
+            arguments->output_format = OUTPUT_FORMAT::STD;
+        }
+        else if (!strcmp(argv[*i], "OBS"))
+        {
+            arguments->output_format = OUTPUT_FORMAT::OBS;
+        }
+        else
+        {
+            std::cout << "\nUnable to read output format argument. " + std::string(argv[*i]) + "\n";
+            std::cout << "-f must be followed directly by a valid output format.\n";
+            std::cout << "Valid formats are: \n\tSTD - standard output.\n\tOBS - obsfile output.\n";
+            exit(1);
+        }
+        break;
     case '-':
         switch (argv[*i][2])
         {
@@ -87,7 +105,7 @@ int main(int argc, char *argv[])
     // Set Default Argument Values
     arguments.project_name = "";
     arguments.time_format = TIMEFORMAT::YYYYMMDD;
-    arguments.obs_out = false;
+    arguments.output_format = OUTPUT_FORMAT::STD;
 
     /*
     * Read the incoming argv[] vector

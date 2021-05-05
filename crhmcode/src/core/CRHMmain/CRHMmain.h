@@ -107,7 +107,7 @@ public:
 	bool ShiftDown; // Linked to ListBox1 and ListBox2
 	bool HruNames;
 
-	bool ObsOut;
+	OUTPUT_FORMAT OutputFormat;
 
 	typedef  void LoadModuleType(string DllName);
 
