@@ -197,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="..\core\Common\CRHMException.h" />
     <ClInclude Include="..\core\Common\VandP.h" />
+    <ClInclude Include="..\gcc\CRHMArguments.h" />
     <ClInclude Include="CACFunction.h" />
     <ClInclude Include="CActivityDonut.h" />
     <ClInclude Include="CActivityGauge.h" />
@@ -763,6 +764,7 @@
     <ClCompile Include="..\core\MacroUnit\MacroUnit.cpp" />
     <ClCompile Include="..\core\StandardConverterUtility.cpp" />
     <ClCompile Include="..\core\TStringList\TStringList.cpp" />
+    <ClCompile Include="..\gcc\main.cpp" />
     <ClCompile Include="..\modules\coremodules\Class3D_param.cpp" />
     <ClCompile Include="..\modules\coremodules\Classalbedo.cpp" />
     <ClCompile Include="..\modules\coremodules\ClassalbedoBaker.cpp" />

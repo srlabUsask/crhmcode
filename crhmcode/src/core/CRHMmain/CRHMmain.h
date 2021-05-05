@@ -28,6 +28,7 @@
 #include "TSeries.h"
 #include "Classinfo.h"
 #include "CRHMLogger.h"
+#include "../../gcc/CRHMArguments.h"
 
 //class ObsFileInfo {
 //private:
@@ -51,7 +52,7 @@ public:
 	CRHMLogger* Logger;
 
 	static CRHMmain *  getInstance();
-	CRHMmain();
+	CRHMmain(struct crhm_arguments * );
 
 	//virtual void DoPrjOpen(string OpenNamePrj, string ProjectDirectory);
 	string Sstrings[12] = { "", "_WtoMJ", "_MJtoW", "_Avg", "_Min", "_Max", "_Sum", "_Pos", "_Tot", "_Tot/Freq", "_First", "_Last" };
@@ -105,6 +106,8 @@ public:
 	bool ProjectOpen;
 	bool ShiftDown; // Linked to ListBox1 and ListBox2
 	bool HruNames;
+
+	OUTPUT_FORMAT OutputFormat;
 
 	typedef  void LoadModuleType(string DllName);
 
@@ -184,6 +187,7 @@ public:
 	void  ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit);
 	void DoObsStatus(bool &First);
 	void RprtHeader(TStringList *LogList, int LocalCnt);
+	void RprtHeaderObs(TStringList *LogList, int LocalCnt);
 	void ResetLoopList(void);
 	void ReadStateFile(bool & GoodRun);
 	string DttoStr(double D);
