@@ -83,19 +83,13 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 	if (arguments == NULL)
 	{
 		//Use default values
-		Global::TimeFormat = TIMEFORMAT::MS;
+		Global::TimeFormat = TIMEFORMAT::ISO;
 		this->OutputFormat = OUTPUT_FORMAT::STD;
 	}
 	else
 	{
 		Global::TimeFormat = arguments->time_format;
 		this->OutputFormat = arguments->output_format;
-
-		//Obs output format must have MS time format.
-		if (this->OutputFormat == OUTPUT_FORMAT::OBS)
-		{
-			Global::TimeFormat = TIMEFORMAT::MS;
-		}
 	}
 
 	FormCreate();
@@ -2419,6 +2413,9 @@ void  CRHMmain::AllRprt(void)
 		case TIMEFORMAT::YYYYMMDD:
 			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn));
 			break;
+		case TIMEFORMAT::ISO:
+			Sx = StandardConverterUtility::FormatDateTime("ISO", cdSeries[0]->XValue(nn));
+			break;
 		default:
 			break;
 		}
@@ -2469,6 +2466,9 @@ void  CRHMmain::LastRprt(void)
 		break;
 	case TIMEFORMAT::YYYYMMDD:
 		Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn-1));
+		break;
+	case TIMEFORMAT::ISO:
+		Sx = StandardConverterUtility::FormatDateTime("ISO", cdSeries[0]->XValue(nn));
 		break;
 	default:
 		break;

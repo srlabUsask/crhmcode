@@ -71,7 +71,7 @@ enum class TExtra { BLANK, DD, TT, DT };
 enum class TAKA { AKAERROR = -1, VARG, OBSR, VARD, OBSD, PARD, OBSF, AKAEND };
 enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll, mbNoToAll, mbYesToAll, mbHelp };
 enum class TBuild { BUILD, DECL, INIT, RUN };
-enum class TIMEFORMAT { MS, MMDDYYYY, YYYYMMDD };
+enum class TIMEFORMAT { MS, MMDDYYYY, YYYYMMDD, ISO};
 enum class LMODULE { BASIC, MACRO, ADVANCE, SUPPORT, CUSTOM, PROTO, OBSOL };
 enum class TFun { FOBS, VP_SAT, W_MJ, MJ_W, AVG, MIN, MAX, TOT, POS, FIRST, LAST, CNT, CNT0, DLTA, INTVL, DAY, DTOT };
 enum class TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all variables/parameters
