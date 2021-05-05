@@ -85,11 +85,14 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 		//Use default values
 		Global::TimeFormat = TIMEFORMAT::ISO;
 		this->OutputFormat = OUTPUT_FORMAT::STD;
+		this->OutputName = "";
+
 	}
 	else
 	{
 		Global::TimeFormat = arguments->time_format;
 		this->OutputFormat = arguments->output_format;
+		this->OutputName = arguments->output_name;
 	}
 
 	FormCreate();
@@ -2833,7 +2836,61 @@ TStringList* CRHMmain::getVariables()
 	return AllVariables;
 }
 
+void CRHMmain::calculateOutputFileName()
+{
+	if (this->OutputName == "")
+	{
+		ClassPar* thisPar;
+		thisPar = ParFind("basin RUN_ID");
 
+		long ID = 0;
+
+		std::string ext;
+
+		if (this->OutputFormat == OUTPUT_FORMAT::STD)
+		{
+			ext = ".obs";
+		}
+		else
+		{
+			ext = ".txt";
+		}
+
+
+		if (!thisPar) {
+			MapPar::iterator itPar;
+
+			for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
+				thisPar = (*itPar).second;
+				if (thisPar->param == "RUN_ID") {
+					ID = thisPar->ivalues[0];
+					break;
+				}
+			}
+		}
+		else
+			ID = thisPar->ivalues[0];
+
+		OpenNameReport = ProjectDirectory + "/CRHM_output"; //manishankar updated this line to make it suitable for both windows and linux.s
+		if (ID >= 0) {
+			if (ID > 0) {
+				OpenNameReport += "_";
+				OpenNameReport += inttoStr(ID);
+			}
+			OpenNameReport += ext;
+		}
+		else if (ID < 0) {
+			ID = -ID;
+			OpenNameReport = OpenNamePrj.substr(0, OpenNamePrj.length() - 4) + "_" + Common::longtoStr(ID) + ext;
+		}
+	}
+	else
+	{
+		OpenNameReport = ProjectDirectory + "/";
+		OpenNameReport += this->OutputName;
+	}
+	
+}
 
 
 void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
@@ -2841,48 +2898,8 @@ void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
 
 	string Sx, Sy;
 
-	ClassPar *thisPar;
-	thisPar = ParFind("basin RUN_ID");
+	calculateOutputFileName();
 
-	long ID = 0;
-
-	if (!thisPar) {
-		MapPar::iterator itPar;
-
-		for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
-			thisPar = (*itPar).second;
-			if (thisPar->param == "RUN_ID") {
-				ID = thisPar->ivalues[0];
-				break;
-			}
-		}
-	}
-	else
-		ID = thisPar->ivalues[0];
-
-	OpenNameReport = ProjectDirectory + "/CRHM_output"; //manishankar updated this line to make it suitable for both windows and linux.s
-	if (ID >= 0) {
-		if (ID > 0) {
-			OpenNameReport += "_";
-			OpenNameReport += inttoStr(ID);
-		}
-		OpenNameReport += ".txt";
-	}
-	else if (ID < 0) {
-		ID = -ID;
-		OpenNameReport = OpenNamePrj.substr(0, OpenNamePrj.length() - 4) + "_" + Common::longtoStr(ID) + ".txt";
-	}
-
-	//LogList->Add("Future File Description");
-	/**
-	for (int vv = 0; vv < LocalCnt; ++vv) {
-		ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
-		Sx = cdSeries[vv]->Title;
-		Sx += string(" 1 ");
-		Sx += thisVar->units;
-		LogList->Add(Sx);
-	}
-	**/
 	Sx = "time";
 	for (int vv = 0; vv < LocalCnt; ++vv) {
 		string S = cdSeries[vv]->Title;
@@ -2904,37 +2921,7 @@ void CRHMmain::RprtHeaderObs(TStringList* LogList, int LocalCnt)
 
 	string Sx, Sy;
 
-	ClassPar* thisPar;
-	thisPar = ParFind("basin RUN_ID");
-
-	long ID = 0;
-
-	if (!thisPar) {
-		MapPar::iterator itPar;
-
-		for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
-			thisPar = (*itPar).second;
-			if (thisPar->param == "RUN_ID") {
-				ID = thisPar->ivalues[0];
-				break;
-			}
-		}
-	}
-	else
-		ID = thisPar->ivalues[0];
-
-	OpenNameReport = ProjectDirectory + "/CRHM_output"; //manishankar updated this line to make it suitable for both windows and linux.s
-	if (ID >= 0) {
-		if (ID > 0) {
-			OpenNameReport += "_";
-			OpenNameReport += inttoStr(ID);
-		}
-		OpenNameReport += ".obs";
-	}
-	else if (ID < 0) {
-		ID = -ID;
-		OpenNameReport = OpenNamePrj.substr(0, OpenNamePrj.length() - 4) + "_" + Common::longtoStr(ID) + ".obs";
-	}
+	calculateOutputFileName();
 
 	LogList->Add("Future File Description");
 	

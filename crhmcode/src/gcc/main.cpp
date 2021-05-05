@@ -1,6 +1,6 @@
 //#include "stdafx.h"
 #include <stdio.h>
-
+#include "CRHMArguments.h"
 #include "../core/CRHMmain/CRHMmain.h"
 
 const char * argp_program_version =
@@ -72,6 +72,10 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
             exit(1);
         }
         break;
+    case 'o':
+        *i = *i + 1;
+        arguments->output_name = argv[*i];
+        break;
     case '-':
         switch (argv[*i][2])
         {
@@ -104,8 +108,10 @@ int main(int argc, char *argv[])
     struct crhm_arguments arguments;
     // Set Default Argument Values
     arguments.project_name = "";
+    arguments.output_name = "";
     arguments.time_format = TIMEFORMAT::ISO;
     arguments.output_format = OUTPUT_FORMAT::STD;
+    
 
     /*
     * Read the incoming argv[] vector

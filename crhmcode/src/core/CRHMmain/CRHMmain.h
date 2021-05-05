@@ -108,6 +108,7 @@ public:
 	bool HruNames;
 
 	OUTPUT_FORMAT OutputFormat;
+	std::string OutputName;
 
 	typedef  void LoadModuleType(string DllName);
 
@@ -186,6 +187,7 @@ public:
 	void  LastRprt(void);
 	void  ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit);
 	void DoObsStatus(bool &First);
+	void calculateOutputFileName();
 	void RprtHeader(TStringList *LogList, int LocalCnt);
 	void RprtHeaderObs(TStringList *LogList, int LocalCnt);
 	void ResetLoopList(void);

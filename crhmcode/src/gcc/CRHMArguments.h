@@ -24,9 +24,10 @@ const string USE_MESSAGE = "\ncrhm [options] PROJECT_FILE\n"
 struct crhm_arguments
 {
 	std::string project_name;
-	TIMEFORMAT time_format;
+	std::string output_name;
+	TIMEFORMAT time_format{TIMEFORMAT::ISO};
 	bool time_format_set{false};
-	OUTPUT_FORMAT output_format;
+	OUTPUT_FORMAT output_format{OUTPUT_FORMAT::STD};
 };
 
 #endif // !CRHM_ARGUMENTS
