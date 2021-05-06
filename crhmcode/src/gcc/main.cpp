@@ -1,7 +1,8 @@
 //#include "stdafx.h"
 #include <stdio.h>
-#include "CRHMArguments.h"
+#include "../core/Common/Common.h"
 #include "../core/CRHMmain/CRHMmain.h"
+#include "CRHMArguments.h"
 
 const char * argp_program_version =
     "CRHMcode gcc Version 1.2";
@@ -24,7 +25,7 @@ std::string unrecongnized_option(char * option)
 
 void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
 {
-
+    ofstream test_file;
 
     switch (argv[*i][1])
     {
@@ -75,6 +76,20 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
     case 'o':
         *i = *i + 1;
         arguments->output_name = argv[*i];
+        
+        test_file.open(arguments->output_name.c_str());
+
+        if (test_file.is_open()) 
+        {
+            test_file.close();
+        }
+        else
+        {
+            std::cout << "\nArgument \""
+                + arguments->output_name 
+                +"\" to -o could not be opened as a file to write to.\n";
+            exit(1);
+        }
         break;
     case '-':
         switch (argv[*i][2])
@@ -105,7 +120,9 @@ void read_argument(char* argument, struct crhm_arguments* arguments)
 
 int main(int argc, char *argv[])
 {
+    //Declare the structure for arguments.
     struct crhm_arguments arguments;
+
     // Set Default Argument Values
     arguments.project_name = "";
     arguments.output_name = "";
@@ -128,6 +145,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    //Perform logic check to make sure arguments are internaly consistant.
     if (arguments.output_format == OUTPUT_FORMAT::OBS)
     {
         if (arguments.time_format_set)
@@ -148,12 +166,12 @@ int main(int argc, char *argv[])
         }
     }
 
-
-    CRHMmain * m = new CRHMmain(&arguments);
+    //Run the program with the given arguments.
+    CRHMmain* m = new CRHMmain(&arguments);
 
     std::string projectArgument = arguments.project_name;
-
     m->OpenNamePrj = projectArgument;
     m->DoPrjOpen(projectArgument, "");
-    m->RunClick ();
+    m->RunClick();
+
 }

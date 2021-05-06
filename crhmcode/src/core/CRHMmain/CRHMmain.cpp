@@ -2849,13 +2849,12 @@ void CRHMmain::calculateOutputFileName()
 
 		if (this->OutputFormat == OUTPUT_FORMAT::STD)
 		{
-			ext = ".obs";
+			ext = ".txt";
 		}
 		else
 		{
-			ext = ".txt";
+			ext = ".obs";
 		}
-
 
 		if (!thisPar) {
 			MapPar::iterator itPar;
@@ -2886,8 +2885,7 @@ void CRHMmain::calculateOutputFileName()
 	}
 	else
 	{
-		OpenNameReport = ProjectDirectory + "/";
-		OpenNameReport += this->OutputName;
+		OpenNameReport = this->OutputName;
 	}
 	
 }
