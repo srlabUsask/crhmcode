@@ -93,7 +93,7 @@ OBJ = $(patsubst %,$(ODIR)/%,$(ALL_OBS))
 crhm: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(DFLAGS) $(LIBS)
 
-$(ODIR)/main.o: $(SDIR)/gcc/main.cpp | $(ODIR)
+$(ODIR)/main.o: $(SDIR)/gcc/main.cpp $(SDIR)/gcc/CRHMArguments.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
 $(ODIR)/%.o: $(SDIR)/core/%.cpp $(SDIR)/core/%.h | $(ODIR)

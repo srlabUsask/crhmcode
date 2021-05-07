@@ -19,14 +19,18 @@ const string USE_MESSAGE = "\ncrhm [options] PROJECT_FILE\n"
 	"\t\tValid formats are:\n"
 	"\t\tSTD - Standard output format. Sutable for a spreadsheet.\n"
 	"\t\tOBS - Observation file .obs format. Sutable for reading with CRHM GUI.\n"
-	"\n";
+	"\n"
+	"\t-o PATH - Specify a location to place the output file generated.\n"
+	"\n"
+	;
 
 struct crhm_arguments
 {
 	std::string project_name;
-	TIMEFORMAT time_format;
+	std::string output_name;
+	TIMEFORMAT time_format{TIMEFORMAT::ISO};
 	bool time_format_set{false};
-	OUTPUT_FORMAT output_format;
+	OUTPUT_FORMAT output_format{OUTPUT_FORMAT::STD};
 };
 
 #endif // !CRHM_ARGUMENTS
