@@ -86,13 +86,15 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 		Global::TimeFormat = TIMEFORMAT::ISO;
 		this->OutputFormat = OUTPUT_FORMAT::STD;
 		this->OutputName = "";
-
+		this->Delimiter = '\t';
 	}
 	else
 	{
+		//Recive the arguments from the passed struct.
 		Global::TimeFormat = arguments->time_format;
 		this->OutputFormat = arguments->output_format;
 		this->OutputName = arguments->output_name;
+		this->Delimiter = arguments->delimiter;
 	}
 
 	FormCreate();
@@ -2432,7 +2434,7 @@ void  CRHMmain::AllRprt(void)
 					prec = 7;
 				
 				Sy = FloatToStrF(cdSeries[vv]->YValue(nn), TFloatFormat::ffGeneral, prec, 10);
-				Sx = Sx + "\t" + Sy;
+				Sx = Sx + this->Delimiter + Sy;
 			}
 		}
 
@@ -2479,7 +2481,7 @@ void  CRHMmain::LastRprt(void)
 
 		Sy = FloatToStrF(cdSeries[vv]->YValue(nn - 1), TFloatFormat::ffGeneral, prec, 0);
 
-		Sx = Sx + "\t" + Sy;
+		Sx = Sx + this->Delimiter + Sy;
 	}
 
 	LogList->Add(Sx);
@@ -2901,7 +2903,7 @@ void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
 	Sx = "time";
 	for (int vv = 0; vv < LocalCnt; ++vv) {
 		string S = cdSeries[vv]->Title;
-		Sx += "\t" + S;
+		Sx += this->Delimiter + S;
 	}
 	LogList->Add(Sx);
 
@@ -2909,7 +2911,7 @@ void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
 	for (int vv = 0; vv < LocalCnt; ++vv) {
 		ClassVar* thisVar = (ClassVar*)cdSeries[vv]->Tag;
 		string S = thisVar->units;
-		Sx += "\t" + S;
+		Sx += this->Delimiter + S;
 	}
 	LogList->Add(Sx);
 }
@@ -2934,7 +2936,7 @@ void CRHMmain::RprtHeaderObs(TStringList* LogList, int LocalCnt)
 	Sx = "###### time";
 	for (int vv = 0; vv < LocalCnt; ++vv) {
 		string S = cdSeries[vv]->Title;
-		Sx += "\t" + S;
+		Sx += this->Delimiter + S;
 	}
 	LogList->Add(Sx);
 }

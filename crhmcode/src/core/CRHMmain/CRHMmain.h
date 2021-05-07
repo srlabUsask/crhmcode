@@ -109,6 +109,7 @@ public:
 
 	OUTPUT_FORMAT OutputFormat;
 	std::string OutputName;
+	char Delimiter;
 
 	typedef  void LoadModuleType(string DllName);
 

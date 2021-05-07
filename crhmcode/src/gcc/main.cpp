@@ -91,6 +91,19 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
             exit(1);
         }
         break;
+    case 'd':
+        *i = *i + 1;
+        if (strlen(argv[*i]) == 1)
+        {
+            arguments->delimiter = argv[*i][0];
+        }
+        else
+        {
+            std::cout << "\nInvalid argument \"" + std::string(argv[*i]) + "\" to -d."
+                "\nDelimiter must be a single character.\n";
+            exit(1);
+        }
+        break;
     case '-':
         switch (argv[*i][2])
         {
@@ -128,6 +141,7 @@ int main(int argc, char *argv[])
     arguments.output_name = "";
     arguments.time_format = TIMEFORMAT::ISO;
     arguments.output_format = OUTPUT_FORMAT::STD;
+    arguments.delimiter = '\t';
     
 
     /*

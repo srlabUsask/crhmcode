@@ -22,6 +22,8 @@ const string USE_MESSAGE = "\ncrhm [options] PROJECT_FILE\n"
 	"\n"
 	"\t-o PATH - Specify a location to place the output file generated.\n"
 	"\n"
+	"\t-d DELIMITER - Specify a single character delimiter to use when generating file output. \n\t\tTab character is the default.\n"
+	"\n"
 	;
 
 struct crhm_arguments
@@ -31,6 +33,7 @@ struct crhm_arguments
 	TIMEFORMAT time_format{TIMEFORMAT::ISO};
 	bool time_format_set{false};
 	OUTPUT_FORMAT output_format{OUTPUT_FORMAT::STD};
+	char delimiter{'\t'};
 };
 
 #endif // !CRHM_ARGUMENTS
