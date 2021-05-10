@@ -828,10 +828,15 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 			}
 			else if (S == "Final_State") {
 				getline(DataFile, S);
-				if (S[0] != '#') {
+				if (S[1] != '#') {
+					SS = S.c_str();
+					SaveStateFileName = SS;
+					SaveStateFlag = true;
 					DataFile >> S;
 				}
-			}
+				else
+					SaveStateFileName = "";
+				}
 			else if (S == "Log_Last") {
 				ReportAll = false;
 			}
@@ -2128,11 +2133,22 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 		((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(true);
 
 	if (GoodRun) {
-		//    LogDebugT("\"end of run\".");
+		
+		/*Either print the whole report or just the last time step.*/
 		if (ReportAll)
+		{
 			AllRprt();
+		}
 		else
+		{
 			LastRprt();
+		}
+
+		if (SaveStateFlag)
+		{
+			SaveState();
+		}
+			
 	}
 
 	//double timediff2 = double(clock() - begintime2) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
@@ -3189,8 +3205,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->Add("Final_State");
 		ProjectList->Add("######");
 		if (SaveStateFlag) {
-			//need to modify
-			//ProjectList->Add(SaveDialogState->FileName);
+			ProjectList->Add(SaveStateFileName);
 		}
 		ProjectList->Add("######");
 	}
@@ -3801,4 +3816,74 @@ string CRHMmain::BuildHru(string S, long Hru, TDim dimen) {
 string CRHMmain::BuildLay(string S, long Lay) {
 
 	return S.substr(1, S.length() - 1) + "," + to_string(Lay) + ")";
+}
+
+void CRHMmain::SaveState()
+{
+	TStringList* StateList;
+	MapVar::iterator itVar;
+	ClassVar* thisVar;
+	StateList = new TStringList;
+	std::string S;
+
+	StateList->Add("Description of State File - to be added");
+	StateList->Add("######");
+
+	StateList->Add("Time:");
+	S = FormatString(Global::DTnow, "YMD");
+	StateList->Add(S);
+	StateList->Add("######");
+
+	StateList->Add("Dimension:");
+	StateList->Add(std::to_string(Global::nhru) + " " + std::to_string(Global::nlay));
+	StateList->Add("######");
+
+	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
+		thisVar = (*itVar).second;
+		if (thisVar->varType < TVar::Read && thisVar->StatVar) {
+			S = std::string(thisVar->module.c_str()) + " " +
+				std::string(thisVar->name.c_str());
+			StateList->Add(S);
+			S = "";
+			if (thisVar->lay == 0)
+				for (int ii = 0; ii < thisVar->dim; ii++) {
+					if (thisVar->values != NULL)
+						S = S + FloatToStrF(thisVar->values[ii], TFloatFormat::ffGeneral, 4, 0) + " ";
+					else if (thisVar->ivalues != NULL)
+						S = S + FloatToStrF(thisVar->ivalues[ii], TFloatFormat::ffGeneral, 4, 0) + " ";
+					else
+						S = S + "-0 ";
+
+					if (ii % 10 == 9) {
+						StateList->Add(S);
+						S = "";
+					}
+				}
+			else
+				for (int ll = 0; ll < thisVar->lay; ll++) {
+					for (int ii = 0; ii < thisVar->dim; ii++) {
+						if (thisVar->layvalues != NULL)
+							S = S + FloatToStrF(thisVar->layvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
+						else if (thisVar->ivalues != NULL)
+							S = S + FloatToStrF(thisVar->ilayvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
+						else
+							S = S + "-0 ";
+
+						if (ii % 10 == 9) {
+							StateList->Add(S);
+							S = "";
+						}
+					}
+					if (!S.empty()) StateList->Add(S);
+					S = "";
+				}
+			if (!S.empty()) StateList->Add(S);
+			StateList->Add("######");
+		}
+	}
+	StateList->SaveToFile(SaveStateFileName);
+	delete StateList;
+
+	SaveStateFileName = "";
+	SaveStateFlag = false;
 }

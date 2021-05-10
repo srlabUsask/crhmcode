@@ -64,6 +64,8 @@ public:
 	string OpenNameReport;
 	string OpenProjectPath;
 
+	string SaveStateFileName;
+
 	//	string ProjectDirectory;
 	string ApplicationDir;
 
@@ -226,6 +228,8 @@ public:
 
 	TObject * GetObjectOfVariable(string vname); //added this function from CRHMmainDlg.cpp file.
 	TObject * GetObjectOfObservation(string vname); //added this function from CRHMmainDlg.cpp file.
+
+	void SaveState();
 
 };
 
