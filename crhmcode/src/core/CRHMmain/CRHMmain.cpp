@@ -2301,7 +2301,7 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 	ClassVar *thisVar;
 
 	//  ifstream DataFile;
-	char module[24], name[24], Descrip[80], Line[80];
+	std::string module, name, Descrip, Line;
 	string S;
 	ifstream DataFile(OpenNameState.c_str());
 	if (!DataFile) {
@@ -2309,20 +2309,20 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 		return;
 	}
 
-	DataFile.getline(Descrip, 80);
-	DataFile.ignore(80, '#');
-	DataFile.getline(Line, 80);
+	getline(DataFile, Descrip);
+	DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+	getline(DataFile, Line);
 
-	DataFile.getline(Line, 80); // read "TIME:"
+	getline(DataFile, Line); // read "TIME:"
 	int D[3]{};
 	DataFile >> D[0] >> D[1] >> D[2];
 	double DT = StandardConverterUtility::EncodeDateTime(D[0], D[1], D[2], 0, 0); // ????
 
-	DataFile.getline(Descrip, 80);
-	DataFile.ignore(80, '#');
-	DataFile.getline(Line, 80);
+	getline(DataFile, Descrip);
+	DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+	getline(DataFile, Line);
 
-	DataFile.getline(Line, 80); // read "Dimension:"
+	getline(DataFile, Line); // read "Dimension:"
 	long filehru, filelay;
 	DataFile >> filehru >> filelay;
 	if (filehru != Global::nhru || filelay != Global::nlay) {
@@ -2331,8 +2331,8 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 		return;
 	}
 
-	DataFile.ignore(80, '#');
-	DataFile.getline(Line, 80);
+	DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+	getline(DataFile, Line);
 
 	while (!DataFile.eof()) {
 		DataFile >> module >> name;
@@ -2360,13 +2360,13 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 						else  if (thisVar->ivalues != NULL)
 							DataFile >> thisVar->ilayvalues[ll][ii];
 			}
-			DataFile.ignore(80, '#');
-			DataFile.getline(Line, 80);
+			DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+			getline(DataFile, Line);
 		}
 		else {
 			Common::Message((string("State File variable ") + S.c_str()).c_str(), "Unknown variable");
-			DataFile.ignore(80, '#');
-			DataFile.getline(Line, 80);
+			DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+			getline(DataFile, Line);
 		}
 	}
 }

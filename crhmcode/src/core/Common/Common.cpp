@@ -1,4 +1,5 @@
 #include "Common.h"
+#include "../CRHMmain/CRHMLogger.h"
 //#include <math.h>
 #include <cmath>
 #include <algorithm>
@@ -129,13 +130,13 @@ double Common::Ice_Bulb(double Tc, double RH, double Pa) {
 
 
 void Common::Message(const char *s1, const char *s2) {
-
-	cout << s1 << ", " << s2 << endl;
+	CRHMLogger::instance()->log_to_console( s1 + std::string(", ") + s2);
+	CRHMLogger::instance()->log_run_message(s1 + std::string(", ") + s2);
 }
 
 void Common::Message(const string s1, const string s2) {
-
-	cout << s1 << ", " << s2 << endl;
+	CRHMLogger::instance()->log_to_console(s1 + std::string(", ") + s2);
+	CRHMLogger::instance()->log_run_message(s1 + std::string(", ") + s2);
 }
 
 string Common::lowercase(string &s) {  //Manishankar: in CRHMmain.cpp, utils.cpp, CRHMmainDlg.cpp
