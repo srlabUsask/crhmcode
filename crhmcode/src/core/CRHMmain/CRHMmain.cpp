@@ -410,7 +410,8 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 						//				      }   // was return
 					}
 					else {
-						Common::Message(SS.c_str(), "Cannot find observation file");
+						Common::Message(SS.c_str(), "Cannot find observation file. Exiting.");
+						exit(1);
 					}
 					getline(DataFile, S);
 				}
