@@ -113,6 +113,10 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
                 std::cout << USE_MESSAGE;
                 exit(1);
             }
+        case 'o':
+            *i = *i + 1;
+            arguments->obs_file_directory = argv[*i];
+            break;
         default:
             std::cout << unrecongnized_option(argv[*i]);
             exit(1);
@@ -139,6 +143,7 @@ int main(int argc, char *argv[])
     // Set Default Argument Values
     arguments.project_name = "";
     arguments.output_name = "";
+    arguments.obs_file_directory = "";
     arguments.time_format = TIMEFORMAT::ISO;
     arguments.output_format = OUTPUT_FORMAT::STD;
     arguments.delimiter = '\t';

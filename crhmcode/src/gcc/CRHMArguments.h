@@ -24,12 +24,17 @@ const string USE_MESSAGE = "\ncrhm [options] PROJECT_FILE\n"
 	"\n"
 	"\t-d DELIMITER - Specify a single character delimiter to use when generating file output. \n\t\tTab character is the default.\n"
 	"\n"
+	"\t--obs_file_directory DIRECTORY_PATH - Specify a directory where the obs files" 
+	"\n\t\t for this project are found. This directory will be prepended to the obsfile"
+	"\n\t\t names specified in the project file."
+	"\n"
 	;
 
 struct crhm_arguments
 {
 	std::string project_name;
 	std::string output_name;
+	std::string obs_file_directory;
 	TIMEFORMAT time_format{TIMEFORMAT::ISO};
 	bool time_format_set{false};
 	OUTPUT_FORMAT output_format{OUTPUT_FORMAT::STD};

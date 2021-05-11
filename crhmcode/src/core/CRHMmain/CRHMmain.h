@@ -111,6 +111,7 @@ public:
 
 	OUTPUT_FORMAT OutputFormat;
 	std::string OutputName;
+	std::string ObsFileDirectory;
 	char Delimiter;
 
 	typedef  void LoadModuleType(string DllName);

@@ -87,6 +87,7 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 		this->OutputFormat = OUTPUT_FORMAT::STD;
 		this->OutputName = "";
 		this->Delimiter = '\t';
+		this->ObsFileDirectory = "";
 	}
 	else
 	{
@@ -95,6 +96,7 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 		this->OutputFormat = arguments->output_format;
 		this->OutputName = arguments->output_name;
 		this->Delimiter = arguments->delimiter;
+		this->ObsFileDirectory = arguments->obs_file_directory;
 	}
 
 	FormCreate();
@@ -397,7 +399,15 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 			else if (S == "Observations:") {
 				getline(DataFile, S);
 				while (S[0] != '#') {
-					SS = S;
+
+					if (this->ObsFileDirectory == "")
+					{
+						SS = S;
+					}
+					else
+					{
+						SS = this->ObsFileDirectory + "/" + S;
+					}
 					int l = SS.length();
 					if (SS[l-1] == '\r') { SS[l-1]='\0'; }
 					if (FindFileName(SS)) {
