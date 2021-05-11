@@ -828,10 +828,15 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 			}
 			else if (S == "Final_State") {
 				getline(DataFile, S);
-				if (S[0] != '#') {
+				if (S[1] != '#') {
+					SS = S.c_str();
+					SaveStateFileName = SS;
+					SaveStateFlag = true;
 					DataFile >> S;
 				}
-			}
+				else
+					SaveStateFileName = "";
+				}
 			else if (S == "Log_Last") {
 				ReportAll = false;
 			}
@@ -2128,11 +2133,22 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 		((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(true);
 
 	if (GoodRun) {
-		//    LogDebugT("\"end of run\".");
+		
+		/*Either print the whole report or just the last time step.*/
 		if (ReportAll)
+		{
 			AllRprt();
+		}
 		else
+		{
 			LastRprt();
+		}
+
+		if (SaveStateFlag)
+		{
+			SaveState();
+		}
+			
 	}
 
 	//double timediff2 = double(clock() - begintime2) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
@@ -2285,7 +2301,7 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 	ClassVar *thisVar;
 
 	//  ifstream DataFile;
-	char module[24], name[24], Descrip[80], Line[80];
+	std::string module, name, Descrip, Line;
 	string S;
 	ifstream DataFile(OpenNameState.c_str());
 	if (!DataFile) {
@@ -2293,20 +2309,20 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 		return;
 	}
 
-	DataFile.getline(Descrip, 80);
-	DataFile.ignore(80, '#');
-	DataFile.getline(Line, 80);
+	getline(DataFile, Descrip);
+	DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+	getline(DataFile, Line);
 
-	DataFile.getline(Line, 80); // read "TIME:"
+	getline(DataFile, Line); // read "TIME:"
 	int D[3]{};
 	DataFile >> D[0] >> D[1] >> D[2];
 	double DT = StandardConverterUtility::EncodeDateTime(D[0], D[1], D[2], 0, 0); // ????
 
-	DataFile.getline(Descrip, 80);
-	DataFile.ignore(80, '#');
-	DataFile.getline(Line, 80);
+	getline(DataFile, Descrip);
+	DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+	getline(DataFile, Line);
 
-	DataFile.getline(Line, 80); // read "Dimension:"
+	getline(DataFile, Line); // read "Dimension:"
 	long filehru, filelay;
 	DataFile >> filehru >> filelay;
 	if (filehru != Global::nhru || filelay != Global::nlay) {
@@ -2315,8 +2331,8 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 		return;
 	}
 
-	DataFile.ignore(80, '#');
-	DataFile.getline(Line, 80);
+	DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+	getline(DataFile, Line);
 
 	while (!DataFile.eof()) {
 		DataFile >> module >> name;
@@ -2344,13 +2360,13 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 						else  if (thisVar->ivalues != NULL)
 							DataFile >> thisVar->ilayvalues[ll][ii];
 			}
-			DataFile.ignore(80, '#');
-			DataFile.getline(Line, 80);
+			DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+			getline(DataFile, Line);
 		}
 		else {
 			Common::Message((string("State File variable ") + S.c_str()).c_str(), "Unknown variable");
-			DataFile.ignore(80, '#');
-			DataFile.getline(Line, 80);
+			DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
+			getline(DataFile, Line);
 		}
 	}
 }
@@ -3189,8 +3205,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->Add("Final_State");
 		ProjectList->Add("######");
 		if (SaveStateFlag) {
-			//need to modify
-			//ProjectList->Add(SaveDialogState->FileName);
+			ProjectList->Add(SaveStateFileName);
 		}
 		ProjectList->Add("######");
 	}
@@ -3801,4 +3816,74 @@ string CRHMmain::BuildHru(string S, long Hru, TDim dimen) {
 string CRHMmain::BuildLay(string S, long Lay) {
 
 	return S.substr(1, S.length() - 1) + "," + to_string(Lay) + ")";
+}
+
+void CRHMmain::SaveState()
+{
+	TStringList* StateList;
+	MapVar::iterator itVar;
+	ClassVar* thisVar;
+	StateList = new TStringList;
+	std::string S;
+
+	StateList->Add("Description of State File - to be added");
+	StateList->Add("######");
+
+	StateList->Add("Time:");
+	S = FormatString(Global::DTnow, "YMD");
+	StateList->Add(S);
+	StateList->Add("######");
+
+	StateList->Add("Dimension:");
+	StateList->Add(std::to_string(Global::nhru) + " " + std::to_string(Global::nlay));
+	StateList->Add("######");
+
+	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
+		thisVar = (*itVar).second;
+		if (thisVar->varType < TVar::Read && thisVar->StatVar) {
+			S = std::string(thisVar->module.c_str()) + " " +
+				std::string(thisVar->name.c_str());
+			StateList->Add(S);
+			S = "";
+			if (thisVar->lay == 0)
+				for (int ii = 0; ii < thisVar->dim; ii++) {
+					if (thisVar->values != NULL)
+						S = S + FloatToStrF(thisVar->values[ii], TFloatFormat::ffGeneral, 4, 0) + " ";
+					else if (thisVar->ivalues != NULL)
+						S = S + FloatToStrF(thisVar->ivalues[ii], TFloatFormat::ffGeneral, 4, 0) + " ";
+					else
+						S = S + "-0 ";
+
+					if (ii % 10 == 9) {
+						StateList->Add(S);
+						S = "";
+					}
+				}
+			else
+				for (int ll = 0; ll < thisVar->lay; ll++) {
+					for (int ii = 0; ii < thisVar->dim; ii++) {
+						if (thisVar->layvalues != NULL)
+							S = S + FloatToStrF(thisVar->layvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
+						else if (thisVar->ivalues != NULL)
+							S = S + FloatToStrF(thisVar->ilayvalues[ll][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
+						else
+							S = S + "-0 ";
+
+						if (ii % 10 == 9) {
+							StateList->Add(S);
+							S = "";
+						}
+					}
+					if (!S.empty()) StateList->Add(S);
+					S = "";
+				}
+			if (!S.empty()) StateList->Add(S);
+			StateList->Add("######");
+		}
+	}
+	StateList->SaveToFile(SaveStateFileName);
+	delete StateList;
+
+	SaveStateFileName = "";
+	SaveStateFlag = false;
 }
