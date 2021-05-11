@@ -814,6 +814,8 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 				getline(DataFile, S);
 				if (S[0] != '#') {
 					SS = S;
+					int l = SS.length();
+					if (SS[l - 1] == '\r') { SS[l - 1] = '\0'; }
 					if (FindFileName(SS)) {
 						OpenNameState = SS;
 						OpenStateFlag = true;
@@ -829,7 +831,9 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 			else if (S == "Final_State") {
 				getline(DataFile, S);
 				if (S[1] != '#') {
-					SS = S.c_str();
+					SS = S;
+					int l = SS.length();
+					if (SS[l - 1] == '\r') { SS[l - 1] = '\0'; }
 					SaveStateFileName = SS;
 					SaveStateFlag = true;
 					DataFile >> S;
