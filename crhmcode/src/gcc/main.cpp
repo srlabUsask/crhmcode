@@ -26,6 +26,9 @@ std::string unrecongnized_option(char * option)
 void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
 {
     ofstream test_file;
+    struct stat buff;
+
+    int test;
 
     switch (argv[*i][1])
     {
@@ -116,6 +119,12 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
         case 'o':
             *i = *i + 1;
             arguments->obs_file_directory = argv[*i];
+            //Check if directory exists and exit if it can't be found. 
+            if (stat(arguments->obs_file_directory.c_str(), &buff) != 0)
+            {
+                std::cout << "\nArgument to --obs_file_directory \"" +arguments->obs_file_directory+ "\" can't be resolved to a directory.\n";
+                exit(1);
+            }
             break;
         default:
             std::cout << unrecongnized_option(argv[*i]);

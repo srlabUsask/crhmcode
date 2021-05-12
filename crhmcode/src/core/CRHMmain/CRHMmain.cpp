@@ -406,7 +406,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					}
 					else
 					{
-						SS = this->ObsFileDirectory + "/" + S;
+						SS = this->ObsFileDirectory + S;
 					}
 					int l = SS.length();
 					if (SS[l-1] == '\r') { SS[l-1]='\0'; }
