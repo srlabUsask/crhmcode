@@ -28,8 +28,6 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
     ofstream test_file;
     struct stat buff;
 
-    int test;
-
     switch (argv[*i][1])
     {
     case 'h':
