@@ -870,21 +870,21 @@ Argument declarations
     }
 
     for(long ii = 0; ii < maxsoillayers ; ++ii){ // [maxsoillayers][maxsoillayers]
-      NO3_Npool_lay[ii][hh] = 0.0f;
-      NH4_Npool_lay[ii][hh] = 0.0f;
-      SRPpool_lay[ii][hh] = 0.0f;
-      DONpool_lay[ii][hh] = 0.0f;
-      DOPpool_lay[ii][hh] = 0.0f;
-      partP_lay[ii][hh] = 0.0f;
-      degradhN[ii] = 0.0f;
-      transfminN[ii] = 0.0f;
-      dissolfN[ii] = 0.0f;
-      dissolhN[ii] = 0.0f;
-      degradhP[ii] = 0.0f;
-      transfP[ii] = 0.0f;
-      dissolfP[ii] = 0.0f;
-      dissolhP[ii] = 0.0f;
-      smfcn[ii] = 0.0f;
+      NO3_Npool_lay[ii][hh] = 0.0;
+      NH4_Npool_lay[ii][hh] = 0.0;
+      SRPpool_lay[ii][hh] = 0.0;
+      DONpool_lay[ii][hh] = 0.0;
+      DOPpool_lay[ii][hh] = 0.0;
+      partP_lay[ii][hh] = 0.0;
+      degradhN[ii] = 0.0;
+      transfminN[ii] = 0.0;
+      dissolfN[ii] = 0.0;
+      dissolhN[ii] = 0.0;
+      degradhP[ii] = 0.0;
+      transfP[ii] = 0.0;
+      dissolfP[ii] = 0.0;
+      dissolhP[ii] = 0.0;
+      smfcn[ii] = 0.0;
     }
 
 // Current pools of N and P dissolved in soil water
