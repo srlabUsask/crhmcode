@@ -676,7 +676,7 @@ void ClassWQ_Soil::run(void) {
                         leaching_mWQ = parleach[hh] * (potential[hh] - excs) * surfsoil_solub_mWQ_lay[Sub][hh];
                         leaching_mWQ = std::fmax(0.0f, std::fmin(leaching_mWQ, surfsoil_solub_mWQ_lay[Sub][hh]));
                         surfsoil_solub_mWQ_lay[Sub][hh] -= leaching_mWQ;
-                        if (soil_rechr[hh] > 0.0) { // !!!! CAUTION !!!: this piece of code has a huge impact on the conc_soil_rechr_lay[Sub][hh] values 
+                        if (soil_rechr[hh] > 0.0) { // !!!! CAUTION !!!: this piece of code has a huge impact on the conc_soil_rechr_lay[Sub][hh] values
                             conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh] * soil_rechr[hh] + leaching_mWQ + potential_mWQ_lay[Sub][hh];
                             conc_soil_rechr_lay[Sub][hh] /= (soil_rechr[hh] + potential[hh]);
                         }
@@ -995,7 +995,7 @@ void ClassWQ_Soil::run(void) {
                         Sd2gw_k = Sd[hh];
 
                     soil_gw_conc_lay[Sub][hh] = soil_gw_conc_lay[Sub][hh] * soil_gw[hh] + Sd_conc_lay[Sub][hh] * Sd2gw_k;
-                    soil_gw[hh] += Sd2gw_k; // ?? Diogo: this was commented out but Tom suggested that it should be (but strangely flow results don't change!!!) -> but it is needed for WQ 
+                    soil_gw[hh] += Sd2gw_k; // ?? Diogo: this was commented out but Tom suggested that it should be (but strangely flow results don't change!!!) -> but it is needed for WQ
 
                     if (soil_gw[hh] > 0.0)
                         soil_gw_conc_lay[Sub][hh] /= soil_gw[hh];
@@ -1570,7 +1570,7 @@ void ClassWQ_Soil::finish(bool good) {
 
         LogMessage(string("'" + Name + " (WQ_Soil)' AllTotal              (mm*basin):        ").c_str(), AllTotal);
         LogDebug(" ");
-    } // sub 
+    } // sub
 }
 
 double ClassWQ_Soil::FunctX(const double x) {
@@ -1586,11 +1586,11 @@ double ClassWQ_Soil::FunctX(const double x) {
 }
 
 void ClassWQ_Soil::Sd_to_soil_mass(double add_mass) {
-    if (soil_rechr[hh] > 0.0f) { // Diogo: goes to rechr if existant
+    if (soil_rechr[hh] > minFlow_WQ) { // Diogo: goes to rechr if existant
         conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh] * soil_rechr[hh] + add_mass; // Diogo: just mass
         conc_soil_rechr_lay[Sub][hh] /= soil_rechr[hh];
     }
-    else if (soil_moist[hh] > 0.0f)
+    else if (soil_moist[hh] > minFlow_WQ)
     {
         conc_soil_rechr_lay[Sub][hh] = 0.0f;
         conc_soil_lower_lay[Sub][hh] = conc_soil_lower_lay[Sub][hh] * soil_lower[hh] + add_mass; // Diogo: just mass
