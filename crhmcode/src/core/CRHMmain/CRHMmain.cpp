@@ -88,6 +88,8 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 		this->OutputName = "";
 		this->Delimiter = '\t';
 		this->ObsFileDirectory = "";
+		this->ShowProgress = false;
+		this->UpdateProgress = 7;
 	}
 	else
 	{
@@ -97,6 +99,9 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 		this->OutputName = arguments->output_name;
 		this->Delimiter = arguments->delimiter;
 		this->ObsFileDirectory = arguments->obs_file_directory;
+		this->ShowProgress = arguments->show_progress;
+		this->UpdateProgress = arguments->update_progress;
+
 	}
 
 	FormCreate();
@@ -1946,10 +1951,22 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 	bool First = true;
 	try
 	{
+		if (this->ShowProgress)
+		{
+			print_progress_start();
+		}
+		
+
 		int iter = 0;
 		//for (Global::DTindx = Global::DTmin; Global::DTindx < Global::DTmax; Global::DTindx++)
 		for (Global::DTindx = startdate; Global::DTindx < enddate; Global::DTindx++)
 		{
+			if (this->ShowProgress)
+			{
+				print_progress(Global::DTindx, enddate, this->UpdateProgress);
+			}
+			
+			//CRHMLogger::instance()->log_to_console(to_string(((float)Global::DTindx / (float)enddate) * 100.0f));
 
 			iter++;
 
@@ -2111,6 +2128,11 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			}
 
 		} // end for
+
+		if (this->ShowProgress)
+		{
+			print_progress_end();
+		}
 
 		int d = iter;
 		Global::BuildFlag = TBuild::DECL;
@@ -3901,4 +3923,26 @@ void CRHMmain::SaveState()
 
 	SaveStateFileName = "";
 	SaveStateFlag = false;
+}
+
+void CRHMmain::print_progress_start() 
+{
+	std::cout << "Running simulation...\n";
+}
+
+void CRHMmain::print_progress(long current_step, long last_step, int print_frequency)
+{
+	if (current_step % (Global::Freq * print_frequency) == 0)
+	{
+		std::cout << '\r' << setprecision(3) << setfill(' ') << setw(25) << (((float)current_step / (float)last_step) * 100.0f) << "% complete.";
+		std::cout.flush();
+	}
+}
+
+void CRHMmain::print_progress_end()
+{
+	std::cout.flush();
+	std::cout << '\r' << setfill(' ') << setw(25) << 100.0f << "% Complete!";
+	std::cout.flush();
+	std::cout << "\n\n\n";
 }

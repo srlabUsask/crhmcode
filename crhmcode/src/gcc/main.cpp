@@ -27,6 +27,7 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
 {
     ofstream test_file;
     struct stat buff;
+    int prog_frequency = 1;
 
     switch (argv[*i][1])
     {
@@ -105,6 +106,32 @@ void read_option(char ** argv, struct crhm_arguments * arguments, int * i)
             exit(1);
         }
         break;
+    case 'p':
+        *i = *i + 1;
+
+        try 
+        {
+            prog_frequency = std::stoi(argv[*i]);
+        }
+        catch (exception e)
+        {
+            std::cout << "\nInvalid argument \"" + std::string(argv[*i]) + "\" to -p."
+                "\nFreqeuncy must be a positive integer.\n";
+            exit(1);
+        }
+
+        if ( prog_frequency > 0)
+        {
+            arguments->show_progress = true;
+            arguments->update_progress = std::stoi(argv[*i]);
+        }
+        else
+        {
+            std::cout << "\nInvalid argument \"" + std::string(argv[*i]) + "\" to -p."
+                "\nFreqeuncy must be a positive integer.\n";
+            exit(1);
+        }
+        break;
     case '-':
         switch (argv[*i][2])
         {
@@ -154,6 +181,8 @@ int main(int argc, char *argv[])
     arguments.time_format = TIMEFORMAT::ISO;
     arguments.output_format = OUTPUT_FORMAT::STD;
     arguments.delimiter = '\t';
+    arguments.show_progress = false;
+    arguments.update_progress = 7;
     
 
     /*

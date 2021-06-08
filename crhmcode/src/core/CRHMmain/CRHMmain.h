@@ -112,6 +112,8 @@ public:
 	OUTPUT_FORMAT OutputFormat;
 	std::string OutputName;
 	std::string ObsFileDirectory;
+	bool ShowProgress;
+	int UpdateProgress;
 	char Delimiter;
 
 	typedef  void LoadModuleType(string DllName);
@@ -231,6 +233,12 @@ public:
 	TObject * GetObjectOfObservation(string vname); //added this function from CRHMmainDlg.cpp file.
 
 	void SaveState();
+
+	void print_progress_start();
+
+	void print_progress(long current_step, long last_step, int print_frequency);
+
+	void print_progress_end();
 
 };
 
