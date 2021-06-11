@@ -69,7 +69,7 @@ public:
 	//	string ProjectDirectory;
 	string ApplicationDir;
 
-	TStringList *AllVariables; //manishankar used this meaningful variable name instead of ListBox1.
+	std::map<std::string, ClassVar*> *AllVariables; //manishankar used this meaningful variable name instead of ListBox1.
 	TStringList *AllObservations; //manishankar used this meaningful variable name instead of ListBox2.
 	TStringList *SelectedVariables; //manishankar used this meaningful variable name instead of ListBox3.
 	TStringList *SelectedObservations; //manishankar used this meaningful variable name instead of ListBox4.
@@ -181,7 +181,7 @@ public:
 
 	TStringList * getAllmodules();
 
-	TStringList* getVariables();
+	std::map<std::string, ClassVar*>* getVariables();
 
 	MMSData * RunClick2Start();
 	void RunClick2Middle(MMSData * mmsdata, long startdate, long enddate);
@@ -229,7 +229,7 @@ public:
 	void MacroClick(void);
 	void ListBoxMacroClear();
 
-	TObject * GetObjectOfVariable(string vname); //added this function from CRHMmainDlg.cpp file.
+	ClassVar * GetObjectOfVariable(string vname); //added this function from CRHMmainDlg.cpp file.
 	TObject * GetObjectOfObservation(string vname); //added this function from CRHMmainDlg.cpp file.
 
 	void SaveState();
