@@ -156,21 +156,20 @@ void CRHMmain::setSelectedObservatoions(TStringList *t)
 
 
 //manishankar added this function from CRHMmainDlg.cpp file.
-TObject * CRHMmain::GetObjectOfVariable(string vname)
+ClassVar * CRHMmain::GetObjectOfVariable(string vname)
 {
-	for (int i = 0; i < AllVariables->Count; i++)
+
+	std::map<std::string, ClassVar*>::iterator it = this->AllVariables->find(vname);
+	
+	if (it != this->AllVariables->end())
 	{
-		string str = AllVariables->Strings[i];
-
-		int ind = vname.find(str + "(");
-
-		if (ind > -1)
-		{
-			TObject * obj = AllVariables->Objects[i];
-			return obj;
-		}
+		return it->second;
 	}
-	return NULL; //added fall through case where name is not found - jhs507
+	else
+	{
+		return NULL;
+	}
+	
 }
 
 //manishankar added this function from CRHMmainDlg.cpp file.
@@ -958,7 +957,7 @@ void CRHMmain::FormCreate() {
 
 	Global::DeclRootList = new TStringList;
 
-	AllVariables = new TStringList;
+	AllVariables = new std::map<std::string, ClassVar*>;
 	AllObservations = new TStringList;
 	SelectedVariables = new TStringList;
 	SelectedObservations = new TStringList;
@@ -1023,16 +1022,16 @@ void  CRHMmain::Label4Click(void) {
 	MapVar::iterator itVar;
 	string Newname;
 
-	AllVariables->Clear();
-
-	AllVariables->Sorted = true;
+	AllVariables->clear();
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		if (thisVar->varType < TVar::Read && thisVar->visibility == TVISIBLE::USUAL && thisVar->dimen != TDim::NREB) {
 			Newname = DeclObsName(thisVar);
-			if (Common::IndexOf(AllVariables, Newname) == -1)
-				AllVariables->AddObject(Newname, (TObject*)thisVar);
+			if (this->AllVariables->count(Newname) == 0)
+			{
+				this->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
+			}
 		}
 	}
 }
@@ -1248,13 +1247,17 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		}
 	}
 
-	for (int ii = 0; ii < AllVariables->Count; ii++) {
-		thisVar = (ClassVar *)AllVariables->Objects[ii];
-		if (thisVar != NULL && thisVar->DLLName == "Macro") {
-			AllVariables->Delete(ii);
-			ii = 0;
+	map<string, ClassVar*>::iterator it;
+
+	for (it = AllVariables->begin(); it != AllVariables->end(); it++)
+	{
+		if (it->second->DLLName == "Macro")
+		{
+			AllVariables->erase(it->first);
+			it = AllVariables->begin(); //This line included to match pervious code only. 
 		}
 	}
+
 }
 
 
@@ -1387,15 +1390,19 @@ bool  CRHMmain::OpenObsFile(string FileName)
 
 		FileData->ModN = Global::Freq / FileData->Freq;
 
-		MapVar::iterator itVar;
+		
 		ClassVar * thisVar;
 
-		// always starts with this display// remove entries that are in observation AllVariables
-		for (int ii = 0; ii < AllVariables->Count; ii++) {
-			thisVar = (ClassVar *)AllVariables->Objects[ii];
-			if (thisVar && thisVar->varType >= TVar::Read) {
-				AllVariables->Delete(ii);
-				ii = 0;
+		// always starts with this display
+		// remove entries that are in observation AllVariables
+		std::map<std::string, ClassVar*>::iterator it;
+
+		for (it = AllVariables->begin(); it != AllVariables->end(); it++)
+		{
+			if (it->second->varType >= TVar::Read)
+			{
+				AllVariables->erase(it->first);
+				it = AllVariables->begin(); //This included to match pervious code only.
 			}
 		}
 
@@ -1410,6 +1417,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 
 		AllObservations->Clear();
 
+		MapVar::iterator itVar;
 		for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 			thisVar = (*itVar).second;
 			if (thisVar && thisVar->varType >= TVar::Read)
@@ -1477,12 +1485,18 @@ void  CRHMmain::ObsFileClose(void)
 				(TObject*)(*itVar).second);
 	}
 
-	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
+	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) 
+	{
 		thisVar = (*itVar).second;
 		//if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::VARIABLE) //changed by Manishankar.
 		if (thisVar->varType < TVar::Read && thisVar->visibility == TVISIBLE::USUAL)
-			if (Common::IndexOf(AllVariables, (*itVar).second->name) == -1)
-				AllVariables->AddObject((*itVar).second->name, (TObject*)(*itVar).second);
+		{
+			if (AllVariables->count((*itVar).second->name) == 0)
+			{
+				AllVariables->insert(std::pair<std::string, ClassVar*>((*itVar).second->name, (*itVar).second));
+			}
+			
+		}
 	}
 
 	delete cdSeries;
@@ -2826,15 +2840,16 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 		for (int ii = 0; ii < TraceVarPar->Strings->Count; ++ii) {
 			string Trimmed = Common::trim(TraceVarPar->Strings->Strings[ii]);
 			if (!Trimmed.empty()) {
-				int jj = AllVariables->IndexOf(Trimmed);
-				if (jj > -1) {
+
+				if (AllVariables->count(Trimmed)) 
+				{
 					for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
 						ClassVar * thisVar = VarFind(string(Global::OurModulesList->Strings[ii]) + ' ' + TraceVarPar->Strings->Strings[0]);
 						if (thisVar)
 							break;
 					} // for
 
-					thisVar = (ClassVar*)AllVariables->Objects[jj];
+					thisVar = AllVariables->find(Trimmed)->second;
 					if (thisVar) {
 						Sx += ("\t" + string(Trimmed));
 						Sy = "";
@@ -2886,9 +2901,9 @@ TStringList* CRHMmain::getAllmodules()
 }
 
 
-TStringList* CRHMmain::getVariables()
+std::map<std::string, ClassVar*> * CRHMmain::getVariables()
 {
-	return AllVariables;
+	return this->AllVariables;
 }
 
 void CRHMmain::calculateOutputFileName()
@@ -3290,7 +3305,6 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//if (HruNames)
 	//HruNameClick(Sender);
 
-	int c = AllVariables->Count;
 
 	for (int ii = 0; ii < SelectedVariables->Count; ++ii) {
 
@@ -3612,7 +3626,7 @@ void CRHMmain::ClearModules(bool All) {
 		//SaveDialogPrj->FileName = "";
 	}
 
-	AllVariables->Clear();
+	AllVariables->clear();
 	SelectedVariables->Clear();
 
 	if (cdSeries) {
