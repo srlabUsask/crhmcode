@@ -156,10 +156,22 @@ void CRHMmain::setSelectedObservatoions(TStringList *t)
 
 
 //manishankar added this function from CRHMmainDlg.cpp file.
+/*
+* Returns a reference to the ClassVar object with variable name related to the passed in string. 
+*	The hru specifier of the variable will be stripped away before looking for the variable object
+*	ie. Albedo(1) and Albedo(2) will return the same object.
+* 
+* @param vname - std::string with the name of the variable for which a reference to will be returned.
+* @return Reference to the ClassVar object specified by the string parameter
+*/
 ClassVar * CRHMmain::GetObjectOfVariable(string vname)
 {
 
-	std::map<std::string, ClassVar*>::iterator it = this->AllVariables->find(vname);
+	int pos = vname.find_first_of('(');
+
+	std::string name = vname.substr(0,pos);
+
+	std::map<std::string, ClassVar*>::iterator it = this->AllVariables->find(name);
 	
 	if (it != this->AllVariables->end())
 	{
