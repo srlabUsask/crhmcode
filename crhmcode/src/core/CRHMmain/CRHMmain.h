@@ -69,7 +69,8 @@ public:
 	//	string ProjectDirectory;
 	string ApplicationDir;
 
-	std::map<std::string, ClassVar*> *AllVariables; //manishankar used this meaningful variable name instead of ListBox1.
+	//manishankar used this meaningful variable name instead of ListBox1.
+	std::map<std::string, ClassVar*> * AllVariables; //!< Map keying variable names in module to their ClassVar objects.
 	TStringList *AllObservations; //manishankar used this meaningful variable name instead of ListBox2.
 	TStringList *SelectedVariables; //manishankar used this meaningful variable name instead of ListBox3.
 	TStringList *SelectedObservations; //manishankar used this meaningful variable name instead of ListBox4.
