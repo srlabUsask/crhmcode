@@ -167,7 +167,11 @@ void CRHMmain::setSelectedObservatoions(TStringList *t)
 ClassVar * CRHMmain::GetObjectOfVariable(string vname)
 {
 
-	std::map<std::string, ClassVar*>::iterator it = this->AllVariables->find(vname);
+	int pos = vname.find_first_of('(');
+
+	std::string name = vname.substr(0,pos);
+
+	std::map<std::string, ClassVar*>::iterator it = this->AllVariables->find(name);
 	
 	if (it != this->AllVariables->end())
 	{
