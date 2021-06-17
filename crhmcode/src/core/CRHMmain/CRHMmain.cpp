@@ -185,23 +185,24 @@ ClassVar * CRHMmain::GetObjectOfVariable(string vname)
 }
 
 //manishankar added this function from CRHMmainDlg.cpp file.
-TObject * CRHMmain::GetObjectOfObservation(string vname)
+ClassVar * CRHMmain::GetObjectOfObservation(string vname)
 {
-	for (int i = 0; i < AllObservations->Count; i++)
+
+	int pos = vname.find_first_of('(');
+
+	std::string name = vname.substr(0, pos);
+
+	std::map<std::string, ClassVar*>::iterator it = this->AllObservations->find(name);
+
+	if (it != this->AllObservations->end())
 	{
-		string str = AllObservations->Strings[i];
-
-		int ind = vname.find(str + "(");
-
-		if (ind > -1)			
-		{
-			ClassVar * thisVar;;
-			thisVar = (ClassVar *)AllObservations->Objects[i];
-			TObject * obj = (TObject*)thisVar;
-			return obj;
-		}
+		return it->second;
 	}
-	return NULL; //added fall through case where observation is not found - jhs507
+	else
+	{
+		return NULL;
+	}
+
 }
 
 
@@ -970,7 +971,7 @@ void CRHMmain::FormCreate() {
 	Global::DeclRootList = new TStringList;
 
 	AllVariables = new std::map<std::string, ClassVar*>;
-	AllObservations = new TStringList;
+	AllObservations = new std::map<std::string, ClassVar*>;
 	SelectedVariables = new TStringList;
 	SelectedObservations = new TStringList;
 
@@ -1427,14 +1428,18 @@ bool  CRHMmain::OpenObsFile(string FileName)
 			}
 		}
 
-		AllObservations->Clear();
+		AllObservations->clear();
 
 		MapVar::iterator itVar;
 		for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 			thisVar = (*itVar).second;
 			if (thisVar && thisVar->varType >= TVar::Read)
-				if (Common::IndexOf(AllObservations, thisVar->name) == -1)
-					AllObservations->AddObject(thisVar->name, (TObject*)thisVar);
+			{
+				if (AllObservations->count(thisVar->name) == 0)
+				{
+					AllObservations->insert(std::pair<std::string, ClassVar*>(thisVar->name, thisVar));
+				}
+			}
 		}
 
 		ObsFilesList->AddObject(OpenNameObs, (TObject *)FileData);
@@ -1455,7 +1460,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 
 void  CRHMmain::ObsCloseClick(void) {
 
-	AllObservations->Clear();
+	AllObservations->clear();
 
 
 	for (int ii = 0; ii < ObsFilesList->Count; ii++) {
@@ -1483,7 +1488,7 @@ void  CRHMmain::ObsFileClose(void)
 		return;
 	}
 
-	AllObservations->Clear();
+	AllObservations->clear();
 
 	ClassData * FileData = (ClassData *)ObsFilesList->Objects[Pos];
 	delete FileData;   // delete ClassData instance
@@ -1492,9 +1497,12 @@ void  CRHMmain::ObsFileClose(void)
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		if (thisVar->varType >= TVar::Read)
-			if (Common::IndexOf(AllObservations, (*itVar).second->name) == -1)
-				AllObservations->AddObject((*itVar).second->name,
-				(TObject*)(*itVar).second);
+		{
+			if (AllObservations->count(itVar->second->name) == 0)
+			{
+				AllObservations->insert(std::pair<std::string, ClassVar*>(itVar->second->name, itVar->second));
+			}
+		}
 	}
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) 
@@ -1506,8 +1514,7 @@ void  CRHMmain::ObsFileClose(void)
 			if (AllVariables->count((*itVar).second->name) == 0)
 			{
 				AllVariables->insert(std::pair<std::string, ClassVar*>((*itVar).second->name, (*itVar).second));
-			}
-			
+			}	
 		}
 	}
 
@@ -2901,7 +2908,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 
 
 
-TStringList* CRHMmain::getObservations()
+std::map<std::string, ClassVar *> * CRHMmain::getObservations()
 {
 	return AllObservations;
 }
@@ -3569,18 +3576,21 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 string CRHMmain::GetObservationName(string vname)
 {
-	for (int i = 0; i < AllObservations->Count; i++)
+
+	int pos = vname.find_first_of('(');
+
+	std::string name = vname.substr(0,pos);
+
+	std::map<std::string,ClassVar*>::iterator it = AllObservations->find(name);
+
+	if (it != AllObservations->end())
 	{
-		string str = AllObservations->Strings[i];
-
-		int ind = vname.find(str);
-
-		if (ind > -1)
-		{
-			return str;
-		}
+		return it->first;
 	}
-	return "";
+	else
+	{
+		return "";
+	}
 }
 
 string  CRHMmain::ExtractHruLayFunct(string S, long &Hru, long &Lay, string &Funct, string &FullName) {

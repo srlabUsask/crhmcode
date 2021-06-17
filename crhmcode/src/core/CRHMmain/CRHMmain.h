@@ -70,8 +70,10 @@ public:
 	string ApplicationDir;
 
 	//manishankar used this meaningful variable name instead of ListBox1.
-	std::map<std::string, ClassVar*> * AllVariables; //!< Map keying variable names in module to their ClassVar objects.
-	TStringList *AllObservations; //manishankar used this meaningful variable name instead of ListBox2.
+	std::map<std::string, ClassVar*> * AllVariables; //!< Map keying variable names in model to their ClassVar objects.
+	//manishankar used this meaningful variable name instead of ListBox2.
+	std::map<std::string, ClassVar*> * AllObservations; //!< Map keying observation names in model to their ClassVar objects.
+	
 	TStringList *SelectedVariables; //manishankar used this meaningful variable name instead of ListBox3.
 	TStringList *SelectedObservations; //manishankar used this meaningful variable name instead of ListBox4.
 	TStringList *queryResult;
@@ -178,7 +180,7 @@ public:
 	ClassPar *StatePar = NULL; // used to handle basin StateVars_to_Handle
 
 
-	TStringList * getObservations();
+	std::map<std::string, ClassVar*> * getObservations();
 
 	TStringList * getAllmodules();
 
@@ -231,7 +233,7 @@ public:
 	void ListBoxMacroClear();
 
 	ClassVar * GetObjectOfVariable(string vname); //added this function from CRHMmainDlg.cpp file.
-	TObject * GetObjectOfObservation(string vname); //added this function from CRHMmainDlg.cpp file.
+	ClassVar * GetObjectOfObservation(string vname); //added this function from CRHMmainDlg.cpp file.
 
 	void SaveState();
 
