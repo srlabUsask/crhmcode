@@ -134,12 +134,12 @@ void CRHMmain::setEndDate(double edate)
 }
 
 
-TStringList* CRHMmain::getSelectedVariables()
+std::list<std::pair<std::string, ClassVar*>> * CRHMmain::getSelectedVariables()
 {
 	return SelectedVariables;
 }
 
-void CRHMmain::setSelectedVariables(TStringList * t)
+void CRHMmain::setSelectedVariables(std::list<std::pair<std::string, ClassVar*>>* t)
 {
 	SelectedVariables = t;
 }
@@ -767,9 +767,23 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 								SS = thisVar->name + "(" + Common::longtoStr(Index) + comma + ")";
 							}
 
+							bool listContainsSS = false;
+							for (std::list<std::pair<std::string, ClassVar*>>::iterator listIt = SelectedVariables->begin();
+								listIt != SelectedVariables->end();
+								listIt++)
+							{
+								if (listIt->first == SS) 
+								{
+									listContainsSS = true;
+								}
+							}
+
 							//int index = IndexOf(ListBox3, SS);
-							if (Common::IndexOf(SelectedVariables, SS) == -1 && Index <= thisVar->dim)
-								SelectedVariables->AddObject(SS, (TObject*)thisVar);
+							if (listContainsSS == false  && Index <= thisVar->dim)
+							{
+								SelectedVariables->push_back(std::pair<std::string, ClassVar*>(SS, thisVar));
+							}
+								
 						} // for
 					}
 					else {
@@ -970,9 +984,9 @@ void CRHMmain::FormCreate() {
 
 	Global::DeclRootList = new TStringList;
 
-	AllVariables = new std::map<std::string, ClassVar*>;
-	AllObservations = new std::map<std::string, ClassVar*>;
-	SelectedVariables = new TStringList;
+	AllVariables = new std::map<std::string, ClassVar*>();
+	AllObservations = new std::map<std::string, ClassVar*>();
+	SelectedVariables = new std::list<std::pair<std::string, ClassVar*>>();
 	SelectedObservations = new TStringList;
 
 	MoveModulesToGlobal();
@@ -1228,31 +1242,57 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 
 
 	if (SeriesCnt <= 0)
-		SelectedVariables->Clear();
+	{
+		SelectedVariables->clear();
+	}
 	else {
 		int indx;
 		string serTitle;
 		int jj;
 
 		//Initialize the cdSeries variable in case it has not been yet - Matt
-		SeriesCnt = SelectedVariables->Count;
+		SeriesCnt = SelectedVariables->size();
 		cdSeries = new TSeries*[SeriesCnt];
 		int Cnt = Global::DTmax - Global::DTmin;
 		for (int ii = 0; ii < SeriesCnt; ++ii)
 			cdSeries[ii] = new TSeries(Cnt);
 
 		for (jj = 0; jj < SeriesCnt; jj++)
+		{
 			serTitle = cdSeries[jj]->Title;
-		if (indx = SelectedVariables->IndexOf(serTitle), indx > -1) {
-			thisVar = (ClassVar *)SelectedVariables->Objects[indx];
-			if (thisVar->DLLName == "Macro") { // delete only macros
-											   //cdSeries[jj]->ParentChart = NULL;
-											   //cdSeries[jj]->Clear();
+		}
+
+
+
+		bool listContainsSerTitle = false;
+		std::list<std::pair<std::string, ClassVar*>>::iterator positionOfSerTitle;
+		for (std::list<std::pair<std::string, ClassVar*>>::iterator listIt = SelectedVariables->begin();
+			listIt != SelectedVariables->end();
+			listIt++)
+		{
+			if (listIt->first == serTitle)
+			{
+				listContainsSerTitle = true;
+				positionOfSerTitle = listIt;
+			}
+		}
+
+		if (listContainsSerTitle == true)
+		{
+
+			thisVar = positionOfSerTitle->second;
+			if (thisVar->DLLName == "Macro") 
+			{ 
+				// delete only macros
+				//cdSeries[jj]->ParentChart = NULL;
+				//cdSeries[jj]->Clear();
 
 				for (int kk = jj + 1; kk < SeriesCnt; ++kk)
+				{
 					cdSeries[kk - 1] = cdSeries[kk];
-
-				SelectedVariables->Delete(indx);
+				}
+					
+				SelectedVariables->erase(positionOfSerTitle);
 				SeriesCnt--; // no need to increment
 			}
 			//else
@@ -1420,11 +1460,14 @@ bool  CRHMmain::OpenObsFile(string FileName)
 		}
 
 		// remove entries that are in observation ListBox3
-		for (int ii = 0; ii < SelectedVariables->Count; ii++) {
-			thisVar = (ClassVar *)SelectedVariables->Objects[ii];
-			if (thisVar && thisVar->varType >= TVar::Read) {
-				SelectedVariables->Delete(ii);
-				ii = 0;
+		for (std::list<std::pair<std::string, ClassVar*>>::iterator selectedVarIt = SelectedVariables->begin();
+			selectedVarIt != SelectedVariables->end();
+			selectedVarIt++)
+		{
+			thisVar = selectedVarIt->second;
+			if (thisVar && thisVar->varType >= TVar::Read) 
+			{
+				SelectedVariables->erase(selectedVarIt);
 			}
 		}
 
@@ -1687,7 +1730,8 @@ MMSData *  CRHMmain::RunClick2Start()
 		return mmsdata;  // do not run
 	}
 
-	if (SelectedVariables->Count == 0) {
+	if (SelectedVariables->size() == 0) 
+	{
 #if defined(VS_GUI)
 		AfxMessageBox(_T("No model output selected"));
 #endif
@@ -1891,7 +1935,7 @@ MMSData *  CRHMmain::RunClick2Start()
 	Global::BuildFlag = TBuild::RUN;
 	Global::DTmax = (int)((DTendR - Global::DTstart)* Global::Freq);
 
-	SeriesCnt = SelectedVariables->Count;
+	SeriesCnt = SelectedVariables->size();
 
 	int Cnt = Global::DTmax - Global::DTmin;
 	cdSeries = new TSeries*[SeriesCnt];
@@ -1902,13 +1946,16 @@ MMSData *  CRHMmain::RunClick2Start()
 	mmsData = new double*[SeriesCnt];
 	mmsDataL = new long*[SeriesCnt];
 
-	for (int ii = 0; ii < SelectedVariables->Count; ii++) {
+	std::list<std::pair<std::string, ClassVar*>>::iterator selectedVarIterator = SelectedVariables->begin();
+	for (int ii = 0; ii < SelectedVariables->size(); ii++) 
+	{
+		
 
-		thisVar = (ClassVar *)(SelectedVariables->Objects[ii]);
+		thisVar = selectedVarIterator->second;
 
 		cdSeries[ii]->Tag = thisVar;
 
-		string S = SelectedVariables->Strings[ii];
+		string S = selectedVarIterator->first;
 		cdSeries[ii]->Title = S;
 
 		long lay, dim;
@@ -1933,9 +1980,9 @@ MMSData *  CRHMmain::RunClick2Start()
 				mmsDataL[ii] = (thisVar->ilayvalues[lay - 1]) + (dim - 1);
 			}
 		}
+
+		selectedVarIterator++;
 	}
-
-
 
 	LogMessageX(" ");
 	S = string("timestep ") + DttoStr(Global::Interval * 24) + " hr.";
@@ -3325,18 +3372,20 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//HruNameClick(Sender);
 
 
-	for (int ii = 0; ii < SelectedVariables->Count; ++ii) {
+	for (std::list<std::pair<std::string, ClassVar*>>::iterator selectedVariablesIt = SelectedVariables->begin();
+		selectedVariablesIt != SelectedVariables->end();
+		selectedVariablesIt++) 
+	{
 
 		long lay, dim;
 
-		ExtractHruLay(SelectedVariables->Strings[ii], dim, lay);
+		ExtractHruLay(selectedVariablesIt->first, dim, lay);
 
 		//need to modify possibly
-		ClassVar *thisVar = (ClassVar *)SelectedVariables->Objects[ii]; //previous code
-															   //ClassVar *thisVar = (ClassVar *)ii; //Manishankar's code
-
-
-															   //thisVar->TchrtOpt = 1; //added by Manishankar
+		ClassVar *thisVar = selectedVariablesIt->second; 
+		//previous code
+		//ClassVar *thisVar = (ClassVar *)ii; //Manishankar's code
+		//thisVar->TchrtOpt = 1; //added by Manishankar
 
 		if (thisVar != NULL)
 		{
@@ -3404,15 +3453,27 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		if (!thisVar || !thisVar->FileData) {  // VarObsFunct
 			if (!thisVar) {
-				long Indx = SelectedVariables->IndexOf(FullName);
-				if (Indx > -1)
-					thisVar = (ClassVar *)SelectedVariables->Objects[Indx];
+
+				std::list<std::pair<std::string, ClassVar*>>::iterator pos;
+				for (
+					std::list<std::pair<std::string, ClassVar*>>::iterator it = SelectedVariables->begin();
+					it != SelectedVariables->end() || it->first != FullName;
+					it++
+					)
+				{
+					pos = it;
+				}
+
+				if (pos != SelectedVariables->end())
+				{
+					thisVar = pos->second;
+				}
 				else
+				{
 					thisVar = VarFind(string(string("obs ") + Name.c_str()));
+				}
 			}
 		}
-
-
 
 		//need to modify
 		//if (cdSeries->VertAxis == aRightAxis)
@@ -3649,7 +3710,7 @@ void CRHMmain::ClearModules(bool All) {
 	}
 
 	AllVariables->clear();
-	SelectedVariables->Clear();
+	SelectedVariables->clear();
 
 	if (cdSeries) {
 		//for (int ii = 0; ii < SeriesCnt; ii++)
