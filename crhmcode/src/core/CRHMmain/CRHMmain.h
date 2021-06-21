@@ -74,9 +74,10 @@ public:
 	//manishankar used this meaningful variable name instead of ListBox2.
 	std::map<std::string, ClassVar*> * AllObservations; //!< Map keying observation names in model to their ClassVar objects.
 	//manishankar used this meaningful variable name instead of ListBox3.
-	std::list<std::pair<std::string, ClassVar*>> * SelectedVariables; //!< Map keying selected variable strings to their ClassVar objects.
-
-	TStringList *SelectedObservations; //manishankar used this meaningful variable name instead of ListBox4.
+	std::list<std::pair<std::string, ClassVar*>> * SelectedVariables; //!< List of selected paired variables names and variable objects.
+	//manishankar used this meaningful variable name instead of ListBox4.
+	std::list<std::pair<std::string, TSeries *>> * SelectedObservations; //!< List of selected paired observation names and TSeries objects.
+	
 	TStringList *queryResult;
 
 
@@ -214,10 +215,10 @@ public:
 	void setStartDate(double sdate);
 	double GetEndDate();
 	void setEndDate(double edate);
-	std::list<std::pair<std::string, ClassVar*>> * getSelectedVariables();
-	TStringList* getSelectedObservations();
-	void setSelectedObservatoions(TStringList * t);
-	void setSelectedVariables(std::list<std::pair<std::string, ClassVar*>>* t);
+	std::list<std::pair<std::string, ClassVar *>> * getSelectedVariables();
+	std::list<std::pair<std::string, TSeries *>> * getSelectedObservations();
+	void setSelectedObservatoions(std::list<std::pair<std::string, TSeries*>> * t);
+	void setSelectedVariables(std::list<std::pair<std::string, ClassVar*>> * t);
 
 
 	string GetCaptionFromAboutBox();
