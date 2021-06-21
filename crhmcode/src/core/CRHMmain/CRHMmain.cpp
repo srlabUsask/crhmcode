@@ -144,12 +144,12 @@ void CRHMmain::setSelectedVariables(std::list<std::pair<std::string, ClassVar*>>
 	SelectedVariables = t;
 }
 
-TStringList* CRHMmain::getSelectedObservations()
+std::list<std::pair<std::string, TSeries *>> * CRHMmain::getSelectedObservations()
 {
 	return SelectedObservations;
 }
 
-void CRHMmain::setSelectedObservatoions(TStringList *t)
+void CRHMmain::setSelectedObservatoions(std::list<std::pair<std::string, TSeries*>>* t)
 {
 	SelectedObservations = t;
 }
@@ -820,7 +820,23 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 							if (Kind == "_obs") Kind = "";
 							SS = thisVar->name + "(" + Common::longtoStr(labs(Index)) + ")" + Kind;
-							if (Common::IndexOf(SelectedObservations, SS) == -1) {
+							
+							
+							bool selectedObservationsContainsSS = false;
+							for ( 
+								std::list<std::pair<std::string, TSeries*>>::iterator it = SelectedObservations->begin();
+								it != SelectedObservations->end();
+								it++
+								)
+							{
+								if (it->first == SS)
+								{
+									selectedObservationsContainsSS = true;
+								}
+							}
+
+							if (selectedObservationsContainsSS != true) 
+							{
 
 								TSeries *cdSeries = NULL;
 								if (thisVar->FileData->Times == NULL) {
@@ -834,7 +850,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 									cdSeries->Title = SS;
 								}
 
-								SelectedObservations->AddObject(SS, (TObject *)cdSeries);
+								SelectedObservations->push_back(std::pair<std::string, TSeries *>( SS, cdSeries));
 								//                AddObsPlot((ClassVar *) thisVar, cdSeries, SS,
 								//                FindObservationType(Kind.c_str()));
 							}
@@ -987,7 +1003,7 @@ void CRHMmain::FormCreate() {
 	AllVariables = new std::map<std::string, ClassVar*>();
 	AllObservations = new std::map<std::string, ClassVar*>();
 	SelectedVariables = new std::list<std::pair<std::string, ClassVar*>>();
-	SelectedObservations = new TStringList;
+	SelectedObservations = new std::list<std::pair<std::string, TSeries*>>();
 
 	MoveModulesToGlobal();
 	((ClassModule*)Global::PendingDLLModuleList->Objects[0])->OurAdmin->Accept(mbYesToAll);
@@ -3372,9 +3388,11 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//HruNameClick(Sender);
 
 
-	for (std::list<std::pair<std::string, ClassVar*>>::iterator selectedVariablesIt = SelectedVariables->begin();
+	for (
+		std::list<std::pair<std::string, ClassVar*>>::iterator selectedVariablesIt = SelectedVariables->begin();
 		selectedVariablesIt != SelectedVariables->end();
-		selectedVariablesIt++) 
+		selectedVariablesIt++
+		) 
 	{
 
 		long lay, dim;
@@ -3422,9 +3440,13 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	string kind, lastkind;
 	Output = "";
 
-	for (int ii = 0; ii < SelectedObservations->Count; ii++) {
+	for (
+		std::list<std::pair<std::string, TSeries*>>::iterator it = SelectedObservations->begin();
+		it != SelectedObservations->end();
+		it++) 
+	{
 
-		string S = SelectedObservations->Strings[ii];
+		string S = it->first;
 		string FullName;
 		long dim = 0, lay = 0;
 		kind = "_obs";
@@ -3432,14 +3454,14 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		//need to modify
 		//string Name = ExtractHruLayFunct(SelectedObservations->Strings[ii], dim, lay, kind, FullName);
-		string Name = GetObservationName(SelectedObservations->Strings[ii]);
-		ExtractHruLay(SelectedObservations->Strings[ii], dim, lay);
+		string Name = GetObservationName(it->first);
+		ExtractHruLay(it->first, dim, lay);
 		//string Name = "";
 
 
 		//need to modify
 		//TLineSeries *cdSeries = (TLineSeries *)SelectedObservations->Objects[ii];
-		TSeries *cdSeries = (TSeries *)SelectedObservations->Objects[ii];
+		TSeries *cdSeries =it->second;
 
 		ClassVar *thisVar;
 		thisVar = NULL;
@@ -3447,7 +3469,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		//need to modify
 		thisVar = (ClassVar *)cdSeries->Tag; // always OK for observation
 
-		thisVar = (ClassVar *)SelectedObservations->Objects[ii]; //added by Manishankar for testing.
+		//thisVar = it->second; //added by Manishankar for testing.
 													 //Name = SelectedObservations->Strings[ii];
 
 
