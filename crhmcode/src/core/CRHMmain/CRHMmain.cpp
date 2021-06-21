@@ -417,7 +417,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					c = DataFile.peek();
 				}
 
-				if (iswdigit(c) && ObsFilesList->Count == 0) {
+				if (iswdigit(c) && ObsFilesList->size() == 0) {
 					DataFile >> Global::Freq;
 					Global::Interval = 1.0 / Global::Freq;
 				}
@@ -929,7 +929,7 @@ void CRHMmain::FormCreate() {
 
 	Global::OBS_AS_IS = false;
 
-	ObsFilesList = new TStringList;
+	ObsFilesList = new std::list<std::pair<std::string, ClassData*>>();
 
 	ProjectList = new TStringList;
 
@@ -1381,10 +1381,27 @@ bool  CRHMmain::OpenObsFile(string FileName)
 {
 	ClassData  * FileData;
 
-	if (ObsFilesList->IndexOf(FileName.c_str()) != -1)
-		return false;  // already open
+	  // already open
 
-	if (ObsFilesList->Count == 0) {
+	bool fileAlreadyOpen = false;
+	for (
+		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
+		it != ObsFilesList->end();
+		it++
+		)
+	{
+		if (it->first == FileName)
+		{
+			fileAlreadyOpen = true;
+		}
+	}
+
+	if (fileAlreadyOpen == true)
+	{
+		return false;
+	}
+		
+	if (ObsFilesList->size() == 0) {
 		Global::DTstart = 0; // used to flag first data file
 		Global::DTend = 0; // used to flag first data file
 	}
@@ -1393,7 +1410,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 
 	if (FileData->Success) {
 
-		if (ObsFilesList->Count == 0) {
+		if (ObsFilesList->size() == 0) {
 
 
 			//look at this.
@@ -1459,12 +1476,13 @@ bool  CRHMmain::OpenObsFile(string FileName)
 			}
 		}
 
-		ObsFilesList->AddObject(OpenNameObs, (TObject *)FileData);
+		ObsFilesList->push_back(std::pair<std::string, ClassData*>(OpenNameObs, FileData));
 
 		return true;
 	}
 	else {
-		if (ObsFilesList->Count == 0) {
+		if (ObsFilesList->size() == 0) 
+		{
 			Global::DTstart = 0; // used to flag first data file
 			Global::DTend = 0; // used to flag first data file
 		}
@@ -1479,12 +1497,17 @@ void  CRHMmain::ObsCloseClick(void) {
 
 	AllObservations->clear();
 
-
-	for (int ii = 0; ii < ObsFilesList->Count; ii++) {
-		ClassData * FileData = (ClassData *)ObsFilesList->Objects[ii];
+	for (
+		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
+		it != ObsFilesList->end();
+		it++
+		) 
+	{
+		ClassData * FileData = it->second;
 		delete FileData;   // delete ClassData instance
 	}
-	ObsFilesList->Clear();  // clear list
+
+	ObsFilesList->clear();  // clear list
 
 	Global::nobs = 1;  // reset to 1
 
@@ -1498,18 +1521,31 @@ void  CRHMmain::ObsFileClose(void)
 
 	string S;  // Fix ???
 
-	int Pos = ObsFilesList->IndexOf(S);
+	std::list<std::pair<std::string, ClassData*>>::iterator position;
+	for (
+		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
+		it != ObsFilesList->end();
+		it++
+		)
+	{
+		if (it->first == S)
+		{
+			position = it;
+		}
+	}
 
-	if (Pos == 0 && ObsFilesList->Count > 1) {
+
+	if (position == ObsFilesList->begin() && ObsFilesList->size() > 1) 
+	{
 		ObsCloseClick();
 		return;
 	}
 
 	AllObservations->clear();
 
-	ClassData * FileData = (ClassData *)ObsFilesList->Objects[Pos];
+	ClassData * FileData = position->second;
 	delete FileData;   // delete ClassData instance
-	ObsFilesList->Delete(Pos);  // delete entry in list
+	ObsFilesList->erase(position);  // delete entry in list
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
@@ -1542,8 +1578,13 @@ void  CRHMmain::ObsFileClose(void)
 void  CRHMmain::FormDestroy(void)
 {
 
-	for (int ii = 0; ii < ObsFilesList->Count; ++ii) {
-		ClassData * FileData = (ClassData *)ObsFilesList->Objects[ii];
+	for (
+		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
+		it != ObsFilesList->end();
+		it++
+		) 
+	{
+		ClassData * FileData = it->second;
 		delete FileData;   // delete ClassData instance
 	}
 
@@ -1720,8 +1761,13 @@ MMSData *  CRHMmain::RunClick2Start()
 	LogMessageX(Message.c_str());
 	LogMessageX(" ");
 
-	for (int ii = 0; ii < ObsFilesList->Count; ii++) {
-		Message = "Observation file: " + ObsFilesList->Strings[ii];
+	for (
+		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin(); 
+		it != ObsFilesList->end(); 
+		it++
+		) 
+	{
+		Message = "Observation file: " + it->first;
 		LogMessageX(Message.c_str());
 	}
 	LogMessageX(" ");
@@ -1850,9 +1896,9 @@ MMSData *  CRHMmain::RunClick2Start()
 
 
 	ClassData * FileData = NULL;
-	if (ObsFilesList->Count > 0)
+	if (ObsFilesList->size() > 0)
 	{
-		FileData = (ClassData *)ObsFilesList->Objects[0];
+		FileData = ObsFilesList->begin()->second;
 
 		if (DTstartR < FileData->Dt1) {
 			LogMessageX("Start Time before first Observation");
@@ -2605,26 +2651,40 @@ void  CRHMmain::LastRprt(void)
 void CRHMmain::DoObsStatus(bool &First)
 {
 	if (First) {
-		for (int ii = 0; ii < ObsFilesList->Count; ii++) {
-			ClassData * FileData = (ClassData *)ObsFilesList->Objects[ii];
+		for (
+			std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin(); 
+			it != ObsFilesList->end(); 
+			it++
+			) 
+		{
+			ClassData * FileData = it->second;
 			FileData->TimeIndx = 0;
 		}
 		First = false;
 	}
 
-	for (int ii = 0; ii < ObsFilesList->Count; ii++) {
-		ClassData * FileData = (ClassData *)ObsFilesList->Objects[ii];
+	for (
+		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin(); 
+		it != ObsFilesList->end(); 
+		it++
+		) 
+	{
+		ClassData * FileData = it->second;
 
 		FileData->GoodInterval = true;
 
-		if (ii == 0) {  // first observation file always good
+		// first observation file always good
+		if (it == ObsFilesList->begin())  
+		{  
 			FileData->GoodDay = true;
 			continue;
 		}
 
 		FileData->GoodInterval = true;
 
-		if (FileData->Times != NULL) { // sparse data
+		// sparse data
+		if (FileData->Times != NULL) 
+		{ 
 			FileData->GoodDay = false;
 
 			while (FileData->Times[FileData->TimeIndx] < Global::DTnow
@@ -3139,8 +3199,13 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		ProjectList->Add("Observations:");
 		ProjectList->Add("######");
-		for (int ii = 0; ii < ObsFilesList->Count; ii++) {
-			string S = ObsFilesList->Strings[ii];
+		for (
+			std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin(); 
+			it != ObsFilesList->end(); 
+			it++
+			) 
+		{
+			string S = it->first;
 			ProjectList->Add(S);
 		}
 		ProjectList->Add("######");
@@ -3154,8 +3219,10 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		S = StandardConverterUtility::GetDateInString(date1);
 
 
-		if (ObsFilesList->Count == 0)
+		if (ObsFilesList->size() == 0)
+		{
 			S = S + " " + FloatToStrF(Global::Freq, TFloatFormat::ffGeneral, 0, 0);
+		}
 		ProjectList->Add(S);
 
 
