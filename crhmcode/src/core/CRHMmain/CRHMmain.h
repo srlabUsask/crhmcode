@@ -78,9 +78,6 @@ public:
 	//manishankar used this meaningful variable name instead of ListBox4.
 	std::list<std::pair<std::string, TSeries *>> * SelectedObservations; //!< List of selected paired observation names and TSeries objects.
 	
-	TStringList *queryResult;
-
-
 	double StartDatePicker; // replaces graphic controls. manishankar Picker1 was replaced by StartDatePicker
 	double EndDatePicker; //manishankar Picker2 was replaced by EndDatePicker
 

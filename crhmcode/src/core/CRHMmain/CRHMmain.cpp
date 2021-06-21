@@ -248,48 +248,6 @@ void CRHMmain::BldModelClick()
 					  //dirty = true;
 }
 
-
-void CRHMmain::makeQuery(string statementtype, string statement, string fields, int fieldcount)
-{
-	ofstream queryfile;
-	queryfile.open("d:/test/query.txt");
-	queryfile << "database name = " << "watersecurity" << endl;
-	queryfile << "userid = " << "root" << endl;
-	queryfile << "password = " << "none" << endl;
-	queryfile << "statement type = " << statementtype << endl;
-	queryfile << "statement = " << statement << endl;
-	queryfile << "field count = " << fieldcount << endl;
-	queryfile << "fields = " << fields << endl;
-	queryfile.close();
-
-	//system("java -jar -min d:/javadatabaseaccess/DatabaseAccess.jar");
-
-	ifstream resultfile;
-	string line = "";
-	resultfile.open("d:/test/result.txt");
-	queryResult->Clear();
-
-	while (!resultfile.eof())
-	{
-		if (getline(resultfile, line)) { queryResult->Add(line); }
-	}
-}
-
-string CRHMmain::getQueryValue(int row, int column)
-{
-	string res = queryResult->Strings[row];
-	int l = res.length();
-
-
-	int cc = 0;
-	for (int i = 0; i < l; i++)
-	{
-		if (cc == column - 1) {}
-	}
-
-	return "";
-}
-
 void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 
