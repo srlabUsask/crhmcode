@@ -1220,7 +1220,7 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		SelectedVariables->clear();
 	}
 	else {
-		int indx;
+		
 		string serTitle;
 		int jj;
 
@@ -1915,13 +1915,15 @@ MMSData *  CRHMmain::RunClick2Start()
 	cdSeries = new TSeries*[SeriesCnt];
 
 	for (int ii = 0; ii < SeriesCnt; ++ii)
+	{
 		cdSeries[ii] = new TSeries(Cnt);
+	}
 
 	mmsData = new double*[SeriesCnt];
 	mmsDataL = new long*[SeriesCnt];
 
 	std::list<std::pair<std::string, ClassVar*>>::iterator selectedVarIterator = SelectedVariables->begin();
-	for (int ii = 0; ii < SelectedVariables->size(); ii++) 
+	for (int ii = 0; ii < SeriesCnt; ii++)
 	{
 		
 

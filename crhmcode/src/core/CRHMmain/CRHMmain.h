@@ -131,9 +131,6 @@ public:
 
 	void DoPrjOpen(string OpenNamePrj, string ProjectDirectory);
 
-	void makeQuery(string statementtype, string statement, string fields, int fieldcount);
-	string getQueryValue(int row, int column);
-
 	void FormCreate(void);
 
 	void InitModules(void);
