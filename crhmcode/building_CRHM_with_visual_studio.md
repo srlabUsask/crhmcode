@@ -1,42 +1,70 @@
-# Requirements
+# Building CRHM Visual Studio GUI
 
-### Microsoft Visual Studio 2019
-        Configuration for visual studio can be imported from the configuration
-        file available in the github repository.
+1. Clone the git repository.
+2. Download and configure Visual Studio.
 
-### Vcpkg with boost library
-        In order to compile CRHM needs the Boost library. To install this and
-        integrate with Microsoft visual studio follow the tutorial here:
-        https://docs.microsoft.com/en-us/cpp/build/vcpkg?view=vs-2019#installation
+## 1: Clone the git repository
 
+1. Create a local directory in your desired location.
+2. Navigate to the directory in your choice of terminal.
+3. Execute the command "git clone https://github.com/srlabUsask/crhmcode"
+4. Enter your github credentials.
+5. Wait for the clone to complete.
 
-### Install TeeChart
-    1. Download TeeChart from https://www.steema.com/downloads/net
+## 2: Download and configure Visual Studio
 
-    2. Run the installer provided.
+1. Download Visual Studio Installer from Microsoft https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=16
+2. Run the downloaded installer.
+3. Launch Visual Studio installer.
+4. Under the installed tab click "More" and select "Import configuration".
+5. Select the file "crhmcode\CRHM_Visual_Studio_Config.vsconfig" from the git repository.
+6. Import the configuration.
 
-    3. To make sure the TeeChart ActiveX control is 
-        accessible, execute this command to register TeeChart Pro Activex with command prompt: regsvr32.exe c:\yourpath\teechart2020.ocx
+## 3: Open the project with Visual Studio
 
-# Download and configure project
-1. Open visual studio.
-2. In dialog window select clone repository.
-3. Enter the repository URL https://github.com/srlabUsask/crhmcode.git
-4. Click clone and wait until the repository finishes downloading.
-5. In bottom right click on the master branch and add a new branch.
-6. Add the desired branch ie. justin
-7. Switch to the desired branch.
-8. In the menu select file->open->project/solution.
-9. Select the file crhmcode\release1.1\src\vcc\CRHM_GUI.vcxproj.
-10. In the menu select view->property_manager.
-11. In the property tree open CRHM_GUI->Debug|Win32->UserMacros.
-12. Within user macros under common properties select User Macros.
-13. Select the macro ProjectHome and set its value to the location of the src folder within the release1.1 folder.
-14. Click apply then okay.
-15. In the property tree open CRHM_GUI->Release|Win32->UserMacros.
-16. Within user macros under common properties select User Macros.
-17. Select the macro ProjectHome and set its value to the location of        the src folder within the release1.1 folder.
-17. Click apply then okay.
+1. Launch Visual Studio.
+2. Select "Open a project or solution."
+3. Select the file "crhmcode\src\vcc\CRHM_GUI.sln"
+
+## 4: Configure Project in Visual Studio
+
+1. Click on "Project" in the menu bar and select "CRHM_GUI Properties"
+2. Under "Configuration Properties" select VC++ Directories.
+3. Edit the property "Include Directories" to read "$(ProjectHome)\vcc;$(ProjectHome)\vcc\tchart;$(ProjectHome)\vcc\gui;$(ProjectHome)\core;$(ProjectHome)\core\ClassCRHM;$(ProjectHome)\core\TStringList;$(ProjectHome)\modules\coremodules;$(ProjectHome)\modules\hype;$(ProjectHome)\modules\newmodules;$(ProjectHome)\modules\waterquality;$(IncludePath)"
+4. Edit the "Source Directories" Property to read "$(ProjectHome)\vcc;$(ProjectHome)\vcc\tchart;$(ProjectHome)\vcc\gui;$(ProjectHome)\core;$(ProjectHome)\core\ClassCRHM;$(ProjectHome)\core\TStringList;$(ProjectHome)\modules\coremodules;$(ProjectHome)\modules\hype;$(ProjectHome)\modules\newmodules;$(ProjectHome)\modules\waterquality;$(IncludePath)"
+5. Click "Apply"
+6. Click "OK"
+
+## 5: Configure User Macros
+1. Click on "View" in the menu bar and select "Property Manager"
+2. Under the section "CRHM GUI->Debug | Win 32" open the "UserMacros" page.
+3. Under "Configuration Properties" select "User Macros"
+4. Edit the "ProjectHome" Macro to read as the full path to the /crhmcode/src directory.
+5. Click "Apply"
+6. Click "OK"
+
+## 6: Install TeeChart
+
+1. Download TeeChart from https://www.steema.com/downloads/ax
+2. Run the installer provided placing the files in a location that you remember.
+3. Launch Command Prompt.
+4. Navigate to the TeeChart instalation folder.
+5. Run the command "regsvr32.exe [PATH TO]\teechart2020.ocx" replacing [PATH TO] with the location you installed TeeChart
+
+## 7: Install Boost
+
+1. Follow the tutorial here to integrate VCPKG with Visual Studio. https://vcpkg.io/en/getting-started.html
+2. Launch Command Prompt
+3. Navigate to the location of vcpkg
+4. Run the command ".\vcpkg install boost"
+
+## 8: Install SPDLOG
+
+1. Download the SPDLOG repository from https://github.com/gabime/spdlog to a temporary folder.
+2. Copy the directory include/spdlog
+3. Past the "spdlog" directory in the /crhmcode directory on the same level as the src directory.
+
+## 9: Build
 
 # To build Debug mode:
 1. In the toolbar set configuration to Debug|x86
