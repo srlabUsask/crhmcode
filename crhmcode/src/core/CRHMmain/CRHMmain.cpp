@@ -2756,9 +2756,30 @@ void CRHMmain::ResetLoopList(void) { // writes to "CRHM_loop_output" and cleans 
 
 	string FileName = "CRHM_loop_output";
 	if (ID > 0)
+	{
 		FileName += string("_"); //??? + ID;
+	}
+		
+	ofstream file(ProjectDirectory + "\\" + FileName + ".txt");
+	
+	if (file)
+	{
+		for (
+			std::list<std::string>::iterator it = LoopList->begin();
+			it != LoopList->end();
+			it++
+			)
+		{
+			file << it->c_str() << endl;
+		}
 
-	LoopList->SaveToFile(ProjectDirectory + "\\" + FileName + ".txt");
+		file.close();
+	}
+	else
+	{
+		CRHMException e = CRHMException("Cannot open file to write out loop list."+ ProjectDirectory + "\\" + FileName + ".txt", TExcept::ERR);
+		CRHMLogger::instance()->log_run_error(e);
+	}
 
 	delete LoopList;
 	LoopList = NULL;
@@ -2865,9 +2886,9 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 
 			if (VarPar && VarPar->Strings->IndexOf(namebasic) > -1) {
 				if (LoopList == NULL) {
-					LoopList = new TStringList;
+					LoopList = new std::list<std::string>();
 					Sx = DttoStr(Global::DTnow);
-					LoopList->Add(Sx);
+					LoopList->push_back(Sx);
 				}
 				if (first) {
 					Sx = "loop " + inttoStr(Global::LoopCnt - Global::LoopCntDown + 1) + "\t" + name;
@@ -2981,7 +3002,10 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 	}
 
 	if (!Sx.empty())
-		LoopList->Add(Sx);
+	{
+		LoopList->push_back(Sx);
+	}
+		
 }
 
 
@@ -3686,7 +3710,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	}
 	else
 	{
-		//ERROR message 
+		CRHMException e = CRHMException("Cannot open file at "+filepath+ " to save project file.", TExcept::ERR);
+		CRHMLogger::instance()->log_run_error(e);
 	}
 
 	ProjectList->clear();
@@ -3743,7 +3768,7 @@ string  CRHMmain::ExtractHruLayFunct(string S, long &Hru, long &Lay, string &Fun
 
 		string sub = S.substr(jj + 1, jj1 - jj - 1);
 		bool found = false;
-		for (int i = 0; i < ListHruNames->size(); i++)
+		for (size_t i = 0; i < ListHruNames->size(); i++)
 		{
 			if (ListHruNames->operator[](i) == sub) 
 			{
