@@ -3740,16 +3740,40 @@ string  CRHMmain::ExtractHruLayFunct(string S, long &Hru, long &Lay, string &Fun
 			Funct = S.substr(jj4 + 1, S.length());
 	}
 	else {
-		Hru = ListHruNames->IndexOf(S.substr(jj + 1, jj1 - jj - 1));
+
+		string sub = S.substr(jj + 1, jj1 - jj - 1);
+		bool found = false;
+		for (int i = 0; i < ListHruNames->size(); i++)
+		{
+			if (ListHruNames->operator[](i) == sub) 
+			{
+				Hru = i;
+				found = true;
+			}
+		}
+
+		if (found == false) 
+		{
+			Hru = -1;
+		}
+		
 		if (Hru == -1) // detects observations - still numeric index value
+		{
 			Hru = stoi(S.substr(jj + 1, jj1 - jj - 1));
+		}
 		else
-			if (Hru == 0) ++Hru;
+		{
+			if (Hru == 0)
+			{
+				++Hru;
+			}
+		}
+			
 	}
+
 	FullName = S.substr(1, jj2); // return name and bracket
 	return S.substr(1, jj - 1); // return name
-
-								//return S; //added by Manishankar temporarily
+							//return S; //added by Manishankar temporarily
 }
 
 
@@ -3997,17 +4021,37 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 
 }
 
-
+/*
+* Returns passed in string with hru identifier appended
+*
+* hru identifer is numeric if CRHMmain::HruNames is false 
+* if CRHMmain HruNames is true the identifier is looked up in
+* CRHMmaim::ListHruNames
+* 
+* @param S string - string to append hru identifer to
+* @param Hru long - numerical identifier of Hru
+* @param dimen TDim - demension type of passed in variable
+* @return string - S with identifier appended within ()
+*/
 string CRHMmain::BuildHru(string S, long Hru, TDim dimen) {
 
 	if (!HruNames)
+	{
 		return S + "(" + to_string(Hru) + ")";
-	else {
+	}
+	else 
+	{
+
+
 		string SS;
 		if (dimen == TDim::BASIN)
-			SS = "(" + ListHruNames->Strings[0] + ")";
+		{
+			SS = "(" + ListHruNames->front() + ")";
+		}	
 		else
-			SS = "(" + ListHruNames->Strings[Hru] + ")";
+		{
+			SS = "(" + ListHruNames->operator[](Hru) + ")";
+		}
 		return S + SS;
 	}
 }
