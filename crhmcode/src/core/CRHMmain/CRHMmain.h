@@ -97,7 +97,7 @@ public:
 
 	string SaveDialogPrj;
 
-	TStringList *ListHruNames;
+	std::vector<std::string> * ListHruNames;
 
 	TStringList *LoopList;  // used by ControlReadState
 	MapstrSS    *MapGrpNames;
