@@ -97,10 +97,6 @@ public:
 
 	string SaveDialogPrj;
 
-
-
-	TStringList *OpenDLLs;
-	TStringList *PrjObsHelp;
 	TStringList *ListHruNames;
 
 	TStringList *LoopList;  // used by ControlReadState
