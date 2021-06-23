@@ -931,7 +931,7 @@ void CRHMmain::FormCreate() {
 
 	ObsFilesList = new std::list<std::pair<std::string, ClassData*>>();
 
-	ProjectList = new TStringList;
+	ProjectList = new std::list<std::string>;
 
 	PrjObsHelp = new TStringList;
 	PrjObsHelp->AddObject("", (TObject*)1);
@@ -3150,7 +3150,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	ClassVar *lastVar = NULL;
 	string Output;
 	int Y = 0, M = 0, D = 0, H = 0, Min = 0;
-	ProjectList->Add(prj_description);
+	ProjectList->push_back(prj_description);
 	double Dt = StandardConverterUtility::GetCurrentDateTime();
 	string datetime = StandardConverterUtility::GetDateTimeInString(Dt);
 	//Common::DecodeDateTime(DT, &Y, &M, &D, &H, &Min);
@@ -3158,7 +3158,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	string S("  Creation: " + datetime);
 
 	string caption = GetCaptionFromAboutBox(); // AboutBox->Label2->Caption
-	ProjectList->Add("###### " + caption + S);
+	ProjectList->push_back("###### " + caption + S);
 
 
 	bool Prj = false;
@@ -3169,36 +3169,36 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		//need to modify
 		//Main->Text = Main->Text.SubString(1, 49) + " - " + SaveDialogPrj->FileName;
 
-		ProjectList->Add("Dimensions:");
-		ProjectList->Add("######");
-		ProjectList->Add(string("nhru " + to_string(Global::maxhru)));
-		ProjectList->Add(string("nlay " + to_string(Global::nlay)));
-		ProjectList->Add(string("nobs " + to_string(Global::nobs)));
-		ProjectList->Add("######");
+		ProjectList->push_back("Dimensions:");
+		ProjectList->push_back("######");
+		ProjectList->push_back(string("nhru " + to_string(Global::maxhru)));
+		ProjectList->push_back(string("nlay " + to_string(Global::nlay)));
+		ProjectList->push_back(string("nobs " + to_string(Global::nobs)));
+		ProjectList->push_back("######");
 
-		ProjectList->Add("Macros:");
-		ProjectList->Add("######");
+		ProjectList->push_back("Macros:");
+		ProjectList->push_back("######");
 
 		for (int ii = 0; ii < Global::MacroModulesList->Count; ++ii)
-			ProjectList->Add("'" + Global::MacroModulesList->Strings[ii] + "'");
+			ProjectList->push_back("'" + Global::MacroModulesList->Strings[ii] + "'");
 
-		ProjectList->Add("######");
+		ProjectList->push_back("######");
 
 		if (!Global::MapAKA.empty()) {
 			Mapstr2::iterator it;
 
-			ProjectList->Add("AKAs:");
-			ProjectList->Add("######");
+			ProjectList->push_back("AKAs:");
+			ProjectList->push_back("######");
 
 			for (it = Global::MapAKA.begin(); it != Global::MapAKA.end(); ++it) {
 				string Var = (*it).first + ' ' + (*it).second;
-				ProjectList->Add(Var.c_str());
+				ProjectList->push_back(Var.c_str());
 			}
-			ProjectList->Add("######");
+			ProjectList->push_back("######");
 		}
 
-		ProjectList->Add("Observations:");
-		ProjectList->Add("######");
+		ProjectList->push_back("Observations:");
+		ProjectList->push_back("######");
 		for (
 			std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin(); 
 			it != ObsFilesList->end(); 
@@ -3206,12 +3206,12 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			) 
 		{
 			string S = it->first;
-			ProjectList->Add(S);
+			ProjectList->push_back(S);
 		}
-		ProjectList->Add("######");
+		ProjectList->push_back("######");
 
-		ProjectList->Add("Dates:");
-		ProjectList->Add("######");
+		ProjectList->push_back("Dates:");
+		ProjectList->push_back("######");
 		string S;
 
 
@@ -3223,31 +3223,31 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		{
 			S = S + " " + FloatToStrF(Global::Freq, TFloatFormat::ffGeneral, 0, 0);
 		}
-		ProjectList->Add(S);
+		ProjectList->push_back(S);
 
 
 		double date2 = GetEndDate();
 		S = StandardConverterUtility::GetDateInString(date2);
 
 
-		ProjectList->Add(S);
-		ProjectList->Add("######");
+		ProjectList->push_back(S);
+		ProjectList->push_back("######");
 
 #ifdef CRHM_DLL
 		if (OpenDLLs->Count > 0) {
-			ProjectList->Add("DLLs:");
-			ProjectList->Add("######");
+			ProjectList->push_back("DLLs:");
+			ProjectList->push_back("######");
 			CompactDlls();
 			for (int ii = 0; ii < OpenDLLs->Count; ii++) {
 				String S = OpenDLLs->Strings[ii];
-				ProjectList->Add(S);
+				ProjectList->push_back(S);
 			}
-			ProjectList->Add("######");
+			ProjectList->push_back("######");
 		}
 #endif
 
-		ProjectList->Add("Modules:");
-		ProjectList->Add("######");
+		ProjectList->push_back("Modules:");
+		ProjectList->push_back("######");
 		for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
 			ClassModule* thisModule = (ClassModule*)Global::OurModulesList->Objects[ii];
 			string S = Global::OurModulesList->Strings[ii];
@@ -3261,7 +3261,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 			S = S + thisModule->DLLName + " ";
 			S = S + thisModule->Version;
-			ProjectList->Add(S);
+			ProjectList->push_back(S);
 
 			if (thisModule->isGroup || thisModule->isStruct) {
 				list<ModulePtr> ::iterator iterM;
@@ -3279,15 +3279,15 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 					S = S + (*iterM)->DLLName + " ";
 					S = S + (*iterM)->Version;
-					ProjectList->Add(S);
+					ProjectList->push_back(S);
 					++iterM;
 				}
 			}
 		}
-		ProjectList->Add("######");
+		ProjectList->push_back("######");
 
-		ProjectList->Add("Parameters:");
-		ProjectList->Add("###### 'basin' parameters always first");
+		ProjectList->push_back("Parameters:");
+		ProjectList->push_back("###### 'basin' parameters always first");
 
 		for (int bb = 0; bb < 2; ++bb) { // shared parameters first - initially over-write all others
 			for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
@@ -3306,7 +3306,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 					S += " <" + FloatToStrF(thisPar->minVal, TFloatFormat::ffGeneral, 4, 0) + " to " + FloatToStrF(thisPar->maxVal, TFloatFormat::ffGeneral, 4, 0) + ">";
 
 
-				ProjectList->Add(S);
+				ProjectList->push_back(S);
 
 				for (int jj = 0; jj<thisPar->lay; jj++) {
 					S = "";
@@ -3332,24 +3332,24 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 						}
 
 						if (ii % 16 == 15) {
-							ProjectList->Add(S);
+							ProjectList->push_back(S);
 							S = "";
 						}
 					}
 
 					//if (!S.IsEmpty()) { ProjectList->Add(S); S = ""; }
-					if (S.length() != 0) { ProjectList->Add(S); S = ""; }
+					if (S.length() != 0) { ProjectList->push_back(S); S = ""; }
 				}
 
 				//if (!S.IsEmpty()) ProjectList->Add(S);
-				if (S.length() != 0) ProjectList->Add(S);
+				if (S.length() != 0) ProjectList->push_back(S);
 			} // output loop
 		}  // basin module/other loop
 
-		ProjectList->Add("######");
+		ProjectList->push_back("######");
 
-		ProjectList->Add("Initial_State");
-		ProjectList->Add("######");
+		ProjectList->push_back("Initial_State");
+		ProjectList->push_back("######");
 
 
 		//need to modify
@@ -3361,14 +3361,14 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		//		ProjectList->Add(StateItem->Items[ii]->Caption);
 		//}
 
-		ProjectList->Add("######");
+		ProjectList->push_back("######");
 
-		ProjectList->Add("Final_State");
-		ProjectList->Add("######");
+		ProjectList->push_back("Final_State");
+		ProjectList->push_back("######");
 		if (SaveStateFlag) {
-			ProjectList->Add(SaveStateFileName);
+			ProjectList->push_back(SaveStateFileName);
 		}
-		ProjectList->Add("######");
+		ProjectList->push_back("######");
 	}
 
 	//ProjectList->Add("Summary_period");
@@ -3390,12 +3390,12 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//ProjectList->Add("######");
 
 	if (Global::LOGVARLOAD) {
-		ProjectList->Add("LOGVARLOAD");
-		ProjectList->Add("######");
+		ProjectList->push_back("LOGVARLOAD");
+		ProjectList->push_back("######");
 	}
 
-	ProjectList->Add("Display_Variable:");
-	ProjectList->Add("######");
+	ProjectList->push_back("Display_Variable:");
+	ProjectList->push_back("######");
 
 	for (int ii = 0; ii < SeriesCnt; ii++) { // transfer TeeChart data
 
@@ -3445,7 +3445,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			if (lastVar == NULL)
 				Output = (Mod + " " + thisVar->name + " ").c_str() + SS;
 			else if (lastVar != thisVar) {
-				ProjectList->Add(Output);
+				ProjectList->push_back(Output);
 				Output = (Mod + " " + thisVar->name + " ").c_str() + SS;
 			}
 			else
@@ -3456,12 +3456,12 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	}
 
 	//if (!Output.IsEmpty()) ProjectList->Add(Output);
-	if (Output.length() != 0) ProjectList->Add(Output);
+	if (Output.length() != 0) ProjectList->push_back(Output);
 
-	ProjectList->Add("######");
+	ProjectList->push_back("######");
 
-	ProjectList->Add("Display_Observation:");
-	ProjectList->Add("######");
+	ProjectList->push_back("Display_Observation:");
+	ProjectList->push_back("######");
 
 	lastVar = NULL;
 	string kind, lastkind;
@@ -3534,7 +3534,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			SS += "," + to_string(lay);
 
 		if (Output != "" && (thisVar != lastVar || kind != lastkind)) {
-			ProjectList->Add(Output + " " + lastkind);
+			ProjectList->push_back(Output + " " + lastkind);
 			if (thisVar)
 				Output = (thisVar->module + " " + Name.c_str() + " " + SS.c_str()).c_str();
 			else // fudge for obs _Avg thru _Tot being null for observations
@@ -3593,9 +3593,9 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	}
 
 
-	if (Output.length() != 0) ProjectList->Add(Output + " " + kind); // handle last output
+	if (Output.length() != 0) ProjectList->push_back(Output + " " + kind); // handle last output
 
-	ProjectList->Add("######");
+	ProjectList->push_back("######");
 
 
 	//need to check
@@ -3637,8 +3637,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//	ProjectList->Add("######");
 	//}
 
-	ProjectList->Add("TChart:");
-	ProjectList->Add("######");
+	ProjectList->push_back("TChart:");
+	ProjectList->push_back("######");
 
 
 	//need to check
@@ -3665,14 +3665,33 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//	string S = string(Chart->MaxPointsPerPage) + " " + string(Chart->Page);
 	//	ProjectList->Add(S);
 	//}
-	ProjectList->Add("######");
+	ProjectList->push_back("######");
 
 
 	//need to check
 	//ProjectList->SaveToFile(SaveDialogPrj->FileName);
-	ProjectList->SaveToFile(filepath);
 
-	ProjectList->Clear();
+	ofstream file(filepath.c_str()) ;
+
+	if (file)
+	{
+		for (
+			std::list<std::string>::iterator it = ProjectList->begin();
+			it != ProjectList->end();
+			it++
+			)
+		{
+			file << it->c_str() << endl;
+		}
+
+		file.close();
+	}
+	else
+	{
+		//ERROR message 
+	}
+
+	ProjectList->clear();
 
 
 	//need to check

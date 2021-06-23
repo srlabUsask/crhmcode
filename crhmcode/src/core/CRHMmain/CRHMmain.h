@@ -84,7 +84,7 @@ public:
 
 
 	std::list<std::pair<std::string, ClassData*>> * ObsFilesList;
-	TStringList *ProjectList;
+	std::list<std::string> * ProjectList;
 
 	bool OpenStateFlag;
 
