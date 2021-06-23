@@ -933,9 +933,7 @@ void CRHMmain::FormCreate() {
 
 	ProjectList = new std::list<std::string>;
 
-	PrjObsHelp = new TStringList;
-	PrjObsHelp->AddObject("", (TObject*)1);
-
+	
 	Global::AllModulesList = new TStringList;
 	Global::AllModulesList->CaseSensitive = true;
 
