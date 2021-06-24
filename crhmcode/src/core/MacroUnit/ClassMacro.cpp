@@ -88,9 +88,10 @@ void ClassMacro::decl(void) {
 			else
 				Variation = 0;
 
-			int Indx = Global::AllModulesList->IndexOf(S);
+			int Indx = Global::AllModulesList->count(S);
 
-			if (Indx == -1) {
+			if (Indx == 0) 
+			{
 
 				Common::Message(string("Module: '" + S + "' not found!"), "Macro Error");
 				CRHMException Except(string(string("module: ") + S + " not found in " + Name).c_str(), TExcept::TERMINATE);
@@ -105,7 +106,7 @@ void ClassMacro::decl(void) {
 
 			}
 
-			ClassModule* Mod = (ClassModule*)Global::AllModulesList->Objects[Indx];
+			ClassModule* Mod = Global::AllModulesList->find(S)->second;
 
 			//ModulePtr Test(Mod->klone());
 			ModulePtr Test(Mod->klone(Name));
