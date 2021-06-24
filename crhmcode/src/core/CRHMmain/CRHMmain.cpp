@@ -470,8 +470,9 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 				for (int ii = Global::OurModulesList->Count - 1; ii >= 0; --ii) {
 					string Name = Global::OurModulesList->Strings[ii];
-					int jj = Global::AllModulesList->IndexOf(Name);
-					if (jj < 0) {
+					int jj = Global::AllModulesList->count(Name);
+					if (jj == 0) 
+					{
 						CRHMException Except("Unknown Module: " + string(Name.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
 							"Unknown Module: incorrect CRHM version or DLL not loaded");
@@ -480,10 +481,11 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 						DataFile.seekg(0, ios_base::end);  // cause break out
 					}
-					else {
+					else 
+					{
 						Variation = ((long long)Global::OurModulesList->Objects[ii]);
-						((ClassModule*)Global::AllModulesList->Objects[jj])->variation = (unsigned short) Variation;
-						Global::OurModulesList->Objects[ii] = Global::AllModulesList->Objects[jj];
+						Global::AllModulesList->find(Name)->second->variation = (unsigned short)Variation;
+						Global::OurModulesList->Objects[ii] = Global::AllModulesList->find(Name)->second;
 					}
 				}
 
@@ -934,8 +936,7 @@ void CRHMmain::FormCreate() {
 	ProjectList = new std::list<std::string>;
 
 	
-	Global::AllModulesList = new TStringList;
-	Global::AllModulesList->CaseSensitive = true;
+	Global::AllModulesList = new std::map<std::string, ClassModule*>;
 
 	Global::OurModulesList = new TStringList;
 	Global::OurModulesList->Sorted = false;
@@ -973,9 +974,10 @@ void CRHMmain::FormCreate() {
 	Global::NewModuleName->CommaText("longVt, CanopyClearingGap, WQ_pbsm, WQ_Soil, WQ_Netroute, WQ_Netroute_M_D");
 
 #if !defined NO_MODULES
-	for (int ii = 0; ii < Global::NewModuleName->Count; ++ii) {
-		long long jj = Global::AllModulesList->IndexOf(Global::NewModuleName->Strings[ii]);
-		assert(jj != -1);
+	for (int ii = 0; ii < Global::NewModuleName->Count; ++ii) 
+	{
+		size_t jj = Global::AllModulesList->count(Global::NewModuleName->Strings[ii]);
+		assert(jj != 0);
 		Global::OldModuleName->Objects[ii] = (TObject*)jj;
 	}
 #endif
@@ -3019,7 +3021,7 @@ std::map<std::string, ClassVar *> * CRHMmain::getObservations()
 }
 
 
-TStringList* CRHMmain::getAllmodules()
+std::map<std::string, ClassModule*> * CRHMmain::getAllmodules()
 {
 	return Global::AllModulesList;
 }

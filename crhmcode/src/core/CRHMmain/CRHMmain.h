@@ -173,7 +173,7 @@ public:
 
 	std::map<std::string, ClassVar*> * getObservations();
 
-	TStringList * getAllmodules();
+	std::map<std::string, ClassModule *> * getAllmodules();
 
 	std::map<std::string, ClassVar*>* getVariables();
 

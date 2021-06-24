@@ -74,7 +74,7 @@ Mapstr Global::Mapdeclobs;  // build
 Mapstr Global::Mapdeclstat; // build
 Mapstr2 Global::MapAKA;
 
-TStringList *(Global::AllModulesList);
+std::map<std::string, ClassModule * > * (Global::AllModulesList);
 TStringList *(Global::OurModulesList);
 TStringList *(Global::MacroModulesList);
 TStringList *(Global::AllModelsList);

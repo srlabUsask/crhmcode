@@ -92,17 +92,19 @@ void Administer::Accept(int Result) {
 			&& Global::PendingDLLModuleList->IndexOf(DLLModuleList->Strings[ii]) == -1)
 			continue;
 
-		int jj = Global::AllModulesList->IndexOf(DLLModuleList->Strings[ii]);
-		if (jj != -1) {
+		int jj = Global::AllModulesList->count(DLLModuleList->Strings[ii]);
+		if (jj != 0) 
+		{
 			Exists = "Over-write existing module \"";
 			//      MsgDlgType = mtWarning;
 		}
-		else {
+		else 
+		{
 			Exists = "Load Module \"";
 			//      MsgDlgType = mtInformation;
 		}
 
-		if (Global::AllModulesList->IndexOf(DLLModuleList->Strings[ii]) == -1 // Needed to be put back!
+		if (Global::AllModulesList->count(DLLModuleList->Strings[ii]) == 0 // Needed to be put back!
 			&& Global::OurModulesList->IndexOf(DLLModuleList->Strings[ii]) != -1)
 			Result = mbYes;
 		//    else if(Result != mbYesToAll && Result != mbNoToAll){ // optional
@@ -114,18 +116,22 @@ void Administer::Accept(int Result) {
 		switch (Result) {
 		case mbYes:
 		case mbYesToAll:
-			if (jj != -1) {
+			if (jj != 0) 
+			{
 				LogError(CRHMException((DLLModuleList->Strings[ii] + " module being replaced").c_str(), TExcept::WARNING));
-				Global::AllModulesList->Delete(jj);
+				Global::AllModulesList->erase(DLLModuleList->Strings[ii]);
 			}
 
 			thisModule = (ClassModule*)DLLModuleList->Objects[ii];
 			thisModule->DLLName = DLLName;
 			if (thisModule->DLLName != "Macro")
+			{
 				thisModule->ID = typeid(*thisModule).name();
+			}
+				
 
-			Global::AllModulesList->AddObject(DLLModuleList->Strings[ii],
-				(TObject*)DLLModuleList->Objects[ii]);
+			Global::AllModulesList->insert(std::pair<std::string, ClassModule*>(DLLModuleList->Strings[ii],
+				(ClassModule*)DLLModuleList->Objects[ii]));
 			break;
 
 		case mbNo:

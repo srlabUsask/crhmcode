@@ -13,6 +13,7 @@
 #include "Common/Common.h"
 #include "StandardConverterUtility.h"
 #include "TStringList/TStringList.h"
+#include "ClassModule/ClassModule.h"
 
 #include <map>
 //#include "ClassCRHM.h"
@@ -21,6 +22,8 @@ using namespace std;
 
 //newly added
 typedef double TDateTime;
+
+class ClassModule;
 
 class   Global {
 public:
@@ -87,7 +90,7 @@ public:
 	static Mapstr Mapdeclstat; // BUILD, state variable list
 	static Mapstr2 MapAKA;
 
-	static TStringList *AllModulesList;       // modules defined in CRHM
+	static std::map<std::string, ClassModule*> *AllModulesList;       // modules defined in CRHM
 	static TStringList *OurModulesList;       // modules defined in current model
 	static TStringList *MacroModulesList;     // custom modules defined in current model
 	static TStringList *AllModelsList;        // models defined in CRHM
