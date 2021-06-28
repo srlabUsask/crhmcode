@@ -16,6 +16,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <set>
 //#include "CString"
 #include "Common/Common.h"
 #include "TStringList/TStringList.h"
@@ -183,9 +184,9 @@ public:
 	void RunClick(void);
 	void CheckBlankModule();
 	void AllRprt();
-	void  ControlReadState(bool MainLoop, ClassPar * VarPar);
-	void  LastRprt(void);
-	void  ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit);
+	void ControlReadState(bool MainLoop, ClassPar * VarPar);
+	void LastRprt(void);
+	void ControlSaveState(bool MainLoop, ClassPar * VarPar);
 	void DoObsStatus(bool &First);
 	void calculateOutputFileName();
 	void RprtHeader(TStringList *LogList, int LocalCnt);

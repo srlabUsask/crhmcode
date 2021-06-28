@@ -8,7 +8,7 @@
 #include "CRHMAboutBox.h"
 #endif
 
-
+#include <list>
 #include <map>
 #include <string>
 #include <iostream>
@@ -258,7 +258,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	ClassPar *thisPar = NULL;
 	ClassVar *thisVar;
 	ifstream DataFile;
-	long long Variation;
+	unsigned short Variation;
 
 	string module, param, Descrip, Line, name;
 	//string module, param, Descrip, Line, name;
@@ -433,7 +433,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 				DataFile >> S;
 			}
 			else if (S == "Modules:") {
-				Global::OurModulesList->Clear();
+				Global::OurModulesList->clear();
 
 				for (;;) {
 					getline(DataFile, S);
@@ -450,15 +450,18 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 					idx = S.find('#');
 					if (idx != -1) {
-						Variation = (long long)pow(2, S[idx + 1] - char('1'));
+						Variation = (unsigned short) pow(2, S[idx + 1] - char('1'));
 						s = S.substr(0, idx);
 					}
 					else
 						Variation = 0;
 
-					if (!InGrp)
-						Global::OurModulesList->AddObject(s, (TObject*)Variation);
 
+					if (!InGrp)
+					{
+						Global::OurModulesVariation->push_back(std::pair<std::string, unsigned short>(s, Variation));
+					}
+						
 					idx = S.find(' ');
 					S = S.substr(idx + 1);
 					idx = S.rfind(' ');
@@ -468,8 +471,13 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					idx = S.rfind(".DLL");
 				}
 
-				for (int ii = Global::OurModulesList->Count - 1; ii >= 0; --ii) {
-					string Name = Global::OurModulesList->Strings[ii];
+				for (
+					std::list<std::pair<std::string, unsigned short>>::iterator it = Global::OurModulesVariation->begin(); 
+					it != Global::OurModulesVariation->end(); 
+					it++
+					) 
+				{
+					string Name = it->first;
 					int jj = Global::AllModulesList->count(Name);
 					if (jj == 0) 
 					{
@@ -477,15 +485,29 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 						Common::Message(Except.Message.c_str(),
 							"Unknown Module: incorrect CRHM version or DLL not loaded");
 						LogError(Except);
-						Global::OurModulesList->Delete(ii);
+						
+						for (
+							std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+							it != Global::OurModulesList->end();
+							it++
+							)
+						{
+							if (it->first == Name)
+							{
+								Global::OurModulesList->erase(it);
+								break;
+							}
+						}
+
+						Global::OurModulesVariation->erase(it);
 
 						DataFile.seekg(0, ios_base::end);  // cause break out
 					}
 					else 
 					{
-						Variation = ((long long)Global::OurModulesList->Objects[ii]);
-						Global::AllModulesList->find(Name)->second->variation = (unsigned short)Variation;
-						Global::OurModulesList->Objects[ii] = Global::AllModulesList->find(Name)->second;
+						Variation = it->second;
+						Global::AllModulesList->find(Name)->second->variation = Variation;
+						Global::OurModulesList->push_back(std::pair<std::string, ClassModule*>(Name, Global::AllModulesList->find(Name)->second));
 					}
 				}
 
@@ -936,10 +958,10 @@ void CRHMmain::FormCreate() {
 	ProjectList = new std::list<std::string>;
 
 	
-	Global::AllModulesList = new std::map<std::string, ClassModule*>;
-
-	Global::OurModulesList = new TStringList;
-	Global::OurModulesList->Sorted = false;
+	Global::AllModulesList = new std::map<std::string, ClassModule * >;
+	Global::OurModulesList = new std::list<std::pair<std::string, ClassModule*>>;
+	Global::OurModulesVariation = new std::list<std::pair<std::string, unsigned short>>;
+	Global::ModuleBitSet = new std::set<std::string>;
 
 	Global::MacroModulesList = new TStringList;
 	Global::MacroModulesList->Sorted = false; // Global::ModelModulesList is not sorted
@@ -1009,10 +1031,16 @@ void  CRHMmain::InitModules(void) {
 	Global::BuildFlag = TBuild::DECL;
 
 	// executes the DECL portion of the declvar/declparam etc. routines
-	for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
-		((ClassModule*)Global::OurModulesList->Objects[ii])->nhru = Global::nhru;
-		((ClassModule*)Global::OurModulesList->Objects[ii])->decl();
+	for (
+		std::list<std::pair<std::string, ClassModule *>>::iterator it = Global::OurModulesList->begin(); 
+		it != Global::OurModulesList->end(); 
+		it++
+		) 
+	{
+		it->second->nhru = Global::nhru;
+		it->second->decl();
 	}
+
 	Label4Click();
 }
 
@@ -1357,12 +1385,28 @@ void CRHMmain::MacroLoad(void)
 }
 
 //---------------------------------------------------------------------------
-string CRHMmain::DeclObsName(ClassVar *thisVar) {
-
+string CRHMmain::DeclObsName(ClassVar *thisVar) 
+{
 	string Newname = thisVar->name;
-	int jj = Global::OurModulesList->IndexOf(thisVar->module); // find module
-	if (jj > -1 && Newname.rfind("#") != string::npos) { // -1 for "obs" and "#" for declared "obs"
-		ClassModule* thisModule = (ClassModule*)Global::OurModulesList->Objects[jj];
+	
+	//std::map<std::string, ClassModule*>::iterator pos = Global::OurModulesList->find(thisVar->module); // find module
+	
+	std::list<std::pair<std::string, ClassModule*>>::iterator pos;
+	for (
+		std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+		it != Global::OurModulesList->end();
+		it++
+		)
+	{
+		if (it->first == thisVar->module)
+		{
+			pos = it;
+		}
+	}
+
+	if (pos != Global::OurModulesList->end() && Newname.rfind("#") != string::npos) // -1 for "obs" and "#" for declared "obs"
+	{ 
+		ClassModule* thisModule = pos->second;
 		if (thisModule->isGroup) { // if group add suffix
 			string AA("@@");
 			AA[1] += (char) thisModule->GroupCnt;
@@ -1723,7 +1767,7 @@ MMSData *  CRHMmain::RunClick2Start()
 	MapVar::iterator itVar;
 	//PlotControl->IntervalControl = 0;
 	//PlotControl->IntervalLength = 3; // make default
-	Global::ModuleBitSet.reset();
+	Global::ModuleBitSet->clear();
 
 	Global::HRU_OBS = Global::HRU_OBS_DIRECT; // always correct? Not set by macro project?
 	Global::OBS_AS_IS = false;
@@ -1783,19 +1827,32 @@ MMSData *  CRHMmain::RunClick2Start()
 	LogMessageX(Message.c_str());
 
 	string S = string("Module List \"");
-	for (int ii = 0; ii < Global::OurModulesList->Count; ++ii) {
-		ClassModule* thisModule = (ClassModule*)Global::OurModulesList->Objects[ii];
-		S += Global::OurModulesList->Strings[ii];
-		if (thisModule->variation != 0) {
+	for (
+		std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+		it != Global::OurModulesList->end(); 
+		it++
+		) 
+	{
+		ClassModule* thisModule = it->second;
+		S += it->first;
+		if (thisModule->variation != 0) 
+		{
 			string AA("#0");
 			AA[1] += (char) (log(thisModule->variation) / log(2) + 1);
 			S += AA;
 		}
+		
+		std::list<std::pair<std::string, ClassModule*>>::iterator pos = it;
 
-		if (ii == Global::OurModulesList->Count - 1)
+		if (pos++ == Global::OurModulesList->end())
+		{
 			S += ".\"";
+		}
 		else
+		{
 			S += ", ";
+		}
+			
 	}
 
 	if (!Global::MapAKA.empty()) {
@@ -1812,7 +1869,7 @@ MMSData *  CRHMmain::RunClick2Start()
 	Global::DeclRootList->Clear(); // used by AKA to stop looping
 
 								   // clears storage for observation read and function lists
-	((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
+	Global::OurModulesList->begin()->second->InitReadObs();
 
 	double DTstartR = StartDatePicker;
 	double DTendR = EndDatePicker;
@@ -1865,11 +1922,15 @@ MMSData *  CRHMmain::RunClick2Start()
 	Global::MapVarsPut.clear();
 	Global::MapObsGet.clear();
 
-
-
 	try {
-		for (Modii = 0; Modii < Global::OurModulesList->Count; Modii++)
-			((ClassModule*)(Global::OurModulesList->Objects[Modii]))->initbase();
+		for (
+			std::list<std::pair<std::string, ClassModule*>>::iterator moduleIt = Global::OurModulesList->begin();
+			moduleIt != Global::OurModulesList->end();
+			moduleIt++
+			)
+		{
+			moduleIt->second->initbase();
+		}
 	}
 
 	catch (CRHMException Except) { // serious error - program had to stop immediately
@@ -1941,13 +2002,19 @@ MMSData *  CRHMmain::RunClick2Start()
 
 	if (!GoodRun) { //cleanup memory before returning
 
-					// deletes storage for observation read list
-		((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
+		// deletes storage for observation read list
+		Global::OurModulesList->begin()->second->InitReadObs();
 
 		// deletes module allocated storage
-		for (int ii = 0; ii < Modii; ii++)
-			((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(false);
-
+		for (
+			std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
+			modIt != Global::OurModulesList->end(); 
+			modIt++
+			)
+		{
+			modIt->second->finish(false);
+		}
+			
 		Global::BuildFlag = TBuild::DECL;
 		return mmsdata;
 	}
@@ -2017,18 +2084,33 @@ MMSData *  CRHMmain::RunClick2Start()
 	Global::CRHMStatus = 0; // module status; module control = 1 , main control = 2 and Finished = 4. Both inhibit output.
 	Global::LoopCntDown = -1;
 	StatePar = NULL;
-	Global::ModuleBitSet.reset();
+	Global::ModuleBitSet->clear();
 
 
 	/////////////////// Manishankar added this from Diogo's code.
 	ClassModule* Obs_preset; // used to call preset for simple projects
 
-	int jj = Global::OurModulesList->IndexOf("obs");
+	std::list<std::pair<std::string, ClassModule*>>::iterator pos;
+	for (
+		std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+		it != Global::OurModulesList->end();
+		it++
+		)
+	{
+		if (it->first == "obs")
+		{
+			pos = it;
+		}
+	}
 
-	if (jj == -1)
+	if (pos == Global::OurModulesList->end())
+	{
 		Obs_preset = NULL;
+	}
 	else
-		Obs_preset = (ClassModule*)Global::OurModulesList->Objects[jj];
+	{
+		Obs_preset = pos->second;
+	}
 
 	if (Global::LoopCnt && ((double)Global::RapidAdvanceTo == 0.0 || (double)Global::RapidAdvanceTo <= DTstartR))
 		Global::RapidAdvanceTo = DTstartR + 1;
@@ -2090,7 +2172,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 					if (Global::LoopCntDown == -1) { // first time
 						Global::LoopCntDown = Global::LoopCnt;
 						StatePar = ParFind("basin StateVars_to_Update");
-						ControlSaveState(true, StatePar, Global::RunUpBitSet); // save this position
+						ControlSaveState(true, StatePar); // save this position
 						LogMessage("Initialise LoopTo Main", TExtra::DD);
 					}
 				}
@@ -2120,11 +2202,17 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			if (Obs_preset) // for simple prj, set up elev etc.
 				Obs_preset->pre_run();
 
-			for (Global::CurrentModuleRun = 0; Global::CurrentModuleRun < Global::OurModulesList->Count; Global::CurrentModuleRun++) {
+			for (
+				std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
+				modIt != Global::OurModulesList->end();
+				modIt++
+				) 
+			{
+				Global::CurrentModuleRun = modIt->first;
 
 				long Last = Global::CRHMControlSaveCnt;
 
-				ClassModule *p = (ClassModule*)Global::OurModulesList->Objects[Global::CurrentModuleRun];
+				ClassModule* p = modIt->second;
 				// Simple project for module obs. For group always when !CRHMStatus otherwise only selected groups
 
 
@@ -2141,7 +2229,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 				CheckBlankModule();
 
-				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet[Global::CurrentModuleRun])) {
+				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet->count(Global::CurrentModuleRun))) {
 					//try
 					//{
 					//Common::writefile("d:/test.txt","p = "+p->Name+", p nameroot = "+p->NameRoot);
@@ -2163,7 +2251,10 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				// module flag loop
 
 				if (Last != Global::CRHMControlSaveCnt) // means last module/group
-					Global::ModuleBitSet.set(Global::CurrentModuleRun);
+				{
+					Global::ModuleBitSet->insert(Global::CurrentModuleRun);
+				}
+					
 			} // end for
 			  //--------------------------------------------------------------------------------------------------
 
@@ -2171,7 +2262,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 
 			if (Global::CRHMControlSaveCnt && !(Global::CRHMStatus & 1)) { // Set module mode. Save current position.
-				ControlSaveState(false, StatePar, Global::ModuleBitSet);
+				ControlSaveState(false, StatePar);
 				Global::CRHMStatus |= 1; // set module control bit and inhibit display.
 				LogMessage("Start save Main", TExtra::DD);
 			}
@@ -2265,11 +2356,18 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 	delete[] mmsDataL;
 
 	// deletes storage for observation read list
-	((ClassModule*)Global::OurModulesList->Objects[0])->InitReadObs();
+	Global::OurModulesList->begin()->second->InitReadObs();
 
 	// deletes module allocated storage
-	for (int ii = 0; ii < Global::OurModulesList->Count; ii++)
-		((ClassModule*)(Global::OurModulesList->Objects[ii]))->finish(true);
+	for (
+		std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
+		modIt !=Global::OurModulesList->end();
+		modIt++
+		)
+	{
+		modIt->second->finish(true);
+	}
+		
 
 	if (GoodRun) {
 		
@@ -2321,7 +2419,7 @@ void  CRHMmain::RunClick(void) {
 
 //---------------------------------------------------------------------------
 
-void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit)
+void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 {
 	TStringList *StateList;
 	MapVar::iterator itVar;
@@ -2353,7 +2451,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit)
 	StateList->Add("######");
 
 	StateList->Add("CurrentModuleRun:");
-	StateList->Add(DttoStr(Global::CurrentModuleRun));
+	StateList->Add(Global::CurrentModuleRun);
 	StateList->Add("######");
 
 	StateList->Add("Dimension:");
@@ -2366,7 +2464,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar, BitSet &Bit)
 
 		if (thisVar->varType < TVar::Read && thisVar->StatVar) { // Is state variable!
 
-			if (!thisVar->InGroup || Global::ModuleBitSet[thisVar->InGroup - 1])  // All variables in simple projects and module requested group projects
+			if (!thisVar->InGroup || Global::ModuleBitSet->count(thisVar->module))  // All variables in simple projects and module requested group projects
 				Needed = true;
 			else if (MainLoop) {
 				string namebasic = thisVar->name;
@@ -2850,11 +2948,26 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 
 		DataFile.ignore();
 
-		long exist = Global::OurModulesList->IndexOf(module);
+		std::list<std::pair<std::string, ClassModule*>>::iterator pos;
+		for (
+			std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+			it != Global::OurModulesList->end();
+			it++
+			)
+		{
+			if (it->first == module)
+			{
+				pos = it;
+			}
+		}
+
 		ClassModule*  mod;
-		if (exist > -1)
-			mod = (ClassModule*)Global::OurModulesList->Objects[exist];
-		else {
+		if (pos != Global::OurModulesList->end())
+		{
+			mod = pos->second;
+		}
+		else 
+		{
 			Common::Message((string("State File module ") + module), "Unknown module");
 			DataFile.ignore(180, '#');
 			getline(DataFile, Line);
@@ -2966,10 +3079,17 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 
 				if (AllVariables->count(Trimmed)) 
 				{
-					for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
-						ClassVar * thisVar = VarFind(string(Global::OurModulesList->Strings[ii]) + ' ' + TraceVarPar->Strings->Strings[0]);
-						if (thisVar)
+					for (
+						std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
+						modIt  != Global::OurModulesList->end(); 
+						modIt++
+						) 
+					{
+						ClassVar * thisVar = VarFind(string(modIt->first) + ' ' + TraceVarPar->Strings->Strings[0]);
+						if (thisVar) 
+						{
 							break;
+						}
 					} // for
 
 					thisVar = AllVariables->find(Trimmed)->second;
@@ -3272,17 +3392,25 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		ProjectList->push_back("Modules:");
 		ProjectList->push_back("######");
-		for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
-			ClassModule* thisModule = (ClassModule*)Global::OurModulesList->Objects[ii];
-			string S = Global::OurModulesList->Strings[ii];
-			if (thisModule->variation > 0) {
+		for (
+			std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
+			modIt != Global::OurModulesList->end(); 
+			modIt++
+			) 
+		{
+			ClassModule* thisModule = modIt->second;
+			string S = modIt->first;
+			if (thisModule->variation > 0) 
+			{
 				string AA("#0 ");
 				AA[1] += (char) (log(thisModule->variation) / log(2) + 1);
 				S = S + AA.c_str();
 			}
 			else
+			{
 				S = S + " ";
-
+			}
+				
 			S = S + thisModule->DLLName + " ";
 			S = S + thisModule->Version;
 			ProjectList->push_back(S);
@@ -3812,10 +3940,19 @@ void CRHMmain::ClearModules(bool All) {
 	Global::SharedMapPars.clear();
 
 	if (All)
-		for (int ii = 0; ii < Global::OurModulesList->Count; ii++)
-			((ClassModule*)(Global::OurModulesList->Objects[ii]))->reset();
+	{
+		for (
+			std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
+			modIt != Global::OurModulesList->end();
+			modIt++
+			)
+		{
+			modIt->second->reset();
+		}
+	}
+		
 
-	Global::OurModulesList->Clear();
+	Global::OurModulesList->clear();
 
 	if (All) {
 		AdminMacro.MacroClear();

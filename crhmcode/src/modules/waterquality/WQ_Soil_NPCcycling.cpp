@@ -816,9 +816,23 @@ void ClassWQ_SoilBGC::finish(bool good) {
     }  // try
     catch(...)
     {
+
+        string moduleName;
+        for (
+            std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+            it != Global::OurModulesList->end();
+            it++
+            )
+        {
+            if (it->first == Global::CurrentModuleRun)
+            {
+                moduleName = it->first;
+            }
+        }
+
       //string S = E.Message + " at " +
 		string S = string("Error ") + " at " +
-		  StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " (" + to_string(getstep()) + ") in '" + Global::OurModulesList->Strings[Global::CurrentModuleRun] +
+		  StandardConverterUtility::GetDateTimeInString(Global::DTnow) + " (" + to_string(getstep()) + ") in '" + moduleName +
           "'" + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 6) + ") hh = " + FloatToStrF(hh, TFloatFormat::ffGeneral, 6, 0);
       LogError(S, TExcept::WARNING);
       throw;

@@ -3221,15 +3221,33 @@ ClassModule* ClassModule::FindModule_from_parameter(string source, string param)
 		}
 	}
 
-	if (GroupCnt) {
-		long ii = Global::OurModulesList->IndexOf(Name.c_str()); // find group macro
-																 //ClassMacro* macro = (ClassMacro*)Global::OurModulesList->Objects[ii]; // access it
-																 //long jj = macro->GrpstringList->IndexOf(newPar->basemodule.c_str()); // find module in list
-																 //return    (long)macro->GrpstringList->Objects[jj]; // return object
+	if (GroupCnt) 
+	{
+		//long ii = Global::OurModulesList->count(Name.c_str()); // find group macro
+		//ClassMacro* macro = (ClassMacro*)Global::OurModulesList->Objects[ii]; // access it
+		//long jj = macro->GrpstringList->IndexOf(newPar->basemodule.c_str()); // find module in list
+		//return    (long)macro->GrpstringList->Objects[jj]; // return object
 	}
 	else {
-		long ii = Global::OurModulesList->IndexOf(newPar->basemodule.c_str());
-		return    (ClassModule*)Global::OurModulesList->array[ii].Object;
+		std::list<std::pair<std::string, ClassModule*>>::iterator pos = Global::OurModulesList->end(); 
+		
+		for (
+			std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+			it != Global::OurModulesList->end();
+			it++
+			)
+		{
+			if (it->first == newPar->basemodule.c_str())
+			{
+				pos = it;
+			}
+		}
+
+		if (pos != Global::OurModulesList->end())
+		{
+			return pos->second;
+		}
+
 	}
 
 	CRHMException Except("Parameter not found: " + Name + " " + param, TExcept::TERMINATE);
@@ -3418,15 +3436,34 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 }
 
 //---------------------------------------------------------------------------
-ClassModule* ClassModule::link(string Module) {
+ClassModule* ClassModule::link(string Module) 
+{
 
 	if (Name == Module.c_str())
+	{
 		return NULL; // self
+	}
+		
+	std::list<std::pair<std::string, ClassModule*>>::iterator pos; 
+	for (
+		std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+		it != Global::OurModulesList->end();
+		it++
+		)
+	{
+		if (it->first == Module.c_str())
+		{
+			pos = it;
+		}
+	}
 
-	int jj = Global::OurModulesList->IndexOf(Module.c_str());
-
-	if (jj == -1)
+	if (pos == Global::OurModulesList->end())
+	{
 		return NULL;
+	}
 	else
-		return (ClassModule*)Global::OurModulesList->array[jj].Object;
+	{
+		return pos->second;
+	}
+		
 }

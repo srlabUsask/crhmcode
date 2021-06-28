@@ -38,11 +38,11 @@ long Global::nlay;
 long Global::nhru;
 
 long Global::CRHMStatus;  // module status; module control = 1 , main control = 2 and Finished = 4. Both inhibit output.
-long Global::CurrentModuleRun;  // currently executing module index
+std::string Global::CurrentModuleRun;  //!< Currently executing module
 long Global::CRHMControlSaveCnt; // NewModules input
 
 BitSet Global::RunUpBitSet; // determines modules executed during looping.
-BitSet Global::ModuleBitSet; // determines modules executed during calculating ahead.
+std::set<std::string> * Global::ModuleBitSet; // determines modules executed during calculating ahead.
 
 double Global::Interval; // set by first observation file.
 double Global::DTstart;  // set by first observation file.  Integer.
@@ -75,7 +75,8 @@ Mapstr Global::Mapdeclstat; // build
 Mapstr2 Global::MapAKA;
 
 std::map<std::string, ClassModule * > * (Global::AllModulesList);
-TStringList *(Global::OurModulesList);
+std::list<std::pair<std::string, ClassModule*>> * (Global::OurModulesList);
+std::list<std::pair<std::string, unsigned short>> * (Global::OurModulesVariation);
 TStringList *(Global::MacroModulesList);
 TStringList *(Global::AllModelsList);
 TStringList *(Global::ModelModulesList);

@@ -80,10 +80,29 @@ long ClassParFindParBld(ClassPar *thisPar) { // where parameter is BasinMapPars
 		smodule = (itPar->first).c_str();
 		if (sparam == thisPar->param) {
 			MapPar::iterator itPar0 = Global::MapPars.find(smodule + ' ' + thisPar->param);
-			if (itPar0 != Global::MapPars.end()) // already there?
+			if (itPar0 != Global::MapPars.end())
+			{// already there?
 				continue;
-			if (Global::OurModulesList->IndexOf(smodule.c_str()) == -1) // in project?
-				continue; // NO!
+			}
+
+			bool smoduleInOurModules = false;
+			for (
+				std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+				it != Global::OurModulesList->end();
+				it++
+				)
+			{
+				if (it->first == smodule.c_str())
+				{
+					smoduleInOurModules = true;
+				}
+			}
+
+			if (smoduleInOurModules == false)
+			{
+				continue;
+			}
+
 			++Count;
 			ClassPar *newPar = new ClassPar(*thisPar);
 			newPar->module = smodule;

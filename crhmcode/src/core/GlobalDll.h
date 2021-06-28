@@ -16,6 +16,7 @@
 #include "ClassModule/ClassModule.h"
 
 #include <map>
+#include <set>
 //#include "ClassCRHM.h"
 
 using namespace std;
@@ -54,11 +55,11 @@ public:
 	static long nhru;
 
 	static long CRHMStatus;
-	static long CurrentModuleRun;
+	static std::string CurrentModuleRun;
 	static long CRHMControlSaveCnt;
 
 	static BitSet RunUpBitSet; // determines modules executed during looping.
-	static BitSet ModuleBitSet; // determines modules executed during calculating ahead.
+	static std::set<std::string> * ModuleBitSet; // determines modules executed during calculating ahead.
 
 	static double Interval;
 	static double DTstart;
@@ -90,8 +91,9 @@ public:
 	static Mapstr Mapdeclstat; // BUILD, state variable list
 	static Mapstr2 MapAKA;
 
-	static std::map<std::string, ClassModule*> *AllModulesList;       // modules defined in CRHM
-	static TStringList *OurModulesList;       // modules defined in current model
+	static std::map<std::string, ClassModule* > * AllModulesList;       // modules defined in CRHM
+	static std::list<std::pair<std::string, ClassModule*>> * OurModulesList;       // modules defined in current model
+	static std::list<std::pair<std::string, unsigned short>> * OurModulesVariation;
 	static TStringList *MacroModulesList;     // custom modules defined in current model
 	static TStringList *AllModelsList;        // models defined in CRHM
 	static TStringList *ModelModulesList;     // modules used in above models in CommaText

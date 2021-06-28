@@ -48,11 +48,28 @@ void Administer::MacroClear() {
 
 //---------------------------------------------------------------------------
 void Administer::MacroUpdate() {
-	for (int ii = 0; ii < DLLModuleList->Count; ++ii) {
-		int jj = Global::OurModulesList->IndexOf(DLLModuleList->Strings[ii]);
+	for (int ii = 0; ii < DLLModuleList->Count; ++ii) 
+	{
+		std::list<std::pair<std::string, ClassModule*>>::iterator pos;
+		bool moduleFound = false;
+		for (
+			std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+			it != Global::OurModulesList->end();
+			it++
+			)
+		{
+			if (it->first == DLLModelList->Strings[ii])
+			{
+				moduleFound = true;
+				pos = it;
+			}
+		}
 
-		if (jj > -1) // Update Macro Module address
-			Global::OurModulesList->Objects[jj] = DLLModuleList->Objects[ii];
+		if (moduleFound) // Update Macro Module address
+		{
+			pos->second = (ClassModule * ) DLLModuleList->Objects[ii];
+		}
+			
 	}
 }
 
@@ -104,8 +121,22 @@ void Administer::Accept(int Result) {
 			//      MsgDlgType = mtInformation;
 		}
 
+		bool inOurModulesList = false;
+		for (
+			std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
+			it != Global::OurModulesList->end();
+			it++
+			)
+		{
+			if (it->first == DLLModelList->Strings[ii])
+			{
+				inOurModulesList = true;
+				
+			}
+		}		
+
 		if (Global::AllModulesList->count(DLLModuleList->Strings[ii]) == 0 // Needed to be put back!
-			&& Global::OurModulesList->IndexOf(DLLModuleList->Strings[ii]) != -1)
+			&& inOurModulesList)
 			Result = mbYes;
 		//    else if(Result != mbYesToAll && Result != mbNoToAll){ // optional
 		//      Result = MessageDlg(Exists + DLLModuleList->Strings[ii] + "\" ?",
