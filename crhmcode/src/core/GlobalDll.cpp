@@ -77,7 +77,7 @@ Mapstr2 Global::MapAKA;
 std::map<std::string, ClassModule * > * (Global::AllModulesList);
 std::list<std::pair<std::string, ClassModule*>> * (Global::OurModulesList);
 std::list<std::pair<std::string, unsigned short>> * (Global::OurModulesVariation);
-TStringList *(Global::MacroModulesList);
+std::vector<std::string> * (Global::MacroModulesList);
 TStringList *(Global::AllModelsList);
 TStringList *(Global::ModelModulesList);
 TStringList *(Global::OurHelpList);

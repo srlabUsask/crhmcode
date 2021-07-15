@@ -470,16 +470,16 @@ void ClassMacro::init(void) {
 
 	Operations.clear();
 
-	string str(Global::MacroModulesList->Strings[Begin]);
+	string str(Global::MacroModulesList->operator[](Begin));
 
 	for (int jj = Begin + 1; jj < End; ++jj) {
-		string::size_type P = Global::MacroModulesList->Strings[jj].find("//");
+		string::size_type P = Global::MacroModulesList->operator[](jj).find("//");
 		if (P != string::npos) {
 			if (P - 1 > 0)
-				str += " \n" + Global::MacroModulesList->Strings[jj].substr(1, P - 1);
+				str += " \n" + Global::MacroModulesList->operator[](jj).substr(1, P - 1);
 		}
 		else
-			str += " \n" + Global::MacroModulesList->Strings[jj];
+			str += " \n" + Global::MacroModulesList->operator[](jj);
 	}
 
 	//str = str + " \n"; //updated by Manishankar for solving the parsing problem.
@@ -585,10 +585,10 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 	//Common::Message ("test 11", Global::MacroModulesList->Strings[ThisEnd]);	
 
 
-	while (S = Common::trim(Global::MacroModulesList->Strings[ThisEnd]), SS = S.substr(0, 3),
+	while (S = Common::trim(Global::MacroModulesList->operator[](ThisEnd)), SS = S.substr(0, 3),
 		!(SS == "end" &&
 			(S.length() == 3 || S.find_first_of(" /") != string::npos)) &&
-		Global::MacroModulesList->Count > ThisEnd
+		Global::MacroModulesList->size() > ThisEnd
 		)
 	{
 		//Common::Message ("test 11-2", SS);
@@ -615,14 +615,17 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 		//Common::Message ("test", "test 14");
 
 		string::size_type Indx;
-		Indx = Global::MacroModulesList->Strings[ii].find("//");  //Manishankar did this to resolve a warning.
+		Indx = Global::MacroModulesList->operator[](ii).find("//");  //Manishankar did this to resolve a warning.
 		if (Indx != string::npos) {
-			string temp = Global::MacroModulesList->Strings[ii].substr(0, Indx - 1);
+			string temp = Global::MacroModulesList->operator[](ii).substr(0, Indx - 1);
 			temp = Common::trimright(temp);
 			DefCRHM::DefStringList->DelimitedText(Add_Quote(temp));
 		}
 		else
-			DefCRHM::DefStringList->DelimitedText(Add_Quote(Global::MacroModulesList->Strings[ii]));
+		{
+			DefCRHM::DefStringList->DelimitedText(Add_Quote(Global::MacroModulesList->operator[](ii)));
+		}
+			
 
 
 		//Common::Message ("test", "test 15");
@@ -763,7 +766,7 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 		}
 		else {
 			Common::Message(string(string("function not recognised or too few parameters: ")
-				+ "\"" + Global::MacroModulesList->Strings[ii] + "\""), "Macro Error");
+				+ "\"" + Global::MacroModulesList->operator[](ii) + "\""), "Macro Error");
 		}
 	}
 }

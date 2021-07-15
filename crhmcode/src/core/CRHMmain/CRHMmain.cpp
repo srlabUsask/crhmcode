@@ -299,7 +299,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	//DataFile.getline(Line, CharLength);
 	getline(DataFile, Line);
 
-	Global::MacroModulesList->Clear();
+	Global::MacroModulesList->clear();
 
 	try {
 
@@ -366,7 +366,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					size_t pos = 1; // start at 1 since first character on macro line should be a single quote
 					while (pos<S.length() && S[pos] != '\'') sub.push_back(S[pos++]); // build token until next single quote
 
-					Global::MacroModulesList->Add(sub);
+					Global::MacroModulesList->push_back(sub);
 					getline(DataFile, S);
 				}
 				MacroLoad();
@@ -963,8 +963,8 @@ void CRHMmain::FormCreate() {
 	Global::OurModulesVariation = new std::list<std::pair<std::string, unsigned short>>;
 	Global::ModuleBitSet = new std::set<std::string>;
 
-	Global::MacroModulesList = new TStringList;
-	Global::MacroModulesList->Sorted = false; // Global::ModelModulesList is not sorted
+	Global::MacroModulesList = new std::vector<std::string>;
+	
 
 	Global::AllModelsList = new TStringList;
 	Global::AllModelsList->Sorted = true;
@@ -1330,15 +1330,18 @@ void CRHMmain::MacroLoad(void)
 
 
 
-	if (Global::MacroModulesList->Count > 0) {
+	if (Global::MacroModulesList->size() > 0) 
+	{
 		int Macro = 0;
 
 		//while (Global::MacroModulesList->Count - 1 > Macro) {
-		while (Macro < Global::MacroModulesList->Count) {
+		while (Macro < Global::MacroModulesList->size()) 
+		{
 
-			string s = Global::MacroModulesList->Strings[Macro];
+			string s = Global::MacroModulesList->operator[](Macro);
 			string::size_type ppp = s.find_last_not_of(' ');
-			if (s.empty() || ppp == string::npos || s[0] == '/') {
+			if (s.empty() || ppp == string::npos || s[0] == '/') 
+			{
 				++Macro;
 				continue;
 			}
@@ -1352,17 +1355,20 @@ void CRHMmain::MacroLoad(void)
 				Desc = '\'' + Desc + '\''; // Bld handles as block
 			}
 			else
+			{
 				Desc = "'no description given'"; // Bld handles as block
+			}
+				
 
 			ClassMacro *Custom = new ClassMacro(s, Macro, "04/20/06", Desc);
 			AdminMacro.AddModule(Custom);
 
 			string S, SS;
 
-			while (S = Common::trim(Global::MacroModulesList->Strings[Macro]), SS = S.substr(0, 3),
+			while (S = Common::trim(Global::MacroModulesList->operator[](Macro)), SS = S.substr(0, 3),
 				!(SS == "end" &&
 				(S.length() == 3 || S.find_first_of(" /") != string::npos)) &&
-				Global::MacroModulesList->Count > Macro
+				Global::MacroModulesList->size() > Macro
 				)
 
 				++Macro;
@@ -3323,8 +3329,11 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->push_back("Macros:");
 		ProjectList->push_back("######");
 
-		for (int ii = 0; ii < Global::MacroModulesList->Count; ++ii)
-			ProjectList->push_back("'" + Global::MacroModulesList->Strings[ii] + "'");
+		for (int ii = 0; ii < Global::MacroModulesList->size(); ++ii)
+		{
+			ProjectList->push_back("'" + Global::MacroModulesList->operator[](ii) + "'");
+		}
+			
 
 		ProjectList->push_back("######");
 
@@ -3957,7 +3966,7 @@ void CRHMmain::ClearModules(bool All) {
 	if (All) {
 		AdminMacro.MacroClear();
 
-		Global::MacroModulesList->Clear();
+		Global::MacroModulesList->clear();
 
 		//OpenDialogPrj->FileName = "";
 		//SaveDialogPrj->FileName = "";
