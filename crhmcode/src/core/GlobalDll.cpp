@@ -81,7 +81,7 @@ std::vector<std::string> * (Global::MacroModulesList);
 std::list<std::pair<std::string, int>> * (Global::AllModelsList);
 std::list<std::pair<std::string, Administer* >> * (Global::ModelModulesList);
 
-TStringList *(Global::OurHelpList);
+std::map<std::string, int> * (Global::OurHelpList);
 TStringList *(Global::PendingDLLModuleList);
 TStringList *(Global::ReportList);
 TStringList *(Global::DeclRootList);

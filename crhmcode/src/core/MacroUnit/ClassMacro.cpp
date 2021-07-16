@@ -572,7 +572,7 @@ void ClassMacro::finish(bool good) { // only required for local storage and fina
 
 ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) : ClassModule(Name, Version, LMODULE::MACRO) {
 
-	int ThisEnd = ThisBegin;
+	size_t ThisEnd = ThisBegin;
 	MacroBegin = ThisBegin;
 	Description = Desc;
 
@@ -610,7 +610,7 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 	isGroup = false;
 	isStruct = false;
 
-	for (int ii = ThisBegin + 1; ii < ThisEnd - 1; ++ii) {
+	for (size_t ii = ThisBegin + 1; ii < ThisEnd - 1; ++ii) {
 
 		//Common::Message ("test", "test 14");
 

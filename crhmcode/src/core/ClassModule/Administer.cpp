@@ -36,9 +36,11 @@ void Administer::MacroClear() {
 	}
 
 	if (Global::OurHelpList) {
-		int indx = Global::OurHelpList->IndexOf(HelpFile);
-		if (indx > -1) // delete Macro help file.
-			Global::OurHelpList->Delete(indx);
+		std::map<std::string, int>::iterator indx = Global::OurHelpList->find(HelpFile);
+		if (indx != Global::OurHelpList->end()) // delete Macro help file.
+		{
+			Global::OurHelpList->erase(indx);
+		}
 	}
 
 	DLLModuleList->Clear();
@@ -185,13 +187,13 @@ void Administer::Accept(int Result) {
 
 	if (Global::OurHelpList)
 	{
-		if (Global::OurHelpList->IndexOf(HelpFile) < 0)  // No duplicates
+		if (Global::OurHelpList->count(HelpFile) != 0)  // No duplicates
 		{
-			Global::OurHelpList->AddObject(HelpFile, (TObject*)1);
+			Global::OurHelpList->insert(std::pair<std::string, int>(HelpFile, 1));
 		}
 		else
 		{
-			Global::OurHelpList->AddObject(HelpFile, (TObject*)0);
+			Global::OurHelpList->insert(std::pair<std::string, int>(HelpFile, 0));
 		}
 	}
 
