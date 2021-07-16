@@ -79,7 +79,8 @@ std::list<std::pair<std::string, ClassModule*>> * (Global::OurModulesList);
 std::list<std::pair<std::string, unsigned short>> * (Global::OurModulesVariation);
 std::vector<std::string> * (Global::MacroModulesList);
 std::list<std::pair<std::string, int>> * (Global::AllModelsList);
-TStringList *(Global::ModelModulesList);
+std::list<std::pair<std::string, Administer* >> * (Global::ModelModulesList);
+
 TStringList *(Global::OurHelpList);
 TStringList *(Global::PendingDLLModuleList);
 TStringList *(Global::ReportList);

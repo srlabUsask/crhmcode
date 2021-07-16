@@ -14,6 +14,7 @@
 #include "StandardConverterUtility.h"
 #include "TStringList/TStringList.h"
 #include "ClassModule/ClassModule.h"
+#include "ClassModule/Administer.h"
 
 #include <map>
 #include <set>
@@ -25,6 +26,7 @@ using namespace std;
 typedef double TDateTime;
 
 class ClassModule;
+class Administer;
 
 class   Global {
 public:
@@ -97,7 +99,7 @@ public:
 	static std::vector<std::string> * MacroModulesList;     // custom modules defined in current model
 	
 	static std::list<std::pair<std::string, int>> * AllModelsList;        // models defined in CRHM
-	static TStringList *ModelModulesList;     // modules used in above models in CommaText
+	static std::list<std::pair<std::string, Administer * >> * ModelModulesList;     // modules used in above models in CommaText
 	
 	static TStringList *OurHelpList;          // help files defined in current modules
 	static TStringList *PendingDLLModuleList; // current DLL modules
