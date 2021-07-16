@@ -1331,7 +1331,7 @@ void CRHMmain::MacroLoad(void)
 
 	if (Global::MacroModulesList->size() > 0) 
 	{
-		int Macro = 0;
+		size_t Macro = 0;
 
 		//while (Global::MacroModulesList->Count - 1 > Macro) {
 		while (Macro < Global::MacroModulesList->size()) 
@@ -3328,7 +3328,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->push_back("Macros:");
 		ProjectList->push_back("######");
 
-		for (int ii = 0; ii < Global::MacroModulesList->size(); ++ii)
+		for (size_t ii = 0; ii < Global::MacroModulesList->size(); ++ii)
 		{
 			ProjectList->push_back("'" + Global::MacroModulesList->operator[](ii) + "'");
 		}
