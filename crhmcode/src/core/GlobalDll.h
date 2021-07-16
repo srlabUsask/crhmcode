@@ -95,8 +95,10 @@ public:
 	static std::list<std::pair<std::string, ClassModule*>> * OurModulesList;       // modules defined in current model
 	static std::list<std::pair<std::string, unsigned short>> * OurModulesVariation;
 	static std::vector<std::string> * MacroModulesList;     // custom modules defined in current model
-	static TStringList *AllModelsList;        // models defined in CRHM
+	
+	static std::list<std::pair<std::string, int>> * AllModelsList;        // models defined in CRHM
 	static TStringList *ModelModulesList;     // modules used in above models in CommaText
+	
 	static TStringList *OurHelpList;          // help files defined in current modules
 	static TStringList *PendingDLLModuleList; // current DLL modules
 	static TStringList *ReportList;           //

@@ -966,8 +966,7 @@ void CRHMmain::FormCreate() {
 	Global::MacroModulesList = new std::vector<std::string>;
 	
 
-	Global::AllModelsList = new TStringList;
-	Global::AllModelsList->Sorted = true;
+	Global::AllModelsList = new std::list<std::pair<std::string, int>>();
 
 	Global::ModelModulesList = new TStringList;
 	Global::ModelModulesList->Sorted = false;
