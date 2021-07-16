@@ -180,7 +180,7 @@ void Administer::Accept(int Result) {
 		Global::AllModelsList->push_back(std::pair<std::string, int>(DLLModelList->Strings[ii], _object));
 
 		// Administer object used to find which DLL loaded model
-		Global::ModelModulesList->AddObject(DLLModelModuleList->Strings[ii], (TObject*)this);
+		Global::ModelModulesList->push_back(std::pair<std::string, Administer *>(DLLModelModuleList->Strings[ii], this));
 	}
 
 	if (Global::OurHelpList)

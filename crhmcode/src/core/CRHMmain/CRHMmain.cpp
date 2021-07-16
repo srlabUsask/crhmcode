@@ -967,10 +967,8 @@ void CRHMmain::FormCreate() {
 	
 
 	Global::AllModelsList = new std::list<std::pair<std::string, int>>();
-
-	Global::ModelModulesList = new TStringList;
-	Global::ModelModulesList->Sorted = false;
-
+	Global::ModelModulesList = new std::list<std::pair<std::string, Administer* >>();
+	
 	Global::OurHelpList = NULL;   // DLL help files
 	Global::PendingDLLModuleList = new TStringList; // current DLL modules
 

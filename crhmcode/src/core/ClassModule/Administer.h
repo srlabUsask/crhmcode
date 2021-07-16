@@ -5,6 +5,8 @@
 
 #include "ClassModule.h"
 
+class ClassModule;
+
 class   Administer {
 
 public:
