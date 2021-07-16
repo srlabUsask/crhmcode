@@ -101,7 +101,7 @@ public:
 	static std::list<std::pair<std::string, int>> * AllModelsList;        // models defined in CRHM
 	static std::list<std::pair<std::string, Administer * >> * ModelModulesList;     // modules used in above models in CommaText
 	
-	static TStringList *OurHelpList;          // help files defined in current modules
+	static std::map<std::string, int> * OurHelpList;          // help files defined in current modules
 	static TStringList *PendingDLLModuleList; // current DLL modules
 	static TStringList *ReportList;           //
 	static TStringList *DeclRootList;         //
