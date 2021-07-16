@@ -176,8 +176,8 @@ void Administer::Accept(int Result) {
 	for (int ii = 0; ii < DLLModelList->Count; ++ii) {
 
 		// when sorted index used to access ModelModulesList		
-		long long _object = ii;
-		Global::AllModelsList->AddObject(DLLModelList->Strings[ii], (TObject*)_object);
+		int _object = ii;
+		Global::AllModelsList->push_back(std::pair<std::string, int>(DLLModelList->Strings[ii], _object));
 
 		// Administer object used to find which DLL loaded model
 		Global::ModelModulesList->AddObject(DLLModelModuleList->Strings[ii], (TObject*)this);
