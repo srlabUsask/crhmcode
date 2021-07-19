@@ -2425,10 +2425,11 @@ void  CRHMmain::RunClick(void) {
 
 void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 {
-	TStringList *StateList;
+	std::list<std::string> * StateList;
+	StateList = new std::list<std::string>();
 	MapVar::iterator itVar;
 	ClassVar * thisVar;
-	StateList = new TStringList;
+	
 	string S;
 	bool Needed;
 
@@ -2439,28 +2440,28 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 		Wild = VarPar->Strings->Strings[0].find("@") == string::npos;
 
 	if (MainLoop)
-		StateList->Add("Starting main run-up loop");
+		StateList->push_back("Starting main run-up loop");
 	else
-		StateList->Add("starting module run-ahead to determine future variables");
+		StateList->push_back("starting module run-ahead to determine future variables");
 
-	StateList->Add("######");
+	StateList->push_back("######");
 
-	StateList->Add("Time:");
+	StateList->push_back("Time:");
 	S = FormatString(Global::DTnow, "yyyy m d");
-	StateList->Add(S);
-	StateList->Add("######");
+	StateList->push_back(S);
+	StateList->push_back("######");
 
-	StateList->Add("DTindx:");
-	StateList->Add(DttoStr(Global::DTindx));
-	StateList->Add("######");
+	StateList->push_back("DTindx:");
+	StateList->push_back(DttoStr(Global::DTindx));
+	StateList->push_back("######");
 
-	StateList->Add("CurrentModuleRun:");
-	StateList->Add(Global::CurrentModuleRun);
-	StateList->Add("######");
+	StateList->push_back("CurrentModuleRun:");
+	StateList->push_back(Global::CurrentModuleRun);
+	StateList->push_back("######");
 
-	StateList->Add("Dimension:");
-	StateList->Add(Common::longtoStr(Global::nhru) + " " + Common::longtoStr(Global::nlay));
-	StateList->Add("######");
+	StateList->push_back("Dimension:");
+	StateList->push_back(Common::longtoStr(Global::nhru) + " " + Common::longtoStr(Global::nlay));
+	StateList->push_back("######");
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
@@ -2488,7 +2489,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 
 		if (Needed) {
 			S = thisVar->module + " " + thisVar->name;
-			StateList->Add(S);
+			StateList->push_back(S);
 			S = "";
 			if (thisVar->lay == 0)
 				for (int ii = 0; ii < thisVar->dim; ii++) {
@@ -2500,7 +2501,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 						S = S + "-0 ";
 
 					if (ii % 10 == 9) {
-						StateList->Add(S);
+						StateList->push_back(S);
 						S = "";
 					}
 				}
@@ -2515,23 +2516,68 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 							S = S + "-0 ";
 
 						if (ii % 10 == 9) {
-							StateList->Add(S);
+							StateList->push_back(S);
 							S = "";
 						}
 					}
-					if (!S.empty()) StateList->Add(S);
+					if (!S.empty()) StateList->push_back(S);
 					S = "";
 				}
-			if (!S.empty()) StateList->Add(S);
-			StateList->Add("######");
+			if (!S.empty()) StateList->push_back(S);
+			StateList->push_back("######");
 		}
 	}
 
 	if (MainLoop)
-		StateList->SaveToFile(ProjectDirectory + "\\" + "ControlStateFile.tmp1");
-	else
-		StateList->SaveToFile(ProjectDirectory + "\\" + "ControlStateFile.tmp2");
+	{
+		ofstream file;
+		file.open(ProjectDirectory + "\\" + "ControlStateFile.tmp1");
 
+		if (file.is_open())
+		{
+			for (
+				std::list<std::string>::iterator it = StateList->begin();
+				it != StateList->end();
+				it++
+				)
+			{
+				file << it->c_str() << endl;
+			}
+
+			file.close();
+		}
+		else 
+		{
+			CRHMException e = CRHMException("Cannot open file "+ ProjectDirectory + "\\" + "ControlStateFile.tmp1 to save state file.", TExcept::ERR);
+			CRHMLogger::instance()->log_run_error(e);
+		}
+	}
+	else
+	{
+		ofstream file;
+		file.open(ProjectDirectory + "\\" + "ControlStateFile.tmp2");
+
+		if (file.is_open())
+		{
+			for (
+				std::list<std::string>::iterator it = StateList->begin();
+				it != StateList->end();
+				it++
+				)
+			{
+				file << it->c_str() << endl;
+			}
+
+			file.close();
+		}
+		else
+		{
+			CRHMException e = CRHMException("Cannot open file " + ProjectDirectory + "\\" + "ControlStateFile.tmp2 to save state file.", TExcept::ERR);
+			CRHMLogger::instance()->log_run_error(e);
+		}
+
+	}
+		
 	delete StateList;
 }
 
