@@ -4326,30 +4326,32 @@ string CRHMmain::BuildLay(string S, long Lay) {
 
 void CRHMmain::SaveState()
 {
-	TStringList* StateList;
+	std::list<std::string> * StateList;
+	StateList = new std::list<std::string>();
+
 	MapVar::iterator itVar;
 	ClassVar* thisVar;
-	StateList = new TStringList;
+	
 	std::string S;
 
-	StateList->Add("Description of State File - to be added");
-	StateList->Add("######");
+	StateList->push_back("Description of State File - to be added");
+	StateList->push_back("######");
 
-	StateList->Add("Time:");
+	StateList->push_back("Time:");
 	S = FormatString(Global::DTnow, "YMD");
-	StateList->Add(S);
-	StateList->Add("######");
+	StateList->push_back(S);
+	StateList->push_back("######");
 
-	StateList->Add("Dimension:");
-	StateList->Add(std::to_string(Global::nhru) + " " + std::to_string(Global::nlay));
-	StateList->Add("######");
+	StateList->push_back("Dimension:");
+	StateList->push_back(std::to_string(Global::nhru) + " " + std::to_string(Global::nlay));
+	StateList->push_back("######");
 
 	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
 		thisVar = (*itVar).second;
 		if (thisVar->varType < TVar::Read && thisVar->StatVar) {
 			S = std::string(thisVar->module.c_str()) + " " +
 				std::string(thisVar->name.c_str());
-			StateList->Add(S);
+			StateList->push_back(S);
 			S = "";
 			if (thisVar->lay == 0)
 				for (int ii = 0; ii < thisVar->dim; ii++) {
@@ -4361,7 +4363,7 @@ void CRHMmain::SaveState()
 						S = S + "-0 ";
 
 					if (ii % 10 == 9) {
-						StateList->Add(S);
+						StateList->push_back(S);
 						S = "";
 					}
 				}
@@ -4376,18 +4378,41 @@ void CRHMmain::SaveState()
 							S = S + "-0 ";
 
 						if (ii % 10 == 9) {
-							StateList->Add(S);
+							StateList->push_back(S);
 							S = "";
 						}
 					}
-					if (!S.empty()) StateList->Add(S);
+					if (!S.empty()) StateList->push_back(S);
 					S = "";
 				}
-			if (!S.empty()) StateList->Add(S);
-			StateList->Add("######");
+			if (!S.empty()) StateList->push_back(S);
+			StateList->push_back("######");
 		}
 	}
-	StateList->SaveToFile(SaveStateFileName);
+
+	//Save to file.
+	ofstream file;
+	file.open(SaveStateFileName);
+
+	if (file.is_open())
+	{
+		for (
+			std::list<std::string>::iterator it = StateList->begin();
+			it != StateList->end();
+			it++
+			)
+		{
+			file << it->c_str() << endl;
+		}
+
+		file.close();
+	}
+	else
+	{
+		CRHMException e = CRHMException("Cannot open file " + SaveStateFileName + " to save state file.", TExcept::ERR);
+		CRHMLogger::instance()->log_run_error(e);
+	}
+
 	delete StateList;
 
 	SaveStateFileName = "";
