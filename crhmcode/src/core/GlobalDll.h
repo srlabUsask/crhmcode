@@ -105,7 +105,7 @@ public:
 	
 	static std::list<std::pair<std::string, ClassModule *>> * PendingDLLModuleList; // current DLL modules
 	static std::list<std::string> * ReportList;           //
-	static TStringList *DeclRootList;         //
+	static std::list<std::string> * DeclRootList;         //
 	static TStringList *OldModuleName;        // used to upgrade module names
 	static TStringList *NewModuleName;        // used to upgrade module names
 

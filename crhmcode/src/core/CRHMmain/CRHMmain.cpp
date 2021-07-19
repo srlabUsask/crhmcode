@@ -974,7 +974,7 @@ void CRHMmain::FormCreate() {
 
 	Global::ReportList = NULL; //
 
-	Global::DeclRootList = new TStringList;
+	Global::DeclRootList = new std::list<std::string>();
 
 	AllVariables = new std::map<std::string, ClassVar*>();
 	AllObservations = new std::map<std::string, ClassVar*>();
@@ -1869,7 +1869,7 @@ MMSData *  CRHMmain::RunClick2Start()
 		LogMessageX(" ");
 	}
 
-	Global::DeclRootList->Clear(); // used by AKA to stop looping
+	Global::DeclRootList->clear(); // used by AKA to stop looping
 
 								   // clears storage for observation read and function lists
 	Global::OurModulesList->begin()->second->InitReadObs();

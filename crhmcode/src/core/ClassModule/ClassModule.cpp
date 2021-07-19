@@ -359,7 +359,7 @@ void ClassModule::declvar(string variable, TDim dimen, string help,
 
 		Global::Mapdeclvar.insert(Item);
 
-		Global::DeclRootList->Add(string(ID.c_str()) + " " + Orgvariable.c_str()); // to prevent input/output looping
+		Global::DeclRootList->push_back(string(ID.c_str()) + " " + Orgvariable.c_str()); // to prevent input/output looping
 
 		return;
 	}
@@ -428,7 +428,7 @@ void ClassModule::declvar(string variable, TDim dimen, string help,
 				Var_loop_lay_value[Var_NDEFN_cnt++] = newVar->values;
 			}
 
-			Global::DeclRootList->Add(string(ID.c_str()) + " " + Orgvariable.c_str()); // to prevent input/output looping
+			Global::DeclRootList->push_back(string(ID.c_str()) + " " + Orgvariable.c_str()); // to prevent input/output looping
 
 			return;
 		}
@@ -471,7 +471,7 @@ void ClassModule::declvar(string variable, TDim dimen, string help,
 
 		Global::Mapdeclvar.insert(Item);
 
-		Global::DeclRootList->Add(string(ID.c_str()) + " " + Orgvariable.c_str()); // to prevent input/output looping
+		Global::DeclRootList->push_back(string(ID.c_str()) + " " + Orgvariable.c_str()); // to prevent input/output looping
 
 		return;
 	}
@@ -527,7 +527,7 @@ void ClassModule::declvar(string variable, TDim dimen, string help,
 
 			*ivalue = newVar->ivalues; // TB move 10/07/10
 
-			Global::DeclRootList->Add(string(ID.c_str()) + " " + Orgvariable.c_str()); // to prevent input/output looping
+			Global::DeclRootList->push_back(string(ID.c_str()) + " " + Orgvariable.c_str()); // to prevent input/output looping
 
 			return;
 		}
@@ -1358,7 +1358,7 @@ long ClassModule::declobs(string name, TDim dimen, string help, string units, do
 		Global::Mapdeclvar.insert(Item);
 		Global::Mapdeclobs.insert(Item);
 
-		Global::DeclRootList->Add(string(ID.c_str()) + " " + (name + "#").c_str()); // to prevent input/output looping
+		Global::DeclRootList->push_back(string(ID.c_str()) + " " + (name + "#").c_str()); // to prevent input/output looping
 
 		return(-1);
 	}
@@ -1405,7 +1405,7 @@ long ClassModule::declobs(string name, TDim dimen, string help, string units, do
 
 	case TBuild::INIT: {
 		if ((itVar = Global::MapVars.find(Name + " " + name + "#")) != Global::MapVars.end()) {
-			Global::DeclRootList->Add(string(ID.c_str()) + " " + (name + "#").c_str()); // to prevent input/output looping
+			Global::DeclRootList->push_back(string(ID.c_str()) + " " + (name + "#").c_str()); // to prevent input/output looping
 
 			newVar = (*itVar).second;
 			if (newVar->FileData) {
@@ -2468,11 +2468,30 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 	if ((it = Global::MapAKA.find(ID)) != Global::MapAKA.end()) { // search AKA list
 		Try = (*it).second;
 		Try = Try.substr(0, Try.find(' '));
-		if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) { // looping redirection
+
+		bool foundInDeclRootList = false;
+		for (
+			std::list<std::string>::iterator it = Global::DeclRootList->begin();
+			it != Global::DeclRootList->end();
+			it++
+			)
+		{
+			if (it->c_str() == std::string(base + " " + Try).c_str())
+			{
+				foundInDeclRootList = true;
+			}
+		}
+
+		if (foundInDeclRootList == true) 
+		{ // looping redirection
 			if (typeL == TAKA::OBSF)
+			{
 				Outcome = OUTCOME::IgnoreObsFunct;
+			}
 			else
+			{
 				Outcome = OUTCOME::IgnoreObs;
+			}
 		}
 		else if (GroupCnt && type == TAKA::VARG) {
 			string A;
@@ -2492,7 +2511,21 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 		}
 		else if (type == TAKA::OBSR) { //  observation   !!! was typeL 08/20/10
 			if (Try[Try.size() - 1] == '#') {
-				if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) {
+
+				bool foundInDeclRootList = false;
+				for (
+					std::list<std::string>::iterator it = Global::DeclRootList->begin();
+					it != Global::DeclRootList->end();
+					it++
+					)
+				{
+					if (it->c_str() == std::string(base + " " + Try).c_str())
+					{
+						foundInDeclRootList = true;
+					}
+				}
+				if (foundInDeclRootList == true) 
+				{
 					Outcome = OUTCOME::IgnoreObs;
 				}
 			}
@@ -2544,7 +2577,21 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 			if ((it = Global::MapAKA.find(ID)) != Global::MapAKA.end()) {
 				Try = (*it).second;
 				Try = Try.substr(0, Try.find('@'));
-				if (Global::DeclRootList->IndexOf(string(base.c_str()) + " " + Try.c_str()) > -1) {
+
+				bool foundInDeclRootList = false;
+				for (
+					std::list<std::string>::iterator it = Global::DeclRootList->begin();
+					it != Global::DeclRootList->end();
+					it++
+					)
+				{
+					if (it->c_str() == std::string(base + " " + Try).c_str())
+					{
+						foundInDeclRootList = true;
+					}
+				}
+				if (foundInDeclRootList == true) 
+				{
 					Outcome = OUTCOME::IgnoreVar;
 				}
 				else {
