@@ -2683,7 +2683,7 @@ ClassPar *ParFind(string name) { // where name is concatenation of MODULE and NA
 
 void  CRHMmain::AllRprt(void)
 {
-	TStringList *LogList = new TStringList;
+	std::list<std::string> * LogList = new std::list<std::string>();
 
 	if (this->OutputFormat == OUTPUT_FORMAT::STD) 
 	{
@@ -2741,16 +2741,39 @@ void  CRHMmain::AllRprt(void)
 			}
 		}
 
-		LogList->Add(Sx);
+		LogList->push_back(Sx);
 	}
 
-	LogList->SaveToFile(OpenNameReport);
+	
+	//Save report to file.
+	ofstream file;
+	file.open(OpenNameReport);
 
-	LogList->Clear();
+	if (file.is_open())
+	{
+		for (
+			std::list<std::string>::iterator it = LogList->begin();
+			it != LogList->end();
+			it++
+			)
+		{
+			file << it->c_str() << endl;
+		}
+
+		file.close();
+	}
+	else
+	{
+		CRHMException e = CRHMException("Cannot open file "+ OpenNameReport +" to save report.", TExcept::ERR);
+		CRHMLogger::instance()->log_run_error(e);
+	}
+
+	LogList->clear();
 }
+
 void  CRHMmain::LastRprt(void)
 {
-	TStringList *LogList = new TStringList;
+	std::list<std::string> * LogList = new std::list<std::string>();
 
 	RprtHeader(LogList, SeriesCnt);
 
@@ -2787,10 +2810,32 @@ void  CRHMmain::LastRprt(void)
 		Sx = Sx + this->Delimiter + Sy;
 	}
 
-	LogList->Add(Sx);
+	LogList->push_back(Sx);
 
-	LogList->SaveToFile(OpenNameReport);
-	LogList->Clear();
+	//Save report to file.
+	ofstream file;
+	file.open(OpenNameReport);
+
+	if (file.is_open())
+	{
+		for (
+			std::list<std::string>::iterator it = LogList->begin();
+			it != LogList->end();
+			it++
+			)
+		{
+			file << it->c_str() << endl;
+		}
+
+		file.close();
+	}
+	else
+	{
+		CRHMException e = CRHMException("Cannot open file " + OpenNameReport + " to save report.", TExcept::ERR);
+		CRHMLogger::instance()->log_run_error(e);
+	}
+
+	LogList->clear();
 }
 
 
@@ -3257,7 +3302,7 @@ void CRHMmain::calculateOutputFileName()
 }
 
 
-void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
+void CRHMmain::RprtHeader(std::list<std::string> * LogList, int LocalCnt)
 {
 
 	string Sx, Sy;
@@ -3269,7 +3314,7 @@ void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
 		string S = cdSeries[vv]->Title;
 		Sx += this->Delimiter + S;
 	}
-	LogList->Add(Sx);
+	LogList->push_back(Sx);
 
 	Sx = "units";
 	for (int vv = 0; vv < LocalCnt; ++vv) {
@@ -3277,24 +3322,24 @@ void CRHMmain::RprtHeader(TStringList *LogList, int LocalCnt)
 		string S = thisVar->units;
 		Sx += this->Delimiter + S;
 	}
-	LogList->Add(Sx);
+	LogList->push_back(Sx);
 }
 
-void CRHMmain::RprtHeaderObs(TStringList* LogList, int LocalCnt)
+void CRHMmain::RprtHeaderObs(std::list<std::string> * LogList, int LocalCnt)
 {
 
 	string Sx, Sy;
 
 	calculateOutputFileName();
 
-	LogList->Add("Future File Description");
+	LogList->push_back("Future File Description");
 	
 	for (int vv = 0; vv < LocalCnt; ++vv) {
 		ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
 		Sx = cdSeries[vv]->Title;
 		Sx += string(" 1 ");
 		Sx += thisVar->units;
-		LogList->Add(Sx);
+		LogList->push_back(Sx);
 	}
 	
 	Sx = "###### time";
@@ -3302,7 +3347,7 @@ void CRHMmain::RprtHeaderObs(TStringList* LogList, int LocalCnt)
 		string S = cdSeries[vv]->Title;
 		Sx += this->Delimiter + S;
 	}
-	LogList->Add(Sx);
+	LogList->push_back(Sx);
 }
 
 string CRHMmain::DttoStr(double D) {
