@@ -189,8 +189,9 @@ public:
 	void ControlSaveState(bool MainLoop, ClassPar * VarPar);
 	void DoObsStatus(bool &First);
 	void calculateOutputFileName();
-	void RprtHeader(TStringList *LogList, int LocalCnt);
-	void RprtHeaderObs(TStringList *LogList, int LocalCnt);
+	
+	void RprtHeader(std::list<std::string>* LogList, int LocalCnt);
+	void RprtHeaderObs(std::list<std::string> *LogList, int LocalCnt);
 	void ResetLoopList(void);
 	void ReadStateFile(bool & GoodRun);
 	string DttoStr(double D);
