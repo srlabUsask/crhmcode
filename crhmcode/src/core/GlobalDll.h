@@ -106,8 +106,8 @@ public:
 	static std::list<std::pair<std::string, ClassModule *>> * PendingDLLModuleList; // current DLL modules
 	static std::list<std::string> * ReportList;           //
 	static std::list<std::string> * DeclRootList;         //
-	static TStringList *OldModuleName;        // used to upgrade module names
-	static TStringList *NewModuleName;        // used to upgrade module names
+	static std::vector<std::string> * OldModuleName;        // used to upgrade module names
+	static std::vector<std::string> * NewModuleName;        // used to upgrade module names
 
 											  //static HWND crhmMain;
 											  //static HWND crhmLog;

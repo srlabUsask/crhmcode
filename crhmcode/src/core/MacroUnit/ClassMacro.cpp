@@ -684,13 +684,19 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 			long jj = -1;
 			if (Global::OldModuleName != NULL)
 			{
-				jj = Global::OldModuleName->IndexOf(S); // find old name
+				for (size_t i = 0; i < Global::OldModuleName->size(); i++)
+				{
+					if (Global::OldModuleName->operator[](i) == S)
+					{
+						jj = i;
+					}
+				}
 			}
 			if (jj == -1) // not changed
 				GrpStringList->Add(DefCRHM::DefStringList->Strings[0]); // original name
 			else {
-				GrpStringList->Add(Global::NewModuleName->Strings[jj] + V); // new name
-				string Message = "Converting module " + Global::OldModuleName->Strings[jj] + V + " to " + Global::NewModuleName->Strings[jj] + V + " in macro " + Name.c_str();
+				GrpStringList->Add(Global::NewModuleName->operator[](jj) + V); // new name
+				string Message = "Converting module " + Global::OldModuleName->operator[](jj) + V + " to " + Global::NewModuleName->operator[](jj) + V + " in macro " + Name.c_str();
 				LogMessage(Message.c_str());
 			}
 		}
