@@ -19,7 +19,6 @@
 #include <set>
 //#include "CString"
 #include "Common/Common.h"
-#include "TStringList/TStringList.h"
 //#include "boost/shared_ptr.hpp"
 #include "ClassCRHM/ClassCRHM.h"
 #include <map>
@@ -189,7 +188,6 @@ public:
 	void ControlSaveState(bool MainLoop, ClassPar * VarPar);
 	void DoObsStatus(bool &First);
 	void calculateOutputFileName();
-	
 	void RprtHeader(std::list<std::string>* LogList, int LocalCnt);
 	void RprtHeaderObs(std::list<std::string> *LogList, int LocalCnt);
 	void ResetLoopList(void);
