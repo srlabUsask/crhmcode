@@ -970,7 +970,7 @@ void CRHMmain::FormCreate() {
 	Global::ModelModulesList = new std::list<std::pair<std::string, Administer* >>();
 	
 	Global::OurHelpList = NULL;   // DLL help files
-	Global::PendingDLLModuleList = new TStringList; // current DLL modules
+	Global::PendingDLLModuleList = new std::list<std::pair<std::string, ClassModule *>>(); // current DLL modules
 
 	Global::ReportList = NULL; //
 
@@ -982,7 +982,7 @@ void CRHMmain::FormCreate() {
 	SelectedObservations = new std::list<std::pair<std::string, TSeries*>>();
 
 	MoveModulesToGlobal();
-	((ClassModule*)Global::PendingDLLModuleList->Objects[0])->OurAdmin->Accept(mbYesToAll);
+	Global::PendingDLLModuleList->begin()->second->OurAdmin->Accept(mbYesToAll);
 	++InitModCnt;
 
 	//ApplicationDir = "C:\CRHM_Borland\bin\CRHM";

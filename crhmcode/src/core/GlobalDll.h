@@ -102,7 +102,8 @@ public:
 	static std::list<std::pair<std::string, Administer * >> * ModelModulesList;     // modules used in above models in CommaText
 	
 	static std::map<std::string, int> * OurHelpList;          // help files defined in current modules
-	static TStringList *PendingDLLModuleList; // current DLL modules
+	
+	static std::list<std::pair<std::string, ClassModule *>> * PendingDLLModuleList; // current DLL modules
 	static TStringList *ReportList;           //
 	static TStringList *DeclRootList;         //
 	static TStringList *OldModuleName;        // used to upgrade module names

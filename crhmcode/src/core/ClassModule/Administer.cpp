@@ -8,7 +8,10 @@ Administer::Administer(string Version, string _HelpFile) : Version(Version), Hel
 	DLLModelModuleList = new TStringList;
 
 	if (Global::PendingDLLModuleList != NULL)
-		Global::PendingDLLModuleList->Clear(); // clear
+	{
+		Global::PendingDLLModuleList->clear(); // clear
+	}
+		
 }
 
 //---------------------------------------------------------------------------
@@ -80,7 +83,7 @@ void Administer::AddModule(ClassModule* Module) {
 
 	Module->OurAdmin = this;
 	DLLModuleList->AddObject((Module)->Name.c_str(), (TObject*)Module);
-	Global::PendingDLLModuleList->AddObject((Module)->Name.c_str(), (TObject*)Module);
+	Global::PendingDLLModuleList->push_back(std::pair<std::string, ClassModule *>((Module)->Name.c_str(), Module));
 }
 
 //---------------------------------------------------------------------------
@@ -107,9 +110,26 @@ void Administer::Accept(int Result) {
 
 	for (int ii = 0; ii < DLLModuleList->Count; ++ii) { // All modules in DLL
 
-		if (Global::PendingDLLModuleList->Count > 0  // Do not load unless requested.  Count == 0 means all!
-			&& Global::PendingDLLModuleList->IndexOf(DLLModuleList->Strings[ii]) == -1)
+		bool foundInPending = false;
+		for (
+			std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::PendingDLLModuleList->begin();
+			it != Global::PendingDLLModuleList->end();
+			it++
+			)
+		{
+			if (it->first == DLLModuleList->Strings[ii])
+			{
+				foundInPending = true;
+			}
+		}
+
+
+		if (Global::PendingDLLModuleList->size() != 0  // Do not load unless requested.  Count == 0 means all!
+			&& foundInPending == false)
+		{
 			continue;
+		}
+			
 
 		int jj = Global::AllModulesList->count(DLLModuleList->Strings[ii]);
 		if (jj != 0) 
@@ -197,5 +217,5 @@ void Administer::Accept(int Result) {
 		}
 	}
 
-	Global::PendingDLLModuleList->Clear(); // clear
+	Global::PendingDLLModuleList->clear(); // clear
 }
