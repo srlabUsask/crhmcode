@@ -104,7 +104,7 @@ public:
 	static std::map<std::string, int> * OurHelpList;          // help files defined in current modules
 	
 	static std::list<std::pair<std::string, ClassModule *>> * PendingDLLModuleList; // current DLL modules
-	static TStringList *ReportList;           //
+	static std::list<std::string> * ReportList;           //
 	static TStringList *DeclRootList;         //
 	static TStringList *OldModuleName;        // used to upgrade module names
 	static TStringList *NewModuleName;        // used to upgrade module names
