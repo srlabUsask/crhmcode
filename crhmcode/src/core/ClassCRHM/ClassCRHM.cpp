@@ -160,10 +160,17 @@ ClassPar *ClassParFind(string module, string param) { // routine concatenates MO
 		long jj = -1;
 		if (Global::OldModuleName != NULL)
 		{
-			jj = Global::OldModuleName->IndexOf(module.c_str()); // Check if renamed module. Find old name
+			for (size_t i = 0; i < Global::OldModuleName->size(); i++)
+			{
+				if (module.c_str() == Global::OldModuleName->operator[](i))
+				{
+					jj = i;
+				}
+			}
 		}
-		if (jj > -1) {
-			string s = Global::NewModuleName->Strings[jj] + ""; // two step to remove \0
+		if (jj > -1) 
+		{
+			string s = Global::NewModuleName->operator[](jj) + ""; // two step to remove \0
 			if ((itPar = Global::MapPars.find(s + ' ' + param)) != Global::MapPars.end()) {
 				return ((*itPar).second);
 			}

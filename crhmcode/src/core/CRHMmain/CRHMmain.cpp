@@ -987,17 +987,18 @@ void CRHMmain::FormCreate() {
 
 	//ApplicationDir = "C:\CRHM_Borland\bin\CRHM";
 
-	Global::OldModuleName = new TStringList;
-	Global::NewModuleName = new TStringList;
-	Global::OldModuleName->CommaText("long, CanopyClearingGap2, pbsm_WQ, Soil_WQ, Netroute_WQ, Netroute_M_D_WQ");
-	Global::NewModuleName->CommaText("longVt, CanopyClearingGap, WQ_pbsm, WQ_Soil, WQ_Netroute, WQ_Netroute_M_D");
+	Global::OldModuleName = new std::vector<std::string>;
+	Global::NewModuleName = new std::vector<std::string>;
+	std::string oldModuleNames[] = {"long", "CanopyClearingGap2", "pbsm_WQ", "Soil_WQ", "Netrout_WQ", "Netroute_M_D_WQ"};
+	Global::OldModuleName->insert(Global::OldModuleName->begin(), oldModuleNames, oldModuleNames + 6);
+	std::string newModuleNames[] = { "longVt", "CanopyClearingGap", "WQ_pbsm", "WQ_Soil", "WQ_Netroute", "WQ_Netroute_M_D" };
+	Global::NewModuleName->insert(Global::NewModuleName->begin(), newModuleNames, newModuleNames + 6);
 
 #if !defined NO_MODULES
-	for (int ii = 0; ii < Global::NewModuleName->Count; ++ii) 
+	for (size_t ii = 0; ii < Global::NewModuleName->size(); ++ii) 
 	{
-		size_t jj = Global::AllModulesList->count(Global::NewModuleName->Strings[ii]);
+		size_t jj = Global::AllModulesList->count(Global::NewModuleName->operator[](ii));
 		assert(jj != 0);
-		Global::OldModuleName->Objects[ii] = (TObject*)jj;
 	}
 #endif
 

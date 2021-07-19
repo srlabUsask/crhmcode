@@ -85,8 +85,8 @@ std::map<std::string, int> * (Global::OurHelpList);
 std::list<std::pair<std::string, ClassModule * >> * (Global::PendingDLLModuleList);
 std::list<std::string> * (Global::ReportList);
 std::list<std::string> * (Global::DeclRootList);
-TStringList *(Global::OldModuleName);
-TStringList *(Global::NewModuleName);
+std::vector<std::string> * (Global::OldModuleName);
+std::vector<std::string> * (Global::NewModuleName);
 
 //HWND Global::crhmMain;
 //HWND Global::crhmLog;
