@@ -82,7 +82,7 @@ std::list<std::pair<std::string, int>> * (Global::AllModelsList);
 std::list<std::pair<std::string, Administer* >> * (Global::ModelModulesList);
 
 std::map<std::string, int> * (Global::OurHelpList);
-TStringList *(Global::PendingDLLModuleList);
+std::list<std::pair<std::string, ClassModule * >> * (Global::PendingDLLModuleList);
 TStringList *(Global::ReportList);
 TStringList *(Global::DeclRootList);
 TStringList *(Global::OldModuleName);
