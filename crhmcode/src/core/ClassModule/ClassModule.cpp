@@ -2446,7 +2446,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 			NewName.insert(NewName.size(), "#");
 		if (Explicit)
 			NewName.insert(NewName.size(), " **** explicit");
-		Global::ReportList->Add((ID + " ---> " + NewName).c_str());
+		Global::ReportList->push_back((ID + " ---> " + NewName).c_str());
 	}
 }
 
@@ -2598,7 +2598,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 			break;
 		} // switch
 
-		Global::ReportList->Add((source + reason).c_str());
+		Global::ReportList->push_back((source + reason).c_str());
 	}
 }
 
