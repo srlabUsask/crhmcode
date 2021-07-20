@@ -4,7 +4,7 @@
 Administer::Administer(string Version, string _HelpFile) : Version(Version), HelpFile(_HelpFile) {
 
 	DLLModuleList = new std::vector<std::pair<std::string, ClassModule *>>();
-	DLLModelList = new TStringList;
+	DLLModelList = new std::vector<std::pair<std::string, int>>();
 	DLLModelModuleList = new TStringList;
 
 	if (Global::PendingDLLModuleList != NULL)
@@ -50,7 +50,7 @@ void Administer::MacroClear() {
 	}
 
 	DLLModuleList->clear();
-	DLLModelList->Clear();
+	DLLModelList->clear();
 	DLLModelModuleList->Clear();
 }
 
@@ -66,7 +66,7 @@ void Administer::MacroUpdate() {
 			it++
 			)
 		{
-			if (it->first == DLLModelList->Strings[ii])
+			if (it->first == DLLModelList->operator[](ii).first)
 			{
 				moduleFound = true;
 				pos = it;
@@ -94,8 +94,8 @@ void Administer::AddModel(string ModelName, string ModelModules) {
 
 	DLLModelModuleList->Add(ModelModules);
 	//DLLModelList->AddObject(ModelName, (TObject*)(DLLModelModuleList->Count - 1)); // removed this line and added the following two for resolving a warning.
-	long long _object =(long long) DLLModelModuleList->Count - 1;
-	DLLModelList->AddObject(ModelName, (TObject*)_object);
+	int _object = DLLModelModuleList->Count - 1;
+	DLLModelList->push_back(std::pair<std::string, int>(ModelName, _object));
 }
 
 //---------------------------------------------------------------------------
@@ -153,7 +153,7 @@ void Administer::Accept(int Result) {
 			it++
 			)
 		{
-			if (it->first == DLLModelList->Strings[ii])
+			if (it->first == DLLModelList->operator[](ii).first)
 			{
 				inOurModulesList = true;
 				
@@ -198,11 +198,11 @@ void Administer::Accept(int Result) {
 		}
 	}
 
-	for (int ii = 0; ii < DLLModelList->Count; ++ii) {
+	for (size_t ii = 0; ii < DLLModelList->size() ; ++ii) {
 
 		// when sorted index used to access ModelModulesList		
 		int _object = ii;
-		Global::AllModelsList->push_back(std::pair<std::string, int>(DLLModelList->Strings[ii], _object));
+		Global::AllModelsList->push_back(std::pair<std::string, int>(DLLModelList->operator[](ii).first, _object));
 
 		// Administer object used to find which DLL loaded model
 		Global::ModelModulesList->push_back(std::pair<std::string, Administer *>(DLLModelModuleList->Strings[ii], this));
