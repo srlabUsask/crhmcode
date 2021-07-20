@@ -5,7 +5,7 @@ Administer::Administer(string Version, string _HelpFile) : Version(Version), Hel
 
 	DLLModuleList = new std::vector<std::pair<std::string, ClassModule *>>();
 	DLLModelList = new std::vector<std::pair<std::string, int>>();
-	DLLModelModuleList = new TStringList;
+	DLLModelModuleList = new std::vector<std::string>();
 
 	if (Global::PendingDLLModuleList != NULL)
 	{
@@ -51,7 +51,7 @@ void Administer::MacroClear() {
 
 	DLLModuleList->clear();
 	DLLModelList->clear();
-	DLLModelModuleList->Clear();
+	DLLModelModuleList->clear();
 }
 
 //---------------------------------------------------------------------------
@@ -92,9 +92,9 @@ void Administer::AddModule(ClassModule* Module) {
 //---------------------------------------------------------------------------
 void Administer::AddModel(string ModelName, string ModelModules) {
 
-	DLLModelModuleList->Add(ModelModules);
+	DLLModelModuleList->push_back(ModelModules);
 	//DLLModelList->AddObject(ModelName, (TObject*)(DLLModelModuleList->Count - 1)); // removed this line and added the following two for resolving a warning.
-	int _object = DLLModelModuleList->Count - 1;
+	int _object = DLLModelModuleList->size() - 1;
 	DLLModelList->push_back(std::pair<std::string, int>(ModelName, _object));
 }
 
@@ -205,7 +205,7 @@ void Administer::Accept(int Result) {
 		Global::AllModelsList->push_back(std::pair<std::string, int>(DLLModelList->operator[](ii).first, _object));
 
 		// Administer object used to find which DLL loaded model
-		Global::ModelModulesList->push_back(std::pair<std::string, Administer *>(DLLModelModuleList->Strings[ii], this));
+		Global::ModelModulesList->push_back(std::pair<std::string, Administer *>(DLLModelModuleList->operator[](ii), this));
 	}
 
 	if (Global::OurHelpList)

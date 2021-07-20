@@ -12,7 +12,7 @@ class   Administer {
 public:
 	std::vector<std::pair<std::string, ClassModule *>> * DLLModuleList;       // modules defined in DLL
 	std::vector<std::pair<std::string, int>> * DLLModelList;        // models defined in DLL
-	TStringList* DLLModelModuleList;  // modules used in DLL models in CommaText
+	std::vector<std::string> * DLLModelModuleList;  // modules used in DLL models in CommaText
 	string Version;
 	string DLLName;
 	string HelpFile;
