@@ -10,7 +10,7 @@ class ClassModule;
 class   Administer {
 
 public:
-	TStringList* DLLModuleList;       // modules defined in DLL
+	std::vector<std::pair<std::string, ClassModule *>> * DLLModuleList;       // modules defined in DLL
 	TStringList* DLLModelList;        // models defined in DLL
 	TStringList* DLLModelModuleList;  // modules used in DLL models in CommaText
 	string Version;
