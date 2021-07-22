@@ -173,6 +173,20 @@ public:
 	string static GetCurrentPath(void);
 	bool static Variation_Decide(int Variation_set, long Variation);
 	void static writefile(string filepath, string content);
+	
+	
+	/*
+	* Takes a string of comma seperated values and places each value as a entry in a 
+	* vector of strings. Values are surounded by single quote characters before being 
+	* placed into the vector. 
+	* 
+	* ex. input of "Red,Green,Blue" yeilds a vector with "'Red'", "'Green'", and "'Blue'"
+	* as its values.
+	* 
+	* @param std::string css - the incomming string of comma spererated values.
+	* @param std::vector<std::string> * pointer to the vector in which to save the parsed values.
+	*/
+	void static parseCommaSeperatedString(std::string css, std::vector<std::string>* stringVector);
 };
 
 #endif
