@@ -105,29 +105,41 @@ void ClassSetSoil::init(void) {
     Global::LoopTo = 0;
     Global::LoopCnt = 0;
 
-    RapidAdvance_to->Strings[0] = Common::trim(RapidAdvance_to->Strings[0]);
-    if (Loop_to->Count >= 1)
-        Loop_to->Strings[0] = Common::trim(Loop_to->Strings[0]);
-    if (Loop_to->Count == 2)
-        Loop_to->Strings[1] = Common::trim(Loop_to->Strings[1]);
+    RapidAdvance_to->operator[](0) = Common::trim(RapidAdvance_to->operator[](0));
+    if (Loop_to->size() >= 1)
+    {
+        Loop_to->operator[](0) = Common::trim(Loop_to->operator[](0));
+    }
+    if (Loop_to->size() == 2)
+    {
+        Loop_to->operator[](1) = Common::trim(Loop_to->operator[](1));
+    }
 
-    if (RapidAdvance_to->Strings[0].length() > 0)
-        try {
-        Global::RapidAdvanceTo = StrToDate(RapidAdvance_to->Strings[0]);
-        if (Loop_to->Count >= 1) {
-            Global::LoopTo = StrToDate(Loop_to->Strings[0]);
-            if (Loop_to->Count == 2)
-                Global::LoopCnt = Strtolong(Loop_to->Strings[1]);
+    if (RapidAdvance_to->operator[](0).length() > 0)
+    {
+        try 
+        {
+            Global::RapidAdvanceTo = StrToDate(RapidAdvance_to->operator[](0));
+            if (Loop_to->size() >= 1) 
+            {
+                Global::LoopTo = StrToDate(Loop_to->operator[](0));
+                if (Loop_to->size() == 2)
+                {
+                    Global::LoopCnt = Strtolong(Loop_to->operator[](1));
+                }
+            }
+
         }
-
+        catch (...) 
+        {
+            CRHMException TExcept("Error in 'RapidAdvance_to' or 'Loop_to' parameters", TExcept::TERMINATE);
+            LogError(TExcept);
+            Global::RapidAdvanceTo = 0;
+            Global::LoopTo = 0;
+            Global::LoopCnt = 0;
+        }
     }
-    catch (...) {
-        CRHMException TExcept("Error in 'RapidAdvance_to' or 'Loop_to' parameters", TExcept::TERMINATE);
-        LogError(TExcept);
-        Global::RapidAdvanceTo = 0;
-        Global::LoopTo = 0;
-        Global::LoopCnt = 0;
-    }
+        
 
     for (hh = 0; chkStruct(); ++hh) {
         double Fract = (Vol_h2o_content[hh] * 1000 - SetSoilproperties[soiltype_rechr[hh]][1]) / SetSoilproperties[soiltype_rechr[hh]][0];

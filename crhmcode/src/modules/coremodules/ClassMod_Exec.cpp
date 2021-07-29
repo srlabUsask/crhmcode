@@ -60,18 +60,25 @@ void ClassMod_Exec::init(void) {
 
   bool Root = false;
 
-  if(this->GroupCnt)
-    Root = true;
+  if (this->GroupCnt)
+  {
+      Root = true;
+  }
 
   long  GetUnit;
 
-  if(trk_Vars->Count){
-    VarArray = new double *[trk_Vars->Count];
+  if(trk_Vars->size())
+  {
+    VarArray = new double * [trk_Vars->size()];
 
-    for(long ii = 0; ii < trk_Vars->Count; ++ii){
-      S = Common::trim(trk_Vars->Strings[ii]);
-      if(S.length() == 0)
-        break;
+    for(size_t ii = 0; ii < trk_Vars->size(); ii++)
+    {
+      S = Common::trim(trk_Vars->operator[](ii));
+
+      if (S.length() == 0)
+      {
+          break;
+      }
 
       GetUnit = FindWildVarFloat(S.c_str(), newVar); // name changed 08/16/16 needs checked
       VarArray[ii] = newVar->values;
@@ -80,11 +87,13 @@ void ClassMod_Exec::init(void) {
     }
   }
 
-  if(chg_Pars->Count){
-    ParArray = new double *[chg_Pars->Count];
+  if(chg_Pars->size())
+  {
+    ParArray = new double *[chg_Pars->size()];
 
-    for(long ii = 0; ii < chg_Pars->Count; ++ii){
-      S = Common::trim(chg_Pars->Strings[ii]);
+    for(size_t ii = 0; ii < chg_Pars->size(); ++ii)
+    {
+      S = Common::trim(chg_Pars->operator[](ii));
       if(S.length() == 0)
         break;
 

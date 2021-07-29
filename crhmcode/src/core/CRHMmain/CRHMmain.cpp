@@ -623,12 +623,12 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					if (thisPar) {
 						ClassPar *newPar = new ClassPar(*thisPar);
 						newPar->module = module; // set module name
-						if (thisPar->varType == TVar::Txt) {
-							//newPar->Strings->DelimitedText = S.c_str();
-							newPar->Strings->DelimitedText(S.c_str());
-							//int a = 10;
+						if (thisPar->varType == TVar::Txt) 
+						{
+							Common::tokenizeString(S.c_str(), newPar->Strings);
 						}
-						else {
+						else 
+						{
 							Rows = 0;
 							istringstream instr; // count columns
 							instr.clear();
@@ -1979,20 +1979,26 @@ MMSData *  CRHMmain::RunClick2Start()
 	
 	
 
-	if (GoodRun) {
-		if (!OpenStateFlag) {
+	if (GoodRun) 
+	{
+		if (!OpenStateFlag) 
+		{
 			thisPar = ParFind("basin INIT_STATE");
-			if (thisPar && thisPar->Strings->Count && !thisPar->Strings->Strings[0].empty()) {
-				OpenNameState = thisPar->Strings->Strings[0];
+			if (thisPar && thisPar->Strings->size() && !thisPar->Strings->operator[](0).empty()) 
+			{
+				OpenNameState = thisPar->Strings->operator[](0);
 				OpenStateFlag = true;
 			}
-			else {
+			else 
+			{
 				MapPar::iterator itPar;
 
-				for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) {
+				for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) 
+				{
 					thisPar = (*itPar).second;
-					if (thisPar->param == "INIT_STATE" && thisPar->Strings->Count && !thisPar->Strings->Strings[0].empty()) {
-						OpenNameState = thisPar->Strings->Strings[0];
+					if (thisPar->param == "INIT_STATE" && thisPar->Strings->size() && !thisPar->Strings->operator[](0).empty()) 
+					{
+						OpenNameState = thisPar->Strings->operator[](0);
 						OpenStateFlag = true;
 						break;
 					}
@@ -2436,13 +2442,21 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 	Global::RunUpBitSet.reset();
 
 	bool Wild = false;
-	if (VarPar && !VarPar->Strings->Strings[0].empty()) // first parameter determines the type
-		Wild = VarPar->Strings->Strings[0].find("@") == string::npos;
+	
+	// first parameter determines the type
+	if (VarPar && !VarPar->Strings->operator[](0).empty())
+	{
+		Wild = VarPar->Strings->operator[](0).find("@") == string::npos;
+	}
 
 	if (MainLoop)
+	{
 		StateList->push_back("Starting main run-up loop");
+	}
 	else
+	{
 		StateList->push_back("starting module run-ahead to determine future variables");
+	}
 
 	StateList->push_back("######");
 
@@ -2471,23 +2485,58 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 
 			if (!thisVar->InGroup || Global::ModuleBitSet->count(thisVar->module))  // All variables in simple projects and module requested group projects
 				Needed = true;
-			else if (MainLoop) {
+			else if (MainLoop) 
+			{
 				string namebasic = thisVar->name;
-				if (VarPar && (VarPar->Strings->IndexOf(namebasic) > -1))
+				
+				size_t indx_namebasic = -1;
+				if (VarPar)
+				{
+					for (size_t it = 0; it < VarPar->Strings->size(); it++)
+					{
+						if (VarPar->Strings->operator[](it) == namebasic)
+						{
+							indx_namebasic = it;
+							break;
+						}
+					}
+				}
+
+				if (VarPar && (indx_namebasic > -1))
+				{
 					Needed = true;
+				}
 				else if (Wild) { // if Wild reduce parameter to root
 					string::size_type Idx = namebasic.find("@");
-					if (Idx != string::npos) {
+					if (Idx != string::npos) 
+					{
 						namebasic = namebasic.substr(1, Idx - 1);
-						if (VarPar && (VarPar->Strings->IndexOf(namebasic) > -1))
+
+						indx_namebasic = -1;
+						if (VarPar)
+						{
+							for (size_t it = 0; it < VarPar->Strings->size(); it++)
+							{
+								if (VarPar->Strings->operator[](it) == namebasic)
+								{
+									indx_namebasic = it;
+									break;
+								}
+							}
+						}
+
+						if (VarPar && (indx_namebasic > -1))
+						{
 							Needed = true;
+						}
 					}
 				} // wild!
 				Global::RunUpBitSet[thisVar->InGroup - 1] = true;
 			} // MainLoop!
 		} // state variable!
 
-		if (Needed) {
+		if (Needed) 
+		{
 			S = thisVar->module + " " + thisVar->name;
 			StateList->push_back(S);
 			S = "";
@@ -2991,8 +3040,11 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 	bool first = true;
 	bool Wild = false;
 
-	if (VarPar && !VarPar->Strings->Strings[0].empty()) // first parameter determines the type
-		Wild = VarPar->Strings->Strings[0].find("@") == string::npos;
+	// first parameter determines the type
+	if (VarPar && !VarPar->Strings->operator[](0).empty()) 
+	{
+		Wild = VarPar->Strings->operator[](0).find("@") == string::npos;
+	}
 
 	ifstream DataFile;
 
@@ -3092,20 +3144,39 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 				namebasic = namebasic.substr(1, Idx - 1);
 		}
 
-		if (thisVar) {
+		if (thisVar) 
+		{
 
-			if (VarPar && VarPar->Strings->IndexOf(namebasic) > -1) {
-				if (LoopList == NULL) {
+			size_t indx_namebasic = -1;
+			if (VarPar)
+			{
+				for (size_t it = 0; it < VarPar->Strings->size(); it++)
+				{
+					if (VarPar->Strings->operator[](it) == namebasic)
+					{
+						indx_namebasic = it;
+						break;
+					}
+				}
+			}
+
+			if (VarPar && indx_namebasic > -1) 
+			{
+				if (LoopList == NULL) 
+				{
 					LoopList = new std::list<std::string>();
 					Sx = DttoStr(Global::DTnow);
 					LoopList->push_back(Sx);
 				}
-				if (first) {
+				if (first) 
+				{
 					Sx = "loop " + inttoStr(Global::LoopCnt - Global::LoopCntDown + 1) + "\t" + name;
 					first = false;
 				}
 				else
+				{
 					Sx += ("\t" + string(name));
+				}
 
 				// write data
 
@@ -3165,12 +3236,17 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 		bool Wild2 = false;
 		ClassPar * TraceVarPar = ParFind("basin TraceVars");
 
-		if (TraceVarPar && !TraceVarPar->Strings->Strings[0].empty()) // first parameter determines the type
-			Wild2 = TraceVarPar->Strings->Strings[0].find("@") == string::npos;
+		if (TraceVarPar && !TraceVarPar->Strings->operator[](0).empty()) // first parameter determines the type
+		{
+			Wild2 = TraceVarPar->Strings->operator[](0).find("@") == string::npos;
+		}
+			
 
-		for (int ii = 0; ii < TraceVarPar->Strings->Count; ++ii) {
-			string Trimmed = Common::trim(TraceVarPar->Strings->Strings[ii]);
-			if (!Trimmed.empty()) {
+		for (size_t ii = 0; ii < TraceVarPar->Strings->size(); ++ii) 
+		{
+			string Trimmed = Common::trim(TraceVarPar->Strings->operator[](ii));
+			if (!Trimmed.empty()) 
+			{
 
 				if (AllVariables->count(Trimmed)) 
 				{
@@ -3180,7 +3256,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 						modIt++
 						) 
 					{
-						ClassVar * thisVar = VarFind(string(modIt->first) + ' ' + TraceVarPar->Strings->Strings[0]);
+						ClassVar * thisVar = VarFind(string(modIt->first) + ' ' + TraceVarPar->Strings->operator[](0));
 						if (thisVar) 
 						{
 							break;
@@ -3558,9 +3634,10 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 				ProjectList->push_back(S);
 
-				for (int jj = 0; jj<thisPar->lay; jj++) {
+				for (long jj = 0; jj<thisPar->lay; jj++) 
+				{
 					S = "";
-					for (int ii = 0; ii < thisPar->dim; ii++) {
+					for (size_t ii = 0; ii < (size_t) thisPar->dim; ii++) {
 						if (thisPar->varType == TVar::Float)
 						{
 							S = S + FloatToStrF(thisPar->layvalues[jj][ii], TFloatFormat::ffGeneral, 4, 0) + " ";
@@ -3571,9 +3648,9 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 						}
 						else if (thisPar->varType == TVar::Txt)
 						{
-							if (thisPar->Strings->Count > ii)
+							if (thisPar->Strings->size() > ii)
 							{
-								S = S + "'" + thisPar->Strings->Strings[ii] + "' ";
+								S = S + "'" + thisPar->Strings->operator[](ii) + "' ";
 							}
 							else
 							{

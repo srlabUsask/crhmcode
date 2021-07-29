@@ -34,7 +34,8 @@ public:
 	double minVal{ 0.0 };
 	double maxVal{ 0.0 };
 
-	TStringList* Strings{ NULL };
+	std::vector<std::string> * Strings{ NULL };
+	std::vector<std::string> * StringsBkup{ NULL };
 
 	TVISIBLE visibility{ TVISIBLE::USUAL };
 
@@ -47,7 +48,7 @@ public:
 
 	ClassPar* Identical;
 
-	TStringList* StringsBkup{ NULL };
+	
 
 	ClassPar(string module = "none", string param = "none") : 
 		module(module), 

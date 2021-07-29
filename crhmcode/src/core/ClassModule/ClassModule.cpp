@@ -709,29 +709,31 @@ void ClassModule::decllocal(string variable, TDim dimen, string help,
 }
 
 //---------------------------------------------------------------------------
-TStringList* ClassModule::decldiagparam(string param, TDim dimen,
-	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
+std::vector<std::string> * ClassModule::decldiagparam(string param, TDim dimen,
+	string Texts, string help, std::vector<std::string> * stringsList, TVISIBLE Local) 
+{
 
-	TStringList* fix = declparam(param, dimen, Texts, help, stringsList, Local);
+	std::vector<std::string> * fix = declparam(param, dimen, Texts, help, stringsList, Local);
 	return fix;
 }
 
 //---------------------------------------------------------------------------
-TStringList* ClassModule::decllocalparam(string param, TDim dimen,
-	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
+std::vector<std::string>* ClassModule::decllocalparam(string param, TDim dimen,
+	string Texts, string help, std::vector<std::string> *stringsList, TVISIBLE Local) {
 
-	TStringList* fix = declparam(param, dimen, Texts, help, stringsList, Local);
+	std::vector<std::string> * fix = declparam(param, dimen, Texts, help, stringsList, Local);
 	return fix;
 }
 
 //---------------------------------------------------------------------------
-TStringList* ClassModule::declparam(string param, TDim dimen,
-	string Texts, string help, TStringList *stringsList, TVISIBLE Local) {
+std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
+	string Texts, string help, std::vector<std::string> * stringsList, TVISIBLE Local) {
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
-	if (Variation_Skip()) {
-		return (TStringList*)NULL;
+	if (Variation_Skip()) 
+	{
+		return NULL;
 	}
 
 	variation_max = variation_max | variation_set;
@@ -740,13 +742,14 @@ TStringList* ClassModule::declparam(string param, TDim dimen,
 
 	switch (Global::BuildFlag) {
 
-	case TBuild::BUILD: {
+	case TBuild::BUILD: 
+	{
 		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
 		PairstrI Item = PairstrI(Name.c_str(), Item2);
 
 		Global::Mapdeclpar.insert(Item);
-		return (TStringList*)NULL;
+		return NULL;
 	}
 
 	case TBuild::DECL: {
@@ -801,7 +804,7 @@ TStringList* ClassModule::declparam(string param, TDim dimen,
 	default:
 		break;
 	}
-	return (TStringList*)NULL;
+	return NULL;
 }
 
 //---------------------------------------------------------------------------
