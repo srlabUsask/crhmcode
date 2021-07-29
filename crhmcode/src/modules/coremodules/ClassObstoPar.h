@@ -16,8 +16,8 @@ double *Ht_var{ NULL };
 const double *Ht_obs{ NULL };      // interval data
 
 // declared parameters
-TStringList *obs_name{ NULL };
-TStringList *par_name{ NULL };
+std::vector<std::string> * obs_name{ NULL };
+std::vector<std::string> * par_name{ NULL };
 
 double *Ht{ NULL };
 

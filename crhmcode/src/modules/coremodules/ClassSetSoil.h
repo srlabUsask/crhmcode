@@ -30,13 +30,13 @@ const double *soil_moist_init{ NULL };
 const long *soil_type{ NULL };
 const long *soiltype_rechr{ NULL };
 
-TStringList *basin_name{ NULL };
-TStringList *INIT_STATE{ NULL };
-TStringList *hru_names{ NULL };
-TStringList *RapidAdvance_to{ NULL };
-TStringList *Loop_to{ NULL };
-TStringList *StateVars_to_Update{ NULL };
-TStringList *TraceVars{ NULL };
+std::vector<std::string> * basin_name{ NULL };
+std::vector<std::string> * INIT_STATE{ NULL };
+std::vector<std::string> * hru_names{ NULL };
+std::vector<std::string> * RapidAdvance_to{ NULL };
+std::vector<std::string> * Loop_to{ NULL };
+std::vector<std::string> * StateVars_to_Update{ NULL };
+std::vector<std::string> * TraceVars{ NULL };
 
 // declared variables
 //long *run_ID;

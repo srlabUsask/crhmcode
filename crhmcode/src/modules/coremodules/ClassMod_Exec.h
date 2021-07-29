@@ -32,9 +32,9 @@ long *statusInit{ NULL };
 long *statusStep{ NULL };
 
 // declared parameters
-TStringList *DLL_name{ NULL };
-TStringList *chg_Pars{ NULL };
-TStringList *trk_Vars{ NULL };
+std::vector<std::string> * DLL_name{ NULL };
+std::vector<std::string> * chg_Pars{ NULL };
+std::vector<std::string> * trk_Vars{ NULL };
 const long *Borland_Dll{ NULL };
 
 // variable inputs

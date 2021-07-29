@@ -32,28 +32,37 @@ ClassPar::ClassPar(string module, string param, TDim dimen,
 	else
 		dim = Grpdim;
 
-	Strings = new TStringList();
+	Strings = new std::vector<std::string>();
 	//Strings->QuoteChar = '\'';
-	Strings->DelimitedText(CommaText);
-	if (Strings->Count == 0) // handle case of newly added string parameter. Only handles 'BASIN'
-		Strings->Add("");
+	Common::tokenizeString(CommaText, Strings);
+
+	if (Strings->size() == 0) // handle case of newly added string parameter. Only handles 'BASIN'
+	{
+		Strings->push_back("");
+	}
 
 	if (dimen == TDim::NHRU)
-		for (int ii = Strings->Count; ii < dim; ++ii) {
-			Strings->Add(Strings->Strings[0] + std::to_string(ii + 1));
+	{
+		for (size_t ii = Strings->size(); ii < (size_t) dim; ++ii) 
+		{
+			Strings->push_back(Strings->operator[](0) + std::to_string(ii + 1));
 		}
+	}
+		
 }
 
 //---------------------------------------------------------------------------
-void ClassPar::ExpandShrink(long new_dim) {
+void ClassPar::ExpandShrink(long new_dim) 
+{
 
 	// backup current string
 
-	if (varType == TVar::Txt) {
-		StringsBkup = new TStringList;
-		StringsBkup->Assign(Strings);
+	if (varType == TVar::Txt) 
+	{
+		StringsBkup = new std::vector<std::string>(*Strings);
 	}
-	else if (varType == TVar::Float) {
+	else if (varType == TVar::Float) 
+	{
 		layvaluesBkup = new double* [lay];
 		for (int ii = 0; ii < lay; ii++)
 			layvaluesBkup[ii] = new double[dim];
@@ -62,7 +71,8 @@ void ClassPar::ExpandShrink(long new_dim) {
 			for (int ii = 0; ii < dim; ii++)
 				layvaluesBkup[jj][ii] = layvalues[jj][ii];
 	}
-	else if (varType == TVar::Int) {
+	else if (varType == TVar::Int) 
+	{
 		ilayvaluesBkup = new long* [lay];
 		for (int ii = 0; ii < lay; ii++)
 			ilayvaluesBkup[ii] = new long[dim];
@@ -86,8 +96,9 @@ void ClassPar::ExpandShrink(long new_dim) {
 		delete[] ilayvalues; //Array [nhru] [lay]
 		ivalues = NULL;
 	}
-	else if (varType == TVar::Txt) {
-		Strings->Clear();
+	else if (varType == TVar::Txt) 
+	{
+		Strings->clear();
 	}
 
 	// allocate new memory
@@ -130,23 +141,27 @@ void ClassPar::ExpandShrink(long new_dim) {
 		for (int kk = 0; kk < dim; ++kk)
 			ivalues[kk] = 0;
 	}
-	else if (varType == TVar::Txt) {
-		Strings->Clear();
+	else if (varType == TVar::Txt) 
+	{
+		Strings->clear();
 	}
 
 	// copy data into expanded/shrunk array
 
-	if (varType == TVar::Txt) {
-		if (StringsBkup->Count > 0)
+	if (varType == TVar::Txt) 
+	{
+		if (StringsBkup->size() > 0)
 		{
 			for (int kk = 0; kk < dim; ++kk)
-				Strings->Add(StringsBkup->Strings[min<int>(kk, dim0 - 1)] + "");
+			{
+				Strings->push_back(StringsBkup->operator[](min<int>(kk, dim0 - 1)) + "");
+			}
 			delete StringsBkup;
 		}
 		StringsBkup = NULL;
 	}
-	else if (varType == TVar::Float) {
-
+	else if (varType == TVar::Float) 
+	{
 		for (int jj = 0; jj < lay; jj++)
 			for (int ii = 0; ii < dim; ii++)
 				layvalues[jj][ii] = layvaluesBkup[min<int>(jj, lay0 - 1)][min<int>(ii, dim0 - 1)];
@@ -172,11 +187,12 @@ void ClassPar::ExpandShrink(long new_dim) {
 //---------------------------------------------------------------------------
 void ClassPar::BackUp() {
 
-	if (varType == TVar::Txt) {
-		StringsBkup = new TStringList;
-		StringsBkup->Assign(Strings);
+	if (varType == TVar::Txt) 
+	{
+		StringsBkup = new std::vector<std::string>(*Strings);
 	}
-	else if (varType == TVar::Float) {
+	else if (varType == TVar::Float) 
+	{
 		layvaluesBkup = new double* [lay];
 		for (int ii = 0; ii < lay; ii++)
 			layvaluesBkup[ii] = new double[dim];
@@ -185,7 +201,8 @@ void ClassPar::BackUp() {
 			for (int ii = 0; ii < dim; ii++)
 				layvaluesBkup[jj][ii] = layvalues[jj][ii];
 	}
-	else if (varType == TVar::Int) {
+	else if (varType == TVar::Int) 
+	{
 		ilayvaluesBkup = new long* [lay];
 		for (int ii = 0; ii < lay; ii++)
 			ilayvaluesBkup[ii] = new long[dim];
@@ -197,14 +214,18 @@ void ClassPar::BackUp() {
 }
 
 //---------------------------------------------------------------------------
-void ClassPar::Restore() {
+void ClassPar::Restore() 
+{
 
-	if (varType == TVar::Txt) {
-		Strings->Assign(StringsBkup);
+	if (varType == TVar::Txt) 
+	{
+		Strings = NULL;
+		Strings = new std::vector<std::string>(*StringsBkup);
 		delete StringsBkup;
 		StringsBkup = NULL;
 	}
-	else if (varType == TVar::Float) {
+	else if (varType == TVar::Float) 
+	{
 
 		for (int jj = 0; jj < lay; jj++)
 			for (int ii = 0; ii < dim; ii++)
@@ -215,7 +236,8 @@ void ClassPar::Restore() {
 		delete[] layvaluesBkup;  //Array [nhru] [lay]
 		layvaluesBkup = NULL;
 	}
-	else if (varType == TVar::Int) {
+	else if (varType == TVar::Int) 
+	{
 
 		for (int jj = 0; jj < lay; jj++)
 			for (int ii = 0; ii < dim; ii++)
@@ -346,7 +368,7 @@ ClassPar::ClassPar(ClassPar& p) {  // copy constructor
 		}
 		else if (varType == TVar::Txt)
 		{
-			Strings = new TStringList;
+			Strings = new std::vector<std::string>();
 		}
 	}
 	catch (std::bad_alloc)
@@ -389,7 +411,8 @@ ClassPar::ClassPar(ClassPar& p) {  // copy constructor
 	}
 	else if (varType == TVar::Txt)
 	{
-		Strings->Assign(p.Strings);
+		Strings = NULL;
+		Strings = new std::vector<std::string>(*p.Strings);
 	}
 
 }
@@ -418,7 +441,7 @@ bool ClassPar::Same(ClassPar& p) {  // compares parameter data
 					return true;
 				}
 
-				if (Strings != NULL && (Strings->Count != p.Strings->Count))
+				if (Strings != NULL && (Strings->size() != p.Strings->size()))
 				{
 					return(false);
 				}
@@ -427,9 +450,10 @@ bool ClassPar::Same(ClassPar& p) {  // compares parameter data
 					return false;
 				}
 				else {
-					for (int ii = 0; ii < Strings->Count; ++ii) {
+					for (size_t ii = 0; ii < Strings->size(); ++ii) 
+					{
 
-						if (Strings->Strings[ii] != p.Strings->Strings[ii])
+						if (Strings->operator[](ii) != p.Strings->operator[](ii))
 						{
 							return(false);
 						}
@@ -461,13 +485,19 @@ void ClassPar::Change(ClassPar& p) {  // changes parameter data to 'p'
 
 	if (this == &p) return;
 
-	if (varType == TVar::Txt) {
-		Strings->Assign(p.Strings);
-		while (Strings->Count < dim && Strings->Count>0)  // duplicate last field when # of HRUs increased
-														  //Strings->Append(Strings->Strings[Strings->Count - 1]);
-			Strings->Add(Strings->Strings[Strings->Count - 1] + "");
+	if (varType == TVar::Txt) 
+	{
+		Strings = NULL;
+		Strings = new std::vector<std::string>(*p.Strings);
+
+		// duplicate last field when # of HRUs increased
+		while (Strings->size() < (size_t) dim && Strings->size() > 0)  
+		{
+			Strings->push_back(Strings->operator[](Strings->size() - 1) + "");
+		}
 	}
-	else {
+	else 
+	{
 		bool Bang = valstr.find("!") != string::npos;
 		for (int jj = 0; jj < lay; ++jj) {
 			long jj0 = min<long>(jj, p.lay - 1);

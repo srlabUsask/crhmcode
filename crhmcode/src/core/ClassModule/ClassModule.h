@@ -196,6 +196,8 @@ public:
 	void decllocal(string variable, TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1);
 
+	std::vector<std::string> * decldiagparam(string param, TDim dimen, string Texts, string help, std::vector<std::string> * stringsList, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
+
 	void declparam(string param, TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const double **value,
@@ -206,7 +208,6 @@ public:
 		string help, string units, const long **value,
 		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::USUAL);
 
-	TStringList* declparam(string param, TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::USUAL);
 
 	void decldiagparam(string param, TDim dimen,
 		string valstr, string minstr, string maxstr,
@@ -218,8 +219,6 @@ public:
 		string help, string units, const long **value,
 		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
 
-	TStringList* decldiagparam(string param, TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
-
 	void decllocalparam(string param, TDim dimen,
 		string valstr, string minstr, string maxstr,
 		string help, string units, const double **value,
@@ -230,7 +229,9 @@ public:
 		string help, string units, const long **value,
 		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::PRIVATE);
 
-	TStringList* decllocalparam(string param, TDim dimen, string Texts, string help, TStringList *stringsList, TVISIBLE Local = TVISIBLE::PRIVATE);
+	std::vector<std::string> * decllocalparam(string param, TDim dimen, string Texts, string help, std::vector<std::string> *stringsList, TVISIBLE Local = TVISIBLE::PRIVATE);
+
+	std::vector<std::string>* declparam(string param, TDim dimen, string Texts, string help, std::vector<std::string>* stringsList, TVISIBLE Local = TVISIBLE::USUAL);
 
 	long declgetvar(string source, string name, string units, const double **value, const double ***layvalue = NULL);
 
