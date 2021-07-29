@@ -64,8 +64,6 @@
 #define M_PI	3.14159265358979323846  /* pi */
 #endif
 
-using namespace std;
-
 enum class TMemoSel { LOG, DEBUG };
 enum class TExtra { BLANK, DD, TT, DT };
 enum class TAKA { AKAERROR = -1, VARG, OBSR, VARD, OBSD, PARD, OBSF, AKAEND };
@@ -186,7 +184,7 @@ public:
 	* @param std::string css - the incomming string of comma spererated values.
 	* @param std::vector<std::string> * pointer to the vector in which to save the parsed values.
 	*/
-	void static parseCommaSeperatedString(std::string css, std::vector<std::string>* stringVector);
+	void static tokenizeString(std::string css, std::vector<std::string>* stringVector);
 };
 
 #endif

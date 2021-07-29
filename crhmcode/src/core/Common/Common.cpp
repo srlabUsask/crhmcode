@@ -335,8 +335,10 @@ bool static isdigit(char ch)
 
 /////////////////////////////////////////
 
-void  Common::parseCommaSeperatedString(std::string css, std::vector<std::string>* stringVector)
+void  Common::tokenizeString(std::string css, std::vector<std::string>* stringVector)
 {
+	stringVector->clear();
+
 	std::string inString;
 	std::string token;
 	size_t tokenStart = 0;
@@ -346,12 +348,29 @@ void  Common::parseCommaSeperatedString(std::string css, std::vector<std::string
 
 	while (tokenEnd < inString.size())
 	{
-		tokenEnd = inString.find_first_of(',', tokenStart);
-		token = inString.substr(tokenStart, tokenEnd - tokenStart);
-		if (token != "")
+		tokenEnd = inString.find_first_of("\' ,", tokenStart);
+
+		if (tokenEnd != std::string::npos)
 		{
-			stringVector->push_back("\'" + Common::trim(token) + "\'");
+			if (inString[tokenEnd] == '\'')
+			{
+				tokenStart = tokenEnd + 1;
+
+				if (tokenStart < inString.size())
+				{
+					tokenEnd = inString.find_first_of('\'', tokenStart);
+				}
+
+			}
+
+			token = inString.substr(tokenStart, tokenEnd - tokenStart);
+			if (token != "" && token != "\"")
+			{
+				stringVector->push_back(Common::trim(token));
+			}
+			tokenStart = tokenEnd + 1;
 		}
-		tokenStart = tokenEnd + 1;
+
 	}
+
 }
