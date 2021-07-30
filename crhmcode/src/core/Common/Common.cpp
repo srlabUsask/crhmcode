@@ -345,6 +345,7 @@ void  Common::tokenizeString(std::string css, std::vector<std::string>* stringVe
 	size_t tokenEnd = 0;
 
 	inString = Common::trim(css);
+	inString.append(",");
 
 	while (tokenEnd < inString.size())
 	{
