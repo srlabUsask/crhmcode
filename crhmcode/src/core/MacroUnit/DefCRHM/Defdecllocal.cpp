@@ -1,14 +1,19 @@
 #include "Defdecllocal.h"
 
-Defdecllocal::Defdecllocal(ClassMacro* Macro_) : DefCRHM(Macro_) {
-	name = DefStringList->Strings[1];
-	Dim = getTDim(DefStringList->Strings[2]);
-	Description = DefStringList->Strings[3];
-	Units = DefStringList->Strings[4];
-	if (DefCRHM::DefStringList->Count > 5 && DefStringList->Strings[5] == "Int")
+Defdecllocal::Defdecllocal(ClassMacro* Macro_) : DefCRHM(Macro_) 
+{
+	name = DefStringList->operator[](1);
+	Dim = getTDim(DefStringList->operator[](2));
+	Description = DefStringList->operator[](3);
+	Units = DefStringList->operator[](4);
+	if (DefCRHM::DefStringList->size() > 5 && DefStringList->operator[](5) == "Int")
+	{
 		Int = true;
+	}
 	else
+	{
 		Int = false;
+	}
 }
 
 void Defdecllocal::CallDecl() {

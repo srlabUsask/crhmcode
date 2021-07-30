@@ -599,8 +599,9 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 
 	//Common::Message ("test", "test 12");
 
-	if (!DefCRHM::DefStringList) {
-		DefCRHM::DefStringList = new TStringList;
+	if (!DefCRHM::DefStringList) 
+	{
+		DefCRHM::DefStringList = new std::vector<std::string>();
 	}
 
 	//Common::Message ("test", "test 13");
@@ -614,66 +615,79 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 
 		string::size_type Indx;
 		Indx = Global::MacroModulesList->operator[](ii).find("//");  //Manishankar did this to resolve a warning.
-		if (Indx != string::npos) {
+		if (Indx != string::npos) 
+		{
 			string temp = Global::MacroModulesList->operator[](ii).substr(0, Indx - 1);
 			temp = Common::trimright(temp);
-			DefCRHM::DefStringList->DelimitedText(Add_Quote(temp));
+			Common::tokenizeString(Add_Quote(temp), DefCRHM::DefStringList);
 		}
 		else
 		{
-			DefCRHM::DefStringList->DelimitedText(Add_Quote(Global::MacroModulesList->operator[](ii)));
+			Common::tokenizeString(Add_Quote(Global::MacroModulesList->operator[](ii)), DefCRHM::DefStringList);
 		}
 			
 
 
 		//Common::Message ("test", "test 15");
 
-		long Pcnt = DefCRHM::DefStringList->Count;
+		long Pcnt = (long) DefCRHM::DefStringList->size();
 		if (Pcnt < 1)
+		{
 			continue;
+		}
 
-		DefCRHM::DefStringList->Strings[0] = Common::trimleft(DefCRHM::DefStringList->Strings[0]);
+		DefCRHM::DefStringList->operator[](0) = Common::trimleft(DefCRHM::DefStringList->operator[](0));
 
-		if (!DefCRHM::DefStringList->Strings[0].compare("//") || DefCRHM::DefStringList->Strings[0].empty()) // comment
+		if (!DefCRHM::DefStringList->operator[](0).compare("//") || DefCRHM::DefStringList->operator[](0).empty()) // comment
+		{
 			continue;
+		}
 
 		//Common::Message ("test", "test 16");
 
-		if (DefCRHM::DefStringList->Strings[0].find("command") == 0) {
+		if (DefCRHM::DefStringList->operator[](0).find("command") == 0) 
+		{
 			Begin = ii + 1; End = ThisEnd;
 			DefCRHMPtr Call(new Defcommand(this));
 			break;
 		}
-
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declgroup")) {
-			if (!isGroup) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declgroup")) 
+		{
+			if (!isGroup) 
+			{
 				isGroup = true;
 				GroupCnt = ++Global::GroupCntTrk;
 				GrpStringList = new TStringList;
 
-				if (DefCRHM::DefStringList->Count > 1 && (DefCRHM::DefStringList->Strings[1].find("//") == string::npos)) // ignore comments
-					Grpnhru = Strtolong(DefCRHM::DefStringList->Strings[1]);
+				if (DefCRHM::DefStringList->size() > 1 && (DefCRHM::DefStringList->operator[](1).find("//") == string::npos)) // ignore comments
+				{
+					Grpnhru = Strtolong(DefCRHM::DefStringList->operator[](1));
+				}
 				else
+				{
 					Grpnhru = nhru;
+				}
 			}
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declstruct")) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declstruct")) {
 			if (!isStruct) {
 				isStruct = true;
 				StructCnt = ++Global::StructCntTrk;
 				GrpStringList = new TStringList;
 
-				if (DefCRHM::DefStringList->Count > 1 && !DefCRHM::DefStringList->Strings[1].find("//")) // ignore comments
-					Grpnhru = Strtolong(DefCRHM::DefStringList->Strings[1]);
+				if (DefCRHM::DefStringList->size() > 1 && !DefCRHM::DefStringList->operator[](1).find("//")) // ignore comments
+				{
+					Grpnhru = Strtolong(DefCRHM::DefStringList->operator[](1));
+				}
 				else
+				{
 					Grpnhru = nhru;
+				}
 			}
 		}
-
-		else if (isGroup || isStruct) {
-			string S = DefCRHM::DefStringList->Strings[0];
+		else if (isGroup || isStruct) 
+		{
+			string S = DefCRHM::DefStringList->operator[](0);
 			string V;
 			string::size_type N = S.find("#"); // remove any variation
 			if (N != string::npos) {
@@ -693,82 +707,86 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 				}
 			}
 			if (jj == -1) // not changed
-				GrpStringList->Add(DefCRHM::DefStringList->Strings[0]); // original name
-			else {
+			{
+				GrpStringList->Add(DefCRHM::DefStringList->operator[](0)); // original name
+			}
+			else 
+			{
 				GrpStringList->Add(Global::NewModuleName->operator[](jj) + V); // new name
 				string Message = "Converting module " + Global::OldModuleName->operator[](jj) + V + " to " + Global::NewModuleName->operator[](jj) + V + " in macro " + Name.c_str();
 				LogMessage(Message.c_str());
 			}
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declparam") && Pcnt >= 8) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declparam") && Pcnt >= 8) 
+		{
 			DefCRHMPtr Call(new Defdeclparam(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("decldiagparam") && Pcnt >= 8) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("decldiagparam") && Pcnt >= 8) 
+		{
 			DefCRHMPtr Call(new Defdeclparam(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declreadobs") && Pcnt >= 5) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declreadobs") && Pcnt >= 5) 
+		{
 			DefCRHMPtr Call(new Defdeclreadobs(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declobsfunc") && Pcnt >= 4) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declobsfunc") && Pcnt >= 4) 
+		{
 			DefCRHMPtr Call(new Defdeclobsfunc(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declvar") && Pcnt >= 5) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declvar") && Pcnt >= 5) 
+		{
 			DefCRHMPtr Call(new Defdeclvar(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("decldiag") && Pcnt >= 5) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("decldiag") && Pcnt >= 5) 
+		{
 			DefCRHMPtr Call(new Defdecldiag(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declstatvar") && Pcnt >= 5) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declstatvar") && Pcnt >= 5) 
+		{
 			DefCRHMPtr Call(new Defdeclstatvar(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("decllocal") && Pcnt >= 5) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("decllocal") && Pcnt >= 5) 
+		{
 			DefCRHMPtr Call(new Defdecllocal(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declgetvar") && Pcnt >= 4) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declgetvar") && Pcnt >= 4) 
+		{
 			DefCRHMPtr Call(new Defdeclgetvar(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declputvar") && Pcnt >= 4) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declputvar") && Pcnt >= 4) 
+		{
 			DefCRHMPtr Call(new Defdeclputvar(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declputparam") && Pcnt >= 4) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declputparam") && Pcnt >= 4) 
+		{
 			DefCRHMPtr Call(new Defdeclputparam(this));
 			Calls.push_back(Call);
 		}
-
-		else if (!DefCRHM::DefStringList->Strings[0].compare("declobs") && Pcnt >= 5) {
+		else if (!DefCRHM::DefStringList->operator[](0).compare("declobs") && Pcnt >= 5) 
+		{
 			DefCRHMPtr Call(new Defdeclobs(this));
 			Calls.push_back(Call);
 		}
-		else if (!DefCRHM::DefStringList->Strings[0].compare("setpeer")) {
-
-			if (DefCRHM::DefStringList->Count > 2)
+		else if (!DefCRHM::DefStringList->operator[](0).compare("setpeer")) 
+		{
+			if (DefCRHM::DefStringList->size() > 2)
 			{
-				PeerVar = DefCRHM::DefStringList->Strings[1];
-				PeerRank = Strtolong(DefCRHM::DefStringList->Strings[2]);
+				PeerVar = DefCRHM::DefStringList->operator[](1);
+				PeerRank = Strtolong(DefCRHM::DefStringList->operator[](2));
 			}
 		}
-		else {
+		else 
+		{
 			Common::Message(string(string("function not recognised or too few parameters: ")
 				+ "\"" + Global::MacroModulesList->operator[](ii) + "\""), "Macro Error");
 		}

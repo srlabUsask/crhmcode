@@ -1,9 +1,10 @@
 #include "Defdeclobsfunc.h"
 
-Defdeclobsfunc::Defdeclobsfunc(ClassMacro* Macro_) : DefCRHM(Macro_) {
-	obs = DefStringList->Strings[1];
-	name = DefStringList->Strings[2];
-	typeFun = getTFunc(DefStringList->Strings[3]);
+Defdeclobsfunc::Defdeclobsfunc(ClassMacro* Macro_) : DefCRHM(Macro_) 
+{
+	obs = DefStringList->operator[](1);
+	name = DefStringList->operator[](2);
+	typeFun = getTFunc(DefStringList->operator[](3));
 }
 
 

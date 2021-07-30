@@ -13,10 +13,10 @@ class DefCRHM {
 public:
 	DefCRHM(ClassMacro* Macro_) : Macro(Macro_), fix(NULL), fix2(NULL)
 	{
-		if (!DefStringList) DefStringList = new TStringList;
+		if (!DefStringList) DefStringList = new std::vector<std::string>();
 	};
 
-	static TStringList* DefStringList;
+	static std::vector<std::string> * DefStringList;
 	virtual void CallDecl() {};
 	virtual void CallInit(long nhru, long nlay) {};
 
