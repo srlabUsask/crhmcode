@@ -1,9 +1,10 @@
 #include "Defdeclputvar.h"
 
-Defdeclputvar::Defdeclputvar(ClassMacro* Macro_) : DefCRHM(Macro_) {
-	module = DefStringList->Strings[1];
-	name = DefStringList->Strings[2];
-	Units = DefStringList->Strings[3];
+Defdeclputvar::Defdeclputvar(ClassMacro* Macro_) : DefCRHM(Macro_) 
+{
+	module = DefStringList->operator[](1);
+	name = DefStringList->operator[](2);
+	Units = DefStringList->operator[](3);
 }
 
 void Defdeclputvar::CallDecl() {

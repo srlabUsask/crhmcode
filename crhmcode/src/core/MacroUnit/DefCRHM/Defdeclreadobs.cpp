@@ -1,15 +1,20 @@
 #include "Defdeclreadobs.h"
 
-Defdeclreadobs::Defdeclreadobs(ClassMacro* Macro_) : DefCRHM(Macro_) {
-	name = DefStringList->Strings[1];
-	Dim = getTDim(DefStringList->Strings[2]);
-	Description = DefStringList->Strings[3];
-	Units = DefStringList->Strings[4];
+Defdeclreadobs::Defdeclreadobs(ClassMacro* Macro_) : DefCRHM(Macro_) 
+{
+	name = DefStringList->operator[](1);
+	Dim = getTDim(DefStringList->operator[](2));
+	Description = DefStringList->operator[](3);
+	Units = DefStringList->operator[](4);
 
-	if (DefCRHM::DefStringList->Count > 5)
-		HRU_OBS_indexed = Strtolong(DefStringList->Strings[5]);
+	if (DefCRHM::DefStringList->size() > 5)
+	{
+		HRU_OBS_indexed = Strtolong(DefStringList->operator[](5));
+	}
 	else
+	{
 		HRU_OBS_indexed = 0;
+	}
 }
 
 void Defdeclreadobs::CallDecl() {

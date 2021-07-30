@@ -1,27 +1,38 @@
 #include "DefCRHM.h"
 
-Defdeclparam::Defdeclparam(ClassMacro* Macro_) : DefCRHM(Macro_) {
+Defdeclparam::Defdeclparam(ClassMacro* Macro_) : DefCRHM(Macro_) 
+{
 
-	if (DefStringList->Strings[0] == "decldiagparam")
+	if (DefStringList->operator[](0) == "decldiagparam")
+	{
 		visibility = TVISIBLE::DIAGNOSTIC;
+	}
 	else
+	{
 		visibility = TVISIBLE::USUAL;
+	}
 
-	name = DefStringList->Strings[1];
-	Dim = getTDim(DefStringList->Strings[2]);
-	Default = DefStringList->Strings[3];
-	Min = DefStringList->Strings[4];
-	Max = DefStringList->Strings[5];
-	Description = DefStringList->Strings[6];
-	Units = DefStringList->Strings[7];
+	name = DefStringList->operator[](1);
+	Dim = getTDim(DefStringList->operator[](2));
+	Default = DefStringList->operator[](3);
+	Min = DefStringList->operator[](4);
+	Max = DefStringList->operator[](5);
+	Description = DefStringList->operator[](6);
+	Units = DefStringList->operator[](7);
 
-	if (DefCRHM::DefStringList->Count > 8 && DefStringList->Strings[8] == "Int")
+	if (DefCRHM::DefStringList->size() > 8 && DefStringList->operator[](8) == "Int")
+	{
 		Int = true;
+	}
 	else
+	{
 		Int = false;
+	}
 
-	if (DefCRHM::DefStringList->Count > 9)
-		nlay = Strtolong(DefStringList->Strings[9]);
+	if (DefCRHM::DefStringList->size() > 9)
+	{
+		nlay = Strtolong(DefStringList->operator[](9));
+	}
 }
 
 

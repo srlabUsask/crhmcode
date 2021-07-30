@@ -19,4 +19,4 @@
 
 extern double xLimit;
 
-TStringList *DefCRHM::DefStringList = NULL;
+std::vector<std::string> * DefCRHM::DefStringList = NULL;
