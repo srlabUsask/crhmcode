@@ -254,7 +254,7 @@ void ClassMacro::init(void) {
 		else
 			SS = "Struct: '" + NameRoot + "' ->";
 
-		for (int ii = 0; ii < GrpStringList->size(); ++ii)
+		for (size_t ii = 0; ii < GrpStringList->size(); ++ii)
 		{
 			SS += " " + GrpStringList->operator[](ii).first;
 		}
@@ -277,7 +277,7 @@ void ClassMacro::init(void) {
 				{
 					const_cast<long*>  (HRU_struct)[hh] = 1;
 				}
-				if (HRU_struct[hh] > GrpStringList->size())
+				if (HRU_struct[hh] > (long) GrpStringList->size())
 				{
 					const_cast<long*>  (HRU_struct)[hh] = GrpStringList->size();
 				}
