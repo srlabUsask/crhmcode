@@ -22,9 +22,9 @@
 
 using namespace std;
 
-TStringList *ReadListN = new TStringList;
+std::vector<std::pair<std::string, ClassVar *>> * ReadListN = new std::vector<std::pair<std::string, ClassVar*>>();
 
-TStringList *FunctListN = new TStringList;
+std::vector<std::pair<std::string, ClassVar*>>* FunctListN = new std::vector<std::pair<std::string, ClassVar*>>();
 
 string Fstrings[] = { "Observation", "VP_saturated", "W_to_MJ/Int", "MJ/Int_to_W", "Average", "Minimum", "Maximum", "Daily Sum", "Positive",
 "Total", "First", "Last", "Peak", "Count", "Count0", "Intvl" };
@@ -2657,8 +2657,8 @@ void ClassModule::InitReadObs(void) {
 
 	// called by TMain::RunClick to clear storage
 
-	ReadListN->Clear();
-	FunctListN->Clear();
+	ReadListN->clear();
+	FunctListN->clear();
 }
 
 //---------------------------------------------------------------------------
@@ -2668,8 +2668,8 @@ void ClassModule::ReadObs(bool Reset) {
 	// Order in read lists same as in OurModuleList.
 	// module can be in FunctListN without being in ReadListN.
 
-	static long p;
-	static long pN;
+	static size_t p;
+	static size_t pN;
 	static long LastGroup; // limits calls to pre_run
 
 	if (Reset) {
@@ -2679,13 +2679,10 @@ void ClassModule::ReadObs(bool Reset) {
 	}
 
 	if (Global::DTindx%Global::Freq == 0) { // only at start of day
-		while (pN != FunctListN->Count && FunctListN->Strings[pN] == Name.c_str()) {
+		while (pN != FunctListN->size() && FunctListN->operator[](pN).first == Name.c_str()) 
+		{
 
-			/*TStringList test1 = FunctListN->Objects[pN];
-			auto *test2 = &test1;
-			ClassVar *P = (ClassVar*)test2;*/
-
-			ClassVar *P = (ClassVar*)FunctListN->array[pN].Object;
+			ClassVar *P = FunctListN->operator[](pN).second;
 
 			P->dim = nhru; // check if necessary. Group?
 
@@ -2695,21 +2692,28 @@ void ClassModule::ReadObs(bool Reset) {
 			}
 
 			if (P->CustomFunct) // execute any extra features except for nfreq observations   && !P->nfreq
+			{
 				(P->*(P->CustomFunct))(this); // do_t_day, do_rh_day, do_ea_day, do_t, do_p,  do_ppt or Nothing
+			}
 
 			++pN;
 		}
 	}
 
-	while (p < ReadListN->Count && ((ReadListN->Strings[p] == Name.c_str()) || GroupCnt == 0)) { //  && ReadListN->strings[p] == "obs"
-		ClassVar *P = (ClassVar*)ReadListN->array[p].Object;
+	while (p < ReadListN->size() && ((ReadListN->operator[](p).first == Name.c_str()) || GroupCnt == 0))  //  && ReadListN->strings[p] == "obs"
+	{	
+		ClassVar *P = ReadListN->operator[](p).second;
 		P->dim = nhru; // check if necessary. Group?
 
 		if (P->module == "obs" || (GroupCnt && !P->No_ReadVar))
+		{
 			P->ReadVar();
+		}
 
 		if (P->CustomFunct) // execute any extra features for t etc
+		{
 			(P->*(P->CustomFunct))(this); // do_t, do_p or Nothing
+		}
 
 		++p;
 	}
@@ -2729,21 +2733,27 @@ bool ClassModule::ReadAheadObs(long inc) {
 	Global::DTindx += inc;
 	Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 
-	long p = 0;
+	size_t p = 0;
 
-	while (p < ReadListN->Count) {
-		ClassVar *P = (ClassVar*)ReadListN->array[p].Object;
+	while (p < ReadListN->size()) 
+	{
+		ClassVar *P = ReadListN->operator[](p).second;
 		if (P->FileData->GoodInterval)
+		{
 			P->ReadVar();
+		}
 		++p;
 	}
 
 	if (Global::DTindx%Global::Freq == 0) {
 		p = 0;
-		while (p < FunctListN->Count && FunctListN->Strings[p] == Name.c_str()) {
-			ClassVar *P = (ClassVar*)FunctListN->array[p].Object;
+		while (p < FunctListN->size() && FunctListN->operator[](p).first == Name.c_str()) 
+		{
+			ClassVar *P = FunctListN->operator[](p).second;
 			if (P->FunctVar->FileData->GoodDay)
+			{
 				(P->*(P->UserFunct))();
+			}
 			++p;
 		}
 	}
@@ -2755,8 +2765,8 @@ bool ClassModule::ReadAheadObs(long inc) {
 }
 
 //---------------------------------------------------------------------------
-bool ClassModule::ReadAheadObsMacro(long inc) {
-
+bool ClassModule::ReadAheadObsMacro(long inc) 
+{
 	// called by 'macros'. ReadAheadObsMacro(0) must be called at end to reset Global::DTnow
 
 	if (Global::DTindx + inc >= Global::DTmax || Global::DTindx + inc < Global::DTmin)
@@ -2768,21 +2778,28 @@ bool ClassModule::ReadAheadObsMacro(long inc) {
 	Global::DTindx += inc;
 	Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
 
-	long p = 0;
+	size_t p = 0;
 
-	while (p < ReadListN->Count) {
-		ClassVar *P = (ClassVar*)ReadListN->array[p].Object;
+	while (p < ReadListN->size()) 
+	{
+		ClassVar *P = (ClassVar*)ReadListN->operator[](p).second;
 		if (P->FileData->GoodInterval)
+		{
 			P->ReadVar();
+		}
 		++p;
 	}
 
-	if (Global::DTindx%Global::Freq == 0) {
+	if (Global::DTindx%Global::Freq == 0) 
+	{
 		p = 0;
-		while (p < FunctListN->Count) {
-			ClassVar *P = (ClassVar*)FunctListN->array[p].Object;
+		while (p < FunctListN->size()) 
+		{
+			ClassVar *P = FunctListN->operator[](p).second;
 			if (P->FunctVar->FileData->GoodDay)
+			{
 				(P->*(P->UserFunct))();
+			}
 			++p;
 		}
 	}
@@ -2795,8 +2812,8 @@ bool ClassModule::ReadAheadObsMacro(long inc) {
 
 //---------------------------------------------------------------------------
 
-bool ClassModule::WriteAheadObsMacro(long inc) {
-
+bool ClassModule::WriteAheadObsMacro(long inc) 
+{
 	// called by 'macros'
 
 	if (Global::DTindx + inc >= Global::DTmax || Global::DTindx + inc < Global::DTmin)
@@ -2806,12 +2823,15 @@ bool ClassModule::WriteAheadObsMacro(long inc) {
 
 	Global::DTindx += inc;
 
-	long p = 0;
+	size_t p = 0;
 
-	while (p < ReadListN->Count) {
-		ClassVar *P = (ClassVar*)ReadListN->array[p].Object;
+	while (p < ReadListN->size()) 
+	{
+		ClassVar *P = ReadListN->operator[](p).second;
 		if (P->FileData->GoodInterval)
+		{
 			P->WriteVar();
+		}
 		++p;
 	}
 
@@ -2825,8 +2845,8 @@ void ClassModule::DelReadObs(void) {
 
 	// called by TMain::RunClick to clear storage
 
-	ReadListN->Clear();
-	FunctListN->Clear();
+	ReadListN->clear();
+	FunctListN->clear();
 }
 
 //---------------------------------------------------------------------------
@@ -2840,28 +2860,37 @@ bool ClassModule::AnyOne(double *Data, int Cnt, double Val) {
 }
 
 //---------------------------------------------------------------------------
-bool ClassModule::UsingObservations(void) {
+bool ClassModule::UsingObservations(void) 
+{
 
-	if (ReadListN->Count || FunctListN->Count)
+	if (ReadListN->size() || FunctListN->size())
+	{
 		return true;
+	}
 	else
+	{
 		return false;
+	}
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
+void ClassModule::addtoreadlist(ClassVar* newVar) { // BuildFlag = crhm::init
 
 													// called by ClassModule::declreadobs INIT to add observation
 
-	long p = 0;
-	ClassVar *P;
+	size_t p = 0;
+	ClassVar* P;
 	//string::size_type indx; variable is unreferenced commenting out for now - jhs507
 
-	while (p < ReadListN->Count && GroupCnt == 0) { // duplicates possible in simple projects
-		P = (ClassVar*)ReadListN->array[p].Object;
-		if (newVar == P) {
+	while (p < ReadListN->size() && GroupCnt == 0) // duplicates possible in simple projects
+	{
+		P = (ClassVar*)ReadListN->operator[](p).second;
+		if (newVar == P)
+		{
 			if (this->Name == this->NameRoot) // simple project
+			{
 				return;
+			}
 		}
 		p++;
 	}
@@ -2872,9 +2901,13 @@ void ClassModule::addtoreadlist(ClassVar *newVar) { // BuildFlag = crhm::init
 	}
 
 	if (GroupCnt) // Group
-		ReadListN->AddObject(Name.c_str(), (TObject*)newVar); // add call to ReadVar
+	{
+		ReadListN->push_back(std::pair<std::string, ClassVar*>(Name.c_str(), newVar)); // add call to ReadVar
+	}
 	else
-		ReadListN->AddObject(newVar->module.c_str(), (TObject*)newVar); // add call to ReadVar
+	{
+		ReadListN->push_back(std::pair<std::string, ClassVar*>(newVar->module.c_str(), newVar)); // add call to ReadVar
+	}
 
 	newVar->CustomFunct = NULL; // Set by 'declobsfunc' for Groups. If simple set by 'addtoreadlist'
 
@@ -2912,22 +2945,26 @@ void ClassModule::addtofunctlist(ClassVar *newVar) {
 
 	// called by ClassModule::declobsfunc INIT to add observation function
 
-	long p = 0;
+	size_t p = 0;
 	ClassVar *P;
 	string::size_type indx;
 
-	while (p < FunctListN->Count) {
-		P = (ClassVar*)FunctListN->array[p].Object;
+	while (p < FunctListN->size()) 
+	{
+		P = (ClassVar*)FunctListN->operator[](p).second;
 
-		if (newVar == P) {
+		if (newVar == P) 
+		{
 			if (this->Name == this->NameRoot && GroupCnt == 0) // duplicates possible in simple projects
+			{
 				return;
+			}
 		}
 
 		p++;
 	}
 
-	FunctListN->AddObject(Name.c_str(), (TObject*)newVar);
+	FunctListN->push_back(std::pair<std::string, ClassVar*>(Name.c_str(), newVar));
 
 	if (NameRoot == "obs" || Name == "obs") { // handle vapour pressure
 
