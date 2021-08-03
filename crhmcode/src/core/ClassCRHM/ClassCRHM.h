@@ -30,8 +30,6 @@ enum types { DELIMITER = 1, NUMBER };
 //class parser; removed forward declaration - jhs507
 //class ClassModule; removed forward declaration - jhs507
 
-//TStringList *Strings; 
-
 typedef unsigned long Word;
 typedef int INT;
 

@@ -96,39 +96,51 @@ void MacroClass::addfilter(string Line) {
 		return;
 	}
 
-	if (!NewFilter->Error) FilterList->AddObject(Filter, (TObject*)NewFilter);
-	else delete NewFilter;
+	if (!NewFilter->Error)
+	{
+		FilterList->push_back(std::pair<std::string, Classfilter*>(Filter, NewFilter));
+	}
+	else
+	{
+		delete NewFilter;
+	}
 }
 
 
 
 
 //---------------------------------------------------------------------------
-void MacroClass::execute(long Line) {
-
-	for (int ii = 0; ii < FilterList->Count; ii++)
-		((Classfilter*)FilterList->Objects[ii])->doFunctions(Line);
+void MacroClass::execute(long Line) 
+{
+	for (size_t ii = 0; ii < FilterList->size(); ii++)
+	{
+		FilterList->operator[](ii).second->doFunctions(Line);
+	}
 }
 
 //---------------------------------------------------------------------------
-void MacroClass::fixup(void) {
+void MacroClass::fixup(void) 
+{
 
-	for (int ii = 0; ii < FilterList->Count; ii++)
-		((Classfilter*)FilterList->Objects[ii])->fixup();
+	for (size_t ii = 0; ii < FilterList->size(); ii++)
+	{
+		FilterList->operator[](ii).second->fixup();
+	}
 }
 
 //---------------------------------------------------------------------------
 MacroClass::MacroClass(ClassData* File) : File(File), Interpolation(0) {
 
-	FilterList = new TStringList;
-	FilterList->Sorted = false;
+	FilterList = new std::vector<std::pair<std::string, Classfilter *>>();
 }
 
 //---------------------------------------------------------------------------
 MacroClass::~MacroClass() { // calls all filters to finalise data memory addresses
 
-	if (Interpolation > 0 && FilterList->Count > Interpolation)
+	if (Interpolation > 0 && (long) FilterList->size() > Interpolation)
+	{
 		LogError("Filter execution occurs before interpolation -> values may be incorrect." + File->DataFileName, TExcept::WARNING);
+	}
 
 	//for (int ii = 0; ii < FilterList->Count; ii++)
 	//	delete (Classfilter*)FilterList->Objects[ii];
