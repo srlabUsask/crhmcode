@@ -4,14 +4,18 @@
 #define MACROCLASS
 
 #include "ClassCRHM.h"
+#include "Classfilter.h"
 
-class MacroClass {
+class Classfilter;
+
+class MacroClass 
+{
 public:
 	MacroClass(ClassData* File);
 	~MacroClass();
 
 	ClassData* File;
-	TStringList* FilterList;
+	std::vector<std::pair<std::string, Classfilter *>> * FilterList;
 	long Interpolation;
 	void addfilter(string Line);
 	void fixup(void);
