@@ -17,12 +17,10 @@ public:
 
 	symtab_t::iterator FP;
 
-	TStringList* Declaration;
-
 	list<DefCRHMPtr> Calls;    // declaration list used for declarations
 	list<ModulePtr> Modules;   // list used for modules
 	list<Execbase> Operations; // shortened to 'oper' in CRHM_parse.h
-	TStringList* GrpStringList;// list of modules in group or struct
+	std::vector<std::pair<std::string, ClassModule*>> * GrpStringList;// list of modules in group or struct
 	long Grpnhru;              // group actual nhru
 	stack<double> eval;         // execution stack for double values
 	symtab_t vars;             // symbol table

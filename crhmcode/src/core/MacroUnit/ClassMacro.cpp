@@ -69,24 +69,44 @@ void ClassMacro::decl(void) {
 			declparam("HRU_group", TDim::NHRU, S, "1", "1e3", "group #", "()", &HRU_group);
 		}
 
-		if (isStruct) {
-			string Choice = GrpStringList->CommaText();
-			declparam("HRU_struct", TDim::NHRU, "[1]", "1", Common::longtoStr(GrpStringList->Count), string("select using 1/2/3 ... module/group from '" + Choice + "'"), "()", &HRU_struct); // _group
+		if (isStruct) 
+		{
+			std::string Choice;
+
+			std::ostringstream temp;
+
+			for (size_t it = 0; it < GrpStringList->size(); it++)
+			{
+				if (it)
+				{
+					temp << ", ";
+				}
+				temp << GrpStringList->operator[](it).first;
+			}
+			temp << endl;
+			
+			Choice = temp.str();
+
+			declparam("HRU_struct", TDim::NHRU, "[1]", "1", Common::longtoStr(GrpStringList->size()), string("select using 1/2/3 ... module/group from '" + Choice + "'"), "()", &HRU_struct); // _group
 		}
 
 		Modules.clear();
 		unsigned short Variation;
 
-		for (int ii = 0; ii < GrpStringList->Count; ++ii) {
-			string S = GrpStringList->Strings[ii];
+		for (size_t ii = 0; ii < GrpStringList->size(); ii++) 
+		{
+			std::string S = GrpStringList->operator[](ii).first;
 
-			string::size_type idx = S.find("#");
-			if (idx != string::npos) {
+			std::string::size_type idx = S.find("#");
+			if (idx != std::string::npos) 
+			{
 				Variation = (unsigned short)(pow(2, S[idx + 1] - char('1')));
 				S = S.substr(0, idx);
 			}
 			else
+			{
 				Variation = 0;
+			}
 
 			int Indx = Global::AllModulesList->count(S);
 
@@ -190,8 +210,18 @@ void ClassMacro::decl(void) {
 				AA[1] += (char)(log((*iterM)->variation) / log(2) + 1);
 				SS += AA;
 			}
-			long jj = GrpStringList->IndexOf(SS); // find module entry
-			GrpStringList->Objects[jj] = (TObject*)MPP; // save pointer to module
+			
+			long jj = -1;
+			for (size_t it = 0; it < GrpStringList->size(); it++)
+			{
+				if (GrpStringList->operator[](it).first == SS)
+				{
+					jj = it;
+					break;
+				}
+			}
+
+			GrpStringList->operator[](jj).second = MPP; // save pointer to module
 			(*iterM)->nhru = nhru;
 			(*iterM)->decl();
 			++iterM;
@@ -224,8 +254,10 @@ void ClassMacro::init(void) {
 		else
 			SS = "Struct: '" + NameRoot + "' ->";
 
-		for (int ii = 0; ii < GrpStringList->Count; ++ii)
-			SS += " " + GrpStringList->Strings[ii];
+		for (int ii = 0; ii < GrpStringList->size(); ++ii)
+		{
+			SS += " " + GrpStringList->operator[](ii).first;
+		}
 
 		LogMessage(SS.c_str());
 
@@ -239,11 +271,16 @@ void ClassMacro::init(void) {
 		}
 
 		if (StructCnt) // force into range of modules in the group
-			for (hh = 0; hh < nhru; ++hh) {
+			for (hh = 0; hh < nhru; ++hh) 
+			{
 				if (HRU_struct[hh] < 1)
+				{
 					const_cast<long*>  (HRU_struct)[hh] = 1;
-				if (HRU_struct[hh] > GrpStringList->Count)
-					const_cast<long*>  (HRU_struct)[hh] = GrpStringList->Count;
+				}
+				if (HRU_struct[hh] > GrpStringList->size())
+				{
+					const_cast<long*>  (HRU_struct)[hh] = GrpStringList->size();
+				}
 			}
 
 		return;
@@ -659,7 +696,7 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 			{
 				isGroup = true;
 				GroupCnt = ++Global::GroupCntTrk;
-				GrpStringList = new TStringList;
+				GrpStringList = new std::vector<std::pair<std::string, ClassModule *>>();
 
 				if (DefCRHM::DefStringList->size() > 1 && (DefCRHM::DefStringList->operator[](1).find("//") == string::npos)) // ignore comments
 				{
@@ -675,7 +712,7 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 			if (!isStruct) {
 				isStruct = true;
 				StructCnt = ++Global::StructCntTrk;
-				GrpStringList = new TStringList;
+				GrpStringList = new std::vector<std::pair<std::string, ClassModule *>>();
 
 				if (DefCRHM::DefStringList->size() > 1 && !DefCRHM::DefStringList->operator[](1).find("//")) // ignore comments
 				{
@@ -710,11 +747,11 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 			}
 			if (jj == -1) // not changed
 			{
-				GrpStringList->Add(DefCRHM::DefStringList->operator[](0)); // original name
+				GrpStringList->push_back(std::pair<std::string, ClassModule *>(DefCRHM::DefStringList->operator[](0), NULL)); // original name
 			}
 			else 
 			{
-				GrpStringList->Add(Global::NewModuleName->operator[](jj) + V); // new name
+				GrpStringList->push_back(std::pair<std::string, ClassModule *>((Global::NewModuleName->operator[](jj) + V), NULL)); // new name
 				string Message = "Converting module " + Global::OldModuleName->operator[](jj) + V + " to " + Global::NewModuleName->operator[](jj) + V + " in macro " + Name.c_str();
 				LogMessage(Message.c_str());
 			}
