@@ -145,16 +145,6 @@ string Common::lowercase(string &s) {  //Manishankar: in CRHMmain.cpp, utils.cpp
 	return s;
 }
 
-
-
-int Common::IndexOf(TStringList *Box, const string S) { //Manishankar: being used in different places in different ways.
-	for (int ii = 0; ii < Box->Count; ++ii) {
-		if (Box->Strings[ii] == S)
-			return ii;
-	}
-	return -1;
-}
-
 string Common::longtoStr(long L) { //Manishankar: in two or more files.
 	ostringstream temp;
 	temp << L;
