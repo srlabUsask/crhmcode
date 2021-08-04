@@ -123,7 +123,6 @@ public:
 	void static  Message(const char *s1, const char *s2);
 	void static Message(const string s1, const string s2);
 	string static lowercase(string &s);
-	int static IndexOf(TStringList *Box, const string S);
 	string static longtoStr(long L);
 
 	/*
