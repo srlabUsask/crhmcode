@@ -1,6 +1,4 @@
-#include <cmath>
 #include "StandardConverterUtility.h"
-#include "TStringList/TStringList.h"
 
 StandardConverterUtility::StandardConverterUtility()
 {
@@ -146,12 +144,17 @@ double StandardConverterUtility::DateTimeDt(void) {  //Manishankar: in CRHMmain.
 
 
 //this function is being used CRHMmain.cpp. Added by Manishankar.
-std::string StandardConverterUtility::FormatDateTime(std::string fmt, double datetime) {
+std::string StandardConverterUtility::FormatDateTime(std::string fmt, double datetime) 
+{
 	int y, m, d, h, min;
 	//int s; variable is unreferenced commenting out for now - jhs507
 	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
 
-	string m1 = to_string(m), d1 = to_string(d), h1 = to_string(h), min1 = to_string(min);
+	std::string m1 = std::to_string(m);
+	std::string d1 = std::to_string(d);
+	std::string h1 = std::to_string(h);
+	std::string min1 = std::to_string(min);
+
 	if (m < 10) { m1 = "0" + m1; }
 	if (d < 10) { d1 = "0" + d1; }
 	if (h < 10) { h1 = "0" + h1; }
@@ -159,11 +162,11 @@ std::string StandardConverterUtility::FormatDateTime(std::string fmt, double dat
 
 	if (fmt == "yyyy-mm-dd hh:mm ")
 	{
-		return to_string(y) + " " + m1 + " " + d1 + " " + h1 + " " + min1;
+		return std::to_string(y) + " " + m1 + " " + d1 + " " + h1 + " " + min1;
 	}
 	else if (fmt == "ISO")
 	{
-		return to_string(y) + "-" + m1 + "-" + d1 + "T" + h1 + ":" + min1;
+		return std::to_string(y) + "-" + m1 + "-" + d1 + "T" + h1 + ":" + min1;
 	}
 
 	return "";

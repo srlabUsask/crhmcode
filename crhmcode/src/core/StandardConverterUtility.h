@@ -1,6 +1,10 @@
-#include <string>
-
 #pragma once
+
+#include <cstring>
+#include <string>
+#include <cmath>
+#include <ctime>
+
 class StandardConverterUtility
 {
 public:

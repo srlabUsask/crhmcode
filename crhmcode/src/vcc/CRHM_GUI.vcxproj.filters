@@ -1538,9 +1538,6 @@
     <ClCompile Include="..\core\StandardConverterUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\TStringList\TStringList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\core\ClassCRHM\ClassCRHM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
