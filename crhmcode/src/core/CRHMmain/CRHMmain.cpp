@@ -14,18 +14,14 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <time.h>
-//#include "boost/shared_ptr.hpp"
+#include <ctime>
+
 #include "GlobalDll.h"
-//#include "ClassCRHM/ClassCRHM.h"
 #include "ClassModule/ClassModule.h"
 #include "NewModules.h"
 #include "../MacroUnit/MacroUnit.h"
 #include "Common/Common.h"
 #include "StandardConverterUtility.h"
-
-#include <time.h>
-
 #include "CRHMLogger.h"
 
 
