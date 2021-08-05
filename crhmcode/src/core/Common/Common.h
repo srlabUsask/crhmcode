@@ -4,10 +4,14 @@
 #ifndef CommonH
 #define CommonH
 //---------------------------------------------------------------------------
-
-//#include <vcl.h>
+#include <vector>
 #include <string>
 #include <cmath>
+#include <limits>
+#include <algorithm>
+#include <sstream>
+#include <iostream>
+#include <fstream>
 
 #if defined(_WIN32)
 #include <direct.h>
@@ -19,9 +23,7 @@
 #define GetCurrentDir getcwd
 #endif
 
-#include "string.h"
-#include<iostream>
-#include "TStringList/TStringList.h"
+
 
 #include "time.h"
 #include "CRHM_namespace.h"
@@ -79,8 +81,8 @@ enum class TVar { none, Int, Float, Txt, Read, ReadI, ReadF };
 enum class TDim { BASIN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, NHRU, NOBS, NLAY, NDEF, NFREQ, NREB, NDEFN, NDEFNZ };
 enum class TFloatFormat { ffGeneral, ffExponent, ffFixed, ffNumber, ffCurrency };
 
-static double xLimit = (numeric_limits<double>::max)();
-static long lLimit = (numeric_limits<long>::max)();
+static double xLimit = (std::numeric_limits<double>::max)();
+static long lLimit = (std::numeric_limits<long>::max)();
 
 const double a1 = 0.4361836;   //constants of approximation
 const double a2 = -0.1201676;
@@ -94,7 +96,7 @@ const double little_p = 0.33267;
 double static sqr(double X) { return X * X; }
 //bool static EqualUpper(std::string s1, std::string s2);
 
-string static GetCurrentDir(void) {
+std::string static GetCurrentDir(void) {
 	char buff[FILENAME_MAX];
 	char* cwd;
 	cwd = GetCurrentDir(buff, FILENAME_MAX);
@@ -118,12 +120,12 @@ public:
 
 	double static SWE_prob(double SWEmean, double SWE, double CV);
 	double static SVDens(double Temp);
-	void static GroupEnding(string &AA, int Cnt);
+	void static GroupEnding(std::string &AA, int Cnt);
 	double static Ice_Bulb(double Tc, double RH, double Pa);
 	void static  Message(const char *s1, const char *s2);
-	void static Message(const string s1, const string s2);
-	string static lowercase(string &s);
-	string static longtoStr(long L);
+	void static Message(const std::string s1, const std::string s2);
+	std::string static lowercase(std::string &s);
+	std::string static longtoStr(long L);
 
 	/*
 	* Trim all whitespace from the start of a string to
@@ -144,7 +146,7 @@ public:
 	* @param str - a string to trim.
 	* @return the string with its beginning trimmed of white space characters.
 	**/
-	string static trimleft(string& str);
+	std::string static trimleft(std::string& str);
 
 	/**
 	* Trim all whitespace from the end of a string to
@@ -153,7 +155,7 @@ public:
 	* @param str - a string to trim.
 	* @return The string with its end trimmed of white space characters.
 	**/
-	string static trimright(string& str);
+	std::string static trimright(std::string& str);
 
 	/**
 	* Trim all the whitespace from the begining and end of of a string.
@@ -161,15 +163,15 @@ public:
 	* @param str - a string to trim.
 	* @return The string with its beginning and ending whitespace removed.
 	**/
-	string static trim(string& str);
+	std::string static trim(std::string& str);
 
-	double static StrtoDt(string s);
-	bool static EqualUpper(string s1, string s2);
+	double static StrtoDt(std::string s);
+	bool static EqualUpper(std::string s1, std::string s2);
 	double static KyValue(double probability, double guess);
 	double static K(double Ky, double LogStDev);
-	string static GetCurrentPath(void);
+	std::string static GetCurrentPath(void);
 	bool static Variation_Decide(int Variation_set, long Variation);
-	void static writefile(string filepath, string content);
+	void static writefile(std::string filepath, std::string content);
 	
 	
 	/*

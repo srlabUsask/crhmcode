@@ -3,6 +3,8 @@
 #ifndef TRESULT
 #define TRESULT
 
+#include <cstring>
+
 class Tresult {
 public:
 	double k;
@@ -10,7 +12,7 @@ public:
 
 	Tresult(int size) : k(1.0) {
 		aExp = new char[size];
-		::memset(aExp, 0, sizeof(char) * size);
+		std::memset(aExp, 0, sizeof(char) * size);
 	}
 	~Tresult() { delete[] aExp; }
 };

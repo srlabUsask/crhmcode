@@ -1,23 +1,23 @@
-
 #pragma once
 // 12/19/16
-
 //---------------------------------------------------------------------------
 
 #ifndef GlobalDllH
 #define GlobalDllH
 //---------------------------------------------------------------------------
 
-#include "GlobalCommon.h"
 #include <ctime>
+#include <map>
+#include <set>
+#include <list>
+#include <sstream>
+#include <iomanip>
+
+#include "GlobalCommon.h"
 #include "Common/Common.h"
 #include "StandardConverterUtility.h"
 #include "ClassModule/ClassModule.h"
 #include "ClassModule/Administer.h"
-
-#include <map>
-#include <set>
-//#include "ClassCRHM.h"
 
 using namespace std;
 
@@ -133,14 +133,14 @@ public:
 	static double ** obs_rh; // used for array observations adjustments
 	static double ** obs_t_obs; // used for array observations adjustments
 
-	static TObject *thisVar;
+	static ClassVar *thisVar;
 };
 
 
 //Mani added this from TStringList.
 
 string static FloatToStrF(double value, string format, int precision, int digits) {
-	stringstream stream;
+	std::stringstream stream;
 
 	//double minVal = 3000.14159265359;
 

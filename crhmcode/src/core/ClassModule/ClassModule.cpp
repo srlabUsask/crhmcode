@@ -1128,7 +1128,7 @@ long ClassModule::FindWildVarFloat(string name, ClassVar* &newVar, bool OnceFlag
 		if (spacename.substr(1) != newVar->name) // exact match - previous match contained name
 			continue;
 
-		Global::thisVar = (TObject*)newVar;
+		Global::thisVar = newVar;
 		return newVar->GetUnit();
 	} // for
 

@@ -1,9 +1,6 @@
 #include "Common.h"
 #include "../CRHMmain/CRHMLogger.h"
-//#include <math.h>
-#include <cmath>
-#include <algorithm>
-#include <limits>
+
 
 //#pragma package(smart_init) removed uneeded pragma - jhs507
 
@@ -146,7 +143,7 @@ string Common::lowercase(string &s) {  //Manishankar: in CRHMmain.cpp, utils.cpp
 }
 
 string Common::longtoStr(long L) { //Manishankar: in two or more files.
-	ostringstream temp;
+	std::ostringstream temp;
 	temp << L;
 	return temp.str();
 }
@@ -307,9 +304,9 @@ bool Common::Variation_Decide(int Variation_set, long Variation) {
 		return false;
 }
 
-void Common::writefile(string filepath, string content)
+void Common::writefile(std::string filepath, std::string content)
 {
-	ofstream myfile;
+	std::ofstream myfile;
 	myfile.open(filepath, ios::app);
 	myfile << "\n" << content;
 	myfile.close();

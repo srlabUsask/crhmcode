@@ -46,8 +46,6 @@ DefCRHM_OBJS = DefCRHM.o Defdecldiag.o Defdeclgetvar.o Defdecllocal.o \
 Defdeclobs.o Defdeclobsfunc.o Defdeclparam.o Defdeclputparam.o \
 Defdeclputvar.o Defdeclreadobs.o Defdeclstatvar.o Defdeclvar.o
 
-TStringList_OBJS = TStringList.o
-
 GCC_OBJS = main.o
 
 COREMODULES_OBJS = Class_z_s_rho.o Class3D_param.o Classalbedo.o \
@@ -84,7 +82,7 @@ ClassWQ_Test_Hype.o WQ_CRHM.o WQ_Soil_NPCcycling.o
 
 ALL_OBS = $(CORE_OBJS) $(ClassCRHM_OBJS) $(Filter_OBJS) $(ClassModule_OBJS) \
 $(Common_OBJS) $(CRHM_parse_OBJS) $(EXEC_OBJS) $(CRHMmain_OBJS) \
-$(MacroUnit_OBJS) $(DefCRHM_OBJS) $(GCC_OBJS) $(TStringList_OBJS) \
+$(MacroUnit_OBJS) $(DefCRHM_OBJS) $(GCC_OBJS) \
 $(COREMODULES_OBJS) $(NEWMODULES_OBJS) $(Waterquality_OBJS)
 
 OBJ = $(patsubst %,$(ODIR)/%,$(ALL_OBS))
