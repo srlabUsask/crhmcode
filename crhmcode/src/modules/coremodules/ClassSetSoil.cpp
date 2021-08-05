@@ -105,27 +105,27 @@ void ClassSetSoil::init(void) {
     Global::LoopTo = 0;
     Global::LoopCnt = 0;
 
-    RapidAdvance_to->operator[](0) = Common::trim(RapidAdvance_to->operator[](0));
+    RapidAdvance_to->at(0) = Common::trim(RapidAdvance_to->at(0));
     if (Loop_to->size() >= 1)
     {
-        Loop_to->operator[](0) = Common::trim(Loop_to->operator[](0));
+        Loop_to->at(0) = Common::trim(Loop_to->at(0));
     }
     if (Loop_to->size() == 2)
     {
-        Loop_to->operator[](1) = Common::trim(Loop_to->operator[](1));
+        Loop_to->at(1) = Common::trim(Loop_to->at(1));
     }
 
-    if (RapidAdvance_to->operator[](0).length() > 0)
+    if (RapidAdvance_to->at(0).length() > 0)
     {
         try 
         {
-            Global::RapidAdvanceTo = StrToDate(RapidAdvance_to->operator[](0));
+            Global::RapidAdvanceTo = StrToDate(RapidAdvance_to->at(0));
             if (Loop_to->size() >= 1) 
             {
-                Global::LoopTo = StrToDate(Loop_to->operator[](0));
+                Global::LoopTo = StrToDate(Loop_to->at(0));
                 if (Loop_to->size() == 2)
                 {
-                    Global::LoopCnt = Strtolong(Loop_to->operator[](1));
+                    Global::LoopCnt = Strtolong(Loop_to->at(1));
                 }
             }
 

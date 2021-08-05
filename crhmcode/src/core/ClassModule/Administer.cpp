@@ -19,7 +19,7 @@ Administer::~Administer() {
 
 	for (size_t ii = 0; ii < DLLModuleList->size(); ++ii)
 	{
-		delete DLLModuleList->operator[](ii).second; // delete modules
+		delete DLLModuleList->at(ii).second; // delete modules
 	}
 		
 
@@ -37,7 +37,7 @@ void Administer::MacroClear() {
 		if (jj > -1)
 		Global::AllModulesList->Delete(jj);*/
 
-		ClassModule * thisModule = DLLModuleList->operator[](ii).second;
+		ClassModule * thisModule = DLLModuleList->at(ii).second;
 		delete thisModule;
 	}
 
@@ -66,7 +66,7 @@ void Administer::MacroUpdate() {
 			it++
 			)
 		{
-			if (it->first == DLLModelList->operator[](ii).first)
+			if (it->first == DLLModelList->at(ii).first)
 			{
 				moduleFound = true;
 				pos = it;
@@ -75,7 +75,7 @@ void Administer::MacroUpdate() {
 
 		if (moduleFound) // Update Macro Module address
 		{
-			pos->second = DLLModuleList->operator[](ii).second;
+			pos->second = DLLModuleList->at(ii).second;
 		}
 			
 	}
@@ -120,7 +120,7 @@ void Administer::Accept(int Result) {
 			it++
 			)
 		{
-			if (it->first == DLLModuleList->operator[](ii).first)
+			if (it->first == DLLModuleList->at(ii).first)
 			{
 				foundInPending = true;
 			}
@@ -134,7 +134,7 @@ void Administer::Accept(int Result) {
 		}
 			
 
-		int jj = Global::AllModulesList->count(DLLModuleList->operator[](ii).first);
+		int jj = Global::AllModulesList->count(DLLModuleList->at(ii).first);
 		if (jj != 0) 
 		{
 			Exists = "Over-write existing module \"";
@@ -153,14 +153,14 @@ void Administer::Accept(int Result) {
 			it++
 			)
 		{
-			if (it->first == DLLModelList->operator[](ii).first)
+			if (it->first == DLLModelList->at(ii).first)
 			{
 				inOurModulesList = true;
 				
 			}
 		}		
 
-		if (Global::AllModulesList->count(DLLModuleList->operator[](ii).first) == 0 // Needed to be put back!
+		if (Global::AllModulesList->count(DLLModuleList->at(ii).first) == 0 // Needed to be put back!
 			&& inOurModulesList)
 			Result = mbYes;
 		//    else if(Result != mbYesToAll && Result != mbNoToAll){ // optional
@@ -174,11 +174,11 @@ void Administer::Accept(int Result) {
 		case mbYesToAll:
 			if (jj != 0) 
 			{
-				LogError(CRHMException((DLLModuleList->operator[](ii).first + " module being replaced").c_str(), TExcept::WARNING));
-				Global::AllModulesList->erase(DLLModuleList->operator[](ii).first);
+				LogError(CRHMException((DLLModuleList->at(ii).first + " module being replaced").c_str(), TExcept::WARNING));
+				Global::AllModulesList->erase(DLLModuleList->at(ii).first);
 			}
 
-			thisModule = DLLModuleList->operator[](ii).second;
+			thisModule = DLLModuleList->at(ii).second;
 			thisModule->DLLName = DLLName;
 			if (thisModule->DLLName != "Macro")
 			{
@@ -186,8 +186,8 @@ void Administer::Accept(int Result) {
 			}
 				
 
-			Global::AllModulesList->insert(std::pair<std::string, ClassModule*>(DLLModuleList->operator[](ii).first,
-				DLLModuleList->operator[](ii).second));
+			Global::AllModulesList->insert(std::pair<std::string, ClassModule*>(DLLModuleList->at(ii).first,
+				DLLModuleList->at(ii).second));
 			break;
 
 		case mbNo:
@@ -202,10 +202,10 @@ void Administer::Accept(int Result) {
 
 		// when sorted index used to access ModelModulesList		
 		int _object = ii;
-		Global::AllModelsList->push_back(std::pair<std::string, int>(DLLModelList->operator[](ii).first, _object));
+		Global::AllModelsList->push_back(std::pair<std::string, int>(DLLModelList->at(ii).first, _object));
 
 		// Administer object used to find which DLL loaded model
-		Global::ModelModulesList->push_back(std::pair<std::string, Administer *>(DLLModelModuleList->operator[](ii), this));
+		Global::ModelModulesList->push_back(std::pair<std::string, Administer *>(DLLModelModuleList->at(ii), this));
 	}
 
 	if (Global::OurHelpList)

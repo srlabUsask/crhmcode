@@ -45,7 +45,7 @@ ClassPar::ClassPar(string module, string param, TDim dimen,
 	{
 		for (size_t ii = Strings->size(); ii < (size_t) dim; ++ii) 
 		{
-			Strings->push_back(Strings->operator[](0) + std::to_string(ii + 1));
+			Strings->push_back(Strings->at(0) + std::to_string(ii + 1));
 		}
 	}
 		
@@ -154,7 +154,7 @@ void ClassPar::ExpandShrink(long new_dim)
 		{
 			for (int kk = 0; kk < dim; ++kk)
 			{
-				Strings->push_back(StringsBkup->operator[](min<int>(kk, dim0 - 1)) + "");
+				Strings->push_back(StringsBkup->at(min<int>(kk, dim0 - 1)) + "");
 			}
 			delete StringsBkup;
 		}
@@ -453,7 +453,7 @@ bool ClassPar::Same(ClassPar& p) {  // compares parameter data
 					for (size_t ii = 0; ii < Strings->size(); ++ii) 
 					{
 
-						if (Strings->operator[](ii) != p.Strings->operator[](ii))
+						if (Strings->at(ii) != p.Strings->at(ii))
 						{
 							return(false);
 						}
@@ -493,7 +493,7 @@ void ClassPar::Change(ClassPar& p) {  // changes parameter data to 'p'
 		// duplicate last field when # of HRUs increased
 		while (Strings->size() < (size_t) dim && Strings->size() > 0)  
 		{
-			Strings->push_back(Strings->operator[](Strings->size() - 1) + "");
+			Strings->push_back(Strings->at(Strings->size() - 1) + "");
 		}
 	}
 	else 

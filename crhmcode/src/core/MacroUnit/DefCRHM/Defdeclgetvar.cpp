@@ -3,9 +3,9 @@
 
 Defdeclgetvar::Defdeclgetvar(ClassMacro* Macro_) : DefCRHM(Macro_) 
 {
-	module = DefStringList->operator[](1);
-	name = DefStringList->operator[](2);
-	Units = DefStringList->operator[](3);
+	module = DefStringList->at(1);
+	name = DefStringList->at(2);
+	Units = DefStringList->at(3);
 }
 
 

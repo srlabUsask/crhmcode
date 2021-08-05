@@ -114,7 +114,7 @@ void MacroClass::execute(long Line)
 {
 	for (size_t ii = 0; ii < FilterList->size(); ii++)
 	{
-		FilterList->operator[](ii).second->doFunctions(Line);
+		FilterList->at(ii).second->doFunctions(Line);
 	}
 }
 
@@ -124,7 +124,7 @@ void MacroClass::fixup(void)
 
 	for (size_t ii = 0; ii < FilterList->size(); ii++)
 	{
-		FilterList->operator[](ii).second->fixup();
+		FilterList->at(ii).second->fixup();
 	}
 }
 

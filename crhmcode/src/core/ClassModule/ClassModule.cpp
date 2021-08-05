@@ -2679,10 +2679,10 @@ void ClassModule::ReadObs(bool Reset) {
 	}
 
 	if (Global::DTindx%Global::Freq == 0) { // only at start of day
-		while (pN != FunctListN->size() && FunctListN->operator[](pN).first == Name.c_str()) 
+		while (pN != FunctListN->size() && FunctListN->at(pN).first == Name.c_str()) 
 		{
 
-			ClassVar *P = FunctListN->operator[](pN).second;
+			ClassVar *P = FunctListN->at(pN).second;
 
 			P->dim = nhru; // check if necessary. Group?
 
@@ -2700,9 +2700,9 @@ void ClassModule::ReadObs(bool Reset) {
 		}
 	}
 
-	while (p < ReadListN->size() && ((ReadListN->operator[](p).first == Name.c_str()) || GroupCnt == 0))  //  && ReadListN->strings[p] == "obs"
+	while (p < ReadListN->size() && ((ReadListN->at(p).first == Name.c_str()) || GroupCnt == 0))  //  && ReadListN->strings[p] == "obs"
 	{	
-		ClassVar *P = ReadListN->operator[](p).second;
+		ClassVar *P = ReadListN->at(p).second;
 		P->dim = nhru; // check if necessary. Group?
 
 		if (P->module == "obs" || (GroupCnt && !P->No_ReadVar))
@@ -2737,7 +2737,7 @@ bool ClassModule::ReadAheadObs(long inc) {
 
 	while (p < ReadListN->size()) 
 	{
-		ClassVar *P = ReadListN->operator[](p).second;
+		ClassVar *P = ReadListN->at(p).second;
 		if (P->FileData->GoodInterval)
 		{
 			P->ReadVar();
@@ -2747,9 +2747,9 @@ bool ClassModule::ReadAheadObs(long inc) {
 
 	if (Global::DTindx%Global::Freq == 0) {
 		p = 0;
-		while (p < FunctListN->size() && FunctListN->operator[](p).first == Name.c_str()) 
+		while (p < FunctListN->size() && FunctListN->at(p).first == Name.c_str()) 
 		{
-			ClassVar *P = FunctListN->operator[](p).second;
+			ClassVar *P = FunctListN->at(p).second;
 			if (P->FunctVar->FileData->GoodDay)
 			{
 				(P->*(P->UserFunct))();
@@ -2782,7 +2782,7 @@ bool ClassModule::ReadAheadObsMacro(long inc)
 
 	while (p < ReadListN->size()) 
 	{
-		ClassVar *P = (ClassVar*)ReadListN->operator[](p).second;
+		ClassVar *P = (ClassVar*)ReadListN->at(p).second;
 		if (P->FileData->GoodInterval)
 		{
 			P->ReadVar();
@@ -2795,7 +2795,7 @@ bool ClassModule::ReadAheadObsMacro(long inc)
 		p = 0;
 		while (p < FunctListN->size()) 
 		{
-			ClassVar *P = FunctListN->operator[](p).second;
+			ClassVar *P = FunctListN->at(p).second;
 			if (P->FunctVar->FileData->GoodDay)
 			{
 				(P->*(P->UserFunct))();
@@ -2827,7 +2827,7 @@ bool ClassModule::WriteAheadObsMacro(long inc)
 
 	while (p < ReadListN->size()) 
 	{
-		ClassVar *P = ReadListN->operator[](p).second;
+		ClassVar *P = ReadListN->at(p).second;
 		if (P->FileData->GoodInterval)
 		{
 			P->WriteVar();
@@ -2884,7 +2884,7 @@ void ClassModule::addtoreadlist(ClassVar* newVar) { // BuildFlag = crhm::init
 
 	while (p < ReadListN->size() && GroupCnt == 0) // duplicates possible in simple projects
 	{
-		P = (ClassVar*)ReadListN->operator[](p).second;
+		P = (ClassVar*)ReadListN->at(p).second;
 		if (newVar == P)
 		{
 			if (this->Name == this->NameRoot) // simple project
@@ -2951,7 +2951,7 @@ void ClassModule::addtofunctlist(ClassVar *newVar) {
 
 	while (p < FunctListN->size()) 
 	{
-		P = (ClassVar*)FunctListN->operator[](p).second;
+		P = (ClassVar*)FunctListN->at(p).second;
 
 		if (newVar == P) 
 		{

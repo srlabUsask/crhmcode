@@ -3,7 +3,7 @@
 Defdeclparam::Defdeclparam(ClassMacro* Macro_) : DefCRHM(Macro_) 
 {
 
-	if (DefStringList->operator[](0) == "decldiagparam")
+	if (DefStringList->at(0) == "decldiagparam")
 	{
 		visibility = TVISIBLE::DIAGNOSTIC;
 	}
@@ -12,15 +12,15 @@ Defdeclparam::Defdeclparam(ClassMacro* Macro_) : DefCRHM(Macro_)
 		visibility = TVISIBLE::USUAL;
 	}
 
-	name = DefStringList->operator[](1);
-	Dim = getTDim(DefStringList->operator[](2));
-	Default = DefStringList->operator[](3);
-	Min = DefStringList->operator[](4);
-	Max = DefStringList->operator[](5);
-	Description = DefStringList->operator[](6);
-	Units = DefStringList->operator[](7);
+	name = DefStringList->at(1);
+	Dim = getTDim(DefStringList->at(2));
+	Default = DefStringList->at(3);
+	Min = DefStringList->at(4);
+	Max = DefStringList->at(5);
+	Description = DefStringList->at(6);
+	Units = DefStringList->at(7);
 
-	if (DefCRHM::DefStringList->size() > 8 && DefStringList->operator[](8) == "Int")
+	if (DefCRHM::DefStringList->size() > 8 && DefStringList->at(8) == "Int")
 	{
 		Int = true;
 	}
@@ -31,7 +31,7 @@ Defdeclparam::Defdeclparam(ClassMacro* Macro_) : DefCRHM(Macro_)
 
 	if (DefCRHM::DefStringList->size() > 9)
 	{
-		nlay = Strtolong(DefStringList->operator[](9));
+		nlay = Strtolong(DefStringList->at(9));
 	}
 }
 
