@@ -2,14 +2,14 @@
 
 Defdeclreadobs::Defdeclreadobs(ClassMacro* Macro_) : DefCRHM(Macro_) 
 {
-	name = DefStringList->operator[](1);
-	Dim = getTDim(DefStringList->operator[](2));
-	Description = DefStringList->operator[](3);
-	Units = DefStringList->operator[](4);
+	name = DefStringList->at(1);
+	Dim = getTDim(DefStringList->at(2));
+	Description = DefStringList->at(3);
+	Units = DefStringList->at(4);
 
 	if (DefCRHM::DefStringList->size() > 5)
 	{
-		HRU_OBS_indexed = Strtolong(DefStringList->operator[](5));
+		HRU_OBS_indexed = Strtolong(DefStringList->at(5));
 	}
 	else
 	{

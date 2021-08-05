@@ -2,9 +2,9 @@
 
 Defdeclobsfunc::Defdeclobsfunc(ClassMacro* Macro_) : DefCRHM(Macro_) 
 {
-	obs = DefStringList->operator[](1);
-	name = DefStringList->operator[](2);
-	typeFun = getTFunc(DefStringList->operator[](3));
+	obs = DefStringList->at(1);
+	name = DefStringList->at(2);
+	typeFun = getTFunc(DefStringList->at(3));
 }
 
 

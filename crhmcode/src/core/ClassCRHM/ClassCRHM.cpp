@@ -162,7 +162,7 @@ ClassPar *ClassParFind(string module, string param) { // routine concatenates MO
 		{
 			for (size_t i = 0; i < Global::OldModuleName->size(); i++)
 			{
-				if (module.c_str() == Global::OldModuleName->operator[](i))
+				if (module.c_str() == Global::OldModuleName->at(i))
 				{
 					jj = i;
 				}
@@ -170,7 +170,7 @@ ClassPar *ClassParFind(string module, string param) { // routine concatenates MO
 		}
 		if (jj > -1) 
 		{
-			string s = Global::NewModuleName->operator[](jj) + ""; // two step to remove \0
+			string s = Global::NewModuleName->at(jj) + ""; // two step to remove \0
 			if ((itPar = Global::MapPars.find(s + ' ' + param)) != Global::MapPars.end()) {
 				return ((*itPar).second);
 			}

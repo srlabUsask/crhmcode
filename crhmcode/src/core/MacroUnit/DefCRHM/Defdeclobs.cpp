@@ -2,7 +2,7 @@
 
 Defdeclobs::Defdeclobs(ClassMacro* Macro_) : DefCRHM(Macro_) 
 {
-	string S = DefStringList->operator[](1);
+	string S = DefStringList->at(1);
 	string::size_type Pos = S.find("#");
 	if (Pos == string::npos) //Updated by Manishankar on 2019-09-14. This previously was ------------- if (Pos != string::npos)
 		S += "#"; // no # symbol
@@ -10,9 +10,9 @@ Defdeclobs::Defdeclobs(ClassMacro* Macro_) : DefCRHM(Macro_)
 		S = S.substr(0, Pos + 1); // use just one # //Updated by Manishankar on 2019-09-14. This previously was ------------- S.substr(1, Pos)
 
 	name = S;
-	Dim = getTDim(DefStringList->operator[](2));
-	Description = DefStringList->operator[](3);
-	Units = DefStringList->operator[](4);
+	Dim = getTDim(DefStringList->at(2));
+	Description = DefStringList->at(3);
+	Units = DefStringList->at(4);
 }
 
 void Defdeclobs::CallDecl() {

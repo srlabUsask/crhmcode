@@ -997,7 +997,7 @@ void CRHMmain::FormCreate() {
 #if !defined NO_MODULES
 	for (size_t ii = 0; ii < Global::NewModuleName->size(); ++ii) 
 	{
-		size_t jj = Global::AllModulesList->count(Global::NewModuleName->operator[](ii));
+		size_t jj = Global::AllModulesList->count(Global::NewModuleName->at(ii));
 		assert(jj != 0);
 	}
 #endif
@@ -1336,7 +1336,7 @@ void CRHMmain::MacroLoad(void)
 		while (Macro < Global::MacroModulesList->size()) 
 		{
 
-			string s = Global::MacroModulesList->operator[](Macro);
+			string s = Global::MacroModulesList->at(Macro);
 			string::size_type ppp = s.find_last_not_of(' ');
 			if (s.empty() || ppp == string::npos || s[0] == '/') 
 			{
@@ -1363,7 +1363,7 @@ void CRHMmain::MacroLoad(void)
 
 			string S, SS;
 
-			while (S = Common::trim(Global::MacroModulesList->operator[](Macro)), SS = S.substr(0, 3),
+			while (S = Common::trim(Global::MacroModulesList->at(Macro)), SS = S.substr(0, 3),
 				!(SS == "end" &&
 				(S.length() == 3 || S.find_first_of(" /") != string::npos)) &&
 				Global::MacroModulesList->size() > Macro
@@ -1984,9 +1984,9 @@ MMSData *  CRHMmain::RunClick2Start()
 		if (!OpenStateFlag) 
 		{
 			thisPar = ParFind("basin INIT_STATE");
-			if (thisPar && thisPar->Strings->size() && !thisPar->Strings->operator[](0).empty()) 
+			if (thisPar && thisPar->Strings->size() && !thisPar->Strings->at(0).empty()) 
 			{
-				OpenNameState = thisPar->Strings->operator[](0);
+				OpenNameState = thisPar->Strings->at(0);
 				OpenStateFlag = true;
 			}
 			else 
@@ -1996,9 +1996,9 @@ MMSData *  CRHMmain::RunClick2Start()
 				for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) 
 				{
 					thisPar = (*itPar).second;
-					if (thisPar->param == "INIT_STATE" && thisPar->Strings->size() && !thisPar->Strings->operator[](0).empty()) 
+					if (thisPar->param == "INIT_STATE" && thisPar->Strings->size() && !thisPar->Strings->at(0).empty()) 
 					{
-						OpenNameState = thisPar->Strings->operator[](0);
+						OpenNameState = thisPar->Strings->at(0);
 						OpenStateFlag = true;
 						break;
 					}
@@ -2444,9 +2444,9 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 	bool Wild = false;
 	
 	// first parameter determines the type
-	if (VarPar && !VarPar->Strings->operator[](0).empty())
+	if (VarPar && !VarPar->Strings->at(0).empty())
 	{
-		Wild = VarPar->Strings->operator[](0).find("@") == string::npos;
+		Wild = VarPar->Strings->at(0).find("@") == string::npos;
 	}
 
 	if (MainLoop)
@@ -2494,7 +2494,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 				{
 					for (size_t it = 0; it < VarPar->Strings->size(); it++)
 					{
-						if (VarPar->Strings->operator[](it) == namebasic)
+						if (VarPar->Strings->at(it) == namebasic)
 						{
 							indx_namebasic = it;
 							break;
@@ -2517,7 +2517,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 						{
 							for (size_t it = 0; it < VarPar->Strings->size(); it++)
 							{
-								if (VarPar->Strings->operator[](it) == namebasic)
+								if (VarPar->Strings->at(it) == namebasic)
 								{
 									indx_namebasic = it;
 									break;
@@ -3041,9 +3041,9 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 	bool Wild = false;
 
 	// first parameter determines the type
-	if (VarPar && !VarPar->Strings->operator[](0).empty()) 
+	if (VarPar && !VarPar->Strings->at(0).empty()) 
 	{
-		Wild = VarPar->Strings->operator[](0).find("@") == string::npos;
+		Wild = VarPar->Strings->at(0).find("@") == string::npos;
 	}
 
 	ifstream DataFile;
@@ -3152,7 +3152,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 			{
 				for (size_t it = 0; it < VarPar->Strings->size(); it++)
 				{
-					if (VarPar->Strings->operator[](it) == namebasic)
+					if (VarPar->Strings->at(it) == namebasic)
 					{
 						indx_namebasic = it;
 						break;
@@ -3236,15 +3236,15 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 		bool Wild2 = false;
 		ClassPar * TraceVarPar = ParFind("basin TraceVars");
 
-		if (TraceVarPar && !TraceVarPar->Strings->operator[](0).empty()) // first parameter determines the type
+		if (TraceVarPar && !TraceVarPar->Strings->at(0).empty()) // first parameter determines the type
 		{
-			Wild2 = TraceVarPar->Strings->operator[](0).find("@") == string::npos;
+			Wild2 = TraceVarPar->Strings->at(0).find("@") == string::npos;
 		}
 			
 
 		for (size_t ii = 0; ii < TraceVarPar->Strings->size(); ++ii) 
 		{
-			string Trimmed = Common::trim(TraceVarPar->Strings->operator[](ii));
+			string Trimmed = Common::trim(TraceVarPar->Strings->at(ii));
 			if (!Trimmed.empty()) 
 			{
 
@@ -3256,7 +3256,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 						modIt++
 						) 
 					{
-						ClassVar * thisVar = VarFind(string(modIt->first) + ' ' + TraceVarPar->Strings->operator[](0));
+						ClassVar * thisVar = VarFind(string(modIt->first) + ' ' + TraceVarPar->Strings->at(0));
 						if (thisVar) 
 						{
 							break;
@@ -3496,7 +3496,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		for (size_t ii = 0; ii < Global::MacroModulesList->size(); ++ii)
 		{
-			ProjectList->push_back("'" + Global::MacroModulesList->operator[](ii) + "'");
+			ProjectList->push_back("'" + Global::MacroModulesList->at(ii) + "'");
 		}
 			
 
@@ -3650,7 +3650,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 						{
 							if (thisPar->Strings->size() > ii)
 							{
-								S = S + "'" + thisPar->Strings->operator[](ii) + "' ";
+								S = S + "'" + thisPar->Strings->at(ii) + "' ";
 							}
 							else
 							{
@@ -4075,7 +4075,7 @@ string  CRHMmain::ExtractHruLayFunct(string S, long &Hru, long &Lay, string &Fun
 		bool found = false;
 		for (size_t i = 0; i < ListHruNames->size(); i++)
 		{
-			if (ListHruNames->operator[](i) == sub) 
+			if (ListHruNames->at(i) == sub) 
 			{
 				Hru = i;
 				found = true;
@@ -4389,7 +4389,7 @@ string CRHMmain::BuildHru(string S, long Hru, TDim dimen) {
 		}	
 		else
 		{
-			SS = "(" + ListHruNames->operator[](Hru) + ")";
+			SS = "(" + ListHruNames->at(Hru) + ")";
 		}
 		return S + SS;
 	}

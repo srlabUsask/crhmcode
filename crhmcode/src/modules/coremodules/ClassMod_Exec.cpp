@@ -73,7 +73,7 @@ void ClassMod_Exec::init(void) {
 
     for(size_t ii = 0; ii < trk_Vars->size(); ii++)
     {
-      S = Common::trim(trk_Vars->operator[](ii));
+      S = Common::trim(trk_Vars->at(ii));
 
       if (S.length() == 0)
       {
@@ -93,7 +93,7 @@ void ClassMod_Exec::init(void) {
 
     for(size_t ii = 0; ii < chg_Pars->size(); ++ii)
     {
-      S = Common::trim(chg_Pars->operator[](ii));
+      S = Common::trim(chg_Pars->at(ii));
       if(S.length() == 0)
         break;
 

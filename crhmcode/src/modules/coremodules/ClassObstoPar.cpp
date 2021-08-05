@@ -28,12 +28,12 @@ void ClassObstoPar::decl(void) {
 
   if (par_name)
   {
-      declputparam("*", (par_name->operator[](0)).c_str(), "(m)", &Ht);
+      declputparam("*", (par_name->at(0)).c_str(), "(m)", &Ht);
   }
 
   if (obs_name)
   {
-      declreadobs((obs_name->operator[](0)).c_str(), TDim::NHRU, "height observation", "(m)", &Ht_obs);
+      declreadobs((obs_name->at(0)).c_str(), TDim::NHRU, "height observation", "(m)", &Ht_obs);
   }
 
   decldiag("Ht_var", TDim::NHRU, "variable name", "()", &Ht_var);

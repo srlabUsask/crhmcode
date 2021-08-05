@@ -2,11 +2,11 @@
 
 Defdecllocal::Defdecllocal(ClassMacro* Macro_) : DefCRHM(Macro_) 
 {
-	name = DefStringList->operator[](1);
-	Dim = getTDim(DefStringList->operator[](2));
-	Description = DefStringList->operator[](3);
-	Units = DefStringList->operator[](4);
-	if (DefCRHM::DefStringList->size() > 5 && DefStringList->operator[](5) == "Int")
+	name = DefStringList->at(1);
+	Dim = getTDim(DefStringList->at(2));
+	Description = DefStringList->at(3);
+	Units = DefStringList->at(4);
+	if (DefCRHM::DefStringList->size() > 5 && DefStringList->at(5) == "Int")
 	{
 		Int = true;
 	}
