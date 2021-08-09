@@ -2363,7 +2363,6 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 		* Flush and close stream buffer
 		*/
 		reportStream.CloseStream();
-		delete &reportStream;
 		
 		int d = iter;
 		Global::BuildFlag = TBuild::DECL;
