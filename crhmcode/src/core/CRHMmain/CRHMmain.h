@@ -29,6 +29,7 @@
 #include "Classinfo.h"
 #include "CRHMLogger.h"
 #include "../../gcc/CRHMArguments.h"
+#include "ReportStream.h"
 
 //class ObsFileInfo {
 //private:
@@ -182,14 +183,10 @@ public:
 	void RunClick2End(MMSData * mmsdata);
 	void RunClick(void);
 	void CheckBlankModule();
-	void AllRprt();
 	void ControlReadState(bool MainLoop, ClassPar * VarPar);
-	void LastRprt(void);
 	void ControlSaveState(bool MainLoop, ClassPar * VarPar);
 	void DoObsStatus(bool &First);
 	void calculateOutputFileName();
-	void RprtHeader(std::list<std::string>* LogList, int LocalCnt);
-	void RprtHeaderObs(std::list<std::string> *LogList, int LocalCnt);
 	void ResetLoopList(void);
 	void ReadStateFile(bool & GoodRun);
 	string DttoStr(double D);

@@ -197,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="..\core\Common\CRHMException.h" />
     <ClInclude Include="..\core\Common\VandP.h" />
+    <ClInclude Include="..\core\CRHMmain\ReportStream.h" />
     <ClInclude Include="..\gcc\CRHMArguments.h" />
     <ClInclude Include="CACFunction.h" />
     <ClInclude Include="CActivityDonut.h" />
@@ -674,6 +675,7 @@
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="NewModules.h" />
     <ClInclude Include="OutputWnd.h" />
+    <ClInclude Include="ReportStream.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceDlg.h" />
     <ClInclude Include="SnobalDefines.h" />
@@ -745,6 +747,7 @@
     <ClCompile Include="..\core\Common\snowcover.cpp" />
     <ClCompile Include="..\core\CRHMmain\CRHMLogger.cpp" />
     <ClCompile Include="..\core\CRHMmain\CRHMmain.cpp" />
+    <ClCompile Include="..\core\CRHMmain\ReportStream.cpp" />
     <ClCompile Include="..\core\CRHM_parse\exec\execbase.cpp" />
     <ClCompile Include="..\core\CRHM_parse\VarCHRM.cpp" />
     <ClCompile Include="..\core\GlobalDll.cpp" />

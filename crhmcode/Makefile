@@ -38,7 +38,7 @@ CRHM_parse_OBJS = CRHM_parse.o VarCHRM.o
 
 EXEC_OBJS = execbase.o
 
-CRHMmain_OBJS = CRHMmain.o CRHMLogger.o
+CRHMmain_OBJS = CRHMmain.o CRHMLogger.o ReportStream.o
 
 MacroUnit_OBJS = ClassMacro.o MacroUnit.o
 

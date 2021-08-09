@@ -2146,6 +2146,15 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			print_progress_start();
 		}
 		
+		//Calculate the name of the output file store it in OpenNameReport
+		this->calculateOutputFileName();
+
+		//Open the ReportStream
+		ReportStream reportStream = ReportStream(this->OpenNameReport);
+
+		//Calculate the header lines for the report and place them in the stream
+		reportStream.OutputHeaders(this);
+		
 
 		int iter = 0;
 		//for (Global::DTindx = Global::DTmin; Global::DTindx < Global::DTmax; Global::DTindx++)
@@ -2326,6 +2335,23 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				}
 			}
 
+			/*
+			* If ReportAll is set Calculate the line in output to be 
+			* produced by this timestep and send it to the buffer.
+			*/
+			if (ReportAll)
+			{
+				reportStream.SendTimeStepToReport(this);
+			}
+
+			/*
+			* If ReportAll is not set output the last timestep
+			*/
+			if (!ReportAll && Global::DTindx == enddate -1)
+			{
+				reportStream.SendTimeStepToReport(this);
+			}
+
 		} // end for
 
 		if (this->ShowProgress)
@@ -2333,13 +2359,19 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			print_progress_end();
 		}
 
+		/*
+		* Flush and close stream buffer
+		*/
+		reportStream.CloseStream();
+		delete &reportStream;
+		
 		int d = iter;
 		Global::BuildFlag = TBuild::DECL;
 
-
 	}
 
-	catch (exception &E) {
+	catch (exception &E) 
+	{
 		//string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
 		//    ShowMessage(S);
 		string errorMessage = E.what();
@@ -2374,19 +2406,9 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 		modIt->second->finish(true);
 	}
 		
-
-	if (GoodRun) {
+	if (GoodRun) 
+	{
 		
-		/*Either print the whole report or just the last time step.*/
-		if (ReportAll)
-		{
-			AllRprt();
-		}
-		else
-		{
-			LastRprt();
-		}
-
 		if (SaveStateFlag)
 		{
 			SaveState();
@@ -2723,167 +2745,6 @@ ClassPar *ParFind(string name) { // where name is concatenation of MODULE and NA
 	}
 	return ((*itPar).second);
 }
-//---------------------------------------------------------------------------
-
-
-void  CRHMmain::AllRprt(void)
-{
-	std::list<std::string> * LogList = new std::list<std::string>();
-
-	if (this->OutputFormat == OUTPUT_FORMAT::STD) 
-	{
-		//standard output header
-		RprtHeader(LogList, SeriesCnt);
-	}
-	else if (this->OutputFormat == OUTPUT_FORMAT::OBS)
-	{
-		//.obs file output header
-		RprtHeaderObs(LogList, SeriesCnt);
-	}
-	else 
-	{
-		CRHMException e = CRHMException("No output format was specified defaulting to STD.", TExcept::WARNING);
-		CRHMLogger::instance()->log_run_error(e);
-		//standard output header
-		RprtHeader(LogList, SeriesCnt);
-	}
-	
-	string Sx, Sy;
-
-	for (int nn = 0; nn < cdSeries[0]->Count(); ++nn) {
-
-		Sx = FloatToStrF(cdSeries[0]->XValue(nn), TFloatFormat::ffGeneral, 10, 0);
-		Sx = StandardConverterUtility::GetDateTimeInStringForOutput(cdSeries[0]->XValue(nn));
-
-		//added this switch statement according to Peter's code.
-		switch (Global::TimeFormat) {
-		case TIMEFORMAT::MS:
-			Sx = FloatToStrF(cdSeries[0]->XValue(nn), TFloatFormat::ffGeneral, 10, 0);
-			break;
-		case TIMEFORMAT::YYYYMMDD:
-			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn));
-			break;
-		case TIMEFORMAT::ISO:
-			Sx = StandardConverterUtility::FormatDateTime("ISO", cdSeries[0]->XValue(nn));
-			break;
-		default:
-			break;
-		}
-
-
-
-		for (int vv = 0; vv < SeriesCnt; ++vv) {
-			if (cdSeries[0]->Count() == cdSeries[vv]->Count()) { // has to equal first series length
-				ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
-				int prec = 7;
-				//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
-				
-				if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
-					prec = 7;
-				
-				Sy = FloatToStrF(cdSeries[vv]->YValue(nn), TFloatFormat::ffGeneral, prec, 10);
-				Sx = Sx + this->Delimiter + Sy;
-			}
-		}
-
-		LogList->push_back(Sx);
-	}
-
-	
-	//Save report to file.
-	ofstream file;
-	file.open(OpenNameReport);
-
-	if (file.is_open())
-	{
-		for (
-			std::list<std::string>::iterator it = LogList->begin();
-			it != LogList->end();
-			it++
-			)
-		{
-			file << it->c_str() << endl;
-		}
-
-		file.close();
-	}
-	else
-	{
-		CRHMException e = CRHMException("Cannot open file "+ OpenNameReport +" to save report.", TExcept::ERR);
-		CRHMLogger::instance()->log_run_error(e);
-	}
-
-	LogList->clear();
-}
-
-void  CRHMmain::LastRprt(void)
-{
-	std::list<std::string> * LogList = new std::list<std::string>();
-
-	RprtHeader(LogList, SeriesCnt);
-
-	string Sx, Sy;
-
-	int nn = cdSeries[0]->Count();
-
-	Sx = FloatToStrF(cdSeries[0]->XValue(nn - 1), TFloatFormat::ffGeneral, 10, 0);
-	Sx = StandardConverterUtility::GetDateTimeInStringForOutput(cdSeries[0]->XValue(nn-1));
-
-	//added this switch statement according to Peter's code.
-	switch (Global::TimeFormat) {
-	case TIMEFORMAT::MS:
-		Sx = FloatToStrF(cdSeries[0]->XValue(nn-1), TFloatFormat::ffGeneral, 10, 0);
-		break;
-	case TIMEFORMAT::YYYYMMDD:
-		Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", cdSeries[0]->XValue(nn-1));
-		break;
-	case TIMEFORMAT::ISO:
-		Sx = StandardConverterUtility::FormatDateTime("ISO", cdSeries[0]->XValue(nn));
-		break;
-	default:
-		break;
-	}
-
-	for (int vv = 0; vv < SeriesCnt; ++vv) {
-		ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
-		int prec = 6;
-		if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
-			prec = 4;
-
-		Sy = FloatToStrF(cdSeries[vv]->YValue(nn - 1), TFloatFormat::ffGeneral, prec, 0);
-
-		Sx = Sx + this->Delimiter + Sy;
-	}
-
-	LogList->push_back(Sx);
-
-	//Save report to file.
-	ofstream file;
-	file.open(OpenNameReport);
-
-	if (file.is_open())
-	{
-		for (
-			std::list<std::string>::iterator it = LogList->begin();
-			it != LogList->end();
-			it++
-			)
-		{
-			file << it->c_str() << endl;
-		}
-
-		file.close();
-	}
-	else
-	{
-		CRHMException e = CRHMException("Cannot open file " + OpenNameReport + " to save report.", TExcept::ERR);
-		CRHMLogger::instance()->log_run_error(e);
-	}
-
-	LogList->clear();
-}
-
-
 
 
 void CRHMmain::DoObsStatus(bool &First)
@@ -3374,53 +3235,7 @@ void CRHMmain::calculateOutputFileName()
 }
 
 
-void CRHMmain::RprtHeader(std::list<std::string> * LogList, int LocalCnt)
-{
 
-	string Sx, Sy;
-
-	calculateOutputFileName();
-
-	Sx = "time";
-	for (int vv = 0; vv < LocalCnt; ++vv) {
-		string S = cdSeries[vv]->Title;
-		Sx += this->Delimiter + S;
-	}
-	LogList->push_back(Sx);
-
-	Sx = "units";
-	for (int vv = 0; vv < LocalCnt; ++vv) {
-		ClassVar* thisVar = (ClassVar*)cdSeries[vv]->Tag;
-		string S = thisVar->units;
-		Sx += this->Delimiter + S;
-	}
-	LogList->push_back(Sx);
-}
-
-void CRHMmain::RprtHeaderObs(std::list<std::string> * LogList, int LocalCnt)
-{
-
-	string Sx, Sy;
-
-	calculateOutputFileName();
-
-	LogList->push_back("Future File Description");
-	
-	for (int vv = 0; vv < LocalCnt; ++vv) {
-		ClassVar *thisVar = (ClassVar *)cdSeries[vv]->Tag;
-		Sx = cdSeries[vv]->Title;
-		Sx += string(" 1 ");
-		Sx += thisVar->units;
-		LogList->push_back(Sx);
-	}
-	
-	Sx = "###### time";
-	for (int vv = 0; vv < LocalCnt; ++vv) {
-		string S = cdSeries[vv]->Title;
-		Sx += this->Delimiter + S;
-	}
-	LogList->push_back(Sx);
-}
 
 string CRHMmain::DttoStr(double D) {
 	ostringstream temp;
