@@ -117,6 +117,8 @@ void ClassMacro::decl(void) {
 
 			string S1 = typeid(*Mod).name();
 			string S2 = typeid(*Test).name();
+
+			S2 = S2.substr(6, S2.length()); // Remove the "class " from the begining of the class name string. 
 #endif
 #if defined(__linux__) || defined(__APPLE__) || defined(__MINGW32__) //introspection issue resolved for linux and apple as was suggested by Dr. Kevin. Manishankar
 			int demangle_status = 0;
