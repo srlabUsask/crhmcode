@@ -2096,7 +2096,7 @@ MMSData *  CRHMmain::RunClick2Start()
 	/////////////////// Manishankar added this from Diogo's code.
 	ClassModule* Obs_preset; // used to call preset for simple projects
 
-	std::list<std::pair<std::string, ClassModule*>>::iterator pos;
+	std::list<std::pair<std::string, ClassModule*>>::iterator pos = Global::OurModulesList->end();
 	for (
 		std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
 		it != Global::OurModulesList->end();
