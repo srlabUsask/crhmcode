@@ -50,20 +50,22 @@ void ReportStream::OutputHeaders(CRHMmain * instance)
 void ReportStream::SendTimeStepToReport(CRHMmain * instance) 
 {
 
-	std::string Sx = FloatToStrF(instance->cdSeries[0]->XValue(Global::DTindx), TFloatFormat::ffGeneral, 10, 0);
-	Sx = StandardConverterUtility::GetDateTimeInStringForOutput(instance->cdSeries[0]->XValue(Global::DTindx));
+	long index = Global::DTindx - Global::DTmin;
+
+	std::string Sx = FloatToStrF(instance->cdSeries[0]->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+	Sx = StandardConverterUtility::GetDateTimeInStringForOutput(instance->cdSeries[0]->XValue(index));
 
 	//added this switch statement according to Peter's code.
 	switch (Global::TimeFormat) 
 	{
 	case TIMEFORMAT::MS:
-		Sx = FloatToStrF(instance->cdSeries[0]->XValue(Global::DTindx), TFloatFormat::ffGeneral, 10, 0);
+		Sx = FloatToStrF(instance->cdSeries[0]->XValue(index), TFloatFormat::ffGeneral, 10, 0);
 		break;
 	case TIMEFORMAT::YYYYMMDD:
-		Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", instance->cdSeries[0]->XValue(Global::DTindx));
+		Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", instance->cdSeries[0]->XValue(index));
 		break;
 	case TIMEFORMAT::ISO:
-		Sx = StandardConverterUtility::FormatDateTime("ISO", instance->cdSeries[0]->XValue(Global::DTindx));
+		Sx = StandardConverterUtility::FormatDateTime("ISO", instance->cdSeries[0]->XValue(index));
 		break;
 	default:
 		break;
@@ -83,7 +85,7 @@ void ReportStream::SendTimeStepToReport(CRHMmain * instance)
 				prec = 7;
 			}
 
-			std::string Sy = FloatToStrF(instance->cdSeries[vv]->YValue(Global::DTindx), TFloatFormat::ffGeneral, prec, 10);
+			std::string Sy = FloatToStrF(instance->cdSeries[vv]->YValue(index), TFloatFormat::ffGeneral, prec, 10);
 			Sx = Sx + instance->Delimiter + Sy;
 		}
 	}
