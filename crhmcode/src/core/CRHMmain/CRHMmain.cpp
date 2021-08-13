@@ -2145,7 +2145,9 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 		{
 			print_progress_start();
 		}
-		
+
+#if !defined(VS_GUI)
+
 		//Calculate the name of the output file store it in OpenNameReport
 		this->calculateOutputFileName();
 
@@ -2154,6 +2156,10 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 
 		//Calculate the header lines for the report and place them in the stream
 		reportStream.OutputHeaders(this);
+
+#endif 
+
+		
 		
 
 		int iter = 0;
@@ -2335,8 +2341,9 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				}
 			}
 
+#if !defined(VS_GUI)
 			/*
-			* If ReportAll is set Calculate the line in output to be 
+			* If ReportAll is set Calculate the line in output to be
 			* produced by this timestep and send it to the buffer.
 			*/
 			if (ReportAll)
@@ -2347,10 +2354,12 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			/*
 			* If ReportAll is not set output the last timestep
 			*/
-			if (!ReportAll && Global::DTindx == enddate -1)
+			if (!ReportAll && Global::DTindx == enddate - 1)
 			{
 				reportStream.SendTimeStepToReport(this);
 			}
+#endif
+			
 
 		} // end for
 
@@ -2359,10 +2368,12 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			print_progress_end();
 		}
 
+#if !defined(VS_GUI)
 		/*
 		* Flush and close stream buffer
 		*/
 		reportStream.CloseStream();
+#endif
 		
 		int d = iter;
 		Global::BuildFlag = TBuild::DECL;
