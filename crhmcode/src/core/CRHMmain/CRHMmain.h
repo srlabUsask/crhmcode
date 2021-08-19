@@ -44,6 +44,8 @@
 //	void setFilePath(string filepath);
 //};
 
+class ReportStream;
+
 class CRHMmain
 {
 	static CRHMmain* instance;
@@ -51,6 +53,7 @@ class CRHMmain
 public:
 
 	CRHMLogger* Logger;
+	ReportStream * reportStream{NULL};
 
 	static CRHMmain *  getInstance();
 	CRHMmain(struct crhm_arguments * );

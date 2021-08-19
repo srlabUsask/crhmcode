@@ -80,7 +80,12 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 	{
 		//Use default values
 		Global::TimeFormat = TIMEFORMAT::ISO;
+#if defined(VS_GUI)
+		this->OutputFormat = OUTPUT_FORMAT::OBS;
+#endif
+#if !defined(VS_GUI)
 		this->OutputFormat = OUTPUT_FORMAT::STD;
+#endif
 		this->OutputName = "";
 		this->Delimiter = '\t';
 		this->ObsFileDirectory = "";
@@ -2146,21 +2151,18 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			print_progress_start();
 		}
 
-#if !defined(VS_GUI)
-
-		//Calculate the name of the output file store it in OpenNameReport
-		this->calculateOutputFileName();
-
-		//Open the ReportStream
-		ReportStream reportStream = ReportStream(this->OpenNameReport);
-
-		//Calculate the header lines for the report and place them in the stream
-		reportStream.OutputHeaders(this);
-
-#endif 
-
 		
-		
+		if (Global::DTindx == Global::DTmin)
+		{
+			//Calculate the name of the output file store it in OpenNameReport
+			this->calculateOutputFileName();
+
+			//Open the ReportStream
+			this->reportStream = new ReportStream(this->OpenNameReport);
+
+			//Calculate the header lines for the report and place them in the stream
+			this->reportStream->OutputHeaders(this);
+		}
 
 		int iter = 0;
 		//for (Global::DTindx = Global::DTmin; Global::DTindx < Global::DTmax; Global::DTindx++)
@@ -2341,14 +2343,14 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				}
 			}
 
-#if !defined(VS_GUI)
+
 			/*
 			* If ReportAll is set Calculate the line in output to be
 			* produced by this timestep and send it to the buffer.
 			*/
 			if (ReportAll)
 			{
-				reportStream.SendTimeStepToReport(this);
+				this->reportStream->SendTimeStepToReport(this);
 			}
 
 			/*
@@ -2356,9 +2358,9 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			*/
 			if (!ReportAll && Global::DTindx == enddate - 1)
 			{
-				reportStream.SendTimeStepToReport(this);
+				this->reportStream->SendTimeStepToReport(this);
 			}
-#endif
+
 			
 
 		} // end for
@@ -2368,12 +2370,15 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			print_progress_end();
 		}
 
-#if !defined(VS_GUI)
 		/*
-		* Flush and close stream buffer
+		* Flush and close stream buffer if we have reached the end.
 		*/
-		reportStream.CloseStream();
-#endif
+		if (Global::DTindx == Global::DTmax)
+		{
+			
+			this->reportStream->CloseStream();
+		}
+		
 		
 		int d = iter;
 		Global::BuildFlag = TBuild::DECL;
