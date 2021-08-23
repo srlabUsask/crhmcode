@@ -49,7 +49,7 @@ class CRHMmain
 	static CRHMmain* instance;
 
 private: 
-	bool AutoRun{ FALSE };
+	bool AutoRun{0};
 public:
 
 	bool getAutoRun();
