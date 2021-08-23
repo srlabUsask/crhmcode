@@ -63,6 +63,16 @@ string Version = "Version: 4.7_16";
 
 CRHMmain* CRHMmain::instance = 0;
 
+bool CRHMmain::getAutoRun()
+{
+	return this->AutoRun;
+}
+
+void CRHMmain::setAutoRun(bool set)
+{
+	this->AutoRun = set;
+}
+
 CRHMmain* CRHMmain::getInstance()
 {
 	if (instance == 0)
@@ -251,7 +261,6 @@ void CRHMmain::BldModelClick()
 
 void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
-
 	//saving the project file path. added by Manishankar.
 	OpenProjectPath = OpenNamePrj;
 
@@ -261,31 +270,15 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	ifstream DataFile;
 	unsigned short Variation;
 
-	string module, param, Descrip, Line, name;
-	//string module, param, Descrip, Line, name;
-	string S, s;
-	string SS;
-
-
-	//system("java -jar -min d:/javadatabaseaccess/DatabaseAccess.jar");
-
-
-	//  string Default = GetCurrentDir();
-	/*
-	int iFileHandle = FileOpen(OpenNamePrj, fmOpenRead);
-	if(iFileHandle > -1){ // not file error
-	int T = FileGetDate(iFileHandle);
-	ProjectFileDate = FileDateToDateTime(T);
-	FileClose(iFileHandle);
-	}*/
+	std::string module, param, Descrip, Line, name;
+	std::string S, s;
+	std::string SS;
 
 	DataFile.open(OpenNamePrj.c_str());
 	if (!DataFile) {
 		Common::Message("cannot open file", "File Error");
 		return;
 	}
-
-
 
 	ProjectDirectory = GetCurrentDir();
 
@@ -301,37 +294,16 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	getline(DataFile, Line);
 
 	Global::MacroModulesList->clear();
+	this->setAutoRun(FALSE);
 
-	try {
-
-		/*
-		//get project id
-		makeQuery("query", "select projectid, projectname from project where projectname = 'test4.prj'", "projectid projectname", 2);
-		string res = queryResult->Strings[0];
-		std::istringstream iss(res);
-
-		*/
-
-
-
-		//reading the macros
-
-
-		//reading the dates
-
-
-		//reading the observations
-
-
-
-
-
-		do {
+	try 
+	{
+		do 
+		{
 			DataFile >> S;
 			if (DataFile.eof()) break;
 
 			DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
-			//DataFile.getline(Line, CharLength);
 			getline(DataFile, Line);
 
 			if (S == "AKAs:") {
@@ -888,8 +860,9 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 			else if (S == "Log_All") {
 				ReportAll = true;
 			}
-			else if (S == "Auto_Run") {
-				;
+			else if (S == "Auto_Run") 
+			{
+				this->setAutoRun(TRUE);
 			}
 			else if (S == "Auto_Exit") {
 				;
@@ -3752,10 +3725,11 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 
 	//need to check
-	//if (PrjAutoRun->Checked) {
-	//	ProjectList->Add("Auto_Run");
-	//	ProjectList->Add("######");
-	//}
+	if (this->getAutoRun()) 
+	{
+		ProjectList->push_back("Auto_Run");
+		ProjectList->push_back("######");
+	}
 
 	//if (SaveChartTemplate->Checked) {
 	//	ProjectList->Add("SaveChartTemplate");

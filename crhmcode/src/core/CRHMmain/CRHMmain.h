@@ -50,7 +50,12 @@ class CRHMmain
 {
 	static CRHMmain* instance;
 
+private: 
+	bool AutoRun{ FALSE };
 public:
+
+	bool getAutoRun();
+	void setAutoRun(bool set);
 
 	CRHMLogger* Logger;
 	ReportStream * reportStream{NULL};
@@ -109,6 +114,7 @@ public:
 	bool ProjectOpen;
 	bool ShiftDown; // Linked to ListBox1 and ListBox2
 	bool HruNames;
+	
 
 	OUTPUT_FORMAT OutputFormat;
 	std::string OutputName;
