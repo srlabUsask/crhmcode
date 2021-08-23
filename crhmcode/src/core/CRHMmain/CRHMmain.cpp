@@ -289,7 +289,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	getline(DataFile, Line);
 
 	Global::MacroModulesList->clear();
-	this->setAutoRun(FALSE);
+	this->setAutoRun(false);
 
 	try 
 	{
@@ -857,7 +857,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 			}
 			else if (S == "Auto_Run") 
 			{
-				this->setAutoRun(TRUE);
+				this->setAutoRun(true);
 			}
 			else if (S == "Auto_Exit") {
 				;
