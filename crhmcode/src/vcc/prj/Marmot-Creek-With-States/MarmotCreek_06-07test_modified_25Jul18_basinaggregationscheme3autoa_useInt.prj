@@ -1,0 +1,1462 @@
+Description - to be added
+###### Version NON DLL 4.02  Creation: 9/15/2021 11:18
+Dimensions:
+######
+nhru 12
+nlay 2
+nobs 7
+######
+Macros:
+######
+'Precip_Elevation_Adjust'
+'declparam, precip_elev_adj, NHRU, "[0.0]", -0.1, 0.1, "precipitation height adjustment {adjusted p(or ppt) = p(or ppt)*(1.0 + precip_elev_adj*elev_difference/100)}", (1/100m)'
+'declvar, p_elev_adj, NHRU, "precipitation adjustment for elevation", (1/100m)'
+'command'
+'if(LASTINT)'
+'if(JULIAN >= 244 && JULIAN < 305)'
+'precip_elev_adj[hh] = 0.0868'
+'else if (JULIAN >= 305 || JULIAN < 91)'
+'precip_elev_adj[hh] = 0.1081'
+'else if (JULIAN >= 91 && JULIAN < 152)'
+'precip_elev_adj[hh] = 0.0997'
+'else if (JULIAN >= 152 && JULIAN < 244)'
+'precip_elev_adj[hh] = 0.0592'
+'endif'
+'endif'
+'endif'
+'endif'
+'p_elev_adj[hh] = precip_elev_adj[hh]'
+'endif'
+'end'
+'MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA'
+'declgroup 12'
+'basin'
+'global'
+'obs'
+'Precip_Elevation_Adjust'
+'calcsun'
+'Slope_Qsi#1'
+'albedo_Richard'
+'walmsley_wind'
+'longVt'
+'netall'
+'evap_Resist'
+'CanopyClearingGap#3'
+'pbsmSnobal'
+'SnobalCRHM#1'
+'frozenAyers'
+'SoilDetention'
+'K_Estimate#1'
+'Netroute_M_D'
+'command'
+'end'
+'MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB'
+'declgroup 7'
+'basin'
+'global'
+'obs'
+'Precip_Elevation_Adjust'
+'calcsun'
+'Slope_Qsi#1'
+'albedo_Richard'
+'walmsley_wind'
+'longVt'
+'netall'
+'evap_Resist'
+'CanopyClearingGap#3'
+'pbsmSnobal'
+'SnobalCRHM#1'
+'frozenAyers'
+'SoilDetention'
+'K_Estimate#1'
+'Netroute_M_D'
+'command'
+'end'
+'MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC'
+'declgroup 9'
+'basin'
+'global'
+'obs'
+'Precip_Elevation_Adjust'
+'calcsun'
+'Slope_Qsi#1'
+'albedo_Richard'
+'walmsley_wind'
+'longVt'
+'netall'
+'evap_Resist'
+'CanopyClearingGap#3'
+'pbsmSnobal'
+'SnobalCRHM#1'
+'frozenAyers'
+'SoilDetention'
+'K_Estimate#1'
+'Netroute_M_D'
+'command'
+'end'
+'MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD'
+'declgroup 8'
+'basin'
+'global'
+'obs'
+'Precip_Elevation_Adjust'
+'calcsun'
+'Slope_Qsi#1'
+'albedo_Richard'
+'walmsley_wind'
+'longVt'
+'netall'
+'evap_Resist'
+'CanopyClearingGap#3'
+'pbsmSnobal'
+'SnobalCRHM#1'
+'frozenAyers'
+'SoilDetention'
+'K_Estimate#1'
+'Netroute_M_D'
+'command'
+'end'
+'REW_Grp'
+'declgroup 4'
+'REW_route'
+'command'
+'end'
+######
+Observations:
+######
+prj/Marmot-Creek-With-States/Marmot_Hourly_ArrayMetData_withT_g_1Oct05-30Sept20_update_22Jan2021.obs
+######
+Dates:
+######
+2006 10 1
+2007 10 1
+######
+Modules:
+######
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Macro 04/20/06
+ +basin CRHM 04/20/06
+ +global CRHM 04/20/06
+ +obs CRHM 04/20/06
+ +Precip_Elevation_Adjust Macro 04/20/06
+ +calcsun CRHM 04/20/06
+ +Slope_Qsi#1 CRHM 04/20/06
+ +albedo_Richard CRHM 04/20/06
+ +walmsley_wind CRHM 04/20/06
+ +longVt CRHM 04/20/06
+ +netall CRHM 04/20/06
+ +evap_Resist CRHM 04/20/06
+ +CanopyClearingGap#3 CRHM 04/20/06
+ +pbsmSnobal CRHM 04/20/06
+ +SnobalCRHM#1 CRHM 04/20/06
+ +frozenAyers CRHM 04/20/06
+ +SoilDetention CRHM 04/20/06
+ +K_Estimate#1 CRHM 04/20/06
+ +Netroute_M_D CRHM 04/20/06
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Macro 04/20/06
+ +basin CRHM 04/20/06
+ +global CRHM 04/20/06
+ +obs CRHM 04/20/06
+ +Precip_Elevation_Adjust Macro 04/20/06
+ +calcsun CRHM 04/20/06
+ +Slope_Qsi#1 CRHM 04/20/06
+ +albedo_Richard CRHM 04/20/06
+ +walmsley_wind CRHM 04/20/06
+ +longVt CRHM 04/20/06
+ +netall CRHM 04/20/06
+ +evap_Resist CRHM 04/20/06
+ +CanopyClearingGap#3 CRHM 04/20/06
+ +pbsmSnobal CRHM 04/20/06
+ +SnobalCRHM#1 CRHM 04/20/06
+ +frozenAyers CRHM 04/20/06
+ +SoilDetention CRHM 04/20/06
+ +K_Estimate#1 CRHM 04/20/06
+ +Netroute_M_D CRHM 04/20/06
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Macro 04/20/06
+ +basin CRHM 04/20/06
+ +global CRHM 04/20/06
+ +obs CRHM 04/20/06
+ +Precip_Elevation_Adjust Macro 04/20/06
+ +calcsun CRHM 04/20/06
+ +Slope_Qsi#1 CRHM 04/20/06
+ +albedo_Richard CRHM 04/20/06
+ +walmsley_wind CRHM 04/20/06
+ +longVt CRHM 04/20/06
+ +netall CRHM 04/20/06
+ +evap_Resist CRHM 04/20/06
+ +CanopyClearingGap#3 CRHM 04/20/06
+ +pbsmSnobal CRHM 04/20/06
+ +SnobalCRHM#1 CRHM 04/20/06
+ +frozenAyers CRHM 04/20/06
+ +SoilDetention CRHM 04/20/06
+ +K_Estimate#1 CRHM 04/20/06
+ +Netroute_M_D CRHM 04/20/06
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Macro 04/20/06
+ +basin CRHM 04/20/06
+ +global CRHM 04/20/06
+ +obs CRHM 04/20/06
+ +Precip_Elevation_Adjust Macro 04/20/06
+ +calcsun CRHM 04/20/06
+ +Slope_Qsi#1 CRHM 04/20/06
+ +albedo_Richard CRHM 04/20/06
+ +walmsley_wind CRHM 04/20/06
+ +longVt CRHM 04/20/06
+ +netall CRHM 04/20/06
+ +evap_Resist CRHM 04/20/06
+ +CanopyClearingGap#3 CRHM 04/20/06
+ +pbsmSnobal CRHM 04/20/06
+ +SnobalCRHM#1 CRHM 04/20/06
+ +frozenAyers CRHM 04/20/06
+ +SoilDetention CRHM 04/20/06
+ +K_Estimate#1 CRHM 04/20/06
+ +Netroute_M_D CRHM 04/20/06
+REW_Grp Macro 04/20/06
+ +REW_route CRHM 04/20/06
+######
+Parameters:
+###### 'basin' parameters always first
+Shared INIT_STATE
+''
+Shared Loop_to
+''
+Shared RapidAdvance_to
+''
+Shared RUN_END <0 to 1e+05>
+0 
+Shared RUN_ID <-1e+08 to 1e+08>
+6 
+Shared RUN_START <0 to 1e+05>
+0 
+Shared StateVars_to_Update
+''
+Shared t0_Julian <0 to 366>
+60 
+Shared TraceVars
+''
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA A <0 to 4.4>
+2.5 2.5 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA a1 <0 to 1e+08>
+1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA a2 <0 to 1e+08>
+7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Albedo_Bare <0 to 1>
+0.17 0.17 0.17 0.17 0.17 0.17 0.17 0.17 0.17 0.17 0.17 0.17 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Albedo_Snow <0 to 1>
+0.85 0.85 0.85 0.85 0.85 0.85 0.85 0.85 0.85 0.85 0.85 0.85 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Alpha_c <0.05 to 0.2>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA amax <0 to 1>
+0.84 0.84 0.84 0.84 0.8 0.8 0.8 0.84 0.8 0.8 0.8 0.84 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA amin <0 to 1>
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA A_S <0 to 2>
+0.003 0.003 0.6 0.6 0.8 0.8 0.8 0.003 0.6 0.6 0.6 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA B <0 to 2>
+0.8 0.8 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA basin_area <1e-06 to 1e+09>
+2.35 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA basin_name
+'Cabin Sub' 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA B_canopy <0 to 0.2>
+0.038 0.038 0.038 0.038 0.038 0.038 0.038 0.038 0.038 0.038 0.038 0.038 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA C <0 to 3>
+1.14 1.14 1.14 1.14 1.14 1.14 1.14 1.14 1.14 1.14 1.14 1.14 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA CanopyClearing <0 to 2>
+1 1 0 0 0 0 0 1 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA catchadjust <0 to 3>
+0 0 0 0 0 0 0 2 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Channel_shp <0 to 2>
+1 1 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA ClimChng_flag <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA ClimChng_precip <0 to 10>
+1 1 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA ClimChng_t <-50 to 50>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA cov_type <0 to 2>
+2 2 2 2 2 2 2 2 2 2 2 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA distrib <-10 to 10>
+1 1 1 1 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA distrib_Basin <0 to 100>
+0 0 0 0 0 0 0 0 0 0 0 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA distrib_Route <-1e+06 to 1e+06>
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Dts_organic_init <0 to 5000>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Dts_organic_max <0 to 5000>
+50 50 100 100 100 100 100 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Dts_organic_runoff_K <0 to 100>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Dts_snow_init <0 to 5000>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Dts_snow_max <0 to 5000>
+50 50 100 100 100 100 100 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Dts_snow_runoff_K <0 to 100>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA d_g <0 to 10>
+3 3 3 3 3 3 3 3 3 3 3 3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA ElevChng_flag <0 to 1>
+1 1 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA epsilon_s <0 to 1>
+0.98 0.98 0.98 0.98 0.98 0.98 0.98 0.98 0.98 0.98 0.98 0.98 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA evap_type <0 to 2>
+0 0 0 0 0 0 0 0 0 0 0 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA fetch <300 to 1e+04>
+300 300 300 300 300 300 300 300 300 300 300 300 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA F_Qg <0 to 1>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Gap_diameter <10 to 1000>
+100 100 100 100 100 100 100 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA groundcover <1 to 6>
+1 1 6 6 6 6 6 6 6 6 6 6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA gwKstorage <0 to 200>
+1053 835 366 668 429 1162 1.297e+04 3029 2.456e+04 1127 450 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA gwLag <0 to 1e+04>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA gwwhereto <-1000 to 1000>
+-4 -3 -5 -6 -11 -10 -9 -10 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA gw_init <0 to 5000>
+250 250 250 250 250 250 250 250 250 250 250 250 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA gw_K <0 to 100>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA gw_max <0 to 5000>
+500 500 500 500 500 500 500 500 500 500 500 500 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA hru_area <1e-06 to 1e+09>
+0.23 0.17 0.02 0.02 0.35 0.93 0.05 0.4 0.06 0.07 0.01 0.04 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA hru_ASL <0 to 360>
+122 69 60 115 62 151 0 140 0 204 76 135 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA hru_elev <0 to 1e+05>
+2387 2379 2222 2194 2046 1972 1931 1927 1882 1798 1780 1951 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA hru_F_g <-50 to 50>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA hru_GSL <0 to 90>
+36 37 35 32 24 18 4 11 3 18 25 18 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA hru_lat <-90 to 90>
+50.95 50.95 50.95 50.95 50.95 50.95 50.95 50.95 50.95 50.95 50.95 50.95 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA hru_names
+'Alpine Rock SF' 'Alpine Rock NF' 'Alpine Veg NF' 'Alpine Veg SF' 'Mix NF' 'Mix SF' 'Mix Level' 'Clearings' 'Lodgepole Level' 'Lodgepole SF' 'Lodgepole NF' 'ValleyBottom' 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA HRU_OBS <1 to 100>
+1 1 2 2 3 3 3 3 4 4 4 4 
+1 1 2 2 3 3 3 3 4 4 4 4 
+1 1 2 2 3 3 3 3 4 4 4 4 
+1 1 2 2 4 4 4 4 4 4 4 4 
+1 1 2 2 3 3 3 3 4 4 4 4 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA hru_rho_snow <50 to 1000>
+100 100 100 100 100 100 100 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA hru_tsoil <223 to 273.1>
+271.9 271.9 271.9 271.9 272.6 272.6 272.6 272.6 273 273 273 272.6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA hru_T_g <-50 to 50>
+-4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Ht <0.001 to 100>
+0.14 0.14 3 3 15 15 15 3 15 15 15 15 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Htmax <0.1 to 100>
+1 1 5 5 15 15 15 5 15 15 15 15 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA inhibit_bs <0 to 1>
+0 0 0 0 1 1 1 0 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA inhibit_evap <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Inhibit_K_set <0 to 63>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA inhibit_subl <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Ks_gw <0 to 100>
+1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Ks_lower <0 to 100>
+1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Ks_organic <0 to 100>
+0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 4.6e-06 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Ks_upper <0 to 100>
+1.1e-05 1.1e-05 1.1e-05 1.1e-05 4.6e-06 4.6e-06 4.6e-06 4.6e-06 4.6e-06 4.6e-06 4.6e-06 4.6e-06 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA KT_sand <0.01 to 3>
+0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA L <40 to 1e+06>
+500 500 40 40 40 40 40 40 40 40 40 40 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Lag <0 to 1e+04>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA LAI <0.1 to 20>
+0.1 0.1 1.1 1.1 3 3 3 1.1 1.44 1.44 1.44 2.07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA LAImax <0 to 20>
+0.5 0.5 2.5 2.5 3 3 3 2.5 1.44 1.44 1.44 2.07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA LAImin <0 to 20>
+0.1 0.1 1.1 1.1 3 3 3 1.1 1.44 1.44 1.44 2.07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA lapse_rate <0 to 2>
+0.79 0.79 0.79 0.79 0.37 0.37 0.37 0.37 0.37 0.37 0.37 0.37 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA lower_ssr_K <0 to 100>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA max_h2o_vol <0.0001 to 0.2>
+0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA max_z_s_0 <0 to 0.35>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA N_S <1 to 500>
+1 1 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA obs_elev <0 to 1e+05>
+2470 2470 2325 2325 1956 1956 1956 1956 1845 1845 1845 1845 
+2470 2470 2325 2325 1956 1956 1956 1956 1845 1845 1845 1845 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA order <1 to 1000>
+1 2 3 4 5 6 7 8 9 10 11 12 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA PMmethod <0 to 1>
+1 1 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA ppt_daily_distrib <0 to 1>
+1 1 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA precip_elev_adj <-1 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA preferential_flow <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA PSD <0 to 10>
+2.55 2.55 2.55 2.55 2.55 2.55 2.55 2.55 2.55 2.55 2.55 2.55 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA PSD_org <0 to 10>
+3 3 3 3 3 3 3 3 3 3 3 3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA rain_soil_snow <0 to 1>
+1 1 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA rcs <25 to 5000>
+25 25 25 25 25 25 25 25 25 25 25 25 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA rechr_ssr_K <0 to 100>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA relative_hts <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA route_L <0.01 to 1e+10>
+575 484 136 130 742 1338 225 805 243 290 84 2337 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA route_n <0.016 to 0.2>
+0.04 0.04 0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.04 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA route_R <0.01 to 1e+04>
+0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA route_S0 <1e-06 to 1>
+0.72 0.75 0.7 0.62 0.44 0.32 0.06 0.2 0.05 0.32 0.46 0.32 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA route_X_M <0 to 0.5>
+0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA runKstorage <0 to 200>
+0 0 0 0 0 0 0 0 0 0 0 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA runLag <0 to 1e+04>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA s <0 to 1>
+1 1 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA S0 <0 to 1>
+1 1 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Sbar <0 to 100>
+0 0 6.6 6.6 12.6 12.6 12.6 3.3 6.6 6.6 6.6 6.6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA scaling_factor <0 to 1e+06>
+1 1 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Sdinit <0 to 5000>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Sdmax <0 to 5000>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Sd_ByPass <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Sd_gw_K <0 to 100>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Sd_ssr_K <0 to 100>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Si <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA smin <0 to 20>
+1 1 5 5 5 5 5 1 5 5 5 5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA snow_rain_determination <0 to 2>
+2 2 2 2 2 2 2 2 2 2 2 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA soil_Depth <0 to 10>
+1.1 1.1 1.1 1.1 0.9 0.9 0.9 0.9 0.9 0.9 0.9 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA soil_gw_K <0 to 100>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA soil_moist_init <0 to 5000>
+163 163 357 357 276 276 276 276 276 276 276 650 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA soil_moist_max <0 to 5000>
+250 250 550 550 425 425 425 425 425 425 425 1000 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA soil_rechr_ByPass <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA soil_rechr_init <0 to 250>
+49 49 162 162 162 162 162 162 162 162 162 162 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA soil_rechr_max <0 to 350>
+75 75 250 250 250 250 250 250 250 250 250 250 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA soil_ssr_runoff <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA soil_type <1 to 12>
+5 5 5 5 5 5 5 5 5 5 5 5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA soil_withdrawal <1 to 4>
+4 4 4 4 4 4 4 4 4 4 4 4 
+4 4 4 4 4 4 4 4 4 4 4 4 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA ssrKstorage <0 to 200>
+1 0.8 0.4 0.7 1.1 2.9 32.4 7.6 61.4 2.8 1.1 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA ssrLag <0 to 1e+04>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Surrounding_Ht <0.001 to 100>
+0.1 0.25 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA S_I <1 to 7>
+4.8 4.8 4.8 4.8 4.8 4.8 4.8 4.8 4.8 4.8 4.8 4.8 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA t0 <0 to 1000>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA texture <1 to 4>
+4 4 1 1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Time_Offset <-12 to 12>
+0.67 0.67 0.67 0.67 0.67 0.67 0.67 0.67 0.67 0.67 0.67 0.67 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA tmax_allrain <-10 to 10>
+4 4 4 4 4 4 4 4 4 4 4 4 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA tmax_allsnow <-10 to 10>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA transp_limited <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA T_g_or_G_flux <0 to 1>
+0 0 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA t_ice_lens <-50 to 0>
+-20 -20 -20 -20 -20 -20 -20 -20 -20 -20 -20 -20 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA unload_t <-10 to 20>
+2 2 2 2 2 2 2 2 2 2 2 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA unload_t_water <-10 to 20>
+6 6 6 6 6 6 6 6 6 6 6 6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Vt <0 to 1>
+0.4 0.4 0.3 0.3 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Walmsley_Ht <-1000 to 1000>
+320 320 0 0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Z0snow <0.0001 to 0.01>
+0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Zref <0.01 to 100>
+2.3 2.3 2.6 2.6 2.6 2.6 2.6 2.6 2.1 2.1 2.1 2.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Zvent <0 to 1>
+0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA Zwind <0 to 100>
+2.6 2.6 12 12 12 12 12 12 12 12 12 12 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA z_0 <0.0001 to 0.1>
+0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA z_g <0.1 to 1>
+0.1 0.1 0.1 0.1 0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA z_T <0 to 10>
+2.3 2.3 2.6 2.6 2.6 2.6 2.6 2.6 2.1 2.1 2.1 2.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub1_Cabin_template_GrpA z_u <0 to 10>
+2.6 2.6 4 4 4 4 4 4 3 3 3 3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB A <0 to 4.4>
+2.5 2.5 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB a1 <0 to 1e+08>
+1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB a2 <0 to 1e+08>
+7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Albedo_Bare <0 to 1>
+0.17 0.17 0.17 0.17 0.17 0.17 0.17 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Albedo_Snow <0 to 1>
+0.85 0.85 0.85 0.85 0.85 0.85 0.85 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Alpha_c <0.05 to 0.2>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB amax <0 to 1>
+0.84 0.84 0.84 0.84 0.8 0.8 0.84 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB amin <0 to 1>
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB A_S <0 to 2>
+0.003 0.003 0.6 0.6 0.8 0.8 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB B <0 to 2>
+0.8 0.8 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB basin_area <1e-06 to 1e+09>
+2.94 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB basin_name
+'Middle Sub' 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB B_canopy <0 to 0.2>
+0.038 0.038 0.038 0.038 0.038 0.038 0.038 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB C <0 to 3>
+1.14 1.14 1.14 1.14 1.14 1.14 1.14 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB CanopyClearing <0 to 2>
+1 1 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB catchadjust <0 to 3>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Channel_shp <0 to 2>
+1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB ClimChng_flag <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB ClimChng_precip <0 to 10>
+1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB ClimChng_t <-50 to 50>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB cov_type <0 to 2>
+2 2 2 2 2 2 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB distrib <-10 to 10>
+1 1 1 1 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB distrib_Basin <0 to 100>
+0 0 0 0 0 0 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB distrib_Route <-1e+06 to 1e+06>
+0 0 0 0 0 0 1 
+0 0 0 0 0 0 1 
+0 0 0 0 0 0 1 
+0 0 0 0 0 0 1 
+0 0 0 0 0 0 1 
+0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Dts_organic_init <0 to 5000>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Dts_organic_max <0 to 5000>
+50 50 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Dts_organic_runoff_K <0 to 100>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Dts_snow_init <0 to 5000>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Dts_snow_max <0 to 5000>
+50 50 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Dts_snow_runoff_K <0 to 100>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB d_g <0 to 10>
+3 3 3 3 3 3 3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB ElevChng_flag <0 to 1>
+1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB epsilon_s <0 to 1>
+0.98 0.98 0.98 0.98 0.98 0.98 0.98 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB evap_type <0 to 2>
+0 0 0 0 0 0 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB fetch <300 to 1e+04>
+300 300 300 300 300 300 300 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB F_Qg <0 to 1>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Gap_diameter <10 to 1000>
+100 100 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB groundcover <1 to 6>
+1 1 6 6 6 6 6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB gwKstorage <0 to 200>
+1664 1640 1044 452 712 1229 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB gwLag <0 to 1e+04>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB gwwhereto <-1000 to 1000>
+-4 -3 -6 -5 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB gw_init <0 to 5000>
+250 250 250 250 250 250 250 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB gw_K <0 to 100>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB gw_max <0 to 5000>
+500 500 500 500 500 500 500 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB hru_area <1e-06 to 1e+09>
+0.52 1.37 0.26 0.08 0.16 0.52 0.03 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB hru_ASL <0 to 360>
+82 148 138 46 76 134 115 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB hru_elev <0 to 1e+05>
+2462 2422 2246 2211 1995 1953 2057 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB hru_F_g <-50 to 50>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB hru_GSL <0 to 90>
+31 30 20 18 21 22 16 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB hru_lat <-90 to 90>
+50.95 50.95 50.95 50.95 50.95 50.95 50.95 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB hru_names
+'Alpine Rock NF' 'Alpine Rock SF' 'Alpine Veg SF' 'Alpine Veg NF' 'Mix NF' 'Mix SF' 'ValleyBottom' 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB HRU_OBS <1 to 100>
+1 1 2 2 3 3 5 
+1 1 2 2 3 3 5 
+1 1 2 2 3 3 5 
+1 1 2 2 5 5 5 
+1 1 2 2 3 3 5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB hru_rho_snow <50 to 1000>
+100 100 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB hru_tsoil <223 to 273.1>
+271.9 271.9 271.9 271.9 272.6 272.6 272.6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB hru_T_g <-50 to 50>
+-4 -4 -4 -4 -4 -4 -4 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Ht <0.001 to 100>
+0.14 0.14 3 3 15 15 15 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Htmax <0.1 to 100>
+1 1 5 5 15 15 15 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB inhibit_bs <0 to 1>
+0 0 0 0 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB inhibit_evap <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Inhibit_K_set <0 to 63>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB inhibit_subl <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Ks_gw <0 to 100>
+1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Ks_lower <0 to 100>
+1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Ks_organic <0 to 100>
+0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 4.6e-06 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Ks_upper <0 to 100>
+1.1e-05 1.1e-05 1.1e-05 1.1e-05 4.6e-06 4.6e-06 4.6e-06 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB KT_sand <0.01 to 3>
+0.08 0.08 0.08 0.08 0.08 0.08 0.08 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB L <40 to 1e+06>
+500 500 40 40 40 40 40 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Lag <0 to 1e+04>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB LAI <0.1 to 20>
+0.1 0.1 1.1 1.1 3 3 2.07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB LAImax <0 to 20>
+0.5 0.5 2.5 2.5 3 3 2.07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB LAImin <0 to 20>
+0.1 0.1 1.1 1.1 3 3 2.07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB lapse_rate <0 to 2>
+0.79 0.79 0.79 0.79 0.37 0.37 0.37 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB lower_ssr_K <0 to 100>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB max_h2o_vol <0.0001 to 0.2>
+0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB max_z_s_0 <0 to 0.35>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB N_S <1 to 500>
+1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB obs_elev <0 to 1e+05>
+2470 2470 2325 2325 1956 1956 1845 
+2470 2470 2325 2325 1956 1956 1845 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB order <1 to 1000>
+1 2 3 4 5 6 7 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB PMmethod <0 to 1>
+1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB ppt_daily_distrib <0 to 1>
+1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB precip_elev_adj <-1 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB preferential_flow <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB PSD <0 to 10>
+2.55 2.55 2.55 2.55 2.55 2.55 2.55 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB PSD_org <0 to 10>
+3 3 3 3 3 3 3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB rain_soil_snow <0 to 1>
+1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB rcs <25 to 5000>
+25 25 25 25 25 25 25 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB rechr_ssr_K <0 to 100>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB relative_hts <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB route_L <0.01 to 1e+10>
+944 1689 618 302 461 947 2907 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB route_n <0.016 to 0.2>
+0.04 0.04 0.15 0.15 0.15 0.15 0.04 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB route_R <0.01 to 1e+04>
+0.05 0.05 0.05 0.05 0.05 0.05 0.3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB route_S0 <1e-06 to 1>
+0.59 0.57 0.36 0.32 0.38 0.4 0.28 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB route_X_M <0 to 0.5>
+0.25 0.25 0.25 0.25 0.25 0.25 0.25 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB runKstorage <0 to 200>
+0 0 0 0 0 0 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB runLag <0 to 1e+04>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB s <0 to 1>
+1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB S0 <0 to 1>
+1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Sbar <0 to 100>
+0 0 6.6 6.6 12.6 12.6 6.6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB scaling_factor <0 to 1e+06>
+1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Sdinit <0 to 5000>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Sdmax <0 to 5000>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Sd_ByPass <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Sd_gw_K <0 to 100>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Sd_ssr_K <0 to 100>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Si <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB smin <0 to 20>
+1 1 5 5 5 5 5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB snow_rain_determination <0 to 2>
+2 2 2 2 2 2 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB soil_Depth <0 to 10>
+1.1 1.1 1.1 1.1 0.9 0.9 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB soil_gw_K <0 to 100>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB soil_moist_init <0 to 5000>
+163 163 357 357 276 276 650 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB soil_moist_max <0 to 5000>
+250 250 550 550 425 425 1000 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB soil_rechr_ByPass <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB soil_rechr_init <0 to 250>
+49 49 162 162 162 162 162 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB soil_rechr_max <0 to 350>
+75 75 250 250 250 250 250 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB soil_ssr_runoff <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB soil_type <1 to 12>
+5 5 5 5 5 5 5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB soil_withdrawal <1 to 4>
+4 4 4 4 4 4 4 
+4 4 4 4 4 4 4 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB ssrKstorage <0 to 200>
+1.6 1.6 1 0.4 1.8 3.1 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB ssrLag <0 to 1e+04>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Surrounding_Ht <0.001 to 100>
+0.1 0.25 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB S_I <1 to 7>
+4.8 4.8 4.8 4.8 4.8 4.8 4.8 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB t0 <0 to 1000>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB texture <1 to 4>
+4 4 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Time_Offset <-12 to 12>
+0.67 0.67 0.67 0.67 0.67 0.67 0.67 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB tmax_allrain <-10 to 10>
+4 4 4 4 4 4 4 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB tmax_allsnow <-10 to 10>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB transp_limited <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB T_g_or_G_flux <0 to 1>
+0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB t_ice_lens <-50 to 0>
+-20 -20 -20 -20 -20 -20 -20 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB unload_t <-10 to 20>
+2 2 2 2 2 2 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB unload_t_water <-10 to 20>
+6 6 6 6 6 6 6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Vt <0 to 1>
+0.4 0.4 0.3 0.3 0.25 0.25 0.3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Walmsley_Ht <-1000 to 1000>
+250 250 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Z0snow <0.0001 to 0.01>
+0.01 0.01 0.01 0.01 0.01 0.01 0.01 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Zref <0.01 to 100>
+2.3 2.3 2.6 2.6 2.1 2.1 2.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Zvent <0 to 1>
+0.75 0.75 0.75 0.75 0.75 0.75 0.75 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB Zwind <0 to 100>
+2.6 2.6 12 12 12 12 12 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB z_0 <0.0001 to 0.1>
+0.001 0.001 0.001 0.001 0.001 0.001 0.001 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB z_g <0.1 to 1>
+0.1 0.1 0.1 0.1 0.15 0.15 0.15 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB z_T <0 to 10>
+2.3 2.3 2.6 2.6 2.1 2.1 2.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub2_Middle_template_GrpB z_u <0 to 10>
+2.6 2.6 4 4 3 3 3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC A <0 to 4.4>
+2.5 2.5 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC a1 <0 to 1e+08>
+1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC a2 <0 to 1e+08>
+7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Albedo_Bare <0 to 1>
+0.17 0.17 0.17 0.17 0.17 0.17 0.17 0.17 0.17 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Albedo_Snow <0 to 1>
+0.85 0.85 0.85 0.85 0.85 0.85 0.85 0.85 0.85 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Alpha_c <0.05 to 0.2>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC amax <0 to 1>
+0.84 0.84 0.84 0.84 0.8 0.8 0.84 0.84 0.84 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC amin <0 to 1>
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC A_S <0 to 2>
+0.003 0.003 0.6 0.6 0.8 0.8 0.6 0.6 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC B <0 to 2>
+0.8 0.8 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC basin_area <1e-06 to 1e+09>
+2.79 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC basin_name
+'Twin Sub' 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC B_canopy <0 to 0.2>
+0.038 0.038 0.038 0.038 0.038 0.038 0.038 0.038 0.038 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC C <0 to 3>
+1.14 1.14 1.14 1.14 1.14 1.14 1.14 1.14 1.14 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC CanopyClearing <0 to 2>
+1 1 0 0 0 0 2 2 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC catchadjust <0 to 3>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Channel_shp <0 to 2>
+1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC ClimChng_flag <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC ClimChng_precip <0 to 10>
+1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC ClimChng_t <-50 to 50>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC cov_type <0 to 2>
+2 2 2 2 2 2 2 2 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC distrib <-10 to 10>
+1 1 1 1 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC distrib_Basin <0 to 100>
+0 0 0 0 0 0 0 0 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC distrib_Route <-1e+06 to 1e+06>
+0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Dts_organic_init <0 to 5000>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Dts_organic_max <0 to 5000>
+50 50 100 100 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Dts_organic_runoff_K <0 to 100>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Dts_snow_init <0 to 5000>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Dts_snow_max <0 to 5000>
+50 50 100 100 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Dts_snow_runoff_K <0 to 100>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC d_g <0 to 10>
+3 3 3 3 3 3 3 3 3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC ElevChng_flag <0 to 1>
+1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC epsilon_s <0 to 1>
+0.98 0.98 0.98 0.98 0.98 0.98 0.98 0.98 0.98 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC evap_type <0 to 2>
+0 0 0 0 0 0 0 0 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC fetch <300 to 1e+04>
+300 300 300 300 300 300 300 300 300 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC F_Qg <0 to 1>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Gap_diameter <10 to 1000>
+100 100 100 100 100 100 20 20 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC groundcover <1 to 6>
+1 1 6 6 6 6 6 6 6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC gwKstorage <0 to 200>
+1726 2245 868 912 912 869 912 724 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC gwLag <0 to 1e+04>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC gwwhereto <-1000 to 1000>
+-4 -3 -6 -5 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC gw_init <0 to 5000>
+250 250 250 250 250 250 250 250 250 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC gw_K <0 to 100>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC gw_max <0 to 5000>
+500 500 500 500 500 500 500 500 500 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC hru_area <1e-06 to 1e+09>
+0.79 0.16 0.28 0.28 0.38 0.36 0.26 0.24 0.04 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC hru_ASL <0 to 360>
+67 106 116 37 34 113 34 113 119 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC hru_elev <0 to 1e+05>
+2386 2380 2228 2182 1966 2014 1966 2014 1988 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC hru_F_g <-50 to 50>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC hru_GSL <0 to 90>
+28 22 23 22 17 21 17 21 16 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC hru_lat <-90 to 90>
+50.95 50.95 50.95 50.95 50.95 50.95 50.95 50.95 50.95 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC hru_names
+'Alpine Rock NF' 'Alpine Rock SF' 'Alpine Veg SF' 'Alpine Veg NF' 'Mix NF' 'Mix SF' 'Mix NF Gap' 'Mix SF Gap' 'ValleyBottom' 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC HRU_OBS <1 to 100>
+1 1 2 2 3 3 3 3 5 
+1 1 2 2 3 3 3 3 5 
+1 1 2 2 3 3 3 3 5 
+1 1 2 2 5 5 5 5 5 
+1 1 2 2 3 3 3 3 5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC hru_rho_snow <50 to 1000>
+100 100 100 100 100 100 100 100 100 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC hru_tsoil <223 to 273.1>
+271.9 271.9 271.9 271.9 272.6 272.6 272.6 272.6 272.6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC hru_T_g <-50 to 50>
+-4 -4 -4 -4 -4 -4 -4 -4 -4 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Ht <0.001 to 100>
+0.14 0.14 3 3 15 15 8 8 15 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Htmax <0.1 to 100>
+1 1 5 5 15 15 8 8 15 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC inhibit_bs <0 to 1>
+0 0 0 0 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC inhibit_evap <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Inhibit_K_set <0 to 63>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC inhibit_subl <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Ks_gw <0 to 100>
+1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Ks_lower <0 to 100>
+1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Ks_organic <0 to 100>
+0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 4.6e-06 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Ks_upper <0 to 100>
+1.1e-05 1.1e-05 1.1e-05 1.1e-05 4.6e-06 4.6e-06 4.6e-06 4.6e-06 4.6e-06 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC KT_sand <0.01 to 3>
+0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC L <40 to 1e+06>
+500 500 40 40 40 40 40 40 40 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Lag <0 to 1e+04>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC LAI <0.1 to 20>
+0.1 0.1 1.1 1.1 3 3 1.1 1.1 2.07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC LAImax <0 to 20>
+0.5 0.5 2.5 2.5 3 3 2.5 2.5 2.07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC LAImin <0 to 20>
+0.1 0.1 1.1 1.1 3 3 1.1 1.1 2.07 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC lapse_rate <0 to 2>
+0.79 0.79 0.79 0.79 0.37 0.37 0.37 0.37 0.37 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC lower_ssr_K <0 to 100>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC max_h2o_vol <0.0001 to 0.2>
+0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC max_z_s_0 <0 to 0.35>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC N_S <1 to 500>
+1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC obs_elev <0 to 1e+05>
+2470 2470 2325 2325 1956 1956 1956 1956 1845 
+2470 2470 2325 2325 1956 1956 1956 1956 1845 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC order <1 to 1000>
+1 2 3 4 5 6 7 8 9 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC PMmethod <0 to 1>
+1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC ppt_daily_distrib <0 to 1>
+1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC precip_elev_adj <-1 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC preferential_flow <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC PSD <0 to 10>
+2.55 2.55 2.55 2.55 2.55 2.55 2.55 2.55 2.55 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC PSD_org <0 to 10>
+3 3 3 3 3 3 3 3 3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC rain_soil_snow <0 to 1>
+1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC rcs <25 to 5000>
+25 25 25 25 25 25 25 25 25 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC rechr_ssr_K <0 to 100>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC relative_hts <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC route_L <0.01 to 1e+10>
+1217 457 649 654 788 757 618 594 2443 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC route_n <0.016 to 0.2>
+0.04 0.04 0.15 0.15 0.15 0.15 0.15 0.15 0.04 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC route_R <0.01 to 1e+04>
+0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC route_S0 <1e-06 to 1>
+0.53 0.4 0.42 0.4 0.3 0.38 0.3 0.38 0.28 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC route_X_M <0 to 0.5>
+0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC runKstorage <0 to 200>
+0 0 0 0 0 0 0 0 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC runLag <0 to 1e+04>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC s <0 to 1>
+1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC S0 <0 to 1>
+1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Sbar <0 to 100>
+0 0 6.6 6.6 12.6 12.6 6.6 6.6 6.6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC scaling_factor <0 to 1e+06>
+1 1 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Sdinit <0 to 5000>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Sdmax <0 to 5000>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Sd_ByPass <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Sd_gw_K <0 to 100>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Sd_ssr_K <0 to 100>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Si <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC smin <0 to 20>
+1 1 5 5 5 5 1 1 5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC snow_rain_determination <0 to 2>
+2 2 2 2 2 2 2 2 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC soil_Depth <0 to 10>
+1.1 1.1 1.1 1.1 0.9 0.9 0.9 0.9 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC soil_gw_K <0 to 100>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC soil_moist_init <0 to 5000>
+163 163 357 357 276 276 276 276 650 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC soil_moist_max <0 to 5000>
+250 250 550 550 425 425 425 425 1000 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC soil_rechr_ByPass <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC soil_rechr_init <0 to 250>
+49 49 162 162 162 162 162 162 162 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC soil_rechr_max <0 to 350>
+75 75 250 250 250 250 250 250 250 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC soil_ssr_runoff <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC soil_type <1 to 12>
+5 5 5 5 5 5 5 5 5 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC soil_withdrawal <1 to 4>
+4 4 4 4 4 4 4 4 4 
+4 4 4 4 4 4 4 4 4 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC ssrKstorage <0 to 200>
+1.7 2.2 0.9 0.9 2.3 2.2 2.3 1.8 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC ssrLag <0 to 1e+04>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Surrounding_Ht <0.001 to 100>
+0.1 0.25 1 1 1 1 20 20 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC S_I <1 to 7>
+4.8 4.8 4.8 4.8 4.8 4.8 4.8 4.8 4.8 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC t0 <0 to 1000>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC texture <1 to 4>
+4 4 1 1 1 1 1 1 1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Time_Offset <-12 to 12>
+0.67 0.67 0.67 0.67 0.67 0.67 0.67 0.67 0.67 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC tmax_allrain <-10 to 10>
+4 4 4 4 4 4 4 4 4 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC tmax_allsnow <-10 to 10>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC transp_limited <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC T_g_or_G_flux <0 to 1>
+0 0 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC t_ice_lens <-50 to 0>
+-20 -20 -20 -20 -20 -20 -20 -20 -20 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC unload_t <-10 to 20>
+2 2 2 2 2 2 2 2 2 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC unload_t_water <-10 to 20>
+6 6 6 6 6 6 6 6 6 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Vt <0 to 1>
+0.4 0.4 0.3 0.3 0.25 0.25 0.25 0.25 0.3 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Walmsley_Ht <-1000 to 1000>
+300 300 0 0 0 0 0 0 0 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Z0snow <0.0001 to 0.01>
+0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Zref <0.01 to 100>
+2.3 2.3 2.6 2.6 2.1 2.1 2.1 2.1 2.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Zvent <0 to 1>
+0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC Zwind <0 to 100>
+2.6 2.6 12 12 12 12 12 12 12 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC z_0 <0.0001 to 0.1>
+0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC z_g <0.1 to 1>
+0.1 0.1 0.1 0.1 0.15 0.15 0.15 0.15 0.15 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC z_T <0 to 10>
+2.3 2.3 2.6 2.6 2.1 2.1 2.1 2.1 2.1 
+MarmotCreek_modified_15June10_aggregation_scheme3_Sub3_Twin_template_GrpC z_u <0 to 10>
+2.6 2.6 4 4 3 3 3 3 3 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD A <0 to 4.4>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD a1 <0 to 1e+08>
+1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 1.08e+07 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD a2 <0 to 1e+08>
+7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 7.2e+05 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Albedo_Bare <0 to 1>
+0.17 0.17 0.17 0.17 0.17 0.17 0.17 0.17 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Albedo_Snow <0 to 1>
+0.85 0.85 0.85 0.85 0.85 0.85 0.85 0.85 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Alpha_c <0.05 to 0.2>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD amax <0 to 1>
+0.84 0.8 0.8 0.8 0.8 0.8 0.8 0.84 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD amin <0 to 1>
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD A_S <0 to 2>
+0.003 0.8 0.8 0.8 0.6 0.6 0.6 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD B <0 to 2>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD basin_area <1e-06 to 1e+09>
+1.32 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD basin_name
+'Marmot Conflunece Sub' 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD B_canopy <0 to 0.2>
+0.038 0.038 0.038 0.038 0.038 0.038 0.038 0.038 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD C <0 to 3>
+1.14 1.14 1.14 1.14 1.14 1.14 1.14 1.14 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD CanopyClearing <0 to 2>
+1 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD catchadjust <0 to 3>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Channel_shp <0 to 2>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD ClimChng_flag <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD ClimChng_precip <0 to 10>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD ClimChng_t <-50 to 50>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD cov_type <0 to 2>
+2 2 2 2 2 2 2 2 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD distrib <-10 to 10>
+1 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD distrib_Basin <0 to 100>
+0 0 0 0 0 0 0 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD distrib_Route <-1e+06 to 1e+06>
+0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Dts_organic_init <0 to 5000>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Dts_organic_max <0 to 5000>
+100 100 100 100 100 100 100 100 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Dts_organic_runoff_K <0 to 100>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Dts_snow_init <0 to 5000>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Dts_snow_max <0 to 5000>
+100 100 100 100 100 100 100 100 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Dts_snow_runoff_K <0 to 100>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD d_g <0 to 10>
+3 3 3 3 3 3 3 3 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD ElevChng_flag <0 to 1>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD epsilon_s <0 to 1>
+0.98 0.98 0.98 0.98 0.98 0.98 0.98 0.98 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD evap_type <0 to 2>
+0 0 0 0 0 0 0 2 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD fetch <300 to 1e+04>
+300 300 300 300 300 300 300 300 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD F_Qg <0 to 1>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Gap_diameter <10 to 1000>
+100 100 100 100 100 100 100 100 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD groundcover <1 to 6>
+6 6 6 6 6 6 6 6 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD gwKstorage <0 to 200>
+8709 2838 1662 4586 1655 8235 1758 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD gwLag <0 to 1e+04>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD gwwhereto <-1000 to 1000>
+-2 -7 -5 -6 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD gw_init <0 to 5000>
+250 250 250 250 250 250 250 250 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD gw_K <0 to 100>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD gw_max <0 to 5000>
+500 500 500 500 500 500 500 500 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD hru_area <1e-06 to 1e+09>
+0.01 0.38 0.24 0.05 0.44 0.03 0.15 0.02 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD hru_ASL <0 to 360>
+55 54 159 0 172 0 71 163 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD hru_elev <0 to 1e+05>
+1903 1786 1724 1688 1752 1724 1687 1664 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD hru_F_g <-50 to 50>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD hru_GSL <0 to 90>
+11 13 13 4 17 4 14 8 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD hru_lat <-90 to 90>
+50.95 50.95 50.95 50.95 50.95 50.95 50.95 50.95 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD hru_names
+'Clearings' 'Mix NF' 'Mix SF' 'Mix Level' 'Lodgepole SF' 'Lodgepole Level' 'Lodgepole NF' 'ValleyBottom' 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD HRU_OBS <1 to 100>
+4 5 5 5 5 5 5 5 
+4 5 5 5 5 5 5 5 
+4 5 5 5 5 5 5 5 
+4 5 5 5 5 5 5 5 
+4 5 5 5 5 5 5 5 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD hru_rho_snow <50 to 1000>
+100 100 100 100 100 100 100 100 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD hru_tsoil <223 to 273.1>
+273.1 273.1 273.1 273.1 273.1 273.1 273.1 273.1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD hru_T_g <-50 to 50>
+-4 -4 -4 -4 -4 -4 -4 -4 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Ht <0.001 to 100>
+3 15 15 15 15 15 15 15 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Htmax <0.1 to 100>
+5 15 15 15 15 15 15 15 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD inhibit_bs <0 to 1>
+0 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD inhibit_evap <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Inhibit_K_set <0 to 63>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD inhibit_subl <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Ks_gw <0 to 100>
+1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 1.1e-08 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Ks_lower <0 to 100>
+1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 1.1e-07 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Ks_organic <0 to 100>
+0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 0.00011 4.6e-06 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Ks_upper <0 to 100>
+4.6e-06 4.6e-06 4.6e-06 4.6e-06 4.6e-06 4.6e-06 4.6e-06 4.6e-06 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD KT_sand <0.01 to 3>
+0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD L <40 to 1e+06>
+40 40 40 40 40 40 40 40 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Lag <0 to 1e+04>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD LAI <0.1 to 20>
+1.1 3 3 3 1.44 1.44 1.44 2.07 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD LAImax <0 to 20>
+2.5 3 3 3 1.44 1.44 1.44 2.07 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD LAImin <0 to 20>
+1.1 3 3 3 1.44 1.44 1.44 2.07 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD lapse_rate <0 to 2>
+0.44 0.44 0.44 0.44 0.44 0.44 0.44 0.44 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD lower_ssr_K <0 to 100>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD max_h2o_vol <0.0001 to 0.2>
+0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD max_z_s_0 <0 to 0.35>
+0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD N_S <1 to 500>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD obs_elev <0 to 1e+05>
+1845 1845 1845 1845 1845 1845 1845 1845 
+1845 1845 1845 1845 1845 1845 1845 1845 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD order <1 to 1000>
+1 2 3 4 5 6 7 8 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD PMmethod <0 to 1>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD ppt_daily_distrib <0 to 1>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD precip_elev_adj <-1 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD preferential_flow <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD PSD <0 to 10>
+2.55 2.55 2.55 2.55 2.55 2.55 2.55 2.55 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD PSD_org <0 to 10>
+3 3 3 3 3 3 3 3 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD rain_soil_snow <0 to 1>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD rcs <25 to 5000>
+25 25 25 25 25 25 25 25 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD rechr_ssr_K <0 to 100>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD relative_hts <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD route_L <0.01 to 1e+10>
+90 785 592 210 853 150 449 1998 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD route_n <0.016 to 0.2>
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.04 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD route_R <0.01 to 1e+04>
+0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.3 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD route_S0 <1e-06 to 1>
+0.19 0.23 0.22 0.06 0.3 0.06 0.24 0.14 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD route_X_M <0 to 0.5>
+0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD runKstorage <0 to 200>
+0 0 0 0 0 0 0 2 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD runLag <0 to 1e+04>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD s <0 to 1>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD S0 <0 to 1>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Sbar <0 to 100>
+3.3 12.6 12.6 12.6 6.6 6.6 6.6 6.6 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD scaling_factor <0 to 1e+06>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Sdinit <0 to 5000>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Sdmax <0 to 5000>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Sd_ByPass <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Sd_gw_K <0 to 100>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Sd_ssr_K <0 to 100>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Si <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD smin <0 to 20>
+1 5 5 5 5 5 5 5 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD snow_rain_determination <0 to 2>
+2 2 2 2 2 2 2 2 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD soil_Depth <0 to 10>
+1.5 1.5 1.5 1.5 1.5 1.5 1.5 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD soil_gw_K <0 to 100>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD soil_moist_init <0 to 5000>
+487 487 487 487 487 487 487 650 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD soil_moist_max <0 to 5000>
+750 750 750 750 750 750 750 1000 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD soil_rechr_ByPass <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD soil_rechr_init <0 to 250>
+162 162 162 162 162 162 162 162 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD soil_rechr_max <0 to 350>
+250 250 250 250 250 250 250 250 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD soil_ssr_runoff <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD soil_type <1 to 12>
+5 5 5 5 5 5 5 5 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD soil_withdrawal <1 to 4>
+4 4 4 4 4 4 4 4 
+4 4 4 4 4 4 4 4 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD ssrKstorage <0 to 200>
+21.8 7.1 4.2 11.5 4.1 20.6 4.4 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD ssrLag <0 to 1e+04>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Surrounding_Ht <0.001 to 100>
+0.1 0.25 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD S_I <1 to 7>
+4.8 4.8 4.8 4.8 4.8 4.8 4.8 4.8 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD t0 <0 to 1000>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD texture <1 to 4>
+1 1 1 1 1 1 1 1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Time_Offset <-12 to 12>
+0.67 0.67 0.67 0.67 0.67 0.67 0.67 0.67 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD tmax_allrain <-10 to 10>
+4 4 4 4 4 4 4 4 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD tmax_allsnow <-10 to 10>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD transp_limited <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD T_g_or_G_flux <0 to 1>
+0 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD t_ice_lens <-50 to 0>
+-20 -20 -20 -20 -20 -20 -20 -20 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD unload_t <-10 to 20>
+2 2 2 2 2 2 2 2 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD unload_t_water <-10 to 20>
+6 6 6 6 6 6 6 6 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Vt <0 to 1>
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Walmsley_Ht <-1000 to 1000>
+50 0 0 0 0 0 0 0 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Z0snow <0.0001 to 0.01>
+0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Zref <0.01 to 100>
+2.1 2.1 2.1 2.1 2.1 2.1 2.1 2.1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Zvent <0 to 1>
+0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD Zwind <0 to 100>
+12 12 12 12 12 12 12 12 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD z_0 <0.0001 to 0.1>
+0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD z_g <0.1 to 1>
+0.15 0.15 0.15 0.15 0.15 0.15 0.15 0.15 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD z_T <0 to 10>
+2.1 2.1 2.1 2.1 2.1 2.1 2.1 2.1 
+MarmotCreek_modified_20May10_aggregation_scheme3_Sub4_Confluence_template_GrpD z_u <0 to 10>
+3 3 3 3 3 3 3 3 
+REW_Grp WS_Channel_shp <0 to 2>
+1 1 1 1 
+REW_Grp WS_gwLag <0 to 1e+04>
+0 0 0 0 
+REW_Grp WS_gworder <1 to 1000>
+1 2 3 4 
+REW_Grp WS_gwwhereto <0 to 1000>
+4 4 4 0 
+REW_Grp WS_gwX_M <0 to 0.5>
+0.25 0.25 0.25 0.25 
+REW_Grp WS_Lag <0 to 1e+04>
+0 0 0 0 
+REW_Grp WS_order <1 to 1000>
+1 2 3 4 
+REW_Grp WS_route_L <0.01 to 1e+10>
+2718 2907 2443 1998 
+REW_Grp WS_route_n <0.016 to 0.2>
+0.04 0.04 0.04 0.04 
+REW_Grp WS_route_R <0.01 to 1e+04>
+0.3 0.3 0.3 0.3 
+REW_Grp WS_route_S0 <1e-06 to 1>
+0.32 0.28 0.28 0.14 
+REW_Grp WS_whereto <0 to 1000>
+4 4 4 0 
+REW_Grp WS_X_M <0 to 0.5>
+0.25 0.25 0.25 0.25 
+######
+Initial_State
+######
+######
+Final_State
+######
+C:\Users\Timonic\source\repos\crhmcode\crhmcode\src\vcc\prj\Marmot-Creek-With-States\Test.int
+######
+Display_Variable:
+######
+REW_Grp WS_outflow@E 1 2 3 4
+######
+Display_Observation:
+######
+######
+TChart:
+######
+######
