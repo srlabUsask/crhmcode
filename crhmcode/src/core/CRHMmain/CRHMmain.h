@@ -51,11 +51,15 @@ class CRHMmain
 	static CRHMmain* instance;
 
 private: 
-	bool AutoRun{0};
+	bool AutoRun{ false };
+	bool AutoExit{ false };
+
 public:
 
 	bool getAutoRun();
 	void setAutoRun(bool set);
+	bool getAutoExit();
+	void setAutoExit(bool set);
 
 	CRHMLogger* Logger;
 	ReportStream * reportStream{NULL};

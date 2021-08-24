@@ -73,6 +73,16 @@ void CRHMmain::setAutoRun(bool set)
 	this->AutoRun = set;
 }
 
+bool CRHMmain::getAutoExit()
+{
+	return this->AutoExit;
+}
+
+void CRHMmain::setAutoExit(bool set)
+{
+	this->AutoExit = set;
+}
+
 CRHMmain* CRHMmain::getInstance()
 {
 	if (instance == 0)
@@ -295,6 +305,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 	Global::MacroModulesList->clear();
 	this->setAutoRun(false);
+	this->setAutoExit(false);
 
 	try 
 	{
@@ -865,7 +876,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 				this->setAutoRun(true);
 			}
 			else if (S == "Auto_Exit") {
-				;
+				this->setAutoExit(true);
 			}
 			else if (S == "TChart:") {
 
@@ -3731,6 +3742,12 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->push_back("######");
 	}
 
+	if (this->getAutoExit()) 
+	{
+		ProjectList->push_back("Auto_Exit");
+		ProjectList->push_back("######");
+	}
+
 	//if (SaveChartTemplate->Checked) {
 	//	ProjectList->Add("SaveChartTemplate");
 	//	ProjectList->Add("######");
@@ -3739,10 +3756,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//	SaveChartToFile(Chart, FileName, false, true);
 	//}
 	//
-	//if (PrjAutoExit->Checked) {
-	//	ProjectList->Add("Auto_Exit");
-	//	ProjectList->Add("######");
-	//}
+	
 	//
 	//if (Last1->Checked) {
 	//	ProjectList->Add("Log_Last");
