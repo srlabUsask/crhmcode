@@ -1509,7 +1509,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 			}
 		}
 
-		ObsFilesList->push_back(std::pair<std::string, ClassData*>(OpenNameObs, FileData));
+		ObsFilesList->push_back(std::pair<std::string, ClassData*>(FileName, FileData));
 
 		return true;
 	}
@@ -1526,7 +1526,8 @@ bool  CRHMmain::OpenObsFile(string FileName)
 }
 //---------------------------------------------------------------------------
 
-void  CRHMmain::ObsCloseClick(void) {
+void  CRHMmain::ObsCloseClick(void) 
+{
 
 	AllObservations->clear();
 
@@ -1547,13 +1548,12 @@ void  CRHMmain::ObsCloseClick(void) {
 }
 //---------------------------------------------------------------------------
 
-void  CRHMmain::ObsFileClose(void)
+void  CRHMmain::ObsFileClose(std::string filepath)
 {
 	MapVar::iterator itVar;
 	ClassVar * thisVar;
 
-	string S;  // Fix ???
-
+	/*Locate the postion of the obs file to close in the list of obs files.*/
 	std::list<std::pair<std::string, ClassData*>>::iterator position;
 	for (
 		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
@@ -1561,21 +1561,24 @@ void  CRHMmain::ObsFileClose(void)
 		it++
 		)
 	{
-		if (it->first == S)
+		if (it->first == filepath)
 		{
 			position = it;
+			break;
 		}
 	}
 
-
-	if (position == ObsFilesList->begin() && ObsFilesList->size() > 1) 
+	/*If the desired file is the only obs file open. Close all obs files.*/
+	if (position == ObsFilesList->begin() && ObsFilesList->size() == 1) 
 	{
 		ObsCloseClick();
 		return;
 	}
 
+	/*Clear the Observations list*/
 	AllObservations->clear();
 
+	/*Remove the observation file from the Observation file list*/
 	ClassData * FileData = position->second;
 	delete FileData;   // delete ClassData instance
 	ObsFilesList->erase(position);  // delete entry in list
