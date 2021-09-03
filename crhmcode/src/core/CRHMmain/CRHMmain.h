@@ -160,7 +160,7 @@ public:
 
 	void ObsCloseClick(void);
 
-	void ObsFileClose(void);
+	void ObsFileClose(std::string filepath);
 
 	void FormDestroy(void);
 
