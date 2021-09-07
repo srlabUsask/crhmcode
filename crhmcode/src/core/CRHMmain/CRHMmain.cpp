@@ -1530,6 +1530,7 @@ void  CRHMmain::ObsCloseClick(void)
 {
 
 	AllObservations->clear();
+	SelectedObservations->clear();
 
 	for (
 		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
@@ -1542,6 +1543,8 @@ void  CRHMmain::ObsCloseClick(void)
 	}
 
 	ObsFilesList->clear();  // clear list
+
+	
 
 	Global::nobs = 1;  // reset to 1
 
