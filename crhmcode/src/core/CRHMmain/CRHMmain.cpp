@@ -83,6 +83,11 @@ void CRHMmain::setAutoExit(bool set)
 	this->AutoExit = set;
 }
 
+bool CRHMmain::getFinishedRun()
+{
+	return this->finishedRun;
+}
+
 CRHMmain* CRHMmain::getInstance()
 {
 	if (instance == 0)
@@ -269,8 +274,9 @@ void CRHMmain::BldModelClick()
 					  //dirty = true;
 }
 
-void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
-
+void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) 
+{
+	this->finishedRun = false;
 	//saving the project file path. added by Manishankar.
 	OpenProjectPath = OpenNamePrj;
 
@@ -1751,6 +1757,8 @@ MMSData *  CRHMmain::RunClick2Start()
 	bool GoodRun = true;
 	MMSData * mmsdata = new MMSData();
 
+	this->finishedRun = false;
+
 	//TimingStatistics * ts = new TimingStatistics();
 
 	//clock_t begintime2 = clock();
@@ -2418,6 +2426,8 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 		{
 			SaveState();
 		}
+
+		this->finishedRun = true;
 			
 	}
 

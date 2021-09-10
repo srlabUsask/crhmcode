@@ -53,6 +53,7 @@ class CRHMmain
 private: 
 	bool AutoRun{ false };
 	bool AutoExit{ false };
+	bool finishedRun{ false };
 
 public:
 
@@ -60,6 +61,7 @@ public:
 	void setAutoRun(bool set);
 	bool getAutoExit();
 	void setAutoExit(bool set);
+	bool getFinishedRun();
 
 	CRHMLogger* Logger;
 	ReportStream * reportStream{NULL};
