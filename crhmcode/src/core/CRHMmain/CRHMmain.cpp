@@ -4322,8 +4322,6 @@ void CRHMmain::SaveState()
 
 	delete StateList;
 
-	SaveStateFileName = "";
-	SaveStateFlag = false;
 }
 
 void CRHMmain::print_progress_start() 
