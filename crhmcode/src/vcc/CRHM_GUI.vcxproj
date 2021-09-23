@@ -678,6 +678,7 @@
     <ClInclude Include="ReportStream.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceDlg.h" />
+    <ClInclude Include="RightClickListBox.h" />
     <ClInclude Include="SnobalDefines.h" />
     <ClInclude Include="StandardConverterUtility.h" />
     <ClInclude Include="stdafx.h" />
@@ -894,6 +895,7 @@
     <ClCompile Include="gui\MainFrm.cpp" />
     <ClCompile Include="gui\OutputWnd.cpp" />
     <ClCompile Include="gui\ResourceDlg.cpp" />
+    <ClCompile Include="RightClickListBox.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
