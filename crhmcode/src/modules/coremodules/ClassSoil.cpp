@@ -649,7 +649,7 @@ void ClassSoil::run(void) {
                     if (culvert_water_V[hh] > culvert_Q[hh] * interval_secs) // (m3/s) to (m3))
                         culvert_water_V[hh] -= culvert_Q[hh] * interval_secs; // (m3/s) to (m3)
                     else {
-                        culvert_Q[hh] = culvert_water_V[hh] * interval_secs;  // (m3) to (m3/s)
+                        culvert_Q[hh] = culvert_water_V[hh] / interval_secs;  // (m3) to (m3/s)
                         culvert_water_V[hh] = 0.0;
                     }
 
