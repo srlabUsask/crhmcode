@@ -5,22 +5,43 @@
 
 class TSeries {
 public:
-	double* XValues;
-	double* YValues;
+	std::vector<double> XValues;
+	std::vector<double> YValues;
 	ClassVar* Tag{ NULL };
-	int MaxCnt;
-	int Used;
+	//int MaxCnt;
 	string Title;
-	TSeries(int Cnt) { MaxCnt = Cnt; XValues = new double[MaxCnt]; YValues = new double[MaxCnt]; Used = 0; };
-	~TSeries() { delete[] XValues; delete[] YValues; };
+	
+	TSeries() 
+	{ 
+		//MaxCnt = Cnt; 
+		XValues = vector<double>(); 
+		YValues = vector<double>();
+	};
+	
+	~TSeries() 
+	{ 
+	};
+
 	void AddXY(double X, double Y)
 	{
-		XValues[Used] = X;
-		YValues[Used++] = Y;
+		XValues.insert(XValues.end(), X);
+		YValues.insert(YValues.end(), Y);
 	};
-	int Count(void) { return Used; };
-	double XValue(int nn) { return XValues[nn]; };
-	double YValue(int nn) { return YValues[nn]; };
+	
+	int Count(void) 
+	{ 
+		return XValues.size(); 
+	};
+	
+	double XValue(int nn) 
+	{ 
+		return XValues.at(nn);
+	};
+	
+	double YValue(int nn) 
+	{ 
+		return YValues.at(nn);
+	};
 };
 
 #endif // !TSERIES

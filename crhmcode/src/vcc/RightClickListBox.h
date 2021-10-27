@@ -10,6 +10,6 @@ public:
     DECLARE_MESSAGE_MAP()
     afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 private:
-    UINT messageCode;
+    UINT messageCode{0};
 };
 

@@ -814,7 +814,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 								if (thisVar->FileData->Times == NULL) {
 									//                  cdSeries = new TSeries(Global::DTmax - Global::DTmin);
 									double Dif = EndDatePicker - StartDatePicker;
-									TSeries * cdSeries = new TSeries(((int)(Dif * thisVar->FileData->Freq))*thisVar->FileData->ModN);
+									TSeries * cdSeries = new TSeries();
 
 									//move inside to avoid null ptr exception - Matt
 									cdSeries->Tag = thisVar;
@@ -1246,7 +1246,7 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		cdSeries = new TSeries*[SeriesCnt];
 		int Cnt = Global::DTmax - Global::DTmin;
 		for (int ii = 0; ii < SeriesCnt; ++ii)
-			cdSeries[ii] = new TSeries(Cnt);
+			cdSeries[ii] = new TSeries();
 
 		for (jj = 0; jj < SeriesCnt; jj++)
 		{
@@ -2038,7 +2038,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 	for (int ii = 0; ii < SeriesCnt; ++ii)
 	{
-		cdSeries[ii] = new TSeries(Cnt);
+		cdSeries[ii] = new TSeries();
 	}
 
 	mmsData = new double*[SeriesCnt];
@@ -4142,7 +4142,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 		j++;
 	}
 
-	observationseries = new TSeries(50000);
+	observationseries = new TSeries();
 	observationseries->Title = observationname;
 
 	int obscount = j;
