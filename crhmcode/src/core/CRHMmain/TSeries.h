@@ -15,7 +15,9 @@ public:
 	{ 
 		//MaxCnt = Cnt; 
 		XValues = vector<double>(); 
+		XValues.reserve(50000);
 		YValues = vector<double>();
+		YValues.reserve(50000);
 	};
 	
 	~TSeries() 
