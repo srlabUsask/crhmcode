@@ -17,33 +17,60 @@
 using namespace std;
 
 Classfilter::Classfilter(ClassData* MyObs, string ToVar, string args, string argtypes) :
-	MyObs(MyObs), ToVar(ToVar), args(args), argtypes(argtypes),
-	Vs(0), Cs(0), Error(0), ObsCnt(0), TotalCnt(0), FirstTime(true) {
+	MyObs(MyObs), 
+	ToVar(ToVar), 
+	args(args), 
+	argtypes(argtypes),
+	Vs(0), 
+	Cs(0), 
+	Error(0), 
+	ObsCnt(0), 
+	TotalCnt(0), 
+	FirstTime(true) 
+{
 
-	for (unsigned int ii = 1; ii < argtypes.length() + 1; ++ii) {
-		if (argtypes[ii] == 'V') Vs++;
-		else if (argtypes[ii] == 'C') Cs++;
+	for (unsigned int ii = 0; ii < argtypes.length(); ++ii)
+	{
+		if (argtypes[ii] == 'V')
+		{
+			Vs++;
+		}
+		else if (argtypes[ii] == 'C')
+		{
+			Cs++;
+		}
 	}
 
 	if (!ToVar.empty()) // 11/10/11
+	{
 		++Vs;
+	}
 
-	if (Vs) {
+	if (Vs) 
+	{
 		Data = new double** [Vs];  // increment
 		for (int ii = 0; ii < Vs; ++ii)
+		{
 			Data[ii] = NULL;
+		}
 
 		DataIndx = new long[Vs];
 		DataObsCnt = new long[Vs];
 	}
 
-	if (Cs > 0) Constants = new double[Cs];
+	if (Cs > 0)
+	{
+		Constants = new double[Cs];
+	}
 }
 
 //---------------------------------------------------------------------------
-void Classfilter::doFunctions(long Line) {
+void Classfilter::doFunctions(long Line) 
+{
 	for (int jj = 0; jj < ObsCnt; ++jj)
+	{
 		doFunc(jj, Line);
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -97,7 +124,8 @@ void Classfilter::fixup(void) { // must wait till memory allocated
 
 //---------------------------------------------------------------------------
 
-void Classfilter::readargs() {
+void Classfilter::readargs() 
+{
 
 	MapVar::iterator itVar;
 	ClassVar* thisVar;
@@ -109,17 +137,24 @@ void Classfilter::readargs() {
 	string Comment = args.substr(ee + 1, args.size());
 	Common::trim(Comment);
 	if (Comment.empty())
+	{
 		Comment = "filter";
-	else {
+	}
+	else 
+	{
 		long tt;
-		while (tt = Comment.find("\\t"), tt != string::npos) {
+		while (tt = Comment.find("\\t"), tt != string::npos) 
+		{
 			Comment.erase(tt, 1);
 			Comment[tt] = ' ';
 		}
 	}
 
 	args = args.substr(1, ee - 1);
-	while (ee = args.find(','), ee > 0) args[ee] = ' ';
+	while (ee = args.find(','), ee > 0)
+	{
+		args[ee] = ' ';
+	}
 
 	instr.str(args);
 	unsigned long Cnt;
@@ -127,26 +162,42 @@ void Classfilter::readargs() {
 	long IndexV = 0;
 	long pp, pp2;
 
-	for (Cnt = 0; Cnt < argtypes.length(); ++Cnt) { // allow for output location
+	// allow for output location
+	for (Cnt = 0; Cnt < argtypes.length(); ++Cnt) 
+	{ 
 		instr >> V;
-		if (instr.fail()) break;
+		if (instr.fail())
+		{
+			break;
+		}
+		
 		pp = V.find_first_not_of("0123456789 //:.+-Ee_");
-		if (pp == -1) { // constant
-			if (argtypes[Cnt] != 'C') {
+		if (pp == -1) 
+		{ 
+			// constant
+			if (argtypes[Cnt] != 'C') 
+			{
 				error("expected constant");
 				return;
 			}
 
 			pp = V.find_first_of("://_");
-			if (pp != -1) { // time
+			if (pp != -1) 
+			{ // time
 				pp2 = V.find_first_of("_");
-				if (pp2 == -1) {
+				if (pp2 == -1) 
+				{
 					if (V[pp] == '/')
+					{
 						C = StrToDate(V);
+					}
 					else
+					{
 						C = StrToTime(V);
+					}
 				}
-				else {
+				else 
+				{
 					string z(V, 1, pp2 - 1);
 					C = StrToDate(z);
 					z.assign(V, pp2 + 1, V.size());
@@ -154,24 +205,32 @@ void Classfilter::readargs() {
 				}
 			}
 			else
+			{
 				C = Common::StrtoDt(V);
+			}
 
 			Constants[IndexC++] = C;
 		}
-		else {               // variable
-			if (argtypes[Cnt] != 'V') {
+		else 
+		{   
+			// variable
+			if (argtypes[Cnt] != 'V') 
+			{
 				error("expecting CONSTANT");
 				return;
 			}
 
-			if ((itVar = Global::MapVars.find("obs " + V)) != Global::MapVars.end()) {
+			if ((itVar = Global::MapVars.find("obs " + V)) != Global::MapVars.end()) 
+			{
 				thisVar = (*itVar).second;
-				if (thisVar->varType < TVar::Read) {
+				if (thisVar->varType < TVar::Read) 
+				{
 					error("not observation variable");
 					return;
 				}
 			}
-			else {
+			else 
+			{
 				error("unknown variable");
 				return;
 			}
@@ -181,30 +240,37 @@ void Classfilter::readargs() {
 			++IndexV;
 
 			if (ObsCnt == 0 || thisVar->dim < ObsCnt)
+			{
 				ObsCnt = thisVar->dim;
+			}
 		}
 	}
 
-	if (Cnt != argtypes.length()) {
+	if (Cnt != argtypes.length()) 
+	{
 		error("too few arguments");
 		return;
 	}
 
-	if (Cnt > argtypes.length()) {
+	if (Cnt > argtypes.length()) 
+	{
 		error("too many arguments");
 		return;
 	}
 
-	if (!ToVar.empty()) {
+	if (!ToVar.empty()) 
+	{
 
 		TotalCnt = MyObs->DataCnt + MyObs->FilterCnt;
 		if (ObsCnt == 0) ++ObsCnt; // handle case of constant
 
 		MyObs->FilterCnt += ObsCnt;
 
-		if ((itVar = Global::MapVars.find("obs " + ToVar)) != Global::MapVars.end()) {
+		if ((itVar = Global::MapVars.find("obs " + ToVar)) != Global::MapVars.end()) 
+		{
 			thisVar = (*itVar).second;
-			if (thisVar->varType >= TVar::Read) {
+			if (thisVar->varType >= TVar::Read) 
+			{
 				DataIndx[Vs - 1] = thisVar->offset;
 				DataObsCnt[Vs - 1] = ObsCnt;
 				return;
@@ -221,7 +287,11 @@ void Classfilter::readargs() {
 double estar(double t) /* Saturation vapour pressure */
 {
 	if (t > 0.0)
+	{
 		return 0.611 * exp(17.27 * t / (t + 237.3));
+	}
 	else
+	{
 		return 0.611 * exp(21.88 * t / (t + 265.5));
+	}
 }
