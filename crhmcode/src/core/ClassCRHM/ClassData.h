@@ -22,7 +22,7 @@ public:
 	long IndxMin{ 0 };   // range of data available
 	long IndxMax{ 0 };   // range of data available
 	long ModN;      // divisor for data less frequent than basic interval
-	long HdrLen{ 0 };    // length of file header
+	long numHeaderLines{ 0 }; // number of lines in the header of the observation file. 
 	long Position{ 0 };  // current line in file
 	long DataCnt;
 	long FilterCnt;  // filter count
