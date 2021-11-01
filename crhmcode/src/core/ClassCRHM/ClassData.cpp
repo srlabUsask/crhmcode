@@ -29,7 +29,7 @@ ClassData::ClassData(const ClassData& Cl) { //
 	IndxMin = Cl.IndxMin;
 	IndxMax = Cl.IndxMax;
 	ModN = Cl.ModN;
-	HdrLen = Cl.HdrLen;
+	numHeaderLines = Cl.numHeaderLines;
 	Position = Cl.Position;
 	DataCnt = Cl.DataCnt;
 	FilterCnt = Cl.FilterCnt;
@@ -77,7 +77,7 @@ ClassData& ClassData::operator=(const ClassData& Cl) { //
 	IndxMin = Cl.IndxMin;
 	IndxMax = Cl.IndxMax;
 	ModN = Cl.ModN;
-	HdrLen = Cl.HdrLen;
+	numHeaderLines = Cl.numHeaderLines;
 	Position = Cl.Position;
 	DataCnt = Cl.DataCnt;
 	FilterCnt = Cl.FilterCnt;
@@ -113,12 +113,13 @@ ClassData& ClassData::operator=(const ClassData& Cl) { //
 	return *this;
 }
 
-bool ClassData::DataReadFile(void) {
+bool ClassData::DataReadFile(void) 
+{
 
-	ifstream DataFile;
-	ifstream::pos_type Here, Here2;
-	string Header, Var, Comment;
-	istringstream instr;
+	std::ifstream DataFile;
+	std::ifstream::pos_type Here, Here2;
+	std::string Header, Var, Comment;
+	std::istringstream instr;
 	bool DecimalTime;
 	FirstFile = !Global::DTstart;
 
@@ -131,10 +132,11 @@ bool ClassData::DataReadFile(void) {
 
 	ModN = 1;
 
-	bitset <128> MyBitSet;
+	std::bitset <128> MyBitSet;
 
 	DataFile.open(DataFileName, ios_base::in);
-	if (!DataFile) {
+	if (!DataFile) 
+	{
 		CRHMException Except("Missing observation " + DataFileName, TExcept::ERR);
 		//Message(Except.Message.c_str(), "Project observation file", mbOK);
 		LogError(Except);
@@ -142,13 +144,15 @@ bool ClassData::DataReadFile(void) {
 		return false;
 	}
 
-	getline(DataFile, Description);
-	HdrLen = 1;
+	std::getline(DataFile, Description);
+	numHeaderLines = 1;
 	myMacro = new MacroClass(this);
-	while (!DataFile.eof()) {
+	while (!DataFile.eof()) 
+	{
 		char c = DataFile.peek();
 
-		if (DataFile.fail()) {
+		if (DataFile.fail()) 
+		{
 			CRHMException Except("Errors in observation file header" + DataFileName, TExcept::ERR);
 			//Message(Except.Message.c_str(), "Project observation file", mbOK);
 			LogError(Except);
@@ -156,21 +160,27 @@ bool ClassData::DataReadFile(void) {
 			return false;
 		}
 
-		++HdrLen;
+		++numHeaderLines;
 
-		if (c == '#') {
-			getline(DataFile, Comment);
+		if (c == '#') 
+		{
+			std::getline(DataFile, Comment);
 			break;
 		}
 
 		if (c == '/')
-			getline(DataFile, Comment); // lose
-		else if (c == '$') {
-			getline(DataFile, Comment);
+		{
+			std::getline(DataFile, Comment); // lose
+		}
+		else if (c == '$') 
+		{
+			std::getline(DataFile, Comment);
 			myMacro->addfilter(Comment);
 		}
-		else { // observation
-			if (FilterCnt != 0) {
+		else // observation
+		{ 
+			if (FilterCnt != 0) 
+			{
 				CRHMException Except("Filters must follow observations in file header " + DataFileName, TExcept::ERR);
 				//Message(Except.Message.c_str(), "Project observation file", mbOK);
 				LogError(Except);
@@ -180,16 +190,19 @@ bool ClassData::DataReadFile(void) {
 			DataFile >> Var; // observation name
 			DataFile >> jj; // number of columns
 
-			getline(DataFile, Comment);
+			std::getline(DataFile, Comment);
 			bool negative = false; // defines integral/instantaneous data
-			if (jj < 0) {
+			if (jj < 0) 
+			{
 				jj = labs(jj);
 				negative = true;
 			}
 
 			ClassVar* ThisVar = declread("obs", Var, jj, DataCnt, this, Comment);
 
-			if (!ThisVar) { // NULL if already defined
+			if (!ThisVar) 
+			{ 
+				// NULL if already defined
 				string S = string("Observation '") + Var + "' defined in earlier observation file";
 				CRHMException Except(S + "Observation variable already defined " + DataFileName, TExcept::ERR);
 				//Message(S.c_str(), Except.Message.c_str(), mbOK);
@@ -200,33 +213,44 @@ bool ClassData::DataReadFile(void) {
 			ThisVar->review_HRU_OBS();
 
 			for (int ii = 0; ii < jj; ++ii)
+			{
 				if (negative)
+				{
 					MyBitSet.set(DataCnt + jj - 1);
-
+				}
+			}
+				
 			DataCnt = DataCnt + jj;
 		}
 	} // while
 
-	if (!Simulation) {
-
+	if (!Simulation) 
+	{
+		
 		do {
 			Here = DataFile.tellg();
 			DataFile >> Dt1;
 			if (Dt1 > 3000.0)
+			{
 				DecimalTime = true;
-			else {
+			}
+			else 
+			{
 				DecimalTime = false;
 				D[0] = (int)Dt1;
 				//DataFile.seekg(Here - 1);  // go back to beginning of data
 				for (int ii = 1; ii < 5; ii++)
+				{
 					DataFile >> D[ii];
-				Position = HdrLen;
+				}
+				Position = numHeaderLines;
 				Dt1 = Encode24(D);
 			}
 
 			Dt1 += TimeShiftFilter;
 
-			if (DataFile.eof()) {
+			if (DataFile.eof()) 
+			{
 				CRHMException Except("Error in observation file header " + DataFileName, TExcept::ERR);
 				//Message(Except.Message.c_str(), "File observations end early!", mbOK);
 				LogError(Except);
@@ -234,7 +258,8 @@ bool ClassData::DataReadFile(void) {
 				return false;
 			}
 
-			if (Global::DTstart != 0.0 && Dt1 >= Global::DTend) {
+			if (Global::DTstart != 0.0 && Dt1 >= Global::DTend) 
+			{
 				CRHMException Except("Error in observation file " + DataFileName, TExcept::ERR);
 				//Message(Except.Message.c_str(), "File observations begin after period!", mbOK);
 				LogError(Except);
@@ -242,19 +267,24 @@ bool ClassData::DataReadFile(void) {
 				return false;
 			}
 
-			getline(DataFile, Var);  // eat up remainder of line
+			std::getline(DataFile, Var);  // eat up remainder of line
 
 			instr.clear(); // check for sufficient data
 			instr.str(Var);
 			double V;
 			long Cols = 0;
-			for (;;) {
+			for (;;) 
+			{
 				instr >> V;
-				if (instr.fail()) break;
+				if (instr.fail())
+				{
+					break;
+				}
 				++Cols;
 			}
 
-			if (Cols < DataCnt) {
+			if (Cols < DataCnt) 
+			{
 				CRHMException Except("Header of file defines more observations than data columns. "
 					"Observation file header Error "+ DataFileName, TExcept::ERR);
 				//Message(Except.Message.c_str(), string("Header of file defines more observations than data columns (" + string(Cols) + ")").c_str(), mbOK);
@@ -262,7 +292,8 @@ bool ClassData::DataReadFile(void) {
 				DataFile.close();
 				return false;
 			}
-			else if (Cols > DataCnt) {
+			else if (Cols > DataCnt) 
+			{
 				CRHMException Except("Header of file defines fewer observations than data columns. "
 					"Observation file header Warning - Column count > Data count " + DataFileName, TExcept::WARNING);
 				//Message(Except.Message.c_str(), string("Header of file defines fewer observations than data columns (" + string(Cols) + ")").c_str(), mbOK);
@@ -271,7 +302,9 @@ bool ClassData::DataReadFile(void) {
 
 			char c = DataFile.peek();
 
-			if (DataFile.eof()) { // one line file
+			if (DataFile.eof()) 
+			{ 
+				// one line file
 				DataFile.clear();
 				CRHMException Except("One line observation file. Observation file warning " + DataFileName, TExcept::ERR);
 				//Message(Except.Message.c_str(), "ONE line observation file!", mbOK);
@@ -285,22 +318,32 @@ bool ClassData::DataReadFile(void) {
 			}
 		} while (Global::DTstart != 0.0 && Global::DTstart > Dt1);
 
-		if (Global::DTstart == 0.0) Global::DTstart = floor(Dt1);
+		if (Global::DTstart == 0.0)
+		{
+			Global::DTstart = floor(Dt1);
+		}
 
-		if (!OneLine) {
+		if (!OneLine) 
+		{
 			if (DecimalTime)
+			{
 				DataFile >> Dt2;
-			else {
+			}
+			else 
+			{
 				for (int ii = 0; ii < 5; ii++)
+				{
 					DataFile >> D[ii];
-				Position = HdrLen + 1;
+				}
+				Position = numHeaderLines + 1;
 				Dt2 = Encode24(D);
 			}
 
 			Dt2 += TimeShiftFilter;
 
 			Interval = Dt2 - Dt1;
-			if (Interval > 1.0) {
+			if (Interval > 1.0) 
+			{
 				Interval = 1.0;
 				SparseFlag = true;
 			}
@@ -310,15 +353,23 @@ bool ClassData::DataReadFile(void) {
 
 			Interval = (double)1.0 / Freq;
 			if (FirstFile)
+			{
 				IndxMin = 0;
-			else {
+			}
+			else 
+			{
 				IndxMin = (long)floor((Dt1 - Global::DTstart) * Freq + Interval / 2.0);
 				if (Interval != 1) // Oct 30
+				{
 					--IndxMin;
+				}
 			}
 			double mid = floor(Dt1) + Interval;
 			double range = 0.00002;
-			if (Dt1 > mid + range || (Dt1 < mid - range && Interval < 1.0)) { // ensure data starts at first interval  //warning resolved by Manishankar
+
+			// ensure data starts at first interval  //warning resolved by Manishankar
+			if (Dt1 > mid + range || (Dt1 < mid - range && Interval < 1.0)) 
+			{ 
 				CRHMException Except("Observation file WARNING " + DataFileName, TExcept::ERR);
 				//Message(Except.Message.c_str(), "First interval must start at midnight + interval! ", mbOK);
 				LogError(Except);
@@ -336,19 +387,27 @@ bool ClassData::DataReadFile(void) {
 
 			bool white = true;
 			long Fix = -3;
-			do {
+			do 
+			{
 				DataFile.seekg(Fix, ios::end);  // find last line in file
 				--Fix;
 				c = DataFile.get();
 				if (white)
+				{
 					white = isspace(c);
+				}
 			} while (c != '\n' || white);
 
 			if (DecimalTime)
+			{
 				DataFile >> Dt2;
-			else {
+			}
+			else 
+			{
 				for (int ii = 0; ii < 5; ii++)  // read last date and time
+				{
 					DataFile >> D[ii];
+				}
 				Position = 99998;
 				Dt2 = Encode24(D);
 			}
@@ -356,22 +415,32 @@ bool ClassData::DataReadFile(void) {
 
 		Dt2 += TimeShiftFilter;
 
-		if (Global::DTend == 0.0) Global::DTend = Dt2;  // first data file
+		if (Global::DTend == 0.0)
+		{
+			Global::DTend = Dt2;  // first data file
+		}
 
-		if (Global::DTend != 0.0 && Global::DTend < Dt2) Dt2 = Global::DTend;
+		if (Global::DTend != 0.0 && Global::DTend < Dt2)
+		{
+			Dt2 = Global::DTend;
+		}
 
 		Lines = (long)ceil((Dt2 - Dt1 + 1.0 / (static_cast<long long>(Freq) * 2)) * static_cast<long long>(Freq));
 
 		if (SparseFlag && Lines < Global::Freq) // handle short interval with lots of sparse points
+		{
 			Lines = Global::Freq;
+		}
 
 		IndxMax = IndxMin + Lines - 1;
 
 		DataFile.seekg(0, ios_base::beg);  // go back to beginning of data
 
-		getline(DataFile, Comment);
+		std::getline(DataFile, Comment);
 		while (Comment[0] != '#') // space by header
-			getline(DataFile, Comment);
+		{
+			std::getline(DataFile, Comment);
+		}
 
 	} // !Simulation
 
@@ -385,7 +454,9 @@ bool ClassData::DataReadFile(void) {
 		Data = new double* [DataCnt + FilterCnt];   // Data [Cnt] [Lines]
 		MaxLines = Lines;
 		if (fmodl(Lines, Freq) > 0) // if missing data in last day - pad to midnight
+		{
 			MaxLines = (Lines / Freq + 1) * Freq;
+		}
 		for (int jj = 0; jj < DataCnt + FilterCnt; jj++)
 		{
 			Data[jj] = new double[MaxLines];
@@ -393,16 +464,13 @@ bool ClassData::DataReadFile(void) {
 		Times = new double[MaxLines];
 	}
 
-	catch (std::bad_alloc) {
+	catch (std::bad_alloc) 
+	{
 		CRHMException Except("Could not allocate for observations file: " +
 			DataFileName, TExcept::TERMINATE);
 		LogError(Except);
 		throw(Except);
 	}
-
-
-
-
 
 	//Mani look at this
 	//trying to initialize data[][].
@@ -444,7 +512,9 @@ bool ClassData::DataReadFile(void) {
 		if (!Simulation)
 		{
 			if (DecimalTime)
+			{
 				DataFile >> Times[Position];
+			}
 			else
 			{
 				for (int ii = 0; ii < 5; ++ii)
@@ -458,13 +528,17 @@ bool ClassData::DataReadFile(void) {
 				break;
 			}
 
-			if (!DecimalTime) Times[Position] = Encode24(D);
+			if (!DecimalTime)
+			{
+				Times[Position] = Encode24(D);
+			}
 
 			Times[Position] += TimeShiftFilter;
 
 			Global::DTnow = Times[Position];
 
-			if (Position != 0 && Times[Position] <= Times[Position - 1]) {
+			if (Position != 0 && Times[Position] <= Times[Position - 1]) 
+			{
 				char S[160];
 				sprintf(S, "Earlier Date at line: %lu+, %5u %3u %3u %3u %3u in observation file ", Position, D[0], D[1], D[2], D[3], D[4]);
 
@@ -475,13 +549,19 @@ bool ClassData::DataReadFile(void) {
 				break;
 			}
 
-			for (int ii = 0; ii < DataCnt; ++ii) {
+			for (int ii = 0; ii < DataCnt; ++ii) 
+			{
 				char c;
-				while (c = DataFile.peek(), c == ' ' || c == '\t') DataFile.get();
+				while (c = DataFile.peek(), c == ' ' || c == '\t')
+				{
+					DataFile.get();
+				}
 
-				if (DataFile.peek() == '\n') { // handles short line
+				// handles short line
+				if (DataFile.peek() == '\n')  
+				{ 
 
-					string S = string("Check line ") + to_string(HdrLen + Position + 1) + string(" for missing columns in ");
+					string S = string("Check line ") + to_string(numHeaderLines + Position + 1) + string(" for missing columns in ");
 					CRHMException Except(S.c_str() + DataFileName, TExcept::ERR);
 					if (!SparseFlag) 
 					{
@@ -511,9 +591,10 @@ bool ClassData::DataReadFile(void) {
 					DataFile >> Data[ii][Position];
 				}
 				
-
-				if (DataFile.fail()) { // handles faulty data
-					string S = string("Faulty data at line ") + to_string(HdrLen + Position + 1) + string(" in observation file ");
+				// handles faulty data
+				if (DataFile.fail()) 
+				{ 
+					string S = string("Faulty data at line ") + to_string(numHeaderLines + Position + 1) + string(" in observation file ");
 					CRHMException Except(S.c_str() + DataFileName, TExcept::ERR);
 					//Application->MessageBox(Except.Message.c_str(),
 					//"Project observation file", MB_OK);
@@ -525,10 +606,15 @@ bool ClassData::DataReadFile(void) {
 			} // for data loop
 
 
-			if (LineError) break;
+			if (LineError)
+			{
+				break;
+			}
 
 			if (DataFile.peek() != '\n') // gobbles up rest of line
+			{
 				DataFile.ignore(256, '\n');
+			}
 
 			//manishankar. The condition "Times[Position] >= Times[Position - 1] + DeltaH" was being true and thus the SparseFlag was being set.
 			//However, I checked the data and saw that the date entries are not really sparse although this condition was being true.
@@ -565,7 +651,8 @@ bool ClassData::DataReadFile(void) {
 	  }*/
 
 
-	if (!Simulation && Dt2 > Times[Position - 1] + Interval / 2.0 && !SparseFlag) {
+	if (!Simulation && Dt2 > Times[Position - 1] + Interval / 2.0 && !SparseFlag) 
+	{
 		string S = string("Interval frequency increases ") + string(" in observation file ");
 		CRHMException Except(S + DataFileName, TExcept::ERR);
 		//Message(Except.Message.c_str(), "Project observation file", mbOK);
@@ -573,44 +660,61 @@ bool ClassData::DataReadFile(void) {
 		SparseFlag = true;
 	}
 
-	if (Freq > 1 && fmodl(Lines, Freq) > 0 && !SparseFlag) {
+	if (Freq > 1 && fmodl(Lines, Freq) > 0 && !SparseFlag) 
+	{
 
 		CRHMException Except("Last day is incomplete and is padded with 0.0 " + DataFileName, TExcept::WARNING);
 		LogError(Except);
 
 		IndxMax = IndxMin + MaxLines - 1;
 
-		for (long ll = Position; ll <= MaxLines - 1; ++ll) {
+		for (long ll = Position; ll <= MaxLines - 1; ++ll) 
+		{
 			Times[ll] = Times[ll - 1] + 1.0 / Freq;
 			Dt2 = Times[ll];
 
 			for (long dd = 0; dd < DataCnt; ++dd)
+			{
 				Data[dd][ll] = 0.0;
+			}
+
 		}
 	}
 
 
-	if (LineError) { // clean up and flag error
+	if (LineError) 
+	{ 
+		// clean up and flag error
 		for (int ii = 0; ii < DataCnt + FilterCnt; ii++)
-			if (Data[ii]) { // may already have been deleted if not used by the filter
+		{
+			if (Data[ii]) 
+			{ 
+				// may already have been deleted if not used by the filter
 				delete[] Data[ii];
 				Data[ii] = NULL;
 			}
+		}
+			
 		delete[] Data;
 		Data = NULL;
 		delete[] Times;
 		Times = NULL;
 	}
-	else {
+	else 
+	{
 		if (Lines < Freq)  // Handle less than one day
+		{
 			SparseFlag = true;
+		}
 
 		if (!SparseFlag)
 		{
 			delete[] Times;
 			Times = NULL;
 
-			if ((ForceInterval == 96 && Freq == 144) || (ForceInterval == 144 && Freq == 96)) { // cannot convert 10 minute to 15 minute or vice versa  //warning resolved by Manishankar.
+			if ((ForceInterval == 96 && Freq == 144) || (ForceInterval == 144 && Freq == 96)) 
+			{	
+				// cannot convert 10 minute to 15 minute or vice versa  //warning resolved by Manishankar.
 				string S = string("cannot convert 10 minute interval to 15 minute or vice versa") + string(" in observation file ");
 				CRHMException Except(S + DataFileName, TExcept::ERR);
 				//Message(Except.Message.c_str(), "Project observation file", mbOK);
@@ -618,12 +722,16 @@ bool ClassData::DataReadFile(void) {
 				ForceInterval = 0;
 			}
 
-			if (ForceInterval != Freq && ForceInterval) {
+			if (ForceInterval != Freq && ForceInterval) 
+			{
 				double Result = 0.0;
 
-				for (int jj = 0; jj < DataCnt + FilterCnt; ++jj) { // convert all observations
-
-					if (!Data[jj]) {
+				// convert all observations
+				for (int jj = 0; jj < DataCnt + FilterCnt; ++jj) 
+				{ 
+					
+					if (!Data[jj]) 
+					{
 						continue;
 					}
 
@@ -631,22 +739,30 @@ bool ClassData::DataReadFile(void) {
 					long NCnt;
 					double Delta;
 
-					if (ForceInterval > Freq) { // expand data
+					if (ForceInterval > Freq) 
+					{ 
+						// expand data
 						NCnt = ForceInterval / Freq;
 						double* NewData = new double[Lines * NCnt];
-						if (!MyBitSet[jj]) {
-							for (long ii = 0; ii < Lines * NCnt; ++ii) {
+						if (!MyBitSet[jj]) 
+						{
+							for (long ii = 0; ii < Lines * NCnt; ++ii) 
+							{
 								long kk = ii % NCnt;
-								if (kk == 0) {
-									if (ii == 0) {
+								if (kk == 0) 
+								{
+									if (ii == 0) 
+									{
 										Result = Data[jj][ii / NCnt] * Divisor;
 										Delta = 0.0;
 									}
-									else if (ii + NCnt >= Lines * NCnt) {
+									else if (ii + NCnt >= Lines * NCnt) 
+									{
 										Result = Data[jj][ii / NCnt] * Divisor;
 										Delta = 0.0;
 									}
-									else {
+									else 
+									{
 										Result = Data[jj][ii / NCnt - 1] * Divisor;
 										Delta = (Data[jj][ii / NCnt] - Data[jj][ii / NCnt - 1]) * Divisor;
 									}
@@ -654,12 +770,16 @@ bool ClassData::DataReadFile(void) {
 								NewData[ii] = Result + Delta * (static_cast<long long>(ii % NCnt) + 1) / NCnt;
 							}
 						}
-						else {
+						else 
+						{
 							Divisor = (double)1.0 / NCnt;
-							for (long ii = 0; ii < Lines * NCnt; ++ii) {
+							for (long ii = 0; ii < Lines * NCnt; ++ii) 
+							{
 								long kk = ii % NCnt;
 								if (kk == 0)
+								{
 									Result = Data[jj][ii / NCnt] * Divisor;
+								}
 								NewData[ii] = Result;
 							}
 						}
@@ -667,7 +787,8 @@ bool ClassData::DataReadFile(void) {
 						delete[] Data[jj];
 						Data[jj] = NewData;
 
-						if (jj + 1 == DataCnt + FilterCnt) {
+						if (jj + 1 == DataCnt + FilterCnt) 
+						{
 							Lines = Lines * NCnt;
 							Freq = Freq * NCnt;
 							Interval = Interval / NCnt;
@@ -675,16 +796,22 @@ bool ClassData::DataReadFile(void) {
 							IndxMax = IndxMin + Lines - 1;
 						}
 					} // expand data
-					else { // shrink data
+					else 
+					{ 
+						// shrink data
 						long NCnt = Freq / ForceInterval;
 						double* NewData = new double[Lines / NCnt];
 						if (!MyBitSet[jj])
+						{
 							Divisor = (double)NCnt;
+						}
 						Result = 0.0;
-						for (long ii = 0; ii < Lines; ++ii) {
+						for (long ii = 0; ii < Lines; ++ii) 
+						{
 							Result += Data[jj][ii];
 							long kk = ii % NCnt;
-							if (kk == NCnt - 1) {
+							if (kk == NCnt - 1) 
+							{
 								NewData[ii / NCnt] = Result / Divisor;
 								Result = 0.0;
 							}
@@ -694,7 +821,9 @@ bool ClassData::DataReadFile(void) {
 					} // shrink data
 				} // convert all observations
 
-				if (ForceInterval < Freq) { // shrink data
+				if (ForceInterval < Freq) 
+				{ 
+					// shrink data
 					long NCnt = Freq / ForceInterval;
 					Lines = Lines / NCnt;
 					Freq = Freq / NCnt;
@@ -705,9 +834,8 @@ bool ClassData::DataReadFile(void) {
 			}
 		}
 		else
-		{ //allocate space required
-
-
+		{ 
+			//allocate space required
 			if (SparseFlag && Simulation)
 			{
 				//If SparseFlag and Simulation are both true then something unintended has happened.
@@ -716,7 +844,8 @@ bool ClassData::DataReadFile(void) {
 				LogError(Except);
 				throw(Except);
 			}
-			else {
+			else 
+			{
 				double* Temp = new double[Lines];
 
 				for (long ii = 0; ii < Lines; ++ii)
@@ -772,7 +901,7 @@ ClassData::~ClassData() {
 		delete[] Data;
 		Data = NULL;
 	}
-	if (HdrLen == 0)
+	if (numHeaderLines == 0)
 		return; // not actual observation but Obs function
 
 	if (myMacro) {
