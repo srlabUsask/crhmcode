@@ -8,10 +8,18 @@ Classea::Classea(ClassData* MyObs, string ToVar, string args, string argtypes) :
 	readargs();
 }
 
-void Classea::doFunc(long Obs, long Line) {
+void Classea::doFunc(long Obs, long Line) 
+{
 
 	if (Line == MyObs->IndxMax) // wait till last
+	{
 		for (int Obs = 0; Obs < ObsCnt; ++Obs)
+		{
 			for (long Line = MyObs->IndxMin; Line <= MyObs->IndxMax; ++Line)
+			{
 				Data[Vs - 1][Obs][Line] = (double)(estar(Data[0][Obs][Line]) * Data[1][Obs][Line] / 100.0);
+			}
+		}
+	}
+			
 }
