@@ -673,7 +673,7 @@ bool ClassData::DataReadFile(void)
 			Times[ll] = Times[ll - 1] + 1.0 / Freq;
 			Dt2 = Times[ll];
 
-			for (long dd = 0; dd < DataCnt; ++dd)
+			for (long dd = 0; dd < DataCnt + FilterCnt; ++dd)
 			{
 				Data[dd][ll] = 0.0;
 			}
