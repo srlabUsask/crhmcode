@@ -3518,7 +3518,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		ProjectList->push_back("Final_State");
 		ProjectList->push_back("######");
-		if (SaveStateFlag) {
+		if (SaveStateFlag) 
+		{
 			ProjectList->push_back(SaveStateFileName);
 		}
 		ProjectList->push_back("######");
