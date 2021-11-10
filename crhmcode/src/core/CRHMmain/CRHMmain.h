@@ -140,7 +140,7 @@ public:
 
 	~CRHMmain();
 
-	void DoPrjOpen(string OpenNamePrj, string ProjectDirectory);
+	bool DoPrjOpen(string OpenNamePrj, string ProjectDirectory);
 
 	void FormCreate(void);
 

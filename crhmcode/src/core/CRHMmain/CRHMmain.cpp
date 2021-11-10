@@ -274,7 +274,7 @@ void CRHMmain::BldModelClick()
 					  //dirty = true;
 }
 
-void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) 
+bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) 
 {
 	this->finishedRun = false;
 	//saving the project file path. added by Manishankar.
@@ -291,9 +291,10 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 	std::string SS;
 
 	DataFile.open(OpenNamePrj.c_str());
-	if (!DataFile) {
+	if (!DataFile) 
+	{
 		Common::Message("cannot open file", "File Error");
-		return;
+		return false;
 	}
 
 	ProjectDirectory = GetCurrentDir();
@@ -343,7 +344,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 						Global::MapAKA.insert(Item);
 					}
 
-					if (DataFile.eof()) return; // final exit
+					if (DataFile.eof()) return true; // final exit
 
 				}
 			}
@@ -384,8 +385,16 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 
 						//				      }   // was return
 					}
-					else {
+					else 
+					{
+
+						
 						Common::Message(SS.c_str(), "Cannot find observation file. Exiting.");
+						CRHMException Except("Cannot find observation file.", TExcept::ERR);
+						LogError(Except);
+#ifdef VS_GUI
+						return false;
+#endif // VS_GUI
 						exit(1);
 					}
 					getline(DataFile, S);
@@ -538,7 +547,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					if (module[1] == '#') break;
 					DataFile >> param;
 
-					if (DataFile.eof()) return; // final exit
+					if (DataFile.eof()) return true; // final exit
 
 					DataFile.ignore((numeric_limits<streamsize>::max)(), '\n'); // need for character input, why?
 
@@ -716,7 +725,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					DataFile >> module;
 					if (module[1] == '#') break;
 					DataFile >> name;
-					if (DataFile.eof()) return; // final exit
+					if (DataFile.eof()) return true; // final exit
 
 					S = string(module) + ' ' + string(name);
 					long Index;
@@ -776,7 +785,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					DataFile >> module;
 					if (module[1] == '#') break;
 					DataFile >> name;
-					if (DataFile.eof()) return; // final exit
+					if (DataFile.eof()) return true; // final exit
 
 					string Kind;
 					long Index;
@@ -898,10 +907,12 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 	catch (CRHMException Except) {
 		Common::Message(Except.Message.c_str(), "Loading project Error");
 		DataFile.close();
-		return;
+		return false;
 	}
 
 	DataFile.close();
+
+	return true;
 }
 
 
