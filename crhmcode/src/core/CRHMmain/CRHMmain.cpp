@@ -37,7 +37,7 @@ using namespace CRHM;
 //extern double xLimit;
 //extern long lLimit;
 
-bool ReportAll = true;
+
 
 
 
@@ -87,6 +87,17 @@ bool CRHMmain::getFinishedRun()
 {
 	return this->finishedRun;
 }
+
+bool CRHMmain::getReportAll()
+{
+	return this->ReportAll;
+}
+
+void CRHMmain::setReportAll(bool set)
+{
+	this->ReportAll = set;
+}
+
 
 CRHMmain* CRHMmain::getInstance()
 {
@@ -880,11 +891,13 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 				else
 					SaveStateFileName = "";
 				}
-			else if (S == "Log_Last") {
-				ReportAll = false;
+			else if (S == "Log_Last") 
+			{
+				this->setReportAll(false);
 			}
-			else if (S == "Log_All") {
-				ReportAll = true;
+			else if (S == "Log_All") 
+			{
+				this->setReportAll(true);
 			}
 			else if (S == "Auto_Run") 
 			{
@@ -2357,7 +2370,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			* If ReportAll is set Calculate the line in output to be
 			* produced by this timestep and send it to the buffer.
 			*/
-			if (ReportAll)
+			if (this->ReportAll)
 			{
 				this->reportStream->SendTimeStepToReport(this);
 			}
@@ -2365,7 +2378,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			/*
 			* If ReportAll is not set output the last timestep
 			*/
-			if (!ReportAll && Global::DTindx == enddate - 1)
+			if (!this->ReportAll && Global::DTindx == enddate - 1)
 			{
 				this->reportStream->SendTimeStepToReport(this);
 			}
@@ -3773,6 +3786,17 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	if (this->getAutoExit()) 
 	{
 		ProjectList->push_back("Auto_Exit");
+		ProjectList->push_back("######");
+	}
+
+	if (this->getReportAll())
+	{
+		ProjectList->push_back("Log_All");
+		ProjectList->push_back("######");
+	}
+	else
+	{
+		ProjectList->push_back("Log_Last");
 		ProjectList->push_back("######");
 	}
 
