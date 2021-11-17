@@ -2378,7 +2378,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			/*
 			* If ReportAll is not set output the last timestep
 			*/
-			if (!this->ReportAll && Global::DTindx == enddate - 1)
+			if (!this->ReportAll && Global::DTindx == Global::DTmax - 1)
 			{
 				this->reportStream->SendTimeStepToReport(this);
 			}
