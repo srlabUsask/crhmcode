@@ -177,11 +177,11 @@ string static FloatToStrF(double X, TFloatFormat Format, int Prec, int Digits) {
 	ostringstream temp;
 	if (Format == TFloatFormat::ffFixed) {
 		temp.precision(Prec);
-		temp << X;
+		temp << std::uppercase << X << std::nouppercase;
 	}
 	else { // assume ffGeneral
 		temp.precision(Prec);
-		temp << X;
+		temp << std::uppercase << X << std::nouppercase;
 	}
 	return temp.str();
 }
@@ -190,11 +190,11 @@ string static FloatToStrF(long L, TFloatFormat Format, int Prec, int Digits) {
 	ostringstream temp;
 	if (Format == TFloatFormat::ffFixed) {
 		temp.precision(Prec);
-		temp << L;
+		temp << std::uppercase << L << std::nouppercase;
 	}
 	else { // assume ffGeneral
 		temp.precision(Prec);
-		temp << L;
+		temp << std::uppercase << L << std::nouppercase;
 	}
 	return temp.str();
 }
