@@ -1378,15 +1378,23 @@ void CRHMmain::MacroLoad(void)
 
 			string S, SS;
 
-			while (S = Common::trim(Global::MacroModulesList->at(Macro)), SS = S.substr(0, 3),
+			S = Global::MacroModulesList->at(Macro).c_str();
+			S = Common::trim(S); 
+			SS = S.substr(0, 3);
+
+			while (
 				!(SS == "end" &&
-				(S.length() == 3 || S.find_first_of(" /") != string::npos)) &&
+					(S.length() == 3 || S.find_first_of(" /") != string::npos)) &&
 				Global::MacroModulesList->size() > Macro
 				)
+			{
+				Macro++;
+				S = Global::MacroModulesList->at(Macro).c_str();
+				S = Common::trim(S);
+				SS = S.substr(0, 3);
+			}
 
-				++Macro;
-
-			++Macro;
+			Macro++;
 		}
 
 		AdminMacro.LoadCRHM("Macro");
