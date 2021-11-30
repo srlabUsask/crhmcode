@@ -70,14 +70,14 @@ void HierarchyDlg::Hierarchy1Click()
 
                 std::list<std::pair<std::string, ClassModule*>> * GrpModuleList = new std::list<std::pair<std::string, ClassModule*>>();
                 std::list<std::pair<std::string, ClassModule*>> * TempModuleList = new std::list<std::pair<std::string, ClassModule*>>();
-                long * Oldvariation = new long[thisMacro->GrpStringList->size()];
+                unsigned short * Oldvariation = new unsigned short[thisMacro->GrpStringList->size()];
 
                 for (size_t ii = 0; ii < thisMacro->GrpStringList->size(); ii++) 
                 {
                     GrpModuleList->push_back(thisMacro->GrpStringList->at(ii));
                 }
 
-                int loopCount = 0;
+                size_t loopCount = 0;
                 for (
                     std::list<std::pair<std::string, ClassModule*>>::iterator ii = GrpModuleList->begin();
                     ii != GrpModuleList->end();
@@ -87,7 +87,7 @@ void HierarchyDlg::Hierarchy1Click()
                     int Pos = ii->first.find("#");
                     if (Pos) 
                     {
-                        Variation = pow(2, ii->first[Pos + 1] - char('1'));
+                        Variation = (long) pow(2, ii->first[Pos + 1] - char('1'));
                         ii->first = ii->first.substr(1, Pos - 1);
                     }
                     else
@@ -101,8 +101,11 @@ void HierarchyDlg::Hierarchy1Click()
                     { 
                         ii->second = jj->second;
                         ClassModule* thisModule = ii->second;
-                        Oldvariation[loopCount] = thisModule->variation; // save original variation
-                        thisModule->variation = Variation;
+                        if (loopCount <= GrpModuleList->size())
+                        {
+                            Oldvariation[loopCount] = thisModule->variation; // save original variation
+                        }
+                        thisModule->variation = (unsigned short) Variation;
                     }
                     loopCount++;
                 }
@@ -140,7 +143,7 @@ void HierarchyDlg::Hierarchy1Click()
                     )
                 {
                     ClassModule* thisModule = ii->second;
-                    thisModule->variation = Oldvariation[loopCount2]; // restore original variation
+                    thisModule->variation = (unsigned short) Oldvariation[loopCount2]; // restore original variation
                     loopCount2++;
                 }
 
@@ -180,14 +183,14 @@ void HierarchyDlg::HierarchyList()
 {
     std::string S, SS, S1, S2, Entry;
     bool Self;
-    long offset, Act_ii, List_start;
+    long offset, Act_ii;
     std::pair<std::string, ClassModule*> * Indx = NULL;
     offset = hierarchyList.GetCount();
 
     pair<Mapstr::iterator, Mapstr::iterator> range;
     Mapstr::iterator itMap;
 
-    int Twos;
+    //int Twos;
     
 
     for (
@@ -209,7 +212,7 @@ void HierarchyDlg::HierarchyList()
         if (Variation) 
         {
             AA = "#0";
-            AA[1] += log(thisModule->variation) / log(2) + 1;
+            AA[1] += (char) (log(thisModule->variation) / log(2) + 1);
         }
 
 
@@ -344,13 +347,13 @@ void HierarchyDlg::HierarchyList()
         int i = 0;
         //int Twos = (int)ListBox1->Items->Objects[ii + offset];
         int Twos = 0;
-        int N = powl(2, ii);
+        int N = (int) powl(2, ii);
         if (Twos > N)
         {
             OK = false;
         }
 
-        char P[80];
+        //char P[80];
         //strcpy(P, ListBox1->Items->Strings[ii + offset].c_str());
 
         //TVarRec args[3] = { N, P, Twos };
@@ -410,7 +413,7 @@ void HierarchyDlg::Expand_Grp_to_OurModuleList(std::string moduleName, ClassModu
         int Pos = grpModuleListIt->first.find_first_of("#");
         if (Pos) 
         {
-            Variation = pow(2, grpModuleListIt->first[Pos + 1] - char('1'));
+            Variation = (long) pow(2, grpModuleListIt->first[Pos + 1] - char('1'));
             grpModuleListIt->first = grpModuleListIt->first.substr(1, Pos - 1);
         }
         else
@@ -425,7 +428,7 @@ void HierarchyDlg::Expand_Grp_to_OurModuleList(std::string moduleName, ClassModu
             grpModuleListIt->second = jj->second;
             ClassModule* thisModule = (ClassModule*)grpModuleListIt->second;
             Oldvariation[ii] = thisModule->variation; // save original variation
-            thisModule->variation = Variation;
+            thisModule->variation = (unsigned short) Variation;
         }
         ii++;
     }
@@ -460,7 +463,7 @@ void HierarchyDlg::Expand_Grp_to_OurModuleList(std::string moduleName, ClassModu
         )
     {
         ClassModule* thisModule = grpModListIt->second;
-        thisModule->variation = Oldvariation[ii]; // restore original variation
+        thisModule->variation = (unsigned short) Oldvariation[ii]; // restore original variation
     }
 
     Global::OurModulesList->assign(TempModuleList->begin(), TempModuleList->end());
@@ -542,7 +545,7 @@ std::pair<std::string, ClassModule*> * HierarchyDlg::findvar(std::string who, st
         }
 
         Pos = itMap->second.first.find("@");
-        if (Pos = std::string::npos) // remove @... from possible source module
+        if (Pos == std::string::npos) // remove @... from possible source module
         { 
             S2 = itMap->second.first.substr(1, Pos - 1);
             if (S1 == S2) 
