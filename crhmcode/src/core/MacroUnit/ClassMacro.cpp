@@ -622,18 +622,20 @@ ClassMacro::ClassMacro(string Name, int ThisBegin, string Version, string Desc) 
 	//Common::Message ("test 11", Global::MacroModulesList->Strings[ThisEnd]);	
 
 
-	while (S = Common::trim(Global::MacroModulesList->at(ThisEnd)), SS = S.substr(0, 3),
+	S = Global::MacroModulesList->at(ThisEnd).c_str();
+	S = Common::trim(S);
+	SS = S.substr(0, 3);
+
+	while (
 		!(SS == "end" &&
 			(S.length() == 3 || S.find_first_of(" /") != string::npos)) &&
 		Global::MacroModulesList->size() > ThisEnd
 		)
 	{
-		//Common::Message ("test 11-2", SS);
-		//Common::Message ("test 11-2", S);
-		//Common::Message ("test 11-2", std::to_string(Global::MacroModulesList->Count));
-		//Common::Message ("test 11-2", std::to_string(ThisEnd));
-
-		++ThisEnd;
+		ThisEnd++;
+		S = Global::MacroModulesList->at(ThisEnd).c_str();
+		S = Common::trim(S);
+		SS = S.substr(0, 3);
 	}
 
 	//Common::Message ("test", "test 12");

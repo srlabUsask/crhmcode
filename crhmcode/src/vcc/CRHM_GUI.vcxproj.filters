@@ -1485,6 +1485,9 @@
     <ClInclude Include="RightClickListBox.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HierarchyDlg.h">
+      <Filter>Resource Files\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2115,6 +2118,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RightClickListBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchyDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
