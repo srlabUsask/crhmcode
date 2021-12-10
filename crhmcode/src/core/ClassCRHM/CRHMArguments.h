@@ -1,11 +1,15 @@
 #ifndef CRHM_ARGUMENTS
 #define CRHM_ARGUMENTS
 
-#include "../core/Common/Common.h"
+#include <string.h>
+#include <stdio.h>
+
+#include "../CRHMmain/CRHMmain.h"
+#include "../Common/Common.h"
 
 enum class OUTPUT_FORMAT {STD, OBS};
 
-const string USE_MESSAGE = "\ncrhm [options] PROJECT_FILE\n"
+const std::string USE_MESSAGE = "\ncrhm [options] PROJECT_FILE\n"
 	"\n"
 	"\t-h - Display this message.\n"
 	"\n"
@@ -33,8 +37,9 @@ const string USE_MESSAGE = "\ncrhm [options] PROJECT_FILE\n"
 	"\n"
 	;
 
-struct crhm_arguments
+class CRHMArguments
 {
+private:
 	std::string project_name;
 	std::string output_name;
 	std::string obs_file_directory;
@@ -44,6 +49,26 @@ struct crhm_arguments
 	char delimiter{'\t'};
 	bool show_progress;
 	int update_progress;
+
+	void read_option(char** argv, int* pos);
+	void read_argument(char* argument);
+	std::string unrecongnized_option(char* option);
+public:
+	//Standard Constructor 
+	CRHMArguments(); 
+
+	void readCommandLine(int argc, char * argv[]);
+	void validate();
+
+
+	std::string get_project_name();
+	std::string get_output_name();
+	std::string get_obs_file_directory();
+	TIMEFORMAT get_time_format();
+	OUTPUT_FORMAT get_output_format();
+	char get_delimiter();
+	bool get_show_progress();
+	int get_update_progress();
 };
 
 #endif // !CRHM_ARGUMENTS

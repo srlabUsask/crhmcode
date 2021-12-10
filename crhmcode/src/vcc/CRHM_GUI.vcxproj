@@ -195,6 +195,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\core\ClassCRHM\CRHMArguments.h" />
     <ClInclude Include="..\core\Common\CRHMException.h" />
     <ClInclude Include="..\core\Common\VandP.h" />
     <ClInclude Include="..\core\CRHMmain\ReportStream.h" />
@@ -694,6 +695,7 @@
     <ClCompile Include="..\core\ClassCRHM\ClassPar.cpp" />
     <ClCompile Include="..\core\ClassCRHM\ClassVar.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Convert.cpp" />
+    <ClCompile Include="..\core\ClassCRHM\CRHMArguments.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classabs.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classadd.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classaddv.cpp" />

@@ -110,7 +110,7 @@ CRHMmain* CRHMmain::getInstance()
 }
 
 
-CRHMmain::CRHMmain(struct crhm_arguments * arguments)
+CRHMmain::CRHMmain(CRHMArguments * arguments)
 {
 	if (arguments == NULL)
 	{
@@ -131,13 +131,13 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 	else
 	{
 		//Recive the arguments from the passed struct.
-		Global::TimeFormat = arguments->time_format;
-		this->OutputFormat = arguments->output_format;
-		this->OutputName = arguments->output_name;
-		this->Delimiter = arguments->delimiter;
-		this->ObsFileDirectory = arguments->obs_file_directory;
-		this->ShowProgress = arguments->show_progress;
-		this->UpdateProgress = arguments->update_progress;
+		Global::TimeFormat = arguments->get_time_format();
+		this->OutputFormat = arguments->get_output_format();
+		this->OutputName = arguments->get_output_name();
+		this->Delimiter = arguments->get_delimiter();
+		this->ObsFileDirectory = arguments->get_obs_file_directory();
+		this->ShowProgress = arguments->get_show_progress();
+		this->UpdateProgress = arguments->get_update_progress();
 
 	}
 
