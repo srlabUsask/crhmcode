@@ -28,8 +28,8 @@
 #include "TSeries.h"
 #include "Classinfo.h"
 #include "CRHMLogger.h"
-#include "../../gcc/CRHMArguments.h"
 #include "ReportStream.h"
+#include "../ClassCRHM/CRHMArguments.h"
 
 //class ObsFileInfo {
 //private:
@@ -44,7 +44,10 @@
 //	void setFilePath(string filepath);
 //};
 
+//Forward Declarations
 class ReportStream;
+class CRHMArguments;
+enum class OUTPUT_FORMAT;
 
 class CRHMmain
 {
@@ -70,7 +73,7 @@ public:
 	ReportStream * reportStream{NULL};
 
 	static CRHMmain *  getInstance();
-	CRHMmain(struct crhm_arguments * );
+	CRHMmain(CRHMArguments * arguments);
 
 	//virtual void DoPrjOpen(string OpenNamePrj, string ProjectDirectory);
 	string Sstrings[12] = { "", "_WtoMJ", "_MJtoW", "_Avg", "_Min", "_Max", "_Sum", "_Pos", "_Tot", "_Tot/Freq", "_First", "_Last" };

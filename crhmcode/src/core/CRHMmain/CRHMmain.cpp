@@ -37,7 +37,7 @@ using namespace CRHM;
 //extern double xLimit;
 //extern long lLimit;
 
-bool ReportAll = true;
+
 
 
 
@@ -88,6 +88,17 @@ bool CRHMmain::getFinishedRun()
 	return this->finishedRun;
 }
 
+bool CRHMmain::getReportAll()
+{
+	return this->ReportAll;
+}
+
+void CRHMmain::setReportAll(bool set)
+{
+	this->ReportAll = set;
+}
+
+
 CRHMmain* CRHMmain::getInstance()
 {
 	if (instance == 0)
@@ -99,7 +110,7 @@ CRHMmain* CRHMmain::getInstance()
 }
 
 
-CRHMmain::CRHMmain(struct crhm_arguments * arguments)
+CRHMmain::CRHMmain(CRHMArguments * arguments)
 {
 	if (arguments == NULL)
 	{
@@ -120,13 +131,13 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 	else
 	{
 		//Recive the arguments from the passed struct.
-		Global::TimeFormat = arguments->time_format;
-		this->OutputFormat = arguments->output_format;
-		this->OutputName = arguments->output_name;
-		this->Delimiter = arguments->delimiter;
-		this->ObsFileDirectory = arguments->obs_file_directory;
-		this->ShowProgress = arguments->show_progress;
-		this->UpdateProgress = arguments->update_progress;
+		Global::TimeFormat = arguments->get_time_format();
+		this->OutputFormat = arguments->get_output_format();
+		this->OutputName = arguments->get_output_name();
+		this->Delimiter = arguments->get_delimiter();
+		this->ObsFileDirectory = arguments->get_obs_file_directory();
+		this->ShowProgress = arguments->get_show_progress();
+		this->UpdateProgress = arguments->get_update_progress();
 
 	}
 
@@ -880,11 +891,13 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 				else
 					SaveStateFileName = "";
 				}
-			else if (S == "Log_Last") {
-				ReportAll = false;
+			else if (S == "Log_Last") 
+			{
+				this->setReportAll(false);
 			}
-			else if (S == "Log_All") {
-				ReportAll = true;
+			else if (S == "Log_All") 
+			{
+				this->setReportAll(true);
 			}
 			else if (S == "Auto_Run") 
 			{
@@ -1365,15 +1378,23 @@ void CRHMmain::MacroLoad(void)
 
 			string S, SS;
 
-			while (S = Common::trim(Global::MacroModulesList->at(Macro)), SS = S.substr(0, 3),
+			S = Global::MacroModulesList->at(Macro).c_str();
+			S = Common::trim(S); 
+			SS = S.substr(0, 3);
+
+			while (
 				!(SS == "end" &&
-				(S.length() == 3 || S.find_first_of(" /") != string::npos)) &&
+					(S.length() == 3 || S.find_first_of(" /") != string::npos)) &&
 				Global::MacroModulesList->size() > Macro
 				)
+			{
+				Macro++;
+				S = Global::MacroModulesList->at(Macro).c_str();
+				S = Common::trim(S);
+				SS = S.substr(0, 3);
+			}
 
-				++Macro;
-
-			++Macro;
+			Macro++;
 		}
 
 		AdminMacro.LoadCRHM("Macro");
@@ -2357,7 +2378,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			* If ReportAll is set Calculate the line in output to be
 			* produced by this timestep and send it to the buffer.
 			*/
-			if (ReportAll)
+			if (this->ReportAll)
 			{
 				this->reportStream->SendTimeStepToReport(this);
 			}
@@ -2365,7 +2386,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			/*
 			* If ReportAll is not set output the last timestep
 			*/
-			if (!ReportAll && Global::DTindx == enddate - 1)
+			if (!this->ReportAll && Global::DTindx == Global::DTmax - 1)
 			{
 				this->reportStream->SendTimeStepToReport(this);
 			}
@@ -3773,6 +3794,17 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	if (this->getAutoExit()) 
 	{
 		ProjectList->push_back("Auto_Exit");
+		ProjectList->push_back("######");
+	}
+
+	if (this->getReportAll())
+	{
+		ProjectList->push_back("Log_All");
+		ProjectList->push_back("######");
+	}
+	else
+	{
+		ProjectList->push_back("Log_Last");
 		ProjectList->push_back("######");
 	}
 

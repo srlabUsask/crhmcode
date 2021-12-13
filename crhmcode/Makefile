@@ -18,7 +18,7 @@ CFLAGS = -I. -I$(BOOST) -I$(SDIR)/core -I$(SDIR)/macro \
 CORE_OBJS = GlobalDll.o StandardConverterUtility.o
 
 ClassCRHM_OBJS = ClassCRHM.o ClassData.o Classfilter.o ClassModel.o \
-ClassPar.o ClassVar.o Convert.o MacroClass.o Tresult.o
+ClassPar.o ClassVar.o Convert.o MacroClass.o Tresult.o CRHMArguments.o
 
 Filter_OBJS = Classabs.o Classadd.o ClassaddV.o Classconst.o Classcos.o \
 ClassCtoK.o Classdiv.o ClassdivV.o Classea.o Classexp.o Classexpv.o \
@@ -91,7 +91,7 @@ OBJ = $(patsubst %,$(ODIR)/%,$(ALL_OBS))
 crhm: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(DFLAGS) $(LIBS)
 
-$(ODIR)/main.o: $(SDIR)/gcc/main.cpp $(SDIR)/gcc/CRHMArguments.h | $(ODIR)
+$(ODIR)/main.o: $(SDIR)/gcc/main.cpp | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
 $(ODIR)/%.o: $(SDIR)/core/%.cpp $(SDIR)/core/%.h | $(ODIR)
