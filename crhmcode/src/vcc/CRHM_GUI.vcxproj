@@ -397,6 +397,7 @@
     <ClInclude Include="CHighFunction.h" />
     <ClInclude Include="CHighLowLineSeries.h" />
     <ClInclude Include="CHighLowSeries.h" />
+    <ClInclude Include="ChiralClickButton.h" />
     <ClInclude Include="CHistogramFunction.h" />
     <ClInclude Include="CHistogramSeries.h" />
     <ClInclude Include="CHorizAreaSeries.h" />
@@ -881,6 +882,7 @@
     <ClCompile Include="..\modules\waterquality\Class_lapse_rate_Monthly.cpp" />
     <ClCompile Include="..\modules\waterquality\WQ_CRHM.cpp" />
     <ClCompile Include="..\modules\waterquality\WQ_Soil_NPCcycling.cpp" />
+    <ClCompile Include="ChiralClickButton.cpp" />
     <ClCompile Include="gui\CConstruct.cpp" />
     <ClCompile Include="gui\CExport.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
