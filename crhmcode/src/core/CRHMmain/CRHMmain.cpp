@@ -3345,8 +3345,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->push_back("Dimensions:");
 		ProjectList->push_back("######");
 		ProjectList->push_back(string("nhru " + to_string(Global::maxhru)));
-		ProjectList->push_back(string("nlay " + to_string(Global::nlay)));
-		ProjectList->push_back(string("nobs " + to_string(Global::nobs)));
+		ProjectList->push_back(string("nlay " + to_string(Global::maxlay)));
+		ProjectList->push_back(string("nobs " + to_string(Global::maxobs)));
 		ProjectList->push_back("######");
 
 		ProjectList->push_back("Macros:");
