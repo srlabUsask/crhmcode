@@ -834,7 +834,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 								if (thisVar->FileData->Times == NULL) {
 									//                  cdSeries = new TSeries(Global::DTmax - Global::DTmin);
 									double Dif = EndDatePicker - StartDatePicker;
-									TSeries * cdSeries = new TSeries();
+									cdSeries = new TSeries();
 
 									//move inside to avoid null ptr exception - Matt
 									cdSeries->Tag = thisVar;
