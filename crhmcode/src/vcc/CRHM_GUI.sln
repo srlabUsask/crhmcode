@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Console_CRHM_Visual_Studio.exe = Console_CRHM_Visual_Studio.exe
 	EndProjectSection
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CRHM_Installer", "..\CRHM_Installer\CRHM_Installer.vdproj", "{BA903A6F-627A-4BCA-BA83-5601E4E7CA66}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Install_CRHM_GUI", "..\Install_CRHM_GUI\Install_CRHM_GUI.vdproj", "{83E4B068-C513-4B2A-8879-97D36E81CC39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +28,10 @@ Global
 		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Release|x64.Build.0 = Release|x64
 		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Release|x86.ActiveCfg = Release|Win32
 		{A8C55449-0939-47A7-B52C-BDB9ABB5E450}.Release|x86.Build.0 = Release|Win32
-		{BA903A6F-627A-4BCA-BA83-5601E4E7CA66}.Debug|x64.ActiveCfg = Debug
-		{BA903A6F-627A-4BCA-BA83-5601E4E7CA66}.Debug|x86.ActiveCfg = Debug
-		{BA903A6F-627A-4BCA-BA83-5601E4E7CA66}.Release|x64.ActiveCfg = Release
-		{BA903A6F-627A-4BCA-BA83-5601E4E7CA66}.Release|x86.ActiveCfg = Release
+		{83E4B068-C513-4B2A-8879-97D36E81CC39}.Debug|x64.ActiveCfg = Debug
+		{83E4B068-C513-4B2A-8879-97D36E81CC39}.Debug|x86.ActiveCfg = Debug
+		{83E4B068-C513-4B2A-8879-97D36E81CC39}.Release|x64.ActiveCfg = Release
+		{83E4B068-C513-4B2A-8879-97D36E81CC39}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
