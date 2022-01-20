@@ -37,7 +37,7 @@ using namespace CRHM;
 //extern double xLimit;
 //extern long lLimit;
 
-bool ReportAll = true;
+
 
 
 
@@ -63,6 +63,42 @@ string Version = "Version: 4.7_16";
 
 CRHMmain* CRHMmain::instance = 0;
 
+bool CRHMmain::getAutoRun()
+{
+	return this->AutoRun;
+}
+
+void CRHMmain::setAutoRun(bool set)
+{
+	this->AutoRun = set;
+}
+
+bool CRHMmain::getAutoExit()
+{
+	return this->AutoExit;
+}
+
+void CRHMmain::setAutoExit(bool set)
+{
+	this->AutoExit = set;
+}
+
+bool CRHMmain::getFinishedRun()
+{
+	return this->finishedRun;
+}
+
+bool CRHMmain::getReportAll()
+{
+	return this->ReportAll;
+}
+
+void CRHMmain::setReportAll(bool set)
+{
+	this->ReportAll = set;
+}
+
+
 CRHMmain* CRHMmain::getInstance()
 {
 	if (instance == 0)
@@ -74,7 +110,7 @@ CRHMmain* CRHMmain::getInstance()
 }
 
 
-CRHMmain::CRHMmain(struct crhm_arguments * arguments)
+CRHMmain::CRHMmain(CRHMArguments * arguments)
 {
 	if (arguments == NULL)
 	{
@@ -95,13 +131,13 @@ CRHMmain::CRHMmain(struct crhm_arguments * arguments)
 	else
 	{
 		//Recive the arguments from the passed struct.
-		Global::TimeFormat = arguments->time_format;
-		this->OutputFormat = arguments->output_format;
-		this->OutputName = arguments->output_name;
-		this->Delimiter = arguments->delimiter;
-		this->ObsFileDirectory = arguments->obs_file_directory;
-		this->ShowProgress = arguments->show_progress;
-		this->UpdateProgress = arguments->update_progress;
+		Global::TimeFormat = arguments->get_time_format();
+		this->OutputFormat = arguments->get_output_format();
+		this->OutputName = arguments->get_output_name();
+		this->Delimiter = arguments->get_delimiter();
+		this->ObsFileDirectory = arguments->get_obs_file_directory();
+		this->ShowProgress = arguments->get_show_progress();
+		this->UpdateProgress = arguments->get_update_progress();
 
 	}
 
@@ -249,9 +285,9 @@ void CRHMmain::BldModelClick()
 					  //dirty = true;
 }
 
-void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
-
-
+bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) 
+{
+	this->finishedRun = false;
 	//saving the project file path. added by Manishankar.
 	OpenProjectPath = OpenNamePrj;
 
@@ -261,31 +297,16 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	ifstream DataFile;
 	unsigned short Variation;
 
-	string module, param, Descrip, Line, name;
-	//string module, param, Descrip, Line, name;
-	string S, s;
-	string SS;
-
-
-	//system("java -jar -min d:/javadatabaseaccess/DatabaseAccess.jar");
-
-
-	//  string Default = GetCurrentDir();
-	/*
-	int iFileHandle = FileOpen(OpenNamePrj, fmOpenRead);
-	if(iFileHandle > -1){ // not file error
-	int T = FileGetDate(iFileHandle);
-	ProjectFileDate = FileDateToDateTime(T);
-	FileClose(iFileHandle);
-	}*/
+	std::string module, param, Descrip, Line, name;
+	std::string S, s;
+	std::string SS;
 
 	DataFile.open(OpenNamePrj.c_str());
-	if (!DataFile) {
+	if (!DataFile) 
+	{
 		Common::Message("cannot open file", "File Error");
-		return;
+		return false;
 	}
-
-
 
 	ProjectDirectory = GetCurrentDir();
 
@@ -301,37 +322,17 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	getline(DataFile, Line);
 
 	Global::MacroModulesList->clear();
+	this->setAutoRun(false);
+	this->setAutoExit(false);
 
-	try {
-
-		/*
-		//get project id
-		makeQuery("query", "select projectid, projectname from project where projectname = 'test4.prj'", "projectid projectname", 2);
-		string res = queryResult->Strings[0];
-		std::istringstream iss(res);
-
-		*/
-
-
-
-		//reading the macros
-
-
-		//reading the dates
-
-
-		//reading the observations
-
-
-
-
-
-		do {
+	try 
+	{
+		do 
+		{
 			DataFile >> S;
 			if (DataFile.eof()) break;
 
 			DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
-			//DataFile.getline(Line, CharLength);
 			getline(DataFile, Line);
 
 			if (S == "AKAs:") {
@@ -354,7 +355,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 						Global::MapAKA.insert(Item);
 					}
 
-					if (DataFile.eof()) return; // final exit
+					if (DataFile.eof()) return true; // final exit
 
 				}
 			}
@@ -395,8 +396,16 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 
 						//				      }   // was return
 					}
-					else {
+					else 
+					{
+
+						
 						Common::Message(SS.c_str(), "Cannot find observation file. Exiting.");
+						CRHMException Except("Cannot find observation file.", TExcept::ERR);
+						LogError(Except);
+#ifdef VS_GUI
+						return false;
+#endif // VS_GUI
 						exit(1);
 					}
 					getline(DataFile, S);
@@ -549,7 +558,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					if (module[1] == '#') break;
 					DataFile >> param;
 
-					if (DataFile.eof()) return; // final exit
+					if (DataFile.eof()) return true; // final exit
 
 					DataFile.ignore((numeric_limits<streamsize>::max)(), '\n'); // need for character input, why?
 
@@ -727,7 +736,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					DataFile >> module;
 					if (module[1] == '#') break;
 					DataFile >> name;
-					if (DataFile.eof()) return; // final exit
+					if (DataFile.eof()) return true; // final exit
 
 					S = string(module) + ' ' + string(name);
 					long Index;
@@ -787,7 +796,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 					DataFile >> module;
 					if (module[1] == '#') break;
 					DataFile >> name;
-					if (DataFile.eof()) return; // final exit
+					if (DataFile.eof()) return true; // final exit
 
 					string Kind;
 					long Index;
@@ -825,7 +834,7 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 								if (thisVar->FileData->Times == NULL) {
 									//                  cdSeries = new TSeries(Global::DTmax - Global::DTmin);
 									double Dif = EndDatePicker - StartDatePicker;
-									TSeries * cdSeries = new TSeries(((int)(Dif * thisVar->FileData->Freq))*thisVar->FileData->ModN);
+									cdSeries = new TSeries();
 
 									//move inside to avoid null ptr exception - Matt
 									cdSeries->Tag = thisVar;
@@ -882,17 +891,20 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 				else
 					SaveStateFileName = "";
 				}
-			else if (S == "Log_Last") {
-				ReportAll = false;
+			else if (S == "Log_Last") 
+			{
+				this->setReportAll(false);
 			}
-			else if (S == "Log_All") {
-				ReportAll = true;
+			else if (S == "Log_All") 
+			{
+				this->setReportAll(true);
 			}
-			else if (S == "Auto_Run") {
-				;
+			else if (S == "Auto_Run") 
+			{
+				this->setAutoRun(true);
 			}
 			else if (S == "Auto_Exit") {
-				;
+				this->setAutoExit(true);
 			}
 			else if (S == "TChart:") {
 
@@ -908,10 +920,12 @@ void CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) {
 	catch (CRHMException Except) {
 		Common::Message(Except.Message.c_str(), "Loading project Error");
 		DataFile.close();
-		return;
+		return false;
 	}
 
 	DataFile.close();
+
+	return true;
 }
 
 
@@ -1256,7 +1270,7 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		cdSeries = new TSeries*[SeriesCnt];
 		int Cnt = Global::DTmax - Global::DTmin;
 		for (int ii = 0; ii < SeriesCnt; ++ii)
-			cdSeries[ii] = new TSeries(Cnt);
+			cdSeries[ii] = new TSeries();
 
 		for (jj = 0; jj < SeriesCnt; jj++)
 		{
@@ -1364,15 +1378,23 @@ void CRHMmain::MacroLoad(void)
 
 			string S, SS;
 
-			while (S = Common::trim(Global::MacroModulesList->at(Macro)), SS = S.substr(0, 3),
+			S = Global::MacroModulesList->at(Macro).c_str();
+			S = Common::trim(S); 
+			SS = S.substr(0, 3);
+
+			while (
 				!(SS == "end" &&
-				(S.length() == 3 || S.find_first_of(" /") != string::npos)) &&
+					(S.length() == 3 || S.find_first_of(" /") != string::npos)) &&
 				Global::MacroModulesList->size() > Macro
 				)
+			{
+				Macro++;
+				S = Global::MacroModulesList->at(Macro).c_str();
+				S = Common::trim(S);
+				SS = S.substr(0, 3);
+			}
 
-				++Macro;
-
-			++Macro;
+			Macro++;
 		}
 
 		AdminMacro.LoadCRHM("Macro");
@@ -1396,7 +1418,7 @@ string CRHMmain::DeclObsName(ClassVar *thisVar)
 	
 	//std::map<std::string, ClassModule*>::iterator pos = Global::OurModulesList->find(thisVar->module); // find module
 	
-	std::list<std::pair<std::string, ClassModule*>>::iterator pos;
+	std::list<std::pair<std::string, ClassModule*>>::iterator pos = Global::OurModulesList->end();
 	for (
 		std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
 		it != Global::OurModulesList->end();
@@ -1525,7 +1547,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 			}
 		}
 
-		ObsFilesList->push_back(std::pair<std::string, ClassData*>(OpenNameObs, FileData));
+		ObsFilesList->push_back(std::pair<std::string, ClassData*>(FileName, FileData));
 
 		return true;
 	}
@@ -1542,9 +1564,11 @@ bool  CRHMmain::OpenObsFile(string FileName)
 }
 //---------------------------------------------------------------------------
 
-void  CRHMmain::ObsCloseClick(void) {
+void  CRHMmain::ObsCloseClick(void) 
+{
 
 	AllObservations->clear();
+	SelectedObservations->clear();
 
 	for (
 		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
@@ -1558,18 +1582,19 @@ void  CRHMmain::ObsCloseClick(void) {
 
 	ObsFilesList->clear();  // clear list
 
+	
+
 	Global::nobs = 1;  // reset to 1
 
 }
 //---------------------------------------------------------------------------
 
-void  CRHMmain::ObsFileClose(void)
+void  CRHMmain::ObsFileClose(std::string filepath)
 {
 	MapVar::iterator itVar;
 	ClassVar * thisVar;
 
-	string S;  // Fix ???
-
+	/*Locate the postion of the obs file to close in the list of obs files.*/
 	std::list<std::pair<std::string, ClassData*>>::iterator position;
 	for (
 		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
@@ -1577,21 +1602,24 @@ void  CRHMmain::ObsFileClose(void)
 		it++
 		)
 	{
-		if (it->first == S)
+		if (it->first == filepath)
 		{
 			position = it;
+			break;
 		}
 	}
 
-
-	if (position == ObsFilesList->begin() && ObsFilesList->size() > 1) 
+	/*If the desired file is the only obs file open. Close all obs files.*/
+	if (position == ObsFilesList->begin() && ObsFilesList->size() == 1) 
 	{
 		ObsCloseClick();
 		return;
 	}
 
+	/*Clear the Observations list*/
 	AllObservations->clear();
 
+	/*Remove the observation file from the Observation file list*/
 	ClassData * FileData = position->second;
 	delete FileData;   // delete ClassData instance
 	ObsFilesList->erase(position);  // delete entry in list
@@ -1760,6 +1788,8 @@ MMSData *  CRHMmain::RunClick2Start()
 	long **mmsDataL;
 	bool GoodRun = true;
 	MMSData * mmsdata = new MMSData();
+
+	this->finishedRun = false;
 
 	//TimingStatistics * ts = new TimingStatistics();
 
@@ -2040,7 +2070,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 	for (int ii = 0; ii < SeriesCnt; ++ii)
 	{
-		cdSeries[ii] = new TSeries(Cnt);
+		cdSeries[ii] = new TSeries();
 	}
 
 	mmsData = new double*[SeriesCnt];
@@ -2348,7 +2378,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			* If ReportAll is set Calculate the line in output to be
 			* produced by this timestep and send it to the buffer.
 			*/
-			if (ReportAll)
+			if (this->ReportAll)
 			{
 				this->reportStream->SendTimeStepToReport(this);
 			}
@@ -2356,7 +2386,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			/*
 			* If ReportAll is not set output the last timestep
 			*/
-			if (!ReportAll && Global::DTindx == enddate - 1)
+			if (!this->ReportAll && Global::DTindx == Global::DTmax - 1)
 			{
 				this->reportStream->SendTimeStepToReport(this);
 			}
@@ -2428,6 +2458,8 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 		{
 			SaveState();
 		}
+
+		this->finishedRun = true;
 			
 	}
 
@@ -3313,8 +3345,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->push_back("Dimensions:");
 		ProjectList->push_back("######");
 		ProjectList->push_back(string("nhru " + to_string(Global::maxhru)));
-		ProjectList->push_back(string("nlay " + to_string(Global::nlay)));
-		ProjectList->push_back(string("nobs " + to_string(Global::nobs)));
+		ProjectList->push_back(string("nlay " + to_string(Global::maxlay)));
+		ProjectList->push_back(string("nobs " + to_string(Global::maxobs)));
 		ProjectList->push_back("######");
 
 		ProjectList->push_back("Macros:");
@@ -3518,7 +3550,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		ProjectList->push_back("Final_State");
 		ProjectList->push_back("######");
-		if (SaveStateFlag) {
+		if (SaveStateFlag) 
+		{
 			ProjectList->push_back(SaveStateFileName);
 		}
 		ProjectList->push_back("######");
@@ -3752,10 +3785,28 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 
 	//need to check
-	//if (PrjAutoRun->Checked) {
-	//	ProjectList->Add("Auto_Run");
-	//	ProjectList->Add("######");
-	//}
+	if (this->getAutoRun()) 
+	{
+		ProjectList->push_back("Auto_Run");
+		ProjectList->push_back("######");
+	}
+
+	if (this->getAutoExit()) 
+	{
+		ProjectList->push_back("Auto_Exit");
+		ProjectList->push_back("######");
+	}
+
+	if (this->getReportAll())
+	{
+		ProjectList->push_back("Log_All");
+		ProjectList->push_back("######");
+	}
+	else
+	{
+		ProjectList->push_back("Log_Last");
+		ProjectList->push_back("######");
+	}
 
 	//if (SaveChartTemplate->Checked) {
 	//	ProjectList->Add("SaveChartTemplate");
@@ -3765,10 +3816,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//	SaveChartToFile(Chart, FileName, false, true);
 	//}
 	//
-	//if (PrjAutoExit->Checked) {
-	//	ProjectList->Add("Auto_Exit");
-	//	ProjectList->Add("######");
-	//}
+	
 	//
 	//if (Last1->Checked) {
 	//	ProjectList->Add("Log_Last");
@@ -4138,7 +4186,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 		j++;
 	}
 
-	observationseries = new TSeries(50000);
+	observationseries = new TSeries();
 	observationseries->Title = observationname;
 
 	int obscount = j;
@@ -4318,8 +4366,6 @@ void CRHMmain::SaveState()
 
 	delete StateList;
 
-	SaveStateFileName = "";
-	SaveStateFlag = false;
 }
 
 void CRHMmain::print_progress_start() 

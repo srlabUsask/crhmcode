@@ -195,6 +195,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\core\ClassCRHM\CRHMArguments.h" />
     <ClInclude Include="..\core\Common\CRHMException.h" />
     <ClInclude Include="..\core\Common\VandP.h" />
     <ClInclude Include="..\core\CRHMmain\ReportStream.h" />
@@ -396,6 +397,7 @@
     <ClInclude Include="CHighFunction.h" />
     <ClInclude Include="CHighLowLineSeries.h" />
     <ClInclude Include="CHighLowSeries.h" />
+    <ClInclude Include="ChiralClickButton.h" />
     <ClInclude Include="CHistogramFunction.h" />
     <ClInclude Include="CHistogramSeries.h" />
     <ClInclude Include="CHorizAreaSeries.h" />
@@ -666,6 +668,7 @@
     <ClInclude Include="GlobalCommon.h" />
     <ClInclude Include="GlobalDll.h" />
     <ClInclude Include="Header.h" />
+    <ClInclude Include="HierarchyDlg.h" />
     <ClInclude Include="Hype_CRHM.h" />
     <ClInclude Include="Hype_lake.h" />
     <ClInclude Include="Hype_river.h" />
@@ -678,6 +681,7 @@
     <ClInclude Include="ReportStream.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceDlg.h" />
+    <ClInclude Include="RightClickListBox.h" />
     <ClInclude Include="SnobalDefines.h" />
     <ClInclude Include="StandardConverterUtility.h" />
     <ClInclude Include="stdafx.h" />
@@ -692,6 +696,7 @@
     <ClCompile Include="..\core\ClassCRHM\ClassPar.cpp" />
     <ClCompile Include="..\core\ClassCRHM\ClassVar.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Convert.cpp" />
+    <ClCompile Include="..\core\ClassCRHM\CRHMArguments.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classabs.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classadd.cpp" />
     <ClCompile Include="..\core\ClassCRHM\Filters\Classaddv.cpp" />
@@ -877,6 +882,7 @@
     <ClCompile Include="..\modules\waterquality\Class_lapse_rate_Monthly.cpp" />
     <ClCompile Include="..\modules\waterquality\WQ_CRHM.cpp" />
     <ClCompile Include="..\modules\waterquality\WQ_Soil_NPCcycling.cpp" />
+    <ClCompile Include="ChiralClickButton.cpp" />
     <ClCompile Include="gui\CConstruct.cpp" />
     <ClCompile Include="gui\CExport.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
@@ -894,6 +900,8 @@
     <ClCompile Include="gui\MainFrm.cpp" />
     <ClCompile Include="gui\OutputWnd.cpp" />
     <ClCompile Include="gui\ResourceDlg.cpp" />
+    <ClCompile Include="HierarchyDlg.cpp" />
+    <ClCompile Include="RightClickListBox.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -28,8 +28,8 @@
 #include "TSeries.h"
 #include "Classinfo.h"
 #include "CRHMLogger.h"
-#include "../../gcc/CRHMArguments.h"
 #include "ReportStream.h"
+#include "../ClassCRHM/CRHMArguments.h"
 
 //class ObsFileInfo {
 //private:
@@ -44,19 +44,36 @@
 //	void setFilePath(string filepath);
 //};
 
+//Forward Declarations
 class ReportStream;
+class CRHMArguments;
+enum class OUTPUT_FORMAT;
 
 class CRHMmain
 {
 	static CRHMmain* instance;
 
+private: 
+	bool AutoRun{ false };
+	bool AutoExit{ false };
+	bool ReportAll{ true };
+	bool finishedRun{ false };
+
 public:
+
+	bool getAutoRun();
+	void setAutoRun(bool set);
+	bool getAutoExit();
+	void setAutoExit(bool set);
+	bool getFinishedRun();
+	bool getReportAll();
+	void setReportAll(bool set);
 
 	CRHMLogger* Logger;
 	ReportStream * reportStream{NULL};
 
 	static CRHMmain *  getInstance();
-	CRHMmain(struct crhm_arguments * );
+	CRHMmain(CRHMArguments * arguments);
 
 	//virtual void DoPrjOpen(string OpenNamePrj, string ProjectDirectory);
 	string Sstrings[12] = { "", "_WtoMJ", "_MJtoW", "_Avg", "_Min", "_Max", "_Sum", "_Pos", "_Tot", "_Tot/Freq", "_First", "_Last" };
@@ -109,6 +126,7 @@ public:
 	bool ProjectOpen;
 	bool ShiftDown; // Linked to ListBox1 and ListBox2
 	bool HruNames;
+	
 
 	OUTPUT_FORMAT OutputFormat;
 	std::string OutputName;
@@ -128,7 +146,7 @@ public:
 
 	~CRHMmain();
 
-	void DoPrjOpen(string OpenNamePrj, string ProjectDirectory);
+	bool DoPrjOpen(string OpenNamePrj, string ProjectDirectory);
 
 	void FormCreate(void);
 
@@ -150,7 +168,7 @@ public:
 
 	void ObsCloseClick(void);
 
-	void ObsFileClose(void);
+	void ObsFileClose(std::string filepath);
 
 	void FormDestroy(void);
 

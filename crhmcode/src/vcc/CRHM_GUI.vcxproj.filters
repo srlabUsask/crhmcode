@@ -1482,6 +1482,18 @@
     <ClInclude Include="..\core\CRHMmain\ReportStream.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RightClickListBox.h">
+      <Filter>Resource Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HierarchyDlg.h">
+      <Filter>Resource Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\ClassCRHM\CRHMArguments.h">
+      <Filter>Resource Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChiralClickButton.h">
+      <Filter>Resource Files\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2109,6 +2121,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\core\CRHMmain\ReportStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RightClickListBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchyDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassCRHM\CRHMArguments.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChiralClickButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
