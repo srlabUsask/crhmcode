@@ -266,3 +266,5 @@ __pycache__/
 /crhmcode/test
 /crhmcode/prj
 /crhmcode/src/vcc/prj
+
+build/
