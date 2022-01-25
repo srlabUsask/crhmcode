@@ -1,3 +1,4 @@
 [submodule "crhmcode/src/libs/spdlog"]
 	path = crhmcode/src/libs/spdlog
 	url = https://github.com/gabime/spdlog.git
+	branch = v1.x
