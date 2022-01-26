@@ -5,7 +5,12 @@
 #define ClassCRHMH
 //---------------------------------------------------------------------------
 
-#include "Common/Common.h"
+#include <string>
+#include <iostream>
+#include <map>
+#include <typeinfo>
+
+#include "Common.h"
 #include "GlobalCommon.h"
 #include "ClassData.h"
 #include "ClassVar.h"
@@ -17,10 +22,6 @@
 #include "Unit_Info.h"
 #include "Multiplier_Info.h"
 #include "Convert.h"
-#include <string>
-#include <iostream>
-#include <map>
-#include <typeinfo>
 
 using namespace std;
 

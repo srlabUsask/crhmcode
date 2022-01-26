@@ -1,6 +1,6 @@
 //created by Manishankar Mondal
 
-#include "ClassModule/ClassModule.h"
+#include "../core/ClassModule.h"
 
 class ClassSWEslope : public ClassModule {
 public:
@@ -29,7 +29,7 @@ const long *Disable_SWEslope{ NULL }; // [nhru]
 // variable put inputs
 double *SWE{ NULL };
 
-// variable inputs 
+// variable inputs
 const double *rho{ NULL };
 
 void decl(void);

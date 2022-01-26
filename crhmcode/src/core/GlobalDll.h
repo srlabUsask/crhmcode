@@ -14,10 +14,10 @@
 #include <iomanip>
 
 #include "GlobalCommon.h"
-#include "Common/Common.h"
+#include "Common.h"
 #include "StandardConverterUtility.h"
-#include "ClassModule/ClassModule.h"
-#include "ClassModule/Administer.h"
+#include "ClassModule.h"
+#include "Administer.h"
 
 using namespace std;
 
@@ -96,12 +96,12 @@ public:
 	static std::list<std::pair<std::string, ClassModule*>> * OurModulesList;       // modules defined in current model
 	static std::list<std::pair<std::string, unsigned short>> * OurModulesVariation;
 	static std::vector<std::string> * MacroModulesList;     // custom modules defined in current model
-	
+
 	static std::list<std::pair<std::string, int>> * AllModelsList;        // models defined in CRHM
 	static std::list<std::pair<std::string, Administer * >> * ModelModulesList;     // modules used in above models in CommaText
-	
+
 	static std::map<std::string, int> * OurHelpList;          // help files defined in current modules
-	
+
 	static std::list<std::pair<std::string, ClassModule *>> * PendingDLLModuleList; // current DLL modules
 	static std::list<std::string> * ReportList;           //
 	static std::list<std::string> * DeclRootList;         //
@@ -153,7 +153,7 @@ string static FloatToStrF(double value, string format, int precision, int digits
 		stream << std::setprecision(precision) << value;
 	}
 
-	
+
 	return stream.str();
 };
 

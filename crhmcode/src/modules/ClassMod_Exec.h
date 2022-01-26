@@ -1,6 +1,6 @@
 //created by Manishankar Mondal
 
-#include "ClassModule/ClassModule.h"
+#include "../core/ClassModule.h"
 
 class ClassMod_Exec : public ClassModule {
 public:

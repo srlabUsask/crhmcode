@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "Classglacier_debris.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "Classglacier_debris.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -235,18 +236,18 @@ void Classglacier_debris::decl(void){
   variation_set = VARIATION_2;
 
   declreadobs("Qnsn", TDim::NHRU, "net radiation", "(W/m^2*int)", &Qnsn, HRU_OBS_Q);
-  
+
 
   variation_set = VARIATION_4;
 
   declgetvar("*",  "Xmelt", "(mm/d)", &Xmelt); // interval value
-  
+
 
   variation_set = VARIATION_5;
 
 
 
-// debris 
+// debris
 
 
   declvar("lagT", TDim::NHRU, "lagged temperature.", "(" + string(DEGREE_CELSIUS) + ")", &lagT);
@@ -317,7 +318,7 @@ void Classglacier_debris::init(void) {
 
     if(variation != VARIATION_4)
       Xmelt_V5[hh] = 0.0;
-      
+
     if(variation != VARIATION_4){
       lagT[hh] = 0.0;
       lagSW[hh] = 0.0;
@@ -513,7 +514,7 @@ double TF, SRF;
         Gmelt_energy[hh] = Qn_ebsm[hh] + Qh_ebsm[hh] + Qe_ebsm[hh] + Qp_ebsm[hh];
 
         Xmelt_int[hh] = Gmelt_energy[hh]/(996.0*334000.0)*1000.0*3600.0; // (996*334000) * 1000*3600;
-        
+
         if(Xmelt_int[hh] < 0.0)
           Xmelt_int[hh] = 0.0;
       } // variation == VARIATION_5 AND debris_h[hh] <= 0.0
@@ -656,10 +657,10 @@ double TF, SRF;
 
             Qmelt[hh] = Qmelt[hh]/316.8*1000.0; // thermal quality B=0.95. 316.8 = 333.5*0.95 (kJ/kg), (mm/d)
           }
-          
+
           if(variation == VARIATION_4) // external valuevalue
             Qmelt[hh] = Xmelt[hh];
-            
+
           if(variation == VARIATION_5) // external valuevalue
             Qmelt[hh] = Xmelt_V5[hh];
 

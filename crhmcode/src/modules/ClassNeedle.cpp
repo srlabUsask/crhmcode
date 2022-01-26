@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassNeedle.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassNeedle.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 #ifndef M_PI_2
 #define M_PI_2 1.57079632679489661923

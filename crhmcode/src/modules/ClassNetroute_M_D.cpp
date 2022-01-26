@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassNetroute_M_D.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassNetroute_M_D.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -398,7 +399,7 @@ void ClassNetroute_M_D::run(void) {
     runcumoutflow[hh] += runoutflow[hh];
 
     inflow[hh] += scaling_factor[hh]*(runoutflow[hh] + ssroutflow[hh]); // add this HRU runoff and subsurface flow temporary change 10/07/11
-    
+
     if(outflow[hh] > 0.0){
 
       double Used = outflow[hh]*distrib_Basin[hh]/distrib_sum[hh];

@@ -1,5 +1,5 @@
 //#include "stdafx.h"
-#include "../core/ClassCRHM/CRHMArguments.h"
+#include "core/CRHMArguments.h"
 
 int main(int argc, char *argv[])
 {

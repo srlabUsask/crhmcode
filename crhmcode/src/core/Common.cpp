@@ -1,5 +1,5 @@
 #include "Common.h"
-#include "../CRHMmain/CRHMLogger.h"
+#include "CRHMLogger.h"
 
 
 //#pragma package(smart_init) removed uneeded pragma - jhs507
@@ -148,14 +148,14 @@ string Common::longtoStr(long L) { //Manishankar: in two or more files.
 	return temp.str();
 }
 
-void Common::ltrim(std::string& s) 
+void Common::ltrim(std::string& s)
 {
 	s.erase(
-		s.begin(), 
+		s.begin(),
 		std::find_if(
-			s.begin(), 
+			s.begin(),
 			s.end(),
-			[](unsigned char ch) 
+			[](unsigned char ch)
 			{
 				return !std::isspace(ch);
 			}
@@ -164,17 +164,17 @@ void Common::ltrim(std::string& s)
 }
 
 
-void Common::rtrim(std::string& s) 
+void Common::rtrim(std::string& s)
 {
 	s.erase(
 		std::find_if(
 			s.rbegin(),
 			s.rend(),
-			[](unsigned char ch) 
+			[](unsigned char ch)
 			{
 				return !std::isspace(ch);
 			}
-		).base(), 
+		).base(),
 		s.end()
 	);
 
@@ -189,7 +189,7 @@ string Common::trimleft(string& str) {
 }
 
 
-string Common::trimright(string& str) 
+string Common::trimright(string& str)
 {
 	Common::rtrim(str);
 	return str;

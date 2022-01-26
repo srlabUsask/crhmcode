@@ -1,0 +1,1 @@
+#cmakedefine ACTIVE_LOG_LEVEL @ACTIVE_LOG_LEVEL@

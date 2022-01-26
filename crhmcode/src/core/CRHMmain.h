@@ -10,26 +10,23 @@
 #define VS_GUI
 #endif
 
-
-
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <set>
-//#include "CString"
-#include "Common/Common.h"
-//#include "boost/shared_ptr.hpp"
-#include "ClassCRHM/ClassCRHM.h"
 #include <map>
+#include <list>
 #include <iostream>
-#include<list>
+
+#include "Common.h"
+#include "ClassCRHM.h"
 #include "MMSData.h"
 #include "TSeries.h"
 #include "Classinfo.h"
 #include "CRHMLogger.h"
 #include "ReportStream.h"
-#include "../ClassCRHM/CRHMArguments.h"
+#include "CRHMArguments.h"
 
 //class ObsFileInfo {
 //private:
@@ -53,7 +50,7 @@ class CRHMmain
 {
 	static CRHMmain* instance;
 
-private: 
+private:
 	bool AutoRun{ false };
 	bool AutoExit{ false };
 	bool ReportAll{ true };
@@ -98,7 +95,7 @@ public:
 	std::list<std::pair<std::string, ClassVar*>> * SelectedVariables; //!< List of selected paired variables names and variable objects.
 	//manishankar used this meaningful variable name instead of ListBox4.
 	std::list<std::pair<std::string, TSeries *>> * SelectedObservations; //!< List of selected paired observation names and TSeries objects.
-	
+
 	double StartDatePicker; // replaces graphic controls. manishankar Picker1 was replaced by StartDatePicker
 	double EndDatePicker; //manishankar Picker2 was replaced by EndDatePicker
 
@@ -126,7 +123,7 @@ public:
 	bool ProjectOpen;
 	bool ShiftDown; // Linked to ListBox1 and ListBox2
 	bool HruNames;
-	
+
 
 	OUTPUT_FORMAT OutputFormat;
 	std::string OutputName;

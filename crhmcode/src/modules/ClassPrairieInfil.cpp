@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassPrairieInfil.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassPrairieInfil.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -76,11 +77,11 @@ void ClassPrairieInfil::init(void) {
 
   nhru = getdim(TDim::NHRU);
 
-  try 
+  try
   {
 
     Xinfil = new double*[3];   // Data [3] [nhru]
-    for (int jj = 0; jj < 3; ++jj) 
+    for (int jj = 0; jj < 3; ++jj)
     {
         Xinfil[jj] = new double[nhru];
     }
@@ -88,7 +89,7 @@ void ClassPrairieInfil::init(void) {
     timer = new long[nhru];
 
   }
-  catch (std::bad_alloc) 
+  catch (std::bad_alloc)
   {
     CRHMException Except("Could not allocate in module CRACK." , TExcept::TERMINATE);
     LogError(Except);
@@ -111,14 +112,14 @@ void ClassPrairieInfil::init(void) {
     crackon[hh] = false;
     crackstat[hh] = 0;
 
-    if (hh < nhru) 
+    if (hh < nhru)
     {
         timer[hh] = 0;
         Xinfil[0][hh] = 0.0;
         Xinfil[1][hh] = 0.0;
         Xinfil[2][hh] = 0.0;
     }
-    
+
   }
 }
 
@@ -153,11 +154,11 @@ void ClassPrairieInfil::run(void) {
 
   if (nstep == 0) // end of every day
   {
-      for (hh = 0; chkStruct(); ++hh) 
+      for (hh = 0; chkStruct(); ++hh)
       {
 
           //If snow is larger than 25 mm and the frozen soil routine is off then we need to turn it on.
-          if (SWE[hh] > 25.0 && !crackon[hh]) 
+          if (SWE[hh] > 25.0 && !crackon[hh])
           {
               crackstat[hh] = 0;
               crackon[hh] = true; // initialise for current year
@@ -171,11 +172,11 @@ void ClassPrairieInfil::run(void) {
           meltrunoff[hh] = 0.0;
 
           //If soil is frozen and we have some snowmelt.
-          if (crackon[hh] && snowmelt[hh] > 0.0) 
+          if (crackon[hh] && snowmelt[hh] > 0.0)
           {
-              
 
-              if (timer[hh] > 0 && crackstat[hh] > 0) 
+
+              if (timer[hh] > 0 && crackstat[hh] > 0)
               {
                   if (fallstat[hh] > 0.0 && hru_tmax[0] < -10.0)
                   {
@@ -186,7 +187,7 @@ void ClassPrairieInfil::run(void) {
               // ice lens forms, if next day below -10 limited
               // unlimited - (fallstat[hh].eq.0.0)
 
-              if (fallstat[hh] <= 0.0) 
+              if (fallstat[hh] <= 0.0)
               {
                   snowinfil[hh] = snowmelt[hh];
                   crackstat[hh] = 1;
@@ -194,16 +195,16 @@ void ClassPrairieInfil::run(void) {
 
               // limited - (0.0 < fallstat[hh] < 100.0)
 
-              else if (fallstat[hh] < 100.0) 
+              else if (fallstat[hh] < 100.0)
               {
-                  if (snowmelt[hh] >= Major[hh] || crackstat[hh] >= 1) 
+                  if (snowmelt[hh] >= Major[hh] || crackstat[hh] >= 1)
                   {
-                      if (SWE[hh] > Xinfil[2][hh] && snowmelt[hh] >= Major[hh]) 
+                      if (SWE[hh] > Xinfil[2][hh] && snowmelt[hh] >= Major[hh])
                       {
                           infil_index(fallstat[hh] / 100.0, SWE[hh], Xinfil[0][hh], Xinfil[1][hh], infDays[hh]);
                           Xinfil[2][hh] = SWE[hh];
                       }
-                      if (snowmelt[hh] >= Major[hh]) 
+                      if (snowmelt[hh] >= Major[hh])
                       {
                           if (crackstat[hh] <= 0)
                           {
@@ -216,23 +217,23 @@ void ClassPrairieInfil::run(void) {
 
                           timer[hh] = 1;
                           snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
-                          
+
                           if (snowinfil[hh] > Xinfil[1][hh])
                           {
                               snowinfil[hh] = Xinfil[1][hh];
                           }
                       }
-                      else 
+                      else
                       {
                           snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
                       }
-                          
+
 
                       if (crackstat[hh] > infDays[hh])
                       {
                           snowinfil[hh] = 0;
                       }
-                          
+
                   }
                   else
                   {
@@ -240,14 +241,14 @@ void ClassPrairieInfil::run(void) {
                       {
                           snowinfil[hh] = snowmelt[hh]; // zero by default
                       }
-                          
+
                   }
-                      
+
               }
 
               // restricted - (fallstat[hh].ge.100.0)
 
-              else if (fallstat[hh] >= 100.0) 
+              else if (fallstat[hh] >= 100.0)
               {
                   snowinfil[hh] = 0.0;
                   crackstat[hh] = 1;
@@ -263,7 +264,7 @@ void ClassPrairieInfil::run(void) {
               {
                   meltrunoff[hh] += RainOnSnowA[hh];
               }
-                 
+
               cumsnowinfil[hh] += snowinfil[hh];
               cummeltrunoff[hh] += meltrunoff[hh];
 
@@ -271,20 +272,20 @@ void ClassPrairieInfil::run(void) {
               RainOnSnowA[hh] = 0.0;
 
           } // end if
-          else if (snowmelt[hh] > 0.0) 
+          else if (snowmelt[hh] > 0.0)
           {
               snowinfil[hh] = snowmelt[hh];
               cumsnowinfil[hh] += snowinfil[hh];
           }
 
-          if (crackstat[hh] > 0 && SWE[hh] <= 0.0) 
+          if (crackstat[hh] > 0 && SWE[hh] <= 0.0)
           {
               crackon[hh] = false;
               crackstat[hh] = 0;
           }
       }   // end for
   }
-    
+
 }
 
 void ClassPrairieInfil::finish(bool good) {

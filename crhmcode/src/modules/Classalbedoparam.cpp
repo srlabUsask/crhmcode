@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "Classalbedoparam.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "Classalbedoparam.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 

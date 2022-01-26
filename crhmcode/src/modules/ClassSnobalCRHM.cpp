@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassSnobalCRHM.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassSnobalCRHM.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -215,7 +216,7 @@ void ClassSnobalCRHM::run(void) { // executed every interval
           rho[hh] = 0.0;
         else
           rho[hh] = m_s[hh]/z_s[hh];
-          
+
         if(layer_count[hh] <= 0)
           layer_count[hh] = 1;
       }

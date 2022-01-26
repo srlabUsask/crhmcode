@@ -10,7 +10,7 @@
 
 #include "ClassPar.h"
 #include "ClassCRHM.h"
-#include "NewModules.h"
+#include "../modules/newmodules/NewModules.h"
 #include "stddef.h"
 #include "GlobalDll.h"
 
@@ -43,25 +43,25 @@ ClassPar::ClassPar(string module, string param, TDim dimen,
 
 	if (dimen == TDim::NHRU)
 	{
-		for (size_t ii = Strings->size(); ii < (size_t) dim; ++ii) 
+		for (size_t ii = Strings->size(); ii < (size_t) dim; ++ii)
 		{
 			Strings->push_back(Strings->at(0) + std::to_string(ii + 1));
 		}
 	}
-		
+
 }
 
 //---------------------------------------------------------------------------
-void ClassPar::ExpandShrink(long new_dim) 
+void ClassPar::ExpandShrink(long new_dim)
 {
 
 	// backup current string
 
-	if (varType == TVar::Txt) 
+	if (varType == TVar::Txt)
 	{
 		StringsBkup = new std::vector<std::string>(*Strings);
 	}
-	else if (varType == TVar::Float) 
+	else if (varType == TVar::Float)
 	{
 		layvaluesBkup = new double* [lay];
 		for (int ii = 0; ii < lay; ii++)
@@ -71,7 +71,7 @@ void ClassPar::ExpandShrink(long new_dim)
 			for (int ii = 0; ii < dim; ii++)
 				layvaluesBkup[jj][ii] = layvalues[jj][ii];
 	}
-	else if (varType == TVar::Int) 
+	else if (varType == TVar::Int)
 	{
 		ilayvaluesBkup = new long* [lay];
 		for (int ii = 0; ii < lay; ii++)
@@ -96,7 +96,7 @@ void ClassPar::ExpandShrink(long new_dim)
 		delete[] ilayvalues; //Array [nhru] [lay]
 		ivalues = NULL;
 	}
-	else if (varType == TVar::Txt) 
+	else if (varType == TVar::Txt)
 	{
 		Strings->clear();
 	}
@@ -141,14 +141,14 @@ void ClassPar::ExpandShrink(long new_dim)
 		for (int kk = 0; kk < dim; ++kk)
 			ivalues[kk] = 0;
 	}
-	else if (varType == TVar::Txt) 
+	else if (varType == TVar::Txt)
 	{
 		Strings->clear();
 	}
 
 	// copy data into expanded/shrunk array
 
-	if (varType == TVar::Txt) 
+	if (varType == TVar::Txt)
 	{
 		if (StringsBkup->size() > 0)
 		{
@@ -160,7 +160,7 @@ void ClassPar::ExpandShrink(long new_dim)
 		}
 		StringsBkup = NULL;
 	}
-	else if (varType == TVar::Float) 
+	else if (varType == TVar::Float)
 	{
 		for (int jj = 0; jj < lay; jj++)
 			for (int ii = 0; ii < dim; ii++)
@@ -187,11 +187,11 @@ void ClassPar::ExpandShrink(long new_dim)
 //---------------------------------------------------------------------------
 void ClassPar::BackUp() {
 
-	if (varType == TVar::Txt) 
+	if (varType == TVar::Txt)
 	{
 		StringsBkup = new std::vector<std::string>(*Strings);
 	}
-	else if (varType == TVar::Float) 
+	else if (varType == TVar::Float)
 	{
 		layvaluesBkup = new double* [lay];
 		for (int ii = 0; ii < lay; ii++)
@@ -201,7 +201,7 @@ void ClassPar::BackUp() {
 			for (int ii = 0; ii < dim; ii++)
 				layvaluesBkup[jj][ii] = layvalues[jj][ii];
 	}
-	else if (varType == TVar::Int) 
+	else if (varType == TVar::Int)
 	{
 		ilayvaluesBkup = new long* [lay];
 		for (int ii = 0; ii < lay; ii++)
@@ -214,17 +214,17 @@ void ClassPar::BackUp() {
 }
 
 //---------------------------------------------------------------------------
-void ClassPar::Restore() 
+void ClassPar::Restore()
 {
 
-	if (varType == TVar::Txt) 
+	if (varType == TVar::Txt)
 	{
 		Strings = NULL;
 		Strings = new std::vector<std::string>(*StringsBkup);
 		delete StringsBkup;
 		StringsBkup = NULL;
 	}
-	else if (varType == TVar::Float) 
+	else if (varType == TVar::Float)
 	{
 
 		for (int jj = 0; jj < lay; jj++)
@@ -236,7 +236,7 @@ void ClassPar::Restore()
 		delete[] layvaluesBkup;  //Array [nhru] [lay]
 		layvaluesBkup = NULL;
 	}
-	else if (varType == TVar::Int) 
+	else if (varType == TVar::Int)
 	{
 
 		for (int jj = 0; jj < lay; jj++)
@@ -450,7 +450,7 @@ bool ClassPar::Same(ClassPar& p) {  // compares parameter data
 					return false;
 				}
 				else {
-					for (size_t ii = 0; ii < Strings->size(); ++ii) 
+					for (size_t ii = 0; ii < Strings->size(); ++ii)
 					{
 
 						if (Strings->at(ii) != p.Strings->at(ii))
@@ -485,18 +485,18 @@ void ClassPar::Change(ClassPar& p) {  // changes parameter data to 'p'
 
 	if (this == &p) return;
 
-	if (varType == TVar::Txt) 
+	if (varType == TVar::Txt)
 	{
 		Strings = NULL;
 		Strings = new std::vector<std::string>(*p.Strings);
 
 		// duplicate last field when # of HRUs increased
-		while (Strings->size() < (size_t) dim && Strings->size() > 0)  
+		while (Strings->size() < (size_t) dim && Strings->size() > 0)
 		{
 			Strings->push_back(Strings->at(Strings->size() - 1) + "");
 		}
 	}
-	else 
+	else
 	{
 		bool Bang = valstr.find("!") != string::npos;
 		for (int jj = 0; jj < lay; ++jj) {

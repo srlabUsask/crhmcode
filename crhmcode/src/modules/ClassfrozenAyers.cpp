@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassfrozenAyers.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassfrozenAyers.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -260,11 +261,11 @@ void ClassfrozenAyers::run(void) {
               cumsnowinfil[hh] += snowinfil[hh];
               cummeltrunoff[hh] += meltrunoff[hh];
 
-              /** 03/30/2020 commented out as not suitable for multiple year simulation 
-              * 
+              /** 03/30/2020 commented out as not suitable for multiple year simulation
+              *
               * Commented this out and corrected a small error in the below code to match code recived from kevin shook's group
               * - jhs507
-              * 
+              *
               if(cumsnowinfil[hh] - cumsnowinfil_0[hh] > INF[hh]) {
                   cummeltrunoff[hh] += (cumsnowinfil[hh] - cumsnowinfil_0[hh] - INF[hh]);
                   cumsnowinfil[hh] = (cumsnowinfil_0[hh] + INF[hh]);

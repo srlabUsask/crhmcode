@@ -10,10 +10,10 @@
 
 #include "ClassCRHM.h"
 #include "Classfilter.h"
-#include "NewModules.h"
+#include "../modules/newmodules/NewModules.h"
 #include "stddef.h"
 #include "GlobalDll.h"
-#include "../CRHMmain/CRHMLogger.h"
+#include "CRHMLogger.h"
 
 using namespace std;
 
@@ -168,7 +168,7 @@ ClassPar *ClassParFind(string module, string param) { // routine concatenates MO
 				}
 			}
 		}
-		if (jj > -1) 
+		if (jj > -1)
 		{
 			string s = Global::NewModuleName->at(jj) + ""; // two step to remove \0
 			if ((itPar = Global::MapPars.find(s + ' ' + param)) != Global::MapPars.end()) {
@@ -638,14 +638,14 @@ void setdim(TDim dimen, long dim) {
 }
 
 //---------------------------------------------------------------------------
-void   LogError(CRHMException Except) 
+void   LogError(CRHMException Except)
 {
 	//Old handler for Visual Studio Messages
-	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION, (unsigned int)&Except, 0); 
-	
+	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION, (unsigned int)&Except, 0);
+
 	CRHMLogger::instance()->log_run_error(Except);
-	
-	
+
+
 	if (Except.Kind == TExcept::TERMINATE)
 	{
 		CRHMLogger::instance()->log_to_console(Except.Message);
@@ -655,7 +655,7 @@ void   LogError(CRHMException Except)
 }
 
 //---------------------------------------------------------------------------
-void   LogError(string S, TExcept Kind) 
+void   LogError(string S, TExcept Kind)
 {
 	//Old handler for Visual Studio Messages
 	//SendMessage(Global::crhmLog, WM_CRHM_LOG_EXCEPTION1, (unsigned int)&S, (unsigned int)&Kind);
@@ -789,7 +789,7 @@ void   LogMessage(long hh, const char *S, double V, TExtra Opt) {
 	}
 
 	string SS = A + D + S + FloatToStrF(V, "ffFixed", 10, 4);
-	
+
 
 	CRHMLogger::instance()->log_run_message(SS);
 
@@ -818,7 +818,7 @@ void   LogMessage(long hh, const char *S, long V, TExtra Opt) {
 	}
 
 	string SS = A + D + S + to_string(V);
-	
+
 	CRHMLogger::instance()->log_run_message(SS);
 
 	//Old handler for Visual Studio Messages
@@ -846,7 +846,7 @@ void   LogMessage(long hh, const char *S, TExtra Opt) {
 	}
 
 	string SS = A + D + S;
-	
+
 	CRHMLogger::instance()->log_run_message(SS);
 
 	//Old handler for Visual Studio Messages

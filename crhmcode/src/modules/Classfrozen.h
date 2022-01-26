@@ -1,7 +1,6 @@
 //created by Manishankar Mondal
 
-#include "ClassModule/ClassModule.h"
-
+#include "../core/ClassModule.h"
 
 class Classfrozen : public ClassModule {
 public:

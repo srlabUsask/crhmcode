@@ -4,8 +4,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "../CRHMmain/CRHMmain.h"
-#include "../Common/Common.h"
+#include "CRHMmain.h"
+#include "Common.h"
 
 enum class OUTPUT_FORMAT {STD, OBS};
 
@@ -28,7 +28,7 @@ const std::string USE_MESSAGE = "\ncrhm [options] PROJECT_FILE\n"
 	"\n"
 	"\t-d DELIMITER - Specify a single character delimiter to use when generating file output. \n\t\tTab character is the default.\n"
 	"\n"
-	"\t--obs_file_directory DIRECTORY_PATH - Specify a directory where the obs files" 
+	"\t--obs_file_directory DIRECTORY_PATH - Specify a directory where the obs files"
 	"\n\t\t for this project are found. This directory will be prepended to the obsfile"
 	"\n\t\t names specified in the project file."
 	"\n\n"
@@ -54,8 +54,8 @@ private:
 	void read_argument(char* argument);
 	std::string unrecongnized_option(char* option);
 public:
-	//Standard Constructor 
-	CRHMArguments(); 
+	//Standard Constructor
+	CRHMArguments();
 
 	void readCommandLine(int argc, char * argv[]);
 	void validate();
@@ -72,5 +72,3 @@ public:
 };
 
 #endif // !CRHM_ARGUMENTS
-
-

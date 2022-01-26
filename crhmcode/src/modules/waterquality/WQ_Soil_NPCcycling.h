@@ -4,7 +4,7 @@
 #define WQ_Soil_NPCcyclingH
 //---------------------------------------------------------------------------
 
-#include "ClassModule/ClassModule.h"
+#include "../../core/ClassModule.h"
 
 #define numsubstances 7
 #define maxsoillayers 2
@@ -106,9 +106,9 @@ const double **wp_lay{ NULL }; // [maxsoillayers]
 //const double *ep; // water content: effectiv porosity(mm)
 //const double **ep_lay; // [maxsoillayers]
 const double *plant_uptk_NO3N{ NULL }; //
-const double **plant_uptk_NO3N_lay{ NULL }; // 
+const double **plant_uptk_NO3N_lay{ NULL }; //
 const double *plant_uptk_NH4N{ NULL }; //
-const double **plant_uptk_NH4N_lay{ NULL }; // 
+const double **plant_uptk_NH4N_lay{ NULL }; //
 const double *plant_uptk_SRP{ NULL }; //
 const double **plant_uptk_SRP_lay{ NULL }; //
 const double *pardenN{ NULL }; // nitrification
@@ -120,7 +120,7 @@ const double *pardegrhP{ NULL }; //
 const double *pardisfN{ NULL }; //
 const double *pardisfP{ NULL }; //
 const double *pardishN{ NULL }; //
-const double *pardishP{ NULL }; // 
+const double *pardishP{ NULL }; //
 
 const double *refractoryNmass_init{ NULL };
 const double **refractoryNmass_init_lay{ NULL };
@@ -308,7 +308,7 @@ ClassWQ_SoilBGC* klone(string name) const;
       double SUM(double XX[maxsoillayers][2], long part); // two dimensional arrays
 
       double SUM(double *XX); // one dimensional arrays
-      
+
       void runoff_pp_by_erosion();
 
       void calculate_erosion(double& erodedP);
@@ -318,8 +318,3 @@ ClassWQ_SoilBGC* klone(string name) const;
 };
 
 #endif
-
-
-
-
-

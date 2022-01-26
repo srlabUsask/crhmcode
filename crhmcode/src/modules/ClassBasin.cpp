@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassBasin.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassBasin.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -84,14 +85,14 @@ void Classbasin::init(void) {
 	  {
 		  RapidAdvance_to->at(0) = Common::trim(RapidAdvance_to->at(0));
 
-		  if (RapidAdvance_to->at(0).length() > 0) 
+		  if (RapidAdvance_to->at(0).length() > 0)
 		  {
-			  
+
 			  if (RapidAdvance_to->at(0).length() > 0)
 			  {
 				  Global::RapidAdvanceTo = StrToDate(RapidAdvance_to->at(0));
 			  }
-				  
+
 		  }
 	  }
 	  if (Loop_to->size() > 1)
@@ -99,18 +100,18 @@ void Classbasin::init(void) {
 		  Loop_to->at(0) = Common::trim(Loop_to->at(0));
 		  Loop_to->at(1) = Common::trim(Loop_to->at(1));
 
-		  if (Loop_to->at(0).length() > 0) 
+		  if (Loop_to->at(0).length() > 0)
 		  {
-			  
+
 			  if (Loop_to->at(0).length() > 0)
 			  {
 				  Global::LoopTo = StrToDate(Loop_to->at(0));
-			  }  
+			  }
 			  if (Loop_to->at(1).length() > 0)
 			  {
 				  Global::LoopCnt = Strtolong(Loop_to->at(1));
 			  }
-				  
+
 		  }
 	  }
   }

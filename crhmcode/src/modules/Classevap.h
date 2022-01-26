@@ -1,6 +1,6 @@
 //created by Manishankar Mondal
 
-#include "ClassModule/ClassModule.h"
+#include "../core/ClassModule.h"
 
 class Classevap : public ClassModule {
 public:

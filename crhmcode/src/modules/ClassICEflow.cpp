@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassICEflow.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassICEflow.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -110,7 +111,7 @@ void ClassICEflow::run(void) {
   if(nstep == 0 || Global::Freq == 1){ // end of every day
 
     for (long hhh = 0; chkStruct(hhh); ++hhh) {
-    
+
       hh = order[hhh] - 1; // do HRUs in the desired sequence
 
       if(Disable_ICEflow[hh])

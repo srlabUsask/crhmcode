@@ -10,7 +10,7 @@
 
 #include "ClassVar.h"
 #include "ClassCRHM.h"
-#include "NewModules.h"
+#include "../modules/newmodules/NewModules.h"
 #include "stddef.h"
 #include "GlobalDll.h"
 

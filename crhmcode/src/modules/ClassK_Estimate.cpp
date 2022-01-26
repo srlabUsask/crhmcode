@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassK_Estimate.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassK_Estimate.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -131,7 +132,7 @@ void ClassK_Estimate::init(void) {
 
 void ClassK_Estimate::run(void) {
 
-  
+
   const double den_water = 1000.0, acc_gravi = 9.8, dyna_visc_water = 0.001787;
 
   for(hh = 0; chkStruct(); ++hh){

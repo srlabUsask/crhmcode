@@ -2,11 +2,10 @@
 
 // 10/04/12
 //---------------------------------------------------------------------------
-
-#include "CRHM_parse/CRHM_parse.h"
-#include "ClassModule/ClassModule.h"
 #include <string>
-#include "ClassMacro.h"
-#include "DefCRHM/DefCRHM.h"
-//#include "boost/spirit/core/basics.hpp"
 
+#include "CRHM_parse.h"
+#include "ClassModule.h"
+#include "ClassMacro.h"
+#include "def/DefCRHM.h"
+//#include "boost/spirit/core/basics.hpp"

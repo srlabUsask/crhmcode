@@ -10,23 +10,23 @@
 
 #include "Classfilter.h"
 #include "ClassCRHM.h"
-#include "NewModules.h"
+#include "../modules/newmodules/NewModules.h"
 #include "stddef.h"
 #include "GlobalDll.h"
 
 using namespace std;
 
 Classfilter::Classfilter(ClassData* MyObs, string ToVar, string args, string argtypes) :
-	MyObs(MyObs), 
-	ToVar(ToVar), 
-	args(args), 
+	MyObs(MyObs),
+	ToVar(ToVar),
+	args(args),
 	argtypes(argtypes),
-	Vs(0), 
-	Cs(0), 
-	Error(0), 
-	ObsCnt(0), 
-	TotalCnt(0), 
-	FirstTime(true) 
+	Vs(0),
+	Cs(0),
+	Error(0),
+	ObsCnt(0),
+	TotalCnt(0),
+	FirstTime(true)
 {
 
 	for (unsigned int ii = 0; ii < argtypes.length(); ++ii)
@@ -46,7 +46,7 @@ Classfilter::Classfilter(ClassData* MyObs, string ToVar, string args, string arg
 		++Vs;
 	}
 
-	if (Vs) 
+	if (Vs)
 	{
 		Data = new double** [Vs];  // increment
 		for (int ii = 0; ii < Vs; ++ii)
@@ -65,7 +65,7 @@ Classfilter::Classfilter(ClassData* MyObs, string ToVar, string args, string arg
 }
 
 //---------------------------------------------------------------------------
-void Classfilter::doFunctions(long Line) 
+void Classfilter::doFunctions(long Line)
 {
 	for (int jj = 0; jj < ObsCnt; ++jj)
 	{
@@ -124,7 +124,7 @@ void Classfilter::fixup(void) { // must wait till memory allocated
 
 //---------------------------------------------------------------------------
 
-void Classfilter::readargs() 
+void Classfilter::readargs()
 {
 
 	MapVar::iterator itVar;
@@ -140,10 +140,10 @@ void Classfilter::readargs()
 	{
 		Comment = "filter";
 	}
-	else 
+	else
 	{
 		long tt;
-		while (tt = Comment.find("\\t"), tt != string::npos) 
+		while (tt = Comment.find("\\t"), tt != string::npos)
 		{
 			Comment.erase(tt, 1);
 			Comment[tt] = ' ';
@@ -163,29 +163,29 @@ void Classfilter::readargs()
 	long pp, pp2;
 
 	// allow for output location
-	for (Cnt = 0; Cnt < argtypes.length(); ++Cnt) 
-	{ 
+	for (Cnt = 0; Cnt < argtypes.length(); ++Cnt)
+	{
 		instr >> V;
 		if (instr.fail())
 		{
 			break;
 		}
-		
+
 		pp = V.find_first_not_of("0123456789 //:.+-Ee_");
-		if (pp == -1) 
-		{ 
+		if (pp == -1)
+		{
 			// constant
-			if (argtypes[Cnt] != 'C') 
+			if (argtypes[Cnt] != 'C')
 			{
 				error("expected constant");
 				return;
 			}
 
 			pp = V.find_first_of("://_");
-			if (pp != -1) 
+			if (pp != -1)
 			{ // time
 				pp2 = V.find_first_of("_");
-				if (pp2 == -1) 
+				if (pp2 == -1)
 				{
 					if (V[pp] == '/')
 					{
@@ -196,7 +196,7 @@ void Classfilter::readargs()
 						C = StrToTime(V);
 					}
 				}
-				else 
+				else
 				{
 					string z(V, 1, pp2 - 1);
 					C = StrToDate(z);
@@ -211,25 +211,25 @@ void Classfilter::readargs()
 
 			Constants[IndexC++] = C;
 		}
-		else 
-		{   
+		else
+		{
 			// variable
-			if (argtypes[Cnt] != 'V') 
+			if (argtypes[Cnt] != 'V')
 			{
 				error("expecting CONSTANT");
 				return;
 			}
 
-			if ((itVar = Global::MapVars.find("obs " + V)) != Global::MapVars.end()) 
+			if ((itVar = Global::MapVars.find("obs " + V)) != Global::MapVars.end())
 			{
 				thisVar = (*itVar).second;
-				if (thisVar->varType < TVar::Read) 
+				if (thisVar->varType < TVar::Read)
 				{
 					error("not observation variable");
 					return;
 				}
 			}
-			else 
+			else
 			{
 				error("unknown variable");
 				return;
@@ -246,19 +246,19 @@ void Classfilter::readargs()
 		}
 	}
 
-	if (Cnt != argtypes.length()) 
+	if (Cnt != argtypes.length())
 	{
 		error("too few arguments");
 		return;
 	}
 
-	if (Cnt > argtypes.length()) 
+	if (Cnt > argtypes.length())
 	{
 		error("too many arguments");
 		return;
 	}
 
-	if (!ToVar.empty()) 
+	if (!ToVar.empty())
 	{
 
 		TotalCnt = MyObs->DataCnt + MyObs->FilterCnt;
@@ -266,10 +266,10 @@ void Classfilter::readargs()
 
 		MyObs->FilterCnt += ObsCnt;
 
-		if ((itVar = Global::MapVars.find("obs " + ToVar)) != Global::MapVars.end()) 
+		if ((itVar = Global::MapVars.find("obs " + ToVar)) != Global::MapVars.end())
 		{
 			thisVar = (*itVar).second;
-			if (thisVar->varType >= TVar::Read) 
+			if (thisVar->varType >= TVar::Read)
 			{
 				DataIndx[Vs - 1] = thisVar->offset;
 				DataObsCnt[Vs - 1] = ObsCnt;

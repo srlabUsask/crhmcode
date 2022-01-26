@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "Classalbedo.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "Classalbedo.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -115,11 +116,11 @@ void Classalbedo::run(void) {
           DR = 0.001;
 
         //Subtracting a small epsilon to favor entering branch when values are close.
-        //This is done to account for double percision differences. 
+        //This is done to account for double percision differences.
         double epsilon = 1e-5;
 
-        if(net_snowD[hh] > (0.25 - epsilon)) // SF = SWE*2 if density 0.005 (0.5cm) 
-        { 
+        if(net_snowD[hh] > (0.25 - epsilon)) // SF = SWE*2 if density 0.005 (0.5cm)
+        {
           Albedo[hh] = Albedo[hh] + net_snowD[hh] * 0.1 * 2.0; // daily value
           if(Albedo[hh] > Albedo_snow[hh])
           {

@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassTestSparse.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassTestSparse.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -154,7 +155,7 @@ void ClassTestSparse::run(void) {
             Res_N_Var[hh] = Res_N_up[hh];
           else
             Res_N_Var[hh] = fLimit;
-            
+
           if(ObsCntRes_P_up >= hh) // file open
             Res_P_Var[hh] = Res_P_up[hh];
           else

@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "Classquinton.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "Classquinton.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -543,7 +544,7 @@ void Classquinton::run(void) {
     else if(variation == VARIATION_1)
       flowin[hh] += hru_p[0];
 
-	//Added after to get rid of errors 
+	//Added after to get rid of errors
 	double MINFLOAT = 0.00;
 
     if(flowin[hh] > MINFLOAT*2) cumflowin[hh] += flowin[hh];

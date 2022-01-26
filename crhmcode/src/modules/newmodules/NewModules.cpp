@@ -4,19 +4,21 @@
 //#include "vcl.h"
 #pragma hdrstop
 
-#include "NewModules.h"
-#include "WQ_CRHM.h"
-#include "WQ_Soil_NPCcycling.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <cmath>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "NewModules.h"
+#include "../waterquality/WQ_CRHM.h"
+#include "../waterquality/WQ_Soil_NPCcycling.h"
+#include "../../core/GlobalDll.h"
+#include "../../core/ClassCRHM.h"
+#include "SnobalDefines.h"
+
+
 
 #include "ClassBasin.h" //added by Manishankar Mondal
 #include "ClassGlobal.h" //added by Manishankar Mondal
@@ -24,9 +26,9 @@
 #include "ClassIntcp.h" //added by Manishankar Mondal
 #include "Classpbsm.h" //added by Manishankar Mondal
 #include "ClassNO_pbsm.h" //added by Manishankar Mondal
-#include "Classtsurface.h" //added by Manishankar Mondal 
-#include "Classalbedo.h" //added by Manishankar Mondal 
-#include "Classnetall.h" //added by Manishankar Mondal 
+#include "Classtsurface.h" //added by Manishankar Mondal
+#include "Classalbedo.h" //added by Manishankar Mondal
+#include "Classnetall.h" //added by Manishankar Mondal
 #include "Classebsm.h" //added by Manishankar Mondal
 #include "ClassTs.h" //added by Manishankar Mondal
 #include "ClassNeedle.h" //added by Manishankar Mondal
@@ -246,7 +248,7 @@ void MoveModulesToGlobal(string DLLName)
     DLLModules.AddModule(new Classlapse_rate_Monthly_Mod("lapse_rate_Monthly_Mod", "11/22/19", LMODULE::ADVANCE));
     DLLModules.AddModule(new ClassGlacier_melt_debris_cover_estimate_Mod("Glacier_melt_debris_cover_estimate_Mod", "11/22/19", LMODULE::ADVANCE));
   }
-                                                             
+
   DLLModules.AddModel("Prairie using sunshine hours or Qsi generated sunshine hours", "basin, global, obs, calcsun, intcp, pbsm, albedo, netall, ebsm, evap, PrairieInfiltration, Soil, Netroute");
   DLLModules.AddModel("Prairie slope using Qsi generated sunshine hours", "basin, global, obs, Slope_Qsi#3, intcp, calcsun#1, netall, pbsm, albedo, ebsm, evap, PrairieInfiltration, Soil, Netroute");
   DLLModules.AddModel("Prairie Annandale", "basin, global, obs, Annandale#1, intcp, netall, pbsm, albedo, ebsm, evap, PrairieInfiltration, Soil, Netroute");

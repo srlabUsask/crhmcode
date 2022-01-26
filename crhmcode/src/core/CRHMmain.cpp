@@ -17,10 +17,10 @@
 #include <ctime>
 
 #include "GlobalDll.h"
-#include "ClassModule/ClassModule.h"
-#include "NewModules.h"
-#include "../MacroUnit/MacroUnit.h"
-#include "Common/Common.h"
+#include "ClassModule.h"
+#include "../modules/newmodules/NewModules.h"
+#include "MacroUnit.h"
+#include "Common.h"
 #include "StandardConverterUtility.h"
 #include "CRHMLogger.h"
 
@@ -194,10 +194,10 @@ void CRHMmain::setSelectedObservatoions(std::list<std::pair<std::string, TSeries
 
 //manishankar added this function from CRHMmainDlg.cpp file.
 /*
-* Returns a reference to the ClassVar object with variable name related to the passed in string. 
+* Returns a reference to the ClassVar object with variable name related to the passed in string.
 *	The hru specifier of the variable will be stripped away before looking for the variable object
 *	ie. Albedo(1) and Albedo(2) will return the same object.
-* 
+*
 * @param vname - std::string with the name of the variable for which a reference to will be returned.
 * @return Reference to the ClassVar object specified by the string parameter
 */
@@ -209,7 +209,7 @@ ClassVar * CRHMmain::GetObjectOfVariable(string vname)
 	std::string name = vname.substr(0,pos);
 
 	std::map<std::string, ClassVar*>::iterator it = this->AllVariables->find(name);
-	
+
 	if (it != this->AllVariables->end())
 	{
 		return it->second;
@@ -218,7 +218,7 @@ ClassVar * CRHMmain::GetObjectOfVariable(string vname)
 	{
 		return NULL;
 	}
-	
+
 }
 
 //manishankar added this function from CRHMmainDlg.cpp file.
@@ -285,7 +285,7 @@ void CRHMmain::BldModelClick()
 					  //dirty = true;
 }
 
-bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD) 
+bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 {
 	this->finishedRun = false;
 	//saving the project file path. added by Manishankar.
@@ -302,7 +302,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 	std::string SS;
 
 	DataFile.open(OpenNamePrj.c_str());
-	if (!DataFile) 
+	if (!DataFile)
 	{
 		Common::Message("cannot open file", "File Error");
 		return false;
@@ -325,9 +325,9 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 	this->setAutoRun(false);
 	this->setAutoExit(false);
 
-	try 
+	try
 	{
-		do 
+		do
 		{
 			DataFile >> S;
 			if (DataFile.eof()) break;
@@ -396,10 +396,10 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 
 						//				      }   // was return
 					}
-					else 
+					else
 					{
 
-						
+
 						Common::Message(SS.c_str(), "Cannot find observation file. Exiting.");
 						CRHMException Except("Cannot find observation file.", TExcept::ERR);
 						LogError(Except);
@@ -471,7 +471,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					{
 						Global::OurModulesVariation->push_back(std::pair<std::string, unsigned short>(s, Variation));
 					}
-						
+
 					idx = S.find(' ');
 					S = S.substr(idx + 1);
 					idx = S.rfind(' ');
@@ -482,20 +482,20 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 				}
 
 				for (
-					std::list<std::pair<std::string, unsigned short>>::iterator it = Global::OurModulesVariation->begin(); 
-					it != Global::OurModulesVariation->end(); 
+					std::list<std::pair<std::string, unsigned short>>::iterator it = Global::OurModulesVariation->begin();
+					it != Global::OurModulesVariation->end();
 					it++
-					) 
+					)
 				{
 					string Name = it->first;
 					int jj = Global::AllModulesList->count(Name);
-					if (jj == 0) 
+					if (jj == 0)
 					{
 						CRHMException Except("Unknown Module: " + string(Name.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
 							"Unknown Module: incorrect CRHM version or DLL not loaded");
 						LogError(Except);
-						
+
 						for (
 							std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
 							it != Global::OurModulesList->end();
@@ -513,7 +513,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 
 						DataFile.seekg(0, ios_base::end);  // cause break out
 					}
-					else 
+					else
 					{
 						Variation = it->second;
 						Global::AllModulesList->find(Name)->second->variation = Variation;
@@ -617,7 +617,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 									{
 										thisPar = NULL;
 									}
-										
+
 								}
 							}
 							else
@@ -633,11 +633,11 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					if (thisPar) {
 						ClassPar *newPar = new ClassPar(*thisPar);
 						newPar->module = module; // set module name
-						if (thisPar->varType == TVar::Txt) 
+						if (thisPar->varType == TVar::Txt)
 						{
 							Common::tokenizeString(S.c_str(), newPar->Strings);
 						}
-						else 
+						else
 						{
 							Rows = 0;
 							istringstream instr; // count columns
@@ -712,7 +712,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 						{
 							ClassParSet(newPar);  // can delete newPar!
 						}
-							
+
 					}
 					else {
 						if (param != "Use_Observations_As_Supplied") {
@@ -764,7 +764,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 								listIt != SelectedVariables->end();
 								listIt++)
 							{
-								if (listIt->first == SS) 
+								if (listIt->first == SS)
 								{
 									listContainsSS = true;
 								}
@@ -775,7 +775,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 							{
 								SelectedVariables->push_back(std::pair<std::string, ClassVar*>(SS, thisVar));
 							}
-								
+
 						} // for
 					}
 					else {
@@ -812,10 +812,10 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 
 							if (Kind == "_obs") Kind = "";
 							SS = thisVar->name + "(" + Common::longtoStr(labs(Index)) + ")" + Kind;
-							
-							
+
+
 							bool selectedObservationsContainsSS = false;
-							for ( 
+							for (
 								std::list<std::pair<std::string, TSeries*>>::iterator it = SelectedObservations->begin();
 								it != SelectedObservations->end();
 								it++
@@ -827,7 +827,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 								}
 							}
 
-							if (selectedObservationsContainsSS != true) 
+							if (selectedObservationsContainsSS != true)
 							{
 
 								TSeries *cdSeries = NULL;
@@ -891,15 +891,15 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 				else
 					SaveStateFileName = "";
 				}
-			else if (S == "Log_Last") 
+			else if (S == "Log_Last")
 			{
 				this->setReportAll(false);
 			}
-			else if (S == "Log_All") 
+			else if (S == "Log_All")
 			{
 				this->setReportAll(true);
 			}
-			else if (S == "Auto_Run") 
+			else if (S == "Auto_Run")
 			{
 				this->setAutoRun(true);
 			}
@@ -972,18 +972,18 @@ void CRHMmain::FormCreate() {
 
 	ProjectList = new std::list<std::string>;
 
-	
+
 	Global::AllModulesList = new std::map<std::string, ClassModule * >;
 	Global::OurModulesList = new std::list<std::pair<std::string, ClassModule*>>;
 	Global::OurModulesVariation = new std::list<std::pair<std::string, unsigned short>>;
 	Global::ModuleBitSet = new std::set<std::string>;
 
 	Global::MacroModulesList = new std::vector<std::string>;
-	
+
 
 	Global::AllModelsList = new std::list<std::pair<std::string, int>>();
 	Global::ModelModulesList = new std::list<std::pair<std::string, Administer* >>();
-	
+
 	Global::OurHelpList = NULL;   // DLL help files
 	Global::PendingDLLModuleList = new std::list<std::pair<std::string, ClassModule *>>(); // current DLL modules
 
@@ -1010,7 +1010,7 @@ void CRHMmain::FormCreate() {
 	Global::NewModuleName->insert(Global::NewModuleName->begin(), newModuleNames, newModuleNames + 6);
 
 #if !defined NO_MODULES
-	for (size_t ii = 0; ii < Global::NewModuleName->size(); ++ii) 
+	for (size_t ii = 0; ii < Global::NewModuleName->size(); ++ii)
 	{
 		size_t jj = Global::AllModulesList->count(Global::NewModuleName->at(ii));
 		assert(jj != 0);
@@ -1033,7 +1033,7 @@ void CRHMmain::FormCreate() {
 
 	Global::NaNcheck = false;
 	Global::LOGVARLOAD = false;
-	
+
 
 }
 
@@ -1045,10 +1045,10 @@ void  CRHMmain::InitModules(void) {
 
 	// executes the DECL portion of the declvar/declparam etc. routines
 	for (
-		std::list<std::pair<std::string, ClassModule *>>::iterator it = Global::OurModulesList->begin(); 
-		it != Global::OurModulesList->end(); 
+		std::list<std::pair<std::string, ClassModule *>>::iterator it = Global::OurModulesList->begin();
+		it != Global::OurModulesList->end();
 		it++
-		) 
+		)
 	{
 		it->second->nhru = Global::nhru;
 		it->second->decl();
@@ -1261,7 +1261,7 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		SelectedVariables->clear();
 	}
 	else {
-		
+
 		string serTitle;
 		int jj;
 
@@ -1296,8 +1296,8 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		{
 
 			thisVar = positionOfSerTitle->second;
-			if (thisVar->DLLName == "Macro") 
-			{ 
+			if (thisVar->DLLName == "Macro")
+			{
 				// delete only macros
 				//cdSeries[jj]->ParentChart = NULL;
 				//cdSeries[jj]->Clear();
@@ -1306,7 +1306,7 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 				{
 					cdSeries[kk - 1] = cdSeries[kk];
 				}
-					
+
 				SelectedVariables->erase(positionOfSerTitle);
 				SeriesCnt--; // no need to increment
 			}
@@ -1322,7 +1322,7 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		if (it->second->DLLName == "Macro")
 		{
 			AllVariables->erase(it->first);
-			it = AllVariables->begin(); //This line included to match pervious code only. 
+			it = AllVariables->begin(); //This line included to match pervious code only.
 		}
 	}
 
@@ -1343,17 +1343,17 @@ void CRHMmain::MacroLoad(void)
 
 
 
-	if (Global::MacroModulesList->size() > 0) 
+	if (Global::MacroModulesList->size() > 0)
 	{
 		size_t Macro = 0;
 
 		//while (Global::MacroModulesList->Count - 1 > Macro) {
-		while (Macro < Global::MacroModulesList->size()) 
+		while (Macro < Global::MacroModulesList->size())
 		{
 
 			string s = Global::MacroModulesList->at(Macro);
 			string::size_type ppp = s.find_last_not_of(' ');
-			if (s.empty() || ppp == string::npos || s[0] == '/') 
+			if (s.empty() || ppp == string::npos || s[0] == '/')
 			{
 				++Macro;
 				continue;
@@ -1371,7 +1371,7 @@ void CRHMmain::MacroLoad(void)
 			{
 				Desc = "'no description given'"; // Bld handles as block
 			}
-				
+
 
 			ClassMacro *Custom = new ClassMacro(s, Macro, "04/20/06", Desc);
 			AdminMacro.AddModule(Custom);
@@ -1379,7 +1379,7 @@ void CRHMmain::MacroLoad(void)
 			string S, SS;
 
 			S = Global::MacroModulesList->at(Macro).c_str();
-			S = Common::trim(S); 
+			S = Common::trim(S);
 			SS = S.substr(0, 3);
 
 			while (
@@ -1412,12 +1412,12 @@ void CRHMmain::MacroLoad(void)
 }
 
 //---------------------------------------------------------------------------
-string CRHMmain::DeclObsName(ClassVar *thisVar) 
+string CRHMmain::DeclObsName(ClassVar *thisVar)
 {
 	string Newname = thisVar->name;
-	
+
 	//std::map<std::string, ClassModule*>::iterator pos = Global::OurModulesList->find(thisVar->module); // find module
-	
+
 	std::list<std::pair<std::string, ClassModule*>>::iterator pos = Global::OurModulesList->end();
 	for (
 		std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
@@ -1432,7 +1432,7 @@ string CRHMmain::DeclObsName(ClassVar *thisVar)
 	}
 
 	if (pos != Global::OurModulesList->end() && Newname.rfind("#") != string::npos) // -1 for "obs" and "#" for declared "obs"
-	{ 
+	{
 		ClassModule* thisModule = pos->second;
 		if (thisModule->isGroup) { // if group add suffix
 			string AA("@@");
@@ -1471,7 +1471,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 	{
 		return false;
 	}
-		
+
 	if (ObsFilesList->size() == 0) {
 		Global::DTstart = 0; // used to flag first data file
 		Global::DTend = 0; // used to flag first data file
@@ -1505,7 +1505,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 
 		FileData->ModN = Global::Freq / FileData->Freq;
 
-		
+
 		ClassVar * thisVar;
 
 		// always starts with this display
@@ -1527,7 +1527,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 			selectedVarIt++)
 		{
 			thisVar = selectedVarIt->second;
-			if (thisVar && thisVar->varType >= TVar::Read) 
+			if (thisVar && thisVar->varType >= TVar::Read)
 			{
 				SelectedVariables->erase(selectedVarIt);
 			}
@@ -1552,7 +1552,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 		return true;
 	}
 	else {
-		if (ObsFilesList->size() == 0) 
+		if (ObsFilesList->size() == 0)
 		{
 			Global::DTstart = 0; // used to flag first data file
 			Global::DTend = 0; // used to flag first data file
@@ -1564,7 +1564,7 @@ bool  CRHMmain::OpenObsFile(string FileName)
 }
 //---------------------------------------------------------------------------
 
-void  CRHMmain::ObsCloseClick(void) 
+void  CRHMmain::ObsCloseClick(void)
 {
 
 	AllObservations->clear();
@@ -1574,7 +1574,7 @@ void  CRHMmain::ObsCloseClick(void)
 		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
 		it != ObsFilesList->end();
 		it++
-		) 
+		)
 	{
 		ClassData * FileData = it->second;
 		delete FileData;   // delete ClassData instance
@@ -1582,7 +1582,7 @@ void  CRHMmain::ObsCloseClick(void)
 
 	ObsFilesList->clear();  // clear list
 
-	
+
 
 	Global::nobs = 1;  // reset to 1
 
@@ -1610,7 +1610,7 @@ void  CRHMmain::ObsFileClose(std::string filepath)
 	}
 
 	/*If the desired file is the only obs file open. Close all obs files.*/
-	if (position == ObsFilesList->begin() && ObsFilesList->size() == 1) 
+	if (position == ObsFilesList->begin() && ObsFilesList->size() == 1)
 	{
 		ObsCloseClick();
 		return;
@@ -1635,7 +1635,7 @@ void  CRHMmain::ObsFileClose(std::string filepath)
 		}
 	}
 
-	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) 
+	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++)
 	{
 		thisVar = (*itVar).second;
 		//if (thisVar->varType < CRHM::Read && thisVar->visibility == CRHM::VARIABLE) //changed by Manishankar.
@@ -1644,7 +1644,7 @@ void  CRHMmain::ObsFileClose(std::string filepath)
 			if (AllVariables->count((*itVar).second->name) == 0)
 			{
 				AllVariables->insert(std::pair<std::string, ClassVar*>((*itVar).second->name, (*itVar).second));
-			}	
+			}
 		}
 	}
 
@@ -1659,7 +1659,7 @@ void  CRHMmain::FormDestroy(void)
 		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
 		it != ObsFilesList->end();
 		it++
-		) 
+		)
 	{
 		ClassData * FileData = it->second;
 		delete FileData;   // delete ClassData instance
@@ -1824,7 +1824,7 @@ MMSData *  CRHMmain::RunClick2Start()
 		return mmsdata;  // do not run
 	}
 
-	if (SelectedVariables->size() == 0) 
+	if (SelectedVariables->size() == 0)
 	{
 #if defined(VS_GUI)
 		AfxMessageBox(_T("No model output selected"));
@@ -1841,10 +1841,10 @@ MMSData *  CRHMmain::RunClick2Start()
 	LogMessageX(" ");
 
 	for (
-		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin(); 
-		it != ObsFilesList->end(); 
+		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
+		it != ObsFilesList->end();
 		it++
-		) 
+		)
 	{
 		Message = "Observation file: " + it->first;
 		LogMessageX(Message.c_str());
@@ -1864,19 +1864,19 @@ MMSData *  CRHMmain::RunClick2Start()
 	string S = string("Module List \"");
 	for (
 		std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
-		it != Global::OurModulesList->end(); 
+		it != Global::OurModulesList->end();
 		it++
-		) 
+		)
 	{
 		ClassModule* thisModule = it->second;
 		S += it->first;
-		if (thisModule->variation != 0) 
+		if (thisModule->variation != 0)
 		{
 			string AA("#0");
 			AA[1] += (char) (log(thisModule->variation) / log(2) + 1);
 			S += AA;
 		}
-		
+
 		std::list<std::pair<std::string, ClassModule*>>::iterator pos = it;
 
 		if (pos++ == Global::OurModulesList->end())
@@ -1887,7 +1887,7 @@ MMSData *  CRHMmain::RunClick2Start()
 		{
 			S += ", ";
 		}
-			
+
 	}
 
 	if (!Global::MapAKA.empty()) {
@@ -2007,27 +2007,27 @@ MMSData *  CRHMmain::RunClick2Start()
 		}
 	}
 
-	
-	
 
-	if (GoodRun) 
+
+
+	if (GoodRun)
 	{
-		if (!OpenStateFlag) 
+		if (!OpenStateFlag)
 		{
 			thisPar = ParFind("basin INIT_STATE");
-			if (thisPar && thisPar->Strings->size() && !thisPar->Strings->at(0).empty()) 
+			if (thisPar && thisPar->Strings->size() && !thisPar->Strings->at(0).empty())
 			{
 				OpenNameState = thisPar->Strings->at(0);
 				OpenStateFlag = true;
 			}
-			else 
+			else
 			{
 				MapPar::iterator itPar;
 
-				for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++) 
+				for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); itPar++)
 				{
 					thisPar = (*itPar).second;
-					if (thisPar->param == "INIT_STATE" && thisPar->Strings->size() && !thisPar->Strings->at(0).empty()) 
+					if (thisPar->param == "INIT_STATE" && thisPar->Strings->size() && !thisPar->Strings->at(0).empty())
 					{
 						OpenNameState = thisPar->Strings->at(0);
 						OpenStateFlag = true;
@@ -2049,13 +2049,13 @@ MMSData *  CRHMmain::RunClick2Start()
 		// deletes module allocated storage
 		for (
 			std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
-			modIt != Global::OurModulesList->end(); 
+			modIt != Global::OurModulesList->end();
 			modIt++
 			)
 		{
 			modIt->second->finish(false);
 		}
-			
+
 		Global::BuildFlag = TBuild::DECL;
 		return mmsdata;
 	}
@@ -2079,7 +2079,7 @@ MMSData *  CRHMmain::RunClick2Start()
 	std::list<std::pair<std::string, ClassVar*>>::iterator selectedVarIterator = SelectedVariables->begin();
 	for (int ii = 0; ii < SeriesCnt; ii++)
 	{
-		
+
 
 		thisVar = selectedVarIterator->second;
 
@@ -2181,7 +2181,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			print_progress_start();
 		}
 
-		
+
 		if (Global::DTindx == Global::DTmin)
 		{
 			//Calculate the name of the output file store it in OpenNameReport
@@ -2202,7 +2202,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			{
 				print_progress(Global::DTindx, enddate, this->UpdateProgress);
 			}
-			
+
 			//CRHMLogger::instance()->log_to_console(to_string(((float)Global::DTindx / (float)enddate) * 100.0f));
 
 			iter++;
@@ -2259,7 +2259,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
 				modIt != Global::OurModulesList->end();
 				modIt++
-				) 
+				)
 			{
 				Global::CurrentModuleRun = modIt->first;
 
@@ -2307,7 +2307,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				{
 					Global::ModuleBitSet->insert(Global::CurrentModuleRun);
 				}
-					
+
 			} // end for
 			  //--------------------------------------------------------------------------------------------------
 
@@ -2391,7 +2391,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				this->reportStream->SendTimeStepToReport(this);
 			}
 
-			
+
 
 		} // end for
 
@@ -2405,17 +2405,17 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 		*/
 		if (Global::DTindx == Global::DTmax)
 		{
-			
+
 			this->reportStream->CloseStream();
 		}
-		
-		
+
+
 		int d = iter;
 		Global::BuildFlag = TBuild::DECL;
 
 	}
 
-	catch (exception &E) 
+	catch (exception &E)
 	{
 		//string S = E.Message + " at " + FormatString(Global::DTnow, "yyyy'/'m'/'d hh':'nn") + " in '" + Global::OurModulesList->Strings[Modii] + "'";
 		//    ShowMessage(S);
@@ -2450,17 +2450,17 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 	{
 		modIt->second->finish(true);
 	}
-		
-	if (GoodRun) 
+
+	if (GoodRun)
 	{
-		
+
 		if (SaveStateFlag)
 		{
 			SaveState();
 		}
 
 		this->finishedRun = true;
-			
+
 	}
 
 	//double timediff2 = double(clock() - begintime2) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
@@ -2485,7 +2485,7 @@ void CRHMmain::CheckBlankModule() {
 }
 
 
-void  CRHMmain::RunClick(void) {	
+void  CRHMmain::RunClick(void) {
 	MMSData * mmsdata = CRHMmain::RunClick2Start();
 	CRHMmain::RunClick2Middle(mmsdata, Global::DTmin, Global::DTmax);
 	CRHMmain::RunClick2End(mmsdata);
@@ -2500,14 +2500,14 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 	StateList = new std::list<std::string>();
 	MapVar::iterator itVar;
 	ClassVar * thisVar;
-	
+
 	string S;
 	bool Needed;
 
 	Global::RunUpBitSet.reset();
 
 	bool Wild = false;
-	
+
 	// first parameter determines the type
 	if (VarPar && !VarPar->Strings->at(0).empty())
 	{
@@ -2550,10 +2550,10 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 
 			if (!thisVar->InGroup || Global::ModuleBitSet->count(thisVar->module))  // All variables in simple projects and module requested group projects
 				Needed = true;
-			else if (MainLoop) 
+			else if (MainLoop)
 			{
 				string namebasic = thisVar->name;
-				
+
 				size_t indx_namebasic = -1;
 				if (VarPar)
 				{
@@ -2573,7 +2573,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 				}
 				else if (Wild) { // if Wild reduce parameter to root
 					string::size_type Idx = namebasic.find("@");
-					if (Idx != string::npos) 
+					if (Idx != string::npos)
 					{
 						namebasic = namebasic.substr(1, Idx - 1);
 
@@ -2600,7 +2600,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 			} // MainLoop!
 		} // state variable!
 
-		if (Needed) 
+		if (Needed)
 		{
 			S = thisVar->module + " " + thisVar->name;
 			StateList->push_back(S);
@@ -2660,7 +2660,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 
 			file.close();
 		}
-		else 
+		else
 		{
 			CRHMException e = CRHMException("Cannot open file "+ ProjectDirectory + "\\" + "ControlStateFile.tmp1 to save state file.", TExcept::ERR);
 			CRHMLogger::instance()->log_run_error(e);
@@ -2691,7 +2691,7 @@ void CRHMmain::ControlSaveState(bool MainLoop, ClassPar * VarPar)
 		}
 
 	}
-		
+
 	delete StateList;
 }
 
@@ -2798,10 +2798,10 @@ void CRHMmain::DoObsStatus(bool &First)
 {
 	if (First) {
 		for (
-			std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin(); 
-			it != ObsFilesList->end(); 
+			std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
+			it != ObsFilesList->end();
 			it++
-			) 
+			)
 		{
 			ClassData * FileData = it->second;
 			FileData->TimeIndx = 0;
@@ -2810,18 +2810,18 @@ void CRHMmain::DoObsStatus(bool &First)
 	}
 
 	for (
-		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin(); 
-		it != ObsFilesList->end(); 
+		std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
+		it != ObsFilesList->end();
 		it++
-		) 
+		)
 	{
 		ClassData * FileData = it->second;
 
 		FileData->GoodInterval = true;
 
 		// first observation file always good
-		if (it == ObsFilesList->begin())  
-		{  
+		if (it == ObsFilesList->begin())
+		{
 			FileData->GoodDay = true;
 			continue;
 		}
@@ -2829,8 +2829,8 @@ void CRHMmain::DoObsStatus(bool &First)
 		FileData->GoodInterval = true;
 
 		// sparse data
-		if (FileData->Times != NULL) 
-		{ 
+		if (FileData->Times != NULL)
+		{
 			FileData->GoodDay = false;
 
 			while (FileData->Times[FileData->TimeIndx] < Global::DTnow
@@ -2907,9 +2907,9 @@ void CRHMmain::ResetLoopList(void) { // writes to "CRHM_loop_output" and cleans 
 	{
 		FileName += string("_"); //??? + ID;
 	}
-		
+
 	ofstream file(ProjectDirectory + "\\" + FileName + ".txt");
-	
+
 	if (file)
 	{
 		for (
@@ -2945,7 +2945,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 	bool Wild = false;
 
 	// first parameter determines the type
-	if (VarPar && !VarPar->Strings->at(0).empty()) 
+	if (VarPar && !VarPar->Strings->at(0).empty())
 	{
 		Wild = VarPar->Strings->at(0).find("@") == string::npos;
 	}
@@ -3017,7 +3017,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 		{
 			mod = pos->second;
 		}
-		else 
+		else
 		{
 			Common::Message((string("State File module ") + module), "Unknown module");
 			DataFile.ignore(180, '#');
@@ -3048,7 +3048,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 				namebasic = namebasic.substr(1, Idx - 1);
 		}
 
-		if (thisVar) 
+		if (thisVar)
 		{
 
 			size_t indx_namebasic = -1;
@@ -3064,15 +3064,15 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 				}
 			}
 
-			if (VarPar && indx_namebasic > -1) 
+			if (VarPar && indx_namebasic > -1)
 			{
-				if (LoopList == NULL) 
+				if (LoopList == NULL)
 				{
 					LoopList = new std::list<std::string>();
 					Sx = DttoStr(Global::DTnow);
 					LoopList->push_back(Sx);
 				}
-				if (first) 
+				if (first)
 				{
 					Sx = "loop " + inttoStr(Global::LoopCnt - Global::LoopCntDown + 1) + "\t" + name;
 					first = false;
@@ -3144,24 +3144,24 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 		{
 			Wild2 = TraceVarPar->Strings->at(0).find("@") == string::npos;
 		}
-			
 
-		for (size_t ii = 0; ii < TraceVarPar->Strings->size(); ++ii) 
+
+		for (size_t ii = 0; ii < TraceVarPar->Strings->size(); ++ii)
 		{
 			string Trimmed = Common::trim(TraceVarPar->Strings->at(ii));
-			if (!Trimmed.empty()) 
+			if (!Trimmed.empty())
 			{
 
-				if (AllVariables->count(Trimmed)) 
+				if (AllVariables->count(Trimmed))
 				{
 					for (
 						std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
-						modIt  != Global::OurModulesList->end(); 
+						modIt  != Global::OurModulesList->end();
 						modIt++
-						) 
+						)
 					{
 						ClassVar * thisVar = VarFind(string(modIt->first) + ' ' + TraceVarPar->Strings->at(0));
-						if (thisVar) 
+						if (thisVar)
 						{
 							break;
 						}
@@ -3202,7 +3202,7 @@ void  CRHMmain::ControlReadState(bool MainLoop, ClassPar * VarPar) {
 	{
 		LoopList->push_back(Sx);
 	}
-		
+
 }
 
 
@@ -3278,7 +3278,7 @@ void CRHMmain::calculateOutputFileName()
 	{
 		OpenNameReport = this->OutputName;
 	}
-	
+
 }
 
 
@@ -3356,7 +3356,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		{
 			ProjectList->push_back("'" + Global::MacroModulesList->at(ii) + "'");
 		}
-			
+
 
 		ProjectList->push_back("######");
 
@@ -3376,10 +3376,10 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->push_back("Observations:");
 		ProjectList->push_back("######");
 		for (
-			std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin(); 
-			it != ObsFilesList->end(); 
+			std::list<std::pair<std::string, ClassData*>>::iterator it = ObsFilesList->begin();
+			it != ObsFilesList->end();
 			it++
-			) 
+			)
 		{
 			string S = it->first;
 			ProjectList->push_back(S);
@@ -3426,13 +3426,13 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->push_back("######");
 		for (
 			std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
-			modIt != Global::OurModulesList->end(); 
+			modIt != Global::OurModulesList->end();
 			modIt++
-			) 
+			)
 		{
 			ClassModule* thisModule = modIt->second;
 			string S = modIt->first;
-			if (thisModule->variation > 0) 
+			if (thisModule->variation > 0)
 			{
 				string AA("#0 ");
 				AA[1] += (char) (log(thisModule->variation) / log(2) + 1);
@@ -3442,7 +3442,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			{
 				S = S + " ";
 			}
-				
+
 			S = S + thisModule->DLLName + " ";
 			S = S + thisModule->Version;
 			ProjectList->push_back(S);
@@ -3492,7 +3492,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 				ProjectList->push_back(S);
 
-				for (long jj = 0; jj<thisPar->lay; jj++) 
+				for (long jj = 0; jj<thisPar->lay; jj++)
 				{
 					S = "";
 					for (size_t ii = 0; ii < (size_t) thisPar->dim; ii++) {
@@ -3550,7 +3550,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 		ProjectList->push_back("Final_State");
 		ProjectList->push_back("######");
-		if (SaveStateFlag) 
+		if (SaveStateFlag)
 		{
 			ProjectList->push_back(SaveStateFileName);
 		}
@@ -3605,7 +3605,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		std::list<std::pair<std::string, ClassVar*>>::iterator selectedVariablesIt = SelectedVariables->begin();
 		selectedVariablesIt != SelectedVariables->end();
 		selectedVariablesIt++
-		) 
+		)
 	{
 
 		long lay, dim;
@@ -3613,7 +3613,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ExtractHruLay(selectedVariablesIt->first, dim, lay);
 
 		//need to modify possibly
-		ClassVar *thisVar = selectedVariablesIt->second; 
+		ClassVar *thisVar = selectedVariablesIt->second;
 		//previous code
 		//ClassVar *thisVar = (ClassVar *)ii; //Manishankar's code
 		//thisVar->TchrtOpt = 1; //added by Manishankar
@@ -3656,7 +3656,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	for (
 		std::list<std::pair<std::string, TSeries*>>::iterator it = SelectedObservations->begin();
 		it != SelectedObservations->end();
-		it++) 
+		it++)
 	{
 
 		string S = it->first;
@@ -3785,13 +3785,13 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 
 
 	//need to check
-	if (this->getAutoRun()) 
+	if (this->getAutoRun())
 	{
 		ProjectList->push_back("Auto_Run");
 		ProjectList->push_back("######");
 	}
 
-	if (this->getAutoExit()) 
+	if (this->getAutoExit())
 	{
 		ProjectList->push_back("Auto_Exit");
 		ProjectList->push_back("######");
@@ -3816,7 +3816,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	//	SaveChartToFile(Chart, FileName, false, true);
 	//}
 	//
-	
+
 	//
 	//if (Last1->Checked) {
 	//	ProjectList->Add("Log_Last");
@@ -3949,18 +3949,18 @@ string  CRHMmain::ExtractHruLayFunct(string S, long &Hru, long &Lay, string &Fun
 		bool found = false;
 		for (size_t i = 0; i < ListHruNames->size(); i++)
 		{
-			if (ListHruNames->at(i) == sub) 
+			if (ListHruNames->at(i) == sub)
 			{
 				Hru = i;
 				found = true;
 			}
 		}
 
-		if (found == false) 
+		if (found == false)
 		{
 			Hru = -1;
 		}
-		
+
 		if (Hru == -1) // detects observations - still numeric index value
 		{
 			Hru = stoi(S.substr(jj + 1, jj1 - jj - 1));
@@ -3972,7 +3972,7 @@ string  CRHMmain::ExtractHruLayFunct(string S, long &Hru, long &Lay, string &Fun
 				++Hru;
 			}
 		}
-			
+
 	}
 
 	FullName = S.substr(1, jj2); // return name and bracket
@@ -3999,7 +3999,7 @@ void CRHMmain::ClearModules(bool All) {
 			modIt->second->reset();
 		}
 	}
-		
+
 
 	Global::OurModulesList->clear();
 
@@ -4047,7 +4047,7 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 
 	readErrorIndicator = fgets(line, sizeof line, obfile); //reading the first line. discarding because first line is not an obsname
 
-	if (readErrorIndicator == NULL) 
+	if (readErrorIndicator == NULL)
 	{
 		CRHMException e = CRHMException("Error reading and discarding the first line of an obsfile.", TExcept::TERMINATE);
 		CRHMLogger::instance()->log_run_error(e);
@@ -4064,7 +4064,7 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 			break;
 		}
 
-		//copy the read line character by character into obsname until a space is reached 
+		//copy the read line character by character into obsname until a space is reached
 		for (unsigned int i = 0; i < strlen(line); i++)
 		{
 			obsname[i] = line[i];
@@ -4076,15 +4076,15 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 			}
 		}
 
-		//loop over the previous observation names to see if the current obsname matches 
-		//a previously recorded observation name with a '$' prepended to it indicating a derived observation 
-		//If this is found decriment j which has the effect of discarding the current obsname 
+		//loop over the previous observation names to see if the current obsname matches
+		//a previously recorded observation name with a '$' prepended to it indicating a derived observation
+		//If this is found decriment j which has the effect of discarding the current obsname
 		for (int i = 0; i < j; i++)
 		{
 			char test[128]{};
-			test[0] = '$'; 
+			test[0] = '$';
 			test[1] = '\0';
-			
+
 			strcat(test, obsnames[i]);
 
 			if (strcmp(obsname, test) == 0)
@@ -4113,9 +4113,9 @@ void CRHMmain::GetObservationNames(char* obsfilepath)
 void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 {
 	int length = strlen(observationname);
-	if (observationname[length - 1] == '\n') 
-	{ 
-		observationname[length - 1] = '\0'; 
+	if (observationname[length - 1] == '\n')
+	{
+		observationname[length - 1] = '\0';
 	}
 
 	FILE * obfile = fopen(obsfilepath, "r");
@@ -4128,7 +4128,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 
 	char* readErrorIndicator;
 
-	readErrorIndicator = fgets(line, sizeof line, obfile); //reading the first line which gets discarded as the first line in the obsfile is a description 
+	readErrorIndicator = fgets(line, sizeof line, obfile); //reading the first line which gets discarded as the first line in the obsfile is a description
 
 	if (readErrorIndicator == NULL)
 	{
@@ -4143,36 +4143,36 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 		obsname[0] = '\0';
 
 		//End the loop if the line begins with '#' which indicates the break between obsnames and data
-		if (line[0] == '#') 
-		{ 
-			break; 
+		if (line[0] == '#')
+		{
+			break;
 		}
 
-		//Loop along the line unntil a space character is reached 
+		//Loop along the line unntil a space character is reached
 		for (unsigned int i = 0; i < strlen(line); i++)
 		{
 			obsname[i] = line[i];
 			if (line[i] == ' ')
 			{
-				obsname[i] = '\0'; //end the obsname with a null byte 
-				strcpy(obsnames[j], obsname); //copy the new obsname into the obsname array. 
+				obsname[i] = '\0'; //end the obsname with a null byte
+				strcpy(obsnames[j], obsname); //copy the new obsname into the obsname array.
 				break;
 			}
 		}
 
 		//if the current obsname matches the requested observation name set obsindex
-		if (strcmp(obsname, observationname) == 0) 
-		{ 
-			obsindex = j + 1; 
+		if (strcmp(obsname, observationname) == 0)
+		{
+			obsindex = j + 1;
 		}
-		
-		//loop over the previous observation names to see if the current obsname matches 
-		//a previously recorded observation name with a '$' prepended to it indicating a derived observation 
-		//If this is found decriment j which has the effect of discarding the current obsname 
+
+		//loop over the previous observation names to see if the current obsname matches
+		//a previously recorded observation name with a '$' prepended to it indicating a derived observation
+		//If this is found decriment j which has the effect of discarding the current obsname
 		for (int i = 0; i < j; i++)
 		{
 			char test[128]{};
-			test[0] = '$'; 
+			test[0] = '$';
 			test[1] = '\0';
 
 			strcat(test, obsnames[i]);
@@ -4214,12 +4214,12 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 		{
 			obsvalue = atof(tokens[tokencount - obscount + obsindex - 1]);
 		}
-		else 
+		else
 		{
 			CRHMException Except("Reading an obs file attempted to read before the begining of an array", TExcept::TERMINATE);
 		}
 
-		
+
 
 		dateelements = tokencount - obscount;
 		if (dateelements == 1) { ddate = atof(tokens[0]); }
@@ -4237,10 +4237,10 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 /*
 * Returns passed in string with hru identifier appended
 *
-* hru identifer is numeric if CRHMmain::HruNames is false 
+* hru identifer is numeric if CRHMmain::HruNames is false
 * if CRHMmain HruNames is true the identifier is looked up in
 * CRHMmaim::ListHruNames
-* 
+*
 * @param S string - string to append hru identifer to
 * @param Hru long - numerical identifier of Hru
 * @param dimen TDim - demension type of passed in variable
@@ -4252,7 +4252,7 @@ string CRHMmain::BuildHru(string S, long Hru, TDim dimen) {
 	{
 		return S + "(" + to_string(Hru) + ")";
 	}
-	else 
+	else
 	{
 
 
@@ -4260,7 +4260,7 @@ string CRHMmain::BuildHru(string S, long Hru, TDim dimen) {
 		if (dimen == TDim::BASIN)
 		{
 			SS = "(" + ListHruNames->front() + ")";
-		}	
+		}
 		else
 		{
 			SS = "(" + ListHruNames->at(Hru) + ")";
@@ -4282,7 +4282,7 @@ void CRHMmain::SaveState()
 
 	MapVar::iterator itVar;
 	ClassVar* thisVar;
-	
+
 	std::string S;
 
 	StateList->push_back("Description of State File - to be added");
@@ -4368,7 +4368,7 @@ void CRHMmain::SaveState()
 
 }
 
-void CRHMmain::print_progress_start() 
+void CRHMmain::print_progress_start()
 {
 	std::cout << "Running simulation...\n";
 }

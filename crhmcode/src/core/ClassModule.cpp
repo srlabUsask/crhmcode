@@ -12,7 +12,7 @@
 
 
 #include "ClassModule.h"
-#include "Common/Common.h"
+#include "Common.h"
 
 
 //---------------------------------------------------------------------------
@@ -68,24 +68,24 @@ void ClassModule::initbase(void) {
 
 
 	if (Var_NDEFN_cnt) {
-		
+
 		Var_loop_lay_table = new double**[Var_NDEFN_cnt]; // define [#Var][#layers]
-														 
+
 		for (long jj = 0; jj < Var_NDEFN_cnt; ++jj) {
 			Var_loop_lay_table[jj] = new double*[nlay];
 		}
-		
+
 		Var_loop_lay_value = new double*[Var_NDEFN_cnt]; // define [#Var]
 		for (long jj = 0; jj < Var_NDEFN_cnt; ++jj)
 			Var_loop_lay_value[jj] = new double[nhru];
 	}
 	else {
-		
+
 		Var_loop_lay_table = NULL;
 		Var_loop_lay_value = NULL;
 	}
 
-	
+
 
 	if (Par_NDEFN_cnt) {
 		Par_loop_lay_table = new double**[Par_NDEFN_cnt];
@@ -106,19 +106,19 @@ void ClassModule::initbase(void) {
 		Par_loop_lay_value = NULL;
 	}
 
-	
+
 
 	Var_NDEFN_cnt = 0;
 	Par_NDEFN_cnt = 0;
 
 
-	
+
 
 	decl();  // executes the INIT portion of the declvar/declparam etc. routines
 
 	init();  // executes the module init() routine
 
-			 
+
 
 }
 
@@ -182,7 +182,7 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 	}
 
 	case TBuild::INIT: {
-		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end()) 
+		if ((itVar = Global::MapVars.find(Name + " " + variable)) != Global::MapVars.end())
 		{
 			newVar = (*itVar).second;
 			*value = newVar->values;
@@ -194,25 +194,25 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 				return 0;
 
 			long querycnt = 0;
-			for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) 
+			for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++)
 			{
 				ClassVar* foundVar = (*itVar).second;
 
-				if (newVar != NULL) 
+				if (newVar != NULL)
 				{
-					if (foundVar->FileData) 
+					if (foundVar->FileData)
 					{
 						continue;
 					}
-					
+
 					string S = foundVar->name;
 					string::size_type indx = S.find('@');
-					
-					if (indx != string::npos) 
+
+					if (indx != string::npos)
 					{
 						string N = S.substr(indx + 1);
 						S = S.erase(indx);
-						if (S == queryvar) 
+						if (S == queryvar)
 						{
 							newVar->layvalues[querycnt] = foundVar->values;
 							newVar->values[querycnt] = foundVar->dim;
@@ -221,8 +221,8 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 					} // if - found group
 				} // if - not null, is it possible?
 			} // for
-			
-			if (newVar != NULL) 
+
+			if (newVar != NULL)
 			{
 				*layvalue = newVar->layvalues; // return address
 			}
@@ -232,10 +232,10 @@ int ClassModule::declgrpvar(string variable, string queryvar, string help,
 				LogError(Except);
 				throw Except;
 			}
-			
+
 			return querycnt;
 		}
-		else 
+		else
 		{
 			CRHMException Except("variable not found: " + Name + ' ' + variable, TExcept::TERMINATE);
 			LogError(Except);
@@ -710,7 +710,7 @@ void ClassModule::decllocal(string variable, TDim dimen, string help,
 
 //---------------------------------------------------------------------------
 std::vector<std::string> * ClassModule::decldiagparam(string param, TDim dimen,
-	string Texts, string help, std::vector<std::string> * stringsList, TVISIBLE Local) 
+	string Texts, string help, std::vector<std::string> * stringsList, TVISIBLE Local)
 {
 
 	std::vector<std::string> * fix = declparam(param, dimen, Texts, help, stringsList, Local);
@@ -731,7 +731,7 @@ std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
-	if (Variation_Skip()) 
+	if (Variation_Skip())
 	{
 		return NULL;
 	}
@@ -742,7 +742,7 @@ std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
 
 	switch (Global::BuildFlag) {
 
-	case TBuild::BUILD: 
+	case TBuild::BUILD:
 	{
 		VandP VP; VP.PutV(variation_set); VP.PutP((int)Local);
 		PairstrV Item2 = PairstrV(param.c_str(), VP.both);
@@ -837,8 +837,8 @@ void ClassModule::declparam(string param, TDim dimen,
 
 	variation_max = variation_max | variation_set;
 
-	Convert convert; 
-	
+	Convert convert;
+
 	convert.CheckUnitsString(Name, param, units);
 
 	AKAhook(TAKA::PARD, Name, param, param);
@@ -1848,7 +1848,7 @@ long ClassModule::declobsfunc(string obs, string variable, double **value, TFun 
 	case TBuild::BUILD: {
 		pair<Mapstr::iterator, Mapstr::iterator> range = Global::Mapreadvar.equal_range(Name.c_str());
 		//string units; local variable is not used - jhs507
-		 
+
 		for (Mapstr::iterator itMap = range.first; itMap != range.second; ++itMap) {
 			if (itMap->second.first == obs.c_str()) {
 				//units = itMap->second.second; units is set here with a long value to a string but never used - jhs507
@@ -2458,7 +2458,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 
 	Mapstr2::iterator it; // holds NewName AND source
 
-	
+
 	OUTCOME Outcome = OUTCOME::None;
 
 	TAKA typeL = type; // fudge until AKA screen fixed
@@ -2485,7 +2485,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 			}
 		}
 
-		if (foundInDeclRootList == true) 
+		if (foundInDeclRootList == true)
 		{ // looping redirection
 			if (typeL == TAKA::OBSF)
 			{
@@ -2527,7 +2527,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 						foundInDeclRootList = true;
 					}
 				}
-				if (foundInDeclRootList == true) 
+				if (foundInDeclRootList == true)
 				{
 					Outcome = OUTCOME::IgnoreObs;
 				}
@@ -2593,7 +2593,7 @@ void ClassModule::AKAhook(TAKA type, string module, string OrgName, string & New
 						foundInDeclRootList = true;
 					}
 				}
-				if (foundInDeclRootList == true) 
+				if (foundInDeclRootList == true)
 				{
 					Outcome = OUTCOME::IgnoreVar;
 				}
@@ -2679,7 +2679,7 @@ void ClassModule::ReadObs(bool Reset) {
 	}
 
 	if (Global::DTindx%Global::Freq == 0) { // only at start of day
-		while (pN != FunctListN->size() && FunctListN->at(pN).first == Name.c_str()) 
+		while (pN != FunctListN->size() && FunctListN->at(pN).first == Name.c_str())
 		{
 
 			ClassVar *P = FunctListN->at(pN).second;
@@ -2688,7 +2688,7 @@ void ClassModule::ReadObs(bool Reset) {
 
 			if (P->FunctVar->FileData->GoodDay)
 			{
-				(P->*(P->UserFunct))();				
+				(P->*(P->UserFunct))();
 			}
 
 			if (P->CustomFunct) // execute any extra features except for nfreq observations   && !P->nfreq
@@ -2701,7 +2701,7 @@ void ClassModule::ReadObs(bool Reset) {
 	}
 
 	while (p < ReadListN->size() && ((ReadListN->at(p).first == Name.c_str()) || GroupCnt == 0))  //  && ReadListN->strings[p] == "obs"
-	{	
+	{
 		ClassVar *P = ReadListN->at(p).second;
 		P->dim = nhru; // check if necessary. Group?
 
@@ -2735,7 +2735,7 @@ bool ClassModule::ReadAheadObs(long inc) {
 
 	size_t p = 0;
 
-	while (p < ReadListN->size()) 
+	while (p < ReadListN->size())
 	{
 		ClassVar *P = ReadListN->at(p).second;
 		if (P->FileData->GoodInterval)
@@ -2747,7 +2747,7 @@ bool ClassModule::ReadAheadObs(long inc) {
 
 	if (Global::DTindx%Global::Freq == 0) {
 		p = 0;
-		while (p < FunctListN->size() && FunctListN->at(p).first == Name.c_str()) 
+		while (p < FunctListN->size() && FunctListN->at(p).first == Name.c_str())
 		{
 			ClassVar *P = FunctListN->at(p).second;
 			if (P->FunctVar->FileData->GoodDay)
@@ -2765,7 +2765,7 @@ bool ClassModule::ReadAheadObs(long inc) {
 }
 
 //---------------------------------------------------------------------------
-bool ClassModule::ReadAheadObsMacro(long inc) 
+bool ClassModule::ReadAheadObsMacro(long inc)
 {
 	// called by 'macros'. ReadAheadObsMacro(0) must be called at end to reset Global::DTnow
 
@@ -2780,7 +2780,7 @@ bool ClassModule::ReadAheadObsMacro(long inc)
 
 	size_t p = 0;
 
-	while (p < ReadListN->size()) 
+	while (p < ReadListN->size())
 	{
 		ClassVar *P = (ClassVar*)ReadListN->at(p).second;
 		if (P->FileData->GoodInterval)
@@ -2790,10 +2790,10 @@ bool ClassModule::ReadAheadObsMacro(long inc)
 		++p;
 	}
 
-	if (Global::DTindx%Global::Freq == 0) 
+	if (Global::DTindx%Global::Freq == 0)
 	{
 		p = 0;
-		while (p < FunctListN->size()) 
+		while (p < FunctListN->size())
 		{
 			ClassVar *P = FunctListN->at(p).second;
 			if (P->FunctVar->FileData->GoodDay)
@@ -2812,7 +2812,7 @@ bool ClassModule::ReadAheadObsMacro(long inc)
 
 //---------------------------------------------------------------------------
 
-bool ClassModule::WriteAheadObsMacro(long inc) 
+bool ClassModule::WriteAheadObsMacro(long inc)
 {
 	// called by 'macros'
 
@@ -2825,7 +2825,7 @@ bool ClassModule::WriteAheadObsMacro(long inc)
 
 	size_t p = 0;
 
-	while (p < ReadListN->size()) 
+	while (p < ReadListN->size())
 	{
 		ClassVar *P = ReadListN->at(p).second;
 		if (P->FileData->GoodInterval)
@@ -2860,7 +2860,7 @@ bool ClassModule::AnyOne(double *Data, int Cnt, double Val) {
 }
 
 //---------------------------------------------------------------------------
-bool ClassModule::UsingObservations(void) 
+bool ClassModule::UsingObservations(void)
 {
 
 	if (ReadListN->size() || FunctListN->size())
@@ -2949,11 +2949,11 @@ void ClassModule::addtofunctlist(ClassVar *newVar) {
 	ClassVar *P;
 	string::size_type indx;
 
-	while (p < FunctListN->size()) 
+	while (p < FunctListN->size())
 	{
 		P = (ClassVar*)FunctListN->at(p).second;
 
-		if (newVar == P) 
+		if (newVar == P)
 		{
 			if (this->Name == this->NameRoot && GroupCnt == 0) // duplicates possible in simple projects
 			{
@@ -3308,7 +3308,7 @@ ClassModule* ClassModule::FindModule_from_parameter(string source, string param)
 		}
 	}
 
-	if (GroupCnt) 
+	if (GroupCnt)
 	{
 		//long ii = Global::OurModulesList->count(Name.c_str()); // find group macro
 		//ClassMacro* macro = (ClassMacro*)Global::OurModulesList->Objects[ii]; // access it
@@ -3316,8 +3316,8 @@ ClassModule* ClassModule::FindModule_from_parameter(string source, string param)
 		//return    (long)macro->GrpstringList->Objects[jj]; // return object
 	}
 	else {
-		std::list<std::pair<std::string, ClassModule*>>::iterator pos = Global::OurModulesList->end(); 
-		
+		std::list<std::pair<std::string, ClassModule*>>::iterator pos = Global::OurModulesList->end();
+
 		for (
 			std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
 			it != Global::OurModulesList->end();
@@ -3523,15 +3523,15 @@ void ClassModule::declgetparam(string source, string param, string units, const 
 }
 
 //---------------------------------------------------------------------------
-ClassModule* ClassModule::link(string Module) 
+ClassModule* ClassModule::link(string Module)
 {
 
 	if (Name == Module.c_str())
 	{
 		return NULL; // self
 	}
-		
-	std::list<std::pair<std::string, ClassModule*>>::iterator pos; 
+
+	std::list<std::pair<std::string, ClassModule*>>::iterator pos;
 	for (
 		std::list<std::pair<std::string, ClassModule*>>::iterator it = Global::OurModulesList->begin();
 		it != Global::OurModulesList->end();
@@ -3552,5 +3552,5 @@ ClassModule* ClassModule::link(string Module)
 	{
 		return pos->second;
 	}
-		
+
 }

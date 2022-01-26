@@ -7,7 +7,7 @@ CRHMLogger::CRHMLogger()
 {
     try
     {
-        auto logger = spdlog::rotating_logger_st("run_log", "crhmRun.log", 1024 * 1024 * 10, 5, true);
+        auto logger = spdlog::rotating_logger_st("run_log", "crhmRun.log", 1024 * 1024 * 10, 5);
         logger->set_level(spdlog::level::level_enum::trace);
         this->runLogger = logger;
     }
@@ -52,7 +52,7 @@ void CRHMLogger::log_to_console(std::string msg)
 void CRHMLogger::log_run_error(CRHMException exception)
 {
 
-    switch (exception.Kind) 
+    switch (exception.Kind)
     {
         case TExcept::TERMINATE:
             SPDLOG_LOGGER_CRITICAL(this->runLogger, exception.Message);
@@ -70,7 +70,7 @@ void CRHMLogger::log_run_error(CRHMException exception)
 
 }
 
-void CRHMLogger::log_run_message(std::string msg) 
+void CRHMLogger::log_run_message(std::string msg)
 {
     SPDLOG_LOGGER_INFO(this->runLogger, msg);
 }

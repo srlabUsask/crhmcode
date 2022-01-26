@@ -6,16 +6,18 @@
 #ifndef ClassModuleH
 #define ClassModuleH
 //---------------------------------------------------------------------------
+#include <cmath>
+#include <string>
+#include <time.h>
+
 #include "GlobalCommon.h"
 #include "GlobalDll.h"
-#include "ClassCRHM/ClassCRHM.h"
+#include "ClassCRHM.h"
 #include "Administer.h"
 #include "Myparser.h"
 #include "ClassClark.h"
 #include "ClassMuskingum.h"
-#include <cmath>
-#include <string>
-#include <time.h>
+
 
 
 using namespace std;

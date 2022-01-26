@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassObs.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassObs.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -263,7 +264,7 @@ void Classobs::pre_run(void) {
 
   Global::RH_VP_flag2 = const_cast<long *> (this->ClimChng_flag);
 
-  
+
 }
 
 void Classobs::run(void) {

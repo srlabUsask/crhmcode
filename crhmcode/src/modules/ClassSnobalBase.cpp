@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassSnobalBase.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassSnobalBase.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -72,7 +73,7 @@ void ClassSnobalBase::init(void) {
         {
             current_time[hh] = 0;
         }
-        
+
 
         melt_direct_cum[hh] = 0.0;
         E_s_cum[hh] = 0.0;
@@ -115,7 +116,7 @@ void ClassSnobalBase::init(void) {
             tstep_info[hh][SMALL_TSTEP].intervals = 15;
             tstep_info[hh][SMALL_TSTEP].threshold = DEFAULT_SMALL_THRESHOLD;  // 1
         }
-        
+
     }
 }
 
@@ -1865,7 +1866,7 @@ psi(double zeta,		// z/lo
     double	result{};
 
     if (zeta > 0) // stable
-    {		
+    {
         if (zeta > 1)
         {
             zeta = 1;
@@ -1873,10 +1874,10 @@ psi(double zeta,		// z/lo
         result = -BETA_S * zeta;
     }
     else if (zeta < 0) // unstable
-    {	
+    {
         x = sqrt(sqrt(1.0 - BETA_U * zeta));
 
-        switch (code) 
+        switch (code)
         {
             case SM:
                 result = 2.0 * log((1.0 + x) / 2.0) + log((1.0 + x * x) / 2.0) -
@@ -1893,7 +1894,7 @@ psi(double zeta,		// z/lo
                 LogError(TExcept);
         }
     }
-    else //Zeta == 1, neutral 
+    else //Zeta == 1, neutral
     {
         result = 0.0;
     }

@@ -3,10 +3,10 @@
 #include <fstream>
 #include <string>
 
-#include "../Common/CRHMException.h"
+#include "CRHMException.h"
 #include "CRHMmain.h"
 #include "CRHMLogger.h"
-#include "../GlobalDll.h"
+#include "GlobalDll.h"
 
 class CRHMmain;
 
@@ -26,4 +26,3 @@ public:
 
 
 };
-

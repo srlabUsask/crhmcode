@@ -1,16 +1,17 @@
 //created by Manishankar Mondal
 
-#include "ClassSetSoil.h"
-#include "GlobalDll.h"
-#include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <algorithm>
+
+#include "ClassSetSoil.h"
+#include "../core/GlobalDll.h"
+#include "../core/ClassCRHM.h"
+#include "newmodules/SnobalDefines.h"
+
 
 using namespace CRHM;
 
@@ -117,10 +118,10 @@ void ClassSetSoil::init(void) {
 
     if (RapidAdvance_to->at(0).length() > 0)
     {
-        try 
+        try
         {
             Global::RapidAdvanceTo = StrToDate(RapidAdvance_to->at(0));
-            if (Loop_to->size() >= 1) 
+            if (Loop_to->size() >= 1)
             {
                 Global::LoopTo = StrToDate(Loop_to->at(0));
                 if (Loop_to->size() == 2)
@@ -130,7 +131,7 @@ void ClassSetSoil::init(void) {
             }
 
         }
-        catch (...) 
+        catch (...)
         {
             CRHMException TExcept("Error in 'RapidAdvance_to' or 'Loop_to' parameters", TExcept::TERMINATE);
             LogError(TExcept);
@@ -139,7 +140,7 @@ void ClassSetSoil::init(void) {
             Global::LoopCnt = 0;
         }
     }
-        
+
 
     for (hh = 0; chkStruct(); ++hh) {
         double Fract = (Vol_h2o_content[hh] * 1000 - SetSoilproperties[soiltype_rechr[hh]][1]) / SetSoilproperties[soiltype_rechr[hh]][0];
