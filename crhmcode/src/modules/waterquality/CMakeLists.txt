@@ -1,4 +1,4 @@
-add_library(waterquality
+add_library(waterquality OBJECT
     Class_lapse_rate_Monthly.cpp
     ClassGlacier_debris_cover.cpp
     ClassGlacier_melt_debris_cover_estimate_Mod.cpp
@@ -17,4 +17,8 @@ add_library(waterquality
     ClassWQ_Test_Hype.cpp
     WQ_CRHM.cpp
     WQ_Soil_NPCcycling.cpp
+)
+
+target_include_directories(waterquality PUBLIC
+    ../../libs/boost_1_75_0
 )

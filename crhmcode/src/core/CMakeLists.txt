@@ -15,7 +15,7 @@ add_subdirectory(exec)
 add_subdirectory(def)
 add_subdirectory(filter)
 
-add_library(core
+add_library(core OBJECT
     Administer.cpp
     ClassClark.cpp
     ClassCRHM.cpp
@@ -44,11 +44,11 @@ add_library(core
     VarCHRM.cpp
 )
 
-target_link_libraries(core
-    def
-    exec
-    filter
-)
+# target_link_libraries(core
+#     def
+#     exec
+#     filter
+# )
 
 
 add_dependencies(core spdlog)
@@ -56,4 +56,5 @@ add_dependencies(core spdlog)
 target_include_directories(core PUBLIC
     ${STAGING_DIR}/include/
     ../config.h
+    ../libs/boost_1_75_0
 )

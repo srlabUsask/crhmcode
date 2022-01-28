@@ -2,7 +2,7 @@ add_subdirectory(newmodules)
 
 add_subdirectory(waterquality)
 
-add_library(modules
+add_library(modules OBJECT
     Class_z_s_rho.cpp
     Class3D_Param.cpp
     Classalbedo.cpp
@@ -52,6 +52,7 @@ add_library(modules
     ClassMeltRunoff_lag.cpp
     ClassMod_Exec.cpp
     ClassNeedle.cpp
+    Classnetall.cpp
     ClassNetroute_D.cpp
     ClassNetroute_M_D.cpp
     ClassNetroute_M.cpp
@@ -94,9 +95,10 @@ add_library(modules
     Classwinter_meltflag.cpp
     ClassXG.cpp
     ClassXGAyers.cpp
+
 )
 
-target_link_libraries(modules
-    waterquality
-    newmodules
-)
+# target_link_libraries(modules
+#     waterquality
+#     newmodules
+# )

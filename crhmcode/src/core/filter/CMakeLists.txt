@@ -1,4 +1,4 @@
-add_library(filter
+add_library(filter OBJECT
     Classabs.cpp
     Classadd.cpp
     ClassaddV.cpp
@@ -43,8 +43,9 @@ add_library(filter
     ClasssubV.cpp
     Classtime.cpp
     ClassTimeshift.cpp
+    Classsin.cpp
 )
 
 target_include_directories(filter PUBLIC
-    ../
+    ../../libs/boost_1_75_0
 )

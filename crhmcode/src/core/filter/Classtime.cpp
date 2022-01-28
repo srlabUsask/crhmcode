@@ -1,6 +1,6 @@
 #include "../Classfilter.h"
 #include "Classtime.h"
-#include <GlobalDll.h>
+#include "../GlobalDll.h"
 
 using namespace std;
 
