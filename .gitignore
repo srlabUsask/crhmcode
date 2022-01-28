@@ -268,3 +268,4 @@ __pycache__/
 /crhmcode/src/vcc/prj
 
 build/
+/crhmcode/src/libs/boost_1_75_0

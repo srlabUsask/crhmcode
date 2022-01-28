@@ -1496,22 +1496,53 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="CRHMGUI.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\output_wnd.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\output_wnd_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\userimages.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\CRHM_GUIDoc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\CRHM_GUI.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar256.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\CRHMGUI.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files (x86)\Steema Software\TeeChart Pro v2018 ActiveX Evaluation\TeeChart2018.ocx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ChiralClickButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchyDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RightClickListBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CRHMmainDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\CRHMAboutBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\CRHM_GUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\CRHM_GUIDoc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\CRHM_GUIView.cpp">
+    <ClCompile Include="gui\CConstruct.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\CExport.cpp">
@@ -1526,7 +1557,25 @@
     <ClCompile Include="gui\CReport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CConstruct.cpp">
+    <ClCompile Include="gui\CRHM_GUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\CRHM_GUIDoc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\CRHM_GUIView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\CRHMAboutBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\CRHMmainDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\CTChart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\CWebBrowser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\FlowDiagramDlg.cpp">
@@ -1535,529 +1584,538 @@
     <ClCompile Include="gui\MacroEntryDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gui\MainFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="gui\OutputWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\ResourceDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\MainFrm.cpp">
+    <ClCompile Include="..\core\Administer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CWebBrowser.cpp">
+    <ClCompile Include="..\core\ClassClark.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CTChart.cpp">
+    <ClCompile Include="..\core\ClassCRHM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\Classfilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassMacro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassMuskingum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassPar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ClassVar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\Common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\Convert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\CRHM_parse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\CRHMArguments.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\CRHMLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\CRHMmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\core\GlobalDll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\core\MacroClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\MacroUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\Myparser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\ReportStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\snowcover.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\core\StandardConverterUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\ClassCRHM.cpp">
+    <ClCompile Include="..\core\Tresult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\ClassData.cpp">
+    <ClCompile Include="..\core\VarCHRM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\ClassVar.cpp">
+    <ClCompile Include="..\core\filter\Classabs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\ClassPar.cpp">
+    <ClCompile Include="..\core\filter\Classadd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Classfilter.cpp">
+    <ClCompile Include="..\core\filter\ClassaddV.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassFtoC.cpp">
+    <ClCompile Include="..\core\filter\Classconst.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassCtok.cpp">
+    <ClCompile Include="..\core\filter\Classcos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassReplace.cpp">
+    <ClCompile Include="..\core\filter\ClassCtoK.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassKtoC.cpp">
+    <ClCompile Include="..\core\filter\Classdiv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassTimeshift.cpp">
+    <ClCompile Include="..\core\filter\ClassdivV.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassRH_WtoI.cpp">
+    <ClCompile Include="..\core\filter\Classea.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classea.cpp">
+    <ClCompile Include="..\core\filter\Classexp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classrh.cpp">
+    <ClCompile Include="..\core\filter\Classexpv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classsin.cpp">
+    <ClCompile Include="..\core\filter\ClassForce.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classcos.cpp">
+    <ClCompile Include="..\core\filter\ClassFtoC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classabs.cpp">
+    <ClCompile Include="..\core\filter\Classjulian.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classexp.cpp">
+    <ClCompile Include="..\core\filter\ClassKtoC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classpoly.cpp">
+    <ClCompile Include="..\core\filter\Classlog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classpolyv.cpp">
+    <ClCompile Include="..\core\filter\Classlogv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classlog.cpp">
+    <ClCompile Include="..\core\filter\ClassMissing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classlogv.cpp">
+    <ClCompile Include="..\core\filter\ClassMissing0.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classpow.cpp">
+    <ClCompile Include="..\core\filter\ClassMissingC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classpowv.cpp">
+    <ClCompile Include="..\core\filter\ClassMissingFlag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classtime.cpp">
+    <ClCompile Include="..\core\filter\ClassMissingFlagAfter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classjulian.cpp">
+    <ClCompile Include="..\core\filter\ClassMissingInter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classrefwind.cpp">
+    <ClCompile Include="..\core\filter\ClassMissingrepl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classsquare.cpp">
+    <ClCompile Include="..\core\filter\Classmul.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classramp.cpp">
+    <ClCompile Include="..\core\filter\ClassmulV.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classadd.cpp">
+    <ClCompile Include="..\core\filter\Classpoly.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classsub.cpp">
+    <ClCompile Include="..\core\filter\Classpolyv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classmul.cpp">
+    <ClCompile Include="..\core\filter\Classpow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classdiv.cpp">
+    <ClCompile Include="..\core\filter\Classpowv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classaddv.cpp">
+    <ClCompile Include="..\core\filter\Classpulse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classpulse.cpp">
+    <ClCompile Include="..\core\filter\Classramp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classexpv.cpp">
+    <ClCompile Include="..\core\filter\Classrandom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classrandom.cpp">
+    <ClCompile Include="..\core\filter\Classrefwind.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClasssubV.cpp">
+    <ClCompile Include="..\core\filter\ClassReplace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassmulV.cpp">
+    <ClCompile Include="..\core\filter\Classrh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassdivV.cpp">
+    <ClCompile Include="..\core\filter\ClassRH_WtoI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\Classconst.cpp">
+    <ClCompile Include="..\core\filter\ClassSim.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassSim.cpp">
+    <ClCompile Include="..\core\filter\Classsin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassSmear.cpp">
+    <ClCompile Include="..\core\filter\ClassSmear.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassMissing.cpp">
+    <ClCompile Include="..\core\filter\Classsquare.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassMissingInter.cpp">
+    <ClCompile Include="..\core\filter\Classsub.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassMissing0.cpp">
+    <ClCompile Include="..\core\filter\ClasssubV.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassMissingFlagAfter.cpp">
+    <ClCompile Include="..\core\filter\Classtime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassMissingFlag.cpp">
+    <ClCompile Include="..\core\filter\ClassTimeshift.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassMissingrepl.cpp">
+    <ClCompile Include="..\core\exec\execbase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassForce.cpp">
+    <ClCompile Include="..\core\def\DefCRHM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Filters\ClassMissingC.cpp">
+    <ClCompile Include="..\core\def\Defdecldiag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\Convert.cpp">
+    <ClCompile Include="..\core\def\Defdeclgetvar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassModule\ClassModule.cpp">
+    <ClCompile Include="..\core\def\Defdecllocal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassModule\Administer.cpp">
+    <ClCompile Include="..\core\def\Defdeclobs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassModule\Myparser.cpp">
+    <ClCompile Include="..\core\def\Defdeclobsfunc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassModule\ClassClark.cpp">
+    <ClCompile Include="..\core\def\Defdeclparam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassModule\ClassMuskingum.cpp">
+    <ClCompile Include="..\core\def\Defdeclputparam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\Common\Common.cpp">
+    <ClCompile Include="..\core\def\Defdeclputvar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\Common\snowcover.cpp">
+    <ClCompile Include="..\core\def\Defdeclreadobs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\CRHM_parse\VarCHRM.cpp">
+    <ClCompile Include="..\core\def\Defdeclstatvar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\CRHM_parse\exec\execbase.cpp">
+    <ClCompile Include="..\core\def\Defdeclvar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\CRHMmain\CRHMmain.cpp">
+    <ClCompile Include="..\modules\Class_z_s_rho.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\MacroUnit.cpp">
+    <ClCompile Include="..\modules\Class3D_param.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\MacroClass.cpp">
+    <ClCompile Include="..\modules\Classalbedo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\ClassMacro.cpp">
+    <ClCompile Include="..\modules\ClassalbedoBaker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\DefCRHM.cpp">
+    <ClCompile Include="..\modules\Classalbedoobs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdeclparam.cpp">
+    <ClCompile Include="..\modules\Classalbedoobs2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdeclvar.cpp">
+    <ClCompile Include="..\modules\Classalbedoparam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdecldiag.cpp">
+    <ClCompile Include="..\modules\ClassalbedoRichard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdeclstatvar.cpp">
+    <ClCompile Include="..\modules\ClassalbedoWinstral.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdecllocal.cpp">
+    <ClCompile Include="..\modules\ClassAnnan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdeclobs.cpp">
+    <ClCompile Include="..\modules\ClassAyers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdeclgetvar.cpp">
+    <ClCompile Include="..\modules\ClassBasin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdeclputvar.cpp">
+    <ClCompile Include="..\modules\Classbrushintcp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdeclputparam.cpp">
+    <ClCompile Include="..\modules\Classcalcsun.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdeclreadobs.cpp">
+    <ClCompile Include="..\modules\Classcontribution.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdeclobsfunc.cpp">
+    <ClCompile Include="..\modules\Classcrack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Class3D_param.cpp">
+    <ClCompile Include="..\modules\ClassCRHMCanopy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classalbedo.cpp">
+    <ClCompile Include="..\modules\ClassCRHMCanopyClearing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassalbedoBaker.cpp">
+    <ClCompile Include="..\modules\ClassCRHMCanopyClearingGap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classalbedoobs.cpp">
+    <ClCompile Include="..\modules\Classebsm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classalbedoobs2.cpp">
+    <ClCompile Include="..\modules\Classevap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Class_z_s_rho.cpp">
+    <ClCompile Include="..\modules\Classevap_Resist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classalbedoparam.cpp">
+    <ClCompile Include="..\modules\ClassevapD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassalbedoRichard.cpp">
+    <ClCompile Include="..\modules\ClassevapD_Resist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassalbedoWinstral.cpp">
+    <ClCompile Include="..\modules\ClassevapX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassAnnan.cpp">
+    <ClCompile Include="..\modules\ClassFlowInSnow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassAyers.cpp">
+    <ClCompile Include="..\modules\Classfrostdepth.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassBasin.cpp">
+    <ClCompile Include="..\modules\Classfrozen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classbrushintcp.cpp">
+    <ClCompile Include="..\modules\ClassfrozenAyers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classcalcsun.cpp">
+    <ClCompile Include="..\modules\Classglacier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classcontribution.cpp">
+    <ClCompile Include="..\modules\Classglacier_debris.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classcrack.cpp">
+    <ClCompile Include="..\modules\ClassGlobal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassCRHMCanopy.cpp">
+    <ClCompile Include="..\modules\ClassGreenAmpt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassCRHMCanopyClearing.cpp">
+    <ClCompile Include="..\modules\ClassGreencrack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassCRHMCanopyClearingGap.cpp">
+    <ClCompile Include="..\modules\ClassGrow_Crop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classebsm.cpp">
+    <ClCompile Include="..\modules\ClassHMSA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classevap.cpp">
+    <ClCompile Include="..\modules\ClassHtobs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classevap_Resist.cpp">
+    <ClCompile Include="..\modules\ClassIceBulb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassevapD.cpp">
+    <ClCompile Include="..\modules\ClassICEflow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassevapD_Resist.cpp">
+    <ClCompile Include="..\modules\ClassIntcp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassevapX.cpp">
+    <ClCompile Include="..\modules\Classinterception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassFlowInSnow.cpp">
+    <ClCompile Include="..\modules\ClassK_Estimate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classfrostdepth.cpp">
+    <ClCompile Include="..\modules\ClassKevin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classfrozen.cpp">
+    <ClCompile Include="..\modules\Classlake.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassfrozenAyers.cpp">
+    <ClCompile Include="..\modules\ClassLongVt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classglacier.cpp">
+    <ClCompile Include="..\modules\ClassMeltRunoff_Kstorage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classglacier_debris.cpp">
+    <ClCompile Include="..\modules\ClassMeltRunoff_Lag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassGlobal.cpp">
+    <ClCompile Include="..\modules\ClassMod_Exec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassGreenAmpt.cpp">
+    <ClCompile Include="..\modules\ClassNeedle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassGreencrack.cpp">
+    <ClCompile Include="..\modules\Classnetall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassGrow_Crop.cpp">
+    <ClCompile Include="..\modules\ClassNetroute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassHMSA.cpp">
+    <ClCompile Include="..\modules\ClassNetroute_D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassHtobs.cpp">
+    <ClCompile Include="..\modules\ClassNetroute_M.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassIceBulb.cpp">
+    <ClCompile Include="..\modules\ClassNetroute_M_D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassICEflow.cpp">
+    <ClCompile Include="..\modules\ClassNO_pbsm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassIntcp.cpp">
+    <ClCompile Include="..\modules\ClassNOP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classinterception.cpp">
+    <ClCompile Include="..\modules\ClassObs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassK_Estimate.cpp">
+    <ClCompile Include="..\modules\ClassObstoPar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassKevin.cpp">
+    <ClCompile Include="..\modules\Classpbsm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classlake.cpp">
+    <ClCompile Include="..\modules\Classpbsm_M.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassLongVt.cpp">
+    <ClCompile Include="..\modules\ClasspbsmSnobal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassMeltRunoff_Kstorage.cpp">
+    <ClCompile Include="..\modules\ClassPrairieInfil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassMeltRunoff_Lag.cpp">
+    <ClCompile Include="..\modules\ClassPSPnew.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassMod_Exec.cpp">
+    <ClCompile Include="..\modules\Classqdrift.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassNeedle.cpp">
+    <ClCompile Include="..\modules\Classqmelt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classnetall.cpp">
+    <ClCompile Include="..\modules\Classquinton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassNetroute.cpp">
+    <ClCompile Include="..\modules\ClassREWroute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassNetroute_D.cpp">
+    <ClCompile Include="..\modules\ClassREWroute_stream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassNetroute_M.cpp">
+    <ClCompile Include="..\modules\ClassREWroute2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassNetroute_M_D.cpp">
+    <ClCompile Include="..\modules\Classsbsm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassNO_pbsm.cpp">
+    <ClCompile Include="..\modules\ClassSetSoil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassNOP.cpp">
+    <ClCompile Include="..\modules\Classshared.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassObs.cpp">
+    <ClCompile Include="..\modules\ClassShutWall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassObstoPar.cpp">
+    <ClCompile Include="..\modules\ClassShutWallD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classpbsm.cpp">
+    <ClCompile Include="..\modules\ClassSimpleRichard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classpbsm_M.cpp">
+    <ClCompile Include="..\modules\ClassSlope_Qsi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClasspbsmSnobal.cpp">
+    <ClCompile Include="..\modules\ClassSnobalBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassPrairieInfil.cpp">
+    <ClCompile Include="..\modules\ClassSnobalCRHM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassPSPnew.cpp">
+    <ClCompile Include="..\modules\ClassSnobalX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classqdrift.cpp">
+    <ClCompile Include="..\modules\ClassSoil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classqmelt.cpp">
+    <ClCompile Include="..\modules\ClassSoilDS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classquinton.cpp">
+    <ClCompile Include="..\modules\ClassSoilX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassREWroute.cpp">
+    <ClCompile Include="..\modules\ClassSWEslope.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassREWroute_stream.cpp">
+    <ClCompile Include="..\modules\ClassTestSparse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassREWroute2.cpp">
+    <ClCompile Include="..\modules\ClassTs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classsbsm.cpp">
+    <ClCompile Include="..\modules\Classtsurface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassSetSoil.cpp">
+    <ClCompile Include="..\modules\ClassVolumetric.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classshared.cpp">
+    <ClCompile Include="..\modules\Classwalmsley_wind.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassShutWall.cpp">
+    <ClCompile Include="..\modules\Classwinter_meltflag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassShutWallD.cpp">
+    <ClCompile Include="..\modules\ClassXG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassSimpleRichard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassSlope_Qsi.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassSnobalBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassSnobalCRHM.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassSnobalX.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassSoil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassSoilDS.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassSoilX.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassSWEslope.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassTestSparse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassTs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classtsurface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassVolumetric.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classwalmsley_wind.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\Classwinter_meltflag.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassXG.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\coremodules\ClassXGAyers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\newmodules\NewModules.cpp">
+    <ClCompile Include="..\modules\ClassXGAyers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\modules\waterquality\Class_lapse_rate_Monthly.cpp">
@@ -2114,60 +2172,8 @@
     <ClCompile Include="..\modules\waterquality\WQ_Soil_NPCcycling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\CRHMmain\CRHMLogger.cpp">
+    <ClCompile Include="..\modules\newmodules\NewModules.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\gcc\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\core\CRHMmain\ReportStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RightClickListBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HierarchyDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\core\ClassCRHM\CRHMArguments.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChiralClickButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="CRHMGUI.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\output_wnd.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\output_wnd_hc.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\userimages.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\CRHM_GUIDoc.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\CRHM_GUI.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Toolbar.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Toolbar256.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\CRHMGUI.rc2">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\..\..\..\..\Program Files (x86)\Steema Software\TeeChart Pro v2018 ActiveX Evaluation\TeeChart2018.ocx" />
   </ItemGroup>
 </Project>

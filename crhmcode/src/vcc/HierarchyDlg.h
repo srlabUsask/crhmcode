@@ -3,7 +3,7 @@
 #include <string>
 
 #include "../core/GlobalDll.h"
-#include "../core/MacroUnit/ClassMacro.h"
+#include "../core/ClassMacro.h"
 #include "resource.h"
 
 
