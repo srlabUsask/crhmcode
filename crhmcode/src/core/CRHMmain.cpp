@@ -1,11 +1,11 @@
 #if defined(_WIN32) && !defined(__MINGW32__)
-#include "stdafx.h"
+#include "../../vcc/stdafx.h"
 #endif
 
 #include "CRHMmain.h"
 
 #if defined(VS_GUI)
-#include "CRHMAboutBox.h"
+#include "../../vcc/gui/CRHMAboutBox.h"
 #endif
 
 #include <list>
