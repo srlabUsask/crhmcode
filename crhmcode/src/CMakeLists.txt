@@ -1,32 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
-
-configure_file(config.h.in config.h)
+project(crhm VERSION 1.2)
 
 set(ACTIVE_LOG_LEVEL "2")
-set(CXX_STANDARD 14)
-
-# set( BOOST_ROOT "libs/boost_1_75_0")
-# #set( BOOST_LIBRARYDIR "libs/boost_1_75_0/libs")
-# set( BOOST_INCLUDEDIR "libs/boost_1_75_0/boost")
-# #set( Boost_NO_SYSTEM_PATHS ON)
-# message(STATUS "BOOST_ROOT: ${BOOST_ROOT}")
-# configure a header file to pass some of the CMake settings
-# to the source code
-
-
-project(crhm)
-
-# find_package(Boost REQUIRED COMPONENTS spirit)
-#
-# if(NOT TARGET Boost::spirit)
-#     add_library(Boost::spirit IMPORTED INTERFACE)
-#     set_property(TARGET Boost::spirit PROPERTY
-#         INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-#     set_property(TARGET Boost::spirit PROPERTY
-#         INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
-# endif()
-add_compile_options( -std=c++14 -static -static-libgcc -static-libstdc++ -lstdc++)
-
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(LOCAL_BOOST_LOCATION "/libs/boost_1_75_0")
+configure_file(config.h.in config.h)
 
 add_executable(${PROJECT_NAME} main.cpp
     $<TARGET_OBJECTS:core>
@@ -38,16 +17,8 @@ add_executable(${PROJECT_NAME} main.cpp
     $<TARGET_OBJECTS:filter>
 )
 
-
-
 add_subdirectory(core)
 add_subdirectory(modules)
-
-# target_link_libraries(${PROJECT_NAME} PUBLIC
-#     modules
-#     core
-#     # Boost::spirit
-# )
 
 add_dependencies(${PROJECT_NAME} core modules)
 
@@ -62,5 +33,16 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     "${PROJECT_SOURCE_DIR}/modules/newmodules"
     "${PROJECT_SOURCE_DIR}/modules/waterquality"
     "${PROJECT_SOURCE_DIR}/modules/hype"
-    "${PROJECT_SOURCE_DIR}/libs/boost_1_75_0"
+    "${PROJECT_SOURCE_DIR}/${LOCAL_BOOST_LOCATION}"
 )
+
+install(TARGETS crhm DESTINATION bin)
+install(FILES "${PROJECT_BINARY_DIR}/Config.h"
+  DESTINATION include
+ )
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
+set(CPACK_PACKAGE_VERSION_MAJOR "${crhm_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${crhm_VERSION_MINOR}")
+include(CPack)

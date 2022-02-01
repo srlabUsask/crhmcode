@@ -1,1 +1,4 @@
 #cmakedefine ACTIVE_LOG_LEVEL @ACTIVE_LOG_LEVEL@
+#cmakedefine LOCAL_BOOST_LOCATION @LOCAL_BOOST_LOCATION@
+#cmakedefine crhm_VERSION_MAJOR @crhm_VERSION_MAJOR@
+#cmakedefine crhm_VERSION_MINOR @crhm_VERSION_MINOR@

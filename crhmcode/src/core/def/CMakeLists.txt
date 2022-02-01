@@ -14,5 +14,5 @@ add_library(def OBJECT
 )
 
 target_include_directories(def PUBLIC
-    ../../libs/boost_1_75_0
+    "${PROJECT_SOURCE_DIR}/${LOCAL_BOOST_LOCATION}"
 )

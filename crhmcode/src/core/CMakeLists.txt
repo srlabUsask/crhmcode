@@ -1,5 +1,6 @@
 include(ExternalProject)
 
+#Require spdlog
 ExternalProject_Add(spdlog
     PREFIX spdlog
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/libs/spdlog
@@ -44,17 +45,10 @@ add_library(core OBJECT
     VarCHRM.cpp
 )
 
-# target_link_libraries(core
-#     def
-#     exec
-#     filter
-# )
-
-
-add_dependencies(core spdlog)
+add_dependencies(core spdlog exec def filter)
 
 target_include_directories(core PUBLIC
-    ${STAGING_DIR}/include/
-    ../config.h
-    ../libs/boost_1_75_0
+    "${STAGING_DIR}/include/" #Includes the spdlog libs
+    "${PROJECT_SOURCE_DIR}/config.h"
+    "${PROJECT_SOURCE_DIR}/${LOCAL_BOOST_LOCATION}"
 )

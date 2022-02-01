@@ -3,6 +3,5 @@ add_library(newmodules OBJECT
 )
 
 target_include_directories(newmodules PUBLIC
-    ../
-    ../../libs/boost_1_75_0
+    "${PROJECT_SOURCE_DIR}/modules"
 )

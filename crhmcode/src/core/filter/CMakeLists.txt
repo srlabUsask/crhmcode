@@ -47,5 +47,5 @@ add_library(filter OBJECT
 )
 
 target_include_directories(filter PUBLIC
-    ../../libs/boost_1_75_0
+    "${PROJECT_SOURCE_DIR}/${LOCAL_BOOST_LOCATION}"
 )

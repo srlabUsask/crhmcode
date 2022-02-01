@@ -98,7 +98,4 @@ add_library(modules OBJECT
 
 )
 
-# target_link_libraries(modules
-#     waterquality
-#     newmodules
-# )
+add_dependencies(modules newmodules waterquality)
