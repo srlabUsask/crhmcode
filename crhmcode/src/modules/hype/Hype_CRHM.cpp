@@ -11,8 +11,8 @@
 #pragma hdrstop
 
 #include "Hype_CRHM.h"
-#include "NewModules.h"
-#include "GlobalDll.h"
+#include "../newmodules/NewModules.h"
+#include "../../core/GlobalDll.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -2522,5 +2522,3 @@ void ClassWQ_pbsm::Sub_WQ(long hru, float *var, float *var_cWQ, float amount, fl
 		var_cWQ[hru] = 0.0;
 	}
 }
-
-

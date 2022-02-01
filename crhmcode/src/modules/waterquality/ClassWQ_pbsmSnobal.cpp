@@ -136,7 +136,7 @@ void ClassWQ_pbsmSnobal::decl(void) {
 
     declparam("snow_conc", TDim::NDEFN, "0", "0", "1000", "snow solute concentration", "(mg/l)", &snow_conc, &snow_conc_lay, numsubstances);
 
-    declparam("atmos_mWQ", TDim::NDEFN, "0", "0", "10", "total basin area", "(mg/int??)", &atmos_mWQ, &atmos_mWQ_lay, numsubstances);
+    declparam("atmos_mWQ", TDim::NDEFN, "0", "0", "10", "total basin area", "(mg/int)", &atmos_mWQ, &atmos_mWQ_lay, numsubstances);
 
 
     decllocal("DrySnow_0", TDim::NHRU, "", "", &DrySnow_0);

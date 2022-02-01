@@ -1,14 +1,15 @@
 // 11/30/19
 //---------------------------------------------------------------------------
 
-#include "WQ_CRHM.h"
-#include "NewModules.h"
-#include "GlobalDll.h"
 #include <sstream>
-
 //#include <math.h>
 #include <cmath>
 #include <stdlib.h>
+
+#include "WQ_CRHM.h"
+#include "../newmodules/NewModules.h"
+#include "../../core/GlobalDll.h"
+
 //---------------------------------------------------------------------------
 //#pragma package(smart_init) removed uneeded pragma - jhs507
 
@@ -37,5 +38,3 @@
 // l/m2 == mm = Kg/m2
 
 //==============================================================================
-
-

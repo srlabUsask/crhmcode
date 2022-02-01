@@ -2,13 +2,15 @@
 //---------------------------------------------------------------------------
 #pragma hdrstop
 
-#include "WQ_Soil_NPCcycling.h"
-#include "NewModules.h"
-#include "GlobalDll.h"
-
 //#include <math.h>
 #include <cmath>
 #include <stdlib.h>
+
+#include "WQ_Soil_NPCcycling.h"
+#include "../newmodules/NewModules.h"
+#include "../../core/GlobalDll.h"
+
+
 //---------------------------------------------------------------------------
 //#pragma package(smart_init) removed uneeded pragma - jhs507
 
@@ -91,7 +93,7 @@ void ClassWQ_SoilBGC::decl(void) {
   declstatvar("DOPpool", TDim::NDEFN, "dissolved organic phosphorus pool in soil", "(kg/km^2)", &DOPpool, &DOPpool_lay, maxsoillayers);
 
   declstatvar("PPrelpool", TDim::NHRU, "soil PP (particulate phosphorus) released to runoff due to erosion", "(kg/int)", &PPrelpool);
-  
+
   declstatvar("plant_uptk_NO3N_mWQ", TDim::NDEFN, "plant uptake of NO3-N expressed as mass/int", "(kg/int)", &plant_uptk_NO3N_mWQ, &plant_uptk_NO3N_mWQ_lay, maxsoillayers);
 
   declstatvar("plant_uptk_NH4N_mWQ", TDim::NDEFN, "plant uptake of NH4-N expressed as mass/int", "(kg/int)", &plant_uptk_NH4N_mWQ, &plant_uptk_NH4N_mWQ_lay, maxsoillayers);
@@ -99,7 +101,7 @@ void ClassWQ_SoilBGC::decl(void) {
   declstatvar("plant_uptk_SRP_mWQ", TDim::NDEFN, "plant uptake of SRP expressed as mass/int", "(kg/int)", &plant_uptk_SRP_mWQ, &plant_uptk_SRP_mWQ_lay, maxsoillayers);
 
   declvar("water", TDim::NDEFN, "soil moisture", "(mm)", &water, &water_lay, maxsoillayers);
-  
+
   declvar("watermax", TDim::NDEFN, "soil moisture", "(mm)", &watermax, &watermax_lay, maxsoillayers);
 
   declvar("Temp", TDim::NDEFN, "soil layer temperature", "(" + string(DEGREE_CELSIUS) + ")", &Temp, &Temp_lay, maxsoillayers);
@@ -141,8 +143,8 @@ void ClassWQ_SoilBGC::decl(void) {
   declparam("wp", TDim::NDEFN, "[0]", "0.05", "0.2", "normalized wilting point w.r.t. soil_rechr_max or soil_lower_max", "()", &wp, &wp_lay, maxsoillayers);
 
   //declparam("pw", TDim::NDEFN, "[2]", "0.5", "2.0", "normalized total porosity w.r.t. soil_rechr_max or soil_lower_max", "()", &pw, &pw_lay, maxsoillayers);
- 
-  
+
+
   //declvar("fc_mm", TDim::NDEFN, "field capacity w.r.t. soil_rechr_max or soil_lower_max", "(mm)", &fc_mm, &fc_mm_lay, maxsoillayers);
 
   //declvar("ep_mm", TDim::NDEFN, "effective porosity w.r.t. soil_rechr_max or soil_lower_max", "(mm)", &ep_mm, &ep_mm_lay, maxsoillayers);
@@ -221,9 +223,9 @@ void ClassWQ_SoilBGC::decl(void) {
   declparam("minc", TDim::NHRU, "[1]", "0", "100", "fraction mineralisation to DIC", "()", &minc);
 
   declparam("soimf", TDim::NHRU, "[1]", "0", "100", "saturation soilmoisture factor", "()", &soimf);
-  
+
   declparam("soimr", TDim::NHRU, "[1]", "0", "100", "rate soilmoisture factor", "()", &soimr);
-  
+
   declparam("fertNamount_up", TDim::NHRU, "[1]", "0", "1000000", "fertiliser amount1 N", "(kg/km^2)", &fertNamount_up);
 
   declparam("fertNamount_down", TDim::NHRU, "[1]", "0", "1000000", "fertiliser amount2 N", "(kg/km^2)", &fertNamount_down);
@@ -309,11 +311,11 @@ void ClassWQ_SoilBGC::decl(void) {
   declparam("conc_soil_lower_init", TDim::NDEFN, "[0.0]", "0", "1000", "concentration of organic nitrogen in soil moisture per land-soil", "(mg/l)", &conc_soil_lower_init, &conc_soil_lower_init_lay, numsubstances);
 
   declparam("surfsoil_massSolub_init", TDim::NDEFN, "[0.0]", "0", "1000", "initial concentration of inorganic nitrogen in surfsoil layer", "(mg/l)", &surfsoil_massSolub_init, &surfsoil_massSolub_init_lay, numsubstances);
-  
+
   declparam("surfsoil_masslabileNmass_init", TDim::NHRU, "[0.0]", "0", "1000000", "initial mass of labile N in the surfsoil layer", "(kg/km^2)", &surfsoil_masslabileNmass_init);
 
   declparam("surfsoil_masslabilePmass_init", TDim::NHRU, "[0.0]", "0", "1000000", "initial mass of labile P in the surfsoil layer", "(kg/km^2)", &surfsoil_masslabilePmass_init);
-  
+
   declparam("surfsoil_massrefractoryNmass_init", TDim::NHRU, "[0.0]", "0", "1000000", "initial mass of labile N in the surfsoil layer", "(kg/km^2)", &surfsoil_massrefractoryNmass_init);
 
   declparam("surfsoil_massrefractoryPmass_init", TDim::NHRU, "[0.0]", "0", "1000000", "initial mass of labile N in the surfsoil layer", "(kg/km^2)", &surfsoil_massrefractoryPmass_init);
@@ -341,7 +343,7 @@ void ClassWQ_SoilBGC::decl(void) {
   declputvar("*", "SWE_conc", "(mg/l)", &SWE_conc, &SWE_conc_lay);
 
   declparam("soil_Depth", TDim::NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
-  
+
   declgetvar("*", "soil_moist", "(mm)", &soil_moist);
 
   declgetvar("*", "soil_rechr", "(mm)", &soil_rechr);
@@ -349,8 +351,8 @@ void ClassWQ_SoilBGC::decl(void) {
   declgetparam("*", "soil_moist_max", "(mm)", &soil_moist_max);
 
   declgetparam("*", "soil_rechr_max", "(mm)", &soil_rechr_max);
-  
-  
+
+
 }
 
 void ClassWQ_SoilBGC::init(void) {
@@ -407,7 +409,7 @@ void ClassWQ_SoilBGC::init(void) {
       source_lay[Sub][hh] = 0.0;
       sink_lay[Sub][hh] = 0.0;
       src_mineral_fertman_surfsoil_lay[Sub][hh] = 0.0f;
-      src_mineral_fertman_soilrechr_lay[Sub][hh] = 0.0f; 
+      src_mineral_fertman_soilrechr_lay[Sub][hh] = 0.0f;
       sources_plant_lay[Sub][hh] = 0.0;
     }
   }
@@ -461,11 +463,11 @@ void ClassWQ_SoilBGC::run(void) {
     for(hh = 0; chkStruct(); ++hh){ // Using inhibit is dangerous
       water_lay[0][hh] = soil_rechr[hh]; // water_lay dimensioned 3 and soil_rechr and soil_moist only 2D.
       water_lay[1][hh] = soil_moist[hh] - soil_rechr[hh];
-      watermax_lay[0][hh] = soil_rechr_max[hh]; 
+      watermax_lay[0][hh] = soil_rechr_max[hh];
       watermax_lay[1][hh] = soil_moist_max[hh] - soil_rechr_max[hh];
       for(long ii = 0; ii < maxsoillayers ; ++ii) // [maxsoillayers]
         Temp_lay[ii][hh] = hru_t[hh]; // convert air temperature to soil temperature ???
-        
+
     } // for hh */
 
     for(hh = 0; chkStruct(); ++hh){
@@ -519,38 +521,38 @@ void ClassWQ_SoilBGC::finish(bool good) {
     double soilstate                 // <Soil states
 */
 // No substances modelled
-	  
+
 // Calculate the nutrient processes
     nutrient_inputs(); // fertilizer, manure and residues, also orgC
-	
+
     soil_pool_transformations();   // transformation from refractoryN->labileN->IN, ON->IN and labileP->SRP refractoryP -> labileP
-	
-	
+
+
     if (soil_runoff[hh] > 0.0f){
       runoff_pp_by_erosion();
-    }	
-    
-	
+    }
+
+
     plant_uptake(conc_soil_rechr_lay, conc_soil_lower_lay, sink_lay);
 
-	
+
     if(i_no3n >= 0)
       cropuptake[hh] = sink_lay[i_no3n][hh];
 
-   if(calcN[hh]){	   
+   if(calcN[hh]){
       denitrification_surfsoil[hh] = 0.0;
       denitrification_lay[0][hh] = 0.0;
       denitrification_lay[1][hh] = 0.0;
-     	  
+
 	  if (water_lay[0][hh] > 0.0)
 		  soil_denitrification(0);
 		  denitrification_lay[0][hh] = sink_lay[i_no3n][hh];
-			  
+
 	  if (water_lay[1][hh] > 0.0)
 		  soil_denitrification(1);
-		  denitrification_lay[1][hh] = sink_lay[i_no3n][hh];		
+		  denitrification_lay[1][hh] = sink_lay[i_no3n][hh];
     }
-   
+
   } // soil_np_processes
 
 // Calculate and add the crops sources of nutrient to the soil(fertilization and crop residues).
@@ -696,7 +698,7 @@ void ClassWQ_SoilBGC::finish(bool good) {
           common_nres[0][1] = common_nres[0][fast] + (1.0 - resfast[hh]) *  resNamount_up[hh] / littdays;
           common_pres[0][0] = common_pres[0][inorg] + resfast[hh] *  resPamount_up[hh] / littdays;
           common_pres[0][1] = common_pres[0][fast] + (1.0 - resfast[hh]) *  resPamount_up[hh] / littdays;
-          
+
           //common_cres[0][0] = common_cres[0][inorg] + resCamount[hh] * (1.0 - resdown[hh]) / littdays;  //CP121031
           //common_cres[1][0] = common_cres[1][inorg] + resCamount[hh] * resdown[hh] / littdays;
         //}
@@ -725,7 +727,7 @@ void ClassWQ_SoilBGC::finish(bool good) {
       // mineral N (fertilizer and manure)
       if(calcN[hh]  &&  SUM(common_nadd, 0) > 0.0){
 
-        if (SWE[hh]>minFlow_WQ){ // if SWE > 0, fertilizer goes to SWE 
+        if (SWE[hh]>minFlow_WQ){ // if SWE > 0, fertilizer goes to SWE
           SWE_conc_lay[i_no3n][hh] += fertandman_inogNfrac_NO3Nfrac[hh] * common_nadd[0][inorg]/SWE[hh];
           SWE_conc_lay[i_nh4n][hh] += fertandman_inogNfrac_NH4Nfrac[hh] * common_nadd[0][inorg]/SWE[hh];
         }else{
@@ -734,11 +736,11 @@ void ClassWQ_SoilBGC::finish(bool good) {
         }
 
         if(water_lay[0][hh] > 0.0){
-          add_source_to_water(water_lay[0][hh], i_no3n, &conc_soil_rechr_lay[i_no3n][hh], fertandman_inogNfrac_NO3Nfrac[hh] * common_nadd[1][inorg]); // i_no3n      
+          add_source_to_water(water_lay[0][hh], i_no3n, &conc_soil_rechr_lay[i_no3n][hh], fertandman_inogNfrac_NO3Nfrac[hh] * common_nadd[1][inorg]); // i_no3n
           add_source_to_water(water_lay[0][hh], i_nh4n, &conc_soil_rechr_lay[i_nh4n][hh], fertandman_inogNfrac_NH4Nfrac[hh] * common_nadd[1][inorg]); // i_nh4
-        } 
+        }
         else if(water_lay[1][hh] > 0.0){
-          add_source_to_water(water_lay[1][hh], i_no3n, &conc_soil_lower_lay[i_no3n][hh], fertandman_inogNfrac_NO3Nfrac[hh] * common_nadd[1][inorg]); // i_no3n      
+          add_source_to_water(water_lay[1][hh], i_no3n, &conc_soil_lower_lay[i_no3n][hh], fertandman_inogNfrac_NO3Nfrac[hh] * common_nadd[1][inorg]); // i_no3n
           add_source_to_water(water_lay[1][hh], i_nh4n, &conc_soil_lower_lay[i_nh4n][hh], fertandman_inogNfrac_NH4Nfrac[hh] * common_nadd[1][inorg]); // i_nh4
         }
         else{
@@ -755,17 +757,17 @@ void ClassWQ_SoilBGC::finish(bool good) {
       // mineral P (fertilizer and manure)
       if(calcP[hh]  &&  SUM(common_padd, 0) > 0.0){
 
-        if (SWE[hh]>minFlow_WQ){ // if SWE > 0, fertilizer goes to SWE 
+        if (SWE[hh]>minFlow_WQ){ // if SWE > 0, fertilizer goes to SWE
           SWE_conc_lay[i_srp][hh] += common_padd[0][inorg]/SWE[hh];
         }else{
           surfsoil_solub_mWQ_lay[i_srp][hh] += common_padd[0][inorg];
         }
 
         if(water_lay[0][hh] > 0.0){
-          add_source_to_water(water_lay[0][hh], i_srp , &conc_soil_rechr_lay[i_srp][hh], common_padd[1][inorg]);     
+          add_source_to_water(water_lay[0][hh], i_srp , &conc_soil_rechr_lay[i_srp][hh], common_padd[1][inorg]);
         }
         else if(water_lay[1][hh] > 0.0){
-          add_source_to_water(water_lay[1][hh], i_srp , &conc_soil_lower_lay[i_srp][hh], common_padd[1][inorg]);     
+          add_source_to_water(water_lay[1][hh], i_srp , &conc_soil_lower_lay[i_srp][hh], common_padd[1][inorg]);
         }
         else{
           production_pool(1, labileP_lay[0][hh], common_padd[1][inorg]);
@@ -808,7 +810,7 @@ void ClassWQ_SoilBGC::finish(bool good) {
       if(calcC[hh]  &&  (SUM(common_cres, 0) + SUM(common_cres, 1)) > 0.0){
         if(water_lay[1][hh] > 0.0)
            production_pool(1, hh, labileC_lay, common_cres);
-        else 
+        else
            production_pool(1, hh, labileC_lay, common_cres);
 
         sources_plant_lay[i_oc][hh] = SUM(common_cres, 0) + SUM(common_cres, 1); // OrgC load from residuals, all soil layers (kg)
@@ -878,7 +880,7 @@ Argument declarations
     double smfcn[maxsoillayers]; // sm[maxsoillayers],
 
     source[hh] = 0.0;
-    
+
     for(long ii = 0; ii < numsubstances ; ++ii){ // [numsubstances][maxsoillayers]
       source_lay[ii][hh] = 0.0;
     }
@@ -923,7 +925,7 @@ Argument declarations
 
 // Temperature dependence factor
     for (long k = 0; k < maxsoillayers; ++k) {
-        if (water_lay[k][hh] > 0.0) 
+        if (water_lay[k][hh] > 0.0)
         {
             tmpfcn[k] = tempfactor(Temp_lay[0][hh]); // requires soil temperature
         }
@@ -933,15 +935,15 @@ Argument declarations
 
         }
     }
-      
+
 
 // Soil moisture dependence factor
 
     smfcn[0] = moisturefactor(water_lay[0][hh]/watermax_lay[0][hh],
-            wp_lay[0][hh], 
+            wp_lay[0][hh],
             satact, thetapow, thetalow, thetaupp);
-    smfcn[1] = moisturefactor(water_lay[1][hh]/watermax_lay[1][hh], 
-            wp_lay[1][hh], 
+    smfcn[1] = moisturefactor(water_lay[1][hh]/watermax_lay[1][hh],
+            wp_lay[1][hh],
             satact, thetapow, thetalow, thetaupp);
 
 // Degradation of refractoryN to labileN
@@ -970,7 +972,7 @@ Argument declarations
       surfsoil_labileN_mWQ[hh] -= transfminN[0];
       surfsoil_solub_mWQ_lay[i_nh4n][hh] += transfminN[0];
 
-      transfminN[0] = std::fmax(parminfN[hh] * tmpfcn[0] * smfcn[0] * labileN_lay[0][hh],0.0f); 
+      transfminN[0] = std::fmax(parminfN[hh] * tmpfcn[0] * smfcn[0] * labileN_lay[0][hh],0.0f);
       transfminN[1] = std::fmax(parminfN[hh] * tmpfcn[1] * smfcn[1] * labileN_lay[1][hh],0.0f);
 
       if(water_lay[1][hh] > 0.0){
@@ -988,11 +990,11 @@ Argument declarations
 
 // Transformation of NH4 into NH3 (nitrification)
 
-      transfnitrN[0] = std::fmax(parnitrfN[hh] * tmpfcn[0] * smfcn[0] * surfsoil_solub_mWQ_lay[i_nh4n][hh],0.0f); 
+      transfnitrN[0] = std::fmax(parnitrfN[hh] * tmpfcn[0] * smfcn[0] * surfsoil_solub_mWQ_lay[i_nh4n][hh],0.0f);
       surfsoil_solub_mWQ_lay[i_nh4n][hh] -= transfnitrN[0];
       surfsoil_solub_mWQ_lay[i_no3n][hh] += transfnitrN[0];
 
-      transfnitrN[0] = std::fmax(parnitrfN[hh] * tmpfcn[0] * smfcn[0] * NH4_Npool_lay[0][hh],0.0f); 
+      transfnitrN[0] = std::fmax(parnitrfN[hh] * tmpfcn[0] * smfcn[0] * NH4_Npool_lay[0][hh],0.0f);
       transfnitrN[1] = std::fmax(parnitrfN[hh] * tmpfcn[1] * smfcn[1] * NH4_Npool_lay[1][hh],0.0f);
 
       if(water_lay[1][hh] > 0.0){
@@ -1183,8 +1185,8 @@ Argument declarations
 
 // Local variables
     double maxpooluptake[maxsoillayers];
-    double tmpfcn[maxsoillayers]; //tempature funciton 
-    double smfcn[maxsoillayers]; // sm[maxsoillayers], soil moisture 
+    double tmpfcn[maxsoillayers]; //tempature funciton
+    double smfcn[maxsoillayers]; // sm[maxsoillayers], soil moisture
     double excess_pltup, plant_uptk_mWQ;
 
     plant_uptk_mWQ = 0.0f;
@@ -1198,28 +1200,28 @@ Argument declarations
       plant_uptk_NH4N_mWQ_lay[kk][hh] = 0.0f;
       plant_uptk_SRP_mWQ_lay[kk][hh] = 0.0f;
     }
-    
+
         // Temperature dependence factor
-        for (long k = 0; k < maxsoillayers; ++k) 
+        for (long k = 0; k < maxsoillayers; ++k)
         {
-            if (water_lay[k][hh] > 0.0) 
+            if (water_lay[k][hh] > 0.0)
             {
                 tmpfcn[k] = tempfactor(Temp_lay[0][hh]); // requires soil temperature
             }
-            else 
+            else
             {
                 tmpfcn[k] = 0.0;
             }
         }
-        
+
 
   // Soil moisture dependence factor
 
       smfcn[0] = moisturefactor(water_lay[0][hh]/watermax_lay[0][hh],
-              wp_lay[0][hh], 
+              wp_lay[0][hh],
               satact, thetapow, thetalow, thetaupp);
-      smfcn[1] = moisturefactor(water_lay[1][hh]/watermax_lay[1][hh], 
-              wp_lay[1][hh], 
+      smfcn[1] = moisturefactor(water_lay[1][hh]/watermax_lay[1][hh],
+              wp_lay[1][hh],
               satact, thetapow, thetalow, thetaupp);
 
     if(calcN[hh]){
@@ -1246,7 +1248,7 @@ Argument declarations
 
     if(calcN[hh]){
       // for NO3
-      plant_uptk_mWQ = std::fmin(plant_uptk_NO3N_lay[0][hh]* tmpfcn[0] * smfcn[0] * hru_area[hh], 
+      plant_uptk_mWQ = std::fmin(plant_uptk_NO3N_lay[0][hh]* tmpfcn[0] * smfcn[0] * hru_area[hh],
                     maxpooluptake[0]*(surfsoil_solub_mWQ_lay[i_no3n][hh] + NO3_Npool_lay[0][hh]));
       if (plant_uptk_mWQ <= surfsoil_solub_mWQ_lay[i_no3n][hh]){
         surfsoil_solub_mWQ_lay[i_no3n][hh] -= plant_uptk_mWQ;
@@ -1257,7 +1259,7 @@ Argument declarations
         NO3_Npool_lay[0][hh] -= excess_pltup;
       }
 
-      
+
       //if(water_lay[1][hh] > 0.0)
       //  plant_uptk_NO3N_mWQ[1] = min<double>(plant_uptk_NO3N_lay[1][hh]* tmpfcn[0] * smfcn[0], maxpooluptake[1]*NO3_Npool_lay[1][hh]);
 
@@ -1270,7 +1272,7 @@ Argument declarations
       plant_uptk_NO3N_mWQ_lay[1][hh] = excess_pltup;
 
       // for NH4
-      plant_uptk_mWQ = min <double>(plant_uptk_NH4N_lay[0][hh]* tmpfcn[0] * smfcn[0] * hru_area[hh], 
+      plant_uptk_mWQ = min <double>(plant_uptk_NH4N_lay[0][hh]* tmpfcn[0] * smfcn[0] * hru_area[hh],
                     maxpooluptake[0]*(surfsoil_solub_mWQ_lay[i_nh4n][hh] + NH4_Npool_lay[0][hh]));
       if (plant_uptk_mWQ <= surfsoil_solub_mWQ_lay[i_nh4n][hh]){
         surfsoil_solub_mWQ_lay[i_nh4n][hh] -= plant_uptk_mWQ;
@@ -1295,7 +1297,7 @@ Argument declarations
     }
 
     if(calcP[hh]){
-      plant_uptk_mWQ = min <double>(plant_uptk_SRP_lay[0][hh]* tmpfcn[0] * smfcn[0] * hru_area[hh], 
+      plant_uptk_mWQ = min <double>(plant_uptk_SRP_lay[0][hh]* tmpfcn[0] * smfcn[0] * hru_area[hh],
                     maxpooluptake[0]*(surfsoil_solub_mWQ_lay[i_srp][hh] + SRPpool_lay[0][hh]));
       if (plant_uptk_mWQ <= surfsoil_solub_mWQ_lay[i_srp][hh]){
         surfsoil_solub_mWQ_lay[i_srp][hh] -= plant_uptk_mWQ;
@@ -1375,13 +1377,13 @@ Argument declarations
     double tmpfcn = 0.0;
     double soil_max[2];
 
-	
+
 
     // Substance modelled
     for(long kk = 0; kk < numsubstances; ++kk)
       sink_lay[kk][hh] = 0.0;
 
-	
+
     if(soil_layer == 0){
       NO3_Npool_lay[soil_layer][hh] = conc_soil_rechr_lay[0][hh] * water_lay[soil_layer][hh]; // Initial IN pool. conc_lay[substances][layers]
       soil_max[0] = soil_rechr_max[hh]; // layer 1
@@ -1391,11 +1393,11 @@ Argument declarations
       soil_max[1] = soil_moist_max[hh] - soil_rechr_max[hh]; // layer 2
     }
 
-	
+
 // Dependence factors of denitrification
     tmpfcn = tempfactor(Temp_lay[0][hh]);
     smfcn = exponential_moisturefactor(water_lay[soil_layer][hh], soil_max[soil_layer], smfdenitlim, smfdenitpow);
-	
+
     if(soil_layer == 0)
       concfcn = halfsatconcfactor(conc_soil_rechr_lay[0][hh], halfsatINsoil);
 	else
@@ -1403,7 +1405,7 @@ Argument declarations
 	  concfcn = halfsatconcfactor(conc_soil_lower_lay[0][hh], halfsatINsoil);
 	}
 
-	
+
 
 // Denitrification
     if(soil_layer == 0){ // surfsoil considered part of top soil layer
@@ -1412,11 +1414,11 @@ Argument declarations
       denitrification_surfsoil[hh] = denitr_surfsoil;
     }
 
-	
-	
-    denitr[soil_layer] = pardenN[hh] * NO3_Npool_lay[soil_layer][hh] * tmpfcn * smfcn * concfcn;	 
-	retention_pool(1, hh, NO3_Npool_lay, denitr); // denitr may change in retention_pool and NO3_Npool	
-	
+
+
+    denitr[soil_layer] = pardenN[hh] * NO3_Npool_lay[soil_layer][hh] * tmpfcn * smfcn * concfcn;
+	retention_pool(1, hh, NO3_Npool_lay, denitr); // denitr may change in retention_pool and NO3_Npool
+
 // Set the sink (kg/km2)
     sink_lay[soil_layer][hh] = denitr[0];
 
@@ -1428,7 +1430,7 @@ Argument declarations
      new_concentration(NO3_Npool_lay[soil_layer][hh], water_lay[soil_layer][hh], &conc_soil_lower_lay[0][hh]);
 	}
 
-	
+
 
   } // soil_denitrification
 
@@ -1488,7 +1490,7 @@ double ClassWQ_SoilBGC::tempfactor(double temperature){
     else{
      smfcn = std::fmin(1.0, std::fmin(
              (1-satsmf)*pow((1-sm)/thetaupp, thetapow) + satsmf,
-             pow((sm-wp)/thetalow, thetapow))); 
+             pow((sm-wp)/thetalow, thetapow)));
     }
 
     return smfcn;
@@ -1575,9 +1577,9 @@ double ClassWQ_SoilBGC::tempfactor(double temperature){
     fracprod = 1.0 - minc[hh];    // fraction of degradationn that is not mineralised
 
     // Temperature dependence factor
-    for(long kk = 0; kk < maxsoillayers; ++kk) 
+    for(long kk = 0; kk < maxsoillayers; ++kk)
     {
-        if (water_lay[kk][hh] > 0.0) 
+        if (water_lay[kk][hh] > 0.0)
         {
             tmpfcn[kk] = tempfactor(Temp_lay[kk][hh]);
         }
@@ -1586,16 +1588,16 @@ double ClassWQ_SoilBGC::tempfactor(double temperature){
             tmpfcn[kk] = 0.0;
         }
     }
-        
+
 
     // Soil moisture dependence factor
 
-    smfcn[0] = moisturefactor(water_lay[0][hh]/watermax_lay[0][hh], 
-            wp_lay[0][hh], 
+    smfcn[0] = moisturefactor(water_lay[0][hh]/watermax_lay[0][hh],
+            wp_lay[0][hh],
             soimf[hh], thetapow, soimr[hh], thetaupp);
-    smfcn[1] = moisturefactor(water_lay[1][hh]/watermax_lay[1][hh], 
-            wp_lay[1][hh], 
-            soimf[hh], thetapow, 
+    smfcn[1] = moisturefactor(water_lay[1][hh]/watermax_lay[1][hh],
+            wp_lay[1][hh],
+            soimf[hh], thetapow,
             soimr[hh], thetaupp);
 
     // Transformation between labileC and refractoryC
@@ -1654,7 +1656,7 @@ double ClassWQ_SoilBGC::tempfactor(double temperature){
       retention_pool(maxsoillayers, hh, labileC_lay, transfC); // transfC may change in retention_pool
       real1temp[0]=fracprod*transfC[0];
       production_pool(maxsoillayers, DOCpool[0], real1temp[0]);
-    } // 
+    } //
 
     // Transformation of refractoryC to DOC
     for(long k = 0; k < maxsoillayers; ++k)
@@ -1812,7 +1814,7 @@ void ClassWQ_SoilBGC::retention_pool(double &pool, double &sink){
     for(long kk = 0; kk < maxsoillayers; ++kk)
       pool[kk][hh] = pool[kk][hh] + source[kk][n];
 
-  }  // production_pool 
+  }  // production_pool
 
   void ClassWQ_SoilBGC::production_pool(long n, long hh, double **pool, const double *source){
 
@@ -1823,7 +1825,7 @@ void ClassWQ_SoilBGC::retention_pool(double &pool, double &sink){
     for(long kk = 0; kk < n; ++kk)
       pool[kk][hh] = pool[kk][hh] + source[kk];
 
-  }  // production_pool 
+  }  // production_pool
 
   void ClassWQ_SoilBGC::production_pool(long n, double *pool, const double source){
 
@@ -1834,7 +1836,7 @@ void ClassWQ_SoilBGC::retention_pool(double &pool, double &sink){
     for(long kk = 0; kk < n; ++kk)  // layers
       pool[kk] = pool[kk] + source;
 
-  }  // production_pool 
+  }  // production_pool
 
   void ClassWQ_SoilBGC::production_pool(long n, double pool, const double source){
 
@@ -1844,7 +1846,7 @@ void ClassWQ_SoilBGC::retention_pool(double &pool, double &sink){
 
       pool = pool + source;
 
-  }  // production_pool 
+  }  // production_pool
 
 // Calculates concentration based on water volume and amount of one substance
 // ---------------------------------------------------------------------
@@ -2193,4 +2195,3 @@ groundcover = gcmax1[hh];
 
     erodedP = erodedP * transportfactor * enrichment;
 } // calculate_transport
-
