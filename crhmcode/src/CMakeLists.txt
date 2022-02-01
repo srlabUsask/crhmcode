@@ -1,6 +1,19 @@
 cmake_minimum_required(VERSION 3.10)
 project(crhm VERSION 1.2)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+else()
+    set(CMAKE_BUILD_TYPE DEBUG)
+endif()
+
+if(CMAKE_BUILD_TYPE EQUAL DEBUG)
+    set(DEBUG TRUE)
+endif()
+
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 set(ACTIVE_LOG_LEVEL "2")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
