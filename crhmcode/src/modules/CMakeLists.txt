@@ -1,7 +1,7 @@
 add_subdirectory(newmodules)
-
 add_subdirectory(waterquality)
 
+#create modules object libary
 add_library(modules OBJECT
     Class_z_s_rho.cpp
     Class3D_Param.cpp

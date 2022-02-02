@@ -1,6 +1,5 @@
+#Build spdlog as an external project
 include(ExternalProject)
-
-#Require spdlog
 ExternalProject_Add(spdlog
     PREFIX spdlog
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/libs/spdlog
@@ -12,10 +11,12 @@ ExternalProject_Add(spdlog
     -DSPDLOG_BUILD_SHARED=OFF
 )
 
+#Evaluate subdirectories to build their objects
 add_subdirectory(exec)
 add_subdirectory(def)
 add_subdirectory(filter)
 
+#add all the core source files to the core object library
 add_library(core OBJECT
     Administer.cpp
     ClassClark.cpp
@@ -48,7 +49,10 @@ add_library(core OBJECT
 add_dependencies(core spdlog exec def filter)
 
 target_include_directories(core PUBLIC
-    "${STAGING_DIR}/include/" #Includes the spdlog libs
-    "${PROJECT_SOURCE_DIR}/config.h"
+    #Gets the SPDLOG headers
+    "${STAGING_DIR}/include/"
+    #Configuration needed to access ACTIVE_LOG_LEVEL
+    "${PROJECT_SOURCE_DIR}/crhmConfig.h"
+    #Boost headers required by CRHM_parse
     "${PROJECT_SOURCE_DIR}/${LOCAL_BOOST_LOCATION}"
 )

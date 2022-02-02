@@ -1,3 +1,4 @@
+#create waterquality object library
 add_library(waterquality OBJECT
     Class_lapse_rate_Monthly.cpp
     ClassGlacier_debris_cover.cpp

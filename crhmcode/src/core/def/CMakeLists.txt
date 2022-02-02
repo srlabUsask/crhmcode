@@ -1,3 +1,4 @@
+#create def object libary
 add_library(def OBJECT
     DefCRHM.cpp
     Defdecldiag.cpp
@@ -14,5 +15,6 @@ add_library(def OBJECT
 )
 
 target_include_directories(def PUBLIC
+    #boost headers required
     "${PROJECT_SOURCE_DIR}/${LOCAL_BOOST_LOCATION}"
 )
