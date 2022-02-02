@@ -20,7 +20,7 @@
     "Microsoft.Net.Component.4.8.SDK",
     "Microsoft.Net.Component.4.7.2.TargetingPack",
     "Microsoft.Net.ComponentGroup.DevelopmentPrerequisites",
-    "Microsoft.VisualStudio.Component.TypeScript.4.2",
+    "Microsoft.VisualStudio.Component.TypeScript.4.3",
     "Microsoft.VisualStudio.Component.JavaScript.TypeScript",
     "Microsoft.VisualStudio.Component.JavaScript.Diagnostics",
     "Microsoft.Component.MSBuild",
@@ -39,7 +39,6 @@
     "Microsoft.VisualStudio.Component.SQL.SSDT",
     "Microsoft.VisualStudio.Component.SQL.DataSources",
     "Component.Microsoft.Web.LibraryManager",
-    "Component.Microsoft.WebTools.BrowserLink.WebLivePreview",
     "Microsoft.VisualStudio.ComponentGroup.Web",
     "Microsoft.Net.Component.4.TargetingPack",
     "Microsoft.Net.Component.4.5.1.TargetingPack",
@@ -75,6 +74,7 @@
     "Microsoft.VisualStudio.Component.ClassDesigner",
     "Microsoft.NetCore.ComponentGroup.DevelopmentTools.2.1",
     "Microsoft.VisualStudio.Component.WinXP",
-    "Microsoft.VisualStudio.Component.VC.v141.x86.x64.Spectre"
+    "Microsoft.VisualStudio.Component.VC.v141.x86.x64.Spectre",
+    "Microsoft.Component.ClickOnce"
   ]
 }
