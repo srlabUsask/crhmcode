@@ -1,4 +1,4 @@
-#include "ClassModule.h"
+#include "../../src/core/ClassModule.h"
 
 //#pragma once
 

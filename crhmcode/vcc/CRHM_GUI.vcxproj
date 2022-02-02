@@ -78,16 +78,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectHome)\vcc;$(ProjectHome)\vcc\tchart;$(ProjectHome)\vcc\gui;$(ProjectHome)\core;$(ProjectHome)\core\ClassCRHM;$(ProjectHome)\core\TStringList;$(ProjectHome)\modules\coremodules;$(ProjectHome)\modules\hype;$(ProjectHome)\modules\newmodules;$(ProjectHome)\modules\waterquality;$(IncludePath)</IncludePath>
-    <SourcePath>$(ProjectHome)\core;$(ProjectHome)\core\ClassCRHM;$(ProjectHome)\core\TStringList;$(ProjectHome)\vcc;$(ProjectHome)\vcc\gui;$(ProjectHome)\vcc\tchart;$(ProjectHome)\modules\coremodules;$(ProjectHome)\modules\hype;$(ProjectHome)\modules\newmodules;$(ProjectHome)\modules\waterquality;$(SourcePath)</SourcePath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectHome)\core;$(ProjectHome)\core\ClassCRHM;$(ProjectHome)\core\TStringList;$(ProjectHome)\vcc;$(ProjectHome)\vcc\gui;$(ProjectHome)\vcc\tchart;$(ProjectHome)\modules\coremodules;$(ProjectHome)\modules\hype;$(ProjectHome)\modules\newmodules;$(ProjectHome)\modules\waterquality;$(IncludePath)</IncludePath>
-    <SourcePath>$(ProjectHome)\core;$(ProjectHome)\core\ClassCRHM;$(ProjectHome)\core\TStringList;$(ProjectHome)\vcc;$(ProjectHome)\vcc\core;$(ProjectHome)\vcc\gui;$(ProjectHome)\modules\newmodules;$(ProjectHome)\modules\coremodules;$(ProjectHome)\modules\hype;$(ProjectHome)\modules\waterquality;$(SourcePath)</SourcePath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

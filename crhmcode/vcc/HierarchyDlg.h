@@ -2,8 +2,8 @@
 #include <afxwin.h>
 #include <string>
 
-#include "../core/GlobalDll.h"
-#include "../core/ClassMacro.h"
+#include "../src/core/GlobalDll.h"
+#include "../src/core/ClassMacro.h"
 #include "resource.h"
 
 
