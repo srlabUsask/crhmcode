@@ -188,19 +188,19 @@ void Classglacier::decl(void) {
     declputvar("*", "Albedo", "()", &Albedo);
 
     // debris-cover melt, Debris Enhanced Temperature-Index (DETI) model by Carenzo et al (2016), added on 16 June 2020
-    declvar("lagT", TDim::NHRU, "lagged temperature accounting for the energy transfer through the debris layers", "(" + string(DEGREE_CELSIUS) + "C)", &lagT);
+    declvar("lagT", TDim::NHRU, "lagged temperature accounting for the energy transfer through the debris layers", "(" + string(DEGREE_CELSIUS) + ")", &lagT);
     declvar("lagSW", TDim::NHRU, "lagged shortwave radiation accounting for the energy transfer through the debris layers", "(W/m^2)", &lagSW);
-    declvar("TF", TDim::NHRU, "temperature factor for the energy transfer through the debris layers", "(mm h^-1 �C^-1)", &TF);
+    declvar("TF", TDim::NHRU, "temperature factor for the energy transfer through the debris layers", "(mm h^-1 " + string(DEGREE_CELSIUS) + "^-1)", &TF);
     declvar("SRF", TDim::NHRU, "shortwave radiation factor for the energy transfer through the debris layers", "(m2 mm W^-1 h^-1 )", &SRF);
     declvar("Xdebris_melt_hrly", TDim::NHRU, "Experimental Firn and Ice melt under debris-cover at hourly timestep", "(mm/h)", &Xdebris_melt_hrly);
     declvar("Xdebris_melt_acc", TDim::NHRU, "Experimental Firn and Ice melt under debris-cover daily accumulator", "(mm/d)", &Xdebris_melt_acc);
-    declvar("lagT_used", TDim::NHRU, "lagged air temperature used for debris delays otherwise zero.", "(" + string(DEGREE_CELSIUS) + "C)", &lagT_used); // added 2 July 2020
+    declvar("lagT_used", TDim::NHRU, "lagged air temperature used for debris delays otherwise zero.", "(" + string(DEGREE_CELSIUS) + ")", &lagT_used); // added 2 July 2020
     declvar("lagSW_used", TDim::NHRU, "lagged incoming shortwave radiation used for debris delays otherwise zero.", "(W/m^2)", &lagSW_used); // added 2 July 2020
     declparam("debris_h", TDim::NHRU, "[0.0]", "0.0", "10.0", "debris thickness", "(m)", &debris_h);
-    declparam("T_threshold", TDim::NHRU, "[1.0]", "-30.0", "30.0", "threshold temperature above which melt is assumed to occur", "(" + string(DEGREE_CELSIUS) + "C)", &T_threshold);
-    declparam("use_debris", TDim::NHRU, "[0]", "0", "1", "0 - clean glacier melt, 1 - use debris-cover melt", "(" + string(DEGREE_CELSIUS) + "C)", &use_debris);
+    declparam("T_threshold", TDim::NHRU, "[1.0]", "-30.0", "30.0", "threshold temperature above which melt is assumed to occur", "(" + string(DEGREE_CELSIUS) + ")", &T_threshold);
+    declparam("use_debris", TDim::NHRU, "[0]", "0", "1", "0 - clean glacier melt, 1 - use debris-cover melt", "(" + string(DEGREE_CELSIUS) + ")", &use_debris);
     declgetvar("*", "Qsisn_Var", "(W/m^2*int)", &Qsisn_Var); // incident short-wave at surface, interval value
-    declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + "C)", &hru_t);
+    declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
 
     variation_set = VARIATION_0;
 
@@ -256,9 +256,9 @@ void Classglacier::decl(void) {
 
     declvar("Qmelt_kata", TDim::NHRU, "Energy available for glacier melt", "(W/m^2)", &Qmelt_kata);
 
-    declparam("katabatic_lapse_rate", TDim::NHRU, "[0.005]", "0", "2", "lapse rate for katabatic turbulent transfer calculation", "(�C/100m)", &katabatic_lapse_rate);
+    declparam("katabatic_lapse_rate", TDim::NHRU, "[0.005]", "0", "2", "lapse rate for katabatic turbulent transfer calculation", "(" + string(DEGREE_CELSIUS) + "/100m)", &katabatic_lapse_rate);
 
-    declgetvar("*", "T_rain", "("+string(DEGREE_CELSIUS)+"C)", &T_rain);
+    declgetvar("*", "T_rain", "("+string(DEGREE_CELSIUS)+")", &T_rain);
 
     declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
 
