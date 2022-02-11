@@ -272,6 +272,7 @@
     <ClCompile Include="..\src\core\filter\Classtime.cpp" />
     <ClCompile Include="..\src\core\filter\ClassTimeshift.cpp" />
     <ClCompile Include="..\src\core\GlobalDll.cpp" />
+    <ClCompile Include="..\src\core\InstrumentLogger.cpp" />
     <ClCompile Include="..\src\core\MacroClass.cpp" />
     <ClCompile Include="..\src\core\MacroUnit.cpp" />
     <ClCompile Include="..\src\core\Myparser.cpp" />
@@ -524,6 +525,7 @@
     <ClInclude Include="..\src\core\filter\ClassTimeshift.h" />
     <ClInclude Include="..\src\core\GlobalCommon.h" />
     <ClInclude Include="..\src\core\GlobalDll.h" />
+    <ClInclude Include="..\src\core\InstrumentLogger.h" />
     <ClInclude Include="..\src\core\MacroClass.h" />
     <ClInclude Include="..\src\core\MacroUnit.h" />
     <ClInclude Include="..\src\core\MMSData.h" />
