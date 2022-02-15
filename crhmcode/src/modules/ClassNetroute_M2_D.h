@@ -1,4 +1,4 @@
-//created by Manishankar Mondal
+//created by Peter Lawford
 
 #include "../core/ClassModule.h"
 
@@ -58,7 +58,7 @@ double *Ktravel{ NULL };         // [nhru] Muskingum
 double *distrib_sum{ NULL };
 double *cum_preferential_flow_to_gw{ NULL };
 
-ClassMuskingum *hruDelay{ NULL };
+ClassMuskingum2 *hruDelay{ NULL };
 ClassClark *ssrDelay{ NULL };
 ClassClark *runDelay{ NULL };
 ClassClark *gwDelay{ NULL };

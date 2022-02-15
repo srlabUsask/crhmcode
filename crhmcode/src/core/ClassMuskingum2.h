@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef ClassMuskingum2
-#define ClassMuskingum2
+#ifndef CLASSMUSKINGUM2
+#define CLASSMUSKINGUM2
 
 #include "ClassModule.h"
 
@@ -9,7 +9,8 @@
 class   ClassMuskingum2 {
 
 public:
-	ClassMuskingum2(const double* inVar, double* outVar, const double* kstorage, const double* route_X_M, const double* lag, const long nhru, const long setlag = -1);
+	ClassMuskingum2(const double* inVar, double* outVar, 
+                    const double* k, const double* X_M, const long nhru);
 	~ClassMuskingum2();
 	void DoMuskingum();
 	void DoMuskingum(const long hh);
@@ -23,20 +24,17 @@ public:
 	double prevdate{ 0.0 };
 
 private:
-	const double* kstorage{ NULL };
 	const  double* inVar;
 	double* outVar;
 
-	double** LagArray;
+	double** buff_q;
 
-	double* LastIn; //
-	double* LastOut; //
+	double* K_sub; //
+	double* x_atten; //
 
 	long nhru;
-	long* maxlag; // maximum lag - i.e. storage
+	long* buff_sz; // number of segments (buckets) 
 
-	long* ilag; // lag interval (hours)
-	long* ulag; // lag interval (#intervals)
 };
 
 #endif // !ClassMuskingum2

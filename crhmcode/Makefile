@@ -30,7 +30,7 @@ Classramp.o Classrandom.o Classrefwind.o ClassReplace.o Classrh.o \
 ClassRH_WtoI.o ClassSim.o Classsin.o ClassSmear.o Classsquare.o Classsub.o \
 ClasssubV.o Classtime.o ClassTimeshift.o
 
-ClassModule_OBJS = Administer.o ClassClark.o ClassModule.o ClassMuskingum.o Myparser.o
+ClassModule_OBJS = Administer.o ClassClark.o ClassModule.o ClassMuskingum.o ClassMuskingum2.o Myparser.o
 
 Common_OBJS = Common.o snowcover.o
 
@@ -61,7 +61,7 @@ ClassGrow_Crop.o ClassHMSA.o ClassHtobs.o ClassIceBulb.o ClassICEflow.o \
 ClassIntcp.o Classinterception.o ClassK_Estimate.o ClassKevin.o Classlake.o \
 ClassLongVt.o ClassMeltRunoff_Kstorage.o ClassMeltRunoff_Lag.o ClassMod_Exec.o \
 ClassNeedle.o Classnetall.o ClassNetroute.o ClassNetroute_D.o ClassNetroute_M.o \
-ClassNetroute_M_D.o ClassNO_pbsm.o ClassNOP.o ClassObs.o ClassObstoPar.o \
+ClassNetroute_M_D.o ClassNetroute_M2_D.o ClassNO_pbsm.o ClassNOP.o ClassObs.o ClassObstoPar.o \
 Classpbsm.o Classpbsm_M.o ClasspbsmSnobal.o ClassPrairieInfil.o ClassPSPnew.o \
 Classqdrift.o Classqmelt.o Classquinton.o ClassREWroute.o ClassREWroute_stream.o \
 ClassREWroute2.o Classsbsm.o ClassSetSoil.o Classshared.o ClassShutWall.o \

@@ -58,6 +58,7 @@
 #include "../Classpbsm_M.h" //added by Manishankar Mondal
 #include "../ClassNetroute_D.h" //added by Manishankar Mondal
 #include "../ClassNetroute_M_D.h" //added by Manishankar Mondal
+#include "../ClassNetroute_M2_D.h" // added by Peter Lawford (PRL)
 #include "../ClassSetSoil.h" //added by Manishankar Mondal
 #include "../ClassVolumetric.h" //added by Manishankar Mondal
 #include "../ClassAnnan.h" //added by Manishankar Mondal
@@ -185,6 +186,7 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassNetroute_D("Netroute_D", "06/20/18", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassNetroute_M("Netroute_M", "06/20/18", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassNetroute_M_D("Netroute_M_D", "10/26/18", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassNetroute_M2_D("Netroute_M2_D", "02/14/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassREWroute("REW_route", "06/19/18", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassREWroute_stream("REW_route_stream", "07/09/18", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassREWroute2("REW_route2", "06/19/18", LMODULE::ADVANCE));

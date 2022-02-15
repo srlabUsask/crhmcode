@@ -1,8 +1,11 @@
 #include "ClassMuskingum2.h"
+#include <algorithm>    // std::max
+#include <exception>    // std::exception
 
 
 //---------------------------------------------------------------------------
-ClassMuskingum2::ClassMuskingum2(const double* inVar, double* outVar, const double* k, const double* X_M, const double* lag, const long nhru, const long setlag)
+ClassMuskingum2::ClassMuskingum2(const double* inVar, double* outVar, 
+                                const double* k, const double* X_M, const long nhru)
 	: inVar(inVar), outVar(outVar), nhru(nhru) {
 
 	// !!! UNITS !!!
@@ -10,171 +13,97 @@ ClassMuskingum2::ClassMuskingum2(const double* inVar, double* outVar, const doub
 	// kstorage (days)
 	// lag (hours)
 
-	LastIn = new double[nhru];
-	LastOut = new double[nhru];
-
 	c0 = new double[nhru];
 	c1 = new double[nhru];
 	c2 = new double[nhru];
 
 	/*
-	* ilag  for routing water along a stream, it is used to simulate the delay caused by the travel time of water.
-	* ilag is the length of the stream (the number of elements or letters).
 	* If on every cycle the water moves one step then the number of elements determines how many steps
 	* are required to get to the end of the stream.
 	*/
-	ilag = new long[nhru];
-	maxlag = new long[nhru];
-	ulag = new long[nhru];
-	long Biggest = 0;
+
+	buff_sz = new long[nhru];
+	K_sub = new double[nhru];
+	x_atten = new double[nhru];
+
 
 	for (long hh = 0; hh < nhru; hh++) {
 
-		c0[hh] = (Global::Interval - 2.0 * k[hh] * X_M[hh]) /
-			(2.0 * k[hh] * (1.0 - X_M[hh]) + Global::Interval);  // units of Global::Interval (days)
+// Add 1 to buff_sz because the first buffer location just holds the inflow values
+// actual outflow values start from the second buffer location
+        buff_sz[hh] = 1 + std::max(1l, lround(k[hh]/Global::Interval));
+        K_sub[hh] = k[hh] / buff_sz[hh];
+        x_atten[hh] = X_M[hh];
 
-		c1[hh] = (Global::Interval + 2.0 * k[hh] * X_M[hh]) /
-			(2.0 * k[hh] * (1.0 - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
-		c2[hh] = (2.0 * k[hh] * (1.0 - X_M[hh]) - Global::Interval) /
-			(2.0 * k[hh] * (1.0 - X_M[hh]) + Global::Interval); // units of kstorage (days)
+		c0[hh] = (Global::Interval - 2.0 * K_sub[hh] * X_M[hh]) /
+			(2.0 * K_sub[hh] * (1.0 - X_M[hh]) + Global::Interval);  // units of Global::Interval (days)
 
-		ilag[hh] = (long)(max<double>(lag[hh], 0.0) / 24.0 * Global::Freq + 1.1); // =1 for lag of zero
+		c1[hh] = (Global::Interval + 2.0 * K_sub[hh] * X_M[hh]) /
+			(2.0 * K_sub[hh] * (1.0 - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
-		if (setlag == -1 || ilag[hh] > setlag)
-			maxlag[hh] = ilag[hh];
-		else
-			maxlag[hh] = setlag;
+		c2[hh] = (2.0 * K_sub[hh] * (1.0 - X_M[hh]) - Global::Interval) /
+			(2.0 * K_sub[hh] * (1.0 - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
-		ulag[hh] = 0;
-
-		LastIn[hh] = 0.0; // zero initial conditions
-
-		LastOut[hh] = 0.0; // zero initial conditions
-
-		if (maxlag[hh] > Biggest) Biggest = maxlag[hh];
 	}
 
-	LagArray = new double* [nhru];   // create lag array
+	buff_q = new double* [nhru];   // create mem storage for segment discharge
 
 	for (long hh = 0; hh < nhru; hh++) {
-		LagArray[hh] = new double[maxlag[hh]];
-		for (long jj = 0; jj < maxlag[hh]; jj++)
-			LagArray[hh][jj] = 0.0;
+		buff_q[hh] = new double[buff_sz[hh]];
+		for (long jj = 0; jj < buff_sz[hh]; jj++)
+			buff_q[hh][jj] = 0.0;
 	}
 }
 
 ClassMuskingum2::~ClassMuskingum2() {
-	delete[] LastIn;
-	delete[] LastOut;
 	delete[] c0;
 	delete[] c1;
 	delete[] c2;
-	delete[] ilag;
-	delete[] maxlag;
-	delete[] ulag;
+	delete[] buff_sz;
+	delete[] K_sub;
+	delete[] x_atten;
 
 	for (long hh = 0; hh < nhru; hh++)
-		delete[] LagArray[hh];
-	delete[] LagArray;
+		delete[] buff_q[hh];
+	delete[] buff_q;
 }
 
 void ClassMuskingum2::ChangeLag(const double* newlag, const long hh)
 {
-
-	long newilag = (long)(max<double>(newlag[hh], 0.0) / 24.0 * Global::Freq + 1.1); // =1 for lag of zero
-
-	if (newilag == ilag[hh]) {
-		return;
-	}
-
-	double* AccArray = new double[ilag[hh]]; // work area for ChangeLag
-
-	AccArray[0] = 0.0;
-
-	for (int ii = 1; ii < ilag[hh]; ++ii)
-	{
-		AccArray[ii] = AccArray[ii - 1] + LagArray[hh][(ulag[hh] + ii) % ilag[hh]]; // accumulate storage
-	}
-
-	delete[] LagArray[hh]; // delete previous length
-
-	LagArray[hh] = new double[newilag]; // create new length
-
-	ulag[hh] = 0; // next input value save here.
-	LagArray[hh][0] = 0.0; // looks better
-
-	double LastValue = 0.0;
-
-	for (int mm = 1; mm < newilag - 1; ++mm)
-	{
-		double Y = double(mm) / ((long long)newilag - 1ll) * ((long long)ilag[hh] - 1ll);
-		int Yint = (int)(Y + 0.0001);
-		if ((Yint + 1) > ilag[hh] - 1)
-		{
-			CRHMException Except("Attempting to read out of bounds array address", TExcept::TERMINATE);
-			LogError(Except);
-			throw(Except);
-		}
-		double Ydif = Y - Yint;
-
-
-		double NewValue = AccArray[Yint] + Ydif * (AccArray[Yint + 1] - AccArray[Yint]);
-
-
-
-
-		LagArray[hh][(ulag[hh] + mm) % newilag] = NewValue - LastValue;
-
-		LastValue = NewValue;
-	}
-
-	LagArray[hh][(ulag[hh] + newilag - 1) % newilag] = AccArray[ilag[hh] - 1] - LastValue; // final values
-
-	delete[] AccArray; // work area for ChangeLag
-
-	ilag[hh] = newilag; // assign new lag
+    // This is only ever used by ClassMeltRunoff_Lag
+    throw std::runtime_error("Not Implemented");
 }
 
 void ClassMuskingum2::DoMuskingum() {
 
 	for (long hh = 0; hh < nhru; hh++) {
-
-		LagArray[hh][ulag[hh]] = inVar[hh];
-
-		ulag[hh] = ++ulag[hh] % ilag[hh];
-
-		outVar[hh] = c0[hh] * LagArray[hh][ulag[hh]] + c1[hh] * LastIn[hh] + c2[hh] * LastOut[hh];
-
-		LastIn[hh] = LagArray[hh][ulag[hh]];
-
-		LastOut[hh] = outVar[hh];
+        DoMuskingum(hh);
 	}
 }
 
 void ClassMuskingum2::DoMuskingum(const long hh) {
 
-	LagArray[hh][ulag[hh]] = inVar[hh];
-
-	ulag[hh] = ++ulag[hh] % ilag[hh];  // now points to fully delayed value
-
-	outVar[hh] = c0[hh] * LagArray[hh][ulag[hh]] + c1[hh] * LastIn[hh] + c2[hh] * LastOut[hh];
-
-	LastIn[hh] = LagArray[hh][ulag[hh]];
-
-	LastOut[hh] = outVar[hh];
+    double q_prev = buff_q[hh][0];
+    buff_q[hh][0] = inVar[hh];
+    for (int i=1; i<buff_sz[hh]; i++) {
+        const double q_tmp = buff_q[hh][i];   
+    // Qout1 = C0 * Qin1 + C1 * Qin0 + C2 * Qout0 
+        buff_q[hh][i] = c0[hh] * buff_q[hh][i-1] + c1[hh] * q_prev + c2[hh] * buff_q[hh][i];
+        q_prev = q_tmp;
+    }
+    outVar[hh] = buff_q[hh][buff_sz[hh]-1];
 }
 
 double ClassMuskingum2::Left(int hh) {
 
-	double Slag = 0;
+	double Sstorage = 0;
 
-	for (int ii = 1; ii < ilag[hh]; ++ii)
-		Slag += LagArray[hh][(ulag[hh] + ii) % ilag[hh]];
+	for (int ii = 1; ii < buff_sz[hh]; ++ii) {
+        Sstorage += K_sub[hh] * ( x_atten[hh] * buff_q[hh][ii-1] + (1-x_atten[hh])*buff_q[hh][ii] );
+    }
 
-	double Sstorage = (1.0 / (1.0 - c2[hh])) * (c1[hh] * LastIn[hh] + c2[hh] * outVar[hh]);
-
-	return Slag + Sstorage;
+	return Sstorage;
 }
 
 //---------------------------------------------------------------------------

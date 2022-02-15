@@ -110,8 +110,6 @@ void ClassNetroute_M2_D::decl(void) {
 
   declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e09", "HRU area", "(km^2)", &hru_area);
 
-  declparam("Lag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &Lag);
-
   declparam("route_n", TDim::NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &route_n);
 
   declparam("route_R", TDim::NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &route_R);
@@ -198,14 +196,14 @@ void ClassNetroute_M2_D::init(void) {
   }
 
 // Refer to EM 1110-2-1417 for these channel Vw/V definitions
-  const double Vw[3] = {1.67, 1.44, 1.33, 1.5}; // rectangular - 0/parabolic - 1/triangular - 2/natural - 3
+  const double Vw[4] = {1.67, 1.44, 1.33, 1.5}; // rectangular - 0/parabolic - 1/triangular - 2/natural - 3
 
   for(hh = 0; hh < nhru; ++hh){
     double Vavg = (1.0/route_n[hh])*pow(route_R[hh], 2.0/3.0)*pow(route_S0[hh], 0.5f); // (m/s)
     Ktravel[hh] = route_L[hh]/(Vw[route_Cshp[hh]]*Vavg)/86400.0; // (d)
   }
 
-  hruDelay = new ClassMuskingum2(inflow, outflow, Ktravel, route_X_M, Lag, nhru);
+  hruDelay = new ClassMuskingum2(inflow, outflow, Ktravel, route_X_M, nhru);
   ssrDelay = new ClassClark(ssrinflow, ssroutflow, ssrKstorage, ssrLag, nhru);
   runDelay = new ClassClark(runinflow, runoutflow, runKstorage, runLag, nhru);
   gwDelay = new ClassClark(gwinflow, gwoutflow, gwKstorage, gwLag, nhru);
