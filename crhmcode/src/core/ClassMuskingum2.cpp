@@ -32,7 +32,7 @@ ClassMuskingum2::ClassMuskingum2(const double* inVar, double* outVar,
 // Add 1 to buff_sz because the first buffer location just holds the inflow values
 // actual outflow values start from the second buffer location
         buff_sz[hh] = 1 + std::max(1l, lround(k[hh]/Global::Interval));
-        K_sub[hh] = k[hh] / buff_sz[hh];
+        K_sub[hh] = k[hh] / ( buff_sz[hh] - 1);  // The 1 additional should not be included here
         x_atten[hh] = X_M[hh];
 
 

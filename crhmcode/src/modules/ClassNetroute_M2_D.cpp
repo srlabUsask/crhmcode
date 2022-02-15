@@ -148,7 +148,7 @@ void ClassNetroute_M2_D::decl(void) {
 
   decldiagparam("soil_rechr_ByPass", TDim::NHRU, "[1]", "0", "1","0 - normal, 1 - Bypass recharge layer (i.e. soil_rechr).", "()", &soil_rechr_ByPass);
 
-  declparam("Channel_shp", TDim::NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
+  declparam("Channel_shp", TDim::NHRU, "[0]", "0", "3", "rectangular - 0/parabolic - 1/triangular - 2/natural - 3", "()", &route_Cshp);
 
   decldiagparam("scaling_factor", TDim::NHRU, "[1.0]", "0.0", "1.0E6","multiplies the input to Muskingum by this scaling factor.", "()", &scaling_factor); // temporary
 
