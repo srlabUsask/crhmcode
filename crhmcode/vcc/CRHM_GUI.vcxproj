@@ -205,6 +205,7 @@
     <ClCompile Include="..\src\core\ClassModel.cpp" />
     <ClCompile Include="..\src\core\ClassModule.cpp" />
     <ClCompile Include="..\src\core\ClassMuskingum.cpp" />
+    <ClCompile Include="..\src\core\ClassMuskingum2.cpp" />
     <ClCompile Include="..\src\core\ClassPar.cpp" />
     <ClCompile Include="..\src\core\ClassVar.cpp" />
     <ClCompile Include="..\src\core\Common.cpp" />
@@ -332,6 +333,7 @@
     <ClCompile Include="..\src\modules\ClassNetroute.cpp" />
     <ClCompile Include="..\src\modules\ClassNetroute_D.cpp" />
     <ClCompile Include="..\src\modules\ClassNetroute_M.cpp" />
+    <ClCompile Include="..\src\modules\ClassNetroute_M2_D.cpp" />
     <ClCompile Include="..\src\modules\ClassNetroute_M_D.cpp" />
     <ClCompile Include="..\src\modules\ClassNOP.cpp" />
     <ClCompile Include="..\src\modules\ClassNO_pbsm.cpp" />
@@ -424,6 +426,7 @@
     <ClInclude Include="..\src\core\ClassModel.h" />
     <ClInclude Include="..\src\core\ClassModule.h" />
     <ClInclude Include="..\src\core\ClassMuskingum.h" />
+    <ClInclude Include="..\src\core\ClassMuskingum2.h" />
     <ClInclude Include="..\src\core\ClassPar.h" />
     <ClInclude Include="..\src\core\ClassVar.h" />
     <ClInclude Include="..\src\core\Common.h" />
@@ -591,6 +594,7 @@
     <ClInclude Include="..\src\modules\ClassNetroute.h" />
     <ClInclude Include="..\src\modules\ClassNetroute_D.h" />
     <ClInclude Include="..\src\modules\ClassNetroute_M.h" />
+    <ClInclude Include="..\src\modules\ClassNetroute_M2_D.h" />
     <ClInclude Include="..\src\modules\ClassNetroute_M_D.h" />
     <ClInclude Include="..\src\modules\ClassNOP.h" />
     <ClInclude Include="..\src\modules\ClassNO_pbsm.h" />
