@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mkdir -p ../build
-cd ../build
-cmake ../src
+mkdir build
+cd ./build
+cmake ../
 make install
