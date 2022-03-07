@@ -202,7 +202,6 @@
     <ClCompile Include="..\src\core\ClassData.cpp" />
     <ClCompile Include="..\src\core\Classfilter.cpp" />
     <ClCompile Include="..\src\core\ClassMacro.cpp" />
-    <ClCompile Include="..\src\core\ClassModel.cpp" />
     <ClCompile Include="..\src\core\ClassModule.cpp" />
     <ClCompile Include="..\src\core\ClassMuskingum.cpp" />
     <ClCompile Include="..\src\core\ClassPar.cpp" />

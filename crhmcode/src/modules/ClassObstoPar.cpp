@@ -1,76 +1,84 @@
-//created by Manishankar Mondal
-
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
 #include <algorithm>
-
 #include "ClassObstoPar.h"
 #include "../core/GlobalDll.h"
 #include "../core/ClassCRHM.h"
 #include "newmodules/SnobalDefines.h"
-
+#include "../core/InstrumentLogger.h"
 
 using namespace CRHM;
+ClassObstoPar * ClassObstoPar :: klone (string name) const
+{
+InstrumentLogger::instance()->log_instrument_log("<ClassObstoPar::klone(string name) const@@@ClassObstoPar.cpp>");
 
-ClassObstoPar* ClassObstoPar::klone(string name) const{
-  return new ClassObstoPar(name);
+InstrumentLogger::instance()->log_instrument_log("</ClassObstoPar::klone(string name) const@@@ClassObstoPar.cpp>");
+    return new ClassObstoPar (name);
+InstrumentLogger::instance()->log_instrument_log("</ClassObstoPar::klone(string name) const@@@ClassObstoPar.cpp>");
 }
-
-void ClassObstoPar::decl(void) {
-
-  Description = "'Every interval sets the parameter specified in parameter \"par_name\"to the value of the observation specified in parameter \"obs_name\".'";
-
-  obs_name = declparam("obs_name", TDim::BASIN, "default_obs", "observation name", obs_name);
-
-  par_name = declparam("par_name", TDim::BASIN, "default_par", "parameter name", par_name);
-
-  if (par_name)
-  {
-      declputparam("*", (par_name->at(0)).c_str(), "(m)", &Ht);
-  }
-
-  if (obs_name)
-  {
-      declreadobs((obs_name->at(0)).c_str(), TDim::NHRU, "height observation", "(m)", &Ht_obs);
-  }
-
-  decldiag("Ht_var", TDim::NHRU, "variable name", "()", &Ht_var);
-}
-
-void ClassObstoPar::init(void) {
-  nhru = getdim(TDim::NHRU);
-
-  if(Ht_obs == NULL){
-    CRHMException TExcept("\"Ht_obs\". No observation vegetation height data!  Using constant parameter value instead.", TExcept::WARNING);
-    LogError(TExcept);
-  }
-
-  for (hh = 0; hh < nhru; ++hh){
-    Ht_var[hh] = Ht[hh];
-  }
-}
-
-void ClassObstoPar::run(void) {
-  if(Ht_obs != NULL)
-    for(hh = 0; chkStruct(); ++hh){
-      double H = Ht_obs[hh];
-      if(H < 0.001)
-        H = 0.001;
-//      const_cast<double *> (Ht) [hh] = H;
-      Ht[hh] = H;
-      Ht_var[hh] = Ht[hh];
+void ClassObstoPar :: decl (void)
+{
+InstrumentLogger::instance()->log_instrument_log("<ClassObstoPar::decl(void)@@@ClassObstoPar.cpp>");
+    Description = "'Every interval sets the parameter specified in parameter \"par_name\"to the value of the observation specified in parameter \"obs_name\".'";
+    obs_name = declparam ("obs_name", TDim :: BASIN, "default_obs", "observation name", obs_name);
+    par_name = declparam ("par_name", TDim :: BASIN, "default_par", "parameter name", par_name);
+    if (par_name)
+    {
+        declputparam ("*", (par_name -> at (0)).c_str (), "(m)", & Ht);
     }
+
+    if (obs_name)
+    {
+        declreadobs ((obs_name -> at (0)).c_str (), TDim :: NHRU, "height observation", "(m)", & Ht_obs);
+    }
+
+    decldiag ("Ht_var", TDim :: NHRU, "variable name", "()", & Ht_var);
+InstrumentLogger::instance()->log_instrument_log("</ClassObstoPar::decl(void)@@@ClassObstoPar.cpp>");
 }
+void ClassObstoPar :: init (void)
+{
+InstrumentLogger::instance()->log_instrument_log("<ClassObstoPar::init(void)@@@ClassObstoPar.cpp>");
+    nhru = getdim (TDim :: NHRU);
+    if (Ht_obs == NULL)
+    {
+        CRHMException TExcept ("\"Ht_obs\". No observation vegetation height data!  Using constant parameter value instead.", TExcept :: WARNING);
+        LogError (TExcept);
+    }
 
-void ClassObstoPar::finish(bool good) {
+    for (hh = 0; hh < nhru; ++ hh) {
+        Ht_var [hh] = Ht [hh];
+    }
+InstrumentLogger::instance()->log_instrument_log("</ClassObstoPar::init(void)@@@ClassObstoPar.cpp>");
+}
+void ClassObstoPar :: run (void)
+{
+InstrumentLogger::instance()->log_instrument_log("<ClassObstoPar::run(void)@@@ClassObstoPar.cpp>");
+    if (Ht_obs != NULL)
+    {
+        for (hh = 0; chkStruct (); ++ hh) {
+            double H = Ht_obs [hh];
+            if (H < 0.001)
+            {
+                H = 0.001;
+            }
 
-  for(hh = 0; chkStruct(); ++hh) {
+            Ht [hh] = H;
+            Ht_var [hh] = Ht [hh];
+        }
+    }
 
-    string s = "'" + Name + " (Ht_obs)' ";
-    LogMessage(hh, s.c_str());
-    LogDebug(" ");
-  }
+InstrumentLogger::instance()->log_instrument_log("</ClassObstoPar::run(void)@@@ClassObstoPar.cpp>");
+}
+void ClassObstoPar :: finish (bool good)
+{
+InstrumentLogger::instance()->log_instrument_log("<ClassObstoPar::finish(bool good)@@@ClassObstoPar.cpp>");
+    for (hh = 0; chkStruct (); ++ hh) {
+        string s = "'" + Name + " (Ht_obs)' ";
+        LogMessage (hh, s.c_str ());
+        LogDebug (" ");
+    }
+InstrumentLogger::instance()->log_instrument_log("</ClassObstoPar::finish(bool good)@@@ClassObstoPar.cpp>");
 }

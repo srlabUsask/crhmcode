@@ -1,236 +1,199 @@
 #include "StandardConverterUtility.h"
+#include "InstrumentLogger.h"
 
-StandardConverterUtility::StandardConverterUtility()
+StandardConverterUtility :: StandardConverterUtility ()
 {
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::StandardConverterUtility()@@@StandardConverterUtility.cpp>");
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::StandardConverterUtility()@@@StandardConverterUtility.cpp>");
 }
-
-
-StandardConverterUtility::~StandardConverterUtility()
+StandardConverterUtility :: ~StandardConverterUtility ()
 {
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::~StandardConverterUtility()@@@StandardConverterUtility.cpp>");
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::~StandardConverterUtility()@@@StandardConverterUtility.cpp>");
 }
-
-
-
-//This function returns current date and time in double format.
-double StandardConverterUtility::GetCurrentDateTime()
+double StandardConverterUtility :: GetCurrentDateTime ()
 {
-	return DateTimeDt();
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::GetCurrentDateTime()@@@StandardConverterUtility.cpp>");
+
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetCurrentDateTime()@@@StandardConverterUtility.cpp>");
+    return DateTimeDt ();
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetCurrentDateTime()@@@StandardConverterUtility.cpp>");
 }
-
-
-
-
-double StandardConverterUtility::GetDateTimeInDouble(int year, int month, int day, int hour, int minute, int second)
+double StandardConverterUtility :: GetDateTimeInDouble (int year, int month, int day, int hour, int minute, int second)
 {
-	double t = EncodeDateTime(year, month, day, hour, minute);
-	return t;
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::GetDateTimeInDouble(int year, int month, int day, int hour, int minute, int second)@@@StandardConverterUtility.cpp>");
+    double t = EncodeDateTime (year, month, day, hour, minute);
+
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetDateTimeInDouble(int year, int month, int day, int hour, int minute, int second)@@@StandardConverterUtility.cpp>");
+    return t;
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetDateTimeInDouble(int year, int month, int day, int hour, int minute, int second)@@@StandardConverterUtility.cpp>");
 }
-
-
-
-
-//This function takes a double date time as a parameter and returns date time in string format   'mm/dd/yyyy hh:mm'
-std::string StandardConverterUtility::GetDateTimeInString(double datetime)
+std :: string StandardConverterUtility :: GetDateTimeInString (double datetime)
 {
-	int y, m, d, h, min; 
-	//int s; variable is unreferenced commenting out for now - jhs507
-	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
-	std::string stime = std::to_string(m) + "/" + std::to_string(d) + "/" + std::to_string(y) + " " + std::to_string(h) + ":" + std::to_string(min);
-	return stime;
-}
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::GetDateTimeInString(double datetime)@@@StandardConverterUtility.cpp>");
+    int y, m, d, h, min;
+    DecodeDateTime (datetime, & y, & m, & d, & h, & min);
+    std :: string stime = std :: to_string (m) + "/" + std :: to_string (d) + "/" + std :: to_string (y) + " " + std :: to_string (h) + ":" + std :: to_string (min);
 
-std::string StandardConverterUtility::GetDateTimeInStringForOutput(double datetime)
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetDateTimeInString(double datetime)@@@StandardConverterUtility.cpp>");
+    return stime;
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetDateTimeInString(double datetime)@@@StandardConverterUtility.cpp>");
+}
+std :: string StandardConverterUtility :: GetDateTimeInStringForOutput (double datetime)
 {
-	int y, m, d, h, min;
-	//int s; variable is unreferenced commenting out for now - jhs507
-	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
-	//if (min == 59 && h != 23) { h = h + 1; min = 0; } //added by Manishankar to round the minutes into the next hour.
-	std::string stime = std::to_string(y) + " " + std::to_string(m) + " " + std::to_string(d) + " " + std::to_string(h) + " " + std::to_string(min);
-	return stime;
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::GetDateTimeInStringForOutput(double datetime)@@@StandardConverterUtility.cpp>");
+    int y, m, d, h, min;
+    DecodeDateTime (datetime, & y, & m, & d, & h, & min);
+    std :: string stime = std :: to_string (y) + " " + std :: to_string (m) + " " + std :: to_string (d) + " " + std :: to_string (h) + " " + std :: to_string (min);
+
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetDateTimeInStringForOutput(double datetime)@@@StandardConverterUtility.cpp>");
+    return stime;
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetDateTimeInStringForOutput(double datetime)@@@StandardConverterUtility.cpp>");
 }
-
-
-std::string StandardConverterUtility::GetDateInString(double datetime)
+std :: string StandardConverterUtility :: GetDateInString (double datetime)
 {
-	int y, m, d, h, min;
-	//int s; variable is unreferenced commenting out for now - jhs507
-	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
-	std::string stime = std::to_string(y) + " " + std::to_string(m) + " " + std::to_string(d);
-	return stime;
-}
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::GetDateInString(double datetime)@@@StandardConverterUtility.cpp>");
+    int y, m, d, h, min;
+    DecodeDateTime (datetime, & y, & m, & d, & h, & min);
+    std :: string stime = std :: to_string (y) + " " + std :: to_string (m) + " " + std :: to_string (d);
 
-void StandardConverterUtility::GetDateTimeElements(double datetime, int * y, int * m, int * d, int * h, int * mi)
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetDateInString(double datetime)@@@StandardConverterUtility.cpp>");
+    return stime;
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetDateInString(double datetime)@@@StandardConverterUtility.cpp>");
+}
+void StandardConverterUtility :: GetDateTimeElements (double datetime, int * y, int * m, int * d, int * h, int * mi)
 {
-	int y1, m1, d1, h1, min1;
-	//int s1; variable is unreferenced commenting out for now - jhs507
-	DecodeDateTime(datetime, &y1, &m1, &d1, &h1, &min1);
-
-	*y = y1; *m = m1, *d = d1, *h = h1, *mi = min1;
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::GetDateTimeElements(double datetime, int * y, int * m, int * d, int * h, int * mi)@@@StandardConverterUtility.cpp>");
+    int y1, m1, d1, h1, min1;
+    DecodeDateTime (datetime, & y1, & m1, & d1, & h1, & min1);
+    * y = y1;
+    * m = m1, * d = d1, * h = h1, * mi = min1;
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::GetDateTimeElements(double datetime, int * y, int * m, int * d, int * h, int * mi)@@@StandardConverterUtility.cpp>");
 }
-
-double StandardConverterUtility::Calculate_TdateTime_Offset(void) {  //Manishankar: It is only being used here.
-
-	tm timeinfo;
-
-	timeinfo.tm_sec = 0;
-	timeinfo.tm_min = 0;
-	timeinfo.tm_hour = 0;
-	timeinfo.tm_mday = 1;
-	timeinfo.tm_mon = 0;
-	timeinfo.tm_year = 70;
-	timeinfo.tm_isdst = -1;
-
-	time_t Current = mktime(&timeinfo); // determine ???
-
-	return double(Current) / 86400.0;
-}
-
-double StandardConverterUtility::EncodeDateTime(int Year, int Month, int Day, int hour, int min) {  //Manishankar: in ClassCRHM.cpp, GlobalDll.h, CRHMmain.cpp
-
-	tm timeinfo;
-
-	long indx = (Year - 1900) / 10;
-	if (indx > 7)indx = 7;
-
-	timeinfo.tm_sec = 0;
-	timeinfo.tm_min = min;
-	timeinfo.tm_hour = hour;
-	timeinfo.tm_mday = Day;
-	timeinfo.tm_mon = Month - 1;
-
-	timeinfo.tm_isdst = 0;
-
-	timeinfo.tm_year = Year + Decade_Offsets[indx][0] - 1900;
-
-	time_t Current = mktime(&timeinfo);
-
-	return double(Current) / 86400.0 + Decade_Offsets[indx][1] - Calculate_TdateTime_Offset(); //Global::TdateTime_Offset; // correction from
-}
-
-void StandardConverterUtility::DecodeDateTime(double Dttime, int *Year, int *Month, int *Day, int *Hour, int *Min) { //Manishankar: in ClassCRHM.cpp, GlobalDll.h, Hype_routines.cpp, MacroUnit.cpp
-
-	long indx = 7;
-	if (Dttime < 25569)
-		for (indx = 6; indx >= 0; --indx) {
-			if (!(Dttime < Decade_Offsets[indx][3]))
-				break;
-		}
-
-	long Fix = (long) roundl((Dttime - Decade_Offsets[indx][1])*86400.0);
-	//long Fix = (Dttime - Decade_Offsets[indx][1])*86400.0;
-	time_t rawtime = (time_t)Fix;
-
-	tm *timeinfo = gmtime(&rawtime);
-
-	//Manishankar added this if condition
-	if (timeinfo != NULL)
-	{
-		*Year = timeinfo->tm_year - Decade_Offsets[indx][0] + 1900;
-		*Month = timeinfo->tm_mon + 1;
-		*Day = timeinfo->tm_mday;
-		*Hour = timeinfo->tm_hour;
-		*Min = timeinfo->tm_min;
-	}
-}
-
-double StandardConverterUtility::DateTimeDt(void) {  //Manishankar: in CRHMmain.cpp and NewModules.cpp.
-	time_t Currently;
-
-	time(&Currently);
-
-	return double(Currently) / 86400.0 + Decade_Offsets[7][1] - Calculate_TdateTime_Offset(); //Global::TdateTime_Offset; //  TdateTime_Offset less local time offset
-}
-
-
-
-//this function is being used CRHMmain.cpp. Added by Manishankar.
-std::string StandardConverterUtility::FormatDateTime(std::string fmt, double datetime) 
+double StandardConverterUtility :: Calculate_TdateTime_Offset (void)
 {
-	int y, m, d, h, min;
-	//int s; variable is unreferenced commenting out for now - jhs507
-	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::Calculate_TdateTime_Offset(void)@@@StandardConverterUtility.cpp>");
+    tm timeinfo;
+    timeinfo.tm_sec = 0;
+    timeinfo.tm_min = 0;
+    timeinfo.tm_hour = 0;
+    timeinfo.tm_mday = 1;
+    timeinfo.tm_mon = 0;
+    timeinfo.tm_year = 70;
+    timeinfo.tm_isdst = - 1;
+    time_t Current = mktime (& timeinfo);
 
-	std::string m1 = std::to_string(m);
-	std::string d1 = std::to_string(d);
-	std::string h1 = std::to_string(h);
-	std::string min1 = std::to_string(min);
-
-	if (m < 10) { m1 = "0" + m1; }
-	if (d < 10) { d1 = "0" + d1; }
-	if (h < 10) { h1 = "0" + h1; }
-	if (min < 10) { min1 = "0" + min1; }
-
-	if (fmt == "yyyy-mm-dd hh:mm ")
-	{
-		return std::to_string(y) + " " + m1 + " " + d1 + " " + h1 + " " + min1;
-	}
-	else if (fmt == "ISO")
-	{
-		return std::to_string(y) + "-" + m1 + "-" + d1 + "T" + h1 + ":" + min1;
-	}
-
-	return "";
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::Calculate_TdateTime_Offset(void)@@@StandardConverterUtility.cpp>");
+    return double (Current) / 86400.0;
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::Calculate_TdateTime_Offset(void)@@@StandardConverterUtility.cpp>");
 }
+double StandardConverterUtility :: EncodeDateTime (int Year, int Month, int Day, int hour, int min)
+{
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::EncodeDateTime(int Year, int Month, int Day, int hour, int min)@@@StandardConverterUtility.cpp>");
+    tm timeinfo;
+    long indx = (Year - 1900) / 10;
+    if (indx > 7)
+    {
+        indx = 7;
+    }
 
+    timeinfo.tm_sec = 0;
+    timeinfo.tm_min = min;
+    timeinfo.tm_hour = hour;
+    timeinfo.tm_mday = Day;
+    timeinfo.tm_mon = Month - 1;
+    timeinfo.tm_isdst = 0;
+    timeinfo.tm_year = Year + Decade_Offsets [indx] [0] - 1900;
+    time_t Current = mktime (& timeinfo);
 
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::EncodeDateTime(int Year, int Month, int Day, int hour, int min)@@@StandardConverterUtility.cpp>");
+    return double (Current) / 86400.0 + Decade_Offsets [indx] [1] - Calculate_TdateTime_Offset ();
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::EncodeDateTime(int Year, int Month, int Day, int hour, int min)@@@StandardConverterUtility.cpp>");
+}
+void StandardConverterUtility :: DecodeDateTime (double Dttime, int * Year, int * Month, int * Day, int * Hour, int * Min)
+{
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::DecodeDateTime(double Dttime, int * Year, int * Month, int * Day, int * Hour, int * Min)@@@StandardConverterUtility.cpp>");
+    long indx = 7;
+    if (Dttime < 25569)
+    {
+        for (indx = 6; indx >= 0; -- indx) {
+            if (! (Dttime < Decade_Offsets [indx] [3]))
+            {
+                break;
+            }
 
+        }
+    }
 
-//CString StandardConverterUtility::GetCStringFromStandardString(string str)
-//{
-//	CString cstr(str.c_str());
-//	return cstr;
-//}
+    long Fix = (long) roundl ((Dttime - Decade_Offsets [indx] [1]) * 86400.0);
+    time_t rawtime = (time_t) Fix;
+    tm * timeinfo = gmtime (& rawtime);
+    if (timeinfo != NULL)
+    {
+        * Year = timeinfo -> tm_year - Decade_Offsets [indx] [0] + 1900;
+        * Month = timeinfo -> tm_mon + 1;
+        * Day = timeinfo -> tm_mday;
+        * Hour = timeinfo -> tm_hour;
+        * Min = timeinfo -> tm_min;
+    }
 
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::DecodeDateTime(double Dttime, int * Year, int * Month, int * Day, int * Hour, int * Min)@@@StandardConverterUtility.cpp>");
+}
+double StandardConverterUtility :: DateTimeDt (void)
+{
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::DateTimeDt(void)@@@StandardConverterUtility.cpp>");
+    time_t Currently;
+    time (& Currently);
 
-////This function returns all items from a listbox.
-//TStringList * GetItemsFromListBox(CListBox * listbox)
-//{
-//	TStringList * list = new TStringList();
-//	//CListBox * listbox = (CListBox*)GetDlgItem(listboxid);
-//
-//	int itemcount = listbox->GetCount();
-//	for (int i = 0; i < itemcount; i++)
-//	{
-//		CString str;
-//		listbox->GetText(i, str);
-//		CT2A s(str);
-//		string st = s;
-//		list->Add(st);
-//	}
-//	return list;
-//}
-//
-////This function sets the items to a listbox.
-//void SetItemsToListBox(CListBox * listbox, TStringList * list)
-//{
-//	int count = list->Count;
-//
-//	for (int i = 0; i < count; i++)
-//	{
-//		string str = list->array[i].get_Name();
-//		CString cstr(str.c_str());
-//		listbox->AddString(cstr);
-//	}
-//}
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::DateTimeDt(void)@@@StandardConverterUtility.cpp>");
+    return double (Currently) / 86400.0 + Decade_Offsets [7] [1] - Calculate_TdateTime_Offset ();
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::DateTimeDt(void)@@@StandardConverterUtility.cpp>");
+}
+std :: string StandardConverterUtility :: FormatDateTime (std :: string fmt, double datetime)
+{
+InstrumentLogger::instance()->log_instrument_log("<StandardConverterUtility::FormatDateTime(std :: string fmt, double datetime)@@@StandardConverterUtility.cpp>");
+    int y, m, d, h, min;
+    DecodeDateTime (datetime, & y, & m, & d, & h, & min);
+    std :: string m1 = std :: to_string (m);
+    std :: string d1 = std :: to_string (d);
+    std :: string h1 = std :: to_string (h);
+    std :: string min1 = std :: to_string (min);
+    if (m < 10)
+    {
+        m1 = "0" + m1;
+    }
 
+    if (d < 10)
+    {
+        d1 = "0" + d1;
+    }
 
+    if (h < 10)
+    {
+        h1 = "0" + h1;
+    }
 
+    if (min < 10)
+    {
+        min1 = "0" + min1;
+    }
 
+    if (fmt == "yyyy-mm-dd hh:mm ")
+    {
 
-//TStringList * StandardConverterUtility::GetItemsFromListBox(int listboxid)
-//{
-//	TStringList * list = new TStringList();
-//	CListBox * listbox = (CListBox*)GetDlgItem(listboxid);
-//
-//	int itemcount = listbox->GetCount();
-//	for (int i = 0; i < itemcount; i++)
-//	{
-//		CString str;
-//		listbox->GetText(i, str);
-//		CT2A s(str);
-//		string st = s;
-//
-//		list->Add(st);
-//	}
-//	return list;
-//}
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::FormatDateTime(std :: string fmt, double datetime)@@@StandardConverterUtility.cpp>");
+        return std :: to_string (y) + " " + m1 + " " + d1 + " " + h1 + " " + min1;
+    }
+
+    else
+    if (fmt == "ISO")
+    {
+
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::FormatDateTime(std :: string fmt, double datetime)@@@StandardConverterUtility.cpp>");
+        return std :: to_string (y) + "-" + m1 + "-" + d1 + "T" + h1 + ":" + min1;
+    }
+
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::FormatDateTime(std :: string fmt, double datetime)@@@StandardConverterUtility.cpp>");
+    return "";
+InstrumentLogger::instance()->log_instrument_log("</StandardConverterUtility::FormatDateTime(std :: string fmt, double datetime)@@@StandardConverterUtility.cpp>");
+}

@@ -1,23 +1,28 @@
 #include "RightClickListBox.h"
-BEGIN_MESSAGE_MAP(RightClickListBox, CListBox)
-	ON_WM_RBUTTONDOWN()
-END_MESSAGE_MAP()
+#include "../src/core/InstrumentLogger.h"
 
-UINT RightClickListBox::getMessageCode()
+BEGIN_MESSAGE_MAP (RightClickListBox, CListBox)
+    ON_WM_RBUTTONDOWN ()
+END_MESSAGE_MAP ()
+
+UINT RightClickListBox :: getMessageCode ()
 {
-	return this->messageCode;
+InstrumentLogger::instance()->log_instrument_log("<RightClickListBox::getMessageCode()@@@RightClickListBox.cpp>");
+
+InstrumentLogger::instance()->log_instrument_log("</RightClickListBox::getMessageCode()@@@RightClickListBox.cpp>");
+    return this -> messageCode;
+InstrumentLogger::instance()->log_instrument_log("</RightClickListBox::getMessageCode()@@@RightClickListBox.cpp>");
 }
-
-void RightClickListBox::setMessageCode(UINT code)
+void RightClickListBox :: setMessageCode (UINT code)
 {
-	this->messageCode = code;
+InstrumentLogger::instance()->log_instrument_log("<RightClickListBox::setMessageCode(UINT code)@@@RightClickListBox.cpp>");
+    this -> messageCode = code;
+InstrumentLogger::instance()->log_instrument_log("</RightClickListBox::setMessageCode(UINT code)@@@RightClickListBox.cpp>");
 }
-
-void RightClickListBox::OnRButtonDown(UINT nFlags, CPoint point)
+void RightClickListBox :: OnRButtonDown (UINT nFlags, CPoint point)
 {
-	// TODO: Add your message handler code here and/or call default
-
-	GetParent()->SendMessage(this->messageCode, nFlags, 0);
-
-	CListBox::OnRButtonDown(nFlags, point);
+InstrumentLogger::instance()->log_instrument_log("<RightClickListBox::OnRButtonDown(UINT nFlags, CPoint point)@@@RightClickListBox.cpp>");
+    GetParent () -> SendMessage (this -> messageCode, nFlags, 0);
+    CListBox :: OnRButtonDown (nFlags, point);
+InstrumentLogger::instance()->log_instrument_log("</RightClickListBox::OnRButtonDown(UINT nFlags, CPoint point)@@@RightClickListBox.cpp>");
 }

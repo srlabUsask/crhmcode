@@ -1,79 +1,95 @@
 #include "Defdeclgetvar.h"
+#include "../InstrumentLogger.h"
 
-
-Defdeclgetvar::Defdeclgetvar(ClassMacro* Macro_) : DefCRHM(Macro_) 
+Defdeclgetvar :: Defdeclgetvar (ClassMacro * Macro_): DefCRHM (Macro_)
 {
-	module = DefStringList->at(1);
-	name = DefStringList->at(2);
-	Units = DefStringList->at(3);
+InstrumentLogger::instance()->log_instrument_log("<Defdeclgetvar::Defdeclgetvar(ClassMacro * Macro_): DefCRHM (Macro_)@@@Defdeclgetvar.cpp>");
+    module = DefStringList -> at (1);
+    name = DefStringList -> at (2);
+    Units = DefStringList -> at (3);
+InstrumentLogger::instance()->log_instrument_log("</Defdeclgetvar::Defdeclgetvar(ClassMacro * Macro_): DefCRHM (Macro_)@@@Defdeclgetvar.cpp>");
 }
+void Defdeclgetvar :: CallDecl ()
+{
+InstrumentLogger::instance()->log_instrument_log("<Defdeclgetvar::CallDecl()@@@Defdeclgetvar.cpp>");
+    MapVar :: iterator itVar;
+    ClassVar * thisVar = NULL;
+    long GetUnit;
+    GetUnit = Macro -> FindWildVarFloat (name, thisVar);
+    if (Global :: thisVar != NULL && ((ClassVar *) Global :: thisVar) -> varType == TVar :: Int)
+    {
+        Int = true;
+    }
 
+    else
+    {
+        Int = false;
+    }
 
-void Defdeclgetvar::CallDecl() {
+    if (Int)
+    {
+        Macro -> declgetvar (module, name, Units, & fix_long_const, & fix2_long_const);
+    }
 
-	MapVar::iterator itVar;
-	ClassVar* thisVar = NULL;
-	long GetUnit;
+    else
+    {
+        Macro -> declgetvar (module, name, Units, & fix_const, & fix2_const);
+    }
 
-	GetUnit = Macro->FindWildVarFloat(name, thisVar); // chnaged folowwing 2018 , false, true); // just find name
+    if (Global :: BuildFlag == TBuild :: INIT)
+    {
+        FP = Macro -> vars.find (name);
+        if (FP == Macro -> vars.end ())
+        {
+            Macro -> vars.insert (make_pair (name, VarCHRM ()));
+            FP = Macro -> vars.find (name);
+        }
 
+        FP -> second.name = name;
+        FP -> second.Ihh = 0;
+        FP -> second.Ill = 0;
+        FP -> second.IndexMax = Macro -> nhru - 1;
+        FP -> second.IndexMaxLay = Macro -> nhru - 1;
+        FP -> second.Me = Macro;
+        if (Int)
+        {
+            if (((ClassVar *) Global :: thisVar) -> dimen == TDim :: NDEF || ((ClassVar *) Global :: thisVar) -> dimen == TDim :: NDEFN)
+            {
+                FP -> second.kind = TV :: CRHMint2;
+                FP -> second.ivalue2 = const_cast < long ** > (fix2_long_const);
+            }
 
-	//if (thisVar != NULL && thisVar->varType == CRHM::Int) //Manishankar did this to fix output differences
-	if (Global::thisVar != NULL && ((ClassVar*)Global::thisVar)->varType == TVar::Int)
+            else
+            {
+                FP -> second.kind = TV :: CRHMint;
+                FP -> second.ivalue = const_cast < long * > (fix_long_const);
+            }
 
-		Int = true;
-	else
-		Int = false;
+        }
 
-	if (Int)
-		Macro->declgetvar(module, name, Units, &fix_long_const, &fix2_long_const);
-	else
-		Macro->declgetvar(module, name, Units, &fix_const, &fix2_const);
+        else
+        {
+            if (Global :: thisVar != NULL && (((ClassVar *) Global :: thisVar) -> dimen == TDim :: NDEF || ((ClassVar *) Global :: thisVar) -> dimen == TDim :: NDEFN))
+            {
+                FP -> second.kind = TV :: CRHM2;
+                FP -> second.value2 = const_cast < double ** > (fix2_const);
+            }
 
-	if (Global::BuildFlag == TBuild::INIT) { // moved down 06/20/11
+            else
+            {
+                FP -> second.kind = TV :: CRHM;
+                FP -> second.value = const_cast < double * > (fix_const);
+            }
 
-		FP = Macro->vars.find(name);
-		if (FP == Macro->vars.end()) {
-			Macro->vars.insert(make_pair(name, VarCHRM()));
-			FP = Macro->vars.find(name);
-		}
+        }
 
-		FP->second.name = name;
-		FP->second.Ihh = 0;
-		FP->second.Ill = 0;
-		FP->second.IndexMax = Macro->nhru - 1;
-		FP->second.IndexMaxLay = Macro->nhru - 1; // FIX *******
-		FP->second.Me = Macro;
+    }
 
-		if (Int) {
-			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
-			if (((ClassVar*)Global::thisVar)->dimen == TDim::NDEF || ((ClassVar*)Global::thisVar)->dimen == TDim::NDEFN) {
-				FP->second.kind = TV::CRHMint2;
-				FP->second.ivalue2 = const_cast<long**> (fix2_long_const);
-			}
-			else {
-				FP->second.kind = TV::CRHMint;
-				FP->second.ivalue = const_cast<long*> (fix_long_const);
-			}
-		}
-		else {
-			//if (thisVar->varType == CRHM::NDEF || thisVar->varType == CRHM::NDEFN) { //Manishankar did this to fix output differences
-			if (Global::thisVar != NULL && (((ClassVar*)Global::thisVar)->dimen == TDim::NDEF || ((ClassVar*)Global::thisVar)->dimen == TDim::NDEFN)) {
-				FP->second.kind = TV::CRHM2;
-				FP->second.value2 = const_cast<double**> (fix2_const);
-			}
-			else {
-				FP->second.kind = TV::CRHM;
-				FP->second.value = const_cast<double*> (fix_const);
-			}
-		}
-	}
+InstrumentLogger::instance()->log_instrument_log("</Defdeclgetvar::CallDecl()@@@Defdeclgetvar.cpp>");
 }
-
-
-void Defdeclgetvar::CallInit(long nhru, long nlay) {
-	FP->second.IndexMax = nhru - 1;
-	//  for(int hh = 0; hh <= FP->second.IndexMax; ++hh){
-	//    FP->second.IndexMaxLay = nlay-1;
-	//  }
+void Defdeclgetvar :: CallInit (long nhru, long nlay)
+{
+InstrumentLogger::instance()->log_instrument_log("<Defdeclgetvar::CallInit(long nhru, long nlay)@@@Defdeclgetvar.cpp>");
+    FP -> second.IndexMax = nhru - 1;
+InstrumentLogger::instance()->log_instrument_log("</Defdeclgetvar::CallInit(long nhru, long nlay)@@@Defdeclgetvar.cpp>");
 }

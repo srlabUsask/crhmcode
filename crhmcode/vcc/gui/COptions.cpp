@@ -1,85 +1,57 @@
-// COptions.cpp : implementation file
-//
-
 #include "../stdafx.h"
 #include "CRHM_GUI.h"
 #include "COptions.h"
 #include "afxdialogex.h"
-
-
 #include "../tchart/CTitles.h"
 #include "../tchart/CAspect.h"
 #include "../tchart/CLegend.h"
 #include "../tchart/CSeries.h"
 #include "../tchart/CColorGridSeries.h"
 #include "../tchart/CPen0.h"
-
 #include <tchar.h>
-/*
-TCHAR var1[] = _T("1");
-TCHAR var2[] = _T("2");
-TCHAR var3[] = _T("3");
-TCHAR var4[] = _T("4");
-TCHAR var5[] = _T("5");
-*/
-
 #include <iomanip>
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
 #include <fstream>
+#include "../../src/core/InstrumentLogger.h"
 
 using namespace std;
-
 struct points {
-	//vector <const wchar_t *> x;
-	//vector <double> y;
 
-	int add(CSeries chart_series, const wchar_t * point_x, double point_y) {
-		//x.push_back(point_x);
-		//y.push_back(point_y);
-		chart_series.Add(point_y, point_x, 1);
-		return 0;
-	}
-} chart1;
+    int add (CSeries chart_series, const wchar_t * point_x, double point_y)
+    {
+InstrumentLogger::instance()->log_instrument_log("<add(CSeries chart_series, const wchar_t * point_x, double point_y)@@@COptions.cpp>");
+        chart_series.Add (point_y, point_x, 1);
 
-//#define _UNICODE
+InstrumentLogger::instance()->log_instrument_log("</add(CSeries chart_series, const wchar_t * point_x, double point_y)@@@COptions.cpp>");
+        return 0;
+InstrumentLogger::instance()->log_instrument_log("</add(CSeries chart_series, const wchar_t * point_x, double point_y)@@@COptions.cpp>");
+}} chart1;
 
-// COptions dialog
-
-IMPLEMENT_DYNAMIC(COptions, CDialogEx)
-
-COptions::COptions(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(MAIN_DLG, pParent)
-	, mChart1()
+IMPLEMENT_DYNAMIC (COptions, CDialogEx)
+COptions :: COptions (CWnd * pParent): CDialogEx (MAIN_DLG, pParent), mChart1 ()
 {
-
+InstrumentLogger::instance()->log_instrument_log("<COptions::COptions(CWnd * pParent): CDialogEx (MAIN_DLG, pParent), mChart1 ()@@@COptions.cpp>");
+InstrumentLogger::instance()->log_instrument_log("</COptions::COptions(CWnd * pParent): CDialogEx (MAIN_DLG, pParent), mChart1 ()@@@COptions.cpp>");
 }
-
-COptions::~COptions()
+COptions :: ~COptions ()
 {
+InstrumentLogger::instance()->log_instrument_log("<COptions::~COptions()@@@COptions.cpp>");
+InstrumentLogger::instance()->log_instrument_log("</COptions::~COptions()@@@COptions.cpp>");
 }
-
-
-void COptions::initChart()
+void COptions :: initChart ()
 {
-	
-}
+InstrumentLogger::instance()->log_instrument_log("<COptions::initChart()@@@COptions.cpp>");
+InstrumentLogger::instance()->log_instrument_log("</COptions::initChart()@@@COptions.cpp>");
+}BEGIN_MESSAGE_MAP (COptions, CDialogEx)
+    ON_COMMAND (ID_FILE_OPEN, & COptions :: OnFileOpen)
+END_MESSAGE_MAP ()
 
-
-
-BEGIN_MESSAGE_MAP(COptions, CDialogEx)
-	ON_COMMAND(ID_FILE_OPEN, &COptions::OnFileOpen)
-END_MESSAGE_MAP()
-
-
-// COptions message handlers
-
-
-void COptions::OnFileOpen()
+void COptions :: OnFileOpen ()
 {
-	// TODO: Add your command handler code here
-
-	AfxMessageBox(_T("message test"));
+InstrumentLogger::instance()->log_instrument_log("<COptions::OnFileOpen()@@@COptions.cpp>");
+    AfxMessageBox (_T ("message test"));
+InstrumentLogger::instance()->log_instrument_log("</COptions::OnFileOpen()@@@COptions.cpp>");
 }

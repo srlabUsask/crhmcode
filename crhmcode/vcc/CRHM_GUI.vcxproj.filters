@@ -130,9 +130,6 @@
     <ClCompile Include="..\src\core\ClassMacro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\core\ClassModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\core\ClassModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
