@@ -1,29 +1,32 @@
-//created by Manishankar Mondal
-
 #include "Classshared.h"
 #include "GlobalDll.h"
 #include <algorithm>
 #include "ClassCRHM.h"
-
 #include "SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include "../../core/InstrumentLogger.h"
 
 using namespace CRHM;
+Classshared * Classshared :: klone (string name) const
+{
+InstrumentLogger::instance()->log_instrument_log("<Classshared::klone(string name) const@@@Classshared.cpp>");
 
-Classshared* Classshared::klone(string name) const{
-  return new Classshared(name);
+InstrumentLogger::instance()->log_instrument_log("</Classshared::klone(string name) const@@@Classshared.cpp>");
+    return new Classshared (name);
+InstrumentLogger::instance()->log_instrument_log("</Classshared::klone(string name) const@@@Classshared.cpp>");
 }
-
-void Classshared::decl(void) {
-
-  Description = "'System module only. NEVER use!'";
-
+void Classshared :: decl (void)
+{
+InstrumentLogger::instance()->log_instrument_log("<Classshared::decl(void)@@@Classshared.cpp>");
+    Description = "'System module only. NEVER use!'";
+InstrumentLogger::instance()->log_instrument_log("</Classshared::decl(void)@@@Classshared.cpp>");
 }
-
-void Classshared::init(void) {
-
+void Classshared :: init (void)
+{
+InstrumentLogger::instance()->log_instrument_log("<Classshared::init(void)@@@Classshared.cpp>");
+InstrumentLogger::instance()->log_instrument_log("</Classshared::init(void)@@@Classshared.cpp>");
 }

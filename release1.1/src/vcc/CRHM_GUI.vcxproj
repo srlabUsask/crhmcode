@@ -194,6 +194,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\core\InstrumentLogger.h" />
     <ClInclude Include="CACFunction.h" />
     <ClInclude Include="CActivityDonut.h" />
     <ClInclude Include="CActivityGauge.h" />
@@ -686,6 +687,7 @@
     <ClCompile Include="..\core\CRHMmain.cpp" />
     <ClCompile Include="..\core\CRHM_parse.cpp" />
     <ClCompile Include="..\core\GlobalDll.cpp" />
+    <ClCompile Include="..\core\InstrumentLogger.cpp" />
     <ClCompile Include="..\core\MacroUnit.cpp" />
     <ClCompile Include="..\core\StandardConverterUtility.cpp" />
     <ClCompile Include="..\core\TStringList.cpp" />

@@ -1467,6 +1467,9 @@
     <ClInclude Include="CWebBrowser2.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\core\InstrumentLogger.h">
+      <Filter>Resource Files\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1830,6 +1833,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\coremodules\ClassXGAyers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\InstrumentLogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
