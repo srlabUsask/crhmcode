@@ -3,8 +3,8 @@
 #pragma hdrstop
 
 #include "WQ_Soil_NPCcycling.h"
-#include "NewModules.h"
-#include "GlobalDll.h"
+#include "../newmodules/NewModules.h"
+#include "../../core/GlobalDll.h"
 
 //#include <math.h>
 #include <cmath>

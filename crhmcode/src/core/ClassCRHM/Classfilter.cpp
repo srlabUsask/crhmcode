@@ -10,9 +10,9 @@
 
 #include "Classfilter.h"
 #include "ClassCRHM.h"
-#include "NewModules.h"
+#include "../../modules/newmodules/NewModules.h"
 #include "stddef.h"
-#include "GlobalDll.h"
+#include "../GlobalDll.h"
 
 using namespace std;
 

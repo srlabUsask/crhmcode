@@ -5,11 +5,11 @@
 #pragma hdrstop
 
 #include "NewModules.h"
-#include "WQ_CRHM.h"
-#include "WQ_Soil_NPCcycling.h"
-#include "GlobalDll.h"
+#include "../waterquality/WQ_CRHM.h"
+#include "../waterquality/WQ_Soil_NPCcycling.h"
+#include "../../core/GlobalDll.h"
 #include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
+#include "../../core/ClassCRHM/ClassCRHM.h"
 
 #include "SnobalDefines.h"
 #include <cmath>
@@ -18,97 +18,97 @@
 #include <fstream>
 #include <bitset>
 
-#include "ClassBasin.h" //added by Manishankar Mondal
-#include "ClassGlobal.h" //added by Manishankar Mondal
-#include "ClassObs.h" //added by Manishankar Mondal
-#include "ClassIntcp.h" //added by Manishankar Mondal
-#include "Classpbsm.h" //added by Manishankar Mondal
-#include "ClassNO_pbsm.h" //added by Manishankar Mondal
-#include "Classtsurface.h" //added by Manishankar Mondal 
-#include "Classalbedo.h" //added by Manishankar Mondal 
-#include "Classnetall.h" //added by Manishankar Mondal 
-#include "Classebsm.h" //added by Manishankar Mondal
-#include "ClassTs.h" //added by Manishankar Mondal
-#include "ClassNeedle.h" //added by Manishankar Mondal
-#include "ClassSimpleRichard.h" //added by Manishankar Mondal
-#include "Classevap.h" //added by Manishankar Mondal
-#include "ClassevapD.h" //added by Manishankar Mondal
-#include "Classsbsm.h" //added by Manishankar Mondal
-#include "Classcrack.h" //added by Manishankar Mondal
-#include "ClassKevin.h" //added by Manishankar Mondal
-#include "ClassGreencrack.h" //added by Manishankar Mondal
-#include "Classfrostdepth.h" //added by Manishankar Mondal
-#include "Classfrozen.h" //added by Manishankar Mondal
-#include "ClassNetroute.h" //added by Manishankar Mondal
-#include "Classinterception.h" //added by Manishankar Mondal
-#include "ClassGreenAmpt.h" //added by Manishankar Mondal
-#include "Classalbedoparam.h" //added by Manishankar Mondal
-#include "Classalbedoobs.h" //added by Manishankar Mondal
-#include "ClassHtobs.h" //added by Manishankar Mondal
-#include "ClasspbsmSnobal.h" //added by Manishankar Mondal
-#include "ClassalbedoRichard.h" //added by Manishankar Mondal
-#include "ClassalbedoBaker.h" //added by Manishankar Mondal
-#include "ClassHMSA.h" //added by Manishankar Mondal
-#include "Classwalmsley_wind.h" //added by Manishankar Mondal
-#include "ClassNetroute_M.h" //added by Manishankar Mondal
-#include "ClassREWroute2.h" //added by Manishankar Mondal
-#include "ClassLongVt.h" //added by Manishankar Mondal
-#include "Classpbsm_M.h" //added by Manishankar Mondal
-#include "ClassNetroute_D.h" //added by Manishankar Mondal
-#include "ClassNetroute_M_D.h" //added by Manishankar Mondal
-#include "ClassSetSoil.h" //added by Manishankar Mondal
-#include "ClassVolumetric.h" //added by Manishankar Mondal
-#include "ClassAnnan.h" //added by Manishankar Mondal
-#include "Classcalcsun.h" //added by Manishankar Mondal
-#include "ClassObstoPar.h" //added by Manishankar Mondal
-#include "ClassPrairieInfil.h" //added by Manishankar Mondal
-#include "ClassCRHMCanopy.h" //added by Manishankar Mondal
-#include "ClassPSPnew.h" //added by Manishankar Mondal
-#include "Classbrushintcp.h" //added by Manishankar Mondal
-#include "ClassAyers.h" //added by Manishankar Mondal
-#include "ClassSlope_Qsi.h" //added by Manishankar Mondal
-#include "ClassfrozenAyers.h" //added by Manishankar Mondal
-#include "ClassSoil.h" //added by Manishankar Mondal
-#include "Classevap_Resist.h" //added by Manishankar Mondal
-#include "ClassevapD_Resist.h" //added by Manishankar Mondal
-#include "ClassShutWall.h" //added by Manishankar Mondal
-#include "ClassShutWallD.h" //added by Manishankar Mondal
-#include "ClassIceBulb.h" //added by Manishankar Mondal
-#include "Classlake.h" //added by Manishankar Mondal
-#include "ClassalbedoWinstral.h" //added by Manishankar Mondal
-#include "ClassK_Estimate.h" //added by Manishankar Mondal
-#include "ClassevapX.h" //added by Manishankar Mondal
-#include "Class3D_param.h" //added by Manishankar Mondal
-#include "ClassMeltRunoff_Lag.h" //added by Manishankar Mondal
-#include "ClassMeltRunoff_Kstorage.h" //added by Manishankar Mondal
-#include "ClassREWroute.h" //added by Manishankar Mondal
-#include "ClassXG.h" //added by Manishankar Mondal
-#include "Classcontribution.h" //added by Manishankar Mondal
-#include "ClassSoilX.h" //added by Manishankar Mondal
-#include "ClassMod_Exec.h" //added by Manishankar Mondal
-#include "ClassFlowInSnow.h" //added by Manishankar Mondal
-#include "ClassSoilDS.h" //added by Manishankar Mondal
-#include "Classalbedoobs2.h" //added by Manishankar Mondal
-#include "Classwinter_meltflag.h" //added by Manishankar Mondal
-#include "Class_z_s_rho.h" //added by Manishankar Mondal
-#include "Classqmelt.h" //added by Manishankar Mondal
-#include "Classquinton.h" //added by Manishankar Mondal
-#include "Classqdrift.h" //added by Manishankar Mondal
-#include "ClassXGAyers.h" //added by Manishankar Mondal
-#include "ClassCRHMCanopyClearing.h" //added by Manishankar Mondal
-#include "ClassCRHMCanopyClearingGap.h" //added by Manishankar Mondal
-#include "ClassREWroute_stream.h" //added by Manishankar Mondal
-#include "ClassICEflow.h" //added by Manishankar Mondal
-#include "Classglacier.h" //added by Manishankar Mondal
-#include "Classglacier_debris.h" //added by Manishankar Mondal
-#include "ClassSWEslope.h" //added by Manishankar Mondal
-#include "ClassTestSparse.h" //added by Manishankar Mondal
-#include "ClassGrow_Crop.h" //added by Manishankar Mondal
-#include "ClassSnobalBase.h"  //added by Manishankar Mondal
-#include "ClassSnobalX.h"  //added by Manishankar Mondal
-#include "ClassSnobalCRHM.h" //added by Manishankar Mondal
-#include "Classshared.h" //added by Manishankar Mondal
-#include "ClassNOP.h" //added by Manishankar Mondal
+#include "../coremodules/ClassBasin.h" //added by Manishankar Mondal
+#include "../coremodules/ClassGlobal.h" //added by Manishankar Mondal
+#include "../coremodules/ClassObs.h" //added by Manishankar Mondal
+#include "../coremodules/ClassIntcp.h" //added by Manishankar Mondal
+#include "../coremodules/Classpbsm.h" //added by Manishankar Mondal
+#include "../coremodules/ClassNO_pbsm.h" //added by Manishankar Mondal
+#include "../coremodules/Classtsurface.h" //added by Manishankar Mondal 
+#include "../coremodules/Classalbedo.h" //added by Manishankar Mondal 
+#include "../coremodules/Classnetall.h" //added by Manishankar Mondal 
+#include "../coremodules/Classebsm.h" //added by Manishankar Mondal
+#include "../coremodules/ClassTs.h" //added by Manishankar Mondal
+#include "../coremodules/ClassNeedle.h" //added by Manishankar Mondal
+#include "../coremodules/ClassSimpleRichard.h" //added by Manishankar Mondal
+#include "../coremodules/Classevap.h" //added by Manishankar Mondal
+#include "../coremodules/ClassevapD.h" //added by Manishankar Mondal
+#include "../coremodules/Classsbsm.h" //added by Manishankar Mondal
+#include "../coremodules/Classcrack.h" //added by Manishankar Mondal
+#include "../coremodules/ClassKevin.h" //added by Manishankar Mondal
+#include "../coremodules/ClassGreencrack.h" //added by Manishankar Mondal
+#include "../coremodules/Classfrostdepth.h" //added by Manishankar Mondal
+#include "../coremodules/Classfrozen.h" //added by Manishankar Mondal
+#include "../coremodules/ClassNetroute.h" //added by Manishankar Mondal
+#include "../coremodules/Classinterception.h" //added by Manishankar Mondal
+#include "../coremodules/ClassGreenAmpt.h" //added by Manishankar Mondal
+#include "../coremodules/Classalbedoparam.h" //added by Manishankar Mondal
+#include "../coremodules/Classalbedoobs.h" //added by Manishankar Mondal
+#include "../coremodules/ClassHtobs.h" //added by Manishankar Mondal
+#include "../coremodules/ClasspbsmSnobal.h" //added by Manishankar Mondal
+#include "../coremodules/ClassalbedoRichard.h" //added by Manishankar Mondal
+#include "../coremodules/ClassalbedoBaker.h" //added by Manishankar Mondal
+#include "../coremodules/ClassHMSA.h" //added by Manishankar Mondal
+#include "../coremodules/Classwalmsley_wind.h" //added by Manishankar Mondal
+#include "../coremodules/ClassNetroute_M.h" //added by Manishankar Mondal
+#include "../coremodules/ClassREWroute2.h" //added by Manishankar Mondal
+#include "../coremodules/ClassLongVt.h" //added by Manishankar Mondal
+#include "../coremodules/Classpbsm_M.h" //added by Manishankar Mondal
+#include "../coremodules/ClassNetroute_D.h" //added by Manishankar Mondal
+#include "../coremodules/ClassNetroute_M_D.h" //added by Manishankar Mondal
+#include "../coremodules/ClassSetSoil.h" //added by Manishankar Mondal
+#include "../coremodules/ClassVolumetric.h" //added by Manishankar Mondal
+#include "../coremodules/ClassAnnan.h" //added by Manishankar Mondal
+#include "../coremodules/Classcalcsun.h" //added by Manishankar Mondal
+#include "../coremodules/ClassObstoPar.h" //added by Manishankar Mondal
+#include "../coremodules/ClassPrairieInfil.h" //added by Manishankar Mondal
+#include "../coremodules/ClassCRHMCanopy.h" //added by Manishankar Mondal
+#include "../coremodules/ClassPSPnew.h" //added by Manishankar Mondal
+#include "../coremodules/Classbrushintcp.h" //added by Manishankar Mondal
+#include "../coremodules/ClassAyers.h" //added by Manishankar Mondal
+#include "../coremodules/ClassSlope_Qsi.h" //added by Manishankar Mondal
+#include "../coremodules/ClassfrozenAyers.h" //added by Manishankar Mondal
+#include "../coremodules/ClassSoil.h" //added by Manishankar Mondal
+#include "../coremodules/Classevap_Resist.h" //added by Manishankar Mondal
+#include "../coremodules/ClassevapD_Resist.h" //added by Manishankar Mondal
+#include "../coremodules/ClassShutWall.h" //added by Manishankar Mondal
+#include "../coremodules/ClassShutWallD.h" //added by Manishankar Mondal
+#include "../coremodules/ClassIceBulb.h" //added by Manishankar Mondal
+#include "../coremodules/Classlake.h" //added by Manishankar Mondal
+#include "../coremodules/ClassalbedoWinstral.h" //added by Manishankar Mondal
+#include "../coremodules/ClassK_Estimate.h" //added by Manishankar Mondal
+#include "../coremodules/ClassevapX.h" //added by Manishankar Mondal
+#include "../coremodules/Class3D_param.h" //added by Manishankar Mondal
+#include "../coremodules/ClassMeltRunoff_Lag.h" //added by Manishankar Mondal
+#include "../coremodules/ClassMeltRunoff_Kstorage.h" //added by Manishankar Mondal
+#include "../coremodules/ClassREWroute.h" //added by Manishankar Mondal
+#include "../coremodules/ClassXG.h" //added by Manishankar Mondal
+#include "../coremodules/Classcontribution.h" //added by Manishankar Mondal
+#include "../coremodules/ClassSoilX.h" //added by Manishankar Mondal
+#include "../coremodules/ClassMod_Exec.h" //added by Manishankar Mondal
+#include "../coremodules/ClassFlowInSnow.h" //added by Manishankar Mondal
+#include "../coremodules/ClassSoilDS.h" //added by Manishankar Mondal
+#include "../coremodules/Classalbedoobs2.h" //added by Manishankar Mondal
+#include "../coremodules/Classwinter_meltflag.h" //added by Manishankar Mondal
+#include "../coremodules/Class_z_s_rho.h" //added by Manishankar Mondal
+#include "../coremodules/Classqmelt.h" //added by Manishankar Mondal
+#include "../coremodules/Classquinton.h" //added by Manishankar Mondal
+#include "../coremodules/Classqdrift.h" //added by Manishankar Mondal
+#include "../coremodules/ClassXGAyers.h" //added by Manishankar Mondal
+#include "../coremodules/ClassCRHMCanopyClearing.h" //added by Manishankar Mondal
+#include "../coremodules/ClassCRHMCanopyClearingGap.h" //added by Manishankar Mondal
+#include "../coremodules/ClassREWroute_stream.h" //added by Manishankar Mondal
+#include "../coremodules/ClassICEflow.h" //added by Manishankar Mondal
+#include "../coremodules/Classglacier.h" //added by Manishankar Mondal
+#include "../coremodules/Classglacier_debris.h" //added by Manishankar Mondal
+#include "../coremodules/ClassSWEslope.h" //added by Manishankar Mondal
+#include "../coremodules/ClassTestSparse.h" //added by Manishankar Mondal
+#include "../coremodules/ClassGrow_Crop.h" //added by Manishankar Mondal
+#include "../coremodules/ClassSnobalBase.h"  //added by Manishankar Mondal
+#include "../coremodules/ClassSnobalX.h"  //added by Manishankar Mondal
+#include "../coremodules/ClassSnobalCRHM.h" //added by Manishankar Mondal
+#include "../coremodules/Classshared.h" //added by Manishankar Mondal
+#include "../coremodules/ClassNOP.h" //added by Manishankar Mondal
 
 
 //---------------------------------------------------------------------------

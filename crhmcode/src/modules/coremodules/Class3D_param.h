@@ -1,6 +1,6 @@
 //created by Manishankar Mondal
 
-#include "ClassModule/ClassModule.h"
+#include "../../core/ClassModule/ClassModule.h"
 
 class Class3D_param : public ClassModule {
 public:

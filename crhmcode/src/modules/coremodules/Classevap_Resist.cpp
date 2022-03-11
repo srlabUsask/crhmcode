@@ -1,11 +1,10 @@
 //created by Manishankar Mondal
 
 #include "Classevap_Resist.h"
-#include "GlobalDll.h"
 #include <algorithm>
-#include "ClassCRHM/ClassCRHM.h"
-
-#include "SnobalDefines.h"
+#include "../../core/GlobalDll.h"
+#include "../../core/ClassCRHM/ClassCRHM.h"
+#include "../newmodules/SnobalDefines.h"
 #include <math.h>
 #include <assert.h>
 #include <iostream>

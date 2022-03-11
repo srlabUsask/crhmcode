@@ -2,8 +2,8 @@
 //---------------------------------------------------------------------------
 
 #include "WQ_CRHM.h"
-#include "NewModules.h"
-#include "GlobalDll.h"
+#include "../newmodules/NewModules.h"
+#include "../../core/GlobalDll.h"
 #include <sstream>
 
 //#include <math.h>

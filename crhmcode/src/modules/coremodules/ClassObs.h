@@ -1,6 +1,6 @@
 //created by Manishankar
 
-#include "ClassModule/ClassModule.h"
+#include "../../core/ClassModule/ClassModule.h"
 
 class Classobs : public ClassModule {
 public:

@@ -12,7 +12,7 @@
 
 
 #include "ClassModule.h"
-#include "Common/Common.h"
+#include "../Common/Common.h"
 
 
 //---------------------------------------------------------------------------

@@ -12,9 +12,9 @@
 #include <functional>
 #include <algorithm>
 #include <string>
-#include "Common/Common.h"
-#include "ClassCRHM/ClassCRHM.h"
-#include "ClassModule/ClassModule.h"
+#include "../Common/Common.h"
+#include "../ClassCRHM/ClassCRHM.h"
+#include "../ClassModule/ClassModule.h"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/spirit/include/classic_utility.hpp>

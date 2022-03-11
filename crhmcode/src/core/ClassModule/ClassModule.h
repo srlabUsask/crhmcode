@@ -6,10 +6,10 @@
 #ifndef ClassModuleH
 #define ClassModuleH
 //---------------------------------------------------------------------------
-#include "TStringList/TStringList.h"
-#include "GlobalCommon.h"
-#include "GlobalDll.h"
-#include "ClassCRHM/ClassCRHM.h"
+#include "../TStringList/TStringList.h"
+#include "../GlobalCommon.h"
+#include "../GlobalDll.h"
+#include "../ClassCRHM/ClassCRHM.h"
 #include "Administer.h"
 #include "Myparser.h"
 #include "ClassClark.h"

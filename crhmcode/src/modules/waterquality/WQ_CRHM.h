@@ -4,7 +4,7 @@
 #define WQ_CRHMH
 //---------------------------------------------------------------------------
 
-#include "ClassModule/ClassModule.h"
+#include "../../core/ClassModule/ClassModule.h"
 #include "ClassWQ_Soil.h"
 #include "ClassWQ_Netroute.h"
 #include "ClassWQ_pbsm.h"

@@ -1,6 +1,6 @@
 //created by Manishankar Mondal
 
-#include "ClassModule/ClassModule.h"
+#include "../../core/ClassModule/ClassModule.h"
 
 
 class ClassKevin : public ClassModule {

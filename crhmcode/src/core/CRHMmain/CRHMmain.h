@@ -17,10 +17,10 @@
 #include <sstream>
 #include <fstream>
 //#include "CString"
-#include "Common/Common.h"
-#include "TStringList/TStringList.h"
+#include "../Common/Common.h"
+#include "../TStringList/TStringList.h"
 //#include "boost/shared_ptr.hpp"
-#include "ClassCRHM/ClassCRHM.h"
+#include "../ClassCRHM/ClassCRHM.h"
 #include <map>
 #include <iostream>
 #include<list>

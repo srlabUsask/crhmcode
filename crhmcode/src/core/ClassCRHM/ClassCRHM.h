@@ -5,9 +5,9 @@
 #define ClassCRHMH
 //---------------------------------------------------------------------------
 
-#include "Common/Common.h"
-#include "GlobalCommon.h"
-#include "TStringList/TStringList.h"
+#include "../Common/Common.h"
+#include "../GlobalCommon.h"
+#include "../TStringList/TStringList.h"
 #include "ClassData.h"
 #include "ClassVar.h"
 #include "ClassPar.h"

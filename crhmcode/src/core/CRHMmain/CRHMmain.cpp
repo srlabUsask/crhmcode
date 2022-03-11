@@ -1,11 +1,11 @@
 #if defined(_WIN32) && !defined(__MINGW32__)
-#include "stdafx.h"
+#include "../../vcc/stdafx.h"
 #endif
 
 #include "CRHMmain.h"
 
 #if defined(VS_GUI)
-#include "CRHMAboutBox.h"
+#include "../../vcc/gui/CRHMAboutBox.h"
 #endif
 
 
@@ -16,13 +16,13 @@
 #include <fstream>
 #include <time.h>
 //#include "boost/shared_ptr.hpp"
-#include "GlobalDll.h"
+#include "../GlobalDll.h"
 //#include "ClassCRHM/ClassCRHM.h"
-#include "ClassModule/ClassModule.h"
-#include "NewModules.h"
+#include "../ClassModule/ClassModule.h"
+#include "../../modules/newmodules/NewModules.h"
 #include "../MacroUnit/MacroUnit.h"
-#include "Common/Common.h"
-#include "StandardConverterUtility.h"
+#include "../Common/Common.h"
+#include "../StandardConverterUtility.h"
 
 #include <time.h>
 

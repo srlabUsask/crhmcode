@@ -1,6 +1,7 @@
 //created by Manishankar Mondal
 
-#include "ClassModule/ClassModule.h"
+#include "../../core/ClassModule/ClassModule.h"
+
 
 class ClassevapX : public ClassModule {
 public:

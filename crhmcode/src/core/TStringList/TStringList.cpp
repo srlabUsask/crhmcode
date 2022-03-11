@@ -4,14 +4,14 @@
 #include <unistd.h>
 #endif
 
-#include "TStringList/TStringList.h"
+#include "TStringList.h"
 #include <time.h>
 #include <cmath>
 #include <algorithm>
 #include <string>
 #include <limits>
-#include "ClassCRHM/ClassCRHM.h"
-#include "Common/Common.h"
+#include "../ClassCRHM/ClassCRHM.h"
+#include "../Common/Common.h"
 
 string TStringList::CommaText(void) 
 {

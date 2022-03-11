@@ -21,7 +21,7 @@
 
 #include "string.h"
 #include<iostream>
-#include "TStringList/TStringList.h"
+#include "../TStringList/TStringList.h"
 
 #include "time.h"
 #include "CRHM_namespace.h"

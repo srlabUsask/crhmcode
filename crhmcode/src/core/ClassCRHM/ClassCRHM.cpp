@@ -10,9 +10,9 @@
 
 #include "ClassCRHM.h"
 #include "Classfilter.h"
-#include "NewModules.h"
+#include "../../modules/newmodules/NewModules.h"
 #include "stddef.h"
-#include "GlobalDll.h"
+#include "../GlobalDll.h"
 #include "../CRHMmain/CRHMLogger.h"
 
 using namespace std;
