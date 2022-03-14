@@ -197,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="..\core\Common\CRHMException.h" />
     <ClInclude Include="..\core\Common\VandP.h" />
+    <ClInclude Include="..\core\StandardConverterUtility.h" />
     <ClInclude Include="..\gcc\CRHMArguments.h" />
     <ClInclude Include="CACFunction.h" />
     <ClInclude Include="CActivityDonut.h" />
@@ -748,6 +749,7 @@
     <ClCompile Include="..\core\CRHM_parse\exec\execbase.cpp" />
     <ClCompile Include="..\core\CRHM_parse\VarCHRM.cpp" />
     <ClCompile Include="..\core\GlobalDll.cpp" />
+    <ClCompile Include="..\core\InstrumentLogger.cpp" />
     <ClCompile Include="..\core\MacroUnit\ClassMacro.cpp" />
     <ClCompile Include="..\core\MacroUnit\DefCRHM\DefCRHM.cpp" />
     <ClCompile Include="..\core\MacroUnit\DefCRHM\Defdecldiag.cpp" />

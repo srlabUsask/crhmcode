@@ -1,112 +1,78 @@
-
-
-// 12/19/16
-//---------------------------------------------------------------------------
 #include <stdio.h>
-//#include <tchar.h>
-
-
-
 #include "GlobalDll.h"
+#include "InstrumentLogger.h"
 
-//---------------------------------------------------------------------------
-
-//#pragma package(smart_init) removed uneeded pragma - jhs507
-
-using namespace std;
-
-bool Global::NaNcheck;
-bool Global::LOGVARLOAD;
-
-long Global::GroupCntTrk;
-long Global::StructCntTrk;
-
-long Global::Freq;     // set by first observation file.
-
-long Global::DTindx;  // current index during model run and observation display.  Set in main.
-long Global::DTmin;   // minimum index during model run and observation display.  Set in main.
-long Global::DTmax;   // maximum index during model run and observation display.  Set in main.
-long Global::IndxMin; // minimum index of the first file.
-long Global::IndxMax; // maximum index of the first file.
-
-long Global::maxobs;
-long Global::maxlay;
-long Global::maxhru;
-
-long Global::nobs;
-long Global::nlay;
-long Global::nhru;
-
-long Global::CRHMStatus;  // module status; module control = 1 , main control = 2 and Finished = 4. Both inhibit output.
-long Global::CurrentModuleRun;  // currently executing module index
-long Global::CRHMControlSaveCnt; // NewModules input
-
-BitSet Global::RunUpBitSet; // determines modules executed during looping.
-BitSet Global::ModuleBitSet; // determines modules executed during calculating ahead.
-
-double Global::Interval; // set by first observation file.
-double Global::DTstart;  // set by first observation file.  Integer.
-double Global::DTend;    // set by first observation file.  Integer.
-
-TDateTime Global::DTnow; // current time during model run and observation display.  Set in main.
-
-TDateTime Global::RapidAdvanceTo; // Rapid advance to this date.
-TDateTime Global::LoopTo; // Loop to this date.
-long Global::LoopCnt;  // Loop this count
-long Global::LoopCntDown;  // Loop this count
-
-TBuild Global::BuildFlag;
-TIMEFORMAT Global::TimeFormat;
-
-MapVar Global::MapVars;     // DECL
-MapVar Global::MapVarsGet;  // INIT
-MapVar Global::MapVarsPut;  // INIT
-MapVar Global::MapObsGet;   // INIT
-MapPar Global::MapPars;     // DECL
-MapPar Global::SharedMapPars; // DECL
-
-Mapstr Global::Mapgetvar;   // build
-Mapstr Global::Mapputvar;   // build
-Mapstr Global::Mapreadvar;  // build
-Mapstr Global::Mapdeclvar;  // build
-Mapstr Global::Mapdeclpar;  // build
-Mapstr Global::Mapdeclobs;  // build
-Mapstr Global::Mapdeclstat; // build
-Mapstr2 Global::MapAKA;
-
-TStringList *(Global::AllModulesList);
-TStringList *(Global::OurModulesList);
-TStringList *(Global::MacroModulesList);
-TStringList *(Global::AllModelsList);
-TStringList *(Global::ModelModulesList);
-TStringList *(Global::OurHelpList);
-TStringList *(Global::PendingDLLModuleList);
-TStringList *(Global::ReportList);
-TStringList *(Global::DeclRootList);
-TStringList *(Global::OldModuleName);
-TStringList *(Global::NewModuleName);
-
-//HWND Global::crhmMain;
-//HWND Global::crhmLog;
-
-double  *Global::lapse_rate; // used for array observations adjustments
-double  *Global::ppt_adj; // used for array observations adjustments
-double  *Global::hru_elev; // used for array observations adjustments
-long   **Global::HRU_OBS; // used for array observations
-
-double  *Global::Warming_t; // used for climate warming
-double  *Global::Warming_p; // used for climate warming
-long   *Global::RH_VP_flag; // used for elevation change. -> 0 maintain rh, 1 -> maintain ea
-long   *Global::RH_VP_flag2; // used for climate warming. -> 0 maintain rh, 1 -> maintain ea
-long    Global::RH_EA_obs; // 0 -> rh obs, 1 -> ea obs
-long    Global::OBS_AS_IS; // 0 -> process obs, 1 -> no processing
-long    Global::WQ_prj; // true -> processing WQ modules
-
-double  **Global::OBS_ELEV; // used for array observations adjustments
-long   **Global::HRU_OBS_DIRECT; // used for array observations
-double  **Global::obs_t; // used for array observations adjustments
-double  **Global::obs_ea; // used for array observations adjustments
-double  **Global::obs_rh; // used for array observations adjustments
-double  **Global::obs_t_obs; // used for array observations adjustments
-
-TObject *Global::thisVar;
+using namespace std; bool Global :: NaNcheck;
+bool Global :: LOGVARLOAD;
+long Global :: GroupCntTrk;
+long Global :: StructCntTrk;
+long Global :: Freq;
+long Global :: DTindx;
+long Global :: DTmin;
+long Global :: DTmax;
+long Global :: IndxMin;
+long Global :: IndxMax;
+long Global :: maxobs;
+long Global :: maxlay;
+long Global :: maxhru;
+long Global :: nobs;
+long Global :: nlay;
+long Global :: nhru;
+long Global :: CRHMStatus;
+long Global :: CurrentModuleRun;
+long Global :: CRHMControlSaveCnt;
+BitSet Global :: RunUpBitSet;
+BitSet Global :: ModuleBitSet;
+double Global :: Interval;
+double Global :: DTstart;
+double Global :: DTend;
+TDateTime Global :: DTnow;
+TDateTime Global :: RapidAdvanceTo;
+TDateTime Global :: LoopTo;
+long Global :: LoopCnt;
+long Global :: LoopCntDown;
+TBuild Global :: BuildFlag;
+TIMEFORMAT Global :: TimeFormat;
+MapVar Global :: MapVars;
+MapVar Global :: MapVarsGet;
+MapVar Global :: MapVarsPut;
+MapVar Global :: MapObsGet;
+MapPar Global :: MapPars;
+MapPar Global :: SharedMapPars;
+Mapstr Global :: Mapgetvar;
+Mapstr Global :: Mapputvar;
+Mapstr Global :: Mapreadvar;
+Mapstr Global :: Mapdeclvar;
+Mapstr Global :: Mapdeclpar;
+Mapstr Global :: Mapdeclobs;
+Mapstr Global :: Mapdeclstat;
+Mapstr2 Global :: MapAKA;
+TStringList * (Global :: AllModulesList);
+TStringList * (Global :: OurModulesList);
+TStringList * (Global :: MacroModulesList);
+TStringList * (Global :: AllModelsList);
+TStringList * (Global :: ModelModulesList);
+TStringList * (Global :: OurHelpList);
+TStringList * (Global :: PendingDLLModuleList);
+TStringList * (Global :: ReportList);
+TStringList * (Global :: DeclRootList);
+TStringList * (Global :: OldModuleName);
+TStringList * (Global :: NewModuleName);
+double * Global :: lapse_rate;
+double * Global :: ppt_adj;
+double * Global :: hru_elev;
+long ** Global :: HRU_OBS;
+double * Global :: Warming_t;
+double * Global :: Warming_p;
+long * Global :: RH_VP_flag;
+long * Global :: RH_VP_flag2;
+long Global :: RH_EA_obs;
+long Global :: OBS_AS_IS;
+long Global :: WQ_prj;
+double ** Global :: OBS_ELEV;
+long ** Global :: HRU_OBS_DIRECT;
+double ** Global :: obs_t;
+double ** Global :: obs_ea;
+double ** Global :: obs_rh;
+double ** Global :: obs_t_obs;
+TObject * Global :: thisVar;
