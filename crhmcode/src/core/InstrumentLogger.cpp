@@ -9,6 +9,7 @@ InstrumentLogger::InstrumentLogger()
     {
         auto logger = spdlog::basic_logger_mt("instrumentLogger", "callLog.log");
         this->instrumentLogger = logger;
+        this->instrumentLogger->set_pattern("%v");
     }
     catch (const spdlog::spdlog_ex& ex)
     {
