@@ -34,7 +34,7 @@ add_library(core OBJECT
     CRHM_parse.cpp
     CRHMArguments.cpp
     CRHMLogger.cpp
-    CRHMMain.cpp
+    CRHMmain.cpp
     GlobalDll.cpp
     MacroClass.cpp
     MacroUnit.cpp

@@ -53,6 +53,7 @@ add_executable(${PROJECT_NAME} main.cpp
     $<TARGET_OBJECTS:exec>
     $<TARGET_OBJECTS:filter>
 )
+target_link_libraries(${PROJECT_NAME} fmt)
 
 #Evaluate the core subdirectory to build the core objects
 add_subdirectory(core)
