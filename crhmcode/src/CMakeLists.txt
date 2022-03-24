@@ -53,7 +53,6 @@ add_executable(${PROJECT_NAME} main.cpp
     $<TARGET_OBJECTS:exec>
     $<TARGET_OBJECTS:filter>
 )
-target_link_libraries(${PROJECT_NAME} fmt)
 
 #Evaluate the core subdirectory to build the core objects
 add_subdirectory(core)
@@ -74,6 +73,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     "${PROJECT_SOURCE_DIR}/modules/newmodules"
     "${PROJECT_SOURCE_DIR}/modules/waterquality"
     "${PROJECT_SOURCE_DIR}/modules/hype"
+    "${PROJECT_SOURCE_DIR}/libs/spdlog/include"
     "${PROJECT_SOURCE_DIR}/${LOCAL_BOOST_LOCATION}"
 )
 

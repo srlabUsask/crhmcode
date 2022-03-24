@@ -51,6 +51,7 @@ add_dependencies(core spdlog exec def filter)
 target_include_directories(core PUBLIC
     #Gets the SPDLOG headers
     "${STAGING_DIR}/include/"
+    "${PROJECT_SOURCE_DIR}/libs/spdlog/include"
     #Configuration needed to access ACTIVE_LOG_LEVEL
     "${PROJECT_SOURCE_DIR}/crhmConfig.h"
     #Boost headers required by CRHM_parse
