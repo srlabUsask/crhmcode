@@ -19,6 +19,9 @@ set(ACTIVE_LOG_LEVEL "2")
 # relative to the src folder.
 set(LOCAL_BOOST_LOCATION "/libs/boost_1_75_0")
 
+# Set the staging directory for finding spdlog library
+#set(STAGING_DIR ".")
+
 #If no Build Type is specified default to Release
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
