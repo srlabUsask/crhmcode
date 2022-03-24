@@ -19,6 +19,9 @@ set(ACTIVE_LOG_LEVEL "2")
 # relative to the src folder.
 set(LOCAL_BOOST_LOCATION "/libs/boost_1_75_0")
 
+# Set the staging directory for finding spdlog library
+set(STAGING_DIR ".")
+
 #If no Build Type is specified default to Release
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
@@ -73,6 +76,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     "${PROJECT_SOURCE_DIR}/modules/newmodules"
     "${PROJECT_SOURCE_DIR}/modules/waterquality"
     "${PROJECT_SOURCE_DIR}/modules/hype"
+    "${PROJECT_SOURCE_DIR}/libs/spdlog/include"
     "${PROJECT_SOURCE_DIR}/${LOCAL_BOOST_LOCATION}"
 )
 
