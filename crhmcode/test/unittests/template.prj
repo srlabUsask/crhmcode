@@ -1,0 +1,66 @@
+Description - {DESCRIPTION}
+###### Version: CRHM 01/17/18  Creation: 2/14/2022 01:01
+Dimensions:
+######
+nhru 1
+nlay 2
+nobs 1
+######
+Macros:
+######
+'Driver'
+{MACRO_DECL_BLOCK}
+'command'
+{MACRO_CMD_BLOCK}
+'end'
+######
+Observations:
+######
+{OBS_BLOCK}
+######
+Dates:
+######
+{S_YR} {S_MO} {S_DY}
+{E_YR} {E_MO} {E_DY}
+######
+Modules:
+######
+Driver Macro 04/20/06
+{MODULE_BLOCK}
+######
+Parameters:
+######
+{PARAMS_BLOCK}
+######
+Initial_State
+######
+######
+Final_State
+######
+######
+Summary_period
+######
+Daily
+######
+Log_Time_Format
+######
+YYYY-MM-DD
+######
+Display_Variable:
+######
+{OUTPUTS_BLOCK}
+######
+Display_Observation:
+######
+######
+Auto_Run
+######
+Auto_Exit
+######
+Log_All
+######
+TChart:
+######
+The Cold Regions Hydrological Model Platform September 2015
+(mm*km^2/int) 
+######

@@ -1,0 +1,52 @@
+ClassNeedle,3,Divide by zero error because my obs file doesn't cover all the simulation days and the rest of data is filled with zeros which gives a divide by zero in calculation.
+Class_z_s_rho,-1,Required when pbsmSnobal used with glacier and glacier_org. Replaces z_s and rho normally supplied by module SnobalCRHM to pbsmSnobal
+ClassREWroute2,3,Unknown problem
+ClassREWroute2,2,Unknown problem
+ClassREWroute2,1,Unknown problem
+ClassREWroute2,0,Unknown problem
+Classquinton,0,Unknown problem
+Classquinton,1,No output variables
+Classevap_Resist,2,No output variables
+Classevap_Resist,0,Unknown problem
+Classevap_Resist,1,No output variables
+Classwinter_meltflag,-1,Unknown problem
+ClassMeltRunoff_Lag,-1,Unavailable in old version because release=false
+ClassMeltRunoff_Kstorage,-1,Unavailable in old version because release=false
+ClassGrow_Crop,-1,No forcing variables (FIX THIS)
+Classalbedoobs,-1,Unknown problem
+ClassIceBulb,-1,Unknown problem
+Classqmelt,-1,Unknown problem
+Classnetall,-1,Unknown problem
+ClassTestSparse,-1,Unknown problem
+ClassGlobal,-1,Unknown problem
+ClassSnobalX,-1,Unknown problem
+ClassREWroute_stream,0,Unknown problem
+ClassREWroute_stream,1,Unknown problem
+ClassCRHMCanopyClearing,4,Unknown problem
+Classglacier_debris,0,Unknown problem
+Classglacier_debris,1,Unknown problem
+Classglacier_debris,2,Unknown problem
+Classglacier_debris,3,Unknown problem
+Classglacier_debris,4,Unknown problem
+Classglacier_debris,5,Unknown problem
+ClassK_Estimate,1,Unknown problem
+ClassBasin,-1,Unknown problem
+ClassObs,0,Unknown problem
+ClassObs,1,Unknown problem
+ClassObs,2,Unknown problem
+ClassSlope_Qsi,0,Unknown problem
+ClassSoil,0,Unknown problem
+ClassSoil,1,Unknown problem
+ClassSoil,2,Unknown problem
+Classalbedo,-1,Unknown problem
+Classpbsm,0,Unknown problem
+Classpbsm,1,Unknown problem
+Classpbsm,2,Unknown problem
+Classpbsm,3,Unknown problem
+Classshared,-1,Unknown problem
+ClassSetSoil,-1,Unknown problem
+ClassMod_Exec,-1,Unknown problem
+Classalbedoparam,-1,Unknown problem
+Classqdrift,0,Unknown error
+Classqdrift,1,Unknown error
+ClassFlowInSnow,-1,Unavailable in old version because release=false
