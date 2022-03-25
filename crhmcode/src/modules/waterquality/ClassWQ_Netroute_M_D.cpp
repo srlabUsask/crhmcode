@@ -211,8 +211,6 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declputvar("*", "soil_lower", "(mm)", &soil_lower);
 
-    declputvar("*", "conc_soil_lower", "(g)", &conc_soil_lower, &conc_soil_lower_lay);
-
     declputvar("*", "soil_rechr", "(mm)", &soil_rechr);
 
     declputvar("*", "redirected_residual", "(mm*km^2/int)", &redirected_residual);
