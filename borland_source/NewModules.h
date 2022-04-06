@@ -1,4 +1,4 @@
-// 04/12/21 with changes to 07/02/20
+// 08/11/21 with changes to 04/12/21
 //---------------------------------------------------------------------------
 
 #ifndef OurModulesH
@@ -2657,6 +2657,7 @@ ClassVolumetric(string Name, String Version = "undefined", CRHM::LMODULE Lvl = C
 // declared parameters
 const float *soil_Depth;
 const float *Si_correction;
+const float *fallstat_correction; // 08/11/2021
 const float *soil_moist_max;
 const float *soil_rechr_max;
 const long *soil_type;
