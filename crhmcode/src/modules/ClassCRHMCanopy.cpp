@@ -387,7 +387,10 @@ void ClassCRHMCanopy::run(void) {
       C1 = 1.0/(D*SvDens*Nu);
 
       Alpha = 5.0;
-      Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Radius*Radius*Radius *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
+
+      // 18Mar2022: remove Gamma Distribution Correction term, *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
+      Mpm = 4.0 / 3.0 * M_PI * PBSM_constants::DICE * Radius * Radius * Radius;
+
 
 // sublimation rate of single 'ideal' ice sphere:
 
@@ -422,8 +425,11 @@ void ClassCRHMCanopy::run(void) {
 
           double IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
           double Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
+ 
+          // weekly dimensionless unloading coefficient -> to CRHM time interval
+          const double U = -1 * log(0.678) / (24 * 7 * Global::Freq / 24); 
+          // 21Mar2022 correction: invert the term 24/Global::Freq, use unloading rate coefficient U = -log(c)/t for snow unloading determined by inverse function of c = e^(-Ut) = 0.678 based on Eq. 14 in Hedstrom and Pomeroy (1998)
 
-          const double c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
 
   // determine whether canopy snow is unloaded:
 
@@ -438,14 +444,19 @@ void ClassCRHMCanopy::run(void) {
             Snow_load[hh] -= SUnload[hh];
             cum_SUnload[hh] += SUnload[hh];
           }
-          else if(IceBulbT < unload_t[hh]){ // has to be at least one interval. Trip on half step
-            SUnload[hh] = Snow_load[hh]*c; // the dimensionless unloading coefficient already /interval
-            if(SUnload[hh] > Snow_load[hh]){
+          else if(IceBulbT < unload_t[hh]) // has to be at least one interval. Trip on half step
+          { 
+            SUnload[hh] = Snow_load[hh] * U; // the dimensionless unloading coefficient already /interval, 21Mar2022 correction: use unloading rate coefficient U
+            
+            if(SUnload[hh] > Snow_load[hh])
+            {
               SUnload[hh] = Snow_load[hh];
               Snow_load[hh] = 0.0;
             }
             else
-              Snow_load[hh] -= SUnload[hh];
+            {
+                Snow_load[hh] -= SUnload[hh];
+            }
 
             cum_SUnload[hh] += SUnload[hh];
           }
