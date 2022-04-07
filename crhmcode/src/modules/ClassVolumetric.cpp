@@ -48,6 +48,8 @@ void ClassVolumetric::decl(void) {
 
     declparam("Si_correction", TDim::NHRU, "[0.0]", "0.0", "1.0", "Si correction number", "()", &Si_correction);
 
+    declparam("fallstat_correction", TDim::NHRU, "[1.0]", "0.0", "10.0", "fallstat correction factor", "()", &fallstat_correction); // 08/11/2021
+
     declparam("set_fallstat", TDim::NHRU, "[305]", "0", "366", "set fallstat on this Julian date", "()", &set_fallstat);
 
     declparam("Volumetric_option", TDim::NHRU, "[1]", "0", "1", "option of setting Si or fallstat: 0 - based on Volumetric moisture content in entire soil column, 1 - based on Volumetric moisture content in soil recharge layer", "()", &Volumetric_option);  // 04/14/2020:
@@ -120,6 +122,11 @@ void ClassVolumetric::run(void) {
                     else
                     {
                         fallstat[hh] = Volumetric[hh] / SetSoilproperties[soil_type[hh]][3] * 100000.0; // ie 100*1000
+                    }
+
+                    if (fallstat_correction[hh] >= 0.0) // fallstat_correction added 08/11/2021
+                    {
+                        fallstat[hh] = fallstat[hh] * fallstat_correction[hh]; 
                     }
                 }
                 else
