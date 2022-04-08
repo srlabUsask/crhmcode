@@ -23,11 +23,11 @@ void ClassVolumetric::decl(void) {
 
     Description = "'Converts soil moisture to volumetric equivalent and determines fall status.'";
 
-    declvar("Volumetric", TDim::NHRU, "volumetric soil moisture", "()", &Volumetric);
+    declvar("Volumetric", TDim::NHRU, "fractional volumetric soil moisture", "()", &Volumetric);
 
-    declvar("Volumetric_rechr", TDim::NHRU, "volumetric soil moisture in soil recharge zone", "()", &Volumetric_rechr); // 04/14/2020: adding option for updating Si or fallstat based on Volumetric moisture content in recharge layer
+    declvar("Volumetric_rechr", TDim::NHRU, "fractional volumetric soil moisture in soil recharge zone", "()", &Volumetric_rechr); // 04/14/2020: adding option for updating Si or fallstat based on Volumetric moisture content in recharge layer
 
-    declvar("fallstat_V", TDim::NHRU, "fallstat_V copy of parameter fallstat", "()", &fallstat_V);
+    declvar("fallstat_V", TDim::NHRU, "fallstat_V copy of parameter fallstat", "(%)", &fallstat_V);
 
     declvar("Si_V", TDim::NHRU, "Si_V copy of parameter Si", "()", &Si_V);
 
