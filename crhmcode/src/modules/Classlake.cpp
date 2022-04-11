@@ -39,15 +39,15 @@ void Classlake::decl(void) {
 
   declvar("hru_t_Mmean", TDim::NHRU, "HRU temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_t_Mmean);
 
-  declvar("hru_rh_Mmean", TDim::NHRU, "HRU rh", "()", &hru_rh_Mmean);
+  declvar("hru_rh_Mmean", TDim::NHRU, "HRU rh", "(%)", &hru_rh_Mmean);
 
   declvar("hru_u_Mmean", TDim::NHRU, "HRU wind speed", "(m/s)", &hru_u_Mmean);
 
-  decllocal("hru_t_acc", TDim::NHRU, "HRU t accumulated", "(" + string(DEGREE_CELSIUS) + ")", &hru_t_acc);
+  decllocal("hru_t_acc", TDim::NHRU, "HRU t accumulated", "(" + string(DEGREE_CELSIUS) + "*N)", &hru_t_acc);
 
-  decllocal("hru_rh_acc", TDim::NHRU, "HRU rh accumulated", "()", &hru_rh_acc);
+  decllocal("hru_rh_acc", TDim::NHRU, "HRU rh accumulated", "(%*N)", &hru_rh_acc);
 
-  decllocal("hru_u_acc", TDim::NHRU, "HRU u accumulated", "(m)", &hru_u_acc);
+  decllocal("hru_u_acc", TDim::NHRU, "HRU u accumulated", "(m/s*N)", &hru_u_acc);
 
   decllocal("start_open_day", TDim::NHRU, "TDate format start of open water", "()", &start_open_day);
 
