@@ -30,7 +30,7 @@ void Classtsurface::decl(void) {
     'use previous daily mean snowpack temperature with thermal conductivity and energy of snowpack (***Snobal*** case) to estimate surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57).' \
     'use previous daily mean hru_t with thermal conductivity and energy of snowpack (***ebsm*** case) to estimate surface temperature during snowcover period; use parameter n_factor to estimate surface temperature from the air temperature during snow free periods (Woo, 2012, p. 57). '";
 
-  declvar("hru_tsf", TDim::NHRU, "surface/skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_tsf);
+  declvar("hru_tsf", TDim::NHRU, "temperature accumulator used to calculate the daily mean hru_tsfD", "(" + string(DEGREE_CELSIUS) + ")", &hru_tsf);
 
   declvar("hru_tsf_D", TDim::NHRU, "mean daily surface/skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_tsf_D);
 
@@ -45,7 +45,7 @@ void Classtsurface::decl(void) {
 
   decllocal("hru_T_s_D", TDim::NHRU, "mean daily surface/skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_T_s_D);
 
-  decllocal("hru_T_s_acc", TDim::NHRU, "sum interval air temperature from previous day", "(" + string(DEGREE_CELSIUS) + ")", &hru_T_s_acc);
+  decllocal("hru_T_s_acc", TDim::NHRU, "temperature accumulator used to calculate the previous daily mean snowpack temperature hru_T_s_D", "(" + string(DEGREE_CELSIUS) + ")", &hru_T_s_acc);
 
   declgetvar("*", "z_s", "(m)", &z_s);
 
@@ -60,7 +60,7 @@ void Classtsurface::decl(void) {
 
   decllocal("hru_t_D", TDim::NHRU, "mean daily snowpack temperature from previous day", "(" + string(DEGREE_CELSIUS) + ")", &hru_t_D);
 
-  decllocal("hru_t_acc", TDim::NHRU, "sum interval air temperature from previous day", "(" + string(DEGREE_CELSIUS) + ")", &hru_t_acc);
+  decllocal("hru_t_acc", TDim::NHRU, "temperature accumulator used to calculate the previous daily air temperature hru_t_D", "(" + string(DEGREE_CELSIUS) + ")", &hru_t_acc);
 
   declgetvar("*", "hru_tmin", "(" + string(DEGREE_CELSIUS) + ")",   &tmin);
 
@@ -99,7 +99,7 @@ void Classtsurface::decl(void) {
 
   variation_set = VARIATION_2 + VARIATION_3 + VARIATION_4 + VARIATION_5;
 
-  declvar("SWE_tc", TDim::NHRU, "SWE thermal conductivity", "(W/(m*K)", &SWE_tc);
+  declvar("SWE_tc", TDim::NHRU, "SWE thermal conductivity", "(W/(m*K))", &SWE_tc);
 
   declvar("SWE_density", TDim::NHRU, "SWE density", "( kg/m^3)", &SWE_density);
 
