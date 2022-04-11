@@ -99,9 +99,9 @@ void ClassREWroute::decl(void) {
 
   variation_set = VARIATION_1;
 
-  declparam("WS_Kstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_Kstorage);
+  declparam("WS_Kstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "inflow storage constant for RB (Clark method)", "(d)", &WS_Kstorage);
 
-  declparam("WS_gwKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_gwKstorage);
+  declparam("WS_gwKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "gwinflow storage constant for RB (Clark method)", "(d)", &WS_gwKstorage);
 
 
   variation_set = VARIATION_ORG;
