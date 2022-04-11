@@ -42,7 +42,7 @@ void ClassNetroute_M::decl(void) {
 
   decldiag("outflow_diverted", TDim::NHRU, "HRU outflow diverted to another HRU", "(mm*km^2)", &outflow_diverted);
 
-  declstatdiag("cumoutflow_diverted", TDim::NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm*km^2/int)", &cumoutflow_diverted);
+  declstatdiag("cumoutflow_diverted", TDim::NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm*km^2)", &cumoutflow_diverted);
 
   declstatdiag("cum_to_Sd", TDim::NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
 
