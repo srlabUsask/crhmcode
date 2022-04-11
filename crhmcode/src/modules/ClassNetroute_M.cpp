@@ -58,7 +58,7 @@ void ClassNetroute_M::decl(void) {
 
   decldiag("gwoutflow_diverted", TDim::NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
 
-  declstatdiag("gwcumoutflow_diverted", TDim::NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
+  declstatdiag("gwcumoutflow_diverted", TDim::NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2)", &gwcumoutflow_diverted);
 
   declvar("ssrinflow", TDim::NHRU, "subsurface inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
 
