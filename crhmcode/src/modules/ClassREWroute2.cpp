@@ -48,13 +48,13 @@ void ClassREWroute2::decl(void) {
 
   gwCnt = declgrpvar("WS_ALL_gwflow", "basingw", "query variable = 'basingw'", "(m^3/int)", &gwrew, &gw_All);
 
-  declvar("WS_gwinflow", TDim::NHRU, "inflow from each RB", "(m^3/int)", &gwinflow);
+  declvar("WS_gwinflow", TDim::NHRU, "gwinflow from each RB", "(m^3/int)", &gwinflow);
 
-  declstatdiag("cum_WSgwinflow", TDim::NHRU, "cumulative inflow from each RB", "(m^3)", &cumgwinflow);
+  declstatdiag("cum_WSgwinflow", TDim::NHRU, "cumulative gwinflow from each RB", "(m^3)", &cumgwinflow);
 
-  declvar("WS_gwoutflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &gwoutflow);
+  declvar("WS_gwoutflow", TDim::NHRU, "gwoutflow of each RB", "(m^3/int)", &gwoutflow);
 
-  declstatdiag("cum_WSgwoutflow", TDim::NHRU, "cumulative outflow of each RB", "(m^3)", &cumgwoutflow);
+  declstatdiag("cum_WSgwoutflow", TDim::NHRU, "cumulative gwoutflow of each RB", "(m^3)", &cumgwoutflow);
 
   declvar("WS_gwflow", TDim::BASIN, "watershed ground water outflow", "(m^3/int)", &gwflow);
 
