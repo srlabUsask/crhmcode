@@ -41,11 +41,11 @@ void ClassK_Estimate::decl(void) {
   declputparam("*", "gw_K",        "(mm/d)", &gw_K);
 
   declvar("rechr_ssr_K_V", TDim::NHRU, "ssr drainage factor from recharge", "(mm/d)", &rechr_ssr_K_V);
-  declvar("lower_ssr_K_V", TDim::NHRU, "ssr drainage factor from soil column", "(mm/d)", &lower_ssr_K_V);
+  declvar("lower_ssr_K_V", TDim::NHRU, "ssr drainage factor from lower soil layer", "(mm/d)", &lower_ssr_K_V);
   declvar("Sd_ssr_K_V", TDim::NHRU, "depression storage ssr drainage factor", "(mm/d)", &Sd_ssr_K_V);
   declvar("Sd_gw_K_V", TDim::NHRU, "depression storage gw drainage factor", "(mm/d)", &Sd_gw_K_V);
   declvar("soil_gw_K_V", TDim::NHRU, "The maximum amount of the soil water excess for an HRU that is routed directly to the associated groundwater reservoir each day", "(mm/d)", &soil_gw_K_V);
-  declvar("gw_K_V", TDim::NHRU, "ground water drainage factor from gw reservoir each day", "(m/s)", &gw_K_V);
+  declvar("gw_K_V", TDim::NHRU, "ground water drainage factor from gw reservoir each day", "(mm/d)", &gw_K_V);
 
   declparam("Inhibit_K_set", TDim::NHRU, "[0]", "0", "63", "Inhibit setting of rechr_ssr_K/lower_ssr_K/Sd_ssr_K/Sd_gw_K/soil_gw_K/gw_K parameters using 1/2/4/8/16/32", "()", &Inhibit_K_set);
 
