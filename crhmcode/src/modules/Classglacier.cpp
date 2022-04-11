@@ -48,11 +48,11 @@ void Classglacier::decl(void) {
 
     declstatdiag("cumicemelt", TDim::NHRU, "cumulative ice melt", "(mm)", &cumicemelt);
 
-    declstatvar("firn_dens", TDim::NDEFN, "densities of snow densification layers", "(kg/m^3)", &firn_dens, &firn_dens_array, Global::nlay);
+    declstatvar("firn_dens", TDim::NDEFN, "densities of firn layers", "(kg/m^3)", &firn_dens, &firn_dens_array, Global::nlay);
 
-    declstatvar("firn_h", TDim::NDEFN, "depths of snow densification layers", "(m)", &firn_h, &firn_h_array, Global::nlay);
+    declstatvar("firn_h", TDim::NDEFN, "depths of firn layers", "(m)", &firn_h, &firn_h_array, Global::nlay);
 
-    declstatvar("firn_yr", TDim::NDEFN, "layer[1] - years to 'critical density] and layer[2, ...] age of firn", "(yr)", &firn_yr, &firn_yr_array, Global::nlay);
+    declstatvar("firn_yr", TDim::NDEFN, "layer[1] - years to 'critical density' and layer[2, ...] age of firn", "(yr)", &firn_yr, &firn_yr_array, Global::nlay);
 
     decldiagparam("firn_dens_init", TDim::NDEFN, "[220.0]", "0.0", "1000.0", "initial densities of firn densification layers", "(kg/m^3)", &firn_dens_init, &firn_dens_array_init, Global::nlay);
 
@@ -112,11 +112,11 @@ void Classglacier::decl(void) {
 
     declstatdiag("cumfirn_2ice", TDim::NHRU, "cumulative firn added to ice", "(mm)", &cumfirn_2ice);
 
-    declvar("Gnet_rainD", TDim::NHRU, "daily net rain", "(mm/d)", &Gnet_rainD);
+    declvar("Gnet_rainD", TDim::NHRU, "daily net rain calculated from net_rain", "(mm/d)", &Gnet_rainD);
 
     declvar("net_rain_org", TDim::NHRU, "value of 'net_rain' before addition of SWE, firn and ice melt", "(mm/int)", &net_rain_org);
 
-    declvar("cumnet_rain_org", TDim::NHRU, "value of 'net_rain' before addition of SWE, firn and ice melt", "(mm)", &cumnet_rain_org);
+    declvar("cumnet_rain_org", TDim::NHRU, "cumulative value of 'net_rain' before addition of SWE, firn and ice melt", "(mm)", &cumnet_rain_org);
 
 
     ObsCnt_Albedo = declreadobs("glacier_Albedo_obs", TDim::NHRU, "available Albedo observations", "()", &glacier_Albedo_obs, HRU_OBS_misc, true); // HRU_OBS_p_ppt HRU_OBS_misc HRU_OBS_Q HRU_OBS_u HRU_OBS_t_rh_ea
@@ -206,7 +206,7 @@ void Classglacier::decl(void) {
 
     decldiagparam("tfactor", TDim::NHRU, "[0.0]", "0.0", "10.0", "degree day melt factor", "(mm/d*" + string(DEGREE_CELSIUS) + ")", &tfactor);
 
-    decldiagparam("nfactor", TDim::NHRU, "[0.0]", "0.0", "10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
+    decldiagparam("nfactor", TDim::NHRU, "[0.0]", "0.0", "10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ*d))", "(mm*m^2/MJ)", &nfactor);
 
     decldiagparam("Use_QnD", TDim::NHRU, "[0]", "0", "1", "1 - Use QnD if available", "()", &Use_QnD);
 
