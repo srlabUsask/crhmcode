@@ -57,7 +57,7 @@ void ClassSWEslope::decl(void) {
 
   declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("distrib_SWEslope", TDim::NDEFN, "[0.0]", "0.0", "1.0E6.0", "distribute this HRU iceflow to these HRUs. Source HRU can include itself in the re-distribution", "()", &distrib_SWEslope, &distrib_hru, nhru);
+  declparam("distrib_SWEslope", TDim::NDEFN, "[0.0]", "0.0", "1.0E6.0", "distribute SWE from this HRU to these HRUs. Source HRU can include itself in the re-distribution", "()", &distrib_SWEslope, &distrib_hru, nhru);
 
 
   declputvar("*", "SWE", "(mm)", &SWE);
