@@ -26,7 +26,7 @@ void Classinterception::decl(void) {
 
   declvar("SI_Lo", TDim::NHRU, "Canopy load", "(kg/m^2)", &SI_Lo);
 
-  declvar("net_snow", TDim::NHRU, "Canopy unload ", "(kg/m^2)", &net_snow);
+  declvar("net_snow", TDim::NHRU, "Canopy unload ", "(kg/m^2*int)", &net_snow);
 
   decldiag("Cum_net_snow", TDim::NHRU, "Cumulative Canopy unload ", "(kg/m^2)", &Cum_net_snow);
 
