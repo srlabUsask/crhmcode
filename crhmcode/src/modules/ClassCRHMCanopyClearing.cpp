@@ -85,15 +85,15 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declobs("Qnsn", TDim::NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
 
-  declvar("Qnsn_Var", TDim::NHRU, "net all-wave at snow surface", "(W/m^2*int)", &Qnsn_Var);
+  declvar("Qnsn_Var", TDim::NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn_Var);
 
   declobs("Qsisn", TDim::NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn);
 
-  declvar("Qsisn_Var", TDim::NHRU, "incident short-wave at surface", "(W/m^2*int)", &Qsisn_Var);
+  declvar("Qsisn_Var", TDim::NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn_Var);
 
   declobs("Qlisn", TDim::NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn);
 
-  declvar("Qlisn_Var", TDim::NHRU, "incident short-wave at surface", "(W/m^2*int)", &Qlisn_Var);
+  declvar("Qlisn_Var", TDim::NHRU, "incident short-wave at surface", "(W/m^2)", &Qlisn_Var);
 
   declobs("Qlosn", TDim::NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
 
@@ -101,11 +101,11 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   decldiag("k", TDim::NHRU, "extinction coefficient", "()", &k);
 
-  decldiag("Tauc", TDim::NHRU, "short-wave transmissivity", "(W/m^2)", &Tauc);
+  decldiag("Tauc", TDim::NHRU, "short-wave transmissivity", "()", &Tauc);
 
   decllocal("Pa", TDim::NHRU, "Average surface pressure", "(kPa)", &Pa);
 
-  declvar("ra", TDim::NHRU, "", "(s/m)", &ra);
+  declvar("ra", TDim::NHRU, "resistance", "(s/m)", &ra);
 
   declvar("drip_cpy", TDim::NHRU, "canopy drip", "(mm/int)", &drip_Cpy);
 
@@ -113,11 +113,11 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declvar("net_rain", TDim::NHRU, " direct_rain + drip", "(mm/int)", &net_rain);
 
-  declstatdiag("cum_net_rain", TDim::NHRU, " direct_rain + drip", "(mm)", &cum_net_rain);
+  declstatdiag("cum_net_rain", TDim::NHRU, "cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
   declvar("Subl_Cpy", TDim::NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
-  declstatdiag("cum_Subl_Cpy", TDim::NHRU, "canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
+  declstatdiag("cum_Subl_Cpy", TDim::NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
 
   decldiag("Pevap", TDim::NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
 
@@ -125,7 +125,7 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declstatvar("Snow_load", TDim::NHRU, "canopy snow load (timetep start)", "(mm)", &Snow_load);
 
-  declvar("direct_snow", TDim::NHRU, "snow 'direct' Thru", "(mm/int)", &direct_snow);
+  declvar("direct_snow", TDim::NHRU, "snow 'direct' through canopy", "(mm/int)", &direct_snow);
 
   declvar("SUnload", TDim::NHRU, "unloaded canopy snow", "(mm)", &SUnload);
 
@@ -137,7 +137,7 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declvar("net_snow", TDim::NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
 
-  declstatdiag("cum_net_snow", TDim::NHRU, "Cumulative Canopy unload ", "(mm)", &cum_net_snow);
+  declstatdiag("cum_net_snow", TDim::NHRU, "Cumulative hru_snow minus interception", "(mm)", &cum_net_snow);
 
   declvar("net_p", TDim::NHRU, "total precipitation after interception", "(mm/int)", &net_p);
 
@@ -147,7 +147,7 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declvar("intcp_evap", TDim::NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
 
-  declstatdiag("cum_intcp_evap", TDim::NHRU, "HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
+  declstatdiag("cum_intcp_evap", TDim::NHRU, "Cumulative HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
 
 
 // parameters:
@@ -181,9 +181,9 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declparam("CanopyClearing", TDim::NHRU, "[0]", "0", "1", "canopy - 0/clearing - 1", "()", &CanopyClearing);
 
-  decldiagparam("Alpha_c", TDim::NHRU, "[0.1]", "0.05", "0.2", "canopy albedo", "()", &Alpha_c);
+  decldiagparam("Alpha_c", TDim::NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
 
-  decldiagparam("B_canopy", TDim::NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
+  decldiagparam("B_canopy", TDim::NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter for longwave-radiation. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
 }
 
 void ClassCRHMCanopyClearing::init(void) {
