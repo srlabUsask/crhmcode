@@ -34,7 +34,7 @@ void Classtsurface::decl(void) {
 
   declvar("hru_tsf_D", TDim::NHRU, "mean daily surface/skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_tsf_D);
 
-  decldiag("hru_tsf_acc", TDim::NHRU, "mean daily surface/skin temperature", "(" + string(DEGREE_CELSIUS) + ")", &hru_tsf_acc);
+  decldiag("hru_tsf_acc", TDim::NHRU, "temperature accumulator used to calculate the daily mean hru_tsfD", "(" + string(DEGREE_CELSIUS) + ")", &hru_tsf_acc);
 
   declgetvar("*", "SWE", "(m)", &SWE);
 
