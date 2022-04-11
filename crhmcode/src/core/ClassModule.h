@@ -17,6 +17,7 @@
 #include "Myparser.h"
 #include "ClassClark.h"
 #include "ClassMuskingum.h"
+#include "ClassMuskingum2.h"
 
 
 

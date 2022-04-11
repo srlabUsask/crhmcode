@@ -27,6 +27,7 @@ add_library(core OBJECT
     ClassModel.cpp
     ClassModule.cpp
     ClassMuskingum.cpp
+    ClassMuskingum2.cpp
     ClassPar.cpp
     ClassVar.cpp
     Common.cpp

@@ -13,7 +13,7 @@ CFLAGS = -Wno-switch -Wno-c++11-extensions -Wno-logical-op-parentheses \
 
 CFLAGS = -I. -I$(BOOST) -I$(SDIR)/core -I$(SDIR)/macro \
 -I$(SDIR)/modules/waterquality -I$(SDIR)/modules/newmodules \
--I$(SDIR)/modules/coremodules -I$(SDIR)/gcc -std=c++14 -static -static-libgcc -static-libstdc++
+-I$(SDIR)/modules/coremodules -I$(SDIR)/gcc -std=c++14 -static-libgcc -static-libstdc++ -lfmt
 
 CORE_OBJS = GlobalDll.o StandardConverterUtility.o
 
@@ -30,7 +30,7 @@ Classramp.o Classrandom.o Classrefwind.o ClassReplace.o Classrh.o \
 ClassRH_WtoI.o ClassSim.o Classsin.o ClassSmear.o Classsquare.o Classsub.o \
 ClasssubV.o Classtime.o ClassTimeshift.o
 
-ClassModule_OBJS = Administer.o ClassClark.o ClassModule.o ClassMuskingum.o Myparser.o
+ClassModule_OBJS = Administer.o ClassClark.o ClassModule.o ClassMuskingum.o ClassMuskingum2.o Myparser.o
 
 Common_OBJS = Common.o snowcover.o
 
@@ -61,7 +61,7 @@ ClassGrow_Crop.o ClassHMSA.o ClassHtobs.o ClassIceBulb.o ClassICEflow.o \
 ClassIntcp.o Classinterception.o ClassK_Estimate.o ClassKevin.o Classlake.o \
 ClassLongVt.o ClassMeltRunoff_Kstorage.o ClassMeltRunoff_Lag.o ClassMod_Exec.o \
 ClassNeedle.o Classnetall.o ClassNetroute.o ClassNetroute_D.o ClassNetroute_M.o \
-ClassNetroute_M_D.o ClassNO_pbsm.o ClassNOP.o ClassObs.o ClassObstoPar.o \
+ClassNetroute_M_D.o ClassNetroute_M2_D.o ClassNO_pbsm.o ClassNOP.o ClassObs.o ClassObstoPar.o \
 Classpbsm.o Classpbsm_M.o ClasspbsmSnobal.o ClassPrairieInfil.o ClassPSPnew.o \
 Classqdrift.o Classqmelt.o Classquinton.o ClassREWroute.o ClassREWroute_stream.o \
 ClassREWroute2.o Classsbsm.o ClassSetSoil.o Classshared.o ClassShutWall.o \
@@ -91,7 +91,7 @@ OBJ = $(patsubst %,$(ODIR)/%,$(ALL_OBS))
 crhm: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(DFLAGS) $(LIBS)
 
-$(ODIR)/main.o: $(SDIR)/gcc/main.cpp | $(ODIR)
+$(ODIR)/main.o: $(SDIR)/main.cpp | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
 $(ODIR)/%.o: $(SDIR)/core/%.cpp $(SDIR)/core/%.h | $(ODIR)
@@ -103,7 +103,7 @@ $(ODIR)/%.o: $(SDIR)/core/ClassModule/%.cpp $(SDIR)/core/ClassModule/%.h | $(ODI
 $(ODIR)/%.o: $(SDIR)/core/ClassCRHM/%.cpp $(SDIR)/core/ClassCRHM/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
-$(ODIR)/%.o: $(SDIR)/core/ClassCRHM/Filters/%.cpp  $(SDIR)/core/ClassCRHM/Filters/%.h | $(ODIR)
+$(ODIR)/%.o: $(SDIR)/core/filter/%.cpp  $(SDIR)/core/filter/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
 $(ODIR)/%.o: $(SDIR)/core/TStringList/%.cpp $(SDIR)/core/TStringList/%.h | $(ODIR)
@@ -112,10 +112,10 @@ $(ODIR)/%.o: $(SDIR)/core/TStringList/%.cpp $(SDIR)/core/TStringList/%.h | $(ODI
 $(ODIR)/%.o: $(SDIR)/core/Common/%.cpp $(SDIR)/core/Common/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
-$(ODIR)/%.o: $(SDIR)/core/CRHM_parse/%.cpp $(SDIR)/core/CRHM_parse/%.h | $(ODIR)
+$(ODIR)/%.o: $(SDIR)/core/def/%.cpp $(SDIR)/core/def/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
-$(ODIR)/%.o: $(SDIR)/core/CRHM_parse/exec/%.cpp $(SDIR)/core/CRHM_parse/exec/%.h | $(ODIR)
+$(ODIR)/%.o: $(SDIR)/core/exec/%.cpp $(SDIR)/core/exec/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
 $(ODIR)/%.o: $(SDIR)/core/CRHMmain/%.cpp $(SDIR)/core/CRHMmain/%.h | $(ODIR)
@@ -136,7 +136,7 @@ $(ODIR)/%.o: $(SDIR)/modules/waterquality/%.cpp $(SDIR)/modules/waterquality/%.h
 $(ODIR)/%.o: $(SDIR)/modules/newmodules/%.cpp $(SDIR)/modules/newmodules/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
-$(ODIR)/%.o: $(SDIR)/modules/coremodules/%.cpp $(SDIR)/modules/coremodules/%.h | $(ODIR)
+$(ODIR)/%.o: $(SDIR)/modules/%.cpp $(SDIR)/modules/%.h | $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) $(DFLAGS)
 
 clean:

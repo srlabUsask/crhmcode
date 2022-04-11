@@ -55,6 +55,7 @@ add_library(modules OBJECT
     Classnetall.cpp
     ClassNetroute_D.cpp
     ClassNetroute_M_D.cpp
+    ClassNetroute_M2_D.cpp
     ClassNetroute_M.cpp
     ClassNetroute.cpp
     ClassNO_pbsm.cpp
