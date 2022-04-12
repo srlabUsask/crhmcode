@@ -60,7 +60,7 @@ void Classevap_Resist::decl(void) {
 
     decldiagparam("F_Qg", TDim::NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
 
-    declparam("rcs", TDim::NHRU, "[25]", "25.0", "5000.0", "stomatal resistance", "(s/m)", &rcs);
+    declparam("rcs", TDim::NHRU, "[25]", "25.0", "5000.0", "minimum stomatal resistance", "(s/m)", &rcs);
 
     declparam("Htmax", TDim::NHRU, "[0.1]", "0.1", "100.0", "maximum vegetation height (Penman-Monteith)", "(m)", &Htmax);
 

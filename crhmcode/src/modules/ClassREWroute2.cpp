@@ -31,13 +31,13 @@ void ClassREWroute2::decl(void) {
 
   inflowCnt = declgrpvar("WS_ALL_inflow", "basinflow", "query variable = 'basinflow'", "(m^3/int)", &rew, &inflow_All);
 
-  declvar("WS_inflow", TDim::NHRU, "inflow from each RB", "(m^3/int)", &inflow);
+  declvar("WS_inflow", TDim::NHRU, "gwinflow from each RB", "(m^3/int)", &inflow);
 
-  declstatdiag("cum_WSinflow", TDim::NHRU, "cumulative inflow from each RB", "(m^3)", &cuminflow);
+  declstatdiag("cum_WSinflow", TDim::NHRU, "cumulative gwinflow from each RB", "(m^3)", &cuminflow);
 
-  declvar("WS_outflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &outflow);
+  declvar("WS_outflow", TDim::NHRU, "gwoutflow of each RB", "(m^3/int)", &outflow);
 
-  declstatdiag("cum_WSoutflow", TDim::NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutflow);
+  declstatdiag("cum_WSoutflow", TDim::NHRU, "cumulative gwoutflow of each RB", "(m^3)", &cumoutflow);
 
   declvar("WS_flow", TDim::BASIN, "watershed surface and sub-surface outflow", "(m^3/int)", &flow);
 
@@ -48,13 +48,13 @@ void ClassREWroute2::decl(void) {
 
   gwCnt = declgrpvar("WS_ALL_gwflow", "basingw", "query variable = 'basingw'", "(m^3/int)", &gwrew, &gw_All);
 
-  declvar("WS_gwinflow", TDim::NHRU, "inflow from each RB", "(m^3/int)", &gwinflow);
+  declvar("WS_gwinflow", TDim::NHRU, "gwinflow from each RB", "(m^3/int)", &gwinflow);
 
-  declstatdiag("cum_WSgwinflow", TDim::NHRU, "cumulative inflow from each RB", "(m^3)", &cumgwinflow);
+  declstatdiag("cum_WSgwinflow", TDim::NHRU, "cumulative gwinflow from each RB", "(m^3)", &cumgwinflow);
 
-  declvar("WS_gwoutflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &gwoutflow);
+  declvar("WS_gwoutflow", TDim::NHRU, "gwoutflow of each RB", "(m^3/int)", &gwoutflow);
 
-  declstatdiag("cum_WSgwoutflow", TDim::NHRU, "cumulative outflow of each RB", "(m^3)", &cumgwoutflow);
+  declstatdiag("cum_WSgwoutflow", TDim::NHRU, "cumulative gwoutflow of each RB", "(m^3)", &cumgwoutflow);
 
   declvar("WS_gwflow", TDim::BASIN, "watershed ground water outflow", "(m^3/int)", &gwflow);
 
@@ -65,15 +65,15 @@ void ClassREWroute2::decl(void) {
 
   declparam("WS_whereto", TDim::NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_whereto);
 
-  declparam("WS_order", TDim::NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_order);
+  declparam("WS_order", TDim::NHRU, "1,2,3,4,5!", "1","1000", "RB outflow routing process order", "()", &WS_order);
 
   declparam("WS_gwwhereto", TDim::NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_gwwhereto);
 
-  declparam("WS_gworder", TDim::NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_gworder);
+  declparam("WS_gworder", TDim::NHRU, "1,2,3,4,5!", "1","1000", "RB gwoutflow routing process order", "()", &WS_gworder);
 
-  declparam("WS_Lag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_Lag);
+  declparam("WS_Lag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "inflow lag delay", "(h)", &WS_Lag);
 
-  declparam("WS_gwLag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_gwLag);
+  declparam("WS_gwLag", TDim::NHRU, "[0.0]", "0.0","1.0E4.0", "gwinflow lag delay", "(h)", &WS_gwLag);
 
 
   variation_set = VARIATION_2 + VARIATION_3;
@@ -111,13 +111,13 @@ void ClassREWroute2::decl(void) {
 
   variation_set = VARIATION_0 + VARIATION_2;
 
-  decldiag("WS_Ktravel_var", TDim::NHRU, "inflow storage constant", "(d)", &WS_Ktravel_var);
+  decldiag("WS_Ktravel_var", TDim::NHRU, "inflow storage constant (Muskingum method)", "(d)", &WS_Ktravel_var);
 
-  decldiag("WS_gwKtravel_var", TDim::NHRU, "gw storage constant", "(d)", &WS_gwKtravel_var);
+  decldiag("WS_gwKtravel_var", TDim::NHRU, "gwinflow storage constant (Muskingum method)", "(d)", &WS_gwKtravel_var);
 
   declparam("WS_route_n", TDim::NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &WS_route_n);
 
-  declparam("WS_route_R", TDim::NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "()", &WS_route_R);
+  declparam("WS_route_R", TDim::NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &WS_route_R);
 
   declparam("WS_route_S0", TDim::NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &WS_route_S0);
 
@@ -132,9 +132,9 @@ void ClassREWroute2::decl(void) {
 
   variation_set = VARIATION_1 + VARIATION_3;
 
-  declparam("WS_Kstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_Kstorage);
+  declparam("WS_Kstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "inflow Clark storage constant for RB (Clark method)", "(d)", &WS_Kstorage);
 
-  declparam("WS_gwKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_gwKstorage);
+  declparam("WS_gwKstorage", TDim::NHRU, "[0.0]", "0.0","200.0", "gwinflow Clark storage constant for RB (Clark method)", "(d)", &WS_gwKstorage);
 
 
   variation_set = VARIATION_ORG;

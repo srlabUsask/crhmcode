@@ -41,11 +41,11 @@ void ClassNetroute_D::decl(void) {
 
   decldiag("outflow_diverted", TDim::NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
 
-  declstatdiag("cumoutflow_diverted", TDim::NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
+  declstatdiag("cumoutflow_diverted", TDim::NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2)", &cumoutflow_diverted);
 
   decldiag("gwoutflow_diverted", TDim::NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
 
-  declstatdiag("gwcumoutflow_diverted", TDim::NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
+  declstatdiag("gwcumoutflow_diverted", TDim::NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2)", &gwcumoutflow_diverted);
 
   declstatdiag("cum_to_Sd", TDim::NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
 
@@ -59,13 +59,13 @@ void ClassNetroute_D::decl(void) {
 
   declstatdiag("gwcumoutflow", TDim::NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
 
-  declvar("ssrinflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
+  declvar("ssrinflow", TDim::NHRU, "subsurface inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
 
-  declstatdiag("ssrcuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
+  declstatdiag("ssrcuminflow", TDim::NHRU, "cumulative subsurface inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
 
-  declvar("ssroutflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
+  declvar("ssroutflow", TDim::NHRU, "HRU subsurface outflow", "(mm*km^2/int)", &ssroutflow);
 
-  declstatdiag("ssrcumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
+  declstatdiag("ssrcumoutflow", TDim::NHRU, "cumulative HRU subsurface outflow", "(mm*km^2)", &ssrcumoutflow);
 
   declstatdiag("HRU_cumbasinflow", TDim::NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
 
@@ -74,13 +74,13 @@ void ClassNetroute_D::decl(void) {
   declparam("preferential_flow", TDim::NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
 
 
-  declvar("runinflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
+  declvar("runinflow", TDim::NHRU, "overland inflow (sum of meltrunoff and runoff) from other HRUs", "(mm*km^2/int)", &runinflow);
 
-  declstatdiag("runcuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
+  declstatdiag("runcuminflow", TDim::NHRU, "cumulative overland inflow (sum of meltrunoff and runoff) from other HRUs", "(mm*km^2)", &runcuminflow);
 
-  declvar("runoutflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
+  declvar("runoutflow", TDim::NHRU, "HRU overland outflow", "(mm*km^2/int)", &runoutflow);
 
-  declstatdiag("runcumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
+  declstatdiag("runcumoutflow", TDim::NHRU, "cumulative HRU overland outflow", "(mm*km^2)", &runcumoutflow);
 
   declstatdiag("cumscaling_boost", TDim::NHRU, "cumulative amout inflow boosted", "(mm*km^2)", &cumscaling_boost);
 
@@ -96,11 +96,11 @@ void ClassNetroute_D::decl(void) {
 
   declstatdiag("cumbasingw", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
 
-  decllocal("soil_ssr_Buf", TDim::NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
+  decllocal("soil_ssr_Buf", TDim::NHRU, "buffer subsurface runoff from soil, i.e. soil_ssr_Buf is from soil_ssr", "(mm/int)", &soil_ssr_Buf);
 
-  decllocal("soil_runoff_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
+  decllocal("soil_runoff_Buf", TDim::NHRU, "buffer overland runoff from soil, i.e. soil_runoff_Buf is from soil_runoff", "(mm/int)", &soil_runoff_Buf);
 
-  decllocal("soil_gw_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
+  decllocal("soil_gw_Buf", TDim::NHRU, "buffer soil_gw(gw_flow) from soil, i.e. soil_gw_Buf is from gw_flow = soil_gw", "(mm/int)", &soil_gw_Buf);
 
   decllocal("distrib_sum", TDim::NHRU, "HRU distribution sum", "()", &distrib_sum);
 

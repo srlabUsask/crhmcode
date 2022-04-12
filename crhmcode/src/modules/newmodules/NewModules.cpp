@@ -154,52 +154,52 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new Classsbsm("sbsm", "10/21/09", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassAnnan("Annandale", "07/14/11", LMODULE::ADVANCE));
   DLLModules.AddModule(new Classebsm("ebsm", "01/18/16", LMODULE::BASIC));
-  DLLModules.AddModule(new ClassLongVt("longVt", "02/10/16", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassLongVt("longVt", "04/04/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassSlope_Qsi("Slope_Qsi", "07/14/11", LMODULE::ADVANCE));
   DLLModules.AddModule(new Classalbedo("albedo", "08/11/11", LMODULE::BASIC));
-  DLLModules.AddModule(new Classnetall("netall", "03/22/16", LMODULE::BASIC));
-  DLLModules.AddModule(new Classevap("evap", "09/26/13", LMODULE::BASIC));
+  DLLModules.AddModule(new Classnetall("netall", "04/04/22", LMODULE::BASIC));
+  DLLModules.AddModule(new Classevap("evap", "03/18/22", LMODULE::BASIC));
   DLLModules.AddModule(new ClassevapD("evapD", "11/04/09", LMODULE::ADVANCE));
-  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "06/09/20", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassevapD_Resist("evapD_Resist", "06/09/20", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassShutWall("ShuttleWallace", "10/05/06", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassShutWallD("ShuttleWallaceD", "10/05/06", LMODULE::ADVANCE));
-  DLLModules.AddModule(new Classcrack("crack", "03/31/20", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassPrairieInfil("PrairieInfiltration", "03/31/20", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassAyers("Ayers", "01/11/17", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassGreencrack("Greencrack", "03/31/20", LMODULE::BASIC));
-  DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "03/29/10", LMODULE::ADVANCE));
-  DLLModules.AddModule(new Classfrozen("frozen", "08/03/17", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "03/30/20", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassSoil("Soil", "02/01/21", LMODULE::BASIC));
-  DLLModules.AddModule(new ClassevapX("evapX", "06/09/20", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassSoilX("SoilX", "11/28/17", LMODULE::ADVANCE)); // nlay >= 2 check added
-  DLLModules.AddModule(new ClassSoilDS("SoilDetention", "11/28/17", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "10/22/18", LMODULE::PROTO)); // prototype wetlands
-  DLLModules.AddModule(new Classglacier("glacier", "07/02/20", LMODULE::ADVANCE));
+  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "04/04/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassevapD_Resist("evapD_Resist", "04/04/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassShutWall("ShuttleWallace", "04/04/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassShutWallD("ShuttleWallaceD", "04/04/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new Classcrack("crack", "04/04/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassPrairieInfil("PrairieInfiltration", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassAyers("Ayers", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassGreencrack("Greencrack", "04/04/22", LMODULE::BASIC));
+  DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "04/04/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new Classfrozen("frozen", "04/04/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassSoil("Soil", "04/05/22", LMODULE::BASIC));
+  DLLModules.AddModule(new ClassevapX("evapX", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassSoilX("SoilX", "04/05/22", LMODULE::ADVANCE)); // nlay >= 2 check added
+  DLLModules.AddModule(new ClassSoilDS("SoilDetention", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "04/05/22", LMODULE::PROTO)); // prototype wetlands
+  DLLModules.AddModule(new Classglacier("glacier", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new Classglacier_debris("glacier_debris", "11/22/19", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassGlacier_debris_cover("Glacier_debris_cover", "10/17/19", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassSWEslope("SWESlope", "11/01/17", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassSWEslope("SWESlope", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassICEflow("ICEflow", "12/31/18", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassNetroute("Netroute", "06/20/18", LMODULE::BASIC));
-  DLLModules.AddModule(new ClassNetroute_D("Netroute_D", "06/20/18", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassNetroute_M("Netroute_M", "06/20/18", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassNetroute_M_D("Netroute_M_D", "10/26/18", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassREWroute("REW_route", "06/19/18", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassNetroute("Netroute", "04/05/22", LMODULE::BASIC));
+  DLLModules.AddModule(new ClassNetroute_D("Netroute_D", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassNetroute_M("Netroute_M", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassNetroute_M_D("Netroute_M_D", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassREWroute("REW_route", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassREWroute_stream("REW_route_stream", "07/09/18", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassREWroute2("REW_route2", "06/19/18", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassREWroute2("REW_route2", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "11/21/16", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClasspbsmSnobal("pbsmSnobal", "01/05/17", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "06/14/17", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "04/05/19", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "04/05/19", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "07/19/11", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassXG("XG", "10/03/17", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassXG("XG", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassXGAyers("XGAyers", "05/19/17", LMODULE::PROTO));
   DLLModules.AddModule(new ClassSetSoil("SetSoil", "10/21/09", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassVolumetric("Volumetric", "03/15/21", LMODULE::ADVANCE));
-  DLLModules.AddModule(new Classtsurface("tsurface", "01/15/19", LMODULE::PROTO));
+  DLLModules.AddModule(new ClassVolumetric("Volumetric", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new Classtsurface("tsurface", "04/05/22", LMODULE::PROTO));
   DLLModules.AddModule(new Classalbedoparam("albedo_param", "11/22/05", LMODULE::SUPPORT));
   DLLModules.AddModule(new Classalbedoobs("albedo_obs", "11/22/05", LMODULE::SUPPORT));
   DLLModules.AddModule(new ClassalbedoRichard("albedo_Richard", "03/19/15", LMODULE::SUPPORT));
@@ -214,10 +214,10 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassSimpleRichard("SimpleSnow", "03/24/06", LMODULE::CUSTOM));
   DLLModules.AddModule(new ClassKevin("Kevin", "08/11/11", LMODULE::OBSOL));
   DLLModules.AddModule(new ClassTs("Tsnow", "01/15/13", LMODULE::CUSTOM));
-  DLLModules.AddModule(new ClassK_Estimate("K_Estimate", "01/16/18", LMODULE::ADVANCE)); // fixed 'put' descriptions
+  DLLModules.AddModule(new ClassK_Estimate("K_Estimate", "04/06/22", LMODULE::ADVANCE)); // fixed 'put' descriptions
   DLLModules.AddModule(new ClassSnobalX("Snobal", "02/03/16", LMODULE::OBSOL));
-  DLLModules.AddModule(new Classinterception("interception", "11/03/06", LMODULE::OBSOL));
-  DLLModules.AddModule(new Classlake("lake_evap", "07/04/12", LMODULE::ADVANCE));
+  DLLModules.AddModule(new Classinterception("interception", "04/05/22", LMODULE::OBSOL));
+  DLLModules.AddModule(new Classlake("lake_evap", "04/05/22", LMODULE::ADVANCE));
 
   if(!RELEASE)
   {

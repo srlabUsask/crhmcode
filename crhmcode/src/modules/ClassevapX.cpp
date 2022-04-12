@@ -58,7 +58,7 @@ void ClassevapX::decl(void) {
   declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height (used by Penman-Monteith).", "(m)", &Zwind);
 
 
-  declparam("rcs", TDim::NHRU, "[25]", "25.0", "5000.0", "stomatal resistance (used by Penman-Monteith).", "(s/m)", &rcs);
+  declparam("rcs", TDim::NHRU, "[25]", "25.0", "5000.0", "minimum stomatal resistance (used by Penman-Monteith).", "(s/m)", &rcs);
 
   declparam("Htmax", TDim::NHRU, "[0.1]", "0.1", "100.0", "maximum vegetation height (used by Penman-Monteith).", "(m)", &Htmax);
 

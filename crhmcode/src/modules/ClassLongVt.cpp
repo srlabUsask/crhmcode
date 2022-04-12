@@ -31,9 +31,9 @@ ClassLongVt* ClassLongVt::klone(string name) const{
 
   declvar("tau", TDim::NHRU, "Atmospheric transmissivity = S/Sextra", "()", &tau);
 
-  declvar("Qli_Var", TDim::NHRU, "calculated incoming long", "(W/m^2)", &Qli_Var);
+  declvar("Qli_Var", TDim::NHRU, "calculated incoming long-wave in open environment", "(W/m^2)", &Qli_Var);
 
-  declvar("QliVt_Var", TDim::NHRU, "calculated incoming long in open environment", "(W/m^2)", &QliVt_Var);
+  declvar("QliVt_Var", TDim::NHRU, "calculated incoming long-wave in rugged environment", "(W/m^2)", &QliVt_Var);
 
 
 
