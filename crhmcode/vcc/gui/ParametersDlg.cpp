@@ -24,6 +24,7 @@ ParametersDlg::~ParametersDlg()
 void ParametersDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+
 }
 
 
@@ -31,4 +32,3 @@ BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-// ParametersDlg message handlers

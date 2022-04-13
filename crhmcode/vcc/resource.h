@@ -267,6 +267,8 @@
 #define ID_CTX_ALL_VAR_ADD_LAY_ARRAY    40701
 #define ID_CTX_ALL_VAR_ADD_HRU_LAY_ARRAY 40702
 
+#define ID_PARAM_DLG_MODULES_LIST_BOX	50000
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
