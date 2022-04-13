@@ -70,7 +70,7 @@
     <ClCompile Include="gui\COptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CParameters.cpp">
+    <ClCompile Include="gui\ParametersDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\CReport.cpp">
@@ -2094,7 +2094,7 @@
     <ClInclude Include="gui\CReport.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gui\CParameters.h">
+    <ClInclude Include="gui\ParametersDlg.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gui\COptions.h">

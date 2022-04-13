@@ -32,7 +32,7 @@ BEGIN_MESSAGE_MAP(CCRHMGUIView, CView)
 	ON_WM_RBUTTONUP()
 	ON_COMMAND(ID_DIALOG_SHOW, &CCRHMGUIView::OnDialogShow)
 	ON_COMMAND(ID_EXPORT, &CCRHMGUIView::OnExport)
-	ON_COMMAND(ID_PARAMETERS, &CCRHMGUIView::OnParameters)
+	ON_COMMAND(ID_PARAMETERS, &CCRHMGUIView::OpenParametersDialog)
 	ON_COMMAND(ID_BUILD_CONSTRUCT, &CCRHMGUIView::OnBuildConstruct)
 	ON_COMMAND(ID_FILE_SAVE_AS, &CCRHMGUIView::OnFileSaveAs)
 	ON_COMMAND(ID_FILE_OPEN, &CCRHMGUIView::OnFileOpen)
@@ -153,9 +153,9 @@ void CCRHMGUIView::OnExport()
 }
 
 
-void CCRHMGUIView::OnParameters()
+void CCRHMGUIView::OpenParametersDialog()
 {
-	CParameters dlgParameters;
+	ParametersDlg dlgParameters;
 	dlgParameters.DoModal();
 }
 

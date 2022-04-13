@@ -1,15 +1,15 @@
 #pragma once
 
 
-// CParameters dialog
+// ParametersDlg dialog
 
-class CParameters : public CDialog
+class ParametersDlg : public CDialog
 {
-	DECLARE_DYNAMIC(CParameters)
+	DECLARE_DYNAMIC(ParametersDlg)
 
 public:
-	CParameters(CWnd* pParent = nullptr);   // standard constructor
-	virtual ~CParameters();
+	ParametersDlg(CWnd* pParent = nullptr);   // standard constructor
+	virtual ~ParametersDlg();
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME

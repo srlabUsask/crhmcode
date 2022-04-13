@@ -96,6 +96,7 @@
 #define IDC_STATIC2                     1064
 #define IDC_EXPLORER1                   1065
 #define IDC_EXPLORER2                   1066
+#define IDC_CHARTGRID1                  1067
 #define ID_PROJECT_LOG                  32771
 #define ID_PROJECT_SAVECHARTTEMPLATE    32772
 #define ID_PROJECT_PLOTREFRESHRATE      32773
@@ -248,22 +249,22 @@
 #define ID_HIERARCHY_CHECK              40400
 #define ID_HIERARCHY_LIST               40401
 #define ID_HIERARCHY_STATIC             40402
-#define ID_EXPORT_STATIC				40500
-#define ID_EXPORT_STATIC2				40501
-#define ID_EXPORT_CHOICES_LIST_BOX		40502
-#define ID_EXPORT_SELECTED_LIST_BOX		40503
-#define ID_EXPORT_PREVIEW_MORE			40504
-#define ID_EXPORT_FORMAT_BTN			40505
-#define ID_EXPORT_PREVIEW_EDIT_BOX		40506
-#define ID_EXPORT_SAVE					40507
-#define ID_EXPORT_SAVE_AS				40508
-#define ID_EXPORT_EXIT					40509
-#define IDR_EXPORT_MENU					40510
-#define UWM_AUTO_RUN					40511
-#define UWM_FLIP_TICKS_LEFT				40600
-#define UWM_FLIP_TICKS_RIGHT			40601
-#define ID_OBS_LAY_DIM_LABEL			40700
-#define ID_CTX_ALL_VAR_ADD_LAY_ARRAY	40701
+#define ID_EXPORT_STATIC                40500
+#define ID_EXPORT_STATIC2               40501
+#define ID_EXPORT_CHOICES_LIST_BOX      40502
+#define ID_EXPORT_SELECTED_LIST_BOX     40503
+#define ID_EXPORT_PREVIEW_MORE          40504
+#define ID_EXPORT_FORMAT_BTN            40505
+#define ID_EXPORT_PREVIEW_EDIT_BOX      40506
+#define ID_EXPORT_SAVE                  40507
+#define ID_EXPORT_SAVE_AS               40508
+#define ID_EXPORT_EXIT                  40509
+#define IDR_EXPORT_MENU                 40510
+#define UWM_AUTO_RUN                    40511
+#define UWM_FLIP_TICKS_LEFT             40600
+#define UWM_FLIP_TICKS_RIGHT            40601
+#define ID_OBS_LAY_DIM_LABEL            40700
+#define ID_CTX_ALL_VAR_ADD_LAY_ARRAY    40701
 #define ID_CTX_ALL_VAR_ADD_HRU_LAY_ARRAY 40702
 
 // Next default values for new objects
@@ -272,7 +273,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        353
 #define _APS_NEXT_COMMAND_VALUE         32853
-#define _APS_NEXT_CONTROL_VALUE         1067
+#define _APS_NEXT_CONTROL_VALUE         1068
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

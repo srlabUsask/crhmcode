@@ -77,7 +77,7 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_COMMAND(ID_BUILD_MACRO, &CRHMmainDlg::OnBuildMacro)
 	
 	//Parameters menu items
-		//Parameter menu items are missing
+	ON_COMMAND(ID_PARAMETERS, &CRHMmainDlg::OpenParametersDialog)
 	
 	//State menu items
 	ON_COMMAND(ID_STATE_OPEN_INIT_STATE, &CRHMmainDlg::OnClickOnOpenInitState)
@@ -1962,6 +1962,15 @@ void CRHMmainDlg::OnBuildMacro()
 		t->MacroClick();
 		tchart.RemoveAllSeries();
 	}
+}
+
+
+void CRHMmainDlg::OpenParametersDialog()
+{
+	ParametersDlg* parametersDialog;
+	parametersDialog = new ParametersDlg();
+
+	parametersDialog->DoModal();
 }
 
 
