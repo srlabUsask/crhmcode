@@ -9,6 +9,8 @@ class ParametersDlg : public CDialogEx
 
 private:
 	CListBox modules_list_box;
+	
+	void initalizeModulesListBox(CRHMmain * main);
 public:
 	ParametersDlg(CWnd* pParent = nullptr);   // standard constructor
 	virtual ~ParametersDlg();
