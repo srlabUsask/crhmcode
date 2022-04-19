@@ -268,6 +268,7 @@
 #define ID_CTX_ALL_VAR_ADD_HRU_LAY_ARRAY 40702
 
 #define ID_PARAM_DLG_MODULES_LIST_BOX	50000
+#define ID_PARAM_DLG_PARAM_LIST_BOX		50001
 
 // Next default values for new objects
 // 
