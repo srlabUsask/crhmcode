@@ -3221,6 +3221,11 @@ std::map<std::string, ClassModule*> * CRHMmain::getAllmodules()
 	return Global::AllModulesList;
 }
 
+std::list<std::pair<std::string, ClassModule*>>* CRHMmain::getOurModules()
+{
+	return Global::OurModulesList;
+}
+
 
 std::map<std::string, ClassVar*> * CRHMmain::getVariables()
 {
