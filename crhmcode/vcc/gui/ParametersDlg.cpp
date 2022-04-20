@@ -25,10 +25,12 @@ void ParametersDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, ID_PARAM_DLG_MODULES_LIST_BOX, this->modules_list_box);
+	DDX_Control(pDX, ID_PARAM_DLG_PARAM_LIST_BOX, this->parameters_list_box);
 }
 
 
 BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
+	ON_LBN_SELCHANGE(ID_PARAM_DLG_MODULES_LIST_BOX, &ParametersDlg::OnSelectModule)
 END_MESSAGE_MAP()
 
 
@@ -41,6 +43,36 @@ BOOL ParametersDlg::OnInitDialog()
 	
 
 	return TRUE;
+}
+
+void ParametersDlg::OnSelectModule()
+{
+	CString selectedText;
+	int selectedIndex = this->modules_list_box.GetCurSel();
+	this->modules_list_box.GetText(selectedIndex, selectedText);
+
+	CT2CA pszConvertedAnsiString(selectedText);
+	std::string selectedString(pszConvertedAnsiString);
+
+	CRHMmain* model = CRHMmain::getInstance();
+	std::map<std::string, ClassModule*> * modulesMap = model->getAllmodules();
+
+	std::map<std::string, ClassModule*>::iterator selectedModuleIt = modulesMap->find(selectedString);
+
+	std::list<std::pair<std::string, ClassPar*>> * parametersList = selectedModuleIt->second->getParametersList();
+
+
+	this->parameters_list_box.ResetContent();
+
+	for (
+		std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList->begin();
+		it != parametersList->end();
+		it++
+		)
+	{
+		CString paramName(it->first.c_str());
+		this->parameters_list_box.AddString(paramName);
+	}
 }
 
 

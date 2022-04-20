@@ -7,13 +7,23 @@ class ParametersDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(ParametersDlg)
 
-private:
-	CListBox modules_list_box;
-	
-	void initalizeModulesListBox(CRHMmain * main);
 public:
 	ParametersDlg(CWnd* pParent = nullptr);   // standard constructor
 	virtual ~ParametersDlg();
+
+private:
+	CListBox modules_list_box;
+	CListBox parameters_list_box;
+
+	/**
+	* Handler for when the selection in the modules_list_box changes.
+	*
+	* Sets the parameters_list_box to contain all the parameters in the selected module.
+	*/
+	afx_msg void OnSelectModule();
+
+	void initalizeModulesListBox(CRHMmain * main);
+
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
