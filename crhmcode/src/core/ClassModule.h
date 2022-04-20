@@ -27,7 +27,14 @@ enum class OUTCOME { None, Implicit, Explicit, IgnoreObs, IgnoreVar, IgnoreObsFu
 class Administer;
 
 class   ClassModule {
+private:
+	std::list<std::pair<std::string, ClassPar*>> parameters_list;
+
+	
+
 public:
+
+	std::list<std::pair<std::string, ClassPar*>>* getParametersList();
 
 	string Name; // Module or Macro name
 	string NameRoot; // When Macro gives Root
