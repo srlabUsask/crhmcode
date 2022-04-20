@@ -54,25 +54,39 @@ void ParametersDlg::OnSelectModule()
 	CT2CA pszConvertedAnsiString(selectedText);
 	std::string selectedString(pszConvertedAnsiString);
 
-	CRHMmain* model = CRHMmain::getInstance();
-	std::map<std::string, ClassModule*> * modulesMap = model->getAllmodules();
-
-	std::map<std::string, ClassModule*>::iterator selectedModuleIt = modulesMap->find(selectedString);
-
-	std::list<std::pair<std::string, ClassPar*>> * parametersList = selectedModuleIt->second->getParametersList();
-
-
 	this->parameters_list_box.ResetContent();
 
-	for (
-		std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList->begin();
-		it != parametersList->end();
-		it++
-		)
+	if (selectedString == "Shared")
 	{
-		CString paramName(it->first.c_str());
-		this->parameters_list_box.AddString(paramName);
+		std::map<std::string, ClassPar*, Classless<std::string>>::iterator sharedIt = Global::SharedMapPars.begin();
+
+		for (sharedIt; sharedIt != Global::SharedMapPars.end(); sharedIt++)
+		{
+			std::string trimedString = sharedIt->first.substr(7, std::string::npos);
+			CString paramName(trimedString.c_str());
+			this->parameters_list_box.AddString(paramName);
+		}
 	}
+	else
+	{
+		CRHMmain* model = CRHMmain::getInstance();
+		std::map<std::string, ClassModule*>* modulesMap = model->getAllmodules();
+
+		std::map<std::string, ClassModule*>::iterator selectedModuleIt = modulesMap->find(selectedString);
+
+		std::list<std::pair<std::string, ClassPar*>>* parametersList = selectedModuleIt->second->getParametersList();
+
+		for (
+			std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList->begin();
+			it != parametersList->end();
+			it++
+			)
+		{
+			CString paramName(it->first.c_str());
+			this->parameters_list_box.AddString(paramName);
+		}
+	}
+
 }
 
 
