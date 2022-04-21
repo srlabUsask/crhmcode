@@ -1,5 +1,6 @@
 #pragma once
 #include "../../src/core/CRHMmain.h"
+#include "../../src/core/ClassMacro.h"
 
 // ParametersDlg dialog
 

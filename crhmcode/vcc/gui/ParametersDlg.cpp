@@ -7,6 +7,7 @@
 #include "afxdialogex.h"
 
 
+
 // ParametersDlg dialog
 
 IMPLEMENT_DYNAMIC(ParametersDlg, CDialog)
@@ -74,37 +75,101 @@ void ParametersDlg::OnSelectModule()
 
 		std::map<std::string, ClassModule*>::iterator selectedModuleIt = modulesMap->find(selectedString);
 
-		std::list<std::pair<std::string, ClassPar*>> parametersList = *selectedModuleIt->second->getParametersList();
+		if (!selectedModuleIt->second->isGroup)
+		{
+			std::list<std::pair<std::string, ClassPar*>> parametersList = *selectedModuleIt->second->getParametersList();
 
-		parametersList.sort(
-			[](std::pair<std::string, ClassPar*> item_a, std::pair<std::string, ClassPar*> item_b)
+			parametersList.sort(
+				[](std::pair<std::string, ClassPar*> item_a, std::pair<std::string, ClassPar*> item_b)
+				{
+					std::string lower_a;
+					for (std::string::iterator c = item_a.first.begin(); c != item_a.first.end(); c++)
+					{
+						lower_a.push_back(std::tolower(*c));
+					}
+
+					std::string lower_b;
+					for (std::string::iterator c = item_b.first.begin(); c != item_b.first.end(); c++)
+					{
+						lower_b.push_back(std::tolower(*c));
+					}
+
+					return lower_a < lower_b;
+
+				}
+			);
+
+			for (
+				std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList.begin();
+				it != parametersList.end();
+				it++
+				)
 			{
-				std::string lower_a;
-				for (std::string::iterator c = item_a.first.begin(); c != item_a.first.end(); c++)
-				{
-					lower_a.push_back(std::tolower(*c));
-				}
+				CString paramName(it->first.c_str());
+				this->parameters_list_box.AddString(paramName);
+			}
+		}
+		else
+		{
+			ClassMacro * groupModule = (ClassMacro *) selectedModuleIt->second;
 
-				std::string lower_b;
-				for (std::string::iterator c = item_b.first.begin(); c != item_b.first.end(); c++)
-				{
-					lower_b.push_back(std::tolower(*c));
-				}
+			std::vector<std::pair<std::string, ClassModule*>> * modulesVector = groupModule->GrpStringList;
 
-				return lower_a < lower_b;
+			std::list<std::pair<std::string, ClassPar*>> allParametersList;
+
+			for (
+				std::vector<std::pair<std::string, ClassModule*>>::iterator modulesIt = modulesVector->begin();
+				modulesIt != modulesVector->end();
+				modulesIt++
+				)
+			{
+
+				std::list<std::pair<std::string, ClassPar*>> parametersList = *modulesIt->second->getParametersList();
+				
+				for (
+					std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList.begin();
+					it != parametersList.end();
+					it++
+					)
+				{
+					allParametersList.push_back(std::pair<std::string, ClassPar*>(it->first, it->second));
+				}
 
 			}
-		);
 
-		for (
-			std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList.begin();
-			it != parametersList.end();
-			it++
-			)
-		{
-			CString paramName(it->first.c_str());
-			this->parameters_list_box.AddString(paramName);
+			allParametersList.sort(
+				[](std::pair<std::string, ClassPar*> item_a, std::pair<std::string, ClassPar*> item_b)
+				{
+					std::string lower_a;
+					for (std::string::iterator c = item_a.first.begin(); c != item_a.first.end(); c++)
+					{
+						lower_a.push_back(std::tolower(*c));
+					}
+
+					std::string lower_b;
+					for (std::string::iterator c = item_b.first.begin(); c != item_b.first.end(); c++)
+					{
+						lower_b.push_back(std::tolower(*c));
+					}
+
+					return lower_a < lower_b;
+
+				}
+			);
+
+			for (
+				std::list<std::pair<std::string, ClassPar*>>::iterator it = allParametersList.begin();
+				it != allParametersList.end();
+				it++
+				)
+			{
+				CString paramName(it->first.c_str());
+				this->parameters_list_box.AddString(paramName);
+			}
 		}
+
+
+		
 	}
 
 }
