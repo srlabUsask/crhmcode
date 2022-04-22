@@ -105,6 +105,19 @@ void ParametersDlg::OnSelectModule()
 				it++
 				)
 			{
+				if (Global::SharedMapPars.find("Shared "+it->first) != Global::SharedMapPars.end())
+				{
+					it->first = "*" + it->first;
+				}
+			}
+
+
+			for (
+				std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList.begin();
+				it != parametersList.end();
+				it++
+				)
+			{
 				CString paramName(it->first.c_str());
 				this->parameters_list_box.AddString(paramName);
 			}
@@ -156,6 +169,18 @@ void ParametersDlg::OnSelectModule()
 
 				}
 			);
+
+			for (
+				std::list<std::pair<std::string, ClassPar*>>::iterator it = allParametersList.begin();
+				it != allParametersList.end();
+				it++
+				)
+			{
+				if (Global::SharedMapPars.find("Shared " + it->first) != Global::SharedMapPars.end())
+				{
+					it->first = "*" + it->first;
+				}
+			}
 
 			for (
 				std::list<std::pair<std::string, ClassPar*>>::iterator it = allParametersList.begin();
