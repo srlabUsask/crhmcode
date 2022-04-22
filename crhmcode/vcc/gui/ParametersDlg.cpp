@@ -42,6 +42,8 @@ BOOL ParametersDlg::OnInitDialog()
 	CRHMmain * main = CRHMmain::getInstance();
 	this->initalizeModulesListBox(main);
 	
+	this->modules_list_box.SetHorizontalExtent(1000);
+	this->parameters_list_box.SetHorizontalExtent(1000);
 
 	return TRUE;
 }
