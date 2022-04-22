@@ -73,6 +73,12 @@ void ParametersDlg::OnSelectModule()
 		CRHMmain* model = CRHMmain::getInstance();
 		std::map<std::string, ClassModule*>* modulesMap = model->getAllmodules();
 
+		int suffPos;
+		if (suffPos = selectedString.find("#"), suffPos > -1)
+		{
+			selectedString = selectedString.substr(0, selectedString.length() - 2);
+		}
+
 		std::map<std::string, ClassModule*>::iterator selectedModuleIt = modulesMap->find(selectedString);
 
 		if (!selectedModuleIt->second->isGroup)
@@ -232,12 +238,26 @@ void ParametersDlg::initalizeModulesListBox(CRHMmain* main)
 
 	// Place each of the modules into the list box
 	for (
-		std::list<std::pair<std::string, ClassModule*>>::iterator module_iterator = sorted_modules_list.begin();
-		module_iterator != sorted_modules_list.end();
-		module_iterator++
+		std::list<std::pair<std::string, ClassModule*>>::iterator moduleIteratior = sorted_modules_list.begin();
+		moduleIteratior != sorted_modules_list.end();
+		moduleIteratior++
 		)
 	{
-		CString module_name(module_iterator->first.c_str());
-		this->modules_list_box.AddString(module_name);
+		if (moduleIteratior->second->variation != 0)
+		{
+			std::string varSuffix("#0");
+			varSuffix[1] += (char)(log(moduleIteratior->second->variation) / log(2) + 1);
+			std::string moduleStringWithVariation = moduleIteratior->first + varSuffix;
+			CString moduleName(moduleStringWithVariation.c_str());
+			this->modules_list_box.AddString(moduleName);
+		}
+		else
+		{
+			CString moduleName(moduleIteratior->first.c_str());
+			this->modules_list_box.AddString(moduleName);
+		}
+		
+
+		
 	}
 }
