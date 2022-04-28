@@ -269,6 +269,7 @@
 
 #define ID_PARAM_DLG_MODULES_LIST_BOX	50000
 #define ID_PARAM_DLG_PARAM_LIST_BOX		50001
+#define ID_PARAM_DLG_TOGGLE_ALL_BTN		50002
 
 // Next default values for new objects
 // 

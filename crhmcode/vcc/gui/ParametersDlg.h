@@ -41,6 +41,13 @@ private:
 	afx_msg void OnSelectModule();
 
 	/**
+	* Handler for when the Toggle All button is pressed.
+	*
+	* Will switch the selected/unselected state of all Parameters in the Parameters List Box.
+	*/
+	afx_msg void OnToggleAll();
+
+	/**
 	* Helper method used to initalize the values in the modules list box during dialog initalization.
 	*
 	* @param main CRHMmain* reference to the main CRHM model object. 
