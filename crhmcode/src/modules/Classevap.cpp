@@ -164,7 +164,7 @@ void Classevap::run(void) {
 
            evap[hh] = (delta(hru_t[hh])*Q*Global::Freq + (RHOa*Cp/
                         (lambda(hru_t[hh])*1e3)*(Common::estar(hru_t[hh]) - hru_ea[hh])/(ra/86400)))/
-                       (delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh])*(1.0 + rs[hh]/ra))/
+                        (delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh]) * (1.0 + rs[hh] / (ra / 86400))) /			//18Mar2022 correction: add /86400 to ra term, as rs is in d/m and ra is in s/m
                         Global::Freq;
          }
          else

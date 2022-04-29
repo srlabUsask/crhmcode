@@ -1,4 +1,4 @@
-// 03/15/21
+// 04/06/22
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -56,59 +56,59 @@ void MoveModulesToGlobal(String DLLName){
 
   DLLModules.AddModule(new Classebsm("ebsm", "01/18/16", CRHM::BASIC));
 
-  DLLModules.AddModule(new ClassLongVt("longVt", "02/10/16", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassLongVt("longVt", "04/04/22", CRHM::ADVANCE));
 
   DLLModules.AddModule(new ClassSlope_Qsi("Slope_Qsi", "07/14/11", CRHM::ADVANCE));
 
   DLLModules.AddModule(new Classalbedo("albedo", "08/11/11", CRHM::BASIC));
-  DLLModules.AddModule(new Classnetall("netall", "03/22/16", CRHM::BASIC));
-  DLLModules.AddModule(new Classevap("evap", "09/26/13", CRHM::BASIC));
+  DLLModules.AddModule(new Classnetall("netall", "04/04/22", CRHM::BASIC));
+  DLLModules.AddModule(new Classevap("evap", "03/18/22", CRHM::BASIC));
   DLLModules.AddModule(new ClassevapD("evapD", "11/04/09", CRHM::ADVANCE));
-  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "06/09/20", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassevapD_Resist("evapD_Resist", "06/09/20", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassShutWall("ShuttleWallace", "10/05/06", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassShutWallD("ShuttleWallaceD", "10/05/06", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "04/04/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassevapD_Resist("evapD_Resist", "04/04/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassShutWall("ShuttleWallace", "04/04/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassShutWallD("ShuttleWallaceD", "04/04/22", CRHM::ADVANCE));
 
-  DLLModules.AddModule(new Classcrack("crack", "03/31/20", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassPrairieInfil("PrairieInfiltration", "03/31/20", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassAyers("Ayers", "01/11/17", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassGreencrack("Greencrack", "03/31/20", CRHM::BASIC));
-  DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "03/29/10", CRHM::ADVANCE));
-  DLLModules.AddModule(new Classfrozen("frozen", "08/03/17", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "03/30/20", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoil("Soil", "02/01/21", CRHM::BASIC));
-  DLLModules.AddModule(new ClassevapX("evapX", "06/09/20", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoilX("SoilX", "11/28/17", CRHM::ADVANCE)); // nlay >= 2 check added
-  DLLModules.AddModule(new ClassSoilDS("SoilDetention", "11/28/17", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "10/22/18", CRHM::PROTO)); // prototype wetlands
+  DLLModules.AddModule(new Classcrack("crack", "04/04/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassPrairieInfil("PrairieInfiltration", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassAyers("Ayers", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassGreencrack("Greencrack", "04/04/22", CRHM::BASIC));
+  DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "04/04/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classfrozen("frozen", "04/04/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSoil("Soil", "04/05/22", CRHM::BASIC));
+  DLLModules.AddModule(new ClassevapX("evapX", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSoilX("SoilX", "04/05/22", CRHM::ADVANCE)); // nlay >= 2 check added
+  DLLModules.AddModule(new ClassSoilDS("SoilDetention", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "04/05/22", CRHM::PROTO)); // prototype wetlands
   DLLModules.AddModule(new Classglacier_061718("glacier_061718", "06/10/16", CRHM::PROTO));
-  DLLModules.AddModule(new Classglacier("glacier", "07/02/20", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classglacier("glacier", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSWEslope_061718("SWESlope_061718", "06/02/16", CRHM::PROTO));
-  DLLModules.AddModule(new ClassSWEslope("SWESlope", "11/01/17", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSWEslope("SWESlope", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassICEflow("ICEflow", "12/31/18", CRHM::ADVANCE));
 
-  DLLModules.AddModule(new ClassNetroute("Netroute", "06/20/18", CRHM::BASIC));
-  DLLModules.AddModule(new ClassNetroute_D("Netroute_D", "06/20/18", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassNetroute_M("Netroute_M", "06/20/18", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassNetroute_M_D("Netroute_M_D", "10/26/18", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassREWroute("REW_route", "06/19/18", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassNetroute("Netroute", "04/05/22", CRHM::BASIC));
+  DLLModules.AddModule(new ClassNetroute_D("Netroute_D", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassNetroute_M("Netroute_M", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassNetroute_M_D("Netroute_M_D", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassREWroute("REW_route", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassREWroute_stream("REW_route_stream", "07/09/18", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassREWroute2("REW_route2", "06/19/18", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassREWroute2("REW_route2", "04/05/22", CRHM::ADVANCE));
 
   DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "11/21/16", CRHM::ADVANCE));
   DLLModules.AddModule(new ClasspbsmSnobal("pbsmSnobal", "01/05/17", CRHM::ADVANCE));
 
-  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "06/14/17", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "04/05/19", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "04/05/19", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "07/19/11", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassXG("XG", "10/03/17", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassXG("XG", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassXGAyers("XGAyers", "05/19/17", CRHM::PROTO));
 
   DLLModules.AddModule(new ClassSetSoil("SetSoil", "10/21/09", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassVolumetric("Volumetric", "03/15/21", CRHM::ADVANCE));
-  DLLModules.AddModule(new Classtsurface("tsurface", "01/15/19", CRHM::PROTO));
+  DLLModules.AddModule(new ClassVolumetric("Volumetric", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classtsurface("tsurface", "04/05/22", CRHM::PROTO));
 
   DLLModules.AddModule(new Classalbedoparam("albedo_param", "11/22/05", CRHM::SUPPORT));
   DLLModules.AddModule(new Classalbedoobs("albedo_obs", "11/22/05", CRHM::SUPPORT));
@@ -127,11 +127,11 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassSimpleRichard("SimpleSnow", "03/24/06", CRHM::CUSTOM));
   DLLModules.AddModule(new ClassKevin("Kevin", "08/11/11", CRHM::OBSOL));
   DLLModules.AddModule(new ClassTs("Tsnow", "01/15/13", CRHM::CUSTOM));
-  DLLModules.AddModule(new ClassK_Estimate("K_Estimate", "01/16/18", CRHM::ADVANCE)); // fixed 'put' descriptions
+  DLLModules.AddModule(new ClassK_Estimate("K_Estimate", "04/06/22", CRHM::ADVANCE)); // fixed 'put' descriptions
 
   DLLModules.AddModule(new ClassSnobalX("Snobal", "02/03/16", CRHM::OBSOL));
-  DLLModules.AddModule(new Classinterception("interception", "11/03/06", CRHM::OBSOL));
-  DLLModules.AddModule(new Classlake("lake_evap", "07/04/12", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classinterception("interception", "04/05/22", CRHM::OBSOL));
+  DLLModules.AddModule(new Classlake("lake_evap", "04/05/22", CRHM::ADVANCE));
 
   if(!RELEASE){
     DLLModules.AddModule(new ClassHMSA("HMSA", "01/16/13", CRHM::PROTO));
@@ -2159,17 +2159,17 @@ void Classnetall::decl(void) {
 
   Description = "'Models net all-wave radiation (Rn, RnD and RnD_POS) from sunshine hours, temperature and humidity using Brunt.'";
 
-  declvar("net", NHRU, "all-wave net", "(MJ/m^2*int)", &net);
+  declvar("net", NHRU, "net all-wave radiation over time step", "(MJ/m^2*int)", &net);
 
-  decldiag("Rn", NHRU, "all-wave net", "(mm/m^2*int)", &Rn);
+  decldiag("Rn", NHRU, "net all-wave radiation over time step", "(mm/m^2*int)", &Rn);
 
-  declvar("netD", NHRU, "all-wave net", "(MJ/m^2*d)", &netD);
+  declvar("netD", NHRU, "net all-wave radiation per day", "(MJ/m^2*d)", &netD);
 
-  declvar("RnD", NHRU, "all-wave net", "(mm/m^2*d)", &RnD);
+  declvar("RnD", NHRU, "net all-wave radiation per day", "(mm/m^2*d)", &RnD);
 
-  decldiag("RnD_POS", NHRU, "Sum of Positive all-wave net", "(mm/m^2*d)", &RnD_POS);
+  decldiag("RnD_POS", NHRU, "Sum of positive net all-wave radiation per day", "(mm/m^2*d)", &RnD_POS);
 
-  declstatdiag("cum_net", NHRU, "cumulative all-wave net", "(MJ/m^2)", &cum_net);
+  declstatdiag("cum_net", NHRU, "cumulative net all-wave radiation", "(MJ/m^2)", &cum_net);
 
 
   declgetvar("*", "hru_t", "(°C)", &hru_t);
@@ -2729,13 +2729,13 @@ void ClassNeedle::decl(void) {
 
   decldiag("k", NHRU, "extinction coefficient", "()", &k);
 
-  decldiag("Tauc", NHRU, "short-wave transmissivity", "(W/m^2)", &Tauc);
+  decldiag("Tauc", NHRU, "short-wave transmissivity", "()", &Tauc);
 
   decllocal("Pa", NHRU, "Average surface pressure", "(kPa)", &Pa);
 
   declvar("ra", NHRU, "", "(s/m)", &ra);
 
-  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2*int)", &Qnsn_Var);
+  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn_Var);
 
 
   declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
@@ -3275,7 +3275,7 @@ void Classevap::run(void) {
 
            evap[hh] = (delta(hru_t[hh])*Q*Global::Freq + (RHOa*Cp/
                         (lambda(hru_t[hh])*1e3)*(estar(hru_t[hh]) - hru_ea[hh])/(ra/86400)))/
-                       (delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh])*(1.0 + rs[hh]/ra))/
+                       (delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh])*(1.0 + rs[hh]/(ra/86400)))/			//18Mar2022 correction: add /86400 to ra term, as rs is in d/m and ra is in s/m
                         Global::Freq;
          }
          else
@@ -3824,19 +3824,19 @@ void Classcrack::decl(void) {
 
   Description = "'Handles frozen soil infiltration using Granger et al. 1984; Gray et al., 1986.'";
 
-  declvar("snowinfil", NHRU, "infiltration", "(mm/d)", &snowinfil);
+  declvar("snowinfil", NHRU, "daily snowmelt infiltration", "(mm/d)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/d)", &meltrunoff);
+  declvar("meltrunoff", NHRU, "daily melt runoff", "(mm/d)", &meltrunoff);
 
   declstatdiag("cummeltrunoff", NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
 
-  declvar("infil", NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", NHRU,"interval rainfall infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", NHRU, "cumulative rainfall infiltration", "(mm)", &cuminfil);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", NHRU, "interval rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
@@ -3854,7 +3854,7 @@ void Classcrack::decl(void) {
   declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
   declparam("fallstat", NHRU, "[50.0]", "-1.0","100.0",
-     "fall status 0.0 - unlimited/ 100.0 - restricted/ other - limited", "(%)", &fallstat);
+     "fall soil saturation status 0.0 - unlimited/ 100.0 - restricted/ other - limited", "(%)", &fallstat);
 
   decldiagparam("Major", NHRU, "[5]", "1", "100", "threshold for major melt", "(mm/d)", &Major);
 
@@ -4332,21 +4332,21 @@ void ClassGreencrack::decl(void) {
 
   Description = "'Handles summer using Green Ampt and frozen soil infiltration using Granger et al. 1984; Gray et al., 1986.'";
 
-  declvar("infil", NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", NHRU,"interval rainfall infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", NHRU, "cumulative rainfall infiltration", "(mm)", &cuminfil);
 
-  declvar("snowinfil", NHRU, "infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", NHRU, "daily snowmelt infiltration", "(mm/d)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", NHRU, "interval rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", NHRU, "daily snowmelt runoff", "(mm/d)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", NHRU, "cumulative snowmelt runoff", "(mm)", &cummeltrunoff);
 
   declvar("crackstat", NHRU, "infiltration status", "()", &crackstat);
 
@@ -4357,21 +4357,21 @@ void ClassGreencrack::decl(void) {
 
   decllocal("RainOnSnowA", NHRU, "accumulated rain on snow", "(mm)", &RainOnSnowA);
 
-  decllocal("k", NHRU, "(mm/h)", "()", &k);
+  decllocal("k", NHRU, "saturated hydraulic conductivity", "(mm/h)", &k);
 
-  decllocal("F0", NHRU, "last HRU cumulative infiltration", "(mm)", &F0);
+  decllocal("F0", NHRU, "cumulative infiltation at the beginning of the time interval", "(mm)", &F0);
 
-  decllocal("f0", NHRU, "", "(mm/h)", &f0);
+  decllocal("f0", NHRU, "infiltration rate at the beginning of the time interval", "(mm/h)", &f0);
 
-  decllocal("F1", NHRU, "HRU cumulative infiltration", "(mm)", &F1);
+  decllocal("F1", NHRU, "cumulative infiltration at the end of the time interval", "(mm)", &F1);
 
-  decllocal("f1", NHRU, "", "(mm/h)", &f1);
+  decllocal("f1", NHRU, "infiltration rate at the end of the time interval", "(mm/h)", &f1);
 
-  decllocal("dthbot", NHRU, "", "()", &dthbot);
+  decllocal("dthbot", NHRU, "fraction value of soil water deficit", "()", &dthbot);
 
-  decllocal("psidthbot", NHRU, "", "(mm)", &psidthbot);
+  decllocal("psidthbot", NHRU, "capillary suction at the fraction value of soil water deficit", "(mm)", &psidthbot);
 
-  decllocal("timer", NHRU, "", "(d)", &timer);
+  decllocal("timer", NHRU, "indicator for limited infiltration case during Major melt infiltration", "(d)", &timer);
 
 
   declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
@@ -4885,27 +4885,27 @@ void Classfrozen::decl(void) {
 
   Description = "'Frozen soil infiltration Zhao and Gray (1999).'";
 
-  declvar("infil", NHRU, "Potential rain infiltration", "(mm/int)", &infil);
+  declvar("infil", NHRU, "interval rain infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential rain infiltration", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", NHRU, "cumulative rain infiltration", "(mm)", &cuminfil);
 
-  declvar("snowinfil", NHRU, "melt infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", NHRU, "interval snowmelt infiltration", "(mm/int)", &snowinfil);
 
-  declstatvar("cumsnowinfil", NHRU, "cumulative melt infiltration", "(mm)", &cumsnowinfil); // for looping
+  declstatvar("cumsnowinfil", NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil); // for looping
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", NHRU, "interval snowmelt runoff", "(mm/int)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", NHRU, "cumulative snowmelt runoff", "(mm)", &cummeltrunoff);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", NHRU, "interval rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  decllocal("t0_Var", NHRU, "t0 value used by module", "(h)", &t0_Var);
+  decllocal("t0_Var", NHRU, "value of infiltration opportunity time", "(h)", &t0_Var);
 
-  decllocal("t0_Acc", NHRU, "opportunity time", "(h)", &t0_Acc); // to reset every loop
+  decllocal("t0_Acc", NHRU, "infiltration opportunity time accumulator", "(h)", &t0_Acc); // to reset every loop
 
-  decllocal("INF", NHRU, "parametric calculation", "(mm)", &INF);
+  decllocal("INF", NHRU, "infiltration into a frozen soil calculated from parametric relationship", "(mm)", &INF);
 
   decllocal("Julian_window", ONE, "currently in Julian window handling frozen infiltration.", "()", &Julian_window);
 
@@ -5216,7 +5216,7 @@ void ClassNetroute::decl(void) {
 
   decldiag("outflow_diverted", NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
 
-  declstatdiag("cumoutflow_diverted", NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
+  declstatdiag("cumoutflow_diverted", NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2)", &cumoutflow_diverted);
 
   declstatdiag("cum_to_Sd", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
 
@@ -5232,25 +5232,25 @@ void ClassNetroute::decl(void) {
 
   decldiag("gwoutflow_diverted", NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
 
-  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
+  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2)", &gwcumoutflow_diverted);
 
-  declvar("ssrinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
+  declvar("ssrinflow", NHRU, "subsurface inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
 
-  declstatdiag("ssrcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
+  declstatdiag("ssrcuminflow", NHRU, "cumulative subsurface inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
 
-  declvar("ssroutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
+  declvar("ssroutflow", NHRU, "HRU subsurface outflow", "(mm*km^2/int)", &ssroutflow);
 
-  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
+  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU subsurface outflow", "(mm*km^2)", &ssrcumoutflow);
 
   declstatdiag("HRU_cumbasinflow", NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
 
-  declvar("runinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
+  declvar("runinflow", NHRU, "overland inflow (sum of meltrunoff and runoff) from other HRUs", "(mm*km^2/int)", &runinflow);
 
-  declstatdiag("runcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
+  declstatdiag("runcuminflow", NHRU, "cumulative overland inflow (sum of meltrunoff and runoff) from other HRUs", "(mm*km^2)", &runcuminflow);
 
-  declvar("runoutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
+  declvar("runoutflow", NHRU, "HRU overland outflow", "(mm*km^2/int)", &runoutflow);
 
-  declstatdiag("runcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
+  declstatdiag("runcumoutflow", NHRU, "cumulative HRU overland outflow", "(mm*km^2)", &runcumoutflow);
 
   declstatdiag("cum_preferential_flow_to_gw", NHRU, "cumulative other HRU's runoff to gw of this HRU via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
 
@@ -5269,11 +5269,11 @@ void ClassNetroute::decl(void) {
 
   declstatdiag("cumbasingw", BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
 
-  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
+  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff from soil, i.e. soil_ssr_Buf is from soil_ssr", "(mm/int)", &soil_ssr_Buf);
 
-  decllocal("soil_runoff_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
+  decllocal("soil_runoff_Buf", NHRU, "buffer overland runoff from soil, i.e. soil_runoff_Buf is from soil_runoff", "(mm/int)", &soil_runoff_Buf);
 
-  decllocal("soil_gw_Buf", NHRU, "buffer soil_gw(gw_flow) runoff", "(mm/d)", &soil_gw_Buf);
+  decllocal("soil_gw_Buf", NHRU, "buffer soil_gw(gw_flow) from soil, i.e. soil_gw_Buf is from gw_flow = soil_gw", "(mm/int)", &soil_gw_Buf);
 
 
   declparam("basin_area", BASIN, "3", "1e-6", "1e09", "Total basin area", "(km^2)", &basin_area);
@@ -5695,7 +5695,7 @@ void Classinterception::decl(void) {
 
   declvar("SI_Lo", NHRU, "Canopy load", "(kg/m^2)", &SI_Lo);
 
-  declvar("net_snow", NHRU, "Canopy unload ", "(kg/m^2)", &net_snow);
+  declvar("net_snow", NHRU, "Canopy unload ", "(kg/m^2*int)", &net_snow);
 
   decldiag("Cum_net_snow", NHRU, "Cumulative Canopy unload ", "(kg/m^2)", &Cum_net_snow);
 
@@ -5864,36 +5864,36 @@ void ClassGreenAmpt::decl(void) {
 
   Description = "'Summer Green Ampt model.'";
 
-  declvar("infil", NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", NHRU,"Potential amount of rain water infiltrating the soil on each HRU", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", NHRU, "cumulative potential rain water infiltration on each HRU", "(mm)", &cuminfil);
 
   declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  declvar("snowinfil", NHRU, "infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", NHRU, "interval snowmelt infiltration", "(mm/int)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", NHRU, "interval snowmelt runoff", "(mm/int)", &meltrunoff);
 
-  declstatvar("cummeltrunoff", NHRU, "cumulative melt runoff", "(mm/int)", &cummeltrunoff);
+  declstatvar("cummeltrunoff", NHRU, "cumulative snowmelt runoff", "(mm)", &cummeltrunoff);
 
 
-  decllocal("k", NHRU, "(mm/h)", "()", &k);
+  decllocal("k", NHRU, "saturated hydraulic conductivity", "(mm/h)", &k);
 
-  declstatdiag("F0", NHRU, "last HRU cumulative infiltration", "(mm)", &F0);
+  declstatdiag("F0", NHRU, "cumulative infiltation at the beginning of the time interval", "(mm)", &F0);
 
-  decllocal("f0", NHRU, "", "(mm/h)", &f0);
+  decllocal("f0", NHRU, "infiltration rate at the beginning of the time interval", "(mm/h)", &f0);
 
-  declstatdiag("F1", NHRU, "HRU cumulative infiltration", "(mm)", &F1);
+  declstatdiag("F1", NHRU, "cumulative infiltration at the end of the time interval", "(mm)", &F1);
 
-  decllocal("f1", NHRU, "", "(mm/h)", &f1);
+  decllocal("f1", NHRU, "infiltration rate at the end of the time interval", "(mm/h)", &f1);
 
-  decllocal("dthbot", NHRU, "", "()", &dthbot);
+  decllocal("dthbot", NHRU, "fraction value of soil water deficit", "()", &dthbot);
 
-  decllocal("psidthbot", NHRU, "", "(mm)", &psidthbot);
+  decllocal("psidthbot", NHRU, "capillary suction at the fraction value of soil water deficit", "(mm)", &psidthbot);
 
 
   declparam("basin_area", BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);
@@ -9601,7 +9601,7 @@ void ClassNetroute_M::decl(void) {
 
   decldiag("outflow_diverted", NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
 
-  declstatdiag("cumoutflow_diverted", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm*km^2/int)", &cumoutflow_diverted);
+  declstatdiag("cumoutflow_diverted", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm*km^2)", &cumoutflow_diverted);
 
   declstatdiag("cum_to_Sd", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
 
@@ -9617,25 +9617,25 @@ void ClassNetroute_M::decl(void) {
 
   decldiag("gwoutflow_diverted", NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
 
-  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
+  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2)", &gwcumoutflow_diverted);
 
-  declvar("ssrinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
+  declvar("ssrinflow", NHRU, "subsurface inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
 
-  declstatdiag("ssrcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
+  declstatdiag("ssrcuminflow", NHRU, "cumulative subsurface inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
 
-  declvar("ssroutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
+  declvar("ssroutflow", NHRU, "HRU subsurface outflow", "(mm*km^2/int)", &ssroutflow);
 
-  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
+  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU subsurface outflow", "(mm*km^2)", &ssrcumoutflow);
 
   declstatdiag("HRU_cumbasinflow", NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
 
-  declvar("runinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
+  declvar("runinflow", NHRU, "overland inflow (sum of meltrunoff and runoff) from other HRUs", "(mm*km^2/int)", &runinflow);
 
-  declstatdiag("runcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
+  declstatdiag("runcuminflow", NHRU, "cumulative overland inflow (sum of meltrunoff and runoff) from other HRUs", "(mm*km^2)", &runcuminflow);
 
-  declvar("runoutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
+  declvar("runoutflow", NHRU, "HRU overland outflow", "(mm*km^2/int)", &runoutflow);
 
-  declstatdiag("runcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
+  declstatdiag("runcumoutflow", NHRU, "cumulative HRU overland outflow", "(mm*km^2)", &runcumoutflow);
 
   declstatdiag("cum_preferential_flow_to_gw", NHRU, "cumulative other HRU's runoff to gw of this HRU via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
 
@@ -9654,13 +9654,13 @@ void ClassNetroute_M::decl(void) {
 
   declstatdiag("cumbasingw", BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
 
-  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
+  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff from soil, i.e. soil_ssr_Buf is from soil_ssr", "(mm/int)", &soil_ssr_Buf);
 
-  decllocal("soil_runoff_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
+  decllocal("soil_runoff_Buf", NHRU, "buffer overland runoff from soil, i.e. soil_runoff_Buf is from soil_runoff", "(mm/int)", &soil_runoff_Buf);
 
-  decllocal("soil_gw_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
+  decllocal("soil_gw_Buf", NHRU, "buffer soil_gw(gw_flow) from soil, i.e. soil_gw_Buf is from gw_flow = soil_gw", "(mm/int)", &soil_gw_Buf);
 
-  decllocal("Ktravel", NHRU, "travel time", "(d)", &Ktravel);
+  decllocal("Ktravel", NHRU, "travel time from Muskingum method", "(d)", &Ktravel);
 
 
   declparam("basin_area", BASIN, "3", "1e-6", "1e09", "Total basin area", "(km^2)", &basin_area);
@@ -10136,13 +10136,13 @@ void ClassREWroute2::decl(void) {
 
   gwCnt = declgrpvar("WS_ALL_gwflow", "basingw", "query variable = 'basingw'", "(m^3/int)", &gwrew, &gw_All);
 
-  declvar("WS_gwinflow", NHRU, "inflow from each RB", "(m^3/int)", &gwinflow);
+  declvar("WS_gwinflow", NHRU, "gwinflow from each RB", "(m^3/int)", &gwinflow);
 
-  declstatdiag("cum_WSgwinflow", NHRU, "cumulative inflow from each RB", "(m^3)", &cumgwinflow);
+  declstatdiag("cum_WSgwinflow", NHRU, "cumulative gwinflow from each RB", "(m^3)", &cumgwinflow);
 
-  declvar("WS_gwoutflow", NHRU, "outflow of each RB", "(m^3/int)", &gwoutflow);
+  declvar("WS_gwoutflow", NHRU, "gwoutflow of each RB", "(m^3/int)", &gwoutflow);
 
-  declstatdiag("cum_WSgwoutflow", NHRU, "cumulative outflow of each RB", "(m^3)", &cumgwoutflow);
+  declstatdiag("cum_WSgwoutflow", NHRU, "cumulative gwoutflow of each RB", "(m^3)", &cumgwoutflow);
 
   declvar("WS_gwflow", BASIN, "watershed ground water outflow", "(m^3/int)", &gwflow);
 
@@ -10153,15 +10153,15 @@ void ClassREWroute2::decl(void) {
 
   declparam("WS_whereto", NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_whereto);
 
-  declparam("WS_order", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_order);
+  declparam("WS_order", NHRU, "1,2,3,4,5!", "1","1000", "RB outflow routing process order", "()", &WS_order);
 
   declparam("WS_gwwhereto", NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_gwwhereto);
 
-  declparam("WS_gworder", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_gworder);
+  declparam("WS_gworder", NHRU, "1,2,3,4,5!", "1","1000", "RB gwoutflow routing process order", "()", &WS_gworder);
 
-  declparam("WS_Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_Lag);
+  declparam("WS_Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "inflow lag delay", "(h)", &WS_Lag);
 
-  declparam("WS_gwLag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_gwLag);
+  declparam("WS_gwLag", NHRU, "[0.0]", "0.0","1.0E4.0", "gwinflow lag delay", "(h)", &WS_gwLag);
 
 
   variation_set = VARIATION_2 + VARIATION_3;
@@ -10199,13 +10199,13 @@ void ClassREWroute2::decl(void) {
 
   variation_set = VARIATION_0 + VARIATION_2;
 
-  decldiag("WS_Ktravel_var", NHRU, "inflow storage constant", "(d)", &WS_Ktravel_var);
+  decldiag("WS_Ktravel_var", NHRU, "inflow storage constant (Muskingum method)", "(d)", &WS_Ktravel_var);
 
-  decldiag("WS_gwKtravel_var", NHRU, "gw storage constant", "(d)", &WS_gwKtravel_var);
+  decldiag("WS_gwKtravel_var", NHRU, "gwinflow storage constant (Muskingum method)", "(d)", &WS_gwKtravel_var);
 
   declparam("WS_route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &WS_route_n);
 
-  declparam("WS_route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "()", &WS_route_R);
+  declparam("WS_route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &WS_route_R);
 
   declparam("WS_route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &WS_route_S0);
 
@@ -10220,9 +10220,9 @@ void ClassREWroute2::decl(void) {
 
   variation_set = VARIATION_1 + VARIATION_3;
 
-  declparam("WS_Kstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_Kstorage);
+  declparam("WS_Kstorage", NHRU, "[0.0]", "0.0","200.0", "inflow storage constant for RB (Clark method)", "(d)", &WS_Kstorage);
 
-  declparam("WS_gwKstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_gwKstorage);
+  declparam("WS_gwKstorage", NHRU, "[0.0]", "0.0","200.0", "gwinflow storage constant for RB (Clark method)", "(d)", &WS_gwKstorage);
 
 
   variation_set = VARIATION_ORG;
@@ -10581,9 +10581,9 @@ ClassLongVt* ClassLongVt::klone(string name) const{
 
   declvar("tau", NHRU, "Atmospheric transmissivity = S/Sextra", "()", &tau);
 
-  declvar("Qli_Var", NHRU, "calculated incoming long", "(W/m^2)", &Qli_Var);
+  declvar("Qli_Var", NHRU, "calculated incoming long-wave in open environment", "(W/m^2)", &Qli_Var);
 
-  declvar("QliVt_Var", NHRU, "calculated incoming long in open environment", "(W/m^2)", &QliVt_Var);
+  declvar("QliVt_Var", NHRU, "calculated incoming long-wave in rugged environment", "(W/m^2)", &QliVt_Var);
 
 
 
@@ -11293,11 +11293,11 @@ void ClassNetroute_D::decl(void) {
 
   decldiag("outflow_diverted", NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
 
-  declstatdiag("cumoutflow_diverted", NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
+  declstatdiag("cumoutflow_diverted", NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2)", &cumoutflow_diverted);
 
   decldiag("gwoutflow_diverted", NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
 
-  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
+  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2)", &gwcumoutflow_diverted);
 
   declstatdiag("cum_to_Sd", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
 
@@ -11311,13 +11311,13 @@ void ClassNetroute_D::decl(void) {
 
   declstatdiag("gwcumoutflow", NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
 
-  declvar("ssrinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
+  declvar("ssrinflow", NHRU, "subsurface inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
 
-  declstatdiag("ssrcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
+  declstatdiag("ssrcuminflow", NHRU, "cumulative subsurface inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
 
-  declvar("ssroutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
+  declvar("ssroutflow", NHRU, "HRU subsurface outflow", "(mm*km^2/int)", &ssroutflow);
 
-  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
+  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU subsurface outflow", "(mm*km^2)", &ssrcumoutflow);
 
   declstatdiag("HRU_cumbasinflow", NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
 
@@ -11326,13 +11326,13 @@ void ClassNetroute_D::decl(void) {
   declparam("preferential_flow", NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
 
 
-  declvar("runinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
+  declvar("runinflow", NHRU, "overland inflow (sum of meltrunoff and runoff) from other HRUs", "(mm*km^2/int)", &runinflow);
 
-  declstatdiag("runcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
+  declstatdiag("runcuminflow", NHRU, "cumulative overland inflow (sum of meltrunoff and runoff) from other HRUs", "(mm*km^2)", &runcuminflow);
 
-  declvar("runoutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
+  declvar("runoutflow", NHRU, "HRU overland outflow", "(mm*km^2/int)", &runoutflow);
 
-  declstatdiag("runcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
+  declstatdiag("runcumoutflow", NHRU, "cumulative HRU overland outflow", "(mm*km^2)", &runcumoutflow);
 
   declstatdiag("cumscaling_boost", NHRU, "cumulative amout inflow boosted", "(mm*km^2)", &cumscaling_boost);
 
@@ -11348,11 +11348,11 @@ void ClassNetroute_D::decl(void) {
 
   declstatdiag("cumbasingw", BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
 
-  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
+  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff from soil, i.e. soil_ssr_Buf is from soil_ssr", "(mm/int)", &soil_ssr_Buf);
 
-  decllocal("soil_runoff_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
+  decllocal("soil_runoff_Buf", NHRU, "buffer overland runoff from soil, i.e. soil_runoff_Buf is from soil_runoff", "(mm/int)", &soil_runoff_Buf);
 
-  decllocal("soil_gw_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
+  decllocal("soil_gw_Buf", NHRU, "buffer soil_gw(gw_flow) from soil, i.e. soil_gw_Buf is from gw_flow = soil_gw", "(mm/int)", &soil_gw_Buf);
 
   decllocal("distrib_sum", NHRU, "HRU distribution sum", "()", &distrib_sum);
 
@@ -11841,7 +11841,7 @@ void ClassNetroute_M_D::decl(void) {
 
   decldiag("outflow_diverted", NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
 
-  declstatdiag("cumoutflow_diverted", NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
+  declstatdiag("cumoutflow_diverted", NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2)", &cumoutflow_diverted);
 
   declstatdiag("cum_to_Sd", NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
 
@@ -11857,15 +11857,15 @@ void ClassNetroute_M_D::decl(void) {
 
   decldiag("gwoutflow_diverted", NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
 
-  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
+  declstatdiag("gwcumoutflow_diverted", NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2)", &gwcumoutflow_diverted);
 
-  declvar("ssrinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
+  declvar("ssrinflow", NHRU, "subsurface inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
 
-  declstatdiag("ssrcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
+  declstatdiag("ssrcuminflow", NHRU, "cumulative subsurface inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
 
-  declvar("ssroutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
+  declvar("ssroutflow", NHRU, "HRU subsurface outflow", "(mm*km^2/int)", &ssroutflow);
 
-  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
+  declstatdiag("ssrcumoutflow", NHRU, "cumulative HRU subsurface outflow", "(mm*km^2)", &ssrcumoutflow);
 
   declstatdiag("HRU_cumbasinflow", NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
 
@@ -11873,13 +11873,13 @@ void ClassNetroute_M_D::decl(void) {
 
   declparam("preferential_flow", NHRU, "[0]", "0", "1","0 - no preferential and remain as runoff routing to other HRU, 1 - preferential flow and route runoff to other HRU's gw.", "()", &preferential_flow);
 
-  declvar("runinflow", NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
+  declvar("runinflow", NHRU, "overland inflow (sum of meltrunoff and runoff) from other HRUs", "(mm*km^2/int)", &runinflow);
 
-  declstatdiag("runcuminflow", NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
+  declstatdiag("runcuminflow", NHRU, "cumulative overland inflow (sum of meltrunoff and runoff) from other HRUs", "(mm*km^2)", &runcuminflow);
 
-  declvar("runoutflow", NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
+  declvar("runoutflow", NHRU, "HRU overland outflow", "(mm*km^2/int)", &runoutflow);
 
-  declstatdiag("runcumoutflow", NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
+  declstatdiag("runcumoutflow", NHRU, "cumulative HRU overland outflow", "(mm*km^2)", &runcumoutflow);
 
   declstatdiag("cumscaling_boost", NHRU, "cumulative amout inflow boosted", "(mm*km^2)", &cumscaling_boost);
 
@@ -11895,13 +11895,13 @@ void ClassNetroute_M_D::decl(void) {
 
   declstatdiag("cumbasingw", BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
 
-  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
+  decllocal("soil_ssr_Buf", NHRU, "buffer subsurface runoff from soil, i.e. soil_ssr_Buf is from soil_ssr", "(mm/int)", &soil_ssr_Buf);
 
-  decllocal("soil_runoff_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
+  decllocal("soil_runoff_Buf", NHRU, "buffer overland runoff from soil, i.e. soil_runoff_Buf is from soil_runoff", "(mm/int)", &soil_runoff_Buf);
 
-  decllocal("soil_gw_Buf", NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
+  decllocal("soil_gw_Buf", NHRU, "buffer soil_gw(gw_flow) from soil, i.e. soil_gw_Buf is from gw_flow = soil_gw", "(mm/int)", &soil_gw_Buf);
 
-  decllocal("Ktravel", NHRU, "travel time", "(d)", &Ktravel);
+  decllocal("Ktravel", NHRU, "travel time from Muskingum method", "(d)", &Ktravel);
 
   decllocal("distrib_sum", NHRU, "HRU distribution sum", "()", &distrib_sum);
 
@@ -12546,11 +12546,11 @@ void ClassVolumetric::decl(void) {
 
   Description = "'Converts soil moisture to volumetric equivalent and determines fall status.'";
 
-  declvar("Volumetric", NHRU, "volumetric soil moisture", "()", &Volumetric);
+  declvar("Volumetric", NHRU, "fractional volumetric soil moisture", "()", &Volumetric);
 
-  declvar("Volumetric_rechr", NHRU, "volumetric soil moisture in soil recharge zone", "()", &Volumetric_rechr); // 04/14/2020: adding option for updating Si or fallstat based on Volumetric moisture content in recharge layer
+  declvar("Volumetric_rechr", NHRU, "fractional volumetric soil moisture in soil recharge zone", "()", &Volumetric_rechr); // 04/14/2020: adding option for updating Si or fallstat based on Volumetric moisture content in recharge layer
 
-  declvar("fallstat_V", NHRU, "fallstat_V copy of parameter fallstat", "()", &fallstat_V);
+  declvar("fallstat_V", NHRU, "fallstat_V copy of parameter fallstat", "(%)", &fallstat_V);
 
   declvar("Si_V", NHRU, "Si_V copy of parameter Si", "()", &Si_V);
 
@@ -12570,6 +12570,8 @@ void ClassVolumetric::decl(void) {
   declparam("soil_Depth", NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
 
   declparam("Si_correction", NHRU, "[0.0]", "0.0", "1.0", "Si correction number", "()", &Si_correction);
+
+  declparam("fallstat_correction", NHRU, "[1.0]", "0.0", "10.0", "fallstat correction factor", "()", &fallstat_correction); // 08/11/2021
 
   declparam("set_fallstat", NHRU, "[305]", "0","366", "set fallstat on this Julian date", "()", &set_fallstat);
 
@@ -12630,11 +12632,14 @@ void ClassVolumetric::run(void) {
       }
 
       if(fallstat[hh]){
-        if(SetSoilproperties[soil_type[hh]][3] > 0.0)
+        if(SetSoilproperties[soil_type[hh]][3] > 0.0) { // 08/11/2021
           if(Volumetric_option[hh])  // 04/14/2020
             fallstat[hh] = Volumetric_rechr[hh]/SetSoilproperties[soil_type[hh]][3]*100000.0; // ie 100*1000
           else
             fallstat[hh] = Volumetric[hh]/SetSoilproperties[soil_type[hh]][3]*100000.0; // ie 100*1000
+		  if(fallstat_correction[hh] >= 0.0)
+		    fallstat[hh] = fallstat[hh]*fallstat_correction[hh]; // 08/11/2021
+		} // 08/11/2021
         else
           fallstat [hh] = 1.0;
 
@@ -12937,17 +12942,17 @@ void ClassPrairieInfil::decl(void) {
 
   Description = "'Handles frozen soil infiltration using Granger et al. 1984; Gray et al., 1986 and Ayers, 1959 for unfrozen soil.'";
 
-  declvar("snowinfil", NHRU, "infiltration", "(mm/d)", &snowinfil);
+  declvar("snowinfil", NHRU, "daily snowmelt infiltration", "(mm/d)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/d)", &meltrunoff);
+  declvar("meltrunoff", NHRU, "daily melt runoff", "(mm/d)", &meltrunoff);
 
   declstatdiag("cummeltrunoff", NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
 
-  declvar("infil", NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", NHRU,"interval rainfall infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", NHRU, "cumulative rainfall infiltration", "(mm)", &cuminfil);
 
   declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
 
@@ -12967,7 +12972,7 @@ void ClassPrairieInfil::decl(void) {
   declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
   declparam("fallstat", NHRU, "[50.0]", "-1.0","100.0",
-     "fall status 0.0 - unlimited/ 100.0 - restricted/ other - limited", "(%)", &fallstat);
+     "fall soil saturation status 0.0 - unlimited/ 100.0 - restricted/ other - limited", "(%)", &fallstat);
 
   declparam("Major", NHRU, "[5]", "1", "100", "threshold for major melt", "(mm/d)", &Major);
 
@@ -12976,10 +12981,10 @@ void ClassPrairieInfil::decl(void) {
   decldiagparam("infDays", NHRU, "[6]", "0", "20", " maximum number of days of snowmelt infiltration to frozen soil ", "(d)", &infDays);
 
   declparam("texture", NHRU, "[1]", "1","4",
-     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "(%)", &texture);
+     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "()", &texture);
 
   declparam("groundcover", NHRU, "[1]", "1","6",
-     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "(%)", &groundcover);
+     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "()", &groundcover);
 
   declgetvar("*",  "hru_tmax", "(°C)", &hru_tmax);
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmelt);
@@ -13250,7 +13255,7 @@ void ClassCRHMCanopy::decl(void) {
 
   declobs("Qnsn", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
 
-  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2*int)", &Qnsn_Var);
+  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn_Var);
 
   declobs("Qsisn", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn);
 
@@ -13262,11 +13267,11 @@ void ClassCRHMCanopy::decl(void) {
 
   decldiag("k", NHRU, "extinction coefficient", "()", &k);
 
-  decldiag("Tauc", NHRU, "short-wave transmissivity", "(W/m^2)", &Tauc);
+  decldiag("Tauc", NHRU, "short-wave transmissivity", "()", &Tauc);
 
   decllocal("Pa", NHRU, "Average surface pressure", "(kPa)", &Pa);
 
-  declvar("ra", NHRU, "", "(s/m)", &ra);
+  declvar("ra", NHRU, "resistance", "(s/m)", &ra);
 
   declvar("drip_cpy", NHRU, "canopy drip", "(mm/int)", &drip_Cpy);
 
@@ -13274,11 +13279,11 @@ void ClassCRHMCanopy::decl(void) {
 
   declvar("net_rain", NHRU, " direct_rain + drip", "(mm/int)", &net_rain);
 
-  declstatdiag("cum_net_rain", NHRU, " direct_rain + drip", "(mm)", &cum_net_rain);
+  declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
-  declstatdiag("cum_Subl_Cpy", NHRU, "canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
+  declstatdiag("cum_Subl_Cpy", NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
 
   decldiag("Pevap", NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
 
@@ -13286,11 +13291,11 @@ void ClassCRHMCanopy::decl(void) {
 
   declstatvar("Snow_load", NHRU, "canopy snow load (timetep start)", "(mm)", &Snow_load);
 
-  declvar("direct_snow", NHRU, "snow 'direct' Thru", "(mm/int)", &direct_snow);
+  declvar("direct_snow", NHRU, "snow 'direct' through canopy", "(mm/int)", &direct_snow);
 
-  declvar("SUnload", NHRU, "unloaded canopy snow", "(mm)", &SUnload);
+  declvar("SUnload", NHRU, "unloaded canopy snow", "(mm/int)", &SUnload);
 
-  declvar("SUnload_H2O", NHRU, "unloaded canopy snow as water", "(mm)", &SUnload_H2O);
+  declvar("SUnload_H2O", NHRU, "unloaded canopy snow as water", "(mm/int)", &SUnload_H2O);
 
   declstatdiag("cum_SUnload_H2O", NHRU, "Cumulative unloaded canopy snow as water", "(mm)", &cum_SUnload_H2O);
 
@@ -13298,7 +13303,7 @@ void ClassCRHMCanopy::decl(void) {
 
   declvar("net_snow", NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
 
-  declstatdiag("cum_net_snow", NHRU, "Cumulative Canopy unload ", "(mm)", &cum_net_snow);
+  declstatdiag("cum_net_snow", NHRU, "Cumulative hru_snow minus interception", "(mm)", &cum_net_snow);
 
   declvar("net_p", NHRU, "total precipitation after interception", "(mm/int)", &net_p);
 
@@ -13308,11 +13313,11 @@ void ClassCRHMCanopy::decl(void) {
 
   declvar("intcp_evap", NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
 
-  declstatdiag("cum_intcp_evap", NHRU, "HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
+  declstatdiag("cum_intcp_evap", NHRU, "Cumulative HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
 
-  declvar("Qsisn_Var", NHRU, "incident short-wave at surface", "(W/m^2*int)", &Qsisn_Var);
+  declvar("Qsisn_Var", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn_Var);
 
-  declvar("Qlisn_Var", NHRU, "incident long-wave at surface", "(W/m^2*int)", &Qlisn_Var);
+  declvar("Qlisn_Var", NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn_Var);
 
 
 // parameters:
@@ -13344,9 +13349,9 @@ void ClassCRHMCanopy::decl(void) {
 
   declparam("unload_t_water", NHRU, "[4.0]", "-10.0", "20.0", "if ice-bulb temp >= t: canopy snow is unloaded as water", "(°C)", &unload_t_water);
 
-  decldiagparam("Alpha_c", NHRU, "[0.1]", "0.05", "0.2", "canopy albedo", "()", &Alpha_c);
+  decldiagparam("Alpha_c", NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
 
-  decldiagparam("B_canopy", NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
+  decldiagparam("B_canopy", NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter for longwave-radiation. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
 }
 
 void ClassCRHMCanopy::init(void) {
@@ -13552,7 +13557,7 @@ void ClassCRHMCanopy::run(void) {
       C1 = 1.0/(D*SvDens*Nu);
 
       Alpha = 5.0;
-      Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Radius*Radius*Radius *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
+      Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Radius*Radius*Radius; // 18Mar2022: remove Gamma Distribution Correction term, *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
 
 // sublimation rate of single 'ideal' ice sphere:
 
@@ -13588,8 +13593,8 @@ void ClassCRHMCanopy::run(void) {
           float IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
           float Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
 
-          const float c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
-
+          const float U = -1*log(0.678)/(24*7*Global::Freq/24); // weekly dimensionless unloading coefficient -> to CRHM time interval
+                                                       // 21Mar2022 correction: invert the term 24/Global::Freq, use unloading rate coefficient U = -log(c)/t for snow unloading determined by inverse function of c = e^(-Ut) = 0.678 based on Eq. 14 in Hedstrom and Pomeroy (1998)
   // determine whether canopy snow is unloaded:
 
           if(IceBulbT >= unload_t_water[hh]){
@@ -13604,7 +13609,7 @@ void ClassCRHMCanopy::run(void) {
             cum_SUnload[hh] += SUnload[hh];
           }
           else if(IceBulbT < unload_t[hh]){ // has to be at least one interval. Trip on half step
-            SUnload[hh] = Snow_load[hh]*c; // the dimensionless unloading coefficient already /interval
+            SUnload[hh] = Snow_load[hh]*U; // the dimensionless unloading coefficient already /interval, 21Mar2022 correction: use unloading rate coefficient U
             if(SUnload[hh] > Snow_load[hh]){
               SUnload[hh] = Snow_load[hh];
               Snow_load[hh] = 0.0;
@@ -14275,21 +14280,21 @@ void ClassAyers::decl(void) {
 
   Description = "'Uses Ayers, 1959 for unfrozen soil. Snow is assumed to melt immediately on contact with the ground.'";
 
-  declvar("infil", NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", NHRU,"interval rainfall infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", NHRU, "cumulative rainfall infiltration", "(mm)", &cuminfil);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", NHRU, "interval rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  declvar("snowinfil", NHRU, "infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", NHRU, "interval snowmelt infiltration", "(mm/int)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", NHRU, "interval snowmelt runoff", "(mm/int)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", NHRU, "melt runoff", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", NHRU, "cumulative snowmelt runoff", "(mm)", &cummeltrunoff);
 
   decllocal("melt_int", NHRU, "interval melt from snowmelD", "(mm/int)", &melt_int);
 
@@ -14298,10 +14303,10 @@ void ClassAyers::decl(void) {
   declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
   declparam("texture", NHRU, "[1]", "1","4",
-     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "(%)", &texture);
+     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "()", &texture);
 
   declparam("groundcover", NHRU, "[1]", "1","6",
-     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "(%)", &groundcover);
+     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "()", &groundcover);
 
   declgetvar("*",  "net_rain", "(mm/int)", &net_rain);
 
@@ -14530,29 +14535,29 @@ void ClassfrozenAyers::decl(void) {
 
   Description = "'Frozen soil infiltration Zhao and Gray (1999) and Ayers, (1959) for unfrozen soil.'";
 
-  declvar("infil", NHRU, "Potential rain infiltration", "(mm/int)", &infil);
+  declvar("infil", NHRU, "interval rain infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", NHRU, "cumulative potential rain infiltration", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", NHRU, "cumulative rain infiltration", "(mm)", &cuminfil);
 
-  declvar("snowinfil", NHRU, "melt infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", NHRU, "interval snowmelt infiltration", "(mm/int)", &snowinfil);
 
-  declstatvar("cumsnowinfil", NHRU, "cumulative melt infiltration", "(mm)", &cumsnowinfil); // for looping
+  declstatvar("cumsnowinfil", NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil); // for looping
 
-  declvar("cumsnowinfil_0", NHRU, "cumulative melt infiltration at beginning of frozen cycle", "(mm)", &cumsnowinfil_0); // for looping
+  declvar("cumsnowinfil_0", NHRU, "cumulative snowmelt infiltration at beginning of frozen cycle", "(mm)", &cumsnowinfil_0); // for looping
 
-  declvar("meltrunoff", NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", NHRU, "interval snowmelt runoff", "(mm/int)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", NHRU, "cumulative snowmelt runoff", "(mm)", &cummeltrunoff);
 
-  declvar("runoff", NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", NHRU, "interval rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  decllocal("t0_Var", NHRU, "t0 value used by module", "(h)", &t0_Var);
+  decllocal("t0_Var", NHRU, "value of infiltration opportunity time", "(h)", &t0_Var);
 
-  decllocal("t0_Acc", NHRU, "opportunity time", "(h)", &t0_Acc); // to reset every loop
+  decllocal("t0_Acc", NHRU, "infiltration opportunity time accumulator", "(h)", &t0_Acc); // to reset every loop
 
-  decllocal("INF", NHRU, "parametric calculation", "(mm)", &INF);
+  decllocal("INF", NHRU, "infiltration into a frozen soil calculated from parametric relationship", "(mm)", &INF);
 
   decllocal("Julian_window", ONE, "currently in Julian window handling frozen infiltration.", "()", &Julian_window);
 
@@ -14587,10 +14592,10 @@ void ClassfrozenAyers::decl(void) {
     "(mm)", &soil_moist_max);
 
   declparam("texture", NHRU, "[1]", "1","4",
-     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "(%)", &texture);
+     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "()", &texture);
 
   declparam("groundcover", NHRU, "[1]", "1","6",
-     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "(%)", &groundcover);
+     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "()", &groundcover);
 
   decldiagparam("t0_Julian", ONE, "[30]", "0","366", "value > 0 - inhibit frozen algorithm till after this Julian date, 0 - enable frozen algorithm immediately when melt criteria is met", "()", &t0_Julian);
 
@@ -15521,29 +15526,29 @@ void ClassSoil::decl(void) {
 
   declvar("infil_act_D", NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
 
-  declstatdiag("cum_gw_flow", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
+  declstatdiag("cum_gw_flow", NHRU, "cumulative groundwater flow from HRU groundwater reservoirs.", "(mm)", &cum_gw_flow);
 
-  declvar("soil_ssr", NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
+  declvar("soil_ssr", NHRU, "subsurface runoff from soil layers and depressional storage.", "(mm/int)", &soil_ssr);
 
-  declvar("rechr_ssr", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
+  declvar("rechr_ssr", NHRU, "subsurface runoff from soil recharge layer.", "(mm/int)", &rechr_ssr);
 
-  declstatdiag("cum_soil_ssr", NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
+  declstatdiag("cum_soil_ssr", NHRU, "cumulative subsurface runoff from layers and depressional storage.", "(mm)", &cum_soil_ssr);
 
-  declstatdiag("cum_rechr_ssr", NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
+  declstatdiag("cum_rechr_ssr", NHRU, "cumulative subsurface runoff from soil recharge layer.", "(mm)", &cum_rechr_ssr);
 
-  declvar("soil_ssr_D", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
+  declvar("soil_ssr_D", NHRU, "daily accumulation of soil_ssr.", "(mm/d)", &soil_ssr_D);
 
   declvar("soil_runoff", NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
 
   declstatdiag("cum_soil_runoff", NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
-  declvar("soil_runoff_D", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
+  declvar("soil_runoff_D", NHRU, "daily accumulation of soil_runoff.", "(mm/d)", &soil_runoff_D);
 
-  declstatdiag("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
+  declstatdiag("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm)", &cum_runoff_to_Sd);
 
   declstatdiag("cum_soil_gw", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
 
-  declstatdiag("cum_Sd_gw", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_Sd_gw);
+  declstatdiag("cum_Sd_gw", NHRU, "cumulative excess from Sd  that enters groundwater reservoirs.", "(mm)", &cum_Sd_gw);
 
 
   decllocal("snowinfil_buf", NHRU, "buffer snow infiltration.", "(mm/d)", &snowinfil_buf);
@@ -15552,7 +15557,7 @@ void ClassSoil::decl(void) {
 
   decllocal("meltrunoff_buf", NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
 
-  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
+  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/int)", &hru_evap_buf);
 
   decllocal("soil_moist_Init", NHRU, "initial soil moisture.", "(mm)", &soil_moist_Init);
 
@@ -15593,13 +15598,13 @@ void ClassSoil::decl(void) {
 
   declparam("gw_K", NHRU, "[0.0]", "0.", "100.0", "daily ground water drainage from gw reservoir.", "(mm/d)", &gw_K);
 
-  declparam("rechr_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge.", "(mm/d)", &rechr_ssr_K);
+  declparam("rechr_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge layer (soil_rechr).", "(mm/d)", &rechr_ssr_K);
 
-  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column.", "(mm/d)", &lower_ssr_K);
+  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from lower soil layer (soil_moist - soil_rechr).", "(mm/d)", &lower_ssr_K);
 
-  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor.", "(mm/d)", &Sd_ssr_K);
+  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage factor from depression storage.", "(mm/d)", &Sd_ssr_K);
 
-  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
+  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily drainage factor to groundwater reservoir from depression storage.", "(mm/d)", &Sd_gw_K);
 
   declparam("soil_withdrawal", NDEFN, "[3]", "1", "4",
       "Select water withdrawal function for soil type: 1 = sand, 2 = loam, 3 = clay, 4 = organic. soil_withdrawal[1] - rechr layer, soil_withdrawal[2] - lower layer", "()",
@@ -16479,7 +16484,7 @@ void Classevap_Resist::decl(void) {
 
   decldiagparam("F_Qg", NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
 
-  declparam("rcs", NHRU, "[25]", "25.0", "5000.0", "stomatal resistance", "(s/m)", &rcs);
+  declparam("rcs", NHRU, "[25]", "25.0", "5000.0", "minimum stomatal resistance", "(s/m)", &rcs);
 
   declparam("Htmax", NHRU, "[0.1]", "0.1", "100.0", "maximum vegetation height (Penman-Monteith)", "(m)", &Htmax);
 
@@ -16781,7 +16786,7 @@ void ClassevapD_Resist::decl(void) {
 
   decldiagparam("F_Qg", NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
 
-  declparam("rcs", NHRU, "[25]", "25.0", "5000.0", "stomatal resistance (Penman-Monteith/Dalton bulk transfer)", "(s/m)", &rcs);
+  declparam("rcs", NHRU, "[25]", "25.0", "5000.0", "minimum stomatal resistance (Penman-Monteith/Dalton bulk transfer)", "(s/m)", &rcs);
 
   declparam("Htmax", NHRU, "[0.1]", "0.1", "100.0", "maximum vegetation height (Penman-Monteith)", "(m)", &Htmax);
 
@@ -16994,25 +16999,25 @@ ClassShutWall* ClassShutWall::klone(string name) const{
 
   declstatdiag("hru_cum_actet", NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet);
 
-  declvar("hru_evap", NHRU, "evaporation, interval calculation from daily", "(mm/int)", &evap);
+  declvar("hru_evap", NHRU, "interval evaporation", "(mm/int)", &evap);
 
   declvar("hru_evapD", NHRU, "daily evaporation", "(mm)", &evapD);
 
-  declstatdiag("hru_cum_evap", NHRU, "cumulative interval evaporation from daily", "(mm)", &cum_evap);
+  declstatdiag("hru_cum_evap", NHRU, "cumulative interval evaporation", "(mm)", &cum_evap);
 
   decldiag("Cc", NHRU, "canopy weighting coefficient", "()", &Cc);
 
   decldiag("Cs", NHRU, "substrate weighting coefficient", "()", &Cs);
 
-  decldiag("Ra", NHRU, "", "()", &Ra);
+  decldiag("Ra", NHRU, "aerodynamic resistance 'component'", "(mb/K*s/m)", &Ra);
 
-  decldiag("Rc", NHRU, "", "()", &Rc);
+  decldiag("Rc", NHRU, "canopy stomatal resistance 'component'", "(mb/K*s/m)", &Rc);
 
-  decldiag("Rs", NHRU, "", "()", &Rs);
+  decldiag("Rs", NHRU, "soil surface resistance 'component'", "(mb/K*s/m)", &Rs);
 
-  decldiag("ETc", NHRU, "", "(mm/d)", &ETc);
+  decldiag("ETc", NHRU, " daily evaporation from canopy", "(mm/d)", &ETc);
 
-  decldiag("ETs", NHRU, "", "(mm/d)", &ETs);
+  decldiag("ETs", NHRU, "daily evaporation from soil surface", "(mm/d)", &ETs);
 
   decldiag("raa", NHRU, "aerodynamic resistance from canopy to reference height", "(s/m)", &raa);
 
@@ -17202,15 +17207,15 @@ ClassShutWallD* ClassShutWallD::klone(string name) const{
 
   declvar("Cs", NHRU, "substrate weighting coefficient", "()", &Cs);
 
-  decldiag("Ra", NHRU, "", "()", &Ra);
+  decldiag("Ra", NHRU, "aerodynamic resistance 'component'", "(mb/K*s/m)", &Ra);
 
-  decldiag("Rc", NHRU, "", "()", &Rc);
+  decldiag("Rc", NHRU, "canopy stomatal resistance 'component'", "(mb/K*s/m)", &Rc);
 
-  decldiag("Rs", NHRU, "", "()", &Rs);
+  decldiag("Rs", NHRU, "soil surface resistance 'component'", "(mb/K*s/m)", &Rs);
 
-  decldiag("ETc", NHRU, "", "(mm/d)", &ETc);
+  decldiag("ETc", NHRU, " daily evaporation from canopy", "(mm/d)", &ETc);
 
-  decldiag("ETs", NHRU, "", "(mm/d)", &ETs);
+  decldiag("ETs", NHRU, "daily evaporation from soil surface", "(mm/d)", &ETs);
 
   decldiag("raa", NHRU, "aerodynamic resistance from canopy to reference height", "(s/m)", &raa);
 
@@ -17498,15 +17503,15 @@ void Classlake::decl(void) {
 
   declvar("hru_t_Mmean", NHRU, "HRU temperature", "(°C)", &hru_t_Mmean);
 
-  declvar("hru_rh_Mmean", NHRU, "HRU rh", "()", &hru_rh_Mmean);
+  declvar("hru_rh_Mmean", NHRU, "HRU rh", "(%)", &hru_rh_Mmean);
 
   declvar("hru_u_Mmean", NHRU, "HRU wind speed", "(m/s)", &hru_u_Mmean);
 
-  decllocal("hru_t_acc", NHRU, "HRU t accumulated", "(°C)", &hru_t_acc);
+  decllocal("hru_t_acc", NHRU, "HRU t accumulated", "(°C*N)", &hru_t_acc);
 
-  decllocal("hru_rh_acc", NHRU, "HRU rh accumulated", "()", &hru_rh_acc);
+  decllocal("hru_rh_acc", NHRU, "HRU rh accumulated", "(%*N)", &hru_rh_acc);
 
-  decllocal("hru_u_acc", NHRU, "HRU u accumulated", "(m)", &hru_u_acc);
+  decllocal("hru_u_acc", NHRU, "HRU u accumulated", "(m/s*N)", &hru_u_acc);
 
   decllocal("start_open_day", NHRU, "TDate format start of open water", "()", &start_open_day);
 
@@ -17710,11 +17715,11 @@ void ClassK_Estimate::decl(void) {
   declputparam("*", "gw_K",        "(mm/d)", &gw_K);
 
   declvar("rechr_ssr_K_V", NHRU, "ssr drainage factor from recharge", "(mm/d)", &rechr_ssr_K_V);
-  declvar("lower_ssr_K_V", NHRU, "ssr drainage factor from soil column", "(mm/d)", &lower_ssr_K_V);
+  declvar("lower_ssr_K_V", NHRU, "ssr drainage factor from lower soil layer", "(mm/d)", &lower_ssr_K_V);
   declvar("Sd_ssr_K_V", NHRU, "depression storage ssr drainage factor", "(mm/d)", &Sd_ssr_K_V);
   declvar("Sd_gw_K_V", NHRU, "depression storage gw drainage factor", "(mm/d)", &Sd_gw_K_V);
   declvar("soil_gw_K_V", NHRU, "The maximum amount of the soil water excess for an HRU that is routed directly to the associated groundwater reservoir each day", "(mm/d)", &soil_gw_K_V);
-  declvar("gw_K_V", NHRU, "ground water drainage factor from gw reservoir each day", "(m/s)", &gw_K_V);
+  declvar("gw_K_V", NHRU, "ground water drainage factor from gw reservoir each day", "(mm/d)", &gw_K_V);
 
   declparam("Inhibit_K_set",    NHRU, "[0]", "0", "63", "Inhibit setting of rechr_ssr_K/lower_ssr_K/Sd_ssr_K/Sd_gw_K/soil_gw_K/gw_K parameters using 1/2/4/8/16/32", "()", &Inhibit_K_set);
 
@@ -17928,7 +17933,7 @@ void ClassevapX::decl(void) {
   declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height (used by Penman-Monteith).", "(m)", &Zwind);
 
 
-  declparam("rcs", NHRU, "[25]", "25.0", "5000.0", "stomatal resistance (used by Penman-Monteith).", "(s/m)", &rcs);
+  declparam("rcs", NHRU, "[25]", "25.0", "5000.0", "minimum stomatal resistance (used by Penman-Monteith).", "(s/m)", &rcs);
 
   declparam("Htmax", NHRU, "[0.1]", "0.1", "100.0", "maximum vegetation height (used by Penman-Monteith).", "(m)", &Htmax);
 
@@ -18403,25 +18408,25 @@ void ClassSoilPrairie::decl(void) {
 
   declvar("infil_act_D", NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
 
-  declstatdiag("cum_gw_flow", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
+  declstatdiag("cum_gw_flow", NHRU, "cumulative groundwater flow from HRU groundwater reservoirs.", "(mm)", &cum_gw_flow);
 
-  declvar("soil_ssr", NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
+  declvar("soil_ssr", NHRU, "subsurface runoff from soil layers and depressional storage.", "(mm/int)", &soil_ssr);
 
-  declvar("rechr_ssr", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
+  declvar("rechr_ssr", NHRU, "subsurface runoff from soil recharge layer.", "(mm/int)", &rechr_ssr);
 
-  declstatdiag("cum_soil_ssr", NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
+  declstatdiag("cum_soil_ssr", NHRU, "cumulative subsurface runoff from layers and depressional storage.", "(mm)", &cum_soil_ssr);
 
-  declstatdiag("cum_rechr_ssr", NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
+  declstatdiag("cum_rechr_ssr", NHRU, "cumulative subsurface runoff from soil recharge layer.", "(mm)", &cum_rechr_ssr);
 
-  declvar("soil_ssr_D", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
+  declvar("soil_ssr_D", NHRU, "daily accumulation of soil_ssr.", "(mm/d)", &soil_ssr_D);
 
   declvar("soil_runoff", NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
 
   declstatdiag("cum_soil_runoff", NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
-  declvar("soil_runoff_D", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
+  declvar("soil_runoff_D", NHRU, "daily accumulation of soil_runoff.", "(mm/d)", &soil_runoff_D);
 
-  decldiag("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
+  decldiag("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm)", &cum_runoff_to_Sd);
 
   decldiag("cum_soil_gw", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
 
@@ -18440,7 +18445,7 @@ void ClassSoilPrairie::decl(void) {
 
   decllocal("meltrunoff_buf", NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
 
-  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
+  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/int)", &hru_evap_buf);
 
   decllocal("hru_evap_PT_buf", NHRU, "Priestley-Taylor buffer evaporation", "(mm/d)", &hru_evap_PT_buf);
 
@@ -18483,13 +18488,13 @@ void ClassSoilPrairie::decl(void) {
 
   declparam("gw_K", NHRU, "[0.0]", "0.", "100.0", "daily ground water drainage from gw reservoir.", "(mm/d)", &gw_K);
 
-  declparam("rechr_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge.", "(mm/d)", &rechr_ssr_K);
+  declparam("rechr_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge layer (soil_rechr).", "(mm/d)", &rechr_ssr_K);
 
-  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column.", "(mm/d)", &lower_ssr_K);
+  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from lower soil layer (soil_moist - soil_rechr).", "(mm/d)", &lower_ssr_K);
 
-  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor.", "(mm/d)", &Sd_ssr_K);
+  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage factor from depression storage.", "(mm/d)", &Sd_ssr_K);
 
-  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
+  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily drainage factor to groundwater reservoir from depression storage.", "(mm/d)", &Sd_gw_K);
 
   declparam("Sd_water_frac_max", NHRU, "[0.24]", "0.0", "1.0", "Maximum fraction of the HRU area that can be water.", "()", &Sd_water_frac_max);
 
@@ -19744,13 +19749,13 @@ void ClassREWroute::decl(void) {
 
   gwCnt = declgrpvar("WS_ALL_gwflow", "basingw", "query variable = 'basingw'", "(m^3/int)", &gwrew, &gw_All);
 
-  declvar("WS_gwinflow", NHRU, "inflow from each RB", "(m^3/int)", &gwinflow);
+  declvar("WS_gwinflow", NHRU, "gwinflow from each RB", "(m^3/int)", &gwinflow);
 
-  declstatdiag("cum_WSgwinflow", NHRU, "cumulative inflow from each RB", "(m^3)", &cumgwinflow);
+  declstatdiag("cum_WSgwinflow", NHRU, "cumulative gwinflow from each RB", "(m^3)", &cumgwinflow);
 
-  declvar("WS_gwoutflow", NHRU, "outflow of each RB", "(m^3/int)", &gwoutflow);
+  declvar("WS_gwoutflow", NHRU, "gwoutflow of each RB", "(m^3/int)", &gwoutflow);
 
-  declstatdiag("cum_WSgwoutflow", NHRU, "cumulative outflow of each RB", "(m^3)", &cumgwoutflow);
+  declstatdiag("cum_WSgwoutflow", NHRU, "cumulative gwoutflow of each RB", "(m^3)", &cumgwoutflow);
 
   declvar("WS_gwflow", BASIN, "watershed ground water outflow", "(m^3/int)", &gwflow);
 
@@ -19759,29 +19764,29 @@ void ClassREWroute::decl(void) {
   declstatdiag("cum_WSgwflow", BASIN, "cumulative watershed ground water outflow", "(m^3)", &cumgwflow);
 
 
-  declparam("WS_Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_Lag);
+  declparam("WS_Lag", NHRU, "[0.0]", "0.0","1.0E4.0", "inflow lag delay", "(h)", &WS_Lag);
 
-  declparam("WS_gwLag", NHRU, "[0.0]", "0.0","1.0E4.0", "lag delay", "(h)", &WS_gwLag);
+  declparam("WS_gwLag", NHRU, "[0.0]", "0.0","1.0E4.0", "gwinflow lag delay", "(h)", &WS_gwLag);
 
   declparam("WS_whereto", NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_whereto);
 
-  declparam("WS_order", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_order);
+  declparam("WS_order", NHRU, "1,2,3,4,5!", "1","1000", "RB outflow routing process order", "()", &WS_order);
 
-  declparam("WS_gwwhereto", NHRU, "[0]", "0", "1000", "0 - watershed outflow, or RB input", "()", &WS_gwwhereto);
+  declparam("WS_gwwhereto", NHRU, "[0]", "0", "1000", "0 - watershed gwoutflow, or RB input", "()", &WS_gwwhereto);
 
-  declparam("WS_gworder", NHRU, "1,2,3,4,5!", "1","1000", "RB routing process order", "()", &WS_gworder);
+  declparam("WS_gworder", NHRU, "1,2,3,4,5!", "1","1000", "RB gwoutflow routing process order", "()", &WS_gworder);
 
 
   variation_set = VARIATION_0;
 
-  decldiag("WS_Ktravel_var", NHRU, "inflow storage constant", "(d)", &WS_Ktravel_var);
+  decldiag("WS_Ktravel_var", NHRU, "inflow storage constant (Muskingum method)", "(d)", &WS_Ktravel_var);
 
-  decldiag("WS_gwKtravel_var", NHRU, "gw storage constant", "(d)", &WS_gwKtravel_var);
+  decldiag("WS_gwKtravel_var", NHRU, "gwinflow storage constant (Muskingum method)", "(d)", &WS_gwKtravel_var);
 
 
   declparam("WS_route_n", NHRU, "[0.025]", "0.016","0.2", "Manning roughness coefficient", "()", &WS_route_n);
 
-  declparam("WS_route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "()", &WS_route_R);
+  declparam("WS_route_R", NHRU, "[0.5]", "0.01","1.0E4", "hydraulic radius", "(m)", &WS_route_R);
 
   declparam("WS_route_S0", NHRU, "[1e-3]", "1e-6","1.0", "longitudinal channel slope", "()", &WS_route_S0);
 
@@ -19796,9 +19801,9 @@ void ClassREWroute::decl(void) {
 
   variation_set = VARIATION_1;
 
-  declparam("WS_Kstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_Kstorage);
+  declparam("WS_Kstorage", NHRU, "[0.0]", "0.0","200.0", "inflow storage constant for RB (Clark method)", "(d)", &WS_Kstorage);
 
-  declparam("WS_gwKstorage", NHRU, "[0.0]", "0.0","200.0", "Clark storage constant", "(d)", &WS_gwKstorage);
+  declparam("WS_gwKstorage", NHRU, "[0.0]", "0.0","200.0", "gwinflow storage constant for RB (Clark method)", "(d)", &WS_gwKstorage);
 
 
   variation_set = VARIATION_ORG;
@@ -20030,17 +20035,17 @@ void ClassXG::decl(void) {
 
   declvar("pt", NDEFN, "thawing ratios", "()", &pt, &pt_lay, Global::nlay);
 
-  declstatvar("ttc", NDEFN, "thawing thermal conductivity", "(W/(m*K)", &ttc, &ttc_lay, Global::nlay);
+  declstatvar("ttc", NDEFN, "thawing thermal conductivity", "(W/(m*K))", &ttc, &ttc_lay, Global::nlay);
 
-  declstatvar("ftc", NDEFN, "freezing thermal conductivity", "(W/(m*K)", &ftc, &ftc_lay, Global::nlay);
+  declstatvar("ftc", NDEFN, "freezing thermal conductivity", "(W/(m*K))", &ftc, &ftc_lay, Global::nlay);
 
   declstatvar("ttc_contents", NDEFN, "thawing 0/1 thaw/freeze", "()", &ttc_contents, &ttc_contents_lay, Global::nlay);
 
   declstatvar("ftc_contents", NDEFN, "freezing 0/1 freeze/thaw", "()", &ftc_contents, &ftc_contents_lay, Global::nlay);
 
-  declvar("tc_composite", NDEFN, "freeze/thaw composite ftc/ttc value", "(W/(m*K)", &tc_composite, &tc_composite_lay, Global::nlay);
+  declvar("tc_composite", NDEFN, "freeze/thaw composite ftc/ttc value", "(W/(m*K))", &tc_composite, &tc_composite_lay, Global::nlay);
 
-  declvar("tc_composite2", NDEFN, "freeze/thaw composite2 ftc/ttc value", "(W/(m*K)", &tc_composite2, &tc_composite2_lay, Global::nlay);
+  declvar("tc_composite2", NDEFN, "freeze/thaw composite2 ftc/ttc value", "(W/(m*K))", &tc_composite2, &tc_composite2_lay, Global::nlay);
 
   declvar("layer_h2o", NDEFN, "water content", "(kg/m^3)", &layer_h2o, &h2o_lay, Global::nlay);
 
@@ -20087,13 +20092,13 @@ void ClassXG::decl(void) {
 
   declparam("theta_min", NHRU, "[0.001]", "0.0001", "0.1", "minimum value of theta to prevent divide by zero errors)", "(m^3/m^3)", &theta_min);
 
-  declparam("soil_solid_km", NDEFN, "[2.5]", "0.03", "4", "dry soil thermal conductivity", "(W/(m*K)", &soil_solid_km, &soil_solid_km_lay, Global::nlay);
+  declparam("soil_solid_km", NDEFN, "[2.5]", "0.03", "4", "dry soil thermal conductivity", "(W/(m*K))", &soil_solid_km, &soil_solid_km_lay, Global::nlay);
 
-  declparam("soil_solid_km_ki", NDEFN, "[2.5]", "0.03", "4", "saturated frozen soil thermal conductivity", "(W/(m*K)", &soil_solid_km_ki, &soil_solid_km_ki_lay, Global::nlay);
+  declparam("soil_solid_km_ki", NDEFN, "[2.5]", "0.03", "4", "saturated frozen soil thermal conductivity", "(W/(m*K))", &soil_solid_km_ki, &soil_solid_km_ki_lay, Global::nlay);
 
-  declparam("soil_solid_km_kw", NDEFN, "[2.5]", "0.03", "4", "saturated unfrozen soil thermal conductivity.", "(W/(m*K)", &soil_solid_km_kw, &soil_solid_km_kw_lay, Global::nlay);
+  declparam("soil_solid_km_kw", NDEFN, "[2.5]", "0.03", "4", "saturated unfrozen soil thermal conductivity.", "(W/(m*K))", &soil_solid_km_kw, &soil_solid_km_kw_lay, Global::nlay);
 
-  declparam("SWE_k", NHRU, "[0.35]", "0.1", "1.0", "thermal conductivity of blowing snow.", "(W/(m*K)", &SWE_k);
+  declparam("SWE_k", NHRU, "[0.35]", "0.1", "1.0", "thermal conductivity of snow.", "(W/(m*K))", &SWE_k);
 
   declparam("Zdf_init", NHRU, "[0]", "0.0", "3", "initial depth of freezing front. Maximum value limited by freezing algorithm.", "(m)", &Zdf_init);
 
@@ -21052,25 +21057,25 @@ void ClassSoilX::decl(void) {
 
   declvar("infil_act_D", NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
 
-  declstatdiag("cum_gw_flow", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
+  declstatdiag("cum_gw_flow", NHRU, "cumulative groundwater flow from HRU groundwater reservoirs.", "(mm)", &cum_gw_flow);
 
-  declvar("soil_ssr", NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
+  declvar("soil_ssr", NHRU, "subsurface runoff from soil layers and depressional storage.", "(mm/int)", &soil_ssr);
 
-  declvar("rechr_ssr", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
+  declvar("rechr_ssr", NHRU, "subsurface runoff from soil recharge layer.", "(mm/int)", &rechr_ssr);
 
-  declstatdiag("cum_soil_ssr", NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
+  declstatdiag("cum_soil_ssr", NHRU, "cumulative subsurface runoff from layers and depressional storage.", "(mm)", &cum_soil_ssr);
 
-  declstatdiag("cum_rechr_ssr", NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
+  declstatdiag("cum_rechr_ssr", NHRU, "cumulative subsurface runoff from soil recharge layer.", "(mm)", &cum_rechr_ssr);
 
-  declvar("soil_ssr_D", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
+  declvar("soil_ssr_D", NHRU, "daily accumulation of soil_ssr.", "(mm/d)", &soil_ssr_D);
 
   declvar("soil_runoff", NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
 
   declstatdiag("cum_soil_runoff", NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
-  declvar("soil_runoff_D", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
+  declvar("soil_runoff_D", NHRU, "daily accumulation of soil_runoff.", "(mm/d)", &soil_runoff_D);
 
-  declstatdiag("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
+  declstatdiag("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm)", &cum_runoff_to_Sd);
 
   declstatdiag("cum_soil_gw", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
 
@@ -21081,7 +21086,7 @@ void ClassSoilX::decl(void) {
 
   decllocal("meltrunoff_buf", NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
 
-  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
+  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/int)", &hru_evap_buf);
 
   decllocal("soil_moist_Init", NHRU, "initial soil moisture.", "(mm)", &soil_moist_Init);
 
@@ -21124,11 +21129,11 @@ void ClassSoilX::decl(void) {
 
   declparam("rechr_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge. Modified by thaw_upper.", "(mm/d)", &rechr_ssr_K);
 
-  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column. Modified by thaw_lower.", "(mm/d)", &lower_ssr_K);
+  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from lower soil layer (soil_moist - soil_rechr). Modified by thaw_lower.", "(mm/d)", &lower_ssr_K);
 
-  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor. Modified by thaw_all.", "(mm/d)", &Sd_ssr_K);
+  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage factor from depression storage. Modified by thaw_all.", "(mm/d)", &Sd_ssr_K);
 
-  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
+  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily drainage factor to groundwater reservoir from depression storage.", "(mm/d)", &Sd_gw_K);
 
   declparam("soil_withdrawal", NDEFN, "[3]", "1", "4",
       "Select water withdrawal function for soil type: 1 = sand, 2 = loam, 3 = clay, 4 = organic. soil_withdrawal[1] - rechr layer, soil_withdrawal[2] - lower layer", "()",
@@ -22261,25 +22266,25 @@ void ClassSoilDS::decl(void) {
 
   declvar("infil_act_D", NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
 
-  declstatdiag("cum_gw_flow", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
+  declstatdiag("cum_gw_flow", NHRU, "cumulative groundwater flow from HRU groundwater reservoirs.", "(mm)", &cum_gw_flow);
 
-  declvar("soil_ssr", NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
+  declvar("soil_ssr", NHRU, "subsurface runoff from soil layers and depressional storage.", "(mm/int)", &soil_ssr);
 
-  declvar("rechr_ssr", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
+  declvar("rechr_ssr", NHRU, "subsurface runoff from soil recharge layer.", "(mm/int)", &rechr_ssr);
 
-  declstatdiag("cum_soil_ssr", NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
+  declstatdiag("cum_soil_ssr", NHRU, "cumulative subsurface runoff from layers and depressional storage.", "(mm)", &cum_soil_ssr);
 
-  declstatdiag("cum_rechr_ssr", NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
+  declstatdiag("cum_rechr_ssr", NHRU, "cumulative subsurface runoff from soil recharge layer.", "(mm)", &cum_rechr_ssr);
 
-  declvar("soil_ssr_D", NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
+  declvar("soil_ssr_D", NHRU, "daily accumulation of soil_ssr.", "(mm/d)", &soil_ssr_D);
 
   declvar("soil_runoff", NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
 
   declstatdiag("cum_soil_runoff", NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
-  declvar("soil_runoff_D", NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
+  declvar("soil_runoff_D", NHRU, "daily accumulation of soil_runoff.", "(mm/d)", &soil_runoff_D);
 
-  declstatdiag("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
+  declstatdiag("cum_runoff_to_Sd", NHRU, "Cumulative portion of runoff to depression storage.", "(mm)", &cum_runoff_to_Sd);
 
   declstatdiag("cum_soil_gw", NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
 
@@ -22290,7 +22295,7 @@ void ClassSoilDS::decl(void) {
 
   decllocal("meltrunoff_buf", NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
 
-  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
+  decllocal("hru_evap_buf", NHRU, "buffer evaporation.", "(mm/int)", &hru_evap_buf);
 
   decllocal("soil_moist_Init", NHRU, "initial soil moisture.", "(mm)", &soil_moist_Init);
 
@@ -22331,13 +22336,13 @@ void ClassSoilDS::decl(void) {
 
   declparam("gw_K", NHRU, "[0.0]", "0.", "100.0", "daily ground water drainage from gw reservoir.", "(mm/d)", &gw_K);
 
-  declparam("rechr_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge.", "(mm/d)", &rechr_ssr_K);
+  declparam("rechr_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge layer (soil_rechr).", "(mm/d)", &rechr_ssr_K);
 
-  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column.", "(mm/d)", &lower_ssr_K);
+  declparam("lower_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from lower soil layer (soil_moist - soil_rechr).", "(mm/d)", &lower_ssr_K);
 
-  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor.", "(mm/d)", &Sd_ssr_K);
+  declparam("Sd_ssr_K", NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage factor from depression storage.", "(mm/d)", &Sd_ssr_K);
 
-  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
+  declparam("Sd_gw_K", NHRU, "[0.0]", "0.", "100.0", "daily drainage factor to groundwater reservoir from depression storage.", "(mm/d)", &Sd_gw_K);
 
   declparam("soil_withdrawal", NDEFN, "[3]", "1", "4",
       "Select water withdrawal function for soil type: 1 = sand, 2 = loam, 3 = clay, 4 = organic. soil_withdrawal[1] - rechr layer, soil_withdrawal[2] - lower layer", "()",
@@ -23360,7 +23365,7 @@ void Classtsurface::decl(void) {
 
   declvar("hru_tsf_D", NHRU, "mean daily surface/skin temperature", "(°C)", &hru_tsf_D);
 
-  decldiag("hru_tsf_acc", NHRU, "mean daily surface/skin temperature", "(°C)", &hru_tsf_acc);
+  decldiag("hru_tsf_acc", NHRU, "temperature accumulator used to calculate the daily mean hru_tsfD", "(°C)", &hru_tsf_acc);
 
   declgetvar("*", "SWE", "(m)", &SWE);
 
@@ -23371,7 +23376,7 @@ void Classtsurface::decl(void) {
 
   decllocal("hru_T_s_D", NHRU, "mean daily surface/skin temperature", "(°C)", &hru_T_s_D);
 
-  decllocal("hru_T_s_acc", NHRU, "sum interval air temperature from previous day", "(°C)", &hru_T_s_acc);
+  decllocal("hru_T_s_acc", NHRU, "temperature accumulator used to calculate the previous daily mean snowpack temperature hru_T_s_D", "(°C)", &hru_T_s_acc);
 
   declgetvar("*", "z_s", "(m)", &z_s);
 
@@ -23386,7 +23391,7 @@ void Classtsurface::decl(void) {
 
   decllocal("hru_t_D", NHRU, "mean daily snowpack temperature from previous day", "(°C)", &hru_t_D);
 
-  decllocal("hru_t_acc", NHRU, "sum interval air temperature from previous day", "(°C)", &hru_t_acc);
+  decllocal("hru_t_acc", NHRU, "temperature accumulator used to calculate the previous daily air temperature hru_t_D", "(°C)", &hru_t_acc);
 
   declgetvar("*", "hru_tmin", "(°C)",   &tmin);
 
@@ -23425,7 +23430,7 @@ void Classtsurface::decl(void) {
 
   variation_set = VARIATION_2 + VARIATION_3 + VARIATION_4 + VARIATION_5;
 
-  declvar("SWE_tc", NHRU, "SWE thermal conductivity", "(W/(m*K)", &SWE_tc);
+  declvar("SWE_tc", NHRU, "SWE thermal conductivity", "(W/(m*K))", &SWE_tc);
 
   declvar("SWE_density", NHRU, "SWE density", "( kg/m^3)", &SWE_density);
 
@@ -24685,15 +24690,15 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declobs("Qnsn", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
 
-  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2*int)", &Qnsn_Var);
+  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn_Var);
 
   declobs("Qsisn", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn);
 
-  declvar("Qsisn_Var", NHRU, "incident short-wave at surface", "(W/m^2*int)", &Qsisn_Var);
+  declvar("Qsisn_Var", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn_Var);
 
   declobs("Qlisn", NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn);
 
-  declvar("Qlisn_Var", NHRU, "incident short-wave at surface", "(W/m^2*int)", &Qlisn_Var);
+  declvar("Qlisn_Var", NHRU, "incident short-wave at surface", "(W/m^2)", &Qlisn_Var);
 
   declobs("Qlosn", NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
 
@@ -24701,11 +24706,11 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   decldiag("k", NHRU, "extinction coefficient", "()", &k);
 
-  decldiag("Tauc", NHRU, "short-wave transmissivity", "(W/m^2)", &Tauc);
+  decldiag("Tauc", NHRU, "short-wave transmissivity", "()", &Tauc);
 
   decllocal("Pa", NHRU, "Average surface pressure", "(kPa)", &Pa);
 
-  declvar("ra", NHRU, "", "(s/m)", &ra);
+  declvar("ra", NHRU, "resistance", "(s/m)", &ra);
 
   declvar("drip_cpy", NHRU, "canopy drip", "(mm/int)", &drip_Cpy);
 
@@ -24713,11 +24718,11 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declvar("net_rain", NHRU, " direct_rain + drip", "(mm/int)", &net_rain);
 
-  declstatdiag("cum_net_rain", NHRU, " direct_rain + drip", "(mm)", &cum_net_rain);
+  declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
-  declstatdiag("cum_Subl_Cpy", NHRU, "canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
+  declstatdiag("cum_Subl_Cpy", NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
 
   decldiag("Pevap", NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
 
@@ -24725,7 +24730,7 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declstatvar("Snow_load", NHRU, "canopy snow load (timetep start)", "(mm)", &Snow_load);
 
-  declvar("direct_snow", NHRU, "snow 'direct' Thru", "(mm/int)", &direct_snow);
+  declvar("direct_snow", NHRU, "snow 'direct' through canopy", "(mm/int)", &direct_snow);
 
   declvar("SUnload", NHRU, "unloaded canopy snow", "(mm)", &SUnload);
 
@@ -24737,7 +24742,7 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declvar("net_snow", NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
 
-  declstatdiag("cum_net_snow", NHRU, "Cumulative Canopy unload ", "(mm)", &cum_net_snow);
+  declstatdiag("cum_net_snow", NHRU, "Cumulative hru_snow minus interception", "(mm)", &cum_net_snow);
 
   declvar("net_p", NHRU, "total precipitation after interception", "(mm/int)", &net_p);
 
@@ -24747,7 +24752,7 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declvar("intcp_evap", NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
 
-  declstatdiag("cum_intcp_evap", NHRU, "HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
+  declstatdiag("cum_intcp_evap", NHRU, "Cumulative HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
 
 
 // parameters:
@@ -24781,9 +24786,9 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declparam("CanopyClearing", NHRU, "[0]", "0", "1", "canopy - 0/clearing - 1", "()", &CanopyClearing);
 
-  decldiagparam("Alpha_c", NHRU, "[0.1]", "0.05", "0.2", "canopy albedo", "()", &Alpha_c);
+  decldiagparam("Alpha_c", NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
 
-  decldiagparam("B_canopy", NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
+  decldiagparam("B_canopy", NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter for longwave-radiation. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
 }
 
 void ClassCRHMCanopyClearing::init(void) {
@@ -25005,7 +25010,7 @@ void ClassCRHMCanopyClearing::run(void) {
           C1 = 1.0/(D*SvDens*Nu);
 
           Alpha = 5.0;
-          Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Radius*Radius*Radius *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
+          Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Radius*Radius*Radius; // 18Mar2022: remove Gamma Distribution Correction term, *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
 
   // sublimation rate of single 'ideal' ice sphere:
 
@@ -25041,8 +25046,8 @@ void ClassCRHMCanopyClearing::run(void) {
           float IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
           float Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
 
-          const float c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
-
+          const float U = -1*log(0.678)/(24*7*Global::Freq/24); // weekly dimensionless unloading coefficient -> to CRHM time interval
+                                                       // 21Mar2022 correction: invert the term 24/Global::Freq, use unloading rate coefficient U = -log(c)/t for snow unloading determined by inverse function of c = e^(-Ut) = 0.678 based on Eq. 14 in Hedstrom and Pomeroy (1998)
   // determine whether canopy snow is unloaded:
 
           if(IceBulbT >= unload_t_water[hh]){
@@ -25057,7 +25062,7 @@ void ClassCRHMCanopyClearing::run(void) {
             cum_SUnload[hh] += SUnload[hh];
           }
           else if(IceBulbT < unload_t[hh]){ // has to be at least one interval. Trip on half step
-            SUnload[hh] = Snow_load[hh]*c; // the dimensionless unloading coefficient already /interval
+            SUnload[hh] = Snow_load[hh]*U; // the dimensionless unloading coefficient already /interval, 21Mar2022 correction: use unloading rate coefficient U
             if(SUnload[hh] > Snow_load[hh]){
               SUnload[hh] = Snow_load[hh];
               Snow_load[hh] = 0.0;
@@ -25272,15 +25277,15 @@ void ClassCRHMCanopyClearingGap::decl(void) {
 
   declobs("Qnsn", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
 
-  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2*int)", &Qnsn_Var);
+  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn_Var);
 
   declobs("Qsisn", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn);
 
-  declvar("Qsisn_Var", NHRU, "incident short-wave at surface", "(W/m^2*int)", &Qsisn_Var);
+  declvar("Qsisn_Var", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn_Var);
 
   declobs("Qlisn", NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn);
 
-  declvar("Qlisn_Var", NHRU, "incident long-wave at surface", "(W/m^2*int)", &Qlisn_Var);
+  declvar("Qlisn_Var", NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn_Var);
 
   declobs("Qlosn", NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
 
@@ -25288,11 +25293,11 @@ void ClassCRHMCanopyClearingGap::decl(void) {
 
   decldiag("k", NHRU, "extinction coefficient", "()", &k);
 
-  decldiag("Tauc", NHRU, "short-wave transmissivity", "(W/m^2)", &Tauc);
+  decldiag("Tauc", NHRU, "short-wave transmissivity", "()", &Tauc);
 
   decllocal("Pa", NHRU, "Average surface pressure", "(kPa)", &Pa);
 
-  declvar("ra", NHRU, "", "(s/m)", &ra);
+  declvar("ra", NHRU, "resistance", "(s/m)", &ra);
 
   declvar("drip_cpy", NHRU, "canopy drip", "(mm/int)", &drip_Cpy);
 
@@ -25300,11 +25305,11 @@ void ClassCRHMCanopyClearingGap::decl(void) {
 
   declvar("net_rain", NHRU, " direct_rain + drip", "(mm/int)", &net_rain);
 
-  declstatdiag("cum_net_rain", NHRU, " direct_rain + drip", "(mm)", &cum_net_rain);
+  declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
-  declstatdiag("cum_Subl_Cpy", NHRU, "canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
+  declstatdiag("cum_Subl_Cpy", NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
 
   decldiag("Pevap", NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
 
@@ -25312,7 +25317,7 @@ void ClassCRHMCanopyClearingGap::decl(void) {
 
   declstatvar("Snow_load", NHRU, "canopy snow load (timetep start)", "(mm)", &Snow_load);
 
-  declvar("direct_snow", NHRU, "snow 'direct' Thru", "(mm/int)", &direct_snow);
+  declvar("direct_snow", NHRU, "snow 'direct' through canopy", "(mm/int)", &direct_snow);
 
   declvar("SUnload", NHRU, "unloaded canopy snow", "(mm)", &SUnload);
 
@@ -25324,7 +25329,7 @@ void ClassCRHMCanopyClearingGap::decl(void) {
 
   declvar("net_snow", NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
 
-  declstatdiag("cum_net_snow", NHRU, "Cumulative Canopy unload ", "(mm)", &cum_net_snow);
+  declstatdiag("cum_net_snow", NHRU, "Cumulative hru_snow minus interception", "(mm)", &cum_net_snow);
 
   declvar("net_p", NHRU, "total precipitation after interception", "(mm/int)", &net_p);
 
@@ -25334,7 +25339,7 @@ void ClassCRHMCanopyClearingGap::decl(void) {
 
   declvar("intcp_evap", NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
 
-  declstatdiag("cum_intcp_evap", NHRU, "HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
+  declstatdiag("cum_intcp_evap", NHRU, "Cumulative HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
 
 
 // parameters:
@@ -25372,9 +25377,9 @@ void ClassCRHMCanopyClearingGap::decl(void) {
 
   declparam("CanopyClearing", NHRU, "[0]", "0", "2", "canopy - 0/clearing - 1/gap - 2", "()", &CanopyClearing);
 
-  decldiagparam("Alpha_c", NHRU, "[0.1]", "0.05", "0.2", "canopy albedo", "()", &Alpha_c);
+  decldiagparam("Alpha_c", NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
 
-  decldiagparam("B_canopy", NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
+  decldiagparam("B_canopy", NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter for longwave-radiation. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
 }
 
 void ClassCRHMCanopyClearingGap::init(void) {
@@ -25663,7 +25668,7 @@ void ClassCRHMCanopyClearingGap::run(void){
           C1 = 1.0/(D*SvDens*Nu);
 
           Alpha = 5.0;
-          Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Radius*Radius*Radius *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
+          Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Radius*Radius*Radius; // 18Mar2022: remove Gamma Distribution Correction term, *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
 
 // sublimation rate of single 'ideal' ice sphere:
 
@@ -25699,8 +25704,8 @@ void ClassCRHMCanopyClearingGap::run(void){
           float IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
           float Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
 
-          const float c = 0.678/(24*7*24/Global::Freq); // weekly dimensionless unloading coefficient -> to CRHM time interval
-
+          const float U = -1*log(0.678)/(24*7*Global::Freq/24); // weekly dimensionless unloading coefficient -> to CRHM time interval
+                                                       // 21Mar2022 correction: invert the term 24/Global::Freq, use unloading rate coefficient U = -log(c)/t for snow unloading determined by inverse function of c = e^(-Ut) = 0.678 based on Eq. 14 in Hedstrom and Pomeroy (1998)
   // determine whether canopy snow is unloaded:
 
           if(IceBulbT >= unload_t_water[hh]){
@@ -25715,7 +25720,7 @@ void ClassCRHMCanopyClearingGap::run(void){
             cum_SUnload[hh] += SUnload[hh];
           }
           else if(IceBulbT < unload_t[hh]){ // has to be at least one interval. Trip on half step
-            SUnload[hh] = Snow_load[hh]*c; // the dimensionless unloading coefficient already /interval
+            SUnload[hh] = Snow_load[hh]*U; // the dimensionless unloading coefficient already /interval, 21Mar2022 correction: use unloading rate coefficient U
             if(SUnload[hh] > Snow_load[hh]){
               SUnload[hh] = Snow_load[hh];
               Snow_load[hh] = 0.0;
@@ -27019,11 +27024,11 @@ void Classglacier::decl(void){
 
   declstatdiag("cumicemelt", NHRU, "cumulative ice melt", "(mm)", &cumicemelt);
 
-  declstatvar("firn_dens", NDEFN, "densities of snow densification layers", "(kg/m^3)", &firn_dens, &firn_dens_array, Global::nlay);
+  declstatvar("firn_dens", NDEFN, "densities of firn layers", "(kg/m^3)", &firn_dens, &firn_dens_array, Global::nlay);
 
-  declstatvar("firn_h", NDEFN, "depths of snow densification layers", "(m)", &firn_h, &firn_h_array, Global::nlay);
+  declstatvar("firn_h", NDEFN, "depths of firn layers", "(m)", &firn_h, &firn_h_array, Global::nlay);
 
-  declstatvar("firn_yr", NDEFN, "layer[1] - years to 'critical density] and layer[2, ...] age of firn", "(yr)", &firn_yr, &firn_yr_array, Global::nlay);
+  declstatvar("firn_yr", NDEFN, "layer[1] - years to 'critical density' and layer[2, ...] age of firn", "(yr)", &firn_yr, &firn_yr_array, Global::nlay);
 
   decldiagparam("firn_dens_init", NDEFN, "[220.0]", "0.0", "1000.0", "initial densities of firn densification layers", "(kg/m^3)", &firn_dens_init, &firn_dens_array_init, Global::nlay);
 
@@ -27083,11 +27088,11 @@ void Classglacier::decl(void){
 
   declstatdiag("cumfirn_2ice", NHRU, "cumulative firn added to ice", "(mm)", &cumfirn_2ice);
 
-  declvar("Gnet_rainD", NHRU, "daily net rain", "(mm/d)", &Gnet_rainD);
+  declvar("Gnet_rainD", NHRU, "daily net rain calculated from net_rain", "(mm/d)", &Gnet_rainD);
 
   declvar("net_rain_org", NHRU, "value of 'net_rain' before addition of SWE, firn and ice melt", "(mm/int)", &net_rain_org);
 
-  declvar("cumnet_rain_org", NHRU, "value of 'net_rain' before addition of SWE, firn and ice melt", "(mm)", &cumnet_rain_org);
+  declvar("cumnet_rain_org", NHRU, "cumulative value of 'net_rain' before addition of SWE, firn and ice melt", "(mm)", &cumnet_rain_org);
 
 
   ObsCnt_Albedo = declreadobs("glacier_Albedo_obs", NHRU, "available Albedo observations", "()", &glacier_Albedo_obs, HRU_OBS_misc, true); // HRU_OBS_p_ppt HRU_OBS_misc HRU_OBS_Q HRU_OBS_u HRU_OBS_t_rh_ea
@@ -27177,7 +27182,7 @@ void Classglacier::decl(void){
 
   decldiagparam("tfactor", NHRU, "[0.0]", "0.0","10.0", "degree day melt factor", "(mm/d*°C)", &tfactor);
 
-  decldiagparam("nfactor", NHRU, "[0.0]", "0.0","10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ))", "(mm*m^2/MJ)", &nfactor);
+  decldiagparam("nfactor", NHRU, "[0.0]", "0.0","10.0", "net radiation factor (typical value 3.0(mm*m^2/MJ*d))", "(mm*m^2/MJ*d)", &nfactor);
 
   decldiagparam("Use_QnD", NHRU, "[0]", "0","1", "1 - Use QnD if available", "()", &Use_QnD);
 
@@ -27949,7 +27954,7 @@ void ClassSWEslope::decl(void) {
 
   declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
-  declparam("distrib_SWEslope", NDEFN, "[0.0]", "0.0", "1.0E6.0", "distribute this HRU iceflow to these HRUs. Source HRU can include itself in the re-distribution", "()", &distrib_SWEslope, &distrib_hru, nhru);
+  declparam("distrib_SWEslope", NDEFN, "[0.0]", "0.0", "1.0E6.0", "distribute SWE from this HRU to these HRUs. Source HRU can include itself in the re-distribution", "()", &distrib_SWEslope, &distrib_hru, nhru);
 
 
   declputvar("*", "SWE", "(mm)", &SWE);

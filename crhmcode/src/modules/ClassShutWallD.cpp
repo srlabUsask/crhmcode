@@ -35,15 +35,15 @@ ClassShutWallD* ClassShutWallD::klone(string name) const{
 
   declvar("Cs", TDim::NHRU, "substrate weighting coefficient", "()", &Cs);
 
-  decldiag("Ra", TDim::NHRU, "", "()", &Ra);
+  decldiag("Ra", TDim::NHRU, "aerodynamic resistance 'component", "(mb/K*s/m)", &Ra);
 
-  decldiag("Rc", TDim::NHRU, "", "()", &Rc);
+  decldiag("Rc", TDim::NHRU, "canopy stomatal resistance 'component'", "(mb/K*s/m)", &Rc);
 
-  decldiag("Rs", TDim::NHRU, "", "()", &Rs);
+  decldiag("Rs", TDim::NHRU, "soil surface resistance 'component'", "(mb/K*s/m)", &Rs);
 
-  decldiag("ETc", TDim::NHRU, "", "(mm/d)", &ETc);
+  decldiag("ETc", TDim::NHRU, "daily evaporation from canopy", "(mm/d)", &ETc);
 
-  decldiag("ETs", TDim::NHRU, "", "(mm/d)", &ETs);
+  decldiag("ETs", TDim::NHRU, "daily evaporation from soil surface", "(mm/d)", &ETs);
 
   decldiag("raa", TDim::NHRU, "aerodynamic resistance from canopy to reference height", "(s/m)", &raa);
 

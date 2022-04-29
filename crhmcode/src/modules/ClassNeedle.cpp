@@ -72,13 +72,13 @@ void ClassNeedle::decl(void) {
 
   decldiag("k", TDim::NHRU, "extinction coefficient", "()", &k);
 
-  decldiag("Tauc", TDim::NHRU, "short-wave transmissivity", "(W/m^2)", &Tauc);
+  decldiag("Tauc", TDim::NHRU, "short-wave transmissivity", "()", &Tauc);
 
   decllocal("Pa", TDim::NHRU, "Average surface pressure", "(kPa)", &Pa);
 
   declvar("ra", TDim::NHRU, "", "(s/m)", &ra);
 
-  declvar("Qnsn_Var", TDim::NHRU, "net all-wave at snow surface", "(W/m^2*int)", &Qnsn_Var);
+  declvar("Qnsn_Var", TDim::NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn_Var);
 
 
   declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);

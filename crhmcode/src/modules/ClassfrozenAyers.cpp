@@ -23,29 +23,29 @@ void ClassfrozenAyers::decl(void) {
 
   Description = "'Frozen soil infiltration Zhao and Gray (1999) and Ayers, (1959) for unfrozen soil.'";
 
-  declvar("infil", TDim::NHRU, "Potential rain infiltration", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU, "interval rain infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential rain infiltration", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative rain infiltration", "(mm)", &cuminfil);
 
-  declvar("snowinfil", TDim::NHRU, "melt infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "interval snowmelt infiltration", "(mm/int)", &snowinfil);
 
-  declstatvar("cumsnowinfil", TDim::NHRU, "cumulative melt infiltration", "(mm)", &cumsnowinfil); // for looping
+  declstatvar("cumsnowinfil", TDim::NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil); // for looping
 
-  declvar("cumsnowinfil_0", TDim::NHRU, "cumulative melt infiltration at beginning of frozen cycle", "(mm)", &cumsnowinfil_0); // for looping
+  declvar("cumsnowinfil_0", TDim::NHRU, "cumulative snowmelt infiltration at beginning of frozen cycle", "(mm)", &cumsnowinfil_0); // for looping
 
-  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "interval snowmelt runoff", "(mm/int)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative snowmelt runoff", "(mm)", &cummeltrunoff);
 
   declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  decllocal("t0_Var", TDim::NHRU, "t0 value used by module", "(h)", &t0_Var);
+  decllocal("t0_Var", TDim::NHRU, "value of infiltration opportunity time", "(h)", &t0_Var);
 
-  decllocal("t0_Acc", TDim::NHRU, "opportunity time", "(h)", &t0_Acc); // to reset every loop
+  decllocal("t0_Acc", TDim::NHRU, "infiltration opportunity time accumulator", "(h)", &t0_Acc); // to reset every loop
 
-  decllocal("INF", TDim::NHRU, "parametric calculation", "(mm)", &INF);
+  decllocal("INF", TDim::NHRU, "infiltration into a frozen soil calculated from parametric relationship", "(mm)", &INF);
 
   decllocal("Julian_window", TDim::ONE, "currently in Julian window handling frozen infiltration.", "()", &Julian_window);
 
@@ -80,10 +80,10 @@ void ClassfrozenAyers::decl(void) {
     "(mm)", &soil_moist_max);
 
   declparam("texture", TDim::NHRU, "[1]", "1","4",
-     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "(%)", &texture);
+     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "()", &texture);
 
   declparam("groundcover", TDim::NHRU, "[1]", "1","6",
-     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "(%)", &groundcover);
+     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "()", &groundcover);
 
   decldiagparam("t0_Julian", TDim::ONE, "[30]", "0","366", "value > 0 - inhibit frozen algorithm till after this Julian date, 0 - enable frozen algorithm immediately when melt criteria is met", "()", &t0_Julian);
 

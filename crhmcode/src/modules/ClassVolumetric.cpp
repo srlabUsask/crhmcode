@@ -23,11 +23,11 @@ void ClassVolumetric::decl(void) {
 
     Description = "'Converts soil moisture to volumetric equivalent and determines fall status.'";
 
-    declvar("Volumetric", TDim::NHRU, "volumetric soil moisture", "()", &Volumetric);
+    declvar("Volumetric", TDim::NHRU, "fractional volumetric soil moisture", "()", &Volumetric);
 
-    declvar("Volumetric_rechr", TDim::NHRU, "volumetric soil moisture in soil recharge zone", "()", &Volumetric_rechr); // 04/14/2020: adding option for updating Si or fallstat based on Volumetric moisture content in recharge layer
+    declvar("Volumetric_rechr", TDim::NHRU, "fractional volumetric soil moisture in soil recharge zone", "()", &Volumetric_rechr); // 04/14/2020: adding option for updating Si or fallstat based on Volumetric moisture content in recharge layer
 
-    declvar("fallstat_V", TDim::NHRU, "fallstat_V copy of parameter fallstat", "()", &fallstat_V);
+    declvar("fallstat_V", TDim::NHRU, "fallstat_V copy of parameter fallstat", "(%)", &fallstat_V);
 
     declvar("Si_V", TDim::NHRU, "Si_V copy of parameter Si", "()", &Si_V);
 
@@ -47,6 +47,8 @@ void ClassVolumetric::decl(void) {
     declparam("soil_Depth", TDim::NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
 
     declparam("Si_correction", TDim::NHRU, "[0.0]", "0.0", "1.0", "Si correction number", "()", &Si_correction);
+
+    declparam("fallstat_correction", TDim::NHRU, "[1.0]", "0.0", "10.0", "fallstat correction factor", "()", &fallstat_correction); // 08/11/2021
 
     declparam("set_fallstat", TDim::NHRU, "[305]", "0", "366", "set fallstat on this Julian date", "()", &set_fallstat);
 
@@ -120,6 +122,11 @@ void ClassVolumetric::run(void) {
                     else
                     {
                         fallstat[hh] = Volumetric[hh] / SetSoilproperties[soil_type[hh]][3] * 100000.0; // ie 100*1000
+                    }
+
+                    if (fallstat_correction[hh] >= 0.0) // fallstat_correction added 08/11/2021
+                    {
+                        fallstat[hh] = fallstat[hh] * fallstat_correction[hh]; 
                     }
                 }
                 else
