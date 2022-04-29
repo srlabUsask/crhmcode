@@ -29,6 +29,7 @@ void ParametersDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
 	ON_LBN_SELCHANGE(ID_PARAM_DLG_MODULES_LIST_BOX, &ParametersDlg::OnSelectModule)
+	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_BASIC_BTN, &ParametersDlg::OnToggleBasic)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_ALL_BTN, &ParametersDlg::OnToggleAll)
 END_MESSAGE_MAP()
 
@@ -192,6 +193,62 @@ void ParametersDlg::OnSelectModule()
 	}
 
 }
+
+void ParametersDlg::OnToggleBasic()
+{
+	// Create a array of bools the size of the number 
+	//     of parameters in the list box all set to false.
+	int itemCount = this->parameters_list_box.GetCount();
+	bool* toggles = new bool[itemCount];
+	for (int i = 0; i < itemCount; i++)
+	{
+		toggles[i] = false;
+	}
+
+	// Set the toggles of the selected parameters to true.
+	int selectedCount = this->parameters_list_box.GetSelCount();
+	int* selectedIndicies = new int[selectedCount];
+	this->parameters_list_box.GetSelItems(selectedCount, selectedIndicies);
+	for (int i = 0; i < selectedCount; i++)
+	{
+		toggles[selectedIndicies[i]] = true;
+	}
+
+	// Reverse all the toggles that corrispond to basic parameters.
+	for (int i = 0; i < itemCount; i++)
+	{
+		CString selectedText;
+		this->parameters_list_box.GetText(i, selectedText);
+		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
+		std::string selectedString(pszConvertedAnsiString);
+
+		std::map<std::string, ClassPar*>::iterator parameterIt = Global::MapPars.find(selectedString);
+
+		if (parameterIt->second->visibility == TVISIBLE::USUAL)
+		{
+			if (toggles[i])
+			{
+				toggles[i] = false;
+			}
+			else
+			{
+				toggles[i] = true;
+			}
+		}
+
+	}
+
+	// Set the parameters list box based on the toggles array.
+	for (int i = 0; i < itemCount; i++)
+	{
+		this->parameters_list_box.SetSel(i, toggles[i]);
+	}
+
+	// Remove the temporary arrays.
+	delete[] selectedIndicies;
+	delete[] toggles;
+}
+
 
 void ParametersDlg::OnToggleAll()
 {
