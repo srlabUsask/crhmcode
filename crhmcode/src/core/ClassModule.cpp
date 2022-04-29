@@ -819,9 +819,20 @@ std::vector<std::string> * ClassModule::declparam(
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decldiagparam(string param, TDim dimen,
-	string valstr, string minstr, string maxstr,
-	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
+void ClassModule::decldiagparam(
+	string param, 
+	TDim dimen,
+	string valstr, 
+	string minstr, 
+	string maxstr,
+	string help, 
+	string units, 
+	const double **value, 
+	const double ***layvalue, 
+	const int dim, 
+	TVISIBLE Local
+) 
+{
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
