@@ -93,25 +93,25 @@ void ClassSoilPrairie::decl(void) {
 
     declvar("infil_act_D", TDim::NHRU, "Daily actual amount of water infiltrating the soil on each HRU.", "(mm/d)", &infil_act_D);
 
-    declstatdiag("cum_gw_flow", TDim::NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_gw_flow);
+    declstatdiag("cum_gw_flow", TDim::NHRU, "cumulative groundwater flow from HRU groundwater reservoirs.", "(mm)", &cum_gw_flow);
 
-    declvar("soil_ssr", TDim::NHRU, "Portion of soil moisture and recharge excess from a HRU that enters subsurface reservoirs.", "(mm/int)", &soil_ssr);
+    declvar("soil_ssr", TDim::NHRU, "subsurface runoff from soil layers and depressional storage.", "(mm/int)", &soil_ssr);
 
-    declvar("rechr_ssr", TDim::NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/int)", &rechr_ssr);
+    declvar("rechr_ssr", TDim::NHRU, "subsurface runoff from soil recharge layer.", "(mm/int)", &rechr_ssr);
 
-    declstatdiag("cum_soil_ssr", TDim::NHRU, "Accumulation of soil moisture from a HRU to ssr.", "(mm)", &cum_soil_ssr);
+    declstatdiag("cum_soil_ssr", TDim::NHRU, "cumulative subsurface runoff from layers and depressional storage.", "(mm)", &cum_soil_ssr);
 
-    declstatdiag("cum_rechr_ssr", TDim::NHRU, "Accumulation of Portion of excess from a HRU to ssr.", "(mm)", &cum_rechr_ssr);
+    declstatdiag("cum_rechr_ssr", TDim::NHRU, "cumulative subsurface runoff from soil recharge layer.", "(mm)", &cum_rechr_ssr);
 
-    declvar("soil_ssr_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters subsurface reservoirs.", "(mm/d)", &soil_ssr_D);
+    declvar("soil_ssr_D", TDim::NHRU, "daily accumulation of soil_ssr.", "(mm/d)", &soil_ssr_D);
 
     declvar("soil_runoff", TDim::NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
 
     declstatdiag("cum_soil_runoff", TDim::NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
-    declvar("soil_runoff_D", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/d)", &soil_runoff_D);
+    declvar("soil_runoff_D", TDim::NHRU, "daily accumulation of soil_runoff.", "(mm/d)", &soil_runoff_D);
 
-    decldiag("cum_runoff_to_Sd", TDim::NHRU, "Cumulative portion of runoff to depression storage.", "(mm/int)", &cum_runoff_to_Sd);
+    decldiag("cum_runoff_to_Sd", TDim::NHRU, "Cumulative portion of runoff to depression storage.", "(mm)", &cum_runoff_to_Sd);
 
     decldiag("cum_soil_gw", TDim::NHRU, "Accumulation of excess soil water from a HRU that enters groundwater reservoirs.", "(mm)", &cum_soil_gw);
 
@@ -130,7 +130,7 @@ void ClassSoilPrairie::decl(void) {
 
     decllocal("meltrunoff_buf", TDim::NHRU, "buffer melt runoff.", "(mm/d)", &meltrunoff_buf);
 
-    decllocal("hru_evap_buf", TDim::NHRU, "buffer evaporation.", "(mm/d)", &hru_evap_buf);
+    decllocal("hru_evap_buf", TDim::NHRU, "buffer evaporation.", "(mm/int)", &hru_evap_buf);
 
     decllocal("hru_evap_PT_buf", TDim::NHRU, "Priestley-Taylor buffer evaporation", "(mm/d)", &hru_evap_PT_buf);
 
@@ -173,13 +173,13 @@ void ClassSoilPrairie::decl(void) {
 
     declparam("gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ground water drainage from gw reservoir.", "(mm/d)", &gw_K);
 
-    declparam("rechr_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge.", "(mm/d)", &rechr_ssr_K);
+    declparam("rechr_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from recharge layer (soil_rechr).", "(mm/d)", &rechr_ssr_K);
 
-    declparam("lower_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from soil column.", "(mm/d)", &lower_ssr_K);
+    declparam("lower_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage from lower soil layer (soil_moist - soil_rechr).", "(mm/d)", &lower_ssr_K);
 
-    declparam("Sd_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily depression storage ssr drainage factor.", "(mm/d)", &Sd_ssr_K);
+    declparam("Sd_ssr_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily ssr drainage factor from depression storage.", "(mm/d)", &Sd_ssr_K);
 
-    declparam("Sd_gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily depression storage gw drainage.", "(mm/d)", &Sd_gw_K);
+    declparam("Sd_gw_K", TDim::NHRU, "[0.0]", "0.", "100.0", "daily drainage factor to groundwater reservoir from depression storage.", "(mm/d)", &Sd_gw_K);
 
     declparam("Sd_water_frac_max", TDim::NHRU, "[0.24]", "0.0", "1.0", "Maximum fraction of the HRU area that can be water.", "()", &Sd_water_frac_max);
 

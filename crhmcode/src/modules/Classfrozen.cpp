@@ -24,27 +24,27 @@ void Classfrozen::decl(void) {
 
   Description = "'Frozen soil infiltration Zhao and Gray (1999).'";
 
-  declvar("infil", TDim::NHRU, "Potential rain infiltration", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU, "interval rain infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential rain infiltration", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative rain infiltration", "(mm)", &cuminfil);
 
-  declvar("snowinfil", TDim::NHRU, "melt infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "interval snowmelt infiltration", "(mm/int)", &snowinfil);
 
   declstatvar("cumsnowinfil", TDim::NHRU, "cumulative melt infiltration", "(mm)", &cumsnowinfil); // for looping
 
-  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "interval snowmelt runoff", "(mm/int)", &meltrunoff);
 
   declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
 
-  declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", TDim::NHRU, "interval rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  decllocal("t0_Var", TDim::NHRU, "t0 value used by module", "(h)", &t0_Var);
+  decllocal("t0_Var", TDim::NHRU, "value of infiltration opportunity time", "(h)", &t0_Var);
 
-  decllocal("t0_Acc", TDim::NHRU, "opportunity time", "(h)", &t0_Acc); // to reset every loop
+  decllocal("t0_Acc", TDim::NHRU, "infiltration opportunity time accumulator", "(h)", &t0_Acc); // to reset every loop
 
-  decllocal("INF", TDim::NHRU, "parametric calculation", "(mm)", &INF);
+  decllocal("INF", TDim::NHRU, "infiltration into a frozen soil calculated from parametric relationship", "(mm)", &INF);
 
   decllocal("Julian_window", TDim::ONE, "currently in Julian window handling frozen infiltration.", "()", &Julian_window);
 

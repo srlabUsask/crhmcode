@@ -23,19 +23,19 @@ void Classcrack::decl(void) {
 
   Description = "'Handles frozen soil infiltration using Granger et al. 1984; Gray et al., 1986.'";
 
-  declvar("snowinfil", TDim::NHRU, "infiltration", "(mm/d)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "daily snowmelt infiltration", "(mm/d)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/d)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "daily melt runoff", "(mm/d)", &meltrunoff);
 
   declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
 
-  declvar("infil", TDim::NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU,"interval rainfall infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative rainfall infiltration", "(mm)", &cuminfil);
 
-  declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", TDim::NHRU, "interval rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
@@ -53,7 +53,7 @@ void Classcrack::decl(void) {
   declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
   declparam("fallstat", TDim::NHRU, "[50.0]", "-1.0","100.0",
-     "fall status 0.0 - unlimited/ 100.0 - restricted/ other - limited", "(%)", &fallstat);
+     "fall soil saturation status 0.0 - unlimited/ 100.0 - restricted/ other - limited", "(%)", &fallstat);
 
   decldiagparam("Major", TDim::NHRU, "[5]", "1", "100", "threshold for major melt", "(mm/d)", &Major);
 
