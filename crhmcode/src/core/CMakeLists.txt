@@ -34,7 +34,7 @@ add_library(core OBJECT
     CRHM_parse.cpp
     CRHMArguments.cpp
     CRHMLogger.cpp
-    CRHMMain.cpp
+    CRHMmain.cpp
     GlobalDll.cpp
     MacroClass.cpp
     MacroUnit.cpp
@@ -51,6 +51,7 @@ add_dependencies(core spdlog exec def filter)
 target_include_directories(core PUBLIC
     #Gets the SPDLOG headers
     "${STAGING_DIR}/include/"
+    "${PROJECT_SOURCE_DIR}/libs/spdlog/include"
     #Configuration needed to access ACTIVE_LOG_LEVEL
     "${PROJECT_SOURCE_DIR}/crhmConfig.h"
     #Boost headers required by CRHM_parse

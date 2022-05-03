@@ -4,7 +4,7 @@ add_subdirectory(waterquality)
 #create modules object libary
 add_library(modules OBJECT
     Class_z_s_rho.cpp
-    Class3D_Param.cpp
+    Class3D_param.cpp
     Classalbedo.cpp
     ClassalbedoBaker.cpp
     Classalbedoobs.cpp
@@ -49,7 +49,7 @@ add_library(modules OBJECT
     Classlake.cpp
     ClassLongVt.cpp
     ClassMeltRunoff_Kstorage.cpp
-    ClassMeltRunoff_lag.cpp
+    ClassMeltRunoff_Lag.cpp
     ClassMod_Exec.cpp
     ClassNeedle.cpp
     Classnetall.cpp

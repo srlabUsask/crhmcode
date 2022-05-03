@@ -2,5 +2,5 @@
 
 mkdir build
 cd ./build
-cmake ../
+cmake ../ -DSTAGING_DIR=.
 make install

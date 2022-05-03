@@ -24,17 +24,17 @@ void Classnetall::decl(void) {
 
   Description = "'Models net all-wave radiation (Rn, RnD and RnD_POS) from sunshine hours, temperature and humidity using Brunt.'";
 
-  declvar("net", TDim::NHRU, "all-wave net", "(MJ/m^2*int)", &net);
+  declvar("net", TDim::NHRU, "net all-wave radiation over time step", "(MJ/m^2*int)", &net);
 
-  decldiag("Rn", TDim::NHRU, "all-wave net", "(mm/m^2*int)", &Rn);
+  decldiag("Rn", TDim::NHRU, "net all-wave radiation over time step", "(mm/m^2*int)", &Rn);
 
-  declvar("netD", TDim::NHRU, "all-wave net", "(MJ/m^2*d)", &netD);
+  declvar("netD", TDim::NHRU, "net all-wave radiation per day", "(MJ/m^2*d)", &netD);
 
-  declvar("RnD", TDim::NHRU, "all-wave net", "(mm/m^2*d)", &RnD);
+  declvar("RnD", TDim::NHRU, "net all-wave radiation per day", "(mm/m^2*d)", &RnD);
 
-  decldiag("RnD_POS", TDim::NHRU, "Sum of Positive all-wave net", "(mm/m^2*d)", &RnD_POS);
+  decldiag("RnD_POS", TDim::NHRU, "Sum of positive net all-wave radiation per day", "(mm/m^2*d)", &RnD_POS);
 
-  declstatdiag("cum_net", TDim::NHRU, "cumulative all-wave net", "(MJ/m^2)", &cum_net);
+  declstatdiag("cum_net", TDim::NHRU, "cumulative net all-wave radiation", "(MJ/m^2)", &cum_net);
 
 
   declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);

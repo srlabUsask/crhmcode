@@ -24,19 +24,19 @@ void ClassGreencrack::decl(void) {
 
   Description = "'Handles summer using Green Ampt and frozen soil infiltration using Granger et al. 1984; Gray et al., 1986.'";
 
-  declvar("infil", TDim::NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU,"interval rainfall infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative rainfall infiltration", "(mm)", &cuminfil);
 
-  declvar("snowinfil", TDim::NHRU, "infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "daily snowmelt infiltration", "(mm/d)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", TDim::NHRU, "interval rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "daily snowmelt runoff", "(mm/d)", &meltrunoff);
 
   declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
 
@@ -49,21 +49,21 @@ void ClassGreencrack::decl(void) {
 
   decllocal("RainOnSnowA", TDim::NHRU, "accumulated rain on snow", "(mm)", &RainOnSnowA);
 
-  decllocal("k", TDim::NHRU, "(mm/h)", "()", &k);
+  decllocal("k", TDim::NHRU, "saturated hydraulic conductivity", "(mm/h)", &k);
 
-  decllocal("F0", TDim::NHRU, "last HRU cumulative infiltration", "(mm)", &F0);
+  decllocal("F0", TDim::NHRU, "cumulative infiltation at the beginning of the time interval", "(mm)", &F0);
 
-  decllocal("f0", TDim::NHRU, "", "(mm/h)", &f0);
+  decllocal("f0", TDim::NHRU, "infiltration rate at the beginning of the time interval", "(mm/h)", &f0);
 
-  decllocal("F1", TDim::NHRU, "HRU cumulative infiltration", "(mm)", &F1);
+  decllocal("F1", TDim::NHRU, "cumulative infiltration at the end of the time interval", "(mm)", &F1);
 
-  decllocal("f1", TDim::NHRU, "", "(mm/h)", &f1);
+  decllocal("f1", TDim::NHRU, "infiltration rate at the end of the time interval", "(mm/h)", &f1);
 
-  decllocal("dthbot", TDim::NHRU, "", "()", &dthbot);
+  decllocal("dthbot", TDim::NHRU, "fraction value of soil water deficit", "()", &dthbot);
 
-  decllocal("psidthbot", TDim::NHRU, "", "(mm)", &psidthbot);
+  decllocal("psidthbot", TDim::NHRU, "capillary suction at the fraction value of soil water deficit", "(mm)", &psidthbot);
 
-  decllocal("timer", TDim::NHRU, "", "(d)", &timer);
+  decllocal("timer", TDim::NHRU, "indicator for limited infiltration case during Major melt infiltration", "(d)", &timer);
 
 
   declparam("basin_area", TDim::BASIN, "3", "1e-6", "1e+09", "total basin area", "(km^2)", &basin_area);

@@ -23,17 +23,17 @@ void ClassPrairieInfil::decl(void) {
 
   Description = "'Handles frozen soil infiltration using Granger et al. 1984; Gray et al., 1986 and Ayers, 1959 for unfrozen soil.'";
 
-  declvar("snowinfil", TDim::NHRU, "infiltration", "(mm/d)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "daily snowmelt infiltration", "(mm/d)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/d)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "daily melt runoff", "(mm/d)", &meltrunoff);
 
   declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
 
-  declvar("infil", TDim::NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU,"interval rainfall infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative rainfall  infiltration", "(mm)", &cuminfil);
 
   declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
 
@@ -53,7 +53,7 @@ void ClassPrairieInfil::decl(void) {
   declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
   declparam("fallstat", TDim::NHRU, "[50.0]", "-1.0","100.0",
-     "fall status 0.0 - unlimited/ 100.0 - restricted/ other - limited", "(%)", &fallstat);
+     "fall soil saturation status 0.0 - unlimited/ 100.0 - restricted/ other - limited", "(%)", &fallstat);
 
   declparam("Major", TDim::NHRU, "[5]", "1", "100", "threshold for major melt", "(mm/d)", &Major);
 
@@ -62,10 +62,10 @@ void ClassPrairieInfil::decl(void) {
   decldiagparam("infDays", TDim::NHRU, "[6]", "0", "20", " maximum number of days of snowmelt infiltration to frozen soil ", "(d)", &infDays);
 
   declparam("texture", TDim::NHRU, "[1]", "1","4",
-     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "(%)", &texture);
+     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "()", &texture);
 
   declparam("groundcover", TDim::NHRU, "[1]", "1","6",
-     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "(%)", &groundcover);
+     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "()", &groundcover);
 
   declgetvar("*",  "hru_tmax", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmax);
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmelt);

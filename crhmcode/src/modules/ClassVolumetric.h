@@ -10,6 +10,7 @@ ClassVolumetric(string Name, string Version = "undefined", LMODULE Lvl = LMODULE
 // declared parameters
 const double *soil_Depth{ NULL };
 const double *Si_correction{ NULL };
+const double* fallstat_correction{ NULL };
 const double *soil_moist_max{ NULL };
 const double *soil_rechr_max{ NULL };
 const long *soil_type{ NULL };

@@ -23,21 +23,21 @@ void ClassAyers::decl(void) {
 
   Description = "'Uses Ayers, 1959 for unfrozen soil. Snow is assumed to melt immediately on contact with the ground.'";
 
-  declvar("infil", TDim::NHRU,"Potential amount of water infiltrating the soil on each HRU", "(mm/int)", &infil);
+  declvar("infil", TDim::NHRU,"interval rainfall infiltration", "(mm/int)", &infil);
 
-  declstatdiag("cuminfil", TDim::NHRU, "cumulative potential infiltration on each HRU", "(mm)", &cuminfil);
+  declstatdiag("cuminfil", TDim::NHRU, "cumulative rainfall infiltration", "(mm)", &cuminfil);
 
-  declvar("runoff", TDim::NHRU, "rainfall runoff", "(mm/int)", &runoff);
+  declvar("runoff", TDim::NHRU, "interval rainfall runoff", "(mm/int)", &runoff);
 
   declstatdiag("cumrunoff", TDim::NHRU, "cumulative rainfall runoff", "(mm)", &cumrunoff);
 
-  declvar("snowinfil", TDim::NHRU, "infiltration", "(mm/int)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "interval snowmelt infiltration", "(mm/int)", &snowinfil);
 
-  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative infiltration", "(mm)", &cumsnowinfil);
+  declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil);
 
-  declvar("meltrunoff", TDim::NHRU, "melt runoff", "(mm/int)", &meltrunoff);
+  declvar("meltrunoff", TDim::NHRU, "interval snowmelt runoff", "(mm/int)", &meltrunoff);
 
-  declstatdiag("cummeltrunoff", TDim::NHRU, "melt runoff", "(mm)", &cummeltrunoff);
+  declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative snowmelt runoff", "(mm)", &cummeltrunoff);
 
   decllocal("melt_int", TDim::NHRU, "interval melt from snowmelD", "(mm/int)", &melt_int);
 
@@ -46,10 +46,10 @@ void ClassAyers::decl(void) {
   declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
   declparam("texture", TDim::NHRU, "[1]", "1","4",
-     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "(%)", &texture);
+     "texture: 1 - coarse/medium over coarse, 2 - medium over medium, 3 - medium/fine over fine, 4 - soil over shallow bedrock.", "()", &texture);
 
   declparam("groundcover", TDim::NHRU, "[1]", "1","6",
-     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "(%)", &groundcover);
+     "groundcover: 1 - bare soil, 2 - row crop, 3 - poor pasture, 4 - small grains, 5 - good pasture, 6 - forested.", "()", &groundcover);
 
   declgetvar("*",  "net_rain", "(mm/int)", &net_rain);
 

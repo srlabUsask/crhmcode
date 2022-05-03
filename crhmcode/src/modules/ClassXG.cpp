@@ -53,17 +53,17 @@ void ClassXG::decl(void) {
 
   declvar("pt", TDim::NDEFN, "thawing ratios", "()", &pt, &pt_lay, Global::nlay);
 
-  declstatvar("ttc", TDim::NDEFN, "thawing thermal conductivity", "(W/(m*K)", &ttc, &ttc_lay, Global::nlay);
+  declstatvar("ttc", TDim::NDEFN, "thawing thermal conductivity", "(W/(m*K))", &ttc, &ttc_lay, Global::nlay);
 
-  declstatvar("ftc", TDim::NDEFN, "freezing thermal conductivity", "(W/(m*K)", &ftc, &ftc_lay, Global::nlay);
+  declstatvar("ftc", TDim::NDEFN, "freezing thermal conductivity", "(W/(m*K))", &ftc, &ftc_lay, Global::nlay);
 
   declstatvar("ttc_contents", TDim::NDEFN, "thawing 0/1 thaw/freeze", "()", &ttc_contents, &ttc_contents_lay, Global::nlay);
 
   declstatvar("ftc_contents", TDim::NDEFN, "freezing 0/1 freeze/thaw", "()", &ftc_contents, &ftc_contents_lay, Global::nlay);
 
-  declvar("tc_composite", TDim::NDEFN, "freeze/thaw composite ftc/ttc value", "(W/(m*K)", &tc_composite, &tc_composite_lay, Global::nlay);
+  declvar("tc_composite", TDim::NDEFN, "freeze/thaw composite ftc/ttc value", "(W/(m*K))", &tc_composite, &tc_composite_lay, Global::nlay);
 
-  declvar("tc_composite2", TDim::NDEFN, "freeze/thaw composite2 ftc/ttc value", "(W/(m*K)", &tc_composite2, &tc_composite2_lay, Global::nlay);
+  declvar("tc_composite2", TDim::NDEFN, "freeze/thaw composite2 ftc/ttc value", "(W/(m*K))", &tc_composite2, &tc_composite2_lay, Global::nlay);
 
   declvar("layer_h2o", TDim::NDEFN, "water content", "(kg/m^3)", &layer_h2o, &h2o_lay, Global::nlay);
 
@@ -110,13 +110,13 @@ void ClassXG::decl(void) {
 
   declparam("theta_min", TDim::NHRU, "[0.001]", "0.0001", "0.1", "minimum value of theta to prevent divide by zero errors)", "(m^3/m^3)", &theta_min);
 
-  declparam("soil_solid_km", TDim::NDEFN, "[2.5]", "0.03", "4", "dry soil thermal conductivity", "(W/(m*K)", &soil_solid_km, &soil_solid_km_lay, Global::nlay);
+  declparam("soil_solid_km", TDim::NDEFN, "[2.5]", "0.03", "4", "dry soil thermal conductivity", "(W/(m*K))", &soil_solid_km, &soil_solid_km_lay, Global::nlay);
 
-  declparam("soil_solid_km_ki", TDim::NDEFN, "[2.5]", "0.03", "4", "saturated frozen soil thermal conductivity", "(W/(m*K)", &soil_solid_km_ki, &soil_solid_km_ki_lay, Global::nlay);
+  declparam("soil_solid_km_ki", TDim::NDEFN, "[2.5]", "0.03", "4", "saturated frozen soil thermal conductivity", "(W/(m*K))", &soil_solid_km_ki, &soil_solid_km_ki_lay, Global::nlay);
 
-  declparam("soil_solid_km_kw", TDim::NDEFN, "[2.5]", "0.03", "4", "saturated unfrozen soil thermal conductivity.", "(W/(m*K)", &soil_solid_km_kw, &soil_solid_km_kw_lay, Global::nlay);
+  declparam("soil_solid_km_kw", TDim::NDEFN, "[2.5]", "0.03", "4", "saturated unfrozen soil thermal conductivity.", "(W/(m*K))", &soil_solid_km_kw, &soil_solid_km_kw_lay, Global::nlay);
 
-  declparam("SWE_k", TDim::NHRU, "[0.35]", "0.1", "1.0", "thermal conductivity of blowing snow.", "(W/(m*K)", &SWE_k);
+  declparam("SWE_k", TDim::NHRU, "[0.35]", "0.1", "1.0", "thermal conductivity of snow.", "(W/(m*K))", &SWE_k);
 
   declparam("Zdf_init", TDim::NHRU, "[0]", "0.0", "3", "initial depth of freezing front. Maximum value limited by freezing algorithm.", "(m)", &Zdf_init);
 
