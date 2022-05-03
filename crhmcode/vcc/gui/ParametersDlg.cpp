@@ -31,6 +31,7 @@ BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
 	ON_LBN_SELCHANGE(ID_PARAM_DLG_MODULES_LIST_BOX, &ParametersDlg::OnSelectModule)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_BASIC_BTN, &ParametersDlg::OnToggleBasic)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_ADVANCE_BTN, &ParametersDlg::OnToggleAdvance)
+	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_PRIVATE_BTN, &ParametersDlg::OnTogglePrivate)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_ALL_BTN, &ParametersDlg::OnToggleAll)
 END_MESSAGE_MAP()
 
@@ -298,7 +299,7 @@ void ParametersDlg::OnToggleAdvance()
 		toggles[selectedIndicies[i]] = true;
 	}
 
-	// Reverse all the toggles that corrispond to basic parameters.
+	// Reverse all the toggles that corrispond to advance parameters.
 	for (int i = 0; i < itemCount; i++)
 	{
 		CString selectedText;
@@ -337,6 +338,89 @@ void ParametersDlg::OnToggleAdvance()
 		std::map<std::string, ClassPar*>::iterator parameterIt = Global::MapPars.find(selectedParameter);
 
 		if (parameterIt->second->visibility == TVISIBLE::DIAGNOSTIC)
+		{
+			if (toggles[i])
+			{
+				toggles[i] = false;
+			}
+			else
+			{
+				toggles[i] = true;
+			}
+		}
+
+	}
+
+	// Set the parameters list box based on the toggles array.
+	for (int i = 0; i < itemCount; i++)
+	{
+		this->parameters_list_box.SetSel(i, toggles[i]);
+	}
+
+	// Remove the temporary arrays.
+	delete[] selectedIndicies;
+	delete[] toggles;
+}
+
+void ParametersDlg::OnTogglePrivate()
+{
+	// Create a array of bools the size of the number 
+	//     of parameters in the list box all set to false.
+	int itemCount = this->parameters_list_box.GetCount();
+	bool* toggles = new bool[itemCount];
+	for (int i = 0; i < itemCount; i++)
+	{
+		toggles[i] = false;
+	}
+
+	// Set the toggles of the selected parameters to true.
+	int selectedCount = this->parameters_list_box.GetSelCount();
+	int* selectedIndicies = new int[selectedCount];
+	this->parameters_list_box.GetSelItems(selectedCount, selectedIndicies);
+	for (int i = 0; i < selectedCount; i++)
+	{
+		toggles[selectedIndicies[i]] = true;
+	}
+
+	// Reverse all the toggles that corrispond to advance parameters.
+	for (int i = 0; i < itemCount; i++)
+	{
+		CString selectedText;
+		this->parameters_list_box.GetText(i, selectedText);
+		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
+		std::string selectedParameter(pszConvertedAnsiString);
+
+
+		if (selectedParameter.find("*") != std::string::npos)
+		{
+			// Shared Parameter: remove shared asterix and add Shared prefix
+			selectedParameter = selectedParameter.substr(1, std::string::npos);
+			selectedParameter = "Shared " + selectedParameter;
+		}
+		else
+		{
+			// Get the selected module CString
+			CString moduleText;
+			int moduleIndex = this->modules_list_box.GetCurSel();
+			this->modules_list_box.GetText(moduleIndex, moduleText);
+
+			// Convert the CString to std::string 
+			CT2CA pszConvertedAnsiString(moduleText);
+			std::string moduleString(pszConvertedAnsiString);
+
+			// Remove module variation suffix from moduleString
+			int suffPos;
+			if (suffPos = moduleString.find("#"), suffPos > -1)
+			{
+				moduleString = moduleString.substr(0, moduleString.length() - 2);
+			}
+
+			selectedParameter = moduleString + " " + selectedParameter;
+		}
+
+		std::map<std::string, ClassPar*>::iterator parameterIt = Global::MapPars.find(selectedParameter);
+
+		if (parameterIt->second->visibility == TVISIBLE::PRIVATE)
 		{
 			if (toggles[i])
 			{
