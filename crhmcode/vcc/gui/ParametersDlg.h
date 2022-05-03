@@ -48,6 +48,13 @@ private:
 	afx_msg void OnToggleBasic();
 
 	/**
+	* Handler for when the Toggle Advance button is pressed.
+	*
+	* Will switch the selected/unselected state of all advance Parameters in the Parameters List Box.
+	*/
+	afx_msg void OnToggleAdvance();
+
+	/**
 	* Handler for when the Toggle All button is pressed.
 	*
 	* Will switch the selected/unselected state of all Parameters in the Parameters List Box.
