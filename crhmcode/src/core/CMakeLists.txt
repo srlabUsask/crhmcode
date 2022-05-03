@@ -44,6 +44,7 @@ add_library(core OBJECT
     StandardConverterUtility.cpp
     Tresult.cpp
     VarCHRM.cpp
+    InstrumentLogger.cpp
 )
 
 add_dependencies(core spdlog exec def filter)

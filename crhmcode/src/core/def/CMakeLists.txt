@@ -17,4 +17,6 @@ add_library(def OBJECT
 target_include_directories(def PUBLIC
     #boost headers required
     "${PROJECT_SOURCE_DIR}/${LOCAL_BOOST_LOCATION}"
+    "${PROJECT_SOURCE_DIR}/core"
+    "${PROJECT_SOURCE_DIR}/libs/spdlog/include"
 )

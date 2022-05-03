@@ -19,3 +19,8 @@ add_library(waterquality OBJECT
     WQ_CRHM.cpp
     WQ_Soil_NPCcycling.cpp
 )
+
+target_include_directories(waterquality PUBLIC
+    "${PROJECT_SOURCE_DIR}/core"
+    "${PROJECT_SOURCE_DIR}/libs/spdlog/include"
+)

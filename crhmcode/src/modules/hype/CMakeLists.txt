@@ -8,4 +8,6 @@ add_library(hype OBJECT
 target_include_directories(hype PUBLIC
     ../
     ../../libs/boost_1_75_0
+    "${PROJECT_SOURCE_DIR}/core"
+    "${PROJECT_SOURCE_DIR}/libs/spdlog/include"
 )

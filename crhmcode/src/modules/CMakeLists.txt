@@ -99,3 +99,9 @@ add_library(modules OBJECT
 )
 
 add_dependencies(modules newmodules waterquality)
+
+
+target_include_directories(modules PUBLIC
+    "${PROJECT_SOURCE_DIR}/core"
+    "${PROJECT_SOURCE_DIR}/libs/spdlog/include"
+)
