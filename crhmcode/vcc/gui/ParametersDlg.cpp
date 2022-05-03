@@ -220,9 +220,37 @@ void ParametersDlg::OnToggleBasic()
 		CString selectedText;
 		this->parameters_list_box.GetText(i, selectedText);
 		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
-		std::string selectedString(pszConvertedAnsiString);
+		std::string selectedParameter(pszConvertedAnsiString);
 
-		std::map<std::string, ClassPar*>::iterator parameterIt = Global::MapPars.find(selectedString);
+		
+		if (selectedParameter.find("*") != std::string::npos)
+		{
+			// Shared Parameter: remove shared asterix and add Shared prefix
+			selectedParameter = selectedParameter.substr(1, std::string::npos);
+			selectedParameter = "Shared " + selectedParameter;
+		}
+		else
+		{
+			// Get the selected module CString
+			CString moduleText;
+			int moduleIndex = this->modules_list_box.GetCurSel();
+			this->modules_list_box.GetText(moduleIndex, moduleText);
+
+			// Convert the CString to std::string 
+			CT2CA pszConvertedAnsiString(moduleText);
+			std::string moduleString(pszConvertedAnsiString);
+
+			// Remove module variation suffix from moduleString
+			int suffPos;
+			if (suffPos = moduleString.find("#"), suffPos > -1)
+			{
+				moduleString = moduleString.substr(0, moduleString.length() - 2);
+			}
+
+			selectedParameter = moduleString + " " + selectedParameter;
+		}
+
+		std::map<std::string, ClassPar*>::iterator parameterIt = Global::MapPars.find(selectedParameter);
 
 		if (parameterIt->second->visibility == TVISIBLE::USUAL)
 		{
