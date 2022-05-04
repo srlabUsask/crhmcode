@@ -10,7 +10,7 @@ IMPLEMENT_DYNAMIC(ParametersDlg, CDialog)
 ParametersDlg::ParametersDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(PARAMETERS_DLG, pParent)
 {
-
+	this->prameters_scroll_pane = NULL;
 }
 
 
@@ -48,6 +48,17 @@ BOOL ParametersDlg::OnInitDialog()
 	*/
 	this->modules_list_box.SetHorizontalExtent(1000);
 	this->parameters_list_box.SetHorizontalExtent(1000);
+
+	/**
+	* Replace the placeholder pane with the parameters scroll pane.
+	*/
+	this->prameters_scroll_pane = new ParamDlgScrollablePane(this);
+
+	CRect rectangle;
+	GetDlgItem(ID_PARAM_PANE_PLACEHOLDER)->GetWindowRect(rectangle);
+	ScreenToClient(&rectangle);
+
+	this->prameters_scroll_pane->MoveWindow(rectangle);
 
 	return TRUE;
 }

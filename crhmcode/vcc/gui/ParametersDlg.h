@@ -1,4 +1,5 @@
 #pragma once
+#include "ParamDlgScrollablePane.h"
 
 #include "../../src/core/CRHMmain.h"
 #include "../../src/core/ClassMacro.h"
@@ -32,6 +33,8 @@ private:
 	* The list changes based on the selection in the modules_list_box 
 	*/
 	CListBox parameters_list_box;
+
+	ParamDlgScrollablePane* prameters_scroll_pane;
 
 	/**
 	* Handler for when the selection in the modules_list_box changes.
