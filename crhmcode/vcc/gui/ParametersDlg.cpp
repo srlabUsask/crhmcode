@@ -53,11 +53,9 @@ BOOL ParametersDlg::OnInitDialog()
 	* Replace the placeholder pane with the parameters scroll pane.
 	*/
 	this->prameters_scroll_pane = new ParamDlgScrollablePane(this);
-
 	CRect rectangle;
 	GetDlgItem(ID_PARAM_PANE_PLACEHOLDER)->GetWindowRect(rectangle);
 	ScreenToClient(&rectangle);
-
 	this->prameters_scroll_pane->MoveWindow(rectangle);
 
 	return TRUE;

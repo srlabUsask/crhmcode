@@ -34,6 +34,9 @@ private:
 	*/
 	CListBox parameters_list_box;
 
+	/**
+	* Scrollable pane that contains the individual parameter cards.
+	*/
 	ParamDlgScrollablePane* prameters_scroll_pane;
 
 	/**

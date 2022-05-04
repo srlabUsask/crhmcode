@@ -5,8 +5,8 @@ ParamDlgScrollablePane::ParamDlgScrollablePane(CWnd* pParent /*=NULL*/)
 	: CDialog(ParamDlgScrollablePane::IDD, pParent)
 {
 	Create(ParamDlgScrollablePane::IDD,pParent);
-	this->m_nScrollPos = 0;
-	this->m_nCurHeight = 0;
+	this->scroll_position = 0;
+	this->pane_height = 0;
 }
 
 
@@ -18,8 +18,8 @@ void ParamDlgScrollablePane::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(ParamDlgScrollablePane, CDialog)
 	ON_WM_VSCROLL()
-	ON_WM_SIZE()
 	ON_WM_MOUSEWHEEL()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -28,10 +28,10 @@ BOOL ParamDlgScrollablePane::OnInitDialog()
 	CDialog::OnInitDialog();
 	
 	// save the original size
-	GetWindowRect(m_rcOriginalRect);
+	GetWindowRect(original_rectangle);
 
 	// initial scroll position
-	m_nScrollPos = 0; 
+	scroll_position = 0; 
 	
 	return TRUE;
 }
@@ -40,43 +40,43 @@ BOOL ParamDlgScrollablePane::OnInitDialog()
 void ParamDlgScrollablePane::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	int nDelta;
-	int nMaxPos = m_rcOriginalRect.Height() - m_nCurHeight;
+	int nMaxPos = original_rectangle.Height() - pane_height;
 
 	switch (nSBCode)
 	{
 	case SB_LINEDOWN:
-		if (m_nScrollPos >= nMaxPos)
+		if (scroll_position >= nMaxPos)
 			return;
 
-		nDelta = min(max(nMaxPos/20,5),nMaxPos-m_nScrollPos);
+		nDelta = min(max(nMaxPos/20,5),nMaxPos-scroll_position);
 		break;
 
 	case SB_LINEUP:
-		if (m_nScrollPos <= 0)
+		if (scroll_position <= 0)
 			return;
-		nDelta = -min(max(nMaxPos/20,5),m_nScrollPos);
+		nDelta = -min(max(nMaxPos/20,5),scroll_position);
 		break;
 	case SB_PAGEDOWN:
-		if (m_nScrollPos >= nMaxPos)
+		if (scroll_position >= nMaxPos)
 			return;
-		nDelta = min(max(nMaxPos/10,5),nMaxPos-m_nScrollPos);
+		nDelta = min(max(nMaxPos/10,5),nMaxPos-scroll_position);
 		break;
 	case SB_THUMBTRACK:
 	case SB_THUMBPOSITION:
-		nDelta = (int)nPos - m_nScrollPos;
+		nDelta = (int)nPos - scroll_position;
 		break;
 
 	case SB_PAGEUP:
-		if (m_nScrollPos <= 0)
+		if (scroll_position <= 0)
 			return;
-		nDelta = -min(max(nMaxPos/10,5),m_nScrollPos);
+		nDelta = -min(max(nMaxPos/10,5),scroll_position);
 		break;
 	
 		 default:
 		return;
 	}
-	m_nScrollPos += nDelta;
-	SetScrollPos(SB_VERT,m_nScrollPos,TRUE);
+	scroll_position += nDelta;
+	SetScrollPos(SB_VERT,scroll_position,TRUE);
 	ScrollWindow(0,-nDelta);
 	CDialog::OnVScroll(nSBCode, nPos, pScrollBar);
 }
@@ -86,13 +86,13 @@ void ParamDlgScrollablePane::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 
-	m_nCurHeight = cy;
+	pane_height = cy;
 
 	SCROLLINFO si{};
 	si.cbSize = sizeof(SCROLLINFO);
 	si.fMask = SIF_ALL; 
 	si.nMin = 0;
-	si.nMax = m_rcOriginalRect.Height();
+	si.nMax = original_rectangle.Height();
 	si.nPage = cy;
 	si.nPos = 0;
 	SetScrollInfo(SB_VERT, &si, TRUE); 	
@@ -102,27 +102,27 @@ void ParamDlgScrollablePane::OnSize(UINT nType, int cx, int cy)
 
 BOOL ParamDlgScrollablePane::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-	int nMaxPos = m_rcOriginalRect.Height() - m_nCurHeight;
+	int nMaxPos = original_rectangle.Height() - pane_height;
 
 	if (zDelta<0)
 	{
-		if (m_nScrollPos < nMaxPos)
+		if (scroll_position < nMaxPos)
 		{
-			zDelta = min(max(nMaxPos/20,5),nMaxPos-m_nScrollPos);
+			zDelta = min(max(nMaxPos/20,5),nMaxPos-scroll_position);
 
-			m_nScrollPos += zDelta;
-			SetScrollPos(SB_VERT,m_nScrollPos,TRUE);
+			scroll_position += zDelta;
+			SetScrollPos(SB_VERT,scroll_position,TRUE);
 			ScrollWindow(0,-zDelta);
 		}
 	}
 	else
 	{
-		if (m_nScrollPos > 0)
+		if (scroll_position > 0)
 		{
-			zDelta = -min(max(nMaxPos/20,5),m_nScrollPos);
+			zDelta = -min(max(nMaxPos/20,5),scroll_position);
 
-			m_nScrollPos += zDelta;
-			SetScrollPos(SB_VERT,m_nScrollPos,TRUE);
+			scroll_position += zDelta;
+			SetScrollPos(SB_VERT,scroll_position,TRUE);
 			ScrollWindow(0,-zDelta);
 		}
 	}
