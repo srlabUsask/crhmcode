@@ -46,6 +46,8 @@ private:
 	*/
 	afx_msg void OnSelectModule();
 
+	afx_msg void OnSelectParam();
+
 	/**
 	* Handler for when the Toggle Basic button is pressed.
 	*

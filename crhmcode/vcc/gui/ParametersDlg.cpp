@@ -29,6 +29,7 @@ void ParametersDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
 	ON_LBN_SELCHANGE(ID_PARAM_DLG_MODULES_LIST_BOX, &ParametersDlg::OnSelectModule)
+	ON_LBN_SELCANCEL(ID_PARAM_DLG_PARAM_LIST_BOX, &ParametersDlg::OnSelectParam)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_BASIC_BTN, &ParametersDlg::OnToggleBasic)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_ADVANCE_BTN, &ParametersDlg::OnToggleAdvance)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_PRIVATE_BTN, &ParametersDlg::OnTogglePrivate)
@@ -203,6 +204,53 @@ void ParametersDlg::OnSelectModule()
 
 	}
 
+}
+
+void ParametersDlg::OnSelectParam()
+{
+	// Iterate through the selected parameters
+	int selectedCount = this->parameters_list_box.GetSelCount();
+	int* selectedIndicies = new int[selectedCount];
+	this->parameters_list_box.GetSelItems(selectedCount, selectedIndicies);
+	for (int i = 0; i < selectedCount; i++)
+	{
+		// Extract the string of the parameter
+		CString selectedParamText;
+		this->parameters_list_box.GetText(selectedIndicies[i], selectedParamText);
+		CT2CA pszConvertedAnsiString(selectedParamText); //Intermediary to convert CString to std::string
+		std::string selectedParameter(pszConvertedAnsiString);
+
+		// Remove the * from a shared parameter
+		if (selectedParameter.find("*") != std::string::npos)
+		{
+			selectedParameter = selectedParameter.substr(1, std::string::npos);
+			selectedParameter = "Shared " + selectedParameter;
+		}
+		else
+		{
+			// Get the selected module CString
+			CString moduleText;
+			int moduleIndex = this->modules_list_box.GetCurSel();
+			this->modules_list_box.GetText(moduleIndex, moduleText);
+
+			// Convert the CString to std::string 
+			CT2CA pszConvertedAnsiString(moduleText);
+			std::string moduleString(pszConvertedAnsiString);
+
+			// Remove module variation suffix from moduleString
+			int suffPos;
+			if (suffPos = moduleString.find("#"), suffPos > -1)
+			{
+				moduleString = moduleString.substr(0, moduleString.length() - 2);
+			}
+
+			selectedParameter = moduleString + " " + selectedParameter;
+		}
+
+		 
+	}
+
+	delete[] selectedIndicies;
 }
 
 void ParametersDlg::OnToggleBasic()
