@@ -53,6 +53,7 @@ void ParamDlgScrollablePane::SetParameterCards(std::list<std::pair<std::string, 
 		this->AddCard(it);
 	}
 
+	this->ResizeWindow();
 }
 
 
@@ -75,8 +76,6 @@ void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 {
 	CRect cardRect;
 	this->CalculateCardLocation(&cardRect);
-
-	this->ResizeWindow();
 
 	ParamDlgCard * newCard = new ParamDlgCard(data->second, this);
 	newCard->MoveWindow(cardRect);
@@ -107,25 +106,54 @@ void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle)
 void ParamDlgScrollablePane::ResizeWindow()
 {
 
-	this->current_rectangle.InflateRect(0, 250);
+	if (this->cards.size() == 0)
+	{
+		this->current_rectangle.CopyRect(original_rectangle);
 
-	this->SetWindowPos(
-		this->GetParent(),
-		current_rectangle.TopLeft().x,
-		current_rectangle.TopLeft().y,
-		current_rectangle.Width(),
-		current_rectangle.Height(),
-		SWP_SHOWWINDOW
-	);
+		this->SetWindowPos(
+			this->GetParent(),
+			current_rectangle.TopLeft().x,
+			current_rectangle.TopLeft().y,
+			current_rectangle.Width(),
+			current_rectangle.Height(),
+			SWP_SHOWWINDOW
+		);
 
-	SCROLLINFO si{};
-	si.cbSize = sizeof(SCROLLINFO);
-	si.fMask = SIF_ALL;
-	si.nMin = 0;
-	si.nMax = current_rectangle.Height();
-	si.nPage = original_rectangle.Height();
-	si.nPos = 0;
-	SetScrollInfo(SB_VERT, &si, TRUE);
+		SCROLLINFO si{};
+		si.cbSize = sizeof(SCROLLINFO);
+		si.fMask = SIF_ALL;
+		si.nMin = 0;
+		si.nMax = current_rectangle.Height();
+		si.nPage = original_rectangle.Height();
+		si.nPos = 0;
+		SetScrollInfo(SB_VERT, &si, TRUE);
+
+	}
+	else
+	{
+		size_t cardsFactor = this->cards.size();
+
+		current_rectangle.BottomRight().y = original_rectangle.BottomRight().y + (cardsFactor * 250);
+
+		this->SetWindowPos(
+			this->GetParent(),
+			current_rectangle.TopLeft().x,
+			current_rectangle.TopLeft().y,
+			current_rectangle.Width(),
+			current_rectangle.Height(),
+			SWP_SHOWWINDOW
+		);
+
+		SCROLLINFO si{};
+		si.cbSize = sizeof(SCROLLINFO);
+		si.fMask = SIF_ALL;
+		si.nMin = 0;
+		si.nMax = current_rectangle.Height();
+		si.nPage = original_rectangle.Height();
+		si.nPos = 0;
+		SetScrollInfo(SB_VERT, &si, TRUE);
+
+	}
 
 }
 
