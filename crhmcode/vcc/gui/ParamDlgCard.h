@@ -1,9 +1,11 @@
 #pragma once
 
 #include <afxwin.h>
-#include "../resource.h"
-
 #include <string>
+
+#include "../resource.h"
+#include "../../src/core/ClassPar.h"
+
 
 class ParamDlgCard : public CDialog
 {
@@ -30,7 +32,7 @@ private:
 	*/
 	int	pane_height;
 
-	std::string text;
+	ClassPar * parameter;
 
 	
 
@@ -38,11 +40,11 @@ public:
 	/*
 	* Standard constructor
 	*/
-	ParamDlgCard(std::string test, CWnd* pParent = NULL );
+	ParamDlgCard(ClassPar * param, CWnd* pParent = NULL );
 
 	CEdit param_label;
 
-	void SetValues();
+	void InitalizeValues();
 
 protected:
 

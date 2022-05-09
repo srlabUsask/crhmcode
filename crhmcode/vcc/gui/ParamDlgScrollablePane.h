@@ -1,7 +1,13 @@
 #pragma once
 
 #include <afxwin.h>
+#include <list>
+#include <string>
+
+
 #include "../resource.h"
+#include "../../src/core/ClassPar.h"
+#include "ParamDlgCard.h"
 
 class ParamDlgScrollablePane : public CDialog
 {
@@ -16,6 +22,8 @@ private:
 	*/
 	CRect original_rectangle;
 
+	CRect current_rectangle;
+
 	/**
 	* Tracks the scroll position of the pane.
 	*/
@@ -26,11 +34,19 @@ private:
 	*/
 	int	pane_height;
 
+	std::vector<ParamDlgCard*> cards;
+
+	void CalculateCardLocation(CRect*);
+
+	void ResizeWindow();
+
 public:
 	/*
 	* Standard constructor
 	*/
 	ParamDlgScrollablePane(CWnd* pParent = NULL);
+
+	void UpdateParametersCards(std::list<std::pair<std::string, ClassPar*>>* parametersList);
 
 protected:
 
@@ -43,6 +59,11 @@ protected:
 	* Initalize the dialog
 	*/
 	virtual BOOL OnInitDialog();
+
+	void RemoveAllCards();
+
+	void AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data);
+
 
 	/**
 	* Handles vertical scrolling by use of the scroll bar.

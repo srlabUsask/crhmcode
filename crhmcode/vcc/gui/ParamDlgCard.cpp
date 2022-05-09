@@ -1,13 +1,13 @@
 #include "ParamDlgCard.h"
 
 
-ParamDlgCard::ParamDlgCard(std::string testStr, CWnd* pParent /*=NULL*/ )
+ParamDlgCard::ParamDlgCard(ClassPar * param, CWnd* pParent /*=NULL*/ )
 	: CDialog(ParamDlgCard::IDD, pParent)
 {
 	Create(ParamDlgCard::IDD,pParent);
 	this->scroll_position = 0;
 	this->pane_height = 0;
-	this->text = testStr;
+	this->parameter = param;
 }
 
 
@@ -39,11 +39,9 @@ BOOL ParamDlgCard::OnInitDialog()
 	return TRUE;
 }
 
-void ParamDlgCard::SetValues()
+void ParamDlgCard::InitalizeValues()
 {
-	CString infoText(this->text.c_str());
-
-	SetDlgItemText(ID_PARAM_HELP, (LPCTSTR)infoText);
+	
 }
 
 void ParamDlgCard::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)

@@ -29,7 +29,7 @@ void ParametersDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
 	ON_LBN_SELCHANGE(ID_PARAM_DLG_MODULES_LIST_BOX, &ParametersDlg::OnSelectModule)
-	ON_LBN_SELCANCEL(ID_PARAM_DLG_PARAM_LIST_BOX, &ParametersDlg::OnSelectParam)
+	ON_LBN_SELCHANGE(ID_PARAM_DLG_PARAM_LIST_BOX, &ParametersDlg::OnSelectParam)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_BASIC_BTN, &ParametersDlg::OnToggleBasic)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_ADVANCE_BTN, &ParametersDlg::OnToggleAdvance)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_PRIVATE_BTN, &ParametersDlg::OnTogglePrivate)
@@ -208,6 +208,9 @@ void ParametersDlg::OnSelectModule()
 
 void ParametersDlg::OnSelectParam()
 {
+	// Declare list to store parameter information in.
+	std::list<std::pair<std::string, ClassPar*>> * parametersList = new std::list<std::pair<std::string, ClassPar*>>();
+
 	// Iterate through the selected parameters
 	int selectedCount = this->parameters_list_box.GetSelCount();
 	int* selectedIndicies = new int[selectedCount];
@@ -247,10 +250,16 @@ void ParametersDlg::OnSelectParam()
 			selectedParameter = moduleString + " " + selectedParameter;
 		}
 
-		 
+		std::map<std::string, ClassPar*>::iterator parameterIt = Global::MapPars.find(selectedParameter);
+		
+		parametersList->push_back(std::pair<std::string, ClassPar*>(parameterIt->first, parameterIt->second));
+
 	}
 
+	this->prameters_scroll_pane->UpdateParametersCards(parametersList);
+
 	delete[] selectedIndicies;
+	delete parametersList;
 }
 
 void ParametersDlg::OnToggleBasic()
