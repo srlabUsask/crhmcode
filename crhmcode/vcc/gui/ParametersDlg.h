@@ -46,6 +46,11 @@ private:
 	*/
 	afx_msg void OnSelectModule();
 
+	/**
+	* Handler for when the selection in the parameters_list_box changes.
+	* 
+	* Dispaches a call to create the appropreate parameter cards.
+	*/
 	afx_msg void OnSelectParam();
 
 	/**

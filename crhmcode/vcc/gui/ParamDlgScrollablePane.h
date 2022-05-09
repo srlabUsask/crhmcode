@@ -4,7 +4,6 @@
 #include <list>
 #include <string>
 
-
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
 #include "ParamDlgCard.h"
@@ -12,17 +11,25 @@
 class ParamDlgScrollablePane : public CDialog
 {
 private:
-	/*
+	/**
 	* Defines the resource assoicated with this class.
 	*/
 	enum { IDD = PARAMETERS_DLG_SCROLL_PANE };
 
-	/*
+	/**
 	* CRect object representing the original size of the inserted pane.
 	*/
 	CRect original_rectangle;
 
+	/**
+	* CRect object representing the current size of the pane.
+	*/
 	CRect current_rectangle;
+
+	/**
+	* Vector of ParamDlgCard references that holds the currently rendered parameter cards.
+	*/
+	std::vector<ParamDlgCard*> cards;
 
 	/**
 	* Tracks the scroll position of the pane.
@@ -34,19 +41,39 @@ private:
 	*/
 	int	pane_height;
 
-	std::vector<ParamDlgCard*> cards;
+	/**
+	* Renders a parameter card. 
+	* 
+	* @param data - std::list<std::pair<std::string, ClassPar*>>::iterator the data for the parameter card to render.
+	*/
+	void AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data);
 
-	void CalculateCardLocation(CRect*);
+	/**
+	* Removes all of the rendered parameter cards.
+	*/
+	void RemoveAllCards();
+
+	/**
+	* Calculate the location to place the next parameter card.
+	* 
+	* @param rectangle - CRect* a reference to the CRect object to set to the location where to place the card.
+	*/
+	void CalculateCardLocation(CRect* rectangle);
 
 	void ResizeWindow();
 
 public:
-	/*
+	/**
 	* Standard constructor
 	*/
 	ParamDlgScrollablePane(CWnd* pParent = NULL);
 
-	void UpdateParametersCards(std::list<std::pair<std::string, ClassPar*>>* parametersList);
+	/**
+	* Sets the rendered parameter cards to the passed in list of parameters.
+	* 
+	* @param parametersList - std::list<std::pair<std::string, ClassPar*>>* list of parameters to render.
+	*/
+	void SetParameterCards(std::list<std::pair<std::string, ClassPar*>>* parametersList);
 
 protected:
 
@@ -59,11 +86,6 @@ protected:
 	* Initalize the dialog
 	*/
 	virtual BOOL OnInitDialog();
-
-	void RemoveAllCards();
-
-	void AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data);
-
 
 	/**
 	* Handles vertical scrolling by use of the scroll bar.

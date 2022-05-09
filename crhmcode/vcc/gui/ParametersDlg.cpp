@@ -256,7 +256,8 @@ void ParametersDlg::OnSelectParam()
 
 	}
 
-	this->prameters_scroll_pane->UpdateParametersCards(parametersList);
+	// Create the parameters cards to match the selected parameters.
+	this->prameters_scroll_pane->SetParameterCards(parametersList);
 
 	delete[] selectedIndicies;
 	delete parametersList;

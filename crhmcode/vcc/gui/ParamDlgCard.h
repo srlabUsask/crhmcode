@@ -15,8 +15,6 @@ private:
 	*/
 	enum { IDD = PARAMETERS_CARD };
 
-	
-
 	/*
 	* CRect object representing the original size of the inserted pane.
 	*/
@@ -33,8 +31,6 @@ private:
 	int	pane_height;
 
 	ClassPar * parameter;
-
-	
 
 public:
 	/*

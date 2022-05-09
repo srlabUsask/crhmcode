@@ -38,10 +38,12 @@ BOOL ParamDlgScrollablePane::OnInitDialog()
 }
 
 
-void ParamDlgScrollablePane::UpdateParametersCards(std::list<std::pair<std::string, ClassPar*>>* parametersList)
+void ParamDlgScrollablePane::SetParameterCards(std::list<std::pair<std::string, ClassPar*>>* parametersList)
 {
+	// Remove all of the existing cards
 	this->RemoveAllCards();
 
+	// Render a card for each parameter in the passed in list
 	for (
 		std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList->begin();
 		it != parametersList->end();
@@ -85,7 +87,7 @@ void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 }
 
 
-void ParamDlgScrollablePane::CalculateCardLocation(CRect* rect)
+void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle)
 {
 	size_t offsetFactor = this->cards.size();
 
@@ -94,10 +96,10 @@ void ParamDlgScrollablePane::CalculateCardLocation(CRect* rect)
 	int botX = this->current_rectangle.BottomRight().x - 50;
 	int botY = topY + 240;
 
-	rect->TopLeft().x = topX;
-	rect->TopLeft().y = topY;
-	rect->BottomRight().x = botX;
-	rect->BottomRight().y = botY;
+	rectangle->TopLeft().x = topX;
+	rectangle->TopLeft().y = topY;
+	rectangle->BottomRight().x = botX;
+	rectangle->BottomRight().y = botY;
 
 }
 
