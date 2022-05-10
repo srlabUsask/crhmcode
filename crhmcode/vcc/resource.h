@@ -72,6 +72,7 @@
 #define IDC_BUTTON6                     1014
 #define IDC_TCHART1                     1015
 #define IDC_EDIT1                       1018
+#define IDC_EDIT4                       1019
 #define IDC_CHECK1                      1023
 #define IDC_CHECK2                      1024
 #define IDC_CHECK3                      1025
@@ -289,6 +290,8 @@
 #define ID_PARAM_MIN_VALUE              60010
 #define ID_PARAM_MAX_VALUE              60011
 #define ID_PARAM_DEFAULT_VALUE          60012
+#define ID_PARAM_ROW					60013
+#define ID_PARAM_COL					60014
 
 // Next default values for new objects
 // 
