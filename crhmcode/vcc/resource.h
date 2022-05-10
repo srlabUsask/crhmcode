@@ -279,11 +279,12 @@
 
 #define ID_PARAM_NAME					60000
 #define ID_PARAM_HELP					60001
-#define ID_PARAM_UNITS					60002
-#define ID_PARAM_VALUES					60003
-#define ID_PARAM_SET_BTN				60004
-#define ID_PARAM_RESET_BTN				60005
-#define ID_PARAM_SAVE_BTN				60006
+#define ID_PARAM_UNITS_LABEL			60002
+#define ID_PARAM_UNITS					60003
+#define ID_PARAM_VALUES					60004
+#define ID_PARAM_SET_BTN				60005
+#define ID_PARAM_RESET_BTN				60006
+#define ID_PARAM_SAVE_BTN				60007
 
 // Next default values for new objects
 // 
