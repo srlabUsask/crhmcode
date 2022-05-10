@@ -41,6 +41,7 @@ public:
 	CEdit param_label;
 
 	void InitalizeValues();
+	void RenderGrid();
 
 protected:
 

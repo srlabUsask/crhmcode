@@ -80,6 +80,7 @@ void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 	ParamDlgCard * newCard = new ParamDlgCard(data->second, this);
 	newCard->MoveWindow(cardRect);
 	newCard->InitalizeValues();
+	newCard->RenderGrid();
 
 	this->cards.push_back(newCard);
 	

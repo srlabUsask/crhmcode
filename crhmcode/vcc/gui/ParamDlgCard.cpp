@@ -39,16 +39,23 @@ BOOL ParamDlgCard::OnInitDialog()
 	GetDlgItem(ID_PARAM_MIN_LABEL)->SetFont(labelFont);
 	GetDlgItem(ID_PARAM_DEFAULT_LABEL)->SetFont(labelFont);
 	
+	
+	
 	CFont* valueFont = new CFont();
 	valueFont->CreatePointFont(100, _T("Ariel"));
 	GetDlgItem(ID_PARAM_UNITS)->SetFont(valueFont);
 	GetDlgItem(ID_PARAM_MIN_VALUE)->SetFont(valueFont);
 	GetDlgItem(ID_PARAM_MAX_VALUE)->SetFont(valueFont);
 	GetDlgItem(ID_PARAM_DEFAULT_VALUE)->SetFont(valueFont);
+	GetDlgItem(ID_PARAM_COL)->SetFont(valueFont);
 
 	CFont* helpFont = new CFont();
 	helpFont->CreatePointFont(80, _T("Ariel"));
 	GetDlgItem(ID_PARAM_HELP)->SetFont(helpFont);
+
+	CFont* gridFont = new CFont();
+	gridFont->CreatePointFont(60, _T("Ariel"));
+	GetDlgItem(ID_PARAM_ROW)->SetFont(helpFont);
 
 	SetDlgItemText(ID_PARAM_UNITS_LABEL, L"Units:");
 	SetDlgItemText(ID_PARAM_MIN_LABEL, L"Min:");
@@ -98,6 +105,19 @@ void ParamDlgCard::InitalizeValues()
 	std::string defalultString = this->parameter->valstr;
 	CString defaultText = CString(defalultString.c_str());
 	SetDlgItemText(ID_PARAM_DEFAULT_VALUE, defaultText);
+
+}
+
+
+void ParamDlgCard::RenderGrid()
+{
+	std::string gridRowLabel = this->parameter->param + "[1]";
+	CString gridRowLabelText = CString(gridRowLabel.c_str());
+	SetDlgItemText(ID_PARAM_ROW, gridRowLabelText);
+
+	std::string gridColLabel = "HRU[1]";
+	CString gridColLabelText = CString(gridColLabel.c_str());
+	SetDlgItemText(ID_PARAM_COL, gridColLabelText);
 }
 
 void ParamDlgCard::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
