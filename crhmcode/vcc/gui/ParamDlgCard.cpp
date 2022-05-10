@@ -118,6 +118,21 @@ void ParamDlgCard::RenderGrid()
 	std::string gridColLabel = "HRU[1]";
 	CString gridColLabelText = CString(gridColLabel.c_str());
 	SetDlgItemText(ID_PARAM_COL, gridColLabelText);
+
+
+	if (this->parameter->varType == TVar::Float)
+	{
+
+	}
+	else if (this->parameter->varType == TVar::Int)
+	{
+
+	}
+	else if (this->parameter->varType == TVar::Txt)
+	{
+
+	}
+
 }
 
 void ParamDlgCard::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
