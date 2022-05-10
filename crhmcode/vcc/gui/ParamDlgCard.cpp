@@ -29,6 +29,14 @@ BOOL ParamDlgCard::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
+	CFont* nameFont = new CFont();
+	nameFont->CreatePointFont(120, _T("Ariel"));
+	GetDlgItem(ID_PARAM_NAME)->SetFont(nameFont);
+	
+	CFont* helpFont = new CFont();
+	helpFont->CreatePointFont(80, _T("Ariel"));
+	GetDlgItem(ID_PARAM_HELP)->SetFont(helpFont);
+
 	// save the original size
 	GetWindowRect(original_rectangle);
 
@@ -41,7 +49,13 @@ BOOL ParamDlgCard::OnInitDialog()
 
 void ParamDlgCard::InitalizeValues()
 {
-	
+	std::string nameString = this->parameter->param;
+	CString nameText = CString(nameString.c_str());
+	SetDlgItemText(ID_PARAM_NAME, nameText);
+
+	std::string helpString = this->parameter->help;
+	CString helpText = CString(helpString.c_str());
+	SetDlgItemText(ID_PARAM_HELP, helpText);
 }
 
 void ParamDlgCard::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)

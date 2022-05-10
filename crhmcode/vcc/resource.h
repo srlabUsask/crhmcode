@@ -275,16 +275,15 @@
 #define ID_PARAM_DLG_TOGGLE_ALL_BTN     50005
 #define PARAMETERS_DLG_SCROLL_PANE      50006
 #define ID_PARAM_PANE_PLACEHOLDER       50007
-#define ID_PARAM_CARD_PLACEHOLDER       50008
-#define ID_PARAM_CARD_PLACEHOLDER2       50010
 #define PARAMETERS_CARD                 50009
 
-#define ID_PARAM_HELP					60000
-#define ID_PARAM_UNITS					60001
-#define ID_PARAM_VALUES					60002
-#define ID_PARAM_SET_BTN				60003
-#define ID_PARAM_RESET_BTN				60004
-#define ID_PARAM_SAVE_BTN				60005
+#define ID_PARAM_NAME					60000
+#define ID_PARAM_HELP					60001
+#define ID_PARAM_UNITS					60002
+#define ID_PARAM_VALUES					60003
+#define ID_PARAM_SET_BTN				60004
+#define ID_PARAM_RESET_BTN				60005
+#define ID_PARAM_SAVE_BTN				60006
 
 // Next default values for new objects
 // 
