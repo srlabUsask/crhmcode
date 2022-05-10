@@ -119,6 +119,14 @@ void ParamDlgCard::RenderGrid()
 	CString gridColLabelText = CString(gridColLabel.c_str());
 	SetDlgItemText(ID_PARAM_COL, gridColLabelText);
 
+	CRect columnRectangle;
+	GetDlgItem(ID_PARAM_COL)->GetWindowRect(&columnRectangle);
+
+	int numCol = (int)this->parameter->dim;
+	for (int i = 1; i < numCol; i++)
+	{
+		
+	}
 
 	if (this->parameter->varType == TVar::Float)
 	{
