@@ -29,21 +29,31 @@ BOOL ParamDlgCard::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	SetDlgItemText(ID_PARAM_UNITS_LABEL, L"Units:");
+	
 
 	CFont* labelFont = new CFont();
 	labelFont->CreatePointFont(120, _T("Ariel"));
 	GetDlgItem(ID_PARAM_NAME)->SetFont(labelFont);
 	GetDlgItem(ID_PARAM_UNITS_LABEL)->SetFont(labelFont);
+	GetDlgItem(ID_PARAM_MAX_LABEL)->SetFont(labelFont);
+	GetDlgItem(ID_PARAM_MIN_LABEL)->SetFont(labelFont);
+	GetDlgItem(ID_PARAM_DEFAULT_LABEL)->SetFont(labelFont);
 	
 	CFont* valueFont = new CFont();
 	valueFont->CreatePointFont(100, _T("Ariel"));
 	GetDlgItem(ID_PARAM_UNITS)->SetFont(valueFont);
+	GetDlgItem(ID_PARAM_MIN_VALUE)->SetFont(valueFont);
+	GetDlgItem(ID_PARAM_MAX_VALUE)->SetFont(valueFont);
+	GetDlgItem(ID_PARAM_DEFAULT_VALUE)->SetFont(valueFont);
 
 	CFont* helpFont = new CFont();
 	helpFont->CreatePointFont(80, _T("Ariel"));
 	GetDlgItem(ID_PARAM_HELP)->SetFont(helpFont);
 
+	SetDlgItemText(ID_PARAM_UNITS_LABEL, L"Units:");
+	SetDlgItemText(ID_PARAM_MIN_LABEL, L"Min:");
+	SetDlgItemText(ID_PARAM_MAX_LABEL, L"Max:");
+	SetDlgItemText(ID_PARAM_DEFAULT_LABEL, L"Default:");
 
 
 	// save the original size
@@ -69,6 +79,25 @@ void ParamDlgCard::InitalizeValues()
 	std::string unitString = this->parameter->units;
 	CString unitText = CString(unitString.c_str());
 	SetDlgItemText(ID_PARAM_UNITS, unitText);
+
+
+	std::stringstream minStream;
+	minStream << this->parameter->minVal;
+	std::string minString;
+	minStream >> minString;
+	CString minText = CString(minString.c_str());
+	SetDlgItemText(ID_PARAM_MIN_VALUE, minText);
+
+	std::stringstream maxStream;
+	maxStream << this->parameter->maxVal;
+	std::string maxString;
+	maxStream >> maxString;
+	CString maxText = CString(maxString.c_str());
+	SetDlgItemText(ID_PARAM_MAX_VALUE, maxText);
+
+	std::string defalultString = this->parameter->valstr;
+	CString defaultText = CString(defalultString.c_str());
+	SetDlgItemText(ID_PARAM_DEFAULT_VALUE, defaultText);
 }
 
 void ParamDlgCard::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
