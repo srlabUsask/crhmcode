@@ -344,6 +344,9 @@ void ParametersDlg::OnToggleBasic()
 	// Remove the temporary arrays.
 	delete[] selectedIndicies;
 	delete[] toggles;
+
+	// Call to update the parameter cards.
+	this->OnSelectParam();
 }
 
 void ParametersDlg::OnToggleAdvance()
@@ -427,6 +430,9 @@ void ParametersDlg::OnToggleAdvance()
 	// Remove the temporary arrays.
 	delete[] selectedIndicies;
 	delete[] toggles;
+
+	// Call to update the parameter cards.
+	this->OnSelectParam();
 }
 
 void ParametersDlg::OnTogglePrivate()
@@ -510,6 +516,9 @@ void ParametersDlg::OnTogglePrivate()
 	// Remove the temporary arrays.
 	delete[] selectedIndicies;
 	delete[] toggles;
+
+	// Call to update the parameter cards.
+	this->OnSelectParam();
 }
 
 void ParametersDlg::OnToggleAll()
@@ -554,6 +563,9 @@ void ParametersDlg::OnToggleAll()
 	// Remove the temporary arrays.
 	delete[] selectedIndicies;
 	delete[] toggles;
+
+	// Call to update the parameter cards.
+	this->OnSelectParam();
 }
 
 void ParametersDlg::initalizeModulesListBox(CRHMmain* main)
