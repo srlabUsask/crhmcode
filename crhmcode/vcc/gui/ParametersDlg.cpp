@@ -204,6 +204,7 @@ void ParametersDlg::OnSelectModule()
 
 	}
 
+	this->OnSelectParam();
 }
 
 void ParametersDlg::OnSelectParam()
