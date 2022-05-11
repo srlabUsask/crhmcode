@@ -8,6 +8,11 @@ ParamDlgCard::ParamDlgCard(ClassPar * param, CWnd* pParent /*=NULL*/ )
 	this->scroll_position = 0;
 	this->pane_height = 0;
 	this->parameter = param;
+
+	
+
+	this->pointFont100 = new CFont();
+	this->pointFont100->CreatePointFont(100, _T("Ariel"));
 }
 
 
@@ -41,13 +46,10 @@ BOOL ParamDlgCard::OnInitDialog()
 	
 	
 	
-	CFont* valueFont = new CFont();
-	valueFont->CreatePointFont(100, _T("Ariel"));
-	GetDlgItem(ID_PARAM_UNITS)->SetFont(valueFont);
-	GetDlgItem(ID_PARAM_MIN_VALUE)->SetFont(valueFont);
-	GetDlgItem(ID_PARAM_MAX_VALUE)->SetFont(valueFont);
-	GetDlgItem(ID_PARAM_DEFAULT_VALUE)->SetFont(valueFont);
-	GetDlgItem(ID_PARAM_COL)->SetFont(valueFont);
+	
+
+
+	
 
 	CFont* helpFont = new CFont();
 	helpFont->CreatePointFont(80, _T("Ariel"));
@@ -106,6 +108,12 @@ void ParamDlgCard::InitalizeValues()
 	CString defaultText = CString(defalultString.c_str());
 	SetDlgItemText(ID_PARAM_DEFAULT_VALUE, defaultText);
 
+
+	GetDlgItem(ID_PARAM_UNITS)->SetFont(this->pointFont100);
+	GetDlgItem(ID_PARAM_MIN_VALUE)->SetFont(this->pointFont100);
+	GetDlgItem(ID_PARAM_MAX_VALUE)->SetFont(this->pointFont100);
+	GetDlgItem(ID_PARAM_DEFAULT_VALUE)->SetFont(this->pointFont100);
+	GetDlgItem(ID_PARAM_COL)->SetFont(this->pointFont100);
 }
 
 
@@ -119,14 +127,37 @@ void ParamDlgCard::RenderGrid()
 	CString gridColLabelText = CString(gridColLabel.c_str());
 	SetDlgItemText(ID_PARAM_COL, gridColLabelText);
 
-	CRect columnRectangle;
-	GetDlgItem(ID_PARAM_COL)->GetWindowRect(&columnRectangle);
-
+	
+	// Create the column header cells
 	int numCol = (int)this->parameter->dim;
 	for (int i = 1; i < numCol; i++)
 	{
-		
+		// Determine the location for the cell
+		CRect columnRectangle;
+		GetDlgItem(ID_PARAM_COL + i - 1)->GetWindowRect(&columnRectangle);
+		ScreenToClient(&columnRectangle);
+		int width = columnRectangle.Width();
+		columnRectangle.TopLeft().x = columnRectangle.TopLeft().x + width;
+		columnRectangle.BottomRight().x = columnRectangle.BottomRight().x + width;
+
+		// Create a CEdit for the cell
+		CEdit* colHeader = new CEdit();
+		DWORD dwStyle = ES_CENTER | ES_READONLY | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
+		colHeader->Create(
+			dwStyle,
+			columnRectangle,
+			this,
+			ID_PARAM_COL + i
+		);
+
+		// Set the font and text for the cell
+		GetDlgItem(ID_PARAM_COL + i)->SetFont(this->pointFont100);
+		std::string colString = "HRU[" + std::to_string(i+1) + "]";
+		CString colText = CString(colString.c_str());
+		SetDlgItemText(ID_PARAM_COL + i, colText);
 	}
+
+
 
 	if (this->parameter->varType == TVar::Float)
 	{

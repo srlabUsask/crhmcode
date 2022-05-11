@@ -32,6 +32,8 @@ private:
 
 	ClassPar * parameter;
 
+	CFont * pointFont100;
+
 public:
 	/*
 	* Standard constructor
