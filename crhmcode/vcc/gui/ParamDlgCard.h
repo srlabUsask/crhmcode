@@ -32,13 +32,18 @@ private:
 
 	ClassPar * parameter;
 
+	CFont * pointFont120;
 	CFont * pointFont100;
+	CFont * pointFont80;
+	CFont * pointFont60;
 
 public:
 	/*
 	* Standard constructor
 	*/
 	ParamDlgCard(ClassPar * param, CWnd* pParent = NULL );
+
+	~ParamDlgCard();
 
 	CEdit param_label;
 

@@ -10,9 +10,25 @@ ParamDlgCard::ParamDlgCard(ClassPar * param, CWnd* pParent /*=NULL*/ )
 	this->parameter = param;
 
 	
+	this->pointFont120 = new CFont();
+	this->pointFont120->CreatePointFont(120, _T("Ariel"));
 
 	this->pointFont100 = new CFont();
 	this->pointFont100->CreatePointFont(100, _T("Ariel"));
+
+	this->pointFont80 = new CFont();
+	this->pointFont80->CreatePointFont(80, _T("Ariel"));
+
+	this->pointFont60 = new CFont();
+	this->pointFont60->CreatePointFont(60, _T("Ariel"));
+}
+
+ParamDlgCard::~ParamDlgCard()
+{
+	delete this->pointFont120;
+	delete this->pointFont100;
+	delete this->pointFont80;
+	delete this->pointFont60;
 }
 
 
@@ -36,33 +52,7 @@ BOOL ParamDlgCard::OnInitDialog()
 	
 	
 
-	CFont* labelFont = new CFont();
-	labelFont->CreatePointFont(120, _T("Ariel"));
-	GetDlgItem(ID_PARAM_NAME)->SetFont(labelFont);
-	GetDlgItem(ID_PARAM_UNITS_LABEL)->SetFont(labelFont);
-	GetDlgItem(ID_PARAM_MAX_LABEL)->SetFont(labelFont);
-	GetDlgItem(ID_PARAM_MIN_LABEL)->SetFont(labelFont);
-	GetDlgItem(ID_PARAM_DEFAULT_LABEL)->SetFont(labelFont);
 	
-	
-	
-	
-
-
-	
-
-	CFont* helpFont = new CFont();
-	helpFont->CreatePointFont(80, _T("Ariel"));
-	GetDlgItem(ID_PARAM_HELP)->SetFont(helpFont);
-
-	CFont* gridFont = new CFont();
-	gridFont->CreatePointFont(60, _T("Ariel"));
-	GetDlgItem(ID_PARAM_ROW)->SetFont(helpFont);
-
-	SetDlgItemText(ID_PARAM_UNITS_LABEL, L"Units:");
-	SetDlgItemText(ID_PARAM_MIN_LABEL, L"Min:");
-	SetDlgItemText(ID_PARAM_MAX_LABEL, L"Max:");
-	SetDlgItemText(ID_PARAM_DEFAULT_LABEL, L"Default:");
 
 
 	// save the original size
@@ -77,6 +67,29 @@ BOOL ParamDlgCard::OnInitDialog()
 
 void ParamDlgCard::InitalizeValues()
 {
+
+	/*
+	* Setting fonts for CEdit boxes
+	*/
+	GetDlgItem(ID_PARAM_NAME)->SetFont(this->pointFont120);
+	GetDlgItem(ID_PARAM_UNITS_LABEL)->SetFont(this->pointFont120);
+	GetDlgItem(ID_PARAM_MAX_LABEL)->SetFont(this->pointFont120);
+	GetDlgItem(ID_PARAM_MIN_LABEL)->SetFont(this->pointFont120);
+	GetDlgItem(ID_PARAM_DEFAULT_LABEL)->SetFont(this->pointFont120);
+
+	GetDlgItem(ID_PARAM_UNITS)->SetFont(this->pointFont100);
+	GetDlgItem(ID_PARAM_MIN_VALUE)->SetFont(this->pointFont100);
+	GetDlgItem(ID_PARAM_MAX_VALUE)->SetFont(this->pointFont100);
+	GetDlgItem(ID_PARAM_DEFAULT_VALUE)->SetFont(this->pointFont100);
+	GetDlgItem(ID_PARAM_COL)->SetFont(this->pointFont100);
+
+	GetDlgItem(ID_PARAM_HELP)->SetFont(this->pointFont80);
+	GetDlgItem(ID_PARAM_ROW)->SetFont(this->pointFont80);
+
+
+	/*
+	* Set text for CEdit Boxes
+	*/
 	std::string nameString = this->parameter->param;
 	CString nameText = CString(nameString.c_str());
 	SetDlgItemText(ID_PARAM_NAME, nameText);
@@ -108,17 +121,18 @@ void ParamDlgCard::InitalizeValues()
 	CString defaultText = CString(defalultString.c_str());
 	SetDlgItemText(ID_PARAM_DEFAULT_VALUE, defaultText);
 
-
-	GetDlgItem(ID_PARAM_UNITS)->SetFont(this->pointFont100);
-	GetDlgItem(ID_PARAM_MIN_VALUE)->SetFont(this->pointFont100);
-	GetDlgItem(ID_PARAM_MAX_VALUE)->SetFont(this->pointFont100);
-	GetDlgItem(ID_PARAM_DEFAULT_VALUE)->SetFont(this->pointFont100);
-	GetDlgItem(ID_PARAM_COL)->SetFont(this->pointFont100);
+	SetDlgItemText(ID_PARAM_UNITS_LABEL, L"Units:");
+	SetDlgItemText(ID_PARAM_MIN_LABEL, L"Min:");
+	SetDlgItemText(ID_PARAM_MAX_LABEL, L"Max:");
+	SetDlgItemText(ID_PARAM_DEFAULT_LABEL, L"Default:");
 }
 
 
 void ParamDlgCard::RenderGrid()
 {
+	/*
+	* Set the text for the grid guide items.
+	*/
 	std::string gridRowLabel = this->parameter->param + "[1]";
 	CString gridRowLabelText = CString(gridRowLabel.c_str());
 	SetDlgItemText(ID_PARAM_ROW, gridRowLabelText);
@@ -127,7 +141,6 @@ void ParamDlgCard::RenderGrid()
 	CString gridColLabelText = CString(gridColLabel.c_str());
 	SetDlgItemText(ID_PARAM_COL, gridColLabelText);
 
-	
 	// Create the column header cells
 	int numCol = (int)this->parameter->dim;
 	for (int i = 1; i < numCol; i++)
