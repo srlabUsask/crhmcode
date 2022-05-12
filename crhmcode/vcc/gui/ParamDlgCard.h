@@ -53,6 +53,8 @@ private:
 	*/
 	std::vector<CEdit*> colHearders;
 
+	std::vector<std::vector<CEdit*>> valueGrid;
+
 
 public:
 	/*

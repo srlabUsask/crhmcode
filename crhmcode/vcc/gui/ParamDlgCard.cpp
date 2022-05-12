@@ -40,6 +40,14 @@ ParamDlgCard::~ParamDlgCard()
 	{
 		delete this->colHearders[i];
 	}
+
+	for (int i = 0; i < this->valueGrid.size(); i++)
+	{
+		for (int j = 0; j < this->valueGrid[i].size(); j++)
+		{
+			delete this->valueGrid[i][j];
+		}
+	}
 }
 
 
@@ -221,6 +229,9 @@ void ParamDlgCard::RenderGrid()
 		this->rowLabels.push_back(rowHeader);
 	}
 
+	// Initalize space for the valueGrid of CEdit cells
+	this->valueGrid.resize(numRow);
+
 	// Create the value grid
 	for (int i = 0; i < numRow; i++)
 	{
@@ -296,6 +307,8 @@ void ParamDlgCard::RenderGrid()
 			CString valueText = CString(valueString.c_str());
 			SetDlgItemText(ID_PARAM_GRID + (i * 1000) + j, valueText);
 
+			// Place the CEdit into the value grid to be tracked
+			this->valueGrid[i].push_back(newCell);
 		}
 	}
 
