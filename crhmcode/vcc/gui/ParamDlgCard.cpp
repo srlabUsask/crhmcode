@@ -272,18 +272,25 @@ void ParamDlgCard::RenderGrid()
 			std::string valueString;
 			if (this->parameter->varType == TVar::Float)
 			{
-				valueStream << this->parameter->values[j];
+				valueStream << this->parameter->layvalues[i][j];
 				valueStream >> valueString;
 			}
 			else if (this->parameter->varType == TVar::Int)
 			{
-				valueStream << this->parameter->ivalues[j];
+				valueStream << this->parameter->ilayvalues[i][j];
 				valueStream >> valueString;
 			}
 			else if (this->parameter->varType == TVar::Txt)
 			{
-				valueStream << this->parameter->Strings->at(j);
-				valueStream >> valueString;
+				if (this->parameter->Strings->size() > j)
+				{
+					valueStream << this->parameter->Strings->at(j);
+					valueStream >> valueString;
+				}
+				else
+				{
+					valueString = "";
+				}
 			}
 
 			CString valueText = CString(valueString.c_str());
