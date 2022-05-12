@@ -9,7 +9,6 @@ ParamDlgCard::ParamDlgCard(ClassPar * param, CWnd* pParent /*=NULL*/ )
 	this->pane_height = 0;
 	this->parameter = param;
 
-	
 	this->pointFont120 = new CFont();
 	this->pointFont120->CreatePointFont(120, _T("Ariel"));
 
@@ -30,14 +29,16 @@ ParamDlgCard::~ParamDlgCard()
 	delete this->pointFont80;
 	delete this->pointFont60;
 
-	for (int i = 1; i < this->rowGuide.size(); i++)
+	// Starts at 1 because the first item is not dynamicaly allocated
+	for (int i = 1; i < this->rowLabels.size(); i++)
 	{
-		delete this->rowGuide[i];
+		delete this->rowLabels[i];
 	}
 
-	for (int i = 1; i < this->colGuide.size(); i++)
+	// Starts at 1 beacuse the first item is not dynamcialy allocated
+	for (int i = 1; i < this->colHearders.size(); i++)
 	{
-		delete this->colGuide[i];
+		delete this->colHearders[i];
 	}
 }
 
@@ -45,7 +46,6 @@ ParamDlgCard::~ParamDlgCard()
 void ParamDlgCard::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, ID_PARAM_HELP, this->param_label);
 }
 
 
@@ -75,13 +75,11 @@ BOOL ParamDlgCard::OnInitDialog()
 	// initial scroll position
 	scroll_position = 0; 
 
-	
 	return TRUE;
 }
 
 void ParamDlgCard::InitalizeValues()
 {
-
 	/*
 	* Setting fonts for CEdit boxes
 	*/
@@ -100,7 +98,6 @@ void ParamDlgCard::InitalizeValues()
 	GetDlgItem(ID_PARAM_HELP)->SetFont(this->pointFont80);
 	GetDlgItem(ID_PARAM_ROW)->SetFont(this->pointFont80);
 
-
 	/*
 	* Set text for CEdit Boxes
 	*/
@@ -115,7 +112,6 @@ void ParamDlgCard::InitalizeValues()
 	std::string unitString = this->parameter->units;
 	CString unitText = CString(unitString.c_str());
 	SetDlgItemText(ID_PARAM_UNITS, unitText);
-
 
 	std::stringstream minStream;
 	minStream << this->parameter->minVal;
@@ -144,12 +140,11 @@ void ParamDlgCard::InitalizeValues()
 
 void ParamDlgCard::RenderGrid()
 {
-
 	// Place the first col guide CEdit in the vector
-	this->colGuide.push_back((CEdit*)GetDlgItem(ID_PARAM_COL));
+	this->colHearders.push_back((CEdit*)GetDlgItem(ID_PARAM_COL));
 
 	// Place the first row guide CEdit in the vector
-	this->rowGuide.push_back((CEdit *)GetDlgItem(ID_PARAM_ROW));
+	this->rowLabels.push_back((CEdit *)GetDlgItem(ID_PARAM_ROW));
 
 	/*
 	* Set the text for the grid guide items.
@@ -191,7 +186,7 @@ void ParamDlgCard::RenderGrid()
 		SetDlgItemText(ID_PARAM_COL + i, colText);
 
 		// Place the CEdit into the vector
-		this->colGuide.push_back(colHeader);
+		this->colHearders.push_back(colHeader);
 	}
 
 	// Create the row label cells
@@ -223,51 +218,45 @@ void ParamDlgCard::RenderGrid()
 		SetDlgItemText(ID_PARAM_ROW + i, rowText);
 
 		// Place the CEdit into the vector
-		this->rowGuide.push_back(rowHeader);
+		this->rowLabels.push_back(rowHeader);
 	}
 
 	// Create the value grid
 	for (int i = 0; i < numRow; i++)
 	{
+		// Find the Y coordinates for the new cell
 		CRect rowGuideRect;
 		GetDlgItem(ID_PARAM_ROW + i)->GetWindowRect(&rowGuideRect);
 		ScreenToClient(&rowGuideRect);
-
 		int topY = rowGuideRect.TopLeft().y;
 		int botY = rowGuideRect.BottomRight().y;
 
 		for (int j = 0; j < numCol; j++)
 		{
+			// Find the X coordinates for the new cell
 			CRect colGuideRect;
 			GetDlgItem(ID_PARAM_COL + j)->GetWindowRect(&colGuideRect);
 			ScreenToClient(&colGuideRect);
-
 			int topX = colGuideRect.TopLeft().x;
 			int botX = colGuideRect.BottomRight().x;
 
+			// Set the positon of the rectangle for the new cell
 			CRect newCellRect;
 			newCellRect.TopLeft().x = topX;
 			newCellRect.TopLeft().y = topY;
 			newCellRect.BottomRight().x = botX;
 			newCellRect.BottomRight().y = botY;
 
-			// Create a CEdit for the cell
-			CEdit* newCell = new CEdit();
-			
+			// Set the styles for the new cell
 			DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
-			if (this->parameter->varType == TVar::Float)
+			if (this->parameter->varType == TVar::Float || this->parameter->varType == TVar::Int)
 			{
-				dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | ES_NUMBER;
-			}
-			else if (this->parameter->varType == TVar::Int)
-			{
-				dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | ES_NUMBER;
-			}
-			else if (this->parameter->varType == TVar::Txt)
-			{
-				dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
+				// If it is a numberic cell add the ES_NUMBER style to prevent non numeric characters
+				dwStyle =dwStyle | ES_NUMBER;
 			}
 
+			// Create a CEdit for the cell
+			CEdit* newCell = new CEdit();
 			newCell->Create(
 				dwStyle,
 				newCellRect,
@@ -275,13 +264,12 @@ void ParamDlgCard::RenderGrid()
 				ID_PARAM_GRID + (i *1000) + j
 			);
 
-			// Set the font and text for the cell
+			// Set the font for the cell
 			GetDlgItem(ID_PARAM_GRID + (i * 1000) + j)->SetFont(this->pointFont80);
 			
+			// Set the inital value in the cell
 			std::stringstream valueStream;
 			std::string valueString;
-
-
 			if (this->parameter->varType == TVar::Float)
 			{
 				valueStream << this->parameter->values[j];
@@ -301,24 +289,7 @@ void ParamDlgCard::RenderGrid()
 			CString valueText = CString(valueString.c_str());
 			SetDlgItemText(ID_PARAM_GRID + (i * 1000) + j, valueText);
 
-			// Place the CEdit into the vector
-			//this->rowGuide.push_back(rowHeader);
-
 		}
-	}
-
-
-	if (this->parameter->varType == TVar::Float)
-	{
-
-	}
-	else if (this->parameter->varType == TVar::Int)
-	{
-
-	}
-	else if (this->parameter->varType == TVar::Txt)
-	{
-
 	}
 
 }

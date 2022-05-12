@@ -30,18 +30,29 @@ private:
 	*/
 	int	pane_height;
 
+	/**
+	* Holds the parameter associated with this card 
+	*/
 	ClassPar * parameter;
 
+	/**
+	* Holders for fonts used on the card
+	*/
 	CFont * pointFont120;
 	CFont * pointFont100;
 	CFont * pointFont80;
 	CFont * pointFont60;
 
-	std::vector<CEdit*> rowGuide;
-	std::vector<CEdit*> colGuide;
+	/**
+	* Vector that holds the CEdit references for the row label items
+	*/
+	std::vector<CEdit*> rowLabels;
 
-	void OnOK();
-	void OnCancel();
+	/**
+	* Vector that holds the CEdit references for the column header items
+	*/
+	std::vector<CEdit*> colHearders;
+
 
 public:
 	/*
@@ -49,11 +60,19 @@ public:
 	*/
 	ParamDlgCard(ClassPar * param, CWnd* pParent = NULL );
 
+	/*
+	* Deconstructor
+	*/
 	~ParamDlgCard();
 
-	CEdit param_label;
-
+	/**
+	* Initalizes the help information for the parameter card
+	*/
 	void InitalizeValues();
+
+	/**
+	* Renders the value grid for the parameter
+	*/
 	void RenderGrid();
 
 protected:
@@ -82,6 +101,16 @@ protected:
 	* Handles resizing of the pane.
 	*/
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+
+	/**
+	* Overrides OnOK to prevent Enter Key press from closing the card
+	*/
+	void OnOK();
+
+	/**
+	* Overrides OnCancel to prevent esc key press from closing the card
+	*/
+	void OnCancel();
 	
 	DECLARE_MESSAGE_MAP()
 
