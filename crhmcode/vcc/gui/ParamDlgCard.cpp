@@ -259,7 +259,7 @@ void ParamDlgCard::RenderGrid()
 			newCellRect.BottomRight().y = botY;
 
 			// Set the styles for the new cell
-			DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
+			DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | ES_RIGHT;
 			if (this->parameter->varType == TVar::Float || this->parameter->varType == TVar::Int)
 			{
 				// If it is a numberic cell add the ES_NUMBER style to prevent non numeric characters
