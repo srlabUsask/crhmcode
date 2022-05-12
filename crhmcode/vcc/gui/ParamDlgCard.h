@@ -40,6 +40,9 @@ private:
 	std::vector<CEdit*> rowGuide;
 	std::vector<CEdit*> colGuide;
 
+	void OnOK();
+	void OnCancel();
+
 public:
 	/*
 	* Standard constructor

@@ -295,6 +295,8 @@
 
 #define ID_PARAM_ROW					80000
 
+#define ID_PARAM_GRID					100000000
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

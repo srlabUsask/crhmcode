@@ -30,12 +30,12 @@ ParamDlgCard::~ParamDlgCard()
 	delete this->pointFont80;
 	delete this->pointFont60;
 
-	for (int i = 0; i < this->rowGuide.size(); i++)
+	for (int i = 1; i < this->rowGuide.size(); i++)
 	{
 		delete this->rowGuide[i];
 	}
 
-	for (int i = 0; i < this->colGuide.size(); i++)
+	for (int i = 1; i < this->colGuide.size(); i++)
 	{
 		delete this->colGuide[i];
 	}
@@ -55,6 +55,15 @@ BEGIN_MESSAGE_MAP(ParamDlgCard, CDialog)
 	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
+void ParamDlgCard::OnOK()
+{
+	//Do nothing this prevents the enter key from closing the card
+}
+
+void ParamDlgCard::OnCancel()
+{
+	//Do nothing this prevents the escape key from closing the card
+}
 
 BOOL ParamDlgCard::OnInitDialog()
 {
@@ -217,6 +226,86 @@ void ParamDlgCard::RenderGrid()
 		this->rowGuide.push_back(rowHeader);
 	}
 
+	// Create the value grid
+	for (int i = 0; i < numRow; i++)
+	{
+		CRect rowGuideRect;
+		GetDlgItem(ID_PARAM_ROW + i)->GetWindowRect(&rowGuideRect);
+		ScreenToClient(&rowGuideRect);
+
+		int topY = rowGuideRect.TopLeft().y;
+		int botY = rowGuideRect.BottomRight().y;
+
+		for (int j = 0; j < numCol; j++)
+		{
+			CRect colGuideRect;
+			GetDlgItem(ID_PARAM_COL + j)->GetWindowRect(&colGuideRect);
+			ScreenToClient(&colGuideRect);
+
+			int topX = colGuideRect.TopLeft().x;
+			int botX = colGuideRect.BottomRight().x;
+
+			CRect newCellRect;
+			newCellRect.TopLeft().x = topX;
+			newCellRect.TopLeft().y = topY;
+			newCellRect.BottomRight().x = botX;
+			newCellRect.BottomRight().y = botY;
+
+			// Create a CEdit for the cell
+			CEdit* newCell = new CEdit();
+			
+			DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
+			if (this->parameter->varType == TVar::Float)
+			{
+				dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | ES_NUMBER;
+			}
+			else if (this->parameter->varType == TVar::Int)
+			{
+				dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | ES_NUMBER;
+			}
+			else if (this->parameter->varType == TVar::Txt)
+			{
+				dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
+			}
+
+			newCell->Create(
+				dwStyle,
+				newCellRect,
+				this,
+				ID_PARAM_GRID + (i *1000) + j
+			);
+
+			// Set the font and text for the cell
+			GetDlgItem(ID_PARAM_GRID + (i * 1000) + j)->SetFont(this->pointFont80);
+			
+			std::stringstream valueStream;
+			std::string valueString;
+
+
+			if (this->parameter->varType == TVar::Float)
+			{
+				valueStream << this->parameter->values[j];
+				valueStream >> valueString;
+			}
+			else if (this->parameter->varType == TVar::Int)
+			{
+				valueStream << this->parameter->ivalues[j];
+				valueStream >> valueString;
+			}
+			else if (this->parameter->varType == TVar::Txt)
+			{
+				valueStream << this->parameter->Strings->at(j);
+				valueStream >> valueString;
+			}
+
+			CString valueText = CString(valueString.c_str());
+			SetDlgItemText(ID_PARAM_GRID + (i * 1000) + j, valueText);
+
+			// Place the CEdit into the vector
+			//this->rowGuide.push_back(rowHeader);
+
+		}
+	}
 
 
 	if (this->parameter->varType == TVar::Float)
