@@ -170,6 +170,34 @@ void ParamDlgCard::RenderGrid()
 		SetDlgItemText(ID_PARAM_COL + i, colText);
 	}
 
+	// Create the row label cells
+	int numRow = (int) this->parameter->lay;
+	for (int i = 1; i < numRow; i++)
+	{
+		// Determine the location for the cell
+		CRect rowRectangle;
+		GetDlgItem(ID_PARAM_ROW + i - 1)->GetWindowRect(&rowRectangle);
+		ScreenToClient(&rowRectangle);
+		int height = rowRectangle.Height();
+		rowRectangle.TopLeft().y = rowRectangle.TopLeft().y + height;
+		rowRectangle.BottomRight().y = rowRectangle.BottomRight().y + height;
+
+		// Create a CEdit for the cell
+		CEdit* rowHeader = new CEdit();
+		DWORD dwStyle = ES_READONLY | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
+		rowHeader->Create(
+			dwStyle,
+			rowRectangle,
+			this,
+			ID_PARAM_ROW + i
+		);
+
+		// Set the font and text for the cell
+		GetDlgItem(ID_PARAM_ROW + i)->SetFont(this->pointFont80);
+		std::string rowString = this->parameter->param + "[" + std::to_string(i + 1) + "]";
+		CString rowText = CString(rowString.c_str());
+		SetDlgItemText(ID_PARAM_ROW + i, rowText);
+	}
 
 
 	if (this->parameter->varType == TVar::Float)
