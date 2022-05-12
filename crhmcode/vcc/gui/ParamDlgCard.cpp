@@ -29,6 +29,16 @@ ParamDlgCard::~ParamDlgCard()
 	delete this->pointFont100;
 	delete this->pointFont80;
 	delete this->pointFont60;
+
+	for (int i = 0; i < this->rowGuide.size(); i++)
+	{
+		delete this->rowGuide[i];
+	}
+
+	for (int i = 0; i < this->colGuide.size(); i++)
+	{
+		delete this->colGuide[i];
+	}
 }
 
 
@@ -49,11 +59,6 @@ END_MESSAGE_MAP()
 BOOL ParamDlgCard::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-	
-	
-
-	
-
 
 	// save the original size
 	GetWindowRect(original_rectangle);
@@ -130,6 +135,13 @@ void ParamDlgCard::InitalizeValues()
 
 void ParamDlgCard::RenderGrid()
 {
+
+	// Place the first col guide CEdit in the vector
+	this->colGuide.push_back((CEdit*)GetDlgItem(ID_PARAM_COL));
+
+	// Place the first row guide CEdit in the vector
+	this->rowGuide.push_back((CEdit *)GetDlgItem(ID_PARAM_ROW));
+
 	/*
 	* Set the text for the grid guide items.
 	*/
@@ -168,6 +180,9 @@ void ParamDlgCard::RenderGrid()
 		std::string colString = "HRU[" + std::to_string(i+1) + "]";
 		CString colText = CString(colString.c_str());
 		SetDlgItemText(ID_PARAM_COL + i, colText);
+
+		// Place the CEdit into the vector
+		this->colGuide.push_back(colHeader);
 	}
 
 	// Create the row label cells
@@ -197,7 +212,11 @@ void ParamDlgCard::RenderGrid()
 		std::string rowString = this->parameter->param + "[" + std::to_string(i + 1) + "]";
 		CString rowText = CString(rowString.c_str());
 		SetDlgItemText(ID_PARAM_ROW + i, rowText);
+
+		// Place the CEdit into the vector
+		this->rowGuide.push_back(rowHeader);
 	}
+
 
 
 	if (this->parameter->varType == TVar::Float)

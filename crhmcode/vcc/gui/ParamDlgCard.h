@@ -37,6 +37,9 @@ private:
 	CFont * pointFont80;
 	CFont * pointFont60;
 
+	std::vector<CEdit*> rowGuide;
+	std::vector<CEdit*> colGuide;
+
 public:
 	/*
 	* Standard constructor
