@@ -78,6 +78,8 @@ public:
 	*/
 	void RenderGrid();
 
+	void RemoveGrid();
+
 protected:
 
 	/**

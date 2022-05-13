@@ -76,6 +76,8 @@ void ParamDlgCard::OnCancel()
 
 void ParamDlgCard::OnSaveButton()
 {
+	CWaitCursor wait;
+
 	int numLayers = this->valueGrid.size();
 	for (int i = 0; i < numLayers; i++)
 	{
@@ -86,9 +88,26 @@ void ParamDlgCard::OnSaveButton()
 			CString valueText;
 			GetDlgItemText(controlID, valueText);
 
+			CT2CA pszConvertedAnsiString(valueText);
+			std::string valueString(pszConvertedAnsiString);
 
+			if (this->parameter->varType == TVar::Float)
+			{
+				this->parameter->layvalues[i][j] = std::stod(valueString);
+			}
+			else if (this->parameter->varType == TVar::Int)
+			{
+				this->parameter->ilayvalues[i][j] = std::stol(valueString);
+			}
+			else if (this->parameter->varType == TVar::Txt)
+			{
+				this->parameter->Strings->at(j) = valueString;
+			}
 		}
 	}
+
+	this->RemoveGrid();
+	this->RenderGrid();
 }
 
 BOOL ParamDlgCard::OnInitDialog()
@@ -106,6 +125,8 @@ BOOL ParamDlgCard::OnInitDialog()
 
 void ParamDlgCard::InitalizeValues()
 {
+	CWaitCursor wait;
+
 	/*
 	* Setting fonts for CEdit boxes
 	*/
@@ -166,6 +187,8 @@ void ParamDlgCard::InitalizeValues()
 
 void ParamDlgCard::RenderGrid()
 {
+	CWaitCursor wait;
+
 	// Place the first col guide CEdit in the vector
 	this->colHearders.push_back((CEdit*)GetDlgItem(ID_PARAM_COL));
 
@@ -278,7 +301,7 @@ void ParamDlgCard::RenderGrid()
 
 			// Set the styles for the new cell
 			DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | ES_RIGHT;
-			if (this->parameter->varType == TVar::Float || this->parameter->varType == TVar::Int)
+			if (this->parameter->varType == TVar::Int)
 			{
 				// If it is a numberic cell add the ES_NUMBER style to prevent non numeric characters
 				dwStyle =dwStyle | ES_NUMBER;
@@ -330,6 +353,36 @@ void ParamDlgCard::RenderGrid()
 		}
 	}
 
+}
+
+void ParamDlgCard::RemoveGrid()
+{
+	// Starts at 1 because the first item is not dynamicaly allocated
+	for (int i = 1; i < this->rowLabels.size(); i++)
+	{
+		delete this->rowLabels[i];
+	}
+
+	this->rowLabels.clear();
+
+	// Starts at 1 beacuse the first item is not dynamcialy allocated
+	for (int i = 1; i < this->colHearders.size(); i++)
+	{
+		delete this->colHearders[i];
+	}
+
+	this->colHearders.clear();
+
+	for (int i = 0; i < this->valueGrid.size(); i++)
+	{
+		for (int j = 0; j < this->valueGrid[i].size(); j++)
+		{
+			delete this->valueGrid[i][j];
+		}
+		this->valueGrid[i].clear();
+	}
+
+	this->valueGrid.clear();
 }
 
 void ParamDlgCard::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)

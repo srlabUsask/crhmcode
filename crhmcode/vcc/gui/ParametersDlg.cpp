@@ -209,6 +209,8 @@ void ParametersDlg::OnSelectModule()
 
 void ParametersDlg::OnSelectParam()
 {
+	CWaitCursor wait;
+
 	// Declare list to store parameter information in.
 	std::list<std::pair<std::string, ClassPar*>> * parametersList = new std::list<std::pair<std::string, ClassPar*>>();
 
