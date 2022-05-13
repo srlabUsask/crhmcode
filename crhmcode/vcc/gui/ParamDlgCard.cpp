@@ -58,6 +58,7 @@ void ParamDlgCard::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(ParamDlgCard, CDialog)
+	ON_BN_CLICKED(ID_PARAM_SAVE_BTN, &ParamDlgCard::OnSaveButton)
 	ON_WM_VSCROLL()
 	ON_WM_MOUSEWHEEL()
 	ON_WM_SIZE()
@@ -71,6 +72,23 @@ void ParamDlgCard::OnOK()
 void ParamDlgCard::OnCancel()
 {
 	//Do nothing this prevents the escape key from closing the card
+}
+
+void ParamDlgCard::OnSaveButton()
+{
+	int numLayers = this->valueGrid.size();
+	for (int i = 0; i < numLayers; i++)
+	{
+		int numHru = this->valueGrid[i].size();
+		for (int j = 0; j < numHru; j++)
+		{
+			int controlID = valueGrid[i][j]->GetDlgCtrlID();
+			CString valueText;
+			GetDlgItemText(controlID, valueText);
+
+
+		}
+	}
 }
 
 BOOL ParamDlgCard::OnInitDialog()

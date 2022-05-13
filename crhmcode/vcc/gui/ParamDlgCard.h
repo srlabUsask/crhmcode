@@ -55,6 +55,7 @@ private:
 
 	std::vector<std::vector<CEdit*>> valueGrid;
 
+	void OnSaveButton();
 
 public:
 	/*
