@@ -1,4 +1,6 @@
 #pragma once
+#include <afxwin.h>
+
 #include "ParamDlgScrollablePane.h"
 
 #include "../../src/core/CRHMmain.h"

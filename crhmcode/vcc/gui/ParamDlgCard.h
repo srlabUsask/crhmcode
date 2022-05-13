@@ -5,6 +5,7 @@
 
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
+#include "ParamSetAllDlg.h"
 
 
 class ParamDlgCard : public CDialog
@@ -55,9 +56,12 @@ private:
 
 	std::vector<std::vector<CEdit*>> valueGrid;
 
-	void OnSaveButton();
+	void OnSetAllButton();
 
 	void OnResetButton();
+
+	void OnSaveButton();
+
 
 public:
 	/*
