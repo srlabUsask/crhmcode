@@ -59,6 +59,7 @@ void ParamDlgCard::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(ParamDlgCard, CDialog)
 	ON_BN_CLICKED(ID_PARAM_SAVE_BTN, &ParamDlgCard::OnSaveButton)
+	ON_BN_CLICKED(ID_PARAM_RESET_BTN, &ParamDlgCard::OnResetButton)
 	ON_WM_VSCROLL()
 	ON_WM_MOUSEWHEEL()
 	ON_WM_SIZE()
@@ -106,6 +107,12 @@ void ParamDlgCard::OnSaveButton()
 		}
 	}
 
+	this->RemoveGrid();
+	this->RenderGrid();
+}
+
+void ParamDlgCard::OnResetButton()
+{
 	this->RemoveGrid();
 	this->RenderGrid();
 }

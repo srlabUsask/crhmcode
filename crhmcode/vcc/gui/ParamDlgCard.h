@@ -57,6 +57,8 @@ private:
 
 	void OnSaveButton();
 
+	void OnResetButton();
+
 public:
 	/*
 	* Standard constructor
@@ -79,6 +81,8 @@ public:
 	void RenderGrid();
 
 	void RemoveGrid();
+
+
 
 protected:
 
