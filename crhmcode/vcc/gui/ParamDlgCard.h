@@ -86,7 +86,7 @@ public:
 
 	void RemoveGrid();
 
-
+	void SetAll(std::string valueString);
 
 protected:
 

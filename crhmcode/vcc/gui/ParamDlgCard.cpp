@@ -121,9 +121,29 @@ void ParamDlgCard::OnResetButton()
 void ParamDlgCard::OnSetAllButton()
 {
 	ParamSetAllDlg* setAllDlg;
-	setAllDlg = new ParamSetAllDlg();
+	setAllDlg = new ParamSetAllDlg(this, (CWnd*)this);
 
 	setAllDlg->DoModal();
+}
+
+void ParamDlgCard::SetAll(std::string valueString)
+{
+
+	int numLayers = this->valueGrid.size();
+	for (int i = 0; i < numLayers; i++)
+	{
+		int numHru = this->valueGrid[i].size();
+		for (int j = 0; j < numHru; j++)
+		{
+			int controlID = valueGrid[i][j]->GetDlgCtrlID();
+
+			CString valueText(valueString.c_str());
+
+			SetDlgItemText(controlID, valueText);
+
+		}
+	}
+
 }
 
 BOOL ParamDlgCard::OnInitDialog()

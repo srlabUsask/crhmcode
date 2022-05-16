@@ -1,8 +1,13 @@
 #pragma once
 #include <afxwin.h>
-#include "../stdafx.h"
+#include <string>
 #include "afxdialogex.h"
+#include "../stdafx.h"
 #include "../resource.h"
+
+#include "ParamDlgCard.h"
+
+class ParamDlgCard;
 
 class ParamSetAllDlg : public CDialogEx
 {
@@ -11,8 +16,12 @@ class ParamSetAllDlg : public CDialogEx
 private:
 	CEdit set_all_value;
 
+	void ParamSetAllDlg::OnOK();
+
+	ParamDlgCard * card;
+
 public:
-	ParamSetAllDlg(CWnd* parent = nullptr);
+	ParamSetAllDlg(ParamDlgCard* paramCard, CWnd* parent = nullptr);
 
 
 // Dialog Data
