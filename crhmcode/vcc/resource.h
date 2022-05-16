@@ -291,6 +291,7 @@
 #define ID_PARAM_MAX_VALUE              60011
 #define ID_PARAM_DEFAULT_VALUE          60012
 #define PARAMETERS_SET_ALL_DLG			60013
+#define ID_PARAM_SET_VALUE				60014
 
 #define ID_PARAM_COL					70000
 

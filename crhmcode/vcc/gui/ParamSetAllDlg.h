@@ -8,6 +8,9 @@ class ParamSetAllDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(ParamSetAllDlg)
 
+private:
+	CEdit set_all_value;
+
 public:
 	ParamSetAllDlg(CWnd* parent = nullptr);
 
