@@ -1,0 +1,623 @@
+Main changes are as follows.
+
+1) The loop ahead features used by frozen, frozenAyers and lakeevap modules was fixed.
+2) frozen and frozenAyers opportunity time was modified. 
+  a) The calculation of opportunity time now initiates for a group when any HRU has snowmeltD greater than 2.0mm.
+  b) The end of the period used to calculate the opportunity is when the average of the SWE of a group is less than 2mm.
+  c) When Reset_t0 is GT 0, the value of t0 is ignored and the opportunity time is calculated for the group.
+3) The monthly table for the parameter Meyer_B is offset for the Southern Hemisphere by six months.
+
+CRHM 01/19/12
+
+1) Start and end of lake evaporation was not being handled properly in the module "lake_evap.
+
+CRHM 01/20/12
+
+1) Addition of ice bulb temperature to module "obs" to determine snow/rain.
+
+CRHM 01/31/12
+
+1) In order to make the variables that accumulate work properly when doing the "run-up looping" or "running ahead", it was necessary to make them all state variables. Unfortunately, saving and restoring these values will cause CRHM to execute slower.
+
+2) Logic was added so that only the groups requiring to run ahead to calculate future values do so. Other groups hold their values until it is time for the entire project to proceed. This reduces the number of state variables to be saved and restored.
+
+CRHM 02/08/12 (replaced CRHM.exe, new_modules.cpp and this file).
+
+1) Fixed bug in module obs when using daily time step with variation #1.
+
+CRHM 02/15/12
+
+Added the following to module Snowbal.
+
+1) Parameter "T_g_or_G_flux" to select if the ground flux is calculated from ground temperatures or an actual flux is used defined by one of the following parameters.
+
+2) Observation "F_g" and if not available from "hru_F_g" below.
+
+3) Parameter "hru_F_g"
+
+N.B. Even when using the flux option, T_g is still used by the routine evap_cond(void) -- calculates evaporation/condensation at a point in the lower layer.
+
+CRHM 02/16/12
+
+1) Corrected errors in newmodules.cpp.
+
+CRHM 02/22/12
+
+1) When observation averages (or other function) were being displayed with no project loaded or an observation not used by a CRHM module the "HRU_OBS_Tables" were not being initialised correctly.
+
+CRHM 02/25/12
+
+1) Corrected display of observation functions and display of variables with AddObsFunct feature.
+
+2) Corrected module basin. String parameters "Loop_to->Count" and "RapidAdvance_to" were not being handled correctly when not being used.
+
+CRHM 02/28/12
+
+1) Fixed Snobal ground flux error when layer_count[hh] == 2.
+
+2) Modified modules frozen and frozenAyers. Parameter t0 was being ignored when t0 > 0.0 and Reset_t0 == 0. The opportunity time was always being calculated.  
+   Values of of parameters t0 and Reset_t0 are never changed. t0_Var is set to the opportunity time used for infiltration calculations.
+   
+CRHM 03/01/12
+
+1) Changes to modules frozen and frozenAyers. When the opportunity time is calculated all infiltration is inhibited. It was not being reset to its proper value after the calculation of the opportunity time.
+
+CRHM 03/08/12
+
+1) Removed parameter "Reset_t0" and replaced it with "t0_Julian" which now only determines the earliest start of the fronzen infiltration when calculating opportunity time or using parameter values.
+2) To select the calculation of opportunity time, only t0 for HRU 1 has to be set to zero.
+
+CRHM 03/21/12
+
+1) Changes to modules frozen and frozenAyers not correct. Need more work.
+2) Maximums for parameters Sdmax and Sdinit in module Soil increased to 5000mm from 1000mm.
+
+CRHM 03/27/12
+
+1) Added method of inhibiting culvert code in module soil variation #1 for HRUs with no culvert. When the value of parameter number_culverts is <= zero for an HRU, the culvert code is not executed.
+2) Code was added to frozen and frozenAyers using a variable Julian_end equal to t0_Julian + 183 days. Work in progress.
+
+CRHM 04/01/12
+
+1) Fixed problem in module obs using variation #1. Was not handling any of the daily temperatures correctly.
+2) Generated all distribution files.
+
+CRHM 04/18/12
+
+1) Added global warming feature allowing temperature and precipitation to me modified using parameters ClimChng_t and ClimChng_p.
+2) Added parameter ClimChng_flag which determines if RH or ea (ea <= es) is kept constant with temperature change.
+3) Added parameter ppt_ht_adj to adjust p and ppt with change in elevation.
+4) Added variable t_obs which holds the value of the observation t before lapse rate and climate warming change is applied.
+5) At present CRHM uses the RH observation and ignores the ea observation.
+
+CRHM 04/23/12
+
+1) Added more reporting to log screen of modules Soil, Netroute and Netroute_M to assist in checking mass balance.
+2) In Muskingum code added period to some constants. i.e. "2" was changed to "2.0" to ensure term was always handled as floating point.
+
+CRHM 04/25/12
+
+1) Simplified climate warming/lapse rate code handling of t, rh and ea observations. Fixed errors and simplifies its operation.
+2) Put Winstral albedo module back to its original with a few minor changes to make its output similar to "albedo_Richard" and "albedo_Baker".
+
+CRHM 04/27/12
+
+1) CRHM will run using rh or ea. If both are present will use rh and ignore ea. When CRHM executes it generates the other using the adjusted temperature (lapse rate and climate change) and the parameter ElevChng_flag (maintain rh or ea with temperatue change). 
+
+2) Precipitation log messages improved.
+
+CRHM 04/30/12
+
+1) Lapse rate/climate warming error corrected. Worked correctly for simple projects but not for group projects.
+
+CRHM 05/03/12
+
+1) Corrected error when modules are loaded before the driving observation file.
+2) The parameter "ElevChng_flag" was not handling holding ea constant.
+
+CRHM 05/22/12
+
+1) Modified Netroute, Netroute_M, Netroute_D and Netroute_M_D making it possible to to distribute HRU grounwater to gw reservoir(basingw), HRU surface water(basinflow), HRU recharge(soil_rechr) and depressional storage(Sd).
+
+CRHM 05/23/12
+
+1) Module "lake_evap" was not calculating lake evaporation. Variable "lake_evap_month" was a state variable and was always being reset to zero after calculating the monthly evaporation.
+
+2) Projects using obs#1 would not build because of an obs/obs#1 conflict.
+
+CRHM 05/24/12
+
+1) Added to the netroute family of modules the capabilty of redirecting gw.
+
+CRHM 06/14/12
+
+1) Added ground water reservoir to module soil. State variable called "gw" with associated parameters gw_max, gw_init and gw_K.
+
+2) Variable "soil_gw" now feeds the ground water reservoir "gw" in module "soil" and is not used externally.
+
+3) A new variable "gw_flow" is the drainage from the ground water reservoir to the next module normally "Netroute" etc..
+
+4) Input to "Netroute" etc. becomes "gw_flow" instead of "soil_gw".
+
+CRHM 06/29/12
+
+1) Corrected error in modules Netroute_D, Netroute_M and Netroute_M_D caused by incorrect input to gw Clark delay. Error showed when gw was moved between HRUs (-hru).
+
+CRHM 06/28/12 Temporary release for Sebastian. Not fully tested or documented.
+
+1) Re-wrote the "lake_evap" module to simplify the handling of months for calculation of monthly means..
+
+2) Modified Soil so that if "Sdmax" and "soil_moist_max" are both zero evaporation is not limited (i.e. lake evaporation") making "hru_evap" and "hru_actet" identical.
+
+3) Corrected run ahead logic in CRHM.
+
+CRHM 06/29/12
+
+1) Changed parameter maximums.
+
+2) Added elevation term to lake evaporation equation.
+
+CRHM 07/04/12
+
+1) Round off error with TDateTime variables fixed in module lake_evaporation.
+
+CRHM 11/15/12
+
+1) Added a new variable to the module soil called "redirected_residual" to handle "outflow" redirected from an HRU to another HRU by Netroute/_D/_M/_M_D parameters "whereto" or "distrib_Route". 
+   This change was made to correct a problem with the module soil#1 culvert variation. It also delays the re-directed runoff by one timestep and the runoff Clark input delay of Netroute/_D/_M/_M_D.
+   
+2) The "order" parameter did not work properly in modules Netroute/_M when the values were non sequential.
+
+CRHM 11/16/12
+
+1) Error fixed in module "soil" occurring whwn culvert code not used.
+
+CRHM 11/28/12
+
+1) Addition of new module K_Estimate to calculate lateral flow rates in soil layers and groundwater layer using Darcy’s law for unsaturated flow.
+
+2) Added to the "soil" module a variable "infil_act" giving the actual infiltration permitted by "soil". Infiltration modules generate the potential infiltration rate "infil".
+   The Log screen expanded to assist in applying a mass balance.
+   
+CRHM 12/21/12
+
+1) Sparse files can now have lines in the observation file with a date and no data columns. These lines will be ignored. However, if there are any missing columns in a sparse file these will be set to -999999 to indicate missing data.
+
+CRHM 02/05/13 - faulty version
+
+1) Error fixed in modules "frozen" and "frozenAyers" causing the "snowmeltD" to not always be handled correctly when the parameter "t0[1]" was none zero. Error was introduced after the 07/04/2012 release.
+
+2) CRHM help files now distributed as PDF files.
+
+CRHM 02/27/13
+
+1) Corrected error introduced 02/05/13 causing hru_rh and hru_ea not to be refreshed.
+
+CRHM 03/05/13
+
+1) Fixed error in the snow unloading code in the canopy, canopyclearing and canopyclearinggap modules.
+
+CRHM 03/22/13
+
+1) Problem fixed in the module "Greencrack".The variable "snowinfil" and "meltrunoff" were wrong though their accummulated values were correct.
+2) When the modules "crack", "PrairieInfiltration" and "Greencrack" were used with an initial state file, they were not being initialised properly.
+
+CRHM 03/26/13
+
+1) Error found in Netroute_D and Netroute_M_D. Distribution to basin flow was incorrect. Also, a line commented for debugging had not been restored in Netroute_M_D.
+2) Added information to log screen giving each HRU's contribution to the basin flow. 
+
+CRHM 05/17/13
+
+1) modules frozen and frozenAyers changed to give more choice. Parameter t0, when positive is used as the opportunity time,
+                      if t0 == 0, the opportunity time is calculate from t0 = 0.65*SWEPk,
+                      if t0 is negative, then CRHM computes forward to calculate the opportunity and then backs up and uses the t0 determined.
+2) Muskingum routing error checking changed. Still needs further work.
+
+CRHM 06/27/13
+
+1) Revisions to CRHM observation input completed. Reviewed operation of the parameter HRU_OBS and related parameters, precip_elev_adj, ElevChng_flag, ClimChng_flag, ClimChng_t and ClimChng_precip. 
+
+CRHM 09/20/13
+
+1) Miscellaneous items.
+
+2) Removal of Shape screen.
+
+3) Removal of all database components (.dbf).
+
+4) Update of parameter Screen file write/read routines. Identical to project file write/read excecpt all module/group parameters are written separately. In the project file parameters with the same name and values are collected together and written as Shared.
+
+5) Inserted missing lines in module evap_resist.
+
+CRHM 10/01/13
+
+1) Error in module calcsun#2 and calcsun#3 - hru_SunAct not calculated correctly.
+
+
+CRHM 12/10/13
+
+1)  Historically parameters common to more than one module were grouped under "basin". Currently, they are grouped under "shared". A few months ago I removed the shared  parameters from the  "*.par" files
+and entered them under their full module/group names. Unfortunately there was legacy code relating to the old "basin" parameters which began duplicating "basin" module parameters - basin_area, hru_area,
+hru_elev, hru_lat, hru_ASL and hru_GSL. To cut a long story short the listed parameters were no longer shared and defaulted to the Bad Lake values for any modules other than basin.
+
+CRHM 12/17/13
+
+1) Correction made to daily sum in the Observation Functions.
+
+2) Correction to how Build screen handles current parameters when re-building an existing project.
+
+CRHM 01/16/14
+
+1) Summary screen and water year display completed.
+
+2) Work progressing on glacier module.
+
+3) Beginning 2014 a table which translated legacy module names to current names was removed. 
+   This should not be a problem if an earlier project has been saved from a recent copy of CRHM as its module names will have been updated when the project was saved.
+   However, if you wish to run a very old project you will have to manually edit all the occurences in the project file using the following conversion table.
+   
+     "AnnandaleX, calcsunX, calcsun_QsiD, Slope_QsiX, ebsmX, long,   longVtX, route,    smbal, Trees"
+     become respectively,
+     "Annandale,  calcsun,  calcsun,      Slope_Qsi,  ebsm,  longVt, longVt,  Netroute, Soil,  Canopy"
+     
+CRHM 02/05/14
+
+1) Updated modules Canopy, CanopyClearing and CanopyClearingGap.
+
+2) Added a new module "XG" based upon "A Simple Thaw-Freeze Algorithm for a Multilayerd Soil using Stephan Equation, Changwei et al., 2013.
+
+CRHM 02/06/14
+
+1) Added two new filters - cos and abs.
+
+2) The filter sine was renamed to sin. The original name can still be used.
+
+CRHM 02/11/14
+
+1) Additions to module XG.
+
+CRHM 02/13/14
+
+1) Correction in CanopyClearing and CanopyClearingGap in handling of clearing "Qlisn". Now set equal to Qli_.
+
+CRHM 02/21/14
+
+1) Minor correction to module XG.
+
+2) Start og new prototype module Exec.
+
+CRHM 03/12/14
+
+1) In module Soil, the expression "exp(-soil_runoff[hh]/Sdmax[hh])" was causing an overflow error. Code was added to limit the ratio (soil_runoff[hh]/Sdmax[hh]) to a maximum of 12.0.
+
+CRHM 11/18/14
+
+1) Debug code left in error in Bld screen causing error in Build/Construct screen.
+
+CRHM 11/21/14
+
+1) Problem when building a new project without declaring an observation file first. CRHM could not determine if precipitation was p or ppt. If the project was saved and reloaded it would run correctly. Fixed
+
+CRHM 12/02/14
+
+1) Added a Delta observation function. Still being tested.
+
+2) Format for saving observations and observation functions now the same as used for variables. Still being tested.
+
+3) Added an inhibit parameter to module XG which inhibits changing kw/ki after the front has passed through the layers.
+
+CRHM 01/15/15
+
+1) Fixed bugs in saving and retrieving DISPLAY OBSERVATIONS to project files.
+
+2) Completed module XG and edited the help file.
+
+CRHM 02/17/15
+
+1) Call "declputparam" prevents the parameter from being shared between groups in a group project and forces the parameter to be shared between all modules in a simple project.
+
+2) Fixed system error in the build screen when editing a project. This occurred when a project was being edited. It never happened when creating a new project.
+
+CRHM 03/01/15
+
+1) Corrected problems with saving "AddObsFunct"s to project.
+
+2) CRHM variables are not defined until CRHM is run. On the otherhand odservations are always defined after loading. Export screen was faulting when an Observation was followed by a variable before CRHM was run.
+
+CRHM 04/14/15
+
+1) Plot line colours done differently to eliminate white(invisible lines).
+
+2) Created module "z_s_and_rho" to allow module "pbsmSnobal" to be used without "SnobalCRHM". Variables "z_s and "rho" generated from expressions from Pomeroy and Gray from book "Snowcover..."
+
+3) When the global number of layers, "nlay" is increased in size the last defined layer is duplicated. This is satisfactory for say, soil properties but not for example firn layers which must be subsequently edited.
+
+CRHM 05/13/15
+
+1) When a group was extracted from a group project and loaded as a simple project, it would not execute without faulting until it was saved and reloaded again. Fixed.
+
+CRHM 09/22/15
+
+1) CRHM was saving information to the Registry. Removed because it made CRHM suspicious to anti-virus software.
+
+2) Observation and Variable functions completed. They calculate the functions for the time period chosen. These are Daily/Water year/Calendar year/Monthly/Summarize all.
+
+3) The module "obs" feature "catchadjust" was corrected. "Nypher" remains unchanged. "Geonor" is now called "MacDonald-Alter" and should not be used as it is not correct and the fourth option "Smith-Alter" should be used instead. The last option is used for the Alter shielded gauges like the Geonor and Pluvial.
+
+4) The module "ebsm" was enhanced to allow the variable "Qe_ebsm" energy to be sublimated instead of being added to the melt. In the original version this energy was added to "Qmelt. A parameter Qe_subl_from_SWE" was added to select sublimation or melt (original version). A variable "Qe_subl" gives the energy involved.
+
+CRHM 09/28/15
+
+1) "AutoExit" option not functioning. Fixed. N.B. that "AutoExit" is inhibited unless at least one of the "Log" output choices is selected from "Last/All/Debug_Screen/Summary". 
+
+CRHM 10/01/15
+
+1) Changes made to modules "glacier" and "glacier2"
+
+   a)  Firn to ice threshold changed from 800kg/m3 to 830 kg/m3.
+   b)  When SWE is added to Firn, SWE density is used and not the parameter "rho0".
+   c)  Firn values are never allowed to decrease during densification.
+   
+CRHM 10/16/15
+
+1) Added code to pad last day of observation file if it does not end at midnight. "0.0" is used. Warning is displayed on the screen as it could be an error.
+
+CRHM 10/19/15
+
+1) Changes made to the Smith-Alter catch correction in module Obs.
+
+2) Whan variables are deleted from ListBox3 any functions of these variables are deleted from ListBox4.
+
+3) If a project file requests an Obs function of a variable, CRHM checks that the variable appears in ListBox3 to be calculated in the model run.
+
+CRHM 11/25/15
+
+1) Modules - Netroute, ClassNetroute_D, Netrout_M and Netrout_M_D were accounting for "gwinflow" twice.
+
+2) In the modules above the units were incorrect for the gw flow to the HRU gw.
+
+3) In modules ClassNetroute_D, Netrout_M and Netrout_M_D the "order" parameter was added as drainage order can be different from the HRU sequence.
+
+CRHM 11/30/15
+
+Following changes made "Soil", "SoilX", "SoilK" and "SoilDetention", to correct gw mass balance errors.
+
+1)  groundwater to gw_flow:
+      gw_flow[hh] +=  gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq; becomes float spill = gw[hh]/gw_max[hh]*gw_K[hh]/Global::Freq;
+      gw[hh] -= gw_flow[hh];                                   becomes gw[hh] -= spill;
+                                                               plus     gw_flow[hh] += spill;
+
+2)  groundwater recharge of Sd:
+      soil_gw[hh] += (Sd[hh]*Sd2gw_k);   becomes soil_gw[hh] += (Sd2gw_k);
+      Sd[hh] -= (Sd[hh]*Sd2gw_k);  becomes Sd[hh] -= (Sd2gw_k);
+
+
+3) lateral flow of Sd:
+      soil_ssr[hh] += (Sd[hh]*Sd2ssr_k);  becomes soil_ssr[hh] += (Sd2ssr_k); 
+      Sd[hh] -= (Sd[hh]*Sd2ssr_k);  becomes Sd[hh] -= (Sd2ssr_k);
+
+CRHM 03/09/16
+
+1) Module obs does not require the filter ea(t, rh) in the observation file to create the vapour pressure. It is created within CRHM from the temperature and relative humidity. If the observations rh and ea are available , rh is always used and not ea.
+
+2) The parameter Use_Observations_As_Supplied in the module obs is now fully functional. When used CRHM does not modify the input observations in anyway. Both observations rh and ea must be given. However, the observation filters ea(t, rh) or rh(t, ea) may be used to supply the missing ea or rh.
+
+3) It is recommended that the module XG only be used with the parameter k_update = 0 as modifying soil conductivity as freezing/thawing fronts advance does not work very well.
+
+CRHM 03/21/16
+
+1)The parameter Use_Observations_As_Supplied in the module obs has been removed. When it is used it requires that the project be reloaded after any change in the parameter value is made. It may be added again later when a method is found to transparently reload a project.
+.
+CRHM 01/06/17
+
+1) Module Ayers was not calculating "meltrunoff" and "runoff". correctly.
+
+2) Module pbsmSnobal was not distributing the drift correctly when the parameter "distrib" was negative to partition the HRUs into two or more drift regimes.
+
+CRHM 01/13/17
+
+1) In module "obs" the catchratio calculated by MacDonald-Alter and Smith-Alter cannot be greater than 1.0.
+
+2) Checks were added to all soil moisture modules to terminate if gw_init is greater than gw_max.
+
+3) CRHM source code was exceeding the compiler maximum size. Removed some Quinton modules.
+
+CRHM 02/08/17
+
+1) In module "obs", add one more row to obs_elev parameter, and in total two rows are used to index the obs_elev, the first row indexes elevation of observed air temp, the second row indexes elevation of observed precipitation. 
+
+CRHM 04/24/17
+
+1) In modules "Netroute", "Netroute_M", "Netroute_D", "Netroute_M_D", add a parameter preferential_flow, this gives option for a HRU to route surface runoff to another HRU's groundwater reservoir when preferential_flow is set to 1. 
+ 
+CRHM 04/28/17
+
+1) In module SWEslope, corrected available amount of snow for transport by avalanche slide;
+
+   Amount = SWE[hh]; becomes Amount = SWE[hh] - Hd[hh];
+   
+CRHM 05/02/17
+
+1) In modules "soil", "SoilDS", "SoilX", "ClassSoilPrairie", add one more row to soil_withdrawal parameter, and in total two rows are used to index the soil_withdrawal, the first row indexes soil withdrawal function for recharge layer, the second row indexes soil withdrawal function for lower layer. 
+
+CRHM 06/13/17
+
+1) In modules "Canopy", "CanopyClearing", "CanopyClearingGap", modified algorithm determine canopy interception of snow as unloading snow at slower rate, unloading snow at faster rate, and dripping. 
+
+2) In modules "Canopy", "CanopyClearing", "CanopyClearingGap", moved code of canopy interception of snow sublimation before code of canopy interception of snow unloading.
+ 
+CRHM 06/14/17
+
+1) In module "Canopy", added variables Qlisn_Var and Qsisn_Var, this builds link to SnobalCRHM#1. 
+
+CRHM 10/31/17
+
+1) In module SWEslope, corrected index error in parameter Disable_SWEslope;
+
+  for (long hhh = 0; chkStruct(hhh); ++hhh) {
+    if(Disable_SWEslope[hh])
+      continue;
+      
+   becomes
+   
+  for (long hhh = 0; chkStruct(hhh); ++hhh) {
+    if(Disable_SWEslope[hhh])
+      continue;   
+
+CRHM 11/15/17
+
+1) Finished correcting error in indexing observation elevations in ClassCRHM.cpp/h
+
+2) Fixed problem with the module glacier.  Albedo momemtarily changed to the "bare soil" value when SWE became zero.
+
+3) New equation for thermal conductivity in pbsm, pbsm_M, sbsm, and IceBulb
+
+CRHM 11/28/17
+
+  Previous changes to handle duplication of the parameters "obs_elev" and "soil_withdrawl" were causing other errors.
+  
+CRHM 01/16/18
+
+  Previous changes to handle duplication of the parameters "obs_elev" and "soil_withdrawl" were causing other errors.
+
+  Fixed error in declputparam for Dts_organic_runoff_K and Dts_snow_runoff_K.
+
+CRHM 05/15/19
+
+  Fixed errors in ClassModule that handles duplication of the parameters "obs_elev" and "soil_withdrawl".
+
+CRHM 05/15/19_GSL_change on 12/19/19
+  Fixed error in GSL conversion in calculating diffuse variable in global module.
+
+CRHM 03/24/20
+
+  Fixed error in Si update in Volumetric module.
+
+CRHM 03/31/20
+
+  Add 'infDays' parameter in crack, PrairieInfiltration and Greencrack modules to handle more snowinfil conditions that were previously limited to max. 6 days.
+
+  Better description for soil_rechr, soil_moist variables and parameters.
+
+  Modified frozenAyers module comment out if(cumsnowinfil -cumsnowinfil_0 > INF), as the if statement could cause problems for multi-years runs.
+
+CRHM 04/14/20
+
+  Add option for updating Si or fallstat based on Volumetric moisture content in recharge layer in  Volumetric module.
+
+CRHM 05/21/20
+
+  Correcting f2, f3, and f4 formula in Jarvis resistance scheme that is in evap_Resist, evap_ResistD, and evapX modules.
+
+CRHM 06/09/20
+
+  Restoring f2 in Jarvis resistance scheme in evap_Resist, evap_ResistD, and evapX modules to correct formula in CRHM 04/14/20, as pressure in f2 needs be coverted from kPa to mb.
+
+CRHM 06/18/20
+
+  Adding debris-cover glacier melt and katabatic parameterization as glacier#5 in glacier module.
+
+CRHM 06/25/20
+
+  Adding update for variable "Albedo" in glacier module.
+
+    if(GlacierMode[hh] == 1 && SWE[hh] <= 0.0)
+      Albedo[hh] = glacier_Albedo[hh];
+      
+CRHM 07/02/20      
+  
+  Adding lagT_used and lagSW_used variables for debris cover melt in glacier module.
+
+CRHM 02/01/21      
+  
+  Changing default value for parameter 'Wetlands_scaling_factor' from -1 to 1 in Soil module and adding more description for the parameter.
+
+CRHM 03/15/21
+  
+  Adding conditional statements to restrict divided by zero error for 'Volumetric' and 'Volumetric_rechr' variables in Volumetric module.
+
+CRHM 04/12/21
+  
+  Change float to long type for use_rho parameter in NewModules.h in SWEslope module.
+
+CRHM 08/11/21
+  
+  Add fallstat_correction parameter in Volumetric module to allow correction for the estimated fallstat, with default value as 1.
+		  
+    if(fallstat_correction[hh] >= 0.0)
+       fallstat[hh] = fallstat[hh]*fallstat_correction[hh];
+
+CRHM 03/18/22
+
+  In Canopy, CanopyClearing, and CanopyClearingGap module, removing Gamma Distribution Correction term (1.0 + 3.0/Alpha + 2.0/sqr(Alpha))
+  term in mean particle mass equation, correction as,
+	Mpm = 4.0/3.0 * M_PI * PBSM_constants::DICE * Radius*Radius*Radius;
+
+  In evap module, /86400 to ra term for rs/ra in Penman-Monteith method, because rs is in d/m while ra is in s/m, correction as,
+	
+       evap[hh] = (delta(hru_t[hh])*Q*Global::Freq + (RHOa*Cp/
+                  (lambda(hru_t[hh])*1e3)*(estar(hru_t[hh]) - hru_ea[hh])/(ra/86400)))/
+                  (delta(hru_t[hh]) + gamma(Pa[hh], hru_t[hh])*(1.0 + rs[hh]/(ra/86400)))/
+                  Global::Freq;
+
+CRHM 03/21/22
+
+  In Canopy, CanopyClearing, and CanopyClearingGap module, invert the time step conversion term in weekly dimensionless unloading coefficient,
+  use unloading rate coefficient U = -log(c)/t for snow unloading determined by inverse function of c = e^(-Ut) = 0.678 based on Eq. 14 in Hedstrom and Pomeroy (1998)
+  correction as,
+	const float U = -1*log(0.678)/(24*7*Global::Freq/24);
+
+       else if(IceBulbT < unload_t[hh]) // has to be at least one interval. Trip on half step
+            SUnload[hh] = Snow_load[hh]*U; // the dimensionless unloading coefficient already /interval, 21Mar2022 correction: use unloading rate coefficient U
+
+CRHM 04/06/22
+
+  Update description for parameters, variables and units in the modules below:
+
+	longVt
+	netall
+	evap_Resist
+	evapD_Resist
+	ShuttleWallace
+	ShuttleWallaceD
+	crack
+	PrairieInfiltration
+	Ayers
+	Greencrack
+	GreenAmpt
+	frozen
+	frozenAyers
+	Soil
+	evapX
+	SoilX
+	SoilDetention
+	SoilPrairie
+	glacier
+	SWESlope
+	Netroute
+	Netroute_D
+	Netroute_M
+	Netroute_M_D
+	REW_route
+	REW_route2
+	Canopy
+	CanopyClearing
+	CanopyClearingGap
+	NeedleLeaf
+	XG
+	Volumetric
+	tsurface
+	K_Estimate
+	interception
+	lake_evap 
+
+CRHM 04/22/22
+
+  In glacier module:
+	
+	1. adding missing parentheses for (Ts_glacier * katabatic_lapse_rate[hh] * Pr) in the Katabatic equation:
+
+ 	K_kat[hh] = Katabatic * ((hru_t[hh] + 273.15) - Ts_glacier) * pow(g / (Ts_glacier * katabatic_lapse_rate[hh] * Pr), 0.5);
+
+	2. correction in debris-cover melt for handling the delayed air temperature and incoming shortwave radiation due to debris cover.
