@@ -1,10 +1,10 @@
-// 04/06/22 update description for parameters, variables and units in
-// various modules in 03/21/22
+// 04/22/22 fix bugs in Katabatic equation and debris-cover melt for
+// glacier module in 04/06/22
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "04/06/22"
+#define CurrentVersion "04/22/22"
 
 #include <stdexcept>
 #include "CRHMmain.h"
