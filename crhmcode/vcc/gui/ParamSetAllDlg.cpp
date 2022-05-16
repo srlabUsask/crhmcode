@@ -1,5 +1,4 @@
 #include "ParamSetAllDlg.h"
-#include "ParamDlgCard.h"
 
 IMPLEMENT_DYNAMIC(ParamSetAllDlg, CDialogEx)
 

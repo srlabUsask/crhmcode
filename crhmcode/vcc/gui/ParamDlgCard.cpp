@@ -30,20 +30,20 @@ ParamDlgCard::~ParamDlgCard()
 	delete this->pointFont60;
 
 	// Starts at 1 because the first item is not dynamicaly allocated
-	for (int i = 1; i < this->rowLabels.size(); i++)
+	for (size_t i = 1; i < this->rowLabels.size(); i++)
 	{
 		delete this->rowLabels[i];
 	}
 
 	// Starts at 1 beacuse the first item is not dynamcialy allocated
-	for (int i = 1; i < this->colHearders.size(); i++)
+	for (size_t i = 1; i < this->colHearders.size(); i++)
 	{
 		delete this->colHearders[i];
 	}
 
-	for (int i = 0; i < this->valueGrid.size(); i++)
+	for (size_t i = 0; i < this->valueGrid.size(); i++)
 	{
-		for (int j = 0; j < this->valueGrid[i].size(); j++)
+		for (size_t j = 0; j < this->valueGrid[i].size(); j++)
 		{
 			delete this->valueGrid[i][j];
 		}
@@ -380,7 +380,7 @@ void ParamDlgCard::RenderGrid()
 			}
 			else if (this->parameter->varType == TVar::Txt)
 			{
-				if (this->parameter->Strings->size() > j)
+				if ((int)this->parameter->Strings->size() > j)
 				{
 					valueStream << this->parameter->Strings->at(j);
 					valueStream >> valueString;
@@ -404,7 +404,7 @@ void ParamDlgCard::RenderGrid()
 void ParamDlgCard::RemoveGrid()
 {
 	// Starts at 1 because the first item is not dynamicaly allocated
-	for (int i = 1; i < this->rowLabels.size(); i++)
+	for (size_t i = 1; i < this->rowLabels.size(); i++)
 	{
 		delete this->rowLabels[i];
 	}
@@ -412,16 +412,16 @@ void ParamDlgCard::RemoveGrid()
 	this->rowLabels.clear();
 
 	// Starts at 1 beacuse the first item is not dynamcialy allocated
-	for (int i = 1; i < this->colHearders.size(); i++)
+	for (size_t i = 1; i < this->colHearders.size(); i++)
 	{
 		delete this->colHearders[i];
 	}
 
 	this->colHearders.clear();
 
-	for (int i = 0; i < this->valueGrid.size(); i++)
+	for (size_t i = 0; i < this->valueGrid.size(); i++)
 	{
-		for (int j = 0; j < this->valueGrid[i].size(); j++)
+		for (size_t j = 0; j < this->valueGrid[i].size(); j++)
 		{
 			delete this->valueGrid[i][j];
 		}
