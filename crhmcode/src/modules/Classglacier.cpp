@@ -358,8 +358,8 @@ void Classglacier::init(void) {
         Qe_ebsm[hh] = 0.0;
         Qp_ebsm[hh] = 0.0;
 
-        lagT[hh] = 0.0;
-        lagSW[hh] = 0.0;
+        lagT[hh] = 0l;
+        lagSW[hh] = 0l;
         TF[hh] = 0.0;
         SRF[hh] = 0.0;
         Xdebris_melt_hrly[hh] = 0.0;
@@ -469,44 +469,44 @@ void Classglacier::run(void) {
         // 22 Apr 2022 modified: change to long from float for lagT and lagSW
         if (use_debris[hh] && debris_h[hh] > 0.0) { // debris-cover melt, Debris Enhanced Temperature-Index (DETI) model by Carenzo et al (2016), added on 16 June 2020
             if (fabs(debris_h[hh] - 0.05) < epsilon) {
-                lagT[hh] = 0;
-                lagSW[hh] = 0;
+                lagT[hh] = 0l;
+                lagSW[hh] = 0l;
                 TF[hh] = 0.0984;
                 SRF[hh] = 0.0044;
             }
             else if (fabs(debris_h[hh] - 0.1) < epsilon) {
-                lagT[hh] = 0;
-                lagSW[hh] = 1;
+                lagT[hh] = 0l;
+                lagSW[hh] = 1l;
                 TF[hh] = 0.066;
                 SRF[hh] = 0.0023;
             }
             else if (fabs(debris_h[hh] - 0.2) < epsilon) {
-                lagT[hh] = 3;
-                lagSW[hh] = 3;
+                lagT[hh] = 3l;
+                lagSW[hh] = 3l;
                 TF[hh] = 0.0456;
                 SRF[hh] = 0.0009;
             }
             else if (fabs(debris_h[hh] - 0.23) < epsilon) {
-                lagT[hh] = 3;
-                lagSW[hh] = 4;
+                lagT[hh] = 3l;
+                lagSW[hh] = 4l;
                 TF[hh] = 0.0438;
                 SRF[hh] = 0.0006;
             }
             else if (fabs(debris_h[hh] - 0.3) < epsilon) {
-                lagT[hh] = 5;
-                lagSW[hh] = 5;
+                lagT[hh] = 5l;
+                lagSW[hh] = 5l;
                 TF[hh] = 0.0392;
                 SRF[hh] = 0.0002;
             }
             else if (fabs(debris_h[hh] - 0.4) < epsilon) {
-                lagT[hh] = 7;
-                lagSW[hh] = 7;
+                lagT[hh] = 7l;
+                lagSW[hh] = 7l;
                 TF[hh] = 0.0334;
                 SRF[hh] = 0.0001;
             }
             else if (fabs(debris_h[hh] - 0.5) < epsilon) {
-                lagT[hh] = 10;
-                lagSW[hh] = 11;
+                lagT[hh] = 10l;
+                lagSW[hh] = 11l;
                 TF[hh] = 0.0265;
                 SRF[hh] = 0.0;
             }
