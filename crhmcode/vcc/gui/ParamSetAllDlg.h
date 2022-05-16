@@ -7,6 +7,7 @@
 
 #include "ParamDlgCard.h"
 
+// Forward declaration
 class ParamDlgCard;
 
 class ParamSetAllDlg : public CDialogEx
@@ -14,15 +15,30 @@ class ParamSetAllDlg : public CDialogEx
 	DECLARE_DYNAMIC(ParamSetAllDlg)
 
 private:
+	/**
+	* The CEdit control for choosing the value to set. 
+	*/
 	CEdit set_all_value;
 
+	/**
+	* Reference to the parameter card that the value will be applied to.
+	*/
+	ParamDlgCard* card;
+
+	/**
+	* Overide of OnOK that will set the values in the parameter card before closing 
+	*	when the set button is pressed.
+	*/
 	void ParamSetAllDlg::OnOK();
 
-	ParamDlgCard * card;
-
 public:
+	/**
+	* Constructor 
+	* 
+	* @param paramCard - ParamDlgCard* pointer to the 
+	*	parameter card associated with this dialog.
+	*/
 	ParamSetAllDlg(ParamDlgCard* paramCard, CWnd* parent = nullptr);
-
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
