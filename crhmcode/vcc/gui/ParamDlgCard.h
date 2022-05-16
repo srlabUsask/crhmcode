@@ -54,12 +54,30 @@ private:
 	*/
 	std::vector<CEdit*> colHearders;
 
+	/**
+	* Holds the representation of the valueGrid that is displayed
+	*/
 	std::vector<std::vector<CEdit*>> valueGrid;
 
+	/**
+	* Handles the set all button being clicked.
+	* 
+	* Opens a dialog to receive the value to set all of the cells to.
+	*/
 	void OnSetAllButton();
 
+	/**
+	* Handles the Reset button being clicked.
+	* 
+	* Resets all of the cells in the grid to the values in the model.
+	*/
 	void OnResetButton();
 
+	/**
+	* Handles the Save button being clicked. 
+	* 
+	* Saves all of the cells in the grid so that the model matches the cells.
+	*/
 	void OnSaveButton();
 
 
@@ -84,12 +102,26 @@ public:
 	*/
 	void RenderGrid();
 
+	/**
+	* Removes all of the items created to render the grid.
+	*/
 	void RemoveGrid();
 
+	/*
+	* Sets all of the cells in the grid to the value specifed.
+	* 
+	* @param valueString - std::string the value to set all of the cells to.
+	*/
 	void SetAll(std::string valueString);
 
+	/**
+	* Calls the OnResetButton method reseting the grid to the values in the model.
+	*/
 	void ResetGrid();
 
+	/**
+	* Calls the OnSaveButton method saving the state in the grid to the model
+	*/
 	void SaveCard();
 
 protected:

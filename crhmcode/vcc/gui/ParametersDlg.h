@@ -83,8 +83,18 @@ private:
 	*/
 	afx_msg void OnToggleAll();
 
+	/**
+	* Handler for when the Reset All button is pressed. 
+	* 
+	* Calls the reset method on all active parameter cards.
+	*/
 	afx_msg void OnResetAll();
 
+	/**
+	* Handler for when the Save All button is pressed.
+	* 
+	* Calls the save method on all active parameter cards.
+	*/
 	afx_msg void OnSaveAll();
 
 	/**

@@ -573,15 +573,18 @@ void ParametersDlg::OnToggleAll()
 	this->OnSelectParam();
 }
 
+
 void ParametersDlg::OnResetAll()
 {
 	this->prameters_scroll_pane->ResetAllCards();
 }
 
+
 void ParametersDlg::OnSaveAll()
 {
 	this->prameters_scroll_pane->SaveAllCards();
 }
+
 
 void ParametersDlg::initalizeModulesListBox(CRHMmain* main)
 {

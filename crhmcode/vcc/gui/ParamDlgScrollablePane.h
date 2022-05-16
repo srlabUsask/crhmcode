@@ -75,8 +75,14 @@ public:
 	*/
 	void SetParameterCards(std::list<std::pair<std::string, ClassPar*>>* parametersList);
 
+	/**
+	* Calls the ResetGrid method on all of the parameter cards.
+	*/
 	void ResetAllCards();
 
+	/*
+	* Calls the SaveCard method on all of the parameter cards.
+	*/
 	void SaveAllCards();
 
 protected:
