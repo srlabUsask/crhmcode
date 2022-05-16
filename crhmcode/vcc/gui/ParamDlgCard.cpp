@@ -146,6 +146,11 @@ void ParamDlgCard::SetAll(std::string valueString)
 
 }
 
+void ParamDlgCard::ResetGrid()
+{
+	this->OnResetButton();
+}
+
 BOOL ParamDlgCard::OnInitDialog()
 {
 	CDialog::OnInitDialog();

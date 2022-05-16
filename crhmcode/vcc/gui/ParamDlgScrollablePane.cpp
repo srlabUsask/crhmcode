@@ -56,6 +56,18 @@ void ParamDlgScrollablePane::SetParameterCards(std::list<std::pair<std::string, 
 	this->ResizeWindow();
 }
 
+void ParamDlgScrollablePane::ResetAllCards()
+{
+	
+	for (
+		size_t i = 0;
+		i < this->cards.size();
+		i++
+		)
+	{
+		this->cards[i]->ResetGrid();
+	}
+}
 
 void ParamDlgScrollablePane::RemoveAllCards()
 {

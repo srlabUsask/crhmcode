@@ -88,6 +88,8 @@ public:
 
 	void SetAll(std::string valueString);
 
+	void ResetGrid();
+
 protected:
 
 	/**

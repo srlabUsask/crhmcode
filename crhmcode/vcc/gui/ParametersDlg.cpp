@@ -34,6 +34,7 @@ BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_ADVANCE_BTN, &ParametersDlg::OnToggleAdvance)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_PRIVATE_BTN, &ParametersDlg::OnTogglePrivate)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_ALL_BTN, &ParametersDlg::OnToggleAll)
+	ON_BN_CLICKED(ID_PARAM_RESET_ALL, &ParametersDlg::OnResetAll)
 END_MESSAGE_MAP()
 
 
@@ -569,6 +570,11 @@ void ParametersDlg::OnToggleAll()
 
 	// Call to update the parameter cards.
 	this->OnSelectParam();
+}
+
+void ParametersDlg::OnResetAll()
+{
+	this->prameters_scroll_pane->ResetAllCards();
 }
 
 void ParametersDlg::initalizeModulesListBox(CRHMmain* main)

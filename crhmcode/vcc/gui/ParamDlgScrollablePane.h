@@ -75,6 +75,8 @@ public:
 	*/
 	void SetParameterCards(std::list<std::pair<std::string, ClassPar*>>* parametersList);
 
+	void ResetAllCards();
+
 protected:
 
 	/**
