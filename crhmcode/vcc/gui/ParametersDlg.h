@@ -85,6 +85,8 @@ private:
 
 	afx_msg void OnResetAll();
 
+	afx_msg void OnSaveAll();
+
 	/**
 	* Helper method used to initalize the values in the modules list box during dialog initalization.
 	*

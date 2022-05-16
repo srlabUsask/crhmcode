@@ -151,6 +151,11 @@ void ParamDlgCard::ResetGrid()
 	this->OnResetButton();
 }
 
+void ParamDlgCard::SaveCard()
+{
+	this->OnSaveButton();
+}
+
 BOOL ParamDlgCard::OnInitDialog()
 {
 	CDialog::OnInitDialog();

@@ -90,6 +90,8 @@ public:
 
 	void ResetGrid();
 
+	void SaveCard();
+
 protected:
 
 	/**

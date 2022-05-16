@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_PRIVATE_BTN, &ParametersDlg::OnTogglePrivate)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_ALL_BTN, &ParametersDlg::OnToggleAll)
 	ON_BN_CLICKED(ID_PARAM_RESET_ALL, &ParametersDlg::OnResetAll)
+	ON_BN_CLICKED(ID_PARAM_SAVE_ALL, &ParametersDlg::OnSaveAll)
 END_MESSAGE_MAP()
 
 
@@ -575,6 +576,11 @@ void ParametersDlg::OnToggleAll()
 void ParametersDlg::OnResetAll()
 {
 	this->prameters_scroll_pane->ResetAllCards();
+}
+
+void ParametersDlg::OnSaveAll()
+{
+	this->prameters_scroll_pane->SaveAllCards();
 }
 
 void ParametersDlg::initalizeModulesListBox(CRHMmain* main)

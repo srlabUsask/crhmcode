@@ -77,6 +77,8 @@ public:
 
 	void ResetAllCards();
 
+	void SaveAllCards();
+
 protected:
 
 	/**
