@@ -7,6 +7,7 @@ ParamDlgScrollablePane::ParamDlgScrollablePane(CWnd* pParent /*=NULL*/)
 	Create(ParamDlgScrollablePane::IDD,pParent);
 	this->scroll_position = 0;
 	this->pane_height = 0;
+	this->next_card = 8;
 }
 
 
@@ -93,13 +94,14 @@ void ParamDlgScrollablePane::RemoveAllCards()
 	}
 
 	this->cards.clear();
+	this->next_card = 8;
 }
 
 
 void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data)
 {
 	CRect cardRect;
-	this->CalculateCardLocation(&cardRect);
+	this->CalculateCardLocation(&cardRect, (int) data->second->lay);
 
 	ParamDlgCard * newCard = new ParamDlgCard(data->second, this);
 	newCard->MoveWindow(cardRect);
@@ -111,20 +113,26 @@ void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 }
 
 
-void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle)
+void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle, int numRows)
 {
-	size_t offsetFactor = this->cards.size();
+	CRect baseSize(0, 0, 100, 130);
+	CRect sizeGuide(0,0,100,20);
+	ScreenToClient(&sizeGuide);
+	ScreenToClient(&baseSize);
+	int guideHeight = sizeGuide.Height();
+	int baseHeight = baseSize.Height();
 
 	int topX = 8;
-	int topY = 8 + (offsetFactor * 250);
+	int topY = this->next_card;
 	int botX = this->current_rectangle.BottomRight().x - 50;
-	int botY = topY + 240;
+	int botY = topY + baseHeight + (numRows * guideHeight);
 
 	rectangle->TopLeft().x = topX;
 	rectangle->TopLeft().y = topY;
 	rectangle->BottomRight().x = botX;
 	rectangle->BottomRight().y = botY;
 
+	this->next_card = botY + 8;
 }
 
 

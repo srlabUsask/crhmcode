@@ -42,6 +42,11 @@ private:
 	int	pane_height;
 
 	/**
+	* Tracks where to place the top of the next card to be rendered
+	*/
+	int next_card;
+
+	/**
 	* Renders a parameter card. 
 	* 
 	* @param data - std::list<std::pair<std::string, ClassPar*>>::iterator the data for the parameter card to render.
@@ -57,8 +62,9 @@ private:
 	* Calculate the location to place the next parameter card.
 	* 
 	* @param rectangle - CRect* a reference to the CRect object to set to the location where to place the card.
+	* @param numRows - int the number of rows the incoming card needs to display all of its values.
 	*/
-	void CalculateCardLocation(CRect* rectangle);
+	void CalculateCardLocation(CRect* rectangle, int numRows);
 
 	void ResizeWindow();
 
