@@ -482,14 +482,25 @@ void ParamDlgCard::OnSize(UINT nType, int cx, int cy)
 
 	pane_height = cy;
 
-	SCROLLINFO si{};
-	si.cbSize = sizeof(SCROLLINFO);
-	si.fMask = SIF_ALL; 
-	si.nMin = 0;
-	si.nMax = original_rectangle.Height();
-	si.nPage = cy;
-	si.nPos = 0;
-	SetScrollInfo(SB_VERT, &si, TRUE); 	
+	SCROLLINFO siv{};
+	siv.cbSize = sizeof(SCROLLINFO);
+	siv.fMask = SIF_ALL; 
+	siv.nMin = 0;
+	siv.nMax = original_rectangle.Height();
+	siv.nPage = cy;
+	siv.nPos = 0;
+	SetScrollInfo(SB_VERT, &siv, TRUE); 	
+
+	pane_height = cx;
+
+	SCROLLINFO sih{};
+	sih.cbSize = sizeof(SCROLLINFO);
+	sih.fMask = SIF_ALL;
+	sih.nMin = 0;
+	sih.nMax = original_rectangle.Width();
+	sih.nPage = cx;
+	sih.nPos = 0;
+	SetScrollInfo(SB_HORZ, &sih, TRUE);
 
 }
 

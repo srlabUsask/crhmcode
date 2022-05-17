@@ -115,7 +115,7 @@ void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 
 void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle, int numRows)
 {
-	CRect baseSize(0, 0, 100, 130);
+	CRect baseSize(0, 0, 100, 150);
 	CRect sizeGuide(0,0,100,20);
 	ScreenToClient(&sizeGuide);
 	ScreenToClient(&baseSize);

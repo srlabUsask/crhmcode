@@ -32,6 +32,11 @@ private:
 	int	pane_height;
 
 	/**
+	* Tracks the actual width of the pane
+	*/
+	int pane_width;
+
+	/**
 	* Holds the parameter associated with this card 
 	*/
 	ClassPar * parameter;
