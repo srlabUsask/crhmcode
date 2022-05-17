@@ -144,15 +144,6 @@ void ParamDlgScrollablePane::ResizeWindow()
 			SWP_SHOWWINDOW
 		);
 
-		SCROLLINFO si{};
-		si.cbSize = sizeof(SCROLLINFO);
-		si.fMask = SIF_ALL;
-		si.nMin = 0;
-		si.nMax = current_rectangle.Height();
-		si.nPage = original_rectangle.Height();
-		si.nPos = 0;
-		SetScrollInfo(SB_VERT, &si, TRUE);
-
 	}
 	else
 	{
@@ -169,16 +160,18 @@ void ParamDlgScrollablePane::ResizeWindow()
 			SWP_SHOWWINDOW
 		);
 
-		SCROLLINFO si{};
-		si.cbSize = sizeof(SCROLLINFO);
-		si.fMask = SIF_ALL;
-		si.nMin = 0;
-		si.nMax = current_rectangle.Height();
-		si.nPage = original_rectangle.Height();
-		si.nPos = 0;
-		SetScrollInfo(SB_VERT, &si, TRUE);
-
 	}
+
+	SCROLLINFO si{};
+	si.cbSize = sizeof(SCROLLINFO);
+	si.fMask = SIF_ALL;
+	si.nMin = 0;
+	si.nMax = current_rectangle.Height();
+	si.nPage = original_rectangle.Height();
+	si.nPos = 0;
+	SetScrollInfo(SB_VERT, &si, TRUE);
+	this->scroll_position = 0;
+	SetScrollPos(SB_VERT, this->scroll_position, TRUE);
 
 }
 
