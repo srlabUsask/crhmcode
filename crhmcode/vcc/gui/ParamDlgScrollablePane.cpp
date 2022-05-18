@@ -116,7 +116,7 @@ void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle, int numRows, int numCols)
 {
 	CRect baseSize(0, 0, this->current_rectangle.Width(), 150);
-	CRect sizeGuide(0,0,100,20);
+	CRect sizeGuide(0,0,80,20);
 	ScreenToClient(&sizeGuide);
 	ScreenToClient(&baseSize);
 	int guideHeight = sizeGuide.Height();
@@ -124,9 +124,14 @@ void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle, int numRows
 	int baseHeight = baseSize.Height();
 	int baseWidth = baseSize.Width();
 
+	if (numCols < 11)
+	{
+		numCols = 11;
+	}
+
 	int topX = 8;
 	int topY = this->next_card;
-	int botX = topX + baseWidth + (numCols * guideWidth);
+	int botX = topX + baseWidth + ((numCols - 11) * guideWidth);
 	int botY = topY + baseHeight + (numRows * guideHeight);
 
 	rectangle->TopLeft().x = topX;

@@ -6,7 +6,6 @@ ParamDlgCard::ParamDlgCard(ClassPar * param, ParamDlgScrollablePane * pParent)
 {
 	Create(ParamDlgCard::IDD,pParent);
 	this->scroll_position = 0;
-	this->pane_height = 0;
 	this->pane_width = 0;
 	this->parameter = param;
 
@@ -162,7 +161,6 @@ BOOL ParamDlgCard::OnInitDialog()
 
 	// save the original size
 	GetWindowRect(this->original_rectangle);
-	GetWindowRect(this->current_rectangle);
 
 	// initial scroll position
 	scroll_position = 0; 

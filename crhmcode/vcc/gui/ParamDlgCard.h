@@ -23,20 +23,10 @@ private:
 	*/
 	CRect original_rectangle;
 
-	/*
-	* CRect object representing the current size of the card
-	*/
-	CRect current_rectangle;
-
 	/**
 	* Tracks the scroll position of the pane.
 	*/
 	int	scroll_position;
-
-	/**
-	* Tracks the actual height of the pane
-	*/
-	int	pane_height;
 
 	/**
 	* Tracks the actual width of the pane

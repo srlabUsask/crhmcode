@@ -3,6 +3,7 @@
 #include <afxwin.h>
 #include <list>
 #include <string>
+#include <math.h>
 
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
