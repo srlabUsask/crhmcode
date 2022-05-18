@@ -277,6 +277,7 @@
 #define PARAMETERS_DLG_SCROLL_PANE      50006
 #define ID_PARAM_PANE_PLACEHOLDER       50007
 #define PARAMETERS_CARD                 50009
+#define PARAMETERS_CARD_SHARED          50010
 #define ID_PARAM_NAME                   60000
 #define ID_PARAM_HELP                   60001
 #define ID_PARAM_UNITS_LABEL            60002
