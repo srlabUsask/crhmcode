@@ -18,49 +18,6 @@ private:
 	*/
 	enum { IDD = PARAMETERS_CARD };
 
-	/*
-	* CRect object representing the original size of the card.
-	*/
-	CRect original_rectangle;
-
-	/**
-	* Tracks the scroll position of the pane.
-	*/
-	int	scroll_position;
-
-	/**
-	* Tracks the actual width of the pane
-	*/
-	int pane_width;
-
-	/**
-	* Holds the parameter associated with this card 
-	*/
-	ClassPar * parameter;
-
-	/**
-	* Holders for fonts used on the card
-	*/
-	CFont * pointFont120;
-	CFont * pointFont100;
-	CFont * pointFont80;
-	CFont * pointFont60;
-
-	/**
-	* Vector that holds the CEdit references for the row label items
-	*/
-	std::vector<CEdit*> rowLabels;
-
-	/**
-	* Vector that holds the CEdit references for the column header items
-	*/
-	std::vector<CEdit*> colHearders;
-
-	/**
-	* Holds the representation of the valueGrid that is displayed
-	*/
-	std::vector<std::vector<CEdit*>> valueGrid;
-
 	/**
 	* Handles the set all button being clicked.
 	* 
@@ -81,7 +38,6 @@ private:
 	* Saves all of the cells in the grid so that the model matches the cells.
 	*/
 	void OnSaveButton();
-
 
 public:
 	/*
@@ -128,6 +84,49 @@ public:
 
 protected:
 
+	/*
+	* CRect object representing the original size of the card.
+	*/
+	CRect original_rectangle;
+
+	/**
+	* Tracks the scroll position of the pane.
+	*/
+	int	scroll_position;
+
+	/**
+	* Tracks the actual width of the pane
+	*/
+	int pane_width;
+
+	/**
+	* Holds the parameter associated with this card
+	*/
+	ClassPar* parameter;
+
+	/**
+	* Holders for fonts used on the card
+	*/
+	CFont* pointFont120;
+	CFont* pointFont100;
+	CFont* pointFont80;
+	CFont* pointFont60;
+
+	/**
+	* Vector that holds the CEdit references for the row label items
+	*/
+	std::vector<CEdit*> rowLabels;
+
+	/**
+	* Vector that holds the CEdit references for the column header items
+	*/
+	std::vector<CEdit*> colHearders;
+
+	/**
+	* Holds the representation of the valueGrid that is displayed
+	*/
+	std::vector<std::vector<CEdit*>> valueGrid;
+
 	/**
 	* Connect data layer to the view.
 	*/
@@ -142,11 +141,6 @@ protected:
 	* Handles vertical scrolling by use of the scroll bar.
 	*/
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
-
-	/**
-	* Handles vertical scrolling by use of the scroll wheel.
-	*/
-	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 
 	/**
 	* Handles resizing of the pane.
