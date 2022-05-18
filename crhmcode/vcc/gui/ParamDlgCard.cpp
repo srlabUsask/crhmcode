@@ -1,12 +1,13 @@
 #include "ParamDlgCard.h"
 
 
-ParamDlgCard::ParamDlgCard(ClassPar * param, CWnd* pParent /*=NULL*/ )
-	: CDialog(ParamDlgCard::IDD, pParent)
+ParamDlgCard::ParamDlgCard(ClassPar * param, ParamDlgScrollablePane * pParent)
+	: CDialog(ParamDlgCard::IDD, (CWnd*)pParent)
 {
 	Create(ParamDlgCard::IDD,pParent);
 	this->scroll_position = 0;
 	this->pane_height = 0;
+	this->pane_width = 0;
 	this->parameter = param;
 
 	this->pointFont120 = new CFont();
@@ -61,8 +62,7 @@ BEGIN_MESSAGE_MAP(ParamDlgCard, CDialog)
 	ON_BN_CLICKED(ID_PARAM_SET_BTN, &ParamDlgCard::OnSetAllButton)
 	ON_BN_CLICKED(ID_PARAM_RESET_BTN, &ParamDlgCard::OnResetButton)
 	ON_BN_CLICKED(ID_PARAM_SAVE_BTN, &ParamDlgCard::OnSaveButton)
-	ON_WM_VSCROLL()
-	ON_WM_MOUSEWHEEL()
+	ON_WM_HSCROLL()
 	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
@@ -161,7 +161,8 @@ BOOL ParamDlgCard::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	// save the original size
-	GetWindowRect(original_rectangle);
+	GetWindowRect(this->original_rectangle);
+	GetWindowRect(this->current_rectangle);
 
 	// initial scroll position
 	scroll_position = 0; 
@@ -397,6 +398,7 @@ void ParamDlgCard::RenderGrid()
 			// Place the CEdit into the value grid to be tracked
 			this->valueGrid[i].push_back(newCell);
 		}
+
 	}
 
 }
@@ -431,10 +433,10 @@ void ParamDlgCard::RemoveGrid()
 	this->valueGrid.clear();
 }
 
-void ParamDlgCard::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+void ParamDlgCard::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	int nDelta;
-	int nMaxPos = original_rectangle.Height() - pane_height;
+	int nMaxPos = original_rectangle.Width() - pane_width;
 
 	switch (nSBCode)
 	{
@@ -470,9 +472,9 @@ void ParamDlgCard::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		return;
 	}
 	scroll_position += nDelta;
-	SetScrollPos(SB_VERT,scroll_position,TRUE);
-	ScrollWindow(0,-nDelta);
-	CDialog::OnVScroll(nSBCode, nPos, pScrollBar);
+	SetScrollPos(SB_HORZ,scroll_position,TRUE);
+	ScrollWindow(-nDelta,0);
+	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
 
@@ -480,57 +482,18 @@ void ParamDlgCard::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 
-	pane_height = cy;
-
-	SCROLLINFO siv{};
-	siv.cbSize = sizeof(SCROLLINFO);
-	siv.fMask = SIF_ALL; 
-	siv.nMin = 0;
-	siv.nMax = original_rectangle.Height();
-	siv.nPage = cy;
-	siv.nPos = 0;
-	SetScrollInfo(SB_VERT, &siv, TRUE); 	
-
-	pane_height = cx;
+	pane_width = cx;
 
 	SCROLLINFO sih{};
 	sih.cbSize = sizeof(SCROLLINFO);
 	sih.fMask = SIF_ALL;
 	sih.nMin = 0;
-	sih.nMax = original_rectangle.Width();
-	sih.nPage = cx;
+	sih.nMax = cx;
+	sih.nPage = original_rectangle.Width();
 	sih.nPos = 0;
 	SetScrollInfo(SB_HORZ, &sih, TRUE);
 
 }
 
 
-BOOL ParamDlgCard::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
-{
-	int nMaxPos = original_rectangle.Height() - pane_height;
 
-	if (zDelta<0)
-	{
-		if (scroll_position < nMaxPos)
-		{
-			zDelta = min(max(nMaxPos/20,5),nMaxPos-scroll_position);
-
-			scroll_position += zDelta;
-			SetScrollPos(SB_VERT,scroll_position,TRUE);
-			ScrollWindow(0,-zDelta);
-		}
-	}
-	else
-	{
-		if (scroll_position > 0)
-		{
-			zDelta = -min(max(nMaxPos/20,5),scroll_position);
-
-			scroll_position += zDelta;
-			SetScrollPos(SB_VERT,scroll_position,TRUE);
-			ScrollWindow(0,-zDelta);
-		}
-	}
-	
-	return CDialog::OnMouseWheel(nFlags, zDelta, pt);
-}

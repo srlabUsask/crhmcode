@@ -101,7 +101,7 @@ void ParamDlgScrollablePane::RemoveAllCards()
 void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data)
 {
 	CRect cardRect;
-	this->CalculateCardLocation(&cardRect, (int) data->second->lay);
+	this->CalculateCardLocation(&cardRect, (int) data->second->lay, (int) data->second->dim);
 
 	ParamDlgCard * newCard = new ParamDlgCard(data->second, this);
 	newCard->MoveWindow(cardRect);
@@ -113,18 +113,20 @@ void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 }
 
 
-void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle, int numRows)
+void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle, int numRows, int numCols)
 {
-	CRect baseSize(0, 0, 100, 150);
+	CRect baseSize(0, 0, this->current_rectangle.Width(), 150);
 	CRect sizeGuide(0,0,100,20);
 	ScreenToClient(&sizeGuide);
 	ScreenToClient(&baseSize);
 	int guideHeight = sizeGuide.Height();
+	int guideWidth = sizeGuide.Width();
 	int baseHeight = baseSize.Height();
+	int baseWidth = baseSize.Width();
 
 	int topX = 8;
 	int topY = this->next_card;
-	int botX = this->current_rectangle.BottomRight().x - 50;
+	int botX = topX + baseWidth + (numCols * guideWidth);
 	int botY = topY + baseHeight + (numRows * guideHeight);
 
 	rectangle->TopLeft().x = topX;

@@ -6,7 +6,9 @@
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
 #include "ParamSetAllDlg.h"
+#include "ParamDlgScrollablePane.h"
 
+class ParamDlgScrollablePane;
 
 class ParamDlgCard : public CDialog
 {
@@ -17,9 +19,14 @@ private:
 	enum { IDD = PARAMETERS_CARD };
 
 	/*
-	* CRect object representing the original size of the inserted pane.
+	* CRect object representing the original size of the card.
 	*/
 	CRect original_rectangle;
+
+	/*
+	* CRect object representing the current size of the card
+	*/
+	CRect current_rectangle;
 
 	/**
 	* Tracks the scroll position of the pane.
@@ -90,7 +97,7 @@ public:
 	/*
 	* Standard constructor
 	*/
-	ParamDlgCard(ClassPar * param, CWnd* pParent = NULL );
+	ParamDlgCard(ClassPar * param, ParamDlgScrollablePane* pParent);
 
 	/*
 	* Deconstructor
@@ -144,7 +151,7 @@ protected:
 	/**
 	* Handles vertical scrolling by use of the scroll bar.
 	*/
-	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 
 	/**
 	* Handles vertical scrolling by use of the scroll wheel.

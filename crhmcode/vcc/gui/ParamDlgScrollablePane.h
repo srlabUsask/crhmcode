@@ -8,6 +8,8 @@
 #include "../../src/core/ClassPar.h"
 #include "ParamDlgCard.h"
 
+class ParamDlgCard;
+
 class ParamDlgScrollablePane : public CDialog
 {
 private:
@@ -63,8 +65,9 @@ private:
 	* 
 	* @param rectangle - CRect* a reference to the CRect object to set to the location where to place the card.
 	* @param numRows - int the number of rows the incoming card needs to display all of its values.
+	* @param numCols - int the number of columns the incoing card needs to display all of its values
 	*/
-	void CalculateCardLocation(CRect* rectangle, int numRows);
+	void CalculateCardLocation(CRect* rectangle, int numRows, int numCols);
 
 	void ResizeWindow();
 
