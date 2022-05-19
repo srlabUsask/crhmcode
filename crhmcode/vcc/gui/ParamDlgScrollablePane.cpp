@@ -104,7 +104,7 @@ void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 	this->CalculateCardLocation(&cardRect, (int) data->second->lay, (int) data->second->dim);
 
 	ParamDlgCard * newCard;
-	if (data->second->module == "Shared")
+	if (data->first.find("*") != std::string::npos)
 	{
 		newCard = new ParamDlgCardShared(data->second, this);
 		newCard->call_create(this);

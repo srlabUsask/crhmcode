@@ -226,12 +226,13 @@ void ParametersDlg::OnSelectParam()
 		CString selectedParamText;
 		this->parameters_list_box.GetText(selectedIndicies[i], selectedParamText);
 		CT2CA pszConvertedAnsiString(selectedParamText); //Intermediary to convert CString to std::string
-		std::string selectedParameter(pszConvertedAnsiString);
+		std::string selectedParameterRaw(pszConvertedAnsiString);
+		std::string selectedParameter;
 
 		// Remove the * from a shared parameter
-		if (selectedParameter.find("*") != std::string::npos)
+		if (selectedParameterRaw.find("*") != std::string::npos)
 		{
-			selectedParameter = selectedParameter.substr(1, std::string::npos);
+			selectedParameter = selectedParameterRaw.substr(1, std::string::npos);
 			selectedParameter = "Shared " + selectedParameter;
 		}
 		else
@@ -252,12 +253,12 @@ void ParametersDlg::OnSelectParam()
 				moduleString = moduleString.substr(0, moduleString.length() - 2);
 			}
 
-			selectedParameter = moduleString + " " + selectedParameter;
+			selectedParameter = moduleString + " " + selectedParameterRaw;
 		}
 
 		std::map<std::string, ClassPar*>::iterator parameterIt = Global::MapPars.find(selectedParameter);
 		
-		parametersList->push_back(std::pair<std::string, ClassPar*>(parameterIt->first, parameterIt->second));
+		parametersList->push_back(std::pair<std::string, ClassPar*>(selectedParameterRaw, parameterIt->second));
 
 	}
 
