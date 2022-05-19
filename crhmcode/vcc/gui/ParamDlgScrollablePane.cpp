@@ -103,13 +103,23 @@ void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 	CRect cardRect;
 	this->CalculateCardLocation(&cardRect, (int) data->second->lay, (int) data->second->dim);
 
-	ParamDlgCard * newCard = new ParamDlgCard(data->second, this);
+	ParamDlgCard * newCard;
+	if (data->second->module == "Shared")
+	{
+		newCard = new ParamDlgCardShared(data->second, this);
+		newCard->call_create(this);
+	}
+	else
+	{
+		newCard = new ParamDlgCard(data->second, this);
+		newCard->call_create(this);
+	}
 	newCard->MoveWindow(cardRect);
 	newCard->InitalizeValues();
 	newCard->RenderGrid();
 
 	this->cards.push_back(newCard);
-	
+
 }
 
 

@@ -6,7 +6,7 @@
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
 #include "ParamSetAllDlg.h"
-#include "ParamDlgScrollablePane.h"
+
 
 class ParamDlgScrollablePane;
 
@@ -43,7 +43,14 @@ public:
 	/*
 	* Standard constructor
 	*/
-	ParamDlgCard(ClassPar * param, ParamDlgScrollablePane* pParent);
+	ParamDlgCard(ClassPar * param, CWnd * pParent);
+
+	/**
+	* Creates the dialog object and attaches it to this object.
+	*
+	* Must be called directly after the constructor.
+	*/
+	virtual void call_create(CWnd* pParent);
 
 	/*
 	* Deconstructor
@@ -58,7 +65,7 @@ public:
 	/**
 	* Renders the value grid for the parameter
 	*/
-	void RenderGrid();
+	virtual void RenderGrid();
 
 	/**
 	* Removes all of the items created to render the grid.

@@ -8,6 +8,7 @@
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
 #include "ParamDlgCard.h"
+#include "ParamDlgCardShared.h"
 
 class ParamDlgCard;
 

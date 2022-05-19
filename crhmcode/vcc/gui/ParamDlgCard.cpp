@@ -1,10 +1,9 @@
 #include "ParamDlgCard.h"
 
 
-ParamDlgCard::ParamDlgCard(ClassPar * param, ParamDlgScrollablePane * pParent)
+ParamDlgCard::ParamDlgCard(ClassPar * param, CWnd * pParent)
 	: CDialog(ParamDlgCard::IDD, (CWnd*)pParent)
 {
-	Create(ParamDlgCard::IDD,pParent);
 	this->scroll_position = 0;
 	this->pane_width = 0;
 	this->parameter = param;
@@ -21,6 +20,13 @@ ParamDlgCard::ParamDlgCard(ClassPar * param, ParamDlgScrollablePane * pParent)
 	this->pointFont60 = new CFont();
 	this->pointFont60->CreatePointFont(60, _T("Ariel"));
 }
+
+
+void ParamDlgCard::call_create(CWnd* pParent)
+{
+	Create(ParamDlgCard::IDD, pParent);
+}
+
 
 ParamDlgCard::~ParamDlgCard()
 {
@@ -65,15 +71,18 @@ BEGIN_MESSAGE_MAP(ParamDlgCard, CDialog)
 	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
+
 void ParamDlgCard::OnOK()
 {
 	//Do nothing this prevents the enter key from closing the card
 }
 
+
 void ParamDlgCard::OnCancel()
 {
 	//Do nothing this prevents the escape key from closing the card
 }
+
 
 void ParamDlgCard::OnSaveButton()
 {
@@ -111,11 +120,13 @@ void ParamDlgCard::OnSaveButton()
 	this->RenderGrid();
 }
 
+
 void ParamDlgCard::OnResetButton()
 {
 	this->RemoveGrid();
 	this->RenderGrid();
 }
+
 
 void ParamDlgCard::OnSetAllButton()
 {
@@ -124,6 +135,7 @@ void ParamDlgCard::OnSetAllButton()
 
 	setAllDlg->DoModal();
 }
+
 
 void ParamDlgCard::SetAll(std::string valueString)
 {
@@ -145,15 +157,18 @@ void ParamDlgCard::SetAll(std::string valueString)
 
 }
 
+
 void ParamDlgCard::ResetGrid()
 {
 	this->OnResetButton();
 }
 
+
 void ParamDlgCard::SaveCard()
 {
 	this->OnSaveButton();
 }
+
 
 BOOL ParamDlgCard::OnInitDialog()
 {
@@ -167,6 +182,7 @@ BOOL ParamDlgCard::OnInitDialog()
 
 	return TRUE;
 }
+
 
 void ParamDlgCard::InitalizeValues()
 {
@@ -401,6 +417,7 @@ void ParamDlgCard::RenderGrid()
 
 }
 
+
 void ParamDlgCard::RemoveGrid()
 {
 	// Starts at 1 because the first item is not dynamicaly allocated
@@ -430,6 +447,7 @@ void ParamDlgCard::RemoveGrid()
 
 	this->valueGrid.clear();
 }
+
 
 void ParamDlgCard::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
@@ -492,6 +510,4 @@ void ParamDlgCard::OnSize(UINT nType, int cx, int cy)
 	SetScrollInfo(SB_HORZ, &sih, TRUE);
 
 }
-
-
 
