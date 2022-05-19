@@ -190,10 +190,7 @@
 #define ID_CTX_ALL_VAR_ADD              34006
 #define ID_CTX_ALL_VAR_ADD_ARRAY        34007
 #define ID_CTX_SEL_VAR_REMOVE           34008
-#define UWM_OPEN_CTX_ALL_OBS            35000
-#define UWM_OPEN_CTX_SEL_OBS            35001
-#define UWM_OPEN_CTX_ALL_VAR            35002
-#define UWM_OPEN_CTX_SEL_VAR            35003
+
 #define ID_OBS_DIM_DISPLAY              35100
 #define ID_OBS_DIM_DECREASE             35101
 #define ID_OBS_DIM_INCREASE             35102
@@ -224,8 +221,7 @@
 #define ID_MAX_HRU_DISPLAY              40017
 #define ID_MODULE_FILTER_LABELS         40018
 #define ID_CONSTRUCT_CONSOLE            40019
-#define UWM_OPEN_CTX_AVAILABLE_MODS     40020
-#define UWM_OPEN_CTX_SELECTED_MODS      40021
+
 #define ID_CTX_AVAILABLE_MOD_ADD        40022
 #define ID_CTX_SEL_MODS_REMOVE          40023
 #define ID_CTX_SEL_MODS_NEXT            40024
@@ -262,9 +258,7 @@
 #define ID_EXPORT_SAVE_AS               40508
 #define ID_EXPORT_EXIT                  40509
 #define IDR_EXPORT_MENU                 40510
-#define UWM_AUTO_RUN                    40511
-#define UWM_FLIP_TICKS_LEFT             40600
-#define UWM_FLIP_TICKS_RIGHT            40601
+
 #define ID_OBS_LAY_DIM_LABEL            40700
 #define ID_CTX_ALL_VAR_ADD_LAY_ARRAY    40701
 #define ID_CTX_ALL_VAR_ADD_HRU_LAY_ARRAY 40702
@@ -297,11 +291,23 @@
 #define ID_PARAM_SAVE_ALL				60016
 #define ID_PARAM_MAKE_LOCAL				60017
 
+
 #define ID_PARAM_COL					70000
 
 #define ID_PARAM_ROW					80000
 
 #define ID_PARAM_GRID					100000000
+
+#define UWM_OPEN_CTX_ALL_OBS            32768
+#define UWM_OPEN_CTX_SEL_OBS            32769
+#define UWM_OPEN_CTX_ALL_VAR            32770
+#define UWM_OPEN_CTX_SEL_VAR            32771
+#define UWM_OPEN_CTX_AVAILABLE_MODS     32772
+#define UWM_OPEN_CTX_SELECTED_MODS      32773
+#define UWM_AUTO_RUN                    32774
+#define UWM_FLIP_TICKS_LEFT             32775
+#define UWM_FLIP_TICKS_RIGHT            32776
+#define UWM_MAKE_LOCAL					32777
 
 // Next default values for new objects
 // 
