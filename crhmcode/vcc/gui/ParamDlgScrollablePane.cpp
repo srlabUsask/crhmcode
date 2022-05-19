@@ -21,6 +21,7 @@ BEGIN_MESSAGE_MAP(ParamDlgScrollablePane, CDialog)
 	ON_WM_VSCROLL()
 	ON_WM_MOUSEWHEEL()
 	ON_WM_SIZE()
+	ON_MESSAGE(UWM_MAKE_LOCAL, &ParamDlgScrollablePane::OnMakeLocalMsg)
 END_MESSAGE_MAP()
 
 
@@ -292,4 +293,10 @@ BOOL ParamDlgScrollablePane::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	}
 	
 	return CDialog::OnMouseWheel(nFlags, zDelta, pt);
+}
+
+LRESULT ParamDlgScrollablePane::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
+{
+	GetParent()->PostMessage(UWM_MAKE_LOCAL, wParam, lParam);
+	return 0;
 }

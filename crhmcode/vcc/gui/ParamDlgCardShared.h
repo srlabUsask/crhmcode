@@ -11,6 +11,13 @@ private:
 	*/
 	enum { IDD = PARAMETERS_CARD_SHARED };
 
+	/**
+	* Handles the pressing of the "Manage Parameter Localy" button
+	* 
+	* Passes a message up to the ParamDlgScrollablePane
+	*/
+	afx_msg void OnMakeLocal();
+
 public:
 
 	/**
@@ -29,5 +36,7 @@ public:
 	* Renders the value grid for the parameter
 	*/
 	virtual void RenderGrid() override;
+
+	DECLARE_MESSAGE_MAP()
 };
 

@@ -126,6 +126,15 @@ private:
 	*/
 	static BOOL compareParametersAlphabeticalyNoCase(std::pair<std::string, ClassPar*> item_a, std::pair<std::string, ClassPar*> item_b);
 
+	/**
+	* Handles the receiving of a UWM_MAKE_LOCAL message 
+	* 
+	* Will alter the passed parameter to make it local instead of shared.
+	* @param wParam - WPARAM pointer to the shared parameter to be made local
+	* @param lParam - LPARAM pointer to the shared parameter to be made local
+	*/
+	afx_msg LRESULT OnMakeLocalMsg(WPARAM wParam, LPARAM lParam);
+
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = PARAMETERS_DLG };

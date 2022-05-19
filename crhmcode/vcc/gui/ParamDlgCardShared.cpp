@@ -12,6 +12,17 @@ void ParamDlgCardShared::call_create(CWnd* pParent)
 }
 
 
+BEGIN_MESSAGE_MAP(ParamDlgCardShared, ParamDlgCard)
+	ON_BN_CLICKED(ID_PARAM_MAKE_LOCAL, &ParamDlgCardShared::OnMakeLocal)
+END_MESSAGE_MAP()
+
+
+void ParamDlgCardShared::OnMakeLocal()
+{
+	GetParent()->PostMessage(UWM_MAKE_LOCAL, (WPARAM)this->parameter, (LPARAM)this->parameter);
+}
+
+
 void ParamDlgCardShared::RenderGrid()
 {
 

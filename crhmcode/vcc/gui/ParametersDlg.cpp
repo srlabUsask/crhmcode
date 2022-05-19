@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
 	ON_BN_CLICKED(ID_PARAM_DLG_TOGGLE_ALL_BTN, &ParametersDlg::OnToggleAll)
 	ON_BN_CLICKED(ID_PARAM_RESET_ALL, &ParametersDlg::OnResetAll)
 	ON_BN_CLICKED(ID_PARAM_SAVE_ALL, &ParametersDlg::OnSaveAll)
+	ON_MESSAGE(UWM_MAKE_LOCAL, &ParametersDlg::OnMakeLocalMsg)
 END_MESSAGE_MAP()
 
 
@@ -663,4 +664,10 @@ BOOL ParametersDlg::compareParametersAlphabeticalyNoCase(std::pair<std::string, 
 
 	return lower_a < lower_b;
 
+}
+
+LRESULT ParametersDlg::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
+{
+	ClassPar* par = (ClassPar*)wParam;
+	return 0;
 }
