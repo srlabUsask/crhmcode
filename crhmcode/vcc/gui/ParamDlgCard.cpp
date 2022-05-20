@@ -103,17 +103,97 @@ void ParamDlgCard::OnSaveButton()
 
 			if (this->parameter->varType == TVar::Float)
 			{
-				this->parameter->layvalues[i][j] = std::stod(valueString);
+				double proposedValue;
+				try
+				{
+					proposedValue = std::stod(valueString);
+				}
+				catch (const std::invalid_argument& e)
+				{
+					std::string position = "cell " + to_string(i+1) + ", " + to_string(j+1);
+					std::string exceptMsg = e.what();
+					std::string errorMsg = "A non decimal value was entered in "+position+". \n\nError Message: "+exceptMsg;
+					CString text(errorMsg.c_str());
+					MessageBox(text, MB_OK);
+					return;
+				}
+				catch (const std::out_of_range& e)
+				{
+					std::string position = "cell " + to_string(i + 1) + "," + to_string(j + 1);
+					std::string exceptMsg = e.what();
+					std::string errorMsg = "The value in "+position + " cannot fit in a double type. \n\nError Message: " + exceptMsg;
+					CString text(errorMsg.c_str());
+					MessageBox(text, MB_OK);
+					return;
+				}
+
+				double min = this->parameter->minVal;
+				double max = this->parameter->maxVal;
+
+				if (proposedValue >= min && proposedValue <= max)
+				{
+					this->parameter->layvalues[i][j] = proposedValue;
+				}
+				else
+				{
+					std::string position = "cell " + to_string(i + 1) + "," + to_string(j + 1);
+					std::string errorMsg = "The value entered in " +position+" is not within the parameter's range";
+					CString text(errorMsg.c_str());
+					MessageBox(text, MB_OK);
+					return;
+				}
+				
 			}
 			else if (this->parameter->varType == TVar::Int)
 			{
-				this->parameter->ilayvalues[i][j] = std::stol(valueString);
+				long proposedValue;
+				try
+				{
+					proposedValue = std::stol(valueString);
+				}
+				catch (const std::invalid_argument& e)
+				{
+					std::string position = "cell " + to_string(i + 1) + ", " + to_string(j + 1);
+					std::string exceptMsg = e.what();
+					std::string errorMsg = "A non integer value was entered in " + position + ". \n\nError Message: " + exceptMsg;
+					CString text(errorMsg.c_str());
+					MessageBox(text, MB_OK);
+					return;
+				}
+				catch (const std::out_of_range& e)
+				{
+					std::string position = "cell " + to_string(i + 1) + "," + to_string(j + 1);
+					std::string exceptMsg = e.what();
+					std::string errorMsg = "The value in " + position + " cannot fit in a long type. \n\nError Message: " + exceptMsg;
+					CString text(errorMsg.c_str());
+					MessageBox(text, MB_OK);
+					return;
+				}
+
+				long min = (long) this->parameter->minVal;
+				long max = (long) this->parameter->maxVal;
+
+				if (proposedValue >= min && proposedValue <= max)
+				{
+					this->parameter->ilayvalues[i][j] = proposedValue;
+				}
+				else
+				{
+					std::string position = "cell " + to_string(i + 1) + "," + to_string(j + 1);
+					std::string errorMsg = "The value entered in " + position + " is not within the parameter's range";
+					CString text(errorMsg.c_str());
+					MessageBox(text, MB_OK);
+					return;
+				}
+
 			}
 			else if (this->parameter->varType == TVar::Txt)
 			{
 				this->parameter->Strings->at(j) = valueString;
 			}
+
 		}
+
 	}
 
 	this->RemoveGrid();
