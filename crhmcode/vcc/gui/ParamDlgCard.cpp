@@ -449,7 +449,7 @@ void ParamDlgCard::RenderGrid()
 			}
 
 			// Create a CEdit for the cell
-			CEdit* newCell = new CEdit();
+			GridCell* newCell = new GridCell(this->parameter, i, j);
 			newCell->Create(
 				dwStyle,
 				newCellRect,

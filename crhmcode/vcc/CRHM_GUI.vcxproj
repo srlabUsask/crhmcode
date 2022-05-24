@@ -394,6 +394,7 @@
     <ClCompile Include="gui\CConstruct.cpp" />
     <ClCompile Include="gui\CExport.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
+    <ClCompile Include="gui\GridCell.cpp" />
     <ClCompile Include="gui\ParamDlgCard.cpp" />
     <ClCompile Include="gui\ParamDlgCardShared.cpp" />
     <ClCompile Include="gui\ParamDlgScrollablePane.cpp" />
@@ -662,6 +663,7 @@
     <ClInclude Include="gui\CConstructCore.h" />
     <ClInclude Include="gui\CExport.h" />
     <ClInclude Include="gui\COptions.h" />
+    <ClInclude Include="gui\GridCell.h" />
     <ClInclude Include="gui\ParamDlgCard.h" />
     <ClInclude Include="gui\ParamDlgCardShared.h" />
     <ClInclude Include="gui\ParamDlgScrollablePane.h" />

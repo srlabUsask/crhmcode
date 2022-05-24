@@ -6,6 +6,8 @@
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
 #include "ParamSetAllDlg.h"
+#include "GridCell.h"
+
 
 
 class ParamDlgScrollablePane;
