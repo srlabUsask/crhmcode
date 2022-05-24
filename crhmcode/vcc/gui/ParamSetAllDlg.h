@@ -18,7 +18,7 @@ private:
 	/**
 	* The CEdit control for choosing the value to set. 
 	*/
-	CEdit set_all_value;
+	CEdit * set_all_value;
 
 	/**
 	* Reference to the parameter card that the value will be applied to.
@@ -39,6 +39,13 @@ public:
 	*	parameter card associated with this dialog.
 	*/
 	ParamSetAllDlg(ParamDlgCard* paramCard, CWnd* parent = nullptr);
+
+	/**
+	* Deconstructor
+	* 
+	* Deletes the CEdit declared on the heap.
+	*/
+	~ParamSetAllDlg();
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME

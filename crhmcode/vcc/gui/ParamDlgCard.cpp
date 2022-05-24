@@ -445,7 +445,7 @@ void ParamDlgCard::RenderGrid()
 			if (this->parameter->varType == TVar::Int)
 			{
 				// If it is a numberic cell add the ES_NUMBER style to prevent non numeric characters
-				dwStyle =dwStyle | ES_NUMBER;
+				dwStyle = dwStyle | ES_NUMBER;
 			}
 
 			// Create a CEdit for the cell
@@ -591,3 +591,11 @@ void ParamDlgCard::OnSize(UINT nType, int cx, int cy)
 
 }
 
+TVar ParamDlgCard::GetParamType()
+{
+	TVar varType;
+
+	varType = this->parameter->varType;
+
+	return varType;
+}

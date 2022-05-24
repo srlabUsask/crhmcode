@@ -91,6 +91,13 @@ public:
 	*/
 	void SaveCard();
 
+	/**
+	* Get the type of the parameter associated with this card.
+	* 
+	* @return TVar the type of the parameter this card is associated with.
+	*/
+	TVar GetParamType();
+
 protected:
 
 	/*
