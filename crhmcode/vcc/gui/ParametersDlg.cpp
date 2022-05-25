@@ -704,8 +704,20 @@ LRESULT ParametersDlg::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 	PairPar Item = PairPar(newPar->module + ' ' + newPar->param, newPar);
 	Global::MapPars.insert(Item);
 
+	/* Preserve the selected parameters */
+	int selectedCount = this->parameters_list_box.GetSelCount();
+	int* selectedIndicies = new int[selectedCount];
+	this->parameters_list_box.GetSelItems(selectedCount, selectedIndicies);
+
 	this->OnSelectModule();
 	
+	/* Re-select the preserved parameters */
+	for (int i = 0; i < selectedCount; i++)
+	{
+		this->parameters_list_box.SetSel(selectedIndicies[i], true);
+	}
+
+	this->OnSelectParam();
 
 	return 0;
 }
