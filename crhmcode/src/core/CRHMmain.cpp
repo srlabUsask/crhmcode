@@ -1209,6 +1209,69 @@ void  CRHMmain::SqueezeParams(void) {
 
 	Global::MapPars.clear();
 	Global::MapPars = MapParsNew;
+
+	/*
+	* Update the internal module references to parameters
+	*/
+	std::list<std::pair<std::string, ClassPar*>>* newParamList = new std::list<std::pair<std::string, ClassPar*>>();
+
+	std::list<std::pair<std::string, ClassModule*>> * modulesList = Global::OurModulesList;
+	for (
+		std::list<std::pair<std::string, ClassModule*>>::iterator moduleIt = modulesList->begin();
+		moduleIt != modulesList->end();
+		moduleIt++
+		)
+	{
+		std::list<std::pair<std::string, ClassPar*>>* parametersList = moduleIt->second->getParametersList();
+		for (
+			std::list<std::pair<std::string, ClassPar*>>::iterator paramIt = parametersList->begin();
+			paramIt != parametersList->end();
+			paramIt++
+			)
+		{
+			/* Look for the parameter localy */
+			std::string searchString = moduleIt->first + " " + paramIt->first;
+			std::map<std::string, ClassPar*>::iterator param = Global::MapPars.find(searchString);
+			
+			if (param != Global::MapPars.end())
+			{
+				/* Parameter found localy */
+				newParamList->push_back(std::pair<std::string, ClassPar*>(param->second->param, param->second));
+
+			}
+			
+			if (param == Global::MapPars.end())
+			{
+				/* Keep looking this time in shared */
+				searchString = "Shared " + paramIt->first;
+				param = Global::MapPars.find(searchString);
+
+				if (param != Global::MapPars.end())
+				{
+					/* Found in shared */
+					newParamList->push_back(std::pair<std::string, ClassPar*>(param->second->param, param->second));
+				}
+				else
+				{
+					/* Not found. Raise Exception */
+					std::string unfound = moduleIt->first + " " + paramIt->first;
+					CRHMException e = CRHMException("Cannot find parameter "+unfound+" after parameter squeeze.", TExcept::ERR);
+					CRHMLogger::instance()->log_run_error(e);
+					exit(1);
+				}
+			}
+
+		}
+
+		/* Swap the new parameter list with the old one. */
+		parametersList->clear();
+		parametersList->assign(newParamList->begin(), newParamList->end());
+
+		newParamList->clear();
+
+	}
+
+	delete newParamList;
 }
 //---------------------------------------------------------------------------
 
