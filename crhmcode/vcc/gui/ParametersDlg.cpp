@@ -202,7 +202,7 @@ void ParametersDlg::OnSelectModule()
 				it++
 				)
 			{
-				if (Global::SharedMapPars.find("Shared " + it->first) != Global::SharedMapPars.end())
+				if (it->second->module == "Shared")
 				{
 					it->first = "*" + it->first;
 				}
@@ -718,7 +718,7 @@ BOOL ParametersDlg::compareParametersAlphabeticalyNoCase(std::pair<std::string, 
 
 LRESULT ParametersDlg::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 {
-	// Get the selected CString
+	// Get the selected 
 	CString selectedText;
 	int selectedIndex = this->modules_list_box.GetCurSel();
 	this->modules_list_box.GetText(selectedIndex, selectedText);
@@ -729,45 +729,121 @@ LRESULT ParametersDlg::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 
 	std::map<std::string, ClassModule* >::iterator module = Global::AllModulesList->find(selectedString);
 
-	std::list<std::pair<std::string, ClassPar*>> * parametersList = module->second->getParametersList();
-	
-	ClassPar* par = (ClassPar*)wParam;
-
-	ClassPar* newPar = new ClassPar(*par);
-	newPar->module = selectedString.c_str();
-
-	for (
-		std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList->begin();
-		it != parametersList->end();
-		it++
-		)
+	if (!module->second->isGroup)
 	{
-		if (it->first == par->param)
+		std::list<std::pair<std::string, ClassPar*>>* parametersList = module->second->getParametersList();
+
+		ClassPar* par = (ClassPar*)wParam;
+
+		for (
+			std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList->begin();
+			it != parametersList->end();
+			it++
+			)
 		{
-			parametersList->erase(it);
-			break;
+			if (it->first == par->param)
+			{
+				parametersList->erase(it);
+				break;
+			}
 		}
+
+
+		ClassPar* newPar = new ClassPar(*par);
+		newPar->module = selectedString.c_str();
+
+		parametersList->push_back(std::pair<std::string, ClassPar*>(newPar->param, newPar));
+
+		PairPar Item = PairPar(newPar->module + ' ' + newPar->param, newPar);
+		Global::MapPars.insert(Item);
+
+		/* Preserve the selected parameters */
+		int selectedCount = this->parameters_list_box.GetSelCount();
+		int* selectedIndicies = new int[selectedCount];
+		this->parameters_list_box.GetSelItems(selectedCount, selectedIndicies);
+
+		this->OnSelectModule();
+
+		/* Re-select the preserved parameters */
+		for (int i = 0; i < selectedCount; i++)
+		{
+			this->parameters_list_box.SetSel(selectedIndicies[i], true);
+		}
+
+		this->OnSelectParam();
 	}
-
-	parametersList->push_back(std::pair<std::string, ClassPar*>(newPar->param, newPar));
-	
-	PairPar Item = PairPar(newPar->module + ' ' + newPar->param, newPar);
-	Global::MapPars.insert(Item);
-
-	/* Preserve the selected parameters */
-	int selectedCount = this->parameters_list_box.GetSelCount();
-	int* selectedIndicies = new int[selectedCount];
-	this->parameters_list_box.GetSelItems(selectedCount, selectedIndicies);
-
-	this->OnSelectModule();
-	
-	/* Re-select the preserved parameters */
-	for (int i = 0; i < selectedCount; i++)
+	else
 	{
-		this->parameters_list_box.SetSel(selectedIndicies[i], true);
+		// Module is a group macro
+		ClassMacro* groupModule = (ClassMacro*)module->second;
+
+		// Retrive list of modules that make up the group macro 
+		std::vector<std::pair<std::string, ClassModule*>>* modulesVector = groupModule->GrpStringList;
+		// Declare a list to hold the parameters
+		std::list<std::pair<std::string, ClassPar*>> allParametersList;
+
+		ClassPar* par = (ClassPar*)wParam;
+
+		std::list<std::pair<std::string, ClassPar*>>* parametersList = NULL;
+
+		bool found = false;
+
+		// For each module add the assoicated parameters to the list. 
+		for (
+			std::vector<std::pair<std::string, ClassModule*>>::iterator modulesIt = modulesVector->begin();
+			modulesIt != modulesVector->end();
+			modulesIt++
+			)
+		{
+			if (found)
+			{
+				break;
+			}
+
+			parametersList = modulesIt->second->getParametersList();
+
+			for (
+				std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList->begin();
+				it != parametersList->end();
+				it++
+				)
+			{
+				if (it->first == par->param)
+				{
+					parametersList->erase(it);
+					found = true;
+					break;
+				}
+			}
+
+		}
+
+		ClassPar* newPar = new ClassPar(*par);
+		newPar->module = selectedString.c_str();
+
+		parametersList->push_back(std::pair<std::string, ClassPar*>(newPar->param, newPar));
+
+		PairPar Item = PairPar(newPar->module + ' ' + newPar->param, newPar);
+		Global::MapPars.insert(Item);
+
+		/* Preserve the selected parameters */
+		int selectedCount = this->parameters_list_box.GetSelCount();
+		int* selectedIndicies = new int[selectedCount];
+		this->parameters_list_box.GetSelItems(selectedCount, selectedIndicies);
+
+		this->OnSelectModule();
+
+		/* Re-select the preserved parameters */
+		for (int i = 0; i < selectedCount; i++)
+		{
+			this->parameters_list_box.SetSel(selectedIndicies[i], true);
+		}
+
+		this->OnSelectParam();
+
 	}
 
-	this->OnSelectParam();
+	
 
 	return 0;
 }
