@@ -1971,6 +1971,9 @@ void CRHMmainDlg::OpenParametersDialog()
 	parametersDialog = new ParametersDlg();
 
 	parametersDialog->DoModal();
+
+	CRHMmain* model = CRHMmain::getInstance();
+	model->SqueezeParams();
 }
 
 
