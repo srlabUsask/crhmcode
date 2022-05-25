@@ -127,7 +127,7 @@ void ParametersDlg::OnSelectModule()
 				it++
 				)
 			{
-				if (Global::SharedMapPars.find("Shared "+it->first) != Global::SharedMapPars.end())
+				if (it->second->module == "Shared")
 				{
 					it->first = "*" + it->first;
 				}
@@ -668,6 +668,44 @@ BOOL ParametersDlg::compareParametersAlphabeticalyNoCase(std::pair<std::string, 
 
 LRESULT ParametersDlg::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 {
+	// Get the selected CString
+	CString selectedText;
+	int selectedIndex = this->modules_list_box.GetCurSel();
+	this->modules_list_box.GetText(selectedIndex, selectedText);
+
+	// Convert the CString to std::string
+	CT2CA pszConvertedAnsiString(selectedText);
+	std::string selectedString(pszConvertedAnsiString);
+
+	std::map<std::string, ClassModule* >::iterator module = Global::AllModulesList->find(selectedString);
+
+	std::list<std::pair<std::string, ClassPar*>> * parametersList = module->second->getParametersList();
+	
 	ClassPar* par = (ClassPar*)wParam;
+
+	ClassPar* newPar = new ClassPar(*par);
+	newPar->module = selectedString.c_str();
+
+	for (
+		std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList->begin();
+		it != parametersList->end();
+		it++
+		)
+	{
+		if (it->first == par->param)
+		{
+			parametersList->erase(it);
+			break;
+		}
+	}
+
+	parametersList->push_back(std::pair<std::string, ClassPar*>(newPar->param, newPar));
+	
+	PairPar Item = PairPar(newPar->module + ' ' + newPar->param, newPar);
+	Global::MapPars.insert(Item);
+
+	this->OnSelectModule();
+	
+
 	return 0;
 }
