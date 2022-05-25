@@ -51,7 +51,7 @@ BOOL ParametersDlg::OnInitDialog()
 	/**
 	* Sets the width of the list boxes for scroling purposes.
 	*/
-	this->modules_list_box.SetHorizontalExtent(1000);
+	//this->modules_list_box.SetHorizontalExtent(1000);
 	this->parameters_list_box.SetHorizontalExtent(1000);
 
 	/**
@@ -607,6 +607,9 @@ void ParametersDlg::initalizeModulesListBox(CRHMmain* main)
 	// Sort the list of modules alphabeticaly ignoring case.
 	sorted_modules_list.sort(&ParametersDlg::compareModulesAlphabeticalyNoCase);
 
+	//Keep track of the longest string and use to set horizontal extent
+	size_t longStringCount = 0;
+
 	// Place each of the modules into the list box
 	for (
 		std::list<std::pair<std::string, ClassModule*>>::iterator moduleIteratior = sorted_modules_list.begin();
@@ -624,15 +627,31 @@ void ParametersDlg::initalizeModulesListBox(CRHMmain* main)
 			// Add the module to the list box
 			CString moduleName(moduleStringWithVariation.c_str());
 			this->modules_list_box.AddString(moduleName);
+			
+			// Check the length of the string
+			if (moduleStringWithVariation.size() > longStringCount)
+			{
+				longStringCount = moduleStringWithVariation.size();
+			}
 		}
 		else
 		{
 			// Add the module to the list box
 			CString moduleName(moduleIteratior->first.c_str());
 			this->modules_list_box.AddString(moduleName);
+			
+			// Check the length of the string
+			if (moduleIteratior->first.size() > longStringCount)
+			{
+				longStringCount = moduleIteratior->first.size();
+			}
+			
 		}
 		
 	}
+
+	// Set horizontal extent based on the longest string 
+	this->modules_list_box.SetHorizontalExtent(7 * longStringCount);
 }
 
 
