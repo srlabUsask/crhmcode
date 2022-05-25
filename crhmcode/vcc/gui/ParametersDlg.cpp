@@ -81,6 +81,8 @@ void ParametersDlg::OnSelectModule()
 	CT2CA pszConvertedAnsiString(selectedText);
 	std::string selectedString(pszConvertedAnsiString);
 
+	// Used to track the length of the longest string
+	size_t longestStringCount = 0;
 	
 	if (selectedString == "Shared")
 	{
@@ -97,6 +99,12 @@ void ParametersDlg::OnSelectModule()
 			std::string trimedString = sharedIt->first.substr(7, std::string::npos);
 			CString paramName(trimedString.c_str());
 			this->parameters_list_box.AddString(paramName);
+
+			// Check if it is the longest string
+			if (trimedString.size() > longestStringCount)
+			{
+				longestStringCount = trimedString.size();
+			}
 		}
 
 	}
@@ -144,6 +152,12 @@ void ParametersDlg::OnSelectModule()
 			{
 				CString paramName(it->first.c_str());
 				this->parameters_list_box.AddString(paramName);
+
+				// Check if it is the longest string
+				if (it->first.size() > longestStringCount)
+				{
+					longestStringCount = it->first.size();
+				}
 			}
 
 		}
@@ -203,11 +217,20 @@ void ParametersDlg::OnSelectModule()
 			{
 				CString paramName(it->first.c_str());
 				this->parameters_list_box.AddString(paramName);
+
+				// Check if it is the longest string
+				if (it->first.size() > longestStringCount)
+				{
+					longestStringCount = it->first.size();
+				}
 			}
 
 		}
 
 	}
+
+	// Set horizontal extent based on the longest string
+	this->parameters_list_box.SetHorizontalExtent(7 * longestStringCount);
 
 	this->OnSelectParam();
 }
