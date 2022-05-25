@@ -98,6 +98,11 @@ private:
 	afx_msg void OnSaveAll();
 
 	/**
+	* Method that triggers when the window is resized
+	*/
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+
+	/**
 	* Helper method used to initalize the values in the modules list box during dialog initalization.
 	*
 	* @param main CRHMmain* reference to the main CRHM model object. 

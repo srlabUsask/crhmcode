@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
 	ON_BN_CLICKED(ID_PARAM_RESET_ALL, &ParametersDlg::OnResetAll)
 	ON_BN_CLICKED(ID_PARAM_SAVE_ALL, &ParametersDlg::OnSaveAll)
 	ON_MESSAGE(UWM_MAKE_LOCAL, &ParametersDlg::OnMakeLocalMsg)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -64,6 +65,7 @@ BOOL ParametersDlg::OnInitDialog()
 
 	return TRUE;
 }
+
 
 void ParametersDlg::OnSelectModule()
 {
@@ -210,6 +212,7 @@ void ParametersDlg::OnSelectModule()
 	this->OnSelectParam();
 }
 
+
 void ParametersDlg::OnSelectParam()
 {
 	CWaitCursor wait;
@@ -269,6 +272,7 @@ void ParametersDlg::OnSelectParam()
 	delete[] selectedIndicies;
 	delete parametersList;
 }
+
 
 void ParametersDlg::OnToggleBasic()
 {
@@ -356,6 +360,7 @@ void ParametersDlg::OnToggleBasic()
 	this->OnSelectParam();
 }
 
+
 void ParametersDlg::OnToggleAdvance()
 {
 	// Create a array of bools the size of the number 
@@ -442,6 +447,7 @@ void ParametersDlg::OnToggleAdvance()
 	this->OnSelectParam();
 }
 
+
 void ParametersDlg::OnTogglePrivate()
 {
 	// Create a array of bools the size of the number 
@@ -527,6 +533,7 @@ void ParametersDlg::OnTogglePrivate()
 	// Call to update the parameter cards.
 	this->OnSelectParam();
 }
+
 
 void ParametersDlg::OnToggleAll()
 {
@@ -666,6 +673,7 @@ BOOL ParametersDlg::compareParametersAlphabeticalyNoCase(std::pair<std::string, 
 
 }
 
+
 LRESULT ParametersDlg::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 {
 	// Get the selected CString
@@ -720,4 +728,19 @@ LRESULT ParametersDlg::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 	this->OnSelectParam();
 
 	return 0;
+}
+
+
+void ParametersDlg::OnSize(UINT nType, int cx, int cy)
+{
+	CWnd * wnd = GetDlgItem(ID_PARAM_PANE_PLACEHOLDER);
+
+	if (wnd != NULL)
+	{
+		CRect rectangle;
+		GetDlgItem(ID_PARAM_PANE_PLACEHOLDER)->GetWindowRect(rectangle);
+		ScreenToClient(&rectangle);
+		this->prameters_scroll_pane->MoveWindow(rectangle);
+	}
+
 }

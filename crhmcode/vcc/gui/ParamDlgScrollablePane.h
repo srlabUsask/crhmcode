@@ -82,6 +82,8 @@ private:
 	*/
 	afx_msg LRESULT OnMakeLocalMsg(WPARAM wParam, LPARAM lParam);
 
+	void ResizeCards();
+
 public:
 	/**
 	* Standard constructor

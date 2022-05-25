@@ -56,6 +56,7 @@ void ParamDlgScrollablePane::SetParameterCards(std::list<std::pair<std::string, 
 	}
 
 	this->ResizeWindow();
+	this->ResizeCards();
 }
 
 void ParamDlgScrollablePane::ResetAllCards()
@@ -262,6 +263,7 @@ void ParamDlgScrollablePane::OnSize(UINT nType, int cx, int cy)
 	si.nPos = 0;
 	SetScrollInfo(SB_VERT, &si, TRUE); 	
 
+	this->ResizeCards();
 }
 
 
@@ -299,4 +301,25 @@ LRESULT ParamDlgScrollablePane::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 {
 	GetParent()->PostMessage(UWM_MAKE_LOCAL, wParam, lParam);
 	return 0;
+}
+
+
+void ParamDlgScrollablePane::ResizeCards()
+{
+	for (
+		size_t i = 0;
+		i < this->cards.size();
+		i++
+		)
+	{
+		CRect card;
+		CRect window;
+		this->cards[i]->GetWindowRect(&card);
+		this->GetWindowRect(&window);
+
+		card.BottomRight().x = window.BottomRight().x - 20;
+
+		ScreenToClient(&card);
+		this->cards[i]->MoveWindow(card);
+	}
 }
