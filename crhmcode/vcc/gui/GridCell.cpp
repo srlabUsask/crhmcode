@@ -41,7 +41,7 @@ bool GridCell::valueChanged()
 	int lineLength = this->LineLength(0);
 	LPTSTR buffer = new TCHAR[lineLength+1];
 	
-	if (lineLength != 0)
+	if (lineLength > 0)
 	{
 		this->GetLine(0, buffer);
 	}
@@ -59,12 +59,20 @@ bool GridCell::valueChanged()
 		}
 		catch (const std::invalid_argument&)
 		{
-			return true;
+			// Check if value string is empty 
+			if (valueString == "")
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 
 		double original = this->param->layvalues[this->row][this->col];
 
-		if (original != current) 
+		if (std::abs(original - current) > DBL_EPSILON)
 		{
 			changed = true;
 		}
@@ -79,7 +87,15 @@ bool GridCell::valueChanged()
 		}
 		catch (const std::invalid_argument&)
 		{
-			return true;
+			// Check if value string is empty 
+			if (valueString == "")
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 
 		long original = this->param->ilayvalues[this->row][this->col];
@@ -109,5 +125,6 @@ bool GridCell::valueChanged()
 		}
 	}
 
+	delete[] buffer;
 	return changed;
 }
