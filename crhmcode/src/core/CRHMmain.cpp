@@ -1222,52 +1222,123 @@ void  CRHMmain::SqueezeParams(void) {
 		moduleIt++
 		)
 	{
-		std::list<std::pair<std::string, ClassPar*>>* parametersList = moduleIt->second->getParametersList();
-		for (
-			std::list<std::pair<std::string, ClassPar*>>::iterator paramIt = parametersList->begin();
-			paramIt != parametersList->end();
-			paramIt++
-			)
+		if (!moduleIt->second->isGroup)
 		{
-			/* Look for the parameter localy */
-			std::string searchString = moduleIt->first + " " + paramIt->first;
-			std::map<std::string, ClassPar*>::iterator param = Global::MapPars.find(searchString);
-			
-			if (param != Global::MapPars.end())
+			std::list<std::pair<std::string, ClassPar*>>* parametersList = moduleIt->second->getParametersList();
+			for (
+				std::list<std::pair<std::string, ClassPar*>>::iterator paramIt = parametersList->begin();
+				paramIt != parametersList->end();
+				paramIt++
+				)
 			{
-				/* Parameter found localy */
-				newParamList->push_back(std::pair<std::string, ClassPar*>(param->second->param, param->second));
-
-			}
-			
-			if (param == Global::MapPars.end())
-			{
-				/* Keep looking this time in shared */
-				searchString = "Shared " + paramIt->first;
-				param = Global::MapPars.find(searchString);
+				/* Look for the parameter localy */
+				std::string searchString = moduleIt->first + " " + paramIt->first;
+				std::map<std::string, ClassPar*>::iterator param = Global::MapPars.find(searchString);
 
 				if (param != Global::MapPars.end())
 				{
-					/* Found in shared */
+					/* Parameter found localy */
 					newParamList->push_back(std::pair<std::string, ClassPar*>(param->second->param, param->second));
+
 				}
-				else
+
+				if (param == Global::MapPars.end())
 				{
-					/* Not found. Raise Exception */
-					std::string unfound = moduleIt->first + " " + paramIt->first;
-					CRHMException e = CRHMException("Cannot find parameter "+unfound+" after parameter squeeze.", TExcept::ERR);
-					CRHMLogger::instance()->log_run_error(e);
-					exit(1);
+					/* Keep looking this time in shared */
+					searchString = "Shared " + paramIt->first;
+					param = Global::MapPars.find(searchString);
+
+					if (param != Global::MapPars.end())
+					{
+						/* Found in shared */
+						newParamList->push_back(std::pair<std::string, ClassPar*>(param->second->param, param->second));
+					}
+					else
+					{
+						/* Not found. Raise Exception */
+						std::string unfound = moduleIt->first + " " + paramIt->first;
+						CRHMException e = CRHMException("Cannot find parameter " + unfound + " after parameter squeeze.", TExcept::ERR);
+						CRHMLogger::instance()->log_run_error(e);
+						exit(1);
+					}
 				}
+
 			}
+
+			/* Swap the new parameter list with the old one. */
+			parametersList->clear();
+			parametersList->assign(newParamList->begin(), newParamList->end());
+
+			newParamList->clear();
+		}
+		else
+		{
+			/* Module is a group module */
+			ClassMacro* groupModule = (ClassMacro*)moduleIt->second;
+
+			// Retrive list of modules that make up the group macro 
+			std::vector<std::pair<std::string, ClassModule*>>* modulesVector = groupModule->GrpStringList;
+
+			for (
+				std::vector<std::pair<std::string, ClassModule*>>::iterator modVecIt = modulesVector->begin();
+				modVecIt != modulesVector->end();
+				modVecIt++
+				)
+			{
+
+				std::list<std::pair<std::string, ClassPar*>>* parametersList = modVecIt->second->getParametersList();
+				for (
+					std::list<std::pair<std::string, ClassPar*>>::iterator paramIt = parametersList->begin();
+					paramIt != parametersList->end();
+					paramIt++
+					)
+				{
+					/* Look for the parameter localy */
+					std::string searchString = moduleIt->first + " " + paramIt->first;
+					std::map<std::string, ClassPar*>::iterator param = Global::MapPars.find(searchString);
+
+					if (param != Global::MapPars.end())
+					{
+						/* Parameter found localy */
+						newParamList->push_back(std::pair<std::string, ClassPar*>(param->second->param, param->second));
+
+					}
+
+					if (param == Global::MapPars.end())
+					{
+						/* Keep looking this time in shared */
+						searchString = "Shared " + paramIt->first;
+						param = Global::MapPars.find(searchString);
+
+						if (param != Global::MapPars.end())
+						{
+							/* Found in shared */
+							newParamList->push_back(std::pair<std::string, ClassPar*>(param->second->param, param->second));
+						}
+						else
+						{
+							/* Not found. Raise Exception */
+							std::string unfound = modVecIt->first + " " + paramIt->first;
+							CRHMException e = CRHMException("Cannot find parameter " + unfound + " after parameter squeeze.", TExcept::ERR);
+							CRHMLogger::instance()->log_run_error(e);
+							exit(1);
+						}
+					}
+
+				}
+
+				/* Swap the new parameter list with the old one. */
+				parametersList->clear();
+				parametersList->assign(newParamList->begin(), newParamList->end());
+
+				newParamList->clear();
+
+			}
+
 
 		}
 
-		/* Swap the new parameter list with the old one. */
-		parametersList->clear();
-		parametersList->assign(newParamList->begin(), newParamList->end());
-
-		newParamList->clear();
+		
 
 	}
 
