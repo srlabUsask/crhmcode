@@ -317,9 +317,13 @@ void ParamDlgScrollablePane::ResizeCards()
 		this->cards[i]->GetWindowRect(&card);
 		this->GetWindowRect(&window);
 
-		card.BottomRight().x = window.BottomRight().x - 20;
-
-		ScreenToClient(&card);
-		this->cards[i]->MoveWindow(card);
+		if (window.BottomRight().x > card.BottomRight().x)
+		{
+			card.BottomRight().x = window.BottomRight().x - 20;
+			ScreenToClient(&card);
+			this->cards[i]->MoveWindow(card);
+		}
+		
 	}
+
 }
