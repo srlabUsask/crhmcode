@@ -10,6 +10,7 @@ GridCell::GridCell(ClassPar* par, int row, int col)
 	this->black = RGB(0, 0, 0);
 	this->white = RGB(255, 255, 255);
 	this->yellow = RGB(255, 255, 0);
+	this->currentColour = this->white;
 	this->background_brush_white.CreateSolidBrush(this->white);
 	this->background_brush_yellow.CreateSolidBrush(this->yellow);
 }
@@ -20,21 +21,23 @@ END_MESSAGE_MAP()
 
 HBRUSH GridCell::CtlColor(CDC* pDC, UINT nCtlColor)
 {
-	if (this->valueChanged())
+	if (this->calculateColour() == this->yellow)
 	{
 		pDC->SetTextColor(this->black);
 		pDC->SetBkColor(this->yellow);
+		this->currentColour = this->yellow;
 		return this->background_brush_yellow;
 	}
 	else
 	{
 		pDC->SetTextColor(this->black);
 		pDC->SetBkColor(this->white);
+		this->currentColour = this->white;
 		return this->background_brush_white;
 	}
 }
 
-bool GridCell::valueChanged()
+COLORREF GridCell::calculateColour()
 {
 	bool changed = false;
 
@@ -43,7 +46,12 @@ bool GridCell::valueChanged()
 	
 	if (lineLength > 0)
 	{
-		this->GetLine(0, buffer);
+		int charsRead = this->GetLine(0, buffer);
+		if (charsRead != lineLength)
+		{
+			delete[] buffer;
+			return this->currentColour;
+		}
 	}
 	buffer[lineLength] = L'\0';
 
@@ -59,15 +67,8 @@ bool GridCell::valueChanged()
 		}
 		catch (const std::invalid_argument&)
 		{
-			// Check if value string is empty 
-			if (valueString == "")
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+			delete[] buffer;
+			return this->yellow;	
 		}
 
 		double original = this->param->layvalues[this->row][this->col];
@@ -87,15 +88,8 @@ bool GridCell::valueChanged()
 		}
 		catch (const std::invalid_argument&)
 		{
-			// Check if value string is empty 
-			if (valueString == "")
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+			delete[] buffer;
+			return this->yellow;
 		}
 
 		long original = this->param->ilayvalues[this->row][this->col];
@@ -116,7 +110,8 @@ bool GridCell::valueChanged()
 		}
 		catch (const std::out_of_range&)
 		{
-			return false;
+			delete[] buffer;
+			return this->white;
 		}
 
 		if (original != current)
@@ -126,5 +121,19 @@ bool GridCell::valueChanged()
 	}
 
 	delete[] buffer;
-	return changed;
+	
+	if (changed)
+	{
+		return this->yellow;
+	}
+	else
+	{
+		return this->white;
+	}
+	
+}
+
+void GridCell::setColourToYellow()
+{
+	this->currentColour = this->yellow;
 }

@@ -8,7 +8,11 @@ class GridCell :
 public:
     GridCell(ClassPar* par, int row, int col);
 
+    void setColourToYellow();
+
     DECLARE_MESSAGE_MAP()
+
+    
 
 private:
 
@@ -17,6 +21,8 @@ private:
     COLORREF white;
 
     COLORREF yellow;
+
+    COLORREF currentColour;
 
     CBrush background_brush_white;
 
@@ -30,6 +36,6 @@ private:
 
     afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor);
 
-    bool valueChanged();
+    COLORREF calculateColour();
 };
 

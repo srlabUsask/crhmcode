@@ -226,6 +226,8 @@ void ParamDlgCard::SetAll(std::string valueString)
 		int numHru = this->valueGrid[i].size();
 		for (int j = 0; j < numHru; j++)
 		{
+			((GridCell *)valueGrid[i][j])->setColourToYellow();
+
 			int controlID = valueGrid[i][j]->GetDlgCtrlID();
 
 			CString valueText(valueString.c_str());
