@@ -647,28 +647,37 @@ void ParametersDlg::initalizeModulesListBox(CRHMmain* main)
 			varSuffix[1] += (char)(log(moduleIteratior->second->variation) / log(2) + 1);
 			std::string moduleStringWithVariation = moduleIteratior->first + varSuffix;
 			
-			// Add the module to the list box
+			// Add the module to the list box if it has parameters or it is a group module
 			CString moduleName(moduleStringWithVariation.c_str());
-			this->modules_list_box.AddString(moduleName);
-			
-			// Check the length of the string
-			if (moduleStringWithVariation.size() > longStringCount)
+
+			if (!moduleIteratior->second->getParametersList()->empty() || moduleIteratior->second->isGroup)
 			{
-				longStringCount = moduleStringWithVariation.size();
+				this->modules_list_box.AddString(moduleName);
+
+				// Check the length of the string
+				if (moduleStringWithVariation.size() > longStringCount)
+				{
+					longStringCount = moduleStringWithVariation.size();
+				}
 			}
+
 		}
 		else
 		{
 			// Add the module to the list box
 			CString moduleName(moduleIteratior->first.c_str());
-			this->modules_list_box.AddString(moduleName);
 			
-			// Check the length of the string
-			if (moduleIteratior->first.size() > longStringCount)
+			if (!moduleIteratior->second->getParametersList()->empty() || moduleIteratior->second->isGroup)
 			{
-				longStringCount = moduleIteratior->first.size();
+				this->modules_list_box.AddString(moduleName);
+
+				// Check the length of the string
+				if (moduleIteratior->first.size() > longStringCount)
+				{
+					longStringCount = moduleIteratior->first.size();
+				}
 			}
-			
+
 		}
 		
 	}
