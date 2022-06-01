@@ -140,6 +140,15 @@ private:
 	*/
 	afx_msg LRESULT OnMakeLocalMsg(WPARAM wParam, LPARAM lParam);
 
+	/**
+	* Handles the receiving of a UWM_UNSELECT_PARAMS message
+	* 
+	* Will remove the list of parameters passed in from being selected in the parameters list box
+	* @param wParam - WPARAM pointer to a list of parameters to unselect
+	* @param lParam - LPARAM pointer to a list of parameters to unselect (unused)
+	*/
+	afx_msg LRESULT ParametersDlg::OnUnselectParamsMsg(WPARAM wParam, LPARAM lParam);
+
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = PARAMETERS_DLG };

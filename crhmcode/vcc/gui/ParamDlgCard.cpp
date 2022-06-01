@@ -22,9 +22,9 @@ ParamDlgCard::ParamDlgCard(ClassPar * param, CWnd * pParent)
 }
 
 
-void ParamDlgCard::call_create(CWnd* pParent)
+bool ParamDlgCard::call_create(CWnd* pParent)
 {
-	Create(ParamDlgCard::IDD, pParent);
+	return Create(ParamDlgCard::IDD, pParent);
 }
 
 
@@ -340,7 +340,7 @@ void ParamDlgCard::InitalizeValues()
 }
 
 
-void ParamDlgCard::RenderGrid()
+bool ParamDlgCard::RenderGrid()
 {
 	CWaitCursor wait;
 
@@ -376,12 +376,19 @@ void ParamDlgCard::RenderGrid()
 		// Create a CEdit for the cell
 		CEdit* colHeader = new CEdit();
 		DWORD dwStyle = ES_CENTER | ES_READONLY | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
-		colHeader->Create(
+		bool creationSuccess = colHeader->Create(
 			dwStyle,
 			columnRectangle,
 			this,
 			ID_PARAM_COL + i
 		);
+
+		// Return false if creation failed.
+		if (!creationSuccess)
+		{
+			delete colHeader;
+			return false;
+		}
 
 		// Set the font and text for the cell
 		colHeader->SetFont(this->pointFont100);
@@ -408,12 +415,18 @@ void ParamDlgCard::RenderGrid()
 		// Create a CEdit for the cell
 		CEdit* rowHeader = new CEdit();
 		DWORD dwStyle = ES_READONLY | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
-		rowHeader->Create(
+		bool creationSuccess = rowHeader->Create(
 			dwStyle,
 			rowRectangle,
 			this,
 			ID_PARAM_ROW + i
 		);
+
+		if (!creationSuccess)
+		{
+			delete rowHeader;
+			return false;
+		}
 
 		// Set the font and text for the cell
 		rowHeader->SetFont(this->pointFont80);
@@ -464,12 +477,18 @@ void ParamDlgCard::RenderGrid()
 
 			// Create a CEdit for the cell
 			GridCell* newCell = new GridCell(this->parameter, i, j);
-			newCell->Create(
+			bool creationSuccess = newCell->Create(
 				dwStyle,
 				newCellRect,
 				this,
 				ID_PARAM_GRID + (i *1000) + j
 			);
+
+			if (!creationSuccess)
+			{
+				delete newCell;
+				return false;
+			}
 
 			// Set the font for the cell
 			newCell->SetFont(this->pointFont80);
@@ -508,6 +527,8 @@ void ParamDlgCard::RenderGrid()
 		}
 
 	}
+
+	return true;
 
 }
 

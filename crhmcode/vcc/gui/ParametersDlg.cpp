@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(ParametersDlg, CDialog)
 	ON_BN_CLICKED(ID_PARAM_RESET_ALL, &ParametersDlg::OnResetAll)
 	ON_BN_CLICKED(ID_PARAM_SAVE_ALL, &ParametersDlg::OnSaveAll)
 	ON_MESSAGE(UWM_MAKE_LOCAL, &ParametersDlg::OnMakeLocalMsg)
+	ON_MESSAGE(UWM_UNSELECT_PARAMS, &ParametersDlg::OnUnselectParamsMsg)
 	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
@@ -853,6 +854,44 @@ LRESULT ParametersDlg::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 	}
 
 	
+
+	return 0;
+}
+
+
+LRESULT ParametersDlg::OnUnselectParamsMsg(WPARAM wParam, LPARAM lParam)
+{
+	std::list<std::pair<std::string, ClassPar*>>* unselectList = (std::list<std::pair<std::string, ClassPar*>>*) wParam;
+
+	for (
+		std::list<std::pair<std::string, ClassPar*>>::iterator it = unselectList->begin();
+		it != unselectList->end();
+		it++
+		)
+	{
+		int itemCount = this->parameters_list_box.GetCount();
+		for (int i = 0; i < itemCount; i++)
+		{
+			CString itemText;
+			this->parameters_list_box.GetText(i, itemText);
+
+			// Convert the CString to std::string
+			CT2CA pszConvertedAnsiString(itemText);
+			std::string itemString(pszConvertedAnsiString);
+
+			if (itemString == it->first)
+			{
+				this->parameters_list_box.SetSel(i, false);
+				break;
+			}
+
+		}
+
+
+	}
+
+
+
 
 	return 0;
 }

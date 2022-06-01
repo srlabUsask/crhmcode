@@ -6,9 +6,9 @@ ParamDlgCardShared::ParamDlgCardShared(ClassPar* param, CWnd* pParent)
 }
 
 
-void ParamDlgCardShared::call_create(CWnd* pParent)
+bool ParamDlgCardShared::call_create(CWnd* pParent)
 {
-	Create(ParamDlgCardShared::IDD, pParent);
+	return Create(ParamDlgCardShared::IDD, pParent);
 }
 
 
@@ -23,7 +23,7 @@ void ParamDlgCardShared::OnMakeLocal()
 }
 
 
-void ParamDlgCardShared::RenderGrid()
+bool ParamDlgCardShared::RenderGrid()
 {
 
 	CWaitCursor wait;
@@ -60,12 +60,18 @@ void ParamDlgCardShared::RenderGrid()
 		// Create a CEdit for the cell
 		CEdit* colHeader = new CEdit();
 		DWORD dwStyle = ES_CENTER | ES_READONLY | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
-		colHeader->Create(
+		bool creationSuccess = colHeader->Create(
 			dwStyle,
 			columnRectangle,
 			this,
 			ID_PARAM_COL + i
 		);
+
+		if (!creationSuccess)
+		{
+			delete colHeader;
+			return false;
+		}
 
 		// Set the font and text for the cell
 		GetDlgItem(ID_PARAM_COL + i)->SetFont(this->pointFont100);
@@ -92,12 +98,18 @@ void ParamDlgCardShared::RenderGrid()
 		// Create a CEdit for the cell
 		CEdit* rowHeader = new CEdit();
 		DWORD dwStyle = ES_READONLY | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
-		rowHeader->Create(
+		bool creationSuccess = rowHeader->Create(
 			dwStyle,
 			rowRectangle,
 			this,
 			ID_PARAM_ROW + i
 		);
+
+		if (!creationSuccess)
+		{
+			delete rowHeader;
+			return false;
+		}
 
 		// Set the font and text for the cell
 		GetDlgItem(ID_PARAM_ROW + i)->SetFont(this->pointFont80);
@@ -148,12 +160,18 @@ void ParamDlgCardShared::RenderGrid()
 
 			// Create a CEdit for the cell
 			CEdit* newCell = new CEdit();
-			newCell->Create(
+			bool creationSuccess = newCell->Create(
 				dwStyle,
 				newCellRect,
 				this,
 				ID_PARAM_GRID + (i * 1000) + j
 			);
+
+			if (!creationSuccess)
+			{
+				delete newCell;
+				return false;
+			}
 
 			// Set the font for the cell
 			GetDlgItem(ID_PARAM_GRID + (i * 1000) + j)->SetFont(this->pointFont80);
@@ -192,5 +210,7 @@ void ParamDlgCardShared::RenderGrid()
 		}
 
 	}
+
+	return true;
 
 }

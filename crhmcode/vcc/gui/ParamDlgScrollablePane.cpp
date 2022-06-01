@@ -42,8 +42,12 @@ BOOL ParamDlgScrollablePane::OnInitDialog()
 
 void ParamDlgScrollablePane::SetParameterCards(std::list<std::pair<std::string, ClassPar*>>* parametersList)
 {
+	bool success = true;
+
 	// Remove all of the existing cards
 	this->RemoveAllCards();
+
+	std::list<std::pair<std::string, ClassPar*>>::iterator lastIt;
 
 	// Render a card for each parameter in the passed in list
 	for (
@@ -52,7 +56,30 @@ void ParamDlgScrollablePane::SetParameterCards(std::list<std::pair<std::string, 
 		it++
 		)
 	{
-		this->AddCard(it);
+		success = this->AddCard(it);
+
+		if (!success)
+		{
+			lastIt = it;
+			break;
+		}
+	}
+
+	// Handle not displaying all of the selected cards.
+	if (!success)
+	{	
+		std::list<std::pair<std::string, ClassPar*>> * nonRenderedList = new std::list<std::pair<std::string, ClassPar*>>();
+		nonRenderedList->assign(lastIt, parametersList->end());
+		parametersList->erase(lastIt, parametersList->end());
+
+		// Send message to parent to no longer select the nonRenderedList
+		GetParent()->PostMessage(UWM_UNSELECT_PARAMS, (WPARAM)nonRenderedList, (LPARAM)nonRenderedList);
+
+		// Display a message box with a list of the parameters that cannot be rendered and will be unselected
+		std::string temp = std::string("Too many parameters were selected. Excess parameters will be unselected.");
+		CString cstr(temp.c_str());
+		MessageBox(cstr, MB_OK);
+
 	}
 
 	this->ResizeWindow();
@@ -100,8 +127,9 @@ void ParamDlgScrollablePane::RemoveAllCards()
 }
 
 
-void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data)
+bool ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data)
 {
+	bool success = true;
 	CRect cardRect;
 	this->CalculateCardLocation(&cardRect, (int) data->second->lay, (int) data->second->dim);
 
@@ -114,14 +142,22 @@ void ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 	else
 	{
 		newCard = new ParamDlgCard(data->second, this);
-		newCard->call_create(this);
+		success = newCard->call_create(this);
 	}
 	newCard->MoveWindow(cardRect);
 	newCard->InitalizeValues();
-	newCard->RenderGrid();
+	success = newCard->RenderGrid();
 
-	this->cards.push_back(newCard);
+	if (success)
+	{
+		this->cards.push_back(newCard);
+	}
+	else
+	{
+		delete newCard;
+	}
 
+	return success;
 }
 
 

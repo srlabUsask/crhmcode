@@ -29,13 +29,17 @@ public:
 	* Creates the dialog object and attaches it to this object.
 	* 
 	* Must be called directly after the constructor.
+	* 
+	* @return bool - true if successful false otherwise
 	*/
-	virtual void call_create(CWnd* pParent) override;
+	virtual bool call_create(CWnd* pParent) override;
 	
 	/**
 	* Renders the value grid for the parameter
+	* 
+	* @return bool - true if successful false otherwise
 	*/
-	virtual void RenderGrid() override;
+	virtual bool RenderGrid() override;
 
 	DECLARE_MESSAGE_MAP()
 };

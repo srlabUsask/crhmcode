@@ -51,8 +51,9 @@ public:
 	* Creates the dialog object and attaches it to this object.
 	*
 	* Must be called directly after the constructor.
+	* @return bool - true if successful false otherwise
 	*/
-	virtual void call_create(CWnd* pParent);
+	virtual bool call_create(CWnd* pParent);
 
 	/*
 	* Deconstructor
@@ -65,9 +66,11 @@ public:
 	void InitalizeValues();
 
 	/**
-	* Renders the value grid for the parameter
+	* Renders the value grid for the parameter.
+	* 
+	* @return bool - true on success false when an element fails to be created
 	*/
-	virtual void RenderGrid();
+	virtual bool RenderGrid();
 
 	/**
 	* Removes all of the items created to render the grid.

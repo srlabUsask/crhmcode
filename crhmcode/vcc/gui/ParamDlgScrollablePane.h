@@ -54,8 +54,9 @@ private:
 	* Renders a parameter card. 
 	* 
 	* @param data - std::list<std::pair<std::string, ClassPar*>>::iterator the data for the parameter card to render.
+	* @return bool - true if the card is created correctly false otherwise.
 	*/
-	void AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data);
+	bool AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data);
 
 	/**
 	* Removes all of the rendered parameter cards.

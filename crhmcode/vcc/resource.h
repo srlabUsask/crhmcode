@@ -309,6 +309,7 @@
 #define UWM_FLIP_TICKS_LEFT             32775
 #define UWM_FLIP_TICKS_RIGHT            32776
 #define UWM_MAKE_LOCAL					32777
+#define UWM_UNSELECT_PARAMS				32778
 
 // Next default values for new objects
 // 
