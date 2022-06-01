@@ -100,6 +100,19 @@ public:
 
 protected:
 
+	CEdit param_name;
+	CEdit param_units_label;
+	CEdit param_max_label;
+	CEdit param_min_label;
+	CEdit param_default_label;
+	CEdit param_units;
+	CEdit param_min_value;
+	CEdit param_max_value;
+	CEdit param_default_value;
+	CEdit param_col;
+	CEdit param_help;
+	CEdit param_row;
+
 	/*
 	* CRect object representing the original size of the card.
 	*/
@@ -136,7 +149,7 @@ protected:
 	/**
 	* Vector that holds the CEdit references for the column header items
 	*/
-	std::vector<CEdit*> colHearders;
+	std::vector<CEdit*> colHeaders;
 
 	/**
 	* Holds the representation of the valueGrid that is displayed

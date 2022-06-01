@@ -42,9 +42,9 @@ ParamDlgCard::~ParamDlgCard()
 	}
 
 	// Starts at 1 beacuse the first item is not dynamcialy allocated
-	for (size_t i = 1; i < this->colHearders.size(); i++)
+	for (size_t i = 1; i < this->colHeaders.size(); i++)
 	{
-		delete this->colHearders[i];
+		delete this->colHeaders[i];
 	}
 
 	for (size_t i = 0; i < this->valueGrid.size(); i++)
@@ -60,6 +60,18 @@ ParamDlgCard::~ParamDlgCard()
 void ParamDlgCard::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, ID_PARAM_NAME, this->param_name);
+	DDX_Control(pDX, ID_PARAM_UNITS_LABEL, this->param_units_label);
+	DDX_Control(pDX, ID_PARAM_MAX_LABEL, this->param_max_label);
+	DDX_Control(pDX, ID_PARAM_MIN_LABEL, this->param_min_label);
+	DDX_Control(pDX, ID_PARAM_DEFAULT_LABEL, this->param_default_label);
+	DDX_Control(pDX, ID_PARAM_UNITS, this->param_units);
+	DDX_Control(pDX, ID_PARAM_MAX_VALUE, this->param_max_value);
+	DDX_Control(pDX, ID_PARAM_MIN_VALUE, this->param_min_value);
+	DDX_Control(pDX, ID_PARAM_DEFAULT_VALUE, this->param_default_value);
+	DDX_Control(pDX, ID_PARAM_COL, this->param_col);
+	DDX_Control(pDX, ID_PARAM_HELP, this->param_help);
+	DDX_Control(pDX, ID_PARAM_ROW, this->param_row);
 }
 
 
@@ -273,20 +285,20 @@ void ParamDlgCard::InitalizeValues()
 	/*
 	* Setting fonts for CEdit boxes
 	*/
-	GetDlgItem(ID_PARAM_NAME)->SetFont(this->pointFont120);
-	GetDlgItem(ID_PARAM_UNITS_LABEL)->SetFont(this->pointFont120);
-	GetDlgItem(ID_PARAM_MAX_LABEL)->SetFont(this->pointFont120);
-	GetDlgItem(ID_PARAM_MIN_LABEL)->SetFont(this->pointFont120);
-	GetDlgItem(ID_PARAM_DEFAULT_LABEL)->SetFont(this->pointFont120);
+	this->param_name.SetFont(this->pointFont120);
+	this->param_units_label.SetFont(this->pointFont120);
+	this->param_max_label.SetFont(this->pointFont120);
+	this->param_min_label.SetFont(this->pointFont120);
+	this->param_default_label.SetFont(this->pointFont120);
+	
+	this->param_units.SetFont(this->pointFont100);
+	this->param_min_value.SetFont(this->pointFont100);
+	this->param_max_value.SetFont(this->pointFont100);
+	this->param_default_value.SetFont(this->pointFont100);
+	this->param_col.SetFont(this->pointFont100);
 
-	GetDlgItem(ID_PARAM_UNITS)->SetFont(this->pointFont100);
-	GetDlgItem(ID_PARAM_MIN_VALUE)->SetFont(this->pointFont100);
-	GetDlgItem(ID_PARAM_MAX_VALUE)->SetFont(this->pointFont100);
-	GetDlgItem(ID_PARAM_DEFAULT_VALUE)->SetFont(this->pointFont100);
-	GetDlgItem(ID_PARAM_COL)->SetFont(this->pointFont100);
-
-	GetDlgItem(ID_PARAM_HELP)->SetFont(this->pointFont80);
-	GetDlgItem(ID_PARAM_ROW)->SetFont(this->pointFont80);
+	this->param_help.SetFont(this->pointFont80);
+	this->param_row.SetFont(this->pointFont80);
 
 	/*
 	* Set text for CEdit Boxes
@@ -333,10 +345,10 @@ void ParamDlgCard::RenderGrid()
 	CWaitCursor wait;
 
 	// Place the first col guide CEdit in the vector
-	this->colHearders.push_back((CEdit*)GetDlgItem(ID_PARAM_COL));
+	this->colHeaders.push_back(&this->param_col);
 
 	// Place the first row guide CEdit in the vector
-	this->rowLabels.push_back((CEdit *)GetDlgItem(ID_PARAM_ROW));
+	this->rowLabels.push_back(&this->param_row);
 
 	/*
 	* Set the text for the grid guide items.
@@ -355,7 +367,7 @@ void ParamDlgCard::RenderGrid()
 	{
 		// Determine the location for the cell
 		CRect columnRectangle;
-		GetDlgItem(ID_PARAM_COL + i - 1)->GetWindowRect(&columnRectangle);
+		this->colHeaders[i - 1]->GetWindowRect(&columnRectangle);
 		ScreenToClient(&columnRectangle);
 		int width = columnRectangle.Width();
 		columnRectangle.TopLeft().x = columnRectangle.TopLeft().x + width;
@@ -372,13 +384,13 @@ void ParamDlgCard::RenderGrid()
 		);
 
 		// Set the font and text for the cell
-		GetDlgItem(ID_PARAM_COL + i)->SetFont(this->pointFont100);
+		colHeader->SetFont(this->pointFont100);
 		std::string colString = "HRU[" + std::to_string(i+1) + "]";
 		CString colText = CString(colString.c_str());
 		SetDlgItemText(ID_PARAM_COL + i, colText);
 
 		// Place the CEdit into the vector
-		this->colHearders.push_back(colHeader);
+		this->colHeaders.push_back(colHeader);
 	}
 
 	// Create the row label cells
@@ -387,7 +399,7 @@ void ParamDlgCard::RenderGrid()
 	{
 		// Determine the location for the cell
 		CRect rowRectangle;
-		GetDlgItem(ID_PARAM_ROW + i - 1)->GetWindowRect(&rowRectangle);
+		this->rowLabels[i - 1]->GetWindowRect(&rowRectangle);
 		ScreenToClient(&rowRectangle);
 		int height = rowRectangle.Height();
 		rowRectangle.TopLeft().y = rowRectangle.TopLeft().y + height;
@@ -404,7 +416,7 @@ void ParamDlgCard::RenderGrid()
 		);
 
 		// Set the font and text for the cell
-		GetDlgItem(ID_PARAM_ROW + i)->SetFont(this->pointFont80);
+		rowHeader->SetFont(this->pointFont80);
 		std::string rowString = this->parameter->param + "[" + std::to_string(i + 1) + "]";
 		CString rowText = CString(rowString.c_str());
 		SetDlgItemText(ID_PARAM_ROW + i, rowText);
@@ -421,7 +433,7 @@ void ParamDlgCard::RenderGrid()
 	{
 		// Find the Y coordinates for the new cell
 		CRect rowGuideRect;
-		GetDlgItem(ID_PARAM_ROW + i)->GetWindowRect(&rowGuideRect);
+		this->rowLabels[i]->GetWindowRect(&rowGuideRect);
 		ScreenToClient(&rowGuideRect);
 		int topY = rowGuideRect.TopLeft().y;
 		int botY = rowGuideRect.BottomRight().y;
@@ -430,7 +442,7 @@ void ParamDlgCard::RenderGrid()
 		{
 			// Find the X coordinates for the new cell
 			CRect colGuideRect;
-			GetDlgItem(ID_PARAM_COL + j)->GetWindowRect(&colGuideRect);
+			this->colHeaders[j]->GetWindowRect(&colGuideRect);
 			ScreenToClient(&colGuideRect);
 			int topX = colGuideRect.TopLeft().x;
 			int botX = colGuideRect.BottomRight().x;
@@ -460,7 +472,7 @@ void ParamDlgCard::RenderGrid()
 			);
 
 			// Set the font for the cell
-			GetDlgItem(ID_PARAM_GRID + (i * 1000) + j)->SetFont(this->pointFont80);
+			newCell->SetFont(this->pointFont80);
 			
 			// Set the inital value in the cell
 			std::stringstream valueStream;
@@ -511,12 +523,12 @@ void ParamDlgCard::RemoveGrid()
 	this->rowLabels.clear();
 
 	// Starts at 1 beacuse the first item is not dynamcialy allocated
-	for (size_t i = 1; i < this->colHearders.size(); i++)
+	for (size_t i = 1; i < this->colHeaders.size(); i++)
 	{
-		delete this->colHearders[i];
+		delete this->colHeaders[i];
 	}
 
-	this->colHearders.clear();
+	this->colHeaders.clear();
 
 	for (size_t i = 0; i < this->valueGrid.size(); i++)
 	{
