@@ -29,7 +29,7 @@ void ParamDlgCardShared::RenderGrid()
 	CWaitCursor wait;
 
 	// Place the first col guide CEdit in the vector
-	this->colHearders.push_back((CEdit*)GetDlgItem(ID_PARAM_COL));
+	this->colHeaders.push_back((CEdit*)GetDlgItem(ID_PARAM_COL));
 
 	// Place the first row guide CEdit in the vector
 	this->rowLabels.push_back((CEdit*)GetDlgItem(ID_PARAM_ROW));
@@ -74,7 +74,7 @@ void ParamDlgCardShared::RenderGrid()
 		SetDlgItemText(ID_PARAM_COL + i, colText);
 
 		// Place the CEdit into the vector
-		this->colHearders.push_back(colHeader);
+		this->colHeaders.push_back(colHeader);
 	}
 
 	// Create the row label cells
