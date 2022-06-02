@@ -129,7 +129,7 @@ void ParametersDlg::OnSelectModule()
 
 			//Copy the parameters list and sort
 			std::list<std::pair<std::string, ClassPar*>> parametersList = *selectedModuleIt->second->getParametersList();
-			parametersList.sort(&ParametersDlg::compareParametersAlphabeticalyNoCase);
+			parametersList.sort(&ParametersDlg::compareParametersAlphabeticallyNoCase);
 
 			// Add '*' to the begining of the shared parameters.
 			for (
@@ -194,7 +194,7 @@ void ParametersDlg::OnSelectModule()
 			}
 
 			// Sort the list of parameters
-			allParametersList.sort(&ParametersDlg::compareParametersAlphabeticalyNoCase);
+			allParametersList.sort(&ParametersDlg::compareParametersAlphabeticallyNoCase);
 
 			// Add '*' to the begining of the shared parameters.
 			for (
@@ -629,7 +629,7 @@ void ParametersDlg::initalizeModulesListBox(CRHMmain* main)
 	std::list<std::pair<std::string, ClassModule*>> sorted_modules_list = *modules_list;
 
 	// Sort the list of modules alphabeticaly ignoring case.
-	sorted_modules_list.sort(&ParametersDlg::compareModulesAlphabeticalyNoCase);
+	sorted_modules_list.sort(&ParametersDlg::compareModulesAlphabeticallyNoCase);
 
 	//Keep track of the longest string and use to set horizontal extent
 	size_t longStringCount = 0;
@@ -688,7 +688,7 @@ void ParametersDlg::initalizeModulesListBox(CRHMmain* main)
 }
 
 
-BOOL ParametersDlg::compareModulesAlphabeticalyNoCase(std::pair<std::string, ClassModule*> item_a, std::pair<std::string, ClassModule*> item_b)
+BOOL ParametersDlg::compareModulesAlphabeticallyNoCase(std::pair<std::string, ClassModule*> item_a, std::pair<std::string, ClassModule*> item_b)
 {
 	std::string lower_a;
 	for (std::string::iterator c = item_a.first.begin(); c != item_a.first.end(); c++)
@@ -707,7 +707,7 @@ BOOL ParametersDlg::compareModulesAlphabeticalyNoCase(std::pair<std::string, Cla
 }
 
 
-BOOL ParametersDlg::compareParametersAlphabeticalyNoCase(std::pair<std::string, ClassPar*> item_a, std::pair<std::string, ClassPar*> item_b)
+BOOL ParametersDlg::compareParametersAlphabeticallyNoCase(std::pair<std::string, ClassPar*> item_a, std::pair<std::string, ClassPar*> item_b)
 {
 	std::string lower_a;
 	for (std::string::iterator c = item_a.first.begin(); c != item_a.first.end(); c++)
@@ -909,4 +909,110 @@ void ParametersDlg::OnSize(UINT nType, int cx, int cy)
 		this->prameters_scroll_pane->MoveWindow(rectangle);
 	}
 
+}
+
+
+void ParametersDlg::OnCancel()
+{
+	bool found = CheckForConsolidationCandidates();
+
+	
+
+	CDialogEx::OnCancel();
+}
+
+
+bool ParametersDlg::CheckForConsolidationCandidates()
+{
+	/* Make a list of all the parameters */
+	std::list<std::pair<std::string, ClassPar*>> allParametersList =  std::list<std::pair<std::string, ClassPar*>>();
+
+	CRHMmain* main = CRHMmain::getInstance();
+	std::list<std::pair<std::string, ClassModule*>> * modulesList = main->getOurModules();
+
+	for (
+		std::list<std::pair<std::string, ClassModule*>>::iterator modulesListIt = modulesList->begin();
+		modulesListIt != modulesList->end();
+		modulesListIt++
+		)
+	{
+		if (!modulesListIt->second->isGroup)
+		{
+			// Not a group module
+			std::list<std::pair<std::string, ClassPar*>>* parametersList = modulesListIt->second->getParametersList();
+
+			for (
+				std::list<std::pair<std::string, ClassPar*>>::iterator parametersListIt = parametersList->begin();
+				parametersListIt != parametersList->end();
+				parametersListIt++
+				)
+			{
+				allParametersList.push_back(std::pair<std::string, ClassPar*>(parametersListIt->first, parametersListIt->second));
+			}
+
+		}
+		else
+		{
+			// Is a group module
+			ClassMacro* groupModule = (ClassMacro*)modulesListIt->second;
+
+			std::vector<std::pair<std::string, ClassModule*>>* modulesVector = groupModule->GrpStringList;
+			
+			// For each module add the assoicated parameters to the list. 
+			for (
+				std::vector<std::pair<std::string, ClassModule*>>::iterator modulesIt = modulesVector->begin();
+				modulesIt != modulesVector->end();
+				modulesIt++
+				)
+			{
+
+				std::list<std::pair<std::string, ClassPar*>> parametersList = *modulesIt->second->getParametersList();
+
+				for (
+					std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList.begin();
+					it != parametersList.end();
+					it++
+					)
+				{
+					allParametersList.push_back(std::pair<std::string, ClassPar*>(it->first, it->second));
+				}
+
+			}
+
+		}
+
+	}
+
+	/* Sort the list alphabetically */
+	allParametersList.sort(&ParametersDlg::compareParametersAlphabeticallyNoCase);
+
+	/* Walk through the list looking for segments where parametrs have the same name */
+	
+	std::list<std::pair<std::string, ClassPar*>>::iterator leftCursor = allParametersList.begin();
+	std::list<std::pair<std::string, ClassPar*>>::iterator rightCursor = allParametersList.begin();
+	
+	bool candidateFound = false;
+
+	while (rightCursor != allParametersList.end())
+	{
+		while (rightCursor != allParametersList.end() && leftCursor->first == rightCursor->first  )
+		{
+			rightCursor++;
+
+			if (rightCursor != allParametersList.end())
+			{
+				candidateFound = ClassPar::ConsolidationCandidates(leftCursor->second, rightCursor->second);
+			}
+
+			if (candidateFound)
+			{
+				return true;
+			}
+		}
+
+		leftCursor = rightCursor;
+		
+	}
+
+	return false;
 }

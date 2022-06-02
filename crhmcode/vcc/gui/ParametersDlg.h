@@ -24,6 +24,12 @@ public:
 	virtual ~ParametersDlg();
 
 private:
+
+	// Dialog Data
+#ifdef AFX_DESIGN_TIME
+	enum { IDD = PARAMETERS_DLG };
+#endif
+
 	/**
 	* List box that contains a list of the modules used in the loaded model.
 	*/
@@ -103,6 +109,11 @@ private:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 
 	/**
+	* Method that triggers when the dialog is closed
+	*/
+	afx_msg void OnCancel();
+
+	/**
 	* Helper method used to initalize the values in the modules list box during dialog initalization.
 	*
 	* @param main CRHMmain* reference to the main CRHM model object. 
@@ -118,7 +129,7 @@ private:
 	* @param item_b std::pair<std::string, ClassModule*> item to make up the right side of the comparison.
 	* @returns true if item_a is before item_b and false otherwise. 
 	*/
-	static BOOL compareModulesAlphabeticalyNoCase(std::pair<std::string, ClassModule*> item_a, std::pair<std::string, ClassModule*> item_b);
+	static BOOL compareModulesAlphabeticallyNoCase(std::pair<std::string, ClassModule*> item_a, std::pair<std::string, ClassModule*> item_b);
 
 	/**
 	* Comparison function for sorting a list of parameters indexed by string alphabeticaly ignoring case.
@@ -129,7 +140,7 @@ private:
 	* @param item_b std::pair<std::string, ClassPar*> item to make up the right side of the comparison.
 	* @returns true if item_a is before item_b and false otherwise.
 	*/
-	static BOOL compareParametersAlphabeticalyNoCase(std::pair<std::string, ClassPar*> item_a, std::pair<std::string, ClassPar*> item_b);
+	static BOOL compareParametersAlphabeticallyNoCase(std::pair<std::string, ClassPar*> item_a, std::pair<std::string, ClassPar*> item_b);
 
 	/**
 	* Handles the receiving of a UWM_MAKE_LOCAL message 
@@ -149,12 +160,6 @@ private:
 	*/
 	afx_msg LRESULT ParametersDlg::OnUnselectParamsMsg(WPARAM wParam, LPARAM lParam);
 
-// Dialog Data
-#ifdef AFX_DESIGN_TIME
-	enum { IDD = PARAMETERS_DLG };
-#endif
-
-protected:
 	/**
 	* Performs data exchange to properly connect graphical elements to the model.
 	*/
@@ -164,6 +169,19 @@ protected:
 	* Initalizes the dialog elements after creating the dialog.
 	*/
 	virtual BOOL OnInitDialog();
+
+	/**
+	* Checks if any parameters in the model are candidates for consolidation
+	* 
+	* Parameters are consolidation candidates if they have the following properties
+	*    they have the same name
+	*    they have the same dimensions
+	*    they have the same type
+	*	 they DO NOT have the same values
+	* 
+	* @return bool - true if there are consolidation candidates and false otherwise
+	*/
+	bool CheckForConsolidationCandidates();
 
 	/**
 	* Declares handlers for messages dispached by the GUI
