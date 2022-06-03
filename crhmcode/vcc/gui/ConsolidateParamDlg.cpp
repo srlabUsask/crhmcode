@@ -4,10 +4,10 @@
 IMPLEMENT_DYNAMIC(ConsolidateParamDlg, CDialogEx)
 
 
-ConsolidateParamDlg::ConsolidateParamDlg(CWnd* pParent) 
+ConsolidateParamDlg::ConsolidateParamDlg(std::map<std::string, std::list<ClassPar*>*>* candidates, CWnd* pParent)
 	: CDialogEx(CONSOLIDATE_PARAM_DLG, pParent)
 {
-
+	this->candidates = *candidates;
 }
 
 

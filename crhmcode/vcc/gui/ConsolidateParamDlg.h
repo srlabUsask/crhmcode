@@ -2,7 +2,13 @@
 #include <afxwin.h>
 #include <afxdialogex.h>
 
+#include <map>
+#include <list>
+#include <string>
+
 #include "../resource.h"
+#include "../../src/core/ClassPar.h"
+
 
 class ConsolidateParamDlg : public CDialogEx
 {
@@ -21,7 +27,7 @@ public:
 	* 
 	* @param pParent - CWnd* pointer to parent window. Optional.
 	*/
-	ConsolidateParamDlg(CWnd* pParent = nullptr);
+	ConsolidateParamDlg(std::map<std::string, std::list<ClassPar*>*>* candidates, CWnd* pParent = nullptr);
 	
 	/**
 	* Deconstructor 
@@ -30,6 +36,7 @@ public:
 
 private:
 
+	std::map<std::string, std::list<ClassPar*>*> candidates;
 
 	/**
 	* Declares handlers for messages dispached by the GUI

@@ -883,23 +883,33 @@ void ParametersDlg::OnSize(UINT nType, int cx, int cy)
 
 void ParametersDlg::OnCancel()
 {
-	bool found = CheckForConsolidationCandidates();
+	std::map<std::string, std::list<ClassPar*>*>* candidates = RetrieveConsolidationCandidates();
 
-	if (found)
+	if (candidates->size() > 0)
 	{
-		ConsolidateParamDlg * consolidateParamDlg = new ConsolidateParamDlg();
+		ConsolidateParamDlg * consolidateParamDlg = new ConsolidateParamDlg(candidates);
 
 		consolidateParamDlg->DoModal();
 
 		delete consolidateParamDlg;
 	}
 
+	/* Delete lists in candidates */
+	for (
+		std::map<std::string, std::list<ClassPar*>*>::iterator it = candidates->begin();
+		it != candidates->end();
+		it++
+		)
+	{
+		delete it->second;
+	}
+	delete candidates;
 
 	CDialogEx::OnCancel();
 }
 
 
-bool ParametersDlg::CheckForConsolidationCandidates()
+std::map<std::string, std::list<ClassPar*>*>* ParametersDlg::RetrieveConsolidationCandidates()
 {
 	/* Make a list of all the parameters */
 	std::list<std::pair<std::string, ClassPar*>> allParametersList =  std::list<std::pair<std::string, ClassPar*>>();
@@ -947,7 +957,7 @@ bool ParametersDlg::CheckForConsolidationCandidates()
 	std::list<std::pair<std::string, ClassPar*>>::iterator leftCursor = allParametersList.begin();
 	std::list<std::pair<std::string, ClassPar*>>::iterator rightCursor = allParametersList.begin();
 	
-	bool candidateFound = false;
+	std::map<std::string, std::list<ClassPar*>*>* candidates = new std::map<std::string, std::list<ClassPar*>*>();
 
 	while (rightCursor != allParametersList.end())
 	{
@@ -957,18 +967,74 @@ bool ParametersDlg::CheckForConsolidationCandidates()
 
 			if (rightCursor != allParametersList.end())
 			{
-				candidateFound = ClassPar::ConsolidationCandidates(leftCursor->second, rightCursor->second);
+				if (ClassPar::ConsolidationCandidates(leftCursor->second, rightCursor->second))
+				{
+					
+					if (candidates->find(leftCursor->first) != candidates->end())
+					{
+						/* A parameter with this name is already in the candidate map*/
+						std::map<std::string, std::list<ClassPar*>*>::iterator entry = candidates->find(leftCursor->first);
+
+						std::list<ClassPar*>* entryList = entry->second;
+
+						/* Check if leftCursor can be added ie it is consoladatable with all*/
+						
+
+
+						/* Check if rightCursor can be added*/
+
+					}
+					else
+					{
+						/* Need to add this parameter name to the candidate map */
+						
+						/* Compose a list of all of the unique paramters with this name */
+						std::list<ClassPar*>* entryList = new std::list<ClassPar*>();
+
+						/* Add the inital two to the list */
+						entryList->push_back(leftCursor->second);
+						entryList->push_back(rightCursor->second);
+
+						/* 
+						* Look for more parameters that are candidates for consolidation with every 
+						* other candidate and not yet added.
+						*/
+						do
+						{
+							bool unique = true;
+							for (
+								std::list<ClassPar*>::iterator it = entryList->begin();
+								it != entryList->end();
+								it++
+								)
+							{
+								if (*it == rightCursor->second)
+								{
+									unique = false;
+								}
+							}
+
+							if (unique && ClassPar::ConsolidationCandidates(leftCursor->second, rightCursor->second))
+							{
+								entryList->push_back(rightCursor->second);
+							}
+
+							rightCursor++;
+						} while (rightCursor != allParametersList.end() && leftCursor->first == rightCursor->first);
+
+						candidates->insert(std::pair<std::string, std::list<ClassPar*>*>(leftCursor->first, entryList));
+					}
+
+
+				}
 			}
 
-			if (candidateFound)
-			{
-				return true;
-			}
+			
 		}
 
 		leftCursor = rightCursor;
 		
 	}
 
-	return false;
+	return candidates;
 }

@@ -183,9 +183,9 @@ private:
 	*    they have the same type
 	*	 they DO NOT have the same values
 	* 
-	* @return bool - true if there are consolidation candidates and false otherwise
+	* @return std::map<std::string, std::list<ClassPar*>>* - map pairing a parameter name with all versions of that parameter that are consolidatable.
 	*/
-	bool CheckForConsolidationCandidates();
+	std::map<std::string, std::list<ClassPar*>*> * RetrieveConsolidationCandidates();
 
 	/**
 	* Declares handlers for messages dispached by the GUI
