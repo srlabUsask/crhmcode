@@ -11,7 +11,7 @@ class ConsolidateParamDlg : public CDialogEx
 
 	// Dialog Data
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = COSOLIDATE_PARAM_DLG };
+	enum { IDD = CONSOLIDATE_PARAM_DLG };
 #endif
 
 public:

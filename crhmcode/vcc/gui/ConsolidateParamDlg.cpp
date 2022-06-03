@@ -5,7 +5,7 @@ IMPLEMENT_DYNAMIC(ConsolidateParamDlg, CDialogEx)
 
 
 ConsolidateParamDlg::ConsolidateParamDlg(CWnd* pParent) 
-	: CDialogEx(COSOLIDATE_PARAM_DLG, pParent)
+	: CDialogEx(CONSOLIDATE_PARAM_DLG, pParent)
 {
 
 }
