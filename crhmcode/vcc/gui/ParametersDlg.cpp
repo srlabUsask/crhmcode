@@ -1,7 +1,3 @@
-#include "../stdafx.h"
-#include "afxdialogex.h"
-
-#include "CRHM_GUI.h"
 #include "ParametersDlg.h"
 
 IMPLEMENT_DYNAMIC(ParametersDlg, CDialog)
@@ -889,7 +885,15 @@ void ParametersDlg::OnCancel()
 {
 	bool found = CheckForConsolidationCandidates();
 
-	
+	if (found)
+	{
+		ConsolidateParamDlg * consolidateParamDlg = new ConsolidateParamDlg();
+
+		consolidateParamDlg->DoModal();
+
+		delete consolidateParamDlg;
+	}
+
 
 	CDialogEx::OnCancel();
 }

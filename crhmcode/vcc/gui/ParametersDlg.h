@@ -1,7 +1,11 @@
 #pragma once
 #include <afxwin.h>
+#include <afxdialogex.h>
+#include "../stdafx.h"
+#include "CRHM_GUI.h"
 
 #include "ParamDlgScrollablePane.h"
+#include "ConsolidateParamDlg.h"
 
 #include "../../src/core/CRHMmain.h"
 #include "../../src/core/ClassMacro.h"
