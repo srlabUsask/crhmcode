@@ -831,8 +831,6 @@ LRESULT ParametersDlg::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 
 	}
 
-	
-
 	return 0;
 }
 
@@ -867,9 +865,6 @@ LRESULT ParametersDlg::OnUnselectParamsMsg(WPARAM wParam, LPARAM lParam)
 
 
 	}
-
-
-
 
 	return 0;
 }
