@@ -64,8 +64,12 @@ double* rho_snow{ NULL };
 long* nfirn{ NULL };
 long* GlacierMode{ NULL }; // 0 - glacier, 1 - tongue
 
-double* lagT{ NULL }; // debris-cover melt
-double* lagSW{ NULL }; // debris-cover melt
+double* lagT_delayed{ NULL }; // lagged temperature, 22 Apr 2022 added
+double** lagT_delayed_lay{ NULL }; // lagged temperature, 22 Apr 2022 added
+double* lagSW_delayed{ NULL }; // lagged shortwave radiation, 22 Apr 2022 added
+double** lagSW_delayed_lay{ NULL }; // lagged shortwave radiation, 22 Apr 2022 added
+long* lagT{ NULL }; // debris-cover melt
+long* lagSW{ NULL }; // debris-cover melt
 double* TF{ NULL }; // debris-cover melt
 double* SRF{ NULL }; // debris-cover melt
 double* Xdebris_melt_hrly{ NULL }; // debris-cover melt

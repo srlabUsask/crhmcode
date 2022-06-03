@@ -14,7 +14,14 @@ int main(int argc, char *argv[])
 
     std::string projectArgument = arguments->get_project_name();
     m->OpenNamePrj = projectArgument;
-    m->DoPrjOpen(projectArgument, "");
-    m->RunClick();
+
+    if (m->DoPrjOpen(projectArgument, ""))
+    {
+      m->RunClick();
+    }
+    else
+    {
+      std::cout << "Error encountered while loading the project. Check log file for more detail.";
+    }
 
 }

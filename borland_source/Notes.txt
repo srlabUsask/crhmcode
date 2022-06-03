@@ -610,4 +610,14 @@ CRHM 04/06/22
 	tsurface
 	K_Estimate
 	interception
-	lake_evap  
+	lake_evap 
+
+CRHM 04/22/22
+
+  In glacier module:
+	
+	1. adding missing parentheses for (Ts_glacier * katabatic_lapse_rate[hh] * Pr) in the Katabatic equation:
+
+ 	K_kat[hh] = Katabatic * ((hru_t[hh] + 273.15) - Ts_glacier) * pow(g / (Ts_glacier * katabatic_lapse_rate[hh] * Pr), 0.5);
+
+	2. correction in debris-cover melt for handling the delayed air temperature and incoming shortwave radiation due to debris cover.

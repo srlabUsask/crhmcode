@@ -1,4 +1,4 @@
-// 08/11/21 with changes to 04/12/21
+// 04/22/22 with changes to 08/11/21
 //---------------------------------------------------------------------------
 
 #ifndef OurModulesH
@@ -5721,6 +5721,10 @@ float *rho_snow;
 long *nfirn;
 long *GlacierMode; // 0 - glacier, 1 - tongue
 
+float *lagT_delayed;// lagged temperature, 22 Apr 2022 added
+float **lagT_delayed_lay;// lagged temperature, 22 Apr 2022 added
+float *lagSW_delayed;// lagged shortwave radiation, 22 Apr 2022 added
+float **lagSW_delayed_lay;// lagged shortwave radiation, 22 Apr 2022 added
 float *lagT; // debris-cover melt
 float *lagSW; // debris-cover melt
 float *TF; // debris-cover melt
