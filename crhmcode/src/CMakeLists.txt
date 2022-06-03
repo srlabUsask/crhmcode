@@ -25,8 +25,6 @@ set(STAGING_DIR ".")
 #If no Build Type is specified default to Release
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
-else()
-    set(CMAKE_BUILD_TYPE DEBUG)
 endif()
 
 if(CMAKE_BUILD_TYPE EQUAL Release)
