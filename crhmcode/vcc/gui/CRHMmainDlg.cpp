@@ -1962,6 +1962,8 @@ void CRHMmainDlg::OnBuildMacro()
 		t->MacroClick();
 		tchart.RemoveAllSeries();
 	}
+
+	delete macroEntry;
 }
 
 
@@ -1971,6 +1973,7 @@ void CRHMmainDlg::OpenParametersDialog()
 	parametersDialog = new ParametersDlg();
 
 	parametersDialog->DoModal();
+	delete parametersDialog;
 
 	CRHMmain* model = CRHMmain::getInstance();
 	model->SqueezeParams();
