@@ -36,7 +36,27 @@ public:
 
 private:
 
+	/**
+	* Map of parameter names to a list of parameter objects that have differing values.
+	*/
 	std::map<std::string, std::list<ClassPar*>*> candidates;
+
+	CListBox candidates_list_box;
+
+	/**
+	* Performs data exchange to properly connect graphical elements to the model.
+	*/
+	virtual void DoDataExchange(CDataExchange* pDX);
+
+	/**
+	* Initalizes the dialog elements after creating the dialog.
+	*/
+	virtual BOOL OnInitDialog();
+
+	/**
+	* Sets the inital contents of the candidates list box based on the passed in map.
+	*/
+	void InitalizeCandidatesListBox();
 
 	/**
 	* Declares handlers for messages dispached by the GUI
