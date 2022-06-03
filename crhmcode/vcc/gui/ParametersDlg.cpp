@@ -167,31 +167,9 @@ void ParametersDlg::OnSelectModule()
 			// Module is a group macro
 			ClassMacro * groupModule = (ClassMacro *) selectedModuleIt->second;
 
-			// Retrive list of modules that make up the group macro 
-			std::vector<std::pair<std::string, ClassModule*>> * modulesVector = groupModule->GrpStringList;
-			// Declare a list to hold the parameters
+			// Retrive list of modules that make up the group macro
 			std::list<std::pair<std::string, ClassPar*>> allParametersList;
-
-			// For each module add the assoicated parameters to the list. 
-			for (
-				std::vector<std::pair<std::string, ClassModule*>>::iterator modulesIt = modulesVector->begin();
-				modulesIt != modulesVector->end();
-				modulesIt++
-				)
-			{
-
-				std::list<std::pair<std::string, ClassPar*>> parametersList = *modulesIt->second->getParametersList();
-				
-				for (
-					std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList.begin();
-					it != parametersList.end();
-					it++
-					)
-				{
-					allParametersList.push_back(std::pair<std::string, ClassPar*>(it->first, it->second));
-				}
-
-			}
+			groupModule->RetrieveAllParameters(&allParametersList);
 
 			// Sort the list of parameters
 			allParametersList.sort(&ParametersDlg::compareParametersAlphabeticallyNoCase);
@@ -956,28 +934,7 @@ bool ParametersDlg::CheckForConsolidationCandidates()
 			// Is a group module
 			ClassMacro* groupModule = (ClassMacro*)modulesListIt->second;
 
-			std::vector<std::pair<std::string, ClassModule*>>* modulesVector = groupModule->GrpStringList;
-			
-			// For each module add the assoicated parameters to the list. 
-			for (
-				std::vector<std::pair<std::string, ClassModule*>>::iterator modulesIt = modulesVector->begin();
-				modulesIt != modulesVector->end();
-				modulesIt++
-				)
-			{
-
-				std::list<std::pair<std::string, ClassPar*>> parametersList = *modulesIt->second->getParametersList();
-
-				for (
-					std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList.begin();
-					it != parametersList.end();
-					it++
-					)
-				{
-					allParametersList.push_back(std::pair<std::string, ClassPar*>(it->first, it->second));
-				}
-
-			}
+			groupModule->RetrieveAllParameters(&allParametersList);
 
 		}
 
