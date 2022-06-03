@@ -224,8 +224,8 @@ void ParamDlgCard::OnSetAllButton()
 {
 	ParamSetAllDlg* setAllDlg;
 	setAllDlg = new ParamSetAllDlg(this, (CWnd*)this);
-
 	setAllDlg->DoModal();
+	delete setAllDlg;
 }
 
 
