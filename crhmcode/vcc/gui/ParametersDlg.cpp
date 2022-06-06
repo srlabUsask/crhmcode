@@ -44,12 +44,6 @@ BOOL ParametersDlg::OnInitDialog()
 
 	CRHMmain * main = CRHMmain::getInstance();
 	this->initalizeModulesListBox(main);
-	
-	/**
-	* Sets the width of the list boxes for scroling purposes.
-	*/
-	//this->modules_list_box.SetHorizontalExtent(1000);
-	this->parameters_list_box.SetHorizontalExtent(1000);
 
 	/**
 	* Replace the placeholder pane with the parameters scroll pane.
