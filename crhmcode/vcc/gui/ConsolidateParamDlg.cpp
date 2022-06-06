@@ -13,6 +13,7 @@ ConsolidateParamDlg::ConsolidateParamDlg(std::map<std::string, std::list<ClassPa
 
 ConsolidateParamDlg::~ConsolidateParamDlg()
 {
+	delete this->scrollPane;
 }
 
 
@@ -28,6 +29,15 @@ BOOL ConsolidateParamDlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	this->InitalizeCandidatesListBox();
+
+	/**
+	* Replace the placeholder pane with the parameters scroll pane.
+	*/
+	this->scrollPane = new ConsolidationScrollPane(this);
+	CRect rectangle;
+	GetDlgItem(ID_CONSOLIDATE_CARDS_PLACEHOLDER)->GetWindowRect(rectangle);
+	ScreenToClient(&rectangle);
+	this->scrollPane->MoveWindow(rectangle);
 
 	return true;
 }

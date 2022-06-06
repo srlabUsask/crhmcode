@@ -8,6 +8,7 @@
 
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
+#include "ConsolidationScrollPane.h"
 
 
 class ConsolidateParamDlg : public CDialogEx
@@ -41,7 +42,15 @@ private:
 	*/
 	std::map<std::string, std::list<ClassPar*>*> candidates;
 
+	/**
+	* List box containing the candidate parameters for consolidation
+	*/
 	CListBox candidates_list_box;
+
+	/**
+	* Scroll pane that holds the parameter cards
+	*/
+	ConsolidationScrollPane * scrollPane;
 
 	/**
 	* Performs data exchange to properly connect graphical elements to the model.
