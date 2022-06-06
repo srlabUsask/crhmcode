@@ -12,7 +12,7 @@
 
 class ParamDlgCard;
 
-class ParamDlgScrollablePane : public CDialog
+class CardScrollPane : public CDialog
 {
 private:
 	/**
@@ -95,7 +95,7 @@ public:
 	/**
 	* Standard constructor
 	*/
-	ParamDlgScrollablePane(CWnd* pParent = NULL);
+	CardScrollPane(CWnd* pParent = NULL);
 
 	/**
 	* Sets the rendered parameter cards to the passed in list of parameters.

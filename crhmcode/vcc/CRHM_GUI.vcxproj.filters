@@ -694,7 +694,7 @@
     <ClCompile Include="..\src\modules\waterquality\WQ_Soil_NPCcycling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\ParamDlgScrollablePane.cpp">
+    <ClCompile Include="gui\CardScrollPane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\ParamDlgCard.cpp">
@@ -2853,7 +2853,7 @@
     <ClInclude Include="..\src\modules\waterquality\WQ_Soil_NPCcycling.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gui\ParamDlgScrollablePane.h">
+    <ClInclude Include="gui\CardScrollPane.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gui\ParamDlgCard.h">

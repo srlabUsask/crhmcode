@@ -4,7 +4,7 @@
 #include "../stdafx.h"
 #include "CRHM_GUI.h"
 
-#include "ParamDlgScrollablePane.h"
+#include "CardScrollPane.h"
 #include "ConsolidateParamDlg.h"
 
 #include "../../src/core/CRHMmain.h"
@@ -49,7 +49,7 @@ private:
 	/**
 	* Scrollable pane that contains the individual parameter cards.
 	*/
-	ParamDlgScrollablePane* prameters_scroll_pane;
+	CardScrollPane* prameters_scroll_pane;
 
 	/**
 	* Handler for when the selection in the modules_list_box changes.

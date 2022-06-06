@@ -38,7 +38,7 @@ BOOL ConsolidateParamDlg::OnInitDialog()
 	/**
 	* Replace the placeholder pane with the parameters scroll pane.
 	*/
-	this->scrollPane = new ConsolidationScrollPane(this);
+	this->scrollPane = new CardScrollPane(this);
 	CRect rectangle;
 	GetDlgItem(ID_CONSOLIDATE_CARDS_PLACEHOLDER)->GetWindowRect(rectangle);
 	ScreenToClient(&rectangle);
@@ -75,7 +75,7 @@ void ConsolidateParamDlg::OnSelectCandidate()
 
 	std::list<ClassPar*>* selectionList = selection->second;
 
-	this->scrollPane->SetCards(selectionList);
+	//this->scrollPane->SetCards(selectionList);
 }
 
 

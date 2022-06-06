@@ -1,31 +1,31 @@
-#include "ParamDlgScrollablePane.h"
+#include "CardScrollPane.h"
 
 
-ParamDlgScrollablePane::ParamDlgScrollablePane(CWnd* pParent /*=NULL*/)
-	: CDialog(ParamDlgScrollablePane::IDD, pParent)
+CardScrollPane::CardScrollPane(CWnd* pParent /*=NULL*/)
+	: CDialog(CardScrollPane::IDD, pParent)
 {
-	Create(ParamDlgScrollablePane::IDD,pParent);
+	Create(CardScrollPane::IDD,pParent);
 	this->scroll_position = 0;
 	this->pane_height = 0;
 	this->next_card = 8;
 }
 
 
-void ParamDlgScrollablePane::DoDataExchange(CDataExchange* pDX)
+void CardScrollPane::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 }
 
 
-BEGIN_MESSAGE_MAP(ParamDlgScrollablePane, CDialog)
+BEGIN_MESSAGE_MAP(CardScrollPane, CDialog)
 	ON_WM_VSCROLL()
 	ON_WM_MOUSEWHEEL()
 	ON_WM_SIZE()
-	ON_MESSAGE(UWM_MAKE_LOCAL, &ParamDlgScrollablePane::OnMakeLocalMsg)
+	ON_MESSAGE(UWM_MAKE_LOCAL, &CardScrollPane::OnMakeLocalMsg)
 END_MESSAGE_MAP()
 
 
-BOOL ParamDlgScrollablePane::OnInitDialog()
+BOOL CardScrollPane::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
@@ -40,7 +40,7 @@ BOOL ParamDlgScrollablePane::OnInitDialog()
 }
 
 
-void ParamDlgScrollablePane::SetParameterCards(std::list<std::pair<std::string, ClassPar*>>* parametersList)
+void CardScrollPane::SetParameterCards(std::list<std::pair<std::string, ClassPar*>>* parametersList)
 {
 	bool success = true;
 
@@ -86,7 +86,7 @@ void ParamDlgScrollablePane::SetParameterCards(std::list<std::pair<std::string, 
 	this->ResizeCards();
 }
 
-void ParamDlgScrollablePane::ResetAllCards()
+void CardScrollPane::ResetAllCards()
 {
 	for (
 		size_t i = 0;
@@ -99,7 +99,7 @@ void ParamDlgScrollablePane::ResetAllCards()
 }
 
 
-void ParamDlgScrollablePane::SaveAllCards()
+void CardScrollPane::SaveAllCards()
 {
 	for (
 		size_t i = 0;
@@ -111,7 +111,7 @@ void ParamDlgScrollablePane::SaveAllCards()
 	}
 }
 
-void ParamDlgScrollablePane::RemoveAllCards()
+void CardScrollPane::RemoveAllCards()
 {
 	for (
 		std::vector<ParamDlgCard*>::iterator it = this->cards.begin();
@@ -127,7 +127,7 @@ void ParamDlgScrollablePane::RemoveAllCards()
 }
 
 
-bool ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data)
+bool CardScrollPane::AddCard(std::list<std::pair<std::string, ClassPar*>>::iterator data)
 {
 	bool success = true;
 	CRect cardRect;
@@ -161,7 +161,7 @@ bool ParamDlgScrollablePane::AddCard(std::list<std::pair<std::string, ClassPar*>
 }
 
 
-void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle, int numRows, int numCols)
+void CardScrollPane::CalculateCardLocation(CRect* rectangle, int numRows, int numCols)
 {
 	CRect baseSize(0, 0, this->current_rectangle.Width(), 150);
 	CRect sizeGuide(0,0,80,20);
@@ -191,7 +191,7 @@ void ParamDlgScrollablePane::CalculateCardLocation(CRect* rectangle, int numRows
 }
 
 
-void ParamDlgScrollablePane::ResizeWindow()
+void CardScrollPane::ResizeWindow()
 {
 
 	if (this->cards.size() == 0)
@@ -239,7 +239,7 @@ void ParamDlgScrollablePane::ResizeWindow()
 }
 
 
-void ParamDlgScrollablePane::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+void CardScrollPane::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	int nDelta;
 	int nMaxPos = current_rectangle.Height() - pane_height;
@@ -284,7 +284,7 @@ void ParamDlgScrollablePane::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScr
 }
 
 
-void ParamDlgScrollablePane::OnSize(UINT nType, int cx, int cy)
+void CardScrollPane::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 
@@ -303,7 +303,7 @@ void ParamDlgScrollablePane::OnSize(UINT nType, int cx, int cy)
 }
 
 
-BOOL ParamDlgScrollablePane::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+BOOL CardScrollPane::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	int nMaxPos = current_rectangle.Height() - pane_height;
 
@@ -333,14 +333,14 @@ BOOL ParamDlgScrollablePane::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	return CDialog::OnMouseWheel(nFlags, zDelta, pt);
 }
 
-LRESULT ParamDlgScrollablePane::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
+LRESULT CardScrollPane::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 {
 	GetParent()->PostMessage(UWM_MAKE_LOCAL, wParam, lParam);
 	return 0;
 }
 
 
-void ParamDlgScrollablePane::ResizeCards()
+void CardScrollPane::ResizeCards()
 {
 	for (
 		size_t i = 0;

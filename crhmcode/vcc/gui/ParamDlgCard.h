@@ -10,7 +10,7 @@
 
 
 
-class ParamDlgScrollablePane;
+class CardScrollPane;
 
 class ParamDlgCard : public CDialog
 {

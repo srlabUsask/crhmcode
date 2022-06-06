@@ -8,7 +8,7 @@
 
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
-#include "ConsolidationScrollPane.h"
+#include "CardScrollPane.h"
 
 
 class ConsolidateParamDlg : public CDialogEx
@@ -50,7 +50,7 @@ private:
 	/**
 	* Scroll pane that holds the parameter cards
 	*/
-	ConsolidationScrollPane * scrollPane;
+	CardScrollPane * scrollPane;
 
 	/**
 	* Performs data exchange to properly connect graphical elements to the model.
