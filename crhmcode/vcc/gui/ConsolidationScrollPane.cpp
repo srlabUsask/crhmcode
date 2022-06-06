@@ -2,6 +2,9 @@
 
 
 BEGIN_MESSAGE_MAP(ConsolidationScrollPane, CDialog)
+	ON_WM_VSCROLL()
+	ON_WM_MOUSEWHEEL()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
