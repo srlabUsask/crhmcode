@@ -8,8 +8,14 @@ class ConsolidationScrollPane : public CDialog
 {
 public:
 
+	/*
+	* Standard constructor
+	*/
 	ConsolidationScrollPane(CWnd* pParent = NULL);
 	
+	/*
+	* Standard deconstructor
+	*/
 	~ConsolidationScrollPane();
 
 private:
