@@ -393,6 +393,7 @@
     <ClCompile Include="ChiralClickButton.cpp" />
     <ClCompile Include="gui\CConstruct.cpp" />
     <ClCompile Include="gui\CExport.cpp" />
+    <ClCompile Include="gui\ConsolidateParamCard.cpp" />
     <ClCompile Include="gui\ConsolidateParamDlg.cpp" />
     <ClCompile Include="gui\ConsolidationScrollPane.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
@@ -664,6 +665,7 @@
     <ClInclude Include="gui\CConstruct.h" />
     <ClInclude Include="gui\CConstructCore.h" />
     <ClInclude Include="gui\CExport.h" />
+    <ClInclude Include="gui\ConsolidateParamCard.h" />
     <ClInclude Include="gui\ConsolidateParamDlg.h" />
     <ClInclude Include="gui\ConsolidationScrollPane.h" />
     <ClInclude Include="gui\COptions.h" />
