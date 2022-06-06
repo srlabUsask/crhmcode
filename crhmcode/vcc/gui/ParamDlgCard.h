@@ -63,7 +63,7 @@ public:
 	/**
 	* Initalizes the help information for the parameter card
 	*/
-	void InitalizeValues();
+	virtual void InitalizeValues();
 
 	/**
 	* Renders the value grid for the parameter.

@@ -20,7 +20,19 @@ public:
 	*/
 	virtual bool call_create(CWnd* pParent) override;
 
+	/**
+	* Initalizes the help information for the parameter card
+	*/
+	virtual void InitalizeValues();
+
 private:
+
+	CEdit module_name;
+
+	/**
+	* Connect data layer to the view.
+	*/
+	virtual void DoDataExchange(CDataExchange* pDX);
 
 	/*
 	* Defines the resource assoicated with this class.
