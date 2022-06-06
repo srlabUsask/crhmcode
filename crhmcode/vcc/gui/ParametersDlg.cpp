@@ -12,6 +12,7 @@ ParametersDlg::ParametersDlg(CWnd* pParent /*=nullptr*/)
 
 ParametersDlg::~ParametersDlg()
 {
+	delete this->prameters_scroll_pane;
 }
 
 
