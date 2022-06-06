@@ -74,8 +74,20 @@ void ConsolidateParamDlg::OnSelectCandidate()
 	std::map<std::string, std::list<ClassPar*>*>::iterator selection = this->candidates.find(paramString);
 
 	std::list<ClassPar*>* selectionList = selection->second;
+	std::list<std::pair<std::string, ClassPar*>>* paramList = new std::list<std::pair<std::string, ClassPar*>>();
 
-	//this->scrollPane->SetCards(selectionList);
+	for (
+		std::list<ClassPar*>::iterator it = selectionList->begin();
+		it != selectionList->end();
+		it++
+		)
+	{
+		paramList->push_back(std::pair<std::string, ClassPar*>("&" + (*it)->param, *it));
+	}
+
+	this->scrollPane->SetParameterCards(paramList);
+
+	delete paramList;
 }
 
 

@@ -9,6 +9,7 @@
 #include "../../src/core/ClassPar.h"
 #include "ParamDlgCard.h"
 #include "ParamDlgCardShared.h"
+#include "ConsolidateParamCard.h"
 
 class ParamDlgCard;
 

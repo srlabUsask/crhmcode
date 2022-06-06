@@ -139,6 +139,11 @@ bool CardScrollPane::AddCard(std::list<std::pair<std::string, ClassPar*>>::itera
 		newCard = new ParamDlgCardShared(data->second, this);
 		newCard->call_create(this);
 	}
+	else if (data->first.find("&") != std::string::npos)
+	{
+		newCard = new ConsolidateParamCard(data->second, this);
+		newCard->call_create(this);
+	}
 	else
 	{
 		newCard = new ParamDlgCard(data->second, this);
