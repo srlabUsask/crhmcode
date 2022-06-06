@@ -67,6 +67,13 @@ private:
 	*/
 	void InitalizeCandidatesListBox();
 
+	/*
+	* Handler when selecting a candidate parameter to consolidate.
+	* 
+	* When a parameter is selected the parameter version cards are created in the scroll pane.
+	*/
+	afx_msg void OnSelectCandidate();
+
 	/**
 	* Declares handlers for messages dispached by the GUI
 	*/

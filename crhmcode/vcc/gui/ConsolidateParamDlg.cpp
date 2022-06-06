@@ -17,6 +17,11 @@ ConsolidateParamDlg::~ConsolidateParamDlg()
 }
 
 
+BEGIN_MESSAGE_MAP(ConsolidateParamDlg, CDialogEx)
+	ON_LBN_SELCHANGE(ID_CONSOLIDATABLE_LIST_BOX, &ConsolidateParamDlg::OnSelectCandidate)
+END_MESSAGE_MAP()
+
+
 void ConsolidateParamDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
@@ -57,5 +62,20 @@ void ConsolidateParamDlg::InitalizeCandidatesListBox()
 }
 
 
-BEGIN_MESSAGE_MAP(ConsolidateParamDlg, CDialogEx)
-END_MESSAGE_MAP()
+void ConsolidateParamDlg::OnSelectCandidate()
+{
+	CString paramText;
+	this->candidates_list_box.GetText(this->candidates_list_box.GetCurSel(), paramText);
+
+	// Convert the CString to std::string
+	CT2CA pszConvertedAnsiString(paramText);
+	std::string paramString(pszConvertedAnsiString);
+
+	std::map<std::string, std::list<ClassPar*>*>::iterator selection = this->candidates.find(paramString);
+
+	std::list<ClassPar*>* selectionList = selection->second;
+
+	this->scrollPane->SetCards(selectionList);
+}
+
+
