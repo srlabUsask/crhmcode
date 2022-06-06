@@ -72,7 +72,15 @@ private:
 	*/
 	void CalculateCardLocation(CRect* rectangle, int numRows, int numCols);
 
+	/**
+	* Method called when the window is resized. Updates scroll info
+	*/
 	void ResizeWindow();
+
+	/**
+	* Resizes the cards in the scroll pane to fit horizontaly when the size of the window changes.
+	*/
+	void ResizeCards();
 
 	/**
 	* Handles the receiving of a UWM_MAKE_LOCAL message
@@ -82,8 +90,6 @@ private:
 	* @param lParam - LPARAM pointer to the shared parameter to be made local
 	*/
 	afx_msg LRESULT OnMakeLocalMsg(WPARAM wParam, LPARAM lParam);
-
-	void ResizeCards();
 
 public:
 	/**
