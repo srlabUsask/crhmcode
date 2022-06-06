@@ -395,7 +395,6 @@
     <ClCompile Include="gui\CExport.cpp" />
     <ClCompile Include="gui\ConsolidateParamCard.cpp" />
     <ClCompile Include="gui\ConsolidateParamDlg.cpp" />
-    <ClCompile Include="gui\ConsolidationScrollPane.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
     <ClCompile Include="gui\GridCell.cpp" />
     <ClCompile Include="gui\ParamDlgCard.cpp" />
@@ -667,7 +666,6 @@
     <ClInclude Include="gui\CExport.h" />
     <ClInclude Include="gui\ConsolidateParamCard.h" />
     <ClInclude Include="gui\ConsolidateParamDlg.h" />
-    <ClInclude Include="gui\ConsolidationScrollPane.h" />
     <ClInclude Include="gui\COptions.h" />
     <ClInclude Include="gui\GridCell.h" />
     <ClInclude Include="gui\ParamDlgCard.h" />
