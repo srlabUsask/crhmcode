@@ -99,6 +99,11 @@ private:
 	afx_msg void OnFinishClicked();
 
 	/**
+	* Method that triggers when the window is resized
+	*/
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+
+	/**
 	* Declares handlers for messages dispached by the GUI
 	*/
 	DECLARE_MESSAGE_MAP()

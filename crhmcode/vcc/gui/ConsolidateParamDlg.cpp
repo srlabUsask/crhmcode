@@ -22,6 +22,7 @@ BEGIN_MESSAGE_MAP(ConsolidateParamDlg, CDialogEx)
 	ON_MESSAGE(UWM_USE_FOR_ALL, &ConsolidateParamDlg::OnUseForAllMsg)
 	ON_BN_CLICKED(ID_CONSOLIDATE_RETURN, &ConsolidateParamDlg::OnReturnClicked)
 	ON_BN_CLICKED(ID_CONSOLIDATE_FINISH, &ConsolidateParamDlg::OnFinishClicked)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -162,4 +163,18 @@ void ConsolidateParamDlg::OnReturnClicked()
 void ConsolidateParamDlg::OnFinishClicked()
 {
 	this->OnCancel();
+}
+
+
+void ConsolidateParamDlg::OnSize(UINT nType, int cx, int cy)
+{
+	CWnd* wnd = GetDlgItem(ID_CONSOLIDATE_CARDS_PLACEHOLDER);
+
+	if (wnd != NULL)
+	{
+		CRect rectangle;
+		GetDlgItem(ID_CONSOLIDATE_CARDS_PLACEHOLDER)->GetWindowRect(rectangle);
+		ScreenToClient(&rectangle);
+		this->scrollPane->MoveWindow(rectangle);
+	}
 }
