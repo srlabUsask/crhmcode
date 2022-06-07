@@ -350,6 +350,13 @@ private:
 
 	afx_msg void OnViewHierarchy();
 
+	afx_msg void OnSetDailyRefresh();
+	afx_msg void OnSetBiWeeklyRefresh();
+	afx_msg void OnSetWeeklyRefresh();
+	afx_msg void OnSetMonthlyRefresh();
+	afx_msg void OnSetYearlyRefresh();
+	afx_msg void OnSetNoRefresh();
+
 	/**
 	* Handler for clicking on project->Auto Run
 	* 
