@@ -94,5 +94,58 @@ void ConsolidateParamDlg::OnSelectCandidate()
 
 LRESULT ConsolidateParamDlg::OnUseForAllMsg(WPARAM wParam, LPARAM lParam)
 {
+	ClassPar * selectedParameter = (ClassPar*)wParam;
+
+	std::map<std::string, std::list<ClassPar*>*>::iterator candidatesIt = this->candidates.find(selectedParameter->param);
+
+	std::list<ClassPar*>* parameterList = candidatesIt->second;
+
+	for (
+		std::list<ClassPar*>::iterator it = parameterList->begin();
+		it != parameterList->end();
+		it++
+		)
+	{
+		for (int i = 0; i < (*it)->lay; i++)
+		{
+			for (int j = 0; j < (*it)->dim; j++)
+			{
+				
+				if (selectedParameter->varType == TVar::Float)
+				{
+					(*it)->layvalues[i][j] = selectedParameter->layvalues[i][j];
+				}
+				else if (selectedParameter->varType == TVar::Int)
+				{
+					(*it)->ilayvalues[i][j] = selectedParameter->ilayvalues[i][j];
+				}
+				else if (selectedParameter->varType == TVar::Txt)
+				{
+					(*it)->Strings[i] = selectedParameter->Strings[i];
+				}
+
+			}
+		}
+
+	}
+
+	int itemCount = this->candidates_list_box.GetCount();
+	for (int i = 0; i < itemCount; i++)
+	{
+		CString paramText;
+		this->candidates_list_box.GetText(i, paramText);
+
+		// Convert the CString to std::string
+		CT2CA pszConvertedAnsiString(paramText);
+		std::string paramString(pszConvertedAnsiString);
+
+		if (selectedParameter->param == paramString)
+		{
+			this->candidates_list_box.DeleteString(i);
+		}
+	}
+
+	this->scrollPane->SetParameterCards(new std::list<std::pair<std::string, ClassPar*>>());
+
 	return LRESULT();
 }
