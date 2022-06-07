@@ -66,6 +66,14 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_COMMAND(ID_EXTRACT_GROUP, &CRHMmainDlg::OnExtractGroup)
 	ON_COMMAND(ID_VIEW_HIERARCHY, &CRHMmainDlg::OnViewHierarchy)
 
+	//Project->Plot Refresh Rate submenu
+	ON_COMMAND(ID_PLOTREFRESHRATE_DAILY, &CRHMmainDlg::OnSetDailyRefresh)
+	ON_COMMAND(ID_PLOTREFRESHRATE_BI, &CRHMmainDlg::OnSetBiWeeklyRefresh)
+	ON_COMMAND(ID_PLOTREFRESHRATE_WEEKLY, &CRHMmainDlg::OnSetWeeklyRefresh)
+	ON_COMMAND(ID_PLOTREFRESHRATE_MONTHLY, &CRHMmainDlg::OnSetMonthlyRefresh)
+	ON_COMMAND(ID_PLOTREFRESHRATE_YEARLY, &CRHMmainDlg::OnSetYearlyRefresh)
+	ON_COMMAND(ID_PLOTREFRESHRATE_ATEND, &CRHMmainDlg::OnSetNoRefresh)
+
 	//Observation menu items
 	ON_COMMAND(ID_OPEN_OBS, &CRHMmainDlg::OnOpenObservation)
 	ON_COMMAND_RANGE(ID_OPEN_OBS_FILE_FIRST, ID_OPEN_OBS_FILE_LAST, &CRHMmainDlg::OnClickOnOpenFile)
@@ -1742,6 +1750,37 @@ void CRHMmainDlg::OnViewHierarchy()
 	HierarchyDlg hierarchy;
 	hierarchy.DoModal();
 }
+
+
+void CRHMmainDlg::OnSetDailyRefresh()
+{
+}
+
+
+void CRHMmainDlg::OnSetBiWeeklyRefresh()
+{
+}
+
+
+void CRHMmainDlg::OnSetWeeklyRefresh()
+{
+}
+
+
+void CRHMmainDlg::OnSetMonthlyRefresh()
+{
+}
+
+
+void CRHMmainDlg::OnSetYearlyRefresh()
+{
+}
+
+
+void CRHMmainDlg::OnSetNoRefresh()
+{
+}
+
 
 void CRHMmainDlg::OnAutoRun()
 {
