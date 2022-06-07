@@ -626,6 +626,7 @@ void ParamDlgCard::OnSize(UINT nType, int cx, int cy)
 
 }
 
+
 TVar ParamDlgCard::GetParamType()
 {
 	TVar varType;

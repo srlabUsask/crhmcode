@@ -22,6 +22,7 @@ BEGIN_MESSAGE_MAP(CardScrollPane, CDialog)
 	ON_WM_MOUSEWHEEL()
 	ON_WM_SIZE()
 	ON_MESSAGE(UWM_MAKE_LOCAL, &CardScrollPane::OnMakeLocalMsg)
+	ON_MESSAGE(UWM_USE_FOR_ALL, &CardScrollPane::OnUseForAllMsg)
 END_MESSAGE_MAP()
 
 
@@ -86,6 +87,7 @@ void CardScrollPane::SetParameterCards(std::list<std::pair<std::string, ClassPar
 	this->ResizeCards();
 }
 
+
 void CardScrollPane::ResetAllCards()
 {
 	for (
@@ -110,6 +112,7 @@ void CardScrollPane::SaveAllCards()
 		this->cards[i]->SaveCard();
 	}
 }
+
 
 void CardScrollPane::RemoveAllCards()
 {
@@ -338,9 +341,17 @@ BOOL CardScrollPane::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	return CDialog::OnMouseWheel(nFlags, zDelta, pt);
 }
 
+
 LRESULT CardScrollPane::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 {
 	GetParent()->PostMessage(UWM_MAKE_LOCAL, wParam, lParam);
+	return 0;
+}
+
+
+LRESULT CardScrollPane::OnUseForAllMsg(WPARAM wParam, LPARAM lParam)
+{
+	GetParent()->PostMessage(UWM_USE_FOR_ALL, wParam, lParam);
 	return 0;
 }
 

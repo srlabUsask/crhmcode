@@ -92,6 +92,15 @@ private:
 	*/
 	afx_msg LRESULT OnMakeLocalMsg(WPARAM wParam, LPARAM lParam);
 
+	/**
+	* Handles the receiving of a UWM_USE_FOR_ALL message
+	*
+	* Passes the message up to the ConsolidateParamDlg
+	* @param wParam - WPARAM pointer to the shared parameter to be used for all parameters with that name
+	* @param lParam - LPARAM pointer to the shared parameter to be used for all parameters with that name
+	*/
+	afx_msg	LRESULT OnUseForAllMsg(WPARAM wParam, LPARAM lParam);
+
 public:
 	/**
 	* Standard constructor

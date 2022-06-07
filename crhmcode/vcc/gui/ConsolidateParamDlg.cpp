@@ -19,6 +19,7 @@ ConsolidateParamDlg::~ConsolidateParamDlg()
 
 BEGIN_MESSAGE_MAP(ConsolidateParamDlg, CDialogEx)
 	ON_LBN_SELCHANGE(ID_CONSOLIDATABLE_LIST_BOX, &ConsolidateParamDlg::OnSelectCandidate)
+	ON_MESSAGE(UWM_USE_FOR_ALL, &ConsolidateParamDlg::OnUseForAllMsg)
 END_MESSAGE_MAP()
 
 
@@ -91,3 +92,7 @@ void ConsolidateParamDlg::OnSelectCandidate()
 }
 
 
+LRESULT ConsolidateParamDlg::OnUseForAllMsg(WPARAM wParam, LPARAM lParam)
+{
+	return LRESULT();
+}

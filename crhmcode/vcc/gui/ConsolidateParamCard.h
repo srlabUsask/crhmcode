@@ -27,12 +27,20 @@ public:
 
 private:
 
+	/**
+	* The CEdit component that holds the name of the module this version of the parameter is from
+	*/
 	CEdit module_name;
 
 	/**
 	* Connect data layer to the view.
 	*/
 	virtual void DoDataExchange(CDataExchange* pDX);
+
+	/**
+	* Handles the use for all button being clicked. Sends a message up to the CardScrollPane. 
+	*/
+	afx_msg void ConsolidateParamCard::OnUseForAll();
 
 	/*
 	* Defines the resource assoicated with this class.
