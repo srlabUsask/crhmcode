@@ -85,6 +85,20 @@ private:
 	afx_msg LRESULT OnUseForAllMsg(WPARAM wParam, LPARAM lParam);
 
 	/**
+	* Handles when the Return button is clicked. 
+	* 
+	* Closes the dialog while returning false.
+	*/
+	afx_msg void OnReturnClicked();
+
+	/**
+	* Handles when the Finish button is clicked. 
+	* 
+	* Closes the dialog while returning true.
+	*/
+	afx_msg void OnFinishClicked();
+
+	/**
 	* Declares handlers for messages dispached by the GUI
 	*/
 	DECLARE_MESSAGE_MAP()

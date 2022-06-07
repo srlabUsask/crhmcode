@@ -884,9 +884,14 @@ void ParametersDlg::OnCancel()
 	{
 		ConsolidateParamDlg * consolidateParamDlg = new ConsolidateParamDlg(candidates);
 
-		consolidateParamDlg->DoModal();
+		int ret = consolidateParamDlg->DoModal();
 
 		delete consolidateParamDlg;
+
+		if (ret == IDOK)
+		{
+			return;
+		}
 	}
 
 	/* Delete lists in candidates */

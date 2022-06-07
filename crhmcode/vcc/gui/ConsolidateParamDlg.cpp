@@ -20,6 +20,8 @@ ConsolidateParamDlg::~ConsolidateParamDlg()
 BEGIN_MESSAGE_MAP(ConsolidateParamDlg, CDialogEx)
 	ON_LBN_SELCHANGE(ID_CONSOLIDATABLE_LIST_BOX, &ConsolidateParamDlg::OnSelectCandidate)
 	ON_MESSAGE(UWM_USE_FOR_ALL, &ConsolidateParamDlg::OnUseForAllMsg)
+	ON_BN_CLICKED(ID_CONSOLIDATE_RETURN, &ConsolidateParamDlg::OnReturnClicked)
+	ON_BN_CLICKED(ID_CONSOLIDATE_FINISH, &ConsolidateParamDlg::OnFinishClicked)
 END_MESSAGE_MAP()
 
 
@@ -148,4 +150,16 @@ LRESULT ConsolidateParamDlg::OnUseForAllMsg(WPARAM wParam, LPARAM lParam)
 	this->scrollPane->SetParameterCards(new std::list<std::pair<std::string, ClassPar*>>());
 
 	return LRESULT();
+}
+
+
+void ConsolidateParamDlg::OnReturnClicked()
+{
+	this->OnOK();
+}
+
+
+void ConsolidateParamDlg::OnFinishClicked()
+{
+	this->OnCancel();
 }
