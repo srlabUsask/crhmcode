@@ -71,8 +71,21 @@ private:
 
 	CMenu main_menu;
 
-
+	/**
+	* Defines the options for the plot refresh rate.
+	* 
+	* Daily the plot updates once per simulation day
+	* Bi-Weekly the plot updates every 4 simulation days
+	* Weekly the plot updates every 7 simulation days
+	* Monthly the plot updates every 30 simulation days
+	* Yearly the plot updates every 365 simulation days
+	* At End the plot updates only when the simulation is complete
+	*/
 	enum class RefreshRate {DAILY, BIWEEKLY, WEEKLY, MONTHLY, YEARLY, ATEND};
+	
+	/**
+	* Tracks the currently set plot refresh rate.
+	*/
 	RefreshRate refresh_rate;
 
 	/**
