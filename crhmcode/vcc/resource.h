@@ -54,6 +54,7 @@
 #define IDR_MacroEntryMenu              343
 #define FlowDiagram_DLG                 344
 #define ID_HIERARCHY_DLG                351
+#define REFRESH_RATE_DLG                352
 #define IDC_LIST1                       1000
 #define IDC_LIST2                       1001
 #define IDC_LIST3                       1002
@@ -96,6 +97,9 @@
 #define IDC_STATIC2                     1064
 #define IDC_EXPLORER1                   1065
 #define IDC_EXPLORER2                   1066
+#define IDC_RADIO1                      1067
+#define IDC_RADIO2                      1068
+#define IDC_RADIO3                      1069
 #define ID_PROJECT_LOG                  32771
 #define ID_PROJECT_SAVECHARTTEMPLATE    32772
 #define ID_PROJECT_PLOTREFRESHRATE      32773
@@ -277,9 +281,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        353
+#define _APS_NEXT_RESOURCE_VALUE        354
 #define _APS_NEXT_COMMAND_VALUE         32860
-#define _APS_NEXT_CONTROL_VALUE         1067
+#define _APS_NEXT_CONTROL_VALUE         1068
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
