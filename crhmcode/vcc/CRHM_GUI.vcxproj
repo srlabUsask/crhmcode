@@ -407,6 +407,7 @@
     <ClCompile Include="gui\MacroEntryDlg.cpp" />
     <ClCompile Include="gui\MainFrm.cpp" />
     <ClCompile Include="gui\OutputWnd.cpp" />
+    <ClCompile Include="gui\RefreshRateDlg.cpp" />
     <ClCompile Include="gui\ResourceDlg.cpp" />
     <ClCompile Include="HierarchyDlg.cpp" />
     <ClCompile Include="RightClickListBox.cpp" />
@@ -673,6 +674,7 @@
     <ClInclude Include="gui\MainFrm.h" />
     <ClInclude Include="gui\Module.h" />
     <ClInclude Include="gui\OutputWnd.h" />
+    <ClInclude Include="gui\RefreshRateDlg.h" />
     <ClInclude Include="gui\ResourceDlg.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="HierarchyDlg.h" />

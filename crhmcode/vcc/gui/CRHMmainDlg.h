@@ -16,6 +16,7 @@
 #include "../HierarchyDlg.h"
 #include "CExport.h"
 #include "../ChiralClickButton.h"
+#include "RefreshRateDlg.h"	
 
 // Defines
 #define MAX_CFileDialog_FILE_COUNT 99

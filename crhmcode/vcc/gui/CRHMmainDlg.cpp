@@ -642,6 +642,15 @@ void CRHMmainDlg::RunClickFunction()
 		}
 		pcount = TotalCount;
 		//tchart.Repaint();
+
+		MSG msg;
+		bool messageFound = PeekMessage(&msg, this->GetSafeHwnd(), WM_LBUTTONDOWN, WM_RBUTTONDBLCLK, PM_REMOVE);
+		if (messageFound)
+		{
+			RefreshRateDlg modal;
+			modal.DoModal();
+		}
+
 	}
 	tchart.Repaint();
 
