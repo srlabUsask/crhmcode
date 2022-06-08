@@ -13,6 +13,7 @@ CRHMmainDlg::CRHMmainDlg(CWnd* pParent /*=nullptr*/)
 	CRHMmain* test = CRHMmain::getInstance();
 	//test->FormCreate();
 	this->openObsFiles = new std::map< UINT, std::pair<std::string, std::string>>();
+	this->refresh_rate = RefreshRate::BIWEEKLY;
 }
 
 
@@ -1754,31 +1755,91 @@ void CRHMmainDlg::OnViewHierarchy()
 
 void CRHMmainDlg::OnSetDailyRefresh()
 {
+	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_CHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_UNCHECKED);
+
+	this->refresh_rate = RefreshRate::DAILY;
 }
 
 
 void CRHMmainDlg::OnSetBiWeeklyRefresh()
 {
+	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_CHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_UNCHECKED);
+
+	this->refresh_rate = RefreshRate::BIWEEKLY;
 }
 
 
 void CRHMmainDlg::OnSetWeeklyRefresh()
 {
+	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_CHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_UNCHECKED);
+
+	this->refresh_rate = RefreshRate::WEEKLY;
 }
 
 
 void CRHMmainDlg::OnSetMonthlyRefresh()
 {
+	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_CHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_UNCHECKED);
+
+	this->refresh_rate = RefreshRate::MONTHLY;
 }
 
 
 void CRHMmainDlg::OnSetYearlyRefresh()
 {
+	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_CHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_UNCHECKED);
+
+	this->refresh_rate = RefreshRate::YEARLY;
 }
 
 
 void CRHMmainDlg::OnSetNoRefresh()
 {
+	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_CHECKED);
+
+	this->refresh_rate = RefreshRate::ATEND;
 }
 
 

@@ -71,6 +71,10 @@ private:
 
 	CMenu main_menu;
 
+
+	enum class RefreshRate {DAILY, BIWEEKLY, WEEKLY, MONTHLY, YEARLY, ATEND};
+	RefreshRate refresh_rate;
+
 	/**
 	* List box for all variables in the loaded project
 	* List box that contains a string for each variable available
@@ -350,11 +354,46 @@ private:
 
 	afx_msg void OnViewHierarchy();
 
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->Daily
+	* 
+	* Sets the refresh rate of the plot to Daily.
+	*/
 	afx_msg void OnSetDailyRefresh();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->Bi Weekly
+	*
+	* Sets the refresh rate of the plot to Bi Weekly.
+	*/
 	afx_msg void OnSetBiWeeklyRefresh();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->Weekly
+	*
+	* Sets the refresh rate of the plot to Weekly.
+	*/
 	afx_msg void OnSetWeeklyRefresh();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->Monthly
+	*
+	* Sets the refresh rate of the plot to Monthly.
+	*/
 	afx_msg void OnSetMonthlyRefresh();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->Yearly
+	*
+	* Sets the refresh rate of the plot to Yearly.
+	*/
 	afx_msg void OnSetYearlyRefresh();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->At End
+	*
+	* Sets the refresh rate of the plot to only update at the end of the run.
+	*/
 	afx_msg void OnSetNoRefresh();
 
 	/**
