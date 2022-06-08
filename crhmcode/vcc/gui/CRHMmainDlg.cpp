@@ -26,6 +26,7 @@ CRHMmainDlg::CRHMmainDlg(string argumentfile)
 	CRHMmain* test = CRHMmain::getInstance();
 	test->FormCreate();
 	this->openObsFiles = new std::map< UINT, std::pair<std::string, std::string>>();
+	this->refresh_rate = RefreshRate::BIWEEKLY;
 }
 
 
@@ -523,18 +524,18 @@ std::string CRHMmainDlg::DeclObsName(ClassVar* thisVar)
 
 void CRHMmainDlg::RunClickFunction()
 {
-	CRHMmain* test = CRHMmain::getInstance();
+	CRHMmain* main = CRHMmain::getInstance();
 
-	if (test->ObsFilesList->size() == 0)
+	if (main->ObsFilesList->size() == 0)
 	{
 		MessageBox(_T("Please open an observation file."));
 		return;
 	}
 
-	MMSData* mmsdata = test->RunClick2Start();
+	MMSData* mmsdata = main->RunClick2Start();
 
 
-	int seriesCount = test->SeriesCnt;
+	int seriesCount = main->SeriesCnt;
 
 	if (seriesCount == 0)
 	{
@@ -545,7 +546,7 @@ void CRHMmainDlg::RunClickFunction()
 
 	CSeries series[1000];
 
-	std::list<std::pair<std::string, ClassVar*>>::iterator selectedVariableIt = test->SelectedVariables->begin();
+	std::list<std::pair<std::string, ClassVar*>>::iterator selectedVariableIt = main->SelectedVariables->begin();
 	for (int i = 0; i < seriesCount; i++)
 	{
 
@@ -575,42 +576,68 @@ void CRHMmainDlg::RunClickFunction()
 		selectedVariableIt++;
 	}
 
+	long stepSize;
+
+	switch (this->refresh_rate)
+	{
+	case RefreshRate::DAILY:
+		stepSize = Global::Freq;
+		break;
+	case RefreshRate::BIWEEKLY:
+		stepSize = Global::Freq * 4;
+		break;
+	case RefreshRate::WEEKLY:
+		stepSize = Global::Freq * 7;
+		break;
+	case RefreshRate::MONTHLY:
+		stepSize = Global::Freq * 30;
+		break;
+	case RefreshRate::YEARLY:
+		stepSize = Global::Freq * 365;
+		break;
+	case RefreshRate::ATEND:
+		stepSize = Global::DTmax;
+		break;
+	default:
+		break;
+	}
+
 	string values = "";
 	int seriesIndex = 0;
 	int TotalCount = 0;
 
 	int pcount = 0;
 	int n = 0;
-	for (int indx = Global::DTmin; indx < Global::DTmax; indx = indx + 500)
+	for (int indx = Global::DTmin; indx < Global::DTmax; indx = indx + stepSize)
 	{
 
-		int next = indx + 500;
+		int next = indx + stepSize;
 		if (next >= Global::DTmax)
 		{
-			test->RunClick2Middle(mmsdata, indx, Global::DTmax);
+			main->RunClick2Middle(mmsdata, indx, Global::DTmax);
 		}
 		else
 		{
-			test->RunClick2Middle(mmsdata, indx, indx + 500);
+			main->RunClick2Middle(mmsdata, indx, indx + stepSize);
 		}
 
 		//test->RunClick2Middle(mmsdata, Global::DTmin, Global::DTmax);
 
-		TotalCount = test->cdSeries[0]->Count();
+		TotalCount = main->cdSeries[0]->Count();
 
 		for (int i = pcount; i < TotalCount; i++)
 		{
 			for (int j = 0; j < seriesCount; j++)
 			{
 				int y, m, d, h, mi;
-				StandardConverterUtility::GetDateTimeElements(test->cdSeries[j]->XValues.at(i), &y, &m, &d, &h, &mi);
+				StandardConverterUtility::GetDateTimeElements(main->cdSeries[j]->XValues.at(i), &y, &m, &d, &h, &mi);
 				string dt = to_string(m) + "/" + to_string(d) + "/" + to_string(y);
 				CString str(dt.c_str());
 				LPCTSTR dtstr = (LPCTSTR)str;
-				series[j].AddXY(test->cdSeries[j]->XValues.at(i), test->cdSeries[j]->YValues.at(i), dtstr, series[j].get_Color());
+				series[j].AddXY(main->cdSeries[j]->XValues.at(i), main->cdSeries[j]->YValues.at(i), dtstr, series[j].get_Color());
 			}
 			n++;
-			if (n % 500 == 0) { tchart.Repaint(); }
+			if (n % stepSize == 0) { tchart.Repaint(); }
 			//tchart.Repaint();
 		}
 		pcount = TotalCount;
@@ -618,9 +645,9 @@ void CRHMmainDlg::RunClickFunction()
 	}
 	tchart.Repaint();
 
-	test->RunClick2End(mmsdata);
+	main->RunClick2End(mmsdata);
 
-	if (test->getAutoExit())
+	if (main->getAutoExit())
 	{
 		GetActiveWindow()->PostMessageW(WM_QUIT);
 	}
@@ -2188,6 +2215,8 @@ void CRHMmainDlg::OnSaveStateAs()
 
 void CRHMmainDlg::OnRunRunmodel()
 {
+	CWaitCursor wait;
+
 	RunClickFunction();
 	updateOpenStateFileMenu();
 }
