@@ -647,8 +647,9 @@ void CRHMmainDlg::RunClickFunction()
 		bool messageFound = PeekMessage(&msg, this->GetSafeHwnd(), WM_LBUTTONDOWN, WM_RBUTTONDBLCLK, PM_REMOVE);
 		if (messageFound)
 		{
-			RefreshRateDlg modal;
-			modal.DoModal();
+			RefreshRateDlg * modal = new RefreshRateDlg(this->refresh_rate);
+			modal->DoModal();
+			delete modal;
 		}
 
 	}
