@@ -280,6 +280,13 @@
 #define ID_CTX_ALL_VAR_ADD_LAY_ARRAY    40701
 #define ID_CTX_ALL_VAR_ADD_HRU_LAY_ARRAY 40702
 
+#define ID_REFRESH_DAILY				41000
+#define ID_REFRESH_BIWEEKLY				41001
+#define ID_REFRESH_WEEKLY				41002
+#define ID_REFRESH_MONTHLY				41003
+#define ID_REFRESH_YEARLY				41004
+#define ID_REFRESH_ATEND				41005
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

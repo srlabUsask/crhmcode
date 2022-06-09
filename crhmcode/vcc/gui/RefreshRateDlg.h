@@ -39,5 +39,14 @@ private:
 
 	void DoDataExchange(CDataExchange* pDX);
 
+	void CheckRate(RefreshRate rate);
+
+	void OnRefreshRateDaily();
+	void OnRefreshRateBiWeekly();
+	void OnRefreshRateWeekly();
+	void OnRefreshRateMonthly();
+	void OnRefreshRateYearly();
+	void OnRefreshRateAtEnd();
+
 	DECLARE_MESSAGE_MAP()
 };
