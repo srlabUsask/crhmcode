@@ -2,11 +2,13 @@
 
 IMPLEMENT_DYNAMIC(RefreshRateDlg, CDialog)
 
+
 RefreshRateDlg::RefreshRateDlg(RefreshRate rate, CWnd* pParent) 
 	: CDialog(RefreshRateDlg::IDD, pParent)
 {
 	this->rate = rate;
 }
+
 
 BEGIN_MESSAGE_MAP(RefreshRateDlg, CDialog)
 	ON_COMMAND(ID_REFRESH_DAILY, &RefreshRateDlg::OnRefreshRateDaily)
@@ -15,7 +17,9 @@ BEGIN_MESSAGE_MAP(RefreshRateDlg, CDialog)
 	ON_COMMAND(ID_REFRESH_MONTHLY, &RefreshRateDlg::OnRefreshRateMonthly)
 	ON_COMMAND(ID_REFRESH_YEARLY, &RefreshRateDlg::OnRefreshRateYearly)
 	ON_COMMAND(ID_REFRESH_ATEND, &RefreshRateDlg::OnRefreshRateAtEnd)
+	ON_COMMAND(ID_CONTINUE_RUN, &RefreshRateDlg::OnContinueRun)
 END_MESSAGE_MAP()
+
 
 BOOL RefreshRateDlg::OnInitDialog()
 {
@@ -23,6 +27,7 @@ BOOL RefreshRateDlg::OnInitDialog()
 	this->CheckRate(this->rate);
 	return true;
 }
+
 
 void RefreshRateDlg::DoDataExchange(CDataExchange* pDX)
 {
@@ -133,4 +138,10 @@ void RefreshRateDlg::OnRefreshRateAtEnd()
 {
 	this->rate = RefreshRate::ATEND;
 	this->CheckRate(this->rate);
+}
+
+
+void RefreshRateDlg::OnContinueRun()
+{
+	this->EndDialog((int) this->rate);
 }

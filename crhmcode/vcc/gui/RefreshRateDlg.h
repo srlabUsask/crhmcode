@@ -48,5 +48,7 @@ private:
 	void OnRefreshRateYearly();
 	void OnRefreshRateAtEnd();
 
+	void OnContinueRun();
+
 	DECLARE_MESSAGE_MAP()
 };
