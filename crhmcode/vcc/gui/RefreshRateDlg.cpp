@@ -18,6 +18,7 @@ BEGIN_MESSAGE_MAP(RefreshRateDlg, CDialog)
 	ON_COMMAND(ID_REFRESH_YEARLY, &RefreshRateDlg::OnRefreshRateYearly)
 	ON_COMMAND(ID_REFRESH_ATEND, &RefreshRateDlg::OnRefreshRateAtEnd)
 	ON_COMMAND(ID_CONTINUE_RUN, &RefreshRateDlg::OnContinueRun)
+	ON_COMMAND(ID_END_RUN, &RefreshRateDlg::OnEndRun)
 END_MESSAGE_MAP()
 
 
@@ -144,4 +145,10 @@ void RefreshRateDlg::OnRefreshRateAtEnd()
 void RefreshRateDlg::OnContinueRun()
 {
 	this->EndDialog((int) this->rate);
+}
+
+
+void RefreshRateDlg::OnEndRun()
+{
+	this->EndDialog(-1);
 }
