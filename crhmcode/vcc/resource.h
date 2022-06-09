@@ -286,6 +286,8 @@
 #define ID_REFRESH_MONTHLY				41003
 #define ID_REFRESH_YEARLY				41004
 #define ID_REFRESH_ATEND				41005
+#define ID_END_RUN						41006
+#define ID_CONTINUE_RUN					41007
 
 // Next default values for new objects
 // 

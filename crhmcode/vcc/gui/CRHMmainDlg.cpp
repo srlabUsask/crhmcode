@@ -607,18 +607,20 @@ void CRHMmainDlg::RunClickFunction()
 	int TotalCount = 0;
 
 	int pcount = 0;
-	int n = 0;
-	for (int indx = Global::DTmin; indx < Global::DTmax; indx = indx + stepSize)
+	int last = 0;
+	for (int indx = Global::DTmin; indx < Global::DTmax; indx = last)
 	{
 
 		int next = indx + stepSize;
 		if (next >= Global::DTmax)
 		{
-			main->RunClick2Middle(mmsdata, indx, Global::DTmax);
+			main->RunClick2Middle(mmsdata, last, Global::DTmax);
+			last = Global::DTmax;
 		}
 		else
 		{
-			main->RunClick2Middle(mmsdata, indx, indx + stepSize);
+			main->RunClick2Middle(mmsdata, last, next);
+			last = next;
 		}
 
 		//test->RunClick2Middle(mmsdata, Global::DTmin, Global::DTmax);
@@ -636,10 +638,8 @@ void CRHMmainDlg::RunClickFunction()
 				LPCTSTR dtstr = (LPCTSTR)str;
 				series[j].AddXY(main->cdSeries[j]->XValues.at(i), main->cdSeries[j]->YValues.at(i), dtstr, series[j].get_Color());
 			}
-			n++;
-			if (n % stepSize == 0) { tchart.Repaint(); }
-			//tchart.Repaint();
 		}
+		tchart.Repaint();
 		pcount = TotalCount;
 		//tchart.Repaint();
 
@@ -648,7 +648,32 @@ void CRHMmainDlg::RunClickFunction()
 		if (messageFound)
 		{
 			RefreshRateDlg * modal = new RefreshRateDlg(this->refresh_rate);
-			modal->DoModal();
+			int rate = modal->DoModal();
+			this->refresh_rate = (RefreshRate)rate;
+			switch (this->refresh_rate)
+			{
+			case RefreshRate::DAILY:
+				stepSize = Global::Freq;
+				break;
+			case RefreshRate::BIWEEKLY:
+				stepSize = Global::Freq * 4;
+				break;
+			case RefreshRate::WEEKLY:
+				stepSize = Global::Freq * 7;
+				break;
+			case RefreshRate::MONTHLY:
+				stepSize = Global::Freq * 30;
+				break;
+			case RefreshRate::YEARLY:
+				stepSize = Global::Freq * 365;
+				break;
+			case RefreshRate::ATEND:
+				stepSize = Global::DTmax;
+				break;
+			default:
+				break;
+			}
+
 			delete modal;
 		}
 
