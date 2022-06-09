@@ -649,6 +649,11 @@ void CRHMmainDlg::RunClickFunction()
 		{
 			RefreshRateDlg * modal = new RefreshRateDlg(this->refresh_rate);
 			int rate = modal->DoModal();
+			if (rate == -1)
+			{
+				break;
+			}
+
 			this->refresh_rate = (RefreshRate)rate;
 			switch (this->refresh_rate)
 			{

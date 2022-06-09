@@ -50,5 +50,7 @@ private:
 
 	void OnContinueRun();
 
+	void OnEndRun();
+
 	DECLARE_MESSAGE_MAP()
 };
