@@ -100,6 +100,9 @@
 #define IDC_RADIO1                      1067
 #define IDC_RADIO2                      1068
 #define IDC_RADIO3                      1069
+#define IDC_RADIO4                      1070
+#define IDC_RADIO5                      1071
+#define IDC_RADIO6                      1072
 #define ID_PROJECT_LOG                  32771
 #define ID_PROJECT_SAVECHARTTEMPLATE    32772
 #define ID_PROJECT_PLOTREFRESHRATE      32773
@@ -283,7 +286,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        354
 #define _APS_NEXT_COMMAND_VALUE         32860
-#define _APS_NEXT_CONTROL_VALUE         1068
+#define _APS_NEXT_CONTROL_VALUE         1071
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
