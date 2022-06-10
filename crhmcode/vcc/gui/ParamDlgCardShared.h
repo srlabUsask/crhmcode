@@ -26,7 +26,7 @@ public:
 	/**
 	* Standard constructor
 	*/
-	ParamDlgCardShared(ClassPar* param, CWnd* pParent);
+	ParamDlgCardShared(ClassPar* param, FontsContainer* fonts, CWnd* pParent);
 
 	/**
 	* Creates the dialog object and attaches it to this object.

@@ -8,6 +8,26 @@ CardScrollPane::CardScrollPane(CWnd* pParent /*=NULL*/)
 	this->scroll_position = 0;
 	this->pane_height = 0;
 	this->next_card = 8;
+
+	this->fonts = new FontsContainer();
+	this->fonts->pointFont120 = new CFont();
+	this->fonts->pointFont120->CreatePointFont(120, _T("Ariel"));
+	this->fonts->pointFont100 = new CFont();
+	this->fonts->pointFont100->CreatePointFont(100, _T("Ariel"));
+	this->fonts->pointFont80 = new CFont();
+	this->fonts->pointFont80->CreatePointFont(80, _T("Ariel"));
+	this->fonts->pointFont60 = new CFont();
+	this->fonts->pointFont60->CreatePointFont(60, _T("Ariel"));
+
+}
+
+CardScrollPane::~CardScrollPane()
+{
+	delete this->fonts->pointFont120;
+	delete this->fonts->pointFont100;
+	delete this->fonts->pointFont80;
+	delete this->fonts->pointFont60;
+	delete this->fonts;
 }
 
 
@@ -139,17 +159,17 @@ bool CardScrollPane::AddCard(std::list<std::pair<std::string, ClassPar*>>::itera
 	ParamDlgCard * newCard;
 	if (data->first.find("*") != std::string::npos)
 	{
-		newCard = new ParamDlgCardShared(data->second, this);
+		newCard = new ParamDlgCardShared(data->second, this->fonts, this);
 		newCard->call_create(this);
 	}
 	else if (data->first.find("&") != std::string::npos)
 	{
-		newCard = new ConsolidateParamCard(data->second, this);
+		newCard = new ConsolidateParamCard(data->second, this->fonts, this);
 		newCard->call_create(this);
 	}
 	else
 	{
-		newCard = new ParamDlgCard(data->second, this);
+		newCard = new ParamDlgCard(data->second, this->fonts, this);
 		success = newCard->call_create(this);
 	}
 	newCard->MoveWindow(cardRect);

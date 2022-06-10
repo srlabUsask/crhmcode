@@ -1,24 +1,17 @@
 #include "ParamDlgCard.h"
 
 
-ParamDlgCard::ParamDlgCard(ClassPar * param, CWnd * pParent)
+ParamDlgCard::ParamDlgCard(ClassPar * param, FontsContainer * fonts, CWnd * pParent)
 	: CDialog(ParamDlgCard::IDD, (CWnd*)pParent)
 {
 	this->scroll_position = 0;
 	this->pane_width = 0;
 	this->parameter = param;
 
-	this->pointFont120 = new CFont();
-	this->pointFont120->CreatePointFont(120, _T("Ariel"));
-
-	this->pointFont100 = new CFont();
-	this->pointFont100->CreatePointFont(100, _T("Ariel"));
-
-	this->pointFont80 = new CFont();
-	this->pointFont80->CreatePointFont(80, _T("Ariel"));
-
-	this->pointFont60 = new CFont();
-	this->pointFont60->CreatePointFont(60, _T("Ariel"));
+	this->pointFont120 = fonts->pointFont120;
+	this->pointFont100 = fonts->pointFont100;
+	this->pointFont80 = fonts->pointFont80;
+	this->pointFont60 = fonts->pointFont60;
 }
 
 
@@ -30,10 +23,6 @@ bool ParamDlgCard::call_create(CWnd* pParent)
 
 ParamDlgCard::~ParamDlgCard()
 {
-	delete this->pointFont120;
-	delete this->pointFont100;
-	delete this->pointFont80;
-	delete this->pointFont60;
 
 	// Starts at 1 because the first item is not dynamicaly allocated
 	for (size_t i = 1; i < this->rowLabels.size(); i++)

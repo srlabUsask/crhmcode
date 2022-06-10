@@ -7,6 +7,7 @@
 #include "ParamDlgCard.h"
 #include "ParamDlgCardShared.h"
 #include "ConsolidateParamCard.h"
+#include "FontsContainer.h"
 
 class ParamDlgCard;
 
@@ -110,6 +111,11 @@ public:
 	CardScrollPane(CWnd* pParent = NULL);
 
 	/**
+	* deconstructor
+	*/
+	~CardScrollPane();
+
+	/**
 	* Sets the rendered parameter cards to the passed in list of parameters.
 	* 
 	* @param parametersList - std::list<std::pair<std::string, ClassPar*>>* list of parameters to render.
@@ -125,6 +131,13 @@ public:
 	* Calls the SaveCard method on all of the parameter cards.
 	*/
 	void SaveAllCards();
+
+	
+
+	/**
+	* Reference to the structure that contains the font pointers to be used in parameter cards
+	*/
+	FontsContainer* fonts;
 
 protected:
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ParamDlgCardShared.h"
+#include "ParamDlgCardShared.h" 
 
 /**
 * Parameter card for displaying a prameter as an option for consolidation
@@ -12,7 +12,7 @@ public:
 	/**
 	* Standard constructor
 	*/
-	ConsolidateParamCard(ClassPar* param, CWnd* pParent);
+	ConsolidateParamCard(ClassPar* param, FontsContainer * fonts, CWnd* pParent);
 
 	/**
 	* Creates the dialog object and attaches it to this object.

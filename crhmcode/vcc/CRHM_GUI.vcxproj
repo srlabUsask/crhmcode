@@ -667,6 +667,7 @@
     <ClInclude Include="gui\ConsolidateParamCard.h" />
     <ClInclude Include="gui\ConsolidateParamDlg.h" />
     <ClInclude Include="gui\COptions.h" />
+    <ClInclude Include="gui\FontsContainer.h" />
     <ClInclude Include="gui\GridCell.h" />
     <ClInclude Include="gui\ParamDlgCard.h" />
     <ClInclude Include="gui\ParamDlgCardShared.h" />

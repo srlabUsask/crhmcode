@@ -2871,5 +2871,8 @@
     <ClInclude Include="gui\ConsolidateParamCard.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gui\FontsContainer.h">
+      <Filter>Resource Files\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

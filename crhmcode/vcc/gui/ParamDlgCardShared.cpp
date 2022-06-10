@@ -1,7 +1,7 @@
 #include "ParamDlgCardShared.h"
 
-ParamDlgCardShared::ParamDlgCardShared(ClassPar* param, CWnd* pParent)
-	: ParamDlgCard(param, pParent)
+ParamDlgCardShared::ParamDlgCardShared(ClassPar* param, FontsContainer * fonts, CWnd* pParent)
+	: ParamDlgCard(param, fonts, pParent)
 {
 }
 

@@ -7,8 +7,7 @@
 #include "../../src/core/ClassPar.h"
 #include "ParamSetAllDlg.h"
 #include "GridCell.h"
-
-class CardScrollPane;
+#include "FontsContainer.h"
 
 /**
 *  Displays the information for a parameter and allows it to be edited.
@@ -46,7 +45,7 @@ public:
 	/*
 	* Standard constructor
 	*/
-	ParamDlgCard(ClassPar * param, CWnd * pParent);
+	ParamDlgCard(ClassPar * param, FontsContainer * fonts, CWnd * pParent);
 
 	/**
 	* Creates the dialog object and attaches it to this object.

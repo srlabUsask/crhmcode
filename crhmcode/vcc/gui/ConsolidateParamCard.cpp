@@ -1,8 +1,8 @@
 #include "ConsolidateParamCard.h"
 
 
-ConsolidateParamCard::ConsolidateParamCard(ClassPar* param, CWnd* pParent)
-	: ParamDlgCardShared(param, pParent)
+ConsolidateParamCard::ConsolidateParamCard(ClassPar* param, FontsContainer * fonts, CWnd* pParent)
+	: ParamDlgCardShared(param, fonts, pParent)
 {
 }
 
