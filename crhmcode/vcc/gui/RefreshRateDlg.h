@@ -15,42 +15,147 @@
 */
 enum class RefreshRate { DAILY, BIWEEKLY, WEEKLY, MONTHLY, YEARLY, ATEND };
 
+/**
+* Dialog that appears when a user clicks while a simulation is running. 
+* 
+* Allows the user to select a different refresh rate for the TChart plot.
+* Also allows the user to end the simulation run prematurely.
+*/
 class RefreshRateDlg : public CDialog
 {
 	DECLARE_DYNAMIC(RefreshRateDlg)
 
 public:
+
+	/**
+	* Constructor for the RefreshRateDlg. 
+	* 
+	* @param rate - RefreshRate enum for the currently set refresh rate.
+	* @param pParent - CWnd* pointer to the parent window.
+	*/
 	RefreshRateDlg(RefreshRate rate, CWnd* pParent = NULL);
 
+	/**
+	* Defines the Resource ID for the dialog. 
+	*/
 	enum { IDD = REFRESH_RATE_DLG };
 
 private:
 
+	/**
+	* Radial buttons for setting a daily refresh rate.
+	*/
 	CButton daily_button;
+
+	/**
+	* Radial button for setting a bi-weekly refresh rate.
+	*/
 	CButton biweekly_button;
+	
+	/**
+	* Radial button for setting a weekly refresh rate.
+	*/
 	CButton weekly_button;
+
+	/**
+	* Radial button for setting a montly refresh rate.
+	*/
 	CButton monthly_button;
+
+	/**
+	* Radial button for setting a yearly refresh rate.
+	*/
 	CButton yearly_button;
+
+	/**
+	* Radial button for setting an at end refresh rate.
+	*/
 	CButton at_end_button;
 
+	/**
+	* Stores the currently set refresh rate.
+	*/
 	RefreshRate rate;
 
+	/**
+	* Initalized the dialog.
+	*/
 	BOOL OnInitDialog();
 
+	/**
+	* Connects GUI components to member variables.
+	*/
 	void DoDataExchange(CDataExchange* pDX);
 
+	/**
+	* Checks the corrisponding radio dial button for the passed in refresh rate.
+	* Additionaly removes checks from all of the other radio dial buttons. 
+	* 
+	* @param rate - RefreshRate rate corrisponding for the button to check.
+	*/
 	void CheckRate(RefreshRate rate);
 
-	void OnRefreshRateDaily();
-	void OnRefreshRateBiWeekly();
-	void OnRefreshRateWeekly();
-	void OnRefreshRateMonthly();
-	void OnRefreshRateYearly();
-	void OnRefreshRateAtEnd();
+	/**
+	* Handler for when the daily refresh rate dial is clicked. 
+	* 
+	* Selects the daily rate and unselects all others.
+	* Sets the internal rate variable to daily.
+	*/
+	afx_msg void OnRefreshRateDaily();
 
-	void OnContinueRun();
+	/**
+	* Handler for when the bi weekly refresh rate dial is clicked.
+	*
+	* Selects the bi weekly rate and unselects all others.
+	* Sets the internal rate variable to bi weekly.
+	*/
+	afx_msg void OnRefreshRateBiWeekly();
 
-	void OnEndRun();
+	/**
+	* Handler for when the weekly refresh rate dial is clicked.
+	*
+	* Selects the weekly rate and unselects all others.
+	* Sets the internal rate variable to weekly.
+	*/
+	afx_msg void OnRefreshRateWeekly();
+
+	/**
+	* Handler for when the monthly refresh rate dial is clicked.
+	*
+	* Selects the monthly rate and unselects all others.
+	* Sets the internal rate variable to monthly.
+	*/
+	afx_msg void OnRefreshRateMonthly();
+
+	/**
+	* Handler for when the yearly refresh rate dial is clicked.
+	*
+	* Selects the yearly rate and unselects all others.
+	* Sets the internal rate variable to yearly.
+	*/
+	afx_msg void OnRefreshRateYearly();
+
+	/**
+	* Handler for when the at end refresh rate dial is clicked.
+	*
+	* Selects the at end rate and unselects all others.
+	* Sets the internal rate variable to at end.
+	*/
+	afx_msg void OnRefreshRateAtEnd();
+
+	/**
+	* Handler for when the continue button is clicked. 
+	* 
+	* Closes the modal window and sends a signal to continue with the set refresh rate.
+	*/
+	afx_msg void OnContinueRun();
+
+	/**
+	* Handler for when the end run button is clicked. 
+	* 
+	* Closes the modal window and sends a signal to stop the simulation.
+	*/
+	afx_msg void OnEndRun();
 
 	DECLARE_MESSAGE_MAP()
 };
