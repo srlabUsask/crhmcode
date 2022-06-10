@@ -1,25 +1,21 @@
 #pragma once
-#include <afxwin.h>
-#include <afxdialogex.h>
-
-#include <map>
-#include <list>
-#include <string>
 
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
 #include "CardScrollPane.h"
 
-
-class ConsolidateParamDlg : public CDialogEx
+/**
+* Dialog for consolidating parameters that have the same name but different values across modules
+*/
+class ConsolidateParamDlg : public CDialog
 {
 
 	DECLARE_DYNAMIC(ConsolidateParamDlg)
 
-	// Dialog Data
-#ifdef AFX_DESIGN_TIME
+	/*
+	* Defines the dialog resource ID 
+	*/
 	enum { IDD = CONSOLIDATE_PARAM_DLG };
-#endif
 
 public:
 

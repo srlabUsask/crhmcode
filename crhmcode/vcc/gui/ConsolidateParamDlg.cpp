@@ -1,11 +1,11 @@
 #include "ConsolidateParamDlg.h"
 
 
-IMPLEMENT_DYNAMIC(ConsolidateParamDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(ConsolidateParamDlg, CDialog)
 
 
 ConsolidateParamDlg::ConsolidateParamDlg(std::map<std::string, std::list<ClassPar*>*>* candidates, CWnd* pParent)
-	: CDialogEx(CONSOLIDATE_PARAM_DLG, pParent)
+	: CDialog(CONSOLIDATE_PARAM_DLG, pParent)
 {
 	this->candidates = *candidates;
 }
@@ -17,7 +17,7 @@ ConsolidateParamDlg::~ConsolidateParamDlg()
 }
 
 
-BEGIN_MESSAGE_MAP(ConsolidateParamDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(ConsolidateParamDlg, CDialog)
 	ON_LBN_SELCHANGE(ID_CONSOLIDATABLE_LIST_BOX, &ConsolidateParamDlg::OnSelectCandidate)
 	ON_MESSAGE(UWM_USE_FOR_ALL, &ConsolidateParamDlg::OnUseForAllMsg)
 	ON_BN_CLICKED(ID_CONSOLIDATE_RETURN, &ConsolidateParamDlg::OnReturnClicked)
@@ -28,14 +28,14 @@ END_MESSAGE_MAP()
 
 void ConsolidateParamDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
+	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, ID_CONSOLIDATABLE_LIST_BOX, this->candidates_list_box);
 }
 
 
 BOOL ConsolidateParamDlg::OnInitDialog()
 {
-	CDialogEx::OnInitDialog();
+	CDialog::OnInitDialog();
 
 	this->InitalizeCandidatesListBox();
 

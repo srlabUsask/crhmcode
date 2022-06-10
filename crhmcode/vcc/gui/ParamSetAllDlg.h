@@ -1,20 +1,18 @@
 #pragma once
-#include <afxwin.h>
-#include <string>
-#include "afxdialogex.h"
-#include "../stdafx.h"
-#include "../resource.h"
 
 #include "ParamDlgCard.h"
 
-// Forward declaration
 class ParamDlgCard;
 
-class ParamSetAllDlg : public CDialogEx
+/**
+* Dialog window that takes in a value to set all values in a parameter to a single value.
+*/
+class ParamSetAllDlg : public CDialog
 {
 	DECLARE_DYNAMIC(ParamSetAllDlg)
 
 private:
+
 	/**
 	* The CEdit control for choosing the value to set. 
 	*/
@@ -32,6 +30,7 @@ private:
 	void ParamSetAllDlg::OnOK();
 
 public:
+
 	/**
 	* Constructor 
 	* 

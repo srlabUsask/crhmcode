@@ -2,10 +2,13 @@
 
 #include "ParamDlgCard.h"
 
-
+/**
+* Displays the information for a shared parameter and allows it to be made local
+*/
 class ParamDlgCardShared : public ParamDlgCard
 {
 private:
+
 	/*
 	* Defines the resource assoicated with this class.
 	*/

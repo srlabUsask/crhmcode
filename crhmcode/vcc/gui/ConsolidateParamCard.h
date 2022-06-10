@@ -2,6 +2,9 @@
 
 #include "ParamDlgCardShared.h"
 
+/**
+* Parameter card for displaying a prameter as an option for consolidation
+*/
 class ConsolidateParamCard : public ParamDlgCardShared
 {
 public:

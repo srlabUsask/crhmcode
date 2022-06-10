@@ -1,5 +1,6 @@
 #include "ParametersDlg.h"
 
+
 IMPLEMENT_DYNAMIC(ParametersDlg, CDialog)
 
 

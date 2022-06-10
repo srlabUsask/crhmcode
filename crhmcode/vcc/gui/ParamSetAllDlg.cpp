@@ -1,25 +1,30 @@
 #include "ParamSetAllDlg.h"
 
-IMPLEMENT_DYNAMIC(ParamSetAllDlg, CDialogEx)
+
+IMPLEMENT_DYNAMIC(ParamSetAllDlg, CDialog)
+
 
 ParamSetAllDlg::ParamSetAllDlg(ParamDlgCard* paramCard, CWnd* pParent) 
-	: CDialogEx(PARAMETERS_SET_ALL_DLG, pParent)
+	: CDialog(PARAMETERS_SET_ALL_DLG, pParent)
 {
 	this->card = paramCard;
 	this->set_all_value = new CEdit();
 }
+
 
 ParamSetAllDlg::~ParamSetAllDlg()
 {
 	delete this->set_all_value;
 }
 
-BEGIN_MESSAGE_MAP(ParamSetAllDlg, CDialogEx)
+
+BEGIN_MESSAGE_MAP(ParamSetAllDlg, CDialog)
 END_MESSAGE_MAP()
+
 
 BOOL ParamSetAllDlg::OnInitDialog()
 {
-	CDialogEx::OnInitDialog();
+	CDialog::OnInitDialog();
 
 	CRect rect;
 	GetDlgItem(ID_PARAM_SET_PLACEHOLDER)->GetWindowRect(&rect);
@@ -43,10 +48,12 @@ BOOL ParamSetAllDlg::OnInitDialog()
 	return TRUE;
 }
 
+
 void ParamSetAllDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
+	CDialog::DoDataExchange(pDX);
 }
+
 
 void ParamSetAllDlg::OnOK()
 {
@@ -60,6 +67,6 @@ void ParamSetAllDlg::OnOK()
 	this->card->SetAll(valueString);
 
 	// Call the default OnOK to close the dialog
-	CDialogEx::OnOK();
+	CDialog::OnOK();
 }
 

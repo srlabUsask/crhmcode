@@ -1,9 +1,6 @@
 #pragma once
 
-#include <afxwin.h>
 #include <list>
-#include <string>
-#include <math.h>
 
 #include "../resource.h"
 #include "../../src/core/ClassPar.h"
@@ -13,9 +10,13 @@
 
 class ParamDlgCard;
 
+/**
+* Resizable pane that holds parameter cards
+*/
 class CardScrollPane : public CDialog
 {
 private:
+
 	/**
 	* Defines the resource assoicated with this class.
 	*/
@@ -102,6 +103,7 @@ private:
 	afx_msg	LRESULT OnUseForAllMsg(WPARAM wParam, LPARAM lParam);
 
 public:
+
 	/**
 	* Standard constructor
 	*/

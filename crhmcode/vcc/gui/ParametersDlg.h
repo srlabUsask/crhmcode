@@ -1,4 +1,5 @@
 #pragma once
+
 #include <afxwin.h>
 #include <afxdialogex.h>
 #include "../stdafx.h"
@@ -10,7 +11,9 @@
 #include "../../src/core/CRHMmain.h"
 #include "../../src/core/ClassMacro.h"
 
-
+/**
+* Dialog window for editing parameters
+*/
 class ParametersDlg : public CDialogEx
 {
 

@@ -8,14 +8,15 @@
 #include "ParamSetAllDlg.h"
 #include "GridCell.h"
 
-
-
 class CardScrollPane;
 
+/**
+*  Displays the information for a parameter and allows it to be edited.
+*/
 class ParamDlgCard : public CDialog
 {
 private:
-	/*
+	/**
 	* Defines the resource assoicated with this class.
 	*/
 	enum { IDD = PARAMETERS_CARD };
@@ -25,21 +26,21 @@ private:
 	* 
 	* Opens a dialog to receive the value to set all of the cells to.
 	*/
-	void OnSetAllButton();
+	afx_msg void OnSetAllButton();
 
 	/**
 	* Handles the Reset button being clicked.
 	* 
 	* Resets all of the cells in the grid to the values in the model.
 	*/
-	void OnResetButton();
+	afx_msg void OnResetButton();
 
 	/**
 	* Handles the Save button being clicked. 
 	* 
 	* Saves all of the cells in the grid so that the model matches the cells.
 	*/
-	void OnSaveButton();
+	afx_msg void OnSaveButton();
 
 public:
 	/*
@@ -103,17 +104,64 @@ public:
 
 protected:
 
+	/**
+	* Displays the name of this parameter
+	*/
 	CEdit param_name;
-	CEdit param_units_label;
-	CEdit param_max_label;
-	CEdit param_min_label;
-	CEdit param_default_label;
-	CEdit param_units;
-	CEdit param_min_value;
-	CEdit param_max_value;
-	CEdit param_default_value;
-	CEdit param_col;
+
+	/**
+	* Displays the help information for this parameter
+	*/
 	CEdit param_help;
+
+	/**
+	* Displays a label for the parameter units
+	*/
+	CEdit param_units_label;
+	
+	/**
+	* Displays the units string for this parameter
+	*/
+	CEdit param_units;
+
+	/**
+	* Displays a label for max value
+	*/
+	CEdit param_max_label;
+
+	/**
+	* Displays the maximum value for this parameter
+	*/
+	CEdit param_max_value;
+
+	/**
+	* Displays a label for min value
+	*/
+	CEdit param_min_label;
+
+	/**
+	* Displays the minimum value for this parameter
+	*/
+	CEdit param_min_value;
+
+	/**
+	* Displays a label for parameter default value
+	*/
+	CEdit param_default_label;
+
+	/**
+	* Displays the default label for this parameter
+	*/
+	CEdit param_default_value;
+
+	/**
+	* The first column label for the value grid
+	*/
+	CEdit param_col;
+
+	/**
+	* The first row lable for the value grid
+	*/
 	CEdit param_row;
 
 	/*
@@ -137,11 +185,23 @@ protected:
 	ClassPar* parameter;
 
 	/**
-	* Holders for fonts used on the card
+	* Reference to a 120 point font
 	*/
 	CFont* pointFont120;
+
+	/**
+	* Reference to a 100 point font
+	*/
 	CFont* pointFont100;
+
+	/**
+	* Reference to a 80 point font
+	*/
 	CFont* pointFont80;
+
+	/**
+	* Reference to a 60 point font
+	*/
 	CFont* pointFont60;
 
 	/**

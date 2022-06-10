@@ -1,5 +1,6 @@
 #include "GridCell.h"
 
+
 GridCell::GridCell(ClassPar* par, int row, int col)
 	: CEdit()
 {
@@ -15,9 +16,11 @@ GridCell::GridCell(ClassPar* par, int row, int col)
 	this->background_brush_yellow.CreateSolidBrush(this->yellow);
 }
 
+
 BEGIN_MESSAGE_MAP(GridCell, CEdit)
 	ON_WM_CTLCOLOR_REFLECT()
 END_MESSAGE_MAP()
+
 
 HBRUSH GridCell::CtlColor(CDC* pDC, UINT nCtlColor)
 {
@@ -36,6 +39,7 @@ HBRUSH GridCell::CtlColor(CDC* pDC, UINT nCtlColor)
 		return this->background_brush_white;
 	}
 }
+
 
 COLORREF GridCell::calculateColour()
 {
@@ -132,6 +136,7 @@ COLORREF GridCell::calculateColour()
 	}
 	
 }
+
 
 void GridCell::setColourToYellow()
 {
