@@ -101,6 +101,27 @@ private:
 	CComboBox timebase_drop_down;
 
 	/**
+	* Drop down selector for water year start setting
+	* 
+	* Options are:
+	*	Jan
+	*	Feb
+	*	Mar
+	*	Apr
+	*	May
+	*	Jun
+	*	July
+	*	Aug
+	*	Sep
+	*	Oct
+	*	Nov
+	*	Dec
+	* 
+	* Control ID is ID_WATER_YEAR_DROP_DOWN
+	*/
+	CComboBox water_year_drop_down;
+
+	/**
 	* List box for all variables in the loaded project
 	* List box that contains a string for each variable available
 	*	for output in the currently loaded project.
@@ -635,6 +656,14 @@ private:
 	*	Remove - Removes the selected observations from the selected observations list box and plot.
 	*/
 	afx_msg LRESULT OpenSelObsCtxMenu(WPARAM, LPARAM);
+
+	/**
+	* Handler for when the timebase drop down selector is changed. 
+	* 
+	* If the chosen value is Water Year it reveals the water year start selector
+	* otherwise it hides the water year start selector
+	*/
+	afx_msg void OnTimebaseChange();
 
 	/**
 	* Checks what variables are selected in the all variables list box and adds the

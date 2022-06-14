@@ -47,6 +47,7 @@ void CRHMmainDlg::DoDataExchange(CDataExchange* pDX)
 	FlipTicks.setMessageCodeRight(UWM_FLIP_TICKS_RIGHT);
 	DDX_Control(pDX, ID_FUNCTION_DROP_DOWN, function_drop_down);
 	DDX_Control(pDX, ID_TIMEBASE_DROP_DOWN, timebase_drop_down);
+	DDX_Control(pDX, ID_WATER_YEAR_DROP_DOWN, water_year_drop_down);
 }
 
 
@@ -124,6 +125,9 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_MESSAGE(UWM_OPEN_CTX_ALL_OBS, &CRHMmainDlg::OpenAllObsCtxMenu)
 	ON_MESSAGE(UWM_OPEN_CTX_SEL_OBS, &CRHMmainDlg::OpenSelObsCtxMenu)
 
+	//Function and Timebase drop down selectors
+	ON_CBN_SELCHANGE(ID_TIMEBASE_DROP_DOWN, &CRHMmainDlg::OnTimebaseChange)
+
 	//Date Pickers
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_START_DATE_PICKER, &CRHMmainDlg::OnStartDateChange)
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_END_DATE_PICKER, &CRHMmainDlg::OnEndDateChange)
@@ -181,6 +185,23 @@ BOOL CRHMmainDlg::OnInitDialog()
 	timebase_drop_down.AddString(L"Water Year");
 	timebase_drop_down.AddString(L"All");
 	timebase_drop_down.SetCurSel(3);
+
+	/**
+	* Set options for the water_year_drop_down
+	*/
+	water_year_drop_down.AddString(L"January");
+	water_year_drop_down.AddString(L"Febuary");
+	water_year_drop_down.AddString(L"March");
+	water_year_drop_down.AddString(L"April");
+	water_year_drop_down.AddString(L"May");
+	water_year_drop_down.AddString(L"June");
+	water_year_drop_down.AddString(L"July");
+	water_year_drop_down.AddString(L"August");
+	water_year_drop_down.AddString(L"September");
+	water_year_drop_down.AddString(L"October");
+	water_year_drop_down.AddString(L"November");
+	water_year_drop_down.AddString(L"December");
+	water_year_drop_down.SetCurSel(9);
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -2519,6 +2540,23 @@ LRESULT CRHMmainDlg::OpenSelObsCtxMenu(WPARAM, LPARAM)
 	}
 
 	return 0;
+}
+
+
+void CRHMmainDlg::OnTimebaseChange()
+{
+	/* If the current selection is water year (3) */
+	if (timebase_drop_down.GetCurSel() == 3)
+	{
+		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_SHOW);
+		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_SHOW);
+	}
+	else
+	{
+		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_HIDE);
+		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_HIDE);
+	}
+	
 }
 
 

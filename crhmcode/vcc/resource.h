@@ -205,6 +205,8 @@
 #define ID_CLEAR_MODULES                35301
 #define ID_FUNCTION_DROP_DOWN           36000
 #define ID_TIMEBASE_DROP_DOWN           36001
+#define ID_WATER_YEAR_DROP_DOWN         36002
+#define ID_WATER_YEAR_LABEL				36003
 #define ID_ALL_MODS_LIST_BOX            40000
 #define ID_SEL_MODS_LIST_BOX            40001
 #define ID_MODULE_FILTER_BASIC          40002
