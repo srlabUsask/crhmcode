@@ -172,6 +172,17 @@ BOOL CRHMmainDlg::OnInitDialog()
 	function_drop_down.AddString(L"Average");
 	function_drop_down.SetCurSel(0);
 
+	/**
+	* Set options for the timebase_drop_down
+	*/
+	timebase_drop_down.AddString(L"Daily");
+	timebase_drop_down.AddString(L"Monthly");
+	timebase_drop_down.AddString(L"Calendar Year");
+	timebase_drop_down.AddString(L"Water Year");
+	timebase_drop_down.AddString(L"All");
+	timebase_drop_down.SetCurSel(3);
+
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE
 }
