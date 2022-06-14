@@ -45,6 +45,8 @@ void CRHMmainDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, ID_FLIP_TICKS, FlipTicks);
 	FlipTicks.setMessageCodeLeft(UWM_FLIP_TICKS_LEFT);
 	FlipTicks.setMessageCodeRight(UWM_FLIP_TICKS_RIGHT);
+	DDX_Control(pDX, ID_FUNCTION_DROP_DOWN, function_drop_down);
+	DDX_Control(pDX, ID_TIMEBASE_DROP_DOWN, timebase_drop_down);
 }
 
 
@@ -137,7 +139,6 @@ END_MESSAGE_MAP()
 BOOL CRHMmainDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
 	// TODO:  Add extra initialization here
 
 	//State the name of the program in the window title - Matt
@@ -160,6 +161,16 @@ BOOL CRHMmainDlg::OnInitDialog()
 
 	delete varHelpFont;
 	delete obsHelpFont;
+
+	/** 
+	* Set options for the function_drop_down
+	*/
+	function_drop_down.AddString(L"Observation");
+	function_drop_down.AddString(L"Total");
+	function_drop_down.AddString(L"Minimum");
+	function_drop_down.AddString(L"Maximum");
+	function_drop_down.AddString(L"Average");
+	function_drop_down.SetCurSel(0);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE

@@ -72,6 +72,35 @@ private:
 	CMenu main_menu;
 
 	/**
+	* Drop down selector for observation functions
+	* 
+	* Options are:
+	*	Observation
+	*	Total
+	*	Minimum
+	*	Maximum
+	*	Average
+	* 
+	* Control ID is ID_FUNCTION_DROP_DOWN
+	*/
+	CComboBox function_drop_down;
+
+	/**
+	* Drop down selector for timebase setting
+	* 
+	* Options are:
+	*	Daily	
+	*	Water Year
+	*	Calendar Year
+	*	Monthly
+	*	All
+	*	
+	* 
+	* Control ID is ID_TIMEBASE_DROP_DOWN
+	*/
+	CComboBox timebase_drop_down;
+
+	/**
 	* List box for all variables in the loaded project
 	* List box that contains a string for each variable available
 	*	for output in the currently loaded project.
