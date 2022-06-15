@@ -60,8 +60,9 @@ protected:
 private:
 	long Box1Disply{ 0 };
 	long ObsFunct_Toggle = 0; /**< no display/Final/Trend values */
-	long TBase{ 0 };
-	long water_year_month = 10; /**< Specifies the month to signal end of water year. Default is October.*/
+	enum class TimeBase {DAILY, WATER_YEAR, CALENDAR_YEAR, MONTHLY, ALL};
+	TimeBase TBase = TimeBase::WATER_YEAR;
+	int water_year_month = 10; /**< Specifies the month to signal end of water year. Default is October.*/
 
 	std::string ProjectFileArgument = ""; /**< it takes the filename from the command line. */
 	std::string defaultprojectname = "currentproject.prj";
@@ -662,8 +663,17 @@ private:
 	* 
 	* If the chosen value is Water Year it reveals the water year start selector
 	* otherwise it hides the water year start selector
+	* 
+	* Also sets the TBase field to the correct TimeBase enum value.
 	*/
 	afx_msg void OnTimebaseChange();
+
+	/**
+	* Handler for when the water year drop down selector is changed.
+	* 
+	* Sets the water_year_month field to the value that corrisponds with the selected month.
+	*/
+	afx_msg void OnWaterYearChange();
 
 	/**
 	* Checks what variables are selected in the all variables list box and adds the

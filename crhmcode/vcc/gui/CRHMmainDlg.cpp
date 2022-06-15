@@ -127,6 +127,7 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 
 	//Function and Timebase drop down selectors
 	ON_CBN_SELCHANGE(ID_TIMEBASE_DROP_DOWN, &CRHMmainDlg::OnTimebaseChange)
+	ON_CBN_SELCHANGE(ID_WATER_YEAR_DROP_DOWN, &CRHMmainDlg::OnWaterYearChange)
 
 	//Date Pickers
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_START_DATE_PICKER, &CRHMmainDlg::OnStartDateChange)
@@ -930,13 +931,13 @@ void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFu
 
 					switch (TBase) {
 
-					case 0: // daily
+					case TimeBase::DAILY: // daily
 						if (Next == -1 || Next != itime[2]) {
 							Next = itime[2];
 							First = TRUE;
 						}
 						break;
-					case 1: // water annual
+					case TimeBase::WATER_YEAR: // water annual
 						if (Next == -1 || itime[0] == Next && itime[1] == water_year_month) {
 							if (Next == -1 && itime[1] < water_year_month)
 								Next = itime[0];
@@ -945,19 +946,19 @@ void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFu
 							First = TRUE;
 						}
 						break;
-					case 2: // annual
+					case TimeBase::CALENDAR_YEAR: // annual
 						if (Next == -1 || itime[0] == Next && itime[1] == 1) {
 							Next = itime[0] + 1;
 							First = TRUE;
 						}
 						break;
-					case 3: // monthly
+					case TimeBase::MONTHLY: // monthly
 						if (Next == -1 || Next == itime[1]) {
 							Next = (itime[1]) % 12 + 1;
 							First = TRUE;
 						}
 						break;
-					case 4: // All - do nothing
+					case TimeBase::ALL: // All - do nothing
 						if (Next == -1) {
 							Next = 0;
 							First = TRUE; // do nothing
@@ -995,7 +996,7 @@ void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFu
 								break;
 							} // switch
 						}
-						else if (Funct == TFun::DLTA && TBase) { // only very first time
+						else if (Funct == TFun::DLTA && TBase != TimeBase::DAILY) { // only very first time
 							(newVar->*(newVar->LoopFunct))(Indx);
 							Delta0 = newVar->values[Indx];
 
@@ -1583,7 +1584,41 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 			it->second->XValues.clear();
 			it->second->YValues.clear();
 
-			AddObsPlot(it->second->Tag, it->second, it->first, model->Funct);
+			/* Look for a suffix and set function to the correct value. */
+			TFun funct = TFun::FOBS;
+			size_t suffixStart = it->first.rfind('_');
+			std::string suffix;
+			if (suffixStart == std::string::npos)
+			{
+				suffix = "";
+			}
+			else
+			{
+				suffix = it->first.substr(suffixStart, std::string::npos);
+			}
+
+			if (suffix == "")
+			{
+				funct = TFun::FOBS;
+			}
+			else if (suffix == "_Tot")
+			{
+				funct = TFun::TOT;
+			}
+			else if (suffix == "_Min")
+			{
+				funct = TFun::MIN;
+			}
+			else if (suffix == "_Max")
+			{
+				funct = TFun::MAX;
+			}
+			else if (suffix == "_Avg")
+			{
+				funct = TFun::AVG;
+			}
+
+			AddObsPlot(it->second->Tag, it->second, it->first, funct);
 
 			CString selectedObservation = CString(it->first.c_str());
 
@@ -2545,8 +2580,10 @@ LRESULT CRHMmainDlg::OpenSelObsCtxMenu(WPARAM, LPARAM)
 
 void CRHMmainDlg::OnTimebaseChange()
 {
+	int currentSelection = timebase_drop_down.GetCurSel();
+
 	/* If the current selection is water year (3) */
-	if (timebase_drop_down.GetCurSel() == 3)
+	if (currentSelection == 3)
 	{
 		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_SHOW);
 		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_SHOW);
@@ -2556,7 +2593,35 @@ void CRHMmainDlg::OnTimebaseChange()
 		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_HIDE);
 		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_HIDE);
 	}
-	
+
+	switch (currentSelection)
+	{
+	case (0):
+		this->TBase = TimeBase::DAILY;
+		break;
+	case (1):
+		this->TBase = TimeBase::MONTHLY;
+		break;
+	case (2):
+		this->TBase = TimeBase::CALENDAR_YEAR;
+		break;
+	case (3):
+		this->TBase = TimeBase::WATER_YEAR;
+		break;
+	case (4):
+		this->TBase = TimeBase::ALL;
+		break;
+	default:
+		break;
+	}
+
+}
+
+
+void CRHMmainDlg::OnWaterYearChange()
+{
+	int currentSelection = this->water_year_drop_down.GetCurSel();
+	this->water_year_month = currentSelection + 1;
 }
 
 
@@ -2940,7 +3005,38 @@ void CRHMmainDlg::addObservationsToSelected()
 		/*Get the variable from the model*/
 		ClassVar* obsVar = model->AllObservations->find(selectedString)->second;
 
-		std::string seriesTitle = selectedString + "(" + to_string(dimension) + ")";
+		/* Retreive the value of the function selector to determine the suffix */
+		int functValue = function_drop_down.GetCurSel();
+		std::string suffix;
+
+		switch (functValue)
+		{
+		case (0):
+			// Observation;
+			suffix = "";
+			break;
+		case (1):
+			// Total
+			suffix = "_Tot";
+			break;
+		case (2):
+			// Minimum
+			suffix = "_Min";
+			break;
+		case (3):
+			// Maximum
+			suffix = "_Max";
+			break;
+		case (4):
+			// Average
+			suffix = "_Avg";
+			break;
+		default:
+			suffix = "";
+			break;
+		}
+
+		std::string seriesTitle = selectedString + "(" + to_string(dimension) + ")" + suffix;
 
 		bool dimensionSelected = observationIsSelected(seriesTitle);
 
