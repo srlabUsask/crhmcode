@@ -1,14 +1,14 @@
 #pragma once
 
-#ifndef CLASSWQ_NETROUTE_M_D
-#define CLASSWQ_NETROUTE_M_D
+#ifndef CLASSWQ_NETROUTE_D
+#define CLASSWQ_NETROUTE_D
 
 #include "WQ_CRHM.h"
 
-class ClassWQ_Netroute_M_D : public ClassModule {
+class ClassWQ_Netroute_D : public ClassModule {
 public:
 
-	ClassWQ_Netroute_M_D(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
+	ClassWQ_Netroute_D(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 	long meltrunoffDiv{ 0 };
 	long soil_ssrDiv{ 0 };
@@ -233,8 +233,8 @@ public:
 	virtual double Function1(double* I, long hh);
 	virtual double Function2(double* X, long hh);
 
-	ClassWQ_Netroute_M_D* klone(string name) const;
+	ClassWQ_Netroute_D* klone(string name) const;
 };
 
 
-#endif // !CLASSWQ_NETROUTE_M_D
+#endif // !CLASSWQ_NETROUTE_D

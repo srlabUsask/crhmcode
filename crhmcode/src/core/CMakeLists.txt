@@ -48,6 +48,11 @@ add_library(core OBJECT
 
 add_dependencies(core spdlog exec def filter)
 
+# add extra include directories for MacOS homebrew
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC "/usr/local/include")
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 target_include_directories(core PUBLIC
     #Gets the SPDLOG headers
     "${STAGING_DIR}/include/"

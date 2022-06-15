@@ -1,7 +1,7 @@
-#include "ClassWQ_Netroute_M_D.h"
+#include "ClassWQ_Netroute_D.h"
 
 
-void ClassWQ_Netroute_M_D::decl(void) {
+void ClassWQ_Netroute_D::decl(void) {
 
     // kg/km2 = (mg/l)*mm = mg/m2
 
@@ -264,7 +264,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
 }
 
-void ClassWQ_Netroute_M_D::init(void) {
+void ClassWQ_Netroute_D::init(void) {
 
     nhru = getdim(TDim::NHRU);
 
@@ -303,7 +303,7 @@ void ClassWQ_Netroute_M_D::init(void) {
 
             for (hh = 0; hh < nhru; ++hh) {
                 if (Ktravel[hh] >= (Global::Interval / (2.0 * route_X_M[hh]))) {
-                    string S = string("'" + Name + " (Netroute_M_D) Muskingum coefficient negative in HRU ").c_str() + to_string(hh + 1);
+                    string S = string("'" + Name + " (Netroute_D) Muskingum coefficient negative in HRU ").c_str() + to_string(hh + 1);
                     CRHMException TExcept(S.c_str(), TExcept::WARNING);
                     LogError(TExcept);
                 }
@@ -331,25 +331,25 @@ void ClassWQ_Netroute_M_D::init(void) {
         } // VARIATION_ORG
     } // try
     catch (std::bad_alloc) {
-        CRHMException Except("Could not allocate in module Netroute_M_D.", TExcept::TERMINATE);
+        CRHMException Except("Could not allocate in module Netroute_D.", TExcept::TERMINATE);
         LogError(Except);
         throw Except;
     }
 
     if (soil_ssrDiv > 1) {
-        string S = "WQ_Netroute_M_D:  \"soil_ssr\". Converting to mm/int";
+        string S = "WQ_Netroute_D:  \"soil_ssr\". Converting to mm/int";
         CRHMException TExcept(S.c_str(), TExcept::WARNING);
         LogError(TExcept);
     }
 
     if (soil_runoffDiv > 1) {
-        string S = "WQ_Netroute_M_D:  \"soil_runoff\". Converting to mm/int";
+        string S = "WQ_Netroute_D:  \"soil_runoff\". Converting to mm/int";
         CRHMException TExcept(S.c_str(), TExcept::WARNING);
         LogError(TExcept);
     }
 
     if (soil_gwDiv > 1) {
-        string S = "WQ_Netroute_M_D:  \"gw_flow\". Converting to mm/int";
+        string S = "WQ_Netroute_D:  \"gw_flow\". Converting to mm/int";
         CRHMException TExcept(S.c_str(), TExcept::WARNING);
         LogError(TExcept);
     }
@@ -434,7 +434,7 @@ void ClassWQ_Netroute_M_D::init(void) {
     } // for hh
 } // init
 
-void ClassWQ_Netroute_M_D::run(void) {
+void ClassWQ_Netroute_D::run(void) {
 
     long step = getstep();
     long nstep = step % Global::Freq;
@@ -447,11 +447,6 @@ void ClassWQ_Netroute_M_D::run(void) {
 
     basinflow[0] = 0.0;
     basingw[0] = 0.0;
-
-    for (long Sub = 0; Sub < numsubstances; ++Sub) {
-        basinflow_mWQ[Sub] = 0.0;
-    }
-
 
     for (hh = 0; chkStruct(hh); ++hh) { // do HRUs in sequence.
         if (nstep == 1) {
@@ -661,7 +656,6 @@ void ClassWQ_Netroute_M_D::run(void) {
                             if (basinflow[0] + gw_Amount * 1000 > minFlow_WQ) {
                                 basinflow_conc_lay[Sub][0] = basinflow_conc_lay[Sub][0] * basinflow[0] + gw_Amount_mWQ * 1000;
                                 basinflow_conc_lay[Sub][0] /= (basinflow[0] + gw_Amount * 1000);
-// TODO: Add code for transferring species from groundwater if not sediment (PRL)
                                 cumbasinflow_mWQ_lay[Sub][0] += gw_Amount_mWQ;
                                 gwcumoutflow_mWQ_lay[Sub][hh] += gw_Amount_mWQ;
                             }
@@ -741,14 +735,13 @@ void ClassWQ_Netroute_M_D::run(void) {
                         basinflow_conc_lay[Sub][0] = basinflow_conc_lay[Sub][0] * basinflow[0] + Used_mWQ_lay[Sub][hh] * 1000;
                         basinflow_conc_lay[Sub][0] /= (basinflow[0] + Used[hh] * 1000);
 
-//                        basinflow_mWQ[Sub] = basinflow_conc_lay[Sub][0] * basinflow[0] + Used_mWQ_lay[Sub][hh] * 1000;
+                        basinflow_mWQ[Sub] = basinflow_conc_lay[Sub][0] * basinflow[0] + Used_mWQ_lay[Sub][hh] * 1000;
                     }
                     else {
                         basinflow_conc_lay[Sub][0] = 0.0;
-//                        basinflow_mWQ[Sub] = 0.0;
+                        basinflow_mWQ[Sub] = 0.0;
                     }
 
-                    basinflow_mWQ[Sub] += Used_mWQ_lay[Sub][hh] * 1000;
                     if (Sub == numsubstances - 1) {
                         basinflow[0] += Used[hh] * 1000; // (m3)
                         cumbasinflow[0] += basinflow[0];
@@ -969,7 +962,7 @@ void ClassWQ_Netroute_M_D::run(void) {
     basingw_s[0] = basingw[0] * Global::Freq / 86400.0;
 } // run
 
-void ClassWQ_Netroute_M_D::finish(bool good) {
+void ClassWQ_Netroute_D::finish(bool good) {
 
 
     double Allcuminflow = 0.0;
@@ -1011,33 +1004,33 @@ void ClassWQ_Netroute_M_D::finish(bool good) {
     LogMessage(" ");
 
     for (hh = 0; chkStruct(); ++hh) {
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cuminflow                   (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cumoutflow                  (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cumoutflow_diverted         (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow_diverted[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cuminflow                   (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cumoutflow                  (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cumoutflow_diverted         (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow_diverted[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
 
         if (variation == VARIATION_1)
-            LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' hruDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), Clark_hruDelay->Left(hh) / hru_area[hh], hru_area[hh], basin_area[0]);
+            LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' hruDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), Clark_hruDelay->Left(hh) / hru_area[hh], hru_area[hh], basin_area[0]);
         else if (variation == VARIATION_ORG)
-            LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' hruDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), hruDelay->Left(hh) / hru_area[hh], hru_area[hh], basin_area[0]);
+            LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' hruDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), hruDelay->Left(hh) / hru_area[hh], hru_area[hh], basin_area[0]);
 
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' ssrcuminflow                (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcuminflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' ssrcumoutflow               (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcumoutflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' ssrDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), ssrDelay->Left(hh) / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' ssrcuminflow                (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcuminflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' ssrcumoutflow               (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcumoutflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' ssrDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), ssrDelay->Left(hh) / hru_area[hh], hru_area[hh], basin_area[0]);
 
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' runoffcuminflow             (mm) (mm*km^2) (mm*basin): ").c_str(), runcuminflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' runoffcumoutflow            (mm) (mm*km^2) (mm*basin): ").c_str(), runcumoutflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' runDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), runDelay->Left(hh) / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' runoffcuminflow             (mm) (mm*km^2) (mm*basin): ").c_str(), runcuminflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' runoffcumoutflow            (mm) (mm*km^2) (mm*basin): ").c_str(), runcumoutflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' runDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), runDelay->Left(hh) / hru_area[hh], hru_area[hh], basin_area[0]);
 
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwcuminflow                 (mm) (mm*km^2) (mm*basin): ").c_str(), gwcuminflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwcumoutflow                (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwcumoutflow_diverted       (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow_diverted[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwDelay_in_storage          (mm) (mm*km^2) (mm*basin): ").c_str(), gwDelay->Left(hh) / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwcuminflow                 (mm) (mm*km^2) (mm*basin): ").c_str(), gwcuminflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwcumoutflow                (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwcumoutflow_diverted       (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow_diverted[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwDelay_in_storage          (mm) (mm*km^2) (mm*basin): ").c_str(), gwDelay->Left(hh) / hru_area[hh], hru_area[hh], basin_area[0]);
 
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cum_to_Sd                   (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_Sd[hh], hru_area[hh], basin_area[0], " *** Added to this HRU Sd");
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cum_to_soil_rechr           (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_soil_rechr[hh], hru_area[hh], basin_area[0], " *** Added to this HRU recharge");
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cum_redirected_residual     (mm) (mm*km^2) (mm*basin): ").c_str(), cum_redirected_residual[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cumbasinflow                (mm) (mm*km^2) (mm*basin): ").c_str(), cumbasinflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' HRU_cumbasinflow            (mm) (mm*km^2) (mm*basin): ").c_str(), HRU_cumbasinflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cum_to_Sd                   (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_Sd[hh], hru_area[hh], basin_area[0], " *** Added to this HRU Sd");
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cum_to_soil_rechr           (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_soil_rechr[hh], hru_area[hh], basin_area[0], " *** Added to this HRU recharge");
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cum_redirected_residual     (mm) (mm*km^2) (mm*basin): ").c_str(), cum_redirected_residual[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cumbasinflow                (mm) (mm*km^2) (mm*basin): ").c_str(), cumbasinflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' HRU_cumbasinflow            (mm) (mm*km^2) (mm*basin): ").c_str(), HRU_cumbasinflow[hh] / hru_area[hh], hru_area[hh], basin_area[0]);
         LogDebug(" ");
 
         Total = cumoutflow[hh] + gwcumoutflow[hh] - cumbasinflow[hh] - cum_to_soil_rechr[hh] - cum_to_Sd[hh] - gwcumoutflow[hh]
@@ -1063,18 +1056,18 @@ void ClassWQ_Netroute_M_D::finish(bool good) {
         AllTotal += Total;
     }  // for hh
 
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allcuminflow (mm*basin):                ").c_str(), Allcuminflow);
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allcumoutflow_mWQ (mm*basin):           ").c_str(), Allcumoutflow_mWQ);
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allcumoutflowdiverted (mm*basin):       ").c_str(), Allcumoutflowdiverted);
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allgwcuminflow (mm*basin):              ").c_str(), Allgwcuminflow);
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allgwcumoutflow (mm*basin):             ").c_str(), Allgwcumoutflow);
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allgwcumoutflowdiverted (mm*basin):     ").c_str(), Allgwcumoutflowdiverted);
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allssrcuminflow (mm*basin):             ").c_str(), Allssrcuminflow);
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allssrcumoutflow (mm*basin):            ").c_str(), Allssrcumoutflow);
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allruncuminflow (mm*basin):             ").c_str(), Allruncuminflow);
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allruncumoutflow (mm*basin):            ").c_str(), Allruncumoutflow);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allcuminflow (mm*basin):                ").c_str(), Allcuminflow);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allcumoutflow_mWQ (mm*basin):           ").c_str(), Allcumoutflow_mWQ);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allcumoutflowdiverted (mm*basin):       ").c_str(), Allcumoutflowdiverted);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allgwcuminflow (mm*basin):              ").c_str(), Allgwcuminflow);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allgwcumoutflow (mm*basin):             ").c_str(), Allgwcumoutflow);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allgwcumoutflowdiverted (mm*basin):     ").c_str(), Allgwcumoutflowdiverted);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allssrcuminflow (mm*basin):             ").c_str(), Allssrcuminflow);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allssrcumoutflow (mm*basin):            ").c_str(), Allssrcumoutflow);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allruncuminflow (mm*basin):             ").c_str(), Allruncuminflow);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allruncumoutflow (mm*basin):            ").c_str(), Allruncumoutflow);
 
-    LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Total (mm) (mm*hru) (mm*hru/basin): ").c_str(), Total);
+    LogMessage(string("'" + Name + " (WQ_Netroute_D)' Total (mm) (mm*hru) (mm*hru/basin): ").c_str(), Total);
     LogDebug(" ");
 
     /*  for(long Sub = 0; Sub < numsubstances; ++Sub){
@@ -1100,47 +1093,47 @@ void ClassWQ_Netroute_M_D::finish(bool good) {
         Allrechrcuminflow_mWQ = 0.0;
 
         for(hh = 0; chkStruct(); ++hh) {
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cuminflow                   (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cuminflow_mWQ               (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cumoutflow                  (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cumoutflow_mWQ              (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cumoutflow_diverted         (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow_diverted[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cumoutflow_diverted_mWQ     (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow_diverted_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cuminflow                   (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cuminflow_mWQ               (mm) (mm*km^2) (mm*basin): ").c_str(), cuminflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cumoutflow                  (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cumoutflow_mWQ              (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cumoutflow_diverted         (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow_diverted[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cumoutflow_diverted_mWQ     (mm) (mm*km^2) (mm*basin): ").c_str(), cumoutflow_diverted_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
           if(variation == VARIATION_1)
             LogMessageA(hh, string("'" + Name + " (WQ_Netroute)' hruDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), Clark_hruDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
           else
-            LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' hruDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), hruDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
+            LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' hruDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), hruDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
 
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' ssrcuminflow                (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' ssrcuminflow_mWQ            (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcuminflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' ssrcumoutflow               (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' ssrcumoutflow_mWQ           (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcumoutflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' ssrDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), ssrDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' ssrcuminflow                (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' ssrcuminflow_mWQ            (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcuminflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' ssrcumoutflow               (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' ssrcumoutflow_mWQ           (mm) (mm*km^2) (mm*basin): ").c_str(), ssrcumoutflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' ssrDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), ssrDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
 
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' runoffcuminflow             (mm) (mm*km^2) (mm*basin): ").c_str(), runcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' runoffcuminflow_mWQ         (mm) (mm*km^2) (mm*basin): ").c_str(), runcuminflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' runoffcumoutflow            (mm) (mm*km^2) (mm*basin): ").c_str(), runcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' runoffcumoutflow_mWQ        (mm) (mm*km^2) (mm*basin): ").c_str(), runcumoutflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' runDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), runDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' runoffcuminflow             (mm) (mm*km^2) (mm*basin): ").c_str(), runcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' runoffcuminflow_mWQ         (mm) (mm*km^2) (mm*basin): ").c_str(), runcuminflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' runoffcumoutflow            (mm) (mm*km^2) (mm*basin): ").c_str(), runcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' runoffcumoutflow_mWQ        (mm) (mm*km^2) (mm*basin): ").c_str(), runcumoutflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' runDelay_in_storage         (mm) (mm*km^2) (mm*basin): ").c_str(), runDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
 
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwcuminflow                 (mm) (mm*km^2) (mm*basin): ").c_str(), gwcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwcuminflow_mWQ             (mm) (mm*km^2) (mm*basin): ").c_str(), gwcuminflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwcumoutflow                (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwcumoutflow_mWQ            (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwcumoutflow_diverted       (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow_diverted[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwcumoutflow_diverted_mWQ   (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow_diverted_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' gwDelay_in_storage          (mm) (mm*km^2) (mm*basin): ").c_str(), gwDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwcuminflow                 (mm) (mm*km^2) (mm*basin): ").c_str(), gwcuminflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwcuminflow_mWQ             (mm) (mm*km^2) (mm*basin): ").c_str(), gwcuminflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwcumoutflow                (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwcumoutflow_mWQ            (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwcumoutflow_diverted       (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow_diverted[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwcumoutflow_diverted_mWQ   (mm) (mm*km^2) (mm*basin): ").c_str(), gwcumoutflow_diverted_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' gwDelay_in_storage          (mm) (mm*km^2) (mm*basin): ").c_str(), gwDelay->Left(hh)/hru_area[hh], hru_area[hh], basin_area[0]);
 
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cum_to_Sd                   (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_Sd[hh], hru_area[hh], basin_area[0], " *** Added to this HRU Sd");
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cum_to_Sd_mWQ               (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_Sd_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0], " *** Added to this HRU Sd");
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cum_to_soil_rechr           (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_soil_rechr[hh], hru_area[hh], basin_area[0], " *** Added to this HRU recharge");
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cum_to_soil_rechr_mWQ       (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_soil_rechr_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0], " *** Added to this HRU recharge");
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cum_redirected_residual     (mm) (mm*km^2) (mm*basin): ").c_str(), cum_redirected_residual[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cum_redirected_residual_mWQ (mm) (mm*km^2) (mm*basin): ").c_str(), cum_redirected_residual_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cumbasinflow                (mm) (mm*km^2) (mm*basin): ").c_str(), cumbasinflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' cumbasinflow_conc           (mm) (mm*km^2) (mm*basin): ").c_str(), cumbasinflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' HRU_cumbasinflow            (mm) (mm*km^2) (mm*basin): ").c_str(), HRU_cumbasinflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
-          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_M_D)' HRU_cumbasinflow_mwq        (mm) (mm*km^2) (mm*basin): ").c_str(), HRU_cumbasinflow_mWQ_lay[Sub][hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cum_to_Sd                   (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_Sd[hh], hru_area[hh], basin_area[0], " *** Added to this HRU Sd");
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cum_to_Sd_mWQ               (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_Sd_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0], " *** Added to this HRU Sd");
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cum_to_soil_rechr           (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_soil_rechr[hh], hru_area[hh], basin_area[0], " *** Added to this HRU recharge");
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cum_to_soil_rechr_mWQ       (mm) (mm*km^2) (mm*basin): ").c_str(), cum_to_soil_rechr_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0], " *** Added to this HRU recharge");
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cum_redirected_residual     (mm) (mm*km^2) (mm*basin): ").c_str(), cum_redirected_residual[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cum_redirected_residual_mWQ (mm) (mm*km^2) (mm*basin): ").c_str(), cum_redirected_residual_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cumbasinflow                (mm) (mm*km^2) (mm*basin): ").c_str(), cumbasinflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' cumbasinflow_conc           (mm) (mm*km^2) (mm*basin): ").c_str(), cumbasinflow_mWQ_lay[Sub][hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' HRU_cumbasinflow            (mm) (mm*km^2) (mm*basin): ").c_str(), HRU_cumbasinflow[hh]/hru_area[hh], hru_area[hh], basin_area[0]);
+          LogMessageA(hh, string("'" + Name + " (WQ_Netroute_D)' HRU_cumbasinflow_mwq        (mm) (mm*km^2) (mm*basin): ").c_str(), HRU_cumbasinflow_mWQ_lay[Sub][hh]/hru_area[hh], hru_area[hh], basin_area[0]);
           LogDebug(" ");
 
 
@@ -1163,45 +1156,45 @@ void ClassWQ_Netroute_M_D::finish(bool good) {
           LogMessage(" ");
         }  // for hh
 
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' cumbasinflow (m^3):                   ").c_str(), cumbasinflow[0]);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' cumbasinflow_mWQ_lay (mg):            ").c_str(), cumbasinflow_mWQ_lay[Sub][0]);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' cumbasingw   (m^3):                   ").c_str(), cumbasingw[0]);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' cumbasingw_mWQ_lay (mg):              ").c_str(), cumbasingw_mWQ_lay[Sub][0]);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' cumbasinflow (m^3):                   ").c_str(), cumbasinflow[0]);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' cumbasinflow_mWQ_lay (mg):            ").c_str(), cumbasinflow_mWQ_lay[Sub][0]);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' cumbasingw   (m^3):                   ").c_str(), cumbasingw[0]);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' cumbasingw_mWQ_lay (mg):              ").c_str(), cumbasingw_mWQ_lay[Sub][0]);
         LogMessage(" ");
 
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allgwcuminflow (mm*basin):              ").c_str(), Allgwcuminflow);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allgwcuminflow_mWQ (mm*basin):          ").c_str(), Allgwcuminflow_mWQ);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allgwcumoutflow (mm*basin):             ").c_str(), Allgwcumoutflow);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allgwcumoutflow_mWQ (mm*basin):         ").c_str(), Allgwcumoutflow_mWQ);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allgwcumoutflowdiverted (mm*basin):     ").c_str(), Allgwcumoutflowdiverted);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allgwcumoutflowdiverted_mWQ (mm*basin): ").c_str(), Allgwcumoutflowdiverted_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allgwcuminflow (mm*basin):              ").c_str(), Allgwcuminflow);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allgwcuminflow_mWQ (mm*basin):          ").c_str(), Allgwcuminflow_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allgwcumoutflow (mm*basin):             ").c_str(), Allgwcumoutflow);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allgwcumoutflow_mWQ (mm*basin):         ").c_str(), Allgwcumoutflow_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allgwcumoutflowdiverted (mm*basin):     ").c_str(), Allgwcumoutflowdiverted);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allgwcumoutflowdiverted_mWQ (mm*basin): ").c_str(), Allgwcumoutflowdiverted_mWQ);
         LogDebug(" ");
 
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allcuminflow (mm*basin):                ").c_str(), Allcuminflow);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allcuminflow_mWQ (mm*basin):            ").c_str(), Allcuminflow_mWQ);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allcumoutflow (mm*basin):               ").c_str(), Allcumoutflow);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allcumoutflow_mWQ (mm*basin):           ").c_str(), Allcumoutflow_mWQ);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allcumoutflowdiverted (mm*basin):       ").c_str(), Allcumoutflowdiverted);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allcumoutflowdiverted_mWQ (mm*basin):   ").c_str(), Allcumoutflowdiverted_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allcuminflow (mm*basin):                ").c_str(), Allcuminflow);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allcuminflow_mWQ (mm*basin):            ").c_str(), Allcuminflow_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allcumoutflow (mm*basin):               ").c_str(), Allcumoutflow);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allcumoutflow_mWQ (mm*basin):           ").c_str(), Allcumoutflow_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allcumoutflowdiverted (mm*basin):       ").c_str(), Allcumoutflowdiverted);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allcumoutflowdiverted_mWQ (mm*basin):   ").c_str(), Allcumoutflowdiverted_mWQ);
         LogDebug(" ");
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allssrcuminflow (mm*basin):             ").c_str(), Allssrcuminflow);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allssrcuminflow_mWQ (mm*basin):         ").c_str(), Allssrcuminflow_mWQ);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allssrcumoutflow (mm*basin):            ").c_str(), Allssrcumoutflow);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allssrcumoutflow_mWQ (mm*basin):        ").c_str(), Allssrcumoutflow_mWQ);
-        LogDebug(" ");
-
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allruncuminflow (mm*basin):             ").c_str(), Allruncuminflow);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allruncuminflow_mWQ (mm*basin):         ").c_str(), Allruncuminflow_mWQ);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allruncumoutflow (mm*basin):            ").c_str(), Allruncumoutflow);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allruncumoutflow_mWQ (mm*basin):        ").c_str(), Allruncumoutflow_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allssrcuminflow (mm*basin):             ").c_str(), Allssrcuminflow);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allssrcuminflow_mWQ (mm*basin):         ").c_str(), Allssrcuminflow_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allssrcumoutflow (mm*basin):            ").c_str(), Allssrcumoutflow);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allssrcumoutflow_mWQ (mm*basin):        ").c_str(), Allssrcumoutflow_mWQ);
         LogDebug(" ");
 
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' AllSdcuminflow (mm*basin):              ").c_str(), AllSdcuminflow);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' AllSdcuminflow_mWQ (mm*basin):          ").c_str(), AllSdcuminflow_mWQ);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allrechrcuminflow (mm*basin):           ").c_str(), Allrechrcuminflow);
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' Allrechrcuminflow_mWQ (mm*basin):       ").c_str(), Allrechrcuminflow_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allruncuminflow (mm*basin):             ").c_str(), Allruncuminflow);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allruncuminflow_mWQ (mm*basin):         ").c_str(), Allruncuminflow_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allruncumoutflow (mm*basin):            ").c_str(), Allruncumoutflow);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allruncumoutflow_mWQ (mm*basin):        ").c_str(), Allruncumoutflow_mWQ);
         LogDebug(" ");
-        LogMessage(string("'" + Name + " (WQ_Netroute_M_D)' AllTotal              (mm*basin):       ").c_str(), AllTotal);
+
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' AllSdcuminflow (mm*basin):              ").c_str(), AllSdcuminflow);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' AllSdcuminflow_mWQ (mm*basin):          ").c_str(), AllSdcuminflow_mWQ);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allrechrcuminflow (mm*basin):           ").c_str(), Allrechrcuminflow);
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' Allrechrcuminflow_mWQ (mm*basin):       ").c_str(), Allrechrcuminflow_mWQ);
+        LogDebug(" ");
+        LogMessage(string("'" + Name + " (WQ_Netroute_D)' AllTotal              (mm*basin):       ").c_str(), AllTotal);
         LogDebug(" ");
       } // for Sub */
 
@@ -1223,14 +1216,14 @@ void ClassWQ_Netroute_M_D::finish(bool good) {
 }
 
 
-void ClassWQ_Netroute_M_D::Reset_WQ(long hru, double* var, double** var_WQ_lay) {
+void ClassWQ_Netroute_D::Reset_WQ(long hru, double* var, double** var_WQ_lay) {
     var[hru] = 0.0;
     for (long Sub = 0; Sub < numsubstances; ++Sub) {
         var_WQ_lay[Sub][hru] = 0.0;
     }
 }
 
-void ClassWQ_Netroute_M_D::Set_WQ(const long hru, double* var, double* var_conc, double Amount, double amount_conc) {
+void ClassWQ_Netroute_D::Set_WQ(const long hru, double* var, double* var_conc, double Amount, double amount_conc) {
 
     var[hru] = Amount;
     if (Amount > 0.0)
@@ -1239,35 +1232,35 @@ void ClassWQ_Netroute_M_D::Set_WQ(const long hru, double* var, double* var_conc,
         var_conc[hru] = 0.0;
 }
 
-void ClassWQ_Netroute_M_D::copy_array(double* from, double* to) {
+void ClassWQ_Netroute_D::copy_array(double* from, double* to) {
     for (hh = 0; chkStruct(); ++hh)
         to[hh] = from[hh];
 }
 
-void ClassWQ_Netroute_M_D::restore_hru(double* from, double* to, long hh) {
+void ClassWQ_Netroute_D::restore_hru(double* from, double* to, long hh) {
     to[hh] = from[hh];
 }
 
-void ClassWQ_Netroute_M_D::Restore(long hh) {
+void ClassWQ_Netroute_D::Restore(long hh) {
 
     restore_hru(gwoutflow_0, gwoutflow, hh);
     restore_hru(outflow_0, outflow, hh);
 }
 
-void ClassWQ_Netroute_M_D::Save() {
+void ClassWQ_Netroute_D::Save() {
 
     copy_array(gwoutflow, gwoutflow_0);
     copy_array(outflow, outflow_0);
 }
 
-ClassWQ_Netroute_M_D* ClassWQ_Netroute_M_D::klone(string name) const {
-    return new ClassWQ_Netroute_M_D(name);
+ClassWQ_Netroute_D* ClassWQ_Netroute_D::klone(string name) const {
+    return new ClassWQ_Netroute_D(name);
 }
 
-double ClassWQ_Netroute_M_D::Function1(double* I, long hh) {
+double ClassWQ_Netroute_D::Function1(double* I, long hh) {
     return runDelay->ChangeLag(I, hh);
 }
 
-double ClassWQ_Netroute_M_D::Function2(double* X, long hh) {
+double ClassWQ_Netroute_D::Function2(double* X, long hh) {
     return runDelay->ChangeStorage(X, hh);
 }

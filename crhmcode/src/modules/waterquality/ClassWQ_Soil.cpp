@@ -1,5 +1,6 @@
 ﻿#include "ClassWQ_Soil.h"
 
+const long i_pp = 5; // particulate phosphorus
 
 ClassWQ_Soil* ClassWQ_Soil::klone(string name) const {
     return new ClassWQ_Soil(name);
@@ -182,6 +183,7 @@ void ClassWQ_Soil::decl(void) {
     declvar("soil_runoff", TDim::NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
 
     declvar("soil_runoff_cWQ", TDim::NDEFN, "Concentration: Portion of excess soil water from a HRU to runoff.", "()", &soil_runoff_cWQ, &soil_runoff_cWQ_lay, numsubstances);
+    declparam("P_is_sediment", TDim::BASIN, "[1]", "0", "1", "Output sediment in the Phosphorus channel", "()", &P_is_sediment);
 
     declstatvar("cum_soil_runoff", TDim::NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
@@ -451,7 +453,8 @@ void ClassWQ_Soil::init(void) {
                     string S = string("'") + Name + " (Soil)' Soil_rechr greater than soil_moist, soil_rechr set to soil_moist, hru = " + to_string(hh).c_str();
                     CRHMException TExcept(S.c_str(), TExcept::WARNING);
                     LogError(TExcept);
-                    throw TExcept;
+                    // Exceptions should not be thrown for just a warning (PRL)
+//                    throw TExcept;
                 }
 
                 if (soil_rechr_max[hh] > soil_moist_max[hh]) {
@@ -609,7 +612,11 @@ void ClassWQ_Soil::run(void) {
                 Reset_WQ(hh, soil_ssr, soil_ssr_conc_lay[Sub]);
                 Reset_WQ(hh, rechr_ssr, rechr_ssr_conc_lay[Sub]);
                 Reset_WQ(hh, infil_act, infil_act_conc_lay[Sub]);
-                Reset_WQ(hh, soil_runoff, soil_runoff_cWQ_lay[Sub]);
+                if ((Sub == i_pp) && (P_is_sediment[0] == 1)) {
+                    soil_runoff[hh] = 0;
+                } else {
+                    Reset_WQ(hh, soil_runoff, soil_runoff_cWQ_lay[Sub]);
+                }
 
                 if (hru_evap_buf[hh] < 0.0) {
                     condense = -hru_evap_buf[hh];
@@ -636,56 +643,59 @@ void ClassWQ_Soil::run(void) {
                     potential_Saved = potential[hh];
                     potential_mWQ_lay_Saved = potential_mWQ_lay[Sub][hh];
 
-                    if (soil_moist[hh] + potential[hh] > soil_moist_max[hh]) { // limit infil and snowinfil to soil_moist_max
-                        direct_excs[hh] = soil_moist[hh] + potential[hh] - soil_moist_max[hh];
-                        direct_excs_Saved = direct_excs[hh];
-                        direct_excs_mWQ_lay[Sub][hh] = potential_mWQ_lay[Sub][hh] * (potential[hh] - direct_excs[hh]) / potential[hh];
-                        direct_excs_mWQ_lay_Saved = direct_excs_mWQ_lay[Sub][hh];
-                        potential_mWQ_lay[Sub][hh] = std::fmax(potential_mWQ_lay[Sub][hh] - direct_excs_mWQ_lay[Sub][hh], 0.0f);
-                        potential[hh] -= direct_excs[hh];
-                    }
-                    else {
-                        direct_excs[hh] = 0.0;
-                        direct_excs_Saved = 0.0;
-                        direct_excs_mWQ_lay[Sub][hh] = 0.0;
-                        direct_excs_mWQ_lay_Saved = 0.0;
+                    if (potential[hh] > 0.0) {
+                        if  (soil_moist[hh] + potential[hh] > soil_moist_max[hh]) { // limit infil and snowinfil to soil_moist_max
+                            direct_excs[hh] = soil_moist[hh] + potential[hh] - soil_moist_max[hh];
+                            direct_excs_Saved = direct_excs[hh];
+                            direct_excs_mWQ_lay[Sub][hh] = potential_mWQ_lay[Sub][hh] * (potential[hh] - direct_excs[hh]) / potential[hh];
+                            direct_excs_mWQ_lay_Saved = direct_excs_mWQ_lay[Sub][hh];
+                            potential_mWQ_lay[Sub][hh] = std::fmax(potential_mWQ_lay[Sub][hh] - direct_excs_mWQ_lay[Sub][hh], 0.0f);
+                            potential[hh] -= direct_excs[hh];
+                        }
+                        else {
+                            direct_excs[hh] = 0.0;
+                            direct_excs_Saved = 0.0;
+                            direct_excs_mWQ_lay[Sub][hh] = 0.0;
+                            direct_excs_mWQ_lay_Saved = 0.0;
+                        }
                     }
 
                     soil_lower[hh] = soil_moist[hh] - soil_rechr[hh];
 
-                    // Diogo -> removed; it seems redundant
-                    //if(soil_lower[hh])
-                    //  conc_soil_lower_lay[Sub][hh] = (soil_moist_conc_lay[Sub][hh]*soil_moist[hh] - conc_soil_rechr_lay[Sub][hh]*soil_rechr[hh])/soil_lower[hh];
-                    //else
-                    //  conc_soil_lower_lay[Sub][hh] = 0.0;
+                    if (potential[hh] > 0.0) {
+                        // Diogo -> removed; it seems redundant
+                        //if(soil_lower[hh])
+                        //  conc_soil_lower_lay[Sub][hh] = (soil_moist_conc_lay[Sub][hh]*soil_moist[hh] - conc_soil_rechr_lay[Sub][hh]*soil_rechr[hh])/soil_lower[hh];
+                        //else
+                        //  conc_soil_lower_lay[Sub][hh] = 0.0;
 
-                    if (soil_rechr[hh] + potential[hh] > soil_rechr_max[hh]) { // limit infil and snowinfil to soil_rechr_max
-                        excs = soil_rechr[hh] + potential[hh] - soil_rechr_max[hh];
-                        leaching_mWQ = parleach[hh] * (potential[hh] - excs) * surfsoil_solub_mWQ_lay[Sub][hh];
-                        leaching_mWQ = std::fmax(0.0f, std::fmin(leaching_mWQ, surfsoil_solub_mWQ_lay[Sub][hh]));
-                        surfsoil_solub_mWQ_lay[Sub][hh] -= leaching_mWQ;
-                        conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh] * soil_rechr[hh] + leaching_mWQ + potential_mWQ_lay[Sub][hh] * ((potential[hh] - excs) / potential[hh]);
-                        conc_soil_rechr_lay[Sub][hh] /= (soil_rechr[hh] + excs);
-                        excs_mWQ = conc_soil_rechr_lay[Sub][hh] * excs;
-                        soil_rechr[hh] = soil_rechr_max[hh];
+                        if (soil_rechr[hh] + potential[hh] > soil_rechr_max[hh]) { // limit infil and snowinfil to soil_rechr_max
+                            excs = soil_rechr[hh] + potential[hh] - soil_rechr_max[hh];
+                            leaching_mWQ = parleach[hh] * (potential[hh] - excs) * surfsoil_solub_mWQ_lay[Sub][hh];
+                            leaching_mWQ = std::fmax(0.0f, std::fmin(leaching_mWQ, surfsoil_solub_mWQ_lay[Sub][hh]));
+                            surfsoil_solub_mWQ_lay[Sub][hh] -= leaching_mWQ;
+                            conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh] * soil_rechr[hh] + leaching_mWQ + potential_mWQ_lay[Sub][hh] * ((potential[hh] - excs) / potential[hh]);
+                            conc_soil_rechr_lay[Sub][hh] /= (soil_rechr[hh] + excs);
+                            excs_mWQ = conc_soil_rechr_lay[Sub][hh] * excs;
+                            soil_rechr[hh] = soil_rechr_max[hh];
 
-                    }
-                    else {
-                        excs = 0.0;
-                        excs_mWQ = 0.0;
-                        leaching_mWQ = parleach[hh] * (potential[hh] - excs) * surfsoil_solub_mWQ_lay[Sub][hh];
-                        leaching_mWQ = std::fmax(0.0f, std::fmin(leaching_mWQ, surfsoil_solub_mWQ_lay[Sub][hh]));
-                        surfsoil_solub_mWQ_lay[Sub][hh] -= leaching_mWQ;
-                        if (soil_rechr[hh] > 0.0) { // !!!! CAUTION !!!: this piece of code has a huge impact on the conc_soil_rechr_lay[Sub][hh] values 
-                            conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh] * soil_rechr[hh] + leaching_mWQ + potential_mWQ_lay[Sub][hh];
-                            conc_soil_rechr_lay[Sub][hh] /= (soil_rechr[hh] + potential[hh]);
                         }
                         else {
-                            conc_soil_rechr_lay[Sub][hh] = 0.0;
+                            excs = 0.0;
+                            excs_mWQ = 0.0;
+                            leaching_mWQ = parleach[hh] * (potential[hh] - excs) * surfsoil_solub_mWQ_lay[Sub][hh];
+                            leaching_mWQ = std::fmax(0.0f, std::fmin(leaching_mWQ, surfsoil_solub_mWQ_lay[Sub][hh]));
+                            surfsoil_solub_mWQ_lay[Sub][hh] -= leaching_mWQ;
+                            if (soil_rechr[hh] > 0.0) { // !!!! CAUTION !!!: this piece of code has a huge impact on the conc_soil_rechr_lay[Sub][hh] values 
+                                conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh] * soil_rechr[hh] + leaching_mWQ + potential_mWQ_lay[Sub][hh];
+                                conc_soil_rechr_lay[Sub][hh] /= (soil_rechr[hh] + potential[hh]);
+                            }
+                            else {
+                                conc_soil_rechr_lay[Sub][hh] = 0.0;
+                            }
+                            soil_rechr[hh] += potential[hh];
                         }
-                        soil_rechr[hh] += potential[hh];
                     }
-
 
                     if (excs > 0.0) { // put remaning excs_mWQ in lower (some already in rechr)
 
@@ -781,36 +791,36 @@ void ClassWQ_Soil::run(void) {
 
                                 tile_flow_conc_lay[Sub][hh] = (from_soil_rechr_to_tile_wq * conc_soil_rechr_lay[Sub][hh] + from_soil_lower_to_tile_wq * conc_soil_lower_lay[Sub][hh]);
                                 tile_flow_conc_lay[Sub][hh] /= (from_soil_rechr_to_tile_wq + from_soil_lower_to_tile_wq);
+                            }
 
-                            } // handle tile drainage
+                        } // handle tile drainage
 
-                            rechr_ssr[hh] = soil_rechr[hh] / soil_rechr_max[hh] * rechr_ssr_K[hh] / Global::Freq;
-                            if (rechr_ssr[hh] > 0.0) {
-                                soil_ssr[hh] = rechr_ssr[hh];
-                                soil_ssr_conc_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh];
+                        rechr_ssr[hh] = soil_rechr[hh] / soil_rechr_max[hh] * rechr_ssr_K[hh] / Global::Freq;
+                        if (rechr_ssr[hh] > 0.0) {
+                            soil_ssr[hh] = rechr_ssr[hh];
+                            soil_ssr_conc_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh];
 
-                                soil_rechr[hh] -= rechr_ssr[hh];
-                                rechr_ssr_conc_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh];
+                            soil_rechr[hh] -= rechr_ssr[hh];
+                            rechr_ssr_conc_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh];
 
-                                if (soil_rechr[hh] < 0.0)
-                                {
-                                    soil_moist[hh] -= soil_rechr[hh];
-                                    soil_rechr[hh] = 0.0;
-                                    conc_soil_rechr_lay[Sub][hh] = 0.0;
-                                }
-                                else
-                                {
-                                    soil_moist[hh] -= rechr_ssr[hh];
-                                }
+                            if (soil_rechr[hh] < 0.0)
+                            {
+                                soil_moist[hh] -= soil_rechr[hh];
+                                soil_rechr[hh] = 0.0;
+                                conc_soil_rechr_lay[Sub][hh] = 0.0;
+                            }
+                            else
+                            {
+                                soil_moist[hh] -= rechr_ssr[hh];
+                            }
 
-                                soil_lower[hh] = soil_moist[hh] - soil_rechr[hh];
-                                soil_moist_conc_lay[Sub][hh] = (conc_soil_lower_lay[Sub][hh] * soil_lower[hh] + soil_rechr[hh] * conc_soil_rechr_lay[Sub][hh]) / soil_moist[hh];
-                            } // handle non variation ssr
+                            soil_lower[hh] = soil_moist[hh] - soil_rechr[hh];
+                            soil_moist_conc_lay[Sub][hh] = (conc_soil_lower_lay[Sub][hh] * soil_lower[hh] + soil_rechr[hh] * conc_soil_rechr_lay[Sub][hh]) / soil_moist[hh];
+                        } // handle non variation ssr
 
-                            cum_rechr_ssr[hh] += rechr_ssr[hh];
-                            cum_rechr_ssr_mWQ_lay[Sub][hh] += rechr_ssr_conc_lay[Sub][hh] * rechr_ssr[hh];
-                        } // !inhibit_evap
-                    }
+                        cum_rechr_ssr[hh] += rechr_ssr[hh];
+                        cum_rechr_ssr_mWQ_lay[Sub][hh] += rechr_ssr_conc_lay[Sub][hh] * rechr_ssr[hh];
+                    } // !inhibit_evap
 
                     //  Handle excess to gw
 
@@ -867,10 +877,14 @@ void ClassWQ_Soil::run(void) {
                     amount_surfs = std::fmin(std::max(amount_surfs, 0.0), surfsoil_solub_mWQ_lay[Sub][hh]);
                     surfsoil_solub_mWQ_lay[Sub][hh] -= amount_surfs;
 
-                    soil_runoff_cWQ_lay[Sub][hh] = (excs_mWQ + direct_excs_mWQ_lay[Sub][hh] + meltrunoff_buf[hh] * SWE_conc_lay[Sub][hh] +
-                        runoff_buf[hh] * rain_conc_lay[Sub][hh] + redirected_residual_conc_lay[Sub][hh] * redirected_residual[hh] / hru_area[hh]
-                        + amount_surfs); // last term (mm*km^2/int)
-                    soil_runoff_cWQ_lay[Sub][hh] /= soil_runoff[hh];
+                    if ((Sub == i_pp) && (P_is_sediment[0] == 1)) {
+                        // do nothing for now (PRL)
+                    } else {
+                        soil_runoff_cWQ_lay[Sub][hh] = (excs_mWQ + direct_excs_mWQ_lay[Sub][hh] + meltrunoff_buf[hh] * SWE_conc_lay[Sub][hh] +
+                            runoff_buf[hh] * rain_conc_lay[Sub][hh] + redirected_residual_conc_lay[Sub][hh] * redirected_residual[hh] / hru_area[hh]
+                            + amount_surfs); // last term (mm*km^2/int)
+                        soil_runoff_cWQ_lay[Sub][hh] /= soil_runoff[hh];
+                    }
 
                 }
                 else {

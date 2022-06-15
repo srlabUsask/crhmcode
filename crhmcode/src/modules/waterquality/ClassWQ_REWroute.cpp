@@ -1,4 +1,4 @@
-//created by Manishankar Mondal
+//created by Peter Lawford
 
 #include <math.h>
 #include <assert.h>
@@ -7,19 +7,19 @@
 #include <bitset>
 #include <algorithm>
 
-#include "ClassREWroute.h"
-#include "../core/GlobalDll.h"
-#include "../core/ClassCRHM.h"
-#include "newmodules/SnobalDefines.h"
+#include "ClassWQ_REWroute.h"
+//#include "../core/GlobalDll.h"
+//#include "../core/ClassCRHM.h"
+//#include "newmodules/SnobalDefines.h"
 
 
 using namespace CRHM;
 
-ClassREWroute* ClassREWroute::klone(string name) const{
-  return new ClassREWroute(name);
+ClassWQ_REWroute* ClassWQ_REWroute::klone(string name) const{
+  return new ClassWQ_REWroute(name);
 }
 
-void ClassREWroute::decl(void) {
+void ClassWQ_REWroute::decl(void) {
 
   Description = "'Handles the routing of surface and subsurface runoff from RBs (representative basins).' \
                     'uses Muskingum,' \
@@ -29,12 +29,15 @@ void ClassREWroute::decl(void) {
 
 
   inflowCnt = declgrpvar("WS_ALL_inflow", "basinflow", "query variable = 'basinflow'", "(m^3/int)", &rew, &inflow_All);
+  inflowConcCnt = declgrpvar("WS_ALL_inflow_mWQ", "basinflow_mWQ", "query variable = 'basinflow_mWQ'", "(g/l)", &rew_mWQ, &inflow_mWQ_All);
 
   declvar("WS_inflow", TDim::NHRU, "inflow from each RB", "(m^3/int)", &inflow);
+  declvar("WS_inflow_mWQ", TDim::NDEFN, "Concentration: inflow from each RB", "(g/l *m^3/int)", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
 
   declstatdiag("cum_WSinflow", TDim::NHRU, "cumulative inflow from each RB", "(m^3)", &cuminflow);
 
   declvar("WS_outflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &outflow);
+  declvar("WS_outflow_mWQ", TDim::NDEFN, "Concentration: outflow of each RB", "(kg/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
 
   declstatdiag("cum_WSoutflow", TDim::NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutflow);
 
@@ -107,7 +110,7 @@ void ClassREWroute::decl(void) {
   variation_set = VARIATION_ORG;
 }
 
-void ClassREWroute::init(void) {
+void ClassWQ_REWroute::init(void) {
 
   if(nhru < inflowCnt) {
     CRHMException Except("Module REW route # of HRUs must be >= # of groups." , TExcept::TERMINATE);
@@ -140,9 +143,17 @@ void ClassREWroute::init(void) {
     inflowDelay = new ClassMuskingum(inflow, outflow, WS_Ktravel_var, WS_route_X_M, WS_Lag, nhru);
     gwDelay = new ClassMuskingum(gwinflow, gwoutflow, WS_gwKtravel_var, WS_gwroute_X_M, WS_gwLag, nhru);
 
+    inflowDelay_mWQ = new ClassMuskingum * [numsubstances];
+//    gwDelay_mWQ = new ClassMuskingum * [numsubstances];
+
+    for (long Sub = 0; Sub < numsubstances; ++Sub) {
+      inflowDelay_mWQ[Sub] = new ClassMuskingum(inflow_mWQ_lay[Sub], outflow_mWQ_lay[Sub], WS_Ktravel_var, WS_route_X_M, WS_Lag, nhru);
+//      gwDelay_mWQ[Sub] = new ClassMuskingum(gwinflow_mWQ_lay[Sub], gwoutflow_mWQ_lay[Sub], WS_gwKtravel_var, WS_gwroute_X_M, WS_gwLag, nhru);
+    }
+
     for(hh = 0; hh < nhru; ++hh){
       if(WS_gwKtravel_var[hh] >= (Global::Interval/(2.0*WS_gwroute_X_M[hh]))){
-        string S = string("'" + Name + " (REW_route) GW Muskingum coefficient negative in HRU ").c_str();
+        string S = string("'" + Name + " (WQ_REW_route) GW Muskingum coefficient negative in HRU ").c_str();
         CRHMException TExcept(S.c_str(), TExcept::WARNING);
         LogError(TExcept);
       }
@@ -154,7 +165,7 @@ void ClassREWroute::init(void) {
       }
 
       if(WS_Ktravel_var[hh] >= (Global::Interval/(2.0*WS_route_X_M[hh]))){
-        string S = string("'" + Name + " (REW_route) inflow Muskingum coefficient negative in HRU ").c_str();
+        string S = string("'" + Name + " (WQ_REW_route) inflow Muskingum coefficient negative in HRU ").c_str();
         CRHMException TExcept(S.c_str(), TExcept::WARNING);
         LogError(TExcept);
       }
@@ -168,7 +179,15 @@ void ClassREWroute::init(void) {
   }
   else if(variation == VARIATION_1){
     Clark_inflowDelay = new ClassClark(inflow, outflow, WS_Kstorage, WS_Lag, nhru);
-    Clark_gwDelay = new ClassClark(gwinflow, gwoutflow, WS_gwKstorage, WS_gwLag, nhru);
+    Clark_gwDelay = new ClassClark(inflow, outflow, WS_gwKstorage, WS_gwLag, nhru);
+
+    Clark_inflowDelay_mWQ = new ClassClark * [numsubstances];
+  //  Clark_gwDelay_mWQ = new ClassClark * [numsubstances];
+
+    for (long Sub = 0; Sub < numsubstances; ++Sub) {
+      Clark_inflowDelay_mWQ[Sub] = new ClassClark(inflow_mWQ_lay[Sub], outflow_mWQ_lay[Sub], WS_Kstorage, WS_Lag, nhru);
+//      Clark_gwDelay_mWQ[sub] = new ClassClark(inflow_mWQ_lay[Sub], outflow_mWQ_lay[Sub], WS_gwKstorage, WS_gwLag, nhru);
+    }
   }
 
   flow[0] = 0.0;
@@ -180,9 +199,10 @@ void ClassREWroute::init(void) {
   cumgwflow[0] = 0.0;
 
   for(hh = 0; hh < nhru; ++hh) {
-    inflow[hh] = 0.0;
+    Reset_WQ(hh, inflow, inflow_mWQ_lay);
+    Reset_WQ(hh, outflow, outflow_mWQ_lay);
+
     cuminflow[hh] = 0.0;
-    outflow[hh] = 0.0;
     cumoutflow[hh] = 0.0;
     gwinflow[hh] = 0.0;
     cumgwinflow[hh] = 0.0;
@@ -191,7 +211,7 @@ void ClassREWroute::init(void) {
   }
 }
 
-void ClassREWroute::run(void) {
+void ClassWQ_REWroute::run(void) {
 
   flow[0] = 0.0;
   gwflow[0] = 0.0;
@@ -200,24 +220,44 @@ void ClassREWroute::run(void) {
 
     int hh = WS_order[jj] - 1;
 
-    if(rew[hh])
+    if(rew[hh]) {
       inflow[hh] = inflow_All[hh][0]; // add this HRU runoff and subsurface flow
-    else
+      for (long Sub = 0; Sub < numsubstances; ++Sub) {
+        inflow_mWQ_lay[Sub][hh] = inflow_mWQ_All[hh][Sub]; // * inflow[hh];
+      }
+    } else {
       inflow[hh] = 0; // add this HRU runoff and subsurface flow
+      for (long Sub = 0; Sub < numsubstances; ++Sub) {
+        inflow_mWQ_lay[Sub][hh] = 0;
+      }
+    }
 
     for(long hhh = 0; chkStruct(hhh); ++hhh) {
-      if(WS_whereto[hhh]-1 == hh && outflow[hhh] > 0.0){
-        if(outflow[hhh] > 0.0)
+      if(WS_whereto[hhh]-1 == hh && outflow[hhh] > 0.0) {
+        if(outflow[hhh] > 0.0) {
           inflow[hh] += outflow[hhh];
+          for (long Sub = 0; Sub < numsubstances; ++Sub) {
+            inflow_mWQ_lay[Sub][hh] += outflow_mWQ_lay[Sub][hhh];
+          }
+        }
       }
     }
 
     cuminflow[hh] += inflow[hh];
 
-  if(variation == VARIATION_ORG)
+  if(variation == VARIATION_ORG) {
     inflowDelay->DoMuskingum(hh); // need to update for later HRUs
-  else
+
+    for (long Sub = 0; Sub < numsubstances; ++Sub) {
+      inflowDelay_mWQ[Sub]->DoMuskingum(hh);
+    }
+  } else {
     Clark_inflowDelay->DoClark(hh); // need to update for later HRUs
+
+    for (long Sub = 0; Sub < numsubstances; ++Sub) {
+      Clark_inflowDelay_mWQ[Sub]->DoClark(hh);
+    }
+  }
 
   cumoutflow[hh] += outflow[hh];
 
@@ -262,7 +302,7 @@ void ClassREWroute::run(void) {
   cumgwflow[0] += gwflow[0];
 }
 
-void ClassREWroute::finish(bool good) {
+void ClassWQ_REWroute::finish(bool good) {
   for(hh = 0; hh < inflowCnt; ++hh) {
     LogMessageA(hh, string("'" + Name + " (REW_route)' cuminflow          (m^3) (m^3): ").c_str(), cuminflow[hh], 1.0);
     LogMessageA(hh, string("'" + Name + " (REW_route)' cumoutflow         (m^3) (m^3): ").c_str(), cumoutflow[hh], 1.0);
@@ -293,4 +333,12 @@ void ClassREWroute::finish(bool good) {
     delete Clark_inflowDelay;
     delete Clark_gwDelay;
   }
+}
+
+
+void ClassWQ_REWroute::Reset_WQ(long hru, double* var, double** var_WQ_lay) {
+    var[hru] = 0.0;
+    for (long Sub = 0; Sub < numsubstances; ++Sub) {
+        var_WQ_lay[Sub][hru] = 0.0;
+    }
 }

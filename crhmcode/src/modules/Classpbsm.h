@@ -12,6 +12,7 @@ double hru_u_{0.0};
 // declared variables
 
 double *SWE{ NULL };
+double *SWE_max{ NULL };
 double *Subl{ NULL };
 double *Drift{ NULL };
 double *SublH{ NULL };

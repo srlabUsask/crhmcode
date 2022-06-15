@@ -111,6 +111,8 @@
 #include "../ClassSnobalCRHM.h" //added by Manishankar Mondal
 #include "../Classshared.h" //added by Manishankar Mondal
 #include "../ClassNOP.h" //added by Manishankar Mondal
+#include "../ClassQuickroute.h" //added by Peter Lawford
+#include "../ClassSWMM.h" //added by Peter Lawford
 
 
 //---------------------------------------------------------------------------
@@ -218,6 +220,8 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassSnobalX("Snobal", "02/03/16", LMODULE::OBSOL));
   DLLModules.AddModule(new Classinterception("interception", "04/05/22", LMODULE::OBSOL));
   DLLModules.AddModule(new Classlake("lake_evap", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassQuickroute("Quickroute", "06/12/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassSWMM("SWMM", "06/13/22", LMODULE::ADVANCE));
 
   if(!RELEASE)
   {
@@ -238,6 +242,7 @@ void MoveModulesToGlobal(string DLLName)
     DLLModules.AddModule(new ClassWQ_Soil("WQ_Soil", "05/08/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_Netroute("WQ_Netroute", "11/29/18", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_Netroute_M_D("WQ_Netroute_M_D", "03/22/19", LMODULE::PROTO));
+    DLLModules.AddModule(new ClassWQ_REWroute("WQ_REW_route", "05/27/22", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_pbsm("WQ_pbsm", "01/21/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_pbsmSnobal("WQ_pbsmSnobal", "04/26/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_SoilBGC("WQ_Soil_BGC", "11/01/19", LMODULE::PROTO));

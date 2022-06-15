@@ -41,6 +41,7 @@ const long *baredayno4; // autumn ploughing
 const long *baredayno5; // winter crops sowing date
 */
 
+const double *pprelmax{ NULL }; // (mm)
 const double *erodibility{ NULL }; // (g/J)
 const double *cohesion{ NULL }; // (kPa)
 const double *closewater{ NULL }; // ()
@@ -61,6 +62,7 @@ const long *calcN{ NULL }; // Status of nitrogen simulation
 const long *calcP{ NULL }; // Status of phosphorus simulation
 const long *calcC{ NULL }; // Status of organic carbon simulation
 const long *Inhibit_Soil_BGC{ NULL }; // Skip Hype
+const long *P_is_sediment{NULL};   // Ouptut sediment in the phosphorus channel
 
 const double *fertNamount_up{ NULL };
 const double *fertNamount_down{ NULL };
@@ -233,6 +235,7 @@ double *cropuptake{ NULL }; // of i_no3n
 // variable inputs
 
 const double *snowmelt_int{ NULL };
+const double *snowmeltD{ NULL };
 const double *SWE{ NULL };
 const double *net_rain{ NULL };
 const double *runoff{ NULL };

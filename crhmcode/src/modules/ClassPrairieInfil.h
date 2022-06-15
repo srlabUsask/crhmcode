@@ -35,6 +35,7 @@ const long  *groundcover{ NULL };
 // variable inputs
 const double *hru_tmax{ NULL };
 const double *snowmelt{ NULL };
+const double *snowmeltD{ NULL };
 const double *SWE{ NULL };
 const double *net_rain{ NULL };
 
@@ -48,4 +49,8 @@ void run(void);
 void finish(bool good);
 
 ClassPrairieInfil* klone(string name) const;
+
+private:
+void applyCrack(double RainOnSnow_int);
+
 };

@@ -15,15 +15,22 @@ Defdeclvar::Defdeclvar(ClassMacro* Macro_) : DefCRHM(Macro_)
 	{
 		Int = false;
 	}
+
+	if (DefCRHM::DefStringList->size() > 6)
+	{
+		nlay = Strtolong(DefStringList->at(6));
+	}	
 }
 
 
 void Defdeclvar::CallDecl() {
 
-	if (Int)
+	if (Int) {
+		// TODO: extend this call to support multiple dimensions (fix_long2, nlay)
 		Macro->declvar(name, Dim, Description, Units, &fix_long);
-	else
-		Macro->declvar(name, Dim, Description, Units, &fix, &fix2);
+	} else {
+		Macro->declvar(name, Dim, Description, Units, &fix, &fix2, nlay);
+	}
 
 	FP = Macro->vars.find(name);
 	if (FP == Macro->vars.end()) {

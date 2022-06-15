@@ -194,6 +194,7 @@ public:
 	const long* calcN{ NULL }; // Status of nitrogen simulation
 	const long* calcP{ NULL }; // Status of phosphorus simulation
 	const long* calcC{ NULL }; // Status of organic carbon simulation
+	const long *P_is_sediment{NULL};   // Ouptut sediment in the phosphorus channel
 
 
 	// variable inputs

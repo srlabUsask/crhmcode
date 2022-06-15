@@ -55,6 +55,9 @@ void Classpbsm::decl(void) {
 
   declstatvar("SWE", TDim::NHRU, "snow water equivalent", "(mm)", &SWE);
 
+  declstatvar("SWE_max", TDim::NHRU, "snow water equivalent seasonal maximum", "(mm)", &SWE_max);
+
+
   declvar("Subl", TDim::NHRU, "interval sublimation", "(mm/int)", &Subl);
 
   declvar("Drift", TDim::NHRU, "interval transport", "(mm/int)", &Drift);
@@ -473,7 +476,7 @@ void Classpbsm::init(void) {
 void Classpbsm::run(void) {
 
   double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  double SumDrift, total, SWE_Max;
+  double SumDrift, total;
   double transport = 0.0;
   long step = getstep();
 
@@ -585,20 +588,20 @@ void Classpbsm::run(void) {
 
     if(SumDrift > 0.0){ // drift has occurred!
       for (long hh = LastN + 1; chkStruct(hh, nn+1); ++hh) {
-        SWE_Max = SWEfromDepth(Ht[hh]);
+        SWE_max[hh] = SWEfromDepth(Ht[hh]);
 
         if(hh == nn) { // handle last HRU
           if(distrib[nn] > 0){
             double In = SumDrift/hru_basin[hh]; // remaining drift
-            if(SWE_Max > SWE[hh] + In){ // fill snowpack, remainder leaves basin
+            if(SWE_max[hh] > SWE[hh] + In){ // fill snowpack, remainder leaves basin
               SWE[hh]  += In; // can handle all
               cumDriftIn[hh] += In;
               transport = 0.0;
             }
-            else if(SWE_Max > SWE[hh]){ // cannot handle all
-              cumDriftIn[hh] += (SWE_Max - SWE[hh]);
-              transport -= (In -(SWE_Max - SWE[hh]))*hru_basin[hh];
-              SWE[hh]  += SWE_Max - SWE[hh]; //  has to come last
+            else if(SWE_max[hh] > SWE[hh]){ // cannot handle all
+              cumDriftIn[hh] += (SWE_max[hh] - SWE[hh]);
+              transport -= (In -(SWE_max[hh] - SWE[hh]))*hru_basin[hh];
+              SWE[hh]  += SWE_max[hh] - SWE[hh]; //  has to come last
             }
             else // zero or -ve - happens during melt??
               transport = SumDrift;
@@ -614,18 +617,18 @@ void Classpbsm::run(void) {
           BasinSnowLoss[0] += (transport + Drift[hh]*hru_basin[hh]);
           cumBasinSnowLoss[0] += (transport + Drift[hh]*hru_basin[hh]);
         }
-        else if(SWE_Max > SWE[hh] &&  distrib[hh] > 0.0) {
+        else if(SWE_max[hh] > SWE[hh] &&  distrib[hh] > 0.0) {
 // handle intermediate HRUs with available storage and distrib > 0
           total = 0.0;
           for (long jj = hh; chkStruct(jj, nn+1); jj++) // calculate denominator        !!!! nn+1
             total += fabs(distrib[jj]);
 // determine contribution and scale
           transport = SumDrift*fabs(distrib[hh])/total/hru_basin[hh];
-          if(SWE_Max > SWE[hh] + transport) // sufficient capacity
+          if(SWE_max[hh] > SWE[hh] + transport) // sufficient capacity
             SWE[hh] += transport;
           else {
-            transport = SWE_Max - SWE[hh];  // insufficient capacity
-            SWE[hh] = SWE_Max;
+            transport = SWE_max[hh] - SWE[hh];  // insufficient capacity
+            SWE[hh] = SWE_max[hh];
           }
           SumDrift -= transport*hru_basin[hh]; // remove drift used from total available
           cumDriftIn[hh] += transport;

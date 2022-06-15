@@ -325,14 +325,17 @@ void ClassWQ_pbsmSnobal::run(void) {
 
    // distribute drift
 
-        if (distrib[0] > 0.0) { // simulate transport entering basin using HRU 1
+        if ( (distrib[0] > 0.0) && (Drift_out[0] > 0.0) ) { // simulate transport entering basin using HRU 1
             double Drft = Drift_out[0] * distrib[0];
             SWE_conc_lay[Sub][0] = SWE_conc_lay[Sub][0] * SWE[0] + Drift_out_conc_lay[Sub][0] * Drft;
             SWE[0] += Drft;
             SWE_conc_lay[Sub][0] /= SWE[0];
             cumDriftIn[0] += Drft;
-            cumDriftIn_mWQ_lay[Sub][0] += Drift_out_conc_lay[Sub][0] * Drft;
-            cumBasinSnowGain[0] += Drft * hru_basin[0];  // **** hru_basin = hru_area/basin_area ****
+            BasinSnowGain[0] = Drft*hru_basin[0]; // **** hru_basin = hru_area/basin_area ****
+            BasinSnowGain_mWQ_lay[Sub][0] = SWE_conc_lay[Sub][hh];
+            cumBasinSnowGain[0] += BasinSnowGain[0];
+            cumDriftIn_mWQ_lay[Sub][0] += Drft*SWE_conc_lay[Sub][0];
+            cumBasinSnowGain_mWQ_lay[Sub][0] += BasinSnowGain[0]*SWE_conc_lay[Sub][0];
         }
 
         BasinSnowLoss[0] = 0.0;

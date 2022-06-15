@@ -112,6 +112,7 @@ void ClassWQ_Netroute::decl(void) {
 
     declvar("basinflow", TDim::BASIN, "basin surface and sub-surface outflow", "(m^3/int)", &basinflow);
 
+    declvar("basinflow_mWQ", TDim::NDEF2, "basin surface and sub-surface outflow", "(g/int)", &basinflow_mWQ, NULL, numsubstances);
     declvar("basinflow_conc", TDim::NDEF, "basin surface and sub-surface outflow", "(mg/l)", &basinflow_conc, &basinflow_conc_lay, numsubstances);
 
     decldiag("basinflow_s", TDim::BASIN, "basin surface and sub-surface outflow", "(m^3/s)", &basinflow_s);
@@ -618,10 +619,13 @@ void ClassWQ_Netroute::run(void) {
 
                         basinflow_conc_lay[Sub][0] = basinflow_conc_lay[Sub][0] * basinflow[0] + gw_Amount_mWQ * 1000;
 
-                        if ((basinflow[0] + gw_Amount) > 0.0)
+                        if ((basinflow[0] + gw_Amount) > 0.0) {
+                            basinflow_mWQ[Sub] = basinflow_conc_lay[Sub][0];
                             basinflow_conc_lay[Sub][hh] /= (basinflow[0] + gw_Amount * 1000);
-                        else
+                        } else {
                             basinflow_conc_lay[Sub][hh] = 0.0;
+                            basinflow_mWQ[Sub] = 0.0;
+                        }
 
                         gwcumoutflow_mWQ_lay[Sub][hh] += gw_Amount_mWQ;
 

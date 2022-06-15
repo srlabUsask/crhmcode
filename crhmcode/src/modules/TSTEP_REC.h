@@ -15,11 +15,11 @@ public:
 
 // default for medium run timestep's threshold for a layer's mass (kg/m^2)
 
-#define	DEFAULT_MEDIUM_THRESHOLD  10.0
+#define	DEFAULT_MEDIUM_THRESHOLD  5.0   // originally 10.0 (PRL)
 
 // default for small run timestep's threshold for a layer's mass (kg/m^2)
 
-#define	DEFAULT_SMALL_THRESHOLD  1.0
+#define	DEFAULT_SMALL_THRESHOLD  0.2    // originally 1.0 (PRL)
 
 
     int level;	    // timestep's level

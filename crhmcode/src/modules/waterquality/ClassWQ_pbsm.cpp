@@ -234,7 +234,8 @@ void ClassWQ_pbsm::run(void) {
     double SumDrift, SumDrift_conc, total, transport;
     long Sub = 0;
 
-    for (long Sub = 0; Sub < numsubstances; ++Sub) {
+//    for (long Sub = 0; Sub < numsubstances; ++Sub) {
+    for (long Sub = 0; Sub < 1; ++Sub) {
         if (getstep() == 1)
             for (hh = 0; chkStruct(); ++hh)
                 SWE_Init[hh] = SWE[hh];
@@ -244,8 +245,9 @@ void ClassWQ_pbsm::run(void) {
 
         for (hh = 0; chkStruct(); ++hh) {
 
-            if (Sub != 0)
-                Restore(hh);
+// (PRL)
+//            if (Sub != 0)
+//                Restore(hh);
 
             if (net_snow[hh] > 0.0) {
                 SWE_conc_lay[Sub][hh] = (SWE_conc_lay[Sub][hh] * SWE[hh] + atmos_mWQ_lay[Sub][hh] * net_snow[hh]) / (SWE[hh] + net_snow[hh]);

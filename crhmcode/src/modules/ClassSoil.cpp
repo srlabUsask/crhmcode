@@ -381,7 +381,8 @@ void ClassSoil::init(void) {
         }
 
         if (variation == VARIATION_1) {
-            if (culvert_water_Dmax[hh] / culvert_diam[hh] > 2.5) {
+            if ((number_culverts[hh] > 0) && 
+                            (culvert_water_Dmax[hh] / culvert_diam[hh] > 2.5) ) {
                 string S = "soil: " + string(Name.c_str()) + " ratio of H/D > 2.5 in HRU " + to_string(hh + 1);
                 CRHMException TExcept(S.c_str(), TExcept::WARNING);
                 LogError(TExcept);

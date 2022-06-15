@@ -849,11 +849,14 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 						}
 					}
 					else {
+						// If an unknown variable is found then processing will halt and the whole project will be corrupt.
+						// Terminate to avoid future errors
 						CRHMException Except("Unknown Variable " + S +
 							" in " + string(OpenNamePrj.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
 							"Unknown Variable in project file");
 						LogError(Except);
+//					    throw Except;
 
 						DataFile.ignore(256, '\n');
 					}
@@ -1832,6 +1835,11 @@ MMSData *  CRHMmain::RunClick2Start()
 #if defined(COMMAND_LINE)
 		string message = "No model output selected";
 		LogMessageX(message.c_str());
+// At this point the model will not be configured correctly so terminate immediately.		
+// (This is a fatal error)
+		CRHMException Except("No model output selected" , TExcept::TERMINATE);
+		LogError(Except);
+		throw Except;
 #endif
 		return mmsdata;  // nothing selected
 	}
@@ -2047,14 +2055,16 @@ MMSData *  CRHMmain::RunClick2Start()
 		Global::OurModulesList->begin()->second->InitReadObs();
 
 		// deletes module allocated storage
-		for (
-			std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
-			modIt != Global::OurModulesList->end();
-			modIt++
-			)
-		{
-			modIt->second->finish(false);
-		}
+		//// This will be handled by RunClick2End,
+		//// doing 'finish' here will cause double deallocation (PRL)
+		// for (
+		// 	std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
+		// 	modIt != Global::OurModulesList->end();
+		// 	modIt++
+		// 	)
+		// {
+		// 	modIt->second->finish(false);
+		// }
 
 		Global::BuildFlag = TBuild::DECL;
 		return mmsdata;

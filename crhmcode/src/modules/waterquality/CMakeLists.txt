@@ -11,6 +11,7 @@ add_library(waterquality OBJECT
     ClassWQ_mass_conc.cpp
     ClassWQ_Netroute_M_D.cpp
     ClassWQ_Netroute.cpp
+    ClassWQ_REWroute.cpp
     ClassWQ_pbsm.cpp
     ClassWQ_pbsmSnobal.cpp
     ClassWQ_Soil.cpp

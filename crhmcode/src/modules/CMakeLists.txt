@@ -68,6 +68,7 @@ add_library(modules OBJECT
     ClassPSPnew.cpp
     Classqdrift.cpp
     Classqmelt.cpp
+    ClassQuickroute.cpp
     Classquinton.cpp
     ClassREWroute_stream.cpp
     ClassREWroute.cpp
@@ -87,6 +88,7 @@ add_library(modules OBJECT
     ClassSoilDS.cpp
     ClassSoilX.cpp
     ClassSWEslope.cpp
+    ClassSWMM.cpp
     ClassTestSparse.cpp
     ClassTs.cpp
     Classtsurface.cpp

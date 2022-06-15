@@ -78,7 +78,9 @@ enum class TVISIBLE { OUTPUT, USUAL, DIAGNOSTIC, PRIVATE }; // OUTPUT infers all
 enum class TVar { none, Int, Float, Txt, Read, ReadI, ReadF };
 
 // NREB only applies to variables. NDEFNZ only applies to parameters
-enum class TDim { BASIN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, NHRU, NOBS, NLAY, NDEF, NFREQ, NREB, NDEFN, NDEFNZ };
+// NDEF2 can be used for a collection of values for an entire basin (not per HRU)
+// for example: mass of chemical species in outflow at the outlet of the representative basin
+enum class TDim { BASIN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, NHRU, NOBS, NLAY, NDEF, NFREQ, NREB, NDEFN, NDEFNZ, NDEF2 };
 enum class TFloatFormat { ffGeneral, ffExponent, ffFixed, ffNumber, ffCurrency };
 
 static double xLimit = (std::numeric_limits<double>::max)();

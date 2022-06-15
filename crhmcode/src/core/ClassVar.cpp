@@ -30,6 +30,12 @@ ClassVar::ClassVar(string module, string name, TDim dimen,
 	if (Grpdim == 0)
 		Grpdim = Global::nhru;
 
+// Allow 'dim' to be overridden as necessary (PRL)
+	if (dimen == TDim::NOBS)
+		dim = Global::nobs;
+	else
+		dim = Grpdim;
+
 	if (dimen == TDim::NLAY)
 		lay = Global::nlay;
 	else if (dimen == TDim::NFREQ) {
@@ -40,6 +46,10 @@ ClassVar::ClassVar(string module, string name, TDim dimen,
 		lay = defdim;
 		dim = 1;
 	}
+	else if (dimen == TDim::NDEF2) {
+		lay = 0;
+		dim = defdim;
+	}
 	else if (dimen == TDim::NDEFN) {
 		lay = defdim;
 		dim = Grpdim;
@@ -48,11 +58,6 @@ ClassVar::ClassVar(string module, string name, TDim dimen,
 		lay = Grpdim; // memory allocated by variables found
 	else
 		lay = 0;
-
-	if (dimen == TDim::NOBS)
-		dim = Global::nobs;
-	else
-		dim = Grpdim;
 
 	try {
 		if (varType == TVar::Float) {

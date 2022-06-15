@@ -29,6 +29,16 @@ ClassClark::ClassClark(const double* inVar, double* outVar, const double* kstora
 		c01[hh] = Global::Interval * 0.5 / (kstorage[hh] + Global::Interval * 0.5);  // units of Global::Interval (days)
 		c2[hh] = (kstorage[hh] - Global::Interval * 0.5) / (kstorage[hh] + Global::Interval * 0.5); // units of kstorage (days)
 
+        if ( (c01[hh] < 0.0) || (c2[hh] < 0.0) ) {
+            string S = string("'") + " (Clark)' constants out of range (do not set Kstorage <- 0): " +
+						to_string(c01[hh]).c_str() + "  " +
+						to_string(c2[hh]).c_str() + "  " +
+						to_string(kstorage[hh]).c_str() + "  ";
+            CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
+            LogError(TExcept);
+            throw TExcept;
+        }
+
 		ilag[hh] = (long)(max<double>(lag[hh], 0.0) / 24.0 * Global::Freq + 1.1); // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)

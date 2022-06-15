@@ -85,6 +85,7 @@ public:
 	double** gwcumoutflow_diverted_mWQ_lay{ NULL };
 
 	double* basinflow{ NULL };     // [BASIN] all HRUs
+	double* basinflow_mWQ{ NULL };     // [NDEF2]
 	double* basinflow_conc{ NULL };     // [BASIN] all HRUs
 	double** basinflow_conc_lay{ NULL };     // [BASIN] all HRUs
 	double* basinflow_s{ NULL };   // [BASIN] all HRUs

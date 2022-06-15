@@ -9,6 +9,7 @@
 #include "ClassWQ_Netroute.h"
 #include "ClassWQ_pbsm.h"
 #include "ClassWQ_Netroute_M_D.h"
+#include "ClassWQ_REWroute.h"
 #include "ClassWQ_Test_Hype.h"
 #include "ClassWQ_pbsmSnobal.h"
 #include "ClassWQ_Substitute_Hype.h"

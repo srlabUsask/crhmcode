@@ -39,6 +39,18 @@ ClassMuskingum::ClassMuskingum(const double* inVar, double* outVar, const double
 		c2[hh] = (2.0 * k[hh] * (1.0 - X_M[hh]) - Global::Interval) /
 			(2.0 * k[hh] * (1.0 - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
+        if ( (c0[hh] < 0.0) || (c1[hh] < 0.0) || (c2[hh] < 0.0) ) {
+            string S = string("'") + " (Muskingum)' constants out of range: " +
+						to_string(c0[hh]).c_str() + "  " +
+						to_string(c1[hh]).c_str() + "  " +
+						to_string(c2[hh]).c_str() + "  " + 
+						to_string(k[hh]).c_str() + "  " + 
+						to_string(X_M[hh]).c_str() + "  ";
+            CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
+            LogError(TExcept);
+            throw TExcept;
+        }
+
 		ilag[hh] = (long)(max<double>(lag[hh], 0.0) / 24.0 * Global::Freq + 1.1); // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)
