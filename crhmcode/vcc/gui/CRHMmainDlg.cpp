@@ -2501,6 +2501,7 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 
 	CString addText("Add");
 	CString addArrayText("Add Array");
+	CString applyFunctionText("Apply Function");
 
 	ctxMenu.InsertMenu(0,
 		MF_BYPOSITION | MF_STRING,
@@ -2511,6 +2512,44 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 		MF_BYPOSITION | MF_STRING,
 		ID_CTX_ALL_OBS_ADD_ARRAY,
 		(LPCTSTR)addArrayText);
+
+	CMenu functionSubMenu;
+	functionSubMenu.CreatePopupMenu();
+
+	ctxMenu.InsertMenu(2,
+		MF_BYPOSITION | MF_STRING | MF_POPUP,
+		(UINT_PTR) functionSubMenu.GetSafeHmenu(),
+		(LPCTSTR)applyFunctionText);
+
+	CString totalText("Total");
+	CString minText("Minimum");
+	CString maxText("Maximum");
+	CString avgText("Average");
+
+	functionSubMenu.InsertMenu(0,
+		MF_BYPOSITION | MF_STRING,
+		ID_TOTAL_FUNCT,
+		(LPCTSTR)totalText
+	);
+
+	functionSubMenu.InsertMenu(1,
+		MF_BYPOSITION | MF_STRING,
+		ID_MIN_FUNCT,
+		(LPCTSTR)minText
+	);
+
+	functionSubMenu.InsertMenu(2,
+		MF_BYPOSITION | MF_STRING,
+		ID_MAX_FUNCT,
+		(LPCTSTR)maxText
+	);
+
+	functionSubMenu.InsertMenu(3,
+		MF_BYPOSITION | MF_STRING,
+		ID_AVG_FUCNT,
+		(LPCTSTR)avgText
+	);
+
 
 	CWnd* wind = AfxGetMainWnd();
 	POINT p;
@@ -2523,16 +2562,46 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 			TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD | TPM_LEFTBUTTON,
 			p.x, p.y, wind, 0))
 		{
-			if (result == ID_CTX_ALL_OBS_ADD)
+			int savedSelection = this->function_drop_down.GetCurSel();
+
+			switch (result)
 			{
+			case (ID_CTX_ALL_OBS_ADD):
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
-			}
-			else if (result == ID_CTX_ALL_OBS_ADD_ARRAY)
-			{
+				break;
+			case (ID_CTX_ALL_OBS_ADD_ARRAY):
 				addObservationsArrayToSelected();
 				updateSelectedObservationListBox();
+				break;
+			case (ID_TOTAL_FUNCT):
+				this->function_drop_down.SetCurSel(1);
+				addObservationsToSelected();
+				updateSelectedObservationListBox();
+				this->function_drop_down.SetCurSel(savedSelection);
+				break;
+			case (ID_MIN_FUNCT):
+				this->function_drop_down.SetCurSel(2);
+				addObservationsToSelected();
+				updateSelectedObservationListBox();
+				this->function_drop_down.SetCurSel(savedSelection);
+				break;
+			case (ID_MAX_FUNCT):
+				this->function_drop_down.SetCurSel(3);
+				addObservationsToSelected();
+				updateSelectedObservationListBox();
+				this->function_drop_down.SetCurSel(savedSelection);
+				break;
+			case (ID_AVG_FUCNT):
+				this->function_drop_down.SetCurSel(4);
+				addObservationsToSelected();
+				updateSelectedObservationListBox();
+				this->function_drop_down.SetCurSel(savedSelection);
+				break;
+			default:
+				break;
 			}
+			
 		}
 
 	}
