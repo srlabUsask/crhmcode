@@ -1575,7 +1575,7 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 		it++
 		)
 	{
-		int found = listbox_sel_observations.FindString(-1, CString(it->first.c_str()));
+		int found = listbox_sel_observations.FindStringExact(-1, CString(it->first.c_str()));
 
 		//If it is found it is already displayed if not then display it. 
 		if (found == LB_ERR)
