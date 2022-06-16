@@ -3671,21 +3671,14 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		std::string observationName = GetObservationName(it->first);
 		ExtractHruLay(it->first, dim, lay);
 
-		TSeries *cdSeries =it->second;
+		TSeries* cdSeries = it->second;
+		ClassVar* thisVar = cdSeries->Tag;
 
-		ClassVar *thisVar;
-		thisVar = NULL;
-
-		//need to modify
-		thisVar = (ClassVar *)cdSeries->Tag; // always OK for observation
-
-		//thisVar = it->second; //added by Manishankar for testing.
-													 //Name = SelectedObservations->Strings[ii];
-
-
-		if (!thisVar || !thisVar->FileData) {  // VarObsFunct
-			if (!thisVar) {
-
+		/* If the variable is a function applied to a variable output this condition is true */
+		if (!thisVar || !thisVar->FileData) 
+		{
+			if (!thisVar) 
+			{
 				std::list<std::pair<std::string, ClassVar*>>::iterator pos;
 				for (
 					std::list<std::pair<std::string, ClassVar*>>::iterator it = SelectedVariables->begin();
@@ -3707,76 +3700,47 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 			}
 		}
 
-		//need to modify
-		//if (cdSeries->VertAxis == aRightAxis)
-		//dim = -dim;
-
-		string SS = to_string(dim);
+		std::string dimensionString = to_string(dim);
 
 		if (lay > 0)
-			SS += "," + to_string(lay);
+		{
+			dimensionString += "," + to_string(lay);
+		}
 
-		if (Output != "" && (thisVar != lastVar || kind != lastkind)) {
+		if (Output != "" && (thisVar != lastVar || kind != lastkind)) 
+		{
 			ProjectList->push_back(Output + " " + lastkind);
 			if (thisVar)
-				Output = (thisVar->module + " " + observationName.c_str() + " " + SS.c_str()).c_str();
+			{
+				Output = (thisVar->module + " " + observationName.c_str() + " " + dimensionString.c_str()).c_str();
+			}
 			else // fudge for obs _Avg thru _Tot being null for observations
-				Output = (string("obs ") + observationName.c_str() + " " + SS.c_str()).c_str();
+			{
+				Output = (string("obs ") + observationName.c_str() + " " + dimensionString.c_str()).c_str();
+			}
 		}
 		else if (lastVar) // add to earlier output
-			Output += " " + SS;
+		{
+			Output += " " + dimensionString;
+		}
 		else // first output
 		{
 			if (thisVar != NULL)
 			{
-				Output = (thisVar->module + " " + observationName.c_str() + " " + SS.c_str()).c_str();
+				Output = (thisVar->module + " " + observationName.c_str() + " " + dimensionString.c_str()).c_str();
 			}
 		}
 
 		lastVar = thisVar;
 		lastkind = kind;
 
-
-
-		//this is just like populating ListBox3.
-
-		//long lay, dim;
-
-		//ExtractHruLay(SelectedObservations->Strings[ii], dim, lay);
-
-		////need to modify possibly
-		//ClassVar *thisVar = (ClassVar *)SelectedObservations->Objects[ii]; //previous code
-		//													   //ClassVar *thisVar = (ClassVar *)ii; //Manishankar's code
-		//if (thisVar != NULL)
-		//{
-		//	if (thisVar->TchrtOpt)
-		//		dim = -dim;
-
-		//	string SS = to_string(dim);
-		//	if (thisVar->lay > 0) SS += "," + to_string(lay);
-
-		//	string Mod = thisVar->module;
-
-		//	if (lastVar == NULL)
-		//		Output = (Mod + " " + thisVar->name + " ").c_str() + SS;
-		//	else if (lastVar != thisVar) {
-		//		ProjectList->Add(Output);
-		//		Output = (Mod + " " + thisVar->name + " ").c_str() + SS;
-		//	}
-		//	else
-		//		Output += " " + SS;
-
-		//	lastVar = thisVar;
-		//}
-
-
-
-
-
 	}
 
-
-	if (Output.length() != 0) ProjectList->push_back(Output + " " + kind); // handle last output
+	/* Handle any remaining output that is not yet pushed to the file */
+	if (Output.length() != 0)
+	{
+		ProjectList->push_back(Output + " " + kind); 
+	}
 
 	ProjectList->push_back("######");
 
