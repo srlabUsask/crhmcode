@@ -60,9 +60,9 @@ protected:
 private:
 	long Box1Disply{ 0 };
 	long ObsFunct_Toggle = 0; /**< no display/Final/Trend values */
-	enum class TimeBase {DAILY, WATER_YEAR, CALENDAR_YEAR, MONTHLY, ALL};
-	TimeBase TBase = TimeBase::WATER_YEAR;
-	int water_year_month = 10; /**< Specifies the month to signal end of water year. Default is October.*/
+	
+	//TimeBase TBase = TimeBase::WATER_YEAR;
+	//int water_year_month = 10; /**< Specifies the month to signal end of water year. Default is October.*/
 
 	std::string ProjectFileArgument = ""; /**< it takes the filename from the command line. */
 	std::string defaultprojectname = "currentproject.prj";

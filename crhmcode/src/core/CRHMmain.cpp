@@ -99,6 +99,31 @@ void CRHMmain::setReportAll(bool set)
 }
 
 
+TimeBase CRHMmain::getTimeBase()
+{
+	return this->time_base;
+}
+
+
+void CRHMmain::setTimeBase(TimeBase base)
+{
+	this->time_base = base;
+}
+
+
+int CRHMmain::getWaterYearMonth()
+{
+	return this->water_year_month;
+}
+
+
+void CRHMmain::setWaterYearMonth(int month)
+{
+	assert(month >= 1 && month <= 12);
+	this->water_year_month = month;
+}
+
+
 CRHMmain* CRHMmain::getInstance()
 {
 	if (instance == 0)
@@ -140,6 +165,9 @@ CRHMmain::CRHMmain(CRHMArguments * arguments)
 		this->UpdateProgress = arguments->get_update_progress();
 
 	}
+
+	this->time_base = TimeBase::WATER_YEAR;
+	this->water_year_month = 10;
 
 	FormCreate();
 }
@@ -3563,14 +3591,37 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->push_back("######");
 	}
 
-	//ProjectList->Add("Summary_period");
-	//ProjectList->Add("######");
-	//need to modify
-	//string T = TBases[TBase];
-	//if (TBase == 1)
-	//	T = T + " " + string(water_year_month);
-	//ProjectList->Add(T);
-	//ProjectList->Add("######");
+	ProjectList->push_back("Summary_period");
+	ProjectList->push_back("######");
+	
+	std::string timeBaseString;
+	switch (this->time_base)
+	{
+	case (TimeBase::DAILY):
+		timeBaseString = "Daily";
+		break;
+	case (TimeBase::MONTHLY):
+		timeBaseString = "Monthly_summary";
+		break;
+	case (TimeBase::WATER_YEAR):
+		timeBaseString = "Water_year " + std::to_string(this->water_year_month);
+		break;
+	case (TimeBase::CALENDAR_YEAR):
+		timeBaseString = "Calendar_year";
+		break;
+	case (TimeBase::ALL):
+		timeBaseString = "Summarize_all";
+		break;
+	default:
+		break;
+	}
+
+	if (timeBaseString.length() != 0)
+	{
+		ProjectList->push_back(timeBaseString);
+	}
+	
+	ProjectList->push_back("######");
 
 	//ProjectList->Add("Log_Time_Format");
 	//ProjectList->Add("######");

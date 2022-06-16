@@ -46,6 +46,8 @@ class ReportStream;
 class CRHMArguments;
 enum class OUTPUT_FORMAT;
 
+enum class TimeBase { DAILY, WATER_YEAR, CALENDAR_YEAR, MONTHLY, ALL };
+
 class CRHMmain
 {
 	static CRHMmain* instance;
@@ -56,6 +58,17 @@ private:
 	bool ReportAll{ true };
 	bool finishedRun{ false };
 
+	/**
+	* Represents the summary period to be used for applying functions to observations or variables.
+	*/
+	TimeBase time_base;
+
+	/**
+	* Integer value of the month the water year ends.
+	* 1 == January ... 12 == December.
+	*/
+	int water_year_month;
+
 public:
 
 	bool getAutoRun();
@@ -65,6 +78,34 @@ public:
 	bool getFinishedRun();
 	bool getReportAll();
 	void setReportAll(bool set);
+
+	/**
+	* Retrives the value of the time_base field
+	* 
+	* @return TimeBase the value of the time_base field
+	*/
+	TimeBase getTimeBase();
+
+	/**
+	* Sets the value of the time_base field
+	* 
+	* @param base - TimeBase value to set the time_base field to.
+	*/
+	void setTimeBase(TimeBase base);
+
+	/**
+	* Retrives the value of the water_year_month field
+	* 
+	* @return int the value of the water_year_month field
+	*/
+	int getWaterYearMonth();
+
+	/**
+	* Sets the value of the water_year_month field
+	* 
+	* @param month - int the value to set the water_year_month to must be between 1-12
+	*/
+	void setWaterYearMonth(int month);
 
 	CRHMLogger* Logger;
 	ReportStream * reportStream{NULL};

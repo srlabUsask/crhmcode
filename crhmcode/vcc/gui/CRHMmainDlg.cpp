@@ -694,15 +694,15 @@ void CRHMmainDlg::AddSeriesToTChart(TSeries* tseries)
 
 void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFun Funct) {
 
-	CRHMmain* test = CRHMmain::getInstance();
+	CRHMmain* model = CRHMmain::getInstance();
 
 	ClassVar* newVar;
 	Global::HRU_OBS = Global::HRU_OBS_DIRECT; // always correct?
 
 	double** Data = thisVar->FileData->Data;
 	double xx;
-	double DTstartR = test->GetStartDate();
-	double DTendR = test->GetEndDate();
+	double DTstartR = model->GetStartDate();
+	double DTendR = model->GetEndDate();
 
 	if (DTstartR >= DTendR) return;
 
@@ -720,15 +720,15 @@ void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFu
 	pp = thisVar->name.rfind('(');
 	bool AlreadyIndex = (pp != string::npos); // handles exported variables in Obs files
 
-	if (test->ListHruNames && thisVar->varType < TVar::Read) // using names
+	if (model->ListHruNames && thisVar->varType < TVar::Read) // using names
 	{
 
 		string sub = S.substr(jj1 + 1, jj2 - jj1 - 1);
 		bool found = false;
 		int n;
-		for (size_t i = 0; i < test->ListHruNames->size(); i++)
+		for (size_t i = 0; i < model->ListHruNames->size(); i++)
 		{
-			if (test->ListHruNames->at(i) == sub)
+			if (model->ListHruNames->at(i) == sub)
 			{
 				n = i;
 				found = true;
@@ -929,7 +929,7 @@ void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFu
 
 					dattim("now", itime);
 
-					switch (TBase) {
+					switch (model->getTimeBase()) {
 
 					case TimeBase::DAILY: // daily
 						if (Next == -1 || Next != itime[2]) {
@@ -938,8 +938,8 @@ void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFu
 						}
 						break;
 					case TimeBase::WATER_YEAR: // water annual
-						if (Next == -1 || itime[0] == Next && itime[1] == water_year_month) {
-							if (Next == -1 && itime[1] < water_year_month)
+						if (Next == -1 || itime[0] == Next && itime[1] == model->getWaterYearMonth()) {
+							if (Next == -1 && itime[1] < model->getWaterYearMonth())
 								Next = itime[0];
 							else
 								Next = itime[0] + 1;
@@ -996,7 +996,7 @@ void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFu
 								break;
 							} // switch
 						}
-						else if (Funct == TFun::DLTA && TBase != TimeBase::DAILY) { // only very first time
+						else if (Funct == TFun::DLTA && model->getTimeBase() != TimeBase::DAILY) { // only very first time
 							(newVar->*(newVar->LoopFunct))(Indx);
 							Delta0 = newVar->values[Indx];
 
@@ -2649,6 +2649,8 @@ LRESULT CRHMmainDlg::OpenSelObsCtxMenu(WPARAM, LPARAM)
 
 void CRHMmainDlg::OnTimebaseChange()
 {
+	CRHMmain* model = CRHMmain::getInstance();
+
 	int currentSelection = timebase_drop_down.GetCurSel();
 
 	/* If the current selection is water year (3) */
@@ -2666,19 +2668,19 @@ void CRHMmainDlg::OnTimebaseChange()
 	switch (currentSelection)
 	{
 	case (0):
-		this->TBase = TimeBase::DAILY;
+		model->setTimeBase(TimeBase::DAILY);
 		break;
 	case (1):
-		this->TBase = TimeBase::MONTHLY;
+		model->setTimeBase(TimeBase::MONTHLY);
 		break;
 	case (2):
-		this->TBase = TimeBase::CALENDAR_YEAR;
+		model->setTimeBase(TimeBase::CALENDAR_YEAR);
 		break;
 	case (3):
-		this->TBase = TimeBase::WATER_YEAR;
+		model->setTimeBase(TimeBase::WATER_YEAR);
 		break;
 	case (4):
-		this->TBase = TimeBase::ALL;
+		model->setTimeBase(TimeBase::ALL);
 		break;
 	default:
 		break;
@@ -2689,8 +2691,10 @@ void CRHMmainDlg::OnTimebaseChange()
 
 void CRHMmainDlg::OnWaterYearChange()
 {
+	CRHMmain* model = CRHMmain::getInstance();
+
 	int currentSelection = this->water_year_drop_down.GetCurSel();
-	this->water_year_month = currentSelection + 1;
+	model->setWaterYearMonth(currentSelection + 1);
 }
 
 
