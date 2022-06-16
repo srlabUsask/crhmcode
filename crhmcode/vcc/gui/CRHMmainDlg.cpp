@@ -3373,7 +3373,8 @@ void HruNameClick() {
 
 	MapPar::iterator itPar;
 	ClassPar *newPar;
-	long Hru, Lay;
+	int Hru; 
+	int Lay;
 
 	if (!test->ListHruNames) {
 

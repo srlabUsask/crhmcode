@@ -1764,21 +1764,26 @@ bool  CRHMmain::FindFileName(string &FileName) {
 
 //---------------------------------------------------------------------------
 
-string  CRHMmain::ExtractHruLay(string S, long &Hru, long &Lay) {
-
-	long jj = S.find("(");
-	long jj1 = S.find(",");
-	long jj2 = S.find(")");
-
+std::string  CRHMmain::ExtractHruLay(std::string label, int &Hru, int &Lay) 
+{
+	size_t openParenPos = label.find("(");
+	size_t commaPos = label.find(",");
+	size_t closeParenPos = label.find(")");
+	
 	Lay = 0;
-	if (jj1 > -1)
-		Lay = Strtolong(S.substr(jj1 + 1, jj2 - jj1 - 1));
+
+	if (commaPos > -1)
+	{
+		Lay = Strtolong(label.substr(commaPos + 1, closeParenPos - commaPos - 1));
+	}
 	else
-		jj1 = jj2;
+	{
+		commaPos = closeParenPos;
+	}
 
-	Hru = Strtolong((S.substr(jj + 1, jj1 - jj - 1)));
+	Hru = Strtolong((label.substr(openParenPos + 1, commaPos - openParenPos - 1)));
 
-	return S.substr(0, jj);
+	return label.substr(0, openParenPos);
 }
 
 MMSData *  CRHMmain::RunClick2Start()
@@ -2088,7 +2093,8 @@ MMSData *  CRHMmain::RunClick2Start()
 		string S = selectedVarIterator->first;
 		cdSeries[ii]->Title = S;
 
-		long lay, dim;
+		int lay;
+		int dim;
 
 		S = ExtractHruLay(S, dim, lay);
 
@@ -3608,7 +3614,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		)
 	{
 
-		long lay, dim;
+		int lay; 
+		int dim;
 
 		ExtractHruLay(selectedVariablesIt->first, dim, lay);
 
@@ -3658,16 +3665,10 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		it != SelectedObservations->end();
 		it++)
 	{
-
-		string S = it->first;
-		string FullName;
-		long dim = 0, lay = 0;
+		int dim = 0;
+		int lay = 0;
 		kind = "_obs";
-
-
-		//need to modify
-		//string Name = ExtractHruLayFunct(SelectedObservations->Strings[ii], dim, lay, kind, FullName);
-		string Name = GetObservationName(it->first);
+		std::string observationName = GetObservationName(it->first);
 		ExtractHruLay(it->first, dim, lay);
 		//string Name = "";
 
@@ -3692,7 +3693,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 				std::list<std::pair<std::string, ClassVar*>>::iterator pos;
 				for (
 					std::list<std::pair<std::string, ClassVar*>>::iterator it = SelectedVariables->begin();
-					it != SelectedVariables->end() || it->first != FullName;
+					it != SelectedVariables->end();
 					it++
 					)
 				{
@@ -3705,7 +3706,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 				}
 				else
 				{
-					thisVar = VarFind(string(string("obs ") + Name.c_str()));
+					thisVar = VarFind(string(string("obs ") + observationName.c_str()));
 				}
 			}
 		}
@@ -3722,9 +3723,9 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		if (Output != "" && (thisVar != lastVar || kind != lastkind)) {
 			ProjectList->push_back(Output + " " + lastkind);
 			if (thisVar)
-				Output = (thisVar->module + " " + Name.c_str() + " " + SS.c_str()).c_str();
+				Output = (thisVar->module + " " + observationName.c_str() + " " + SS.c_str()).c_str();
 			else // fudge for obs _Avg thru _Tot being null for observations
-				Output = (string("obs ") + Name.c_str() + " " + SS.c_str()).c_str();
+				Output = (string("obs ") + observationName.c_str() + " " + SS.c_str()).c_str();
 		}
 		else if (lastVar) // add to earlier output
 			Output += " " + SS;
@@ -3732,7 +3733,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		{
 			if (thisVar != NULL)
 			{
-				Output = (thisVar->module + " " + Name.c_str() + " " + SS.c_str()).c_str();
+				Output = (thisVar->module + " " + observationName.c_str() + " " + SS.c_str()).c_str();
 			}
 		}
 

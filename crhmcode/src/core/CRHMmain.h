@@ -231,7 +231,18 @@ public:
 	void ClearModules(bool All);
 	void GetObservationData(char * obsfilepath, char * observationname);
 	void GetObservationNames(char * obsfilepath);
-	string ExtractHruLay(string S, long &Hru, long &Lay);
+
+	/**
+	* Extracts the HRU and LAY value from a variable/observation label string
+	*	that is in the format [name]([HRU],[LAY])
+	* 
+	* @param label - std::string the lable for values to be extracted from.
+	* @param Hru - int& An integer where the value of [HRU] will be placed in.
+	* @param Lay - int& An integer where the value of [LAY] will be placed in.
+	* @return std::string - The name of the variable or observation without HRU or LAY label.
+	*/
+	std::string ExtractHruLay(std::string label, int &Hru, int &Lay);
+	
 	string BuildHru(string S, long Hru, TDim dimen);
 	string BuildLay(string S, long Lay);
 	void BldModelClick();
