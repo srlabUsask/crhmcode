@@ -3657,7 +3657,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	ProjectList->push_back("######");
 
 	lastVar = NULL;
-	string kind, lastkind;
+	std::string kind;
+	std::string lastkind;
 	Output = "";
 
 	for (
@@ -3667,7 +3668,18 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	{
 		int dim = 0;
 		int lay = 0;
-		kind = "_obs";
+
+		/* Determine kind from the ceSeries->title variable */
+		size_t suffixStartPos = it->first.rfind('_');
+		if (suffixStartPos != std::string::npos)
+		{
+			kind = it->first.substr(suffixStartPos, std::string::npos);
+		}
+		else
+		{
+			kind = "_obs";
+		}
+
 		std::string observationName = GetObservationName(it->first);
 		ExtractHruLay(it->first, dim, lay);
 
