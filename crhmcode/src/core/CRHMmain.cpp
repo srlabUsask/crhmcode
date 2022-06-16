@@ -3670,11 +3670,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		kind = "_obs";
 		std::string observationName = GetObservationName(it->first);
 		ExtractHruLay(it->first, dim, lay);
-		//string Name = "";
 
-
-		//need to modify
-		//TLineSeries *cdSeries = (TLineSeries *)SelectedObservations->Objects[ii];
 		TSeries *cdSeries =it->second;
 
 		ClassVar *thisVar;
@@ -3906,14 +3902,13 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 }
 
 
-string CRHMmain::GetObservationName(string vname)
+std::string CRHMmain::GetObservationName(std::string observationLabel)
 {
+	size_t openParenPos = observationLabel.find_first_of('(');
 
-	int pos = vname.find_first_of('(');
+	std::string trimmedLabel = observationLabel.substr(0,openParenPos);
 
-	std::string name = vname.substr(0,pos);
-
-	std::map<std::string,ClassVar*>::iterator it = AllObservations->find(name);
+	std::map<std::string,ClassVar*>::iterator it = AllObservations->find(trimmedLabel);
 
 	if (it != AllObservations->end())
 	{

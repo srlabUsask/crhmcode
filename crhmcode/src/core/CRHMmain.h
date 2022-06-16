@@ -227,7 +227,16 @@ public:
 
 	string GetCaptionFromAboutBox();
 	string  ExtractHruLayFunct(string S, long &Hru, long &Lay, string &Funct, string &FullName);
-	string GetObservationName(string vname);
+	
+	/**
+	* Extracts the name of an observation from an observation label string 
+	*	that is in the format [name]([HRU],[LAY])
+	* 
+	* @return std::string - the name associated with an observation object found by looking for 
+	*	an empty string is returned if the name portion of the label cannot be used to find an 
+	*	observation object in the AllObservations field.
+	*/
+	std::string GetObservationName(std::string observationLabel);
 	void ClearModules(bool All);
 	void GetObservationData(char * obsfilepath, char * observationname);
 	void GetObservationNames(char * obsfilepath);
