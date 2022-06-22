@@ -906,19 +906,69 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					DataFile >> S;
 				}
 			}
-			else if (S == "Final_State") {
+			else if (S == "Final_State") 
+			{
 				getline(DataFile, S);
-				if (S[1] != '#') {
+				if (S[1] != '#') 
+				{
 					SS = S;
 					int l = SS.length();
-					if (SS[l - 1] == '\r') { SS[l - 1] = '\0'; }
+					if (SS[l - 1] == '\r') 
+					{ 
+						SS[l - 1] = '\0'; 
+					}
 					SaveStateFileName = SS;
 					SaveStateFlag = true;
 					DataFile >> S;
 				}
 				else
+				{
 					SaveStateFileName = "";
 				}
+			}
+			else if (S == "Summary_period")
+			{
+				getline(DataFile, S);
+				if (S[1] != '#')
+				{
+					if (S == "Daily")
+					{
+						this->setTimeBase(TimeBase::DAILY);
+					}
+					else if (S == "Monthly_summary")
+					{
+						this->setTimeBase(TimeBase::MONTHLY);
+					}
+					else if (S == "Calendar_year")
+					{
+						this->setTimeBase(TimeBase::CALENDAR_YEAR);
+					}
+					else if (S == "Summarize_all")
+					{
+						this->setTimeBase(TimeBase::ALL);
+					}
+					else
+					{
+						size_t spacePos = S.find(' ');
+						std::string waterYearString = S.substr(0, spacePos);
+						std::string monthString = S.substr(spacePos, std::string::npos);
+						int month = std::stoi(monthString);
+						if (waterYearString == "Water_year")
+						{
+							this->setTimeBase(TimeBase::WATER_YEAR);
+							this->setWaterYearMonth(month);
+						}
+					}
+					DataFile >> S;
+				}
+				else
+				{
+					this->setTimeBase(TimeBase::WATER_YEAR);
+					this->setWaterYearMonth(10);
+				}
+
+				
+			}
 			else if (S == "Log_Last")
 			{
 				this->setReportAll(false);

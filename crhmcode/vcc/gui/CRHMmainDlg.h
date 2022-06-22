@@ -795,4 +795,9 @@ private:
 
 	int getMaxLayofSelection();
 
+	/** 
+	* Calculates if the water year month drop down should be shown or hidden.
+	*/
+	void showHideWaterYearMonth();
+
 };

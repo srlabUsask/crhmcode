@@ -143,6 +143,8 @@ END_MESSAGE_MAP()
 
 BOOL CRHMmainDlg::OnInitDialog()
 {
+	CRHMmain* model = CRHMmain::getInstance();
+
 	CDialogEx::OnInitDialog();
 	// TODO:  Add extra initialization here
 
@@ -162,12 +164,7 @@ BOOL CRHMmainDlg::OnInitDialog()
 	obsHelpFont->CreatePointFont(96, _T("Ariel"));
 	GetDlgItem(ID_OBS_HELP_DISPLAY)->SetFont(obsHelpFont);
 
-	loadGuiComponents();
-
-	delete varHelpFont;
-	delete obsHelpFont;
-
-	/** 
+	/**
 	* Set options for the function_drop_down
 	*/
 	function_drop_down.AddString(L"Observation");
@@ -185,7 +182,6 @@ BOOL CRHMmainDlg::OnInitDialog()
 	timebase_drop_down.AddString(L"Calendar Year");
 	timebase_drop_down.AddString(L"Water Year");
 	timebase_drop_down.AddString(L"All");
-	timebase_drop_down.SetCurSel(3);
 
 	/**
 	* Set options for the water_year_drop_down
@@ -202,8 +198,11 @@ BOOL CRHMmainDlg::OnInitDialog()
 	water_year_drop_down.AddString(L"October");
 	water_year_drop_down.AddString(L"November");
 	water_year_drop_down.AddString(L"December");
-	water_year_drop_down.SetCurSel(9);
 
+	loadGuiComponents();
+
+	delete varHelpFont;
+	delete obsHelpFont;
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE
@@ -225,7 +224,7 @@ void CRHMmainDlg::loadGuiComponents()
 	listbox_all_observations.ResetContent();
 	listbox_sel_observations.ResetContent();
 
-	CRHMmain* crhm_core = CRHMmain::getInstance();
+	CRHMmain* model = CRHMmain::getInstance();
 
 	std::map<std::string, ClassVar*>* variables = CRHMmain::getInstance()->getVariables();
 	std::map<std::string, ClassVar*>::iterator it;
@@ -326,13 +325,36 @@ void CRHMmainDlg::loadGuiComponents()
 		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_CHECKED);
 	}
 
-	if (crhm_core->getAutoRun())
+	if (model->getAutoRun())
 	{
 		ShowWindow(1);
 		CenterWindow();
 		UpdateWindow();
 		PostMessage(UWM_AUTO_RUN, 0, 0);
 	}
+
+	switch (model->getTimeBase())
+	{
+	case (TimeBase::DAILY):
+		timebase_drop_down.SetCurSel(0);
+		break;
+	case (TimeBase::MONTHLY):
+		timebase_drop_down.SetCurSel(1);
+		break;
+	case (TimeBase::CALENDAR_YEAR):
+		timebase_drop_down.SetCurSel(2);
+		break;
+	case (TimeBase::WATER_YEAR):
+		timebase_drop_down.SetCurSel(3);
+		break;
+	case (TimeBase::ALL):
+		timebase_drop_down.SetCurSel(4);
+		break;
+	default:
+		break;
+	}
+	this->showHideWaterYearMonth();
+	water_year_drop_down.SetCurSel(model->getWaterYearMonth() - 1);
 
 }
 
@@ -2652,19 +2674,7 @@ void CRHMmainDlg::OnTimebaseChange()
 	CRHMmain* model = CRHMmain::getInstance();
 
 	int currentSelection = timebase_drop_down.GetCurSel();
-
-	/* If the current selection is water year (3) */
-	if (currentSelection == 3)
-	{
-		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_SHOW);
-		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_SHOW);
-	}
-	else
-	{
-		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_HIDE);
-		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_HIDE);
-	}
-
+	
 	switch (currentSelection)
 	{
 	case (0):
@@ -2686,6 +2696,7 @@ void CRHMmainDlg::OnTimebaseChange()
 		break;
 	}
 
+	this->showHideWaterYearMonth();
 }
 
 
@@ -3599,4 +3610,21 @@ int CRHMmainDlg::getMaxLayofSelection()
 	}
 
 	return maxLayInSelection;
+}
+
+
+void CRHMmainDlg::showHideWaterYearMonth()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+
+	if (model->getTimeBase() == TimeBase::WATER_YEAR)
+	{
+		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_SHOW);
+		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_SHOW);
+	}
+	else
+	{
+		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_HIDE);
+		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_HIDE);
+	}
 }
