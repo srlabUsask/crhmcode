@@ -168,7 +168,7 @@ void ClassREWroute::init(void) {
   }
   else if(variation == VARIATION_1){
     Clark_inflowDelay = new ClassClark(inflow, outflow, WS_Kstorage, WS_Lag, nhru);
-    Clark_gwDelay = new ClassClark(inflow, outflow, WS_gwKstorage, WS_gwLag, nhru);
+    Clark_gwDelay = new ClassClark(gwinflow, gwoutflow, WS_gwKstorage, WS_gwLag, nhru);
   }
 
   flow[0] = 0.0;
