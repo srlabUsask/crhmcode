@@ -98,6 +98,15 @@ void CRHMmain::setReportAll(bool set)
 	this->ReportAll = set;
 }
 
+bool CRHMmain::getSummarize()
+{
+	return this->Summarize;
+}
+
+void CRHMmain::setSummarize(bool set)
+{
+	this->Summarize = set;
+}
 
 TimeBase CRHMmain::getTimeBase()
 {
@@ -981,10 +990,16 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 			{
 				this->setAutoRun(true);
 			}
-			else if (S == "Auto_Exit") {
+			else if (S == "Auto_Exit") 
+			{
 				this->setAutoExit(true);
 			}
-			else if (S == "TChart:") {
+			else if (S == "Summary_Screen")
+			{
+				this->setSummarize(true);
+			}
+			else if (S == "TChart:") 
+			{
 
 				while (!DataFile.eof()) {
 					getline(DataFile, S);
@@ -3879,6 +3894,12 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	else
 	{
 		ProjectList->push_back("Log_Last");
+		ProjectList->push_back("######");
+	}
+
+	if (this->getSummarize())
+	{
+		ProjectList->push_back("Summary_Screen");
 		ProjectList->push_back("######");
 	}
 

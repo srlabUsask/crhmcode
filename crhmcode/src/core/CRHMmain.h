@@ -59,6 +59,11 @@ private:
 	bool finishedRun{ false };
 
 	/**
+	* Tracks if a summary file has been requested for the loaded project.
+	*/
+	bool Summarize{ false };
+
+	/**
 	* Represents the summary period to be used for applying functions to observations or variables.
 	*/
 	TimeBase time_base;
@@ -78,6 +83,20 @@ public:
 	bool getFinishedRun();
 	bool getReportAll();
 	void setReportAll(bool set);
+
+	/**
+	* Retrives the value of the Summarize field.
+	* 
+	* @return bool - true if a summary is to be produced and false otherwise
+	*/
+	bool getSummarize();
+
+	/**
+	* Sets the value of the Summarize field.
+	* 
+	* @param set - bool value to set the Summarize field to.
+	*/
+	void setSummarize(bool set);
 
 	/**
 	* Retrives the value of the time_base field

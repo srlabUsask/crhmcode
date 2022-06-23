@@ -64,6 +64,7 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	//Project->Log submenu
 	ON_COMMAND(ID_MAIN_LOG_ALL, &CRHMmainDlg::OnLogAll)
 	ON_COMMAND(ID_MAIN_LOG_LAST, &CRHMmainDlg::OnLogLast)
+	ON_COMMAND(ID_MAIN_CREATE_SUMMARY, &CRHMmainDlg::OnCreateSummary)
 
 	//Project->Reports submenu
 	ON_COMMAND(ID_EXTRACT_GROUP, &CRHMmainDlg::OnExtractGroup)
@@ -290,37 +291,33 @@ void CRHMmainDlg::loadGuiComponents()
 	CRHMmain* main = CRHMmain::getInstance();
 	SetTime(main->GetStartDate(), main->GetEndDate());
 
+	CMenu* menu = GetMenu();
+
 	if (main->getAutoRun())
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_AUTO_RUN, MF_CHECKED);
 	}
 	else
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
 	}
 
 	if (main->getAutoExit())
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_AUTO_EXIT, MF_CHECKED);
 	}
 	else
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
 	}
 
 	if (main->getReportAll())
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_CHECKED);
 		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
 	}
 	else
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
 		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_CHECKED);
 	}
@@ -355,6 +352,11 @@ void CRHMmainDlg::loadGuiComponents()
 	}
 	this->showHideWaterYearMonth();
 	water_year_drop_down.SetCurSel(model->getWaterYearMonth() - 1);
+
+	if (model->getSummarize())
+	{
+		menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_CHECKED);
+	}
 
 }
 
@@ -1927,6 +1929,25 @@ void CRHMmainDlg::OnLogLast()
 		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
 	};
 }
+
+
+void CRHMmainDlg::OnCreateSummary()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+	
+	CMenu* menu = GetActiveWindow()->GetMenu();
+
+	if (menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_CHECKED) == MF_CHECKED)
+	{
+		menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_UNCHECKED);
+		model->setSummarize(false);
+	}
+	else 
+	{
+		model->setSummarize(true);
+	}
+}
+
 
 void CRHMmainDlg::OnOpenObservation()
 {

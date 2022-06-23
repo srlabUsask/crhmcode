@@ -251,6 +251,7 @@
 #define ID_MACRO_FILE_EXIT              40108
 #define ID_MAIN_LOG_ALL                 40200
 #define ID_MAIN_LOG_LAST                40201
+#define ID_MAIN_CREATE_SUMMARY			40202
 #define ID_EXTRACT_GROUP_SAVE           40300
 #define ID_EXTRACT_GROUP_EXIT           40301
 #define ID_GROUP_LIST                   40302

@@ -431,6 +431,8 @@ private:
 
 	afx_msg void OnLogLast();
 
+	afx_msg void OnCreateSummary();
+
 	/**
 	* Handler for clicking on Observations->Open Observation
 	* 
