@@ -4523,10 +4523,29 @@ void CRHMmain::OutputSummary()
 		}
 	}
 
+
+	/** 
+	* Determine the name of the summary file
+	*/
+	std::string fileName = this->OpenNameReport;
+	size_t extensionPos = fileName.rfind('.');
+	fileName = fileName.substr(0, extensionPos);
+	fileName = fileName + ".sum";
+
+	/**
+	* Create a Report Stream
+	*/
+	ReportStream summaryStream(fileName);
+
 	/**
 	* Create the header lines for the summary file.
 	*/
+	summaryStream.OutputSummaryHeaders(&summarySeries);
 
+	/**
+	* Create the rest of the lines for the summary.
+	*/
+	summaryStream.OutputSummaryLines(&summarySeries);
 
-
+	summaryStream.CloseStream();
 }
