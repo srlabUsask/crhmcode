@@ -74,6 +74,8 @@ private:
 	*/
 	int water_year_month;
 
+	void OutputSummary();
+
 public:
 
 	bool getAutoRun();

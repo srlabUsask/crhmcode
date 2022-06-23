@@ -1125,7 +1125,6 @@ void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFu
 		delete newVar->FileData; // created in this routine
 		delete newVar; // created in this routine
 
-		cdSeries->Tag = NULL;
 	} // else
 
 	Global::DTnow = Save_DTnow; // restore

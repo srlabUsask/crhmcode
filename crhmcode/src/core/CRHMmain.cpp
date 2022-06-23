@@ -2558,6 +2558,11 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 			SaveState();
 		}
 
+		if (this->getSummarize())
+		{
+			OutputSummary();
+		}
+
 		this->finishedRun = true;
 
 	}
@@ -4482,4 +4487,46 @@ void CRHMmain::print_progress_end()
 	std::cout << '\r' << setfill(' ') << setw(25) << 100.0f << "% Complete!";
 	std::cout.flush();
 	std::cout << "\n\n\n";
+}
+
+
+void CRHMmain::OutputSummary()
+{
+	/**
+	* Determine what series are part of the summary file.
+	*/
+	std::list<std::pair<std::string, TSeries*>> * selectedSeries = this->SelectedObservations;
+	std::list<std::pair<std::string, TSeries*>> summarySeries;
+
+	for (
+		std::list<std::pair<std::string, TSeries*>>::iterator it = selectedSeries->begin();
+		it != selectedSeries->end();
+		it++
+		)
+	{
+		std::string seriesTitle = it->first;
+		size_t underScorePos = seriesTitle.rfind('_');
+		std::string seriesType;
+
+		if (underScorePos != std::string::npos)
+		{
+			seriesType = seriesTitle.substr(underScorePos, std::string::npos);
+		}
+		else
+		{
+			seriesType = "";
+		}
+
+		if (seriesType == "_Tot" || seriesType == "_Avg" || seriesType == "_Max" || seriesType == "_Min")
+		{
+			summarySeries.push_back(std::pair<std::string, TSeries*>(it->first, it->second));
+		}
+	}
+
+	/**
+	* Create the header lines for the summary file.
+	*/
+
+
+
 }
