@@ -331,6 +331,16 @@ public:
 
 	void print_progress_end();
 
+	/**
+	* Calculates the series of values that make up a TSeries representing an Observation plot
+	* 
+	* @param thisVar - ClassVar* pointer to the ClassVar object associated with the observation
+	* @param cdSeries - TSeries* pointer to the TSeries object where the series representing the observation plot will be stored
+	* @param seriesTitle - std::string the name of the series to be represented.
+	* @param TFun - Funct the function to be applied to the observation being ploted
+	*/
+	void calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries, string seriesTitle, TFun Funct);
+
 };
 
 //class Classinfo; // used to process shared parameters
