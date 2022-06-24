@@ -17,6 +17,8 @@
 #include "CExport.h"
 #include "../ChiralClickButton.h"
 #include "RefreshRateDlg.h"	
+#include "ParametersDlg.h"
+
 
 // Defines
 #define MAX_CFileDialog_FILE_COUNT 99
@@ -476,6 +478,13 @@ private:
 	* Opens the macro construction dialog.
 	*/
 	afx_msg void OnBuildMacro();
+
+	/**
+	* Handler for clicking on Parameters in the menu bar
+	* 
+	* Opens the parameter editor dialog
+	*/
+	afx_msg void OpenParametersDialog();
 
 	/**
 	* Handler for clicking on State->Open Inital State

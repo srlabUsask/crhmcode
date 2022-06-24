@@ -194,6 +194,11 @@ public:
 
 	std::map<std::string, ClassModule *> * getAllmodules();
 
+	/*
+	* Return a reference to the list of modules declared in the current model.
+	*/
+	std::list<std::pair<std::string, ClassModule*>>* getOurModules();
+
 	std::map<std::string, ClassVar*>* getVariables();
 
 	MMSData * RunClick2Start();
