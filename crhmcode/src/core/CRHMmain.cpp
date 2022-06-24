@@ -827,13 +827,21 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					DataFile.clear();
 				} // while
 			}
-			else if (S == "Display_Observation:") {
+			else if (S == "Display_Observation:") 
+			{
 
-				while (!DataFile.eof()) {
+				while (!DataFile.eof()) 
+				{
 					DataFile >> module;
-					if (module[1] == '#') break;
+					if (module[1] == '#')
+					{
+						break;
+					}
 					DataFile >> name;
-					if (DataFile.eof()) return true; // final exit
+					if (DataFile.eof())
+					{
+						return true; // final exit
+					}
 
 					string Kind;
 					long Index;
@@ -841,15 +849,24 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					S = string(module) + ' ' + string(name);
 					thisVar = ClassVarFind(S);
 
-					if (thisVar && thisVar->FileData != NULL) {
+					if (thisVar && thisVar->FileData != NULL) 
+					{
 
-						for (int ii = 0; ii < 100; ii++) {
+						for (int ii = 0; ii < 100; ii++) 
+						{
 							DataFile >> Index >> Kind;
-							if (DataFile.fail()) break;
+							
+							if (DataFile.fail())
+							{
+								break;
+							}
 
-							if (Kind == "_obs") Kind = "";
+							if (Kind == "_obs")
+							{
+								Kind = "";
+							}
+
 							SS = thisVar->name + "(" + Common::longtoStr(labs(Index)) + ")" + Kind;
-
 
 							bool selectedObservationsContainsSS = false;
 							for (
@@ -868,7 +885,8 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 							{
 
 								TSeries *cdSeries = NULL;
-								if (thisVar->FileData->Times == NULL) {
+								if (thisVar->FileData->Times == NULL) 
+								{
 									//                  cdSeries = new TSeries(Global::DTmax - Global::DTmin);
 									double Dif = EndDatePicker - StartDatePicker;
 									cdSeries = new TSeries();
@@ -885,7 +903,8 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 							}
 						}
 					}
-					else {
+					else 
+					{
 						CRHMException Except("Unknown Variable " + S +
 							" in " + string(OpenNamePrj.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
