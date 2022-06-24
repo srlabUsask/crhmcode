@@ -103,6 +103,21 @@ public:
 
 	long GetUnit(void);
 
+	/**
+	* Checks if two parameters are consolidation candidates 
+	* 
+	* Parameters are consolidation candidates if they have the following properties
+	*    they have the same name, 
+	*    they have the same dimensions, 
+	*    they have the same type, 
+	*    they DO NOT have the same values. 
+	* 
+	* @param leftParameter - ClassPar* pointer to a parameter
+	* @param rightParameter - ClassPar* pointer to a parameter
+	* @return bool - true if leftParameter and rightPrameter are consolidation candidates
+	*/
+	static bool ConsolidationCandidates(ClassPar * leftParameter, ClassPar * rightParameter);
+
 };
 
 #endif // !CLASSPAR
