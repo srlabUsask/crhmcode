@@ -1,10 +1,10 @@
-// 04/22/22 fix bugs in Katabatic equation and debris-cover melt for
-// glacier module in 04/06/22
+// 06/27/22 fix bugs in Clark_gwDelay equation in REWroute and REWroute2
+// modules in 04/22/22
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "04/22/22"
+#define CurrentVersion "06/27/22"
 
 #include <stdexcept>
 #include "CRHMmain.h"
