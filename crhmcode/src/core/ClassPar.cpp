@@ -594,7 +594,7 @@ bool ClassPar::ConsolidationCandidates(ClassPar* leftParameter, ClassPar* rightP
 				double leftCompare = leftParameter->layvalues[i][j];
 				double rightCompare = rightParameter->layvalues[i][j];
 
-				if (std::abs(leftCompare - rightCompare) > DBL_EPSILON)
+				if (std::abs(leftCompare - rightCompare) > std::numeric_limits<double>::epsilon())
 				{
 					sameValues = false;
 					break;
