@@ -952,3 +952,31 @@ string Add_Quote(string s) { // changes " to ' eliminating duplicates
 	} // for loop
 	return s;
 }
+
+
+void ClassMacro::RetrieveAllParameters(std::list<std::pair<std::string, ClassPar*>>* allParameters)
+{
+
+	std::vector<std::pair<std::string, ClassModule*>>* modulesVector = this->GrpStringList;
+
+	for (
+		std::vector<std::pair<std::string, ClassModule*>>::iterator modulesIt = modulesVector->begin();
+		modulesIt != modulesVector->end();
+		modulesIt++
+		)
+	{
+
+		std::list<std::pair<std::string, ClassPar*>> parametersList = *modulesIt->second->getParametersList();
+
+		for (
+			std::list<std::pair<std::string, ClassPar*>>::iterator it = parametersList.begin();
+			it != parametersList.end();
+			it++
+			)
+		{
+			allParameters->push_back(std::pair<std::string, ClassPar*>(it->first, it->second));
+		}
+
+	}
+
+}

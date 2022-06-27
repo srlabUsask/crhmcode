@@ -553,3 +553,83 @@ long GetSharedUnitPar(string units) {
 long ClassPar::GetUnit(void) {
 	return GetSharedUnitPar(units);
 }
+
+
+bool ClassPar::ConsolidationCandidates(ClassPar* leftParameter, ClassPar* rightParameter)
+{
+
+	if (leftParameter == rightParameter)
+	{
+		return false;
+	}
+
+	if (leftParameter->param != rightParameter->param)
+	{
+		return false;
+	}
+
+	if (leftParameter->dim != rightParameter->dim)
+	{
+		return false;
+	}
+
+	if (leftParameter->lay != rightParameter->lay)
+	{
+		return false;
+	}
+
+	if (leftParameter->varType != rightParameter->varType)
+	{
+		return false;
+	}
+
+	bool sameValues = true;
+
+	for (long i = 0; i < leftParameter->lay; i++)
+	{
+		for (long j = 0; j < leftParameter->dim; j++)
+		{
+			if (leftParameter->varType == TVar::Float)
+			{
+				double leftCompare = leftParameter->layvalues[i][j];
+				double rightCompare = rightParameter->layvalues[i][j];
+
+				if (std::abs(leftCompare - rightCompare) > DBL_EPSILON)
+				{
+					sameValues = false;
+					break;
+				}
+
+			}
+			else if (leftParameter->varType == TVar::Int)
+			{
+				long leftCompare = leftParameter->ilayvalues[i][j];
+				long rightCompare = rightParameter->ilayvalues[i][j];
+
+				if (leftCompare != rightCompare)
+				{
+					sameValues = false;
+					break;
+				}
+			}
+			else if (leftParameter->varType == TVar::Txt)
+			{
+				std::string leftCompare = leftParameter->Strings->at(i);
+				std::string rightCompare = rightParameter->Strings->at(i);
+
+				if (leftCompare != rightCompare)
+				{
+					sameValues = false;
+					break;
+				}
+			}
+
+			if (!sameValues)
+			{
+				break;
+			}
+		}
+	}
+
+	return !sameValues;
+}

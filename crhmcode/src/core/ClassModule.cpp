@@ -726,8 +726,15 @@ std::vector<std::string>* ClassModule::decllocalparam(string param, TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
-	string Texts, string help, std::vector<std::string> * stringsList, TVISIBLE Local) {
+std::vector<std::string> * ClassModule::declparam(
+	string param, 
+	TDim dimen,
+	string Texts, 
+	string help, 
+	std::vector<std::string> * stringsList, 
+	TVISIBLE Local
+) 
+{
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
@@ -752,7 +759,8 @@ std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
 		return NULL;
 	}
 
-	case TBuild::DECL: {
+	case TBuild::DECL: 
+	{
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
@@ -781,6 +789,9 @@ std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
 
 		PairPar Item = PairPar(Name + " " + param, newPar);
 		Global::MapPars.insert(Item);
+
+		this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+
 		return newPar->Strings;
 	}
 
@@ -808,9 +819,20 @@ std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decldiagparam(string param, TDim dimen,
-	string valstr, string minstr, string maxstr,
-	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
+void ClassModule::decldiagparam(
+	string param, 
+	TDim dimen,
+	string valstr, 
+	string minstr, 
+	string maxstr,
+	string help, 
+	string units, 
+	const double **value, 
+	const double ***layvalue, 
+	const int dim, 
+	TVISIBLE Local
+) 
+{
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
@@ -824,9 +846,20 @@ void ClassModule::decllocalparam(string param, TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declparam(string param, TDim dimen,
-	string valstr, string minstr, string maxstr,
-	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
+void ClassModule::declparam(
+	string param, 
+	TDim dimen,
+	string valstr, 
+	string minstr, 
+	string maxstr,
+	string help, 
+	string units, 
+	const double **value, 
+	const double ***layvalue, 
+	const int dim, 
+	TVISIBLE Local
+) 
+{
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
@@ -854,7 +887,8 @@ void ClassModule::declparam(string param, TDim dimen,
 		return;
 	}
 
-	case TBuild::DECL: {
+	case TBuild::DECL: 
+	{
 
 		if (dim <= 0) { // find existing parameter
 			return;
@@ -922,6 +956,9 @@ void ClassModule::declparam(string param, TDim dimen,
 
 		PairPar Item = PairPar(Name + " " + param, newPar);
 		Global::MapPars.insert(Item);
+
+		this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+
 		return;
 	}
 
@@ -973,9 +1010,20 @@ void ClassModule::decllocalparam(string param, TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declparam(string param, TDim dimen,
-	string valstr, string minstr, string maxstr,
-	string help, string units, const long **ivalue, const long ***ilayvalue, const int dim, TVISIBLE Local) {
+void ClassModule::declparam(
+	string param, 
+	TDim dimen,
+	string valstr, 
+	string minstr, 
+	string maxstr,
+	string help, 
+	string units, 
+	const long **ivalue, 
+	const long ***ilayvalue, 
+	const int dim, 
+	TVISIBLE Local
+) 
+{
 
 	MapPar::iterator itPar;
 	ClassPar *newPar;
@@ -1002,7 +1050,8 @@ void ClassModule::declparam(string param, TDim dimen,
 		return;
 	}
 
-	case TBuild::DECL: {
+	case TBuild::DECL: 
+	{
 
 		if (dim <= 0) { // find existing parameter
 			return;
@@ -1068,6 +1117,9 @@ void ClassModule::declparam(string param, TDim dimen,
 
 		PairPar Item = PairPar(Name + " " + param, newPar);
 		Global::MapPars.insert(Item);
+
+		this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+
 		return;
 	}
 
@@ -3553,4 +3605,10 @@ ClassModule* ClassModule::link(string Module)
 		return pos->second;
 	}
 
+}
+
+
+std::list<std::pair<std::string, ClassPar*>>* ClassModule::getParametersList()
+{
+	return &this->parameters_list;
 }

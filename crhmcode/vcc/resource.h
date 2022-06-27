@@ -73,6 +73,7 @@
 #define IDC_BUTTON6                     1014
 #define IDC_TCHART1                     1015
 #define IDC_EDIT1                       1018
+#define IDC_EDIT4                       1019
 #define IDC_CHECK1                      1023
 #define IDC_CHECK2                      1024
 #define IDC_CHECK3                      1025
@@ -201,10 +202,7 @@
 #define ID_CTX_ALL_VAR_ADD              34006
 #define ID_CTX_ALL_VAR_ADD_ARRAY        34007
 #define ID_CTX_SEL_VAR_REMOVE           34008
-#define UWM_OPEN_CTX_ALL_OBS            35000
-#define UWM_OPEN_CTX_SEL_OBS            35001
-#define UWM_OPEN_CTX_ALL_VAR            35002
-#define UWM_OPEN_CTX_SEL_VAR            35003
+
 #define ID_OBS_DIM_DISPLAY              35100
 #define ID_OBS_DIM_DECREASE             35101
 #define ID_OBS_DIM_INCREASE             35102
@@ -235,8 +233,7 @@
 #define ID_MAX_HRU_DISPLAY              40017
 #define ID_MODULE_FILTER_LABELS         40018
 #define ID_CONSTRUCT_CONSOLE            40019
-#define UWM_OPEN_CTX_AVAILABLE_MODS     40020
-#define UWM_OPEN_CTX_SELECTED_MODS      40021
+
 #define ID_CTX_AVAILABLE_MOD_ADD        40022
 #define ID_CTX_SEL_MODS_REMOVE          40023
 #define ID_CTX_SEL_MODS_NEXT            40024
@@ -273,12 +270,66 @@
 #define ID_EXPORT_SAVE_AS               40508
 #define ID_EXPORT_EXIT                  40509
 #define IDR_EXPORT_MENU                 40510
-#define UWM_AUTO_RUN                    40511
-#define UWM_FLIP_TICKS_LEFT             40600
-#define UWM_FLIP_TICKS_RIGHT            40601
+
 #define ID_OBS_LAY_DIM_LABEL            40700
 #define ID_CTX_ALL_VAR_ADD_LAY_ARRAY    40701
 #define ID_CTX_ALL_VAR_ADD_HRU_LAY_ARRAY 40702
+#define ID_PARAM_DLG_MODULES_LIST_BOX   50000
+#define ID_PARAM_DLG_PARAM_LIST_BOX     50001
+#define ID_PARAM_DLG_TOGGLE_BASIC_BTN   50002
+#define ID_PARAM_DLG_TOGGLE_ADVANCE_BTN 50003
+#define ID_PARAM_DLG_TOGGLE_PRIVATE_BTN 50004
+#define ID_PARAM_DLG_TOGGLE_ALL_BTN     50005
+#define PARAMETERS_DLG_SCROLL_PANE      50006
+#define ID_PARAM_PANE_PLACEHOLDER       50007
+#define PARAMETERS_CARD                 50009
+#define PARAMETERS_CARD_SHARED          50010
+#define ID_PARAM_NAME                   60000
+#define ID_PARAM_HELP                   60001
+#define ID_PARAM_UNITS_LABEL            60002
+#define ID_PARAM_UNITS                  60003
+#define ID_PARAM_SET_BTN                60004
+#define ID_PARAM_RESET_BTN              60005
+#define ID_PARAM_SAVE_BTN               60006
+#define ID_PARAM_MIN_LABEL              60007
+#define ID_PARAM_MAX_LABEL              60008
+#define ID_PARAM_DEFAULT_LABEL          60009
+#define ID_PARAM_MIN_VALUE              60010
+#define ID_PARAM_MAX_VALUE              60011
+#define ID_PARAM_DEFAULT_VALUE          60012
+#define PARAMETERS_SET_ALL_DLG			60013
+#define ID_PARAM_SET_VALUE				60014
+#define ID_PARAM_RESET_ALL				60015
+#define ID_PARAM_SAVE_ALL				60016
+#define ID_PARAM_MAKE_LOCAL				60017
+#define ID_PARAM_SET_PLACEHOLDER		60018
+#define CONSOLIDATE_PARAM_DLG			60019
+#define ID_CONSOLIDATABLE_LIST_BOX		60020
+#define ID_CONSOLIDATE_CARDS_PLACEHOLDER 60021
+#define ID_CONSOLIDATE_RETURN			60022
+#define ID_CONSOLIDATE_FINISH			60023
+#define CONSOLIDATE_PARAM_CARD			60024
+#define ID_PARAM_USE_FOR_ALL			60025
+#define ID_MODULE_NAME					60026
+
+#define ID_PARAM_COL					70000
+
+#define ID_PARAM_ROW					80000
+
+#define ID_PARAM_GRID					100000000
+
+#define UWM_OPEN_CTX_ALL_OBS            32768
+#define UWM_OPEN_CTX_SEL_OBS            32769
+#define UWM_OPEN_CTX_ALL_VAR            32770
+#define UWM_OPEN_CTX_SEL_VAR            32771
+#define UWM_OPEN_CTX_AVAILABLE_MODS     32772
+#define UWM_OPEN_CTX_SELECTED_MODS      32773
+#define UWM_AUTO_RUN                    32774
+#define UWM_FLIP_TICKS_LEFT             32775
+#define UWM_FLIP_TICKS_RIGHT            32776
+#define UWM_MAKE_LOCAL					32777
+#define UWM_UNSELECT_PARAMS				32778
+#define UWM_USE_FOR_ALL					32779
 
 #define ID_REFRESH_DAILY				41000
 #define ID_REFRESH_BIWEEKLY				41001
