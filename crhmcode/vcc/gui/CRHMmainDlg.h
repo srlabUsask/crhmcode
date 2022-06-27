@@ -66,9 +66,7 @@ protected:
 private:
 	long Box1Disply{ 0 };
 	long ObsFunct_Toggle = 0; /**< no display/Final/Trend values */
-	long TBase{ 0 };
-	long water_year_month = 10; /**< Specifies the month to signal end of water year. Default is October.*/
-
+	
 	std::string ProjectFileArgument = ""; /**< it takes the filename from the command line. */
 	std::string defaultprojectname = "currentproject.prj";
 	std::string defaultprojectpath = "currentproject.prj";
@@ -81,6 +79,56 @@ private:
 	* Tracks the currently set plot refresh rate.
 	*/
 	RefreshRate refresh_rate;
+
+	/**
+	* Drop down selector for observation functions
+	* 
+	* Options are:
+	*	Observation
+	*	Total
+	*	Minimum
+	*	Maximum
+	*	Average
+	* 
+	* Control ID is ID_FUNCTION_DROP_DOWN
+	*/
+	CComboBox function_drop_down;
+
+	/**
+	* Drop down selector for timebase setting
+	* 
+	* Options are:
+	*	Daily	
+	*	Water Year
+	*	Calendar Year
+	*	Monthly
+	*	All
+	*	
+	* 
+	* Control ID is ID_TIMEBASE_DROP_DOWN
+	*/
+	CComboBox timebase_drop_down;
+
+	/**
+	* Drop down selector for water year start setting
+	* 
+	* Options are:
+	*	Jan
+	*	Feb
+	*	Mar
+	*	Apr
+	*	May
+	*	Jun
+	*	July
+	*	Aug
+	*	Sep
+	*	Oct
+	*	Nov
+	*	Dec
+	* 
+	* Control ID is ID_WATER_YEAR_DROP_DOWN
+	*/
+	CComboBox water_year_drop_down;
 
 	/**
 	* List box for all variables in the loaded project
@@ -433,6 +481,8 @@ private:
 
 	afx_msg void OnLogLast();
 
+	afx_msg void OnCreateSummary();
+
 	/**
 	* Handler for clicking on Observations->Open Observation
 	* 
@@ -668,6 +718,23 @@ private:
 	afx_msg LRESULT OpenSelObsCtxMenu(WPARAM, LPARAM);
 
 	/**
+	* Handler for when the timebase drop down selector is changed. 
+	* 
+	* If the chosen value is Water Year it reveals the water year start selector
+	* otherwise it hides the water year start selector
+	* 
+	* Also sets the TBase field to the correct TimeBase enum value.
+	*/
+	afx_msg void OnTimebaseChange();
+
+	/**
+	* Handler for when the water year drop down selector is changed.
+	* 
+	* Sets the water_year_month field to the value that corrisponds with the selected month.
+	*/
+	afx_msg void OnWaterYearChange();
+
+	/**
 	* Checks what variables are selected in the all variables list box and adds the
 	*	appropreate dimension to the model and updates the list boxes. 
 	*/
@@ -786,5 +853,10 @@ private:
 	void setDimensionSelectorToLay();
 
 	int getMaxLayofSelection();
+
+	/** 
+	* Calculates if the water year month drop down should be shown or hidden.
+	*/
+	void showHideWaterYearMonth();
 
 };

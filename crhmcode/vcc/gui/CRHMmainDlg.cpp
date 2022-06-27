@@ -47,6 +47,9 @@ void CRHMmainDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, ID_FLIP_TICKS, FlipTicks);
 	FlipTicks.setMessageCodeLeft(UWM_FLIP_TICKS_LEFT);
 	FlipTicks.setMessageCodeRight(UWM_FLIP_TICKS_RIGHT);
+	DDX_Control(pDX, ID_FUNCTION_DROP_DOWN, function_drop_down);
+	DDX_Control(pDX, ID_TIMEBASE_DROP_DOWN, timebase_drop_down);
+	DDX_Control(pDX, ID_WATER_YEAR_DROP_DOWN, water_year_drop_down);
 }
 
 
@@ -63,6 +66,7 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	//Project->Log submenu
 	ON_COMMAND(ID_MAIN_LOG_ALL, &CRHMmainDlg::OnLogAll)
 	ON_COMMAND(ID_MAIN_LOG_LAST, &CRHMmainDlg::OnLogLast)
+	ON_COMMAND(ID_MAIN_CREATE_SUMMARY, &CRHMmainDlg::OnCreateSummary)
 
 	//Project->Reports submenu
 	ON_COMMAND(ID_EXTRACT_GROUP, &CRHMmainDlg::OnExtractGroup)
@@ -132,6 +136,10 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_MESSAGE(UWM_OPEN_CTX_ALL_OBS, &CRHMmainDlg::OpenAllObsCtxMenu)
 	ON_MESSAGE(UWM_OPEN_CTX_SEL_OBS, &CRHMmainDlg::OpenSelObsCtxMenu)
 
+	//Function and Timebase drop down selectors
+	ON_CBN_SELCHANGE(ID_TIMEBASE_DROP_DOWN, &CRHMmainDlg::OnTimebaseChange)
+	ON_CBN_SELCHANGE(ID_WATER_YEAR_DROP_DOWN, &CRHMmainDlg::OnWaterYearChange)
+
 	//Date Pickers
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_START_DATE_PICKER, &CRHMmainDlg::OnStartDateChange)
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_END_DATE_PICKER, &CRHMmainDlg::OnEndDateChange)
@@ -146,8 +154,9 @@ END_MESSAGE_MAP()
 
 BOOL CRHMmainDlg::OnInitDialog()
 {
-	CDialogEx::OnInitDialog();
+	CRHMmain* model = CRHMmain::getInstance();
 
+	CDialogEx::OnInitDialog();
 	// TODO:  Add extra initialization here
 
 	//State the name of the program in the window title - Matt
@@ -165,6 +174,41 @@ BOOL CRHMmainDlg::OnInitDialog()
 	CFont* obsHelpFont = new CFont();
 	obsHelpFont->CreatePointFont(96, _T("Ariel"));
 	GetDlgItem(ID_OBS_HELP_DISPLAY)->SetFont(obsHelpFont);
+
+	/**
+	* Set options for the function_drop_down
+	*/
+	function_drop_down.AddString(L"Observation");
+	function_drop_down.AddString(L"Total");
+	function_drop_down.AddString(L"Minimum");
+	function_drop_down.AddString(L"Maximum");
+	function_drop_down.AddString(L"Average");
+	function_drop_down.SetCurSel(0);
+
+	/**
+	* Set options for the timebase_drop_down
+	*/
+	timebase_drop_down.AddString(L"Daily");
+	timebase_drop_down.AddString(L"Monthly");
+	timebase_drop_down.AddString(L"Calendar Year");
+	timebase_drop_down.AddString(L"Water Year");
+	timebase_drop_down.AddString(L"All");
+
+	/**
+	* Set options for the water_year_drop_down
+	*/
+	water_year_drop_down.AddString(L"January");
+	water_year_drop_down.AddString(L"Febuary");
+	water_year_drop_down.AddString(L"March");
+	water_year_drop_down.AddString(L"April");
+	water_year_drop_down.AddString(L"May");
+	water_year_drop_down.AddString(L"June");
+	water_year_drop_down.AddString(L"July");
+	water_year_drop_down.AddString(L"August");
+	water_year_drop_down.AddString(L"September");
+	water_year_drop_down.AddString(L"October");
+	water_year_drop_down.AddString(L"November");
+	water_year_drop_down.AddString(L"December");
 
 	loadGuiComponents();
 
@@ -191,7 +235,7 @@ void CRHMmainDlg::loadGuiComponents()
 	listbox_all_observations.ResetContent();
 	listbox_sel_observations.ResetContent();
 
-	CRHMmain* crhm_core = CRHMmain::getInstance();
+	CRHMmain* model = CRHMmain::getInstance();
 
 	std::map<std::string, ClassVar*>* variables = CRHMmain::getInstance()->getVariables();
 	std::map<std::string, ClassVar*>::iterator it;
@@ -257,47 +301,71 @@ void CRHMmainDlg::loadGuiComponents()
 	CRHMmain* main = CRHMmain::getInstance();
 	SetTime(main->GetStartDate(), main->GetEndDate());
 
+	CMenu* menu = GetMenu();
+
 	if (main->getAutoRun())
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_AUTO_RUN, MF_CHECKED);
 	}
 	else
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
 	}
 
 	if (main->getAutoExit())
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_AUTO_EXIT, MF_CHECKED);
 	}
 	else
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
 	}
 
 	if (main->getReportAll())
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_CHECKED);
 		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
 	}
 	else
 	{
-		CMenu* menu = GetMenu();
 		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
 		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_CHECKED);
 	}
 
-	if (crhm_core->getAutoRun())
+	if (model->getAutoRun())
 	{
 		ShowWindow(1);
 		CenterWindow();
 		UpdateWindow();
 		PostMessage(UWM_AUTO_RUN, 0, 0);
+	}
+
+	switch (model->getTimeBase())
+	{
+	case (TimeBase::DAILY):
+		timebase_drop_down.SetCurSel(0);
+		break;
+	case (TimeBase::MONTHLY):
+		timebase_drop_down.SetCurSel(1);
+		break;
+	case (TimeBase::CALENDAR_YEAR):
+		timebase_drop_down.SetCurSel(2);
+		break;
+	case (TimeBase::WATER_YEAR):
+		timebase_drop_down.SetCurSel(3);
+		break;
+	case (TimeBase::ALL):
+		timebase_drop_down.SetCurSel(4);
+		break;
+	default:
+		break;
+	}
+	this->showHideWaterYearMonth();
+	water_year_drop_down.SetCurSel(model->getWaterYearMonth() - 1);
+
+	if (model->getSummarize())
+	{
+		menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_CHECKED);
 	}
 
 }
@@ -726,420 +794,9 @@ void CRHMmainDlg::AddSeriesToTChart(TSeries* tseries)
 
 void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFun Funct) {
 
-	CRHMmain* test = CRHMmain::getInstance();
+	CRHMmain* model = CRHMmain::getInstance();
 
-	ClassVar* newVar;
-	Global::HRU_OBS = Global::HRU_OBS_DIRECT; // always correct?
-
-	double** Data = thisVar->FileData->Data;
-	double xx;
-	double DTstartR = test->GetStartDate();
-	double DTendR = test->GetEndDate();
-
-	if (DTstartR >= DTendR) return;
-
-	TDateTime Save_DTnow = Global::DTnow; // Save
-
-	double MyInterval = thisVar->FileData->Interval;
-	long DTmin = INT((DTstartR - Global::DTstart) * thisVar->FileData->Freq) * Global::Freq / thisVar->FileData->Freq;
-	long DTmax = INT((DTendR - Global::DTstart) * thisVar->FileData->Freq) * Global::Freq / thisVar->FileData->Freq;
-
-	long jj1 = S.rfind("(");
-	long jj2 = S.rfind(")");
-
-	long Indx;
-	string::size_type pp;
-	pp = thisVar->name.rfind('(');
-	bool AlreadyIndex = (pp != string::npos); // handles exported variables in Obs files
-
-	if (test->ListHruNames && thisVar->varType < TVar::Read) // using names
-	{
-
-		string sub = S.substr(jj1 + 1, jj2 - jj1 - 1);
-		bool found = false;
-		int n;
-		for (size_t i = 0; i < test->ListHruNames->size(); i++)
-		{
-			if (test->ListHruNames->at(i) == sub)
-			{
-				n = i;
-				found = true;
-			}
-		}
-
-		if (found == false)
-		{
-			n = -1;
-		}
-
-		Indx = n - 1; //Subtraction of 1 to match historic code jhs507
-
-	}
-	else {
-		if (thisVar->root != "" || AlreadyIndex)
-			Indx = 0; // (non observations always 0
-		else
-			Indx = stoi(S.substr(jj1 + 1, jj2 - jj1 - 1)) - 1;
-	}
-
-	long IndxMin = thisVar->FileData->IndxMin;
-	long IndxMax = thisVar->FileData->IndxMax;
-
-	if (thisVar->FileData->Times != NULL) { // display sparse data
-		if (Global::Freq == 1)
-			--DTendR;
-
-		double Sum = 0.0;
-
-		for (long ii = 0; ii < thisVar->FileData->Lines; ++ii) {
-			if (thisVar->FileData->Times[ii] < DTstartR) continue;
-			if (thisVar->FileData->Times[ii] > DTendR) continue;
-
-			xx = Data[thisVar->offset + Indx][ii];
-
-			if (Funct == TFun::TOT) {
-				Sum += xx;
-				xx = Sum;
-			}
-
-			cdSeries->AddXY(thisVar->FileData->Times[ii], xx);
-		}
-	}
-
-	else if (Funct <= TFun::MJ_W) // display simple observations
-	{ 
-
-		for (Global::DTindx = DTmin; Global::DTindx < DTmax; Global::DTindx++) 
-		{
-			Global::DTnow = Global::DTstart + Global::Interval * Global::DTindx + Global::Interval;
-
-			if (MyInterval >= 1)
-			{
-				--Global::DTnow;
-			}
-
-			if (Global::DTindx * thisVar->FileData->Freq / Global::Freq >= IndxMin
-				&& Global::DTindx * thisVar->FileData->Freq / Global::Freq <= IndxMax) 
-			{
-				xx = Data[thisVar->offset + Indx][(Global::DTindx * thisVar->FileData->Freq / Global::Freq - IndxMin)];
-
-				if (Funct == TFun::FOBS)
-				{
-					//No function to apply.
-				}
-				else if (Funct == TFun::VP_SAT) 
-				{
-					if (xx > 0.0)
-					{
-						xx = 0.611 * exp(17.27 * xx / (xx + 237.3));
-					}
-					else
-					{
-						xx = 0.611 * exp(21.88 * xx / (xx + 265.5));
-					}
-				}
-				else if (Funct == TFun::W_MJ)
-				{
-					xx *= thisVar->FileData->Interval * 86400 / 1.0E6;
-				}
-				else if (Funct == TFun::MJ_W)
-				{
-					xx *= 1.0E6 / 86400 / thisVar->FileData->Interval;
-				}
-
-				cdSeries->AddXY(Global::DTnow, xx);
-			}
-		}
-	}
-	else { // display observations functions
-		//cdSeries->Stairs = true;
-		// N.B. object FileData copied. If Obs function - Obs deletes else if VarObsFunct SelectedObservations deletes.
-		newVar = new ClassVar(*thisVar);
-
-		newVar->name = S.c_str();
-
-		newVar->FileData->DataFileName = "Copy";
-
-
-		string::size_type pp = thisVar->units.find_last_of(")");
-
-		if (thisVar->FileData->Freq > 1 && (thisVar->units[pp - 1] == 'd'))   //  || TBase == 0
-			thisVar->Daily = TRUE;
-		else
-			thisVar->Daily = FALSE;
-
-		if (newVar->root == "") { // Observation
-			if (thisVar->FileData->Freq == 1)
-				newVar->LoopFunct = &ClassVar::LoopFirst;
-			else if (thisVar->Daily)
-				newVar->LoopFunct = &ClassVar::LoopFirst;
-			else
-				newVar->LoopFunct = &ClassVar::LoopRange;
-		}
-		else { // Variable
-			if (thisVar->Daily)
-				newVar->LoopFunct = &ClassVar::LoopLast;
-			else
-				newVar->LoopFunct = &ClassVar::LoopRange;
-		}
-
-		newVar->FunctVar = thisVar;
-
-		switch (Funct) {
-		case TFun::AVG:
-			newVar->UserFunct_ = &ClassVar::Tot_;
-			newVar->FunKind = TFun::AVG;
-			break;
-		case TFun::MIN:
-			newVar->UserFunct_ = &ClassVar::Min_;
-			newVar->FunKind = TFun::MIN;
-			break;
-		case TFun::MAX:
-			newVar->UserFunct_ = &ClassVar::Max_;
-			newVar->FunKind = TFun::MAX;
-			break;
-		case TFun::TOT:
-			newVar->UserFunct_ = &ClassVar::Tot_;
-			newVar->FunKind = TFun::TOT;
-			break;
-		case TFun::POS:
-			newVar->UserFunct_ = &ClassVar::Pos_;
-			newVar->FunKind = TFun::POS;
-			break;
-		case TFun::FIRST:
-			newVar->UserFunct_ = &ClassVar::First_;
-			newVar->FunKind = TFun::FIRST;
-			newVar->LoopFunct = &ClassVar::LoopFirst;
-			break;
-		case TFun::LAST:
-			newVar->UserFunct_ = &ClassVar::Last_;
-			newVar->FunKind = TFun::LAST;
-			newVar->LoopFunct = &ClassVar::LoopLast;
-			break;
-		case TFun::CNT:
-			newVar->UserFunct_ = &ClassVar::Count_;
-			newVar->FunKind = TFun::CNT;
-			break;
-		case TFun::CNT0:
-			newVar->UserFunct_ = &ClassVar::Count0_;
-			newVar->FunKind = TFun::CNT0;
-			break;
-		case TFun::DLTA:
-			newVar->UserFunct_ = &ClassVar::First_;
-			newVar->LoopFunct = &ClassVar::LoopFirst;
-			newVar->FunKind = TFun::DLTA;
-			break;
-		default:
-			break;
-		} // switch
-
-		bool First = false;
-		long Next = -1;
-		long Days = 0;
-		long LastDays = 0;
-		long Lastkk = 0;
-		long CurrentIndx = -1;
-		long LastIndex = -1;
-		long itime[6];
-		long Greatest;
-		long DTminX = DTmin;
-		if (IndxMin > 0)
-			DTminX = IndxMin;
-		double Delta0 = 0.0;
-		double First0;
-		double Temp;
-		dattim("now", itime);
-
-		for (Global::DTindx = DTmin; Global::DTindx < DTmax; Global::DTindx += Global::Freq) {
-			Global::DTnow = Global::DTstart + Global::Interval * Global::DTindx + Global::Interval;
-
-			if (Global::DTindx * Global::Freq / thisVar->FileData->Freq >= IndxMin)
-				if (Global::DTindx * thisVar->FileData->Freq / Global::Freq > IndxMax)
-					break;
-				else {
-					if (Global::Interval >= 1) --Global::DTnow;
-
-					dattim("now", itime);
-
-					switch (TBase) {
-
-					case 0: // daily
-						if (Next == -1 || Next != itime[2]) {
-							Next = itime[2];
-							First = TRUE;
-						}
-						break;
-					case 1: // water annual
-						if (Next == -1 || itime[0] == Next && itime[1] == water_year_month) {
-							if (Next == -1 && itime[1] < water_year_month)
-								Next = itime[0];
-							else
-								Next = itime[0] + 1;
-							First = TRUE;
-						}
-						break;
-					case 2: // annual
-						if (Next == -1 || itime[0] == Next && itime[1] == 1) {
-							Next = itime[0] + 1;
-							First = TRUE;
-						}
-						break;
-					case 3: // monthly
-						if (Next == -1 || Next == itime[1]) {
-							Next = (itime[1]) % 12 + 1;
-							First = TRUE;
-						}
-						break;
-					case 4: // All - do nothing
-						if (Next == -1) {
-							Next = 0;
-							First = TRUE; // do nothing
-						}
-					default:
-						break;
-					} // switch
-
-					CurrentIndx = (Global::DTindx - DTminX) / thisVar->FileData->Freq - 1;
-
-					if (First) {
-						if (Global::DTindx > DTmin && Global::DTindx > IndxMin) { // Handle RUN starting after beginning of primary obs file and secondary obs file later
-							switch (Funct) {
-							case TFun::DLTA:
-								Temp = cdSeries->YValue((Global::DTindx - DTmin) / thisVar->FileData->Freq - 1);
-								cdSeries->YValues.at(CurrentIndx) -= Delta0;
-								Delta0 = Temp; // fall through
-							case TFun::AVG:
-							case TFun::MIN: // duplicate last
-							case TFun::MAX: // duplicate last
-							case TFun::TOT: // duplicate last
-							case TFun::POS: // duplicate last
-							case TFun::LAST: // duplicate last
-							case TFun::CNT:  // duplicate last
-							case TFun::CNT0: // duplicate last
-								if (ObsFunct_Toggle == 1) // show final value
-									for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-										cdSeries->YValues[jj] = cdSeries->YValues[CurrentIndx];
-								break;
-							case TFun::FIRST: // duplicate first
-								for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-									cdSeries->YValues.at(jj) = First0;
-								break;
-							default:
-								break;
-							} // switch
-						}
-						else if (Funct == TFun::DLTA && TBase) { // only very first time
-							(newVar->*(newVar->LoopFunct))(Indx);
-							Delta0 = newVar->values[Indx];
-
-							newVar->UserFunct_ = &ClassVar::Last_; // change from First interval to Last interval
-							newVar->FunKind = TFun::LAST;
-							newVar->LoopFunct = &ClassVar::LoopLast;
-						}
-
-						Lastkk = Global::DTindx;
-						if (CurrentIndx > -1) // skip first time
-							LastIndex = CurrentIndx;
-
-						switch (Funct) { // beginning of period reset
-						case TFun::MAX:
-							newVar->values[Indx] = -1000000.0;
-							break;
-						case TFun::MIN:
-							newVar->values[Indx] = 1000000.0;
-							break;
-						case TFun::AVG:
-						case TFun::TOT:
-						case TFun::CNT:
-						case TFun::CNT0:
-						case TFun::DLTA:
-						case TFun::POS:
-							newVar->values[Indx] = 0.0;
-						default:
-							break;
-						} // switch
-
-						LastDays = Days;
-						Days = 0;
-					} // if First
-
-					(newVar->*(newVar->LoopFunct))(Indx);
-
-					xx = newVar->values[Indx];
-					cdSeries->AddXY(Global::DTnow, xx);
-					//AddDataToSeries(series, Global::DTnow, xx);
-
-					if (First)
-						First0 = xx;
-
-					if (Global::DTindx > DTmin && Global::DTindx > IndxMin) {
-						switch (Funct) {
-						case TFun::AVG:
-							Greatest = Days;
-							if (LastDays > Days)
-								Greatest = LastDays;
-							cdSeries->YValues.at(CurrentIndx) /= ((long long)Global::Freq * (long long)Greatest);
-							LastDays = 0;
-							break;
-						case TFun::DLTA:
-							if (!First)
-								cdSeries->YValues.at(CurrentIndx) -= Delta0;
-							break;
-						default:
-							break;
-						} // switch
-					}
-
-					++Days;
-
-					First = FALSE;
-				} // if
-		} // for
-
-		if (Global::DTindx > DTmin && Global::DTindx > IndxMin) { // Handle RUN starting after beginning of primary obs file and secondary obs file later
-			CurrentIndx = (Global::DTindx - DTminX) / thisVar->FileData->Freq - 1;
-			switch (Funct) {
-			case TFun::AVG:
-				Greatest = Days;
-				if (LastDays > Days)
-					Greatest = LastDays;
-				cdSeries->YValues.at(CurrentIndx) /= ((long long)Global::Freq * (long long)Greatest);
-				if (ObsFunct_Toggle == 1) // show final value
-					for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-						cdSeries->YValues[jj] = cdSeries->YValues[CurrentIndx];
-				break;
-			case TFun::DLTA:
-				cdSeries->YValues.at(CurrentIndx) -= Delta0;
-			case TFun::MIN: // duplicate last
-			case TFun::MAX: // duplicate last
-			case TFun::TOT: // duplicate last
-			case TFun::POS: // duplicate last
-			case TFun::LAST: // duplicate last
-			case TFun::CNT:  // duplicate last
-			case TFun::CNT0: // duplicate last
-				if (ObsFunct_Toggle == 1) // show final value
-					for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-						cdSeries->YValues[jj] = cdSeries->YValues[CurrentIndx];
-				break;
-			case TFun::FIRST: // duplicate first
-				for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-					cdSeries->YValues.at(jj) = First0;
-				break;
-			default:
-				break;
-			} // switch
-		}
-
-		delete newVar->FileData; // created in this routine
-		delete newVar; // created in this routine
-
-		cdSeries->Tag = NULL;
-	} // else
-
-	Global::DTnow = Save_DTnow; // restore
-
-	//if (!CommandLine)  // do not repaint
-	//tchart.Repaint();
+	model->calculateObservationTseries(thisVar, cdSeries, S, Funct);
 
 	AddSeriesToTChart(cdSeries);
 
@@ -1607,7 +1264,7 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 		it++
 		)
 	{
-		int found = listbox_sel_observations.FindString(-1, CString(it->first.c_str()));
+		int found = listbox_sel_observations.FindStringExact(-1, CString(it->first.c_str()));
 
 		//If it is found it is already displayed if not then display it. 
 		if (found == LB_ERR)
@@ -1616,7 +1273,41 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 			it->second->XValues.clear();
 			it->second->YValues.clear();
 
-			AddObsPlot(it->second->Tag, it->second, it->first, model->Funct);
+			/* Look for a suffix and set function to the correct value. */
+			TFun funct = TFun::FOBS;
+			size_t suffixStart = it->first.rfind('_');
+			std::string suffix;
+			if (suffixStart == std::string::npos)
+			{
+				suffix = "";
+			}
+			else
+			{
+				suffix = it->first.substr(suffixStart, std::string::npos);
+			}
+
+			if (suffix == "")
+			{
+				funct = TFun::FOBS;
+			}
+			else if (suffix == "_Tot")
+			{
+				funct = TFun::TOT;
+			}
+			else if (suffix == "_Min")
+			{
+				funct = TFun::MIN;
+			}
+			else if (suffix == "_Max")
+			{
+				funct = TFun::MAX;
+			}
+			else if (suffix == "_Avg")
+			{
+				funct = TFun::AVG;
+			}
+
+			AddObsPlot(it->second->Tag, it->second, it->first, funct);
 
 			CString selectedObservation = CString(it->first.c_str());
 
@@ -1994,6 +1685,25 @@ void CRHMmainDlg::OnLogLast()
 		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
 	};
 }
+
+
+void CRHMmainDlg::OnCreateSummary()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+	
+	CMenu* menu = GetActiveWindow()->GetMenu();
+
+	if (menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_CHECKED) == MF_CHECKED)
+	{
+		menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_UNCHECKED);
+		model->setSummarize(false);
+	}
+	else 
+	{
+		model->setSummarize(true);
+	}
+}
+
 
 void CRHMmainDlg::OnOpenObservation()
 {
@@ -2607,6 +2317,7 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 
 	CString addText("Add");
 	CString addArrayText("Add Array");
+	CString applyFunctionText("Apply Function");
 
 	ctxMenu.InsertMenu(0,
 		MF_BYPOSITION | MF_STRING,
@@ -2617,6 +2328,44 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 		MF_BYPOSITION | MF_STRING,
 		ID_CTX_ALL_OBS_ADD_ARRAY,
 		(LPCTSTR)addArrayText);
+
+	CMenu functionSubMenu;
+	functionSubMenu.CreatePopupMenu();
+
+	ctxMenu.InsertMenu(2,
+		MF_BYPOSITION | MF_STRING | MF_POPUP,
+		(UINT_PTR) functionSubMenu.GetSafeHmenu(),
+		(LPCTSTR)applyFunctionText);
+
+	CString totalText("Total");
+	CString minText("Minimum");
+	CString maxText("Maximum");
+	CString avgText("Average");
+
+	functionSubMenu.InsertMenu(0,
+		MF_BYPOSITION | MF_STRING,
+		ID_TOTAL_FUNCT,
+		(LPCTSTR)totalText
+	);
+
+	functionSubMenu.InsertMenu(1,
+		MF_BYPOSITION | MF_STRING,
+		ID_MIN_FUNCT,
+		(LPCTSTR)minText
+	);
+
+	functionSubMenu.InsertMenu(2,
+		MF_BYPOSITION | MF_STRING,
+		ID_MAX_FUNCT,
+		(LPCTSTR)maxText
+	);
+
+	functionSubMenu.InsertMenu(3,
+		MF_BYPOSITION | MF_STRING,
+		ID_AVG_FUCNT,
+		(LPCTSTR)avgText
+	);
+
 
 	CWnd* wind = AfxGetMainWnd();
 	POINT p;
@@ -2629,16 +2378,46 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 			TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD | TPM_LEFTBUTTON,
 			p.x, p.y, wind, 0))
 		{
-			if (result == ID_CTX_ALL_OBS_ADD)
+			int savedSelection = this->function_drop_down.GetCurSel();
+
+			switch (result)
 			{
+			case (ID_CTX_ALL_OBS_ADD):
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
-			}
-			else if (result == ID_CTX_ALL_OBS_ADD_ARRAY)
-			{
+				break;
+			case (ID_CTX_ALL_OBS_ADD_ARRAY):
 				addObservationsArrayToSelected();
 				updateSelectedObservationListBox();
+				break;
+			case (ID_TOTAL_FUNCT):
+				this->function_drop_down.SetCurSel(1);
+				addObservationsToSelected();
+				updateSelectedObservationListBox();
+				this->function_drop_down.SetCurSel(savedSelection);
+				break;
+			case (ID_MIN_FUNCT):
+				this->function_drop_down.SetCurSel(2);
+				addObservationsToSelected();
+				updateSelectedObservationListBox();
+				this->function_drop_down.SetCurSel(savedSelection);
+				break;
+			case (ID_MAX_FUNCT):
+				this->function_drop_down.SetCurSel(3);
+				addObservationsToSelected();
+				updateSelectedObservationListBox();
+				this->function_drop_down.SetCurSel(savedSelection);
+				break;
+			case (ID_AVG_FUCNT):
+				this->function_drop_down.SetCurSel(4);
+				addObservationsToSelected();
+				updateSelectedObservationListBox();
+				this->function_drop_down.SetCurSel(savedSelection);
+				break;
+			default:
+				break;
 			}
+			
 		}
 
 	}
@@ -2681,6 +2460,46 @@ LRESULT CRHMmainDlg::OpenSelObsCtxMenu(WPARAM, LPARAM)
 	}
 
 	return 0;
+}
+
+
+void CRHMmainDlg::OnTimebaseChange()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+
+	int currentSelection = timebase_drop_down.GetCurSel();
+	
+	switch (currentSelection)
+	{
+	case (0):
+		model->setTimeBase(TimeBase::DAILY);
+		break;
+	case (1):
+		model->setTimeBase(TimeBase::MONTHLY);
+		break;
+	case (2):
+		model->setTimeBase(TimeBase::CALENDAR_YEAR);
+		break;
+	case (3):
+		model->setTimeBase(TimeBase::WATER_YEAR);
+		break;
+	case (4):
+		model->setTimeBase(TimeBase::ALL);
+		break;
+	default:
+		break;
+	}
+
+	this->showHideWaterYearMonth();
+}
+
+
+void CRHMmainDlg::OnWaterYearChange()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+
+	int currentSelection = this->water_year_drop_down.GetCurSel();
+	model->setWaterYearMonth(currentSelection + 1);
 }
 
 
@@ -3064,7 +2883,38 @@ void CRHMmainDlg::addObservationsToSelected()
 		/*Get the variable from the model*/
 		ClassVar* obsVar = model->AllObservations->find(selectedString)->second;
 
-		std::string seriesTitle = selectedString + "(" + to_string(dimension) + ")";
+		/* Retreive the value of the function selector to determine the suffix */
+		int functValue = function_drop_down.GetCurSel();
+		std::string suffix;
+
+		switch (functValue)
+		{
+		case (0):
+			// Observation;
+			suffix = "";
+			break;
+		case (1):
+			// Total
+			suffix = "_Tot";
+			break;
+		case (2):
+			// Minimum
+			suffix = "_Min";
+			break;
+		case (3):
+			// Maximum
+			suffix = "_Max";
+			break;
+		case (4):
+			// Average
+			suffix = "_Avg";
+			break;
+		default:
+			suffix = "";
+			break;
+		}
+
+		std::string seriesTitle = selectedString + "(" + to_string(dimension) + ")" + suffix;
 
 		bool dimensionSelected = observationIsSelected(seriesTitle);
 
@@ -3332,7 +3182,8 @@ void HruNameClick() {
 
 	MapPar::iterator itPar;
 	ClassPar *newPar;
-	long Hru, Lay;
+	int Hru; 
+	int Lay;
 
 	if (!test->ListHruNames) {
 
@@ -3553,4 +3404,21 @@ int CRHMmainDlg::getMaxLayofSelection()
 	}
 
 	return maxLayInSelection;
+}
+
+
+void CRHMmainDlg::showHideWaterYearMonth()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+
+	if (model->getTimeBase() == TimeBase::WATER_YEAR)
+	{
+		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_SHOW);
+		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_SHOW);
+	}
+	else
+	{
+		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_HIDE);
+		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_HIDE);
+	}
 }

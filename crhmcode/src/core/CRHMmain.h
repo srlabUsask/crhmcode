@@ -46,6 +46,8 @@ class ReportStream;
 class CRHMArguments;
 enum class OUTPUT_FORMAT;
 
+enum class TimeBase { DAILY, WATER_YEAR, CALENDAR_YEAR, MONTHLY, ALL };
+
 class CRHMmain
 {
 	static CRHMmain* instance;
@@ -56,6 +58,24 @@ private:
 	bool ReportAll{ true };
 	bool finishedRun{ false };
 
+	/**
+	* Tracks if a summary file has been requested for the loaded project.
+	*/
+	bool Summarize{ false };
+
+	/**
+	* Represents the summary period to be used for applying functions to observations or variables.
+	*/
+	TimeBase time_base;
+
+	/**
+	* Integer value of the month the water year ends.
+	* 1 == January ... 12 == December.
+	*/
+	int water_year_month;
+
+	void OutputSummary();
+
 public:
 
 	bool getAutoRun();
@@ -65,6 +85,48 @@ public:
 	bool getFinishedRun();
 	bool getReportAll();
 	void setReportAll(bool set);
+
+	/**
+	* Retrives the value of the Summarize field.
+	* 
+	* @return bool - true if a summary is to be produced and false otherwise
+	*/
+	bool getSummarize();
+
+	/**
+	* Sets the value of the Summarize field.
+	* 
+	* @param set - bool value to set the Summarize field to.
+	*/
+	void setSummarize(bool set);
+
+	/**
+	* Retrives the value of the time_base field
+	* 
+	* @return TimeBase the value of the time_base field
+	*/
+	TimeBase getTimeBase();
+
+	/**
+	* Sets the value of the time_base field
+	* 
+	* @param base - TimeBase value to set the time_base field to.
+	*/
+	void setTimeBase(TimeBase base);
+
+	/**
+	* Retrives the value of the water_year_month field
+	* 
+	* @return int the value of the water_year_month field
+	*/
+	int getWaterYearMonth();
+
+	/**
+	* Sets the value of the water_year_month field
+	* 
+	* @param month - int the value to set the water_year_month to must be between 1-12
+	*/
+	void setWaterYearMonth(int month);
 
 	CRHMLogger* Logger;
 	ReportStream * reportStream{NULL};
@@ -232,11 +294,31 @@ public:
 
 	string GetCaptionFromAboutBox();
 	string  ExtractHruLayFunct(string S, long &Hru, long &Lay, string &Funct, string &FullName);
-	string GetObservationName(string vname);
+	
+	/**
+	* Extracts the name of an observation from an observation label string 
+	*	that is in the format [name]([HRU],[LAY])
+	* 
+	* @return std::string - the name associated with an observation object found by looking for 
+	*	an empty string is returned if the name portion of the label cannot be used to find an 
+	*	observation object in the AllObservations field.
+	*/
+	std::string GetObservationName(std::string observationLabel);
 	void ClearModules(bool All);
 	void GetObservationData(char * obsfilepath, char * observationname);
 	void GetObservationNames(char * obsfilepath);
-	string ExtractHruLay(string S, long &Hru, long &Lay);
+
+	/**
+	* Extracts the HRU and LAY value from a variable/observation label string
+	*	that is in the format [name]([HRU],[LAY])
+	* 
+	* @param label - std::string the lable for values to be extracted from.
+	* @param Hru - int& An integer where the value of [HRU] will be placed in.
+	* @param Lay - int& An integer where the value of [LAY] will be placed in.
+	* @return std::string - The name of the variable or observation without HRU or LAY label.
+	*/
+	std::string ExtractHruLay(std::string label, int &Hru, int &Lay);
+	
 	string BuildHru(string S, long Hru, TDim dimen);
 	string BuildLay(string S, long Lay);
 	void BldModelClick();
@@ -253,6 +335,16 @@ public:
 	void print_progress(long current_step, long last_step, int print_frequency);
 
 	void print_progress_end();
+
+	/**
+	* Calculates the series of values that make up a TSeries representing an Observation plot
+	* 
+	* @param thisVar - ClassVar* pointer to the ClassVar object associated with the observation
+	* @param cdSeries - TSeries* pointer to the TSeries object where the series representing the observation plot will be stored
+	* @param seriesTitle - std::string the name of the series to be represented.
+	* @param TFun - Funct the function to be applied to the observation being ploted
+	*/
+	void calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries, string seriesTitle, TFun Funct);
 
 };
 

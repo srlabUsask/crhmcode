@@ -98,6 +98,40 @@ void CRHMmain::setReportAll(bool set)
 	this->ReportAll = set;
 }
 
+bool CRHMmain::getSummarize()
+{
+	return this->Summarize;
+}
+
+void CRHMmain::setSummarize(bool set)
+{
+	this->Summarize = set;
+}
+
+TimeBase CRHMmain::getTimeBase()
+{
+	return this->time_base;
+}
+
+
+void CRHMmain::setTimeBase(TimeBase base)
+{
+	this->time_base = base;
+}
+
+
+int CRHMmain::getWaterYearMonth()
+{
+	return this->water_year_month;
+}
+
+
+void CRHMmain::setWaterYearMonth(int month)
+{
+	assert(month >= 1 && month <= 12);
+	this->water_year_month = month;
+}
+
 
 CRHMmain* CRHMmain::getInstance()
 {
@@ -140,6 +174,9 @@ CRHMmain::CRHMmain(CRHMArguments * arguments)
 		this->UpdateProgress = arguments->get_update_progress();
 
 	}
+
+	this->time_base = TimeBase::WATER_YEAR;
+	this->water_year_month = 10;
 
 	FormCreate();
 }
@@ -790,13 +827,21 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					DataFile.clear();
 				} // while
 			}
-			else if (S == "Display_Observation:") {
+			else if (S == "Display_Observation:") 
+			{
 
-				while (!DataFile.eof()) {
+				while (!DataFile.eof()) 
+				{
 					DataFile >> module;
-					if (module[1] == '#') break;
+					if (module[1] == '#')
+					{
+						break;
+					}
 					DataFile >> name;
-					if (DataFile.eof()) return true; // final exit
+					if (DataFile.eof())
+					{
+						return true; // final exit
+					}
 
 					string Kind;
 					long Index;
@@ -804,15 +849,42 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					S = string(module) + ' ' + string(name);
 					thisVar = ClassVarFind(S);
 
-					if (thisVar && thisVar->FileData != NULL) {
+					if (thisVar && thisVar->FileData != NULL) 
+					{
 
-						for (int ii = 0; ii < 100; ii++) {
+						for (int ii = 0; ii < 100; ii++) 
+						{
+							TFun funct = TFun::FOBS;
 							DataFile >> Index >> Kind;
-							if (DataFile.fail()) break;
+							
+							if (DataFile.fail())
+							{
+								break;
+							}
 
-							if (Kind == "_obs") Kind = "";
+							if (Kind == "_obs")
+							{
+								Kind = "";
+								funct = TFun::FOBS;
+							}
+							else if (Kind == "_Tot")
+							{
+								funct = TFun::TOT;
+							}
+							else if (Kind == "_Min")
+							{
+								funct = TFun::MIN;
+							}
+							else if (Kind == "_Max")
+							{
+								funct = TFun::MAX;
+							}
+							else if (Kind == "_Avg")
+							{
+								funct = TFun::AVG;
+							}
+
 							SS = thisVar->name + "(" + Common::longtoStr(labs(Index)) + ")" + Kind;
-
 
 							bool selectedObservationsContainsSS = false;
 							for (
@@ -831,7 +903,8 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 							{
 
 								TSeries *cdSeries = NULL;
-								if (thisVar->FileData->Times == NULL) {
+								if (thisVar->FileData->Times == NULL) 
+								{
 									//                  cdSeries = new TSeries(Global::DTmax - Global::DTmin);
 									double Dif = EndDatePicker - StartDatePicker;
 									cdSeries = new TSeries();
@@ -840,15 +913,18 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 									cdSeries->Tag = thisVar;
 
 									cdSeries->Title = SS;
+
+									this->calculateObservationTseries(thisVar, cdSeries, SS, funct);
 								}
 
 								SelectedObservations->push_back(std::pair<std::string, TSeries *>( SS, cdSeries));
-								//                AddObsPlot((ClassVar *) thisVar, cdSeries, SS,
-								//                FindObservationType(Kind.c_str()));
+								//AddObsPlot((ClassVar *) thisVar, cdSeries, SS,
+								//FindObservationType(Kind.c_str()));
 							}
 						}
 					}
-					else {
+					else 
+					{
 						CRHMException Except("Unknown Variable " + S +
 							" in " + string(OpenNamePrj.c_str()), TExcept::ERR);
 						Common::Message(Except.Message.c_str(),
@@ -878,19 +954,69 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					DataFile >> S;
 				}
 			}
-			else if (S == "Final_State") {
+			else if (S == "Final_State") 
+			{
 				getline(DataFile, S);
-				if (S[1] != '#') {
+				if (S[1] != '#') 
+				{
 					SS = S;
 					int l = SS.length();
-					if (SS[l - 1] == '\r') { SS[l - 1] = '\0'; }
+					if (SS[l - 1] == '\r') 
+					{ 
+						SS[l - 1] = '\0'; 
+					}
 					SaveStateFileName = SS;
 					SaveStateFlag = true;
 					DataFile >> S;
 				}
 				else
+				{
 					SaveStateFileName = "";
 				}
+			}
+			else if (S == "Summary_period")
+			{
+				getline(DataFile, S);
+				if (S[1] != '#')
+				{
+					if (S == "Daily")
+					{
+						this->setTimeBase(TimeBase::DAILY);
+					}
+					else if (S == "Monthly_summary")
+					{
+						this->setTimeBase(TimeBase::MONTHLY);
+					}
+					else if (S == "Calendar_year")
+					{
+						this->setTimeBase(TimeBase::CALENDAR_YEAR);
+					}
+					else if (S == "Summarize_all")
+					{
+						this->setTimeBase(TimeBase::ALL);
+					}
+					else
+					{
+						size_t spacePos = S.find(' ');
+						std::string waterYearString = S.substr(0, spacePos);
+						std::string monthString = S.substr(spacePos, std::string::npos);
+						int month = std::stoi(monthString);
+						if (waterYearString == "Water_year")
+						{
+							this->setTimeBase(TimeBase::WATER_YEAR);
+							this->setWaterYearMonth(month);
+						}
+					}
+					DataFile >> S;
+				}
+				else
+				{
+					this->setTimeBase(TimeBase::WATER_YEAR);
+					this->setWaterYearMonth(10);
+				}
+
+				
+			}
 			else if (S == "Log_Last")
 			{
 				this->setReportAll(false);
@@ -903,10 +1029,16 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 			{
 				this->setAutoRun(true);
 			}
-			else if (S == "Auto_Exit") {
+			else if (S == "Auto_Exit") 
+			{
 				this->setAutoExit(true);
 			}
-			else if (S == "TChart:") {
+			else if (S == "Summary_Screen")
+			{
+				this->setSummarize(true);
+			}
+			else if (S == "TChart:") 
+			{
 
 				while (!DataFile.eof()) {
 					getline(DataFile, S);
@@ -1898,21 +2030,26 @@ bool  CRHMmain::FindFileName(string &FileName) {
 
 //---------------------------------------------------------------------------
 
-string  CRHMmain::ExtractHruLay(string S, long &Hru, long &Lay) {
-
-	long jj = S.find("(");
-	long jj1 = S.find(",");
-	long jj2 = S.find(")");
-
+std::string  CRHMmain::ExtractHruLay(std::string label, int &Hru, int &Lay) 
+{
+	size_t openParenPos = label.find("(");
+	size_t commaPos = label.find(",");
+	size_t closeParenPos = label.find(")");
+	
 	Lay = 0;
-	if (jj1 > -1)
-		Lay = Strtolong(S.substr(jj1 + 1, jj2 - jj1 - 1));
+
+	if (commaPos > -1)
+	{
+		Lay = Strtolong(label.substr(commaPos + 1, closeParenPos - commaPos - 1));
+	}
 	else
-		jj1 = jj2;
+	{
+		commaPos = closeParenPos;
+	}
 
-	Hru = Strtolong((S.substr(jj + 1, jj1 - jj - 1)));
+	Hru = Strtolong((label.substr(openParenPos + 1, commaPos - openParenPos - 1)));
 
-	return S.substr(0, jj);
+	return label.substr(0, openParenPos);
 }
 
 MMSData *  CRHMmain::RunClick2Start()
@@ -2222,7 +2359,8 @@ MMSData *  CRHMmain::RunClick2Start()
 		string S = selectedVarIterator->first;
 		cdSeries[ii]->Title = S;
 
-		long lay, dim;
+		int lay;
+		int dim;
 
 		S = ExtractHruLay(S, dim, lay);
 
@@ -2591,6 +2729,11 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 		if (SaveStateFlag)
 		{
 			SaveState();
+		}
+
+		if (this->getSummarize())
+		{
+			OutputSummary();
 		}
 
 		this->finishedRun = true;
@@ -3696,14 +3839,37 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ProjectList->push_back("######");
 	}
 
-	//ProjectList->Add("Summary_period");
-	//ProjectList->Add("######");
-	//need to modify
-	//string T = TBases[TBase];
-	//if (TBase == 1)
-	//	T = T + " " + string(water_year_month);
-	//ProjectList->Add(T);
-	//ProjectList->Add("######");
+	ProjectList->push_back("Summary_period");
+	ProjectList->push_back("######");
+	
+	std::string timeBaseString;
+	switch (this->time_base)
+	{
+	case (TimeBase::DAILY):
+		timeBaseString = "Daily";
+		break;
+	case (TimeBase::MONTHLY):
+		timeBaseString = "Monthly_summary";
+		break;
+	case (TimeBase::WATER_YEAR):
+		timeBaseString = "Water_year " + std::to_string(this->water_year_month);
+		break;
+	case (TimeBase::CALENDAR_YEAR):
+		timeBaseString = "Calendar_year";
+		break;
+	case (TimeBase::ALL):
+		timeBaseString = "Summarize_all";
+		break;
+	default:
+		break;
+	}
+
+	if (timeBaseString.length() != 0)
+	{
+		ProjectList->push_back(timeBaseString);
+	}
+	
+	ProjectList->push_back("######");
 
 	//ProjectList->Add("Log_Time_Format");
 	//ProjectList->Add("######");
@@ -3747,7 +3913,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		)
 	{
 
-		long lay, dim;
+		int lay; 
+		int dim;
 
 		ExtractHruLay(selectedVariablesIt->first, dim, lay);
 
@@ -3789,7 +3956,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	ProjectList->push_back("######");
 
 	lastVar = NULL;
-	string kind, lastkind;
+	std::string kind;
+	std::string lastkind;
 	Output = "";
 
 	for (
@@ -3797,41 +3965,35 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		it != SelectedObservations->end();
 		it++)
 	{
+		int dim = 0;
+		int lay = 0;
 
-		string S = it->first;
-		string FullName;
-		long dim = 0, lay = 0;
-		kind = "_obs";
+		/* Determine kind from the ceSeries->title variable */
+		size_t suffixStartPos = it->first.rfind('_');
+		if (suffixStartPos != std::string::npos)
+		{
+			kind = it->first.substr(suffixStartPos, std::string::npos);
+		}
+		else
+		{
+			kind = "_obs";
+		}
 
-
-		//need to modify
-		//string Name = ExtractHruLayFunct(SelectedObservations->Strings[ii], dim, lay, kind, FullName);
-		string Name = GetObservationName(it->first);
+		std::string observationName = GetObservationName(it->first);
 		ExtractHruLay(it->first, dim, lay);
-		//string Name = "";
 
+		TSeries* cdSeries = it->second;
+		ClassVar* thisVar = cdSeries->Tag;
 
-		//need to modify
-		//TLineSeries *cdSeries = (TLineSeries *)SelectedObservations->Objects[ii];
-		TSeries *cdSeries =it->second;
-
-		ClassVar *thisVar;
-		thisVar = NULL;
-
-		//need to modify
-		thisVar = (ClassVar *)cdSeries->Tag; // always OK for observation
-
-		//thisVar = it->second; //added by Manishankar for testing.
-													 //Name = SelectedObservations->Strings[ii];
-
-
-		if (!thisVar || !thisVar->FileData) {  // VarObsFunct
-			if (!thisVar) {
-
+		/* If the variable is a function applied to a variable output this condition is true */
+		if (!thisVar || !thisVar->FileData) 
+		{
+			if (!thisVar) 
+			{
 				std::list<std::pair<std::string, ClassVar*>>::iterator pos;
 				for (
 					std::list<std::pair<std::string, ClassVar*>>::iterator it = SelectedVariables->begin();
-					it != SelectedVariables->end() || it->first != FullName;
+					it != SelectedVariables->end();
 					it++
 					)
 				{
@@ -3844,81 +4006,52 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 				}
 				else
 				{
-					thisVar = VarFind(string(string("obs ") + Name.c_str()));
+					thisVar = VarFind(string(string("obs ") + observationName.c_str()));
 				}
 			}
 		}
 
-		//need to modify
-		//if (cdSeries->VertAxis == aRightAxis)
-		//dim = -dim;
-
-		string SS = to_string(dim);
+		std::string dimensionString = to_string(dim);
 
 		if (lay > 0)
-			SS += "," + to_string(lay);
+		{
+			dimensionString += "," + to_string(lay);
+		}
 
-		if (Output != "" && (thisVar != lastVar || kind != lastkind)) {
+		if (Output != "" && (thisVar != lastVar || kind != lastkind)) 
+		{
 			ProjectList->push_back(Output + " " + lastkind);
 			if (thisVar)
-				Output = (thisVar->module + " " + Name.c_str() + " " + SS.c_str()).c_str();
+			{
+				Output = (thisVar->module + " " + observationName.c_str() + " " + dimensionString.c_str()).c_str();
+			}
 			else // fudge for obs _Avg thru _Tot being null for observations
-				Output = (string("obs ") + Name.c_str() + " " + SS.c_str()).c_str();
+			{
+				Output = (string("obs ") + observationName.c_str() + " " + dimensionString.c_str()).c_str();
+			}
 		}
 		else if (lastVar) // add to earlier output
-			Output += " " + SS;
+		{
+			Output += " " + dimensionString;
+		}
 		else // first output
 		{
 			if (thisVar != NULL)
 			{
-				Output = (thisVar->module + " " + Name.c_str() + " " + SS.c_str()).c_str();
+				Output = (thisVar->module + " " + observationName.c_str() + " " + dimensionString.c_str()).c_str();
 			}
 		}
 
 		lastVar = thisVar;
 		lastkind = kind;
 
-
-
-		//this is just like populating ListBox3.
-
-		//long lay, dim;
-
-		//ExtractHruLay(SelectedObservations->Strings[ii], dim, lay);
-
-		////need to modify possibly
-		//ClassVar *thisVar = (ClassVar *)SelectedObservations->Objects[ii]; //previous code
-		//													   //ClassVar *thisVar = (ClassVar *)ii; //Manishankar's code
-		//if (thisVar != NULL)
-		//{
-		//	if (thisVar->TchrtOpt)
-		//		dim = -dim;
-
-		//	string SS = to_string(dim);
-		//	if (thisVar->lay > 0) SS += "," + to_string(lay);
-
-		//	string Mod = thisVar->module;
-
-		//	if (lastVar == NULL)
-		//		Output = (Mod + " " + thisVar->name + " ").c_str() + SS;
-		//	else if (lastVar != thisVar) {
-		//		ProjectList->Add(Output);
-		//		Output = (Mod + " " + thisVar->name + " ").c_str() + SS;
-		//	}
-		//	else
-		//		Output += " " + SS;
-
-		//	lastVar = thisVar;
-		//}
-
-
-
-
-
 	}
 
-
-	if (Output.length() != 0) ProjectList->push_back(Output + " " + kind); // handle last output
+	/* Handle any remaining output that is not yet pushed to the file */
+	if (Output.length() != 0)
+	{
+		ProjectList->push_back(Output + " " + kind); 
+	}
 
 	ProjectList->push_back("######");
 
@@ -3944,6 +4077,12 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	else
 	{
 		ProjectList->push_back("Log_Last");
+		ProjectList->push_back("######");
+	}
+
+	if (this->getSummarize())
+	{
+		ProjectList->push_back("Summary_Screen");
 		ProjectList->push_back("######");
 	}
 
@@ -4044,14 +4183,13 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 }
 
 
-string CRHMmain::GetObservationName(string vname)
+std::string CRHMmain::GetObservationName(std::string observationLabel)
 {
+	size_t openParenPos = observationLabel.find_first_of('(');
 
-	int pos = vname.find_first_of('(');
+	std::string trimmedLabel = observationLabel.substr(0,openParenPos);
 
-	std::string name = vname.substr(0,pos);
-
-	std::map<std::string,ClassVar*>::iterator it = AllObservations->find(name);
+	std::map<std::string,ClassVar*>::iterator it = AllObservations->find(trimmedLabel);
 
 	if (it != AllObservations->end())
 	{
@@ -4527,4 +4665,472 @@ void CRHMmain::print_progress_end()
 	std::cout << '\r' << setfill(' ') << setw(25) << 100.0f << "% Complete!";
 	std::cout.flush();
 	std::cout << "\n\n\n";
+}
+
+
+void CRHMmain::OutputSummary()
+{
+	/**
+	* Determine what series are part of the summary file.
+	*/
+	std::list<std::pair<std::string, TSeries*>> * selectedSeries = this->SelectedObservations;
+	std::list<std::pair<std::string, TSeries*>> summarySeries;
+
+	for (
+		std::list<std::pair<std::string, TSeries*>>::iterator it = selectedSeries->begin();
+		it != selectedSeries->end();
+		it++
+		)
+	{
+		std::string seriesTitle = it->first;
+		size_t underScorePos = seriesTitle.rfind('_');
+		std::string seriesType;
+
+		if (underScorePos != std::string::npos)
+		{
+			seriesType = seriesTitle.substr(underScorePos, std::string::npos);
+		}
+		else
+		{
+			seriesType = "";
+		}
+
+		if (seriesType == "_Tot" || seriesType == "_Avg" || seriesType == "_Max" || seriesType == "_Min")
+		{
+			summarySeries.push_back(std::pair<std::string, TSeries*>(it->first, it->second));
+		}
+	}
+
+
+	/** 
+	* Determine the name of the summary file
+	*/
+	std::string fileName = this->OpenNameReport;
+	size_t extensionPos = fileName.rfind('.');
+	fileName = fileName.substr(0, extensionPos);
+	fileName = fileName + ".sum";
+
+	/**
+	* Create a Report Stream
+	*/
+	ReportStream summaryStream(fileName);
+
+	/**
+	* Create the header lines for the summary file.
+	*/
+	summaryStream.OutputSummaryHeaders(&summarySeries);
+
+	/**
+	* Create the rest of the lines for the summary.
+	*/
+	summaryStream.OutputSummaryLines(&summarySeries);
+
+	summaryStream.CloseStream();
+}
+
+
+void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries, std::string seriesTitle, TFun Funct)
+{
+	
+
+	ClassVar* newVar;
+	Global::HRU_OBS = Global::HRU_OBS_DIRECT; // always correct?
+
+	double** Data = thisVar->FileData->Data;
+	double xx;
+	double DTstartR = this->GetStartDate();
+	double DTendR = this->GetEndDate();
+
+	if (DTstartR >= DTendR) return;
+
+	TDateTime Save_DTnow = Global::DTnow; // Save
+
+	double MyInterval = thisVar->FileData->Interval;
+	long DTmin = INT((DTstartR - Global::DTstart) * thisVar->FileData->Freq) * Global::Freq / thisVar->FileData->Freq;
+	long DTmax = INT((DTendR - Global::DTstart) * thisVar->FileData->Freq) * Global::Freq / thisVar->FileData->Freq;
+
+	long jj1 = seriesTitle.rfind("(");
+	long jj2 = seriesTitle.rfind(")");
+
+	long Indx;
+	string::size_type pp;
+	pp = thisVar->name.rfind('(');
+	bool AlreadyIndex = (pp != string::npos); // handles exported variables in Obs files
+
+	if (this->ListHruNames && thisVar->varType < TVar::Read) // using names
+	{
+
+		string sub = seriesTitle.substr(jj1 + 1, jj2 - jj1 - 1);
+		bool found = false;
+		int n;
+		for (size_t i = 0; i < this->ListHruNames->size(); i++)
+		{
+			if (this->ListHruNames->at(i) == sub)
+			{
+				n = i;
+				found = true;
+			}
+		}
+
+		if (found == false)
+		{
+			n = -1;
+		}
+
+		Indx = n - 1; //Subtraction of 1 to match historic code jhs507
+
+	}
+	else {
+		if (thisVar->root != "" || AlreadyIndex)
+			Indx = 0; // (non observations always 0
+		else
+			Indx = stoi(seriesTitle.substr(jj1 + 1, jj2 - jj1 - 1)) - 1;
+	}
+
+	long IndxMin = thisVar->FileData->IndxMin;
+	long IndxMax = thisVar->FileData->IndxMax;
+
+	if (thisVar->FileData->Times != NULL) { // display sparse data
+		if (Global::Freq == 1)
+			--DTendR;
+
+		double Sum = 0.0;
+
+		for (long ii = 0; ii < thisVar->FileData->Lines; ++ii) {
+			if (thisVar->FileData->Times[ii] < DTstartR) continue;
+			if (thisVar->FileData->Times[ii] > DTendR) continue;
+
+			xx = Data[thisVar->offset + Indx][ii];
+
+			if (Funct == TFun::TOT) {
+				Sum += xx;
+				xx = Sum;
+			}
+
+			cdSeries->AddXY(thisVar->FileData->Times[ii], xx);
+		}
+	}
+
+	else if (Funct <= TFun::MJ_W) // display simple observations
+	{
+
+		for (Global::DTindx = DTmin; Global::DTindx < DTmax; Global::DTindx++)
+		{
+			Global::DTnow = Global::DTstart + Global::Interval * Global::DTindx + Global::Interval;
+
+			if (MyInterval >= 1)
+			{
+				--Global::DTnow;
+			}
+
+			if (Global::DTindx * thisVar->FileData->Freq / Global::Freq >= IndxMin
+				&& Global::DTindx * thisVar->FileData->Freq / Global::Freq <= IndxMax)
+			{
+				xx = Data[thisVar->offset + Indx][(Global::DTindx * thisVar->FileData->Freq / Global::Freq - IndxMin)];
+
+				if (Funct == TFun::FOBS)
+				{
+					//No function to apply.
+				}
+				else if (Funct == TFun::VP_SAT)
+				{
+					if (xx > 0.0)
+					{
+						xx = 0.611 * exp(17.27 * xx / (xx + 237.3));
+					}
+					else
+					{
+						xx = 0.611 * exp(21.88 * xx / (xx + 265.5));
+					}
+				}
+				else if (Funct == TFun::W_MJ)
+				{
+					xx *= thisVar->FileData->Interval * 86400 / 1.0E6;
+				}
+				else if (Funct == TFun::MJ_W)
+				{
+					xx *= 1.0E6 / 86400 / thisVar->FileData->Interval;
+				}
+
+				cdSeries->AddXY(Global::DTnow, xx);
+			}
+		}
+	}
+	else { // display observations functions
+		//cdSeries->Stairs = true;
+		// N.B. object FileData copied. If Obs function - Obs deletes else if VarObsFunct SelectedObservations deletes.
+		newVar = new ClassVar(*thisVar);
+
+		newVar->name = seriesTitle.c_str();
+
+		newVar->FileData->DataFileName = "Copy";
+
+
+		string::size_type pp = thisVar->units.find_last_of(")");
+
+		if (thisVar->FileData->Freq > 1 && (thisVar->units[pp - 1] == 'd'))   //  || TBase == 0
+			thisVar->Daily = true;
+		else
+			thisVar->Daily = false;
+
+		if (newVar->root == "") { // Observation
+			if (thisVar->FileData->Freq == 1)
+				newVar->LoopFunct = &ClassVar::LoopFirst;
+			else if (thisVar->Daily)
+				newVar->LoopFunct = &ClassVar::LoopFirst;
+			else
+				newVar->LoopFunct = &ClassVar::LoopRange;
+		}
+		else { // Variable
+			if (thisVar->Daily)
+				newVar->LoopFunct = &ClassVar::LoopLast;
+			else
+				newVar->LoopFunct = &ClassVar::LoopRange;
+		}
+
+		newVar->FunctVar = thisVar;
+
+		switch (Funct) {
+		case TFun::AVG:
+			newVar->UserFunct_ = &ClassVar::Tot_;
+			newVar->FunKind = TFun::AVG;
+			break;
+		case TFun::MIN:
+			newVar->UserFunct_ = &ClassVar::Min_;
+			newVar->FunKind = TFun::MIN;
+			break;
+		case TFun::MAX:
+			newVar->UserFunct_ = &ClassVar::Max_;
+			newVar->FunKind = TFun::MAX;
+			break;
+		case TFun::TOT:
+			newVar->UserFunct_ = &ClassVar::Tot_;
+			newVar->FunKind = TFun::TOT;
+			break;
+		case TFun::POS:
+			newVar->UserFunct_ = &ClassVar::Pos_;
+			newVar->FunKind = TFun::POS;
+			break;
+		case TFun::FIRST:
+			newVar->UserFunct_ = &ClassVar::First_;
+			newVar->FunKind = TFun::FIRST;
+			newVar->LoopFunct = &ClassVar::LoopFirst;
+			break;
+		case TFun::LAST:
+			newVar->UserFunct_ = &ClassVar::Last_;
+			newVar->FunKind = TFun::LAST;
+			newVar->LoopFunct = &ClassVar::LoopLast;
+			break;
+		case TFun::CNT:
+			newVar->UserFunct_ = &ClassVar::Count_;
+			newVar->FunKind = TFun::CNT;
+			break;
+		case TFun::CNT0:
+			newVar->UserFunct_ = &ClassVar::Count0_;
+			newVar->FunKind = TFun::CNT0;
+			break;
+		case TFun::DLTA:
+			newVar->UserFunct_ = &ClassVar::First_;
+			newVar->LoopFunct = &ClassVar::LoopFirst;
+			newVar->FunKind = TFun::DLTA;
+			break;
+		default:
+			break;
+		} // switch
+
+		bool First = false;
+		long Next = -1;
+		long Days = 0;
+		long LastDays = 0;
+		long Lastkk = 0;
+		long CurrentIndx = -1;
+		long LastIndex = -1;
+		long itime[6];
+		long Greatest;
+		long DTminX = DTmin;
+		if (IndxMin > 0)
+			DTminX = IndxMin;
+		double Delta0 = 0.0;
+		double First0;
+		double Temp;
+		dattim("now", itime);
+
+		for (Global::DTindx = DTmin; Global::DTindx < DTmax; Global::DTindx += Global::Freq) {
+			Global::DTnow = Global::DTstart + Global::Interval * Global::DTindx + Global::Interval;
+
+			if (Global::DTindx * Global::Freq / thisVar->FileData->Freq >= IndxMin)
+				if (Global::DTindx * thisVar->FileData->Freq / Global::Freq > IndxMax)
+					break;
+				else {
+					if (Global::Interval >= 1) --Global::DTnow;
+
+					dattim("now", itime);
+
+					switch (this->getTimeBase()) {
+
+					case TimeBase::DAILY: // daily
+						if (Next == -1 || Next != itime[2]) {
+							Next = itime[2];
+							First = true;
+						}
+						break;
+					case TimeBase::WATER_YEAR: // water annual
+						if (Next == -1 || itime[0] == Next && itime[1] == this->getWaterYearMonth()) {
+							if (Next == -1 && itime[1] < this->getWaterYearMonth())
+								Next = itime[0];
+							else
+								Next = itime[0] + 1;
+							First = true;
+						}
+						break;
+					case TimeBase::CALENDAR_YEAR: // annual
+						if (Next == -1 || itime[0] == Next && itime[1] == 1) {
+							Next = itime[0] + 1;
+							First = true;
+						}
+						break;
+					case TimeBase::MONTHLY: // monthly
+						if (Next == -1 || Next == itime[1]) {
+							Next = (itime[1]) % 12 + 1;
+							First = true;
+						}
+						break;
+					case TimeBase::ALL: // All - do nothing
+						if (Next == -1) {
+							Next = 0;
+							First = true; // do nothing
+						}
+					default:
+						break;
+					} // switch
+
+					CurrentIndx = (Global::DTindx - DTminX) / thisVar->FileData->Freq - 1;
+
+					if (First) {
+						if (Global::DTindx > DTmin && Global::DTindx > IndxMin) { // Handle RUN starting after beginning of primary obs file and secondary obs file later
+							switch (Funct) {
+							case TFun::DLTA:
+								Temp = cdSeries->YValue((Global::DTindx - DTmin) / thisVar->FileData->Freq - 1);
+								cdSeries->YValues.at(CurrentIndx) -= Delta0;
+								Delta0 = Temp; // fall through
+							case TFun::AVG:
+							case TFun::MIN: // duplicate last
+							case TFun::MAX: // duplicate last
+							case TFun::TOT: // duplicate last
+							case TFun::POS: // duplicate last
+							case TFun::LAST: // duplicate last
+							case TFun::CNT:  // duplicate last
+							case TFun::CNT0: // duplicate last
+								break;
+							case TFun::FIRST: // duplicate first
+								for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
+									cdSeries->YValues.at(jj) = First0;
+								break;
+							default:
+								break;
+							} // switch
+						}
+						else if (Funct == TFun::DLTA && this->getTimeBase() != TimeBase::DAILY) { // only very first time
+							(newVar->*(newVar->LoopFunct))(Indx);
+							Delta0 = newVar->values[Indx];
+
+							newVar->UserFunct_ = &ClassVar::Last_; // change from First interval to Last interval
+							newVar->FunKind = TFun::LAST;
+							newVar->LoopFunct = &ClassVar::LoopLast;
+						}
+
+						Lastkk = Global::DTindx;
+						if (CurrentIndx > -1) // skip first time
+							LastIndex = CurrentIndx;
+
+						switch (Funct) { // beginning of period reset
+						case TFun::MAX:
+							newVar->values[Indx] = -1000000.0;
+							break;
+						case TFun::MIN:
+							newVar->values[Indx] = 1000000.0;
+							break;
+						case TFun::AVG:
+						case TFun::TOT:
+						case TFun::CNT:
+						case TFun::CNT0:
+						case TFun::DLTA:
+						case TFun::POS:
+							newVar->values[Indx] = 0.0;
+						default:
+							break;
+						} // switch
+
+						LastDays = Days;
+						Days = 0;
+					} // if First
+
+					(newVar->*(newVar->LoopFunct))(Indx);
+
+					xx = newVar->values[Indx];
+					cdSeries->AddXY(Global::DTnow, xx);
+					//AddDataToSeries(series, Global::DTnow, xx);
+
+					if (First)
+						First0 = xx;
+
+					if (Global::DTindx > DTmin && Global::DTindx > IndxMin) {
+						switch (Funct) {
+						case TFun::AVG:
+							Greatest = Days;
+							if (LastDays > Days)
+								Greatest = LastDays;
+							cdSeries->YValues.at(CurrentIndx) /= ((long long)Global::Freq * (long long)Greatest);
+							LastDays = 0;
+							break;
+						case TFun::DLTA:
+							if (!First)
+								cdSeries->YValues.at(CurrentIndx) -= Delta0;
+							break;
+						default:
+							break;
+						} // switch
+					}
+
+					++Days;
+
+					First = false;
+				} // if
+		} // for
+
+		if (Global::DTindx > DTmin && Global::DTindx > IndxMin) { // Handle RUN starting after beginning of primary obs file and secondary obs file later
+			CurrentIndx = (Global::DTindx - DTminX) / thisVar->FileData->Freq - 1;
+			switch (Funct) {
+			case TFun::AVG:
+				Greatest = Days;
+				if (LastDays > Days)
+					Greatest = LastDays;
+				cdSeries->YValues.at(CurrentIndx) /= ((long long)Global::Freq * (long long)Greatest);
+				break;
+			case TFun::DLTA:
+				cdSeries->YValues.at(CurrentIndx) -= Delta0;
+			case TFun::MIN: // duplicate last
+			case TFun::MAX: // duplicate last
+			case TFun::TOT: // duplicate last
+			case TFun::POS: // duplicate last
+			case TFun::LAST: // duplicate last
+			case TFun::CNT:  // duplicate last
+			case TFun::CNT0: // duplicate last
+				break;
+			case TFun::FIRST: // duplicate first
+				for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
+					cdSeries->YValues.at(jj) = First0;
+				break;
+			default:
+				break;
+			} // switch
+		}
+
+		delete newVar->FileData; // created in this routine
+		delete newVar; // created in this routine
+
+	} // else
+
+	Global::DTnow = Save_DTnow; // restore
+
 }

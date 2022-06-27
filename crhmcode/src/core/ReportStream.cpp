@@ -47,6 +47,84 @@ void ReportStream::OutputHeaders(CRHMmain * instance)
 	this->reportFileStream->flush();
 }
 
+
+void ReportStream::OutputSummaryHeaders(std::list<std::pair<std::string, TSeries*>>* series)
+{
+	std::string line;
+
+	line = "time";
+	for (
+		std::list<std::pair<std::string, TSeries*>>::iterator it = series->begin();
+		it != series->end();
+		it++
+		)
+	{
+		std::string S = it->second->Title;
+		line += " " + S;
+	}
+	*(this->reportFileStream) << (line.c_str());
+
+	*(this->reportFileStream) << '\n';
+
+	line = "units";
+	for (
+		std::list<std::pair<std::string, TSeries*>>::iterator it = series->begin();
+		it != series->end();
+		it++
+		)
+	{
+		ClassVar* thisVar = it->second->Tag;
+		std::string S = thisVar->units;
+		line += " " + S;
+	}
+	*(this->reportFileStream) << (line.c_str());
+	*(this->reportFileStream) << '\n';
+
+	this->reportFileStream->flush();
+}
+
+
+void ReportStream::OutputSummaryLines(std::list<std::pair<std::string, TSeries*>>* series)
+{
+	TSeries * firstSeries = series->begin()->second;
+
+	for (int i = 0; i < firstSeries->Count(); i++)
+	{
+		std::string line;
+
+		switch (Global::TimeFormat)
+		{
+		case TIMEFORMAT::MS:
+			line = FloatToStrF(firstSeries->XValue(i), TFloatFormat::ffGeneral, 10, 0);
+			break;
+		case TIMEFORMAT::YYYYMMDD:
+			line = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", firstSeries->XValue(i));
+			break;
+		case TIMEFORMAT::ISO:
+			line = StandardConverterUtility::FormatDateTime("ISO", firstSeries->XValue(i));
+			break;
+		default:
+			break;
+		}
+
+		for (
+			std::list<std::pair<std::string, TSeries*>>::iterator it = series->begin();
+			it != series->end();
+			it++
+			)
+		{
+			std::string S = std::to_string(it->second->YValue(i));
+			line += " " + S;
+		}
+
+		*(this->reportFileStream) << (line.c_str());
+		*(this->reportFileStream) << '\n';
+	}
+
+	this->reportFileStream->flush();
+}
+
+
 void ReportStream::SendTimeStepToReport(CRHMmain * instance) 
 {
 

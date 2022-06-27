@@ -104,6 +104,8 @@
 #define IDC_RADIO4                      1070
 #define IDC_RADIO5                      1071
 #define IDC_RADIO6                      1072
+#define IDC_COMBO1                      1073
+#define IDC_COMBO2                      1074
 #define ID_PROJECT_LOG                  32771
 #define ID_PROJECT_SAVECHARTTEMPLATE    32772
 #define ID_PROJECT_PLOTREFRESHRATE      32773
@@ -213,6 +215,15 @@
 #define ID_VAR_HELP_DISPLAY             35203
 #define ID_FLIP_TICKS                   35300
 #define ID_CLEAR_MODULES                35301
+#define ID_FUNCTION_DROP_DOWN           36000
+#define ID_TIMEBASE_DROP_DOWN           36001
+#define ID_WATER_YEAR_DROP_DOWN         36002
+#define ID_WATER_YEAR_LABEL				36003
+#define ID_TOTAL_FUNCT					36004
+#define ID_MIN_FUNCT					36005
+#define ID_MAX_FUNCT					36006
+#define ID_AVG_FUCNT					36007
+#define ID_ADD_OBS_FUNCT				36008
 #define ID_ALL_MODS_LIST_BOX            40000
 #define ID_SEL_MODS_LIST_BOX            40001
 #define ID_MODULE_FILTER_BASIC          40002
@@ -251,6 +262,7 @@
 #define ID_MACRO_FILE_EXIT              40108
 #define ID_MAIN_LOG_ALL                 40200
 #define ID_MAIN_LOG_LAST                40201
+#define ID_MAIN_CREATE_SUMMARY			40202
 #define ID_EXTRACT_GROUP_SAVE           40300
 #define ID_EXTRACT_GROUP_EXIT           40301
 #define ID_GROUP_LIST                   40302
