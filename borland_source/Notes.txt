@@ -621,3 +621,9 @@ CRHM 04/22/22
  	K_kat[hh] = Katabatic * ((hru_t[hh] + 273.15) - Ts_glacier) * pow(g / (Ts_glacier * katabatic_lapse_rate[hh] * Pr), 0.5);
 
 	2. correction in debris-cover melt for handling the delayed air temperature and incoming shortwave radiation due to debris cover.
+
+CRHM 06/27/22
+
+  Corrections in Clark_gwDelay equation in module REWroute Variation#1 and module REWroute2 Variation#1 or Variation#3:
+	
+	Clark_gwDelay = new ClassClark(gwinflow, gwoutflow, WS_gwKstorage, WS_gwLag, nhru);

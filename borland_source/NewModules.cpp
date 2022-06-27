@@ -1,4 +1,4 @@
-// 04/22/22
+// 06/27/22
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -92,9 +92,9 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassNetroute_D("Netroute_D", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNetroute_M("Netroute_M", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNetroute_M_D("Netroute_M_D", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassREWroute("REW_route", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassREWroute("REW_route", "06/27/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassREWroute_stream("REW_route_stream", "07/09/18", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassREWroute2("REW_route2", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassREWroute2("REW_route2", "06/27/22", CRHM::ADVANCE));
 
   DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "11/21/16", CRHM::ADVANCE));
   DLLModules.AddModule(new ClasspbsmSnobal("pbsmSnobal", "01/05/17", CRHM::ADVANCE));
@@ -10290,7 +10290,7 @@ void ClassREWroute2::init(void) {
   }
   else if(variation == VARIATION_1 || variation == VARIATION_3){
     Clark_inflowDelay = new ClassClark(inflow, outflow, WS_Kstorage, WS_Lag, nhru);
-    Clark_gwDelay = new ClassClark(inflow, outflow, WS_gwKstorage, WS_gwLag, nhru);
+    Clark_gwDelay = new ClassClark(gwinflow, gwoutflow, WS_gwKstorage, WS_gwLag, nhru); // 27June2022 correction
   }
 
   flow[0] = 0.0;
@@ -19871,7 +19871,7 @@ void ClassREWroute::init(void) {
   }
   else if(variation == VARIATION_1){
     Clark_inflowDelay = new ClassClark(inflow, outflow, WS_Kstorage, WS_Lag, nhru);
-    Clark_gwDelay = new ClassClark(inflow, outflow, WS_gwKstorage, WS_gwLag, nhru);
+    Clark_gwDelay = new ClassClark(gwinflow, gwoutflow, WS_gwKstorage, WS_gwLag, nhru); // 27June2022 correction
   }
 
   flow[0] = 0.0;
