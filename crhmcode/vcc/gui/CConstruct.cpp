@@ -1783,62 +1783,53 @@ void CConstruct::UpdateAvailableModules()
 		modIt++
 		) 
 	{
-		LMODULE str = modIt->second->Lvl;
-
-		if (modIt->second->Lvl == LMODULE::BASIC)
+		LMODULE level = modIt->second->Lvl;
+		switch (level)
 		{
+		case (LMODULE::BASIC):
 			if (module_filter_basic.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (modIt->second->Lvl == LMODULE::ADVANCE)
-		{
+			break;
+		case (LMODULE::ADVANCE):
 			if (module_filter_advanced.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (modIt->second->Lvl == LMODULE::CUSTOM)
-		{
+			break;
+		case (LMODULE::CUSTOM):
 			if (module_filter_custom.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (str == LMODULE::MACRO)
-		{
+			break;
+		case (LMODULE::MACRO):
 			if (module_filter_macro.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (modIt->second->Lvl == LMODULE::OBSOL)
-		{
+			break;
+		case (LMODULE::OBSOL):
 			if (module_filter_obsolete.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (modIt->second->Lvl == LMODULE::PROTO)
-		{
+			break;
+		case (LMODULE::PROTO):
 			if (module_filter_prototype.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (modIt->second->Lvl == LMODULE::SUPPORT)
-		{
+			break;
+		case (LMODULE::SUPPORT):
 			if (module_filter_support.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
+			break;
+		default:
+			break;
 		}
 
 	}
