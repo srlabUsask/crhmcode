@@ -1,9 +1,5 @@
 #include "CRHMmainDlg.h"
 
-//create a tracking variable for the current project file name
-//a varaible with higher scope is used to avoid unnecessarilly confusing parameter passing - Matt
-CString globFileName;
-
 IMPLEMENT_DYNAMIC(CRHMmainDlg, CDialogEx)
 
 
@@ -926,8 +922,6 @@ void CRHMmainDlg::CloseProject()
 	model->SaveStateFlag = false;
 	updateOpenStateFileMenu();
 
-	//reset the current file name - Matt
-	globFileName = "";
 	model->OpenProjectPath = "";
 
 	//Reset the window text
@@ -1386,9 +1380,6 @@ void CRHMmainDlg::OnFileOpen()
 
 		CString filename = fileDlg.GetFileName();
 
-		//update file name tracking variable - Matt
-		globFileName = filename;
-
 		string file_p = CT2A(filepath.GetString());
 		string file_n = CT2A(filename.GetString());
 
@@ -1451,8 +1442,6 @@ void CRHMmainDlg::OnFileSaveAs()
 void CRHMmainDlg::OnFileClose()
 {
 	CWaitCursor wait;
-
-	CString filename = globFileName;
 
 	CRHMmain* model = CRHMmain::getInstance();
 
@@ -1634,7 +1623,6 @@ void CRHMmainDlg::OnAutoExit()
 
 void CRHMmainDlg::OnExit()
 {
-	CString filename = globFileName;
 
 	CRHMmain* t = CRHMmain::getInstance();
 
@@ -1807,8 +1795,6 @@ void CRHMmainDlg::OnBuildConstruct()
 	//CRHMmain *test = CRHMmain::getInstance();
 	//int c = test->AllVariables->Count;
 
-	//update the tracking variable for the file name - Matt
-	globFileName = defaultprojectpath.c_str();
 }
 
 
