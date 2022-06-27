@@ -1,3 +1,5 @@
+#pragma once
+
 // Library includes
 #include "../stdafx.h"
 #include "afxdialogex.h"
@@ -23,47 +25,51 @@
 #define MAX_CFileDialog_FILE_COUNT 99
 #define FILE_LIST_BUFFER_SIZE ((MAX_CFileDialog_FILE_COUNT * (MAX_PATH + 1)) + 1)
 
-#pragma once
- 
-
-
 /**
-* The main CRHM dialog window class
-* CRHMmainDlg defines the main dialog window for the application. 
-* This dialog handles the main menu and supports loading, saving, and running projects.
-* It is a descendant of the CDialogEx class.  
+* The main dialog window for the application. 
+* This dialog handles the main menu and supports loading, saving, and running projects.  
 */
 class CRHMmainDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CRHMmainDlg)	
 
+	DECLARE_MESSAGE_MAP()
+
+#ifdef AFX_DESIGN_TIME
+	enum { IDD = CRHMmainDialog };
+#endif
+
 public:
 
-	CRHMmainDlg(CWnd* pParent = nullptr); /**< Standard constructor */
-	virtual ~CRHMmainDlg(); /**< Standard destructor */
-
+	/** 
+	* Standard constructor
+	* 
+	* @param pParent - CWnd* pointer to the parent window. Default is nullptr.
+	*/
+	CRHMmainDlg(CWnd* pParent = nullptr); 
 
 	/**
 	* Constructor that takes in a project file name and runs that
 	*	project after opening
 	*
-	* @param argumentfile std::string path to a project file.
+	* @param argumentfile - std::string path to a project file to open.
 	*/
 	CRHMmainDlg(std::string argumentfile);
 
-	
-
-	// Dialog Data
-#ifdef AFX_DESIGN_TIME
-	enum { IDD = CRHMmainDialog };
-#endif
+	/**
+	* Standard destructor 
+	*/
+	~CRHMmainDlg(); 
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
-	DECLARE_MESSAGE_MAP()
+	/**
+	* Performs data exchange between controls and their respective objects.
+	*/
+	virtual void DoDataExchange(CDataExchange* pDX);
 
 private:
+
 	long Box1Disply{ 0 };
 	long ObsFunct_Toggle = 0; /**< no display/Final/Trend values */
 	

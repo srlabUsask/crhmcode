@@ -6,8 +6,16 @@ IMPLEMENT_DYNAMIC(CRHMmainDlg, CDialogEx)
 CRHMmainDlg::CRHMmainDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(CRHMmainDialog, pParent)
 {
-	CRHMmain* test = CRHMmain::getInstance();
-	//test->FormCreate();
+	CRHMmain* main = CRHMmain::getInstance();
+	this->openObsFiles = new std::map< UINT, std::pair<std::string, std::string>>();
+	this->refresh_rate = RefreshRate::BIWEEKLY;
+}
+
+
+CRHMmainDlg::CRHMmainDlg(string argumentfile)
+{
+	CRHMmain* main = CRHMmain::getInstance();
+	main->FormCreate();
 	this->openObsFiles = new std::map< UINT, std::pair<std::string, std::string>>();
 	this->refresh_rate = RefreshRate::BIWEEKLY;
 }
@@ -15,14 +23,6 @@ CRHMmainDlg::CRHMmainDlg(CWnd* pParent /*=nullptr*/)
 
 CRHMmainDlg::~CRHMmainDlg()
 {
-}
-
-CRHMmainDlg::CRHMmainDlg(string argumentfile)
-{
-	CRHMmain* test = CRHMmain::getInstance();
-	test->FormCreate();
-	this->openObsFiles = new std::map< UINT, std::pair<std::string, std::string>>();
-	this->refresh_rate = RefreshRate::BIWEEKLY;
 }
 
 
