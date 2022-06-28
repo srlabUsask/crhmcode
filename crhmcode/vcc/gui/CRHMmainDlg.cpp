@@ -380,6 +380,7 @@ void CRHMmainDlg::InitModules()
 	GetAllVariables();
 }
 
+
 void CRHMmainDlg::GetAllVariables()
 {
 	CRHMmain* model = CRHMmain::getInstance();
@@ -1173,6 +1174,7 @@ void CRHMmainDlg::updateOpenStateFileMenu()
 
 }
 
+
 void CRHMmainDlg::updateSelectedVariablesListBox()
 {
 	CWaitCursor wait;
@@ -1233,6 +1235,7 @@ void CRHMmainDlg::updateSelectedVariablesListBox()
 
 	}
 }
+
 
 void CRHMmainDlg::updateSelectedObservationListBox()
 {
@@ -1637,6 +1640,7 @@ void CRHMmainDlg::OnExit()
 	exit(0);
 }
 
+
 void CRHMmainDlg::OnLogAll()
 {
 	CRHMmain* model = CRHMmain::getInstance();
@@ -1650,6 +1654,7 @@ void CRHMmainDlg::OnLogAll()
 		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
 	};
 }
+
 
 void CRHMmainDlg::OnLogLast()
 {
@@ -1963,6 +1968,7 @@ void CRHMmainDlg::OnRunRunmodel()
 	updateOpenStateFileMenu();
 }
 
+
 void CRHMmainDlg::OnExport()
 {
 	CRHMmain* model = CRHMmain::getInstance();
@@ -2103,6 +2109,7 @@ void CRHMmainDlg::IncreaseObsDimension()
 
 }
 
+
 void CRHMmainDlg::OnDblClkAllVarListBox()
 {
 	addVariablesToSelected();
@@ -2115,6 +2122,7 @@ void CRHMmainDlg::OnDblClkSelVarListBox()
 	removeVariablesFromSelected();
 	updateSelectedVariablesListBox();
 }
+
 
 void CRHMmainDlg::OnVariableSelectChange()
 {
@@ -2286,6 +2294,7 @@ LRESULT CRHMmainDlg::OpenSelVarCtxMenu(WPARAM, LPARAM)
 
 	return 0;
 }
+
 
 LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 {
@@ -2489,6 +2498,7 @@ void CRHMmainDlg::OnStartDateChange(NMHDR* pNMHDR, LRESULT* pResult)
 	CRHMmain::getInstance()->setStartDate(dateTime.m_dt);
 }
 
+
 void CRHMmainDlg::OnEndDateChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	COleDateTime dateTime;
@@ -2513,6 +2523,7 @@ void CRHMmainDlg::OnClickFlipTicks()
 		series.put_Active(!active);
 	}
 }
+
 
 LRESULT CRHMmainDlg::OnLeftClickFlipTicks(WPARAM, LPARAM)
 {
@@ -2549,6 +2560,7 @@ LRESULT CRHMmainDlg::OnLeftClickFlipTicks(WPARAM, LPARAM)
 	return 0;
 }
 
+
 LRESULT CRHMmainDlg::OnRightClickFlipTicks(WPARAM, LPARAM)
 {
 	CRHMmain* model = CRHMmain::getInstance();
@@ -2583,6 +2595,7 @@ LRESULT CRHMmainDlg::OnRightClickFlipTicks(WPARAM, LPARAM)
 
 	return 0;
 }
+
 
 void CRHMmainDlg::addVariablesToSelected()
 {
@@ -2718,6 +2731,7 @@ void CRHMmainDlg::addVariablesArrayToSelected()
 	delete[] selectedIndicies;
 }
 
+
 void CRHMmainDlg::addVariablesLayerArrayToSelected()
 {
 	CRHMmain* model = CRHMmain::getInstance();
@@ -2774,6 +2788,7 @@ void CRHMmainDlg::addVariablesLayerArrayToSelected()
 
 	delete[] selectedIndicies;
 }
+
 
 void CRHMmainDlg::addVariablesHRULayerArrayToSelected()
 {
@@ -2836,6 +2851,7 @@ void CRHMmainDlg::addVariablesHRULayerArrayToSelected()
 
 	delete[] selectedIndicies;
 }
+
 
 void CRHMmainDlg::addObservationsToSelected()
 {
@@ -3091,7 +3107,6 @@ bool CRHMmainDlg::observationIsSelected(std::string seriesTitle)
 }
 
 
-
 void CRHMmainDlg::SetItemsToListBox(int listboxid, std::vector<std::string>* list)
 {
 	CListBox* listbox = (CListBox*)GetDlgItem(listboxid);
@@ -3315,6 +3330,7 @@ LRESULT CRHMmainDlg::OnAutoRunMessage(WPARAM, LPARAM)
 	this->RunClickFunction();
 	return 0;
 }
+
 
 void CRHMmainDlg::setDimensionSelectorToObs()
 {

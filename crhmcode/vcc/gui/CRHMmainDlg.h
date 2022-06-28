@@ -76,10 +76,6 @@ private:
 	
 	std::string defaultprojectname = "currentproject.prj";
 	std::string defaultprojectpath = "currentproject.prj";
-	std::string defaultobservationpath = "obs/Badlake73_76.obs";
-	std::string TBases[5] = { "Daily", "Water_year", "Calendar_year", "Monthly_summary", "Summarize_all" };
-
-	CMenu main_menu;
 	
 	/**
 	* Tracks the currently set plot refresh rate.
@@ -195,8 +191,12 @@ private:
 	*/
 	CDateTimeCtrl EndDatePicker;
 
+	/**
+	* Button for flipping the ticks that control what plots are displayed on the TChart plot
+	* 
+	* This button registers left and right clicks seperatly.
+	*/
 	ChiralClickButton FlipTicks;
-
 
 	/** 
 	* The number of open observation files.
@@ -224,7 +224,6 @@ private:
 	* Also determines of auto run is enabled and runs the project if so.
 	*/
 	void loadGuiComponents();
-
 
 	/**
 	* Calls the declaration function on each selected module after a model is built.
@@ -258,14 +257,12 @@ private:
 	*/
 	void RunClickFunction();
 
-
 	/**
 	* Adds a series to the TChart plot.
 	* 
 	* @param series TSeries* a pointer to the series to add to the plot.
 	*/
 	void AddSeriesToTChart(TSeries* series);
-
 
 	/**
 	* 
@@ -322,7 +319,6 @@ private:
 	*/
 	void OpenObservation(std::string obsfilepath);
 
-
 	/**
 	* Adds an observation file to the list of open observation files and makes a menu item for it.
 	* Creates a menu item for the given observation file and adds it to the menu. 
@@ -331,8 +327,6 @@ private:
 	* @param filename std::string name of the project file to open.
 	*/
 	void AddOpenObsFile(std::string filepath, std::string filename);
-
-	// Start GUI update functions
 
 	/**
 	* Calls the updateOpenObsFileMenu and updateOpenStateFileMenu funcitons.
@@ -363,10 +357,6 @@ private:
 	* Updates the selected observation list box contents based on the state of the model.
 	*/
 	void updateSelectedObservationListBox();
-
-	// End GUI update functions
-
-	//Message handlers
 
 	/**
 	* Handler for clicking on project->Open
@@ -475,10 +465,25 @@ private:
 	*/
 	afx_msg void OnExit();
 
+	/**
+	* Handler for clicking on Project->Log->Log All
+	* 
+	* Sets the project to log all timesteps in the produced output.
+	*/
 	afx_msg void OnLogAll();
 
+	/**
+	* Handler for clicking on Project->Log->Log Last
+	* 
+	* Sets the project to log only the last timestep of the run.
+	*/
 	afx_msg void OnLogLast();
 
+	/**
+	* Handler for clicking on project->log->Create Summary
+	* 
+	* Sets the project to produce a summary file at the end of the run.
+	*/
 	afx_msg void OnCreateSummary();
 
 	/**
@@ -586,7 +591,6 @@ private:
 	*/
 	afx_msg void OnExport();
 
-
 	/**
 	* Handler for clicking on Flow Diagram->Show Diagram
 	* 
@@ -651,7 +655,6 @@ private:
 	* Updates the variables help text to be that for the last selected variable.
 	*/
 	afx_msg void OnVariableSelectChange();
-
 
 	/**
 	* Handler for double clicking on an observation in the all observations list box. 
@@ -839,17 +842,55 @@ private:
 	*/
 	afx_msg void OnClickFlipTicks();
 
+	/**
+	* Handler for when the user left clicks on the flip ticks button
+	* handles the UWM_FLIP_TICKS_LEFT message.
+	* 
+	* Flips the state of the TChart Series ticks for all observations.
+	* 
+	* @param WPARAM unused message parameter.
+	* @param LPARAM unused message parameter.
+	* @return LRESULT unused result parameter.
+	*/
 	afx_msg LRESULT OnLeftClickFlipTicks(WPARAM, LPARAM);
 
+	/**
+	* Handler for when the user right clicks on the flip ticks button
+	* handles the UWM_FLIP_TICKS_RIGHT message.
+	* 
+	* Flips the state of the TChart Series ticks for all variables.
+	*
+	* @param WPARAM unused message parameter.
+	* @param LPARAM unused message parameter.
+	* @return LRESULT unused result parameter.
+	*/
 	afx_msg LRESULT OnRightClickFlipTicks(WPARAM, LPARAM);
 	
-
+	/**
+	* Message handler for receiving the UWM_AUTO_RUN message.
+	* Message is sent when a project with Auto Run enabled is loaded. 
+	* 
+	* @param WPARAM unused message parameter.
+	* @param LPARAM unused message parameter.
+	* @return LRESULT unused result parameter.
+	*/
 	afx_msg LRESULT OnAutoRunMessage(WPARAM, LPARAM);
 
+	/**
+	* Sets the dimenson selector label to "Obs"
+	*/
 	void setDimensionSelectorToObs();
 
+	/**
+	* Sets the dimension selector label to "Lay"
+	*/
 	void setDimensionSelectorToLay();
 
+	/**
+	* Gets the max value layer for the currently selected variable.
+	* 
+	* @return int - maximum layer value for the currently selected variable.
+	*/
 	int getMaxLayofSelection();
 
 	/** 
