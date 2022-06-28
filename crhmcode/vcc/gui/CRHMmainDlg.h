@@ -65,15 +65,15 @@ protected:
 
 	/**
 	* Performs data exchange between controls and their respective objects.
+	* 
+	* @param pDX - CDataExchange* pointer to the data exchange object.
 	*/
 	virtual void DoDataExchange(CDataExchange* pDX);
 
 private:
 
 	long Box1Disply{ 0 };
-	long ObsFunct_Toggle = 0; /**< no display/Final/Trend values */
 	
-	std::string ProjectFileArgument = ""; /**< it takes the filename from the command line. */
 	std::string defaultprojectname = "currentproject.prj";
 	std::string defaultprojectpath = "currentproject.prj";
 	std::string defaultobservationpath = "obs/Badlake73_76.obs";
@@ -217,14 +217,6 @@ private:
 	* Initalizes the dialog elements after creating the dialog.
 	*/
 	virtual BOOL OnInitDialog();
-
-	/**
-	* Processes the command line arguments if the GUI version of CRHM is used as a command line program.
-	* 
-	* This feature is not reccomended as the gcc CLI is much more robust. 
-	* Reccomend depricating this feature. 
-	*/
-	void ProcessCommandLineArgument();
 
 	/**
 	* Initalzies GUI components after loading a project. 

@@ -216,14 +216,6 @@ BOOL CRHMmainDlg::OnInitDialog()
 }
 
 
-void CRHMmainDlg::ProcessCommandLineArgument()
-{
-	CRHMmain *test = CRHMmain::getInstance();
-	test->FormCreate();
-	test->DoPrjOpen(ProjectFileArgument, "");
-}
-
-
 void CRHMmainDlg::loadGuiComponents()
 {
 	listbox_all_variables.ResetContent();
@@ -391,7 +383,6 @@ void CRHMmainDlg::InitModules()
 void CRHMmainDlg::GetAllVariables()
 {
 	CRHMmain* model = CRHMmain::getInstance();
-	CConstruct* buildform = new CConstruct();
 
 	ClassVar* thisVar;
 	MapVar::iterator itVar;
