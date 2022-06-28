@@ -1,4 +1,4 @@
-// 06/27/22
+// 06/28/22
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -43,7 +43,7 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassNOP("NOP", "05/20/16", CRHM::ADVANCE)); // essential for parameter screen
   DLLModules.AddModule(new Classbasin("basin", "02/24/12", CRHM::BASIC));
   DLLModules.AddModule(new Classglobal("global", "12/19/19", CRHM::BASIC));
-  DLLModules.AddModule(new Classobs("obs", "04/17/18", CRHM::BASIC));
+  DLLModules.AddModule(new Classobs("obs", "06/28/22", CRHM::BASIC));
   DLLModules.AddModule(new Classintcp("intcp", "02/24/15", CRHM::BASIC));
   DLLModules.AddModule(new ClassGrow_Crop("Grow_Crop", "04/04/15", CRHM::ADVANCE));
 
@@ -1076,7 +1076,7 @@ DTindx[0] = Global::DTindx;
             hru_newsnow[hh] = 1;
           }
           else { // mixed
-            hru_rain[hh] = hru_p[hh]*(tmax_allrain[hh] - Use)/(tmax_allrain[hh] - tmax_allsnow[hh]);
+            hru_rain[hh] = hru_p[hh]*(Use - tmax_allsnow[hh])/(tmax_allrain[hh] - tmax_allsnow[hh]); // 28June2022 correction
             cumhru_snow_meas[hh] += (hru_p[hh] - hru_rain[hh]);
             hru_snow[hh] = (hru_p[hh] - hru_rain[hh])/catchratio;
             hru_p[hh] = hru_rain[hh] + hru_snow[hh];

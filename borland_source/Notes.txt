@@ -627,3 +627,9 @@ CRHM 06/27/22
   Corrections in Clark_gwDelay equation in module REWroute Variation#1 and module REWroute2 Variation#1 or Variation#3:
 	
 	Clark_gwDelay = new ClassClark(gwinflow, gwoutflow, WS_gwKstorage, WS_gwLag, nhru);
+
+CRHM 06/28/22
+
+  Corrections in hru_rain equation in the mixed precipitation phase in module obs:
+	
+	hru_rain[hh] = hru_p[hh]*(Use - tmax_allsnow[hh])/(tmax_allrain[hh] - tmax_allsnow[hh]);
