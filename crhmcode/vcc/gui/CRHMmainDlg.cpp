@@ -692,7 +692,16 @@ void CRHMmainDlg::RunClickFunction()
 				string dt = to_string(m) + "/" + to_string(d) + "/" + to_string(y);
 				CString str(dt.c_str());
 				LPCTSTR dtstr = (LPCTSTR)str;
-				series[j].AddXY(main->cdSeries[j]->XValues.at(i), main->cdSeries[j]->YValues.at(i), dtstr, series[j].get_Color());
+
+				if (h == 1)
+				{
+					series[j].AddXY(main->cdSeries[j]->XValues.at(i), main->cdSeries[j]->YValues.at(i), dtstr, series[j].get_Color());
+				}
+				else
+				{
+					series[j].AddXY(main->cdSeries[j]->XValues.at(i), main->cdSeries[j]->YValues.at(i), L"", series[j].get_Color());
+				}
+
 			}
 		}
 		tchart.Repaint();
@@ -772,7 +781,16 @@ void CRHMmainDlg::AddSeriesToTChart(TSeries* tseries)
 		string dt = to_string(m) + "/" + to_string(d) + "/" + to_string(y);
 		CString str(dt.c_str());
 		LPCTSTR dtstr = (LPCTSTR)str;
-		series.AddXY(tseries->XValues.at(i), tseries->YValues.at(i), dtstr, series.get_Color());
+
+		if (h == 1)
+		{
+			series.AddXY(tseries->XValues.at(i), tseries->YValues.at(i), dtstr, series.get_Color());
+		}
+		else 
+		{
+			series.AddXY(tseries->XValues.at(i), tseries->YValues.at(i), L"", series.get_Color());
+		}
+
 
 		//if (i % 500 == 0) { tchart.Repaint(); }		
 	}
