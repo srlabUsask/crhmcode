@@ -1,10 +1,10 @@
-// 06/27/22 fix bugs in Clark_gwDelay equation in REWroute and REWroute2
-// modules in 04/22/22
+// 06/28/22 correcting mixed precipitation phase equation in obs
+// module in 06/27/22
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "06/27/22"
+#define CurrentVersion "06/28/22"
 
 #include <stdexcept>
 #include "CRHMmain.h"
