@@ -154,6 +154,7 @@ BOOL CRHMmainDlg::OnInitDialog()
 
 	CDialogEx::OnInitDialog();
 	// TODO:  Add extra initialization here
+	this->main_menu = this->GetMenu();
 
 	//State the name of the program in the window title - Matt
 	std::string str1 = "The Cold Regions Hydrological Model";
@@ -207,6 +208,8 @@ BOOL CRHMmainDlg::OnInitDialog()
 	water_year_drop_down.AddString(L"December");
 
 	loadGuiComponents();
+
+	
 
 	delete varHelpFont;
 	delete obsHelpFont;
@@ -972,7 +975,7 @@ void CRHMmainDlg::OpenObservation(std::string obsfilepath)
 void CRHMmainDlg::AddOpenObsFile(std::string filepath, std::string filename)
 {
 	CString obsFileName = CString(filename.c_str());
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 	CMenu* submenu = menu->GetSubMenu(1);
 
 	//Find first ID not in use
@@ -1019,7 +1022,7 @@ void CRHMmainDlg::updateOpenObsFileMenu()
 	/*
 	* Remove all open obsFiles from the obs submenu.
 	*/
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 	CMenu* submenu = menu->GetSubMenu(1);
 
 	for (
@@ -1130,7 +1133,7 @@ void CRHMmainDlg::updateOpenObsFileMenu()
 void CRHMmainDlg::updateOpenStateFileMenu()
 {
 	/* Get the handle for the intital state submenu */
-	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(4);
+	CMenu* menu = this->main_menu->GetSubMenu(4);
 
 	/* Get the model instance */
 	CRHMmain* model = CRHMmain::getInstance();
@@ -1514,7 +1517,7 @@ void CRHMmainDlg::OnViewHierarchy()
 
 void CRHMmainDlg::OnSetDailyRefresh()
 {
-	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+	CMenu* menu = this->main_menu->GetSubMenu(0);
 
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_CHECKED);
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
@@ -1529,7 +1532,7 @@ void CRHMmainDlg::OnSetDailyRefresh()
 
 void CRHMmainDlg::OnSetBiWeeklyRefresh()
 {
-	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+	CMenu* menu = this->main_menu->GetSubMenu(0);
 
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_CHECKED);
@@ -1544,7 +1547,7 @@ void CRHMmainDlg::OnSetBiWeeklyRefresh()
 
 void CRHMmainDlg::OnSetWeeklyRefresh()
 {
-	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+	CMenu* menu = this->main_menu->GetSubMenu(0);
 
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
@@ -1559,7 +1562,7 @@ void CRHMmainDlg::OnSetWeeklyRefresh()
 
 void CRHMmainDlg::OnSetMonthlyRefresh()
 {
-	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+	CMenu* menu = this->main_menu->GetSubMenu(0);
 
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
@@ -1574,7 +1577,7 @@ void CRHMmainDlg::OnSetMonthlyRefresh()
 
 void CRHMmainDlg::OnSetYearlyRefresh()
 {
-	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+	CMenu* menu = this->main_menu->GetSubMenu(0);
 
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
@@ -1589,7 +1592,7 @@ void CRHMmainDlg::OnSetYearlyRefresh()
 
 void CRHMmainDlg::OnSetNoRefresh()
 {
-	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(0);
+	CMenu* menu = this->main_menu->GetSubMenu(0);
 
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
 	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
@@ -1606,7 +1609,7 @@ void CRHMmainDlg::OnAutoRun()
 {
 	CRHMmain* main = CRHMmain::getInstance();
 
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 
 	main->setAutoRun(true);
 	if (menu->CheckMenuItem(ID_AUTO_RUN, MF_CHECKED) == MF_CHECKED)
@@ -1622,7 +1625,7 @@ void CRHMmainDlg::OnAutoExit()
 {
 	CRHMmain* main = CRHMmain::getInstance();
 
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 
 	main->setAutoExit(true);
 	if (menu->CheckMenuItem(ID_AUTO_EXIT, MF_CHECKED) == MF_CHECKED)
@@ -1664,7 +1667,7 @@ void CRHMmainDlg::OnLogAll()
 	CRHMmain* model = CRHMmain::getInstance();
 	model->setReportAll(true);
 
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 
 	menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
 	if (menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_CHECKED) == MF_CHECKED)
@@ -1679,7 +1682,7 @@ void CRHMmainDlg::OnLogLast()
 	CRHMmain* model = CRHMmain::getInstance();
 	model->setReportAll(false);
 
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 
 	menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
 	if (menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_CHECKED) == MF_CHECKED)
@@ -1693,7 +1696,7 @@ void CRHMmainDlg::OnCreateSummary()
 {
 	CRHMmain* model = CRHMmain::getInstance();
 	
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 
 	if (menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_CHECKED) == MF_CHECKED)
 	{

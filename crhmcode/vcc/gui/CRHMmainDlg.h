@@ -72,6 +72,8 @@ protected:
 
 private:
 
+	CMenu* main_menu;
+
 	long Box1Disply{ 0 };
 	
 	std::string defaultprojectname = "currentproject.prj";
