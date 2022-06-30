@@ -180,6 +180,7 @@ BOOL CRHMmainDlg::OnInitDialog()
 	function_drop_down.AddString(L"Minimum");
 	function_drop_down.AddString(L"Maximum");
 	function_drop_down.AddString(L"Average");
+	function_drop_down.AddString(L"Delta");
 	function_drop_down.SetCurSel(0);
 
 	/**
@@ -1315,6 +1316,10 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 			{
 				funct = TFun::AVG;
 			}
+			else if (suffix == "_Del")
+			{
+				funct = TFun::DLTA;
+			}
 
 			AddObsPlot(it->second->Tag, it->second, it->first, funct);
 
@@ -2348,6 +2353,7 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 	CString minText("Minimum");
 	CString maxText("Maximum");
 	CString avgText("Average");
+	CString delText("Delta");
 
 	functionSubMenu.InsertMenu(0,
 		MF_BYPOSITION | MF_STRING,
@@ -2373,6 +2379,11 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 		(LPCTSTR)avgText
 	);
 
+	functionSubMenu.InsertMenu(4,
+		MF_BYPOSITION | MF_STRING,
+		ID_DEL_FUNCT,
+		(LPCTSTR)delText
+	);
 
 	CWnd* wind = AfxGetMainWnd();
 	POINT p;
@@ -2417,6 +2428,12 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 				break;
 			case (ID_AVG_FUCNT):
 				this->function_drop_down.SetCurSel(4);
+				addObservationsToSelected();
+				updateSelectedObservationListBox();
+				this->function_drop_down.SetCurSel(savedSelection);
+				break;
+			case (ID_DEL_FUNCT):
+				this->function_drop_down.SetCurSel(5);
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
 				this->function_drop_down.SetCurSel(savedSelection);
@@ -2922,6 +2939,10 @@ void CRHMmainDlg::addObservationsToSelected()
 		case (4):
 			// Average
 			suffix = "_Avg";
+			break;
+		case (5):
+			// Delta
+			suffix = "_Del";
 			break;
 		default:
 			suffix = "";

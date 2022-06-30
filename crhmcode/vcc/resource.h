@@ -223,7 +223,8 @@
 #define ID_MIN_FUNCT					36005
 #define ID_MAX_FUNCT					36006
 #define ID_AVG_FUCNT					36007
-#define ID_ADD_OBS_FUNCT				36008
+#define ID_DEL_FUNCT					36008
+#define ID_ADD_OBS_FUNCT				36009
 #define ID_ALL_MODS_LIST_BOX            40000
 #define ID_SEL_MODS_LIST_BOX            40001
 #define ID_MODULE_FILTER_BASIC          40002

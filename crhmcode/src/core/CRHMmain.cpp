@@ -4695,7 +4695,7 @@ void CRHMmain::OutputSummary()
 			seriesType = "";
 		}
 
-		if (seriesType == "_Tot" || seriesType == "_Avg" || seriesType == "_Max" || seriesType == "_Min")
+		if (seriesType == "_Tot" || seriesType == "_Avg" || seriesType == "_Max" || seriesType == "_Min" || seriesType == "_Del")
 		{
 			summarySeries.push_back(std::pair<std::string, TSeries*>(it->first, it->second));
 		}
