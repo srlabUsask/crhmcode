@@ -2291,11 +2291,17 @@ LRESULT CRHMmainDlg::OpenSelVarCtxMenu(WPARAM, LPARAM)
 	ctxMenu.CreatePopupMenu();
 
 	CString removeText("Remove");
+	CString applyFunctText("Apply Function");
 
 	ctxMenu.InsertMenu(0,
 		MF_BYPOSITION | MF_STRING,
 		ID_CTX_SEL_VAR_REMOVE,
 		(LPCTSTR)removeText);
+
+	ctxMenu.InsertMenu(1,
+		MF_BYPOSITION | MF_STRING,
+		ID_CTX_SEL_VAR_APPLY,
+		(LPCTSTR)applyFunctText);
 
 	CWnd* wind = AfxGetMainWnd();
 	POINT p;
