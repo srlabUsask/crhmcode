@@ -1015,7 +1015,7 @@ std::map<std::string, std::list<ClassPar*>*>* ParametersDlg::RetrieveConsolidati
 								}
 							}
 
-							if (unique && ClassPar::ConsolidationCandidates(leftCursor->second, rightCursor->second))
+							if (unique)
 							{
 								entryList->push_back(rightCursor->second);
 							}
