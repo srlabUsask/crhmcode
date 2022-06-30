@@ -36,14 +36,16 @@ void ClassSWMM::decl(void) {
 
   inflowCnt = declgrpvar("WS_ALL_inflow", "basinflow", "query variable = 'basinflow'", "(m^3/int)", &rew, &inflow_All);
   //gwCnt     = declgrpvar("WS_ALL_gwflow", "basingw", "query variable = 'basingw'", "(m^3/int)", &gwrew, &gw_All);
+  inflow_mWQCnt = declgrpvar("WS_ALL_inflow_mWQ", "basinflow_mWQ", "query variable = 'basinflow_mWQ'", "(mg/l)", &rew_mWQ, &inflow_mWQ_All);
 
   declvar("WS_outflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &outflow);
+  declvar("WS_outflow_mWQ", TDim::NDEFN, "Concentration: outflow of each RB", "(kg/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
 
 //  declparam("injection_nodes", TDim::NHRU, "[0]", "0","1000", "SWMM nodes to inject into", "()", &injection_nodes);
 //  declparam("collection_nodes", TDim::NHRU, "[0]", "0","1000", "SWMM nodes to collect from", "()", &collection_nodes);
 
-    injection_node_names  = declparam("injection_nodes", TDim::NHRU, "''", "injection node names", injection_node_names);
-    collection_node_names = declparam("injection_nodes", TDim::NHRU, "''", "collection node names", collection_node_names);
+  injection_node_names  = declparam("injection_nodes", TDim::NHRU, "''", "injection node names", injection_node_names);
+  collection_node_names = declparam("injection_nodes", TDim::NHRU, "''", "collection node names", collection_node_names);
 
 
 }
@@ -142,6 +144,28 @@ void ClassSWMM::init(void) {
     }    
   }
 
+// If using water quality, ensure that pollutants are defined in SWMM
+  
+  if ( (outflow_mWQ == NULL) || (outflow_mWQ_lay == NULL)) {
+    calculate_wq = false;
+    if (swmm_getCount(swmm_POLLUT) < 1) {
+      string S = string("Pollutants were defined in SWMM config file, but no CRHM WQ modules were specified");
+      CRHMException Except(S, TExcept::TERMINATE);
+      LogError(Except);
+      throw Except;
+    }
+  } else {
+    if (swmm_getCount(swmm_POLLUT) < 1) {
+      string S = string("No pollutants defined in SWMM config file, WQ results will not be correct");
+      CRHMException Except(S, TExcept::WARNING);
+      LogError(Except);
+      throw Except;
+      calculate_wq = false;
+    } else {
+      calculate_wq = true;
+    }
+  }
+
   // printf("Nodes: %d\n",swmm_getCount(swmm_NODE));
   // printf("Links: %d\n",swmm_getCount(swmm_LINK));
 
@@ -194,9 +218,13 @@ void ClassSWMM::run(void) {
 
 // inject flow values from CRHM into SWMM
     for(hh = 0; hh < nhru; ++hh){
-      if (injection_nodes[hh] >= 0)
+      if (injection_nodes[hh] >= 0) {
         swmm_setValue(swmm_NODE_LATFLOW, injection_nodes[hh],
                     inflow_All[hh][0]*Global::Freq/86400.0);
+        if (calculate_wq)
+          swmm_setGroupValue(swmm_NODE_POLLUTANTMASS, 
+                    injection_nodes[hh], 0, 7.0);
+      }
     }
 
 
@@ -227,6 +255,9 @@ void ClassSWMM::run(void) {
 
       outflow[hh] = swmm_getValue(swmm_NODE_INFLOW,collection_nodes[hh]) *
                         86400.0/Global::Freq;
+      if (calculate_wq)
+        outflow_mWQ_lay[0][hh] = swmm_getGroupValue(swmm_NODE_POLLUTANTMASS,
+                        collection_nodes[hh], 0) * 86400.0/Global::Freq;
 //        gwoutflow[hh] = swmm_getValue(swmm_NODE_LATFLOW, collection_nodes[hh]-1);
     }
   }
@@ -282,11 +313,13 @@ void ClassSWMM::_mapLibraryFunctions(void *plugin) {
   *(void**)(&swmm_getIndex) = dlsym(plugin, "swmm_getIndex");
   *(void**)(&swmm_getValue) = dlsym(plugin, "swmm_getValue");
   *(void**)(&swmm_setValue) = dlsym(plugin, "swmm_setValue");
+  *(void**)(&swmm_setGroupValue) = dlsym(plugin, "swmm_setGroupValue");
+  *(void**)(&swmm_getGroupValue) = dlsym(plugin, "swmm_getGroupValue");
 
   if ( (!swmm_run) || (!swmm_open) || (!swmm_start) || (!swmm_step)
            || (!swmm_end) || (!swmm_report) || (!swmm_close) || (!swmm_getCount)
             || (!swmm_getName)|| (!swmm_getIndex)|| (!swmm_getValue)
-            || (!swmm_setValue) ) {
+            || (!swmm_setValue) || (!swmm_setGroupValue) || (!swmm_getGroupValue ) ) {
       /* no such symbol */
       string S = string("'" + Name + " (SWMM) Error ") +
                   string(dlerror()) +

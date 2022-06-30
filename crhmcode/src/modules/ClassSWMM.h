@@ -2,6 +2,10 @@
 
 #include "../core/ClassModule.h"
 
+
+#define numsubstances 7
+
+
 /********************************************
  * Taken from swmm5.h
  */
@@ -11,6 +15,7 @@ typedef enum {
     swmm_SUBCATCH = 1,
     swmm_NODE     = 2,
     swmm_LINK     = 3,
+    swmm_POLLUT   = 4,
     swmm_SYSTEM   = 100
 } swmm_Object;
 
@@ -24,7 +29,8 @@ typedef enum {
     swmm_NODE_LATFLOW  = 306,
     swmm_NODE_INFLOW   = 307,
     swmm_NODE_OVERFLOW = 308,
-    swmm_NODE_RPTFLAG  = 309
+    swmm_NODE_RPTFLAG  = 309,
+    swmm_NODE_POLLUTANTMASS = 310
 } swmm_NodeProperty;
 
 /*********************************************/
@@ -36,18 +42,23 @@ public:
 ClassSWMM(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 9999) {};
 
 long inflowCnt{0};
+long inflow_mWQCnt{0};
 // long gwCnt{0};
 
 // declared variables
 double *rew{ NULL };
+double *rew_mWQ{ NULL };
 // double *gwrew{ NULL };
 
 double **inflow_All{ NULL };
+double **inflow_mWQ_All{ NULL };
 // double **gw_All{ NULL };
 
 // double *inflow{ NULL };        // [nhru]
 // double *cuminflow{ NULL };     // [nhru]
 double *outflow{ NULL };       // [nhru]
+double *outflow_mWQ{ NULL };       // [nhru]
+double **outflow_mWQ_lay{ NULL };       // [nhru]
 // double *cumoutflow{ NULL };    // [nhru]
 
 // double *gwinflow{ NULL };        // [nhru]
@@ -63,7 +74,7 @@ double *outflow{ NULL };       // [nhru]
 // double *gwflow_s{ NULL };   // [BASIN] all HRUs
 // double *cumgwflow{ NULL };  // [BASIN] all HRUs
 
-
+bool calculate_wq;
 const char * library_filename = "./libswmm5.so";
 double swmm_elapsedTime;
 
@@ -100,8 +111,9 @@ int    (* swmm_getCount)(int objType);
 void   (* swmm_getName)(int objType, int index, char *name, int size);
 int    (* swmm_getIndex)(int objType, const char *name);
 double (* swmm_getValue)(int property, int index);
+double (* swmm_getGroupValue)(int property, int index, int subindex);
 void   (* swmm_setValue)(int property, int index,  double value);
-
+void   (* swmm_setGroupValue)(int property, int index, int subindex, double value);
 
 
 void decl(void);

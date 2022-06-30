@@ -145,9 +145,9 @@ void ClassPrairieInfil::applyCrack(double RainOnSnow_int) {
       // limited - (0.0 < fallstat[hh] < 100.0)
       if ((fallstat[hh] > 0.0) && (fallstat[hh] < 100.0) )
       {
-        if (snowmelt[hh] >= Major[hh] || crackstat[hh] >= 1)
+        if (snowmelt[hh] >= Major[hh]/24 || crackstat[hh] >= 1)
         {
-          if (snowmelt[hh] >= Major[hh])
+          if (snowmelt[hh] >= Major[hh]/24)
           {
             snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
 
@@ -212,11 +212,9 @@ void ClassPrairieInfil::run(void) {
     snowinfil[hh] = 0.0;
     meltrunoff[hh] = 0.0;
 
-    if(net_rain[hh] > 0.0){
+    if(net_rain[hh] > 0.0) {
       if(crackon[hh]) {
 
-        if (snowmelt[hh] > 0)
-          applyCrack(net_rain[hh]);
         RainOnSnowA[hh] += net_rain[hh];
 
       } else {
@@ -231,7 +229,13 @@ void ClassPrairieInfil::run(void) {
 
         cuminfil[hh] += infil[hh];
         cumrunoff[hh] += runoff[hh];
+      }
+    }
 
+    if (snowmelt[hh] > 0) {
+      if (crackon[hh]) {
+        applyCrack(net_rain[hh]);
+      } else {
         snowinfil[hh] = snowmelt[hh];
         cumsnowinfil[hh] += snowinfil[hh];
       }
