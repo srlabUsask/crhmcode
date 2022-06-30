@@ -72,7 +72,11 @@ protected:
 
 private:
 
-	CMenu* main_menu;
+	/**
+	* Pointer to the main menu object.
+	* The value is initalized in OnInitDialog()
+	*/
+	CMenu* main_menu = NULL;
 
 	long Box1Disply{ 0 };
 	
