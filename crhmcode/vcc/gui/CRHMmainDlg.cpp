@@ -1321,11 +1321,21 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 				funct = TFun::DLTA;
 			}
 
-			AddObsPlot(it->second->Tag, it->second, it->first, funct);
+			//Determine if it is a observation or a variable
+			if (it->second->Tag->FileData == NULL)
+			{
+				//Is a variable
+				CString selectedVariable = CString(it->first.c_str());
+				listbox_sel_observations.AddString(selectedVariable);
+			}
+			else
+			{
+				//Is a observation
+				AddObsPlot(it->second->Tag, it->second, it->first, funct);
+				CString selectedObservation = CString(it->first.c_str());
+				listbox_sel_observations.AddString(selectedObservation);
+			}
 
-			CString selectedObservation = CString(it->first.c_str());
-
-			listbox_sel_observations.AddString(selectedObservation);
 		}
 
 	}
@@ -2318,6 +2328,11 @@ LRESULT CRHMmainDlg::OpenSelVarCtxMenu(WPARAM, LPARAM)
 			{
 				removeVariablesFromSelected();
 				updateSelectedVariablesListBox();
+			}
+			else if (result == ID_CTX_SEL_VAR_APPLY)
+			{
+				addVariableFunctionToSelected();
+				updateSelectedObservationListBox();
 			}
 
 		}
@@ -3462,4 +3477,85 @@ void CRHMmainDlg::showHideWaterYearMonth()
 		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_HIDE);
 		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_HIDE);
 	}
+}
+
+
+void CRHMmainDlg::addVariableFunctionToSelected()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+
+	/* Retreive the value of the function selector to determine the suffix */
+	int functValue = function_drop_down.GetCurSel();
+	std::string suffix;
+
+	switch (functValue)
+	{
+	case (0):
+		// Observation;
+		suffix = "";
+		break;
+	case (1):
+		// Total
+		suffix = "_Tot";
+		break;
+	case (2):
+		// Minimum
+		suffix = "_Min";
+		break;
+	case (3):
+		// Maximum
+		suffix = "_Max";
+		break;
+	case (4):
+		// Average
+		suffix = "_Avg";
+		break;
+	case (5):
+		// Delta
+		suffix = "_Dlta";
+		break;
+	default:
+		suffix = "";
+		break;
+	}
+
+	int selectedCount = listbox_sel_variables.GetSelCount();
+	int* selectedIndicies = new int[selectedCount];
+	listbox_sel_variables.GetSelItems(selectedCount, selectedIndicies);
+
+	// For each selected selected variable
+	for (int i = 0; i < selectedCount; i++)
+	{
+		CString selectedText;
+		listbox_sel_variables.GetText(selectedIndicies[i], selectedText);
+		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
+		std::string selectedString(pszConvertedAnsiString);
+
+		// Find the selected variable
+		std::list<std::pair<std::string, ClassVar*>>* listOfSelectedVariables = model->SelectedVariables;
+		std::list<std::pair<std::string, ClassVar*>>::iterator selectedVar;
+		for (
+			std::list<std::pair<std::string, ClassVar*>>::iterator it = listOfSelectedVariables->begin();
+			it != listOfSelectedVariables->end();
+			it++
+			)
+		{
+			if (selectedString == it->first)
+			{
+				selectedVar = it;
+				break;
+			}
+		}
+
+		std::string seriesLabel = selectedVar->first + suffix;
+		TSeries* series = new TSeries();
+
+		series->Title = seriesLabel;
+		series->Tag = selectedVar->second;
+
+		model->SelectedObservations->push_back(std::pair<std::string, TSeries*>(seriesLabel, series));
+
+	}
+
+	delete[] selectedIndicies;
 }

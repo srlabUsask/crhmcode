@@ -904,4 +904,5 @@ private:
 	*/
 	void showHideWaterYearMonth();
 
+	void addVariableFunctionToSelected();
 };
