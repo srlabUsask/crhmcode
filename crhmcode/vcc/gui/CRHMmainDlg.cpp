@@ -1316,7 +1316,7 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 			{
 				funct = TFun::AVG;
 			}
-			else if (suffix == "_Del")
+			else if (suffix == "_Dlta")
 			{
 				funct = TFun::DLTA;
 			}
@@ -2942,7 +2942,7 @@ void CRHMmainDlg::addObservationsToSelected()
 			break;
 		case (5):
 			// Delta
-			suffix = "_Del";
+			suffix = "_Dlta";
 			break;
 		default:
 			suffix = "";
