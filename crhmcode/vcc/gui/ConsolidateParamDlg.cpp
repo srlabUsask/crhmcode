@@ -145,6 +145,7 @@ LRESULT ConsolidateParamDlg::OnUseForAllMsg(WPARAM wParam, LPARAM lParam)
 		if (selectedParameter->param == paramString)
 		{
 			this->candidates_list_box.DeleteString(i);
+			break;
 		}
 	}
 
