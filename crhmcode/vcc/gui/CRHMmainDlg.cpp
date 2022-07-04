@@ -97,7 +97,7 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_COMMAND(ID_STATE_SAVE_STATE_AS, &CRHMmainDlg::OnSaveStateAs)
 	
 	//Run menu items
-	ON_COMMAND(ID_RUN_RUNMODEL, &CRHMmainDlg::OnRunRunmodel)
+	ON_COMMAND(ID_RUN_RUNMODEL, &CRHMmainDlg::OnRunModel)
 	
 	//Export menu item 
 	ON_COMMAND(ID_EXPORT, &CRHMmainDlg::OnExport)
@@ -1274,10 +1274,23 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 		it++
 		)
 	{
-		int found = listbox_sel_observations.FindStringExact(-1, CString(it->first.c_str()));
 
-		//If it is found it is already displayed if not then display it. 
-		if (found == LB_ERR)
+		bool displayed = false;
+		for (int i = 0; i < this->tchart.get_SeriesCount(); i++)
+		{
+			CString seriesText = this->tchart.SeriesTitleLegend(i);
+			CT2CA pszConvertedAnsiString(seriesText); //Intermediary to convert CString to std::string
+			std::string seriesString(pszConvertedAnsiString);
+
+			if (seriesString == it->first)
+			{
+				displayed = true;
+				break;
+			}
+		}
+
+		//If it is not displayed then display it. 
+		if (!displayed)
 		{
 			//Reset the used to zero so that it doesn't "double write"
 			it->second->XValues.clear();
@@ -1326,12 +1339,16 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 			{
 				//Is a variable
 				CString selectedVariable = CString(it->first.c_str());
-				listbox_sel_observations.AddString(selectedVariable);
+				if ( listbox_sel_observations.FindStringExact(-1, selectedVariable) == LB_ERR )
+				{
+					listbox_sel_observations.AddString(selectedVariable);
+				}
 
 				if (model->getFinishedRun())
 				{
 					calculateVariableFunctionOutput(it->first, it->second, funct);
-					//AddObsPlot(it->second->Tag, it->second, it->first, funct);
+					AddSeriesToTChart(it->second);
+					delete it->second->Tag->FileData;
 				}
 	
 			}
@@ -2003,12 +2020,13 @@ void CRHMmainDlg::OnSaveStateAs()
 }
 
 
-void CRHMmainDlg::OnRunRunmodel()
+void CRHMmainDlg::OnRunModel()
 {
 	CWaitCursor wait;
 
 	RunClickFunction();
 	updateOpenStateFileMenu();
+	updateSelectedObservationListBox();
 }
 
 
@@ -3631,7 +3649,5 @@ void CRHMmainDlg::calculateVariableFunctionOutput(std::string varName, TSeries* 
 	
 
 	model->calculateObservationTseries(derivedVariable, varPlot, varName, function);
-
-	AddSeriesToTChart(varPlot);
 
 }

@@ -588,7 +588,7 @@ private:
 	* 
 	* Runs the simulation of the loaded project model.
 	*/
-	afx_msg void OnRunRunmodel();
+	afx_msg void OnRunModel();
 
 	/**
 	* Handler for clicking on Export menu item
