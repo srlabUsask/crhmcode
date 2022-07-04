@@ -905,4 +905,6 @@ private:
 	void showHideWaterYearMonth();
 
 	void addVariableFunctionToSelected();
+
+	void calculateVariableFunctionOutput(std::string varName, TSeries* varPlot, TFun function);
 };

@@ -4782,7 +4782,7 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 	}
 	else {
 		if (thisVar->root != "" || AlreadyIndex)
-			Indx = 0; // (non observations always 0
+			Indx = stoi(seriesTitle.substr(jj1 + 1, jj2 - jj1 - 1)) - 1;
 		else
 			Indx = stoi(seriesTitle.substr(jj1 + 1, jj2 - jj1 - 1)) - 1;
 	}
@@ -4892,7 +4892,7 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 
 		switch (Funct) {
 		case TFun::AVG:
-			newVar->UserFunct_ = &ClassVar::Tot_;
+			newVar->UserFunct_ = &ClassVar::Avg_;
 			newVar->FunKind = TFun::AVG;
 			break;
 		case TFun::MIN:
