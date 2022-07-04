@@ -1346,9 +1346,10 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 
 				if (model->getFinishedRun())
 				{
-					calculateVariableFunctionOutput(it->first, it->second, funct);
+					model->calculateVariableFunctionOutput(it->first, it->second, funct);
 					AddSeriesToTChart(it->second);
 					delete it->second->Tag->FileData;
+					it->second->Tag->FileData = NULL;
 				}
 	
 			}
@@ -3586,68 +3587,3 @@ void CRHMmainDlg::addVariableFunctionToSelected()
 }
 
 
-void CRHMmainDlg::calculateVariableFunctionOutput(std::string varName, TSeries* varPlot, TFun function)
-{
-	CRHMmain* model = CRHMmain::getInstance();
-
-	ClassVar* rootVariable = varPlot->Tag;
-
-	size_t suffixStart = varName.rfind("_");
-	std::string varNameNoSuffix = varName.substr(0, suffixStart);
-
-	int pos = -1;
-	for (int i = 0; i < model->SeriesCnt; i++)
-	{
-		if (model->cdSeries[i]->Title == varNameNoSuffix)
-		{
-			pos = i;
-			break;
-		}
-	}
-
-	if (pos == -1)
-	{
-		return;
-	}
-
-	ClassVar* derivedVariable = new ClassVar(*rootVariable);
-
-	varPlot->Tag = derivedVariable;
-
-	derivedVariable->FileData = new ClassData();
-
-	derivedVariable->FunKind = function; // permits deletion of FileData
-	derivedVariable->VarFunct = 1;
-	derivedVariable->FileData->Data = new double* [derivedVariable->dim];   // Data [Cnt] [Lines]
-	derivedVariable->cnt = derivedVariable->dim; // added 11/23/11
-	derivedVariable->FileData->Lines = model->cdSeries[pos]->Count();
-	derivedVariable->FileData->Freq = Global::Freq;
-	derivedVariable->FileData->IndxMin = Global::DTmin;
-	// interrupt is not synced to end of day. 05/14/12
-	derivedVariable->FileData->IndxMax = (derivedVariable->FileData->Lines / Global::Freq) * Global::Freq + derivedVariable->FileData->IndxMin - 1;
-	derivedVariable->FileData->ModN = 1;
-	derivedVariable->FileData->Interval = Global::Interval;
-	derivedVariable->FileData->DataCnt = derivedVariable->dim;
-	derivedVariable->FileData->FirstFile = false;
-	derivedVariable->visibility = TVISIBLE::PRIVATE;
-
-	for (int jj = 0; jj < derivedVariable->dim; jj++)
-	{
-		derivedVariable->FileData->Data[jj] = new double[derivedVariable->FileData->Lines];
-	}
-
-	size_t startHruNum = varName.rfind('(');
-	size_t endHruNum = varName.rfind(')');
-
-	int Indx = std::stoi(varName.substr(startHruNum+1, endHruNum-1)) - 1;
-
-	for (long jj = 0; jj < derivedVariable->FileData->Lines; jj++)
-	{
-		derivedVariable->FileData->Data[Indx][jj] = model->cdSeries[pos]->YValue(jj);
-	}
-
-	
-
-	model->calculateObservationTseries(derivedVariable, varPlot, varName, function);
-
-}
