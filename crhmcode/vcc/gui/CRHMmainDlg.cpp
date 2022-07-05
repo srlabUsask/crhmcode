@@ -3099,7 +3099,7 @@ void CRHMmainDlg::removeVariablesFromSelected()
 		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
 		std::string selectedString(pszConvertedAnsiString);
 
-		/*Remove observation from the model*/
+		/*Remove variable output from the model*/
 		std::list<std::pair<std::string, ClassVar*>>* listOfSelectedVariables = model->SelectedVariables;
 		for (
 			std::list<std::pair<std::string, ClassVar*>>::iterator it = listOfSelectedVariables->begin();
@@ -3112,6 +3112,28 @@ void CRHMmainDlg::removeVariablesFromSelected()
 				listOfSelectedVariables->erase(it);
 				break;
 			}
+		}
+
+		bool needToUpdateSelectedObs = false;
+		/* Look for the variable we just removed in the selected observation list and remove if needed */
+		for (
+			std::list<std::pair<std::string, TSeries*>>::iterator it = model->SelectedObservations->begin();
+			it != model->SelectedObservations->end();
+			it++
+			)
+		{
+			std::string trimedString = it->first.substr(0, it->first.rfind(')') + 1);
+			if (selectedString == trimedString)
+			{
+				model->SelectedObservations->erase(it);
+				needToUpdateSelectedObs = true;
+				it = model->SelectedObservations->begin();
+			}
+		}
+
+		if (needToUpdateSelectedObs)
+		{
+			updateSelectedObservationListBox();
 		}
 
 	}
