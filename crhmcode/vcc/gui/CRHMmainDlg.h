@@ -401,6 +401,12 @@ private:
 	*/
 	afx_msg void OnExtractGroup();
 
+	/**
+	* Handler for clicking on project->Extract Group
+	* 
+	* Opens the Hierarchy dialog modal window
+	* Currently unimplemented.
+	*/
 	afx_msg void OnViewHierarchy();
 
 	/**
@@ -904,6 +910,11 @@ private:
 	*/
 	void showHideWaterYearMonth();
 
+	/**
+	* Adds the selected observation function to the currently selected variable outputs
+	* 
+	* These are added to the selected observations list box and will be calculated when a simulation finishes.
+	*/
 	void addVariableFunctionToSelected();
 
 };

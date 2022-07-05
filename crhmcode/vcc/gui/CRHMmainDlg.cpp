@@ -1555,8 +1555,8 @@ void CRHMmainDlg::OnExtractGroup()
 
 void CRHMmainDlg::OnViewHierarchy()
 {
-	HierarchyDlg hierarchy;
-	hierarchy.DoModal();
+	//HierarchyDlg hierarchy;
+	//hierarchy.DoModal();
 }
 
 
