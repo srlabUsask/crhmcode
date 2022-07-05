@@ -1117,7 +1117,12 @@ void CRHMmainDlg::updateOpenObsFileMenu()
 
 		if (!found)
 		{
-			toErase.push_back(it);
+			//Not found as an observation see if it is a function applied to a variable
+			found = main->AllVariables->count(withoutSuffix);
+			if (!found)
+			{
+				toErase.push_back(it);
+			}	
 		}
 
 	}

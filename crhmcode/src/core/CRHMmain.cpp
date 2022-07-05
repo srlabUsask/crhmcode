@@ -849,46 +849,55 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					S = string(module) + ' ' + string(name);
 					thisVar = ClassVarFind(S);
 
-					if (thisVar && thisVar->FileData != NULL) 
+					if (thisVar) 
 					{
-
-						for (int ii = 0; ii < 100; ii++) 
+						TFun funct = TFun::FOBS;
+						//DataFile >> Index >> Kind;
+						std::vector<long> Indices;
+						int i = 0;
+						do
 						{
-							TFun funct = TFun::FOBS;
-							DataFile >> Index >> Kind;
-							
-							if (DataFile.fail())
+							long test;
+							DataFile >> test;
+							if (!DataFile.fail())
 							{
-								break;
+								Indices.push_back(test);
 							}
+							i++;
+						} while (!DataFile.fail());
+						DataFile.clear();
+						DataFile >> Kind;
 
-							if (Kind == "_obs")
-							{
-								Kind = "";
-								funct = TFun::FOBS;
-							}
-							else if (Kind == "_Tot")
-							{
-								funct = TFun::TOT;
-							}
-							else if (Kind == "_Min")
-							{
-								funct = TFun::MIN;
-							}
-							else if (Kind == "_Max")
-							{
-								funct = TFun::MAX;
-							}
-							else if (Kind == "_Avg")
-							{
-								funct = TFun::AVG;
-							}
-							else if (Kind == "_Dlta")
-							{
-								funct = TFun::DLTA;
-							}
+						if (Kind == "_obs")
+						{
+							Kind = "";
+							funct = TFun::FOBS;
+						}
+						else if (Kind == "_Tot")
+						{
+							funct = TFun::TOT;
+						}
+						else if (Kind == "_Min")
+						{
+							funct = TFun::MIN;
+						}
+						else if (Kind == "_Max")
+						{
+							funct = TFun::MAX;
+						}
+						else if (Kind == "_Avg")
+						{
+							funct = TFun::AVG;
+						}
+						else if (Kind == "_Dlta")
+						{
+							funct = TFun::DLTA;
+						}
 
-							SS = thisVar->name + "(" + Common::longtoStr(labs(Index)) + ")" + Kind;
+						for (int i = 0; i < Indices.size(); i++)
+						{
+
+							SS = thisVar->name + "(" + Common::longtoStr(labs(Indices[i])) + ")" + Kind;
 
 							bool selectedObservationsContainsSS = false;
 							for (
@@ -906,8 +915,8 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 							if (selectedObservationsContainsSS != true)
 							{
 
-								TSeries *cdSeries = NULL;
-								if (thisVar->FileData->Times == NULL) 
+								TSeries* cdSeries = NULL;
+								if (thisVar->FileData != NULL)
 								{
 									//                  cdSeries = new TSeries(Global::DTmax - Global::DTmin);
 									double Dif = EndDatePicker - StartDatePicker;
@@ -920,8 +929,14 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 
 									this->calculateObservationTseries(thisVar, cdSeries, SS, funct);
 								}
+								else
+								{
+									cdSeries = new TSeries();
+									cdSeries->Tag = thisVar;
+									cdSeries->Title = SS;
+								}
 
-								SelectedObservations->push_back(std::pair<std::string, TSeries *>( SS, cdSeries));
+								SelectedObservations->push_back(std::pair<std::string, TSeries*>(SS, cdSeries));
 								//AddObsPlot((ClassVar *) thisVar, cdSeries, SS,
 								//FindObservationType(Kind.c_str()));
 							}
