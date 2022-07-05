@@ -849,42 +849,55 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					S = string(module) + ' ' + string(name);
 					thisVar = ClassVarFind(S);
 
-					if (thisVar && thisVar->FileData != NULL) 
+					if (thisVar) 
 					{
-
-						for (int ii = 0; ii < 100; ii++) 
+						TFun funct = TFun::FOBS;
+						//DataFile >> Index >> Kind;
+						std::vector<long> Indices;
+						int i = 0;
+						do
 						{
-							TFun funct = TFun::FOBS;
-							DataFile >> Index >> Kind;
-							
-							if (DataFile.fail())
+							long test;
+							DataFile >> test;
+							if (!DataFile.fail())
 							{
-								break;
+								Indices.push_back(test);
 							}
+							i++;
+						} while (!DataFile.fail());
+						DataFile.clear();
+						DataFile >> Kind;
 
-							if (Kind == "_obs")
-							{
-								Kind = "";
-								funct = TFun::FOBS;
-							}
-							else if (Kind == "_Tot")
-							{
-								funct = TFun::TOT;
-							}
-							else if (Kind == "_Min")
-							{
-								funct = TFun::MIN;
-							}
-							else if (Kind == "_Max")
-							{
-								funct = TFun::MAX;
-							}
-							else if (Kind == "_Avg")
-							{
-								funct = TFun::AVG;
-							}
+						if (Kind == "_obs")
+						{
+							Kind = "";
+							funct = TFun::FOBS;
+						}
+						else if (Kind == "_Tot")
+						{
+							funct = TFun::TOT;
+						}
+						else if (Kind == "_Min")
+						{
+							funct = TFun::MIN;
+						}
+						else if (Kind == "_Max")
+						{
+							funct = TFun::MAX;
+						}
+						else if (Kind == "_Avg")
+						{
+							funct = TFun::AVG;
+						}
+						else if (Kind == "_Dlta")
+						{
+							funct = TFun::DLTA;
+						}
 
-							SS = thisVar->name + "(" + Common::longtoStr(labs(Index)) + ")" + Kind;
+						for (int i = 0; i < Indices.size(); i++)
+						{
+
+							SS = thisVar->name + "(" + Common::longtoStr(labs(Indices[i])) + ")" + Kind;
 
 							bool selectedObservationsContainsSS = false;
 							for (
@@ -902,8 +915,8 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 							if (selectedObservationsContainsSS != true)
 							{
 
-								TSeries *cdSeries = NULL;
-								if (thisVar->FileData->Times == NULL) 
+								TSeries* cdSeries = NULL;
+								if (thisVar->FileData != NULL)
 								{
 									//                  cdSeries = new TSeries(Global::DTmax - Global::DTmin);
 									double Dif = EndDatePicker - StartDatePicker;
@@ -916,8 +929,14 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 
 									this->calculateObservationTseries(thisVar, cdSeries, SS, funct);
 								}
+								else
+								{
+									cdSeries = new TSeries();
+									cdSeries->Tag = thisVar;
+									cdSeries->Title = SS;
+								}
 
-								SelectedObservations->push_back(std::pair<std::string, TSeries *>( SS, cdSeries));
+								SelectedObservations->push_back(std::pair<std::string, TSeries*>(SS, cdSeries));
 								//AddObsPlot((ClassVar *) thisVar, cdSeries, SS,
 								//FindObservationType(Kind.c_str()));
 							}
@@ -3963,7 +3982,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	for (
 		std::list<std::pair<std::string, TSeries*>>::iterator it = SelectedObservations->begin();
 		it != SelectedObservations->end();
-		it++)
+		it++
+		)
 	{
 		int dim = 0;
 		int lay = 0;
@@ -3990,19 +4010,25 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		{
 			if (!thisVar) 
 			{
-				std::list<std::pair<std::string, ClassVar*>>::iterator pos;
+				std::string varName = it->first.substr(0, it->first.rfind('('));
+				std::list<std::pair<std::string, ClassVar*>>::iterator pos = SelectedVariables->end();
 				for (
-					std::list<std::pair<std::string, ClassVar*>>::iterator it = SelectedVariables->begin();
-					it != SelectedVariables->end();
-					it++
+					std::list<std::pair<std::string, ClassVar*>>::iterator selVarIt = SelectedVariables->begin();
+					selVarIt != SelectedVariables->end();
+					selVarIt++
 					)
 				{
-					pos = it;
+					if (selVarIt->second->name == varName)
+					{
+						pos = selVarIt;
+						break;
+					}
 				}
 
 				if (pos != SelectedVariables->end())
 				{
 					thisVar = pos->second;
+					observationName = varName;
 				}
 				else
 				{
@@ -4673,7 +4699,7 @@ void CRHMmain::OutputSummary()
 	/**
 	* Determine what series are part of the summary file.
 	*/
-	std::list<std::pair<std::string, TSeries*>> * selectedSeries = this->SelectedObservations;
+	std::list<std::pair<std::string, TSeries*>>* selectedSeries = this->SelectedObservations;
 	std::list<std::pair<std::string, TSeries*>> summarySeries;
 
 	for (
@@ -4698,6 +4724,39 @@ void CRHMmain::OutputSummary()
 		if (seriesType == "_Tot" || seriesType == "_Avg" || seriesType == "_Max" || seriesType == "_Min" || seriesType == "_Dlta")
 		{
 			summarySeries.push_back(std::pair<std::string, TSeries*>(it->first, it->second));
+
+			TFun funct;
+			if (it->second->Tag->FileData == NULL)
+			{
+				if (seriesType == "")
+				{
+					funct = TFun::FOBS;
+				}
+				else if (seriesType == "_Tot")
+				{
+					funct = TFun::TOT;
+				}
+				else if (seriesType == "_Min")
+				{
+					funct = TFun::MIN;
+				}
+				else if (seriesType == "_Max")
+				{
+					funct = TFun::MAX;
+				}
+				else if (seriesType == "_Avg")
+				{
+					funct = TFun::AVG;
+				}
+				else if (seriesType == "_Dlta")
+				{
+					funct = TFun::DLTA;
+				}
+
+				this->calculateVariableFunctionOutput(it->first, it->second, funct);
+				delete it->second->Tag->FileData;
+				it->second->Tag->FileData = NULL;
+			}
 		}
 	}
 
@@ -4782,7 +4841,7 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 	}
 	else {
 		if (thisVar->root != "" || AlreadyIndex)
-			Indx = 0; // (non observations always 0
+			Indx = stoi(seriesTitle.substr(jj1 + 1, jj2 - jj1 - 1)) - 1;
 		else
 			Indx = stoi(seriesTitle.substr(jj1 + 1, jj2 - jj1 - 1)) - 1;
 	}
@@ -4892,7 +4951,7 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 
 		switch (Funct) {
 		case TFun::AVG:
-			newVar->UserFunct_ = &ClassVar::Tot_;
+			newVar->UserFunct_ = &ClassVar::Avg_;
 			newVar->FunKind = TFun::AVG;
 			break;
 		case TFun::MIN:
@@ -5132,5 +5191,72 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 	} // else
 
 	Global::DTnow = Save_DTnow; // restore
+
+}
+
+
+void CRHMmain::calculateVariableFunctionOutput(std::string varName, TSeries* varPlot, TFun function)
+{
+	CRHMmain* model = CRHMmain::getInstance();
+
+	ClassVar* rootVariable = varPlot->Tag;
+
+	size_t suffixStart = varName.rfind("_");
+	std::string varNameNoSuffix = varName.substr(0, suffixStart);
+
+	int pos = -1;
+	for (int i = 0; i < model->SeriesCnt; i++)
+	{
+		if (model->cdSeries[i]->Title == varNameNoSuffix)
+		{
+			pos = i;
+			break;
+		}
+	}
+
+	if (pos == -1)
+	{
+		return;
+	}
+
+	ClassVar* derivedVariable = new ClassVar(*rootVariable);
+
+	varPlot->Tag = derivedVariable;
+
+	derivedVariable->FileData = new ClassData();
+
+	derivedVariable->FunKind = function; // permits deletion of FileData
+	derivedVariable->VarFunct = 1;
+	derivedVariable->FileData->Data = new double* [derivedVariable->dim];   // Data [Cnt] [Lines]
+	derivedVariable->cnt = derivedVariable->dim; // added 11/23/11
+	derivedVariable->FileData->Lines = model->cdSeries[pos]->Count();
+	derivedVariable->FileData->Freq = Global::Freq;
+	derivedVariable->FileData->IndxMin = Global::DTmin;
+	// interrupt is not synced to end of day. 05/14/12
+	derivedVariable->FileData->IndxMax = (derivedVariable->FileData->Lines / Global::Freq) * Global::Freq + derivedVariable->FileData->IndxMin - 1;
+	derivedVariable->FileData->ModN = 1;
+	derivedVariable->FileData->Interval = Global::Interval;
+	derivedVariable->FileData->DataCnt = derivedVariable->dim;
+	derivedVariable->FileData->FirstFile = false;
+	derivedVariable->visibility = TVISIBLE::PRIVATE;
+
+	for (int jj = 0; jj < derivedVariable->dim; jj++)
+	{
+		derivedVariable->FileData->Data[jj] = new double[derivedVariable->FileData->Lines];
+	}
+
+	size_t startHruNum = varName.rfind('(');
+	size_t endHruNum = varName.rfind(')');
+
+	int Indx = std::stoi(varName.substr(startHruNum + 1, endHruNum - 1)) - 1;
+
+	for (long jj = 0; jj < derivedVariable->FileData->Lines; jj++)
+	{
+		derivedVariable->FileData->Data[Indx][jj] = model->cdSeries[pos]->YValue(jj);
+	}
+
+
+
+	model->calculateObservationTseries(derivedVariable, varPlot, varName, function);
 
 }

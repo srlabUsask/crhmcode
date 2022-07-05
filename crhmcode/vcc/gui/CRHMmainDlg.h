@@ -588,7 +588,7 @@ private:
 	* 
 	* Runs the simulation of the loaded project model.
 	*/
-	afx_msg void OnRunRunmodel();
+	afx_msg void OnRunModel();
 
 	/**
 	* Handler for clicking on Export menu item
@@ -903,5 +903,7 @@ private:
 	* Calculates if the water year month drop down should be shown or hidden.
 	*/
 	void showHideWaterYearMonth();
+
+	void addVariableFunctionToSelected();
 
 };

@@ -346,6 +346,8 @@ public:
 	*/
 	void calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries, string seriesTitle, TFun Funct);
 
+	void calculateVariableFunctionOutput(std::string varName, TSeries* varPlot, TFun function);
+
 };
 
 //class Classinfo; // used to process shared parameters
