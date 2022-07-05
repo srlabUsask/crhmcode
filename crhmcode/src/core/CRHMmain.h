@@ -53,9 +53,31 @@ class CRHMmain
 	static CRHMmain* instance;
 
 private:
+	/**
+	* True if the AutoRun directive is set for the current project.
+	* 
+	* Saved in project file as Auto_Run
+	*/
 	bool AutoRun{ false };
+
+	/**
+	* True if the AutoExit directive is set for the current project. 
+	* 
+	* Saved in the project file as Auto_Exit
+	*/
 	bool AutoExit{ false };
+
+	/**
+	* True if all the variable outputs should be output to file.
+	* False if only the values for the last time step should be output to file.
+	* 
+	* Saved in the project file as Log_All for true or Log_Last for false.
+	*/
 	bool ReportAll{ true };
+
+	/**
+	* True when a simulation run has been completed and is still saved in program memory.
+	*/
 	bool finishedRun{ false };
 
 	/**
@@ -74,16 +96,60 @@ private:
 	*/
 	int water_year_month;
 
+	/**
+	* Ouputs the requested summary information to a .sum file with the same name as the output file.
+	*/
 	void OutputSummary();
 
 public:
-
+	
+	/**
+	* Retrives the value of the AutoRun field.
+	* 
+	* @return bool - true if AutoRun is enabled false otherwise.
+	*/
 	bool getAutoRun();
+
+	/**
+	* Sets the value of the AutoRun field.
+	* 
+	* @param set - bool value to set the field to.
+	*/
 	void setAutoRun(bool set);
+	
+	/**
+	* Retrives the value of the AutoExit field.
+	* 
+	* @return bool - true if AutoExit is enabled false otherwise.
+	*/
 	bool getAutoExit();
+
+	/**
+	* Sets the value of the AutoExit field.
+	* 
+	* @param set - bool value to set the field to.
+	*/
 	void setAutoExit(bool set);
+	
+	/**
+	* Retrives the value of the FinishedRun field
+	* 
+	* @return bool - true if a simulation run is finished and still in program memory false otherwise.
+	*/
 	bool getFinishedRun();
+	
+	/**
+	* Retrives the value of the ReportAll field. 
+	* 
+	* @return bool - true if Log_All is enabled false if Log_Last is enabled.
+	*/
 	bool getReportAll();
+
+	/**
+	* Sets the value of the ReportAll field.
+	* 
+	* @param set - bool value to set the ReportAll field to.
+	*/
 	void setReportAll(bool set);
 
 	/**
@@ -128,62 +194,134 @@ public:
 	*/
 	void setWaterYearMonth(int month);
 
-	CRHMLogger* Logger;
+	/**
+	* Reference to the reportStream object.
+	*/
 	ReportStream * reportStream{NULL};
 
+	/**
+	* Retrives the singleton instance of the main CRHM class.
+	* 
+	* @return CRHMmain* - Reference to the one and only CRHMmain object.
+	*/
 	static CRHMmain *  getInstance();
+
+	/**
+	* Constructs a CRHMmain object from a set of command line arguments.
+	*/
 	CRHMmain(CRHMArguments * arguments);
+	
+	/**
+	* Name of the open project file.
+	*/
+	std::string OpenNamePrj;
 
-	//virtual void DoPrjOpen(string OpenNamePrj, string ProjectDirectory);
-	string Sstrings[12] = { "", "_WtoMJ", "_MJtoW", "_Avg", "_Min", "_Max", "_Sum", "_Pos", "_Tot", "_Tot/Freq", "_First", "_Last" };
+	/**
+	* Name of the open state file
+	*/
+	std::string OpenNameState;
 
-	string OpenNamePrj;
-	string OpenNameState;
-	//string OpenNamePar;
-	string OpenNameObs;
-	string OpenNameReport;
-	string OpenProjectPath;
+	/**
+	* Tracks if there is a open inital state file
+	* true if there is false otherwise.
+	*/
+	bool OpenStateFlag;
+	
+	/**
+	* Name to save the produced report to
+	*/
+	std::string OpenNameReport;
+	
+	/**
+	* Name of the open project file.
+	*/
+	std::string OpenProjectPath;
 
-	string SaveStateFileName;
+	/**
+	* Name of the file to save the final state to.
+	*/
+	std::string SaveStateFileName;
 
-	//	string ProjectDirectory;
-	string ApplicationDir;
+	/**
+	* Tracks if a final state file is requested to be produced.
+	*/
+	bool SaveStateFlag;
 
-	//manishankar used this meaningful variable name instead of ListBox1.
-	std::map<std::string, ClassVar*> * AllVariables; //!< Map keying variable names in model to their ClassVar objects.
-	//manishankar used this meaningful variable name instead of ListBox2.
-	std::map<std::string, ClassVar*> * AllObservations; //!< Map keying observation names in model to their ClassVar objects.
-	//manishankar used this meaningful variable name instead of ListBox3.
-	std::list<std::pair<std::string, ClassVar*>> * SelectedVariables; //!< List of selected paired variables names and variable objects.
-	//manishankar used this meaningful variable name instead of ListBox4.
-	std::list<std::pair<std::string, TSeries *>> * SelectedObservations; //!< List of selected paired observation names and TSeries objects.
+	/**
+	* Map keying variable names in the model to their ClassVar objects.
+	* 
+	* Used to be "ListBox1"
+	*/
+	std::map<std::string, ClassVar*> * AllVariables; 
 
-	double StartDatePicker; // replaces graphic controls. manishankar Picker1 was replaced by StartDatePicker
-	double EndDatePicker; //manishankar Picker2 was replaced by EndDatePicker
+	/**
+	* Map keying observation names in model to their ClassVar objects.
+	* 
+	* Used to be "ListBox2"
+	*/
+	std::map<std::string, ClassVar*> * AllObservations;
 
+	/**
+	* List of the selected variables stored as a pair of variable name and ClassVar object.
+	* 
+	* Used to be "ListBox3"
+	*/
+	std::list<std::pair<std::string, ClassVar*>> * SelectedVariables; 
 
+	/**
+	* List of the selected observations stored as a pair of variable name and TSeries plots
+	* 
+	* Used to be "ListBox4"
+	*/
+	std::list<std::pair<std::string, TSeries *>> * SelectedObservations; 
 
+	/**
+	* Stores in double MS date format the start date of the simulation.
+	*/
+	double StartDate;
+	
+	/**
+	* Stores in double MS date format the end date of the simulation.
+	*/
+	double EndDate;
+
+	/**
+	* List of open observation files stored as a pair of the file name and the ClassData object
+	*/
 	std::list<std::pair<std::string, ClassData*>> * ObsFilesList;
+	
+	/**
+	* Used to store as a series of lines a project file to be written.
+	*/
 	std::list<std::string> * ProjectList;
 
-	bool OpenStateFlag;
+	/**
+	* The file path to the open project directory
+	*/
+	std::string ProjectDirectory;
 
-	//double ProjectFileDate;
-	time_t Dt0; // used to ca
-
-
-	string ProjectDir;// = ApplicationDir;
-	string ProjectDirectory;
-
-	string SaveDialogPrj;
-
+	/**
+	* Ordered list of names for HRU units. Can be used in place of HRU numbers.
+	*/
 	std::vector<std::string> * ListHruNames;
-	std::list<std::string> * LoopList;  // used by ControlReadState
-	MapstrSS    *MapGrpNames;
 
-	bool SaveStateFlag;
+	/**
+	* List of strings used in function ControlReadState
+	*/
+	std::list<std::string> * LoopList;
+	
+	MapstrSS* MapGrpNames;
+
+	/**
+	* Tracks if a project is currently open.
+	* True if a project is open, false otherwise
+	*/
 	bool ProjectOpen;
-	bool ShiftDown; // Linked to ListBox1 and ListBox2
+
+	/**
+	* Tracks if HRU names are being used over numbers
+	* True if they are false otherwise.
+	*/
 	bool HruNames;
 
 
@@ -212,8 +350,6 @@ public:
 	void InitModules(void);
 
 	void Label4Click(void);
-
-	TFun FindObservationType(string Kind);
 
 	void SqueezeParams(void);
 

@@ -188,23 +188,23 @@ CRHMmain::~CRHMmain()
 
 double CRHMmain::GetStartDate()
 {
-	return StartDatePicker;
+	return StartDate;
 }
 
 void CRHMmain::setStartDate(double sdate)
 {
-	StartDatePicker = sdate;
+	StartDate = sdate;
 }
 
 
 double CRHMmain::GetEndDate()
 {
-	return EndDatePicker;
+	return EndDate;
 }
 
 void CRHMmain::setEndDate(double edate)
 {
-	EndDatePicker = edate;
+	EndDate = edate;
 }
 
 
@@ -347,8 +347,6 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 
 	ProjectDirectory = GetCurrentDir();
 
-	Dt0 = time(NULL); // used to calculate project load time
-
 	bool Prj = Common::lowercase(OpenNamePrj).find(".prj") != string::npos;
 
 	//DataFile.getline(Descrip, CharLength);
@@ -425,7 +423,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					int l = SS.length();
 					if (SS[l-1] == '\r') { SS[l-1]='\0'; }
 					if (FindFileName(SS)) {
-						OpenNameObs = SS;
+						
 
 						bool test = OpenObsFile(SS);
 						//if (!OpenObsFile(SS))
@@ -456,7 +454,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					DataFile >> D[ii];
 
 				DT = StandardConverterUtility::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0); // check
-				StartDatePicker = DT;
+				StartDate = DT;
 
 				int c;
 				while ((c = DataFile.peek(), c == 32)) {
@@ -475,7 +473,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					DataFile >> D[ii];
 
 				DT = StandardConverterUtility::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0);
-				EndDatePicker = DT;
+				EndDate = DT;
 
 				DataFile >> S;
 			}
@@ -918,7 +916,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 								if (thisVar->FileData != NULL)
 								{
 									//                  cdSeries = new TSeries(Global::DTmax - Global::DTmin);
-									double Dif = EndDatePicker - StartDatePicker;
+									double Dif = EndDate - StartDate;
 									cdSeries = new TSeries();
 
 									//move inside to avoid null ptr exception - Matt
@@ -1229,14 +1227,6 @@ void  CRHMmain::Label4Click(void) {
 }
 //---------------------------------------------------------------------------
 
-TFun  CRHMmain::FindObservationType(string Kind) {
-
-	if (Kind == "_obs") Kind = "";
-	for (int ii = (int)TFun::FOBS; ii <= (int)TFun::LAST; ii++)
-		if (Kind == Sstrings[ii]) return (TFun)ii;
-	return (TFun::FOBS);
-}
-//---------------------------------------------------------------------------
 
 void  CRHMmain::SqueezeParams(void) {
 
@@ -1778,8 +1768,6 @@ bool  CRHMmain::OpenObsFile(string FileName)
 			setStartDate(FileData->Dt1);
 			setEndDate(FileData->Dt2);
 
-			OpenNameObs = FileName;
-
 			Global::Interval = FileData->Interval;
 			Global::Freq = FileData->Freq;
 
@@ -2033,13 +2021,6 @@ bool  CRHMmain::FindFileName(string &FileName) {
 		return true;
 	}
 
-	// original file may now be in Application directory
-	NewFileName = ApplicationDir + FilePart;
-	if (FileExistsSp(NewFileName)) {
-		FileName = NewFileName;
-		return true;
-	}
-
 	return false;
 }
 
@@ -2195,8 +2176,8 @@ MMSData *  CRHMmain::RunClick2Start()
 								   // clears storage for observation read and function lists
 	Global::OurModulesList->begin()->second->InitReadObs();
 
-	double DTstartR = StartDatePicker;
-	double DTendR = EndDatePicker;
+	double DTstartR = StartDate;
+	double DTendR = EndDate;
 
 	ClassPar *thisPar;
 
