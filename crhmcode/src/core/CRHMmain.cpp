@@ -844,7 +844,6 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					}
 
 					string Kind;
-					long Index;
 
 					S = string(module) + ' ' + string(name);
 					thisVar = ClassVarFind(S);
@@ -894,7 +893,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 							funct = TFun::DLTA;
 						}
 
-						for (int i = 0; i < Indices.size(); i++)
+						for (size_t i = 0; i < Indices.size(); i++)
 						{
 
 							SS = thisVar->name + "(" + Common::longtoStr(labs(Indices[i])) + ")" + Kind;
@@ -4725,7 +4724,7 @@ void CRHMmain::OutputSummary()
 		{
 			summarySeries.push_back(std::pair<std::string, TSeries*>(it->first, it->second));
 
-			TFun funct;
+			TFun funct = TFun::FOBS;
 			if (it->second->Tag->FileData == NULL)
 			{
 				if (seriesType == "")

@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 6/23/2022 11:8
+###### Version NON DLL 4.02  Creation: 7/5/2022 13:50
 Dimensions:
 ######
 nhru 3
@@ -225,7 +225,7 @@ Final_State
 ######
 Summary_period
 ######
-Water_year 10
+Daily
 ######
 Display_Variable:
 ######
@@ -235,6 +235,7 @@ Display_Observation:
 ######
 obs ppt 1 _obs
 obs ppt 1 _Tot
+pbsm SWE 1 2 3 _Dlta
 ######
 Log_All
 ######
