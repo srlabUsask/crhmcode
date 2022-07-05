@@ -883,6 +883,10 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 							{
 								funct = TFun::AVG;
 							}
+							else if (Kind == "_Dlta")
+							{
+								funct = TFun::DLTA;
+							}
 
 							SS = thisVar->name + "(" + Common::longtoStr(labs(Index)) + ")" + Kind;
 
@@ -3963,7 +3967,8 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	for (
 		std::list<std::pair<std::string, TSeries*>>::iterator it = SelectedObservations->begin();
 		it != SelectedObservations->end();
-		it++)
+		it++
+		)
 	{
 		int dim = 0;
 		int lay = 0;
@@ -3990,19 +3995,25 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		{
 			if (!thisVar) 
 			{
-				std::list<std::pair<std::string, ClassVar*>>::iterator pos;
+				std::string varName = it->first.substr(0, it->first.rfind('('));
+				std::list<std::pair<std::string, ClassVar*>>::iterator pos = SelectedVariables->end();
 				for (
-					std::list<std::pair<std::string, ClassVar*>>::iterator it = SelectedVariables->begin();
-					it != SelectedVariables->end();
-					it++
+					std::list<std::pair<std::string, ClassVar*>>::iterator selVarIt = SelectedVariables->begin();
+					selVarIt != SelectedVariables->end();
+					selVarIt++
 					)
 				{
-					pos = it;
+					if (selVarIt->second->name == varName)
+					{
+						pos = selVarIt;
+						break;
+					}
 				}
 
 				if (pos != SelectedVariables->end())
 				{
 					thisVar = pos->second;
+					observationName = varName;
 				}
 				else
 				{
