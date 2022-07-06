@@ -77,8 +77,6 @@ private:
 	* The value is initalized in OnInitDialog()
 	*/
 	CMenu* main_menu = NULL;
-
-	long Box1Disply{ 0 };
 	
 	std::string defaultprojectname = "currentproject.prj";
 	std::string defaultprojectpath = "currentproject.prj";

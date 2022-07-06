@@ -1653,7 +1653,6 @@ void CRHMmainDlg::OnOpenObservation()
 		std::string file_p = CT2A(filepath.GetString());
 		std::string file_n = CT2A(filename.GetString());
 
-		Box1Disply = (int)TVISIBLE::PRIVATE;
 		GetAllVariables();
 		OpenObservation(file_p);
 
@@ -1663,7 +1662,6 @@ void CRHMmainDlg::OnOpenObservation()
 
 	}
 
-	Box1Disply = (int)TVISIBLE::OUTPUT;
 	GetAllVariables();
 
 
