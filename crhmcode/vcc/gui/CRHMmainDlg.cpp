@@ -595,7 +595,8 @@ void CRHMmainDlg::RunClickFunction()
 			int rate = modal->DoModal();
 			if (rate == -1)
 			{
-				break;
+				tchart.Repaint();
+				return;
 			}
 
 			this->refresh_rate = (RefreshRate)rate;
