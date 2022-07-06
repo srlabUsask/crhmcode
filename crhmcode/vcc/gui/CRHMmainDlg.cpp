@@ -1,5 +1,6 @@
 #include "CRHMmainDlg.h"
 
+
 IMPLEMENT_DYNAMIC(CRHMmainDlg, CDialogEx)
 
 
@@ -150,31 +151,26 @@ END_MESSAGE_MAP()
 
 BOOL CRHMmainDlg::OnInitDialog()
 {
-	CRHMmain* model = CRHMmain::getInstance();
-
 	CDialogEx::OnInitDialog();
-	// TODO:  Add extra initialization here
+
+	/* Store the reference to the main menu */
 	this->main_menu = this->GetMenu();
 
-	//State the name of the program in the window title - Matt
-	std::string str1 = "The Cold Regions Hydrological Model";
-	CString cStr(str1.c_str());
-
+	/* Set Text for main dialog elements to defaults */
 	SetDlgItemText(ID_OBS_LAY_DIM_LABEL, L"OBS");
 	SetDlgItemText(ID_HRU_DIM_DISPLAY, _T("1"));
 	SetDlgItemText(ID_OBS_DIM_DISPLAY, _T("1"));
 	SetDlgItemText(ID_OBS_HELP_DISPLAY, _T(""));
 	SetDlgItemText(ID_VAR_HELP_DISPLAY, _T(""));
-	CFont* varHelpFont = new CFont();
-	varHelpFont->CreatePointFont(96, _T("Ariel"));
-	GetDlgItem(ID_VAR_HELP_DISPLAY)->SetFont(varHelpFont);
-	CFont* obsHelpFont = new CFont();
-	obsHelpFont->CreatePointFont(96, _T("Ariel"));
-	GetDlgItem(ID_OBS_HELP_DISPLAY)->SetFont(obsHelpFont);
 
-	/**
-	* Set options for the function_drop_down
-	*/
+	/* Set the font for the help displays */
+	CFont* helpFont = new CFont();
+	helpFont->CreatePointFont(96, _T("Ariel"));
+	GetDlgItem(ID_VAR_HELP_DISPLAY)->SetFont(helpFont);
+	GetDlgItem(ID_OBS_HELP_DISPLAY)->SetFont(helpFont);
+	delete helpFont;
+
+	/* Set options for the function_drop_down */
 	function_drop_down.AddString(L"Observation");
 	function_drop_down.AddString(L"Total");
 	function_drop_down.AddString(L"Minimum");
@@ -183,18 +179,14 @@ BOOL CRHMmainDlg::OnInitDialog()
 	function_drop_down.AddString(L"Delta");
 	function_drop_down.SetCurSel(0);
 
-	/**
-	* Set options for the timebase_drop_down
-	*/
+	/* Set options for the timebase_drop_down */
 	timebase_drop_down.AddString(L"Daily");
 	timebase_drop_down.AddString(L"Monthly");
 	timebase_drop_down.AddString(L"Calendar Year");
 	timebase_drop_down.AddString(L"Water Year");
 	timebase_drop_down.AddString(L"All");
 
-	/**
-	* Set options for the water_year_drop_down
-	*/
+	/* Set options for the water_year_drop_down */
 	water_year_drop_down.AddString(L"January");
 	water_year_drop_down.AddString(L"Febuary");
 	water_year_drop_down.AddString(L"March");
@@ -208,122 +200,112 @@ BOOL CRHMmainDlg::OnInitDialog()
 	water_year_drop_down.AddString(L"November");
 	water_year_drop_down.AddString(L"December");
 
+	/* Initalize the project dependent components */
 	loadGuiComponents();
 
-	
-
-	delete varHelpFont;
-	delete obsHelpFont;
-
-	return TRUE;  // return TRUE unless you set the focus to a control
-				  // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;
 }
 
 
 void CRHMmainDlg::loadGuiComponents()
 {
+	CRHMmain* model = CRHMmain::getInstance();
+
+	/* Reset the list boxes */
 	listbox_all_variables.ResetContent();
 	listbox_sel_variables.ResetContent();
 	listbox_all_observations.ResetContent();
 	listbox_sel_observations.ResetContent();
 
-	CRHMmain* model = CRHMmain::getInstance();
-
-	std::map<std::string, ClassVar*>* variables = CRHMmain::getInstance()->getVariables();
-	std::map<std::string, ClassVar*>::iterator it;
-	for (it = variables->begin(); it != variables->end(); it++) 
+	/* List the variables in the all variables list box */
+	for (
+		std::map<std::string, ClassVar*>::iterator varIt = model->getVariables()->begin();
+		varIt != model->getVariables()->end();
+		varIt++
+		) 
 	{
+		std::string varString = varIt->first;
+		CString varText(varString.c_str());
 
-		//string s = variables->Strings[ii];
-
-
-		std::string s = it->first;
-
-		CString cvariables(s.c_str());
-
-		/*if (s == "t0_inhibit##")
+		/* Add all variables to the list box except the time variable */
+		if (varString != "t")
 		{
-			string s2 = "t0_inhibit#";
-			CString cs2(s2.c_str());
-			listbox_varaiables_all.AddString(cs2);
-			continue;
-		}*/
-		if (s != "t")
-		{
-			listbox_all_variables.AddString(cvariables);
+			listbox_all_variables.AddString(varText);
 		}
 	}
 
-
-	std::map<std::string, ClassVar*>* observations = CRHMmain::getInstance()->getObservations();
-	std::map<std::string, ClassVar*>::iterator observationIt;
-
-
-	for (observationIt = observations->begin(); observationIt != observations->end(); observationIt++)
-	{
-		std::string s = observationIt->first;
-		CString observations(s.c_str());
-		listbox_all_observations.AddString(observations);
-	}
-
-	std::list<std::pair<std::string, ClassVar*>>* sel_variables = CRHMmain::getInstance()->getSelectedVariables();
-
-	for (std::list<std::pair<std::string, ClassVar*>>::iterator it = sel_variables->begin();
-		it != sel_variables->end();
-		it++)
-	{
-		std::string s = it->first;
-		CString observations(s.c_str());
-		listbox_sel_variables.AddString(observations);
-	}
-
-	std::list<std::pair<std::string, TSeries*>>* sel_observations = CRHMmain::getInstance()->getSelectedObservations();
-
+	/* List the observations in the all observations list box */
 	for (
-		std::list<std::pair<std::string, TSeries*>>::iterator it = sel_observations->begin();
-		it != sel_observations->end();
-		it++
+		std::map<std::string, ClassVar*>::iterator obsIt = model->getObservations()->begin();
+		obsIt != model->getObservations()->end();
+		obsIt++
 		)
 	{
-		std::string s = it->first;
-		CString observations(s.c_str());
-		listbox_sel_observations.AddString(observations);
+		std::string obsString = obsIt->first;
+		CString obsText(obsString.c_str());
+		listbox_all_observations.AddString(obsText);
 	}
 
-	CRHMmain* main = CRHMmain::getInstance();
-	SetTime(main->GetStartDate(), main->GetEndDate());
-
-	CMenu* menu = GetMenu();
-
-	if (main->getAutoRun())
+	/* List the selected variables in the selected variables list box */
+	for (
+		std::list<std::pair<std::string, ClassVar*>>::iterator selVarIt = model->getSelectedVariables()->begin();
+		selVarIt != model->getSelectedVariables()->end();
+		selVarIt++
+		)
 	{
-		menu->CheckMenuItem(ID_AUTO_RUN, MF_CHECKED);
+		std::string varString = selVarIt->first;
+		CString varText(varString.c_str());
+		listbox_sel_variables.AddString(varText);
+	}
+
+	/* List the selected observations in the selected observations list box */
+	for (
+		std::list<std::pair<std::string, TSeries*>>::iterator selObsIt = model->getSelectedObservations()->begin();
+		selObsIt != model->getSelectedObservations()->end();
+		selObsIt++
+		)
+	{
+		std::string obsString = selObsIt->first;
+		CString obsText(obsString.c_str());
+		listbox_sel_observations.AddString(obsText);
+	}
+
+	/* Set start date and end date selectors */
+	SetTime(model->GetStartDate(), model->GetEndDate());
+
+	/* Set the state of the auto run check box based on its value */
+	if (model->getAutoRun())
+	{
+		this->main_menu->CheckMenuItem(ID_AUTO_RUN, MF_CHECKED);
 	}
 	else
 	{
-		menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
+		this->main_menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
 	}
 
-	if (main->getAutoExit())
+	/* Set the state of the auto exit check box based on its value */
+	if (model->getAutoExit())
 	{
-		menu->CheckMenuItem(ID_AUTO_EXIT, MF_CHECKED);
+		this->main_menu->CheckMenuItem(ID_AUTO_EXIT, MF_CHECKED);
 	}
 	else
 	{
-		menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
+		this->main_menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
 	}
 
-	if (main->getReportAll())
+	/* Set the state of the log all and log last check boxes based on value of report all boolean*/
+	if (model->getReportAll())
 	{
-		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_CHECKED);
-		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
+		this->main_menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_CHECKED);
+		this->main_menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
 	}
 	else
 	{
-		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
-		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_CHECKED);
+		this->main_menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
+		this->main_menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_CHECKED);
 	}
 
+	/* Send signal to run the project if auto run is set */
 	if (model->getAutoRun())
 	{
 		ShowWindow(1);
@@ -332,6 +314,7 @@ void CRHMmainDlg::loadGuiComponents()
 		PostMessage(UWM_AUTO_RUN, 0, 0);
 	}
 
+	/* Set the time base selector based on the loaded time base */
 	switch (model->getTimeBase())
 	{
 	case (TimeBase::DAILY):
@@ -355,9 +338,10 @@ void CRHMmainDlg::loadGuiComponents()
 	this->showHideWaterYearMonth();
 	water_year_drop_down.SetCurSel(model->getWaterYearMonth() - 1);
 
+	/* Set the state of the create summary check box based on the value of the summarize field */
 	if (model->getSummarize())
 	{
-		menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_CHECKED);
+		this->main_menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_CHECKED);
 	}
 
 }
@@ -365,11 +349,9 @@ void CRHMmainDlg::loadGuiComponents()
 
 void CRHMmainDlg::InitModules()
 {
-
 	Global::BuildFlag = TBuild::DECL;
 
-	Box1Disply = (int)TVISIBLE::OUTPUT;
-
+	/* Call the declaration function for each module */
 	for (
 		std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
 		modIt != Global::OurModulesList->end();
@@ -389,146 +371,32 @@ void CRHMmainDlg::GetAllVariables()
 {
 	CRHMmain* model = CRHMmain::getInstance();
 
-	ClassVar* thisVar;
-	MapVar::iterator itVar;
-
-	string Labels[] = { "Variables", "Variables by Module", "Diagnostic Variables", "Private Variables" };
-	string Newname;
-
-	++Box1Disply;
-	if (Box1Disply > (int)TVISIBLE::PRIVATE)
-	{
-		Box1Disply = (int)TVISIBLE::OUTPUT;
-	}
-
 	model->AllVariables->clear();
 
-	if (Box1Disply == (int)TVISIBLE::OUTPUT)
+	/* Add all the variables to the model's map of variables */
+	for (
+		std::map<std::string, ClassVar*>::iterator varIt = Global::MapVars.begin(); 
+		varIt != Global::MapVars.end(); 
+		varIt++
+		) 
 	{
-
-		for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) 
+		ClassVar* thisVar = varIt->second;
+		if (
+			thisVar->varType < TVar::Read 
+			&& thisVar->visibility == TVISIBLE::USUAL 
+			&& thisVar->dimen != TDim::NREB 
+			&& (thisVar->values || thisVar->ivalues) 
+			&& !thisVar->FileData
+			) 
 		{
-			thisVar = (*itVar).second;
-			if (thisVar->varType < TVar::Read && thisVar->visibility == TVISIBLE::USUAL &&
-				thisVar->dimen != TDim::NREB &&
-				(thisVar->values || thisVar->ivalues) && !thisVar->FileData) {
-				Newname = DeclObsName(thisVar);
-				if (model->AllVariables->count(Newname) == 0)
-				{
-					model->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
-				}
+			std::string Newname = DeclObsName(thisVar);
+			if (model->AllVariables->count(Newname) == 0)
+			{
+				model->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
 			}
 		}
 	}
-	else
-	{
-
-		string S0;
-
-		for (
-			std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
-			modIt != Global::OurModulesList->end();
-			modIt++
-			)
-		{
-			string S = modIt->first;
-			ClassModule* thisModule = modIt->second;
-			if (S0 != S) {
-				if (!(S0.length() == 0))
-				{
-					//test->AllVariables->Add(" "); Now that AllVariables is a map this line doesnt make sense.
-				}
-
-				S0 = S;
-				if (thisModule->variation != 0) {
-					string AA("#0");
-					AA[1] += (char)(log(thisModule->variation) / log(2) + 1);
-					S0 += AA;
-				}
-
-				S0 = "   --- " + S0;
-				//model->AllVariables->insert(std::pair<std::string, ClassVar*>(S0 + " ---", (ClassVar*)modIt->second));
-				//if (S0.Length() > Max_Name_Width1)
-					//Max_Name_Width1 = S0.Length();
-			}
-
-			switch (Box1Disply) { // display in module/group
-			case (int)TVISIBLE::USUAL:
-				for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
-					thisVar = (*itVar).second;
-					if (S == thisVar->module.c_str() && thisVar->visibility == TVISIBLE::USUAL &&
-						Variation_Decide(thisVar->variation_set, thisModule->variation) &&
-						thisVar->dimen != TDim::NREB &&
-						(thisVar->values || thisVar->ivalues) && !thisVar->FileData) {
-
-						//if (UpDownOBSIndx->Max < thisVar->lay && thisVar->dimen == CRHM::NDEF)
-							//UpDownOBSIndx->Max = thisVar->lay;
-						Newname = DeclObsName(thisVar);
-						if (model->AllVariables->count(Newname) == 0) {
-							model->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
-							//if (Newname.length() > Max_Name_Width2)
-								//Max_Name_Width2 = Newname.Length();
-						}
-					}
-				}
-				break;
-
-			case (int)TVISIBLE::DIAGNOSTIC: // display diagnostic variables
-				for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
-					thisVar = (*itVar).second;
-					if (S == thisVar->module.c_str() && thisVar->visibility == TVISIBLE::DIAGNOSTIC &&
-						thisVar->dimen != TDim::NREB &&
-						(thisVar->values || thisVar->ivalues) && !thisVar->FileData) {
-						Newname = DeclObsName(thisVar);
-						if (model->AllVariables->count(Newname) == 0) {
-							model->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
-							//if (Newname.Length() > Max_Name_Width2)
-								//Max_Name_Width2 = Newname.Length();
-						}
-					}
-				}
-				break;
-
-			case (int)TVISIBLE::PRIVATE: // display Local variables
-				for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
-					thisVar = (*itVar).second;
-					if (S == thisVar->module.c_str() && thisVar->visibility == TVISIBLE::PRIVATE &&
-						thisVar->dimen != TDim::NREB &&
-						(thisVar->values || thisVar->ivalues) && !thisVar->FileData) {
-						Newname = DeclObsName(thisVar);
-						if (model->AllVariables->count(Newname) == 0) {
-							model->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
-							//if (Newname.Length() > Max_Name_Width2)
-								//Max_Name_Width2 = Newname.Length();
-						}
-					}
-				}
-				break;
-			default:
-				break;
-			}
-		} // for
-	} // else
-
-	//if (Max_Name_Width2 > Max_Name_Width1) // Max_Name_Width1 only title, Max_Name_Width2 handles other names
-		//Max_Name_Width1 = Max_Name_Width2;
-
-	//if (Max_Name_Width1 * 6 > AllVariables->Width)
-		//AllVariables->ScrollWidth = Max_Name_Width1 * 6;
-
-	//Max_Name_Width1 += 5; // handles array element
-
-	//if (Max_Name_Width2 * 6 > ListBox3->Width)
-		//ListBox3->ScrollWidth = Max_Name_Width1 * 6;
-
-	//if (Max_Name_Width2 * 6 > AllObservations->Width)
-		//AllObservations->ScrollWidth = Max_Name_Width2 * 6;
-
-	//Max_Name_Width2 += 5; // handles array element
-
-	//if (Max_Name_Width2 * 6 > SelectedObservations->Width)
-		//SelectedObservations->ScrollWidth = Max_Name_Width2 * 6;
-
+	
 }
 
 
@@ -539,13 +407,19 @@ bool CRHMmainDlg::Variation_Decide(int Variation_set, long Variation)
 
 	long variations = V.GetV(); // & 2047;
 
-	if ((Variation_set & 2048) != 0 && variations == 0 || // handles VARIATION_0
-		(Variation_set & 4096) != 0 ||                        // handles VARIATION_0
-		(Variation_set == 0) ||                               // handles VARIATION_ORG
-		(variations & Variation_set) != 0)                 // handles #1, #2, #4 etc.
+	if (
+		(Variation_set & 2048) != 0 && variations == 0
+		|| (Variation_set & 4096) != 0
+		|| (Variation_set == 0)
+		|| (variations & Variation_set) != 0
+		)
+	{
 		return true;
+	}
 	else
+	{
 		return false;
+	}
 }
 
 
@@ -586,6 +460,7 @@ void CRHMmainDlg::RunClickFunction()
 {
 	CRHMmain* main = CRHMmain::getInstance();
 
+	/* Cannot run if there are no observations */
 	if (main->ObsFilesList->size() == 0)
 	{
 		MessageBox(_T("Please open an observation file."));

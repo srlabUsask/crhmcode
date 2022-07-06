@@ -271,6 +271,7 @@ private:
 	void AddSeriesToTChart(TSeries* series);
 
 	/**
+	* Adds an observation to the TChart plot
 	* 
 	* @param thisVar ClassVar* pointer to the observation variable being added to the plot.
 	* @param cdSeries TSeries* pointer to the series being added to the plot.
