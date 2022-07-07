@@ -77,6 +77,13 @@ private:
 	* The value is initalized in OnInitDialog()
 	*/
 	CMenu* main_menu = NULL;
+
+	/**
+	* Boolean that indicates if the loaded project file has been changed from what is saved on disk
+	* 
+	* true if the project may have been altered and false if it has not been.
+	*/
+	bool project_altered;
 	
 	std::string defaultprojectname = "currentproject.prj";
 	std::string defaultprojectpath = "currentproject.prj";

@@ -10,6 +10,7 @@ CRHMmainDlg::CRHMmainDlg(CWnd* pParent /*=nullptr*/)
 	CRHMmain* main = CRHMmain::getInstance();
 	this->openObsFiles = new std::map< UINT, std::pair<std::string, std::string>>();
 	this->refresh_rate = RefreshRate::BIWEEKLY;
+	this->project_altered = false;
 }
 
 
@@ -19,6 +20,7 @@ CRHMmainDlg::CRHMmainDlg(string argumentfile)
 	main->FormCreate();
 	this->openObsFiles = new std::map< UINT, std::pair<std::string, std::string>>();
 	this->refresh_rate = RefreshRate::BIWEEKLY;
+	this->project_altered = false;
 }
 
 
@@ -1320,7 +1322,7 @@ void CRHMmainDlg::OnFileOpen()
 		string file_n = CT2A(filename.GetString());
 
 		OpenProject(file_p, file_n);
-
+		this->project_altered = false;
 		updateGuiMenuItems();
 	}
 
@@ -1330,6 +1332,7 @@ void CRHMmainDlg::OnFileOpen()
 void CRHMmainDlg::OnFileSave()
 {
 	SaveProject();
+	this->project_altered = false;
 }
 
 
@@ -1391,6 +1394,7 @@ void CRHMmainDlg::OnFileClose()
 			&& listbox_sel_observations.GetCount() == 0)
 		{
 			this->CloseProject();
+			this->project_altered = false;
 		}
 		else 
 		{
@@ -1401,6 +1405,7 @@ void CRHMmainDlg::OnFileClose()
 				//Save and then close.
 				OnFileSaveAs();
 				this->CloseProject();
+				this->project_altered = false;
 			}
 			if (result == IDCANCEL) 
 			{ 
@@ -1411,13 +1416,16 @@ void CRHMmainDlg::OnFileClose()
 			{
 				//Close without saving.
 				this->CloseProject();
+				this->project_altered = false;
 			}
 		}
 	}
 	else 
 	{
 		this->CloseProject();
+		this->project_altered = false;
 	}
+
 
 }
 
