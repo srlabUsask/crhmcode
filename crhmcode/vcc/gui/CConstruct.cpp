@@ -2478,20 +2478,18 @@ void CConstruct::SetNextVariation()
 	}
 
 	//Update the varation in the ClassModule Object
-	if (currentVariation != 0)
+	for (
+		std::vector<std::pair<std::string, ClassModule*>>::iterator it = this->SelectedModules->begin();
+		it != this->SelectedModules->end();
+		it++
+		)
 	{
-		for (
-			std::vector<std::pair<std::string, ClassModule*>>::iterator it = this->SelectedModules->begin();
-			it != this->SelectedModules->end();
-			it++
-			)
+		if (it->first == trimmedModuleName)
 		{
-			if (it->first == trimmedModuleName)
-			{
-				it->second->variation = (unsigned short)pow(2, currentVariation - 1);
-			}
+			it->second->variation = (unsigned short)pow(2, currentVariation - 1);
 		}
 	}
+	
 	
 }
 
@@ -2562,19 +2560,17 @@ void CConstruct::SetPrevVariation()
 	}
 
 	//Update the varation in the ClassModule Object
-	if (currentVariation != 0)
+	for (
+		std::vector<std::pair<std::string, ClassModule*>>::iterator it = this->SelectedModules->begin();
+		it != this->SelectedModules->end();
+		it++
+		)
 	{
-		for (
-			std::vector<std::pair<std::string, ClassModule*>>::iterator it = this->SelectedModules->begin();
-			it != this->SelectedModules->end();
-			it++
-			)
+		if (it->first == trimmedModuleName)
 		{
-			if (it->first == trimmedModuleName)
-			{
-				it->second->variation = (unsigned short)pow(2, currentVariation - 1);
-			}
+			it->second->variation = (unsigned short)pow(2, currentVariation - 1);
 		}
 	}
+	
 
 }
