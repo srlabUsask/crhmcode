@@ -176,8 +176,6 @@
 #define ID_TEST_TEST32843               32843
 #define ID_ADD                          32844
 #define ID_ADDARRAY                     32845
-#define ID_CTX_OBS_ALL_ADD              32846
-#define ID_CTX_OBS_ALL_ADD_ARRAY        32847
 #define ID_CTX_SEL_OBS_REMOVE           32848
 #define ID_PROJECT_LOG32848             32848
 #define ID_LOG_LOGALL                   32849
@@ -199,12 +197,13 @@
 #define ID_SEL_OBS_LIST_BOX             34001
 #define ID_CTX_ALL_OBS_ADD              34002
 #define ID_CTX_ALL_OBS_ADD_ARRAY        34003
+#define ID_CTX_ALL_OBS_FUNCT			34004
 #define ID_ALL_VAR_LIST_BOX             34004
-#define ID_SEL_VAR_LIST_BOX             34005
-#define ID_CTX_ALL_VAR_ADD              34006
-#define ID_CTX_ALL_VAR_ADD_ARRAY        34007
-#define ID_CTX_SEL_VAR_REMOVE           34008
-#define ID_CTX_SEL_VAR_APPLY			34009
+#define ID_SEL_VAR_LIST_BOX             34006
+#define ID_CTX_ALL_VAR_ADD              34007
+#define ID_CTX_ALL_VAR_ADD_ARRAY        34008
+#define ID_CTX_SEL_VAR_REMOVE           34009
+#define ID_CTX_SEL_VAR_APPLY			34010
 
 #define ID_OBS_DIM_DISPLAY              35100
 #define ID_OBS_DIM_DECREASE             35101

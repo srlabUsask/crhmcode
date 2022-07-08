@@ -2248,10 +2248,20 @@ LRESULT CRHMmainDlg::OpenSelVarCtxMenu(WPARAM, LPARAM)
 		ID_CTX_SEL_VAR_REMOVE,
 		(LPCTSTR)removeText);
 
-	ctxMenu.InsertMenu(1,
-		MF_BYPOSITION | MF_STRING,
-		ID_CTX_SEL_VAR_APPLY,
-		(LPCTSTR)applyFunctText);
+	if (this->function_drop_down.GetCurSel() == 0)
+	{
+		ctxMenu.InsertMenu(1,
+			MF_BYPOSITION | MF_STRING | MF_DISABLED,
+			ID_CTX_SEL_VAR_APPLY,
+			(LPCTSTR)applyFunctText);
+	}
+	else
+	{
+		ctxMenu.InsertMenu(1,
+			MF_BYPOSITION | MF_STRING,
+			ID_CTX_SEL_VAR_APPLY,
+			(LPCTSTR)applyFunctText);
+	}
 
 	CWnd* wind = AfxGetMainWnd();
 	POINT p;
@@ -2304,49 +2314,20 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 		ID_CTX_ALL_OBS_ADD_ARRAY,
 		(LPCTSTR)addArrayText);
 
-	CMenu functionSubMenu;
-	functionSubMenu.CreatePopupMenu();
-
-	ctxMenu.InsertMenu(2,
-		MF_BYPOSITION | MF_STRING | MF_POPUP,
-		(UINT_PTR) functionSubMenu.GetSafeHmenu(),
-		(LPCTSTR)applyFunctionText);
-
-	CString totalText("Total");
-	CString minText("Minimum");
-	CString maxText("Maximum");
-	CString avgText("Average");
-	CString delText("Delta");
-
-	functionSubMenu.InsertMenu(0,
-		MF_BYPOSITION | MF_STRING,
-		ID_TOTAL_FUNCT,
-		(LPCTSTR)totalText
-	);
-
-	functionSubMenu.InsertMenu(1,
-		MF_BYPOSITION | MF_STRING,
-		ID_MIN_FUNCT,
-		(LPCTSTR)minText
-	);
-
-	functionSubMenu.InsertMenu(2,
-		MF_BYPOSITION | MF_STRING,
-		ID_MAX_FUNCT,
-		(LPCTSTR)maxText
-	);
-
-	functionSubMenu.InsertMenu(3,
-		MF_BYPOSITION | MF_STRING,
-		ID_AVG_FUCNT,
-		(LPCTSTR)avgText
-	);
-
-	functionSubMenu.InsertMenu(4,
-		MF_BYPOSITION | MF_STRING,
-		ID_DEL_FUNCT,
-		(LPCTSTR)delText
-	);
+	if (this->function_drop_down.GetCurSel() == 0)
+	{
+		ctxMenu.InsertMenu(2,
+			MF_BYPOSITION | MF_STRING | MF_DISABLED,
+			ID_CTX_ALL_OBS_FUNCT,
+			(LPCTSTR)applyFunctionText);
+	}
+	else
+	{
+		ctxMenu.InsertMenu(2,
+			MF_BYPOSITION | MF_STRING,
+			ID_CTX_ALL_OBS_FUNCT,
+			(LPCTSTR)applyFunctionText);
+	}
 
 	CWnd* wind = AfxGetMainWnd();
 	POINT p;
@@ -2373,39 +2354,9 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 				updateSelectedObservationListBox();
 				this->project_altered = true;
 				break;
-			case (ID_TOTAL_FUNCT):
-				this->function_drop_down.SetCurSel(1);
+			case (ID_CTX_ALL_OBS_FUNCT):
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
-				this->function_drop_down.SetCurSel(savedSelection);
-				this->project_altered = true;
-				break;
-			case (ID_MIN_FUNCT):
-				this->function_drop_down.SetCurSel(2);
-				addObservationsToSelected();
-				updateSelectedObservationListBox();
-				this->function_drop_down.SetCurSel(savedSelection);
-				this->project_altered = true;
-				break;
-			case (ID_MAX_FUNCT):
-				this->function_drop_down.SetCurSel(3);
-				addObservationsToSelected();
-				updateSelectedObservationListBox();
-				this->function_drop_down.SetCurSel(savedSelection);
-				this->project_altered = true;
-				break;
-			case (ID_AVG_FUCNT):
-				this->function_drop_down.SetCurSel(4);
-				addObservationsToSelected();
-				updateSelectedObservationListBox();
-				this->function_drop_down.SetCurSel(savedSelection);
-				this->project_altered = true;
-				break;
-			case (ID_DEL_FUNCT):
-				this->function_drop_down.SetCurSel(5);
-				addObservationsToSelected();
-				updateSelectedObservationListBox();
-				this->function_drop_down.SetCurSel(savedSelection);
 				this->project_altered = true;
 				break;
 			default:
