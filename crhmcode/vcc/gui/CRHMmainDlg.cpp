@@ -1547,6 +1547,7 @@ void CRHMmainDlg::OnAutoRun()
 		menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
 	};
 
+	this->project_altered = true;
 }
 
 
@@ -1562,6 +1563,8 @@ void CRHMmainDlg::OnAutoExit()
 		main->setAutoExit(false);
 		menu->CheckMenuItem(ID_AUTO_EXIT, MF_UNCHECKED);
 	};
+
+	this->project_altered = true;
 }
 
 
@@ -1603,6 +1606,8 @@ void CRHMmainDlg::OnLogAll()
 	{
 		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
 	};
+
+	this->project_altered = true;
 }
 
 
@@ -1618,6 +1623,8 @@ void CRHMmainDlg::OnLogLast()
 	{
 		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
 	};
+
+	this->project_altered = true;
 }
 
 
@@ -1636,12 +1643,13 @@ void CRHMmainDlg::OnCreateSummary()
 	{
 		model->setSummarize(true);
 	}
+
+	this->project_altered = true;
 }
 
 
 void CRHMmainDlg::OnOpenObservation()
 {
-	// TODO: Add your command handler code here
 	CFile theFile;
 	TCHAR szFilters[] = _T("MyType Files (*.obs)|*.obs|All Files (*.*)|*.*||");
 
@@ -1667,13 +1675,11 @@ void CRHMmainDlg::OnOpenObservation()
 		//Add a menu item for the newly opened file.
 		updateOpenObsFileMenu();
 
+		this->project_altered = true;
 
 	}
 
 	GetAllVariables();
-
-
-
 
 }
 
@@ -1689,6 +1695,8 @@ void CRHMmainDlg::OnClickOnOpenFile(UINT ID)
 
 	/* Call the update method to rebuild the GUI */
 	updateOpenObsFileMenu();
+
+	this->project_altered = true;
 }
 
 
@@ -1699,45 +1707,27 @@ void CRHMmainDlg::OnCloseAllObservations()
 	main->ObsCloseClick();
 
 	updateOpenObsFileMenu();
+
+	this->project_altered = true;
 }
 
 
 void CRHMmainDlg::OnBuildConstruct()
 {
-	// TODO: Add your command handler code here
-
-
-	CConstruct* build_form;
+		CConstruct* build_form;
 	std::map<std::string, ClassModule*>* all_module_list = CRHMmain::getInstance()->getAllmodules();
 
 	build_form = new CConstruct();
-	//build_form->UpdateData();
-
-	//	build_form.listbox_all_modules
-	//	build_form->listbox_all_modules = new CListBox();
-
-	//build_form->listbox_all_modules.AddString(_T("test"));
-
-
-	//CListBox *test = &build_form->listbox_all_modules;
-	//AddStringListToListBox(test, all_module_list);
-
+	
 	INT_PTR nRet = build_form->DoModal();
 
-	if (build_form->Execute) {
+	if (build_form->Execute) 
+	{
 		InitModules();
 		build_form->ReadBuildParameters(); // restore original parameters
-
-
 		loadGuiComponents();
-
-		//ReopenProject();
-		//ReopenProject();
-		//OpenObservation(defaultobservationpath);
+		this->project_altered = true;
 	}
-
-	//CRHMmain *test = CRHMmain::getInstance();
-	//int c = test->AllVariables->Count;
 
 }
 
@@ -1754,6 +1744,7 @@ void CRHMmainDlg::OnClearModules()
 	loadGuiComponents();
 	updateSelectedVariablesListBox();
 	
+	this->project_altered = true;
 
 }
 
@@ -1768,6 +1759,7 @@ void CRHMmainDlg::OnBuildMacro()
 		CRHMmain* t = CRHMmain::getInstance();
 		t->MacroClick();
 		tchart.RemoveAllSeries();
+		this->project_altered = true;
 	}
 
 	delete macroEntry;
@@ -1784,6 +1776,8 @@ void CRHMmainDlg::OpenParametersDialog()
 
 	CRHMmain* model = CRHMmain::getInstance();
 	model->SqueezeParams();
+
+	this->project_altered = true;
 }
 
 
@@ -1810,6 +1804,8 @@ void CRHMmainDlg::OnClickOnOpenInitState()
 		main->OpenStateFlag = true;
 
 		updateOpenStateFileMenu();
+
+		this->project_altered = true;
 	}
 
 }
@@ -1823,6 +1819,8 @@ void CRHMmainDlg::CloseOpenInitFile()
 	main->OpenStateFlag = false;
 
 	updateOpenStateFileMenu();
+
+	this->project_altered = true;
 }
 
 
@@ -1847,6 +1845,8 @@ void CRHMmainDlg::OnSaveState()
 	}
 
 	updateOpenStateFileMenu();
+
+	this->project_altered = true;
 }
 
 
@@ -1872,6 +1872,8 @@ void CRHMmainDlg::OnSaveStateTo()
 		model->SaveStateFlag = true;
 
 		updateOpenStateFileMenu();
+
+		this->project_altered = true;
 	}
 }
 
@@ -1903,6 +1905,8 @@ void CRHMmainDlg::OnSaveStateAs()
 		model->SaveState();
 
 		updateOpenStateFileMenu();
+
+		this->project_altered = true;
 	}
 
 }
@@ -2063,6 +2067,7 @@ void CRHMmainDlg::OnDblClkAllVarListBox()
 {
 	addVariablesToSelected();
 	updateSelectedVariablesListBox();
+	this->project_altered = true;
 }
 
 
@@ -2070,6 +2075,7 @@ void CRHMmainDlg::OnDblClkSelVarListBox()
 {
 	removeVariablesFromSelected();
 	updateSelectedVariablesListBox();
+	this->project_altered = true;
 }
 
 
@@ -2103,6 +2109,7 @@ void CRHMmainDlg::OnDblClkAllObsListBox()
 {
 	addObservationsToSelected();
 	updateSelectedObservationListBox();
+	this->project_altered = true;
 }
 
 
@@ -2110,6 +2117,7 @@ void CRHMmainDlg::OnDblClkSelObsListBox()
 {
 	removeObservationsFromSelected();
 	updateSelectedObservationListBox();
+	this->project_altered = true;
 }
 
 
@@ -2184,21 +2192,25 @@ LRESULT CRHMmainDlg::OpenAllVarCtxMenu(WPARAM, LPARAM)
 			{
 				addVariablesToSelected();
 				updateSelectedVariablesListBox();
+				this->project_altered = true;
 			}
 			else if (result == ID_CTX_ALL_VAR_ADD_ARRAY)
 			{
 				addVariablesArrayToSelected();
 				updateSelectedVariablesListBox();
+				this->project_altered = true;
 			}
 			else if (result == ID_CTX_ALL_VAR_ADD_LAY_ARRAY)
 			{
 				addVariablesLayerArrayToSelected();
 				updateSelectedVariablesListBox();
+				this->project_altered = true;
 			}
 			else if (result == ID_CTX_ALL_VAR_ADD_HRU_LAY_ARRAY)
 			{
 				addVariablesHRULayerArrayToSelected();
 				updateSelectedVariablesListBox();
+				this->project_altered = true;
 			}
 		}
 
@@ -2241,11 +2253,13 @@ LRESULT CRHMmainDlg::OpenSelVarCtxMenu(WPARAM, LPARAM)
 			{
 				removeVariablesFromSelected();
 				updateSelectedVariablesListBox();
+				this->project_altered = true;
 			}
 			else if (result == ID_CTX_SEL_VAR_APPLY)
 			{
 				addVariableFunctionToSelected();
 				updateSelectedObservationListBox();
+				this->project_altered = true;
 			}
 
 		}
@@ -2337,40 +2351,47 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 			case (ID_CTX_ALL_OBS_ADD):
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
+				this->project_altered = true;
 				break;
 			case (ID_CTX_ALL_OBS_ADD_ARRAY):
 				addObservationsArrayToSelected();
 				updateSelectedObservationListBox();
+				this->project_altered = true;
 				break;
 			case (ID_TOTAL_FUNCT):
 				this->function_drop_down.SetCurSel(1);
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
 				this->function_drop_down.SetCurSel(savedSelection);
+				this->project_altered = true;
 				break;
 			case (ID_MIN_FUNCT):
 				this->function_drop_down.SetCurSel(2);
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
 				this->function_drop_down.SetCurSel(savedSelection);
+				this->project_altered = true;
 				break;
 			case (ID_MAX_FUNCT):
 				this->function_drop_down.SetCurSel(3);
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
 				this->function_drop_down.SetCurSel(savedSelection);
+				this->project_altered = true;
 				break;
 			case (ID_AVG_FUCNT):
 				this->function_drop_down.SetCurSel(4);
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
 				this->function_drop_down.SetCurSel(savedSelection);
+				this->project_altered = true;
 				break;
 			case (ID_DEL_FUNCT):
 				this->function_drop_down.SetCurSel(5);
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
 				this->function_drop_down.SetCurSel(savedSelection);
+				this->project_altered = true;
 				break;
 			default:
 				break;
@@ -2449,6 +2470,8 @@ void CRHMmainDlg::OnTimebaseChange()
 	}
 
 	this->showHideWaterYearMonth();
+
+	this->project_altered = true;
 }
 
 
@@ -2458,6 +2481,8 @@ void CRHMmainDlg::OnWaterYearChange()
 
 	int currentSelection = this->water_year_drop_down.GetCurSel();
 	model->setWaterYearMonth(currentSelection + 1);
+
+	this->project_altered = true;
 }
 
 
@@ -2468,6 +2493,8 @@ void CRHMmainDlg::OnStartDateChange(NMHDR* pNMHDR, LRESULT* pResult)
 	StartDatePicker.GetTime(dateTime);
 
 	CRHMmain::getInstance()->setStartDate(dateTime.m_dt);
+
+	this->project_altered = true;
 }
 
 
@@ -2478,6 +2505,8 @@ void CRHMmainDlg::OnEndDateChange(NMHDR* pNMHDR, LRESULT* pResult)
 	EndDatePicker.GetTime(dateTime);
 
 	CRHMmain::getInstance()->setEndDate(dateTime.m_dt);
+
+	this->project_altered = true;
 }
 
 
