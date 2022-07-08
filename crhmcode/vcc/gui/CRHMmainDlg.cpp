@@ -1299,6 +1299,11 @@ void CRHMmainDlg::OnFileOpen()
 
 	CWaitCursor wait;
 
+	if (this->project_altered)
+	{
+		this->confirmUnsavedProjectClose();
+	}
+
 	CFile theFile;
 	TCHAR szFilters[] = _T("MyType Files (*.prj)|*.prj|All Files (*.*)|*.*||");
 	CString fileName;
@@ -1381,6 +1386,11 @@ void CRHMmainDlg::OnFileSaveAs()
 void CRHMmainDlg::OnFileClose()
 {
 	CWaitCursor wait;
+
+	if (this->project_altered)
+	{
+		this->confirmUnsavedProjectClose();
+	}
 
 	CRHMmain* model = CRHMmain::getInstance();
 
@@ -1570,6 +1580,11 @@ void CRHMmainDlg::OnAutoExit()
 
 void CRHMmainDlg::OnExit()
 {
+
+	if (this->project_altered)
+	{
+		this->confirmUnsavedProjectClose();
+	}
 
 	CRHMmain* t = CRHMmain::getInstance();
 
@@ -3525,3 +3540,13 @@ void CRHMmainDlg::addVariableFunctionToSelected()
 }
 
 
+void CRHMmainDlg::confirmUnsavedProjectClose()
+{
+	int choice = MessageBox(
+		L"Project may have unsaved changes that may be lost. Do you wish to save?",
+		L"Save Project before continuing?",
+		MB_YESNO
+	);
+
+
+}

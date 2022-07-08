@@ -923,4 +923,12 @@ private:
 	*/
 	void addVariableFunctionToSelected();
 
+	/**
+	* Alerts the user that the currently loaded project may have unsaved changes with a pop up dialog.
+	* 
+	* Pop up dialog has 'Yes' option to save the project and 'No' option continue without saving.
+	* If the user selects 'Yes' the current project will be saved before the next action is completed.
+	* If the user selects 'No' the current project will not be saved befor the next action is completed.
+	*/
+	void confirmUnsavedProjectClose();
 };
