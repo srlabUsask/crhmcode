@@ -479,9 +479,15 @@ private:
 	*	(for example saving an unsaved project) and additionally the program 
 	*	should exit at last.
 	* 
-	* Currently does not check if project needs to be saved.
 	*/
 	afx_msg void OnExit();
+
+	/**
+	* Occurs when user closes the window with the corrner X
+	* 
+	* Calls the OnExit method.
+	*/
+	void OnCancel();
 
 	/**
 	* Handler for clicking on Project->Log->Log All

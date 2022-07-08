@@ -1577,6 +1577,11 @@ void CRHMmainDlg::OnAutoExit()
 	this->project_altered = true;
 }
 
+void CRHMmainDlg::OnCancel()
+{
+	this->OnExit();
+}
+
 
 void CRHMmainDlg::OnExit()
 {
