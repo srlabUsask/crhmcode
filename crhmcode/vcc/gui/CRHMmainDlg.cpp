@@ -3549,5 +3549,9 @@ void CRHMmainDlg::confirmUnsavedProjectClose()
 		MB_YESNO
 	);
 
+	if (choice == IDYES)
+	{
+		this->SaveProject();
+	}
 
 }
