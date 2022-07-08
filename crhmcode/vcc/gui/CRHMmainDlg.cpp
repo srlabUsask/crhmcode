@@ -3544,7 +3544,7 @@ void CRHMmainDlg::addVariableFunctionToSelected()
 void CRHMmainDlg::confirmUnsavedProjectClose()
 {
 	int choice = MessageBox(
-		L"Project may have unsaved changes that may be lost. Do you wish to save?",
+		L"Project may have unsaved changes that may be lost.\n\r Do you wish to save?",
 		L"Save Project before continuing?",
 		MB_YESNO
 	);
