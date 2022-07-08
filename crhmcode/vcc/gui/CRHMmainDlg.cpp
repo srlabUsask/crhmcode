@@ -2447,6 +2447,7 @@ LRESULT CRHMmainDlg::OpenSelObsCtxMenu(WPARAM, LPARAM)
 			{
 				removeObservationsFromSelected();
 				updateSelectedObservationListBox();
+				this->project_altered = true;
 			}
 
 		}
