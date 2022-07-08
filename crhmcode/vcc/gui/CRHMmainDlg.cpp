@@ -292,7 +292,7 @@ void CRHMmainDlg::loadGuiComponents()
 	}
 	else
 	{
-		this->main_menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
+		this->main_menu->CheckMenuItem(ID_AUTO_EXIT, MF_UNCHECKED);
 	}
 
 	/* Set the state of the log all and log last check boxes based on value of report all boolean*/
