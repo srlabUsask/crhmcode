@@ -1,6 +1,8 @@
 #include "CExport.h"
 
+
 IMPLEMENT_DYNAMIC(CExport, CDialog)
+
 
 CExport::CExport(CWnd* pParent /*=nullptr*/)
 	: CDialog(EXPORT_DLG, pParent)
@@ -8,10 +10,12 @@ CExport::CExport(CWnd* pParent /*=nullptr*/)
 
 }
 
+
 CExport::~CExport()
 {
 
 }
+
 
 void CExport::DoDataExchange(CDataExchange* pDX)
 {
@@ -56,8 +60,19 @@ BOOL CExport::OnInitDialog()
 		choicesListBox.AddString(CString(varName.c_str()));
 	}
 
+	for (
+		std::list<std::pair<std::string, TSeries*>>::iterator it = model->SelectedObservations->begin();
+		it != model->SelectedObservations->end();
+		it++
+		)
+	{
+		std::string obsName = it->first;
+		choicesListBox.AddString(CString(obsName.c_str()));
+	}
+
 	return true;
 }
+
 
 void CExport::OnChoicesSelectionChange()
 {
@@ -83,6 +98,7 @@ void CExport::OnChoicesSelectionChange()
 	delete[] selectedIndicies;
 }
 
+
 void CExport::OnSelectedSelectionChange()
 {
 	int selectedCount = selectedListBox.GetSelCount();
@@ -96,6 +112,7 @@ void CExport::OnSelectedSelectionChange()
 
 	delete[] selectedIndicies;
 }
+
 
 void CExport::OnPreviewMorePressed()
 {
@@ -240,6 +257,7 @@ std::vector<int> * CExport::getExportIndex()
 
 }
 
+
 void CExport::OnSave()
 {
 	CRHMmain* model = CRHMmain::getInstance();
@@ -263,6 +281,7 @@ void CExport::OnSave()
 
 	exportToFile(exportFileName);
 }
+
 
 void CExport::OnSaveAs()
 {
@@ -297,10 +316,12 @@ void CExport::OnSaveAs()
 	}
 }
 
+
 void CExport::OnExit()
 {
 	this->OnCancel();
 }
+
 
 void CExport::exportToFile(std::string filePath)
 {
