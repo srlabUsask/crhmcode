@@ -2290,8 +2290,6 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 				//double tdiff = double(clock() - btime) / CLOCKS_PER_SEC; ///////////////////////////////////////////////////////////////
 				//ts->addTime("ReadObs", tdiff);
 
-				CheckBlankModule();
-
 				if (!p->isGroup || !Global::CRHMStatus || (Global::CRHMStatus & 1 && Global::ModuleBitSet->count(Global::CurrentModuleRun))) {
 					//try
 					//{
@@ -2308,8 +2306,6 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 					//	Common::writefile("d:/test.txt", "error in p = " + p->Name + ", p nameroot = " + p->NameRoot+" ");
 					//}
 				}
-
-				CheckBlankModule();
 
 				// module flag loop
 
@@ -2480,18 +2476,6 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 
 	CRHMLogger::instance()->get_run_logger()->flush();
 
-}
-
-
-void CRHMmain::CheckBlankModule() {
-
-	MapVar::iterator itVar;
-	ClassVar * thisVar;
-
-	for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
-		thisVar = (*itVar).second;
-		string s = thisVar->name;
-	}
 }
 
 

@@ -1,4 +1,4 @@
-// 04/06/22
+// 06/28/22
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -20,6 +20,7 @@
 #pragma package(smart_init)
 
 #define numsubstances 5
+#define NUM_SIZE 12 // 22 Apr 2022 added for debris cover glacier melt dimension used in lagT_delayed and lagSW_delayed
 
 using namespace std;
 using namespace CRHM;
@@ -42,7 +43,7 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassNOP("NOP", "05/20/16", CRHM::ADVANCE)); // essential for parameter screen
   DLLModules.AddModule(new Classbasin("basin", "02/24/12", CRHM::BASIC));
   DLLModules.AddModule(new Classglobal("global", "12/19/19", CRHM::BASIC));
-  DLLModules.AddModule(new Classobs("obs", "04/17/18", CRHM::BASIC));
+  DLLModules.AddModule(new Classobs("obs", "06/28/22", CRHM::BASIC));
   DLLModules.AddModule(new Classintcp("intcp", "02/24/15", CRHM::BASIC));
   DLLModules.AddModule(new ClassGrow_Crop("Grow_Crop", "04/04/15", CRHM::ADVANCE));
 
@@ -82,7 +83,7 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassSoilDS("SoilDetention", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "04/05/22", CRHM::PROTO)); // prototype wetlands
   DLLModules.AddModule(new Classglacier_061718("glacier_061718", "06/10/16", CRHM::PROTO));
-  DLLModules.AddModule(new Classglacier("glacier", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classglacier("glacier", "04/22/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSWEslope_061718("SWESlope_061718", "06/02/16", CRHM::PROTO));
   DLLModules.AddModule(new ClassSWEslope("SWESlope", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassICEflow("ICEflow", "12/31/18", CRHM::ADVANCE));
@@ -91,9 +92,9 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassNetroute_D("Netroute_D", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNetroute_M("Netroute_M", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNetroute_M_D("Netroute_M_D", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassREWroute("REW_route", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassREWroute("REW_route", "06/27/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassREWroute_stream("REW_route_stream", "07/09/18", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassREWroute2("REW_route2", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassREWroute2("REW_route2", "06/27/22", CRHM::ADVANCE));
 
   DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "11/21/16", CRHM::ADVANCE));
   DLLModules.AddModule(new ClasspbsmSnobal("pbsmSnobal", "01/05/17", CRHM::ADVANCE));
@@ -1075,7 +1076,7 @@ DTindx[0] = Global::DTindx;
             hru_newsnow[hh] = 1;
           }
           else { // mixed
-            hru_rain[hh] = hru_p[hh]*(tmax_allrain[hh] - Use)/(tmax_allrain[hh] - tmax_allsnow[hh]);
+            hru_rain[hh] = hru_p[hh]*(Use - tmax_allsnow[hh])/(tmax_allrain[hh] - tmax_allsnow[hh]); // 28June2022 correction
             cumhru_snow_meas[hh] += (hru_p[hh] - hru_rain[hh]);
             hru_snow[hh] = (hru_p[hh] - hru_rain[hh])/catchratio;
             hru_p[hh] = hru_rain[hh] + hru_snow[hh];
@@ -10289,7 +10290,7 @@ void ClassREWroute2::init(void) {
   }
   else if(variation == VARIATION_1 || variation == VARIATION_3){
     Clark_inflowDelay = new ClassClark(inflow, outflow, WS_Kstorage, WS_Lag, nhru);
-    Clark_gwDelay = new ClassClark(inflow, outflow, WS_gwKstorage, WS_gwLag, nhru);
+    Clark_gwDelay = new ClassClark(gwinflow, gwoutflow, WS_gwKstorage, WS_gwLag, nhru); // 27June2022 correction
   }
 
   flow[0] = 0.0;
@@ -19870,7 +19871,7 @@ void ClassREWroute::init(void) {
   }
   else if(variation == VARIATION_1){
     Clark_inflowDelay = new ClassClark(inflow, outflow, WS_Kstorage, WS_Lag, nhru);
-    Clark_gwDelay = new ClassClark(inflow, outflow, WS_gwKstorage, WS_gwLag, nhru);
+    Clark_gwDelay = new ClassClark(gwinflow, gwoutflow, WS_gwKstorage, WS_gwLag, nhru); // 27June2022 correction
   }
 
   flow[0] = 0.0;
@@ -27164,6 +27165,8 @@ void Classglacier::decl(void){
   declputvar("*", "Albedo", "()", &Albedo);
 
   // debris-cover melt, Debris Enhanced Temperature-Index (DETI) model by Carenzo et al (2016), added on 16 June 2020
+  declvar("lagT_delayed", NDEFN, "lagged temperature through debris layers.", "(°C)", &lagT_delayed, &lagT_delayed_lay, NUM_SIZE);// 22 Apr 2022 added
+  declvar("lagSW_delayed", NDEFN, "lagged shortwave radiation through debris layers.", "(W/m^2)", &lagSW_delayed, &lagSW_delayed_lay, NUM_SIZE);// 22 Apr 2022 added
   declvar("lagT", NHRU, "lagged temperature accounting for the energy transfer through the debris layers", "(°C)", &lagT);
   declvar("lagSW", NHRU, "lagged shortwave radiation accounting for the energy transfer through the debris layers", "(W/m^2)", &lagSW);
   declvar("TF", NHRU, "temperature factor for the energy transfer through the debris layers", "(mm h^-1 °C^-1)", &TF);
@@ -27339,6 +27342,11 @@ void Classglacier::init(void) {
     Xdebris_melt_acc[hh] = 0.0;
     lagT_used[hh] = 0.0;
     lagSW_used[hh] = 0.0;
+    // 22 Apr 2022 added
+    for(long ll = 0; ll < NUM_SIZE; ++ll) {
+      lagT_delayed_lay[ll][hh] = 0.0;
+      lagSW_delayed_lay[ll][hh] = 0.0;
+    }
 
     if(variation == VARIATION_5){
 	  den_air[hh] = 0.0;
@@ -27432,55 +27440,63 @@ void Classglacier::run(void){
     }
 
     float epsilon = 0.005f; // used for comparing floating numbers
+    // 22 Apr 2022 modified: change to long from float for lagT and lagSW
     if(use_debris[hh] && debris_h[hh] > 0.0){ // debris-cover melt, Debris Enhanced Temperature-Index (DETI) model by Carenzo et al (2016), added on 16 June 2020
 	  if(fabs(debris_h[hh] - 0.05) < epsilon){
-		lagT[hh] = 0.0;
-		lagSW[hh] = 0.0;
+		lagT[hh] = 0;
+		lagSW[hh] = 0;
 		TF[hh] = 0.0984;
 		SRF[hh] = 0.0044;
       }
 	  else if(fabs(debris_h[hh] - 0.1) < epsilon){
-		lagT[hh] = 0.0;
-		lagSW[hh] = 1.0;
+		lagT[hh] = 0;
+		lagSW[hh] = 1;
 		TF[hh] = 0.066;
 		SRF[hh] = 0.0023;
       }
 	  else if(fabs(debris_h[hh] - 0.2) < epsilon){
-		lagT[hh] = 3.0;
-		lagSW[hh] = 3.0;
+		lagT[hh] = 3;
+		lagSW[hh] = 3;
 		TF[hh] = 0.0456;
 		SRF[hh] = 0.0009;
       }
 	  else if(fabs(debris_h[hh] - 0.23) < epsilon){
-		lagT[hh] = 3.0;
-		lagSW[hh] = 4.0;
+		lagT[hh] = 3;
+		lagSW[hh] = 4;
 		TF[hh] = 0.0438;
 		SRF[hh] = 0.0006;
       }
 	  else if(fabs(debris_h[hh] - 0.3) < epsilon){
-		lagT[hh] = 5.0;
-		lagSW[hh] = 5.0;
+		lagT[hh] = 5;
+		lagSW[hh] = 5;
 		TF[hh] = 0.0392;
 		SRF[hh] = 0.0002;
       }
 	  else if(fabs(debris_h[hh] - 0.4) < epsilon){
-		lagT[hh] = 7.0;
-		lagSW[hh] = 7.0;
+		lagT[hh] = 7;
+		lagSW[hh] = 7;
 		TF[hh] = 0.0334;
 		SRF[hh] = 0.0001;
       }
 	  else if(fabs(debris_h[hh] - 0.5) < epsilon){
-		lagT[hh] = 10.0;
-		lagSW[hh] = 11.0;
+		lagT[hh] = 10;
+		lagSW[hh] = 11;
 		TF[hh] = 0.0265;
 		SRF[hh] = 0.0;
       }
-
-      if(nstep >= lagT[hh])
-        lagT_used[hh] = hru_t[hh];
-
-      if(nstep >= lagSW[hh])
-        lagSW_used[hh] = Qsisn_Var[hh];
+      // 22 Apr 2022 modified:
+      for(long ll = NUM_SIZE - 1; 0 < ll; --ll){ // move data up
+        lagT_delayed_lay[ll][hh] = lagT_delayed_lay[ll-1][hh];
+        lagSW_delayed_lay[ll][hh] = lagSW_delayed_lay[ll-1][hh];
+      }
+      // enter new data
+      lagT_delayed_lay[0][hh] = hru_t[hh];
+      lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
+      // lag T and SW
+      long LT = lagT[hh];
+      long LSW = lagSW[hh];
+      lagT_used[hh] = lagT_delayed_lay[LT][hh];
+      lagSW_used[hh] = lagSW_delayed_lay[LSW][hh];
 
       if(hru_t[hh] > T_threshold[hh]){
         Xdebris_melt_hrly[hh] = TF[hh] * lagT_used[hh] + SRF[hh] * (1 - glacier_Albedo[hh]) * lagSW_used[hh]; // modified 2 July 2020
@@ -27510,7 +27526,7 @@ void Classglacier::run(void){
 
 	  Qn_kata[hh] = Qnsn_Var[hh];
 	  den_air[hh] = (Pa[hh] - hru_ea[hh]) * 1000 / (287.05 * (hru_t[hh] + 273.15)) + hru_ea[hh] * 1000 / (461.495 * (hru_t[hh] + 273.15));
-	  K_kat[hh] = Katabatic * ((hru_t[hh] + 273.15) - Ts_glacier) * pow(g / Ts_glacier * katabatic_lapse_rate[hh] * Pr, 0.5); // from Oerlemand and Grisogono (2002)
+	  K_kat[hh] = Katabatic * ((hru_t[hh] + 273.15) - Ts_glacier) * pow(g / (Ts_glacier * katabatic_lapse_rate[hh] * Pr), 0.5); // from Oerlemand and Grisogono (2002) // correction 22 Apr 2022: adding missing parentheses for (Ts_glacier * katabatic_lapse_rate[hh] * Pr)
 	  Qh_kata[hh] = den_air[hh] * Cp_air * ((0.01 + K_kat[hh])/2) * ((hru_t[hh] + 273.15) - Ts_glacier); // katabatic parameterization from Oerlemand and Grisogono (2002)
 	  Qe_kata[hh] = (MOL_wt_ratio_h2o_to_air * den_air[hh] * Lv) / (Pa[hh]*10.0) * ((0.01 + K_kat[hh])/2.0) * ((hru_ea[hh] - e_s)*10.0); // katabatic parameterization from Oerlemand and Grisogono (2002)
 	  Cp_water[hh] = Cp_W0 - 2.55 * ((T_rain[hh] + 273.15) - FREEZE);

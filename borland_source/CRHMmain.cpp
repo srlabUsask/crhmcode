@@ -1,10 +1,10 @@
-// 04/06/22 update description for parameters, variables and units in
-// various modules in 03/21/22
+// 06/28/22 correcting mixed precipitation phase equation in obs
+// module in 06/27/22
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "04/06/22"
+#define CurrentVersion "06/28/22"
 
 #include <stdexcept>
 #include "CRHMmain.h"

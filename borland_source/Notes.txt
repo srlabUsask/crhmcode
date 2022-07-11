@@ -610,4 +610,26 @@ CRHM 04/06/22
 	tsurface
 	K_Estimate
 	interception
-	lake_evap  
+	lake_evap 
+
+CRHM 04/22/22
+
+  In glacier module:
+	
+	1. adding missing parentheses for (Ts_glacier * katabatic_lapse_rate[hh] * Pr) in the Katabatic equation:
+
+ 	K_kat[hh] = Katabatic * ((hru_t[hh] + 273.15) - Ts_glacier) * pow(g / (Ts_glacier * katabatic_lapse_rate[hh] * Pr), 0.5);
+
+	2. correction in debris-cover melt for handling the delayed air temperature and incoming shortwave radiation due to debris cover.
+
+CRHM 06/27/22
+
+  Corrections in Clark_gwDelay equation in module REWroute Variation#1 and module REWroute2 Variation#1 or Variation#3:
+	
+	Clark_gwDelay = new ClassClark(gwinflow, gwoutflow, WS_gwKstorage, WS_gwLag, nhru);
+
+CRHM 06/28/22
+
+  Corrections in hru_rain equation in the mixed precipitation phase in module obs:
+	
+	hru_rain[hh] = hru_p[hh]*(Use - tmax_allsnow[hh])/(tmax_allrain[hh] - tmax_allsnow[hh]);

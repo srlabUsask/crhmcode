@@ -5,11 +5,6 @@ project(crhm VERSION 1.2)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-#set(CMAKE_CXX_COMPILER "/usr/local/opt/llvm/bin/clang++")
-#set(CMAKE_C_COMPILER "/usr/local/opt/llvm/bin/clang")
-
-
-#Logging level used by spdlog
 # 0 - Trace
 # 1 - Debug
 # 2 - Info
@@ -29,8 +24,6 @@ set(STAGING_DIR ".")
 #If no Build Type is specified default to Release
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
-#else()
-#    set(CMAKE_BUILD_TYPE DEBUG)
 endif()
 
 if(CMAKE_BUILD_TYPE EQUAL Release)

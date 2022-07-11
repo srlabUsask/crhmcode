@@ -180,7 +180,7 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassSoilX("SoilX", "04/05/22", LMODULE::ADVANCE)); // nlay >= 2 check added
   DLLModules.AddModule(new ClassSoilDS("SoilDetention", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "04/05/22", LMODULE::PROTO)); // prototype wetlands
-  DLLModules.AddModule(new Classglacier("glacier", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new Classglacier("glacier", "04/22/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new Classglacier_debris("glacier_debris", "11/22/19", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassGlacier_debris_cover("Glacier_debris_cover", "10/17/19", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassSWEslope("SWESlope", "04/05/22", LMODULE::ADVANCE));

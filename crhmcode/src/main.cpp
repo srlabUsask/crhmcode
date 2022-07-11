@@ -18,7 +18,8 @@ int main(int argc, char *argv[])
 
     std::string projectArgument = arguments->get_project_name();
     m->OpenNamePrj = projectArgument;
-    if ( m->DoPrjOpen(projectArgument, "") )
+
+    if (m->DoPrjOpen(projectArgument, ""))
     {
       m->RunClick();
     }
