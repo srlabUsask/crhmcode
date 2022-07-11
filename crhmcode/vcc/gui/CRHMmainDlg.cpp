@@ -472,7 +472,7 @@ void CRHMmainDlg::RunClickFunction()
 	MMSData* mmsdata = main->RunClick2Start();
 
 
-	int seriesCount = main->SeriesCnt;
+	int seriesCount = (int) main->SelectedVariables->size();
 
 	if (seriesCount == 0)
 	{

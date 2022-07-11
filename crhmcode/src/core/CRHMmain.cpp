@@ -1530,23 +1530,22 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 	ClassVar * thisVar;
 
 
-	if (SeriesCnt <= 0)
+	if (this->SelectedVariables->size() <= 0)
 	{
 		SelectedVariables->clear();
 	}
 	else {
 
 		string serTitle;
-		int jj;
+		size_t jj;
 
 		//Initialize the cdSeries variable in case it has not been yet - Matt
-		SeriesCnt = SelectedVariables->size();
-		cdSeries = new TSeries*[SeriesCnt];
+		cdSeries = new TSeries*[this->SelectedVariables->size()];
 		int Cnt = Global::DTmax - Global::DTmin;
-		for (int ii = 0; ii < SeriesCnt; ++ii)
+		for (size_t ii = 0; ii < this->SelectedVariables->size(); ++ii)
 			cdSeries[ii] = new TSeries();
 
-		for (jj = 0; jj < SeriesCnt; jj++)
+		for (jj = 0; jj < this->SelectedVariables->size(); jj++)
 		{
 			serTitle = cdSeries[jj]->Title;
 		}
@@ -1576,13 +1575,12 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 				//cdSeries[jj]->ParentChart = NULL;
 				//cdSeries[jj]->Clear();
 
-				for (int kk = jj + 1; kk < SeriesCnt; ++kk)
+				for (size_t kk = jj + 1; kk < this->SelectedVariables->size(); ++kk)
 				{
 					cdSeries[kk - 1] = cdSeries[kk];
 				}
 
 				SelectedVariables->erase(positionOfSerTitle);
-				SeriesCnt--; // no need to increment
 			}
 			//else
 			//++jj; // increment
@@ -1679,9 +1677,6 @@ void CRHMmain::MacroLoad(void)
 			++InitModCnt;
 		}
 
-		if (SeriesCnt > 0) {
-			SeriesCnt = 0;
-		}
 	}
 }
 
@@ -1961,8 +1956,8 @@ void  CRHMmain::FormDestroy(void)
 
 void   CRHMmain::FreeChart1(void)
 {
-	if (SeriesCnt > 0) {
-		for (int ii = 0; ii < SeriesCnt; ii++) {
+	if (this->SelectedVariables->size() > 0) {
+		for (size_t ii = 0; ii < this->SelectedVariables->size(); ii++) {
 
 			ClassVar* thisVar = (ClassVar *)cdSeries[ii]->Tag;
 			if (thisVar->FunKind > TFun::FOBS && !thisVar->values && !thisVar->ivalues)
@@ -2333,21 +2328,19 @@ MMSData *  CRHMmain::RunClick2Start()
 	Global::BuildFlag = TBuild::RUN;
 	Global::DTmax = (int)((DTendR - Global::DTstart)* Global::Freq);
 
-	SeriesCnt = SelectedVariables->size();
-
 	int Cnt = Global::DTmax - Global::DTmin;
-	cdSeries = new TSeries*[SeriesCnt];
+	cdSeries = new TSeries*[this->SelectedVariables->size()];
 
-	for (int ii = 0; ii < SeriesCnt; ++ii)
+	for (size_t ii = 0; ii < this->SelectedVariables->size(); ++ii)
 	{
 		cdSeries[ii] = new TSeries();
 	}
 
-	mmsData = new double*[SeriesCnt];
-	mmsDataL = new long*[SeriesCnt];
+	mmsData = new double*[this->SelectedVariables->size()];
+	mmsDataL = new long*[this->SelectedVariables->size()];
 
 	std::list<std::pair<std::string, ClassVar*>>::iterator selectedVarIterator = SelectedVariables->begin();
-	for (int ii = 0; ii < SeriesCnt; ii++)
+	for (size_t ii = 0; ii < this->SelectedVariables->size(); ii++)
 	{
 
 
@@ -2616,7 +2609,7 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 			if (!(Global::CRHMStatus & 7) && !(Global::CRHMControlSaveCnt) && DoOutput) { // display if not module or main controlled. why?
 
 				double xx;
-				for (int ii = 0; ii < SeriesCnt; ii++) {
+				for (size_t ii = 0; ii < this->SelectedVariables->size(); ii++) {
 					if (mmsData[ii] != NULL) {
 						xx = *mmsData[ii];
 
@@ -3887,7 +3880,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	ProjectList->push_back("Display_Variable:");
 	ProjectList->push_back("######");
 
-	for (int ii = 0; ii < SeriesCnt; ii++) { // transfer TeeChart data
+	for (size_t ii = 0; ii < this->SelectedVariables->size(); ii++) { // transfer TeeChart data
 
 											 //ClassVar *thisVar = (ClassVar *)cdSeries[ii]->Tag;
 
@@ -4305,7 +4298,6 @@ void CRHMmain::ClearModules(bool All) {
 		//delete cdSeries;           // remove TLineSeries
 		//Do not fully delete cdSeries so that a null pointer exception does not occur - Matt
 		cdSeries = NULL;
-		SeriesCnt = 0; // ??? ListBox3->Items->Count;
 	}
 	//Chart->Refresh();
 
@@ -5188,7 +5180,7 @@ void CRHMmain::calculateVariableFunctionOutput(std::string varName, TSeries* var
 	std::string varNameNoSuffix = varName.substr(0, suffixStart);
 
 	int pos = -1;
-	for (int i = 0; i < model->SeriesCnt; i++)
+	for (size_t i = 0; i < model->SelectedVariables->size(); i++)
 	{
 		if (model->cdSeries[i]->Title == varNameNoSuffix)
 		{

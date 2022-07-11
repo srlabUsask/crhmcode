@@ -149,7 +149,7 @@ void ReportStream::SendTimeStepToReport(CRHMmain * instance)
 		break;
 	}
 
-	for (int vv = 0; vv < instance->SeriesCnt; ++vv) 
+	for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
 	{
 		// has to equal first series length
 		if (instance->cdSeries[0]->Count() == instance->cdSeries[vv]->Count()) 
@@ -186,7 +186,7 @@ std::list<std::string> * ReportStream::RprtHeader(CRHMmain* instance)
 	std::list<std::string>* headerLines = new std::list<std::string>();
 
 	Sx = "time";
-	for (int vv = 0; vv < instance->SeriesCnt; ++vv) 
+	for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
 	{
 		std::string S = instance->cdSeries[vv]->Title;
 		Sx += instance->Delimiter + S;
@@ -194,7 +194,7 @@ std::list<std::string> * ReportStream::RprtHeader(CRHMmain* instance)
 	headerLines->push_back(Sx);
 
 	Sx = "units";
-	for (int vv = 0; vv < instance->SeriesCnt; ++vv) 
+	for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
 	{
 		ClassVar* thisVar = instance->cdSeries[vv]->Tag;
 		std::string S = thisVar->units;
@@ -214,7 +214,7 @@ std::list<std::string> * ReportStream::RprtHeaderObs(CRHMmain* instance)
 
 	headerLines->push_back("Future File Description");
 
-	for (int vv = 0; vv < instance->SeriesCnt; ++vv) 
+	for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
 	{
 		ClassVar* thisVar = instance->cdSeries[vv]->Tag;
 		Sx = instance->cdSeries[vv]->Title;
@@ -224,7 +224,7 @@ std::list<std::string> * ReportStream::RprtHeaderObs(CRHMmain* instance)
 	}
 
 	Sx = "###### time";
-	for (int vv = 0; vv < instance->SeriesCnt; ++vv) 
+	for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
 	{
 		string S = instance->cdSeries[vv]->Title;
 		Sx += instance->Delimiter + S;

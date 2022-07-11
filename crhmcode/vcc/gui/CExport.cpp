@@ -50,7 +50,7 @@ BOOL CExport::OnInitDialog()
 
 	CRHMmain* model = CRHMmain::getInstance();
 	
-	for (int i = 0; i < model->SeriesCnt; i++)
+	for (size_t i = 0; i < model->SelectedVariables->size(); i++)
 	{
 		std::string varName = model->cdSeries[i]->Title;
 		choicesListBox.AddString(CString(varName.c_str()));
@@ -226,7 +226,7 @@ std::vector<int> * CExport::getExportIndex()
 		CT2CA pszConvertedAnsiString(text); 
 		name.assign(pszConvertedAnsiString);
 
-		for (int j = 0; j < model->SeriesCnt; j++)
+		for (size_t j = 0; j < model->SelectedVariables->size(); j++)
 		{
 			if (model->cdSeries[j]->Title == name)
 			{

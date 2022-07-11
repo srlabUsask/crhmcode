@@ -337,7 +337,6 @@ public:
 	//	TDateTime ProjectFileDate;
 
 	TSeries **cdSeries;
-	long SeriesCnt;
 
 	TSeries *observationseries;
 
