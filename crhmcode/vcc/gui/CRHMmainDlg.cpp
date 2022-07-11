@@ -1777,7 +1777,20 @@ void CRHMmainDlg::OnBuildMacro()
 	if (macroEntry->DoModal() == IDOK)
 	{
 		CRHMmain* t = CRHMmain::getInstance();
-		t->MacroClick();
+		try
+		{
+			t->MacroClick();
+		}
+		catch (const std::exception&)
+		{
+			MessageBox(L"Macro cannot be parsed. Project must be reloaded.", MB_OK);
+			Global::MacroModulesList->clear();
+			t->MacroClick();
+			ReopenProject();
+			this->project_altered = false;
+			delete macroEntry;
+			return;
+		}
 		tchart.RemoveAllSeries();
 		this->project_altered = true;
 	}
