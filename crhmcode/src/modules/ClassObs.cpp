@@ -161,6 +161,7 @@ void Classobs::decl(void) {
   decldiagparam("tmax_allsnow", TDim::NHRU, "[0.0]", "-10", "10", "precip all snow if HRU air/ice bulb temperature below this value. Not used in Harder method",
       "(" + string(DEGREE_CELSIUS) + ")", &tmax_allsnow);
 
+  decldiagparam("clip_harder", TDim::NHRU, "[1]", "0", "1", "0 - don't clip harder method, 1 - clip Harder method at 10%, 95%", "()", &clip_harder);
 
   variation_set = VARIATION_1;
 
@@ -508,11 +509,14 @@ void Classobs::Harder(void) {
 
   hru_rain[hh] = 0.0;
 
-  if(hru_p[hh] > 0.0) //rain or snow determined by ice bulb ratio
-
+  if(hru_p[hh] > 0.0) { //rain or snow determined by ice bulb ratio
+    if (clip_harder[hh] == 1) {
+      if (ratio < 0.1) ratio = 0;
+      if (ratio > 0.95) ratio = 1.0;
+    }
     hru_rain[hh] = hru_p[hh]*ratio;
-
-  hru_snow[hh] = hru_p[hh]*(1.0-ratio);
+    hru_snow[hh] = hru_p[hh]*(1.0-ratio);
+  }
 }
 
 void Classobs::finish(bool good) {

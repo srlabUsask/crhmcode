@@ -139,6 +139,7 @@ void ClassSnobalCRHM::decl(void) {
     declparam("T_g_or_G_flux", TDim::NHRU, "[0]", "0", "1", "0 - calculate ground flux from ground temperature, 1 - use ground flux value", "()", &T_g_or_G_flux);
 
     decldiagparam("rain_soil_snow", TDim::NHRU, "[0]", "0", "1", "0 - handle only snow (module Soil handles rain), 1 - handle snow and rain in this module (when SWE > 0.02mm).", "()", &rain_soil_snow);
+    decldiagparam("lw_reduction", TDim::NHRU, "[1]", "0", "1", "0 - handle only snow (module Soil handles rain), 1 - handle snow and rain in this module (when SWE > 0.02mm).", "()", &lw_reduction);
 
     declparam("KT_sand", TDim::NHRU, "[0.08]", "0.01", "3.0", "thermal conductivity of wet sand (J/(m sec K)(from Oke, 1978, pg. 38)", "()", &KT_sand);
 
@@ -245,7 +246,7 @@ void ClassSnobalCRHM::run(void) { // executed every interval
       break;
       case VARIATION_2:
         input_rec2[hh].S_n  = Qsi[hh]*(1.0 - Albedo[hh]);
-        input_rec2[hh].I_lw = QliVt_Var[hh];
+        input_rec2[hh].I_lw = QliVt_Var[hh]*lw_reduction[hh];
       break;
       case VARIATION_3:
         input_rec2[hh].S_n  = QsiS_Var[hh]*(1.0 - Albedo[hh]);

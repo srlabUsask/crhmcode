@@ -49,6 +49,7 @@ class ClassSnobalCRHM : public ClassSnobalBase {
     const double  *T_g_X{ NULL };            // soil temp at depth z_g (C)
     const double  *F_g_X{ NULL };            // soil flux at depth z_g (C)
     const long   *rain_soil_snow{ NULL };  //
+    const double  *lw_reduction{ NULL };            // soil flux at depth z_g (C)
     double *snow_store{ NULL }; // accumulates snow till > 1+mm
 
     void decl(void);

@@ -74,6 +74,7 @@ const double *ClimChng_t{ NULL };
 const double *ClimChng_precip{ NULL };
 const long  *catchadjust{ NULL };
 const long  *ppt_daily_distrib{ NULL };
+const long  *clip_harder{ NULL };
 const long  *snow_rain_determination{ NULL };
 const long  *HRU_OBS{ NULL };
 const long  **HRU_OBS_Tables{ NULL };

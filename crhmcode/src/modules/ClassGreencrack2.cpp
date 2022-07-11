@@ -7,7 +7,7 @@
 #include <bitset>
 #include <algorithm>
 
-#include "ClassPrairieInfil.h"
+#include "ClassGreencrack2.h"
 #include "../core/GlobalDll.h"
 #include "../core/ClassCRHM.h"
 #include "newmodules/SnobalDefines.h"
@@ -15,11 +15,11 @@
 
 using namespace CRHM;
 
-ClassPrairieInfil* ClassPrairieInfil::klone(string name) const{
-  return new ClassPrairieInfil(name);
+ClassGreencrack2* ClassGreencrack2::klone(string name) const{
+  return new ClassGreencrack2(name);
 }
 
-void ClassPrairieInfil::decl(void) {
+void ClassGreencrack2::decl(void) {
 
   Description = "'Handles frozen soil infiltration using Granger et al. 1984; Gray et al., 1986 and Ayers, 1959 for unfrozen soil.'";
 
@@ -75,6 +75,46 @@ void ClassPrairieInfil::decl(void) {
 
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmeltD);
 
+// ******************
+// Parameters and variables for the Green-Ampt portion
+
+  decldiagparam("psi_fixup", TDim::NHRU, "[1]", "0.1", "10", "psi fixup", "()", &psi_fixup);
+  decldiagparam("ksat_fixup", TDim::NHRU, "[1]", "0.1", "10", "ksat fixup", "()", &ksat_fixup);
+  decldiagparam("greenampt_on_recharge_zone", TDim::NHRU, "[0]", "0", "1", "ksat fixup", "()", &ga_rechr);
+
+  declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0",
+      "Maximum value for soil recharge zone (upper portion of soil_moist where losses occur as both evaporation "//
+      "and transpiration).  Must be less than or equal to soil_moist.", "(mm)", &soil_rechr_max);
+
+  declparam("soil_rechr_init", TDim::NHRU, "[30.0]", "0.0", "250.0", "Initial value for soil recharge zone (upper part of "//
+      "soil_moist).  Must be less than or equal to soil_moist_init.", "(mm)", &soil_rechr_init);
+
+  declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0",
+        "Maximum available water holding capacity of soil profile."//
+        "Soil profile is surface to bottom of rooting zone", "(mm)", &soil_moist_max);
+
+  declparam("soil_moist_init", TDim::NHRU, "[187.0]", "0.0", "2500.0",
+        "Initial value of available water in soil profile", "(mm)", &soil_moist_init);
+
+  declparam("soil_type", TDim::NHRU, "[4]", "0", "12",
+        "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
+        " 0 - 12", "()", &soil_type);
+
+  declputvar("*",  "soil_rechr", "(mm)", &soil_rechr);
+  declputvar("*",  "soil_moist", "(mm)", &soil_moist);
+
+  decllocal("k", TDim::NHRU, "saturated hydraulic conductivity", "(mm/h)", &k);
+  decllocal("F0", TDim::NHRU, "cumulative infiltation at the beginning of the time interval", "(mm)", &F0);
+  decllocal("f0", TDim::NHRU, "infiltration rate at the beginning of the time interval", "(mm/h)", &f0);
+  decllocal("F1", TDim::NHRU, "cumulative infiltration at the end of the time interval", "(mm)", &F1);
+  decllocal("f1", TDim::NHRU, "infiltration rate at the end of the time interval", "(mm/h)", &f1);
+  decllocal("dthbot", TDim::NHRU, "fraction value of soil water deficit", "()", &dthbot);
+  decllocal("psidthbot", TDim::NHRU, "capillary suction at the fraction value of soil water deficit", "(mm)", &psidthbot);
+
+
+// ******************
+// Parameters and variables for the variations
+
   variation_set = VARIATION_0;
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmelt);
 
@@ -83,7 +123,7 @@ void ClassPrairieInfil::decl(void) {
 
 }
 
-void ClassPrairieInfil::init(void) {
+void ClassGreencrack2::init(void) {
 
   nhru = getdim(TDim::NHRU);
 
@@ -131,11 +171,38 @@ void ClassPrairieInfil::init(void) {
     }
 
   }
+
+// Setup for the Green-Ampt code
+  for(hh = 0; chkStruct(); ++hh){ // every interval
+    double sminit, smmax;
+    if (ga_rechr[hh] == 1) {
+      sminit = soil_rechr_init[hh];
+      smmax = soil_rechr_max[hh];
+    } else {
+      sminit = soil_moist_init[hh];
+      smmax = soil_moist_max[hh];
+    }
+
+    F1[hh]        = smmax;
+    k[hh]         = ksat_fixup[hh] * soilproperties[soil_type[hh]][KSAT];
+
+    if(smmax > 0.0)  // handle zero
+      dthbot[hh]    = (1.0 - sminit/smmax);
+    else{
+      dthbot[hh] = 1.0;
+      continue;
+    }
+
+    psidthbot[hh] = psi_fixup[hh]*soilproperties[soil_type[hh]][PSI]*dthbot[hh];
+    f1[hh]        = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0;
+  }
+
+
 }
 
 
 
-void ClassPrairieInfil::applyCrack(double RainOnSnow_int) {
+void ClassGreencrack2::applyCrack(double RainOnSnow_int) {
       // ice lens forms, if next day below -10 limited
       // unlimited - (fallstat[hh].eq.0.0)
       if (fallstat[hh] <= 0.0)
@@ -202,7 +269,7 @@ void ClassPrairieInfil::applyCrack(double RainOnSnow_int) {
 
 
 
-void ClassPrairieInfil::run(void) {
+void ClassGreencrack2::run(void) {
 
   long nstep;
 
@@ -220,7 +287,7 @@ void ClassPrairieInfil::run(void) {
         RainOnSnowA[hh] += net_rain[hh];
 
       } else {
-
+/*
         double maxinfil = textureproperties[texture[hh] - 1] [groundcover[hh] - 1] * 24.0/Global::Freq; // mm/int
         if (maxinfil_prm[hh] > 0) 
           maxinfil = maxinfil_prm[hh];
@@ -234,6 +301,51 @@ void ClassPrairieInfil::run(void) {
 
         cuminfil[hh] += infil[hh];
         cumrunoff[hh] += runoff[hh];
+*/
+
+      garain = net_rain[hh]; // precipitation/interval
+      intensity = net_rain[hh]*Global::Freq/24.0; // convert to mm/h
+
+
+      double smt, sminit, smmax;
+      if (ga_rechr[hh] == 1) {
+        smt = soil_rechr[hh];
+        sminit = soil_rechr_init[hh];
+        smmax = soil_rechr_max[hh];
+      } else {
+        smt = soil_moist[hh];
+        sminit = soil_moist_init[hh];
+        smmax = soil_moist_max[hh];
+      }
+
+
+//      if(garain > 0.0) {
+        if(soil_type[hh] == 12){ // handle pavement separately
+          runoff[hh] =  garain;
+        }
+        else if(soil_type[hh] == 0 || smt <= 0.0){ // handle water separately
+          infil[hh] =  garain;
+          cuminfil[hh] += infil[hh];
+        }
+        else {
+          F1[hh] = smt;
+          dthbot[hh]    = (1.0 - smt/smmax);
+          psidthbot[hh] = psi_fixup[hh]*soilproperties[soil_type[hh]][PSI]*dthbot[hh];
+          if(soil_type[hh] > 0) // not water!
+            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall (mm/h)
+
+          infiltrate();
+
+          infil[hh] = F1[hh] - F0[hh];
+          cuminfil[hh] += infil[hh];
+
+          if(pond > 0.0)
+            runoff[hh] = pond;
+        }
+//      }
+
+      cumrunoff[hh] += runoff[hh];
+
       }
     }
 
@@ -384,7 +496,7 @@ void ClassPrairieInfil::run(void) {
 
 }
 
-void ClassPrairieInfil::finish(bool good) {
+void ClassGreencrack2::finish(bool good) {
 
   for(hh = 0; chkStruct(); ++hh) {
     LogMessageA(hh, string("'" + Name + " (PrairieInfiltration)' cumsnowinfil    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cumsnowinfil[hh], hru_area[hh], basin_area[0]);
@@ -405,4 +517,64 @@ void ClassPrairieInfil::finish(bool good) {
 
   delete[] timer;
   timer = NULL;
+}
+
+
+void ClassGreencrack2::infiltrate(void){
+
+  F0[hh] = F1[hh]; // last interval final values become initial values
+  f0[hh] = f1[hh]; // last interval final values become initial values
+
+  if(soil_type[hh] == 0) { // water!
+    pond += garain;
+    return;
+  }
+  pond = 0.0;
+
+  f0[hh] = calcf1(F0[hh], psidthbot[hh]); // (mm/h)
+
+  if(intensity > f0[hh]) { // (mm/h). Greater than initial
+    ponding(); // already ponding
+    return;
+  }
+
+  F1[hh] = F0[hh] + garain;
+
+  f1[hh] = calcf1(F1[hh], psidthbot[hh]); // (mm/h)
+
+  if(intensity > f1[hh]) // (mm/h). Greater than end
+    startponding(); // ponding begins during interval
+}
+
+void ClassGreencrack2::ponding(void){
+
+  F1[hh] = F0[hh] + garain;
+
+  howmuch(F0[hh], Global::Interval*24.0);
+
+  pond = F0[hh] + garain - F1[hh];
+}
+
+void ClassGreencrack2::startponding(void){ // ponding during interval
+
+  double Fp = k[hh]*psidthbot[hh]/(intensity - k[hh]); // (mm/h)
+  double dt = (Fp - F0[hh])/intensity;
+
+  howmuch(F0[hh], Global::Interval*24.0 - dt);
+
+  pond = F0[hh] + garain - F1[hh];
+}
+
+void ClassGreencrack2::howmuch(double F0, double dt) { // output is F1[hh]
+
+  double LastF1;
+  do {
+    LastF1 = F1[hh];
+    F1[hh] = F0 + k[hh]*dt + psidthbot[hh]*log((F1[hh] + psidthbot[hh])/(F0 + psidthbot[hh]));
+  } while(fabs(LastF1 - F1[hh]) > 0.01);
+}
+
+double ClassGreencrack2::calcf1(double F, double psidth){ // calculates infitration rate
+
+  return k[hh]*(psidth/F + 1.0); // (mm/h)
 }

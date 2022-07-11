@@ -39,6 +39,7 @@
 #include "../Classcrack.h" //added by Manishankar Mondal
 #include "../ClassKevin.h" //added by Manishankar Mondal
 #include "../ClassGreencrack.h" //added by Manishankar Mondal
+#include "../ClassGreencrack2.h" //added by Peter Lawford
 #include "../Classfrostdepth.h" //added by Manishankar Mondal
 #include "../Classfrozen.h" //added by Manishankar Mondal
 #include "../ClassNetroute.h" //added by Manishankar Mondal
@@ -170,6 +171,7 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassPrairieInfil("PrairieInfiltration", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassAyers("Ayers", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassGreencrack("Greencrack", "04/04/22", LMODULE::BASIC));
+  DLLModules.AddModule(new ClassGreencrack2("Greencrack2", "07/22/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "04/04/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new Classfrozen("frozen", "04/04/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "04/05/22", LMODULE::ADVANCE));

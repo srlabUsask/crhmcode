@@ -37,6 +37,7 @@ add_library(modules OBJECT
     ClassGlobal.cpp
     ClassGreenAmpt.cpp
     ClassGreencrack.cpp
+    ClassGreencrack2.cpp
     ClassGrow_Crop.cpp
     ClassHMSA.cpp
     ClassHtobs.cpp
