@@ -1540,12 +1540,15 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 		size_t jj;
 
 		//Initialize the cdSeries variable in case it has not been yet - Matt
-		cdSeries = new TSeries*[this->SelectedVariables->size()];
+		size_t selVarCount = this->SelectedVariables->size();
+		cdSeries = new TSeries*[selVarCount];
 		int Cnt = Global::DTmax - Global::DTmin;
-		for (size_t ii = 0; ii < this->SelectedVariables->size(); ++ii)
+		for (size_t ii = 0; ii < selVarCount; ++ii)
+		{
 			cdSeries[ii] = new TSeries();
+		}
 
-		for (jj = 0; jj < this->SelectedVariables->size(); jj++)
+		for (jj = 0; jj < selVarCount; jj++)
 		{
 			serTitle = cdSeries[jj]->Title;
 		}
@@ -2339,10 +2342,10 @@ MMSData *  CRHMmain::RunClick2Start()
 	mmsData = new double*[this->SelectedVariables->size()];
 	mmsDataL = new long*[this->SelectedVariables->size()];
 
+	size_t selVarCount = this->SelectedVariables->size();
 	std::list<std::pair<std::string, ClassVar*>>::iterator selectedVarIterator = SelectedVariables->begin();
-	for (size_t ii = 0; ii < this->SelectedVariables->size(); ii++)
+	for (size_t ii = 0; ii < selVarCount; ii++)
 	{
-
 
 		thisVar = selectedVarIterator->second;
 
