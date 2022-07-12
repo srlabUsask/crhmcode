@@ -569,18 +569,18 @@ void CRHMmainDlg::RunClickFunction()
 			for (int j = 0; j < seriesCount; j++)
 			{
 				int y, m, d, h, mi;
-				StandardConverterUtility::GetDateTimeElements(main->cdSeries[j]->XValues.at(i), &y, &m, &d, &h, &mi);
+				StandardConverterUtility::GetDateTimeElements(main->cdSeries[j]->XValue(i), &y, &m, &d, &h, &mi);
 				string dt = to_string(m) + "/" + to_string(d) + "/" + to_string(y);
 				CString str(dt.c_str());
 				LPCTSTR dtstr = (LPCTSTR)str;
 
 				if (h == 1)
 				{
-					series[j].AddXY(main->cdSeries[j]->XValues.at(i), main->cdSeries[j]->YValues.at(i), dtstr, series[j].get_Color());
+					series[j].AddXY(main->cdSeries[j]->XValue(i), main->cdSeries[j]->YValue(i), dtstr, series[j].get_Color());
 				}
 				else
 				{
-					series[j].AddXY(main->cdSeries[j]->XValues.at(i), main->cdSeries[j]->YValues.at(i), L"", series[j].get_Color());
+					series[j].AddXY(main->cdSeries[j]->XValue(i), main->cdSeries[j]->YValue(i), L"", series[j].get_Color());
 				}
 
 			}
@@ -656,21 +656,21 @@ void CRHMmainDlg::AddSeriesToTChart(TSeries* tseries)
 
 	series.put_LegendTitle(cstr);
 
-	for (size_t i = 0; i < tseries->XValues.size(); i++)
+	for (int i = 0; i < tseries->Count(); i++)
 	{
 		int y, m, d, h, mi;
-		StandardConverterUtility::GetDateTimeElements(tseries->XValues.at(i), &y, &m, &d, &h, &mi);
+		StandardConverterUtility::GetDateTimeElements(tseries->XValue(i), &y, &m, &d, &h, &mi);
 		string dt = to_string(m) + "/" + to_string(d) + "/" + to_string(y);
 		CString str(dt.c_str());
 		LPCTSTR dtstr = (LPCTSTR)str;
 
 		if (h == 1)
 		{
-			series.AddXY(tseries->XValues.at(i), tseries->YValues.at(i), dtstr, series.get_Color());
+			series.AddXY(tseries->XValue(i), tseries->YValue(i), dtstr, series.get_Color());
 		}
 		else 
 		{
-			series.AddXY(tseries->XValues.at(i), tseries->YValues.at(i), L"", series.get_Color());
+			series.AddXY(tseries->XValue(i), tseries->YValue(i), L"", series.get_Color());
 		}
 
 
@@ -1176,8 +1176,7 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 		if (!displayed)
 		{
 			//Reset the used to zero so that it doesn't "double write"
-			it->second->XValues.clear();
-			it->second->YValues.clear();
+			it->second->points.clear();
 
 			/* Look for a suffix and set function to the correct value. */
 			TFun funct = TFun::FOBS;

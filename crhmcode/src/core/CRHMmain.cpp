@@ -5048,7 +5048,7 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 							switch (Funct) {
 							case TFun::DLTA:
 								Temp = cdSeries->YValue((Global::DTindx - DTmin) / thisVar->FileData->Freq - 1);
-								cdSeries->YValues.at(CurrentIndx) -= Delta0;
+								cdSeries->points.at(CurrentIndx).second -= Delta0;
 								Delta0 = Temp; // fall through
 							case TFun::AVG:
 							case TFun::MIN: // duplicate last
@@ -5061,7 +5061,7 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 								break;
 							case TFun::FIRST: // duplicate first
 								for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-									cdSeries->YValues.at(jj) = First0;
+									cdSeries->points.at(jj).second = First0;
 								break;
 							default:
 								break;
@@ -5117,12 +5117,12 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 							Greatest = Days;
 							if (LastDays > Days)
 								Greatest = LastDays;
-							cdSeries->YValues.at(CurrentIndx) /= ((long long)Global::Freq * (long long)Greatest);
+							cdSeries->points.at(CurrentIndx).second /= ((long long)Global::Freq * (long long)Greatest);
 							LastDays = 0;
 							break;
 						case TFun::DLTA:
 							if (!First)
-								cdSeries->YValues.at(CurrentIndx) -= Delta0;
+								cdSeries->points.at(CurrentIndx).second -= Delta0;
 							break;
 						default:
 							break;
@@ -5142,10 +5142,10 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 				Greatest = Days;
 				if (LastDays > Days)
 					Greatest = LastDays;
-				cdSeries->YValues.at(CurrentIndx) /= ((long long)Global::Freq * (long long)Greatest);
+				cdSeries->points.at(CurrentIndx).second /= ((long long)Global::Freq * (long long)Greatest);
 				break;
 			case TFun::DLTA:
-				cdSeries->YValues.at(CurrentIndx) -= Delta0;
+				cdSeries->points.at(CurrentIndx).second -= Delta0;
 			case TFun::MIN: // duplicate last
 			case TFun::MAX: // duplicate last
 			case TFun::TOT: // duplicate last
@@ -5156,7 +5156,7 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 				break;
 			case TFun::FIRST: // duplicate first
 				for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-					cdSeries->YValues.at(jj) = First0;
+					cdSeries->points.at(jj).second = First0;
 				break;
 			default:
 				break;

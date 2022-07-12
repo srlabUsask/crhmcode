@@ -3,21 +3,29 @@
 #ifndef TSERIES
 #define TSERIES
 
+/** 
+* Stores a series of data that represents a line graph with a vector of 
+* X,Y coordinate points that are stored as pairs.
+*/
 class TSeries {
 public:
-	std::vector<double> XValues;
-	std::vector<double> YValues;
+	/* Title of the series of data */
+	std::string Title;
+
+	/* Refrence to the variable object this data is related to */
 	ClassVar* Tag{ NULL };
-	//int MaxCnt;
-	string Title;
+
+	/* The X,Y coordinates of the graph */
+	std::vector<std::pair<double, double>> points;
+
+	/* The X values for the data series */
+	//std::vector<double> XValues;
+	//std::vector<double> YValues;
 	
 	TSeries() 
 	{ 
-		//MaxCnt = Cnt; 
-		XValues = vector<double>(); 
-		XValues.reserve(50000);
-		YValues = vector<double>();
-		YValues.reserve(50000);
+		points = std::vector<std::pair<double, double>>();
+		points.reserve(50000);
 	};
 	
 	~TSeries() 
@@ -26,23 +34,22 @@ public:
 
 	void AddXY(double X, double Y)
 	{
-		XValues.insert(XValues.end(), X);
-		YValues.insert(YValues.end(), Y);
+		points.insert(points.end(), std::pair<double, double>(X, Y));
 	};
 	
-	int Count(void) 
+	int Count() 
 	{ 
-		return XValues.size(); 
+		return points.size(); 
 	};
 	
 	double XValue(int nn) 
 	{ 
-		return XValues.at(nn);
+		return points.at(nn).first;
 	};
 	
 	double YValue(int nn) 
 	{ 
-		return YValues.at(nn);
+		return points.at(nn).second;
 	};
 };
 
