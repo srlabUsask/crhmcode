@@ -16,12 +16,11 @@ private:
 	/* Refrence to the variable object this data is related to */
 	ClassVar* Tag{ NULL };
 
-public:
-	
-
 	/* The X,Y coordinates of the graph */
 	std::vector<std::pair<double, double>> points;
 
+public:
+	
 	TSeries()
 	{
 		points = std::vector<std::pair<double, double>>();
@@ -52,14 +51,14 @@ public:
 		this->Tag = tag;
 	};
 
+	int Count()
+	{
+		return points.size();
+	};
+
 	void AddXY(double X, double Y)
 	{
 		points.insert(points.end(), std::pair<double, double>(X, Y));
-	};
-	
-	int Count() 
-	{ 
-		return points.size(); 
 	};
 	
 	double XValue(int nn) 
@@ -67,10 +66,26 @@ public:
 		return points.at(nn).first;
 	};
 	
+	void setXValue(int nn, double value)
+	{
+		this->points.at(nn).first = value;
+	};
+
 	double YValue(int nn) 
 	{ 
 		return points.at(nn).second;
 	};
+
+	void setYValue(int nn, double value)
+	{
+		this->points.at(nn).second = value;
+	};
+
+	void clearSeries()
+	{
+		this->points.clear();
+	};
+
 };
 
 #endif // !TSERIES

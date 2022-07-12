@@ -1176,7 +1176,7 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 		if (!displayed)
 		{
 			//Reset the used to zero so that it doesn't "double write"
-			it->second->points.clear();
+			it->second->clearSeries();
 
 			/* Look for a suffix and set function to the correct value. */
 			TFun funct = TFun::FOBS;
