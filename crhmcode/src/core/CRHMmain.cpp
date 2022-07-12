@@ -920,7 +920,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 									cdSeries = new TSeries();
 
 									//move inside to avoid null ptr exception - Matt
-									cdSeries->Tag = thisVar;
+									cdSeries->setTag(thisVar);
 
 									cdSeries->setTitle(SS);
 
@@ -929,7 +929,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 								else
 								{
 									cdSeries = new TSeries();
-									cdSeries->Tag = thisVar;
+									cdSeries->setTag(thisVar);
 									cdSeries->setTitle(SS);
 								}
 
@@ -1962,7 +1962,7 @@ void   CRHMmain::FreeChart1(void)
 	if (this->SelectedVariables->size() > 0) {
 		for (size_t ii = 0; ii < this->SelectedVariables->size(); ii++) {
 
-			ClassVar* thisVar = (ClassVar *)cdSeries[ii]->Tag;
+			ClassVar* thisVar = (ClassVar *)cdSeries[ii]->getTag();
 			if (thisVar->FunKind > TFun::FOBS && !thisVar->values && !thisVar->ivalues)
 				delete thisVar;
 
@@ -2349,7 +2349,7 @@ MMSData *  CRHMmain::RunClick2Start()
 
 		thisVar = selectedVarIterator->second;
 
-		cdSeries[ii]->Tag = thisVar;
+		cdSeries[ii]->setTag(thisVar);
 
 		std::string S = selectedVarIterator->first;
 		cdSeries[ii]->setTitle(S);
@@ -3979,7 +3979,7 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 		ExtractHruLay(it->first, dim, lay);
 
 		TSeries* cdSeries = it->second;
-		ClassVar* thisVar = cdSeries->Tag;
+		ClassVar* thisVar = cdSeries->getTag();
 
 		/* If the variable is a function applied to a variable output this condition is true */
 		if (!thisVar || !thisVar->FileData) 
@@ -4701,7 +4701,7 @@ void CRHMmain::OutputSummary()
 			summarySeries.push_back(std::pair<std::string, TSeries*>(it->first, it->second));
 
 			TFun funct = TFun::FOBS;
-			if (it->second->Tag->FileData == NULL)
+			if (it->second->getTag()->FileData == NULL)
 			{
 				if (seriesType == "")
 				{
@@ -4729,8 +4729,8 @@ void CRHMmain::OutputSummary()
 				}
 
 				this->calculateVariableFunctionOutput(it->first, it->second, funct);
-				delete it->second->Tag->FileData;
-				it->second->Tag->FileData = NULL;
+				delete it->second->getTag()->FileData;
+				it->second->getTag()->FileData = NULL;
 			}
 		}
 	}
@@ -5177,7 +5177,7 @@ void CRHMmain::calculateVariableFunctionOutput(std::string varName, TSeries* var
 {
 	CRHMmain* model = CRHMmain::getInstance();
 
-	ClassVar* rootVariable = varPlot->Tag;
+	ClassVar* rootVariable = varPlot->getTag();
 
 	size_t suffixStart = varName.rfind("_");
 	std::string varNameNoSuffix = varName.substr(0, suffixStart);
@@ -5199,7 +5199,7 @@ void CRHMmain::calculateVariableFunctionOutput(std::string varName, TSeries* var
 
 	ClassVar* derivedVariable = new ClassVar(*rootVariable);
 
-	varPlot->Tag = derivedVariable;
+	varPlot->setTag(derivedVariable);
 
 	derivedVariable->FileData = new ClassData();
 

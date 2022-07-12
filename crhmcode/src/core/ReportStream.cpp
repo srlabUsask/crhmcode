@@ -73,7 +73,7 @@ void ReportStream::OutputSummaryHeaders(std::list<std::pair<std::string, TSeries
 		it++
 		)
 	{
-		ClassVar* thisVar = it->second->Tag;
+		ClassVar* thisVar = it->second->getTag();
 		std::string S = thisVar->units;
 		line += " " + S;
 	}
@@ -154,7 +154,7 @@ void ReportStream::SendTimeStepToReport(CRHMmain * instance)
 		// has to equal first series length
 		if (instance->cdSeries[0]->Count() == instance->cdSeries[vv]->Count()) 
 		{ 
-			ClassVar* thisVar = instance->cdSeries[vv]->Tag;
+			ClassVar* thisVar = instance->cdSeries[vv]->getTag();
 			int prec = 7;
 			//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
 
@@ -196,7 +196,7 @@ std::list<std::string> * ReportStream::RprtHeader(CRHMmain* instance)
 	Sx = "units";
 	for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
 	{
-		ClassVar* thisVar = instance->cdSeries[vv]->Tag;
+		ClassVar* thisVar = instance->cdSeries[vv]->getTag();
 		std::string S = thisVar->units;
 		Sx += instance->Delimiter + S;
 	}
@@ -216,7 +216,7 @@ std::list<std::string> * ReportStream::RprtHeaderObs(CRHMmain* instance)
 
 	for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
 	{
-		ClassVar* thisVar = instance->cdSeries[vv]->Tag;
+		ClassVar* thisVar = instance->cdSeries[vv]->getTag();
 		Sx = instance->cdSeries[vv]->getTitle();
 		Sx += string(" 1 ");
 		Sx += thisVar->units;

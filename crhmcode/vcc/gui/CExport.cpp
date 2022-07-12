@@ -135,7 +135,7 @@ void CExport::OnPreviewMorePressed()
 		previewEditBox.AddString(L"Future File Description");
 		for (size_t i = 0; i < exportIndex->size(); i++)
 		{
-			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->Tag;
+			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
 			Sx = model->cdSeries[exportIndex->at(i)]->getTitle();
 			Sx += std::string(" 1 ");
 			Sx += thisVar->units;
@@ -167,7 +167,7 @@ void CExport::OnPreviewMorePressed()
 		Sx = "units";
 		for (size_t i = 0; i < exportIndex->size(); i++)
 		{
-			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->Tag;
+			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
 			std::string S = thisVar->units;
 			Sx.append("\t");
 			Sx.append(S);
@@ -204,7 +204,7 @@ void CExport::OnPreviewMorePressed()
 			// has to equal first series length
 			if (model->cdSeries[0]->Count() == model->cdSeries[exportIndex->at(i)]->Count())
 			{
-				ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->Tag;
+				ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
 				int prec = 7;
 				//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
 
@@ -351,7 +351,7 @@ void CExport::exportToFile(std::string filePath)
 		exportStream << "Future File Description" << endl;
 		for (size_t i = 0; i < exportIndex->size(); i++)
 		{
-			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->Tag;
+			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
 			Sx = model->cdSeries[exportIndex->at(i)]->getTitle();
 			Sx += std::string(" 1 ");
 			Sx += thisVar->units;
@@ -384,7 +384,7 @@ void CExport::exportToFile(std::string filePath)
 		Sx = "units";
 		for (size_t i = 0; i < exportIndex->size(); i++)
 		{
-			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->Tag;
+			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
 			std::string S = thisVar->units;
 			Sx.append("\t");
 			Sx.append(S);
@@ -421,7 +421,7 @@ void CExport::exportToFile(std::string filePath)
 			// has to equal first series length
 			if (model->cdSeries[0]->Count() == model->cdSeries[exportIndex->at(i)]->Count())
 			{
-				ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->Tag;
+				ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
 				int prec = 7;
 				//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
 

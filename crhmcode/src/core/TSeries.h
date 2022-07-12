@@ -9,13 +9,15 @@
 */
 class TSeries {
 private:
+
 	/* Title of the series of data */
 	std::string Title;
 
-	
-public:
 	/* Refrence to the variable object this data is related to */
 	ClassVar* Tag{ NULL };
+
+public:
+	
 
 	/* The X,Y coordinates of the graph */
 	std::vector<std::pair<double, double>> points;
@@ -40,8 +42,15 @@ public:
 		this->Title = title;
 	};
 
-
+	ClassVar* getTag()
+	{
+		return this->Tag;
+	};
 	
+	void setTag(ClassVar* tag)
+	{
+		this->Tag = tag;
+	};
 
 	void AddXY(double X, double Y)
 	{

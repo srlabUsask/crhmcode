@@ -1217,7 +1217,7 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 			}
 
 			//Determine if it is a observation or a variable
-			if (it->second->Tag->FileData == NULL)
+			if (it->second->getTag()->FileData == NULL)
 			{
 				//Is a variable
 				CString selectedVariable = CString(it->first.c_str());
@@ -1230,15 +1230,15 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 				{
 					model->calculateVariableFunctionOutput(it->first, it->second, funct);
 					AddSeriesToTChart(it->second);
-					delete it->second->Tag->FileData;
-					it->second->Tag->FileData = NULL;
+					delete it->second->getTag()->FileData;
+					it->second->getTag()->FileData = NULL;
 				}
 	
 			}
 			else
 			{
 				//Is a observation
-				AddObsPlot(it->second->Tag, it->second, it->first, funct);
+				AddObsPlot(it->second->getTag(), it->second, it->first, funct);
 				CString selectedObservation = CString(it->first.c_str());
 				listbox_sel_observations.AddString(selectedObservation);
 			}
@@ -2920,7 +2920,7 @@ void CRHMmainDlg::addObservationsToSelected()
 			{
 				cdSeries = new TSeries();
 			}
-			cdSeries->Tag = obsVar;
+			cdSeries->setTag(obsVar);
 			cdSeries->setTitle(seriesTitle);
 			model->SelectedObservations->push_back(std::pair<std::string, TSeries*>(seriesTitle, cdSeries));
 		}
@@ -2968,7 +2968,7 @@ void CRHMmainDlg::addObservationsArrayToSelected()
 				{
 					cdSeries = new TSeries();
 				}
-				cdSeries->Tag = obsVar;
+				cdSeries->setTag(obsVar);
 				cdSeries->setTitle(seriesTitle);
 				model->SelectedObservations->push_back(std::pair<std::string, TSeries*>(seriesTitle, cdSeries));
 			}
@@ -3170,7 +3170,7 @@ std::list<std::pair<std::string, TSeries*>>* CRHMmainDlg::GetSelectedObservation
 		//list->Add(s);
 		ClassVar* var = t->GetObjectOfObservation(s);
 		TSeries* obj = new TSeries();
-		obj->Tag = var;
+		obj->setTag(var);
 		obj->setTitle(s);
 
 		list->push_back(std::pair<std::string, TSeries*>(s, obj));
@@ -3499,7 +3499,7 @@ void CRHMmainDlg::addVariableFunctionToSelected()
 		TSeries* series = new TSeries();
 
 		series->setTitle(seriesLabel);
-		series->Tag = selectedVar->second;
+		series->setTag(selectedVar->second);
 
 		model->SelectedObservations->push_back(std::pair<std::string, TSeries*>(seriesLabel, series));
 
