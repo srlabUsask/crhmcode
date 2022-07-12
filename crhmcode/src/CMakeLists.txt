@@ -77,6 +77,8 @@ if (Boost_FOUND)
   target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 endif()
 
+target_link_libraries(${PROJECT_NAME} ${CMAKE_DL_LIBS})
+
 target_include_directories(${PROJECT_NAME} PUBLIC
     config.h
     "${PROJECT_BINARY_DIR}"
