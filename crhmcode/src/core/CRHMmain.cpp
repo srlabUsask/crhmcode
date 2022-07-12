@@ -922,7 +922,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 									//move inside to avoid null ptr exception - Matt
 									cdSeries->Tag = thisVar;
 
-									cdSeries->Title = SS;
+									cdSeries->setTitle(SS);
 
 									this->calculateObservationTseries(thisVar, cdSeries, SS, funct);
 								}
@@ -930,7 +930,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 								{
 									cdSeries = new TSeries();
 									cdSeries->Tag = thisVar;
-									cdSeries->Title = SS;
+									cdSeries->setTitle(SS);
 								}
 
 								SelectedObservations->push_back(std::pair<std::string, TSeries*>(SS, cdSeries));
@@ -1550,7 +1550,7 @@ void CRHMmain::ListBoxMacroClear() { // used by Macro
 
 		for (jj = 0; jj < selVarCount; jj++)
 		{
-			serTitle = cdSeries[jj]->Title;
+			serTitle = cdSeries[jj]->getTitle();
 		}
 
 
@@ -2351,8 +2351,8 @@ MMSData *  CRHMmain::RunClick2Start()
 
 		cdSeries[ii]->Tag = thisVar;
 
-		string S = selectedVarIterator->first;
-		cdSeries[ii]->Title = S;
+		std::string S = selectedVarIterator->first;
+		cdSeries[ii]->setTitle(S);
 
 		int lay;
 		int dim;
@@ -4465,7 +4465,7 @@ void CRHMmain::GetObservationData(char * obsfilepath, char * observationname)
 	}
 
 	observationseries = new TSeries();
-	observationseries->Title = observationname;
+	observationseries->setTitle(observationname);
 
 	int obscount = j;
 	char tokens[50][50]{};
@@ -5185,7 +5185,7 @@ void CRHMmain::calculateVariableFunctionOutput(std::string varName, TSeries* var
 	int pos = -1;
 	for (size_t i = 0; i < model->SelectedVariables->size(); i++)
 	{
-		if (model->cdSeries[i]->Title == varNameNoSuffix)
+		if (model->cdSeries[i]->getTitle() == varNameNoSuffix)
 		{
 			pos = i;
 			break;

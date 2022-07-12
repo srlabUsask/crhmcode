@@ -59,7 +59,7 @@ void ReportStream::OutputSummaryHeaders(std::list<std::pair<std::string, TSeries
 		it++
 		)
 	{
-		std::string S = it->second->Title;
+		std::string S = it->second->getTitle();
 		line += " " + S;
 	}
 	*(this->reportFileStream) << (line.c_str());
@@ -188,7 +188,7 @@ std::list<std::string> * ReportStream::RprtHeader(CRHMmain* instance)
 	Sx = "time";
 	for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
 	{
-		std::string S = instance->cdSeries[vv]->Title;
+		std::string S = instance->cdSeries[vv]->getTitle();
 		Sx += instance->Delimiter + S;
 	}
 	headerLines->push_back(Sx);
@@ -217,7 +217,7 @@ std::list<std::string> * ReportStream::RprtHeaderObs(CRHMmain* instance)
 	for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
 	{
 		ClassVar* thisVar = instance->cdSeries[vv]->Tag;
-		Sx = instance->cdSeries[vv]->Title;
+		Sx = instance->cdSeries[vv]->getTitle();
 		Sx += string(" 1 ");
 		Sx += thisVar->units;
 		headerLines->push_back(Sx);
@@ -226,7 +226,7 @@ std::list<std::string> * ReportStream::RprtHeaderObs(CRHMmain* instance)
 	Sx = "###### time";
 	for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
 	{
-		string S = instance->cdSeries[vv]->Title;
+		std::string S = instance->cdSeries[vv]->getTitle();
 		Sx += instance->Delimiter + S;
 	}
 	

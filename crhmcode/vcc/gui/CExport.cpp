@@ -56,7 +56,7 @@ BOOL CExport::OnInitDialog()
 	
 	for (size_t i = 0; i < model->SelectedVariables->size(); i++)
 	{
-		std::string varName = model->cdSeries[i]->Title;
+		std::string varName = model->cdSeries[i]->getTitle();
 		choicesListBox.AddString(CString(varName.c_str()));
 	}
 
@@ -136,7 +136,7 @@ void CExport::OnPreviewMorePressed()
 		for (size_t i = 0; i < exportIndex->size(); i++)
 		{
 			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->Tag;
-			Sx = model->cdSeries[exportIndex->at(i)]->Title;
+			Sx = model->cdSeries[exportIndex->at(i)]->getTitle();
 			Sx += std::string(" 1 ");
 			Sx += thisVar->units;
 			previewEditBox.AddString(CString(Sx.c_str()));
@@ -145,7 +145,7 @@ void CExport::OnPreviewMorePressed()
 		Sx = "###### time";
 		for (size_t i = 0; i < exportIndex->size(); i++)
 		{
-			std::string S = model->cdSeries[exportIndex->at(i)]->Title;
+			std::string S = model->cdSeries[exportIndex->at(i)]->getTitle();
 			Sx.append("\t");
 			Sx.append(S);
 		}
@@ -158,7 +158,7 @@ void CExport::OnPreviewMorePressed()
 		Sx = "time";
 		for (size_t i = 0; i < exportIndex->size(); i++)
 		{
-			std::string S = model->cdSeries[exportIndex->at(i)]->Title;
+			std::string S = model->cdSeries[exportIndex->at(i)]->getTitle();
 			Sx.append("\t");
 			Sx.append(S);
 		}
@@ -245,7 +245,7 @@ std::vector<int> * CExport::getExportIndex()
 
 		for (size_t j = 0; j < model->SelectedVariables->size(); j++)
 		{
-			if (model->cdSeries[j]->Title == name)
+			if (model->cdSeries[j]->getTitle() == name)
 			{
 				index->push_back(j);
 				break;
@@ -352,7 +352,7 @@ void CExport::exportToFile(std::string filePath)
 		for (size_t i = 0; i < exportIndex->size(); i++)
 		{
 			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->Tag;
-			Sx = model->cdSeries[exportIndex->at(i)]->Title;
+			Sx = model->cdSeries[exportIndex->at(i)]->getTitle();
 			Sx += std::string(" 1 ");
 			Sx += thisVar->units;
 			exportStream << Sx.c_str() << endl;
@@ -361,7 +361,7 @@ void CExport::exportToFile(std::string filePath)
 		Sx = "###### time";
 		for (size_t i = 0; i < exportIndex->size(); i++)
 		{
-			std::string S = model->cdSeries[exportIndex->at(i)]->Title;
+			std::string S = model->cdSeries[exportIndex->at(i)]->getTitle();
 			Sx.append("\t");
 			Sx.append(S);
 		}
@@ -374,7 +374,7 @@ void CExport::exportToFile(std::string filePath)
 		Sx = "time";
 		for (size_t i = 0; i < exportIndex->size(); i++)
 		{
-			std::string S = model->cdSeries[exportIndex->at(i)]->Title;
+			std::string S = model->cdSeries[exportIndex->at(i)]->getTitle();
 			Sx.append("\t");
 			Sx.append(S);
 		}

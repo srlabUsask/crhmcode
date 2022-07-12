@@ -650,7 +650,7 @@ void CRHMmainDlg::AddSeriesToTChart(TSeries* tseries)
 	int count = tchart.get_SeriesCount();
 	series = tchart.Series(count - 1);
 
-	CString cstr(tseries->Title.c_str());
+	CString cstr(tseries->getTitle().c_str());
 	//CString extension("(1)");
 	//cstr.Append(extension);
 
@@ -2921,7 +2921,7 @@ void CRHMmainDlg::addObservationsToSelected()
 				cdSeries = new TSeries();
 			}
 			cdSeries->Tag = obsVar;
-			cdSeries->Title = seriesTitle;
+			cdSeries->setTitle(seriesTitle);
 			model->SelectedObservations->push_back(std::pair<std::string, TSeries*>(seriesTitle, cdSeries));
 		}
 
@@ -2969,7 +2969,7 @@ void CRHMmainDlg::addObservationsArrayToSelected()
 					cdSeries = new TSeries();
 				}
 				cdSeries->Tag = obsVar;
-				cdSeries->Title = seriesTitle;
+				cdSeries->setTitle(seriesTitle);
 				model->SelectedObservations->push_back(std::pair<std::string, TSeries*>(seriesTitle, cdSeries));
 			}
 		}
@@ -3171,7 +3171,7 @@ std::list<std::pair<std::string, TSeries*>>* CRHMmainDlg::GetSelectedObservation
 		ClassVar* var = t->GetObjectOfObservation(s);
 		TSeries* obj = new TSeries();
 		obj->Tag = var;
-		obj->Title = s;
+		obj->setTitle(s);
 
 		list->push_back(std::pair<std::string, TSeries*>(s, obj));
 	}
@@ -3498,7 +3498,7 @@ void CRHMmainDlg::addVariableFunctionToSelected()
 		std::string seriesLabel = selectedVar->first + suffix;
 		TSeries* series = new TSeries();
 
-		series->Title = seriesLabel;
+		series->setTitle(seriesLabel);
 		series->Tag = selectedVar->second;
 
 		model->SelectedObservations->push_back(std::pair<std::string, TSeries*>(seriesLabel, series));

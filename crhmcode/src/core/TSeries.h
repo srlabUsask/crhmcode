@@ -5,32 +5,43 @@
 
 /** 
 * Stores a series of data that represents a line graph with a vector of 
-* X,Y coordinate points that are stored as pairs.
+* X,Y coordinate points that are stored as pairs of doubles.
 */
 class TSeries {
-public:
+private:
 	/* Title of the series of data */
 	std::string Title;
 
+	
+public:
 	/* Refrence to the variable object this data is related to */
 	ClassVar* Tag{ NULL };
 
 	/* The X,Y coordinates of the graph */
 	std::vector<std::pair<double, double>> points;
 
-	/* The X values for the data series */
-	//std::vector<double> XValues;
-	//std::vector<double> YValues;
-	
-	TSeries() 
-	{ 
+	TSeries()
+	{
 		points = std::vector<std::pair<double, double>>();
 		points.reserve(50000);
 	};
-	
-	~TSeries() 
-	{ 
+
+	~TSeries()
+	{
 	};
+
+	std::string getTitle()
+	{
+		return this->Title;
+	};
+
+	void setTitle(std::string title)
+	{
+		this->Title = title;
+	};
+
+
+	
 
 	void AddXY(double X, double Y)
 	{
