@@ -21,66 +21,132 @@ private:
 
 public:
 	
+	/**
+	* Standard Constructor
+	* 
+	* Reserves 50,000 spaces in the points vector
+	*/
 	TSeries()
 	{
 		points = std::vector<std::pair<double, double>>();
 		points.reserve(50000);
 	};
 
+	/**
+	* Standard Deconstructor
+	*/
 	~TSeries()
 	{
 	};
 
+	/**
+	* Gets the series title
+	* 
+	* @return std::string - the series title
+	*/
 	std::string getTitle()
 	{
 		return this->Title;
 	};
 
+	/**
+	* Sets the series title
+	* 
+	* @param title - std::string the string to set the series title to.
+	*/
 	void setTitle(std::string title)
 	{
 		this->Title = title;
 	};
 
+	/**
+	* Gets the series tag
+	* 
+	* @return ClassVar* - reference to the variable object this series refers to.
+	*/
 	ClassVar* getTag()
 	{
 		return this->Tag;
 	};
 	
+	/**
+	* Sets the series tag
+	* 
+	* @param tag - ClassVar* reference to the variable object to set as the series tag.
+	*/
 	void setTag(ClassVar* tag)
 	{
 		this->Tag = tag;
 	};
 
+	/*
+	* Returns the number of points in the series
+	* 
+	* @return int number of points in the series. 
+	*/
 	int Count()
 	{
 		return points.size();
 	};
 
+	/**
+	* Adds a point to the series.
+	* 
+	* @param X - double the X-axis value for the point to be added.
+	* @param Y - double the Y-axis value for the point to be added.
+	*/
 	void AddXY(double X, double Y)
 	{
 		points.insert(points.end(), std::pair<double, double>(X, Y));
 	};
 	
-	double XValue(int nn) 
+	/**
+	* Returns the XValue of the nth point in the series.
+	* 
+	* @param n - int the point in the series to retreive the value of.
+	* @return double the X value at the nth point.
+	*/
+	double XValue(int n) 
 	{ 
-		return points.at(nn).first;
+		return points.at(n).first;
 	};
 	
-	void setXValue(int nn, double value)
+	/**
+	* Sets the X value of the nth point in the series to the passed in value.
+	* 
+	* @param n - int the point in the series to set the value of.
+	* @param value - double the value to set the X value of the nth point in the series to.
+	*/
+	void setXValue(int n, double value)
 	{
-		this->points.at(nn).first = value;
+		this->points.at(n).first = value;
 	};
 
+	/**
+	* Returns the Y Value of the nth point in the series.
+	*
+	* @param n - int the point in the series to retreive the value of.
+	* @return double the Y value at the nth point.
+	*/
 	double YValue(int nn) 
 	{ 
 		return points.at(nn).second;
 	};
 
+	/**
+	* Sets the Y value of the nth point in the series to the passed in value.
+	*
+	* @param n - int the point in the series to set the value of.
+	* @param value - double the value to set the Y value of the nth point in the series to.
+	*/
 	void setYValue(int nn, double value)
 	{
 		this->points.at(nn).second = value;
 	};
 
+	/**
+	* Clears all the points in the series.
+	*/
 	void clearSeries()
 	{
 		this->points.clear();
