@@ -80,7 +80,7 @@ double StandardConverterUtility::Calculate_TdateTime_Offset(void) {  //Manishank
 	timeinfo.tm_year = 70;
 	timeinfo.tm_isdst = -1;
 
-	time_t Current = mktime(&timeinfo); // determine ???
+	time_t Current = timegm(&timeinfo); // determine ???
 
 	return double(Current) / 86400.0;
 }
@@ -102,7 +102,7 @@ double StandardConverterUtility::EncodeDateTime(int Year, int Month, int Day, in
 
 	timeinfo.tm_year = Year + Decade_Offsets[indx][0] - 1900;
 
-	time_t Current = mktime(&timeinfo);
+	time_t Current = timegm(&timeinfo);
 
 	return double(Current) / 86400.0 + Decade_Offsets[indx][1] - Calculate_TdateTime_Offset(); //Global::TdateTime_Offset; // correction from
 }
