@@ -124,7 +124,7 @@ void CExport::OnPreviewMorePressed()
 	std::string Sx;
 	std::string Sy;
 
-	std::vector<int> * exportIndex = getExportIndex();
+	std::vector<TSeries*>* data = this->PrepareDataForExport();
 
 	//Output the header
 
@@ -133,19 +133,19 @@ void CExport::OnPreviewMorePressed()
 	if (formatIndex == 1)
 	{
 		previewEditBox.AddString(L"Future File Description");
-		for (size_t i = 0; i < exportIndex->size(); i++)
+		for (size_t i = 0; i < data->size(); i++)
 		{
-			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
-			Sx = model->cdSeries[exportIndex->at(i)]->getTitle();
+			ClassVar* thisVar = data->at(i)->getTag();
+			Sx = data->at(i)->getTitle();
 			Sx += std::string(" 1 ");
 			Sx += thisVar->units;
 			previewEditBox.AddString(CString(Sx.c_str()));
 		}
 
 		Sx = "###### time";
-		for (size_t i = 0; i < exportIndex->size(); i++)
+		for (size_t i = 0; i < data->size(); i++)
 		{
-			std::string S = model->cdSeries[exportIndex->at(i)]->getTitle();
+			std::string S = data->at(i)->getTitle();
 			Sx.append("\t");
 			Sx.append(S);
 		}
@@ -156,18 +156,18 @@ void CExport::OnPreviewMorePressed()
 	else
 	{
 		Sx = "time";
-		for (size_t i = 0; i < exportIndex->size(); i++)
+		for (size_t i = 0; i < data->size(); i++)
 		{
-			std::string S = model->cdSeries[exportIndex->at(i)]->getTitle();
+			std::string S = data->at(i)->getTitle();
 			Sx.append("\t");
 			Sx.append(S);
 		}
 		previewEditBox.AddString(CString(Sx.c_str()));
 
 		Sx = "units";
-		for (size_t i = 0; i < exportIndex->size(); i++)
+		for (size_t i = 0; i < data->size(); i++)
 		{
-			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
+			ClassVar* thisVar = data->at(i)->getTag();
 			std::string S = thisVar->units;
 			Sx.append("\t");
 			Sx.append(S);
@@ -176,46 +176,44 @@ void CExport::OnPreviewMorePressed()
 	}
 
 	//Output the data preview
-	for (long index = Global::DTmin + this->nextLine; (index < Global::DTmin + this->nextLine + 1000) && (index < Global::DTmax); index++)
+	for (long index = 0 + this->nextLine; (index < this->nextLine + 1000) && (index < data->at(0)->Count()); index++)
 	{
-		std::string Sx = FloatToStrF(model->cdSeries[0]->XValue(index), TFloatFormat::ffGeneral, 10, 0);
-		Sx = StandardConverterUtility::GetDateTimeInStringForOutput(model->cdSeries[0]->XValue(index));
+		std::string Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+		Sx = StandardConverterUtility::GetDateTimeInStringForOutput(data->at(0)->XValue(index));
 
 		switch (formatIndex)
 		{
 		case 0: //:ISO date
-			Sx = StandardConverterUtility::FormatDateTime("ISO", model->cdSeries[0]->XValue(index));
+			Sx = StandardConverterUtility::FormatDateTime("ISO", data->at(0)->XValue(index));
 			break;
 		case 1: //MS date
-			Sx = FloatToStrF(model->cdSeries[0]->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+			Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
 			break;
 		case 2: //MS date
-			Sx = FloatToStrF(model->cdSeries[0]->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+			Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
 			break;
 		case 3: //yyyy-mm-dd hh:mm date
-			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", model->cdSeries[0]->XValue(index));
+			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", data->at(0)->XValue(index));
 			break;
 		}
 
 		
 
-		for (size_t i = 0; i < exportIndex->size(); i++)
+		for (size_t i = 0; i < data->size(); i++)
 		{
-			// has to equal first series length
-			if (model->cdSeries[0]->Count() == model->cdSeries[exportIndex->at(i)]->Count())
+			
+			ClassVar* thisVar = data->at(i)->getTag();
+			int prec = 7;
+			//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
+
+			if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
 			{
-				ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
-				int prec = 7;
-				//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
-
-				if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
-				{
-					prec = 7;
-				}
-
-				std::string Sy = FloatToStrF(model->cdSeries[exportIndex->at(i)]->YValue(index), TFloatFormat::ffGeneral, prec, 10);
-				Sx = Sx + "\t" + Sy;
+				prec = 7;
 			}
+
+			std::string Sy = FloatToStrF(data->at(i)->YValue(index), TFloatFormat::ffGeneral, prec, 10);
+			Sx = Sx + "\t" + Sy;
+			
 		}
 
 		previewEditBox.AddString(CString(Sx.c_str()));
@@ -279,7 +277,9 @@ void CExport::OnSave()
 
 	exportFileName.append(extension);
 
-	exportToFile(exportFileName);
+	std::vector<TSeries*>* processedData = this->PrepareDataForExport();
+
+	exportToFile(exportFileName, processedData);
 }
 
 
@@ -312,7 +312,9 @@ void CExport::OnSaveAs()
 		CString fileName = fileDlg.GetPathName();
 		std::string filePath = CT2A(fileName.GetString());
 
-		exportToFile(filePath);
+		std::vector<TSeries*>* processedData = this->PrepareDataForExport();
+
+		exportToFile(filePath, processedData);
 	}
 }
 
@@ -323,7 +325,7 @@ void CExport::OnExit()
 }
 
 
-void CExport::exportToFile(std::string filePath)
+void CExport::exportToFile(std::string filePath, std::vector<TSeries*>* data)
 {
 
 	std::basic_ofstream<char, std::char_traits<char>> exportStream = std::basic_ofstream<char, std::char_traits<char>>();
@@ -340,7 +342,7 @@ void CExport::exportToFile(std::string filePath)
 	std::string Sx;
 	std::string Sy;
 
-	std::vector<int>* exportIndex = getExportIndex();
+	//std::vector<int>* exportIndex = getExportIndex();
 
 	//Output the header
 
@@ -349,19 +351,19 @@ void CExport::exportToFile(std::string filePath)
 	if (formatIndex == 1)
 	{
 		exportStream << "Future File Description" << endl;
-		for (size_t i = 0; i < exportIndex->size(); i++)
+		for (size_t i = 0; i < data->size(); i++)
 		{
-			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
-			Sx = model->cdSeries[exportIndex->at(i)]->getTitle();
+			ClassVar* thisVar = data->at(i)->getTag();
+			Sx = data->at(i)->getTitle();
 			Sx += std::string(" 1 ");
 			Sx += thisVar->units;
 			exportStream << Sx.c_str() << endl;
 		}
 
 		Sx = "###### time";
-		for (size_t i = 0; i < exportIndex->size(); i++)
+		for (size_t i = 0; i < data->size(); i++)
 		{
-			std::string S = model->cdSeries[exportIndex->at(i)]->getTitle();
+			std::string S = data->at(i)->getTitle();
 			Sx.append("\t");
 			Sx.append(S);
 		}
@@ -372,9 +374,9 @@ void CExport::exportToFile(std::string filePath)
 	else
 	{
 		Sx = "time";
-		for (size_t i = 0; i < exportIndex->size(); i++)
+		for (size_t i = 0; i < data->size(); i++)
 		{
-			std::string S = model->cdSeries[exportIndex->at(i)]->getTitle();
+			std::string S = data->at(i)->getTitle();
 			Sx.append("\t");
 			Sx.append(S);
 		}
@@ -382,9 +384,9 @@ void CExport::exportToFile(std::string filePath)
 
 
 		Sx = "units";
-		for (size_t i = 0; i < exportIndex->size(); i++)
+		for (size_t i = 0; i < data->size(); i++)
 		{
-			ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
+			ClassVar* thisVar = data->at(i)->getTag();
 			std::string S = thisVar->units;
 			Sx.append("\t");
 			Sx.append(S);
@@ -393,46 +395,44 @@ void CExport::exportToFile(std::string filePath)
 	}
 
 	//Output the data preview
-	for (long index = Global::DTmin; index < Global::DTmax; index++)
+	for (long index = 0; index < data->at(0)->Count(); index++)
 	{
-		std::string Sx = FloatToStrF(model->cdSeries[0]->XValue(index), TFloatFormat::ffGeneral, 10, 0);
-		Sx = StandardConverterUtility::GetDateTimeInStringForOutput(model->cdSeries[0]->XValue(index));
+		std::string Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+		Sx = StandardConverterUtility::GetDateTimeInStringForOutput(data->at(0)->XValue(index));
 
 		switch (formatIndex)
 		{
 		case 0: //:ISO date
-			Sx = StandardConverterUtility::FormatDateTime("ISO", model->cdSeries[0]->XValue(index));
+			Sx = StandardConverterUtility::FormatDateTime("ISO", data->at(0)->XValue(index));
 			break;
 		case 1: //MS date
-			Sx = FloatToStrF(model->cdSeries[0]->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+			Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
 			break;
 		case 2: //MS date
-			Sx = FloatToStrF(model->cdSeries[0]->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+			Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
 			break;
 		case 3: //yyyy-mm-dd hh:mm date
-			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", model->cdSeries[0]->XValue(index));
+			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", data->at(0)->XValue(index));
 			break;
 		}
 
 
 
-		for (size_t i = 0; i < exportIndex->size(); i++)
+		for (size_t i = 0; i < data->size(); i++)
 		{
-			// has to equal first series length
-			if (model->cdSeries[0]->Count() == model->cdSeries[exportIndex->at(i)]->Count())
+			
+			ClassVar* thisVar = data->at(i)->getTag();
+			int prec = 7;
+			//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
+
+			if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
 			{
-				ClassVar* thisVar = model->cdSeries[exportIndex->at(i)]->getTag();
-				int prec = 7;
-				//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
-
-				if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
-				{
-					prec = 7;
-				}
-
-				std::string Sy = FloatToStrF(model->cdSeries[exportIndex->at(i)]->YValue(index), TFloatFormat::ffGeneral, prec, 10);
-				Sx = Sx + "\t" + Sy;
+				prec = 7;
 			}
+
+			std::string Sy = FloatToStrF(data->at(i)->YValue(index), TFloatFormat::ffGeneral, prec, 10);
+			Sx = Sx + "\t" + Sy;
+			
 		}
 
 		exportStream << Sx.c_str() << endl;
