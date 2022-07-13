@@ -606,13 +606,14 @@ void ClassWQ_SoilBGC::finish(bool good) {
       }
     } // for
 
-  int Y,M,D, H, Min;
-  StandardConverterUtility::DecodeDateTime(Global::DTnow, &Y, &M, &D, &H, &Min);
+  int Y,M,D, H, Min, Sec, Milli;
+  StandardConverterUtility::DecodeDate(Global::DTnow, Y, M, D);
+  StandardConverterUtility::DecodeTime(Global::DTnow, H, Min, Sec, Milli);
   //Global::DTnow.DecodeDate(&Y,&M,&D);
 
   try{
 
-  long prevdoy = (int)(StandardConverterUtility::EncodeDateTime(Y-1, 12, 31, 0, 0) - StandardConverterUtility::EncodeDateTime(Y-1, 1, 1, 0, 0)) + 1; // calculates #days in previous year
+  long prevdoy = (int)(StandardConverterUtility::EncodeDate(Y-1, 12, 31) - StandardConverterUtility::EncodeDate(Y-1, 1, 1)) + 1; // calculates #days in previous year
 
 // Calculate common fertiliser and manure use (inorg 0, fast 1)   common_nadd[layer][inorg/fast or labile/humus)]
 

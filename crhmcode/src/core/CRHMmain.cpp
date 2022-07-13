@@ -418,7 +418,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 				for (int ii = 0; ii < 3; ii++)
 					DataFile >> D[ii];
 
-				DT = StandardConverterUtility::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0); // check
+				DT = StandardConverterUtility::EncodeDate((int)D[0], (int)D[1], (int)D[2]); // check
 				StartDatePicker = DT;
 
 				int c;
@@ -437,7 +437,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 				for (int ii = 0; ii < 3; ii++)
 					DataFile >> D[ii];
 
-				DT = StandardConverterUtility::EncodeDateTime((int)D[0], (int)D[1], (int)D[2], 0, 0);
+				DT = StandardConverterUtility::EncodeDate((int)D[0], (int)D[1], (int)D[2]);
 				EndDatePicker = DT;
 
 				DataFile >> S;
@@ -1857,8 +1857,17 @@ MMSData *  CRHMmain::RunClick2Start()
 		LogMessageX(" ");
 	}
 
-	double Dt = StandardConverterUtility::DateTimeDt();
-	Message = string("Time of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
+//	double Dt = StandardConverterUtility::DateTimeDt();
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer [80];
+
+	time (&rawtime);   // Get the current UNIX timestamp in rawtime
+	timeinfo = localtime (&rawtime);   // Convert UNIX timestamp to Y-M-D-h-m
+	strftime (buffer, 80, "%D %R", timeinfo );  // Convert to string
+//	string datetime(buffer);  // Convert to C++ string
+
+	Message = string("Time of model run: ") + buffer + ". Program " + Version;
 	LogMessageX(Message.c_str());
 
 	string S = string("Module List \"");
@@ -2427,8 +2436,16 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 	long ** mmsDataL = mmsdata->mmsDataL;
 	bool GoodRun = mmsdata->GoodRun;
 
-	double Dt = StandardConverterUtility::DateTimeDt();
-	string Message = string("End of model run: ") + DttoStr(Dt) + " " + FormatString(Dt, "yy mm dd ") + ". Program " + Version;
+//	double Dt = StandardConverterUtility::DateTimeDt();
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer [80];
+
+	time (&rawtime);   // Get the current UNIX timestamp in rawtime
+	timeinfo = localtime (&rawtime);   // Convert UNIX timestamp to Y-M-D-h-m
+	strftime (buffer, 80, "%D %R", timeinfo );  // Convert to string
+
+	string Message = string("End of model run: ") + buffer + ". Program " + Version;
 	LogMessageX(Message.c_str());
 
 	delete[] mmsData;
@@ -2701,7 +2718,7 @@ void CRHMmain::ReadStateFile(bool & GoodRun)
 	getline(DataFile, Line); // read "TIME:"
 	int D[3]{};
 	DataFile >> D[0] >> D[1] >> D[2];
-	double DT = StandardConverterUtility::EncodeDateTime(D[0], D[1], D[2], 0, 0); // ????
+	double DT = StandardConverterUtility::EncodeDate(D[0], D[1], D[2]); // ????
 
 	getline(DataFile, Descrip);
 	DataFile.ignore((numeric_limits<streamsize>::max)(), '#');
@@ -3308,8 +3325,22 @@ void  CRHMmain::SaveProject(string prj_description, string filepath) {
 	string Output;
 	int Y = 0, M = 0, D = 0, H = 0, Min = 0;
 	ProjectList->push_back(prj_description);
-	double Dt = StandardConverterUtility::GetCurrentDateTime();
-	string datetime = StandardConverterUtility::GetDateTimeInString(Dt);
+
+//	double Dt = StandardConverterUtility::GetCurrentDateTime();
+//	string datetime = StandardConverterUtility::GetDateTimeInString(Dt);
+
+// This uses the UNIX time utilities rather than the reimplemented Borland utilities,
+// avoiding having to convert the current system time to 1899-12-30 offset and back.
+// Also gives more flexibility in formatting the time string.
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer [80];
+
+	time (&rawtime);   // Get the current UNIX timestamp in rawtime
+	timeinfo = localtime (&rawtime);   // Convert UNIX timestamp to Y-M-D-h-m
+	strftime (buffer, 80, "%D %R", timeinfo );  // Convert to string
+	string datetime(buffer);  // Convert to C++ string
+
 	//Common::DecodeDateTime(DT, &Y, &M, &D, &H, &Min);
 	//string datest = D +" " + M  + Y + H + Min;
 	string S("  Creation: " + datetime);

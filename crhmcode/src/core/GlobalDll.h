@@ -258,7 +258,7 @@ double static StrToDate(string date) {
 	int Day = Strtolong(date.substr(3, 2));
 	int Year = Strtolong(date.substr(6, 4));
 
-	return StandardConverterUtility::EncodeDateTime(Year, Month, Day, 0, 0);
+	return StandardConverterUtility::EncodeDate(Year, Month, Day);
 };
 
 double static StrToTime(string time) {
@@ -266,15 +266,16 @@ double static StrToTime(string time) {
 	int hour = Strtolong(time.substr(0, 2));
 	int min = Strtolong(time.substr(3, 2));
 
-	return StandardConverterUtility::EncodeDateTime(0, 0, 0, hour + 24, min);
+	return StandardConverterUtility::EncodeTime(hour + 24, min, 0, 0);
 };
 
 string static FormatString(double DT, string) {
 	ostringstream temp;
 	temp.width(2);
-	int Y = 0, M = 0, D = 0, H = 0, Min = 0;
+	int Y = 0, M = 0, D = 0; //, H = 0, Min = 0, Sec=0, Milli=0;
 
-	StandardConverterUtility::DecodeDateTime(DT, &Y, &M, &D, &H, &Min);
+	StandardConverterUtility::DecodeDate(DT, Y, M, D);
+//	StandardConverterUtility::DecodeTime(DT, &H, &Min, &Sec, &Milli);
 	temp << Y << " " << M << " " << D;
 
 	return temp.str();

@@ -8,16 +8,21 @@
 class StandardConverterUtility
 {
 public:
-	static double GetCurrentDateTime();
+//	static double GetCurrentDateTime();
 	static std::string GetDateTimeInString(double datetime);
 	static std::string GetDateTimeInStringForOutput(double datetime);
 	static std::string GetDateInString(double datetime);
 	static void GetDateTimeElements(double datetime, int * year, int * month, int * day, int * hour, int * minute);
 	static double GetDateTimeInDouble(int year, int month, int day, int hour, int minute, int second);
-	double static Calculate_TdateTime_Offset(void);
-	double static EncodeDateTime(int Year, int Month, int Day, int hour, int min);
-	void static DecodeDateTime(double Dttime, int *Year, int *Month, int *Day, int *Hour, int *Min);
-	double static DateTimeDt(void);
+//	double static Calculate_TdateTime_Offset(void);
+//	double static EncodeDateTime(int Year, int Month, int Day, int hour, int min);
+//	void static DecodeDateTime(double Dttime, int *Year, int *Month, int *Day, int *Hour, int *Min);
+
+	 static double EncodeDate(int y, int m, int d) noexcept;
+	 static double EncodeTime(int hour, int min, int sec, int milli) noexcept;
+	 static void   DecodeDate(double Dttime, int &year, int &month, int &day) noexcept;
+	 static void   DecodeTime(double Dttime, int &hour, int &min, int &sec, int &milli) noexcept;
+//	double static DateTimeDt(void);
 	std::string static FormatDateTime(std::string fmt, double datetime);
 
 

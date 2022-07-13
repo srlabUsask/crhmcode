@@ -4,20 +4,20 @@
 #endif
 
 double Fday() { // used for variable DAY
-	int year, month, day, h, m;
-	StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
+	int year, month, day; //, h, m;
+	StandardConverterUtility::DecodeDate(Global::DTnow, year, month, day);
 	return day;
 }
 
 double Fmonth() { // used for variable MONTH
-	int year, month, day, h, m;
-	StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
+	int year, month, day; //, h, m;
+	StandardConverterUtility::DecodeDate(Global::DTnow, year, month, day);
 	return month;
 }
 
 double Fyear() { // used for variable YEAR
-	int year, month, day, h, m;
-	StandardConverterUtility::DecodeDateTime(Global::DTnow, &year, &month, &day, &h, &m);
+	int year, month, day; //, h, m;
+	StandardConverterUtility::DecodeDate(Global::DTnow, year, month, day);
 	return year;
 }
 
