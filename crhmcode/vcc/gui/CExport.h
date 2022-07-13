@@ -48,8 +48,6 @@ private:
 	afx_msg void OnSaveAs();
 	afx_msg void OnExit();
 
-
-	std::vector<int> * getExportIndex();
 	void exportToFile(std::string filePath, std::vector<TSeries*>* data);
 
 	std::vector<TSeries*>* PrepareDataForExport();

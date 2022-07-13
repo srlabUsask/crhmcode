@@ -226,35 +226,6 @@ void CExport::OnPreviewMorePressed()
 	}
 }
 
-std::vector<int> * CExport::getExportIndex()
-{
-	std::vector<int> * index = new std::vector<int>();
-	CRHMmain* model = CRHMmain::getInstance();
-	CString text;
-	std::string name;
-
-	int selectedCount = this->selectedListBox.GetCount();
-
-	for (int i = 0; i < selectedCount; i++)
-	{
-		this->selectedListBox.GetText(i, text);
-		CT2CA pszConvertedAnsiString(text); 
-		name.assign(pszConvertedAnsiString);
-
-		for (size_t j = 0; j < model->SelectedVariables->size(); j++)
-		{
-			if (model->cdSeries[j]->getTitle() == name)
-			{
-				index->push_back(j);
-				break;
-			}
-		}
-	}
-
-	return index;
-
-}
-
 
 void CExport::OnSave()
 {
