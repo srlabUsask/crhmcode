@@ -166,6 +166,62 @@ public:
 		this->points.clear();
 	};
 
+	/**
+	* Performs a binary search for an X value within the series. 
+	* If the value is found return the index of that point. 
+	* If not found return -1.
+	* 
+	* @param X - double the value to search for on the X Axis
+	* @return long the index of the point if found, -1 if the x value is not found
+	*/
+	long findPointOnXAxis(double x)
+	{
+		long minIndex = 0;
+		long maxIndex = this->Count();
+		long pivot = (minIndex + maxIndex) / 2;
+		
+		return this->findPointOnXAxisRecurse(minIndex, pivot, maxIndex, x);
+	};
+
+	/**
+	* Recursive helper for findPointOnXAxis
+	* Recursively performs binary search between minIndex and maxIndex looking for key
+	* 
+	* @param minIndex long - The smallest index that is still a valid candidate to hold key
+	* @param pivot long - The halfway point between the min and max Index
+	* @param maxIndex long - The largest index that is still a valid candidate to hold key
+	* @return long after recursion finishes the index that holds key or -1 if key is not in series
+	*/
+	long findPointOnXAxisRecurse(long minIndex, long pivot, long maxIndex, double key)
+	{
+		double pivotValue = this->XValue(pivot);
+
+		if (std::abs(pivotValue - key) < std::numeric_limits<double>::epsilon())
+		{
+			return pivot;
+		}
+		else if (minIndex == pivot || maxIndex == pivot)
+		{
+			return -1;
+		}
+		else if (key > pivotValue)
+		{
+			long newMinIndex = pivot;
+			long newMaxIndex = maxIndex;
+			long newPivot = (newMinIndex + newMinIndex) / 2;
+
+			return findPointOnXAxisRecurse(newMinIndex, newPivot, newMaxIndex, key);
+		}
+		else if (key < pivotValue)
+		{
+			long newMindex = minIndex;
+			long newMaxIndex = pivot;
+			long newPivot = (newMindex + newMaxIndex) / 2;
+
+			return findPointOnXAxisRecurse(newMindex, newPivot, newMaxIndex, key);
+		}
+	};
+
 };
 
 #endif // !TSERIES
