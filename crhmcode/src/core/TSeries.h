@@ -33,6 +33,20 @@ public:
 	};
 
 	/**
+	* Copy Constructor
+	*/
+	TSeries(TSeries* original)
+	{
+		this->Title = original->getTitle();
+		this->Tag = original->getTag();
+
+		for (int i = 0; i < original->Count(); i++)
+		{
+			this->AddXY(original->XValue(i), original->YValue(i));
+		}
+	};
+
+	/**
 	* Standard Deconstructor
 	*/
 	~TSeries()
