@@ -12,17 +12,19 @@ StandardConverterUtility::~StandardConverterUtility()
 
 
 //This function returns current date and time in double format.
+/*
 double StandardConverterUtility::GetCurrentDateTime()
 {
 	return DateTimeDt();
 }
-
+*/
 
 
 
 double StandardConverterUtility::GetDateTimeInDouble(int year, int month, int day, int hour, int minute, int second)
 {
-	double t = EncodeDateTime(year, month, day, hour, minute);
+	double t = EncodeDate(year, month, day) +
+				EncodeTime(hour, minute, 0, 0);
 	return t;
 }
 
@@ -32,18 +34,20 @@ double StandardConverterUtility::GetDateTimeInDouble(int year, int month, int da
 //This function takes a double date time as a parameter and returns date time in string format   'mm/dd/yyyy hh:mm'
 std::string StandardConverterUtility::GetDateTimeInString(double datetime)
 {
-	int y, m, d, h, min; 
+	int y, m, d, h, min, sec, milli; 
 	//int s; variable is unreferenced commenting out for now - jhs507
-	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
+	DecodeDate(datetime, y, m, d);
+	DecodeTime(datetime, h, min, sec, milli);
 	std::string stime = std::to_string(m) + "/" + std::to_string(d) + "/" + std::to_string(y) + " " + std::to_string(h) + ":" + std::to_string(min);
 	return stime;
 }
 
 std::string StandardConverterUtility::GetDateTimeInStringForOutput(double datetime)
 {
-	int y, m, d, h, min;
+	int y, m, d, h, min, sec, milli;
 	//int s; variable is unreferenced commenting out for now - jhs507
-	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
+	DecodeDate(datetime, y, m, d);
+	DecodeTime(datetime, h, min, sec, milli);
 	//if (min == 59 && h != 23) { h = h + 1; min = 0; } //added by Manishankar to round the minutes into the next hour.
 	std::string stime = std::to_string(y) + " " + std::to_string(m) + " " + std::to_string(d) + " " + std::to_string(h) + " " + std::to_string(min);
 	return stime;
@@ -52,22 +56,25 @@ std::string StandardConverterUtility::GetDateTimeInStringForOutput(double dateti
 
 std::string StandardConverterUtility::GetDateInString(double datetime)
 {
-	int y, m, d, h, min;
+	int y, m, d, h, min, sec, milli;
 	//int s; variable is unreferenced commenting out for now - jhs507
-	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
+	DecodeDate(datetime, y, m, d);
+	DecodeTime(datetime, h, min, sec, milli);
 	std::string stime = std::to_string(y) + " " + std::to_string(m) + " " + std::to_string(d);
 	return stime;
 }
 
 void StandardConverterUtility::GetDateTimeElements(double datetime, int * y, int * m, int * d, int * h, int * mi)
 {
-	int y1, m1, d1, h1, min1;
+	int y1, m1, d1, h1, min1, sec1, milli1;
 	//int s1; variable is unreferenced commenting out for now - jhs507
-	DecodeDateTime(datetime, &y1, &m1, &d1, &h1, &min1);
+	DecodeDate(datetime, y1, m1, d1);
+	DecodeTime(datetime, h1, min1, sec1, milli1);
 
 	*y = y1; *m = m1, *d = d1, *h = h1, *mi = min1;
 }
 
+/*
 double StandardConverterUtility::Calculate_TdateTime_Offset(void) {  //Manishankar: It is only being used here.
 
 	tm timeinfo;
@@ -84,7 +91,64 @@ double StandardConverterUtility::Calculate_TdateTime_Offset(void) {  //Manishank
 
 	return double(Current) / 86400.0;
 }
+*/
 
+/*************************************
+ * Date and Time routines mirroring Embarcadero / Borland functionality
+ *
+ * The following URLs describe the general API requirements of these routines:
+ * https://docwiki.embarcadero.com/Libraries/Sydney/en/System.TDateTime
+ * https://docwiki.embarcadero.com/Libraries/Sydney/en/System.SysUtils.EncodeDate
+ *************************************/
+
+// This offset defines the origin as Jan 1, 1970
+#define UNIX_OFFSET 719468 
+// This offset defines the origin as Dec 30, 1899
+#define BORLAND_OFFSET 693899 
+
+// This algorithm is from the following url:
+// https://howardhinnant.github.io/date_algorithms.html#days_from_civil
+// This accounts for varying days in the month,
+// and leap-year 4yr, 100yr and 400yr rules.
+ double StandardConverterUtility::EncodeDate(int y, int m, int d) noexcept {
+	y -= m <= 2;
+	const int era = (y >= 0 ? y : y-399) / 400;
+	const int yoe = y - era * 400;      // [0, 399]
+	const int doy = (153*(m > 2 ? m-3 : m+9) + 2)/5 + d-1;  // [0, 365]
+	const int doe = yoe * 365 + yoe/4 - yoe/100 + doy;         // [0, 146096]
+	return era * 146097 + doe - BORLAND_OFFSET;
+}
+
+// This code does not account for leap seconds
+ double StandardConverterUtility::EncodeTime(int hour, int min, int sec, int milli) noexcept {
+// Need to add a small amount to seconds to avoid underrepresentation in the 'double'	
+	return ( ( ( (sec+0.1d)/60.0 + min)/60.0) + hour ) / 24.0;
+}
+
+ void StandardConverterUtility::DecodeDate(double Dttime, int &year, int &month, int &day) noexcept {
+	long z = Dttime + BORLAND_OFFSET;
+	const int era = (z >= 0 ? z : z - 146096) / 146097;
+	const int doe = (z - era * 146097);          // [0, 146096]
+	const int yoe = (doe - doe/1460 + doe/36524 - doe/146096) / 365;  // [0, 399]
+	const int y = yoe + era * 400;
+	const int doy = doe - (365*yoe + yoe/4 - yoe/100);                // [0, 365]
+	const int mp = (5*doy + 2)/153;                                   // [0, 11]
+	const int d = doy - (153*mp+2)/5 + 1;                             // [1, 31]
+	const int m = mp < 10 ? mp+3 : mp-9;                            // [1, 12]
+	year = y + (m <= 2);
+	month = m;
+	day = d;
+}
+
+ void StandardConverterUtility::DecodeTime(double Dttime, int &hour, int &min, int &sec, int &milli) noexcept {
+	Dttime += 0.99d/86400.0d;
+	hour = (long)(Dttime*24) % 24;
+	min = (long)(Dttime*24*60) % 60;
+	sec = (long)(Dttime*24*60*60) % 60;
+}
+
+
+/*
 double StandardConverterUtility::EncodeDateTime(int Year, int Month, int Day, int hour, int min) {  //Manishankar: in ClassCRHM.cpp, GlobalDll.h, CRHMmain.cpp
 
 	tm timeinfo;
@@ -133,6 +197,7 @@ void StandardConverterUtility::DecodeDateTime(double Dttime, int *Year, int *Mon
 	}
 }
 
+
 double StandardConverterUtility::DateTimeDt(void) {  //Manishankar: in CRHMmain.cpp and NewModules.cpp.
 	time_t Currently;
 
@@ -140,15 +205,16 @@ double StandardConverterUtility::DateTimeDt(void) {  //Manishankar: in CRHMmain.
 
 	return double(Currently) / 86400.0 + Decade_Offsets[7][1] - Calculate_TdateTime_Offset(); //Global::TdateTime_Offset; //  TdateTime_Offset less local time offset
 }
-
+*/
 
 
 //this function is being used CRHMmain.cpp. Added by Manishankar.
 std::string StandardConverterUtility::FormatDateTime(std::string fmt, double datetime) 
 {
-	int y, m, d, h, min;
+	int y, m, d, h, min, sec, milli;
 	//int s; variable is unreferenced commenting out for now - jhs507
-	DecodeDateTime(datetime, &y, &m, &d, &h, &min);
+	DecodeDate(datetime, y, m, d);
+	DecodeTime(datetime, h, min, sec, milli);
 
 	std::string m1 = std::to_string(m);
 	std::string d1 = std::to_string(d);
