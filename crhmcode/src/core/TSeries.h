@@ -40,7 +40,7 @@ public:
 		this->Title = original->getTitle();
 		this->Tag = original->getTag();
 
-		for (int i = 0; i < original->Count(); i++)
+		for (long i = 0; i < original->Count(); i++)
 		{
 			this->AddXY(original->XValue(i), original->YValue(i));
 		}
@@ -96,9 +96,9 @@ public:
 	/*
 	* Returns the number of points in the series
 	* 
-	* @return int number of points in the series. 
+	* @return long number of points in the series. 
 	*/
-	int Count()
+	long Count()
 	{
 		return points.size();
 	};
@@ -117,10 +117,10 @@ public:
 	/**
 	* Returns the XValue of the nth point in the series.
 	* 
-	* @param n - int the point in the series to retreive the value of.
+	* @param n - long the point in the series to retreive the value of.
 	* @return double the X value at the nth point.
 	*/
-	double XValue(int n) 
+	double XValue(long n) 
 	{ 
 		return points.at(n).first;
 	};
@@ -128,10 +128,10 @@ public:
 	/**
 	* Sets the X value of the nth point in the series to the passed in value.
 	* 
-	* @param n - int the point in the series to set the value of.
+	* @param n - long the point in the series to set the value of.
 	* @param value - double the value to set the X value of the nth point in the series to.
 	*/
-	void setXValue(int n, double value)
+	void setXValue(long n, double value)
 	{
 		this->points.at(n).first = value;
 	};
@@ -139,10 +139,10 @@ public:
 	/**
 	* Returns the Y Value of the nth point in the series.
 	*
-	* @param n - int the point in the series to retreive the value of.
+	* @param n - long the point in the series to retreive the value of.
 	* @return double the Y value at the nth point.
 	*/
-	double YValue(int nn) 
+	double YValue(long nn) 
 	{ 
 		return points.at(nn).second;
 	};
@@ -150,10 +150,10 @@ public:
 	/**
 	* Sets the Y value of the nth point in the series to the passed in value.
 	*
-	* @param n - int the point in the series to set the value of.
+	* @param n - long the point in the series to set the value of.
 	* @param value - double the value to set the Y value of the nth point in the series to.
 	*/
-	void setYValue(int nn, double value)
+	void setYValue(long nn, double value)
 	{
 		this->points.at(nn).second = value;
 	};
