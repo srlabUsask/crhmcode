@@ -441,3 +441,120 @@ void CExport::exportToFile(std::string filePath)
 	exportStream.close();
 
 }
+
+
+std::vector<TSeries*>* CExport::PrepareDataForExport()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+	
+	std::vector<TSeries*>* selectedSeries = new std::vector<TSeries*>();
+
+	for (int i = 0; i < this->selectedListBox.GetCount(); i++)
+	{
+		CString labelText;
+		std::string labelString;
+		this->selectedListBox.GetText(i, labelText);
+		CT2CA pszConvertedAnsiString(labelText);
+		labelString.assign(pszConvertedAnsiString);
+
+		size_t suffixStartPos = labelString.rfind('_');
+
+		if (suffixStartPos != std::string::npos)
+		{
+			/* Has a suffix look for label in selected observations */
+			for (
+				std::list<std::pair<std::string, TSeries*>>::iterator selObsIt = model->SelectedObservations->begin();
+				selObsIt != model->SelectedObservations->end();
+				selObsIt++
+				)
+			{
+				if (selObsIt->first == labelString)
+				{
+					selectedSeries->push_back(new TSeries(selObsIt->second));
+					break;
+				}
+			}
+		}
+		else
+		{
+			bool found = false;
+
+			/* Does not have a suffix look for it in variables first */
+			for (int i = 0; i < model->SelectedVariables->size(); i++)
+			{
+				if (model->cdSeries[i]->getTitle() == labelString)
+				{
+					selectedSeries->push_back(new TSeries(model->cdSeries[i]));
+					found = true;
+					break;
+				}
+			}
+
+			/* If it was not found in variables look for it in selected observations */
+			if (!found)
+			{
+				for (
+					std::list<std::pair<std::string, TSeries*>>::iterator selObsIt = model->SelectedObservations->begin();
+					selObsIt != model->SelectedObservations->end();
+					selObsIt++
+					)
+				{
+					if (selObsIt->first == labelString)
+					{
+						selectedSeries->push_back(new TSeries(selObsIt->second));
+						break;
+					}
+				}
+			}
+
+		}
+
+	}
+
+	/* Find a the series with the most points */
+	long maxPoints = 0;
+	TSeries* longSeries = NULL;
+	for (
+		std::vector<TSeries*>::iterator seriesIt = selectedSeries->begin();
+		seriesIt != selectedSeries->end();
+		seriesIt++
+		)
+	{
+		if (maxPoints < (*seriesIt)->Count())
+		{
+			maxPoints = (*seriesIt)->Count();
+			longSeries = (*seriesIt);
+		}
+	}
+
+	std::vector<double> lastValue;
+	for (size_t i = 0; i < selectedSeries->size(); i++)
+	{
+		lastValue.push_back(0.0);
+	}
+
+	for (long i = 0; i < maxPoints; i++)
+	{
+		double timeValue = longSeries->XValue(i);
+		std::string Sx = StandardConverterUtility::GetDateTimeInStringForOutput(timeValue);
+
+		for (size_t j = 0; j < selectedSeries->size(); j++)
+		{
+
+			long pointIndex = selectedSeries->at(j)->findPointOnXAxis(timeValue);
+			
+			if (pointIndex != -1)
+			{
+				lastValue[j] = selectedSeries->at(j)->YValue(i);
+			}
+			else 
+			{
+				selectedSeries->at(j)->InsertXY(i, timeValue, lastValue.at(j));
+			}
+
+		}
+
+	}
+
+	return selectedSeries;
+}

@@ -51,4 +51,7 @@ private:
 
 	std::vector<int> * getExportIndex();
 	void exportToFile(std::string filePath);
+
+	std::vector<TSeries*>* PrepareDataForExport();
+
 };
