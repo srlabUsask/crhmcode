@@ -3,6 +3,8 @@
 #ifndef TSERIES
 #define TSERIES
 
+#include "StandardConverterUtility.h"
+
 /** 
 * Stores a series of data that represents a line graph with a vector of 
 * X,Y coordinate points that are stored as pairs of doubles.
@@ -18,6 +20,47 @@ private:
 
 	/* The X,Y coordinates of the graph */
 	std::vector<std::pair<double, double>> points;
+
+	/**
+	* Recursive helper for findPointOnXAxis
+	* Recursively performs binary search between minIndex and maxIndex looking for key
+	*
+	* @param minIndex long - The smallest index that is still a valid candidate to hold key
+	* @param pivot long - The halfway point between the min and max Index
+	* @param maxIndex long - The largest index that is still a valid candidate to hold key
+	* @return long after recursion finishes the index that holds key or -1 if key is not in series
+	*/
+	long findPointOnXAxisRecurse(long minIndex, long pivot, long maxIndex, double key)
+	{
+		double pivotValue = this->XValue(pivot);
+		std::string keyString = StandardConverterUtility::GetDateTimeInStringForOutput(key);
+		std::string pivotString = StandardConverterUtility::GetDateTimeInStringForOutput(pivotValue);
+
+		if (keyString == pivotString)
+		{
+			return pivot;
+		}
+		else if (minIndex == pivot || maxIndex == pivot)
+		{
+			return -1;
+		}
+		else if (key > pivotValue)
+		{
+			long newMinIndex = pivot;
+			long newMaxIndex = maxIndex;
+			long newPivot = (newMinIndex + newMaxIndex) / 2;
+
+			return findPointOnXAxisRecurse(newMinIndex, newPivot, newMaxIndex, key);
+		}
+		else if (key < pivotValue)
+		{
+			long newMindex = minIndex;
+			long newMaxIndex = pivot;
+			long newPivot = (newMindex + newMaxIndex) / 2;
+
+			return findPointOnXAxisRecurse(newMindex, newPivot, newMaxIndex, key);
+		}
+	};
 
 public:
 	
@@ -113,6 +156,18 @@ public:
 	{
 		points.insert(points.end(), std::pair<double, double>(X, Y));
 	};
+
+	/**
+	* Inserts the point X,Y after the specified point in the series
+	* 
+	* @param pos long - the index of the position to place this point after
+	* @param X double - the X value of the point to be inserted.
+	* @param Y double - the Y value of the point to be inserted.
+	*/
+	void InsertXY(long pos, double X, double Y)
+	{
+		points.insert(points.begin()+pos, std::pair<double, double>(X, Y));
+	};
 	
 	/**
 	* Returns the XValue of the nth point in the series.
@@ -183,44 +238,7 @@ public:
 		return this->findPointOnXAxisRecurse(minIndex, pivot, maxIndex, x);
 	};
 
-	/**
-	* Recursive helper for findPointOnXAxis
-	* Recursively performs binary search between minIndex and maxIndex looking for key
-	* 
-	* @param minIndex long - The smallest index that is still a valid candidate to hold key
-	* @param pivot long - The halfway point between the min and max Index
-	* @param maxIndex long - The largest index that is still a valid candidate to hold key
-	* @return long after recursion finishes the index that holds key or -1 if key is not in series
-	*/
-	long findPointOnXAxisRecurse(long minIndex, long pivot, long maxIndex, double key)
-	{
-		double pivotValue = this->XValue(pivot);
-
-		if (std::abs(pivotValue - key) < std::numeric_limits<double>::epsilon())
-		{
-			return pivot;
-		}
-		else if (minIndex == pivot || maxIndex == pivot)
-		{
-			return -1;
-		}
-		else if (key > pivotValue)
-		{
-			long newMinIndex = pivot;
-			long newMaxIndex = maxIndex;
-			long newPivot = (newMinIndex + newMinIndex) / 2;
-
-			return findPointOnXAxisRecurse(newMinIndex, newPivot, newMaxIndex, key);
-		}
-		else if (key < pivotValue)
-		{
-			long newMindex = minIndex;
-			long newMaxIndex = pivot;
-			long newPivot = (newMindex + newMaxIndex) / 2;
-
-			return findPointOnXAxisRecurse(newMindex, newPivot, newMaxIndex, key);
-		}
-	};
+	
 
 };
 
