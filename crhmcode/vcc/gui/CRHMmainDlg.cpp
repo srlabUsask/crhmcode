@@ -185,6 +185,8 @@ BOOL CRHMmainDlg::OnInitDialog()
 	function_drop_down.AddString(L"Count");
 	function_drop_down.AddString(L"Count0");
 	function_drop_down.AddString(L"VP Saturated");
+	function_drop_down.AddString(L"Watts to MJ/Int");
+	function_drop_down.AddString(L"MJ/Int to Watts");
 	function_drop_down.SetCurSel(0);
 
 	/* Set options for the timebase_drop_down */
@@ -1244,6 +1246,14 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 			else if (suffix == "_VPsat")
 			{
 				funct = TFun::VP_SAT;
+			}
+			else if (suffix == "_WtoMJ")
+			{
+				funct = TFun::W_MJ;
+			}
+			else if (suffix == "_MJtoW")
+			{
+				funct = TFun::MJ_W;
 			}
 
 			//Determine if it is a observation or a variable
@@ -2934,6 +2944,14 @@ void CRHMmainDlg::addObservationsToSelected()
 			// VP Sat
 			suffix = "_VPsat";
 			break;
+		case (12):
+			// Watts to MJ/Int
+			suffix = "_WtoMJ";
+			break;
+		case (13):
+			// MJ/Int to Watts
+			suffix = "_MJtoW";
+			break;
 		default:
 			suffix = "";
 			break;
@@ -3528,6 +3546,14 @@ void CRHMmainDlg::addVariableFunctionToSelected()
 	case (11):
 		// VP Saturated
 		suffix = "_VPsat";
+		break;
+	case (12):
+		// Watts to MJ/Int
+		suffix = "_WtoMJ";
+		break;
+	case (13):
+		// MJ/Int to Watts
+		suffix = "MJtoW";
 		break;
 	default:
 		suffix = "";
