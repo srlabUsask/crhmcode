@@ -1956,20 +1956,9 @@ void CRHMmainDlg::OnRunModel()
 
 void CRHMmainDlg::OnExport()
 {
-	CRHMmain* model = CRHMmain::getInstance();
-
-	if (model->getFinishedRun())
-	{
-		CExport exportDlg;
-		exportDlg.DoModal();
-	}
-	else
-	{
-		CString text(L"Run must be completed before export can be performed.");
-		MessageBox(text, MB_OK);
-	}
-
-
+	
+	CExport exportDlg;
+	exportDlg.DoModal();
 	
 }
 

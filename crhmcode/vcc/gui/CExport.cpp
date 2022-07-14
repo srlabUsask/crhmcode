@@ -54,10 +54,13 @@ BOOL CExport::OnInitDialog()
 
 	CRHMmain* model = CRHMmain::getInstance();
 	
-	for (size_t i = 0; i < model->SelectedVariables->size(); i++)
+	if (model->getFinishedRun())
 	{
-		std::string varName = model->cdSeries[i]->getTitle();
-		choicesListBox.AddString(CString(varName.c_str()));
+		for (size_t i = 0; i < model->SelectedVariables->size(); i++)
+		{
+			std::string varName = model->cdSeries[i]->getTitle();
+			choicesListBox.AddString(CString(varName.c_str()));
+		}
 	}
 
 	for (
@@ -66,8 +69,11 @@ BOOL CExport::OnInitDialog()
 		it++
 		)
 	{
+		if (it->second->Count() > 0)
+		{
 		std::string obsName = it->first;
 		choicesListBox.AddString(CString(obsName.c_str()));
+		}
 	}
 
 	return true;
@@ -468,14 +474,17 @@ std::vector<TSeries*>* CExport::PrepareDataForExport()
 		{
 			bool found = false;
 
-			/* Does not have a suffix look for it in variables first */
-			for (int i = 0; i < model->SelectedVariables->size(); i++)
+			if (model->getFinishedRun())
 			{
-				if (model->cdSeries[i]->getTitle() == labelString)
+				/* Does not have a suffix look for it in variables first */
+				for (int i = 0; i < model->SelectedVariables->size(); i++)
 				{
-					selectedSeries->push_back(new TSeries(model->cdSeries[i]));
-					found = true;
-					break;
+					if (model->cdSeries[i]->getTitle() == labelString)
+					{
+						selectedSeries->push_back(new TSeries(model->cdSeries[i]));
+						found = true;
+						break;
+					}
 				}
 			}
 
