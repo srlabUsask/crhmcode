@@ -120,6 +120,7 @@ void CExport::OnSelectedSelectionChange()
 
 void CExport::OnPreviewMorePressed()
 {
+	CWaitCursor wait;
 
 	previewEditBox.ResetContent();
 
@@ -179,48 +180,52 @@ void CExport::OnPreviewMorePressed()
 		previewEditBox.AddString(CString(Sx.c_str()));
 	}
 
-	//Output the data preview
-	for (long index = 0 + this->nextLine; (index < this->nextLine + 1000) && (index < data->at(0)->Count()); index++)
+	if (data->size() > 0)
 	{
-		std::string Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
-		Sx = StandardConverterUtility::GetDateTimeInStringForOutput(data->at(0)->XValue(index));
 
-		switch (formatIndex)
+		for (long index = 0 + this->nextLine; (index < this->nextLine + 1000) && (index < data->at(0)->Count()); index++)
 		{
-		case 0: //:ISO date
-			Sx = StandardConverterUtility::FormatDateTime("ISO", data->at(0)->XValue(index));
-			break;
-		case 1: //MS date
-			Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
-			break;
-		case 2: //MS date
-			Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
-			break;
-		case 3: //yyyy-mm-dd hh:mm date
-			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", data->at(0)->XValue(index));
-			break;
-		}
+			std::string Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+			Sx = StandardConverterUtility::GetDateTimeInStringForOutput(data->at(0)->XValue(index));
 
-		
-
-		for (size_t i = 0; i < data->size(); i++)
-		{
-			
-			ClassVar* thisVar = data->at(i)->getTag();
-			int prec = 7;
-			//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
-
-			if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
+			switch (formatIndex)
 			{
-				prec = 7;
+			case 0: //:ISO date
+				Sx = StandardConverterUtility::FormatDateTime("ISO", data->at(0)->XValue(index));
+				break;
+			case 1: //MS date
+				Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+				break;
+			case 2: //MS date
+				Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+				break;
+			case 3: //yyyy-mm-dd hh:mm date
+				Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", data->at(0)->XValue(index));
+				break;
 			}
 
-			std::string Sy = FloatToStrF(data->at(i)->YValue(index), TFloatFormat::ffGeneral, prec, 10);
-			Sx = Sx + "\t" + Sy;
-			
+
+
+			for (size_t i = 0; i < data->size(); i++)
+			{
+
+				ClassVar* thisVar = data->at(i)->getTag();
+				int prec = 7;
+				//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
+
+				if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
+				{
+					prec = 7;
+				}
+
+				std::string Sy = FloatToStrF(data->at(i)->YValue(index), TFloatFormat::ffGeneral, prec, 10);
+				Sx = Sx + "\t" + Sy;
+
+			}
+
+			previewEditBox.AddString(CString(Sx.c_str()));
 		}
 
-		previewEditBox.AddString(CString(Sx.c_str()));
 	}
 
 	this->nextLine += 1000;
@@ -233,6 +238,8 @@ void CExport::OnPreviewMorePressed()
 
 void CExport::OnSave()
 {
+	CWaitCursor wait;
+
 	CRHMmain* model = CRHMmain::getInstance();
 
 	std::string exportFileName = model->OpenNameReport;
@@ -260,6 +267,7 @@ void CExport::OnSave()
 
 void CExport::OnSaveAs()
 {
+	
 
 	TCHAR * szFilters;
 	CString fileType1;
@@ -284,6 +292,8 @@ void CExport::OnSaveAs()
 
 	if (fileDlg.DoModal() == IDOK)
 	{
+		CWaitCursor wait;
+
 		CString fileName = fileDlg.GetPathName();
 		std::string filePath = CT2A(fileName.GetString());
 
@@ -369,48 +379,52 @@ void CExport::exportToFile(std::string filePath, std::vector<TSeries*>* data)
 		exportStream << Sx.c_str() << endl;
 	}
 
-	//Output the data preview
-	for (long index = 0; index < data->at(0)->Count(); index++)
+	if (data->size() > 0)
 	{
-		std::string Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
-		Sx = StandardConverterUtility::GetDateTimeInStringForOutput(data->at(0)->XValue(index));
 
-		switch (formatIndex)
+		for (long index = 0; index < data->at(0)->Count(); index++)
 		{
-		case 0: //:ISO date
-			Sx = StandardConverterUtility::FormatDateTime("ISO", data->at(0)->XValue(index));
-			break;
-		case 1: //MS date
-			Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
-			break;
-		case 2: //MS date
-			Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
-			break;
-		case 3: //yyyy-mm-dd hh:mm date
-			Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", data->at(0)->XValue(index));
-			break;
-		}
+			std::string Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+			Sx = StandardConverterUtility::GetDateTimeInStringForOutput(data->at(0)->XValue(index));
 
-
-
-		for (size_t i = 0; i < data->size(); i++)
-		{
-			
-			ClassVar* thisVar = data->at(i)->getTag();
-			int prec = 7;
-			//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
-
-			if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
+			switch (formatIndex)
 			{
-				prec = 7;
+			case 0: //:ISO date
+				Sx = StandardConverterUtility::FormatDateTime("ISO", data->at(0)->XValue(index));
+				break;
+			case 1: //MS date
+				Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+				break;
+			case 2: //MS date
+				Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
+				break;
+			case 3: //yyyy-mm-dd hh:mm date
+				Sx = StandardConverterUtility::FormatDateTime("yyyy-mm-dd hh:mm ", data->at(0)->XValue(index));
+				break;
 			}
 
-			std::string Sy = FloatToStrF(data->at(i)->YValue(index), TFloatFormat::ffGeneral, prec, 10);
-			Sx = Sx + "\t" + Sy;
-			
+
+
+			for (size_t i = 0; i < data->size(); i++)
+			{
+
+				ClassVar* thisVar = data->at(i)->getTag();
+				int prec = 7;
+				//Manishankar did this, because GCC is showing segmentation fault here. thisVar remains null.
+
+				if (thisVar->varType == TVar::Int || thisVar->varType == TVar::ReadI)
+				{
+					prec = 7;
+				}
+
+				std::string Sy = FloatToStrF(data->at(i)->YValue(index), TFloatFormat::ffGeneral, prec, 10);
+				Sx = Sx + "\t" + Sy;
+
+			}
+
+			exportStream << Sx.c_str() << endl;
 		}
 
-		exportStream << Sx.c_str() << endl;
 	}
 
 	exportStream.close();
