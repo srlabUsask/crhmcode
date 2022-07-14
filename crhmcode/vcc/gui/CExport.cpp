@@ -477,7 +477,7 @@ std::vector<TSeries*>* CExport::PrepareDataForExport()
 			if (model->getFinishedRun())
 			{
 				/* Does not have a suffix look for it in variables first */
-				for (int i = 0; i < model->SelectedVariables->size(); i++)
+				for (size_t i = 0; i < model->SelectedVariables->size(); i++)
 				{
 					if (model->cdSeries[i]->getTitle() == labelString)
 					{
