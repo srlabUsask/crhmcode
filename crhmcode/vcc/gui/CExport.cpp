@@ -239,6 +239,13 @@ void CExport::OnPreviewMorePressed()
 	{
 		this->nextLine = 0;
 	}
+
+	for (size_t i = 0; i < data->size(); i++)
+	{
+		delete data->at(i);
+	}
+
+	delete data;
 }
 
 
@@ -268,6 +275,13 @@ void CExport::OnSave()
 	std::vector<TSeries*>* processedData = this->PrepareDataForExport();
 
 	exportToFile(exportFileName, processedData);
+
+	for (size_t i = 0; i < processedData->size(); i++)
+	{
+		delete processedData->at(i);
+	}
+
+	delete processedData;
 }
 
 
@@ -306,6 +320,13 @@ void CExport::OnSaveAs()
 		std::vector<TSeries*>* processedData = this->PrepareDataForExport();
 
 		exportToFile(filePath, processedData);
+
+		for (size_t i = 0; i < processedData->size(); i++)
+		{
+			delete processedData->at(i);
+		}
+
+		delete processedData;
 	}
 }
 
