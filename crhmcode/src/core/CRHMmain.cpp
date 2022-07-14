@@ -890,6 +890,14 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 						{
 							funct = TFun::DLTA;
 						}
+						else if (Kind == "_Pos")
+						{
+							funct = TFun::POS;
+						}
+						else if (Kind == "_First")
+						{
+							funct = TFun::FIRST;
+						}
 
 						for (size_t i = 0; i < Indices.size(); i++)
 						{
@@ -4696,7 +4704,14 @@ void CRHMmain::OutputSummary()
 			seriesType = "";
 		}
 
-		if (seriesType == "_Tot" || seriesType == "_Avg" || seriesType == "_Max" || seriesType == "_Min" || seriesType == "_Dlta")
+		if (seriesType == "_Tot" 
+			|| seriesType == "_Avg" 
+			|| seriesType == "_Max" 
+			|| seriesType == "_Min" 
+			|| seriesType == "_Dlta"
+			|| seriesType == "_Pos"
+			|| seriesType == "_First"
+			)
 		{
 			summarySeries.push_back(std::pair<std::string, TSeries*>(it->first, it->second));
 
@@ -4726,6 +4741,10 @@ void CRHMmain::OutputSummary()
 				else if (seriesType == "_Dlta")
 				{
 					funct = TFun::DLTA;
+				}
+				else if (seriesType == "_Pos")
+				{
+					funct = TFun::POS;
 				}
 
 				this->calculateVariableFunctionOutput(it->first, it->second, funct);

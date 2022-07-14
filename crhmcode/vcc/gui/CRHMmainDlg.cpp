@@ -179,6 +179,8 @@ BOOL CRHMmainDlg::OnInitDialog()
 	function_drop_down.AddString(L"Maximum");
 	function_drop_down.AddString(L"Average");
 	function_drop_down.AddString(L"Delta");
+	function_drop_down.AddString(L"Positive");
+	function_drop_down.AddString(L"First");
 	function_drop_down.SetCurSel(0);
 
 	/* Set options for the timebase_drop_down */
@@ -1214,6 +1216,14 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 			else if (suffix == "_Dlta")
 			{
 				funct = TFun::DLTA;
+			}
+			else if (suffix == "_Pos")
+			{
+				funct = TFun::POS;
+			}
+			else if (suffix == "_First")
+			{
+				funct = TFun::FIRST;
 			}
 
 			//Determine if it is a observation or a variable
@@ -2880,6 +2890,14 @@ void CRHMmainDlg::addObservationsToSelected()
 			// Delta
 			suffix = "_Dlta";
 			break;
+		case (6):
+			// Positive
+			suffix = "_Pos";
+			break;
+		case (7):
+			// First
+			suffix = "_First";
+			break;
 		default:
 			suffix = "";
 			break;
@@ -3450,6 +3468,14 @@ void CRHMmainDlg::addVariableFunctionToSelected()
 	case (5):
 		// Delta
 		suffix = "_Dlta";
+		break;
+	case (6):
+		// Positive
+		suffix = "_Pos";
+		break;
+	case (7):
+		// First
+		suffix = "_First";
 		break;
 	default:
 		suffix = "";
