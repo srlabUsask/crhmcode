@@ -906,6 +906,10 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 						{
 							funct = TFun::CNT;
 						}
+						else if (Kind == "_Cnt0")
+						{
+							funct = TFun::CNT0;
+						}
 
 						for (size_t i = 0; i < Indices.size(); i++)
 						{
@@ -4765,6 +4769,10 @@ void CRHMmain::OutputSummary()
 				else if (seriesType == "_Cnt")
 				{
 					funct = TFun::CNT;
+				}
+				else if (seriesType == "_Cnt0")
+				{
+					funct = TFun::CNT0;
 				}
 
 				this->calculateVariableFunctionOutput(it->first, it->second, funct);

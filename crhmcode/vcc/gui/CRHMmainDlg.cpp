@@ -183,6 +183,7 @@ BOOL CRHMmainDlg::OnInitDialog()
 	function_drop_down.AddString(L"First");
 	function_drop_down.AddString(L"Last");
 	function_drop_down.AddString(L"Count");
+	function_drop_down.AddString(L"Count0");
 	function_drop_down.SetCurSel(0);
 
 	/* Set options for the timebase_drop_down */
@@ -1234,6 +1235,10 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 			else if (suffix == "_Cnt")
 			{
 				funct = TFun::CNT;
+			}
+			else if (suffix == "_Cnt0")
+			{
+				funct = TFun::CNT0;
 			}
 
 			//Determine if it is a observation or a variable
@@ -2916,6 +2921,10 @@ void CRHMmainDlg::addObservationsToSelected()
 			// Count
 			suffix = "_Cnt";
 			break;
+		case (10):
+			// Count0
+			suffix = "_Cnt0";
+			break;
 		default:
 			suffix = "";
 			break;
@@ -3502,6 +3511,10 @@ void CRHMmainDlg::addVariableFunctionToSelected()
 	case (9):
 		// Count
 		suffix = "_Cnt";
+		break;
+	case (10):
+		// Count0
+		suffix = "_Cnt0";
 		break;
 	default:
 		suffix = "";
