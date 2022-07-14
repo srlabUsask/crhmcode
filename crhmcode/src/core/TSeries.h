@@ -60,6 +60,10 @@ private:
 
 			return findPointOnXAxisRecurse(newMindex, newPivot, newMaxIndex, key);
 		}
+		else
+		{
+			return -1;
+		}
 	};
 
 public:
