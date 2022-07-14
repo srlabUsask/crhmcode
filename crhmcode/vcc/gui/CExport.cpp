@@ -93,7 +93,7 @@ void CExport::OnChoicesSelectionChange()
 		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
 		std::string selectedString(pszConvertedAnsiString);
 
-		int found = selectedListBox.FindString(-1, selectedText);
+		int found = selectedListBox.FindStringExact(-1, selectedText);
 		if (found == LB_ERR)
 		{
 			selectedListBox.AddString(selectedText);
