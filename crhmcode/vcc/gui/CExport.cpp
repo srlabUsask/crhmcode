@@ -95,6 +95,8 @@ void CExport::OnChoicesSelectionChange()
 
 	}
 
+	this->nextLine = 0;
+
 	delete[] selectedIndicies;
 }
 
@@ -109,6 +111,8 @@ void CExport::OnSelectedSelectionChange()
 	{
 		selectedListBox.DeleteString(selectedIndicies[i]);
 	}
+
+	this->nextLine = 0;
 
 	delete[] selectedIndicies;
 }
