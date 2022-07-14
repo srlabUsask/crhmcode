@@ -910,6 +910,10 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 						{
 							funct = TFun::CNT0;
 						}
+						else if (Kind == "_VPsat")
+						{
+							funct = TFun::VP_SAT;
+						}
 
 						for (size_t i = 0; i < Indices.size(); i++)
 						{
@@ -4773,6 +4777,10 @@ void CRHMmain::OutputSummary()
 				else if (seriesType == "_Cnt0")
 				{
 					funct = TFun::CNT0;
+				}
+				else if (seriesType == "_VPsat")
+				{
+					funct = TFun::VP_SAT;
 				}
 
 				this->calculateVariableFunctionOutput(it->first, it->second, funct);

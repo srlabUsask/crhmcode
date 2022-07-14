@@ -184,6 +184,7 @@ BOOL CRHMmainDlg::OnInitDialog()
 	function_drop_down.AddString(L"Last");
 	function_drop_down.AddString(L"Count");
 	function_drop_down.AddString(L"Count0");
+	function_drop_down.AddString(L"VP Saturated");
 	function_drop_down.SetCurSel(0);
 
 	/* Set options for the timebase_drop_down */
@@ -1239,6 +1240,10 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 			else if (suffix == "_Cnt0")
 			{
 				funct = TFun::CNT0;
+			}
+			else if (suffix == "_VPsat")
+			{
+				funct = TFun::VP_SAT;
 			}
 
 			//Determine if it is a observation or a variable
@@ -2925,6 +2930,10 @@ void CRHMmainDlg::addObservationsToSelected()
 			// Count0
 			suffix = "_Cnt0";
 			break;
+		case (11):
+			// VP Sat
+			suffix = "_VPsat";
+			break;
 		default:
 			suffix = "";
 			break;
@@ -3515,6 +3524,10 @@ void CRHMmainDlg::addVariableFunctionToSelected()
 	case (10):
 		// Count0
 		suffix = "_Cnt0";
+		break;
+	case (11):
+		// VP Saturated
+		suffix = "_VPsat";
 		break;
 	default:
 		suffix = "";
