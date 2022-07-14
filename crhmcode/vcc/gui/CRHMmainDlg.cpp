@@ -3553,7 +3553,7 @@ void CRHMmainDlg::addVariableFunctionToSelected()
 		break;
 	case (13):
 		// MJ/Int to Watts
-		suffix = "MJtoW";
+		suffix = "_MJtoW";
 		break;
 	default:
 		suffix = "";

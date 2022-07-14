@@ -918,7 +918,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 						{
 							funct = TFun::W_MJ;
 						}
-						else if (Kind == "MJtoW")
+						else if (Kind == "_MJtoW")
 						{
 							funct = TFun::MJ_W;
 						}
@@ -4735,6 +4735,12 @@ void CRHMmain::OutputSummary()
 			|| seriesType == "_Dlta"
 			|| seriesType == "_Pos"
 			|| seriesType == "_First"
+			|| seriesType == "_Last"
+			|| seriesType == "_Cnt"
+			|| seriesType == "_Cnt0"
+			|| seriesType == "_VPsat"
+			|| seriesType == "_WtoMJ"
+			|| seriesType == "_MJtoW"
 			)
 		{
 			summarySeries.push_back(std::pair<std::string, TSeries*>(it->first, it->second));
@@ -4794,7 +4800,7 @@ void CRHMmain::OutputSummary()
 				{
 					funct = TFun::W_MJ;
 				}
-				else if (seriesType == "MJtoW")
+				else if (seriesType == "_MJtoW")
 				{
 					funct = TFun::MJ_W;
 				}
