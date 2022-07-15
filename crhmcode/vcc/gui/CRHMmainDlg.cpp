@@ -1773,10 +1773,10 @@ void CRHMmainDlg::OnCloseAllObservations()
 
 void CRHMmainDlg::OnBuildConstruct()
 {
-		CConstruct* build_form;
+		ConstructDlg* build_form;
 	std::map<std::string, ClassModule*>* all_module_list = CRHMmain::getInstance()->getAllmodules();
 
-	build_form = new CConstruct();
+	build_form = new ConstructDlg();
 	
 	INT_PTR nRet = build_form->DoModal();
 

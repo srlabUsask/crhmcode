@@ -61,7 +61,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CConstruct.cpp">
+    <ClCompile Include="gui\ConstructDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\ExportDlg.cpp">
@@ -2130,7 +2130,7 @@
     <ClInclude Include="gui\CConstructCore.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gui\CConstruct.h">
+    <ClInclude Include="gui\ConstructDlg.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\core\VarCHRM.h">

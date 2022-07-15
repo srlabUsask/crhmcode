@@ -9,7 +9,7 @@
 #include "COptions.h"
 #include "CReport.h"
 #include "ExportDlg.h"
-#include "CConstruct.h"
+#include "ConstructDlg.h"
 #include "ParametersDlg.h"
 #include "COptions.h"
 #include "../../src/core/GlobalDll.h"

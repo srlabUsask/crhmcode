@@ -162,7 +162,7 @@ void CCRHMGUIView::OpenParametersDialog()
 
 void CCRHMGUIView::OnBuildConstruct()
 {
-	CConstruct dlgConstruct;
+	ConstructDlg dlgConstruct;
 	dlgConstruct.DoModal();
 }
 

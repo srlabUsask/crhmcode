@@ -13,7 +13,7 @@
 #include "MacroEntryDlg.h"
 #include "FlowDiagramDlg.h"
 #include "CReport.h"
-#include "CConstruct.h"
+#include "ConstructDlg.h"
 #include "../RightClickListBox.h"
 #include "../HierarchyDlg.h"
 #include "ExportDlg.h"
