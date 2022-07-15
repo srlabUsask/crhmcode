@@ -392,7 +392,7 @@
     <ClCompile Include="..\src\modules\waterquality\WQ_Soil_NPCcycling.cpp" />
     <ClCompile Include="ChiralClickButton.cpp" />
     <ClCompile Include="gui\CConstruct.cpp" />
-    <ClCompile Include="gui\CExport.cpp" />
+    <ClCompile Include="gui\ExportDlg.cpp" />
     <ClCompile Include="gui\ConsolidateParamCard.cpp" />
     <ClCompile Include="gui\ConsolidateParamDlg.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
@@ -664,7 +664,7 @@
     <ClInclude Include="ChiralClickButton.h" />
     <ClInclude Include="gui\CConstruct.h" />
     <ClInclude Include="gui\CConstructCore.h" />
-    <ClInclude Include="gui\CExport.h" />
+    <ClInclude Include="gui\ExportDlg.h" />
     <ClInclude Include="gui\ConsolidateParamCard.h" />
     <ClInclude Include="gui\ConsolidateParamDlg.h" />
     <ClInclude Include="gui\COptions.h" />

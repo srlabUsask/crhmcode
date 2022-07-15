@@ -148,7 +148,7 @@ void CCRHMGUIView::OnDialogShow()
 
 void CCRHMGUIView::OnExport()
 {
-	CExport dlgExport;
+	ExportDlg dlgExport;
 	dlgExport.DoModal();
 }
 

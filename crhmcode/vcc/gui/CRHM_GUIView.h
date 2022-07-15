@@ -8,7 +8,7 @@
 #include "CRHM_GUIDoc.h"
 #include "COptions.h"
 #include "CReport.h"
-#include "CExport.h"
+#include "ExportDlg.h"
 #include "CConstruct.h"
 #include "ParametersDlg.h"
 #include "COptions.h"

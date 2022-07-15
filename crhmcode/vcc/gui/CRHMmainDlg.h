@@ -16,7 +16,7 @@
 #include "CConstruct.h"
 #include "../RightClickListBox.h"
 #include "../HierarchyDlg.h"
-#include "CExport.h"
+#include "ExportDlg.h"
 #include "../ChiralClickButton.h"
 #include "ParametersDlg.h"
 #include "RefreshRateDlg.h"	

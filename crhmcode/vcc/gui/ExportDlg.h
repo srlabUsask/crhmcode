@@ -11,9 +11,9 @@
 
 // CExport dialog
 
-class CExport : public CDialog
+class ExportDlg : public CDialog
 {
-	DECLARE_DYNAMIC(CExport)
+	DECLARE_DYNAMIC(ExportDlg)
 
 	DECLARE_MESSAGE_MAP()
 
@@ -22,12 +22,12 @@ public:
 	/**
 	* Standard constructor 
 	*/
-	CExport(CWnd* pParent = nullptr);
+	ExportDlg(CWnd* pParent = nullptr);
 
 	/**
 	* Standard deconstructor
 	*/
-	virtual ~CExport();
+	virtual ~ExportDlg();
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME

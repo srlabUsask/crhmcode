@@ -1997,7 +1997,7 @@ void CRHMmainDlg::OnRunModel()
 void CRHMmainDlg::OnExport()
 {
 	
-	CExport exportDlg;
+	ExportDlg exportDlg;
 	exportDlg.DoModal();
 	
 }

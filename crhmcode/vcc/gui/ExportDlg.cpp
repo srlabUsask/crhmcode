@@ -1,23 +1,23 @@
-#include "CExport.h"
+#include "ExportDlg.h"
 
 
-IMPLEMENT_DYNAMIC(CExport, CDialog)
+IMPLEMENT_DYNAMIC(ExportDlg, CDialog)
 
 
-CExport::CExport(CWnd* pParent /*=nullptr*/)
+ExportDlg::ExportDlg(CWnd* pParent /*=nullptr*/)
 	: CDialog(EXPORT_DLG, pParent)
 {
 	this->next_line = 0;
 }
 
 
-CExport::~CExport()
+ExportDlg::~ExportDlg()
 {
 
 }
 
 
-void CExport::DoDataExchange(CDataExchange* pDX)
+void ExportDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, ID_EXPORT_CHOICES_LIST_BOX, outputs_list_box);
@@ -28,17 +28,17 @@ void CExport::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CExport, CDialog)
-	ON_LBN_SELCHANGE(ID_EXPORT_CHOICES_LIST_BOX, &CExport::OnOutputsSelectionChange)
-	ON_LBN_SELCHANGE(ID_EXPORT_SELECTED_LIST_BOX, &CExport::OnSelectedSelectionChange)
-	ON_BN_CLICKED(ID_EXPORT_PREVIEW_MORE, &CExport::OnPreviewPressed)
-	ON_COMMAND(ID_EXPORT_SAVE, &CExport::OnSave)
-	ON_COMMAND(ID_EXPORT_SAVE_AS, &CExport::OnSaveAs)
-	ON_COMMAND(ID_EXPORT_EXIT, &CExport::OnExit)
+BEGIN_MESSAGE_MAP(ExportDlg, CDialog)
+	ON_LBN_SELCHANGE(ID_EXPORT_CHOICES_LIST_BOX, &ExportDlg::OnOutputsSelectionChange)
+	ON_LBN_SELCHANGE(ID_EXPORT_SELECTED_LIST_BOX, &ExportDlg::OnSelectedSelectionChange)
+	ON_BN_CLICKED(ID_EXPORT_PREVIEW_MORE, &ExportDlg::OnPreviewPressed)
+	ON_COMMAND(ID_EXPORT_SAVE, &ExportDlg::OnSave)
+	ON_COMMAND(ID_EXPORT_SAVE_AS, &ExportDlg::OnSaveAs)
+	ON_COMMAND(ID_EXPORT_EXIT, &ExportDlg::OnExit)
 END_MESSAGE_MAP()
 
 
-BOOL CExport::OnInitDialog()
+BOOL ExportDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
@@ -79,7 +79,7 @@ BOOL CExport::OnInitDialog()
 }
 
 
-void CExport::OnOutputsSelectionChange()
+void ExportDlg::OnOutputsSelectionChange()
 {
 	int selectedCount = outputs_list_box.GetSelCount();
 	int * selectedIndicies = new int[selectedCount];
@@ -106,7 +106,7 @@ void CExport::OnOutputsSelectionChange()
 }
 
 
-void CExport::OnSelectedSelectionChange()
+void ExportDlg::OnSelectedSelectionChange()
 {
 	int selectedCount = selected_list_box.GetSelCount();
 	int* selectedIndicies = new int[selectedCount];
@@ -123,7 +123,7 @@ void CExport::OnSelectedSelectionChange()
 }
 
 
-void CExport::OnPreviewPressed()
+void ExportDlg::OnPreviewPressed()
 {
 	CWaitCursor wait;
 
@@ -246,7 +246,7 @@ void CExport::OnPreviewPressed()
 }
 
 
-void CExport::OnSave()
+void ExportDlg::OnSave()
 {
 	CWaitCursor wait;
 
@@ -282,7 +282,7 @@ void CExport::OnSave()
 }
 
 
-void CExport::OnSaveAs()
+void ExportDlg::OnSaveAs()
 {
 	TCHAR * szFilters;
 	CString fileType1;
@@ -325,13 +325,13 @@ void CExport::OnSaveAs()
 }
 
 
-void CExport::OnExit()
+void ExportDlg::OnExit()
 {
 	this->OnCancel();
 }
 
 
-void CExport::exportToFile(std::string filePath, std::vector<TSeries*>* data)
+void ExportDlg::exportToFile(std::string filePath, std::vector<TSeries*>* data)
 {
 	std::basic_ofstream<char, std::char_traits<char>> exportStream = std::basic_ofstream<char, std::char_traits<char>>();
 	exportStream.open(filePath);
@@ -446,7 +446,7 @@ void CExport::exportToFile(std::string filePath, std::vector<TSeries*>* data)
 }
 
 
-std::vector<TSeries*>* CExport::PrepareDataForExport()
+std::vector<TSeries*>* ExportDlg::PrepareDataForExport()
 {
 	CRHMmain* model = CRHMmain::getInstance();
 	

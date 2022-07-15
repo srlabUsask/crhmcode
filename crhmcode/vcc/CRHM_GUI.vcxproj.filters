@@ -64,7 +64,7 @@
     <ClCompile Include="gui\CConstruct.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\CExport.cpp">
+    <ClCompile Include="gui\ExportDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\COptions.cpp">
@@ -2124,7 +2124,7 @@
     <ClInclude Include="gui\COptions.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gui\CExport.h">
+    <ClInclude Include="gui\ExportDlg.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gui\CConstructCore.h">
