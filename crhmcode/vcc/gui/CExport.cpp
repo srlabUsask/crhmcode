@@ -7,7 +7,7 @@ IMPLEMENT_DYNAMIC(CExport, CDialog)
 CExport::CExport(CWnd* pParent /*=nullptr*/)
 	: CDialog(EXPORT_DLG, pParent)
 {
-
+	this->next_line = 0;
 }
 
 
@@ -20,18 +20,18 @@ CExport::~CExport()
 void CExport::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, ID_EXPORT_CHOICES_LIST_BOX, choicesListBox);
-	DDX_Control(pDX, ID_EXPORT_SELECTED_LIST_BOX, selectedListBox);
-	DDX_Control(pDX, ID_EXPORT_PREVIEW_MORE, previewMoreButton);
-	DDX_Control(pDX, ID_EXPORT_FORMAT_BTN, formatToggle);
-	DDX_Control(pDX, ID_EXPORT_PREVIEW_EDIT_BOX, previewEditBox);
+	DDX_Control(pDX, ID_EXPORT_CHOICES_LIST_BOX, outputs_list_box);
+	DDX_Control(pDX, ID_EXPORT_SELECTED_LIST_BOX, selected_list_box);
+	DDX_Control(pDX, ID_EXPORT_PREVIEW_MORE, preview_button);
+	DDX_Control(pDX, ID_EXPORT_FORMAT_BTN, format_toggle);
+	DDX_Control(pDX, ID_EXPORT_PREVIEW_EDIT_BOX, preview_list_box);
 }
 
 
 BEGIN_MESSAGE_MAP(CExport, CDialog)
-	ON_LBN_SELCHANGE(ID_EXPORT_CHOICES_LIST_BOX, &CExport::OnChoicesSelectionChange)
+	ON_LBN_SELCHANGE(ID_EXPORT_CHOICES_LIST_BOX, &CExport::OnOutputsSelectionChange)
 	ON_LBN_SELCHANGE(ID_EXPORT_SELECTED_LIST_BOX, &CExport::OnSelectedSelectionChange)
-	ON_BN_CLICKED(ID_EXPORT_PREVIEW_MORE, &CExport::OnPreviewMorePressed)
+	ON_BN_CLICKED(ID_EXPORT_PREVIEW_MORE, &CExport::OnPreviewPressed)
 	ON_COMMAND(ID_EXPORT_SAVE, &CExport::OnSave)
 	ON_COMMAND(ID_EXPORT_SAVE_AS, &CExport::OnSaveAs)
 	ON_COMMAND(ID_EXPORT_EXIT, &CExport::OnExit)
@@ -42,15 +42,14 @@ BOOL CExport::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	formatToggle.AddString(L"Standard");
-	formatToggle.AddString(L"OBS");
-	formatToggle.AddString(L"STD w/ MS dates");
-	formatToggle.AddString(L"STD w/ YYYYMMDD dates");
+	format_toggle.AddString(L"Standard");
+	format_toggle.AddString(L"OBS");
+	format_toggle.AddString(L"STD w/ MS dates");
+	format_toggle.AddString(L"STD w/ YYYYMMDD dates");
+	format_toggle.SetCurSel(0);
 
-	formatToggle.SetCurSel(0);
-
-	choicesListBox.ResetContent();
-	selectedListBox.ResetContent();
+	outputs_list_box.ResetContent();
+	selected_list_box.ResetContent();
 
 	CRHMmain* model = CRHMmain::getInstance();
 	
@@ -59,7 +58,7 @@ BOOL CExport::OnInitDialog()
 		for (size_t i = 0; i < model->SelectedVariables->size(); i++)
 		{
 			std::string varName = model->cdSeries[i]->getTitle();
-			choicesListBox.AddString(CString(varName.c_str()));
+			outputs_list_box.AddString(CString(varName.c_str()));
 		}
 	}
 
@@ -72,7 +71,7 @@ BOOL CExport::OnInitDialog()
 		if (it->second->Count() > 0)
 		{
 		std::string obsName = it->first;
-		choicesListBox.AddString(CString(obsName.c_str()));
+		outputs_list_box.AddString(CString(obsName.c_str()));
 		}
 	}
 
@@ -80,28 +79,28 @@ BOOL CExport::OnInitDialog()
 }
 
 
-void CExport::OnChoicesSelectionChange()
+void CExport::OnOutputsSelectionChange()
 {
-	int selectedCount = choicesListBox.GetSelCount();
+	int selectedCount = outputs_list_box.GetSelCount();
 	int * selectedIndicies = new int[selectedCount];
-	choicesListBox.GetSelItems(selectedCount, selectedIndicies);
+	outputs_list_box.GetSelItems(selectedCount, selectedIndicies);
 
 	for (int i = 0; i < selectedCount; i++)
 	{
 		CString selectedText;
-		choicesListBox.GetText(selectedIndicies[i], selectedText);
+		outputs_list_box.GetText(selectedIndicies[i], selectedText);
 		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
 		std::string selectedString(pszConvertedAnsiString);
 
-		int found = selectedListBox.FindStringExact(-1, selectedText);
+		int found = selected_list_box.FindStringExact(-1, selectedText);
 		if (found == LB_ERR)
 		{
-			selectedListBox.AddString(selectedText);
+			selected_list_box.AddString(selectedText);
 		}
 
 	}
 
-	this->nextLine = 0;
+	this->next_line = 0;
 
 	delete[] selectedIndicies;
 }
@@ -109,26 +108,26 @@ void CExport::OnChoicesSelectionChange()
 
 void CExport::OnSelectedSelectionChange()
 {
-	int selectedCount = selectedListBox.GetSelCount();
+	int selectedCount = selected_list_box.GetSelCount();
 	int* selectedIndicies = new int[selectedCount];
-	selectedListBox.GetSelItems(selectedCount, selectedIndicies);
+	selected_list_box.GetSelItems(selectedCount, selectedIndicies);
 
 	for (int i = 0; i < selectedCount; i++)
 	{
-		selectedListBox.DeleteString(selectedIndicies[i]);
+		selected_list_box.DeleteString(selectedIndicies[i]);
 	}
 
-	this->nextLine = 0;
+	this->next_line = 0;
 
 	delete[] selectedIndicies;
 }
 
 
-void CExport::OnPreviewMorePressed()
+void CExport::OnPreviewPressed()
 {
 	CWaitCursor wait;
 
-	previewEditBox.ResetContent();
+	preview_list_box.ResetContent();
 
 	CRHMmain* model = CRHMmain::getInstance();
 
@@ -139,18 +138,18 @@ void CExport::OnPreviewMorePressed()
 
 	//Output the header
 
-	int formatIndex = formatToggle.GetCurSel();
+	int formatIndex = format_toggle.GetCurSel();
 
 	if (formatIndex == 1)
 	{
-		previewEditBox.AddString(L"Future File Description");
+		preview_list_box.AddString(L"Future File Description");
 		for (size_t i = 0; i < data->size(); i++)
 		{
 			ClassVar* thisVar = data->at(i)->getTag();
 			Sx = data->at(i)->getTitle();
 			Sx += std::string(" 1 ");
 			Sx += thisVar->units;
-			previewEditBox.AddString(CString(Sx.c_str()));
+			preview_list_box.AddString(CString(Sx.c_str()));
 		}
 
 		Sx = "###### time";
@@ -161,7 +160,7 @@ void CExport::OnPreviewMorePressed()
 			Sx.append(S);
 		}
 
-		previewEditBox.AddString(CString(Sx.c_str()));
+		preview_list_box.AddString(CString(Sx.c_str()));
 
 	}
 	else
@@ -173,7 +172,7 @@ void CExport::OnPreviewMorePressed()
 			Sx.append("\t");
 			Sx.append(S);
 		}
-		previewEditBox.AddString(CString(Sx.c_str()));
+		preview_list_box.AddString(CString(Sx.c_str()));
 
 		Sx = "units";
 		for (size_t i = 0; i < data->size(); i++)
@@ -183,13 +182,13 @@ void CExport::OnPreviewMorePressed()
 			Sx.append("\t");
 			Sx.append(S);
 		}
-		previewEditBox.AddString(CString(Sx.c_str()));
+		preview_list_box.AddString(CString(Sx.c_str()));
 	}
 
 	if (data->size() > 0)
 	{
 
-		for (long index = 0 + this->nextLine; (index < this->nextLine + 1000) && (index < data->at(0)->Count()); index++)
+		for (long index = 0 + this->next_line; (index < this->next_line + 1000) && (index < data->at(0)->Count()); index++)
 		{
 			std::string Sx = FloatToStrF(data->at(0)->XValue(index), TFloatFormat::ffGeneral, 10, 0);
 			Sx = StandardConverterUtility::GetDateTimeInStringForOutput(data->at(0)->XValue(index));
@@ -210,8 +209,6 @@ void CExport::OnPreviewMorePressed()
 				break;
 			}
 
-
-
 			for (size_t i = 0; i < data->size(); i++)
 			{
 
@@ -229,15 +226,15 @@ void CExport::OnPreviewMorePressed()
 
 			}
 
-			previewEditBox.AddString(CString(Sx.c_str()));
+			preview_list_box.AddString(CString(Sx.c_str()));
 		}
 
 	}
 
-	this->nextLine += 1000;
-	if (this->nextLine > Global::DTmax)
+	this->next_line += 1000;
+	if (this->next_line > Global::DTmax)
 	{
-		this->nextLine = 0;
+		this->next_line = 0;
 	}
 
 	for (size_t i = 0; i < data->size(); i++)
@@ -261,7 +258,7 @@ void CExport::OnSave()
 	std::string extension = exportFileName.substr(extStart, std::string::npos);
 	exportFileName = exportFileName.substr(0, extStart);
 
-	if (this->formatToggle.GetCurSel() == 1)
+	if (this->format_toggle.GetCurSel() == 1)
 	{
 		extension = ".obs";
 	}
@@ -287,14 +284,11 @@ void CExport::OnSave()
 
 void CExport::OnSaveAs()
 {
-	
-
 	TCHAR * szFilters;
 	CString fileType1;
 	CString fileType2;
 
-
-	if (this->formatToggle.GetCurSel() == 1)
+	if (this->format_toggle.GetCurSel() == 1)
 	{
 		szFilters = _T("MyType Files (*.obs)|*.obs|All Files (*.*)|*.*||");
 		fileType1 = _T("obs");
@@ -339,7 +333,6 @@ void CExport::OnExit()
 
 void CExport::exportToFile(std::string filePath, std::vector<TSeries*>* data)
 {
-
 	std::basic_ofstream<char, std::char_traits<char>> exportStream = std::basic_ofstream<char, std::char_traits<char>>();
 	exportStream.open(filePath);
 
@@ -354,11 +347,7 @@ void CExport::exportToFile(std::string filePath, std::vector<TSeries*>* data)
 	std::string Sx;
 	std::string Sy;
 
-	//std::vector<int>* exportIndex = getExportIndex();
-
-	//Output the header
-
-	int formatIndex = formatToggle.GetCurSel();
+	int formatIndex = format_toggle.GetCurSel();
 
 	if (formatIndex == 1)
 	{
@@ -430,8 +419,6 @@ void CExport::exportToFile(std::string filePath, std::vector<TSeries*>* data)
 				break;
 			}
 
-
-
 			for (size_t i = 0; i < data->size(); i++)
 			{
 
@@ -465,11 +452,11 @@ std::vector<TSeries*>* CExport::PrepareDataForExport()
 	
 	std::vector<TSeries*>* selectedSeries = new std::vector<TSeries*>();
 
-	for (int i = 0; i < this->selectedListBox.GetCount(); i++)
+	for (int i = 0; i < this->selected_list_box.GetCount(); i++)
 	{
 		CString labelText;
 		std::string labelString;
-		this->selectedListBox.GetText(i, labelText);
+		this->selected_list_box.GetText(i, labelText);
 		CT2CA pszConvertedAnsiString(labelText);
 		labelString.assign(pszConvertedAnsiString);
 
