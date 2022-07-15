@@ -1091,12 +1091,12 @@ void FlowDiagramDlg::GetModuleDetails(string S, ClassModule* thisModule, FDModul
 		//CString cstr4(StringGrid1->Cells[4][i].c_str());
 		//CString cstr5(StringGrid1->Cells[5][i].c_str());
 
-		m->observations[i-1] = StringGrid1->Cells[0][i];
-		m->modules[i - 1] = StringGrid1->Cells[1][i];  //put variable
-		m->inputs[i-1] = StringGrid1->Cells[2][i]; //put variable
-		m->outputs[i - 1] = StringGrid1->Cells[3][i];
-		m->parameters[i - 1] = StringGrid1->Cells[4][i];
-		m->newobservations[i - 1] = StringGrid1->Cells[5][i];
+		m->observations.push_back(StringGrid1->Cells[0][i]);
+		m->modules.push_back(StringGrid1->Cells[1][i]);
+		m->inputs.push_back(StringGrid1->Cells[2][i]);
+		m->outputs.push_back(StringGrid1->Cells[3][i]);
+		m->parameters.push_back(StringGrid1->Cells[4][i]);
+		m->newobservations.push_back(StringGrid1->Cells[5][i]);
 		m->count++;
 
 		//int nIndex = listcontrol.InsertItem(i - 1, cstr0);
@@ -1309,8 +1309,20 @@ int FlowDiagramDlg::FindPreviousModule(string input, int mcount, FDModule mods[]
 			if (input == mods[i].parameters[j]) { return i; }
 			if (input == mods[i].outputs[j]) { return i; }
 		}*/
-		for (int j = 0; j < mods[i].ilength; j++) { if (input == mods[i].inputlist[j]) { return i; } }
-		for (int j = 0; j < mods[i].olength; j++) { if (input == mods[i].outputlist[j]) { return i; } }
+		for (int j = 0; j < mods[i].ilength; j++) 
+		{ 
+			if (input == mods[i].inputlist[j]) 
+			{ 
+				return i; 
+			} 
+		}
+		for (int j = 0; j < mods[i].olength; j++) 
+		{ 
+			if (input == mods[i].outputlist[j]) 
+			{ 
+				return i; 
+			} 
+		}
 	}
 
 	return -1;
@@ -2096,7 +2108,7 @@ void FlowDiagramDlg::GetModulesInputsAndOutputs(FDModule * mods)
 		mods[ii].modulename = S;
 		for (size_t i = 0; i < ModList->size(); i++) 
 		{ 
-			mods[ii].inputlist[i] = ModList->at(i); 
+			mods[ii].inputlist.push_back(ModList->at(i)); 
 		}
 		mods[ii].ilength = ModList->size();
 
