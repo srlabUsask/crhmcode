@@ -140,6 +140,8 @@ void ExportDlg::OnPreviewPressed()
 
 	int formatIndex = format_toggle.GetCurSel();
 
+	int charsInLongestLine = 0;
+
 	if (formatIndex == 1)
 	{
 		preview_list_box.AddString(L"Future File Description");
@@ -149,6 +151,12 @@ void ExportDlg::OnPreviewPressed()
 			Sx = data->at(i)->getTitle();
 			Sx += std::string(" 1 ");
 			Sx += thisVar->units;
+
+			if (Sx.length() > charsInLongestLine)
+			{
+				charsInLongestLine = Sx.length();
+			}
+
 			preview_list_box.AddString(CString(Sx.c_str()));
 		}
 
@@ -158,6 +166,11 @@ void ExportDlg::OnPreviewPressed()
 			std::string S = data->at(i)->getTitle();
 			Sx.append("\t");
 			Sx.append(S);
+		}
+
+		if (Sx.length() > charsInLongestLine)
+		{
+			charsInLongestLine = Sx.length();
 		}
 
 		preview_list_box.AddString(CString(Sx.c_str()));
@@ -172,6 +185,12 @@ void ExportDlg::OnPreviewPressed()
 			Sx.append("\t");
 			Sx.append(S);
 		}
+
+		if (Sx.length() > charsInLongestLine)
+		{
+			charsInLongestLine = Sx.length();
+		}
+
 		preview_list_box.AddString(CString(Sx.c_str()));
 
 		Sx = "units";
@@ -182,9 +201,16 @@ void ExportDlg::OnPreviewPressed()
 			Sx.append("\t");
 			Sx.append(S);
 		}
+
+		if (Sx.length() > charsInLongestLine)
+		{
+			charsInLongestLine = Sx.length();
+		}
+
 		preview_list_box.AddString(CString(Sx.c_str()));
 	}
 
+	
 	if (data->size() > 0)
 	{
 
@@ -226,10 +252,17 @@ void ExportDlg::OnPreviewPressed()
 
 			}
 
+			if (Sx.length() > charsInLongestLine)
+			{
+				charsInLongestLine = Sx.length();
+			}
+
 			preview_list_box.AddString(CString(Sx.c_str()));
 		}
 
 	}
+
+	preview_list_box.SetHorizontalExtent(charsInLongestLine * 12);
 
 	this->next_line += 1000;
 	if (this->next_line > Global::DTmax)
