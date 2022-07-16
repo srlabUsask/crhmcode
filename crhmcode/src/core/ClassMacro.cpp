@@ -22,7 +22,7 @@ double Fyear() { // used for variable YEAR
 }
 
 double Fjulian() { // used for variable JULIAN
-	return Julian("now");
+	return julian("now");
 }
 
 double Fgetstep() { // used for variable STEP
