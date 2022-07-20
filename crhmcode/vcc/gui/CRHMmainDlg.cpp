@@ -2990,9 +2990,77 @@ void CRHMmainDlg::addObservationsArrayToSelected()
 		/*Get the variable from the model*/
 		ClassVar* obsVar = model->AllObservations->find(selectedString)->second;
 
-		for (int i = 1; i <= Global::maxobs; i++)
+		for (int i = 1; i <= obsVar->dim; i++)
 		{
-			std::string seriesTitle = selectedString + "(" + to_string(i) + ")";
+
+			/* Retreive the value of the function selector to determine the suffix */
+			int functValue = function_drop_down.GetCurSel();
+			std::string suffix;
+
+			switch (functValue)
+			{
+			case (0):
+				// Observation;
+				suffix = "";
+				break;
+			case (1):
+				// Total
+				suffix = "_Tot";
+				break;
+			case (2):
+				// Minimum
+				suffix = "_Min";
+				break;
+			case (3):
+				// Maximum
+				suffix = "_Max";
+				break;
+			case (4):
+				// Average
+				suffix = "_Avg";
+				break;
+			case (5):
+				// Delta
+				suffix = "_Dlta";
+				break;
+			case (6):
+				// Positive
+				suffix = "_Pos";
+				break;
+			case (7):
+				// First
+				suffix = "_First";
+				break;
+			case (8):
+				// Last
+				suffix = "_Last";
+				break;
+			case (9):
+				// Count
+				suffix = "_Cnt";
+				break;
+			case (10):
+				// Count0
+				suffix = "_Cnt0";
+				break;
+			case (11):
+				// VP Sat
+				suffix = "_VPsat";
+				break;
+			case (12):
+				// Watts to MJ/Int
+				suffix = "_WtoMJ";
+				break;
+			case (13):
+				// MJ/Int to Watts
+				suffix = "_MJtoW";
+				break;
+			default:
+				suffix = "";
+				break;
+			}
+
+			std::string seriesTitle = selectedString + "(" + to_string(i) + ")" + suffix;
 
 			bool dimensionSelected = observationIsSelected(seriesTitle);
 
