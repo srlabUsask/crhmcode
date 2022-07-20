@@ -1407,6 +1407,7 @@ void CRHMmainDlg::OnFileSaveAs()
 		string filepath = CT2A(fileName.GetString());
 		crhmmain->SaveProject("Description - to be added", filepath);
 		if (result == IDOK) {
+			this->project_altered = false;
 			MessageBox(_T("Your project has been saved."));
 		}
 		
