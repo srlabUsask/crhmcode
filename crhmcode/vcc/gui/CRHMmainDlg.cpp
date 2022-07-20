@@ -2349,7 +2349,6 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 
 	CString addText("Add");
 	CString addArrayText("Add Array");
-	CString applyFunctionText("Apply Function");
 
 	ctxMenu.InsertMenu(0,
 		MF_BYPOSITION | MF_STRING,
@@ -2360,21 +2359,6 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 		MF_BYPOSITION | MF_STRING,
 		ID_CTX_ALL_OBS_ADD_ARRAY,
 		(LPCTSTR)addArrayText);
-
-	if (this->function_drop_down.GetCurSel() == 0)
-	{
-		ctxMenu.InsertMenu(2,
-			MF_BYPOSITION | MF_STRING | MF_DISABLED,
-			ID_CTX_ALL_OBS_FUNCT,
-			(LPCTSTR)applyFunctionText);
-	}
-	else
-	{
-		ctxMenu.InsertMenu(2,
-			MF_BYPOSITION | MF_STRING,
-			ID_CTX_ALL_OBS_FUNCT,
-			(LPCTSTR)applyFunctionText);
-	}
 
 	CWnd* wind = AfxGetMainWnd();
 	POINT p;
@@ -2398,11 +2382,6 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 				break;
 			case (ID_CTX_ALL_OBS_ADD_ARRAY):
 				addObservationsArrayToSelected();
-				updateSelectedObservationListBox();
-				this->project_altered = true;
-				break;
-			case (ID_CTX_ALL_OBS_FUNCT):
-				addObservationsToSelected();
 				updateSelectedObservationListBox();
 				this->project_altered = true;
 				break;
