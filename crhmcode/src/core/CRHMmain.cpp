@@ -1429,9 +1429,8 @@ void  CRHMmain::SqueezeParams(void) {
 					{
 						/* Not found. Raise Exception */
 						std::string unfound = moduleIt->first + " " + paramIt->first;
-						CRHMException e = CRHMException("Cannot find parameter " + unfound + " after parameter squeeze.", TExcept::ERR);
+						CRHMException e = CRHMException("Cannot find parameter " + unfound + " after parameter squeeze.", TExcept::WARNING);
 						CRHMLogger::instance()->log_run_error(e);
-						exit(1);
 					}
 				}
 
