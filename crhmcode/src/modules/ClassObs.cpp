@@ -162,6 +162,7 @@ void Classobs::decl(void) {
       "(" + string(DEGREE_CELSIUS) + ")", &tmax_allsnow);
 
   decldiagparam("clip_harder", TDim::NHRU, "[1]", "0", "1", "0 - don't clip harder method, 1 - clip Harder method at 10%, 95%", "()", &clip_harder);
+  decldiagparam("daily_harder", TDim::NHRU, "[1]", "0", "1", "0 - use per-timestep T and RH for Harder, 1 - use daily T and RH for Harder", "()", &daily_harder);
 
   variation_set = VARIATION_1;
 
@@ -387,7 +388,25 @@ DTindx[0] = Global::DTindx;
       hru_newsnow[hh] = 0;
 
       if(snow_rain_determination[hh] == 2){ // Harder
-        Harder();
+        double ratio;
+        if (daily_harder[hh] == 1) {
+          ratio = Harder(hru_tmean[hh], hru_rhmean[hh], true);
+        } else {
+          ratio = Harder(hru_t[hh], hru_rh[hh], false);
+        }
+
+        hru_snow[hh] = 0.0;
+        hru_rain[hh] = 0.0;
+
+        if(hru_p[hh] > 0.0) { //rain or snow determined by ice bulb ratio
+          if (clip_harder[hh] == 1) {
+            if (ratio < 0.1) ratio = 0;
+            if (ratio > 0.95) ratio = 1.0;
+          }
+          hru_rain[hh] = hru_p[hh]*ratio;
+          hru_snow[hh] = hru_p[hh]*(1.0-ratio);
+        }
+
         if(hru_snow[hh] > 0.0){
           cumhru_snow_meas[hh] += hru_snow[hh];
           hru_snow[hh] /= catchratio;
@@ -443,25 +462,25 @@ DTindx[0] = Global::DTindx;
   }
 }
 
-void Classobs::Harder(void) {
+double Classobs::Harder(double T_air, double RH, bool is_daily) {
 
   double Tk, D, lamda, pta, L, Ti1, Ti2, crit, crit1, T1, T2, a, b, c, ratio, hru_icebulb;
 
-  Tk = hru_t[hh] + CRHM_constants::Tm;
+  Tk = T_air + CRHM_constants::Tm;
 
   D = 0.0000206*pow(Tk/CRHM_constants::Tm, 1.75);
 
   lamda = 0.000063*Tk + 0.00673;
 
-  pta = 18.01528*((hru_rh[hh]/100.0)*0.611*exp((17.3*hru_t[hh])/(237.3 + hru_t[hh])))/(0.00831441*(hru_t[hh] + CRHM_constants::Tm))/1000.0;
+  pta = 18.01528*((RH/100.0)*0.611*exp((17.3*T_air)/(237.3 + T_air)))/(0.00831441*(T_air + CRHM_constants::Tm))/1000.0;
 
-  if(hru_t[hh] > 0.0)
+  if(T_air > 0.0)
 
-    L = 1000*(2501.0 - (2.361*hru_t[hh]));
+    L = 1000*(2501.0 - (2.361*T_air));
 
   else
 
-    L = 1000.0*(2834.1 - 0.29*hru_t[hh] - 0.004*hru_t[hh]*hru_t[hh]);
+    L = 1000.0*(2834.1 - 0.29*T_air - 0.004*T_air*T_air);
 
   Ti1 = 250.0;
 
@@ -497,26 +516,18 @@ void Classobs::Harder(void) {
 
   hru_icebulb = Ti1 - CRHM_constants::Tm;
 
-  if(hru_icebulb < -10.0) //Eoverflow if ratio calculated with icebulb < -39C
-
+  if(hru_icebulb < -10.0) { //Eoverflow if ratio calculated with icebulb < -39C
     ratio = 0.0;
-
-  else
-
-    ratio = 1.0/(1.0 + 2.50286*pow(0.125006, hru_icebulb));
-
-  hru_snow[hh] = 0.0;
-
-  hru_rain[hh] = 0.0;
-
-  if(hru_p[hh] > 0.0) { //rain or snow determined by ice bulb ratio
-    if (clip_harder[hh] == 1) {
-      if (ratio < 0.1) ratio = 0;
-      if (ratio > 0.95) ratio = 1.0;
+  } else {
+    if (is_daily) {
+      ratio = 1.0/(1.0 + 2.799856*pow(0.293292, hru_icebulb));
+    } else {
+      ratio = 1.0/(1.0 + 2.50286*pow(0.125006, hru_icebulb));
     }
-    hru_rain[hh] = hru_p[hh]*ratio;
-    hru_snow[hh] = hru_p[hh]*(1.0-ratio);
   }
+
+  return ratio;
+
 }
 
 void Classobs::finish(bool good) {

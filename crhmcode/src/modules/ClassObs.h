@@ -75,6 +75,7 @@ const double *ClimChng_precip{ NULL };
 const long  *catchadjust{ NULL };
 const long  *ppt_daily_distrib{ NULL };
 const long  *clip_harder{ NULL };
+const long  *daily_harder{ NULL };
 const long  *snow_rain_determination{ NULL };
 const long  *HRU_OBS{ NULL };
 const long  **HRU_OBS_Tables{ NULL };
@@ -89,7 +90,7 @@ void decl(void);
 void init(void);
 void run(void);
 void pre_run(void);
-void Harder(void);
+double Harder(double T_air, double RH, bool is_daily);
 void finish(bool good);
 
 Classobs* klone(string name) const;
