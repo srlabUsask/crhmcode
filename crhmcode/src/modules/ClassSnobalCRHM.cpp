@@ -53,6 +53,8 @@ void ClassSnobalCRHM::decl(void) {
     declvar("ro_predict", TDim::NHRU, "predicted specific runoff", "(m/s)", &ro_predict);
     declvar("h2o_total", TDim::NHRU, "total liquid h2o: includes h2o in snowcover, melt, and rainfall", "(kg/m^2)", &h2o_total);
 
+    decldiag("hle1_failures", TDim::NHRU, "Count of convergence failures of hle1", "()", &hle1_failures);
+
     decldiag("E_s_int", TDim::NHRU, "mass of evap into air & soil from snowcover", "(kg/m^2*int)", &E_s_int);
     decldiag("E_int", TDim::NHRU, "mass flux by evap into air from active layer", "(kg/m^2*int)", &E_int);
     decldiag("E_s_0_int", TDim::NHRU, "mass of evaporation to air", "(kg/m^2*int)", &E_s_0_int);
@@ -139,7 +141,7 @@ void ClassSnobalCRHM::decl(void) {
     declparam("T_g_or_G_flux", TDim::NHRU, "[0]", "0", "1", "0 - calculate ground flux from ground temperature, 1 - use ground flux value", "()", &T_g_or_G_flux);
 
     decldiagparam("rain_soil_snow", TDim::NHRU, "[0]", "0", "1", "0 - handle only snow (module Soil handles rain), 1 - handle snow and rain in this module (when SWE > 0.02mm).", "()", &rain_soil_snow);
-    decldiagparam("lw_reduction", TDim::NHRU, "[1]", "0", "1", "0 - handle only snow (module Soil handles rain), 1 - handle snow and rain in this module (when SWE > 0.02mm).", "()", &lw_reduction);
+    decldiagparam("lw_reduction", TDim::NHRU, "[1]", "0", "1", "Reduce incoming longwave (multiply by this fraction).", "()", &lw_reduction);
 
     declparam("KT_sand", TDim::NHRU, "[0.08]", "0.01", "3.0", "thermal conductivity of wet sand (J/(m sec K)(from Oke, 1978, pg. 38)", "()", &KT_sand);
 

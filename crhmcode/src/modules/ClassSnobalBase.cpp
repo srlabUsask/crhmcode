@@ -2215,6 +2215,7 @@ double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
         CRHM_le = 0.0; // addition TB 06/03/10
         CRHM_h = 0.0;
         CRHM_e = 0.0;
+        hle1_failures[hh]++;
 
         string Flag = "iters" + to_string(iter);
         LastDTnow = Global::DTnow;
@@ -2232,6 +2233,14 @@ double& CRHM_e)	// mass flux (+ to surf) (kg/m^2/s)
 
         ier = -1;
     }
+
+#ifdef DEBUG_HLE1
+    printf("HLE1 %s %ld %d %f %f %f %f %f %f %f %f %f %f %f %f %f\n",
+                    Name.c_str(), hh, iter, press, ta, ts,
+                    za, ea, es, zq, u, zu, z0, CRHM_h, CRHM_le, CRHM_e);
+#endif
+
+
 
     //  ier_array[ArrayCnt[hh]][hh] = ier;
     //  e_array[ArrayCnt[hh]][hh] = e;

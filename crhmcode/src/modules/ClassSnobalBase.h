@@ -50,6 +50,8 @@ public:
     double* delta_Q{ NULL };        // change in snowcover's energy (W/m^2)
     double* delta_Q_0{ NULL };      // change in active layer's energy (W/m^2)
 
+    long* hle1_failures{ NULL };        // count of convergence failures in hle1
+
 //   mass balance vars for current timestep
 
     double* melt_direct_int{ NULL };       // specific melt (kg/m^2 or m)
