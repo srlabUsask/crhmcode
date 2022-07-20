@@ -495,7 +495,13 @@ std::vector<TSeries*>* ExportDlg::PrepareDataForExport()
 
 		size_t suffixStartPos = labelString.rfind('_');
 
+		bool validSuffix = false;
 		if (suffixStartPos != std::string::npos)
+		{
+			validSuffix = IsValidSuffix(labelString.substr(suffixStartPos, std::string::npos));
+		}
+
+		if (suffixStartPos != std::string::npos && validSuffix)
 		{
 			/* Has a suffix look for label in selected observations */
 			for (
@@ -596,4 +602,65 @@ std::vector<TSeries*>* ExportDlg::PrepareDataForExport()
 	}
 
 	return selectedSeries;
+}
+
+
+bool ExportDlg::IsValidSuffix(std::string suffix)
+{
+	bool valid = false;
+
+	if (suffix == "_Tot")
+	{
+		valid = true;
+	}
+	else if (suffix == "_Min")
+	{
+		valid = true;
+	}
+	else if (suffix == "_Max")
+	{
+		valid = true;
+	}
+	else if (suffix == "_Avg")
+	{
+		valid = true;
+	}
+	else if (suffix == "_Dlta")
+	{
+		valid = true;
+	}
+	else if (suffix == "_Pos")
+	{
+		valid = true;
+	}
+	else if (suffix == "_First")
+	{
+		valid = true;
+	}
+	else if (suffix == "_Last")
+	{
+		valid = true;
+	}
+	else if (suffix == "_Cnt")
+	{
+		valid = true;
+	}
+	else if (suffix == "_Cnt0")
+	{
+		valid = true;
+	}
+	else if (suffix == "_VPsat")
+	{
+		valid = true;
+	}
+	else if (suffix == "_WtoMJ")
+	{
+		valid = true;
+	}
+	else if (suffix == "_MJtoW")
+	{
+		valid = true;
+	}
+
+	return valid;
 }

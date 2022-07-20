@@ -151,4 +151,5 @@ private:
 	*/
 	void exportToFile(std::string filePath, std::vector<TSeries*>* data);
 
+	bool IsValidSuffix(std::string suffix);
 };
