@@ -917,6 +917,13 @@ private:
 	*/
 	int getMaxLayofSelection();
 
+	/**
+	* Gets the max value dimension for the currently selected observation.
+	* 
+	* @return int - maximum dimension value for the currently selected observation.
+	*/
+	int getMaxDimObsSelection();
+
 	/** 
 	* Calculates if the water year month drop down should be shown or hidden.
 	*/

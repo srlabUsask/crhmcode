@@ -2087,6 +2087,8 @@ void CRHMmainDlg::IncreaseObsDimension()
 
 	if (mode == L"OBS")
 	{
+		int maxDimInSelection = getMaxDimObsSelection();
+
 		CString currentValue;
 		CString newValue;
 		int dimension = 0;
@@ -2094,7 +2096,7 @@ void CRHMmainDlg::IncreaseObsDimension()
 		dimension = _ttoi(currentValue);
 		if (currentValue.Trim().GetLength() > 0)
 		{
-			if (dimension < Global::maxobs)
+			if (dimension < maxDimInSelection)
 			{
 				dimension = _ttoi(currentValue) + 1;
 				newValue.Format(_T("%d"), dimension);
@@ -2941,7 +2943,7 @@ void CRHMmainDlg::addObservationsToSelected()
 
 		bool dimensionSelected = observationIsSelected(seriesTitle);
 
-		while (dimensionSelected && dimension < Global::maxobs)
+		while (dimensionSelected && dimension < obsVar->dim)
 		{
 			dimension++;
 			seriesTitle = selectedString + "(" + to_string(dimension) + ")";
@@ -2949,7 +2951,7 @@ void CRHMmainDlg::addObservationsToSelected()
 		}
 
 		/*Add the observation to the selected observations*/
-		if (dimensionSelected == false)
+		if (dimensionSelected == false && dimension <= obsVar->dim)
 		{
 			TSeries* cdSeries = NULL;
 
@@ -3454,6 +3456,8 @@ LRESULT CRHMmainDlg::OnAutoRunMessage(WPARAM, LPARAM)
 
 void CRHMmainDlg::setDimensionSelectorToObs()
 {
+	int maxDimInSelection = getMaxDimObsSelection();
+
 	SetDlgItemText(ID_OBS_LAY_DIM_LABEL, L"OBS");
 	CString currentValue;
 	int dimension = 0;
@@ -3461,7 +3465,7 @@ void CRHMmainDlg::setDimensionSelectorToObs()
 	dimension = _ttoi(currentValue);
 	if (currentValue.Trim().GetLength() > 0)
 	{
-		if (dimension > Global::maxobs)
+		if (dimension > maxDimInSelection)
 		{
 			SetDlgItemText(ID_OBS_DIM_DISPLAY, L"1");
 		}
@@ -3519,6 +3523,36 @@ int CRHMmainDlg::getMaxLayofSelection()
 	return maxLayInSelection;
 }
 
+
+int CRHMmainDlg::getMaxDimObsSelection()
+{
+	int maxDimInSelection = 0;
+
+	CRHMmain* model = CRHMmain::getInstance();
+
+	int selectedCount = listbox_all_observations.GetSelCount();
+	int* selectedIndicies = new int[selectedCount];
+	listbox_all_observations.GetSelItems(selectedCount, selectedIndicies);
+
+	for (int i = 0; i < selectedCount; i++)
+	{
+		CString selectedText;
+		listbox_all_observations.GetText(selectedIndicies[i], selectedText);
+		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
+		std::string selectedString(pszConvertedAnsiString);
+
+		std::map<std::string, ClassVar*>::iterator selected = model->AllObservations->find(selectedString);
+
+		int dim = selected->second->dim;
+
+		if (dim > maxDimInSelection)
+		{
+			maxDimInSelection = dim;
+		}
+	}
+
+	return maxDimInSelection;
+}
 
 void CRHMmainDlg::showHideWaterYearMonth()
 {
