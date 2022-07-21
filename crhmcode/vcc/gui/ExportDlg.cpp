@@ -140,7 +140,7 @@ void ExportDlg::OnPreviewPressed()
 
 	int formatIndex = format_toggle.GetCurSel();
 
-	int charsInLongestLine = 0;
+	size_t charsInLongestLine = 0;
 
 	if (formatIndex == 1)
 	{
