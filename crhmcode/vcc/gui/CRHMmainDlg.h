@@ -627,7 +627,7 @@ private:
 	* 
 	* Opens the help informaiton dialog.
 	*/
-	afx_msg void OnHelpAbout();
+	afx_msg void OnViewHelpDocumentation();
 
 	/**
 	* Handler for clicking on the "<" button for the HRU dimension selector.

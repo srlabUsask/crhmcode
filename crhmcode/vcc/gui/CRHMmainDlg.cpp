@@ -111,7 +111,7 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	//Help menu item
 		//CRHM Help not implemented
 		//New Modules help not implemented
-	ON_COMMAND(ID_HELP_ABOUT, &CRHMmainDlg::OnHelpAbout)
+	ON_COMMAND(ID_HELP_CRHM, &CRHMmainDlg::OnViewHelpDocumentation)
 
 	//HRU Dimension Selector
 	ON_BN_CLICKED(ID_HRU_DIM_DECREASE, &CRHMmainDlg::DecreaseHRUDimension)
@@ -2013,10 +2013,9 @@ void CRHMmainDlg::OnFlowdiagramsShowdiagram()
 }
 
 
-void CRHMmainDlg::OnHelpAbout()
+void CRHMmainDlg::OnViewHelpDocumentation()
 {
-	CRHMAboutBox aboutbox;
-	aboutbox.DoModal();
+	ShellExecute(AfxGetMainWnd()->GetSafeHwnd(), _T("open"), _T("https://wiki.usask.ca/display/CRHMdoc/CRHM+Documentation"), NULL, NULL, SW_SHOW);
 }
 
 
