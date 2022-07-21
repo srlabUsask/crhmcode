@@ -1989,6 +1989,19 @@ void CRHMmainDlg::OnRunModel()
 {
 	CWaitCursor wait;
 
+	CRHMmain* main = CRHMmain::getInstance();
+
+	size_t numSelVar = main->SelectedVariables->size();
+	size_t numSelObs = main->SelectedObservations->size();
+	size_t totalSeries = numSelVar + numSelObs;
+
+	if (totalSeries > 200)
+	{
+		MessageBox(L"More than 200 outputs are selected. \n"
+			"CRHM GUI is not garunteed to be stable with that many outputs. "
+			"The command line version of CRHM is more stable and is reccomended for producing many outputs.");
+	}
+
 	RunClickFunction();
 	updateOpenStateFileMenu();
 	updateSelectedObservationListBox();
