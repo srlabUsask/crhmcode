@@ -51,6 +51,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_73236CC65937480EABC9DB87415B7A7F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_754B6A986554BEB4EFED29E470FB316C"
         "OwnerKey" = "8:_4DF7C5B00A1E4CE7A51D952DAB065783"
         "MsmSig" = "8:_UNDEFINED"
@@ -69,13 +75,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9C7D9A71BE64E529E7358A946E192D3D"
+        "MsmKey" = "8:_9B01AFEE4DC5CCA989B35DF954D499D9"
         "OwnerKey" = "8:_4DF7C5B00A1E4CE7A51D952DAB065783"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_BBD0CAE99747C3D9FB01DB8F98789895"
+        "MsmKey" = "8:_9C7D9A71BE64E529E7358A946E192D3D"
         "OwnerKey" = "8:_4DF7C5B00A1E4CE7A51D952DAB065783"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -121,6 +127,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -137,6 +151,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -258,6 +288,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_73236CC65937480EABC9DB87415B7A7F"
+            {
+            "SourcePath" = "8:..\\vcc\\graphheader.txt"
+            "TargetName" = "8:graphheader.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_BD37ACB7DE7F413DBDA4CD6E1D66B97E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_754B6A986554BEB4EFED29E470FB316C"
             {
             "SourcePath" = "8:api-ms-win-crt-utility-l1-1-0.dll"
@@ -318,10 +368,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9C7D9A71BE64E529E7358A946E192D3D"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B01AFEE4DC5CCA989B35DF954D499D9"
             {
-            "SourcePath" = "8:api-ms-win-crt-locale-l1-1-0.dll"
-            "TargetName" = "8:api-ms-win-crt-locale-l1-1-0.dll"
+            "SourcePath" = "8:fmt.dll"
+            "TargetName" = "8:fmt.dll"
             "Tag" = "8:"
             "Folder" = "8:_BD37ACB7DE7F413DBDA4CD6E1D66B97E"
             "Condition" = "8:"
@@ -338,10 +388,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BBD0CAE99747C3D9FB01DB8F98789895"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9C7D9A71BE64E529E7358A946E192D3D"
             {
-            "SourcePath" = "8:fmt.dll"
-            "TargetName" = "8:fmt.dll"
+            "SourcePath" = "8:api-ms-win-crt-locale-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-locale-l1-1-0.dll"
             "Tag" = "8:"
             "Folder" = "8:_BD37ACB7DE7F413DBDA4CD6E1D66B97E"
             "Condition" = "8:"
@@ -495,7 +545,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CRHM_GUI"
         "ProductCode" = "8:{C45F8962-F4E7-49E0-9107-9B2E3B551E4C}"
-        "PackageCode" = "8:{3807C985-2B65-4305-A879-17032A03DD74}"
+        "PackageCode" = "8:{9B7B2C0B-0967-44B2-81A5-5A3D3560B06B}"
         "UpgradeCode" = "8:{7852469F-4569-4545-88C4-14A1E40B6413}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
