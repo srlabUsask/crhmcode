@@ -1115,7 +1115,7 @@ void CRHMmainDlg::updateSelectedVariablesListBox()
 
 	}
 
-	/*Anything not in the model needs to be removed from the display*/
+	/* Anything not in the model needs to be removed from the display */
 	for (int i = 0; i < listbox_sel_variables.GetCount(); i++)
 	{
 		CString text;
@@ -1144,6 +1144,17 @@ void CRHMmainDlg::updateSelectedVariablesListBox()
 			listbox_sel_variables.DeleteString(i);
 			//Restart outer itteration
 			i = -1;
+
+			// Remove from the TChart as well
+			for (int j = 0; j < tchart.get_SeriesCount(); j++)
+			{
+				CString title = tchart.SeriesTitleLegend(j);
+				if (title == text)
+				{
+					tchart.RemoveSeries(j);
+					break;
+				}
+			}
 		}
 
 	}
