@@ -79,6 +79,11 @@ private:
 	CMenu* main_menu = NULL;
 
 	/**
+	* Saves the size of the window when it first loads.
+	*/
+	CRect original_rectangle;
+
+	/**
 	* Boolean that indicates if the loaded project file has been changed from what is saved on disk
 	* 
 	* true if the project may have been altered and false if it has not been.
@@ -944,4 +949,11 @@ private:
 	* If the user selects 'No' the current project will not be saved befor the next action is completed.
 	*/
 	void confirmUnsavedProjectClose();
+
+	/**
+	* Sets the minimum size of the window ensuring that it is not reduced in size to be deformed.
+	* 
+	* @param MINMAXINFO * lpMMI - MINMAXINFO that contains the information for the min and max size of the window.
+	*/
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI);
 };

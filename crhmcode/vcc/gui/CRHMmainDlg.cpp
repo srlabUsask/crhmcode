@@ -148,6 +148,8 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_MESSAGE(UWM_FLIP_TICKS_RIGHT, &CRHMmainDlg::OnRightClickFlipTicks)
 
 	ON_MESSAGE(UWM_AUTO_RUN, &CRHMmainDlg::OnAutoRunMessage)
+
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 
@@ -212,6 +214,8 @@ BOOL CRHMmainDlg::OnInitDialog()
 
 	/* Initalize the project dependent components */
 	loadGuiComponents();
+
+	GetWindowRect(this->original_rectangle);
 
 	return TRUE;
 }
@@ -3721,4 +3725,12 @@ void CRHMmainDlg::confirmUnsavedProjectClose()
 		this->SaveProject();
 	}
 
+}
+
+
+void CRHMmainDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	// Ensure the window cannot get smaller than its original size.
+	lpMMI->ptMinTrackSize.x = this->original_rectangle.Width();
+	lpMMI->ptMinTrackSize.y = this->original_rectangle.Height();
 }
