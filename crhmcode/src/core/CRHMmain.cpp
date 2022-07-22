@@ -606,18 +606,17 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 								//                  break;
 								else if (thisPar->varType == TVar::Txt && thisPar->dimen < TDim::NHRU) // text can have variable length
 									break;
-								else if (thisPar->param == "obs_elev" || thisPar->param == "soil_withdrawal")
-									break;
+								else if(Cols%thisPar->dim == 0 && thisPar->dim != Cols/thisPar->dim){ // (thisPar->param == "obs_elev" || thisPar->param == "soil_withdrawal") &&
+								CRHMException TExcept("Upgrading layer dimension of parameter added to shared: '" + 
+														string(thisPar->module) + " -> '" + string(thisPar->param) + "'", TExcept::WARNING);
+								LogError(TExcept);
+								break;
+								}
 								else { // Added to handle 2D parameters
-									if ((thisPar->param == param) && (thisPar->dim == Cols / thisPar->dim))
-									{
-										break;
-									}
-									else
-									{
-										thisPar = NULL;
-									}
-
+								if ((thisPar->param == param) && (thisPar->dim == Cols/thisPar->dim))
+									break;
+								else
+									thisPar = NULL;
 								}
 							}
 							else
@@ -1154,13 +1153,14 @@ void  CRHMmain::SqueezeParams(void) {
 					thisPar2 = info4->thisPar;
 
 					// check for duplicate values
-					bool match = thisPar->Same(*thisPar2);
+					bool match = thisPar->Same(*thisPar2) && !thisPar->Inhibit_share;
 
 					// if same values indicate could be merged
 					if (match) {
 						PairPar Item = PairPar(thisPar->module, thisPar2);
 						Matched.insert(Item);
 						info4->matched = true;
+			            thisPar2->Identical = thisPar; // used when reading observations lapse rate and elev
 						if (++info3->rootinfo->cnt > greatestCnt) {
 							greatestCnt = info3->rootinfo->cnt;
 							Key = info3->rootinfo->thisPar->module;
@@ -1185,7 +1185,7 @@ void  CRHMmain::SqueezeParams(void) {
 						Global::SharedMapPars.insert(Item);
 						first = false;
 					} // first
-					else  // remove module parameters so as basin parameters visible
+					else  // remove module parameters so as Shared parameters visible
 						delete thisPar;
 					(*itPar5).second = NULL; // Indicate has been handled
 				} // for(range of S)
@@ -1212,7 +1212,7 @@ void  CRHMmain::SqueezeParams(void) {
 
 	Global::MapPars.clear();
 	Global::MapPars = MapParsNew;
-}
+} // end of SqueezeParams
 //---------------------------------------------------------------------------
 
 void  CRHMmain::SetBasinParams(ClassPar *basinPar) {
