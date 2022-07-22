@@ -143,6 +143,9 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_START_DATE_PICKER, &CRHMmainDlg::OnStartDateChange)
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_END_DATE_PICKER, &CRHMmainDlg::OnEndDateChange)
 
+	//HRU names button
+	ON_BN_CLICKED(ID_HRU_NAMES, &CRHMmainDlg::OnHRU)
+
 	//Flip ticks button
 	ON_MESSAGE(UWM_FLIP_TICKS_LEFT, &CRHMmainDlg::OnLeftClickFlipTicks)
 	ON_MESSAGE(UWM_FLIP_TICKS_RIGHT, &CRHMmainDlg::OnRightClickFlipTicks)
@@ -2546,6 +2549,94 @@ void CRHMmainDlg::OnClickFlipTicks()
 		active = series.get_Active();
 		series.put_Active(!active);
 	}
+}
+
+
+void CRHMmainDlg::OnHRU()
+{
+	CRHMmain* main = CRHMmain::getInstance();
+
+	if (!this->using_hru_names)
+	{
+		std::map<std::string, ClassModule*>::iterator moduleIt = main->getAllmodules()->find("basin");
+
+		std::list<std::pair<std::string, ClassPar*>>::iterator hru_names;
+
+		bool names_found = false;
+
+		if (moduleIt != main->getAllmodules()->end())
+		{
+			ClassModule* module = moduleIt->second;
+			std::list<std::pair<std::string, ClassPar*>>* paramList = module->getParametersList();
+
+			std::list<std::pair<std::string, ClassPar*>>::iterator hru_names_par = paramList->end();
+			for (
+				std::list<std::pair<std::string, ClassPar*>>::iterator parIt = paramList->begin();
+				parIt != paramList->end();
+				parIt++
+				)
+			{
+				if (parIt->first == "hru_names")
+				{
+					hru_names_par = parIt;
+					break;
+				}
+			}
+
+			if (hru_names_par != paramList->end())
+			{
+				hru_names = hru_names_par;
+				names_found = true;
+			}
+		}
+
+		if (names_found)
+		{
+			this->hru_names_vec.clear();
+
+			for (int i = 0; i < Global::maxhru; i++)
+			{
+				this->hru_names_vec.push_back(hru_names->second->Strings->at(i));
+			}
+
+			bool unique_names = true;
+			for (int i = 0; i < this->hru_names_vec.size(); i++)
+			{
+				for (int j = 0; j < this->hru_names_vec.size(); j++)
+				{
+					if (i != j)
+					{
+						if (this->hru_names_vec.at(i) == this->hru_names_vec.at(j))
+						{
+							unique_names = false;
+						}
+					}
+				}
+			}
+
+			if (unique_names)
+			{
+				this->using_hru_names = true;
+			}
+			else
+			{
+				MessageBox(L"Cannot switch to show HRU names because the names are not unique.");
+			}
+
+		}
+		else
+		{
+			MessageBox(L"The parameter hru_names in basin module was not found.\nCannot switch display to HRU names.");
+		}
+	}
+	else 
+	{
+		this->using_hru_names = false;
+		this->hru_names_vec.clear();
+	}
+
+	
+	
 }
 
 

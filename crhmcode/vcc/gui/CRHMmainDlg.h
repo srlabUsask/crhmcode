@@ -230,6 +230,19 @@ private:
 	std::map<UINT, std::pair<std::string, std::string>>* openObsFiles; 
 
 	/**
+	* Associates the ith element to the i-1 hru.
+	*/
+	std::vector<std::string> hru_names_vec;
+
+	/**
+	* Tracks if hru names are being used in place of hru number designations 
+	* 
+	* True if hru names are being used.
+	* False if hru numbers are bing used.
+	*/
+	bool using_hru_names = false;
+
+	/**
 	* Initalizes the dialog elements after creating the dialog.
 	*/
 	virtual BOOL OnInitDialog();
@@ -870,6 +883,13 @@ private:
 	* Handler for clicking on the flip ticks button.
 	*/
 	afx_msg void OnClickFlipTicks();
+
+	/**
+	* Handler for clicking on the HRU button.
+	* 
+	* Switches the display to use HRU names instead of numbers.
+	*/
+	afx_msg void OnHRU();
 
 	/**
 	* Handler for when the user left clicks on the flip ticks button

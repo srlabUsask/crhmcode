@@ -204,6 +204,7 @@
 #define ID_CTX_ALL_VAR_ADD_ARRAY        34008
 #define ID_CTX_SEL_VAR_REMOVE           34009
 #define ID_CTX_SEL_VAR_APPLY			34010
+#define ID_HRU_NAMES					34011
 
 #define ID_OBS_DIM_DISPLAY              35100
 #define ID_OBS_DIM_DECREASE             35101
