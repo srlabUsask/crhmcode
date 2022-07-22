@@ -1998,8 +1998,8 @@ void CRHMmainDlg::OnRunModel()
 	if (totalSeries > 200)
 	{
 		MessageBox(L"More than 200 outputs are selected. \n"
-			"CRHM GUI is not garunteed to be stable with that many outputs. "
-			"The command line version of CRHM is more stable and is reccomended for producing many outputs.");
+			"CRHM GUI is not guaranteed to be stable with that many outputs. "
+			"The command line version of CRHM is more stable and is recommended for producing many outputs.");
 	}
 
 	RunClickFunction();
