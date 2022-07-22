@@ -77,24 +77,27 @@ void ClassVolumetric::run(void) {
 
     for (hh = 0; chkStruct(); ++hh) {
 
+        double wilt_pt = SetSoilproperties[soil_type[hh]][1];   // 0 to 1000 mm per meter
+        double pore_space = SetSoilproperties[soil_type[hh]][3];  // 0 to 1000 mm per meter
+
         if (soil_Depth[hh] > 0.0) // 03/15/2021: conditional statement to restrict divided by zero error
-            Volumetric[hh] = (soil_moist[hh] / soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1]) / 1000.0;
+            Volumetric[hh] = (soil_moist[hh] / soil_Depth[hh] + wilt_pt) / 1000.0;
         else
             Volumetric[hh] = 0.0;
 
         if (soil_rechr_max[hh] > 0.0) // 03/15/2021: conditional statement to restrict divided by zero error
-            Volumetric_rechr[hh] = (soil_rechr[hh] / soil_rechr_max[hh] * SetSoilproperties[soil_type[hh]][3] + SetSoilproperties[soil_type[hh]][1]) / 1000.0;  // 04/14/2020
+            Volumetric_rechr[hh] = (soil_rechr[hh] / soil_rechr_max[hh] * (pore_space-wilt_pt) + wilt_pt) / 1000.0;  // 04/14/2020
         else
             Volumetric_rechr[hh] = 0.0;
 
         if (nstep == 0 && set_fallstat[hh] == Julian || (getstep() == 1 && Julian > set_fallstat[hh])) {
             if (Si) {
                 double X = 1.0;
-                if (SetSoilproperties[soil_type[hh]][3] > 0.0) {
+                if (pore_space > 0.0) {
                     if (Volumetric_option[hh])  // 04/14/2020
-                        X = Volumetric_rechr[hh] / SetSoilproperties[soil_type[hh]][3] * 1000.0;
+                        X = Volumetric_rechr[hh] / pore_space * 1000.0;
                     else
-                        X = Volumetric[hh] / SetSoilproperties[soil_type[hh]][3] * 1000.0;
+                        X = Volumetric[hh] / pore_space * 1000.0;
                     X = X - Si_correction[hh];
                 }
 
@@ -113,15 +116,15 @@ void ClassVolumetric::run(void) {
             if (fallstat[hh])
             {
 
-                if (SetSoilproperties[soil_type[hh]][3] > 0.0)
+                if (pore_space > 0.0)
                 {
                     if (Volumetric_option[hh])  // 04/14/2020
                     {
-                        fallstat[hh] = Volumetric_rechr[hh] / SetSoilproperties[soil_type[hh]][3] * 100000.0; // ie 100*1000
+                        fallstat[hh] = Volumetric_rechr[hh] / pore_space * 100000.0; // ie 100*1000
                     }
                     else
                     {
-                        fallstat[hh] = Volumetric[hh] / SetSoilproperties[soil_type[hh]][3] * 100000.0; // ie 100*1000
+                        fallstat[hh] = Volumetric[hh] / pore_space * 100000.0; // ie 100*1000
                     }
 
                     if (fallstat_correction[hh] >= 0.0) // fallstat_correction added 08/11/2021
@@ -131,7 +134,7 @@ void ClassVolumetric::run(void) {
                 }
                 else
                 {
-                    fallstat[hh] = 1.0;
+                    fallstat[hh] = 100.0;
                 }
 
                 fallstat_V[hh] = fallstat[hh];
