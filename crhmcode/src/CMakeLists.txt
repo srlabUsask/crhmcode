@@ -42,7 +42,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 # Debug and profile in Profile mode
 set(CMAKE_CXX_FLAGS_PROFILE "-g -pg -O0")
-
+# Optimized, but with debug symbols included for vtune
+set(CMAKE_CXX_FLAGS_FASTDBG "-g -O3")
 
 #Configuration stored in crhmConfig.h
 configure_file(crhmConfig.h.in crhmConfig.h)
