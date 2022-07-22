@@ -314,7 +314,7 @@ static void infil_index(double Theta, double SWE, double& Index, double& Pot, co
 	Pot = Pot / infDays;
 }
 
-
+// XXXXXX XXXXXX XXXXXX XXXXX XXXXXX   pore    AIRENT PORESZ XXXXXX
 static double soilproperties[][9] = {
   { 0.0,  999.9, 0.000, 0.00, 1.100,  1.000,	0.000,	0.0,  4},  //      0  water
   { 49.5, 117.8, 0.020, 0.10, 0.437,  0.395,	0.121,	4.05, 1},  //      1  sand
