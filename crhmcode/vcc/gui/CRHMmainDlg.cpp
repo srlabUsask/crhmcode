@@ -143,6 +143,9 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_START_DATE_PICKER, &CRHMmainDlg::OnStartDateChange)
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_END_DATE_PICKER, &CRHMmainDlg::OnEndDateChange)
 
+	//HRU names button
+	ON_BN_CLICKED(ID_HRU_NAMES, &CRHMmainDlg::OnHRU)
+
 	//Flip ticks button
 	ON_MESSAGE(UWM_FLIP_TICKS_LEFT, &CRHMmainDlg::OnLeftClickFlipTicks)
 	ON_MESSAGE(UWM_FLIP_TICKS_RIGHT, &CRHMmainDlg::OnRightClickFlipTicks)
@@ -2546,6 +2549,14 @@ void CRHMmainDlg::OnClickFlipTicks()
 		active = series.get_Active();
 		series.put_Active(!active);
 	}
+}
+
+
+void CRHMmainDlg::OnHRU()
+{
+	CRHMmain* main = CRHMmain::getInstance();
+
+	main->getAllmodules()->find("basin");
 }
 
 
