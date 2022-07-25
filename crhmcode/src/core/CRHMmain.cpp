@@ -4828,8 +4828,6 @@ void CRHMmain::OutputSummary()
 
 void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries, std::string seriesTitle, TFun Funct)
 {
-	
-
 	ClassVar* newVar;
 	Global::HRU_OBS = Global::HRU_OBS_DIRECT; // always correct?
 
@@ -4838,7 +4836,10 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 	double DTstartR = this->GetStartDate();
 	double DTendR = this->GetEndDate();
 
-	if (DTstartR >= DTendR) return;
+	if (DTstartR >= DTendR)
+	{
+		return;
+	}
 
 	TDateTime Save_DTnow = Global::DTnow; // Save
 
@@ -4877,29 +4878,45 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 		Indx = n - 1; //Subtraction of 1 to match historic code jhs507
 
 	}
-	else {
+	else 
+	{
 		if (thisVar->root != "" || AlreadyIndex)
+		{
 			Indx = stoi(seriesTitle.substr(jj1 + 1, jj2 - jj1 - 1)) - 1;
+		}
 		else
+		{
 			Indx = stoi(seriesTitle.substr(jj1 + 1, jj2 - jj1 - 1)) - 1;
+		}
 	}
 
 	long IndxMin = thisVar->FileData->IndxMin;
 	long IndxMax = thisVar->FileData->IndxMax;
 
-	if (thisVar->FileData->Times != NULL) { // display sparse data
+	if (thisVar->FileData->Times != NULL) // display sparse data 
+	{ 
 		if (Global::Freq == 1)
+		{
 			--DTendR;
+		}
 
 		double Sum = 0.0;
 
-		for (long ii = 0; ii < thisVar->FileData->Lines; ++ii) {
-			if (thisVar->FileData->Times[ii] < DTstartR) continue;
-			if (thisVar->FileData->Times[ii] > DTendR) continue;
+		for (long ii = 0; ii < thisVar->FileData->Lines; ++ii) 
+		{
+			if (thisVar->FileData->Times[ii] < DTstartR)
+			{
+				continue;
+			}
+			if (thisVar->FileData->Times[ii] > DTendR)
+			{
+				continue;
+			}
 
 			xx = Data[thisVar->offset + Indx][ii];
 
-			if (Funct == TFun::TOT) {
+			if (Funct == TFun::TOT) 
+			{
 				Sum += xx;
 				xx = Sum;
 			}
@@ -4907,7 +4924,6 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 			cdSeries->AddXY(thisVar->FileData->Times[ii], xx);
 		}
 	}
-
 	else if (Funct <= TFun::MJ_W) // display simple observations
 	{
 
@@ -4953,7 +4969,8 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 			}
 		}
 	}
-	else { // display observations functions
+	else // display observations functions 
+	{ 
 		//cdSeries->Stairs = true;
 		// N.B. object FileData copied. If Obs function - Obs deletes else if VarObsFunct SelectedObservations deletes.
 		newVar = new ClassVar(*thisVar);
@@ -4962,32 +4979,48 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 
 		newVar->FileData->DataFileName = "Copy";
 
-
 		string::size_type pp = thisVar->units.find_last_of(")");
 
 		if (thisVar->FileData->Freq > 1 && (thisVar->units[pp - 1] == 'd'))   //  || TBase == 0
+		{
 			thisVar->Daily = true;
-		else
-			thisVar->Daily = false;
-
-		if (newVar->root == "") { // Observation
-			if (thisVar->FileData->Freq == 1)
-				newVar->LoopFunct = &ClassVar::LoopFirst;
-			else if (thisVar->Daily)
-				newVar->LoopFunct = &ClassVar::LoopFirst;
-			else
-				newVar->LoopFunct = &ClassVar::LoopRange;
 		}
-		else { // Variable
-			if (thisVar->Daily)
-				newVar->LoopFunct = &ClassVar::LoopLast;
+		else
+		{
+			thisVar->Daily = false;
+		}
+
+		if (newVar->root == "") // Observation 
+		{ 
+			if (thisVar->FileData->Freq == 1)
+			{
+				newVar->LoopFunct = &ClassVar::LoopFirst;
+			}
+			else if (thisVar->Daily)
+			{
+				newVar->LoopFunct = &ClassVar::LoopFirst;
+			}
 			else
+			{
 				newVar->LoopFunct = &ClassVar::LoopRange;
+			}
+		}
+		else // Variable 
+		{ 
+			if (thisVar->Daily)
+			{
+				newVar->LoopFunct = &ClassVar::LoopLast;
+			}
+			else
+			{
+				newVar->LoopFunct = &ClassVar::LoopRange;
+			}
 		}
 
 		newVar->FunctVar = thisVar;
 
-		switch (Funct) {
+		switch (Funct) 
+		{
 		case TFun::AVG:
 			newVar->UserFunct_ = &ClassVar::Avg_;
 			newVar->FunKind = TFun::AVG;
@@ -5046,54 +5079,71 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 		long Greatest;
 		long DTminX = DTmin;
 		if (IndxMin > 0)
+		{
 			DTminX = IndxMin;
+		}
 		double Delta0 = 0.0;
 		double First0;
 		double Temp;
 		dattim("now", itime);
 
-		for (Global::DTindx = DTmin; Global::DTindx < DTmax; Global::DTindx += Global::Freq) {
+		for (Global::DTindx = DTmin; Global::DTindx < DTmax; Global::DTindx += Global::Freq)
+		{
 			Global::DTnow = Global::DTstart + Global::Interval * Global::DTindx + Global::Interval;
 
 			if (Global::DTindx * Global::Freq / thisVar->FileData->Freq >= IndxMin)
+			{
 				if (Global::DTindx * thisVar->FileData->Freq / Global::Freq > IndxMax)
+				{
 					break;
-				else {
+				}
+				else 
+				{
 					if (Global::Interval >= 1) --Global::DTnow;
 
 					dattim("now", itime);
 
-					switch (this->getTimeBase()) {
+					switch (this->getTimeBase()) 
+					{
 
 					case TimeBase::DAILY: // daily
-						if (Next == -1 || Next != itime[2]) {
+						if (Next == -1 || Next != itime[2]) 
+						{
 							Next = itime[2];
 							First = true;
 						}
 						break;
 					case TimeBase::WATER_YEAR: // water annual
-						if (Next == -1 || itime[0] == Next && itime[1] == this->getWaterYearMonth()) {
+						if (Next == -1 || itime[0] == Next && itime[1] == this->getWaterYearMonth()) 
+						{
 							if (Next == -1 && itime[1] < this->getWaterYearMonth())
+							{
 								Next = itime[0];
+							}
 							else
+							{
 								Next = itime[0] + 1;
+							}
 							First = true;
 						}
 						break;
 					case TimeBase::CALENDAR_YEAR: // annual
-						if (Next == -1 || itime[0] == Next && itime[1] == 1) {
+						if (Next == -1 || itime[0] == Next && itime[1] == 1) 
+						{
 							Next = itime[0] + 1;
 							First = true;
 						}
 						break;
 					case TimeBase::MONTHLY: // monthly
-						if (Next == -1 || Next == itime[1]) {
+						if (Next == -1 || Next == itime[1]) 
+						{
 							Next = (itime[1]) % 12 + 1;
 							First = true;
 						}
 						break;
 					case TimeBase::ALL: // All - do nothing
-						if (Next == -1) {
+						if (Next == -1) 
+						{
 							Next = 0;
 							First = true; // do nothing
 						}
@@ -5103,9 +5153,12 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 
 					CurrentIndx = (Global::DTindx - DTminX) / thisVar->FileData->Freq - 1;
 
-					if (First) {
-						if (Global::DTindx > DTmin && Global::DTindx > IndxMin) { // Handle RUN starting after beginning of primary obs file and secondary obs file later
-							switch (Funct) {
+					if (First) 
+					{
+						if (Global::DTindx > DTmin && Global::DTindx > IndxMin) // Handle RUN starting after beginning of primary obs file and secondary obs file later 
+						{ 
+							switch (Funct) 
+							{
 							case TFun::DLTA:
 								Temp = cdSeries->YValue((Global::DTindx - DTmin) / thisVar->FileData->Freq - 1);
 								cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx) - Delta0);
@@ -5121,13 +5174,16 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 								break;
 							case TFun::FIRST: // duplicate first
 								for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
+								{
 									cdSeries->setYValue(jj, First0);
+								}
 								break;
 							default:
 								break;
 							} // switch
 						}
-						else if (Funct == TFun::DLTA && this->getTimeBase() != TimeBase::DAILY) { // only very first time
+						else if (Funct == TFun::DLTA && this->getTimeBase() != TimeBase::DAILY) // only very first time
+						{ 
 							(newVar->*(newVar->LoopFunct))(Indx);
 							Delta0 = newVar->values[Indx];
 
@@ -5138,9 +5194,12 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 
 						Lastkk = Global::DTindx;
 						if (CurrentIndx > -1) // skip first time
+						{
 							LastIndex = CurrentIndx;
+						}
 
-						switch (Funct) { // beginning of period reset
+						switch (Funct) // beginning of period reset 
+						{ 
 						case TFun::MAX:
 							newVar->values[Indx] = -1000000.0;
 							break;
@@ -5163,26 +5222,34 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 					} // if First
 
 					(newVar->*(newVar->LoopFunct))(Indx);
-
 					xx = newVar->values[Indx];
 					cdSeries->AddXY(Global::DTnow, xx);
+
 					//AddDataToSeries(series, Global::DTnow, xx);
 
 					if (First)
+					{
 						First0 = xx;
+					}
 
-					if (Global::DTindx > DTmin && Global::DTindx > IndxMin) {
-						switch (Funct) {
+					if (Global::DTindx > DTmin && Global::DTindx > IndxMin) 
+					{
+						switch (Funct) 
+						{
 						case TFun::AVG:
 							Greatest = Days;
 							if (LastDays > Days)
+							{
 								Greatest = LastDays;
+							}
 							cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx)/ ((long long)Global::Freq * (long long)Greatest));
 							LastDays = 0;
 							break;
 						case TFun::DLTA:
 							if (!First)
+							{
 								cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx) - Delta0);
+							}
 							break;
 						default:
 							break;
@@ -5193,15 +5260,20 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 
 					First = false;
 				} // if
+			}
 		} // for
 
-		if (Global::DTindx > DTmin && Global::DTindx > IndxMin) { // Handle RUN starting after beginning of primary obs file and secondary obs file later
+		if (Global::DTindx > DTmin && Global::DTindx > IndxMin) // Handle RUN starting after beginning of primary obs file and secondary obs file later
+		{ 
 			CurrentIndx = (Global::DTindx - DTminX) / thisVar->FileData->Freq - 1;
-			switch (Funct) {
+			switch (Funct) 
+			{
 			case TFun::AVG:
 				Greatest = Days;
 				if (LastDays > Days)
+				{
 					Greatest = LastDays;
+				}
 				cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx) / ((long long)Global::Freq * (long long)Greatest));
 				break;
 			case TFun::DLTA:
