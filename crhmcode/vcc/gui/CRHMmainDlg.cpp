@@ -2057,17 +2057,46 @@ void CRHMmainDlg::DecreaseHRUDimension()
 	CString newValue;
 	int dimension = 0;
 
-	GetDlgItemText(ID_HRU_DIM_DISPLAY, currentValue);
-	dimension = _ttoi(currentValue);
-	if (currentValue.Trim().GetLength() > 0)
+	if (this->using_hru_names)
 	{
-		if (dimension > 1)
+		GetDlgItemText(ID_HRU_DIM_DISPLAY, currentValue);
+		CT2CA pszConvertedAnsiString(currentValue);
+		std::string nameString(pszConvertedAnsiString);
+		int pos = 0;
+
+		for (int i = 0; i < this->hru_names_vec.size(); i++)
 		{
-			dimension = _ttoi(currentValue) - 1;
-			newValue.Format(_T("%d"), dimension);
-			SetDlgItemText(ID_HRU_DIM_DISPLAY, newValue);
+			if (this->hru_names_vec.at(i) == nameString)
+			{
+				pos = i + 1;
+			}
+		}
+		dimension = pos;
+		if (currentValue.Trim().GetLength() > 0)
+		{
+			if (dimension > 1)
+			{
+				dimension--;
+				newValue = this->hru_names_vec.at(dimension - 1).c_str();
+				SetDlgItemText(ID_HRU_DIM_DISPLAY, newValue);
+			}
 		}
 	}
+	else
+	{
+		GetDlgItemText(ID_HRU_DIM_DISPLAY, currentValue);
+		dimension = _ttoi(currentValue);
+		if (currentValue.Trim().GetLength() > 0)
+		{
+			if (dimension > 1)
+			{
+				dimension = _ttoi(currentValue) - 1;
+				newValue.Format(_T("%d"), dimension);
+				SetDlgItemText(ID_HRU_DIM_DISPLAY, newValue);
+			}
+		}
+	}
+
 }
 
 
@@ -2076,17 +2105,48 @@ void CRHMmainDlg::IncreaseHRUDimension()
 	CString currentValue;
 	CString newValue;
 	int dimension = 0;
-	GetDlgItemText(ID_HRU_DIM_DISPLAY, currentValue);
-	dimension = _ttoi(currentValue);
-	if (currentValue.Trim().GetLength() > 0)
+
+	if (this->using_hru_names)
 	{
-		if (dimension < Global::maxhru)
+		GetDlgItemText(ID_HRU_DIM_DISPLAY, currentValue);
+		CT2CA pszConvertedAnsiString(currentValue);
+		std::string nameString(pszConvertedAnsiString);
+		int pos = 0;
+
+		for (int i = 0; i < this->hru_names_vec.size(); i++)
 		{
-			dimension = _ttoi(currentValue) + 1;
-			newValue.Format(_T("%d"), dimension);
-			SetDlgItemText(ID_HRU_DIM_DISPLAY, newValue);
+			if (this->hru_names_vec.at(i) == nameString)
+			{
+				pos = i + 1;
+			}
+		}
+
+		dimension = pos;
+		if (currentValue.Trim().GetLength() > 0)
+		{
+			if (dimension < Global::maxhru)
+			{
+				dimension++;
+				newValue = this->hru_names_vec.at(dimension - 1).c_str();
+				SetDlgItemText(ID_HRU_DIM_DISPLAY, newValue);
+			}
 		}
 	}
+	else 
+	{
+		GetDlgItemText(ID_HRU_DIM_DISPLAY, currentValue);
+		dimension = _ttoi(currentValue);
+		if (currentValue.Trim().GetLength() > 0)
+		{
+			if (dimension < Global::maxhru)
+			{
+				dimension = _ttoi(currentValue) + 1;
+				newValue.Format(_T("%d"), dimension);
+				SetDlgItemText(ID_HRU_DIM_DISPLAY, newValue);
+			}
+		}
+	}
+
 }
 
 
@@ -2627,7 +2687,7 @@ void CRHMmainDlg::OnHRU()
 			{
 				this->using_hru_names = true;
 
-
+				this->ChangeToHRUNamesDisplay();
 
 			}
 			else
@@ -2655,12 +2715,53 @@ void CRHMmainDlg::OnHRU()
 	}
 	else 
 	{
+		this->ChangeToHRUNumberDisplay();
 		this->using_hru_names = false;
 		this->hru_names_vec.clear();
+
 	}
 
 	
 	
+}
+
+
+void CRHMmainDlg::ChangeToHRUNamesDisplay()
+{
+	/* Change the HRU Selector to display a name */
+	CString hruText;
+	GetDlgItemText(ID_HRU_DIM_DISPLAY, hruText);
+	CT2CA pszConvertedAnsiString(hruText);
+	std::string hruString(pszConvertedAnsiString);
+	int hruNum = std::stoi(hruString) - 1;
+	std::string hruNameString = this->hru_names_vec.at(hruNum);
+	CString hruNameText(hruNameString.c_str());
+	SetDlgItemText(ID_HRU_DIM_DISPLAY, hruNameText);
+
+}
+
+
+void CRHMmainDlg::ChangeToHRUNumberDisplay()
+{
+	/* Change the HRU Selector to display a number */
+	CString hruText;
+	GetDlgItemText(ID_HRU_DIM_DISPLAY, hruText);
+	CT2CA pszConvertedAnsiString(hruText);
+	std::string hruString(pszConvertedAnsiString);
+	int pos = 0;
+	for (size_t i = 0; i < this->hru_names_vec.size(); i++)
+	{
+		if (this->hru_names_vec.at(i) == hruString)
+		{
+			pos = i + 1;
+			break;
+		}
+	}
+	std::string hruNumberString = std::to_string(pos);
+	CString hruNumberText(hruNumberString.c_str());
+	SetDlgItemText(ID_HRU_DIM_DISPLAY, hruNumberText);
+
+
 }
 
 

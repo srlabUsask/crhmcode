@@ -891,6 +891,10 @@ private:
 	*/
 	afx_msg void OnHRU();
 
+	void ChangeToHRUNamesDisplay();
+
+	void ChangeToHRUNumberDisplay();
+
 	/**
 	* Handler for when the user left clicks on the flip ticks button
 	* handles the UWM_FLIP_TICKS_LEFT message.
