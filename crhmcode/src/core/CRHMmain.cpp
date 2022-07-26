@@ -4990,19 +4990,24 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 			thisVar->Daily = false;
 		}
 
+		bool loopOnFirstOrLast;
+
 		if (newVar->root == "") // Observation 
 		{ 
 			if (thisVar->FileData->Freq == 1)
 			{
 				newVar->LoopFunct = &ClassVar::LoopFirst;
+				loopOnFirstOrLast = true;
 			}
 			else if (thisVar->Daily)
 			{
 				newVar->LoopFunct = &ClassVar::LoopFirst;
+				loopOnFirstOrLast = true;
 			}
 			else
 			{
 				newVar->LoopFunct = &ClassVar::LoopRange;
+				loopOnFirstOrLast = false;
 			}
 		}
 		else // Variable 
@@ -5010,10 +5015,12 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 			if (thisVar->Daily)
 			{
 				newVar->LoopFunct = &ClassVar::LoopLast;
+				loopOnFirstOrLast = true;
 			}
 			else
 			{
 				newVar->LoopFunct = &ClassVar::LoopRange;
+				loopOnFirstOrLast = false;
 			}
 		}
 
@@ -5242,7 +5249,11 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 							{
 								Greatest = LastDays;
 							}
-							cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx)/ ((long long)Global::Freq * (long long)Greatest));
+							cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx)/Greatest);
+							if (loopOnFirstOrLast)
+							{
+								cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx) * (long long)Global::Freq);
+							}
 							LastDays = 0;
 							break;
 						case TFun::DLTA:
