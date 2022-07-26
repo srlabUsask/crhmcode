@@ -2599,9 +2599,12 @@ void CRHMmainDlg::OnHRU()
 				this->hru_names_vec.push_back(hru_names->second->Strings->at(i));
 			}
 
+			/* Check that the names are unique and not empty strings.*/
 			bool unique_names = true;
+			bool empty_names = false;
 			for (int i = 0; i < this->hru_names_vec.size(); i++)
 			{
+				/* Checks for name uniqueness. */
 				for (int j = 0; j < this->hru_names_vec.size(); j++)
 				{
 					if (i != j)
@@ -2612,15 +2615,36 @@ void CRHMmainDlg::OnHRU()
 						}
 					}
 				}
+
+				/* Checks for any empty names. */
+				if (this->hru_names_vec.at(i) == "")
+				{
+					empty_names = true;
+				}
 			}
 
-			if (unique_names)
+			if (unique_names && !empty_names)
 			{
 				this->using_hru_names = true;
+
+
+
 			}
 			else
 			{
-				MessageBox(L"Cannot switch to show HRU names because the names are not unique.");
+				if (!unique_names)
+				{
+					this->using_hru_names = false;
+					this->hru_names_vec.clear();
+					MessageBox(L"Cannot switch to show HRU names because the names are not unique.");
+				}
+				else if (empty_names)
+				{
+					this->using_hru_names = false;
+					this->hru_names_vec.clear();
+					MessageBox(L"Cannot switch to show HRU names because some names are empty strings.");
+				}
+
 			}
 
 		}
