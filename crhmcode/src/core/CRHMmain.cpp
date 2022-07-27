@@ -5285,7 +5285,11 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 				{
 					Greatest = LastDays;
 				}
-				cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx) / ((long long)Global::Freq * (long long)Greatest));
+				cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx) / Greatest);
+				if (loopOnFirstOrLast)
+				{
+					cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx) * (long long)Global::Freq);
+				}
 				break;
 			case TFun::DLTA:
 				cdSeries->setYValue(CurrentIndx, cdSeries->YValue(CurrentIndx) - Delta0);
