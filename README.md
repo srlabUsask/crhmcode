@@ -14,13 +14,13 @@ One of the objectives of the modernization of the CRHM software was to separate 
 
 Both versions support the same command line interface which is described here: https://github.com/srlabUsask/crhmcode/wiki/Using-CRHMcode-Command-Line-Interface
 
-### CRHMcode GCC
+### CRHMcode CLI
 
-CRHMcode GCC can be compiled on any system that supports the GCC C++ compiler. Instructions for compiling it can be found here: https://github.com/srlabUsask/crhmcode/wiki/Building-CRHMcode-GCC
+CRHMcode CLI can be compiled on any system that supports the GCC C++ compiler. Instructions for compiling it can be found here: https://github.com/srlabUsask/crhmcode/wiki/Building-CRHMcode-GCC
 
 It is likely that other C++ compilers can be used to compile and run CRHMcode GCC but only the GCC compiler has been tested.
 
-CRHMcode GCC will be available as a source distribution designed to be built with the CMake set of tools.
+CRHMcode CLI will be available as a source distribution designed to be built with the CMake set of tools.
 
 
 ### CRHMcode GUI
