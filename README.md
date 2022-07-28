@@ -18,7 +18,7 @@ Both versions support the same command line interface which is described here: h
 
 CRHMcode CLI can be compiled on any system that supports the GCC C++ compiler. Instructions for compiling it can be found here: https://github.com/srlabUsask/crhmcode/wiki/Building-CRHMcode-GCC
 
-It is likely that other C++ compilers can be used to compile and run CRHMcode GCC but only the GCC compiler has been tested.
+It is likely that other C++ compilers can be used to compile and run CRHMcode CLI but only the GCC compiler has been tested.
 
 CRHMcode CLI will be available as a source distribution designed to be built with the CMake set of tools.
 
