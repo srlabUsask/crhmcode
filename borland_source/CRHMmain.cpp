@@ -1,10 +1,10 @@
-// 06/28/22 correcting mixed precipitation phase equation in obs
-// module in 06/27/22
+// 08/02/22 correcting hru_evap estimation in lake_evap module and volumetric_rechr
+// equation and fallstat value for pavement in volumetric module in 06/28/22
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "06/28/22"
+#define CurrentVersion "08/02/22"
 
 #include <stdexcept>
 #include "CRHMmain.h"
