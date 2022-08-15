@@ -17,8 +17,8 @@ Classlake(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROT
 // declared variables
   double *hru_evap{ NULL };
   double *hru_cum_evap{ NULL };
-  double *hru_actet{ NULL };
-  double *hru_cum_actet{ NULL };
+  // double *hru_actet{ NULL }; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
+  // double *hru_cum_actet{ NULL }; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
   double *lake_evap_month{ NULL };
   double *hru_t_Mmean{ NULL };
   double *hru_rh_Mmean{ NULL };

@@ -633,3 +633,14 @@ CRHM 06/28/22
   Corrections in hru_rain equation in the mixed precipitation phase in module obs:
 	
 	hru_rain[hh] = hru_p[hh]*(Use - tmax_allsnow[hh])/(tmax_allrain[hh] - tmax_allsnow[hh]);
+
+CRHM 08/02/22
+
+  Changes in hru_evap estimation based on Meyer's monthly evaporation in module lake_evap.
+
+  Corrections in volumetric_rechr equation and fallstat value for pavement case in module Volumetric:
+	
+	Volumetric_rechr[hh] = (soil_rechr[hh]/soil_rechr_max[hh]*(SetSoilproperties[soil_type[hh]][3] - SetSoilproperties[soil_type[hh]][1])+ SetSoilproperties[soil_type[hh]][1])/1000.0;
+
+        fallstat [hh] = 100.0;  // i.e. for pavement 
+
