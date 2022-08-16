@@ -1020,6 +1020,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 				else
 				{
 					SaveStateFileName = "";
+					SaveStateFlag = false;
 				}
 			}
 			else if (S == "Summary_period")
