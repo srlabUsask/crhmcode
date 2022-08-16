@@ -4856,7 +4856,7 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 	pp = thisVar->name.rfind('(');
 	bool AlreadyIndex = (pp != string::npos); // handles exported variables in Obs files
 
-	if (this->ListHruNames && thisVar->varType < TVar::Read) // using names
+	if (false && thisVar->varType < TVar::Read) // using names
 	{
 
 		string sub = seriesTitle.substr(jj1 + 1, jj2 - jj1 - 1);
@@ -5323,7 +5323,6 @@ void CRHMmain::calculateObservationTseries(ClassVar* thisVar, TSeries* cdSeries,
 
 void CRHMmain::calculateVariableFunctionOutput(std::string varName, TSeries* varPlot, TFun function)
 {
-	CRHMmain* model = CRHMmain::getInstance();
 
 	ClassVar* rootVariable = varPlot->getTag();
 
@@ -5331,9 +5330,9 @@ void CRHMmain::calculateVariableFunctionOutput(std::string varName, TSeries* var
 	std::string varNameNoSuffix = varName.substr(0, suffixStart);
 
 	int pos = -1;
-	for (size_t i = 0; i < model->SelectedVariables->size(); i++)
+	for (size_t i = 0; i < this->SelectedVariables->size(); i++)
 	{
-		if (model->cdSeries[i]->getTitle() == varNameNoSuffix)
+		if (this->cdSeries[i]->getTitle() == varNameNoSuffix)
 		{
 			pos = i;
 			break;
@@ -5355,7 +5354,7 @@ void CRHMmain::calculateVariableFunctionOutput(std::string varName, TSeries* var
 	derivedVariable->VarFunct = 1;
 	derivedVariable->FileData->Data = new double* [derivedVariable->dim];   // Data [Cnt] [Lines]
 	derivedVariable->cnt = derivedVariable->dim; // added 11/23/11
-	derivedVariable->FileData->Lines = model->cdSeries[pos]->Count();
+	derivedVariable->FileData->Lines = this->cdSeries[pos]->Count();
 	derivedVariable->FileData->Freq = Global::Freq;
 	derivedVariable->FileData->IndxMin = Global::DTmin;
 	// interrupt is not synced to end of day. 05/14/12
@@ -5378,11 +5377,11 @@ void CRHMmain::calculateVariableFunctionOutput(std::string varName, TSeries* var
 
 	for (long jj = 0; jj < derivedVariable->FileData->Lines; jj++)
 	{
-		derivedVariable->FileData->Data[Indx][jj] = model->cdSeries[pos]->YValue(jj);
+		derivedVariable->FileData->Data[Indx][jj] = this->cdSeries[pos]->YValue(jj);
 	}
 
 
 
-	model->calculateObservationTseries(derivedVariable, varPlot, varName, function);
+	this->calculateObservationTseries(derivedVariable, varPlot, varName, function);
 
 }
