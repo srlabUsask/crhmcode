@@ -1932,13 +1932,6 @@ long ConstructDlg::BuildClick()
 	Global::maxlay = max_layer_spin.GetPos();
 	Global::maxhru = max_HRU_spin.GetPos();
 
-	COleDateTime timeNow;
-	timeNow = COleDateTime::GetCurrentTime();
-	timeNow.m_dt;
-
-	crhmmain->setStartDate(timeNow.m_dt);
-	crhmmain->setEndDate(timeNow.m_dt);
-
 	Global::OurModulesList->clear();
 	for (size_t i = 0; i < SelectedModules->size(); i++)
 	{

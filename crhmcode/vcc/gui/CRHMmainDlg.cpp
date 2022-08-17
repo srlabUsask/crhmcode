@@ -1789,7 +1789,7 @@ void CRHMmainDlg::OnCloseAllObservations()
 
 void CRHMmainDlg::OnBuildConstruct()
 {
-		ConstructDlg* build_form;
+	ConstructDlg* build_form;
 	std::map<std::string, ClassModule*>* all_module_list = CRHMmain::getInstance()->getAllmodules();
 
 	build_form = new ConstructDlg();
