@@ -4311,6 +4311,7 @@ void CRHMmain::ClearModules(bool All) {
 
 	AllVariables->clear();
 	SelectedVariables->clear();
+	SelectedObservations->clear();
 
 	if (cdSeries) {
 		//for (int ii = 0; ii < SeriesCnt; ii++)
