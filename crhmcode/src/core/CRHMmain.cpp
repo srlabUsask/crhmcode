@@ -865,6 +865,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 						DataFile.clear();
 						DataFile >> Kind;
 
+						Kind.erase(Kind.find_last_not_of(" \t\f\v\n\r")+1, std::string::npos);
 						if (Kind == "_obs")
 						{
 							Kind = "";
@@ -1026,6 +1027,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 			else if (S == "Summary_period")
 			{
 				getline(DataFile, S);
+				S.erase(S.find_last_not_of(" \t\f\v\n\r")+1, std::string::npos);
 				if (S[1] != '#')
 				{
 					if (S == "Daily")
