@@ -1667,7 +1667,7 @@ void CRHMmainDlg::OnExit()
 			if (result == IDCANCEL) { return; } // if cancel is pressed, nothing should happen to the new project.
 		}
 	}
-	exit(0);
+	CDialogEx::OnCancel();
 }
 
 
