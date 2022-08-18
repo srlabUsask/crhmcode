@@ -184,6 +184,12 @@ CRHMmain::CRHMmain(CRHMArguments * arguments)
 
 CRHMmain::~CRHMmain()
 {
+	delete this->ObsFilesList;
+	delete this->ProjectList;
+	delete this->AllVariables;
+	delete this->AllObservations;
+	delete this->SelectedVariables;
+	delete this->SelectedObservations;
 }
 
 double CRHMmain::GetStartDate()
