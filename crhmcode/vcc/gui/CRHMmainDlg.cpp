@@ -26,6 +26,8 @@ CRHMmainDlg::CRHMmainDlg(string argumentfile)
 
 CRHMmainDlg::~CRHMmainDlg()
 {
+	CRHMmain* main = CRHMmain::getInstance();
+	delete main;
 }
 
 
