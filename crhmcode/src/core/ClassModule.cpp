@@ -790,7 +790,22 @@ std::vector<std::string> * ClassModule::declparam(
 		PairPar Item = PairPar(Name + " " + param, newPar);
 		Global::MapPars.insert(Item);
 
-		this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+		bool paramFound = false;
+		for (
+			std::list<std::pair<std::string, ClassPar*>>::iterator it = this->parameters_list.begin();
+			it != this->parameters_list.end();
+			it++
+			)
+		{
+			if (it->first == param)
+			{
+				paramFound = true;
+			}
+		}
+		if (!paramFound)
+		{
+			this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+		}
 
 		return newPar->Strings;
 	}
@@ -957,7 +972,22 @@ void ClassModule::declparam(
 		PairPar Item = PairPar(Name + " " + param, newPar);
 		Global::MapPars.insert(Item);
 
-		this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+		bool paramFound = false;
+		for (
+			std::list<std::pair<std::string, ClassPar*>>::iterator it = this->parameters_list.begin();
+			it != this->parameters_list.end();
+			it++
+			)
+		{
+			if (it->first == param)
+			{
+				paramFound = true;
+			}
+		}
+		if (!paramFound)
+		{
+			this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+		}
 
 		return;
 	}
@@ -1118,7 +1148,22 @@ void ClassModule::declparam(
 		PairPar Item = PairPar(Name + " " + param, newPar);
 		Global::MapPars.insert(Item);
 
-		this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+		bool paramFound = false;
+		for (
+			std::list<std::pair<std::string, ClassPar*>>::iterator it = this->parameters_list.begin();
+			it != this->parameters_list.end();
+			it++
+			)
+		{
+			if (it->first == param)
+			{
+				paramFound = true;
+			}
+		}
+		if (!paramFound)
+		{
+			this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+		}
 
 		return;
 	}
