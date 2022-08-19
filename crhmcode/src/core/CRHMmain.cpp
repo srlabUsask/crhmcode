@@ -634,22 +634,27 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 						++Cols; // # of HRU's in Basin
 					}
 
-					if ( module ==  "Shared") {
+					if ( module ==  "Shared") 
+					{
 						// write Shared parameters to module parameters
 						// all parameter values are set to basin values.  If re-defined in a module will be changed.
 						MapPar::iterator itPar;
-						for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); ++itPar) {
+						for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); ++itPar) 
+						{
 							thisPar = (*itPar).second;
-							if (thisPar->param == param) {
+							if (thisPar->param == param) 
+							{
 								if (thisPar->dim == Cols / thisPar->lay) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
+								{
 									break;
-								//                else if(Cols > 0 && Cols%thisPar->lay == 0) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
-								//                  break;
+								}
 								else if (thisPar->varType == TVar::Txt && thisPar->dimen < TDim::NHRU) // text can have variable length
+								{
 									break;
-								else if (thisPar->param == "obs_elev" || thisPar->param == "soil_withdrawal")
-									break;
-								else { // Added to handle 2D parameters
+								}
+								else 
+								{ 
+									// Added to handle 2D parameters
 									if ((thisPar->param == param) && (thisPar->dim == Cols / thisPar->dim))
 									{
 										break;
@@ -658,17 +663,21 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 									{
 										thisPar = NULL;
 									}
-
 								}
 							}
 							else
+							{
 								thisPar = NULL; // required for last loop when parameter not found
+							}
 						}
 					}
-					else {
+					else 
+					{
 						thisPar = ClassParFind(module, param); // find module parameter for template
 						if (thisPar)
+						{
 							module = thisPar->module.c_str(); // set it to found name
+						}
 					}
 
 					if (thisPar) {
