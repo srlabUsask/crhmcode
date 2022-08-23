@@ -162,6 +162,7 @@ BOOL CCRHMGUIApp::InitInstance()
 			model->OpenNamePrj = projectArgument;
 			model->DoPrjOpen(projectArgument, "");
 			model->RunClick();
+			delete model;
 		}
 		else
 		{
@@ -171,9 +172,6 @@ BOOL CCRHMGUIApp::InitInstance()
 
 		delete args;
 
-		//dlgOptions->ProjectFileArgument = "d:/crhm/demomacrotesting/test4.prj";
-		//dlgOptions.DoModal();
-		//dlgOptions->ProcessCommandLineArgument();
 		return TRUE;
 	}
 	catch (...)

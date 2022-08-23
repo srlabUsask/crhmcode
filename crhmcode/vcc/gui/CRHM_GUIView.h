@@ -8,9 +8,9 @@
 #include "CRHM_GUIDoc.h"
 #include "COptions.h"
 #include "CReport.h"
-#include "CExport.h"
-#include "CParameters.h"
-#include "CConstruct.h"
+#include "ExportDlg.h"
+#include "ConstructDlg.h"
+#include "ParametersDlg.h"
 #include "COptions.h"
 #include "../../src/core/GlobalDll.h"
 
@@ -56,7 +56,7 @@ protected:
 public:
 	afx_msg void OnDialogShow();
 	afx_msg void OnExport();
-	afx_msg void OnParameters();
+	afx_msg void OpenParametersDialog();
 	afx_msg void OnBuildConstruct();
 	afx_msg void OnFileSaveAs();
 

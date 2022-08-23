@@ -261,7 +261,6 @@ void FlowDiagramDlg::FormActivate()
 	time_t start, end1, end2;
 	time(&start);
 
-
 	DrawModules();
 	DrawDiagram();
 
@@ -286,24 +285,6 @@ void FlowDiagramDlg::FormActivate()
 	CString cs1(s1.c_str());
 	CString cs2(s2.c_str());
 
-
-	//MessageBox(cs1);
-	//MessageBox(cs2 + " done");
-
-	//printf("time for first part = %f",seconds1);
-	//printf("time for second part = %f", seconds2);
-
-
-	
-	//FileDialog *f = new FileDialog();
-	//f->Open("html");
-
-
-
-	//FDModule fdmodules[20];
-	//fdmoduleCount = 0;
-
-
 	listcontrol.InsertColumn(0, L"Name", LVCFMT_CENTER, 80);
 	listcontrol.InsertColumn(1, L"Age", LVCFMT_CENTER, 80);
 	listcontrol.InsertColumn(2, L"Address", LVCFMT_CENTER, 80);
@@ -311,109 +292,6 @@ void FlowDiagramDlg::FormActivate()
 	int item = listcontrol.InsertItem(0, L"testname");
 	listcontrol.SetItemText(item, 2, L"Mark");
 
-
-	
-	//if (OurCntrl)
-		//StringGrid1->Visible = true;
-	//else
-		//StringGrid1->Visible = false;
-
-
-	/*
-	Global::Mapgetvar.clear();
-	Global::Mapputvar.clear();
-	Global::Mapreadvar.clear();
-	Global::Mapdeclvar.clear();
-	Global::Mapdeclpar.clear();
-	Global::Mapdeclobs.clear();
-
-	Global::BuildFlag = CRHM::BUILD; // default value
-
-	if (LocalModulesList != NULL)
-		delete LocalModulesList;
-
-	LocalModulesList = new TStringList; // holds parameters/observations already used
-	LocalModulesList->Assign(Global::OurModulesList);
-
-	for (int ii = 0; ii < Global::OurModulesList->Count; ii++) {
-		ClassModule* thisModule = (ClassModule*)Global::OurModulesList->Objects[ii];
-		thisModule->variation_max = 0;
-		thisModule->decl();
-
-		fdmodules[ii] = GetModuleDetails(thisModule->Name, thisModule);
-		fdmoduleCount++;
-	}
-
-	Global::BuildFlag = CRHM::DECL; // model loaded
-
-	//serialize modules
-	FDModule modules[20];
-	for (int i = 0; i < fdmoduleCount; i++)
-	{
-		FDModule toinsert = fdmodules[i];
-		int toinsertCount = toinsert.count;
-		int position = -1;
-
-		for (int j = i - 1; j >= 0; j--)
-		{
-			FDModule check = fdmodules[j];
-			int checkCount = check.count;
-
-			for (int k = 0; k < checkCount; k++)
-			{
-				string output = check.outputs[k];
-				if (output == "") { continue; }
-				for (int l = 0; l < toinsertCount; l++)
-				{
-					string input1 = toinsert.inputs[l];
-					string input2 = toinsert.parameters[l];
-					if (output == input1 || output == input2) { position = j; break; }
-				}
-				if (position > -1) { break; }
-			}
-			if (position > -1) { break; }
-		}
-		for (int j = i - 1; j >= position + 1; j--)
-		{
-			modules[j + 1] = modules[j];
-		}
-		if (position == -1 && i-1 >= 0) { position = i-1; }
-		modules[position + 1] = toinsert;
-	}
-	*/
-
-
-	//provide cordinates to the modules.
-
-
-
-
-	//DrawGrid();
-	
-
-	/*
-	
-
-	if (LocalModulesList->Count <= 0) {
-
-		if (pMetafile)
-			pMetafile->Clear();
-
-		Application->MessageBox("No modules to display", "No Model loaded", MB_OK);
-		return;
-	}
-
-	if (OurDiagram != NULL)
-		delete OurDiagram;
-
-	OurDiagram = new Diagram(FlowForm);
-
-	OurDiagram->DrawModules();
-
-	FormPaint(Sender);
-
-	OurCntrl = false;
-	*/
 }
 
 
@@ -1091,12 +969,12 @@ void FlowDiagramDlg::GetModuleDetails(string S, ClassModule* thisModule, FDModul
 		//CString cstr4(StringGrid1->Cells[4][i].c_str());
 		//CString cstr5(StringGrid1->Cells[5][i].c_str());
 
-		m->observations[i-1] = StringGrid1->Cells[0][i];
-		m->modules[i - 1] = StringGrid1->Cells[1][i];  //put variable
-		m->inputs[i-1] = StringGrid1->Cells[2][i]; //put variable
-		m->outputs[i - 1] = StringGrid1->Cells[3][i];
-		m->parameters[i - 1] = StringGrid1->Cells[4][i];
-		m->newobservations[i - 1] = StringGrid1->Cells[5][i];
+		m->observations.push_back(StringGrid1->Cells[0][i]);
+		m->modules.push_back(StringGrid1->Cells[1][i]);
+		m->inputs.push_back(StringGrid1->Cells[2][i]);
+		m->outputs.push_back(StringGrid1->Cells[3][i]);
+		m->parameters.push_back(StringGrid1->Cells[4][i]);
+		m->newobservations.push_back(StringGrid1->Cells[5][i]);
 		m->count++;
 
 		//int nIndex = listcontrol.InsertItem(i - 1, cstr0);
@@ -1309,8 +1187,20 @@ int FlowDiagramDlg::FindPreviousModule(string input, int mcount, FDModule mods[]
 			if (input == mods[i].parameters[j]) { return i; }
 			if (input == mods[i].outputs[j]) { return i; }
 		}*/
-		for (int j = 0; j < mods[i].ilength; j++) { if (input == mods[i].inputlist[j]) { return i; } }
-		for (int j = 0; j < mods[i].olength; j++) { if (input == mods[i].outputlist[j]) { return i; } }
+		for (int j = 0; j < mods[i].ilength; j++) 
+		{ 
+			if (input == mods[i].inputlist[j]) 
+			{ 
+				return i; 
+			} 
+		}
+		for (int j = 0; j < mods[i].olength; j++) 
+		{ 
+			if (input == mods[i].outputlist[j]) 
+			{ 
+				return i; 
+			} 
+		}
 	}
 
 	return -1;
@@ -2096,7 +1986,7 @@ void FlowDiagramDlg::GetModulesInputsAndOutputs(FDModule * mods)
 		mods[ii].modulename = S;
 		for (size_t i = 0; i < ModList->size(); i++) 
 		{ 
-			mods[ii].inputlist[i] = ModList->at(i); 
+			mods[ii].inputlist.push_back(ModList->at(i)); 
 		}
 		mods[ii].ilength = ModList->size();
 

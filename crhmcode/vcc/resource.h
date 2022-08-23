@@ -54,6 +54,7 @@
 #define IDR_MacroEntryMenu              343
 #define FlowDiagram_DLG                 344
 #define ID_HIERARCHY_DLG                351
+#define REFRESH_RATE_DLG                352
 #define IDC_LIST1                       1000
 #define IDC_LIST2                       1001
 #define IDC_LIST3                       1002
@@ -72,6 +73,7 @@
 #define IDC_BUTTON6                     1014
 #define IDC_TCHART1                     1015
 #define IDC_EDIT1                       1018
+#define IDC_EDIT4                       1019
 #define IDC_CHECK1                      1023
 #define IDC_CHECK2                      1024
 #define IDC_CHECK3                      1025
@@ -96,6 +98,14 @@
 #define IDC_STATIC2                     1064
 #define IDC_EXPLORER1                   1065
 #define IDC_EXPLORER2                   1066
+#define IDC_RADIO1                      1067
+#define IDC_RADIO2                      1068
+#define IDC_RADIO3                      1069
+#define IDC_RADIO4                      1070
+#define IDC_RADIO5                      1071
+#define IDC_RADIO6                      1072
+#define IDC_COMBO1                      1073
+#define IDC_COMBO2                      1074
 #define ID_PROJECT_LOG                  32771
 #define ID_PROJECT_SAVECHARTTEMPLATE    32772
 #define ID_PROJECT_PLOTREFRESHRATE      32773
@@ -166,14 +176,19 @@
 #define ID_TEST_TEST32843               32843
 #define ID_ADD                          32844
 #define ID_ADDARRAY                     32845
-#define ID_CTX_OBS_ALL_ADD              32846
-#define ID_CTX_OBS_ALL_ADD_ARRAY        32847
 #define ID_CTX_SEL_OBS_REMOVE           32848
 #define ID_PROJECT_LOG32848             32848
 #define ID_LOG_LOGALL                   32849
 #define ID_LOG_LOGLAST                  32850
 #define ID_EXTRACT_GROUP                32851
 #define ID_VIEW_HIERARCHY               32852
+#define ID_PROJECT_PLOTREFRESHRATE32853 32853
+#define ID_PLOTREFRESHRATE_DAILY        32854
+#define ID_PLOTREFRESHRATE_WEEKLY       32855
+#define ID_PLOTREFRESHRATE_MONTHLY      32856
+#define ID_PLOTREFRESHRATE_YEARLY       32857
+#define ID_PLOTREFRESHRATE_ATEND        32858
+#define ID_PLOTREFRESHRATE_BI           32859
 #define BEGIN_OPEN_OBS_FILE_ID          32999
 #define ID_OPEN_OBS_FILE_FIRST          33000
 #define ID_OPEN_OBS_FILE_LAST           33998
@@ -182,15 +197,14 @@
 #define ID_SEL_OBS_LIST_BOX             34001
 #define ID_CTX_ALL_OBS_ADD              34002
 #define ID_CTX_ALL_OBS_ADD_ARRAY        34003
+#define ID_CTX_ALL_OBS_FUNCT			34004
 #define ID_ALL_VAR_LIST_BOX             34004
-#define ID_SEL_VAR_LIST_BOX             34005
-#define ID_CTX_ALL_VAR_ADD              34006
-#define ID_CTX_ALL_VAR_ADD_ARRAY        34007
-#define ID_CTX_SEL_VAR_REMOVE           34008
-#define UWM_OPEN_CTX_ALL_OBS            35000
-#define UWM_OPEN_CTX_SEL_OBS            35001
-#define UWM_OPEN_CTX_ALL_VAR            35002
-#define UWM_OPEN_CTX_SEL_VAR            35003
+#define ID_SEL_VAR_LIST_BOX             34006
+#define ID_CTX_ALL_VAR_ADD              34007
+#define ID_CTX_ALL_VAR_ADD_ARRAY        34008
+#define ID_CTX_SEL_VAR_REMOVE           34009
+#define ID_CTX_SEL_VAR_APPLY			34010
+
 #define ID_OBS_DIM_DISPLAY              35100
 #define ID_OBS_DIM_DECREASE             35101
 #define ID_OBS_DIM_INCREASE             35102
@@ -201,6 +215,16 @@
 #define ID_VAR_HELP_DISPLAY             35203
 #define ID_FLIP_TICKS                   35300
 #define ID_CLEAR_MODULES                35301
+#define ID_FUNCTION_DROP_DOWN           36000
+#define ID_TIMEBASE_DROP_DOWN           36001
+#define ID_WATER_YEAR_DROP_DOWN         36002
+#define ID_WATER_YEAR_LABEL				36003
+#define ID_TOTAL_FUNCT					36004
+#define ID_MIN_FUNCT					36005
+#define ID_MAX_FUNCT					36006
+#define ID_AVG_FUCNT					36007
+#define ID_DEL_FUNCT					36008
+#define ID_ADD_OBS_FUNCT				36009
 #define ID_ALL_MODS_LIST_BOX            40000
 #define ID_SEL_MODS_LIST_BOX            40001
 #define ID_MODULE_FILTER_BASIC          40002
@@ -221,8 +245,7 @@
 #define ID_MAX_HRU_DISPLAY              40017
 #define ID_MODULE_FILTER_LABELS         40018
 #define ID_CONSTRUCT_CONSOLE            40019
-#define UWM_OPEN_CTX_AVAILABLE_MODS     40020
-#define UWM_OPEN_CTX_SELECTED_MODS      40021
+
 #define ID_CTX_AVAILABLE_MOD_ADD        40022
 #define ID_CTX_SEL_MODS_REMOVE          40023
 #define ID_CTX_SEL_MODS_NEXT            40024
@@ -240,6 +263,7 @@
 #define ID_MACRO_FILE_EXIT              40108
 #define ID_MAIN_LOG_ALL                 40200
 #define ID_MAIN_LOG_LAST                40201
+#define ID_MAIN_CREATE_SUMMARY			40202
 #define ID_EXTRACT_GROUP_SAVE           40300
 #define ID_EXTRACT_GROUP_EXIT           40301
 #define ID_GROUP_LIST                   40302
@@ -248,31 +272,94 @@
 #define ID_HIERARCHY_CHECK              40400
 #define ID_HIERARCHY_LIST               40401
 #define ID_HIERARCHY_STATIC             40402
-#define ID_EXPORT_STATIC				40500
-#define ID_EXPORT_STATIC2				40501
-#define ID_EXPORT_CHOICES_LIST_BOX		40502
-#define ID_EXPORT_SELECTED_LIST_BOX		40503
-#define ID_EXPORT_PREVIEW_MORE			40504
-#define ID_EXPORT_FORMAT_BTN			40505
-#define ID_EXPORT_PREVIEW_EDIT_BOX		40506
-#define ID_EXPORT_SAVE					40507
-#define ID_EXPORT_SAVE_AS				40508
-#define ID_EXPORT_EXIT					40509
-#define IDR_EXPORT_MENU					40510
-#define UWM_AUTO_RUN					40511
-#define UWM_FLIP_TICKS_LEFT				40600
-#define UWM_FLIP_TICKS_RIGHT			40601
-#define ID_OBS_LAY_DIM_LABEL			40700
-#define ID_CTX_ALL_VAR_ADD_LAY_ARRAY	40701
+#define ID_EXPORT_STATIC                40500
+#define ID_EXPORT_STATIC2               40501
+#define ID_EXPORT_CHOICES_LIST_BOX      40502
+#define ID_EXPORT_SELECTED_LIST_BOX     40503
+#define ID_EXPORT_PREVIEW_MORE          40504
+#define ID_EXPORT_FORMAT_BTN            40505
+#define ID_EXPORT_PREVIEW_EDIT_BOX      40506
+#define ID_EXPORT_SAVE                  40507
+#define ID_EXPORT_SAVE_AS               40508
+#define ID_EXPORT_EXIT                  40509
+#define IDR_EXPORT_MENU                 40510
+
+#define ID_OBS_LAY_DIM_LABEL            40700
+#define ID_CTX_ALL_VAR_ADD_LAY_ARRAY    40701
 #define ID_CTX_ALL_VAR_ADD_HRU_LAY_ARRAY 40702
+#define ID_PARAM_DLG_MODULES_LIST_BOX   50000
+#define ID_PARAM_DLG_PARAM_LIST_BOX     50001
+#define ID_PARAM_DLG_TOGGLE_BASIC_BTN   50002
+#define ID_PARAM_DLG_TOGGLE_ADVANCE_BTN 50003
+#define ID_PARAM_DLG_TOGGLE_PRIVATE_BTN 50004
+#define ID_PARAM_DLG_TOGGLE_ALL_BTN     50005
+#define PARAMETERS_DLG_SCROLL_PANE      50006
+#define ID_PARAM_PANE_PLACEHOLDER       50007
+#define PARAMETERS_CARD                 50009
+#define PARAMETERS_CARD_SHARED          50010
+#define ID_PARAM_NAME                   60000
+#define ID_PARAM_HELP                   60001
+#define ID_PARAM_UNITS_LABEL            60002
+#define ID_PARAM_UNITS                  60003
+#define ID_PARAM_SET_BTN                60004
+#define ID_PARAM_RESET_BTN              60005
+#define ID_PARAM_SAVE_BTN               60006
+#define ID_PARAM_MIN_LABEL              60007
+#define ID_PARAM_MAX_LABEL              60008
+#define ID_PARAM_DEFAULT_LABEL          60009
+#define ID_PARAM_MIN_VALUE              60010
+#define ID_PARAM_MAX_VALUE              60011
+#define ID_PARAM_DEFAULT_VALUE          60012
+#define PARAMETERS_SET_ALL_DLG			60013
+#define ID_PARAM_SET_VALUE				60014
+#define ID_PARAM_RESET_ALL				60015
+#define ID_PARAM_SAVE_ALL				60016
+#define ID_PARAM_MAKE_LOCAL				60017
+#define ID_PARAM_SET_PLACEHOLDER		60018
+#define CONSOLIDATE_PARAM_DLG			60019
+#define ID_CONSOLIDATABLE_LIST_BOX		60020
+#define ID_CONSOLIDATE_CARDS_PLACEHOLDER 60021
+#define ID_CONSOLIDATE_RETURN			60022
+#define ID_CONSOLIDATE_FINISH			60023
+#define CONSOLIDATE_PARAM_CARD			60024
+#define ID_PARAM_USE_FOR_ALL			60025
+#define ID_MODULE_NAME					60026
+
+#define ID_PARAM_COL					70000
+
+#define ID_PARAM_ROW					80000
+
+#define ID_PARAM_GRID					100000000
+
+#define UWM_OPEN_CTX_ALL_OBS            32768
+#define UWM_OPEN_CTX_SEL_OBS            32769
+#define UWM_OPEN_CTX_ALL_VAR            32770
+#define UWM_OPEN_CTX_SEL_VAR            32771
+#define UWM_OPEN_CTX_AVAILABLE_MODS     32772
+#define UWM_OPEN_CTX_SELECTED_MODS      32773
+#define UWM_AUTO_RUN                    32774
+#define UWM_FLIP_TICKS_LEFT             32775
+#define UWM_FLIP_TICKS_RIGHT            32776
+#define UWM_MAKE_LOCAL					32777
+#define UWM_UNSELECT_PARAMS				32778
+#define UWM_USE_FOR_ALL					32779
+
+#define ID_REFRESH_DAILY				41000
+#define ID_REFRESH_BIWEEKLY				41001
+#define ID_REFRESH_WEEKLY				41002
+#define ID_REFRESH_MONTHLY				41003
+#define ID_REFRESH_YEARLY				41004
+#define ID_REFRESH_ATEND				41005
+#define ID_END_RUN						41006
+#define ID_CONTINUE_RUN					41007
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        353
-#define _APS_NEXT_COMMAND_VALUE         32853
-#define _APS_NEXT_CONTROL_VALUE         1067
+#define _APS_NEXT_RESOURCE_VALUE        354
+#define _APS_NEXT_COMMAND_VALUE         32860
+#define _APS_NEXT_CONTROL_VALUE         1071
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

@@ -18,6 +18,8 @@ private:
 public:
 	ReportStream(std::string reportName);
 	void OutputHeaders(CRHMmain * instance);
+	void OutputSummaryHeaders(std::list<std::pair<std::string, TSeries*>>* series);
+	void OutputSummaryLines(std::list<std::pair<std::string, TSeries*>>* series);
 	void SendTimeStepToReport(CRHMmain* instance);
 	void CloseStream();
 	std::list<std::string> * RprtHeader(CRHMmain * instance);

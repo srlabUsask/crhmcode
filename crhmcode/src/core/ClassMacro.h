@@ -54,6 +54,15 @@ public:
 	virtual void finish(bool good);
 
 	ClassMacro* klone(string name) const;
+
+	/**
+	* Retrives all of the parameters associated with a group macro. Appending them to
+	* the provided list.
+	* 
+	* @param allParameters - std::list<std::pair<std::string, ClassPar*>>* pointer to a list to append all of the 
+	*     parameter entries to.
+	*/
+	void RetrieveAllParameters(std::list<std::pair<std::string, ClassPar*>> * allParameters);
 };
 
 #endif // !CLASSMACRO

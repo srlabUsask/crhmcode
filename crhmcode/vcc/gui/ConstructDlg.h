@@ -1,6 +1,6 @@
 #include "../stdafx.h"
+
 #include "CRHM_GUI.h"
-#include "afxdialogex.h"
 #include "../../src/core/CRHMmain.h"
 #include "../../src/core/MacroUnit.h"
 #include "../RightClickListBox.h"
@@ -11,13 +11,13 @@ class StringGrid;
 
 // CConstruct dialog
 
-class CConstruct : public CDialog
+class ConstructDlg : public CDialog
 {
-	DECLARE_DYNAMIC(CConstruct)
+	DECLARE_DYNAMIC(ConstructDlg)
 
 public:
-	CConstruct(CWnd* pParent = nullptr);   // standard constructor
-	virtual ~CConstruct();
+	ConstructDlg(CWnd* pParent = nullptr);   // standard constructor
+	virtual ~ConstructDlg();
 	
 	void AKAselectiveDelete();
 	bool ModifyBuild = false;

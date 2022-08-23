@@ -1,8 +1,5 @@
 #include "CRHMmainDlg.h"
 
-//create a tracking variable for the current project file name
-//a varaible with higher scope is used to avoid unnecessarilly confusing parameter passing - Matt
-CString globFileName;
 
 IMPLEMENT_DYNAMIC(CRHMmainDlg, CDialogEx)
 
@@ -10,21 +7,27 @@ IMPLEMENT_DYNAMIC(CRHMmainDlg, CDialogEx)
 CRHMmainDlg::CRHMmainDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(CRHMmainDialog, pParent)
 {
-	CRHMmain* test = CRHMmain::getInstance();
-	//test->FormCreate();
+	CRHMmain* main = CRHMmain::getInstance();
 	this->openObsFiles = new std::map< UINT, std::pair<std::string, std::string>>();
+	this->refresh_rate = RefreshRate::BIWEEKLY;
+	this->project_altered = false;
+}
+
+
+CRHMmainDlg::CRHMmainDlg(string argumentfile)
+{
+	CRHMmain* main = CRHMmain::getInstance();
+	main->FormCreate();
+	this->openObsFiles = new std::map< UINT, std::pair<std::string, std::string>>();
+	this->refresh_rate = RefreshRate::BIWEEKLY;
+	this->project_altered = false;
 }
 
 
 CRHMmainDlg::~CRHMmainDlg()
 {
-}
-
-CRHMmainDlg::CRHMmainDlg(string argumentfile)
-{
-	CRHMmain* test = CRHMmain::getInstance();
-	test->FormCreate();
-	this->openObsFiles = new std::map< UINT, std::pair<std::string, std::string>>();
+	CRHMmain* main = CRHMmain::getInstance();
+	delete main;
 }
 
 
@@ -45,6 +48,9 @@ void CRHMmainDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, ID_FLIP_TICKS, FlipTicks);
 	FlipTicks.setMessageCodeLeft(UWM_FLIP_TICKS_LEFT);
 	FlipTicks.setMessageCodeRight(UWM_FLIP_TICKS_RIGHT);
+	DDX_Control(pDX, ID_FUNCTION_DROP_DOWN, function_drop_down);
+	DDX_Control(pDX, ID_TIMEBASE_DROP_DOWN, timebase_drop_down);
+	DDX_Control(pDX, ID_WATER_YEAR_DROP_DOWN, water_year_drop_down);
 }
 
 
@@ -61,10 +67,19 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	//Project->Log submenu
 	ON_COMMAND(ID_MAIN_LOG_ALL, &CRHMmainDlg::OnLogAll)
 	ON_COMMAND(ID_MAIN_LOG_LAST, &CRHMmainDlg::OnLogLast)
+	ON_COMMAND(ID_MAIN_CREATE_SUMMARY, &CRHMmainDlg::OnCreateSummary)
 
 	//Project->Reports submenu
 	ON_COMMAND(ID_EXTRACT_GROUP, &CRHMmainDlg::OnExtractGroup)
 	ON_COMMAND(ID_VIEW_HIERARCHY, &CRHMmainDlg::OnViewHierarchy)
+
+	//Project->Plot Refresh Rate submenu
+	ON_COMMAND(ID_PLOTREFRESHRATE_DAILY, &CRHMmainDlg::OnSetDailyRefresh)
+	ON_COMMAND(ID_PLOTREFRESHRATE_BI, &CRHMmainDlg::OnSetBiWeeklyRefresh)
+	ON_COMMAND(ID_PLOTREFRESHRATE_WEEKLY, &CRHMmainDlg::OnSetWeeklyRefresh)
+	ON_COMMAND(ID_PLOTREFRESHRATE_MONTHLY, &CRHMmainDlg::OnSetMonthlyRefresh)
+	ON_COMMAND(ID_PLOTREFRESHRATE_YEARLY, &CRHMmainDlg::OnSetYearlyRefresh)
+	ON_COMMAND(ID_PLOTREFRESHRATE_ATEND, &CRHMmainDlg::OnSetNoRefresh)
 
 	//Observation menu items
 	ON_COMMAND(ID_OPEN_OBS, &CRHMmainDlg::OnOpenObservation)
@@ -77,7 +92,7 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_COMMAND(ID_BUILD_MACRO, &CRHMmainDlg::OnBuildMacro)
 	
 	//Parameters menu items
-		//Parameter menu items are missing
+	ON_COMMAND(ID_PARAMETERS, &CRHMmainDlg::OpenParametersDialog)
 	
 	//State menu items
 	ON_COMMAND(ID_STATE_OPEN_INIT_STATE, &CRHMmainDlg::OnClickOnOpenInitState)
@@ -87,7 +102,7 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_COMMAND(ID_STATE_SAVE_STATE_AS, &CRHMmainDlg::OnSaveStateAs)
 	
 	//Run menu items
-	ON_COMMAND(ID_RUN_RUNMODEL, &CRHMmainDlg::OnRunRunmodel)
+	ON_COMMAND(ID_RUN_RUNMODEL, &CRHMmainDlg::OnRunModel)
 	
 	//Export menu item 
 	ON_COMMAND(ID_EXPORT, &CRHMmainDlg::OnExport)
@@ -98,7 +113,7 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	//Help menu item
 		//CRHM Help not implemented
 		//New Modules help not implemented
-	ON_COMMAND(ID_HELP_ABOUT, &CRHMmainDlg::OnHelpAbout)
+	ON_COMMAND(ID_HELP_CRHM, &CRHMmainDlg::OnViewHelpDocumentation)
 
 	//HRU Dimension Selector
 	ON_BN_CLICKED(ID_HRU_DIM_DECREASE, &CRHMmainDlg::DecreaseHRUDimension)
@@ -122,6 +137,10 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_MESSAGE(UWM_OPEN_CTX_ALL_OBS, &CRHMmainDlg::OpenAllObsCtxMenu)
 	ON_MESSAGE(UWM_OPEN_CTX_SEL_OBS, &CRHMmainDlg::OpenSelObsCtxMenu)
 
+	//Function and Timebase drop down selectors
+	ON_CBN_SELCHANGE(ID_TIMEBASE_DROP_DOWN, &CRHMmainDlg::OnTimebaseChange)
+	ON_CBN_SELCHANGE(ID_WATER_YEAR_DROP_DOWN, &CRHMmainDlg::OnWaterYearChange)
+
 	//Date Pickers
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_START_DATE_PICKER, &CRHMmainDlg::OnStartDateChange)
 	ON_NOTIFY(DTN_DATETIMECHANGE, ID_END_DATE_PICKER, &CRHMmainDlg::OnEndDateChange)
@@ -131,6 +150,8 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_MESSAGE(UWM_FLIP_TICKS_RIGHT, &CRHMmainDlg::OnRightClickFlipTicks)
 
 	ON_MESSAGE(UWM_AUTO_RUN, &CRHMmainDlg::OnAutoRunMessage)
+
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 
@@ -138,151 +159,170 @@ BOOL CRHMmainDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// TODO:  Add extra initialization here
+	/* Store the reference to the main menu */
+	this->main_menu = this->GetMenu();
 
-	//State the name of the program in the window title - Matt
-	std::string str1 = "The Cold Regions Hydrological Model";
-	CString cStr(str1.c_str());
-
+	/* Set Text for main dialog elements to defaults */
 	SetDlgItemText(ID_OBS_LAY_DIM_LABEL, L"OBS");
 	SetDlgItemText(ID_HRU_DIM_DISPLAY, _T("1"));
 	SetDlgItemText(ID_OBS_DIM_DISPLAY, _T("1"));
 	SetDlgItemText(ID_OBS_HELP_DISPLAY, _T(""));
 	SetDlgItemText(ID_VAR_HELP_DISPLAY, _T(""));
-	CFont* varHelpFont = new CFont();
-	varHelpFont->CreatePointFont(96, _T("Ariel"));
-	GetDlgItem(ID_VAR_HELP_DISPLAY)->SetFont(varHelpFont);
-	CFont* obsHelpFont = new CFont();
-	obsHelpFont->CreatePointFont(96, _T("Ariel"));
-	GetDlgItem(ID_OBS_HELP_DISPLAY)->SetFont(obsHelpFont);
 
+	/* Set the font for the help displays */
+	CFont* helpFont = new CFont();
+	helpFont->CreatePointFont(96, _T("Ariel"));
+	GetDlgItem(ID_VAR_HELP_DISPLAY)->SetFont(helpFont);
+	GetDlgItem(ID_OBS_HELP_DISPLAY)->SetFont(helpFont);
+	delete helpFont;
+
+	/* Set options for the function_drop_down */
+	function_drop_down.AddString(L"Observation");
+	function_drop_down.AddString(L"Total");
+	function_drop_down.AddString(L"Minimum");
+	function_drop_down.AddString(L"Maximum");
+	function_drop_down.AddString(L"Average");
+	function_drop_down.AddString(L"Delta");
+	function_drop_down.AddString(L"Positive");
+	function_drop_down.AddString(L"First");
+	function_drop_down.AddString(L"Last");
+	function_drop_down.AddString(L"Count");
+	function_drop_down.AddString(L"Count0");
+	function_drop_down.AddString(L"VP Saturated");
+	function_drop_down.AddString(L"Watts to MJ/Int");
+	function_drop_down.AddString(L"MJ/Int to Watts");
+	function_drop_down.SetCurSel(0);
+
+	/* Set options for the timebase_drop_down */
+	timebase_drop_down.AddString(L"Daily");
+	timebase_drop_down.AddString(L"Monthly");
+	timebase_drop_down.AddString(L"Calendar Year");
+	timebase_drop_down.AddString(L"Water Year");
+	timebase_drop_down.AddString(L"All");
+
+	/* Set options for the water_year_drop_down */
+	water_year_drop_down.AddString(L"January");
+	water_year_drop_down.AddString(L"Febuary");
+	water_year_drop_down.AddString(L"March");
+	water_year_drop_down.AddString(L"April");
+	water_year_drop_down.AddString(L"May");
+	water_year_drop_down.AddString(L"June");
+	water_year_drop_down.AddString(L"July");
+	water_year_drop_down.AddString(L"August");
+	water_year_drop_down.AddString(L"September");
+	water_year_drop_down.AddString(L"October");
+	water_year_drop_down.AddString(L"November");
+	water_year_drop_down.AddString(L"December");
+
+	/* Initalize the project dependent components */
 	loadGuiComponents();
 
-	delete varHelpFont;
-	delete obsHelpFont;
+	GetWindowRect(this->original_rectangle);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-				  // EXCEPTION: OCX Property Pages should return FALSE
-}
-
-
-void CRHMmainDlg::ProcessCommandLineArgument()
-{
-	CRHMmain *test = CRHMmain::getInstance();
-	test->FormCreate();
-	test->DoPrjOpen(ProjectFileArgument, "");
+	return TRUE;
 }
 
 
 void CRHMmainDlg::loadGuiComponents()
 {
+	CRHMmain* model = CRHMmain::getInstance();
+
+	/* Reset the list boxes */
 	listbox_all_variables.ResetContent();
 	listbox_sel_variables.ResetContent();
 	listbox_all_observations.ResetContent();
 	listbox_sel_observations.ResetContent();
 
-	CRHMmain* crhm_core = CRHMmain::getInstance();
-
-	std::map<std::string, ClassVar*>* variables = CRHMmain::getInstance()->getVariables();
-	std::map<std::string, ClassVar*>::iterator it;
-	for (it = variables->begin(); it != variables->end(); it++) 
+	/* List the variables in the all variables list box */
+	for (
+		std::map<std::string, ClassVar*>::iterator varIt = model->getVariables()->begin();
+		varIt != model->getVariables()->end();
+		varIt++
+		) 
 	{
+		std::string varString = varIt->first;
+		CString varText(varString.c_str());
 
-		//string s = variables->Strings[ii];
-
-
-		std::string s = it->first;
-
-		CString cvariables(s.c_str());
-
-		/*if (s == "t0_inhibit##")
+		/* Add all variables to the list box except the time variable */
+		if (varString != "t")
 		{
-			string s2 = "t0_inhibit#";
-			CString cs2(s2.c_str());
-			listbox_varaiables_all.AddString(cs2);
-			continue;
-		}*/
-		if (s != "t")
-		{
-			listbox_all_variables.AddString(cvariables);
+			listbox_all_variables.AddString(varText);
 		}
 	}
 
-
-	std::map<std::string, ClassVar*>* observations = CRHMmain::getInstance()->getObservations();
-	std::map<std::string, ClassVar*>::iterator observationIt;
-
-
-	for (observationIt = observations->begin(); observationIt != observations->end(); observationIt++)
-	{
-		std::string s = observationIt->first;
-		CString observations(s.c_str());
-		listbox_all_observations.AddString(observations);
-	}
-
-	std::list<std::pair<std::string, ClassVar*>>* sel_variables = CRHMmain::getInstance()->getSelectedVariables();
-
-	for (std::list<std::pair<std::string, ClassVar*>>::iterator it = sel_variables->begin();
-		it != sel_variables->end();
-		it++)
-	{
-		std::string s = it->first;
-		CString observations(s.c_str());
-		listbox_sel_variables.AddString(observations);
-	}
-
-	std::list<std::pair<std::string, TSeries*>>* sel_observations = CRHMmain::getInstance()->getSelectedObservations();
-
+	/* List the observations in the all observations list box */
 	for (
-		std::list<std::pair<std::string, TSeries*>>::iterator it = sel_observations->begin();
-		it != sel_observations->end();
-		it++
+		std::map<std::string, ClassVar*>::iterator obsIt = model->getObservations()->begin();
+		obsIt != model->getObservations()->end();
+		obsIt++
 		)
 	{
-		std::string s = it->first;
-		CString observations(s.c_str());
-		listbox_sel_observations.AddString(observations);
+		std::string obsString = obsIt->first;
+		CString obsText(obsString.c_str());
+		listbox_all_observations.AddString(obsText);
 	}
 
-	CRHMmain* main = CRHMmain::getInstance();
-	SetTime(main->GetStartDate(), main->GetEndDate());
-
-	if (main->getAutoRun())
+	/* List the selected variables in the selected variables list box */
+	for (
+		std::list<std::pair<std::string, ClassVar*>>::iterator selVarIt = model->getSelectedVariables()->begin();
+		selVarIt != model->getSelectedVariables()->end();
+		selVarIt++
+		)
 	{
-		CMenu* menu = GetMenu();
-		menu->CheckMenuItem(ID_AUTO_RUN, MF_CHECKED);
+		std::string varString = selVarIt->first;
+		CString varText(varString.c_str());
+		listbox_sel_variables.AddString(varText);
+	}
+
+	/* List the selected observations in the selected observations list box */
+	for (
+		std::list<std::pair<std::string, TSeries*>>::iterator selObsIt = model->getSelectedObservations()->begin();
+		selObsIt != model->getSelectedObservations()->end();
+		selObsIt++
+		)
+	{
+		std::string obsString = selObsIt->first;
+		CString obsText(obsString.c_str());
+		listbox_sel_observations.AddString(obsText);
+	}
+
+	/* Set start date and end date selectors */
+	SetTime(model->GetStartDate(), model->GetEndDate());
+
+	/* Set the state of the auto run check box based on its value */
+	if (model->getAutoRun())
+	{
+		this->main_menu->CheckMenuItem(ID_AUTO_RUN, MF_CHECKED);
 	}
 	else
 	{
-		CMenu* menu = GetMenu();
-		menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
+		this->main_menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
 	}
 
-	if (main->getAutoExit())
+	/* Set the state of the auto exit check box based on its value */
+	if (model->getAutoExit())
 	{
-		CMenu* menu = GetMenu();
-		menu->CheckMenuItem(ID_AUTO_EXIT, MF_CHECKED);
+		this->main_menu->CheckMenuItem(ID_AUTO_EXIT, MF_CHECKED);
 	}
 	else
 	{
-		CMenu* menu = GetMenu();
-		menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
+		this->main_menu->CheckMenuItem(ID_AUTO_EXIT, MF_UNCHECKED);
 	}
 
-	if (main->getReportAll())
+	/* Set the state of the log all and log last check boxes based on value of report all boolean*/
+	if (model->getReportAll())
 	{
-		CMenu* menu = GetMenu();
-		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_CHECKED);
-		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
+		this->main_menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_CHECKED);
+		this->main_menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
 	}
 	else
 	{
-		CMenu* menu = GetMenu();
-		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
-		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_CHECKED);
+		this->main_menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
+		this->main_menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_CHECKED);
 	}
 
-	if (crhm_core->getAutoRun())
+	/* Send signal to run the project if auto run is set */
+	if (model->getAutoRun())
 	{
 		ShowWindow(1);
 		CenterWindow();
@@ -290,16 +330,44 @@ void CRHMmainDlg::loadGuiComponents()
 		PostMessage(UWM_AUTO_RUN, 0, 0);
 	}
 
+	/* Set the time base selector based on the loaded time base */
+	switch (model->getTimeBase())
+	{
+	case (TimeBase::DAILY):
+		timebase_drop_down.SetCurSel(0);
+		break;
+	case (TimeBase::MONTHLY):
+		timebase_drop_down.SetCurSel(1);
+		break;
+	case (TimeBase::CALENDAR_YEAR):
+		timebase_drop_down.SetCurSel(2);
+		break;
+	case (TimeBase::WATER_YEAR):
+		timebase_drop_down.SetCurSel(3);
+		break;
+	case (TimeBase::ALL):
+		timebase_drop_down.SetCurSel(4);
+		break;
+	default:
+		break;
+	}
+	this->showHideWaterYearMonth();
+	water_year_drop_down.SetCurSel(model->getWaterYearMonth() - 1);
+
+	/* Set the state of the create summary check box based on the value of the summarize field */
+	if (model->getSummarize())
+	{
+		this->main_menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_CHECKED);
+	}
+
 }
 
 
 void CRHMmainDlg::InitModules()
 {
-
 	Global::BuildFlag = TBuild::DECL;
 
-	Box1Disply = (int)TVISIBLE::OUTPUT;
-
+	/* Call the declaration function for each module */
 	for (
 		std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
 		modIt != Global::OurModulesList->end();
@@ -314,151 +382,37 @@ void CRHMmainDlg::InitModules()
 	GetAllVariables();
 }
 
+
 void CRHMmainDlg::GetAllVariables()
 {
 	CRHMmain* model = CRHMmain::getInstance();
-	CConstruct* buildform = new CConstruct();
-
-	ClassVar* thisVar;
-	MapVar::iterator itVar;
-
-	string Labels[] = { "Variables", "Variables by Module", "Diagnostic Variables", "Private Variables" };
-	string Newname;
-
-	++Box1Disply;
-	if (Box1Disply > (int)TVISIBLE::PRIVATE)
-	{
-		Box1Disply = (int)TVISIBLE::OUTPUT;
-	}
 
 	model->AllVariables->clear();
 
-	if (Box1Disply == (int)TVISIBLE::OUTPUT)
+	/* Add all the variables to the model's map of variables */
+	for (
+		std::map<std::string, ClassVar*>::iterator varIt = Global::MapVars.begin(); 
+		varIt != Global::MapVars.end(); 
+		varIt++
+		) 
 	{
-
-		for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) 
+		ClassVar* thisVar = varIt->second;
+		if (
+			thisVar->varType < TVar::Read 
+			&& thisVar->visibility == TVISIBLE::USUAL 
+			&& thisVar->dimen != TDim::NREB 
+			&& (thisVar->values || thisVar->ivalues) 
+			&& !thisVar->FileData
+			) 
 		{
-			thisVar = (*itVar).second;
-			if (thisVar->varType < TVar::Read && thisVar->visibility == TVISIBLE::USUAL &&
-				thisVar->dimen != TDim::NREB &&
-				(thisVar->values || thisVar->ivalues) && !thisVar->FileData) {
-				Newname = DeclObsName(thisVar);
-				if (model->AllVariables->count(Newname) == 0)
-				{
-					model->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
-				}
+			std::string Newname = DeclObsName(thisVar);
+			if (model->AllVariables->count(Newname) == 0)
+			{
+				model->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
 			}
 		}
 	}
-	else
-	{
-
-		string S0;
-
-		for (
-			std::list<std::pair<std::string, ClassModule*>>::iterator modIt = Global::OurModulesList->begin();
-			modIt != Global::OurModulesList->end();
-			modIt++
-			)
-		{
-			string S = modIt->first;
-			ClassModule* thisModule = modIt->second;
-			if (S0 != S) {
-				if (!(S0.length() == 0))
-				{
-					//test->AllVariables->Add(" "); Now that AllVariables is a map this line doesnt make sense.
-				}
-
-				S0 = S;
-				if (thisModule->variation != 0) {
-					string AA("#0");
-					AA[1] += (char)(log(thisModule->variation) / log(2) + 1);
-					S0 += AA;
-				}
-
-				S0 = "   --- " + S0;
-				//model->AllVariables->insert(std::pair<std::string, ClassVar*>(S0 + " ---", (ClassVar*)modIt->second));
-				//if (S0.Length() > Max_Name_Width1)
-					//Max_Name_Width1 = S0.Length();
-			}
-
-			switch (Box1Disply) { // display in module/group
-			case (int)TVISIBLE::USUAL:
-				for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
-					thisVar = (*itVar).second;
-					if (S == thisVar->module.c_str() && thisVar->visibility == TVISIBLE::USUAL &&
-						Variation_Decide(thisVar->variation_set, thisModule->variation) &&
-						thisVar->dimen != TDim::NREB &&
-						(thisVar->values || thisVar->ivalues) && !thisVar->FileData) {
-
-						//if (UpDownOBSIndx->Max < thisVar->lay && thisVar->dimen == CRHM::NDEF)
-							//UpDownOBSIndx->Max = thisVar->lay;
-						Newname = DeclObsName(thisVar);
-						if (model->AllVariables->count(Newname) == 0) {
-							model->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
-							//if (Newname.length() > Max_Name_Width2)
-								//Max_Name_Width2 = Newname.Length();
-						}
-					}
-				}
-				break;
-
-			case (int)TVISIBLE::DIAGNOSTIC: // display diagnostic variables
-				for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
-					thisVar = (*itVar).second;
-					if (S == thisVar->module.c_str() && thisVar->visibility == TVISIBLE::DIAGNOSTIC &&
-						thisVar->dimen != TDim::NREB &&
-						(thisVar->values || thisVar->ivalues) && !thisVar->FileData) {
-						Newname = DeclObsName(thisVar);
-						if (model->AllVariables->count(Newname) == 0) {
-							model->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
-							//if (Newname.Length() > Max_Name_Width2)
-								//Max_Name_Width2 = Newname.Length();
-						}
-					}
-				}
-				break;
-
-			case (int)TVISIBLE::PRIVATE: // display Local variables
-				for (itVar = Global::MapVars.begin(); itVar != Global::MapVars.end(); itVar++) {
-					thisVar = (*itVar).second;
-					if (S == thisVar->module.c_str() && thisVar->visibility == TVISIBLE::PRIVATE &&
-						thisVar->dimen != TDim::NREB &&
-						(thisVar->values || thisVar->ivalues) && !thisVar->FileData) {
-						Newname = DeclObsName(thisVar);
-						if (model->AllVariables->count(Newname) == 0) {
-							model->AllVariables->insert(std::pair<std::string, ClassVar*>(Newname, thisVar));
-							//if (Newname.Length() > Max_Name_Width2)
-								//Max_Name_Width2 = Newname.Length();
-						}
-					}
-				}
-				break;
-			default:
-				break;
-			}
-		} // for
-	} // else
-
-	//if (Max_Name_Width2 > Max_Name_Width1) // Max_Name_Width1 only title, Max_Name_Width2 handles other names
-		//Max_Name_Width1 = Max_Name_Width2;
-
-	//if (Max_Name_Width1 * 6 > AllVariables->Width)
-		//AllVariables->ScrollWidth = Max_Name_Width1 * 6;
-
-	//Max_Name_Width1 += 5; // handles array element
-
-	//if (Max_Name_Width2 * 6 > ListBox3->Width)
-		//ListBox3->ScrollWidth = Max_Name_Width1 * 6;
-
-	//if (Max_Name_Width2 * 6 > AllObservations->Width)
-		//AllObservations->ScrollWidth = Max_Name_Width2 * 6;
-
-	//Max_Name_Width2 += 5; // handles array element
-
-	//if (Max_Name_Width2 * 6 > SelectedObservations->Width)
-		//SelectedObservations->ScrollWidth = Max_Name_Width2 * 6;
-
+	
 }
 
 
@@ -469,13 +423,19 @@ bool CRHMmainDlg::Variation_Decide(int Variation_set, long Variation)
 
 	long variations = V.GetV(); // & 2047;
 
-	if ((Variation_set & 2048) != 0 && variations == 0 || // handles VARIATION_0
-		(Variation_set & 4096) != 0 ||                        // handles VARIATION_0
-		(Variation_set == 0) ||                               // handles VARIATION_ORG
-		(variations & Variation_set) != 0)                 // handles #1, #2, #4 etc.
+	if (
+		(Variation_set & 2048) != 0 && variations == 0
+		|| (Variation_set & 4096) != 0
+		|| (Variation_set == 0)
+		|| (variations & Variation_set) != 0
+		)
+	{
 		return true;
+	}
 	else
+	{
 		return false;
+	}
 }
 
 
@@ -514,18 +474,19 @@ std::string CRHMmainDlg::DeclObsName(ClassVar* thisVar)
 
 void CRHMmainDlg::RunClickFunction()
 {
-	CRHMmain* test = CRHMmain::getInstance();
+	CRHMmain* main = CRHMmain::getInstance();
 
-	if (test->ObsFilesList->size() == 0)
+	/* Cannot run if there are no observations */
+	if (main->ObsFilesList->size() == 0)
 	{
 		MessageBox(_T("Please open an observation file."));
 		return;
 	}
 
-	MMSData* mmsdata = test->RunClick2Start();
+	MMSData* mmsdata = main->RunClick2Start();
 
 
-	int seriesCount = test->SeriesCnt;
+	int seriesCount = (int) main->SelectedVariables->size();
 
 	if (seriesCount == 0)
 	{
@@ -536,7 +497,7 @@ void CRHMmainDlg::RunClickFunction()
 
 	CSeries series[1000];
 
-	std::list<std::pair<std::string, ClassVar*>>::iterator selectedVariableIt = test->SelectedVariables->begin();
+	std::list<std::pair<std::string, ClassVar*>>::iterator selectedVariableIt = main->SelectedVariables->begin();
 	for (int i = 0; i < seriesCount; i++)
 	{
 
@@ -566,52 +527,128 @@ void CRHMmainDlg::RunClickFunction()
 		selectedVariableIt++;
 	}
 
+	long stepSize;
+
+	switch (this->refresh_rate)
+	{
+	case RefreshRate::DAILY:
+		stepSize = Global::Freq;
+		break;
+	case RefreshRate::BIWEEKLY:
+		stepSize = Global::Freq * 4;
+		break;
+	case RefreshRate::WEEKLY:
+		stepSize = Global::Freq * 7;
+		break;
+	case RefreshRate::MONTHLY:
+		stepSize = Global::Freq * 30;
+		break;
+	case RefreshRate::YEARLY:
+		stepSize = Global::Freq * 365;
+		break;
+	case RefreshRate::ATEND:
+		stepSize = Global::DTmax;
+		break;
+	default:
+		break;
+	}
+
 	string values = "";
 	int seriesIndex = 0;
 	int TotalCount = 0;
 
 	int pcount = 0;
-	int n = 0;
-	for (int indx = Global::DTmin; indx < Global::DTmax; indx = indx + 500)
+	int last = 0;
+	for (int indx = Global::DTmin; indx < Global::DTmax; indx = last)
 	{
 
-		int next = indx + 500;
+		int next = indx + stepSize;
 		if (next >= Global::DTmax)
 		{
-			test->RunClick2Middle(mmsdata, indx, Global::DTmax);
+			main->RunClick2Middle(mmsdata, last, Global::DTmax);
+			last = Global::DTmax;
 		}
 		else
 		{
-			test->RunClick2Middle(mmsdata, indx, indx + 500);
+			main->RunClick2Middle(mmsdata, last, next);
+			last = next;
 		}
 
 		//test->RunClick2Middle(mmsdata, Global::DTmin, Global::DTmax);
 
-		TotalCount = test->cdSeries[0]->Count();
+		TotalCount = main->cdSeries[0]->Count();
 
 		for (int i = pcount; i < TotalCount; i++)
 		{
 			for (int j = 0; j < seriesCount; j++)
 			{
 				int y, m, d, h, mi;
-				StandardConverterUtility::GetDateTimeElements(test->cdSeries[j]->XValues.at(i), &y, &m, &d, &h, &mi);
+				StandardConverterUtility::GetDateTimeElements(main->cdSeries[j]->XValue(i), &y, &m, &d, &h, &mi);
 				string dt = to_string(m) + "/" + to_string(d) + "/" + to_string(y);
 				CString str(dt.c_str());
 				LPCTSTR dtstr = (LPCTSTR)str;
-				series[j].AddXY(test->cdSeries[j]->XValues.at(i), test->cdSeries[j]->YValues.at(i), dtstr, series[j].get_Color());
+
+				if (h == 1)
+				{
+					series[j].AddXY(main->cdSeries[j]->XValue(i), main->cdSeries[j]->YValue(i), dtstr, series[j].get_Color());
+				}
+				else
+				{
+					series[j].AddXY(main->cdSeries[j]->XValue(i), main->cdSeries[j]->YValue(i), L"", series[j].get_Color());
+				}
+
 			}
-			n++;
-			if (n % 500 == 0) { tchart.Repaint(); }
-			//tchart.Repaint();
 		}
+		tchart.Repaint();
 		pcount = TotalCount;
 		//tchart.Repaint();
+
+		MSG msg;
+		bool messageFound = PeekMessage(&msg, this->GetSafeHwnd(), WM_LBUTTONDOWN, WM_RBUTTONDBLCLK, PM_REMOVE);
+		if (messageFound)
+		{
+			RefreshRateDlg * modal = new RefreshRateDlg(this->refresh_rate);
+			int rate = modal->DoModal();
+			if (rate == -1)
+			{
+				tchart.Repaint();
+				return;
+			}
+
+			this->refresh_rate = (RefreshRate)rate;
+			switch (this->refresh_rate)
+			{
+			case RefreshRate::DAILY:
+				stepSize = Global::Freq;
+				break;
+			case RefreshRate::BIWEEKLY:
+				stepSize = Global::Freq * 4;
+				break;
+			case RefreshRate::WEEKLY:
+				stepSize = Global::Freq * 7;
+				break;
+			case RefreshRate::MONTHLY:
+				stepSize = Global::Freq * 30;
+				break;
+			case RefreshRate::YEARLY:
+				stepSize = Global::Freq * 365;
+				break;
+			case RefreshRate::ATEND:
+				stepSize = Global::DTmax;
+				break;
+			default:
+				break;
+			}
+
+			delete modal;
+		}
+
 	}
 	tchart.Repaint();
 
-	test->RunClick2End(mmsdata);
+	main->RunClick2End(mmsdata);
 
-	if (test->getAutoExit())
+	if (main->getAutoExit())
 	{
 		GetActiveWindow()->PostMessageW(WM_QUIT);
 	}
@@ -627,20 +664,29 @@ void CRHMmainDlg::AddSeriesToTChart(TSeries* tseries)
 	int count = tchart.get_SeriesCount();
 	series = tchart.Series(count - 1);
 
-	CString cstr(tseries->Title.c_str());
+	CString cstr(tseries->getTitle().c_str());
 	//CString extension("(1)");
 	//cstr.Append(extension);
 
 	series.put_LegendTitle(cstr);
 
-	for (size_t i = 0; i < tseries->XValues.size(); i++)
+	for (int i = 0; i < tseries->Count(); i++)
 	{
 		int y, m, d, h, mi;
-		StandardConverterUtility::GetDateTimeElements(tseries->XValues.at(i), &y, &m, &d, &h, &mi);
+		StandardConverterUtility::GetDateTimeElements(tseries->XValue(i), &y, &m, &d, &h, &mi);
 		string dt = to_string(m) + "/" + to_string(d) + "/" + to_string(y);
 		CString str(dt.c_str());
 		LPCTSTR dtstr = (LPCTSTR)str;
-		series.AddXY(tseries->XValues.at(i), tseries->YValues.at(i), dtstr, series.get_Color());
+
+		if (h == 1)
+		{
+			series.AddXY(tseries->XValue(i), tseries->YValue(i), dtstr, series.get_Color());
+		}
+		else 
+		{
+			series.AddXY(tseries->XValue(i), tseries->YValue(i), L"", series.get_Color());
+		}
+
 
 		//if (i % 500 == 0) { tchart.Repaint(); }		
 	}
@@ -650,420 +696,9 @@ void CRHMmainDlg::AddSeriesToTChart(TSeries* tseries)
 
 void CRHMmainDlg::AddObsPlot(ClassVar* thisVar, TSeries* cdSeries, string S, TFun Funct) {
 
-	CRHMmain* test = CRHMmain::getInstance();
+	CRHMmain* model = CRHMmain::getInstance();
 
-	ClassVar* newVar;
-	Global::HRU_OBS = Global::HRU_OBS_DIRECT; // always correct?
-
-	double** Data = thisVar->FileData->Data;
-	double xx;
-	double DTstartR = test->GetStartDate();
-	double DTendR = test->GetEndDate();
-
-	if (DTstartR >= DTendR) return;
-
-	TDateTime Save_DTnow = Global::DTnow; // Save
-
-	double MyInterval = thisVar->FileData->Interval;
-	long DTmin = INT((DTstartR - Global::DTstart) * thisVar->FileData->Freq) * Global::Freq / thisVar->FileData->Freq;
-	long DTmax = INT((DTendR - Global::DTstart) * thisVar->FileData->Freq) * Global::Freq / thisVar->FileData->Freq;
-
-	long jj1 = S.rfind("(");
-	long jj2 = S.rfind(")");
-
-	long Indx;
-	string::size_type pp;
-	pp = thisVar->name.rfind('(');
-	bool AlreadyIndex = (pp != string::npos); // handles exported variables in Obs files
-
-	if (test->ListHruNames && thisVar->varType < TVar::Read) // using names
-	{
-
-		string sub = S.substr(jj1 + 1, jj2 - jj1 - 1);
-		bool found = false;
-		int n;
-		for (size_t i = 0; i < test->ListHruNames->size(); i++)
-		{
-			if (test->ListHruNames->at(i) == sub)
-			{
-				n = i;
-				found = true;
-			}
-		}
-
-		if (found == false)
-		{
-			n = -1;
-		}
-
-		Indx = n - 1; //Subtraction of 1 to match historic code jhs507
-
-	}
-	else {
-		if (thisVar->root != "" || AlreadyIndex)
-			Indx = 0; // (non observations always 0
-		else
-			Indx = stoi(S.substr(jj1 + 1, jj2 - jj1 - 1)) - 1;
-	}
-
-	long IndxMin = thisVar->FileData->IndxMin;
-	long IndxMax = thisVar->FileData->IndxMax;
-
-	if (thisVar->FileData->Times != NULL) { // display sparse data
-		if (Global::Freq == 1)
-			--DTendR;
-
-		double Sum = 0.0;
-
-		for (long ii = 0; ii < thisVar->FileData->Lines; ++ii) {
-			if (thisVar->FileData->Times[ii] < DTstartR) continue;
-			if (thisVar->FileData->Times[ii] > DTendR) continue;
-
-			xx = Data[thisVar->offset + Indx][ii];
-
-			if (Funct == TFun::TOT) {
-				Sum += xx;
-				xx = Sum;
-			}
-
-			cdSeries->AddXY(thisVar->FileData->Times[ii], xx);
-		}
-	}
-
-	else if (Funct <= TFun::MJ_W) // display simple observations
-	{ 
-
-		for (Global::DTindx = DTmin; Global::DTindx < DTmax; Global::DTindx++) 
-		{
-			Global::DTnow = Global::DTstart + Global::Interval * Global::DTindx + Global::Interval;
-
-			if (MyInterval >= 1)
-			{
-				--Global::DTnow;
-			}
-
-			if (Global::DTindx * thisVar->FileData->Freq / Global::Freq >= IndxMin
-				&& Global::DTindx * thisVar->FileData->Freq / Global::Freq <= IndxMax) 
-			{
-				xx = Data[thisVar->offset + Indx][(Global::DTindx * thisVar->FileData->Freq / Global::Freq - IndxMin)];
-
-				if (Funct == TFun::FOBS)
-				{
-					//No function to apply.
-				}
-				else if (Funct == TFun::VP_SAT) 
-				{
-					if (xx > 0.0)
-					{
-						xx = 0.611 * exp(17.27 * xx / (xx + 237.3));
-					}
-					else
-					{
-						xx = 0.611 * exp(21.88 * xx / (xx + 265.5));
-					}
-				}
-				else if (Funct == TFun::W_MJ)
-				{
-					xx *= thisVar->FileData->Interval * 86400 / 1.0E6;
-				}
-				else if (Funct == TFun::MJ_W)
-				{
-					xx *= 1.0E6 / 86400 / thisVar->FileData->Interval;
-				}
-
-				cdSeries->AddXY(Global::DTnow, xx);
-			}
-		}
-	}
-	else { // display observations functions
-		//cdSeries->Stairs = true;
-		// N.B. object FileData copied. If Obs function - Obs deletes else if VarObsFunct SelectedObservations deletes.
-		newVar = new ClassVar(*thisVar);
-
-		newVar->name = S.c_str();
-
-		newVar->FileData->DataFileName = "Copy";
-
-
-		string::size_type pp = thisVar->units.find_last_of(")");
-
-		if (thisVar->FileData->Freq > 1 && (thisVar->units[pp - 1] == 'd'))   //  || TBase == 0
-			thisVar->Daily = TRUE;
-		else
-			thisVar->Daily = FALSE;
-
-		if (newVar->root == "") { // Observation
-			if (thisVar->FileData->Freq == 1)
-				newVar->LoopFunct = &ClassVar::LoopFirst;
-			else if (thisVar->Daily)
-				newVar->LoopFunct = &ClassVar::LoopFirst;
-			else
-				newVar->LoopFunct = &ClassVar::LoopRange;
-		}
-		else { // Variable
-			if (thisVar->Daily)
-				newVar->LoopFunct = &ClassVar::LoopLast;
-			else
-				newVar->LoopFunct = &ClassVar::LoopRange;
-		}
-
-		newVar->FunctVar = thisVar;
-
-		switch (Funct) {
-		case TFun::AVG:
-			newVar->UserFunct_ = &ClassVar::Tot_;
-			newVar->FunKind = TFun::AVG;
-			break;
-		case TFun::MIN:
-			newVar->UserFunct_ = &ClassVar::Min_;
-			newVar->FunKind = TFun::MIN;
-			break;
-		case TFun::MAX:
-			newVar->UserFunct_ = &ClassVar::Max_;
-			newVar->FunKind = TFun::MAX;
-			break;
-		case TFun::TOT:
-			newVar->UserFunct_ = &ClassVar::Tot_;
-			newVar->FunKind = TFun::TOT;
-			break;
-		case TFun::POS:
-			newVar->UserFunct_ = &ClassVar::Pos_;
-			newVar->FunKind = TFun::POS;
-			break;
-		case TFun::FIRST:
-			newVar->UserFunct_ = &ClassVar::First_;
-			newVar->FunKind = TFun::FIRST;
-			newVar->LoopFunct = &ClassVar::LoopFirst;
-			break;
-		case TFun::LAST:
-			newVar->UserFunct_ = &ClassVar::Last_;
-			newVar->FunKind = TFun::LAST;
-			newVar->LoopFunct = &ClassVar::LoopLast;
-			break;
-		case TFun::CNT:
-			newVar->UserFunct_ = &ClassVar::Count_;
-			newVar->FunKind = TFun::CNT;
-			break;
-		case TFun::CNT0:
-			newVar->UserFunct_ = &ClassVar::Count0_;
-			newVar->FunKind = TFun::CNT0;
-			break;
-		case TFun::DLTA:
-			newVar->UserFunct_ = &ClassVar::First_;
-			newVar->LoopFunct = &ClassVar::LoopFirst;
-			newVar->FunKind = TFun::DLTA;
-			break;
-		default:
-			break;
-		} // switch
-
-		bool First = false;
-		long Next = -1;
-		long Days = 0;
-		long LastDays = 0;
-		long Lastkk = 0;
-		long CurrentIndx = -1;
-		long LastIndex = -1;
-		long itime[6];
-		long Greatest;
-		long DTminX = DTmin;
-		if (IndxMin > 0)
-			DTminX = IndxMin;
-		double Delta0 = 0.0;
-		double First0;
-		double Temp;
-		dattim("now", itime);
-
-		for (Global::DTindx = DTmin; Global::DTindx < DTmax; Global::DTindx += Global::Freq) {
-			Global::DTnow = Global::DTstart + Global::Interval * Global::DTindx + Global::Interval;
-
-			if (Global::DTindx * Global::Freq / thisVar->FileData->Freq >= IndxMin)
-				if (Global::DTindx * thisVar->FileData->Freq / Global::Freq > IndxMax)
-					break;
-				else {
-					if (Global::Interval >= 1) --Global::DTnow;
-
-					dattim("now", itime);
-
-					switch (TBase) {
-
-					case 0: // daily
-						if (Next == -1 || Next != itime[2]) {
-							Next = itime[2];
-							First = TRUE;
-						}
-						break;
-					case 1: // water annual
-						if (Next == -1 || itime[0] == Next && itime[1] == water_year_month) {
-							if (Next == -1 && itime[1] < water_year_month)
-								Next = itime[0];
-							else
-								Next = itime[0] + 1;
-							First = TRUE;
-						}
-						break;
-					case 2: // annual
-						if (Next == -1 || itime[0] == Next && itime[1] == 1) {
-							Next = itime[0] + 1;
-							First = TRUE;
-						}
-						break;
-					case 3: // monthly
-						if (Next == -1 || Next == itime[1]) {
-							Next = (itime[1]) % 12 + 1;
-							First = TRUE;
-						}
-						break;
-					case 4: // All - do nothing
-						if (Next == -1) {
-							Next = 0;
-							First = TRUE; // do nothing
-						}
-					default:
-						break;
-					} // switch
-
-					CurrentIndx = (Global::DTindx - DTminX) / thisVar->FileData->Freq - 1;
-
-					if (First) {
-						if (Global::DTindx > DTmin && Global::DTindx > IndxMin) { // Handle RUN starting after beginning of primary obs file and secondary obs file later
-							switch (Funct) {
-							case TFun::DLTA:
-								Temp = cdSeries->YValue((Global::DTindx - DTmin) / thisVar->FileData->Freq - 1);
-								cdSeries->YValues.at(CurrentIndx) -= Delta0;
-								Delta0 = Temp; // fall through
-							case TFun::AVG:
-							case TFun::MIN: // duplicate last
-							case TFun::MAX: // duplicate last
-							case TFun::TOT: // duplicate last
-							case TFun::POS: // duplicate last
-							case TFun::LAST: // duplicate last
-							case TFun::CNT:  // duplicate last
-							case TFun::CNT0: // duplicate last
-								if (ObsFunct_Toggle == 1) // show final value
-									for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-										cdSeries->YValues[jj] = cdSeries->YValues[CurrentIndx];
-								break;
-							case TFun::FIRST: // duplicate first
-								for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-									cdSeries->YValues.at(jj) = First0;
-								break;
-							default:
-								break;
-							} // switch
-						}
-						else if (Funct == TFun::DLTA && TBase) { // only very first time
-							(newVar->*(newVar->LoopFunct))(Indx);
-							Delta0 = newVar->values[Indx];
-
-							newVar->UserFunct_ = &ClassVar::Last_; // change from First interval to Last interval
-							newVar->FunKind = TFun::LAST;
-							newVar->LoopFunct = &ClassVar::LoopLast;
-						}
-
-						Lastkk = Global::DTindx;
-						if (CurrentIndx > -1) // skip first time
-							LastIndex = CurrentIndx;
-
-						switch (Funct) { // beginning of period reset
-						case TFun::MAX:
-							newVar->values[Indx] = -1000000.0;
-							break;
-						case TFun::MIN:
-							newVar->values[Indx] = 1000000.0;
-							break;
-						case TFun::AVG:
-						case TFun::TOT:
-						case TFun::CNT:
-						case TFun::CNT0:
-						case TFun::DLTA:
-						case TFun::POS:
-							newVar->values[Indx] = 0.0;
-						default:
-							break;
-						} // switch
-
-						LastDays = Days;
-						Days = 0;
-					} // if First
-
-					(newVar->*(newVar->LoopFunct))(Indx);
-
-					xx = newVar->values[Indx];
-					cdSeries->AddXY(Global::DTnow, xx);
-					//AddDataToSeries(series, Global::DTnow, xx);
-
-					if (First)
-						First0 = xx;
-
-					if (Global::DTindx > DTmin && Global::DTindx > IndxMin) {
-						switch (Funct) {
-						case TFun::AVG:
-							Greatest = Days;
-							if (LastDays > Days)
-								Greatest = LastDays;
-							cdSeries->YValues.at(CurrentIndx) /= ((long long)Global::Freq * (long long)Greatest);
-							LastDays = 0;
-							break;
-						case TFun::DLTA:
-							if (!First)
-								cdSeries->YValues.at(CurrentIndx) -= Delta0;
-							break;
-						default:
-							break;
-						} // switch
-					}
-
-					++Days;
-
-					First = FALSE;
-				} // if
-		} // for
-
-		if (Global::DTindx > DTmin && Global::DTindx > IndxMin) { // Handle RUN starting after beginning of primary obs file and secondary obs file later
-			CurrentIndx = (Global::DTindx - DTminX) / thisVar->FileData->Freq - 1;
-			switch (Funct) {
-			case TFun::AVG:
-				Greatest = Days;
-				if (LastDays > Days)
-					Greatest = LastDays;
-				cdSeries->YValues.at(CurrentIndx) /= ((long long)Global::Freq * (long long)Greatest);
-				if (ObsFunct_Toggle == 1) // show final value
-					for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-						cdSeries->YValues[jj] = cdSeries->YValues[CurrentIndx];
-				break;
-			case TFun::DLTA:
-				cdSeries->YValues.at(CurrentIndx) -= Delta0;
-			case TFun::MIN: // duplicate last
-			case TFun::MAX: // duplicate last
-			case TFun::TOT: // duplicate last
-			case TFun::POS: // duplicate last
-			case TFun::LAST: // duplicate last
-			case TFun::CNT:  // duplicate last
-			case TFun::CNT0: // duplicate last
-				if (ObsFunct_Toggle == 1) // show final value
-					for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-						cdSeries->YValues[jj] = cdSeries->YValues[CurrentIndx];
-				break;
-			case TFun::FIRST: // duplicate first
-				for (long jj = LastIndex + 1; jj <= CurrentIndx; ++jj)
-					cdSeries->YValues.at(jj) = First0;
-				break;
-			default:
-				break;
-			} // switch
-		}
-
-		delete newVar->FileData; // created in this routine
-		delete newVar; // created in this routine
-
-		cdSeries->Tag = NULL;
-	} // else
-
-	Global::DTnow = Save_DTnow; // restore
-
-	//if (!CommandLine)  // do not repaint
-	//tchart.Repaint();
+	model->calculateObservationTseries(thisVar, cdSeries, S, Funct);
 
 	AddSeriesToTChart(cdSeries);
 
@@ -1193,8 +828,6 @@ void CRHMmainDlg::CloseProject()
 	model->SaveStateFlag = false;
 	updateOpenStateFileMenu();
 
-	//reset the current file name - Matt
-	globFileName = "";
 	model->OpenProjectPath = "";
 
 	//Reset the window text
@@ -1235,7 +868,7 @@ void CRHMmainDlg::OpenObservation(std::string obsfilepath)
 void CRHMmainDlg::AddOpenObsFile(std::string filepath, std::string filename)
 {
 	CString obsFileName = CString(filename.c_str());
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 	CMenu* submenu = menu->GetSubMenu(1);
 
 	//Find first ID not in use
@@ -1282,7 +915,7 @@ void CRHMmainDlg::updateOpenObsFileMenu()
 	/*
 	* Remove all open obsFiles from the obs submenu.
 	*/
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 	CMenu* submenu = menu->GetSubMenu(1);
 
 	for (
@@ -1376,7 +1009,12 @@ void CRHMmainDlg::updateOpenObsFileMenu()
 
 		if (!found)
 		{
-			toErase.push_back(it);
+			//Not found as an observation see if it is a function applied to a variable
+			found = main->AllVariables->count(withoutSuffix);
+			if (!found)
+			{
+				toErase.push_back(it);
+			}	
 		}
 
 	}
@@ -1393,7 +1031,7 @@ void CRHMmainDlg::updateOpenObsFileMenu()
 void CRHMmainDlg::updateOpenStateFileMenu()
 {
 	/* Get the handle for the intital state submenu */
-	CMenu* menu = GetActiveWindow()->GetMenu()->GetSubMenu(4);
+	CMenu* menu = this->main_menu->GetSubMenu(4);
 
 	/* Get the model instance */
 	CRHMmain* model = CRHMmain::getInstance();
@@ -1455,6 +1093,7 @@ void CRHMmainDlg::updateOpenStateFileMenu()
 
 }
 
+
 void CRHMmainDlg::updateSelectedVariablesListBox()
 {
 	CWaitCursor wait;
@@ -1482,7 +1121,7 @@ void CRHMmainDlg::updateSelectedVariablesListBox()
 
 	}
 
-	/*Anything not in the model needs to be removed from the display*/
+	/* Anything not in the model needs to be removed from the display */
 	for (int i = 0; i < listbox_sel_variables.GetCount(); i++)
 	{
 		CString text;
@@ -1511,10 +1150,22 @@ void CRHMmainDlg::updateSelectedVariablesListBox()
 			listbox_sel_variables.DeleteString(i);
 			//Restart outer itteration
 			i = -1;
+
+			// Remove from the TChart as well
+			for (int j = 0; j < tchart.get_SeriesCount(); j++)
+			{
+				CString title = tchart.SeriesTitleLegend(j);
+				if (title == text)
+				{
+					tchart.RemoveSeries(j);
+					break;
+				}
+			}
 		}
 
 	}
 }
+
 
 void CRHMmainDlg::updateSelectedObservationListBox()
 {
@@ -1531,20 +1182,124 @@ void CRHMmainDlg::updateSelectedObservationListBox()
 		it++
 		)
 	{
-		int found = listbox_sel_observations.FindString(-1, CString(it->first.c_str()));
 
-		//If it is found it is already displayed if not then display it. 
-		if (found == LB_ERR)
+		bool displayed = false;
+		for (int i = 0; i < this->tchart.get_SeriesCount(); i++)
+		{
+			CString seriesText = this->tchart.SeriesTitleLegend(i);
+			CT2CA pszConvertedAnsiString(seriesText); //Intermediary to convert CString to std::string
+			std::string seriesString(pszConvertedAnsiString);
+
+			if (seriesString == it->first)
+			{
+				displayed = true;
+				break;
+			}
+		}
+
+		//If it is not displayed then display it. 
+		if (!displayed)
 		{
 			//Reset the used to zero so that it doesn't "double write"
-			it->second->XValues.clear();
-			it->second->YValues.clear();
+			it->second->clearSeries();
 
-			AddObsPlot(it->second->Tag, it->second, it->first, model->Funct);
+			/* Look for a suffix and set function to the correct value. */
+			TFun funct = TFun::FOBS;
+			size_t suffixStart = it->first.rfind('_');
+			std::string suffix;
+			if (suffixStart == std::string::npos)
+			{
+				suffix = "";
+			}
+			else
+			{
+				suffix = it->first.substr(suffixStart, std::string::npos);
+			}
 
-			CString selectedObservation = CString(it->first.c_str());
+			if (suffix == "")
+			{
+				funct = TFun::FOBS;
+			}
+			else if (suffix == "_Tot")
+			{
+				funct = TFun::TOT;
+			}
+			else if (suffix == "_Min")
+			{
+				funct = TFun::MIN;
+			}
+			else if (suffix == "_Max")
+			{
+				funct = TFun::MAX;
+			}
+			else if (suffix == "_Avg")
+			{
+				funct = TFun::AVG;
+			}
+			else if (suffix == "_Dlta")
+			{
+				funct = TFun::DLTA;
+			}
+			else if (suffix == "_Pos")
+			{
+				funct = TFun::POS;
+			}
+			else if (suffix == "_First")
+			{
+				funct = TFun::FIRST;
+			}
+			else if (suffix == "_Last")
+			{
+				funct = TFun::LAST;
+			}
+			else if (suffix == "_Cnt")
+			{
+				funct = TFun::CNT;
+			}
+			else if (suffix == "_Cnt0")
+			{
+				funct = TFun::CNT0;
+			}
+			else if (suffix == "_VPsat")
+			{
+				funct = TFun::VP_SAT;
+			}
+			else if (suffix == "_WtoMJ")
+			{
+				funct = TFun::W_MJ;
+			}
+			else if (suffix == "_MJtoW")
+			{
+				funct = TFun::MJ_W;
+			}
 
-			listbox_sel_observations.AddString(selectedObservation);
+			//Determine if it is a observation or a variable
+			if (it->second->getTag()->FileData == NULL)
+			{
+				//Is a variable
+				CString selectedVariable = CString(it->first.c_str());
+				if ( listbox_sel_observations.FindStringExact(-1, selectedVariable) == LB_ERR )
+				{
+					listbox_sel_observations.AddString(selectedVariable);
+				}
+
+				if (model->getFinishedRun())
+				{
+					model->calculateVariableFunctionOutput(it->first, it->second, funct);
+					AddSeriesToTChart(it->second);
+					delete it->second->getTag()->FileData;
+					it->second->getTag()->FileData = NULL;
+				}
+	
+			}
+			else
+			{
+				//Is a observation
+				AddObsPlot(it->second->getTag(), it->second, it->first, funct);
+				CString selectedObservation = CString(it->first.c_str());
+				listbox_sel_observations.AddString(selectedObservation);
+			}
+
 		}
 
 	}
@@ -1600,6 +1355,11 @@ void CRHMmainDlg::OnFileOpen()
 
 	CWaitCursor wait;
 
+	if (this->project_altered)
+	{
+		this->confirmUnsavedProjectClose();
+	}
+
 	CFile theFile;
 	TCHAR szFilters[] = _T("MyType Files (*.prj)|*.prj|All Files (*.*)|*.*||");
 	CString fileName;
@@ -1619,14 +1379,11 @@ void CRHMmainDlg::OnFileOpen()
 
 		CString filename = fileDlg.GetFileName();
 
-		//update file name tracking variable - Matt
-		globFileName = filename;
-
 		string file_p = CT2A(filepath.GetString());
 		string file_n = CT2A(filename.GetString());
 
 		OpenProject(file_p, file_n);
-
+		this->project_altered = false;
 		updateGuiMenuItems();
 	}
 
@@ -1636,6 +1393,7 @@ void CRHMmainDlg::OnFileOpen()
 void CRHMmainDlg::OnFileSave()
 {
 	SaveProject();
+	this->project_altered = false;
 }
 
 
@@ -1666,6 +1424,7 @@ void CRHMmainDlg::OnFileSaveAs()
 		string filepath = CT2A(fileName.GetString());
 		crhmmain->SaveProject("Description - to be added", filepath);
 		if (result == IDOK) {
+			this->project_altered = false;
 			MessageBox(_T("Your project has been saved."));
 		}
 		
@@ -1685,7 +1444,10 @@ void CRHMmainDlg::OnFileClose()
 {
 	CWaitCursor wait;
 
-	CString filename = globFileName;
+	if (this->project_altered)
+	{
+		this->confirmUnsavedProjectClose();
+	}
 
 	CRHMmain* model = CRHMmain::getInstance();
 
@@ -1699,6 +1461,7 @@ void CRHMmainDlg::OnFileClose()
 			&& listbox_sel_observations.GetCount() == 0)
 		{
 			this->CloseProject();
+			this->project_altered = false;
 		}
 		else 
 		{
@@ -1709,6 +1472,7 @@ void CRHMmainDlg::OnFileClose()
 				//Save and then close.
 				OnFileSaveAs();
 				this->CloseProject();
+				this->project_altered = false;
 			}
 			if (result == IDCANCEL) 
 			{ 
@@ -1719,13 +1483,16 @@ void CRHMmainDlg::OnFileClose()
 			{
 				//Close without saving.
 				this->CloseProject();
+				this->project_altered = false;
 			}
 		}
 	}
 	else 
 	{
 		this->CloseProject();
+		this->project_altered = false;
 	}
+
 
 }
 
@@ -1739,15 +1506,106 @@ void CRHMmainDlg::OnExtractGroup()
 
 void CRHMmainDlg::OnViewHierarchy()
 {
-	HierarchyDlg hierarchy;
-	hierarchy.DoModal();
+	//HierarchyDlg hierarchy;
+	//hierarchy.DoModal();
 }
+
+
+void CRHMmainDlg::OnSetDailyRefresh()
+{
+	CMenu* menu = this->main_menu->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_CHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_UNCHECKED);
+
+	this->refresh_rate = RefreshRate::DAILY;
+}
+
+
+void CRHMmainDlg::OnSetBiWeeklyRefresh()
+{
+	CMenu* menu = this->main_menu->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_CHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_UNCHECKED);
+
+	this->refresh_rate = RefreshRate::BIWEEKLY;
+}
+
+
+void CRHMmainDlg::OnSetWeeklyRefresh()
+{
+	CMenu* menu = this->main_menu->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_CHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_UNCHECKED);
+
+	this->refresh_rate = RefreshRate::WEEKLY;
+}
+
+
+void CRHMmainDlg::OnSetMonthlyRefresh()
+{
+	CMenu* menu = this->main_menu->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_CHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_UNCHECKED);
+
+	this->refresh_rate = RefreshRate::MONTHLY;
+}
+
+
+void CRHMmainDlg::OnSetYearlyRefresh()
+{
+	CMenu* menu = this->main_menu->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_CHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_UNCHECKED);
+
+	this->refresh_rate = RefreshRate::YEARLY;
+}
+
+
+void CRHMmainDlg::OnSetNoRefresh()
+{
+	CMenu* menu = this->main_menu->GetSubMenu(0);
+
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_DAILY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_BI, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_WEEKLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_MONTHLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_YEARLY, MFS_UNCHECKED);
+	menu->CheckMenuItem(ID_PLOTREFRESHRATE_ATEND, MFS_CHECKED);
+
+	this->refresh_rate = RefreshRate::ATEND;
+}
+
 
 void CRHMmainDlg::OnAutoRun()
 {
 	CRHMmain* main = CRHMmain::getInstance();
 
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 
 	main->setAutoRun(true);
 	if (menu->CheckMenuItem(ID_AUTO_RUN, MF_CHECKED) == MF_CHECKED)
@@ -1756,6 +1614,7 @@ void CRHMmainDlg::OnAutoRun()
 		menu->CheckMenuItem(ID_AUTO_RUN, MF_UNCHECKED);
 	};
 
+	this->project_altered = true;
 }
 
 
@@ -1763,7 +1622,7 @@ void CRHMmainDlg::OnAutoExit()
 {
 	CRHMmain* main = CRHMmain::getInstance();
 
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 
 	main->setAutoExit(true);
 	if (menu->CheckMenuItem(ID_AUTO_EXIT, MF_CHECKED) == MF_CHECKED)
@@ -1771,12 +1630,23 @@ void CRHMmainDlg::OnAutoExit()
 		main->setAutoExit(false);
 		menu->CheckMenuItem(ID_AUTO_EXIT, MF_UNCHECKED);
 	};
+
+	this->project_altered = true;
+}
+
+void CRHMmainDlg::OnCancel()
+{
+	this->OnExit();
 }
 
 
 void CRHMmainDlg::OnExit()
 {
-	CString filename = globFileName;
+
+	if (this->project_altered)
+	{
+		this->confirmUnsavedProjectClose();
+	}
 
 	CRHMmain* t = CRHMmain::getInstance();
 
@@ -1797,40 +1667,66 @@ void CRHMmainDlg::OnExit()
 			if (result == IDCANCEL) { return; } // if cancel is pressed, nothing should happen to the new project.
 		}
 	}
-	exit(0);
+	CDialogEx::OnCancel();
 }
+
 
 void CRHMmainDlg::OnLogAll()
 {
 	CRHMmain* model = CRHMmain::getInstance();
 	model->setReportAll(true);
 
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 
 	menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
 	if (menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_CHECKED) == MF_CHECKED)
 	{
 		menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
 	};
+
+	this->project_altered = true;
 }
+
 
 void CRHMmainDlg::OnLogLast()
 {
 	CRHMmain* model = CRHMmain::getInstance();
 	model->setReportAll(false);
 
-	CMenu* menu = GetActiveWindow()->GetMenu();
+	CMenu* menu = this->main_menu;
 
 	menu->CheckMenuItem(ID_MAIN_LOG_ALL, MF_UNCHECKED);
 	if (menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_CHECKED) == MF_CHECKED)
 	{
 		menu->CheckMenuItem(ID_MAIN_LOG_LAST, MF_UNCHECKED);
 	};
+
+	this->project_altered = true;
 }
+
+
+void CRHMmainDlg::OnCreateSummary()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+	
+	CMenu* menu = this->main_menu;
+
+	if (menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_CHECKED) == MF_CHECKED)
+	{
+		menu->CheckMenuItem(ID_MAIN_CREATE_SUMMARY, MF_UNCHECKED);
+		model->setSummarize(false);
+	}
+	else 
+	{
+		model->setSummarize(true);
+	}
+
+	this->project_altered = true;
+}
+
 
 void CRHMmainDlg::OnOpenObservation()
 {
-	// TODO: Add your command handler code here
 	CFile theFile;
 	TCHAR szFilters[] = _T("MyType Files (*.obs)|*.obs|All Files (*.*)|*.*||");
 
@@ -1850,21 +1746,17 @@ void CRHMmainDlg::OnOpenObservation()
 		std::string file_p = CT2A(filepath.GetString());
 		std::string file_n = CT2A(filename.GetString());
 
-		Box1Disply = (int)TVISIBLE::PRIVATE;
 		GetAllVariables();
 		OpenObservation(file_p);
 
 		//Add a menu item for the newly opened file.
 		updateOpenObsFileMenu();
 
+		this->project_altered = true;
 
 	}
 
-	Box1Disply = (int)TVISIBLE::OUTPUT;
 	GetAllVariables();
-
-
-
 
 }
 
@@ -1880,6 +1772,8 @@ void CRHMmainDlg::OnClickOnOpenFile(UINT ID)
 
 	/* Call the update method to rebuild the GUI */
 	updateOpenObsFileMenu();
+
+	this->project_altered = true;
 }
 
 
@@ -1890,48 +1784,28 @@ void CRHMmainDlg::OnCloseAllObservations()
 	main->ObsCloseClick();
 
 	updateOpenObsFileMenu();
+
+	this->project_altered = true;
 }
 
 
 void CRHMmainDlg::OnBuildConstruct()
 {
-	// TODO: Add your command handler code here
-
-
-	CConstruct* build_form;
+	ConstructDlg* build_form;
 	std::map<std::string, ClassModule*>* all_module_list = CRHMmain::getInstance()->getAllmodules();
 
-	build_form = new CConstruct();
-	//build_form->UpdateData();
-
-	//	build_form.listbox_all_modules
-	//	build_form->listbox_all_modules = new CListBox();
-
-	//build_form->listbox_all_modules.AddString(_T("test"));
-
-
-	//CListBox *test = &build_form->listbox_all_modules;
-	//AddStringListToListBox(test, all_module_list);
-
+	build_form = new ConstructDlg();
+	
 	INT_PTR nRet = build_form->DoModal();
 
-	if (build_form->Execute) {
+	if (build_form->Execute) 
+	{
 		InitModules();
 		build_form->ReadBuildParameters(); // restore original parameters
-
-
 		loadGuiComponents();
-
-		//ReopenProject();
-		//ReopenProject();
-		//OpenObservation(defaultobservationpath);
+		this->project_altered = true;
 	}
 
-	//CRHMmain *test = CRHMmain::getInstance();
-	//int c = test->AllVariables->Count;
-
-	//update the tracking variable for the file name - Matt
-	globFileName = defaultprojectpath.c_str();
 }
 
 
@@ -1947,6 +1821,7 @@ void CRHMmainDlg::OnClearModules()
 	loadGuiComponents();
 	updateSelectedVariablesListBox();
 	
+	this->project_altered = true;
 
 }
 
@@ -1959,9 +1834,40 @@ void CRHMmainDlg::OnBuildMacro()
 	if (macroEntry->DoModal() == IDOK)
 	{
 		CRHMmain* t = CRHMmain::getInstance();
-		t->MacroClick();
+		try
+		{
+			t->MacroClick();
+		}
+		catch (const std::exception&)
+		{
+			MessageBox(L"Macro cannot be parsed. Project must be reloaded.", MB_OK);
+			Global::MacroModulesList->clear();
+			t->MacroClick();
+			ReopenProject();
+			this->project_altered = false;
+			delete macroEntry;
+			return;
+		}
 		tchart.RemoveAllSeries();
+		this->project_altered = true;
 	}
+
+	delete macroEntry;
+}
+
+
+void CRHMmainDlg::OpenParametersDialog()
+{
+	ParametersDlg* parametersDialog;
+	parametersDialog = new ParametersDlg();
+
+	parametersDialog->DoModal();
+	delete parametersDialog;
+
+	CRHMmain* model = CRHMmain::getInstance();
+	model->SqueezeParams();
+
+	this->project_altered = true;
 }
 
 
@@ -1988,6 +1894,8 @@ void CRHMmainDlg::OnClickOnOpenInitState()
 		main->OpenStateFlag = true;
 
 		updateOpenStateFileMenu();
+
+		this->project_altered = true;
 	}
 
 }
@@ -2001,6 +1909,8 @@ void CRHMmainDlg::CloseOpenInitFile()
 	main->OpenStateFlag = false;
 
 	updateOpenStateFileMenu();
+
+	this->project_altered = true;
 }
 
 
@@ -2025,6 +1935,8 @@ void CRHMmainDlg::OnSaveState()
 	}
 
 	updateOpenStateFileMenu();
+
+	this->project_altered = true;
 }
 
 
@@ -2050,6 +1962,8 @@ void CRHMmainDlg::OnSaveStateTo()
 		model->SaveStateFlag = true;
 
 		updateOpenStateFileMenu();
+
+		this->project_altered = true;
 	}
 }
 
@@ -2081,33 +1995,41 @@ void CRHMmainDlg::OnSaveStateAs()
 		model->SaveState();
 
 		updateOpenStateFileMenu();
+
+		this->project_altered = true;
 	}
 
 }
 
 
-void CRHMmainDlg::OnRunRunmodel()
+void CRHMmainDlg::OnRunModel()
 {
+	CWaitCursor wait;
+
+	CRHMmain* main = CRHMmain::getInstance();
+
+	size_t numSelVar = main->SelectedVariables->size();
+	size_t numSelObs = main->SelectedObservations->size();
+	size_t totalSeries = numSelVar + numSelObs;
+
+	if (totalSeries > 200)
+	{
+		MessageBox(L"More than 200 outputs are selected. \n"
+			"CRHM GUI is not guaranteed to be stable with that many outputs. "
+			"The command line version of CRHM is more stable and is recommended for producing many outputs.");
+	}
+
 	RunClickFunction();
 	updateOpenStateFileMenu();
+	updateSelectedObservationListBox();
 }
+
 
 void CRHMmainDlg::OnExport()
 {
-	CRHMmain* model = CRHMmain::getInstance();
-
-	if (model->getFinishedRun())
-	{
-		CExport exportDlg;
-		exportDlg.DoModal();
-	}
-	else
-	{
-		CString text(L"Run must be completed before export can be performed.");
-		MessageBox(text, MB_OK);
-	}
-
-
+	
+	ExportDlg exportDlg;
+	exportDlg.DoModal();
 	
 }
 
@@ -2121,10 +2043,9 @@ void CRHMmainDlg::OnFlowdiagramsShowdiagram()
 }
 
 
-void CRHMmainDlg::OnHelpAbout()
+void CRHMmainDlg::OnViewHelpDocumentation()
 {
-	CRHMAboutBox aboutbox;
-	aboutbox.DoModal();
+	ShellExecute(AfxGetMainWnd()->GetSafeHwnd(), _T("open"), _T("https://wiki.usask.ca/display/CRHMdoc/CRHM+Documentation"), NULL, NULL, SW_SHOW);
 }
 
 
@@ -2195,6 +2116,8 @@ void CRHMmainDlg::IncreaseObsDimension()
 
 	if (mode == L"OBS")
 	{
+		int maxDimInSelection = getMaxDimObsSelection();
+
 		CString currentValue;
 		CString newValue;
 		int dimension = 0;
@@ -2202,7 +2125,7 @@ void CRHMmainDlg::IncreaseObsDimension()
 		dimension = _ttoi(currentValue);
 		if (currentValue.Trim().GetLength() > 0)
 		{
-			if (dimension < Global::maxobs)
+			if (dimension < maxDimInSelection)
 			{
 				dimension = _ttoi(currentValue) + 1;
 				newValue.Format(_T("%d"), dimension);
@@ -2232,10 +2155,12 @@ void CRHMmainDlg::IncreaseObsDimension()
 
 }
 
+
 void CRHMmainDlg::OnDblClkAllVarListBox()
 {
 	addVariablesToSelected();
 	updateSelectedVariablesListBox();
+	this->project_altered = true;
 }
 
 
@@ -2243,7 +2168,9 @@ void CRHMmainDlg::OnDblClkSelVarListBox()
 {
 	removeVariablesFromSelected();
 	updateSelectedVariablesListBox();
+	this->project_altered = true;
 }
+
 
 void CRHMmainDlg::OnVariableSelectChange()
 {
@@ -2275,6 +2202,7 @@ void CRHMmainDlg::OnDblClkAllObsListBox()
 {
 	addObservationsToSelected();
 	updateSelectedObservationListBox();
+	this->project_altered = true;
 }
 
 
@@ -2282,6 +2210,7 @@ void CRHMmainDlg::OnDblClkSelObsListBox()
 {
 	removeObservationsFromSelected();
 	updateSelectedObservationListBox();
+	this->project_altered = true;
 }
 
 
@@ -2356,21 +2285,25 @@ LRESULT CRHMmainDlg::OpenAllVarCtxMenu(WPARAM, LPARAM)
 			{
 				addVariablesToSelected();
 				updateSelectedVariablesListBox();
+				this->project_altered = true;
 			}
 			else if (result == ID_CTX_ALL_VAR_ADD_ARRAY)
 			{
 				addVariablesArrayToSelected();
 				updateSelectedVariablesListBox();
+				this->project_altered = true;
 			}
 			else if (result == ID_CTX_ALL_VAR_ADD_LAY_ARRAY)
 			{
 				addVariablesLayerArrayToSelected();
 				updateSelectedVariablesListBox();
+				this->project_altered = true;
 			}
 			else if (result == ID_CTX_ALL_VAR_ADD_HRU_LAY_ARRAY)
 			{
 				addVariablesHRULayerArrayToSelected();
 				updateSelectedVariablesListBox();
+				this->project_altered = true;
 			}
 		}
 
@@ -2386,11 +2319,27 @@ LRESULT CRHMmainDlg::OpenSelVarCtxMenu(WPARAM, LPARAM)
 	ctxMenu.CreatePopupMenu();
 
 	CString removeText("Remove");
+	CString applyFunctText("Apply Function");
 
 	ctxMenu.InsertMenu(0,
 		MF_BYPOSITION | MF_STRING,
 		ID_CTX_SEL_VAR_REMOVE,
 		(LPCTSTR)removeText);
+
+	if (this->function_drop_down.GetCurSel() == 0)
+	{
+		ctxMenu.InsertMenu(1,
+			MF_BYPOSITION | MF_STRING | MF_DISABLED,
+			ID_CTX_SEL_VAR_APPLY,
+			(LPCTSTR)applyFunctText);
+	}
+	else
+	{
+		ctxMenu.InsertMenu(1,
+			MF_BYPOSITION | MF_STRING,
+			ID_CTX_SEL_VAR_APPLY,
+			(LPCTSTR)applyFunctText);
+	}
 
 	CWnd* wind = AfxGetMainWnd();
 	POINT p;
@@ -2407,6 +2356,13 @@ LRESULT CRHMmainDlg::OpenSelVarCtxMenu(WPARAM, LPARAM)
 			{
 				removeVariablesFromSelected();
 				updateSelectedVariablesListBox();
+				this->project_altered = true;
+			}
+			else if (result == ID_CTX_SEL_VAR_APPLY)
+			{
+				addVariableFunctionToSelected();
+				updateSelectedObservationListBox();
+				this->project_altered = true;
 			}
 
 		}
@@ -2415,6 +2371,7 @@ LRESULT CRHMmainDlg::OpenSelVarCtxMenu(WPARAM, LPARAM)
 
 	return 0;
 }
+
 
 LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 {
@@ -2445,16 +2402,24 @@ LRESULT CRHMmainDlg::OpenAllObsCtxMenu(WPARAM, LPARAM)
 			TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD | TPM_LEFTBUTTON,
 			p.x, p.y, wind, 0))
 		{
-			if (result == ID_CTX_ALL_OBS_ADD)
+			int savedSelection = this->function_drop_down.GetCurSel();
+
+			switch (result)
 			{
+			case (ID_CTX_ALL_OBS_ADD):
 				addObservationsToSelected();
 				updateSelectedObservationListBox();
-			}
-			else if (result == ID_CTX_ALL_OBS_ADD_ARRAY)
-			{
+				this->project_altered = true;
+				break;
+			case (ID_CTX_ALL_OBS_ADD_ARRAY):
 				addObservationsArrayToSelected();
 				updateSelectedObservationListBox();
+				this->project_altered = true;
+				break;
+			default:
+				break;
 			}
+			
 		}
 
 	}
@@ -2490,6 +2455,7 @@ LRESULT CRHMmainDlg::OpenSelObsCtxMenu(WPARAM, LPARAM)
 			{
 				removeObservationsFromSelected();
 				updateSelectedObservationListBox();
+				this->project_altered = true;
 			}
 
 		}
@@ -2500,6 +2466,50 @@ LRESULT CRHMmainDlg::OpenSelObsCtxMenu(WPARAM, LPARAM)
 }
 
 
+void CRHMmainDlg::OnTimebaseChange()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+
+	int currentSelection = timebase_drop_down.GetCurSel();
+	
+	switch (currentSelection)
+	{
+	case (0):
+		model->setTimeBase(TimeBase::DAILY);
+		break;
+	case (1):
+		model->setTimeBase(TimeBase::MONTHLY);
+		break;
+	case (2):
+		model->setTimeBase(TimeBase::CALENDAR_YEAR);
+		break;
+	case (3):
+		model->setTimeBase(TimeBase::WATER_YEAR);
+		break;
+	case (4):
+		model->setTimeBase(TimeBase::ALL);
+		break;
+	default:
+		break;
+	}
+
+	this->showHideWaterYearMonth();
+
+	this->project_altered = true;
+}
+
+
+void CRHMmainDlg::OnWaterYearChange()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+
+	int currentSelection = this->water_year_drop_down.GetCurSel();
+	model->setWaterYearMonth(currentSelection + 1);
+
+	this->project_altered = true;
+}
+
+
 void CRHMmainDlg::OnStartDateChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	COleDateTime dateTime;
@@ -2507,7 +2517,10 @@ void CRHMmainDlg::OnStartDateChange(NMHDR* pNMHDR, LRESULT* pResult)
 	StartDatePicker.GetTime(dateTime);
 
 	CRHMmain::getInstance()->setStartDate(dateTime.m_dt);
+
+	this->project_altered = true;
 }
+
 
 void CRHMmainDlg::OnEndDateChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
@@ -2516,6 +2529,8 @@ void CRHMmainDlg::OnEndDateChange(NMHDR* pNMHDR, LRESULT* pResult)
 	EndDatePicker.GetTime(dateTime);
 
 	CRHMmain::getInstance()->setEndDate(dateTime.m_dt);
+
+	this->project_altered = true;
 }
 
 
@@ -2533,6 +2548,7 @@ void CRHMmainDlg::OnClickFlipTicks()
 		series.put_Active(!active);
 	}
 }
+
 
 LRESULT CRHMmainDlg::OnLeftClickFlipTicks(WPARAM, LPARAM)
 {
@@ -2569,6 +2585,7 @@ LRESULT CRHMmainDlg::OnLeftClickFlipTicks(WPARAM, LPARAM)
 	return 0;
 }
 
+
 LRESULT CRHMmainDlg::OnRightClickFlipTicks(WPARAM, LPARAM)
 {
 	CRHMmain* model = CRHMmain::getInstance();
@@ -2603,6 +2620,7 @@ LRESULT CRHMmainDlg::OnRightClickFlipTicks(WPARAM, LPARAM)
 
 	return 0;
 }
+
 
 void CRHMmainDlg::addVariablesToSelected()
 {
@@ -2738,6 +2756,7 @@ void CRHMmainDlg::addVariablesArrayToSelected()
 	delete[] selectedIndicies;
 }
 
+
 void CRHMmainDlg::addVariablesLayerArrayToSelected()
 {
 	CRHMmain* model = CRHMmain::getInstance();
@@ -2794,6 +2813,7 @@ void CRHMmainDlg::addVariablesLayerArrayToSelected()
 
 	delete[] selectedIndicies;
 }
+
 
 void CRHMmainDlg::addVariablesHRULayerArrayToSelected()
 {
@@ -2857,6 +2877,7 @@ void CRHMmainDlg::addVariablesHRULayerArrayToSelected()
 	delete[] selectedIndicies;
 }
 
+
 void CRHMmainDlg::addObservationsToSelected()
 {
 	CRHMmain* model = CRHMmain::getInstance();
@@ -2880,11 +2901,78 @@ void CRHMmainDlg::addObservationsToSelected()
 		/*Get the variable from the model*/
 		ClassVar* obsVar = model->AllObservations->find(selectedString)->second;
 
-		std::string seriesTitle = selectedString + "(" + to_string(dimension) + ")";
+		/* Retreive the value of the function selector to determine the suffix */
+		int functValue = function_drop_down.GetCurSel();
+		std::string suffix;
+
+		switch (functValue)
+		{
+		case (0):
+			// Observation;
+			suffix = "";
+			break;
+		case (1):
+			// Total
+			suffix = "_Tot";
+			break;
+		case (2):
+			// Minimum
+			suffix = "_Min";
+			break;
+		case (3):
+			// Maximum
+			suffix = "_Max";
+			break;
+		case (4):
+			// Average
+			suffix = "_Avg";
+			break;
+		case (5):
+			// Delta
+			suffix = "_Dlta";
+			break;
+		case (6):
+			// Positive
+			suffix = "_Pos";
+			break;
+		case (7):
+			// First
+			suffix = "_First";
+			break;
+		case (8):
+			// Last
+			suffix = "_Last";
+			break;
+		case (9):
+			// Count
+			suffix = "_Cnt";
+			break;
+		case (10):
+			// Count0
+			suffix = "_Cnt0";
+			break;
+		case (11):
+			// VP Sat
+			suffix = "_VPsat";
+			break;
+		case (12):
+			// Watts to MJ/Int
+			suffix = "_WtoMJ";
+			break;
+		case (13):
+			// MJ/Int to Watts
+			suffix = "_MJtoW";
+			break;
+		default:
+			suffix = "";
+			break;
+		}
+
+		std::string seriesTitle = selectedString + "(" + to_string(dimension) + ")" + suffix;
 
 		bool dimensionSelected = observationIsSelected(seriesTitle);
 
-		while (dimensionSelected && dimension < Global::maxobs)
+		while (dimensionSelected && dimension < obsVar->dim)
 		{
 			dimension++;
 			seriesTitle = selectedString + "(" + to_string(dimension) + ")";
@@ -2892,7 +2980,7 @@ void CRHMmainDlg::addObservationsToSelected()
 		}
 
 		/*Add the observation to the selected observations*/
-		if (dimensionSelected == false)
+		if (dimensionSelected == false && dimension <= obsVar->dim)
 		{
 			TSeries* cdSeries = NULL;
 
@@ -2904,8 +2992,8 @@ void CRHMmainDlg::addObservationsToSelected()
 			{
 				cdSeries = new TSeries();
 			}
-			cdSeries->Tag = obsVar;
-			cdSeries->Title = seriesTitle;
+			cdSeries->setTag(obsVar);
+			cdSeries->setTitle(seriesTitle);
 			model->SelectedObservations->push_back(std::pair<std::string, TSeries*>(seriesTitle, cdSeries));
 		}
 
@@ -2933,9 +3021,77 @@ void CRHMmainDlg::addObservationsArrayToSelected()
 		/*Get the variable from the model*/
 		ClassVar* obsVar = model->AllObservations->find(selectedString)->second;
 
-		for (int i = 1; i <= Global::maxobs; i++)
+		for (int i = 1; i <= obsVar->dim; i++)
 		{
-			std::string seriesTitle = selectedString + "(" + to_string(i) + ")";
+
+			/* Retreive the value of the function selector to determine the suffix */
+			int functValue = function_drop_down.GetCurSel();
+			std::string suffix;
+
+			switch (functValue)
+			{
+			case (0):
+				// Observation;
+				suffix = "";
+				break;
+			case (1):
+				// Total
+				suffix = "_Tot";
+				break;
+			case (2):
+				// Minimum
+				suffix = "_Min";
+				break;
+			case (3):
+				// Maximum
+				suffix = "_Max";
+				break;
+			case (4):
+				// Average
+				suffix = "_Avg";
+				break;
+			case (5):
+				// Delta
+				suffix = "_Dlta";
+				break;
+			case (6):
+				// Positive
+				suffix = "_Pos";
+				break;
+			case (7):
+				// First
+				suffix = "_First";
+				break;
+			case (8):
+				// Last
+				suffix = "_Last";
+				break;
+			case (9):
+				// Count
+				suffix = "_Cnt";
+				break;
+			case (10):
+				// Count0
+				suffix = "_Cnt0";
+				break;
+			case (11):
+				// VP Sat
+				suffix = "_VPsat";
+				break;
+			case (12):
+				// Watts to MJ/Int
+				suffix = "_WtoMJ";
+				break;
+			case (13):
+				// MJ/Int to Watts
+				suffix = "_MJtoW";
+				break;
+			default:
+				suffix = "";
+				break;
+			}
+
+			std::string seriesTitle = selectedString + "(" + to_string(i) + ")" + suffix;
 
 			bool dimensionSelected = observationIsSelected(seriesTitle);
 
@@ -2952,8 +3108,8 @@ void CRHMmainDlg::addObservationsArrayToSelected()
 				{
 					cdSeries = new TSeries();
 				}
-				cdSeries->Tag = obsVar;
-				cdSeries->Title = seriesTitle;
+				cdSeries->setTag(obsVar);
+				cdSeries->setTitle(seriesTitle);
 				model->SelectedObservations->push_back(std::pair<std::string, TSeries*>(seriesTitle, cdSeries));
 			}
 		}
@@ -2978,7 +3134,7 @@ void CRHMmainDlg::removeVariablesFromSelected()
 		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
 		std::string selectedString(pszConvertedAnsiString);
 
-		/*Remove observation from the model*/
+		/*Remove variable output from the model*/
 		std::list<std::pair<std::string, ClassVar*>>* listOfSelectedVariables = model->SelectedVariables;
 		for (
 			std::list<std::pair<std::string, ClassVar*>>::iterator it = listOfSelectedVariables->begin();
@@ -2991,6 +3147,28 @@ void CRHMmainDlg::removeVariablesFromSelected()
 				listOfSelectedVariables->erase(it);
 				break;
 			}
+		}
+
+		bool needToUpdateSelectedObs = false;
+		/* Look for the variable we just removed in the selected observation list and remove if needed */
+		for (
+			std::list<std::pair<std::string, TSeries*>>::iterator it = model->SelectedObservations->begin();
+			it != model->SelectedObservations->end();
+			it++
+			)
+		{
+			std::string trimedString = it->first.substr(0, it->first.rfind(')') + 1);
+			if (selectedString == trimedString)
+			{
+				model->SelectedObservations->erase(it);
+				needToUpdateSelectedObs = true;
+				it = model->SelectedObservations->begin();
+			}
+		}
+
+		if (needToUpdateSelectedObs)
+		{
+			updateSelectedObservationListBox();
 		}
 
 	}
@@ -3080,7 +3258,6 @@ bool CRHMmainDlg::observationIsSelected(std::string seriesTitle)
 }
 
 
-
 void CRHMmainDlg::SetItemsToListBox(int listboxid, std::vector<std::string>* list)
 {
 	CListBox* listbox = (CListBox*)GetDlgItem(listboxid);
@@ -3133,8 +3310,8 @@ std::list<std::pair<std::string, TSeries*>>* CRHMmainDlg::GetSelectedObservation
 		//list->Add(s);
 		ClassVar* var = t->GetObjectOfObservation(s);
 		TSeries* obj = new TSeries();
-		obj->Tag = var;
-		obj->Title = s;
+		obj->setTag(var);
+		obj->setTitle(s);
 
 		list->push_back(std::pair<std::string, TSeries*>(s, obj));
 	}
@@ -3148,7 +3325,8 @@ void HruNameClick() {
 
 	MapPar::iterator itPar;
 	ClassPar *newPar;
-	long Hru, Lay;
+	int Hru; 
+	int Lay;
 
 	if (!test->ListHruNames) {
 
@@ -3304,8 +3482,11 @@ LRESULT CRHMmainDlg::OnAutoRunMessage(WPARAM, LPARAM)
 	return 0;
 }
 
+
 void CRHMmainDlg::setDimensionSelectorToObs()
 {
+	int maxDimInSelection = getMaxDimObsSelection();
+
 	SetDlgItemText(ID_OBS_LAY_DIM_LABEL, L"OBS");
 	CString currentValue;
 	int dimension = 0;
@@ -3313,7 +3494,7 @@ void CRHMmainDlg::setDimensionSelectorToObs()
 	dimension = _ttoi(currentValue);
 	if (currentValue.Trim().GetLength() > 0)
 	{
-		if (dimension > Global::maxobs)
+		if (dimension > maxDimInSelection)
 		{
 			SetDlgItemText(ID_OBS_DIM_DISPLAY, L"1");
 		}
@@ -3369,4 +3550,188 @@ int CRHMmainDlg::getMaxLayofSelection()
 	}
 
 	return maxLayInSelection;
+}
+
+
+int CRHMmainDlg::getMaxDimObsSelection()
+{
+	int maxDimInSelection = 0;
+
+	CRHMmain* model = CRHMmain::getInstance();
+
+	int selectedCount = listbox_all_observations.GetSelCount();
+	int* selectedIndicies = new int[selectedCount];
+	listbox_all_observations.GetSelItems(selectedCount, selectedIndicies);
+
+	for (int i = 0; i < selectedCount; i++)
+	{
+		CString selectedText;
+		listbox_all_observations.GetText(selectedIndicies[i], selectedText);
+		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
+		std::string selectedString(pszConvertedAnsiString);
+
+		std::map<std::string, ClassVar*>::iterator selected = model->AllObservations->find(selectedString);
+
+		int dim = selected->second->dim;
+
+		if (dim > maxDimInSelection)
+		{
+			maxDimInSelection = dim;
+		}
+	}
+
+	return maxDimInSelection;
+}
+
+void CRHMmainDlg::showHideWaterYearMonth()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+
+	if (model->getTimeBase() == TimeBase::WATER_YEAR)
+	{
+		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_SHOW);
+		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_SHOW);
+	}
+	else
+	{
+		GetDlgItem(ID_WATER_YEAR_LABEL)->ShowWindow(SW_HIDE);
+		GetDlgItem(ID_WATER_YEAR_DROP_DOWN)->ShowWindow(SW_HIDE);
+	}
+}
+
+
+void CRHMmainDlg::addVariableFunctionToSelected()
+{
+	CRHMmain* model = CRHMmain::getInstance();
+
+	/* Retreive the value of the function selector to determine the suffix */
+	int functValue = function_drop_down.GetCurSel();
+	std::string suffix;
+
+	switch (functValue)
+	{
+	case (0):
+		// Observation;
+		suffix = "";
+		break;
+	case (1):
+		// Total
+		suffix = "_Tot";
+		break;
+	case (2):
+		// Minimum
+		suffix = "_Min";
+		break;
+	case (3):
+		// Maximum
+		suffix = "_Max";
+		break;
+	case (4):
+		// Average
+		suffix = "_Avg";
+		break;
+	case (5):
+		// Delta
+		suffix = "_Dlta";
+		break;
+	case (6):
+		// Positive
+		suffix = "_Pos";
+		break;
+	case (7):
+		// First
+		suffix = "_First";
+		break;
+	case (8):
+		// Last
+		suffix = "_Last";
+		break;
+	case (9):
+		// Count
+		suffix = "_Cnt";
+		break;
+	case (10):
+		// Count0
+		suffix = "_Cnt0";
+		break;
+	case (11):
+		// VP Saturated
+		suffix = "_VPsat";
+		break;
+	case (12):
+		// Watts to MJ/Int
+		suffix = "_WtoMJ";
+		break;
+	case (13):
+		// MJ/Int to Watts
+		suffix = "_MJtoW";
+		break;
+	default:
+		suffix = "";
+		break;
+	}
+
+	int selectedCount = listbox_sel_variables.GetSelCount();
+	int* selectedIndicies = new int[selectedCount];
+	listbox_sel_variables.GetSelItems(selectedCount, selectedIndicies);
+
+	// For each selected selected variable
+	for (int i = 0; i < selectedCount; i++)
+	{
+		CString selectedText;
+		listbox_sel_variables.GetText(selectedIndicies[i], selectedText);
+		CT2CA pszConvertedAnsiString(selectedText); //Intermediary to convert CString to std::string
+		std::string selectedString(pszConvertedAnsiString);
+
+		// Find the selected variable
+		std::list<std::pair<std::string, ClassVar*>>* listOfSelectedVariables = model->SelectedVariables;
+		std::list<std::pair<std::string, ClassVar*>>::iterator selectedVar;
+		for (
+			std::list<std::pair<std::string, ClassVar*>>::iterator it = listOfSelectedVariables->begin();
+			it != listOfSelectedVariables->end();
+			it++
+			)
+		{
+			if (selectedString == it->first)
+			{
+				selectedVar = it;
+				break;
+			}
+		}
+
+		std::string seriesLabel = selectedVar->first + suffix;
+		TSeries* series = new TSeries();
+
+		series->setTitle(seriesLabel);
+		series->setTag(selectedVar->second);
+
+		model->SelectedObservations->push_back(std::pair<std::string, TSeries*>(seriesLabel, series));
+
+	}
+
+	delete[] selectedIndicies;
+}
+
+
+void CRHMmainDlg::confirmUnsavedProjectClose()
+{
+	int choice = MessageBox(
+		L"Project may have unsaved changes that may be lost.\n\r Do you wish to save?",
+		L"Save Project before continuing?",
+		MB_YESNO
+	);
+
+	if (choice == IDYES)
+	{
+		this->SaveProject();
+	}
+
+}
+
+
+void CRHMmainDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	// Ensure the window cannot get smaller than its original size.
+	lpMMI->ptMinTrackSize.x = this->original_rectangle.Width();
+	lpMMI->ptMinTrackSize.y = this->original_rectangle.Height();
 }

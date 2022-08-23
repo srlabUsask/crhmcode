@@ -135,7 +135,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996;1083</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\boost_1_73_0;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\core;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\plugins\hype;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\plugins\newmodules;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\vcc;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\vcc\gui;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\vcc\tchart;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\plugins\waterquality;D:\GIT\CRHM\crhmcodejustin\crhmcode\release1.1\src\plugins\coremodules</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -391,10 +392,16 @@
     <ClCompile Include="..\src\modules\waterquality\WQ_CRHM.cpp" />
     <ClCompile Include="..\src\modules\waterquality\WQ_Soil_NPCcycling.cpp" />
     <ClCompile Include="ChiralClickButton.cpp" />
-    <ClCompile Include="gui\CConstruct.cpp" />
-    <ClCompile Include="gui\CExport.cpp" />
+    <ClCompile Include="gui\ConstructDlg.cpp" />
+    <ClCompile Include="gui\ExportDlg.cpp" />
+    <ClCompile Include="gui\ConsolidateParamCard.cpp" />
+    <ClCompile Include="gui\ConsolidateParamDlg.cpp" />
     <ClCompile Include="gui\COptions.cpp" />
-    <ClCompile Include="gui\CParameters.cpp" />
+    <ClCompile Include="gui\GridCell.cpp" />
+    <ClCompile Include="gui\ParamDlgCard.cpp" />
+    <ClCompile Include="gui\ParamDlgCardShared.cpp" />
+    <ClCompile Include="gui\CardScrollPane.cpp" />
+    <ClCompile Include="gui\ParametersDlg.cpp" />
     <ClCompile Include="gui\CReport.cpp" />
     <ClCompile Include="gui\CRHMAboutBox.cpp" />
     <ClCompile Include="gui\CRHMmainDlg.cpp" />
@@ -407,6 +414,8 @@
     <ClCompile Include="gui\MacroEntryDlg.cpp" />
     <ClCompile Include="gui\MainFrm.cpp" />
     <ClCompile Include="gui\OutputWnd.cpp" />
+    <ClCompile Include="gui\ParamSetAllDlg.cpp" />
+    <ClCompile Include="gui\RefreshRateDlg.cpp" />
     <ClCompile Include="gui\ResourceDlg.cpp" />
     <ClCompile Include="HierarchyDlg.cpp" />
     <ClCompile Include="RightClickListBox.cpp" />
@@ -654,11 +663,18 @@
     <ClInclude Include="..\src\modules\waterquality\WQ_CRHM.h" />
     <ClInclude Include="..\src\modules\waterquality\WQ_Soil_NPCcycling.h" />
     <ClInclude Include="ChiralClickButton.h" />
-    <ClInclude Include="gui\CConstruct.h" />
+    <ClInclude Include="gui\ConstructDlg.h" />
     <ClInclude Include="gui\CConstructCore.h" />
-    <ClInclude Include="gui\CExport.h" />
+    <ClInclude Include="gui\ExportDlg.h" />
+    <ClInclude Include="gui\ConsolidateParamCard.h" />
+    <ClInclude Include="gui\ConsolidateParamDlg.h" />
     <ClInclude Include="gui\COptions.h" />
-    <ClInclude Include="gui\CParameters.h" />
+    <ClInclude Include="gui\FontsContainer.h" />
+    <ClInclude Include="gui\GridCell.h" />
+    <ClInclude Include="gui\ParamDlgCard.h" />
+    <ClInclude Include="gui\ParamDlgCardShared.h" />
+    <ClInclude Include="gui\CardScrollPane.h" />
+    <ClInclude Include="gui\ParametersDlg.h" />
     <ClInclude Include="gui\CReport.h" />
     <ClInclude Include="gui\CRHMAboutBox.h" />
     <ClInclude Include="gui\CRHMmainDlg.h" />
@@ -673,6 +689,8 @@
     <ClInclude Include="gui\MainFrm.h" />
     <ClInclude Include="gui\Module.h" />
     <ClInclude Include="gui\OutputWnd.h" />
+    <ClInclude Include="gui\ParamSetAllDlg.h" />
+    <ClInclude Include="gui\RefreshRateDlg.h" />
     <ClInclude Include="gui\ResourceDlg.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="HierarchyDlg.h" />
