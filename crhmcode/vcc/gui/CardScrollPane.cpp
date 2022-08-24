@@ -191,8 +191,8 @@ bool CardScrollPane::AddCard(std::list<std::pair<std::string, ClassPar*>>::itera
 
 void CardScrollPane::CalculateCardLocation(CRect* rectangle, int numRows, int numCols)
 {
-	CRect baseSize(0, 0, this->current_rectangle.Width(), 150);
-	CRect sizeGuide(0,0,80,20);
+	CRect baseSize(0, 0, this->current_rectangle.Width(), 200);
+	CRect sizeGuide(0,0,80,25);
 	ScreenToClient(&sizeGuide);
 	ScreenToClient(&baseSize);
 	int guideHeight = sizeGuide.Height();
