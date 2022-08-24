@@ -111,8 +111,6 @@ BEGIN_MESSAGE_MAP(CRHMmainDlg, CDialogEx)
 	ON_COMMAND(ID_FLOWDIAGRAMS_SHOWDIAGRAM, &CRHMmainDlg::OnFlowdiagramsShowdiagram)
 	
 	//Help menu item
-		//CRHM Help not implemented
-		//New Modules help not implemented
 	ON_COMMAND(ID_HELP_CRHM, &CRHMmainDlg::OnViewHelpDocumentation)
 
 	//HRU Dimension Selector
@@ -2045,7 +2043,7 @@ void CRHMmainDlg::OnFlowdiagramsShowdiagram()
 
 void CRHMmainDlg::OnViewHelpDocumentation()
 {
-	ShellExecute(AfxGetMainWnd()->GetSafeHwnd(), _T("open"), _T("https://wiki.usask.ca/display/CRHMdoc/CRHM+Documentation"), NULL, NULL, SW_SHOW);
+	ShellExecute(AfxGetMainWnd()->GetSafeHwnd(), _T("open"), _T("https://wiki.usask.ca/display/CRHMdoc/CRHM+-+Cold+Region+Hydrological+Model"), NULL, NULL, SW_SHOW);
 }
 
 
