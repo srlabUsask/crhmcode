@@ -582,7 +582,7 @@ bool ClassData::DataReadFile(void)
 					else
 					{
 						// any column but the first - assume missing
-						Data[ii][Position] = 35.93;//Data[ii][Position] = -999999;
+						Data[ii][Position] = -999999;
 					}
 
 				}
