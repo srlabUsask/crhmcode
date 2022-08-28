@@ -55,6 +55,7 @@
 #include "../Classwalmsley_wind.h" //added by Manishankar Mondal
 #include "../ClassNetroute_M.h" //added by Manishankar Mondal
 #include "../ClassREWroute2.h" //added by Manishankar Mondal
+#include "../ClassREWroute_storage.h"
 #include "../ClassLongVt.h" //added by Manishankar Mondal
 #include "../Classpbsm_M.h" //added by Manishankar Mondal
 #include "../ClassNetroute_D.h" //added by Manishankar Mondal
@@ -114,6 +115,32 @@
 #include "../ClassNOP.h" //added by Manishankar Mondal
 #include "../ClassQuickroute.h" //added by Peter Lawford
 #include "../ClassSWMM.h" //added by Peter Lawford
+
+
+/***********************************
+ * Modules required for simulating water quality
+ ***********************************/
+
+#include "waterquality/ClassWQ_Soil.h"
+#include "waterquality/ClassWQ_Netroute.h"
+#include "waterquality/ClassWQ_pbsm.h"
+#include "waterquality/ClassWQ_Netroute_D.h"
+#include "waterquality/ClassWQ_Netroute_M_D.h"
+#include "waterquality/ClassWQ_REWroute.h"
+#include "waterquality/ClassWQ_Test_Hype.h"
+#include "waterquality/ClassWQ_pbsmSnobal.h"
+#include "waterquality/ClassWQ_Substitute_Hype.h"
+#include "waterquality/ClassWQ_Gen_Mass_Var_Soil.h"
+#include "waterquality/ClassGrow_crops_annually.h"
+#include "waterquality/ClassWQ_Gen_Mass_Var_Netroute.h"
+#include "waterquality/Classlapse_rate_Monthly_Mod.h"
+#include "waterquality/ClassGlacier_melt_debris_cover_estimate_Mod.h"
+#include "waterquality/ClassSoilPrairie.h"
+#include "waterquality/ClassGlacier_debris_cover.h"
+#include "waterquality/Class_lapse_rate_Monthly.h"
+#include "waterquality/ClassWQ_mass_conc.h"
+#include "waterquality/ClassSed_Soil.h"
+#include "waterquality/ClassSed_Detachment.h"
 
 
 //---------------------------------------------------------------------------
@@ -191,6 +218,7 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassNetroute_M_D("Netroute_M_D", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassREWroute("REW_route", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassREWroute_stream("REW_route_stream", "07/09/18", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassREWroute_storage("REW_route_storage", "08/09/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassREWroute2("REW_route2", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "11/21/16", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClasspbsmSnobal("pbsmSnobal", "01/05/17", LMODULE::ADVANCE));
@@ -242,7 +270,12 @@ void MoveModulesToGlobal(string DLLName)
     DLLModules.AddModule(new ClassWQ_Test_Hype("WQ_Test", "05/01/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_Substitute_Hype("WQ_Soil_BGC_substitute", "12/11/18", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_Soil("WQ_Soil", "05/08/19", LMODULE::PROTO));
+
+    DLLModules.AddModule(new ClassSedSoil("Sed_Soil", "08/20/22", LMODULE::PROTO));
+    DLLModules.AddModule(new ClassSed_Detachment("Sed_Detachment", "08/20/22", LMODULE::PROTO));
+
     DLLModules.AddModule(new ClassWQ_Netroute("WQ_Netroute", "11/29/18", LMODULE::PROTO));
+    DLLModules.AddModule(new ClassWQ_Netroute_D("WQ_Netroute_D", "03/22/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_Netroute_M_D("WQ_Netroute_M_D", "03/22/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_REWroute("WQ_REW_route", "05/27/22", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_pbsm("WQ_pbsm", "01/21/19", LMODULE::PROTO));
