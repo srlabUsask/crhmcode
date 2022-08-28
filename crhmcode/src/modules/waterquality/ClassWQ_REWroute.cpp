@@ -38,30 +38,23 @@ void ClassWQ_REWroute::decl(void) {
 
   declvar("WS_outflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &outflow);
   declvar("WS_outflow_mWQ", TDim::NDEFN, "Concentration: outflow of each RB", "(kg/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
-
   declstatdiag("cum_WSoutflow", TDim::NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutflow);
 
   declvar("WS_flow", TDim::BASIN, "watershed surface and sub-surface outflow", "(m^3/int)", &flow);
-
   declvar("WS_flow_s", TDim::BASIN, "watershed surface and sub-surface outflow", "(m^3/s)", &flow_s);
-
   declstatdiag("cum_WSflow", TDim::BASIN, "cumulative watershed surface and sub-surface outflow", "(m^3)", &cumflow);
 
 
   gwCnt = declgrpvar("WS_ALL_gwflow", "basingw", "query variable = 'basingw'", "(m^3/int)", &gwrew, &gw_All);
 
   declvar("WS_gwinflow", TDim::NHRU, "gwinflow from each RB", "(m^3/int)", &gwinflow);
-
   declstatdiag("cum_WSgwinflow", TDim::NHRU, "cumulative gwinflow from each RB", "(m^3)", &cumgwinflow);
 
   declvar("WS_gwoutflow", TDim::NHRU, "gwoutflow of each RB", "(m^3/int)", &gwoutflow);
-
   declstatdiag("cum_WSgwoutflow", TDim::NHRU, "cumulative gwoutflow of each RB", "(m^3)", &cumgwoutflow);
 
   declvar("WS_gwflow", TDim::BASIN, "watershed ground water outflow", "(m^3/int)", &gwflow);
-
   declvar("WS_gwflow_s", TDim::BASIN, "watershed ground water outflow", "(m^3/s)", &gwflow_s);
-
   declstatdiag("cum_WSgwflow", TDim::BASIN, "cumulative watershed ground water outflow", "(m^3)", &cumgwflow);
 
 
@@ -179,7 +172,7 @@ void ClassWQ_REWroute::init(void) {
   }
   else if(variation == VARIATION_1){
     Clark_inflowDelay = new ClassClark(inflow, outflow, WS_Kstorage, WS_Lag, nhru);
-    Clark_gwDelay = new ClassClark(inflow, outflow, WS_gwKstorage, WS_gwLag, nhru);
+    Clark_gwDelay = new ClassClark(gwinflow, gwoutflow, WS_gwKstorage, WS_gwLag, nhru);
 
     Clark_inflowDelay_mWQ = new ClassClark * [numsubstances];
   //  Clark_gwDelay_mWQ = new ClassClark * [numsubstances];

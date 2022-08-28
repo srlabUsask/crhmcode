@@ -222,7 +222,7 @@ void ClassWQ_Netroute_D::decl(void) {
 
     declputvar("*", "cum_redirected_residual", "(mm*km^2/int)", &cum_redirected_residual);
 
-    declputvar("*", "cum_redirected_residual_mWQ", "(mg/l * mm*km^2/int)", &cum_redirected_residual_mWQ, &cum_redirected_residual_mWQ_lay);
+//    declputvar("*", "cum_redirected_residual_mWQ", "(mg/l * mm*km^2/int)", &cum_redirected_residual_mWQ, &cum_redirected_residual_mWQ_lay);
 
     declputvar("*", "gw", "(mm)", &gw);
 
@@ -923,7 +923,8 @@ void ClassWQ_Netroute_D::run(void) {
 
             if (nstep == 0) {
                 if (soil_runoffDiv > 1) // daily value - ready for next day
-                    soil_runoff_Buf_conc_lay[Sub][hh] = soil_runoff_cWQ_lay[Sub][hh] / soil_runoffDiv;
+                // concentration should not be affected by timestep size (PRL)
+                    soil_runoff_Buf_conc_lay[Sub][hh] = soil_runoff_cWQ_lay[Sub][hh]; // / soil_runoffDiv;
             }
 
 
