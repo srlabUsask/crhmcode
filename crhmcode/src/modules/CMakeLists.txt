@@ -71,8 +71,8 @@ add_library(modules OBJECT
     Classqmelt.cpp
     ClassQuickroute.cpp
     Classquinton.cpp
+    ClassREWroute_storage.cpp
     ClassREWroute_stream.cpp
-    ClassREWroute.cpp
     ClassREWroute.cpp
     ClassREWroute2.cpp
     Classsbsm.cpp
