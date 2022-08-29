@@ -1,4 +1,22 @@
-﻿#pragma once
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+*
+* CRHMcode is free software: you can redistribute it and/or modify it under
+* the terms of the GNU General Public License as published by the Free Software
+* Foundation, either version 3 of the License, or (at your option) any later
+* version.
+*
+* CRHMcode is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License along with
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+*
+**/
+#pragma once
 // 10/03/16
 //---------------------------------------------------------------------------
 #ifndef CommonH
@@ -172,16 +190,16 @@ public:
 	std::string static GetCurrentPath(void);
 	bool static Variation_Decide(int Variation_set, long Variation);
 	void static writefile(std::string filepath, std::string content);
-	
-	
+
+
 	/*
-	* Takes a string of comma seperated values and places each value as a entry in a 
-	* vector of strings. Values are surounded by single quote characters before being 
-	* placed into the vector. 
-	* 
+	* Takes a string of comma seperated values and places each value as a entry in a
+	* vector of strings. Values are surounded by single quote characters before being
+	* placed into the vector.
+	*
 	* ex. input of "Red,Green,Blue" yeilds a vector with "'Red'", "'Green'", and "'Blue'"
 	* as its values.
-	* 
+	*
 	* @param std::string css - the incomming string of comma spererated values.
 	* @param std::vector<std::string> * pointer to the vector in which to save the parsed values.
 	*/
