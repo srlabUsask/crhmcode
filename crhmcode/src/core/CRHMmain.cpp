@@ -112,6 +112,8 @@ CRHMmain* CRHMmain::getInstance()
 
 CRHMmain::CRHMmain(CRHMArguments * arguments)
 {
+	InitModCnt = 0;
+
 	if (arguments == NULL)
 	{
 		//Use default values
@@ -301,6 +303,8 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 	std::string S, s;
 	std::string SS;
 
+	SeriesCnt = 0;   // This needs to be initialized somewhere. This may not be the best place.
+
 	DataFile.open(OpenNamePrj.c_str());
 	if (!DataFile)
 	{
@@ -427,7 +431,8 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					c = DataFile.peek();
 				}
 
-				if (iswdigit(c) && ObsFilesList->size() == 0) {
+//				if (iswdigit(c) && ObsFilesList->size() == 0) {
+				if (iswdigit(c) ) {
 					DataFile >> Global::Freq;
 					Global::Interval = 1.0 / Global::Freq;
 				}
@@ -2076,6 +2081,7 @@ MMSData *  CRHMmain::RunClick2Start()
 		// }
 
 		Global::BuildFlag = TBuild::DECL;
+		mmsdata->GoodRun = GoodRun;
 		return mmsdata;
 	}
 
@@ -2438,6 +2444,20 @@ void  CRHMmain::RunClick2Middle(MMSData * mmsdata, long startdate, long enddate)
 		LogError(errorMessage + " (" + FloatToStrF(Global::DTnow, TFloatFormat::ffGeneral, 10, 0) + ")", TExcept::ERR);
 		GoodRun = false;
 	}
+
+	{
+		time_t rawtime;
+		struct tm * timeinfo;
+		char buffer [80];
+
+		time (&rawtime);   // Get the current UNIX timestamp in rawtime
+		timeinfo = localtime (&rawtime);   // Convert UNIX timestamp to Y-M-D-h-m
+		strftime (buffer, 80, "%D %R", timeinfo );  // Convert to string
+	//	string datetime(buffer);  // Convert to C++ string
+
+		string Message = string("Time for completing calculations: ") + buffer;
+		LogMessageX(Message.c_str());
+	}
 }
 
 void CRHMmain::RunClick2End(MMSData * mmsdata)
@@ -2486,6 +2506,7 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 
 	}
 
+	ClearModules(true);  // In Borland, ClearModules is called by GUI handling routines. Won't work for CLI runs.
 	//double timediff2 = double(clock() - begintime2) / CLOCKS_PER_SEC; /////////////////////////////////////////////////////
 	//ts->addTime("totaltime", timediff2);
 
@@ -2500,8 +2521,8 @@ void  CRHMmain::RunClick(void) {
 	MMSData * mmsdata = CRHMmain::RunClick2Start();
 	CRHMmain::RunClick2Middle(mmsdata, Global::DTmin, Global::DTmax);
 	CRHMmain::RunClick2End(mmsdata);
+	delete mmsdata; 
 }
-
 
 //---------------------------------------------------------------------------
 
