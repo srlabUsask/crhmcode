@@ -29,6 +29,7 @@ Defdeclparam::Defdeclparam(ClassMacro* Macro_) : DefCRHM(Macro_)
 		Int = false;
 	}
 
+	nlay = -1;
 	if (DefCRHM::DefStringList->size() > 9)
 	{
 		nlay = Strtolong(DefStringList->at(9));
@@ -38,10 +39,15 @@ Defdeclparam::Defdeclparam(ClassMacro* Macro_) : DefCRHM(Macro_)
 
 void Defdeclparam::CallDecl() {
 
-	if (Int)
-		Macro->declparam(name, Dim, Default, Min, Max, Description, Units, &fix_long_const, &fix2_long_const, nlay, visibility);
-	else
+	if (Int) {
+		if (nlay > 0) {
+			Macro->declparam(name, Dim, Default, Min, Max, Description, Units, &fix_long_const, &fix2_long_const, nlay, visibility);
+		} else {
+			Macro->declparam(name, Dim, Default, Min, Max, Description, Units, &fix_long_const, &fix2_long_const, Macro->nhru, visibility);
+		}
+	} else {
 		Macro->declparam(name, Dim, Default, Min, Max, Description, Units, &fix_const, &fix2_const, Macro->nhru, visibility);
+	}
 
 	if (Global::BuildFlag == TBuild::INIT) {
 		FP = Macro->vars.find(name);
