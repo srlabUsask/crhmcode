@@ -1504,8 +1504,10 @@ bool  CRHMmain::OpenObsFile(string FileName)
 
 			OpenNameObs = FileName;
 
-			Global::Interval = FileData->Interval;
-			Global::Freq = FileData->Freq;
+			if ((Global::Interval == 0) || (Global::Freq == 0)) {
+				Global::Interval = FileData->Interval;			
+				Global::Freq = FileData->Freq;
+			}
 
 			Global::IndxMin = FileData->IndxMin;
 			Global::IndxMax = FileData->IndxMax;
