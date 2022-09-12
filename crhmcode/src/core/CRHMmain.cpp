@@ -2093,7 +2093,7 @@ std::string  CRHMmain::ExtractHruLay(std::string label, int &Hru, int &Lay)
 	
 	Lay = 0;
 
-	if (commaPos > -1)
+	if (commaPos != string::npos)
 	{
 		Lay = Strtolong(label.substr(commaPos + 1, closeParenPos - commaPos - 1));
 	}
