@@ -196,26 +196,6 @@ ClassPar *ClassParFindRev(string module, string param) {
 	}
 }
 
-//---------------------------------------------------------------------------
-ClassPar::~ClassPar() {
-
-	if (varType == TVar::Float) {
-		for (int ii = 0; ii < lay; ++ii) delete[] layvalues[ii];
-
-		delete[] layvalues;  //Array [nhru] [lay]
-		values = NULL;
-	}
-	else if (varType == TVar::Int) {
-		for (int ii = 0; ii < lay; ++ii) delete[] ilayvalues[ii];
-
-		delete[] ilayvalues; //Array [nhru] [lay]
-		ivalues = NULL;
-	}
-	else if (varType == TVar::Txt) {
-		delete Strings;
-	}
-	varType = TVar::none;
-}
 
 //---------------------------------------------------------------------------
 ClassVar *ClassVarFind(string name) {
