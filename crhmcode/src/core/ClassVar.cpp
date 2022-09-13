@@ -63,8 +63,6 @@ ClassVar::ClassVar(string module, string name, TDim dimen,
 		if (varType == TVar::Float) {
 			if (lay > 0) {
 				layvalues = new double* [lay];
-				if (!values)
-					values = new double[dim];
 				if (dimen != TDim::NREB) { // NREB does not own lay memory only HRU memory
 					for (int ii = 0; ii < lay; ii++)
 						layvalues[ii] = new double[dim];
@@ -327,7 +325,7 @@ void ClassVar::ReleaseM(bool Keep) {
 
 		if (lay > 0) {
 			if (dimen != TDim::NREB)
-				values = NULL;
+				values = NULL;    // values was set to layvalues[0] which will be deleted
 
 			if (dimen != TDim::NREB) // NREB does not own lay memory only HRU memory
 				for (int ii = 0; ii < lay; ++ii)
