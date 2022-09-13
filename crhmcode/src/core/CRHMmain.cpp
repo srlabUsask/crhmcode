@@ -433,6 +433,12 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 
 //				if (iswdigit(c) && ObsFilesList->size() == 0) {
 				if (iswdigit(c) ) {
+					if (Global::Freq != 0) {
+						CRHMException Except("Timestep has already been set to " + std::to_string(Global::Freq), TExcept::ERR);
+						Common::Message(Except.Message.c_str(),
+							"Timestep has already been set");
+						LogError(Except);
+					}
 					DataFile >> Global::Freq;
 					Global::Interval = 1.0 / Global::Freq;
 				}
@@ -961,8 +967,9 @@ void CRHMmain::FormCreate() {
 	Global::maxlay = 1;
 	Global::maxobs = 1;
 
-	Global::Freq = 48;
-	Global::Interval = 1.0 / Global::Freq;
+	Global::Freq = 0;
+	Global::Interval = 0;
+//	Global::Interval = 1.0 / Global::Freq;
 
 	cdSeries = NULL;
 
