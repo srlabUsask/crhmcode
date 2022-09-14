@@ -582,13 +582,16 @@ bool ClassData::DataReadFile(void)
 					else
 					{
 						// any column but the first - assume missing
-						Data[ii][Position] = 35.93;//Data[ii][Position] = -999999;
+						Data[ii][Position] = -999999;
 					}
 
 				}
 				else
 				{
 					DataFile >> Data[ii][Position];
+					if ( (Data[ii][Position] > 0.0f) && (Data[ii][Position] < 1e-100)) {
+						printf("ERROR\n");
+					}
 				}
 
 				// handles faulty data
