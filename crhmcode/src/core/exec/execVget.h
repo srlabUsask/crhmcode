@@ -19,6 +19,11 @@ public:
 
 		if (FP == vars.end()) {
 			string SS("macro code - reading from an undefined variable: " + S);
+
+			for (const auto& kv : vars) {
+ 				std::cout << kv.first << std::endl;
+			}
+
 			CRHMException Except(SS, TExcept::TERMINATE);
 			throw CRHMException(Except);
 		}
