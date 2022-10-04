@@ -173,7 +173,7 @@ BOOL CCRHMGUIApp::InitInstance()
 		delete[] cmdLine;
 		free(argv);
 	
-		if (args->get_project_name() != "")
+		if (args->get_project_name().length() != 0)
 		{
 			CRHMmain* model = new CRHMmain(args);
 			std::string projectArgument = args->get_project_name();
