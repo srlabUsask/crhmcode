@@ -31,6 +31,7 @@
 
 #include "NewModules.h"
 #include "../waterquality/WQ_CRHM.h"
+#include "../waterquality/ClassWQ_REWroute.h"
 #include "../waterquality/WQ_Soil_NPCcycling.h"
 #include "../../core/GlobalDll.h"
 #include "../../core/ClassCRHM.h"
@@ -257,6 +258,7 @@ void MoveModulesToGlobal(string DLLName)
     DLLModules.AddModule(new ClassWQ_Netroute("WQ_Netroute", "11/29/18", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_Netroute_M_D("WQ_Netroute_M_D", "03/22/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_pbsm("WQ_pbsm", "01/21/19", LMODULE::PROTO));
+    DLLModules.AddModule(new ClassWQ_REWroute("WQ_REW_route", "05/01/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_pbsmSnobal("WQ_pbsmSnobal", "04/26/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_SoilBGC("WQ_Soil_BGC", "11/01/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_mass_conc("WQ_mass_to_conc", "12/01/18", LMODULE::PROTO));

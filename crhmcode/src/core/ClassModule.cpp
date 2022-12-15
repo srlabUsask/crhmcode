@@ -441,10 +441,11 @@ void ClassModule::declvar(string variable, TDim dimen, string help,
 
 			*value = newVar->values; // TB 10/07/10
 
-			if (dimen == TDim::NDEF) { // save for lay loop
-				Var_loop_lay_table[Var_NDEFN_cnt] = newVar->layvalues;
-				Var_loop_lay_value[Var_NDEFN_cnt++] = newVar->values;
-			}
+			// var_loop_lay_table seems to be used nowhere (PRL)
+			// if (dimen == TDim::NDEF) { // save for lay loop
+			// 	Var_loop_lay_table[Var_NDEFN_cnt] = newVar->layvalues;
+			// 	Var_loop_lay_value[Var_NDEFN_cnt++] = newVar->values;
+			// }
 
 			Global::DeclRootList->push_back(string(ID.c_str()) + " " + Orgvariable.c_str()); // to prevent input/output looping
 

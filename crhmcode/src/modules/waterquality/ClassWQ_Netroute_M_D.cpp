@@ -317,6 +317,15 @@ void ClassWQ_Netroute_M_D::init(void) {
             }
 
             hruDelay = new ClassMuskingum(inflow, outflow, Ktravel, route_X_M, Lag, nhru);
+            int invalidHru = hruDelay->invalidHru();
+            if (invalidHru >= 0) {
+                hh = invalidHru;
+                cout << "Options for correcting Muskingum:" << endl;
+//                K > Global::Interval/(2.0*(1.0 - X_M[hh]))
+                double Vavg = (1.0 / route_n[hh]) * pow(route_R[hh], 2.0 / 3.0) * pow(route_S0[hh], 0.5f); // (m/s)
+                std::cout << "Increase route_L[" << hh << "] above " << ( (Vw[route_Cshp[hh]] * Vavg) * 86400.0 * Global::Interval/(2.0*(1.0 - route_X_M[hh])) ) << endl;
+                std::cout << "decrease route_n, decrease route_R, or decrease route_S0" << endl;
+            }
 
             for (hh = 0; hh < nhru; ++hh) {
                 if (Ktravel[hh] >= (Global::Interval / (2.0 * route_X_M[hh]))) {
@@ -378,18 +387,6 @@ void ClassWQ_Netroute_M_D::init(void) {
 
     basinflow_s[0] = 0.0;
     basingw_s[0] = 0.0;
-
-    for (long Sub = 0; Sub < numsubstances; ++Sub) {
-
-        if (variation == VARIATION_0)
-            Clark_hruDelay_mWQ[Sub] = new ClassClark(inflow_mWQ_lay[Sub], outflow_mWQ_lay[Sub], Kstorage, Lag, nhru);
-        else // ClassMuskingum
-            hruDelay_mWQ[Sub] = new ClassMuskingum(inflow_mWQ_lay[Sub], outflow_mWQ_lay[Sub], Ktravel, route_X_M, Lag, nhru);
-
-        ssrDelay_mWQ[Sub] = new ClassClark(ssrinflow_mWQ_lay[Sub], ssroutflow_mWQ_lay[Sub], ssrKstorage, ssrLag, nhru, -1);
-        runDelay_mWQ[Sub] = new ClassClark(runinflow_mWQ_lay[Sub], runoutflow_mWQ_lay[Sub], runKstorage, runLag, nhru, -1);
-        gwDelay_mWQ[Sub] = new ClassClark(gwinflow_mWQ_lay[Sub], gwoutflow_mWQ_lay[Sub], gwKstorage, gwLag, nhru, -1);
-    } // for Sub
 
     for (hh = 0; hh < nhru; ++hh) {
         Reset_WQ(hh, inflow, inflow_mWQ_lay);
@@ -460,6 +457,9 @@ void ClassWQ_Netroute_M_D::run(void) {
 
     double gw_Amount = 0.0;
     double gw_Amount_mWQ = 0.0;
+
+    basinflow[0] = 0.0;
+    basingw[0] = 0.0;
 
     for (hh = 0; chkStruct(hh); ++hh) { // do HRUs in sequence.
         if (nstep == 1) {
@@ -858,8 +858,12 @@ void ClassWQ_Netroute_M_D::run(void) {
                                 double Free = Amount - Excess;
 
                                 if (Sd[To] + Amount > minFlow_WQ) {
-                                    Sd_conc_lay[Sub][To] = Sd_conc_lay[Sub][To] * Sd[To] + Amount_mWQ * Free / Amount;
-                                    Sd_conc_lay[Sub][To] /= (Sd[To] + Free);
+                                    if (Sd[To] + Free == 0) {
+                                        Sd_conc_lay[Sub][To] = 0.0f;
+                                    } else {
+                                        Sd_conc_lay[Sub][To] = Sd_conc_lay[Sub][To] * Sd[To] + Amount_mWQ * Free / Amount;
+                                        Sd_conc_lay[Sub][To] /= (Sd[To] + Free);
+                                    }
                                 }
                                 else {
                                     Sd_conc_lay[Sub][To] = 0.0f;
@@ -925,6 +929,12 @@ void ClassWQ_Netroute_M_D::run(void) {
                     soil_gw_Buf[hh] = soil_gw[hh] / soil_gwDiv;
 
             } // end if
+
+            if (nstep == 0) {
+                if (soil_runoffDiv > 1) // daily value - ready for next day
+                    soil_runoff_Buf_conc_lay[Sub][hh] = soil_runoff_cWQ_lay[Sub][hh] / soil_runoffDiv;
+            }
+
 
             if (outflow[hh] > minFlow_WQ) {
                 outflow_mWQ_lay[Sub][hh] = std::fmax(outflow_mWQ_lay[Sub][hh], 0.0f);

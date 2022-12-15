@@ -16,6 +16,7 @@ add_library(waterquality OBJECT
     ClassWQ_Soil.cpp
     ClassWQ_Substitute_Hype.cpp
     ClassWQ_Test_Hype.cpp
+    ClassWQ_REWroute.cpp
     WQ_CRHM.cpp
     WQ_Soil_NPCcycling.cpp
 )

@@ -657,7 +657,11 @@ void ClassWQ_Soil::run(void) {
                     if (soil_moist[hh] + potential[hh] > soil_moist_max[hh]) { // limit infil and snowinfil to soil_moist_max
                         direct_excs[hh] = soil_moist[hh] + potential[hh] - soil_moist_max[hh];
                         direct_excs_Saved = direct_excs[hh];
-                        direct_excs_mWQ_lay[Sub][hh] = potential_mWQ_lay[Sub][hh] * (potential[hh] - direct_excs[hh]) / potential[hh];
+                        if (potential[hh] == 0) {
+                            direct_excs_mWQ_lay[Sub][hh] = 0.0;
+                        } else {
+                            direct_excs_mWQ_lay[Sub][hh] = potential_mWQ_lay[Sub][hh] * (potential[hh] - direct_excs[hh]) / potential[hh];
+                        }
                         direct_excs_mWQ_lay_Saved = direct_excs_mWQ_lay[Sub][hh];
                         potential_mWQ_lay[Sub][hh] = std::fmax(potential_mWQ_lay[Sub][hh] - direct_excs_mWQ_lay[Sub][hh], 0.0f);
                         potential[hh] -= direct_excs[hh];
@@ -682,7 +686,11 @@ void ClassWQ_Soil::run(void) {
                         leaching_mWQ = parleach[hh] * (potential[hh] - excs) * surfsoil_solub_mWQ_lay[Sub][hh];
                         leaching_mWQ = std::fmax(0.0f, std::fmin(leaching_mWQ, surfsoil_solub_mWQ_lay[Sub][hh]));
                         surfsoil_solub_mWQ_lay[Sub][hh] -= leaching_mWQ;
-                        conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh] * soil_rechr[hh] + leaching_mWQ + potential_mWQ_lay[Sub][hh] * ((potential[hh] - excs) / potential[hh]);
+                        if (potential[hh] == 0) {
+                            conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh] * soil_rechr[hh] + leaching_mWQ;
+                        } else {
+                            conc_soil_rechr_lay[Sub][hh] = conc_soil_rechr_lay[Sub][hh] * soil_rechr[hh] + leaching_mWQ + potential_mWQ_lay[Sub][hh] * ((potential[hh] - excs) / potential[hh]);
+                        }
                         conc_soil_rechr_lay[Sub][hh] /= (soil_rechr[hh] + excs);
                         excs_mWQ = conc_soil_rechr_lay[Sub][hh] * excs;
                         soil_rechr[hh] = soil_rechr_max[hh];
