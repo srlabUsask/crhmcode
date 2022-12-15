@@ -29,6 +29,7 @@ class   ClassMuskingum {
 public:
 	ClassMuskingum(const double* inVar, double* outVar, const double* kstorage, const double* route_X_M, const double* lag, const long nhru, const long setlag = -1);
 	~ClassMuskingum();
+	int invalidHru();
 	void DoMuskingum();
 	void DoMuskingum(const long hh);
 	void ChangeLag(const double* newlag, const long hh);

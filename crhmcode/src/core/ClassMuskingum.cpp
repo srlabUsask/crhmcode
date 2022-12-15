@@ -57,6 +57,25 @@ ClassMuskingum::ClassMuskingum(const double* inVar, double* outVar, const double
 		c2[hh] = (2.0 * k[hh] * (1.0 - X_M[hh]) - Global::Interval) /
 			(2.0 * k[hh] * (1.0 - X_M[hh]) + Global::Interval); // units of kstorage (days)
 
+//         if ( (c0[hh] < 0.0) || (c1[hh] < 0.0) || (c2[hh] < 0.0) ) {
+//             string S = string("'") + " (Muskingum)' constants out of range: " +
+// 						to_string(c0[hh]).c_str() + "  " +
+// 						to_string(c1[hh]).c_str() + "  " +
+// 						to_string(c2[hh]).c_str() + "  k=" + 
+// 						to_string(k[hh]).c_str() + "  X_M=" + 						
+// 						to_string(X_M[hh]).c_str() + "  ";
+// 			double ttt = 1.0 - Global::Interval/(2.0*k[hh]);
+// 			if (ttt < 0) {
+// 				cout << "set k[" << to_string(hh) << "] greater than " << to_string(Global::Interval/(2.0*(1.0 - X_M[hh])));
+// 			} else {
+// 				cout << "set X_M[hh] less than " << to_string(ttt) << " or decrease k";
+// 			}
+
+//             // CRHMException TExcept(S.c_str(), TExcept::WARNING);
+//             // LogError(TExcept);
+// //            throw TExcept;
+//         }
+
 		ilag[hh] = (long)(max<double>(lag[hh], 0.0) / 24.0 * Global::Freq + 1.1); // =1 for lag of zero
 
 		if (setlag == -1 || ilag[hh] > setlag)
@@ -95,6 +114,34 @@ ClassMuskingum::~ClassMuskingum() {
 	for (long hh = 0; hh < nhru; hh++)
 		delete[] LagArray[hh];
 	delete[] LagArray;
+}
+
+int ClassMuskingum::invalidHru() {
+	for (long hh = 0; hh < nhru; hh++) {
+		if ( (c0[hh] < 0.0) || (c1[hh] < 0.0) || (c2[hh] < 0.0) ) {
+			return hh;
+			// valid = false;
+
+			// string S = string("'") + " (Muskingum)' constants out of range: " +
+			// 			to_string(c0[hh]).c_str() + "  " +
+			// 			to_string(c1[hh]).c_str() + "  " +
+			// 			to_string(c2[hh]).c_str() + "  k=" + 
+			// 			to_string(k[hh]).c_str() + "  X_M=" + 						
+			// 			to_string(X_M[hh]).c_str() + "  ";
+			// double ttt = 1.0 - Global::Interval/(2.0*k[hh]);
+			// if (ttt < 0) {
+			// 	cout << "set k[" << to_string(hh) << "] greater than " << to_string(Global::Interval/(2.0*(1.0 - X_M[hh])));
+			// } else {
+			// 	cout << "set X_M[hh] less than " << to_string(ttt) << " or decrease k";
+			// }
+
+			// CRHMException TExcept(S.c_str(), TExcept::WARNING);
+			// LogError(TExcept);
+			// throw TExcept;
+		}
+	}
+
+	return -1;
 }
 
 void ClassMuskingum::ChangeLag(const double* newlag, const long hh)
