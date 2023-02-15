@@ -1,3 +1,21 @@
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
 //created by Manishankar Mondal
 
 #include "../core/ClassModule.h"
@@ -17,8 +35,8 @@ Classlake(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROT
 // declared variables
   double *hru_evap{ NULL };
   double *hru_cum_evap{ NULL };
-  double *hru_actet{ NULL };
-  double *hru_cum_actet{ NULL };
+  // double *hru_actet{ NULL }; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
+  // double *hru_cum_actet{ NULL }; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
   double *lake_evap_month{ NULL };
   double *hru_t_Mmean{ NULL };
   double *hru_rh_Mmean{ NULL };

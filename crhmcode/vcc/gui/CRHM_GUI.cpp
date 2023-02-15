@@ -1,3 +1,21 @@
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
 
 // CRHM_GUI.cpp : Defines the class behaviors for the application.
 //
@@ -155,13 +173,14 @@ BOOL CCRHMGUIApp::InitInstance()
 		delete[] cmdLine;
 		free(argv);
 	
-		if (args->get_project_name() != "")
+		if (args->get_project_name().length() != 0)
 		{
 			CRHMmain* model = new CRHMmain(args);
 			std::string projectArgument = args->get_project_name();
 			model->OpenNamePrj = projectArgument;
 			model->DoPrjOpen(projectArgument, "");
 			model->RunClick();
+			delete model;
 		}
 		else
 		{
@@ -171,9 +190,6 @@ BOOL CCRHMGUIApp::InitInstance()
 
 		delete args;
 
-		//dlgOptions->ProjectFileArgument = "d:/crhm/demomacrotesting/test4.prj";
-		//dlgOptions.DoModal();
-		//dlgOptions->ProcessCommandLineArgument();
 		return TRUE;
 	}
 	catch (...)

@@ -1,3 +1,23 @@
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
+#pragma once
+
 // Library includes
 #include "../stdafx.h"
 #include "afxdialogex.h"
@@ -11,65 +31,140 @@
 #include "MacroEntryDlg.h"
 #include "FlowDiagramDlg.h"
 #include "CReport.h"
-#include "CConstruct.h"
+#include "ConstructDlg.h"
 #include "../RightClickListBox.h"
 #include "../HierarchyDlg.h"
-#include "CExport.h"
+#include "ExportDlg.h"
 #include "../ChiralClickButton.h"
+#include "ParametersDlg.h"
+#include "RefreshRateDlg.h"	
 
 // Defines
 #define MAX_CFileDialog_FILE_COUNT 99
 #define FILE_LIST_BUFFER_SIZE ((MAX_CFileDialog_FILE_COUNT * (MAX_PATH + 1)) + 1)
 
-#pragma once
- 
 /**
-* The main CRHM dialog window class
-* CRHMmainDlg defines the main dialog window for the application. 
-* This dialog handles the main menu and supports loading, saving, and running projects.
-* It is a descendant of the CDialogEx class.  
+* The main dialog window for the application. 
+* This dialog handles the main menu and supports loading, saving, and running projects.  
 */
 class CRHMmainDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CRHMmainDlg)	
 
+	DECLARE_MESSAGE_MAP()
+
+#ifdef AFX_DESIGN_TIME
+	enum { IDD = CRHMmainDialog };
+#endif
+
 public:
 
-	CRHMmainDlg(CWnd* pParent = nullptr); /**< Standard constructor */
-	virtual ~CRHMmainDlg(); /**< Standard destructor */
-
+	/** 
+	* Standard constructor
+	* 
+	* @param pParent - CWnd* pointer to the parent window. Default is nullptr.
+	*/
+	CRHMmainDlg(CWnd* pParent = nullptr); 
 
 	/**
 	* Constructor that takes in a project file name and runs that
 	*	project after opening
 	*
-	* @param argumentfile std::string path to a project file.
+	* @param argumentfile - std::string path to a project file to open.
 	*/
 	CRHMmainDlg(std::string argumentfile);
 
-	// Dialog Data
-#ifdef AFX_DESIGN_TIME
-	enum { IDD = CRHMmainDialog };
-#endif
+	/**
+	* Standard destructor 
+	*/
+	~CRHMmainDlg(); 
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
-	DECLARE_MESSAGE_MAP()
+	/**
+	* Performs data exchange between controls and their respective objects.
+	* 
+	* @param pDX - CDataExchange* pointer to the data exchange object.
+	*/
+	virtual void DoDataExchange(CDataExchange* pDX);
 
 private:
-	long Box1Disply{ 0 };
-	long ObsFunct_Toggle = 0; /**< no display/Final/Trend values */
-	long TBase{ 0 };
-	long water_year_month = 10; /**< Specifies the month to signal end of water year. Default is October.*/
 
-	std::string ProjectFileArgument = ""; /**< it takes the filename from the command line. */
+	/**
+	* Pointer to the main menu object.
+	* The value is initalized in OnInitDialog()
+	*/
+	CMenu* main_menu = NULL;
+
+	/**
+	* Saves the size of the window when it first loads.
+	*/
+	CRect original_rectangle;
+
+	/**
+	* Boolean that indicates if the loaded project file has been changed from what is saved on disk
+	* 
+	* true if the project may have been altered and false if it has not been.
+	*/
+	bool project_altered;
+	
 	std::string defaultprojectname = "currentproject.prj";
 	std::string defaultprojectpath = "currentproject.prj";
-	std::string defaultobservationpath = "obs/Badlake73_76.obs";
-	std::string TBases[5] = { "Daily", "Water_year", "Calendar_year", "Monthly_summary", "Summarize_all" };
+	
+	/**
+	* Tracks the currently set plot refresh rate.
+	*/
+	RefreshRate refresh_rate;
 
-	CMenu main_menu;
+	/**
+	* Drop down selector for observation functions
+	* 
+	* Options are:
+	*	Observation
+	*	Total
+	*	Minimum
+	*	Maximum
+	*	Average
+	* 
+	* Control ID is ID_FUNCTION_DROP_DOWN
+	*/
+	CComboBox function_drop_down;
+
+	/**
+	* Drop down selector for timebase setting
+	* 
+	* Options are:
+	*	Daily	
+	*	Water Year
+	*	Calendar Year
+	*	Monthly
+	*	All
+	*	
+	* 
+	* Control ID is ID_TIMEBASE_DROP_DOWN
+	*/
+	CComboBox timebase_drop_down;
+
+	/**
+	* Drop down selector for water year start setting
+	* 
+	* Options are:
+	*	Jan
+	*	Feb
+	*	Mar
+	*	Apr
+	*	May
+	*	Jun
+	*	July
+	*	Aug
+	*	Sep
+	*	Oct
+	*	Nov
+	*	Dec
+	* 
+	* Control ID is ID_WATER_YEAR_DROP_DOWN
+	*/
+	CComboBox water_year_drop_down;
 
 	/**
 	* List box for all variables in the loaded project
@@ -130,8 +225,12 @@ private:
 	*/
 	CDateTimeCtrl EndDatePicker;
 
+	/**
+	* Button for flipping the ticks that control what plots are displayed on the TChart plot
+	* 
+	* This button registers left and right clicks seperatly.
+	*/
 	ChiralClickButton FlipTicks;
-
 
 	/** 
 	* The number of open observation files.
@@ -154,20 +253,11 @@ private:
 	virtual BOOL OnInitDialog();
 
 	/**
-	* Processes the command line arguments if the GUI version of CRHM is used as a command line program.
-	* 
-	* This feature is not reccomended as the gcc CLI is much more robust. 
-	* Reccomend depricating this feature. 
-	*/
-	void ProcessCommandLineArgument();
-
-	/**
 	* Initalzies GUI components after loading a project. 
 	* 
 	* Also determines of auto run is enabled and runs the project if so.
 	*/
 	void loadGuiComponents();
-
 
 	/**
 	* Calls the declaration function on each selected module after a model is built.
@@ -201,7 +291,6 @@ private:
 	*/
 	void RunClickFunction();
 
-
 	/**
 	* Adds a series to the TChart plot.
 	* 
@@ -209,8 +298,8 @@ private:
 	*/
 	void AddSeriesToTChart(TSeries* series);
 
-
 	/**
+	* Adds an observation to the TChart plot
 	* 
 	* @param thisVar ClassVar* pointer to the observation variable being added to the plot.
 	* @param cdSeries TSeries* pointer to the series being added to the plot.
@@ -265,7 +354,6 @@ private:
 	*/
 	void OpenObservation(std::string obsfilepath);
 
-
 	/**
 	* Adds an observation file to the list of open observation files and makes a menu item for it.
 	* Creates a menu item for the given observation file and adds it to the menu. 
@@ -274,8 +362,6 @@ private:
 	* @param filename std::string name of the project file to open.
 	*/
 	void AddOpenObsFile(std::string filepath, std::string filename);
-
-	// Start GUI update functions
 
 	/**
 	* Calls the updateOpenObsFileMenu and updateOpenStateFileMenu funcitons.
@@ -306,10 +392,6 @@ private:
 	* Updates the selected observation list box contents based on the state of the model.
 	*/
 	void updateSelectedObservationListBox();
-
-	// End GUI update functions
-
-	//Message handlers
 
 	/**
 	* Handler for clicking on project->Open
@@ -348,7 +430,55 @@ private:
 	*/
 	afx_msg void OnExtractGroup();
 
+	/**
+	* Handler for clicking on project->Extract Group
+	* 
+	* Opens the Hierarchy dialog modal window
+	* Currently unimplemented.
+	*/
 	afx_msg void OnViewHierarchy();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->Daily
+	* 
+	* Sets the refresh rate of the plot to Daily.
+	*/
+	afx_msg void OnSetDailyRefresh();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->Bi Weekly
+	*
+	* Sets the refresh rate of the plot to Bi Weekly.
+	*/
+	afx_msg void OnSetBiWeeklyRefresh();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->Weekly
+	*
+	* Sets the refresh rate of the plot to Weekly.
+	*/
+	afx_msg void OnSetWeeklyRefresh();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->Monthly
+	*
+	* Sets the refresh rate of the plot to Monthly.
+	*/
+	afx_msg void OnSetMonthlyRefresh();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->Yearly
+	*
+	* Sets the refresh rate of the plot to Yearly.
+	*/
+	afx_msg void OnSetYearlyRefresh();
+
+	/**
+	* Handler for clicking on project->Plot Rate Refresh->At End
+	*
+	* Sets the refresh rate of the plot to only update at the end of the run.
+	*/
+	afx_msg void OnSetNoRefresh();
 
 	/**
 	* Handler for clicking on project->Auto Run
@@ -372,13 +502,36 @@ private:
 	*	(for example saving an unsaved project) and additionally the program 
 	*	should exit at last.
 	* 
-	* Currently does not check if project needs to be saved.
 	*/
 	afx_msg void OnExit();
 
+	/**
+	* Occurs when user closes the window with the corrner X
+	* 
+	* Calls the OnExit method.
+	*/
+	void OnCancel();
+
+	/**
+	* Handler for clicking on Project->Log->Log All
+	* 
+	* Sets the project to log all timesteps in the produced output.
+	*/
 	afx_msg void OnLogAll();
 
+	/**
+	* Handler for clicking on Project->Log->Log Last
+	* 
+	* Sets the project to log only the last timestep of the run.
+	*/
 	afx_msg void OnLogLast();
+
+	/**
+	* Handler for clicking on project->log->Create Summary
+	* 
+	* Sets the project to produce a summary file at the end of the run.
+	*/
+	afx_msg void OnCreateSummary();
 
 	/**
 	* Handler for clicking on Observations->Open Observation
@@ -426,6 +579,13 @@ private:
 	afx_msg void OnBuildMacro();
 
 	/**
+	* Handler for clicking on Parameters in the menu bar
+	* 
+	* Opens the parameter editor dialog
+	*/
+	afx_msg void OpenParametersDialog();
+
+	/**
 	* Handler for clicking on State->Open Inital State
 	* 
 	* Opens a file dialog to select an inital state file.
@@ -469,7 +629,7 @@ private:
 	* 
 	* Runs the simulation of the loaded project model.
 	*/
-	afx_msg void OnRunRunmodel();
+	afx_msg void OnRunModel();
 
 	/**
 	* Handler for clicking on Export menu item
@@ -477,7 +637,6 @@ private:
 	* Opens the export dialog
 	*/
 	afx_msg void OnExport();
-
 
 	/**
 	* Handler for clicking on Flow Diagram->Show Diagram
@@ -491,7 +650,7 @@ private:
 	* 
 	* Opens the help informaiton dialog.
 	*/
-	afx_msg void OnHelpAbout();
+	afx_msg void OnViewHelpDocumentation();
 
 	/**
 	* Handler for clicking on the "<" button for the HRU dimension selector.
@@ -543,7 +702,6 @@ private:
 	* Updates the variables help text to be that for the last selected variable.
 	*/
 	afx_msg void OnVariableSelectChange();
-
 
 	/**
 	* Handler for double clicking on an observation in the all observations list box. 
@@ -606,6 +764,23 @@ private:
 	*	Remove - Removes the selected observations from the selected observations list box and plot.
 	*/
 	afx_msg LRESULT OpenSelObsCtxMenu(WPARAM, LPARAM);
+
+	/**
+	* Handler for when the timebase drop down selector is changed. 
+	* 
+	* If the chosen value is Water Year it reveals the water year start selector
+	* otherwise it hides the water year start selector
+	* 
+	* Also sets the TBase field to the correct TimeBase enum value.
+	*/
+	afx_msg void OnTimebaseChange();
+
+	/**
+	* Handler for when the water year drop down selector is changed.
+	* 
+	* Sets the water_year_month field to the value that corrisponds with the selected month.
+	*/
+	afx_msg void OnWaterYearChange();
 
 	/**
 	* Checks what variables are selected in the all variables list box and adds the
@@ -714,17 +889,89 @@ private:
 	*/
 	afx_msg void OnClickFlipTicks();
 
+	/**
+	* Handler for when the user left clicks on the flip ticks button
+	* handles the UWM_FLIP_TICKS_LEFT message.
+	* 
+	* Flips the state of the TChart Series ticks for all observations.
+	* 
+	* @param WPARAM unused message parameter.
+	* @param LPARAM unused message parameter.
+	* @return LRESULT unused result parameter.
+	*/
 	afx_msg LRESULT OnLeftClickFlipTicks(WPARAM, LPARAM);
 
+	/**
+	* Handler for when the user right clicks on the flip ticks button
+	* handles the UWM_FLIP_TICKS_RIGHT message.
+	* 
+	* Flips the state of the TChart Series ticks for all variables.
+	*
+	* @param WPARAM unused message parameter.
+	* @param LPARAM unused message parameter.
+	* @return LRESULT unused result parameter.
+	*/
 	afx_msg LRESULT OnRightClickFlipTicks(WPARAM, LPARAM);
 	
-
+	/**
+	* Message handler for receiving the UWM_AUTO_RUN message.
+	* Message is sent when a project with Auto Run enabled is loaded. 
+	* 
+	* @param WPARAM unused message parameter.
+	* @param LPARAM unused message parameter.
+	* @return LRESULT unused result parameter.
+	*/
 	afx_msg LRESULT OnAutoRunMessage(WPARAM, LPARAM);
 
+	/**
+	* Sets the dimenson selector label to "Obs"
+	*/
 	void setDimensionSelectorToObs();
 
+	/**
+	* Sets the dimension selector label to "Lay"
+	*/
 	void setDimensionSelectorToLay();
 
+	/**
+	* Gets the max value layer for the currently selected variable.
+	* 
+	* @return int - maximum layer value for the currently selected variable.
+	*/
 	int getMaxLayofSelection();
 
+	/**
+	* Gets the max value dimension for the currently selected observation.
+	* 
+	* @return int - maximum dimension value for the currently selected observation.
+	*/
+	int getMaxDimObsSelection();
+
+	/** 
+	* Calculates if the water year month drop down should be shown or hidden.
+	*/
+	void showHideWaterYearMonth();
+
+	/**
+	* Adds the selected observation function to the currently selected variable outputs
+	* 
+	* These are added to the selected observations list box and will be calculated when a simulation finishes.
+	*/
+	void addVariableFunctionToSelected();
+
+	/**
+	* Alerts the user that the currently loaded project may have unsaved changes with a pop up dialog.
+	* 
+	* Pop up dialog has 'Yes' option to save the project and 'No' option continue without saving.
+	* If the user selects 'Yes' the current project will be saved before the next action is completed.
+	* If the user selects 'No' the current project will not be saved befor the next action is completed.
+	*/
+	void confirmUnsavedProjectClose();
+
+	/**
+	* Sets the minimum size of the window ensuring that it is not reduced in size to be deformed.
+	* 
+	* @param MINMAXINFO * lpMMI - MINMAXINFO that contains the information for the min and max size of the window.
+	*/
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI);
 };

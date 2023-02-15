@@ -1,3 +1,21 @@
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
 
 #include <stdio.h>
 //#include <tchar.h>
@@ -726,8 +744,15 @@ std::vector<std::string>* ClassModule::decllocalparam(string param, TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
-	string Texts, string help, std::vector<std::string> * stringsList, TVISIBLE Local) {
+std::vector<std::string> * ClassModule::declparam(
+	string param, 
+	TDim dimen,
+	string Texts, 
+	string help, 
+	std::vector<std::string> * stringsList, 
+	TVISIBLE Local
+) 
+{
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
@@ -752,7 +777,8 @@ std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
 		return NULL;
 	}
 
-	case TBuild::DECL: {
+	case TBuild::DECL: 
+	{
 
 		if ((itPar = Global::MapPars.find(Name + " " + param)) != Global::MapPars.end()) {
 			if ((*itPar).second->dim == this->nhru || dimen == TDim::BASIN) {
@@ -781,6 +807,24 @@ std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
 
 		PairPar Item = PairPar(Name + " " + param, newPar);
 		Global::MapPars.insert(Item);
+
+		bool paramFound = false;
+		for (
+			std::list<std::pair<std::string, ClassPar*>>::iterator it = this->parameters_list.begin();
+			it != this->parameters_list.end();
+			it++
+			)
+		{
+			if (it->first == param)
+			{
+				paramFound = true;
+			}
+		}
+		if (!paramFound)
+		{
+			this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+		}
+
 		return newPar->Strings;
 	}
 
@@ -808,9 +852,20 @@ std::vector<std::string> * ClassModule::declparam(string param, TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::decldiagparam(string param, TDim dimen,
-	string valstr, string minstr, string maxstr,
-	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
+void ClassModule::decldiagparam(
+	string param, 
+	TDim dimen,
+	string valstr, 
+	string minstr, 
+	string maxstr,
+	string help, 
+	string units, 
+	const double **value, 
+	const double ***layvalue, 
+	const int dim, 
+	TVISIBLE Local
+) 
+{
 
 	declparam(param, dimen, valstr, minstr, maxstr, help, units, value, layvalue, dim, Local);
 }
@@ -824,9 +879,20 @@ void ClassModule::decllocalparam(string param, TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declparam(string param, TDim dimen,
-	string valstr, string minstr, string maxstr,
-	string help, string units, const double **value, const double ***layvalue, const int dim, TVISIBLE Local) {
+void ClassModule::declparam(
+	string param, 
+	TDim dimen,
+	string valstr, 
+	string minstr, 
+	string maxstr,
+	string help, 
+	string units, 
+	const double **value, 
+	const double ***layvalue, 
+	const int dim, 
+	TVISIBLE Local
+) 
+{
 	MapPar::iterator itPar;
 	ClassPar *newPar;
 
@@ -854,7 +920,8 @@ void ClassModule::declparam(string param, TDim dimen,
 		return;
 	}
 
-	case TBuild::DECL: {
+	case TBuild::DECL: 
+	{
 
 		if (dim <= 0) { // find existing parameter
 			return;
@@ -922,6 +989,24 @@ void ClassModule::declparam(string param, TDim dimen,
 
 		PairPar Item = PairPar(Name + " " + param, newPar);
 		Global::MapPars.insert(Item);
+
+		bool paramFound = false;
+		for (
+			std::list<std::pair<std::string, ClassPar*>>::iterator it = this->parameters_list.begin();
+			it != this->parameters_list.end();
+			it++
+			)
+		{
+			if (it->first == param)
+			{
+				paramFound = true;
+			}
+		}
+		if (!paramFound)
+		{
+			this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+		}
+
 		return;
 	}
 
@@ -973,9 +1058,20 @@ void ClassModule::decllocalparam(string param, TDim dimen,
 }
 
 //---------------------------------------------------------------------------
-void ClassModule::declparam(string param, TDim dimen,
-	string valstr, string minstr, string maxstr,
-	string help, string units, const long **ivalue, const long ***ilayvalue, const int dim, TVISIBLE Local) {
+void ClassModule::declparam(
+	string param, 
+	TDim dimen,
+	string valstr, 
+	string minstr, 
+	string maxstr,
+	string help, 
+	string units, 
+	const long **ivalue, 
+	const long ***ilayvalue, 
+	const int dim, 
+	TVISIBLE Local
+) 
+{
 
 	MapPar::iterator itPar;
 	ClassPar *newPar;
@@ -1002,7 +1098,8 @@ void ClassModule::declparam(string param, TDim dimen,
 		return;
 	}
 
-	case TBuild::DECL: {
+	case TBuild::DECL: 
+	{
 
 		if (dim <= 0) { // find existing parameter
 			return;
@@ -1068,6 +1165,24 @@ void ClassModule::declparam(string param, TDim dimen,
 
 		PairPar Item = PairPar(Name + " " + param, newPar);
 		Global::MapPars.insert(Item);
+
+		bool paramFound = false;
+		for (
+			std::list<std::pair<std::string, ClassPar*>>::iterator it = this->parameters_list.begin();
+			it != this->parameters_list.end();
+			it++
+			)
+		{
+			if (it->first == param)
+			{
+				paramFound = true;
+			}
+		}
+		if (!paramFound)
+		{
+			this->parameters_list.push_back(std::pair<std::string, ClassPar*>(param, newPar));
+		}
+
 		return;
 	}
 
@@ -3553,4 +3668,10 @@ ClassModule* ClassModule::link(string Module)
 		return pos->second;
 	}
 
+}
+
+
+std::list<std::pair<std::string, ClassPar*>>* ClassModule::getParametersList()
+{
+	return &this->parameters_list;
 }

@@ -1,4 +1,4 @@
-// 06/28/22
+// 08/02/22
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -108,7 +108,7 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassXGAyers("XGAyers", "05/19/17", CRHM::PROTO));
 
   DLLModules.AddModule(new ClassSetSoil("SetSoil", "10/21/09", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassVolumetric("Volumetric", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassVolumetric("Volumetric", "08/02/22", CRHM::ADVANCE));
   DLLModules.AddModule(new Classtsurface("tsurface", "04/05/22", CRHM::PROTO));
 
   DLLModules.AddModule(new Classalbedoparam("albedo_param", "11/22/05", CRHM::SUPPORT));
@@ -132,7 +132,7 @@ void MoveModulesToGlobal(String DLLName){
 
   DLLModules.AddModule(new ClassSnobalX("Snobal", "02/03/16", CRHM::OBSOL));
   DLLModules.AddModule(new Classinterception("interception", "04/05/22", CRHM::OBSOL));
-  DLLModules.AddModule(new Classlake("lake_evap", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classlake("lake_evap", "08/02/22", CRHM::ADVANCE));
 
   if(!RELEASE){
     DLLModules.AddModule(new ClassHMSA("HMSA", "01/16/13", CRHM::PROTO));
@@ -12608,7 +12608,7 @@ void ClassVolumetric::run(void) {
       Volumetric[hh] = 0.0;
 
 	if(soil_rechr_max[hh] > 0.0) // 03/15/2021: conditional statement to restrict divided by zero error
-      Volumetric_rechr[hh] = (soil_rechr[hh]/soil_rechr_max[hh]*SetSoilproperties[soil_type[hh]][3] + SetSoilproperties[soil_type[hh]][1])/1000.0;  // 04/14/2020
+      Volumetric_rechr[hh] = (soil_rechr[hh]/soil_rechr_max[hh]*(SetSoilproperties[soil_type[hh]][3] - SetSoilproperties[soil_type[hh]][1]) + SetSoilproperties[soil_type[hh]][1])/1000.0;  // 04/14/2020, Aug 2, 2022 correction with term (SetSoilproperties[soil_type[hh]][3] - SetSoilproperties[soil_type[hh]][1])
     else
       Volumetric_rechr[hh] = 0.0;
 
@@ -12642,7 +12642,7 @@ void ClassVolumetric::run(void) {
 		    fallstat[hh] = fallstat[hh]*fallstat_correction[hh]; // 08/11/2021
 		} // 08/11/2021
         else
-          fallstat [hh] = 1.0;
+          fallstat [hh] = 100.0; // Aug 2, 2022 correction
 
         fallstat_V[hh] = fallstat[hh];
       }
@@ -17492,9 +17492,9 @@ void Classlake::decl(void) {
 
   declstatdiag("hru_cum_evap", NHRU, "cumulative interval evaporation", "(mm)", &hru_cum_evap);
 
-  declvar("hru_actet", NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
+  //declvar("hru_actet", NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet); // modified Aug 2, 2022, hru_actet not calculated in lake_evap
 
-  declstatdiag("hru_cum_actet", NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet);
+  //declstatdiag("hru_cum_actet", NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet); // modified Aug 2, 2022, hru_actet not calculated in lake_evap
 
   decldiag("Va", NHRU, "water vapour pressure, Vw*rh (Meyer)", "(mm)", &Va);
 
@@ -17545,8 +17545,8 @@ void Classlake::init(void) {
     lake_evap_month[hh] = 0.0;
     hru_evap[hh] = 0.0;
     hru_cum_evap[hh] = 0.0;
-    hru_actet[hh] = 0.0;
-    hru_cum_actet[hh] = 0.0;
+    //hru_actet[hh] = 0.0; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
+    //hru_cum_actet[hh] = 0.0; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
     hru_rh_acc[hh] = 0.0;
     hru_t_acc[hh] = 0.0;
     hru_t_Mmean[hh] = 0.0;
@@ -17598,7 +17598,7 @@ void Classlake::run(void) {
       Va[hh] = 0.0;
       Vw[hh] = 0.0;
 
-      hru_actet[hh] = 0.0;
+      //hru_actet[hh] = 0.0; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
       hru_evap[hh] = 0.0;
     } // for
 
@@ -17618,7 +17618,7 @@ void Classlake::run(void) {
   } // beginning of month
 
   if(DoMean){
-    if(--DaysMonth == 0 || last_timestep()){
+    if(DaysMonth > 0 || last_timestep()){ // modified Aug 2, 2022
       add();
       process();
       --Global::CRHMControlSaveCnt; // restore state to backtrack
@@ -17631,11 +17631,11 @@ void Classlake::run(void) {
   else if(N_intervals){ // normal entry after monthly lake evaporation
     Ahead = false;
     for(hh = 0; chkStruct(); ++hh) {
-      hru_actet[hh] = 0.0;
+      //hru_actet[hh] = 0.0; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
       hru_evap[hh] = 0.0;
 
       if((double) Global::DTnow + 0.01 >= start_open_day[hh] && (double) Global::DTnow - 0.01 <= end_open_day[hh]){
-        hru_evap[hh] = lake_evap_month[hh]/N_intervals;
+        hru_evap[hh] = lake_evap_month[hh]/(DaysMonth * Global::Freq); // correction Aug 2, 2022 for interval evaporation based on monthly evap
         hru_cum_evap[hh] += hru_evap[hh];
       } // if
     } // for
@@ -17648,7 +17648,7 @@ void Classlake::finish(bool good) {
 
     LogMessageA(hh, string("'" + Name + " (lake_evap)' hru_cum_evap  (mm) (mm*hru) (mm*hru/basin): ").c_str(), hru_cum_evap[hh], hru_area[hh], basin_area[0]);
 
-    LogMessageA(hh, string("'" + Name + " (lake_evap)' hru_cum_actet (mm) (mm*hru) (mm*hru/basin): ").c_str(), hru_cum_actet[hh], hru_area[hh], basin_area[0]);
+    //LogMessageA(hh, string("'" + Name + " (lake_evap)' hru_cum_actet (mm) (mm*hru) (mm*hru/basin): ").c_str(), hru_cum_actet[hh], hru_area[hh], basin_area[0]);
     LogDebug(" ");
 
   }

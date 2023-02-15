@@ -1,3 +1,21 @@
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
 #include "afxdialogex.h"
 #include "../../src/core/GlobalDll.h"
 #include "CRHM_GUI.h"
@@ -14,14 +32,14 @@ class FDModule //flow diagram module
 {
 public:
 	std::string modulename;
-	std::string observations[100];
-	std::string modules[100];
-	std::string inputs[100];
-	std::string outputs[100]; 
-	std::string parameters[100];
-	std::string newobservations[100];
-	std::string inputlist[100]; 
-	std::string outputlist[100];
+	std::vector<std::string> observations;
+	std::vector<std::string> modules;
+	std::vector<std::string> inputs;
+	std::vector<std::string> outputs;
+	std::vector<std::string> parameters;
+	std::vector<std::string> newobservations;
+	std::vector<std::string> inputlist; 
+	std::vector<std::string> outputlist;
 	int count{0};
 	int x1{0};
 	int y1{0};
@@ -32,24 +50,34 @@ public:
 
 	void FindInputList()
 	{
-		int ii = 0;
-		for (int i = 0; i < count; i++)
+		for (size_t i = 0; i < this->inputs.size(); i++)
 		{
-			if (inputs[i] != "" && InputPresent(inputs[i]) == 0) { inputlist[ilength] = inputs[i]; ilength++; }
+			if (inputs[i] != "" && InputPresent(inputs[i]) == 0)
+			{ 
+				inputlist.push_back(inputs[i]); 
+				ilength++; 
+			}
 		}
-		for (int i = 0; i < count; i++)
+		for (size_t i = 0; i < this->parameters.size(); i++)
 		{
-			if (parameters[i] != "" && InputPresent(parameters[i]) == 0) { inputlist[ilength] = parameters[i]; ilength++; }
+			if (parameters[i] != "" && InputPresent(parameters[i]) == 0) 
+			{ 
+				inputlist.push_back(parameters[i]); 
+				ilength++; 
+			}
 		}
-		//ilength = ii;
 	}
 
 	void FindOutputList()
 	{
 		int ii = 0;
-		for (int i = 0; i < count; i++)
+		for (size_t i = 0; i < this->outputs.size(); i++)
 		{
-			if (outputs[i] != "" && OutputPresent (outputs[i]) == 0) { outputlist[olength] = outputs[i]; olength++; }
+			if (outputs[i] != "" && OutputPresent (outputs[i]) == 0)
+			{ 
+				outputlist.push_back(outputs[i]); 
+				olength++; 
+			}
 		}
 	}
 
@@ -57,7 +85,10 @@ public:
 	{
 		for (int i = 0; i < ilength; i++)
 		{
-			if (inputlist[i] == input) { return i; }
+			if (inputlist[i] == input) 
+			{ 
+				return i; 
+			}
 		}
 		return -1;
 	}
@@ -65,7 +96,10 @@ public:
 	{
 		for (int i = 0; i < olength; i++)
 		{
-			if (outputlist[i] == input) { return i; }
+			if (outputlist[i] == input) 
+			{ 
+				return i; 
+			}
 		}
 		return -1;
 	}
@@ -74,7 +108,10 @@ public:
 	{
 		for (int i = 0; i < ilength; i++)
 		{
-			if (inputlist[i] == input) { return 1; }
+			if (inputlist[i] == input) 
+			{ 
+				return 1; 
+			}
 		}
 		return 0;
 	}
@@ -83,7 +120,10 @@ public:
 	{
 		for (int i = 0; i < olength; i++)
 		{
-			if (outputlist[i] == output) { return 1; }
+			if (outputlist[i] == output) 
+			{ 
+				return 1; 
+			}
 		}
 		return 0;
 	}

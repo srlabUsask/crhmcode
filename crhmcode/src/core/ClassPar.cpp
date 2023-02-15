@@ -1,3 +1,21 @@
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
 #include <stdio.h>
 #include <cstring>
 #include <sstream>
@@ -582,4 +600,115 @@ ClassPar::~ClassPar()
 		delete Strings;
 	}
 	varType = TVar::none;
+}
+
+//---------------------------------------------------------------------------
+ClassPar::~ClassPar()
+{
+
+	if (varType == TVar::Float)
+	{
+		for (int ii = 0; ii < lay; ++ii)
+			delete[] layvalues[ii];
+
+		delete[] layvalues; // Array [nhru] [lay]
+		values = NULL;
+	}
+	else if (varType == TVar::Int)
+	{
+		for (int ii = 0; ii < lay; ++ii)
+			delete[] ilayvalues[ii];
+
+		delete[] ilayvalues; // Array [nhru] [lay]
+		ilayvalues = NULL;
+		ivalues = NULL;
+	}
+	else if (varType == TVar::Txt)
+	{
+//		for (string s : Strings)
+//			delete s;
+		Strings->clear();
+		delete Strings;
+	}
+	varType = TVar::none;
+}
+
+
+bool ClassPar::ConsolidationCandidates(ClassPar* leftParameter, ClassPar* rightParameter)
+{
+
+	if (leftParameter == rightParameter)
+	{
+		return false;
+	}
+
+	if (leftParameter->param != rightParameter->param)
+	{
+		return false;
+	}
+
+	if (leftParameter->dim != rightParameter->dim)
+	{
+		return false;
+	}
+
+	if (leftParameter->lay != rightParameter->lay)
+	{
+		return false;
+	}
+
+	if (leftParameter->varType != rightParameter->varType)
+	{
+		return false;
+	}
+
+	bool sameValues = true;
+
+	for (long i = 0; i < leftParameter->lay; i++)
+	{
+		for (long j = 0; j < leftParameter->dim; j++)
+		{
+			if (leftParameter->varType == TVar::Float)
+			{
+				double leftCompare = leftParameter->layvalues[i][j];
+				double rightCompare = rightParameter->layvalues[i][j];
+
+				if (std::abs(leftCompare - rightCompare) > std::numeric_limits<double>::epsilon())
+				{
+					sameValues = false;
+					break;
+				}
+
+			}
+			else if (leftParameter->varType == TVar::Int)
+			{
+				long leftCompare = leftParameter->ilayvalues[i][j];
+				long rightCompare = rightParameter->ilayvalues[i][j];
+
+				if (leftCompare != rightCompare)
+				{
+					sameValues = false;
+					break;
+				}
+			}
+			else if (leftParameter->varType == TVar::Txt)
+			{
+				std::string leftCompare = leftParameter->Strings->at(i);
+				std::string rightCompare = rightParameter->Strings->at(i);
+
+				if (leftCompare != rightCompare)
+				{
+					sameValues = false;
+					break;
+				}
+			}
+
+			if (!sameValues)
+			{
+				break;
+			}
+		}
+	}
+
+	return !sameValues;
 }

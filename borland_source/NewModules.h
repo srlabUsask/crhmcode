@@ -1,4 +1,4 @@
-// 04/22/22 with changes to 08/11/21
+// 08/02/22 with changes to 04/22/22
 //---------------------------------------------------------------------------
 
 #ifndef OurModulesH
@@ -3713,8 +3713,8 @@ Classlake(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::P
 // declared variables
   float *hru_evap;
   float *hru_cum_evap;
-  float *hru_actet;
-  float *hru_cum_actet;
+  //float *hru_actet; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
+  //float *hru_cum_actet; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
   float *lake_evap_month;
   float *hru_t_Mmean;
   float *hru_rh_Mmean;

@@ -1,3 +1,21 @@
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
 //created by Manishankar Mondal
 
 #include <math.h>
@@ -27,9 +45,9 @@ void Classlake::decl(void) {
 
   declstatdiag("hru_cum_evap", TDim::NHRU, "cumulative interval evaporation", "(mm)", &hru_cum_evap);
 
-  declvar("hru_actet", TDim::NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet);
+  // declvar("hru_actet", TDim::NHRU, "actual evapotranspiration over HRU, limited by the amount of soil moisture available", "(mm/int)", &hru_actet); // modified Aug 2, 2022, hru_actet not calculated in lake_evap
 
-  declstatdiag("hru_cum_actet", TDim::NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet);
+  // declstatdiag("hru_cum_actet", TDim::NHRU, "cumulative actual evapotranspiration over HRU", "(mm)", &hru_cum_actet); // modified Aug 2, 2022, hru_actet not calculated in lake_evap
 
   decldiag("Va", TDim::NHRU, "water vapour pressure, Vw*rh (Meyer)", "(mm)", &Va);
 
@@ -80,8 +98,8 @@ void Classlake::init(void) {
     lake_evap_month[hh] = 0.0;
     hru_evap[hh] = 0.0;
     hru_cum_evap[hh] = 0.0;
-    hru_actet[hh] = 0.0;
-    hru_cum_actet[hh] = 0.0;
+    // hru_actet[hh] = 0.0; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
+    // hru_cum_actet[hh] = 0.0; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
     hru_rh_acc[hh] = 0.0;
     hru_t_acc[hh] = 0.0;
     hru_t_Mmean[hh] = 0.0;
@@ -136,7 +154,7 @@ void Classlake::run(void) {
       Va[hh] = 0.0;
       Vw[hh] = 0.0;
 
-      hru_actet[hh] = 0.0;
+      // hru_actet[hh] = 0.0; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
       hru_evap[hh] = 0.0;
     } // for
 
@@ -156,7 +174,7 @@ void Classlake::run(void) {
   } // beginning of month
 
   if(DoMean){
-    if(--DaysMonth == 0 || last_timestep()){
+    if(DaysMonth > 0 || last_timestep()){ // modified Aug 2, 2022
       add();
       process();
       --Global::CRHMControlSaveCnt; // restore state to backtrack
@@ -169,11 +187,11 @@ void Classlake::run(void) {
   else if(N_intervals){ // normal entry after monthly lake evaporation
     Ahead = false;
     for(hh = 0; chkStruct(); ++hh) {
-      hru_actet[hh] = 0.0;
+      // hru_actet[hh] = 0.0; // modified Aug 2, 2022, hru_actet not calculated in lake_evap
       hru_evap[hh] = 0.0;
 
       if((double) Global::DTnow + 0.01 >= start_open_day[hh] && (double) Global::DTnow - 0.01 <= end_open_day[hh]){
-        hru_evap[hh] = lake_evap_month[hh]/N_intervals;
+        hru_evap[hh] = lake_evap_month[hh]/(DaysMonth * Global::Freq); // correction Aug 2, 2022 for interval evaporation based on monthly evap
         hru_cum_evap[hh] += hru_evap[hh];
       } // if
     } // for
@@ -186,7 +204,7 @@ void Classlake::finish(bool good) {
 
     LogMessageA(hh, string("'" + Name + " (lake_evap)' hru_cum_evap  (mm) (mm*hru) (mm*hru/basin): ").c_str(), hru_cum_evap[hh], hru_area[hh], basin_area[0]);
 
-    LogMessageA(hh, string("'" + Name + " (lake_evap)' hru_cum_actet (mm) (mm*hru) (mm*hru/basin): ").c_str(), hru_cum_actet[hh], hru_area[hh], basin_area[0]);
+    // LogMessageA(hh, string("'" + Name + " (lake_evap)' hru_cum_actet (mm) (mm*hru) (mm*hru/basin): ").c_str(), hru_cum_actet[hh], hru_area[hh], basin_area[0]);
     LogDebug(" ");
 
   }

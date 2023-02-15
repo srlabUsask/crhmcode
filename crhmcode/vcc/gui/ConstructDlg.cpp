@@ -1,19 +1,37 @@
-#include "CConstruct.h"
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
+#include "ConstructDlg.h"
 #include "CConstructCore.h"
 
-IMPLEMENT_DYNAMIC(CConstruct, CDialog)
+IMPLEMENT_DYNAMIC(ConstructDlg, CDialog)
 
-CConstruct::CConstruct(CWnd* pParent /*=nullptr*/)
+ConstructDlg::ConstructDlg(CWnd* pParent /*=nullptr*/)
 	: CDialog(CONSTRUCT_DLG, pParent)
 {
 
 }
 
-CConstruct::~CConstruct()
+ConstructDlg::~ConstructDlg()
 {
 }
 
-void CConstruct::DoDataExchange(CDataExchange* pDX)
+void ConstructDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, ID_ALL_MODS_LIST_BOX, listbox_available_modules);
@@ -33,24 +51,24 @@ void CConstruct::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CConstruct, CDialog)
+BEGIN_MESSAGE_MAP(ConstructDlg, CDialog)
 	//Buttons
-	ON_BN_CLICKED(ID_CONSTRUCT_CHECK_BUTTON, &CConstruct::OnClkCheckButton)
-	ON_BN_CLICKED(ID_CONSTRUCT_BUILD_BUTTON, &CConstruct::OnClkBuildButton)
-	ON_BN_CLICKED(ID_CONSTRUCT_CANCEL_BUTTON, &CConstruct::OnClkCancelButton)
+	ON_BN_CLICKED(ID_CONSTRUCT_CHECK_BUTTON, &ConstructDlg::OnClkCheckButton)
+	ON_BN_CLICKED(ID_CONSTRUCT_BUILD_BUTTON, &ConstructDlg::OnClkBuildButton)
+	ON_BN_CLICKED(ID_CONSTRUCT_CANCEL_BUTTON, &ConstructDlg::OnClkCancelButton)
 	//List Boxes
-	ON_LBN_SELCHANGE(ID_ALL_MODS_LIST_BOX, &CConstruct::OnSelChangeAllModsListBox)
-	ON_MESSAGE(UWM_OPEN_CTX_AVAILABLE_MODS, &CConstruct::OpenAvailableModsCtxMenu)
-	ON_LBN_SELCHANGE(ID_SEL_MODS_LIST_BOX, &CConstruct::OnSelChangeSelModsListBox)
-	ON_MESSAGE(UWM_OPEN_CTX_SELECTED_MODS, &CConstruct::OpenSelectedModsCtxMenu)
+	ON_LBN_SELCHANGE(ID_ALL_MODS_LIST_BOX, &ConstructDlg::OnSelChangeAllModsListBox)
+	ON_MESSAGE(UWM_OPEN_CTX_AVAILABLE_MODS, &ConstructDlg::OpenAvailableModsCtxMenu)
+	ON_LBN_SELCHANGE(ID_SEL_MODS_LIST_BOX, &ConstructDlg::OnSelChangeSelModsListBox)
+	ON_MESSAGE(UWM_OPEN_CTX_SELECTED_MODS, &ConstructDlg::OpenSelectedModsCtxMenu)
 	//Module Filters
-	ON_BN_CLICKED(ID_MODULE_FILTER_BASIC, &CConstruct::OnClkModuleFilterBasic)
-	ON_BN_CLICKED(ID_MODULE_FILTER_MACRO, &CConstruct::OnClkModuleFilterMacro)
-	ON_BN_CLICKED(ID_MODULE_FILTER_ADVANCED, &CConstruct::OnClkModuleFilterAdvanced)
-	ON_BN_CLICKED(ID_MODULE_FILTER_SUPPORT, &CConstruct::OnClkModuleFilterSupport)
-	ON_BN_CLICKED(ID_MODULE_FILTER_CUSTOM, &CConstruct::OnClkModuleFilterCustom)
-	ON_BN_CLICKED(ID_MODULE_FILTER_PROTOTYPE, &CConstruct::OnClkModuleFilterPrototype)
-	ON_BN_CLICKED(ID_MODULE_FILTER_OBSOLETE, &CConstruct::OnClkModuleFilterObsolete)
+	ON_BN_CLICKED(ID_MODULE_FILTER_BASIC, &ConstructDlg::OnClkModuleFilterBasic)
+	ON_BN_CLICKED(ID_MODULE_FILTER_MACRO, &ConstructDlg::OnClkModuleFilterMacro)
+	ON_BN_CLICKED(ID_MODULE_FILTER_ADVANCED, &ConstructDlg::OnClkModuleFilterAdvanced)
+	ON_BN_CLICKED(ID_MODULE_FILTER_SUPPORT, &ConstructDlg::OnClkModuleFilterSupport)
+	ON_BN_CLICKED(ID_MODULE_FILTER_CUSTOM, &ConstructDlg::OnClkModuleFilterCustom)
+	ON_BN_CLICKED(ID_MODULE_FILTER_PROTOTYPE, &ConstructDlg::OnClkModuleFilterPrototype)
+	ON_BN_CLICKED(ID_MODULE_FILTER_OBSOLETE, &ConstructDlg::OnClkModuleFilterObsolete)
 
 
 
@@ -58,8 +76,8 @@ BEGIN_MESSAGE_MAP(CConstruct, CDialog)
 	//ON_NOTIFY(UDN_DELTAPOS, ID_MAX_HRU_SPIN, &CConstruct::OnMaxHRUSpinClick)
 
 
-	ON_BN_CLICKED(IDC_BUTTON8, &CConstruct::OnBnClickedButton8)
-	ON_BN_CLICKED(IDC_BUTTON1, &CConstruct::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON8, &ConstructDlg::OnBnClickedButton8)
+	ON_BN_CLICKED(IDC_BUTTON1, &ConstructDlg::OnBnClickedButton1)
 	
 END_MESSAGE_MAP()
 
@@ -68,7 +86,7 @@ END_MESSAGE_MAP()
 
 
 
-BOOL CConstruct::OnInitDialog()
+BOOL ConstructDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
@@ -99,7 +117,7 @@ BOOL CConstruct::OnInitDialog()
 				  // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CConstruct::LoadAllModules()
+void ConstructDlg::LoadAllModules()
 {
 	listbox_available_modules.ResetContent();
 	std::map<std::string, ClassModule *> * all_modules = CRHMmain::getInstance()->getAllmodules();
@@ -119,7 +137,7 @@ void CConstruct::LoadAllModules()
 
 
 
-bool CConstruct::ModuleIsSelected(CString cstr)
+bool ConstructDlg::ModuleIsSelected(CString cstr)
 {
 	CString cstr1;
 	for (int i = 0; i < listbox_selected_modules.GetCount(); i++)
@@ -135,7 +153,7 @@ bool CConstruct::ModuleIsSelected(CString cstr)
 }
 
 
-void CConstruct::OnBnClickedButton8()
+void ConstructDlg::OnBnClickedButton8()
 {
 	// TODO: Add your control notification handler code here
 
@@ -166,7 +184,7 @@ void CConstruct::OnBnClickedButton8()
 
 
 
-void CConstruct::RemoveSelectedModule()
+void ConstructDlg::RemoveSelectedModule()
 {
 	CString cstr;
 
@@ -197,7 +215,7 @@ void CConstruct::RemoveSelectedModule()
 }
 
 
-void CConstruct::AddToAvailableModules(string str, ClassModule * obj)
+void ConstructDlg::AddToAvailableModules(string str, ClassModule * obj)
 {
 	AvailableModules->push_back(std::pair<std::string, ClassModule *>(str, obj));
 	CString cstr(str.c_str());
@@ -205,7 +223,7 @@ void CConstruct::AddToAvailableModules(string str, ClassModule * obj)
 }
 
 
-void CConstruct::AddToSelectedModules(string str, ClassModule * obj)
+void ConstructDlg::AddToSelectedModules(string str, ClassModule * obj)
 {
 	
 	SelectedModules->push_back(std::pair<std::string, ClassModule*>(str, obj));
@@ -226,7 +244,7 @@ void CConstruct::AddToSelectedModules(string str, ClassModule * obj)
 
 
 //core functionality
-void CConstruct::FormActivate()
+void ConstructDlg::FormActivate()
 {
 	//StatusBar1->SimpleText = "";
 	//StatusBar1->SimplePanel = true;
@@ -354,7 +372,7 @@ void CConstruct::FormActivate()
 }
 
 
-void CConstruct::SetSuffix(std::list<std::pair<std::string, ClassModule*>>::iterator pos) 
+void ConstructDlg::SetSuffix(std::list<std::pair<std::string, ClassModule*>>::iterator pos) 
 {
 
 	ClassModule* thisModule = pos->second;
@@ -390,7 +408,7 @@ void CConstruct::SetSuffix(std::list<std::pair<std::string, ClassModule*>>::iter
 
 
 
-void CConstruct::AKAselectiveDelete()
+void ConstructDlg::AKAselectiveDelete()
 {
 	if(!Global::MapAKA.empty()) 
 	{ // separate out AKA commands
@@ -419,7 +437,7 @@ void CConstruct::AKAselectiveDelete()
 }
 
 
-void CConstruct:: AddLineToConstructConsole(std::string str)
+void ConstructDlg:: AddLineToConstructConsole(std::string str)
 {
 	CListBox * listbox = (CListBox*)GetDlgItem(ID_CONSTRUCT_CONSOLE);
 	CString cstr(str.c_str());
@@ -427,7 +445,7 @@ void CConstruct:: AddLineToConstructConsole(std::string str)
 }
 
 
-void CConstruct::DisplayModule(std::string moduleName, ClassModule* module, bool LBox1) 
+void ConstructDlg::DisplayModule(std::string moduleName, ClassModule* module, bool LBox1) 
 {
 	long variation = 0;
 	long variationIndex = 0;
@@ -740,7 +758,7 @@ void CConstruct::DisplayModule(std::string moduleName, ClassModule* module, bool
 }
 
 
-bool CConstruct::Variation_Decide(int Variation_set, long Variation) {
+bool ConstructDlg::Variation_Decide(int Variation_set, long Variation) {
 
 	VandP V; V.Set(Variation);
 
@@ -755,14 +773,14 @@ bool CConstruct::Variation_Decide(int Variation_set, long Variation) {
 		return false;
 }
 
-bool CConstruct::Visible_Decide(long Variation) {
+bool ConstructDlg::Visible_Decide(long Variation) {
 
 	VandP V; V.Set(Variation);
 	long Visible = V.GetP();
 	return Visible == 1;
 }
 
-bool CConstruct::Not_Obs(string Mod, string Var) {
+bool ConstructDlg::Not_Obs(string Mod, string Var) {
 
 	pair<Mapstr::iterator, Mapstr::iterator> rangeIobs = Global::Mapreadvar.equal_range(Mod);
 	for (Mapstr::iterator itMap = rangeIobs.first; itMap != rangeIobs.second; ++itMap)
@@ -773,7 +791,7 @@ bool CConstruct::Not_Obs(string Mod, string Var) {
 }
 
 
-void CConstruct::OnSelChangeAllModsListBox()
+void ConstructDlg::OnSelChangeAllModsListBox()
 {
 	int selection = listbox_available_modules.GetCurSel();
 	CString cstr;
@@ -785,7 +803,7 @@ void CConstruct::OnSelChangeAllModsListBox()
 }
 
 
-void CConstruct::OnSelChangeSelModsListBox()
+void ConstructDlg::OnSelChangeSelModsListBox()
 {
 	int selection = listbox_selected_modules.GetCurSel();
 	CString cstr;
@@ -811,13 +829,13 @@ void CConstruct::OnSelChangeSelModsListBox()
 }
 
 
-void CConstruct::OnClkCheckButton()
+void ConstructDlg::OnClkCheckButton()
 {
 	CheckModel();	
 	UpdateSelectedModulesListBox();
 }
 
-string CConstruct::StringOfChar(char c, int n)
+string ConstructDlg::StringOfChar(char c, int n)
 {
 	string result = "";
 	for (int i = 0; i < n; i++)
@@ -827,7 +845,7 @@ string CConstruct::StringOfChar(char c, int n)
 	return result;
 }
 
-long CConstruct::CheckModel() 
+long ConstructDlg::CheckModel() 
 {
 
 	size_t Showing = SelectedModules->size();
@@ -1701,7 +1719,7 @@ Again:
 	return Error;
 }
 
-long CConstruct::Best_Match(string Var, std::vector<std::pair<std::string, int>> * List) {
+long ConstructDlg::Best_Match(string Var, std::vector<std::pair<std::string, int>> * List) {
 
 	long found = 10;
 	long Indx = -1;
@@ -1736,7 +1754,7 @@ long CConstruct::Best_Match(string Var, std::vector<std::pair<std::string, int>>
 	return Indx;
 }
 
-long CConstruct::Best_Match(string Var, std::vector<std::string>* List) {
+long ConstructDlg::Best_Match(string Var, std::vector<std::string>* List) {
 
 	long found = 10;
 	long Indx = -1;
@@ -1772,7 +1790,7 @@ long CConstruct::Best_Match(string Var, std::vector<std::string>* List) {
 }
 
 
-void CConstruct::UpdateAvailableModules()
+void ConstructDlg::UpdateAvailableModules()
 {
 	AvailableModules->clear();
 	listbox_available_modules.ResetContent();
@@ -1783,62 +1801,53 @@ void CConstruct::UpdateAvailableModules()
 		modIt++
 		) 
 	{
-		LMODULE str = modIt->second->Lvl;
-
-		if (modIt->second->Lvl == LMODULE::BASIC)
+		LMODULE level = modIt->second->Lvl;
+		switch (level)
 		{
+		case (LMODULE::BASIC):
 			if (module_filter_basic.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (modIt->second->Lvl == LMODULE::ADVANCE)
-		{
+			break;
+		case (LMODULE::ADVANCE):
 			if (module_filter_advanced.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (modIt->second->Lvl == LMODULE::CUSTOM)
-		{
+			break;
+		case (LMODULE::CUSTOM):
 			if (module_filter_custom.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (str == LMODULE::MACRO)
-		{
+			break;
+		case (LMODULE::MACRO):
 			if (module_filter_macro.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (modIt->second->Lvl == LMODULE::OBSOL)
-		{
+			break;
+		case (LMODULE::OBSOL):
 			if (module_filter_obsolete.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (modIt->second->Lvl == LMODULE::PROTO)
-		{
+			break;
+		case (LMODULE::PROTO):
 			if (module_filter_prototype.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
-		}
-
-		if (modIt->second->Lvl == LMODULE::SUPPORT)
-		{
+			break;
+		case (LMODULE::SUPPORT):
 			if (module_filter_support.GetCheck() == 1)
 			{
 				AddToAvailableModules(modIt->first, modIt->second);
 			}
+			break;
+		default:
+			break;
 		}
 
 	}
@@ -1846,7 +1855,7 @@ void CConstruct::UpdateAvailableModules()
 }
 
 
-void CConstruct::OnClkModuleFilterBasic()
+void ConstructDlg::OnClkModuleFilterBasic()
 {
 	// TODO: Add your control notification handler code here
 
@@ -1854,7 +1863,7 @@ void CConstruct::OnClkModuleFilterBasic()
 }
 
 
-void CConstruct::OnClkModuleFilterMacro()
+void ConstructDlg::OnClkModuleFilterMacro()
 {
 	// TODO: Add your control notification handler code here
 
@@ -1862,7 +1871,7 @@ void CConstruct::OnClkModuleFilterMacro()
 }
 
 
-void CConstruct::OnClkModuleFilterAdvanced()
+void ConstructDlg::OnClkModuleFilterAdvanced()
 {
 	// TODO: Add your control notification handler code here
 
@@ -1870,7 +1879,7 @@ void CConstruct::OnClkModuleFilterAdvanced()
 }
 
 
-void CConstruct::OnClkModuleFilterSupport()
+void ConstructDlg::OnClkModuleFilterSupport()
 {
 	// TODO: Add your control notification handler code here
 
@@ -1878,7 +1887,7 @@ void CConstruct::OnClkModuleFilterSupport()
 }
 
 
-void CConstruct::OnClkModuleFilterCustom()
+void ConstructDlg::OnClkModuleFilterCustom()
 {
 	// TODO: Add your control notification handler code here
 
@@ -1886,7 +1895,7 @@ void CConstruct::OnClkModuleFilterCustom()
 }
 
 
-void CConstruct::OnClkModuleFilterPrototype()
+void ConstructDlg::OnClkModuleFilterPrototype()
 {
 	// TODO: Add your control notification handler code here
 
@@ -1894,7 +1903,7 @@ void CConstruct::OnClkModuleFilterPrototype()
 }
 
 
-void CConstruct::OnClkModuleFilterObsolete()
+void ConstructDlg::OnClkModuleFilterObsolete()
 {
 	// TODO: Add your control notification handler code here
 
@@ -1902,7 +1911,7 @@ void CConstruct::OnClkModuleFilterObsolete()
 }
 
 
-long CConstruct::BuildClick()
+long ConstructDlg::BuildClick()
 {
 	int test = AvailableModules->size();
 	long Showing = SelectedModules->size();
@@ -1940,13 +1949,6 @@ long CConstruct::BuildClick()
 
 	Global::maxlay = max_layer_spin.GetPos();
 	Global::maxhru = max_HRU_spin.GetPos();
-
-	COleDateTime timeNow;
-	timeNow = COleDateTime::GetCurrentTime();
-	timeNow.m_dt;
-
-	crhmmain->setStartDate(timeNow.m_dt);
-	crhmmain->setEndDate(timeNow.m_dt);
 
 	Global::OurModulesList->clear();
 	for (size_t i = 0; i < SelectedModules->size(); i++)
@@ -1990,7 +1992,7 @@ long CConstruct::BuildClick()
 	return Errors;
 }
 
-void CConstruct::SaveBuildParameters() {
+void ConstructDlg::SaveBuildParameters() {
 
 	ClassPar *thisPar;
 
@@ -2027,7 +2029,7 @@ void CConstruct::SaveBuildParameters() {
 }
 
 
-void CConstruct::ReadBuildParameters() {
+void ConstructDlg::ReadBuildParameters() {
 
 	MapPar::iterator itPar;
 	ClassPar *thisPar;
@@ -2071,7 +2073,7 @@ void CConstruct::ReadBuildParameters() {
 }
 
 
-void CConstruct::RemoveSharedParams() { // pseudo shared parameters
+void ConstructDlg::RemoveSharedParams() { // pseudo shared parameters
 
 	Global::Mapgetvar.clear();
 	Global::Mapputvar.clear();
@@ -2114,7 +2116,7 @@ void CConstruct::RemoveSharedParams() { // pseudo shared parameters
 	Global::SharedMapPars.clear();
 }
 
-void CConstruct::RemoveParameter() {
+void ConstructDlg::RemoveParameter() {
 
 	MapPar::iterator itPar;
 	ClassPar *thisPar;
@@ -2143,7 +2145,7 @@ void CConstruct::RemoveParameter() {
 
 }
 
-long CConstruct::FormatMax(long M)
+long ConstructDlg::FormatMax(long M)
 {
 	M = M & 2047;
 	if (M == 0) return 0;
@@ -2154,7 +2156,7 @@ long CConstruct::FormatMax(long M)
 	return -1; // should never get here
 }
 
-void CConstruct::OnClkBuildButton()
+void ConstructDlg::OnClkBuildButton()
 {
 	// TODO: Add your control notification handler code here
 
@@ -2166,7 +2168,7 @@ void CConstruct::OnClkBuildButton()
 }
 
 
-void CConstruct::OnClkCancelButton()
+void ConstructDlg::OnClkCancelButton()
 {
 	// TODO: Add your control notification handler code here
 	
@@ -2177,7 +2179,7 @@ void CConstruct::OnClkCancelButton()
 
 
 
-void CConstruct::OnBnClickedButton1()
+void ConstructDlg::OnBnClickedButton1()
 {
 	// TODO: Add your control notification handler code here
 
@@ -2187,7 +2189,7 @@ void CConstruct::OnBnClickedButton1()
 }
 
 
-LRESULT CConstruct::OpenAvailableModsCtxMenu(WPARAM, LPARAM)
+LRESULT ConstructDlg::OpenAvailableModsCtxMenu(WPARAM, LPARAM)
 {
 	CMenu ctxMenu;
 	ctxMenu.CreatePopupMenu();
@@ -2223,7 +2225,7 @@ LRESULT CConstruct::OpenAvailableModsCtxMenu(WPARAM, LPARAM)
 }
 
 
-LRESULT CConstruct::OpenSelectedModsCtxMenu(WPARAM, LPARAM)
+LRESULT ConstructDlg::OpenSelectedModsCtxMenu(WPARAM, LPARAM)
 {
 	CMenu ctxMenu;
 	ctxMenu.CreatePopupMenu();
@@ -2281,7 +2283,7 @@ LRESULT CConstruct::OpenSelectedModsCtxMenu(WPARAM, LPARAM)
 	return 0;
 }
 
-void CConstruct::AddAvailableModsToSelected()
+void ConstructDlg::AddAvailableModsToSelected()
 {
 	int selectedCount = listbox_available_modules.GetSelCount();
 	int* selectedIndicies = new int[selectedCount];
@@ -2302,7 +2304,7 @@ void CConstruct::AddAvailableModsToSelected()
 	delete[] selectedIndicies;
 }
 
-void CConstruct::RemoveModulesFromSelected()
+void ConstructDlg::RemoveModulesFromSelected()
 {
 	int selectedCount = listbox_selected_modules.GetSelCount();
 	int* selectedIndicies = new int[selectedCount];
@@ -2348,7 +2350,7 @@ void CConstruct::RemoveModulesFromSelected()
 }
 
 
-void CConstruct::UpdateSelectedModulesListBox()
+void ConstructDlg::UpdateSelectedModulesListBox()
 {
 	//Remove any elements that are no longer in the vector
 	for (int i = 0; i < listbox_selected_modules.GetCount(); i++)
@@ -2440,7 +2442,7 @@ void CConstruct::UpdateSelectedModulesListBox()
 
 }
 
-void CConstruct::SetNextVariation()
+void ConstructDlg::SetNextVariation()
 {
 	CString selectedText;
 	int selIndex = listbox_selected_modules.GetCurSel();
@@ -2487,24 +2489,22 @@ void CConstruct::SetNextVariation()
 	}
 
 	//Update the varation in the ClassModule Object
-	if (currentVariation != 0)
+	for (
+		std::vector<std::pair<std::string, ClassModule*>>::iterator it = this->SelectedModules->begin();
+		it != this->SelectedModules->end();
+		it++
+		)
 	{
-		for (
-			std::vector<std::pair<std::string, ClassModule*>>::iterator it = this->SelectedModules->begin();
-			it != this->SelectedModules->end();
-			it++
-			)
+		if (it->first == trimmedModuleName)
 		{
-			if (it->first == trimmedModuleName)
-			{
-				it->second->variation = (unsigned short)pow(2, currentVariation - 1);
-			}
+			it->second->variation = (unsigned short)pow(2, currentVariation - 1);
 		}
 	}
 	
+	
 }
 
-void CConstruct::SetPrevVariation()
+void ConstructDlg::SetPrevVariation()
 {
 	CString selectedText;
 	int selIndex = listbox_selected_modules.GetCurSel();
@@ -2571,19 +2571,17 @@ void CConstruct::SetPrevVariation()
 	}
 
 	//Update the varation in the ClassModule Object
-	if (currentVariation != 0)
+	for (
+		std::vector<std::pair<std::string, ClassModule*>>::iterator it = this->SelectedModules->begin();
+		it != this->SelectedModules->end();
+		it++
+		)
 	{
-		for (
-			std::vector<std::pair<std::string, ClassModule*>>::iterator it = this->SelectedModules->begin();
-			it != this->SelectedModules->end();
-			it++
-			)
+		if (it->first == trimmedModuleName)
 		{
-			if (it->first == trimmedModuleName)
-			{
-				it->second->variation = (unsigned short)pow(2, currentVariation - 1);
-			}
+			it->second->variation = (unsigned short)pow(2, currentVariation - 1);
 		}
 	}
+	
 
 }

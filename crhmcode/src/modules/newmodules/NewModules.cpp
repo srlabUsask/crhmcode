@@ -1,3 +1,21 @@
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
 // 11/21/19
 //---------------------------------------------------------------------------
 
@@ -230,7 +248,7 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassXG("XG", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassXGAyers("XGAyers", "05/19/17", LMODULE::PROTO));
   DLLModules.AddModule(new ClassSetSoil("SetSoil", "10/21/09", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassVolumetric("Volumetric", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassVolumetric("Volumetric", "08/02/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new Classtsurface("tsurface", "04/05/22", LMODULE::PROTO));
   DLLModules.AddModule(new Classalbedoparam("albedo_param", "11/22/05", LMODULE::SUPPORT));
   DLLModules.AddModule(new Classalbedoobs("albedo_obs", "11/22/05", LMODULE::SUPPORT));
@@ -249,9 +267,13 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassK_Estimate("K_Estimate", "04/06/22", LMODULE::ADVANCE)); // fixed 'put' descriptions
   DLLModules.AddModule(new ClassSnobalX("Snobal", "02/03/16", LMODULE::OBSOL));
   DLLModules.AddModule(new Classinterception("interception", "04/05/22", LMODULE::OBSOL));
-  DLLModules.AddModule(new Classlake("lake_evap", "04/05/22", LMODULE::ADVANCE));
+<<<<<<< HEAD
+  DLLModules.AddModule(new Classlake("lake_evap", "08/02/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassQuickroute("Quickroute", "06/12/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassSWMM("SWMM", "06/13/22", LMODULE::ADVANCE));
+=======
+  DLLModules.AddModule(new Classlake("lake_evap", "08/02/22", LMODULE::ADVANCE));
+>>>>>>> master
 
   if(!RELEASE)
   {

@@ -1,3 +1,21 @@
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
 #pragma once
 
 // 02/20/18
@@ -27,7 +45,14 @@ enum class OUTCOME { None, Implicit, Explicit, IgnoreObs, IgnoreVar, IgnoreObsFu
 class Administer;
 
 class   ClassModule {
+private:
+	std::list<std::pair<std::string, ClassPar*>> parameters_list;
+
+	
+
 public:
+
+	std::list<std::pair<std::string, ClassPar*>>* getParametersList();
 
 	string Name; // Module or Macro name
 	string NameRoot; // When Macro gives Root
@@ -197,42 +222,238 @@ public:
 	void decllocal(string variable, TDim dimen,
 		string help, string units, long **value, long ***ilayvalue = NULL, const int dim = 1);
 
-	std::vector<std::string> * decldiagparam(string param, TDim dimen, string Texts, string help, std::vector<std::string> * stringsList, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
+	
 
-	void declparam(string param, TDim dimen,
-		string valstr, string minstr, string maxstr,
-		string help, string units, const double **value,
-		const double ***layvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::USUAL);
+	/**
+	* Declares a user defined floating point basic parameter for a module.
+	* 
+	* @param param - std::string the name of the parameter.
+	* @param dimen - TDim defines the dimensonality of the parameter.
+	* @param valstr - std::string string the defines the default value of the parameter.
+	* @param minstr - std::string string that defines the minimum value of the parameter.
+	* @param maxstr - std::string string that defines the maximum value of the parameter.
+	* @param help - std::string help string for the parameter. 
+	* @param units - std::string units the units string for the parameter.
+	* @param value - double** Pointer to an array of doubles that holds the values for the parameter.
+	* @param layvalue - double*** Pointer to a two dimenional array of doubles that holds the values for the parameter.
+	* @param dim - int purpose unknown defaults to 1.
+	* @param Local - TVISABLE indicates the visability level of the parameter defaults to USUAL which indicates a basic parameter.
+	*/
+	void declparam(
+		std::string param, 
+		TDim dimen,
+		std::string valstr, 
+		std::string minstr, 
+		std::string maxstr,
+		std::string help, 
+		std::string units, 
+		const double **value,
+		const double ***layvalue = NULL, 
+		const int dim = 1, 
+		TVISIBLE Local = TVISIBLE::USUAL
+	);
 
-	void declparam(string param, TDim dimen,
-		string valstr, string minstr, string maxstr,
-		string help, string units, const long **value,
-		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::USUAL);
+	/**
+	* Declares a user defined integer basic parameter for a module.
+	*
+	* @param param - std::string the name of the parameter.
+	* @param dimen - TDim defines the dimensonality of the parameter.
+	* @param valstr - std::string string the defines the default value of the parameter.
+	* @param minstr - std::string string that defines the minimum value of the parameter.
+	* @param maxstr - std::string string that defines the maximum value of the parameter.
+	* @param help - std::string help string for the parameter.
+	* @param units - std::string units the units string for the parameter.
+	* @param value - long** Pointer to an array of longs that holds the values for the parameter.
+	* @param ilayvalue - long*** Pointer to a two dimenional array of longs that holds the values for the parameter.
+	* @param dim - int purpose unknown defaults to 1.
+	* @param Local - TVISABLE indicates the visability level of the parameter defaults to USUAL which indicates a basic parameter.
+	*/
+	void declparam(
+		std::string param, 
+		TDim dimen,
+		std::string valstr, 
+		std::string minstr, 
+		std::string maxstr,
+		std::string help, 
+		std::string units, 
+		const long **value,
+		const long ***ilayvalue = NULL, 
+		const int dim = 1, 
+		TVISIBLE Local = TVISIBLE::USUAL
+	);
 
+	/**
+	* Declares a user defined string basic parameter 
+	*
+	* @param param - std::string the name of the parameter.
+	* @param dimen - TDim defines the dimensonality of the parameter.
+	* @param Texts - std::string the default string to use in the parameter.
+	* @param help - std::string the help string for the parameter.
+	* @param stringsList - std::vector<std::string>* pointer to the vector where the parameter values are stored.
+	* @param Local - TVISABLE indicates the visability level of the parameter defaults to USUAL which indicates a basic parameter.
+	*/
+	std::vector<std::string>* declparam(
+		std::string param, 
+		TDim dimen, 
+		std::string Texts, 
+		std::string help, 
+		std::vector<std::string>* stringsList, 
+		TVISIBLE Local = TVISIBLE::USUAL
+	);
 
-	void decldiagparam(string param, TDim dimen,
-		string valstr, string minstr, string maxstr,
-		string help, string units, const double **value,
-		const double ***layvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
+	/**
+	* Declares a user defined floating point advance parameter for a module.
+	*
+	* @param param - std::string the name of the parameter.
+	* @param dimen - TDim defines the dimensonality of the parameter.
+	* @param valstr - std::string string the defines the default value of the parameter.
+	* @param minstr - std::string string that defines the minimum value of the parameter.
+	* @param maxstr - std::string string that defines the maximum value of the parameter.
+	* @param help - std::string help string for the parameter.
+	* @param units - std::string units the units string for the parameter.
+	* @param value - double** Pointer to an array of doubles that holds the values for the parameter.
+	* @param layvalue - double*** Pointer to a two dimenional array of doubles that holds the values for the parameter.
+	* @param dim - int purpose unknown defaults to 1.
+	* @param Local - TVISABLE indicates the visability level of the parameter defaults to DIAGNOSTIC which indicates an advance parameter.
+	*/
+	void decldiagparam(
+		std::string param, 
+		TDim dimen,
+		std::string valstr, 
+		std::string minstr, 
+		std::string maxstr,
+		std::string help, 
+		std::string units, 
+		const double **value,
+		const double ***layvalue = NULL, 
+		const int dim = 1, 
+		TVISIBLE Local = TVISIBLE::DIAGNOSTIC
+	);
 
-	void decldiagparam(string param, TDim dimen,
-		string valstr, string minstr, string maxstr,
-		string help, string units, const long **value,
-		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::DIAGNOSTIC);
+	/**
+	* Declares a user defined integer advance parameter for a module.
+	*
+	* @param param - std::string the name of the parameter.
+	* @param dimen - TDim defines the dimensonality of the parameter.
+	* @param valstr - std::string string the defines the default value of the parameter.
+	* @param minstr - std::string string that defines the minimum value of the parameter.
+	* @param maxstr - std::string string that defines the maximum value of the parameter.
+	* @param help - std::string help string for the parameter.
+	* @param units - std::string units the units string for the parameter.
+	* @param value - long** Pointer to an array of longs that holds the values for the parameter.
+	* @param ilayvalue - long*** Pointer to a two dimenional array of longs that holds the values for the parameter.
+	* @param dim - int purpose unknown defaults to 1.
+	* @param Local - TVISABLE indicates the visability level of the parameter defaults to DIAGNOSTIC which indicates an advance parameter.
+	*/
+	void decldiagparam(
+		std::string param, 
+		TDim dimen,
+		std::string valstr, 
+		std::string minstr, 
+		std::string maxstr,
+		std::string help, 
+		std::string units, 
+		const long **value,
+		const long ***ilayvalue = NULL, 
+		const int dim = 1, 
+		TVISIBLE Local = TVISIBLE::DIAGNOSTIC
+	);
 
-	void decllocalparam(string param, TDim dimen,
-		string valstr, string minstr, string maxstr,
-		string help, string units, const double **value,
-		const double ***layvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::PRIVATE);
+	/**
+	* Declares a user defined string advance parameter
+	*
+	* @param param - std::string the name of the parameter.
+	* @param dimen - TDim defines the dimensonality of the parameter.
+	* @param Texts - std::string the default string to use in the parameter.
+	* @param help - std::string the help string for the parameter.
+	* @param stringsList - std::vector<std::string>* pointer to the vector where the parameter values are stored.
+	* @param Local - TVISABLE indicates the visability level of the parameter defaults to DIAGNOSTIC which indicates an advance parameter.
+	*/
+	std::vector<std::string>* decldiagparam(
+		std::string param,
+		TDim dimen,
+		std::string Texts,
+		std::string help,
+		std::vector<std::string>* stringsList,
+		TVISIBLE Local = TVISIBLE::DIAGNOSTIC
+	);
 
-	void decllocalparam(string param, TDim dimen,
-		string valstr, string minstr, string maxstr,
-		string help, string units, const long **value,
-		const long ***ilayvalue = NULL, const int dim = 1, TVISIBLE Local = TVISIBLE::PRIVATE);
+	/**
+	* Declares a user defined floating point private parameter for a module.
+	*
+	* @param param - std::string the name of the parameter.
+	* @param dimen - TDim defines the dimensonality of the parameter.
+	* @param valstr - std::string string the defines the default value of the parameter.
+	* @param minstr - std::string string that defines the minimum value of the parameter.
+	* @param maxstr - std::string string that defines the maximum value of the parameter.
+	* @param help - std::string help string for the parameter.
+	* @param units - std::string units the units string for the parameter.
+	* @param value - double** Pointer to an array of doubles that holds the values for the parameter.
+	* @param layvalue - double*** Pointer to a two dimenional array of doubles that holds the values for the parameter.
+	* @param dim - int purpose unknown defaults to 1.
+	* @param Local - TVISABLE indicates the visability level of the parameter defaults to PRIVATE which indicates a private parameter.
+	*/
+	void decllocalparam(
+		std::string param, 
+		TDim dimen,
+		std::string valstr, 
+		std::string minstr, 
+		std::string maxstr,
+		std::string help, 
+		std::string units, 
+		const double **value,
+		const double ***layvalue = NULL, 
+		const int dim = 1, 
+		TVISIBLE Local = TVISIBLE::PRIVATE
+	);
 
-	std::vector<std::string> * decllocalparam(string param, TDim dimen, string Texts, string help, std::vector<std::string> *stringsList, TVISIBLE Local = TVISIBLE::PRIVATE);
+	/**
+	* Declares a user defined integer private parameter for a module.
+	*
+	* @param param - std::string the name of the parameter.
+	* @param dimen - TDim defines the dimensonality of the parameter.
+	* @param valstr - std::string string the defines the default value of the parameter.
+	* @param minstr - std::string string that defines the minimum value of the parameter.
+	* @param maxstr - std::string string that defines the maximum value of the parameter.
+	* @param help - std::string help string for the parameter.
+	* @param units - std::string units the units string for the parameter.
+	* @param value - long** Pointer to an array of longs that holds the values for the parameter.
+	* @param ilayvalue - long*** Pointer to a two dimenional array of longs that holds the values for the parameter.
+	* @param dim - int purpose unknown defaults to 1.
+	* @param Local - TVISABLE indicates the visability level of the parameter defaults to PRIVATE which indicates a private parameter.
+	*/
+	void decllocalparam(
+		std::string param, 
+		TDim dimen,
+		std::string valstr, 
+		std::string minstr, 
+		std::string maxstr,
+		std::string help, 
+		std::string units, 
+		const long **value,
+		const long ***ilayvalue = NULL, 
+		const int dim = 1, 
+		TVISIBLE Local = TVISIBLE::PRIVATE
+	);
 
-	std::vector<std::string>* declparam(string param, TDim dimen, string Texts, string help, std::vector<std::string>* stringsList, TVISIBLE Local = TVISIBLE::USUAL);
+	/**
+	* Declares a user defined string private parameter
+	*
+	* @param param - std::string the name of the parameter.
+	* @param dimen - TDim defines the dimensonality of the parameter.
+	* @param Texts - std::string the default string to use in the parameter.
+	* @param help - std::string the help string for the parameter.
+	* @param stringsList - std::vector<std::string>* pointer to the vector where the parameter values are stored.
+	* @param Local - TVISABLE indicates the visability level of the parameter defaults to PRIVATE which indicates a private parameter.
+	*/
+	std::vector<std::string> * decllocalparam(
+		string param, 
+		TDim dimen, 
+		string Texts, 
+		string help, 
+		std::vector<std::string> *stringsList, 
+		TVISIBLE Local = TVISIBLE::PRIVATE
+	);
 
 	long declgetvar(string source, string name, string units, const double **value, const double ***layvalue = NULL);
 

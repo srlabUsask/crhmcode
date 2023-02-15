@@ -1,3 +1,21 @@
+/**
+* Copyright 2022, CRHMcode's Authors or Contributors
+* This file is part of CRHMcode.
+* 
+* CRHMcode is free software: you can redistribute it and/or modify it under 
+* the terms of the GNU General Public License as published by the Free Software 
+* Foundation, either version 3 of the License, or (at your option) any later 
+* version.
+* 
+* CRHMcode is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License along with 
+* CRHMcode. If not, see <https://www.gnu.org/licenses/>.
+* 
+**/
 //created by Manishankar Mondal
 
 #include <math.h>
@@ -517,7 +535,7 @@ void ClassCRHMCanopyClearingGap::run(void){
           double IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
           double Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
 
-          const float U = -1 * log(0.678) / (24 * 7 * Global::Freq / 24); // weekly dimensionless unloading coefficient -> to CRHM time interval
+          const double U = -1 * log(0.678) / (24 * 7 * Global::Freq / 24); // weekly dimensionless unloading coefficient -> to CRHM time interval
                                                        // 21Mar2022 correction: invert the term 24/Global::Freq, use unloading rate coefficient U = -log(c)/t for snow unloading determined by inverse function of c = e^(-Ut) = 0.678 based on Eq. 14 in Hedstrom and Pomeroy (1998)
   // determine whether canopy snow is unloaded:
 

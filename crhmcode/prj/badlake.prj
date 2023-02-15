@@ -1,5 +1,5 @@
 Description - to be added
-###### Version NON DLL 4.02  Creation: 6/5/2020 13:11
+###### Version NON DLL 4.02  Creation: 7/5/2022 13:50
 Dimensions:
 ######
 nhru 3
@@ -11,38 +11,38 @@ Macros:
 ######
 Observations:
 ######
-obs/Badlake73_76.obs
+C:\Users\jhs507\repos\crhmcode\crhmcode\obs\Badlake73_76.obs
 ######
 Dates:
 ######
 1973 1 1
-1976 1 1
+1974 1 1
 ######
 Modules:
 ######
 basin CRHM 02/24/12
-global CRHM 04/19/13
-obs CRHM 11/28/17
+global CRHM 12/19/19
+obs CRHM 04/17/18
 calcsun CRHM 10/01/13
 intcp CRHM 02/24/15
 pbsm CRHM 11/20/17
 albedo CRHM 08/11/11
 ebsm CRHM 01/18/16
-netall CRHM 03/22/16
-crack CRHM 09/03/08
-evap CRHM 09/26/13
-Soil CRHM 11/28/17
-Netroute CRHM 04/24/17
+netall CRHM 04/04/22
+crack CRHM 04/04/22
+evap CRHM 03/18/22
+Soil CRHM 04/05/22
+Netroute CRHM 04/05/22
 ######
 Parameters:
 ###### 'basin' parameters always first
-Shared basin_area <1e-06 to 1e+09>
+Shared basin_area <1E-06 to 1E+09>
 11.39 
-Shared hru_area <1e-06 to 1e+09>
+Shared hru_area <1E-06 to 1E+09>
 3.58 6.13 1.68 
 Shared hru_ASL <0 to 360>
 0 0 0 
-Shared hru_elev <0 to 1e+05>
+Shared hru_elev <0 to 1E+05>
 637 637 637 
 Shared hru_GSL <0 to 90>
 5 5 5 
@@ -51,7 +51,7 @@ Shared hru_lat <-90 to 90>
 Shared Ht <0.001 to 100>
 0.05 0.25 0.6 
 Shared inhibit_evap <0 to 1>
-0 0 0 
+1 1 1 
 Shared Sdmax <0 to 1000>
 10 5 1 
 Shared soil_rechr_max <0 to 350>
@@ -70,11 +70,11 @@ basin Loop_to
 ''
 basin RapidAdvance_to
 ''
-basin RUN_END <0 to 1e+05>
+basin RUN_END <0 to 1E+05>
 0 
-basin RUN_ID <-1e+08 to 1e+08>
+basin RUN_ID <-1E+08 to 1E+08>
 1 
-basin RUN_START <0 to 1e+05>
+basin RUN_START <0 to 1E+05>
 0 
 basin StateVars_to_Update
 ''
@@ -82,6 +82,8 @@ basin TraceVars
 ''
 crack fallstat <-1 to 100>
 46 54 44 
+crack infDays <0 to 20>
+6 6 6 
 crack Major <1 to 100>
 5 5 5 
 crack PriorInfiltration <0 to 1>
@@ -100,6 +102,8 @@ evap evap_type <0 to 2>
 0 0 0 
 evap F_Qg <0 to 1>
 0.05 0.05 0.05 
+evap inhibit_evap_User <0 to 1>
+0 0 0 
 evap rs <0 to 0.01>
 0 0 0 
 evap Zwind <0.01 to 100>
@@ -108,13 +112,13 @@ global Time_Offset <-12 to 12>
 0 0 0 
 Netroute gwKstorage <0 to 200>
 0 0 0 
-Netroute gwLag <0 to 1e+04>
+Netroute gwLag <0 to 1E+04>
 0 0 0 
 Netroute gwwhereto <-1000 to 1000>
 3 3 0 
 Netroute Kstorage <0 to 200>
 1 1 0.5 
-Netroute Lag <0 to 1e+04>
+Netroute Lag <0 to 1E+04>
 8 8 3 
 Netroute order <1 to 1000>
 1 2 3 
@@ -122,7 +126,7 @@ Netroute preferential_flow <0 to 1>
 0 0 0 
 Netroute runKstorage <0 to 200>
 0 0 0 
-Netroute runLag <0 to 1e+04>
+Netroute runLag <0 to 1E+04>
 0 0 0 
 Netroute Sd_ByPass <0 to 1>
 0 0 0 
@@ -130,7 +134,7 @@ Netroute soil_rechr_ByPass <0 to 1>
 0 0 0 
 Netroute ssrKstorage <0 to 200>
 0 0 0 
-Netroute ssrLag <0 to 1e+04>
+Netroute ssrLag <0 to 1E+04>
 0 0 0 
 Netroute whereto <0 to 1000>
 3 3 0 
@@ -152,7 +156,7 @@ obs HRU_OBS <1 to 100>
 1 1 1 
 obs lapse_rate <0 to 2>
 0.75 0.75 0.75 
-obs obs_elev <0 to 1e+05>
+obs obs_elev <0 to 1E+05>
 637 637 637 
 637 637 637 
 obs ppt_daily_distrib <0 to 1>
@@ -169,7 +173,7 @@ pbsm A_S <0 to 2>
 0.003 0.003 0.003 
 pbsm distrib <-10 to 10>
 1 1 0.1 
-pbsm fetch <300 to 1e+04>
+pbsm fetch <300 to 1E+04>
 1500 2000 2000 
 pbsm inhibit_bs <0 to 1>
 0 0 0 
@@ -210,6 +214,8 @@ Soil soil_withdrawal <1 to 4>
 2 2 2 
 Soil transp_limited <0 to 1>
 0 0 0 
+Soil Wetlands_scaling_factor <-1 to 1>
+1 1 1 
 ######
 Initial_State
 ######
@@ -217,12 +223,23 @@ Initial_State
 Final_State
 ######
 ######
+Summary_period
+######
+Daily
+######
 Display_Variable:
 ######
 pbsm SWE 1 2 3
 ######
 Display_Observation:
 ######
+obs ppt 1 _obs
+obs ppt 1 _Tot
+pbsm SWE 1 2 3 _Dlta
+######
+Log_All
+######
+Summary_Screen
 ######
 TChart:
 ######

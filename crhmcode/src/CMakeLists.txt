@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(crhm VERSION 1.2)
+project(crhm VERSION 1.3)
 
 #Project uses C++14 standard
 set(CMAKE_CXX_STANDARD 14)
