@@ -364,8 +364,6 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 	std::string S, s;
 	std::string SS;
 
-	SeriesCnt = 0;   // This needs to be initialized somewhere. This may not be the best place.
-
 	DataFile.open(OpenNamePrj.c_str());
 	if (!DataFile)
 	{
@@ -481,11 +479,8 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 				for (int ii = 0; ii < 3; ii++)
 					DataFile >> D[ii];
 
-<<<<<<< HEAD
 				DT = StandardConverterUtility::EncodeDate((int)D[0], (int)D[1], (int)D[2]); // check
-				StartDatePicker = DT;
-=======
->>>>>>> master
+				StartDate = DT;
 
 				int c;
 				while ((c = DataFile.peek(), c == 32)) {
@@ -510,11 +505,8 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 				for (int ii = 0; ii < 3; ii++)
 					DataFile >> D[ii];
 
-<<<<<<< HEAD
 				DT = StandardConverterUtility::EncodeDate((int)D[0], (int)D[1], (int)D[2]);
-				EndDatePicker = DT;
-=======
->>>>>>> master
+				EndDate = DT;
 
 				DataFile >> S;
 			}
@@ -1432,9 +1424,6 @@ void  CRHMmain::SqueezeParams(void) {
 
 	Global::MapPars.clear();
 	Global::MapPars = MapParsNew;
-<<<<<<< HEAD
-} // end of SqueezeParams
-=======
 
 	/*
 	* Update the internal module references to parameters

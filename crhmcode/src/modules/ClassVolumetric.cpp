@@ -104,11 +104,7 @@ void ClassVolumetric::run(void) {
             Volumetric[hh] = 0.0;
 
         if (soil_rechr_max[hh] > 0.0) // 03/15/2021: conditional statement to restrict divided by zero error
-<<<<<<< HEAD
             Volumetric_rechr[hh] = (soil_rechr[hh] / soil_rechr_max[hh] * (pore_space-wilt_pt) + wilt_pt) / 1000.0;  // 04/14/2020
-=======
-            Volumetric_rechr[hh] = (soil_rechr[hh] / soil_rechr_max[hh] * (SetSoilproperties[soil_type[hh]][3] - SetSoilproperties[soil_type[hh]][1]) + SetSoilproperties[soil_type[hh]][1]) / 1000.0;  // 04/14/2020, Aug 2, 2022 correction with term (SetSoilproperties[soil_type[hh]][3] - SetSoilproperties[soil_type[hh]][1])
->>>>>>> master
         else
             Volumetric_rechr[hh] = 0.0;
 
@@ -156,11 +152,7 @@ void ClassVolumetric::run(void) {
                 }
                 else
                 {
-<<<<<<< HEAD
-                    fallstat[hh] = 100.0;
-=======
                     fallstat[hh] = 100.0; // Aug 2, 2022 correction
->>>>>>> master
                 }
 
                 fallstat_V[hh] = fallstat[hh];

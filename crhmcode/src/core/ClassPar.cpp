@@ -603,35 +603,6 @@ ClassPar::~ClassPar()
 }
 
 //---------------------------------------------------------------------------
-ClassPar::~ClassPar()
-{
-
-	if (varType == TVar::Float)
-	{
-		for (int ii = 0; ii < lay; ++ii)
-			delete[] layvalues[ii];
-
-		delete[] layvalues; // Array [nhru] [lay]
-		values = NULL;
-	}
-	else if (varType == TVar::Int)
-	{
-		for (int ii = 0; ii < lay; ++ii)
-			delete[] ilayvalues[ii];
-
-		delete[] ilayvalues; // Array [nhru] [lay]
-		ilayvalues = NULL;
-		ivalues = NULL;
-	}
-	else if (varType == TVar::Txt)
-	{
-//		for (string s : Strings)
-//			delete s;
-		Strings->clear();
-		delete Strings;
-	}
-	varType = TVar::none;
-}
 
 
 bool ClassPar::ConsolidationCandidates(ClassPar* leftParameter, ClassPar* rightParameter)

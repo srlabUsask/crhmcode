@@ -267,13 +267,9 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassK_Estimate("K_Estimate", "04/06/22", LMODULE::ADVANCE)); // fixed 'put' descriptions
   DLLModules.AddModule(new ClassSnobalX("Snobal", "02/03/16", LMODULE::OBSOL));
   DLLModules.AddModule(new Classinterception("interception", "04/05/22", LMODULE::OBSOL));
-<<<<<<< HEAD
   DLLModules.AddModule(new Classlake("lake_evap", "08/02/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassQuickroute("Quickroute", "06/12/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassSWMM("SWMM", "06/13/22", LMODULE::ADVANCE));
-=======
-  DLLModules.AddModule(new Classlake("lake_evap", "08/02/22", LMODULE::ADVANCE));
->>>>>>> master
 
   if(!RELEASE)
   {
