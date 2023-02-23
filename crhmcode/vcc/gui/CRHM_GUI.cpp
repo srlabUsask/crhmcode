@@ -141,7 +141,7 @@ BOOL CCRHMGUIApp::InitInstance()
 			return FALSE;
 		AddDocTemplate(pDocTemplate);
 
-
+		/**
 		CString commandText = GetCommandLine();
 		std::string commandString = CT2A(commandText.GetString());
 		char* cmdLine = new char[commandString.length() + 1];
@@ -152,7 +152,25 @@ BOOL CCRHMGUIApp::InitInstance()
 		char ** argv;
 
 		argv = (char**) malloc(sizeof(char*) * numberOfArgs);
+		**/
 
+		LPCWSTR commandText = GetCommandLine();
+		LPWSTR* argvText;
+		int argc;
+
+		argvText = CommandLineToArgvW(commandText, &argc);
+
+		char ** argv;
+		argv = (char**)malloc(sizeof(char*) * argc);
+
+		for (int i = 0; i < argc; i++)
+		{
+			std::string tempStr = CT2A(argvText[i]);
+			argv[i] = (char*) malloc(sizeof(char) * tempStr.length());
+			strcpy(argv[i], tempStr.c_str());
+		}
+
+		/*
 		char * pos = strtok(cmdLine, " ");
 		while (pos != NULL)
 		{
@@ -160,6 +178,7 @@ BOOL CCRHMGUIApp::InitInstance()
 			pos = strtok(NULL, " ");
 			argc++;
 		}
+		*/
 
 		CRHMArguments* args = new CRHMArguments();
 
@@ -170,9 +189,13 @@ BOOL CCRHMGUIApp::InitInstance()
 			args->validate();
 		}
 
-		delete[] cmdLine;
+		LocalFree(argvText);
+		for (int i = 0; i < argc; i++)
+		{
+			free(argv[i]);
+		}
 		free(argv);
-	
+
 		if (args->get_project_name().length() != 0)
 		{
 			CRHMmain* model = new CRHMmain(args);
