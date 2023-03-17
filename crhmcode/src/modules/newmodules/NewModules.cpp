@@ -140,6 +140,7 @@
  ***********************************/
 
 #include "waterquality/ClassWQ_Soil.h"
+#include "waterquality/ClassWQ_SoilX.h"
 #include "waterquality/ClassWQ_Netroute.h"
 #include "waterquality/ClassWQ_pbsm.h"
 #include "waterquality/ClassWQ_Netroute_D.h"
@@ -158,6 +159,7 @@
 #include "waterquality/Class_lapse_rate_Monthly.h"
 #include "waterquality/ClassWQ_mass_conc.h"
 #include "waterquality/ClassSed_Soil.h"
+#include "waterquality/ClassSed_SoilX.h"
 #include "waterquality/ClassSed_Detachment.h"
 
 
@@ -288,8 +290,10 @@ void MoveModulesToGlobal(string DLLName)
     DLLModules.AddModule(new ClassWQ_Test_Hype("WQ_Test", "05/01/19", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_Substitute_Hype("WQ_Soil_BGC_substitute", "12/11/18", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_Soil("WQ_Soil", "05/08/19", LMODULE::PROTO));
+    DLLModules.AddModule(new ClassWQ_SoilX("WQ_SoilX", "05/08/19", LMODULE::PROTO));
 
     DLLModules.AddModule(new ClassSedSoil("Sed_Soil", "08/20/22", LMODULE::PROTO));
+    DLLModules.AddModule(new ClassSed_SoilX("Sed_SoilX", "08/20/22", LMODULE::PROTO));
     DLLModules.AddModule(new ClassSed_Detachment("Sed_Detachment", "08/20/22", LMODULE::PROTO));
 
     DLLModules.AddModule(new ClassWQ_Netroute("WQ_Netroute", "11/29/18", LMODULE::PROTO));

@@ -16,7 +16,10 @@ add_library(waterquality OBJECT
     ClassWQ_pbsm.cpp
     ClassWQ_pbsmSnobal.cpp
     ClassWQ_Soil.cpp
+    ClassWQ_SoilX.cpp
+
     ClassSed_Soil.cpp
+    ClassSed_SoilX.cpp
     ClassSed_Detachment.cpp
     ClassWQ_Substitute_Hype.cpp
     ClassWQ_Test_Hype.cpp
