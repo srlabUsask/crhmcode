@@ -358,7 +358,7 @@ void ClassModule::declvar(string variable, TDim dimen, string help,
 	string Orgvariable = variable;
 
 	if (Variation_Skip()) {
-		*value = NULL;
+//		*value = NULL;
 		return;
 	}
 
@@ -470,7 +470,7 @@ void ClassModule::declvar(string variable, TDim dimen, string help,
 	string Orgvariable = variable;
 
 	if (Variation_Skip()) {
-		*ivalue = NULL;
+//		*ivalue = NULL;
 		return;
 	}
 
@@ -1299,7 +1299,7 @@ long ClassModule::declgetvar(string source, string name, string units, const dou
 	ClassVar *newVar;
 
 	if (Variation_Skip()) {
-		*value = NULL;
+//		*value = NULL;
 		return(-1);
 	}
 
@@ -1374,7 +1374,7 @@ long ClassModule::declgetvar(string source, string name, string units, const lon
 	ClassVar *newVar;
 
 	if (Variation_Skip()) {
-		*value = NULL;
+//		*value = NULL;
 		return(-1);
 	}
 
@@ -2371,7 +2371,7 @@ long ClassModule::declputvar(string source, string name, string units, double **
 	long GetUnit;
 
 	if (Variation_Skip()) {
-		*value = NULL;
+//		*value = NULL;
 		return(-1);
 	}
 
@@ -2441,7 +2441,7 @@ long ClassModule::declputvar(string source, string name, string units, long **va
 	long GetUnit;
 
 	if (Variation_Skip()) {
-		*value = NULL;
+//		*value = NULL;
 		return(-1);
 	}
 
