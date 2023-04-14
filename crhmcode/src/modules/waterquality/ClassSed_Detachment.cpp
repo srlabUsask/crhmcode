@@ -21,6 +21,9 @@ ClassSed_Detachment* ClassSed_Detachment::klone(string name) const{
 
 
 void ClassSed_Detachment::decl(void) {
+
+  variation_set = VARIATION_ORG;
+
   declstatvar("conc_soil_rechr", TDim::NDEFN, "concentration in soil_rechr: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
       "(i_srp=3) SRP, (i_dop=4) DOP, (i_pp=5) PP, (i_oc=6) OC", "(mg/l)", &conc_soil_rechr, &conc_soil_rechr_lay, numsubstances); //
 
@@ -28,6 +31,7 @@ void ClassSed_Detachment::decl(void) {
       "(i_srp=3) SRP, (i_dop=4) DOP, (i_pp=5) PP, (i_oc=6) OC", "(mg/l)", &conc_soil_lower, &conc_soil_lower_lay, numsubstances);
 
   declgetvar("*", "runoff", "(mm)", &runoff);
+  declgetvar("*", "scf", "()", &scf);
 
   declgetvar("*", "soil_runoff", "(mm)", &soil_runoff);
   declputvar("*", "soil_runoff_cWQ", "(mm)", &soil_runoff_cWQ,&soil_runoff_cWQ_lay);
@@ -129,6 +133,17 @@ void ClassSed_Detachment::runoff_sed_by_erosion() {
 void ClassSed_Detachment::calculate_erosion(double& erodedSed) {
     double MobilisedSed = 0;
 
+// See comparison in Morgan, 2001
+
+// From Marshall and Palmer, suitable for North-western Europe
+//    double Kintensity_A = 8.95;
+//    double Kintensity_B = 8.44;
+
+// From Laws and Parsons, suitable for North America east of the Rocky Mountains
+// Also used in USLE (wischmeier and Smith, 1978)
+    double Kintensity_A = 11.87;
+    double Kintensity_B = 8.73;
+
     erodedSed = 0;
 
     double common_cropcover = 0.0f;
@@ -159,12 +174,14 @@ void ClassSed_Detachment::calculate_erosion(double& erodedSed) {
         double Rainfall_energy;
 
         if(net_rain[hh] > 5.0/Global::Freq)     // TODO: shorter timestep, other threshold?
-          Rainfall_energy = 8.95+8.44*log10(net_rain[hh]*(0.257+sin(2*3.14*((dayno-70.)/365.))*0.09)*2.0);
+        // Taken from HYPE
+//          Rainfall_energy = 8.95+8.44*log10(net_rain[hh]*(0.257+sin(2*3.14*((dayno-70.)/365.))*0.09)*2.0);
+          Rainfall_energy = Kintensity_A + Kintensity_B*log10(net_rain[hh]);
         else
           Rainfall_energy = 0.0;
 
         Rainfall_energy = net_rain[hh] * Rainfall_energy;        // J/m2
-        double RainMobilisedSed = Rainfall_energy * (1.0 - common_cropcover) * erodibility[hh];  // g/m2
+        double RainMobilisedSed = Rainfall_energy * (1.0 - common_cropcover) * (1.0-scf[hh]) * erodibility[hh];  // g/m2
 
         MobilisedSed += RainMobilisedSed;   // Mobilisation due to rainfall
       }
@@ -175,7 +192,7 @@ void ClassSed_Detachment::calculate_erosion(double& erodedSed) {
 // Modified (PRL)
 // TODO: temporarily disabled factors for testing. reimplement (PRL)
 //       MobilisedSed = ((pow(runoff[hh] * 365.0, sreroexp)) * (1.0 - common_groundcover) * (1.0/(0.5 * cohesion[hh])) * sin(hru_GSL[hh] / 100.)) / 365.0; // g/m2
-        double FlowMobilisedSed = ((pow(runoff[hh], sreroexp[hh])) * (1.0 - common_groundcover) * (1.0/(0.5 * cohesion[hh])) ); // g/m2
+        double FlowMobilisedSed = ((pow(runoff[hh], sreroexp[hh])) * (1.0 - common_groundcover) * (1.0-scf[hh]) * (1.0/(0.5 * cohesion[hh])) ); // g/m2
         MobilisedSed += FlowMobilisedSed;   // Mobilisation due to surface flow
     }
 

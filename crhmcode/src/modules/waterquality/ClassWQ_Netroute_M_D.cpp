@@ -240,7 +240,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declputvar("*", "cum_redirected_residual", "(mm*km^2/int)", &cum_redirected_residual);
 
-    declputvar("*", "cum_redirected_residual_mWQ", "(mg/l * mm*km^2/int)", &cum_redirected_residual_mWQ, &cum_redirected_residual_mWQ_lay);
+//    declputvar("*", "cum_redirected_residual_mWQ", "(mg/l * mm*km^2/int)", &cum_redirected_residual_mWQ, &cum_redirected_residual_mWQ_lay);
 
     declputvar("*", "gw", "(mm)", &gw);
 
@@ -811,7 +811,7 @@ void ClassWQ_Netroute_M_D::run(void) {
                             Amount_mWQ = 0.0;
                         }
                         else if (!soil_rechr_ByPass[To] && Amount > 0.0) { // assumes both Amount and Amount_mWQ divided by hru_area
-                            if (soil_rechr[To] + Amount >= soil_rechr_max[To]) { // units (mm*km^2/int)
+                            if (soil_rechr[To] + Amount >= soil_rechr_max[To]) { // units (mm/int)
                                 double Excess = soil_rechr[To] + Amount - soil_rechr_max[To];
                                 double Free = Amount - Excess;
 
@@ -868,7 +868,7 @@ void ClassWQ_Netroute_M_D::run(void) {
                         }
                         else if (!Sd_ByPass[To] && Amount > 0.0) {
 
-                            if (Sd[To] + Amount >= Sdmax[To]) { // units (mm*km^2/int)
+                            if (Sd[To] + Amount >= Sdmax[To]) { // units (mm/int)
                                 double Excess = Sd[To] + Amount - Sdmax[To];
                                 double Free = Amount - Excess;
 

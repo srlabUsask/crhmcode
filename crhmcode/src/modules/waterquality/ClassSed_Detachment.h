@@ -34,6 +34,7 @@ class ClassSed_Detachment : public ClassModule {
     double **conc_soil_lower_lay{ NULL };
 
     const double *runoff{ NULL };
+    const double *scf{ NULL };
 
     const double *soil_runoff{ NULL };
     double *soil_runoff_cWQ{ NULL };
