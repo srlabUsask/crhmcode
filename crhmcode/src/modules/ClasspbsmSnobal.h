@@ -28,6 +28,7 @@ ClasspbsmSnobal(string Name, string Version = "undefined", LMODULE Lvl = LMODULE
 double hru_u_{0.0};
 
 // declared variables
+double *SWE_max{ NULL };
 double *Subl{ NULL };
 double *Drift{ NULL };     // HRU composite drift
 double *SublH{ NULL };

@@ -219,7 +219,9 @@ void ClassSoilX::decl(void) {
 
     declparam("NO_Freeze", TDim::NHRU, "[0]", "0", "1", "when equal to 1, keeps soil from freezing.", "()", &NO_Freeze);
 
-    declgetparam("*", "inhibit_evap", "()", &inhibit_evap); // used since no declgetparam defined
+// Changed (PRL)
+//    declgetparam("*", "inhibit_evap", "()", &inhibit_evap); // used since no declgetparam defined
+    decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit.", "()", &inhibit_evap);
 
 
     declputvar("*", "hru_actet", "(mm/int)", &hru_actet);

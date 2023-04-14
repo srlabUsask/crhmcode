@@ -328,6 +328,7 @@ void ClassXG::init(void) {
     }
 
     if(rechrmax != 0.0 || soilmax != 0.0){
+      printf("RCHR=%f TTL=%f %f %f %f\n", rechrmax, soilmax, XG_max_lay[0][0], soil_rechr_max[0], soil_moist_max[0]);
       string S = string("'") + Name + " (XG)' too few layers (nlay) to handle soil_max in hru = " + to_string(hh+1).c_str();
       CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
       LogError(TExcept);
@@ -396,9 +397,9 @@ void ClassXG::run(void) {
 
     TrigAcc[hh] += B[hh];
 
-    t_trend[hh] -= t_trend[hh]/192;
+    t_trend[hh] -= t_trend[hh]/ 192;
 
-    t_trend[hh] += B[hh]/192;
+    t_trend[hh] += B[hh]/ 192;
 
     if(getstep()%Global::Freq == 0 || Global::Freq == 1){ // end of every day
 

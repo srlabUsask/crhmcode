@@ -98,7 +98,6 @@ add_library(modules OBJECT
     Classwinter_meltflag.cpp
     ClassXG.cpp
     ClassXGAyers.cpp
-
 )
 
 add_dependencies(modules newmodules waterquality)

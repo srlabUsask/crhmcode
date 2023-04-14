@@ -41,11 +41,9 @@ void ClassPrairieInfil::decl(void) {
 
   Description = "'Handles frozen soil infiltration using Granger et al. 1984; Gray et al., 1986 and Ayers, 1959 for unfrozen soil.'";
 
-  declvar("snowinfil", TDim::NHRU, "interval snowmelt infiltration", "(mm/int)", &snowinfil);
+  variation_set = VARIATION_ORG;   // Appplies to all variations
 
   declstatdiag("cumsnowinfil", TDim::NHRU, "cumulative snowmelt infiltration", "(mm)", &cumsnowinfil);
-
-  declvar("meltrunoff", TDim::NHRU, "interval melt runoff", "(mm/int)", &meltrunoff);
 
   declstatdiag("cummeltrunoff", TDim::NHRU, "cumulative melt runoff", "(mm)", &cummeltrunoff);
 
@@ -93,10 +91,15 @@ void ClassPrairieInfil::decl(void) {
 
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmeltD);
 
+// This is sort of tricky (daily vs interval). Apologies. (PRL)
   variation_set = VARIATION_0;
+  declvar("snowinfil", TDim::NHRU, "interval snowmelt infiltration", "(mm/d)", &snowinfil);
+  declvar("meltrunoff", TDim::NHRU, "daily melt runoff", "(mm/d)", &meltrunoff);
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmelt);
 
   variation_set = VARIATION_1;
+  declvar("snowinfil", TDim::NHRU, "interval snowmelt infiltration", "(mm/int)", &snowinfil);
+  declvar("meltrunoff", TDim::NHRU, "interval melt runoff", "(mm/int)", &meltrunoff);
   declgetvar("*",  "snowmelt_int", "(mm/int)", &snowmelt);
 
 }
@@ -154,29 +157,38 @@ void ClassPrairieInfil::init(void) {
 
 
 void ClassPrairieInfil::applyCrack(double RainOnSnow_int) {
+
+      double snowmelt_int;
+
+      if (variation == VARIATION_0) {
+        snowmelt_int = snowmelt[hh] / Global::Freq;
+      } else {
+        snowmelt_int = snowmelt[hh];
+      }
+
       // ice lens forms, if next day below -10 limited
       // unlimited - (fallstat[hh].eq.0.0)
       if (fallstat[hh] <= 0.0)
       {
-          snowinfil[hh] = snowmelt[hh];
+          snowinfil[hh] = snowmelt_int;
       }
 
 
       // limited - (0.0 < fallstat[hh] < 100.0)
       if ((fallstat[hh] > 0.0) && (fallstat[hh] < 100.0) )
       {
-        if (snowmelt[hh] >= Major[hh]/24 || crackstat[hh] >= 1)
+        if (snowmelt_int >= Major[hh]/Global::Freq || crackstat[hh] >= 1)
         {
-          if (snowmelt[hh] >= Major[hh]/24)
+          if (snowmelt_int >= Major[hh]/Global::Freq)
           {
-            snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
+            snowinfil[hh] = snowmelt_int * Xinfil[0][hh];
 
             if (snowinfil[hh] > Xinfil[1][hh])
             {
                 snowinfil[hh] = Xinfil[1][hh];
             }
           } else {
-            snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
+            snowinfil[hh] = snowmelt_int * Xinfil[0][hh];
           }
 
           if (crackstat[hh] > infDays[hh])
@@ -188,7 +200,7 @@ void ClassPrairieInfil::applyCrack(double RainOnSnow_int) {
         {
             if (PriorInfiltration[hh])
             {
-                snowinfil[hh] = snowmelt[hh]; // zero by default
+                snowinfil[hh] = snowmelt_int; // zero by default
             }
 
         }

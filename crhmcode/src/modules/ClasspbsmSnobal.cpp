@@ -71,6 +71,8 @@ void ClasspbsmSnobal::decl(void) {
 
   variation_set = VARIATION_ORG;
 
+  declstatvar("SWE_max", TDim::NHRU, "snow water equivalent seasonal maximum", "(mm)", &SWE_max);
+
   declvar("hru_subl", TDim::NHRU, "interval sublimation", "(mm/int)", &Subl);
 
   declvar("hru_drift", TDim::NHRU, "interval composite transport", "(mm/int)", &Drift);
@@ -166,7 +168,7 @@ void ClasspbsmSnobal::init(void) {
 void ClasspbsmSnobal::run(void) {
 
   double Znod, Ustar, Ustn, E_StubHt, Lambda, Ut, Uten_Prob;
-  double SumDrift, total, SWE_Max, transport;
+  double SumDrift, total, transport;
 
   for (hh = 0; chkStruct(); ++hh) {
 
@@ -272,25 +274,25 @@ void ClasspbsmSnobal::run(void) {
       for (long hh = LastN + 1; chkStruct(hh, nn+1); ++hh) {
 
         if(Ht[hh] > z_s[hh])
-          SWE_Max = SWE[hh] + rho[hh]*(Ht[hh]-z_s[hh]); // not filled
+          SWE_max[hh] = SWE[hh] + rho[hh]*(Ht[hh]-z_s[hh]); // not filled
         else
-          SWE_Max = SWE[hh]; // filled or over filled. Wait for snow transport
+          SWE_max[hh] = SWE[hh]; // filled or over filled. Wait for snow transport
 
-        if(SWE_Max <= 0.0)
-           SWE_Max = Ht[hh];
+        if(SWE_max[hh] <= 0.0)
+           SWE_max[hh] = Ht[hh];
 
         if(hh == nn) { // handle last HRU
           if(distrib[nn] > 0){
             double In = SumDrift/hru_basin[hh]; // remaining drift
-            if(SWE_Max > SWE[hh] + In){ // fill snowpack, remainder leaves basin
+            if(SWE_max[hh] > SWE[hh] + In){ // fill snowpack, remainder leaves basin
               Drift_in[hh] = In; // can handle all
               cumDriftIn[hh] += Drift_in[hh];
               transport = 0.0;
             }
-            else if(SWE_Max > SWE[hh]){ // cannot handle all
-              Drift_in[hh] = SWE_Max - SWE[hh];
+            else if(SWE_max[hh] > SWE[hh]){ // cannot handle all
+              Drift_in[hh] = SWE_max[hh] - SWE[hh];
               cumDriftIn[hh] += Drift_in[hh];
-              transport -= (In -(SWE_Max - SWE[hh]))*hru_basin[hh];
+              transport -= (In -(SWE_max[hh] - SWE[hh]))*hru_basin[hh];
             }
             else // zero or -ve - happens during melt??
               transport = SumDrift;
@@ -306,17 +308,17 @@ void ClasspbsmSnobal::run(void) {
           BasinSnowLoss[0] += (transport + Drift_out[hh]*hru_basin[hh]);
           cumBasinSnowLoss[0] += (transport + Drift_out[hh]*hru_basin[hh]);
         }
-        else if(SWE_Max > SWE[hh] &&  distrib[hh] > 0.0) {
+        else if(SWE_max[hh] > SWE[hh] &&  distrib[hh] > 0.0) {
 // handle intermediate HRUs with available storage and distrib > 0
           total = 0.0;
           for (long jj = hh; chkStruct(jj, nn+1); jj++) // calculate denominator
             total += fabs(distrib[jj]);
 // determine contribution and scale
           transport = SumDrift*fabs(distrib[hh])/total/hru_basin[hh];
-          if(SWE_Max > SWE[hh] + transport) // sufficient capacity
+          if(SWE_max[hh] > SWE[hh] + transport) // sufficient capacity
             Drift_in[hh] += transport;
-          else if(SWE_Max > SWE[hh]){
-            transport = SWE_Max - SWE[hh];  // insufficient capacity
+          else if(SWE_max[hh] > SWE[hh]){
+            transport = SWE_max[hh] - SWE[hh];  // insufficient capacity
             Drift_in[hh] += transport;
           }
           else
