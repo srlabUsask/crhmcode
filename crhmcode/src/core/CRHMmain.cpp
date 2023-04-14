@@ -2456,6 +2456,11 @@ MMSData *  CRHMmain::RunClick2Start()
 				mmsData[ii] = thisVar->values + (dim - 1);
 			}
 			else {
+				if (lay <= 0) {
+			        string S = "Display_Variable: "+thisVar->name+" must have a layer specified, I.e. HRU,LAY";;
+					CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
+					LogError(TExcept);
+				}
 				mmsData[ii] = (thisVar->layvalues[lay - 1]) + (dim - 1);
 			}
 		}
@@ -2465,6 +2470,7 @@ MMSData *  CRHMmain::RunClick2Start()
 				mmsDataL[ii] = thisVar->ivalues + (dim - 1);
 			}
 			else {
+				assert(lay > 0);
 				mmsDataL[ii] = (thisVar->ilayvalues[lay - 1]) + (dim - 1);
 			}
 		}

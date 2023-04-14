@@ -64,9 +64,15 @@ ClassMuskingum::ClassMuskingum(const double* inVar, double* outVar, const double
 						to_string(c2[hh]).c_str() + "  " + 
 						to_string(k[hh]).c_str() + "  " + 
 						to_string(X_M[hh]).c_str() + "  ";
-            CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
-            LogError(TExcept);
-            throw TExcept;
+			// Raising an exception here would put the module into an undefined state maybe					
+//            CRHMException TExcept(S.c_str(), TExcept::WARNING);
+//            LogError(TExcept);
+			printf(S.c_str());
+
+
+//            CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
+//            LogError(TExcept);
+//            throw TExcept;
         }
 
 		ilag[hh] = (long)(max<double>(lag[hh], 0.0) / 24.0 * Global::Freq + 1.1); // =1 for lag of zero

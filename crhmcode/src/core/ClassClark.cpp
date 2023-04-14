@@ -57,9 +57,14 @@ ClassClark::ClassClark(const double* inVar, double* outVar, const double* kstora
 						to_string(c01[hh]).c_str() + "  " +
 						to_string(c2[hh]).c_str() + "  " +
 						to_string(kstorage[hh]).c_str() + "  ";
-            CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
-            LogError(TExcept);
-            throw TExcept;
+			// Raising an exception here would put the module into an undefined state maybe					
+//            CRHMException TExcept(S.c_str(), TExcept::WARNING);
+//            LogError(TExcept);
+			printf(S.c_str());
+
+//            CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
+//            LogError(TExcept);
+//            throw TExcept;
         }
 
 		ilag[hh] = (long)(max<double>(lag[hh], 0.0) / 24.0 * Global::Freq + 1.1); // =1 for lag of zero
