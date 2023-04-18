@@ -69,6 +69,7 @@ public:
 
 	// declared parameters
 	const long* Ag_YearStart{ NULL };
+	const long* disable_manfertres{ NULL };
 
 	// put parameters
 	const double* Htmax{ NULL };

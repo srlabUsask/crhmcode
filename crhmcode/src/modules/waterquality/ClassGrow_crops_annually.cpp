@@ -171,6 +171,9 @@ void ClassGrow_crops_annually::decl(void) {
     declputparam("*", "Ht", "(m)", &Ht);
 
     variation_set = VARIATION_ORG;
+
+    declparam("disable_manfertres", TDim::NHRU, "[0]", "0", "1", "Disable manure,fertilization,residuals (false=0, true=1)", "()", &disable_manfertres);
+
 }
 
 void ClassGrow_crops_annually::init(void) {
@@ -350,6 +353,9 @@ void ClassGrow_crops_annually::run(void) {
     if (nstep == 1) { // beginning of every day
         for (hh = 0; chkStruct(); ++hh) {
             if (variation == VARIATION_1 || variation == VARIATION_3) {
+                if (disable_manfertres[hh])
+                    continue;
+
                 if (Ag_YearStart[hh] == today) {
                     //SecondDown_fert[hh] = 0;
                     //SecondDown_man[hh] = 0;
