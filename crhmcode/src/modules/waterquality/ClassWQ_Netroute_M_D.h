@@ -191,8 +191,8 @@ public:
 	const double* soil_ssr_conc{ NULL };
 	const double** soil_ssr_conc_lay{ NULL };
 	const double* soil_runoff{ NULL };
-	const double* soil_runoff_cWQ{ NULL };
-	const double** soil_runoff_cWQ_lay{ NULL };
+	const double* soil_runoff_mWQ{ NULL };    // (g/int)
+	const double** soil_runoff_mWQ_lay{ NULL };   // (g/int)
 
 	// variable puts
 	double* Sd{ NULL };

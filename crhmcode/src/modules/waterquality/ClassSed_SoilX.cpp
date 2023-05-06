@@ -5,7 +5,7 @@
 #include <bitset>
 #include <algorithm>
 
-#include "ClassSed_Soil.h"
+#include "ClassSed_SoilX.h"
 #include "../../core/GlobalDll.h"
 #include "../../core/ClassCRHM.h"
 //#include "newmodules/SnobalDefines.h"
@@ -13,16 +13,18 @@
 
 using namespace CRHM;
 
-ClassSedSoil* ClassSedSoil::klone(string name) const {
-    return new ClassSedSoil(name);
+ClassSed_SoilX* ClassSed_SoilX::klone(string name) const {
+    return new ClassSed_SoilX(name);
 }
 
-void ClassSedSoil::decl(void) {
+void ClassSed_SoilX::decl(void) {
 
     Description = "'Handles soil moisture throughout the year.' \
                  'Standard version,' \
                  'Version with Culvert limited runoff.'\
                  'Version with Weir limited runoff.'";
+
+    depths_size = 2; // handles recharge and lower layers
 
     variation_set = VARIATION_1;
 
@@ -155,6 +157,12 @@ void ClassSedSoil::decl(void) {
 
     declvar("cum_Sd_evap", TDim::NHRU, "cumulative Sd evap over HRU.", "(mm)", &cum_Sd_evap);
 
+// vvvvvvvvvvv    Additions for XG algorithm
+    declvar("depth_layers", TDim::NDEFN, "thickness of soil layer.", "(m)", &depth_layers, &depth_layers_lay, depths_size);
+
+    declvar("thaw_layers", TDim::NDEFN, "fraction of layer thawed.", "()", &thaw_layers, &thaw_layers_lay, depths_size);
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
     declvar("soil_gw", TDim::NHRU, "Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mm/int)", &soil_gw);
     declvar("soil_gw_conc", TDim::NDEFN, "Concentration: Portion of excess soil water from a HRU that enters groundwater reservoirs.", "(mg/l)", &soil_gw_conc, &soil_gw_conc_lay, numsubstances);
 
@@ -190,7 +198,7 @@ void ClassSedSoil::decl(void) {
     declvar("soil_ssr_D", TDim::NHRU, "daily accumulation of soil_ssr.", "(mm/d)", &soil_ssr_D);
 
     declvar("soil_runoff", TDim::NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
-    declvar("soil_runoff_mWQ", TDim::NDEFN, "Concentration: Portion of excess soil water from a HRU to runoff.", "(g/int)", &soil_runoff_mWQ, &soil_runoff_mWQ_lay, numsubstances);
+    declvar("soil_runoff_cWQ", TDim::NDEFN, "Concentration: Portion of excess soil water from a HRU to runoff.", "()", &soil_runoff_cWQ, &soil_runoff_cWQ_lay, numsubstances);
 
     declstatdiag("cum_soil_runoff", TDim::NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
@@ -268,6 +276,18 @@ void ClassSedSoil::decl(void) {
 
     declparam("soil_ssr_runoff", TDim::NHRU, "[1]", "0", "1", "soil column excess to interflow(ssr)/runoff (and possibly Sd)  interflow-0/runoff-1.", "()", &soil_ssr_runoff);
 
+// vvvvvvvvvvvvvvvvv Added for XR
+
+    declparam("porosity_upper", TDim::NHRU, "[0.5]", "0.0", "1.0", "upper soil porosity (recharge layer).", "(m^3/m^3)", &porosity_upper);
+
+    declparam("porosity_lower", TDim::NHRU, "[0.5]", "0.0", "1.0", "lower soil porosity.", "(m^3/m^3)", &porosity_lower);
+
+//    declparam("evap_from_runoff", TDim::NHRU, "[0]", "0", "1", "when equal to 1, allow evaporation from runoff.", "()", &evap_from_runoff);
+
+    declparam("NO_Freeze", TDim::NHRU, "[0]", "0", "1", "when equal to 1, keeps soil from freezing.", "()", &NO_Freeze);
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
     decldiagparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evapatation, 1 -> inhibit.", "()", &inhibit_evap);
 
     decldiagparam("Wetlands_scaling_factor", TDim::NHRU, "[1.0]", "-1.0", "1.0", "Scaling ratio for available evaporation from wetland: no scaling applied when default value 1; using Sd/(Sd + soil_moist) as scale ratio when -1<= Wetlands_scaling_factor <0; using Wetlands_scaling_factor value as scale ratio when 0<= Wetlands_scaling_factor <1", "()", &Wetlands_scaling_factor); // Modification 02/01/2021
@@ -277,6 +297,15 @@ void ClassSedSoil::decl(void) {
 
     declputvar("*", "hru_cum_actet", "(mm)", &hru_cum_actet);
 
+// vvvvvvvvvvvvvvvvv Added for XG
+
+    declgetvar("*", "Zdt", "(m)", &Zdt);
+
+    declgetvar("*", "Zdf", "(m)", &Zdf);
+
+    declgetvar("*", "Zd_front", "(m)", &Zd_front, &Zd_front_array);
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     evapDiv = declgetvar("*", "hru_evap", "(mm/int)", &hru_evap);
 
@@ -293,7 +322,7 @@ void ClassSedSoil::decl(void) {
     meltrunoffDiv = declgetvar("*", "meltrunoff", "(mm/int)", &meltrunoff);
 }
 
-void ClassSedSoil::init(void) {
+void ClassSed_SoilX::init(void) {
 
     nhru = getdim(TDim::NHRU);
 
@@ -400,7 +429,7 @@ void ClassSedSoil::init(void) {
             soil_gw_conc_lay[Sub][hh] = 0.0;
             soil_ssr_conc_lay[Sub][hh] = 0.0;
             rechr_ssr_conc_lay[Sub][hh] = 0.0;
-            soil_runoff_mWQ_lay[Sub][hh] = 0.0;
+            soil_runoff_cWQ_lay[Sub][hh] = 0.0;
         }
 
 
@@ -449,10 +478,20 @@ void ClassSedSoil::init(void) {
             } //while
         }
 
+        // vvvvvvvvvvv    Additions for XG algorithm
+
+        depth_layers_lay[0][hh] = soil_rechr_max[hh] / porosity_upper[hh] / 1000.0;
+        depth_layers_lay[1][hh] = (soil_moist_max[hh] - soil_rechr_max[hh]) / porosity_lower[hh] / 1000.0;
+
+        thaw_layers_lay[0][hh] = 1.0; // unfrozen
+        thaw_layers_lay[1][hh] = 1.0; // unfrozen
+
+        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
     }
 }
 
-void ClassSedSoil::run(void) {
+void ClassSed_SoilX::run(void) {
 
     double excs, condense;
     double et;
@@ -501,6 +540,8 @@ void ClassSedSoil::run(void) {
         else
             scf[hh] = 0.0;
 
+        // Addition for XG because XG includes a second input to soil_runoff
+        soil_runoff[hh] = 0.0;
 
         if (snowinfilDiv == 1) // interval value
             snowinfil_buf[hh] = snowinfil[hh];
@@ -522,7 +563,45 @@ void ClassSedSoil::run(void) {
         if (evapDiv == 1) // interval value
             hru_evap_buf[hh] = hru_evap[hh];
 
-        if (nstep == 1) { // beginning of every day
+
+        // vvvvvvvvvvv    Additions for XG algorithm
+
+        if (nstep == 0) {
+
+            for (long ll = 0; ll < depths_size; ++ll)
+                if (NO_Freeze[hh])
+                    thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
+                else
+                    thaw_layers_lay[ll][hh] = 0.0; // all frozen
+
+            if (soil_moist_max[hh] > 0.0 && !NO_Freeze[hh] && Zd_front_array[0][hh] > 0.0) {
+
+                double layer_start = 0.0; // start of current layer
+                double layer_end = 0.0; // end of current layer
+                long ll = 0;
+
+                while (ll < depths_size && Zdt[hh] > 0.0) {
+                    layer_end += depth_layers_lay[ll][hh];
+                    if (Zdt[hh] >= layer_end) { // frozen to bottom of layer
+                        thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
+                        layer_start = layer_end;
+                        ++ll;
+                    }
+                    else { // no
+                        if (Zdt[hh] >= layer_start && Zdt[hh] < layer_end) { // in layer ?
+                            thaw_layers_lay[ll][hh] = (Zdt[hh] - layer_start) / depth_layers_lay[ll][hh];
+                            ++ll;
+                            break;
+                        }
+                    } // else
+                } // while ll
+            }
+        } // finished daily upgrade
+
+        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+        if (nstep == 1) { // beginning of every day   // FIXME: is nstep = 0 or 1 at beggining of day? (PRL)
             soil_runoff_D[hh] = 0.0;
             soil_ssr_D[hh] = 0.0;
             soil_gw_D[hh] = 0.0;
@@ -552,6 +631,16 @@ void ClassSedSoil::run(void) {
 
             double potential = infil[hh] + snowinfil_buf[hh] + condense;
 
+            // vvvvvvvvvvv    Additions for XG algorithm
+
+            double possible = thaw_layers_lay[0][hh] * (soil_rechr_max[hh] - soil_rechr[hh]);
+            if ((!NO_Freeze[hh]) && (possible < potential)) {
+                soil_runoff[hh] = potential - possible;
+                potential = possible;
+            }
+
+            // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
             soil_rechr[hh] = soil_rechr[hh] + potential;
 
             if (soil_rechr[hh] > soil_rechr_max[hh]) {
@@ -577,6 +666,14 @@ void ClassSedSoil::run(void) {
 
             if (!inhibit_evap[hh]) { // only when no snowcover
                 rechr_ssr[hh] = soil_rechr[hh] / soil_rechr_max[hh] * rechr_ssr_K[hh] / Global::Freq;
+
+                // vvvvvvvvvvv    Additions for XG algorithm
+
+                if (rechr_ssr[hh] > soil_rechr[hh] * thaw_layers_lay[0][hh])
+                    rechr_ssr[hh] = soil_rechr[hh] * thaw_layers_lay[0][hh];
+
+                // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
                 if (rechr_ssr[hh] > soil_rechr[hh])
                     rechr_ssr[hh] = soil_rechr[hh];
 
@@ -589,7 +686,10 @@ void ClassSedSoil::run(void) {
                 cum_rechr_ssr[hh] += rechr_ssr[hh];
             }
 
-            double s2gw_k = soil_gw_K[hh] / Global::Freq;
+            //****** Version without XG:
+            // double s2gw_k = soil_gw_K[hh] / Global::Freq;
+            //****** Modification for XG algorithm
+            double s2gw_k = soil_gw_K[hh] / Global::Freq * thaw_layers_lay[1][hh]; // regulate by amount of unfrozen lower layer
 
             //  Handle excess to gw
 
@@ -606,8 +706,12 @@ void ClassSedSoil::run(void) {
             //  Handle excess to interflow or runoff
 
             if (!soil_ssr_runoff[hh] && excs > 0.0) { // to interflow
-                soil_ssr[hh] += excs;
-                excs = 0.0;
+// Previous version:
+            //  soil_ssr[hh] += direct_excs[hh];
+              //  excs = 0.0;
+// Modified for XG:
+                soil_ssr[hh] += excs * thaw_layers_lay[1][hh];
+                excs = excs * (1.0 - thaw_layers_lay[1][hh]);
             }
         }
         else { // soil_moist_max <= 0.0, i.e. Pond
@@ -616,7 +720,10 @@ void ClassSedSoil::run(void) {
 
         double runoff_to_Sd = 0.0;
 
-        soil_runoff[hh] = meltrunoff_buf[hh] + runoff_buf[hh] + excs + redirected_residual[hh] / hru_area[hh]; // last term (mm*km^2/int)
+        // Previous version:
+        //  soil_runoff[hh] = meltrunoff_buf[hh] + runoff_buf[hh] + excs + redirected_residual[hh] / hru_area[hh]; // last term (mm*km^2/int)
+        // Modified for XG:
+        soil_runoff[hh] += meltrunoff_buf[hh] + runoff_buf[hh] + excs + redirected_residual[hh] / hru_area[hh]; // last term (mm*km^2/int)
 
         cum_redirected_residual[hh] += redirected_residual[hh];
 
@@ -822,7 +929,11 @@ void ClassSedSoil::run(void) {
                 Sd[hh] = 0.0;
         }
 
-        double s2ssr_k = lower_ssr_K[hh] / Global::Freq;
+        // Previous version:
+        //  double s2ssr_k = lower_ssr_K[hh] / Global::Freq;
+        // Modified for XG:
+        double s2ssr_k = lower_ssr_K[hh] / Global::Freq * thaw_layers_lay[1][hh]; // regulate by amount of unfrozen lower layer
+
         if (s2ssr_k > 0.0) {
             double avail = soil_moist[hh] - soil_rechr[hh];
             if (s2ssr_k >= avail)
@@ -1040,7 +1151,7 @@ void ClassSedSoil::run(void) {
     }
 }
 
-void ClassSedSoil::finish(bool good) {
+void ClassSed_SoilX::finish(bool good) {
 
     double Allcum_soil_runoff = 0.0;
     double Allcum_soil_ssr = 0.0;

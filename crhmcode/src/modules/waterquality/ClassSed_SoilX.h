@@ -1,16 +1,21 @@
 #include "../../core/ClassModule.h"
 #include "WQ_CRHM.h"
 
+#ifndef CLASSSED_SOILX
+#define CLASSSED_SOILX
 
-class ClassSedSoil : public ClassModule {
+class ClassSed_SoilX : public ClassModule {
 public:
 
-ClassSedSoil(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassSed_SoilX(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
 long snowinfilDiv{0};
 long meltrunoffDiv{0};
 long runoffDiv{0};
 long evapDiv{0};
+
+// Added for XG
+long depths_size{0}; // handles recharge and lower layers
 
 // declared observation variables
 
@@ -62,8 +67,8 @@ double* rechr_ssr_conc{ NULL };
 double** rechr_ssr_conc_lay{ NULL };
 
 double *soil_runoff{ NULL };
-double* soil_runoff_mWQ{ NULL };    // (g/int)
-double** soil_runoff_mWQ_lay{ NULL };   // (g/int)
+double* soil_runoff_cWQ{ NULL };
+double** soil_runoff_cWQ_lay{ NULL };
 
 double *cum_soil_ssr{ NULL };
 double *cum_rechr_ssr{ NULL };
@@ -127,6 +132,16 @@ double *runoff_buf{ NULL };
 double *meltrunoff_buf{ NULL };
 double *hru_evap_buf{ NULL };
 
+// vvvvvvvvvv  Added for XG
+
+double *thaw_layers{ NULL };
+double **thaw_layers_lay{ NULL };
+double *depth_layers{ NULL };
+double **depth_layers_lay{ NULL };
+double *thaw_all{ NULL };
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 // declared parameters
 const double *Sdmax{ NULL };
 const double *Sdinit{ NULL };
@@ -154,6 +169,14 @@ const double *culvert_diam{ NULL };
 const double *culvert_water_Dmax{ NULL };
 const double *number_culverts{ NULL };
 
+// vvvvvvvvvv  Added for XG
+
+	const double *porosity_upper{ NULL };
+	const double *porosity_lower{ NULL };
+	const double *evap_from_runoff{ NULL };
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 const double *weir_crest{ NULL };
 const double *weir_coefficient{ NULL };
 const double *weir_mult{ NULL };
@@ -171,6 +194,13 @@ const long *culvert_type{ NULL };
 const long *cov_type{ NULL };
 const long *transp_limited{ NULL };
 const long *soil_ssr_runoff{ NULL };
+
+// vvvvvvvvvv  Added for XG
+
+	const long *NO_Freeze{ NULL };
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 const long *inhibit_evap{ NULL };
 const long *soil_withdrawal{ NULL };
 const long **soil_withdrawal_Tables{ NULL };
@@ -181,6 +211,15 @@ const double *snowinfil{ NULL };
 const double *meltrunoff{ NULL }; // frozen melt runoff
 const double *runoff{ NULL };     // liquid runoff
 const double *hru_evap{ NULL };
+
+// vvvvvvvvvv  Added for XG
+
+const double *Zdt{ NULL };
+const double *Zdf{ NULL };
+const double *Zd_front{ NULL };
+const double **Zd_front_array{ NULL };
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 /* Added for snow cover fraction */
 const double* SWE{ NULL };
@@ -200,5 +239,7 @@ void init(void);
 void run(void);
 void finish(bool good);
 
-ClassSedSoil* klone(string name) const;
+ClassSed_SoilX* klone(string name) const;
 };
+
+#endif

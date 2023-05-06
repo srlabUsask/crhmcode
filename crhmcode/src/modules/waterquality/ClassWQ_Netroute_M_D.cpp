@@ -156,7 +156,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     decllocal("soil_runoff_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
 
-    declvar("soil_runoff_Buf_conc", TDim::NDEFN, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf_conc, &soil_runoff_Buf_conc_lay, numsubstances);
+    declvar("soil_runoff_Buf_conc", TDim::NDEFN, "buffer rain runoff", "(g/mm*km2/d)", &soil_runoff_Buf_conc, &soil_runoff_Buf_conc_lay, numsubstances);
 
     decllocal("soil_gw_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_gw_Buf);
 
@@ -217,7 +217,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declgetvar("*", "soil_gw_conc", "(mg)", &soil_gw_conc, &soil_gw_conc_lay);
 
-    declgetvar("*", "soil_runoff_cWQ", "(mg)", &soil_runoff_cWQ, &soil_runoff_cWQ_lay);
+    declgetvar("*", "soil_runoff_mWQ", "(g/int)", &soil_runoff_mWQ, &soil_runoff_mWQ_lay);
 
 
     declputvar("*", "Sd", "(mm)", &Sd);
@@ -504,7 +504,11 @@ void ClassWQ_Netroute_M_D::run(void) {
 
             if (soil_runoffDiv == 1) { // interval value
                 soil_runoff_Buf[hh] = soil_runoff[hh];
-                soil_runoff_Buf_conc_lay[Sub][hh] = soil_runoff_cWQ_lay[Sub][hh];
+                if (soil_runoff[hh] == 0) {
+                    soil_runoff_Buf_conc_lay[Sub][hh] = 0;
+                } else {
+                    soil_runoff_Buf_conc_lay[Sub][hh] = soil_runoff_mWQ_lay[Sub][hh] * soil_runoffDiv / soil_runoff[hh];
+                }
             }
         } // for Sub
     } // for hh
@@ -948,7 +952,11 @@ void ClassWQ_Netroute_M_D::run(void) {
 
             if (nstep == 0) {
                 if (soil_runoffDiv > 1) // daily value - ready for next day
-                    soil_runoff_Buf_conc_lay[Sub][hh] = soil_runoff_cWQ_lay[Sub][hh] / soil_runoffDiv;
+                    if (soil_runoff[hh] == 0) {
+                        soil_runoff_Buf_conc_lay[Sub][hh] = 0;
+                    } else {
+                        soil_runoff_Buf_conc_lay[Sub][hh] = soil_runoff_mWQ_lay[Sub][hh] * soil_runoffDiv / soil_runoff[hh];
+                    }
             }
 
 
