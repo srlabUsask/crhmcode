@@ -65,15 +65,15 @@ class ClassSed_Detachment : public ClassModule {
 ******************************************************************/
 
     double calc_critical_shear_stress_nodim_VANRIJN(double diam_nodim);
-    double calc_rill_flowdepth_from_manning(double flow_rate);
-    double calc_rill_flowvel_from_flowdepth(double flow_rate, double h);
+    double calc_vanrijn_flowdepth_from_manning(double flow_rate);
+    double calc_vanrijn_flowvel_from_flowdepth(double flow_rate, double h);
     double calc_bed_shear_stress(double stream_depth);
     double calc_nodim_diam( double diam );
     double calc_nodim_shear_stress( double tau_b );
     double calc_dim_bed_flux( double bed_flux_nodim );
     double VANRIJN( double tau_b_nodim , double tau_crit_nodim, double diam_nodim );
     void   initialize_VANRIJN();
-    double calculate_flow_mobilization_VANRIJN(double runoff);
+//    double calculate_flow_mobilization_VANRIJN(double runoff);
 
 
 /*****************************************************************

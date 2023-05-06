@@ -505,7 +505,7 @@ double ClassSed_Detachment::calc_vanrijn_flowdepth_from_manning(double flow_rate
   return h;
 }    
   
-double ClassSed_Detachment::calc_rill_flowvel_from_flowdepth(double flow_rate, double h) {
+double ClassSed_Detachment::calc_vanrijn_flowvel_from_flowdepth(double flow_rate, double h) {
   return flow_rate / (h*h);
 }
 
