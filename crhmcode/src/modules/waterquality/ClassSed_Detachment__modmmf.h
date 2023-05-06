@@ -72,6 +72,9 @@ class ClassSed_Detachment : public ClassModule {
     double calc_nodim_shear_stress( double tau_b );
     double calc_dim_bed_flux( double bed_flux_nodim );
     double VANRIJN( double tau_b_nodim , double tau_crit_nodim, double diam_nodim );
+
+    double calc_bedload_transport_cap(double runoff);
+
     void   initialize_VANRIJN();
 //    double calculate_flow_mobilization_VANRIJN(double runoff);
 
