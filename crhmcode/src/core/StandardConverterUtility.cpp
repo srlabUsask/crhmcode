@@ -140,7 +140,7 @@ double StandardConverterUtility::Calculate_TdateTime_Offset(void) {  //Manishank
 // This code does not account for leap seconds
  double StandardConverterUtility::EncodeTime(int hour, int min, int sec, int milli) noexcept {
 // Need to add a small amount to seconds to avoid underrepresentation in the 'double'	
-	return ( ( ( (sec+0.1d)/60.0 + min)/60.0) + hour ) / 24.0;
+	return ( ( ( (sec+0.1)/60.0 + min)/60.0) + hour ) / 24.0;
 }
 
  void StandardConverterUtility::DecodeDate(double Dttime, int &year, int &month, int &day) noexcept {
@@ -159,7 +159,7 @@ double StandardConverterUtility::Calculate_TdateTime_Offset(void) {  //Manishank
 }
 
  void StandardConverterUtility::DecodeTime(double Dttime, int &hour, int &min, int &sec, int &milli) noexcept {
-	Dttime += 0.99d/86400.0d;
+	Dttime += 0.99/86400.0;
 	hour = (long)(Dttime*24) % 24;
 	min = (long)(Dttime*24*60) % 60;
 	sec = (long)(Dttime*24*60*60) % 60;
