@@ -153,7 +153,7 @@ BOOL CCRHMGUIApp::InitInstance()
 		for (int i = 0; i < argc; i++)
 		{
 			std::string tempStr = CT2A(argvText[i]);
-			argv[i] = (char*) malloc(sizeof(char) * tempStr.length());
+			argv[i] = (char*) malloc(sizeof(char) * (tempStr.length()+1));
 			strcpy(argv[i], tempStr.c_str());
 		}
 
