@@ -105,6 +105,26 @@ void ClassWQ_REWroute::decl(void) {
 
 void ClassWQ_REWroute::init(void) {
 
+/* VALIDATION OF INPUT PARAMETERS */
+
+  for (int i=0; i<nhru; i++) {
+
+    if (WS_order[i] < 1) {
+      CRHMException Except("Module REW route All WS_order parameters must be > 0." , TExcept::TERMINATE);
+      LogError(Except);
+      throw Except;
+    }
+
+    if (WS_gworder[i] < 1) {
+      CRHMException Except("Module REW route All WS_gworder parameters must be > 0." , TExcept::TERMINATE);
+      LogError(Except);
+      throw Except;
+    }
+
+  }
+
+/**************/
+
   if(nhru < inflowCnt) {
     CRHMException Except("Module REW route # of HRUs must be >= # of groups." , TExcept::TERMINATE);
     LogError(Except);

@@ -36,6 +36,7 @@ void ReportStream::OutputHeaders(CRHMmain * instance)
 
 	if (instance->OutputFormat == OUTPUT_FORMAT::STD)
 	{
+
 		//standard output header
 		headerLines = this->RprtHeader(instance);
 	}

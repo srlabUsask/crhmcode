@@ -2863,6 +2863,10 @@ void CRHMmain::RunClick2End(MMSData * mmsdata)
 
 void  CRHMmain::RunClick(void) {
 	MMSData * mmsdata = CRHMmain::RunClick2Start();
+	if (!this->cdSeries) {
+		CRHMException TExcept("Failed to properly initialize model", TExcept::TERMINATE);
+		throw TExcept;
+	}
 	CRHMmain::RunClick2Middle(mmsdata, Global::DTmin, Global::DTmax);
 	CRHMmain::RunClick2End(mmsdata);
 	delete mmsdata; 
