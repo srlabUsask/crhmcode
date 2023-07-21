@@ -138,6 +138,8 @@ void ClassCRHMCanopyClearingGap::decl(void) {
 
   declstatdiag("cum_net_rain", TDim::NHRU, "cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
+  declvar("pot_subl_cpy", TDim::NHRU, "potential dimensionless canopy snow sublimation rate", "(-)", &pot_subl_cpy);
+
   declvar("Subl_Cpy", TDim::NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
   declstatdiag("cum_Subl_Cpy", TDim::NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
@@ -504,6 +506,8 @@ void ClassCRHMCanopyClearingGap::run(void){
 // sublimation rate of single 'ideal' ice sphere:
 
           double Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+
+          pot_subl_cpy[hh] = Vs; // export the dimensionless potential sublimation rate added by alex 2023-07-21
 
 // snow exposure coefficient (Ce):
 
