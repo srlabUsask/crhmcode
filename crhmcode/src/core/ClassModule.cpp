@@ -442,9 +442,8 @@ void ClassModule::declvar(string variable, TDim dimen, string help,
 			*value = newVar->values; // TB 10/07/10
 
 			if (dimen == TDim::NDEF) { // save for lay loop
-			// These two variables are not actually used anywhere (PRL)
-//				Var_loop_lay_table[Var_NDEFN_cnt] = newVar->layvalues;
-//				Var_loop_lay_value[Var_NDEFN_cnt++] = newVar->values;
+				Var_loop_lay_table[Var_NDEFN_cnt] = newVar->layvalues;
+				Var_loop_lay_value[Var_NDEFN_cnt++] = newVar->values;
 			}
 
 			Global::DeclRootList->push_back(string(ID.c_str()) + " " + Orgvariable.c_str()); // to prevent input/output looping
@@ -1127,9 +1126,6 @@ void ClassModule::declparam(
 				(*itPar).second->ExpandShrink(this->nhru);
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share == 2) {
-					printf("%s\n", Name.c_str());
-					printf("%s\n", param.c_str());
-//					cout << Name << " " << param;
 					assert(0);
 				}
 				return;

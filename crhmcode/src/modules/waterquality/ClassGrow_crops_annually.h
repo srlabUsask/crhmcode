@@ -103,7 +103,7 @@ public:
 	double* fertday_down{ NULL };
 	double* resday_up{ NULL };
 	double* resday_down{ NULL };
-	double* fertperiod{ NULL };   // must match WQ_Soil_NPCcycling declaration (PRL)
+	long* fertperiod{ NULL };
 	long* litterperiod{ NULL };
 
 	// declared observation variables
