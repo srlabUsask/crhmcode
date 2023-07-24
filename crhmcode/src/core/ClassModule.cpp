@@ -1127,6 +1127,9 @@ void ClassModule::declparam(
 				(*itPar).second->ExpandShrink(this->nhru);
 				newPar = (*itPar).second;
 				if (newPar->Inhibit_share == 2) {
+					printf("%s\n", Name.c_str());
+					printf("%s\n", param.c_str());
+//					cout << Name << " " << param;
 					assert(0);
 				}
 				return;
