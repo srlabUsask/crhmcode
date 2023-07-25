@@ -245,6 +245,7 @@ void ClassWQ_REWroute::run(void) {
       }
     }
 
+// Perform the tree-network routing at nodes
     for(long hhh = 0; chkStruct(hhh); ++hhh) {
       if(WS_whereto[hhh]-1 == hh && outflow[hhh] > 0.0) {
         if(outflow[hhh] > 0.0) {
@@ -298,10 +299,14 @@ void ClassWQ_REWroute::run(void) {
 
     cumgwinflow[hh] += gwinflow[hh];
 
-  if(variation == VARIATION_ORG)
-    gwDelay->DoMuskingum(hh); // need to update for later HRUs
-  else
-    Clark_gwDelay->DoClark(hh); // need to update for later HRUs
+    if(variation == VARIATION_ORG)
+      gwDelay->DoMuskingum(hh); // need to update for later HRUs
+    else
+      Clark_gwDelay->DoClark(hh); // need to update for later HRUs
+
+// Apply sediment processes if necessary
+    
+
 
     cumgwoutflow[hh] += gwoutflow[hh];
 
@@ -309,7 +314,7 @@ void ClassWQ_REWroute::run(void) {
       gwflow[0] += gwoutflow[hh]; // (already m^3)
       gwflow_s[0] = gwflow[0]*Global::Freq/86400.0;
     }
-} //end for
+  } //end for
 
   cumflow[0] += flow[0];
   cumgwflow[0] += gwflow[0];
