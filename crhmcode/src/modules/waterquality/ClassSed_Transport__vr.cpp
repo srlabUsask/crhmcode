@@ -132,19 +132,21 @@ double ClassSed_Transport__vr::calc_vcsi_diam_percentile(double percentile, doub
 
 
 double ClassSed_Transport__vr::calc_critical_shear_stress_nodim_VANRIJN(double diam_nodim) {
+// Taken from Shields curve (Fig. 1) of Van Rijn 1984 Part 1 - Bed load
+
   double A=0, B=0;  
 
   if (diam_nodim <= 4) {
       A = 0.24;
-      B = 1;
+      B = -1;
   } else {
     if (diam_nodim <= 10) {
       A = 0.14;
-      B = 0.64;
+      B = -0.64;
     } else {
       if (diam_nodim <= 20) {
         A = 0.04;
-        B = 0.1;
+        B = -0.1;
       } else {
         if (diam_nodim <= 150) {
           A = 0.013;
@@ -157,7 +159,7 @@ double ClassSed_Transport__vr::calc_critical_shear_stress_nodim_VANRIJN(double d
     }
   }
       
-  return A * pow(diam_nodim, -B);
+  return A * pow(diam_nodim, B);
 }
 
 
