@@ -250,8 +250,8 @@ double ClassSed_Transport__vr::calc_vr_transport_stage(double streamwidth) {
   double shearvel_crit = sqrt( (s-1)*g*diam50[hh]*tau_crit_nodim[hh] );   // TODO: consider if this value may be different for suspension (PRL)
 
   double hydraulic_radius__bed = streamwidth;
-  double chezy_coef_grains = 18 * log(12*hydraulic_radius__bed /(3*diam90[hh]) );
-  double shearvel_grains = sqrt(g) / chezy_coef_grains;  // u'*
+  double chezy_coef_grains = 18 * log(12*hydraulic_radius__bed /(3*diam90[hh]) );   // Eq. 18
+  double shearvel_grains = sqrt(g) / chezy_coef_grains;  // u'*    // Eq. 17
   return (shearvel_grains*shearvel_grains - shearvel_crit*shearvel_crit) / (shearvel_crit*shearvel_crit);   // Van Rijn (84) Eq 2
 }
 
