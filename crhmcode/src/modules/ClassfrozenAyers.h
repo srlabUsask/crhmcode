@@ -23,8 +23,15 @@
 class ClassfrozenAyers : public ClassModule {
 public:
 
-ClassfrozenAyers(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001, "net_rain_org"), // setting PeerRank, change on 04Oct2023
-                                    infiltype(NULL) {};
+ClassfrozenAyers(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : 
+    ClassModule(
+        Name, 
+        Version, 
+        Lvl, 
+        1001, // Set PeerRank to ensure proper module ordering below glacier modules
+        "net_rain_org"
+    ), infiltype(NULL) {};
+
 bool SetOpportunityTime {false};
 bool Update_infil {false};
 

@@ -23,9 +23,15 @@
 class ClassPrairieInfil : public ClassModule {
 public:
 
-ClassPrairieInfil(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001, "net_rain_org"), // setting PeerRank, change on 04Oct2023
-                                   Xinfil(NULL),
-                                   timer(NULL) {};
+ClassPrairieInfil(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : 
+    ClassModule(
+        Name, 
+        Version, 
+        Lvl, 
+        1001, // Set PeerRank to ensure proper module ordering below glacier modules
+        "net_rain_org"
+    ), Xinfil(NULL), timer(NULL) {};
+
 // declared variables
 double *snowinfil{ NULL };
 double *cumsnowinfil{ NULL };
