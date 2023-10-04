@@ -24,7 +24,7 @@
 class ClassGreenAmpt : public ClassModule {
 public:
 
-ClassGreenAmpt(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassGreenAmpt(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1001, "net_rain_org") {}; // setting PeerRank, change on 04Oct2023
 // declared variables
 double *infil{ NULL };
 double *cuminfil{ NULL };
