@@ -662,4 +662,9 @@ CRHM 03/14/23
         else
           hru_tsf[hh] = hru_T_s_D[hh] + G[hh]*0.5*z_s[hh]/SWE_tc[hh]; // changing to plus sign for second term G[hh]*0.5*z_s[hh]/SWE_tc[hh], G is positive towards snowpack
 
+
+CRHM 10/04/23
+
+  Fixing module order issue for glacier and infiltration modules when constructing model project in GUI.
+
 	

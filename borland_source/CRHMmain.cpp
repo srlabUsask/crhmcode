@@ -1,9 +1,9 @@
-// 03/14/23 correcting hru_tsf estimation in tsurface module in 08/02/22
+// 10/04/23 fixing module order issue for glacier and infiltration modules when constructing project in GUI in 03/14/23
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "03/14/23"
+#define CurrentVersion "10/04/23"
 
 #include <stdexcept>
 #include "CRHMmain.h"
