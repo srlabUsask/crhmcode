@@ -23,7 +23,14 @@
 class ClassAyers : public ClassModule {
 public:
 
-ClassAyers(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassAyers(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : 
+	ClassModule(
+		Name, 
+		Version, 
+		Lvl, 
+		1001, // Set PeerRank to ensure proper module ordering below glacier modules
+		"net_rain_org"
+	) {}; 
 
 // declared variables
 double *infil { NULL };

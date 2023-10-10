@@ -23,8 +23,15 @@
 class Classfrozen : public ClassModule {
 public:
 
-Classfrozen(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl),
-                                    infiltype(NULL) {};
+Classfrozen(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : 
+    ClassModule(
+        Name, 
+        Version, 
+        Lvl, 
+        1001, // Set PeerRank to ensure proper module ordering below glacier modules
+        "net_rain_org"
+    ), infiltype(NULL) {};
+
 bool SetOpportunityTime {false};
 bool Update_infil {false};
 
