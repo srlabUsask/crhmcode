@@ -107,7 +107,7 @@ const double *manday_down{ NULL };
 const double *resday_up{ NULL };
 const double *resday_down{ NULL };
 
-const double *fertperiod{ NULL };
+const long *fertperiod{ NULL };
 const long *litterperiod{ NULL };
 
 const double *manureinogNfrac{ NULL };
