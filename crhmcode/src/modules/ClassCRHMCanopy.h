@@ -65,6 +65,7 @@ double *cum_net_snow { NULL };
 double *net_p { NULL };
 double *intcp_evap { NULL };
 double *cum_intcp_evap { NULL };
+double *pot_subl_cpy { NULL };
 double *Subl_Cpy { NULL };
 double *cum_Subl_Cpy { NULL };
 double *cum_SUnload { NULL };
