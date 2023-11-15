@@ -667,4 +667,10 @@ CRHM 10/04/23
 
   Fixing module order issue for glacier and infiltration modules when constructing model project in GUI.
 
+
+
+CRHM 11/14/23
+
+  Adding variable "pot_subl_cpy" to output "dimensionless canopy sublimation rate" in Canopy, CanopyClearing, and CanopyClearingGap modules.
+
 	

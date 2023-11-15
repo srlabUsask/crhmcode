@@ -1,4 +1,4 @@
-// 03/14/23
+// 11/14/23
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -99,9 +99,9 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "11/21/16", CRHM::ADVANCE));
   DLLModules.AddModule(new ClasspbsmSnobal("pbsmSnobal", "01/05/17", CRHM::ADVANCE));
 
-  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "11/14/23", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "11/14/23", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "11/14/23", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassXG("XG", "04/05/22", CRHM::ADVANCE));
@@ -13282,6 +13282,8 @@ void ClassCRHMCanopy::decl(void) {
 
   declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
+  declvar("pot_subl_cpy", NHRU, "potential dimensionless canopy snow sublimation rate", "(s^-1)", &pot_subl_cpy);
+
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
   declstatdiag("cum_Subl_Cpy", NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
@@ -13563,6 +13565,8 @@ void ClassCRHMCanopy::run(void) {
 // sublimation rate of single 'ideal' ice sphere:
 
       float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+
+      pot_subl_cpy[hh] = Vs; // 14Nov2023: export the dimensionless sublimation rate (s^-1)
 
 // snow exposure coefficient (Ce):
 
@@ -24726,6 +24730,8 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
+  declvar("pot_subl_cpy", NHRU, "potential dimensionless canopy snow sublimation rate", "(s^-1)", &pot_subl_cpy);
+
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
   declstatdiag("cum_Subl_Cpy", NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
@@ -25022,6 +25028,8 @@ void ClassCRHMCanopyClearing::run(void) {
 
           float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
 
+          pot_subl_cpy[hh] = Vs; // 14Nov2023: export the dimensionless sublimation rate (s^-1)
+
   // snow exposure coefficient (Ce):
 
           float Ce;
@@ -25312,6 +25320,8 @@ void ClassCRHMCanopyClearingGap::decl(void) {
   declvar("net_rain", NHRU, " direct_rain + drip", "(mm/int)", &net_rain);
 
   declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
+
+  declvar("pot_subl_cpy", NHRU, "potential dimensionless canopy snow sublimation rate", "(s^-1)", &pot_subl_cpy);
 
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
@@ -25679,6 +25689,8 @@ void ClassCRHMCanopyClearingGap::run(void){
 // sublimation rate of single 'ideal' ice sphere:
 
           float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+
+          pot_subl_cpy[hh] = Vs; // 14Nov2023: export the dimensionless sublimation rate (s^-1)
 
 // snow exposure coefficient (Ce):
 
