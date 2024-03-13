@@ -1,7 +1,7 @@
 // 11/20/19
 //---------------------------------------------------------------------------
-#ifndef Sed_Transport
-#define Sed_Transport
+#ifndef Sed_Transport_07
+#define Sed_Transport_07
 //---------------------------------------------------------------------------
 
 #include "../../core/ClassModule.h"
@@ -32,6 +32,12 @@ double von_Karman = 0.4;  // von Karman constant for clear flow
 // Constants for Van Rijn (suspended transport)
 double MAX_BEDCONC = 0.65;
 
+// beta: coefficient related to vertical structure of velocity profile (van Rijn 1993)
+double diam_sand = 62e-6;  // m
+double bedload_beta = 1;
+double bedload_nu = 1;
+double bedload_gamma = 0.5;
+
 // *******************
 
 
@@ -61,36 +67,47 @@ double MAX_BEDCONC = 0.65;
  * van Rijn Support Routines
 ******************************************************************/
 
-    double calc_critical_shear_stress_nodim_VANRIJN(double diam_nodim);
+    double calc_critical_shear_stress_nodim(double diam_nodim);
+    double calc_critical_velocity(double d50, double d90, double streamdepth);
 
 /*****************************************************************
  * van Rijn Bedload Transport Routines
 ******************************************************************/
 
-    double calc_vanrijn_flowdepth_from_manning(double flow_rate);
-    double calc_vanrijn_flowvel_from_flowdepth(double flow_rate, double h);
-    double calc_bed_shear_stress(double stream_depth);
-    double calc_nodim_diam( double diam );
-    double calc_nodim_shear_stress( double tau_b );
-    double calc_dim_bed_flux( double bed_flux_nodim );
-    double VANRIJN( double tau_b_nodim , double tau_crit_nodim, double diam_nodim );
+    double calc_flowdepth_from_manning__rect(double flow_rate);
+    double calc_flowdepth_from_manning__Vchannel(double flow_rate);
+    double calc_flowwidth_from_flowdepth__Vchannel(double flow_depth);
 
-    double calc_bedload_transport_cap(double runoff);
+    // double calc_vanrijn_flowvel_from_flowdepth(double flow_rate, double h);
+    // double calc_bed_shear_stress(double stream_depth);
+    double calc_nodim_diam( double diam );
+    // double calc_nodim_shear_stress( double tau_b );
+    // double calc_dim_bed_flux( double bed_flux_nodim );
+    // double VANRIJN( double tau_b_nodim , double tau_crit_nodim, double diam_nodim );
+
+    double calc_bedload_transport_cap_eq10(  double streamvel,   // m/s
+                                        double streamwidth,   // m
+                                        double streamdepth   // m
+    );
+    double calc_bedload_transport_cap_eq12(  double streamvel,   // m/s
+                                        double streamwidth,   // m
+                                        double streamdepth   // m
+    );
 
 /*****************************************************************
  * van Rijn Suspended Transport Routines
 ******************************************************************/
 
-    double calc_vr_transport_stage(double streamwidth);
-    double calc_vr_ref_level(double streamdepth);
-    double calc_vr_ref_conc(double ref_level, double transport_stage);
-    double calc_vr_diam_susp(double transport_stage);
-    double calc_vr_fallvel(double transport_stage);
-    double calc_vr_shearvel(double streamdepth);
-    double calc_vr_beta_factor(double shearvel, double fallvel);
-    double calc_vr_phi_factor(double fallvel, double shearvel, double ref_conc);
-    double calc_vr_susp_param(double transport_stage, double shearvel, double ref_conc);
-    double calc_vr_f_factor(double ref_level, double ref_conc, double streamdepth, double transport_stage);
+    // double calc_vr_transport_stage(double streamwidth);
+    // double calc_vr_ref_level(double streamdepth);
+    // double calc_vr_ref_conc(double ref_level, double transport_stage);
+    // double calc_vr_diam_susp(double transport_stage);
+    // double calc_vr_fallvel(double transport_stage);
+    // double calc_vr_shearvel(double streamdepth);
+    // double calc_vr_beta_factor(double shearvel, double fallvel);
+    // double calc_vr_phi_factor(double fallvel, double shearvel, double ref_conc);
+    // double calc_vr_susp_param(double transport_stage, double shearvel, double ref_conc);
+    // double calc_vr_f_factor(double ref_level, double ref_conc, double streamdepth, double transport_stage);
     double calc_suspended_transport_cap(double streamvel, double streamwidth, double streamdepth);
 
     /*****************************************************************
@@ -98,7 +115,7 @@ double MAX_BEDCONC = 0.65;
      ******************************************************************/
 
     void   initialize_VANRIJN();
-    double calc_vr_load_transport_rect(double streamflow );
+    double calc_vr_load_transport(double streamflow );   // (g/m3)
 //    double calculate_flow_mobilization_VANRIJN(double runoff);
 
 
@@ -106,16 +123,26 @@ double MAX_BEDCONC = 0.65;
  * VARIABLES
 ******************************************************************/
 
+
+    long scfCnt{0};
+    double *scf_rew{ NULL };
+    double **scf_All{ NULL };
+    const double *scf_netroute{ NULL };
+
+
     const double *outflow{ NULL };       // [nhru]
+//    const double *scf{ NULL };       // [nhru]
     double *outflow_mWQ{ NULL };       // [ndefn]
     double **outflow_mWQ_lay{ NULL };       // [ndefn]
+    double *sedvr_outflow_mWQ{ NULL };       // [ndefn]
+    double **sedvr_outflow_mWQ_lay{ NULL };       // [ndefn]
 
 // Vars for the vanRijn formulation
     double *pct_sand{ NULL }; // ()
 
     double *diam50{ NULL };   // mm
     double *diam90{ NULL };   // mm
-    double *diam_nodim{ NULL };
+//    double *diam_nodim{ NULL };
     double *tau_crit_nodim{ NULL };
 
 // Vars for debugging    
@@ -123,6 +150,7 @@ double MAX_BEDCONC = 0.65;
     double *tau_b_nodim{ NULL };   // debugging
     double *tau_b{ NULL };   // debugging
     double *stream_depth{ NULL };   // debugging
+    double *stream_width{ NULL };   // debugging
     double *mass_suspended{ NULL };      // debugging
     double *mass_bedload{ NULL };      // debugging
 // ******
@@ -135,12 +163,15 @@ double MAX_BEDCONC = 0.65;
  *******************/
 
 /* Parameters for van Rijn formulation */
+
+    const long *route_Cshp{ NULL };
     const double *channel_width{ NULL };
     const double *channel_slope{ NULL }; // ()
+    const double *sidewall_angle{ NULL }; // ()
     const double *channel_pct{ NULL }; // ()
     const double *vr_mannings_n{ NULL }; // ()
     const double *vr_roughness_height{ NULL }; // ()
-    const double *hru_area{ NULL }; // (m)
+    const double *u_crit{ NULL }; // (m)
 
 };
 

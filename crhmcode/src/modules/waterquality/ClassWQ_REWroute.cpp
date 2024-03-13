@@ -37,7 +37,7 @@ void ClassWQ_REWroute::decl(void) {
   declstatdiag("cum_WSinflow", TDim::NHRU, "cumulative inflow from each RB", "(m^3)", &cuminflow);
 
   declvar("WS_outflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &outflow);
-  declvar("WS_outflow_mWQ", TDim::NDEFN, "Concentration: outflow of each RB", "(kg/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
+  declvar("WS_outflow_mWQ", TDim::NDEFN, "Concentration: outflow of each RB", "(g/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
   declstatdiag("cum_WSoutflow", TDim::NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutflow);
 
   declvar("WS_flow", TDim::BASIN, "watershed surface and sub-surface outflow", "(m^3/int)", &flow);

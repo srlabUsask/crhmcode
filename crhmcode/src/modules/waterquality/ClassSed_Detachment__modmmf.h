@@ -24,7 +24,8 @@ class ClassSed_Detachment : public ClassModule {
 
     long dayno{0};
 
-    ClassSed_Detachment(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
+    ClassSed_Detachment(string Name, string Version = "undefined", 
+                            LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
 
     ClassSed_Detachment* klone(string name) const;
 
@@ -116,12 +117,7 @@ class ClassSed_Detachment : public ClassModule {
  * VARIABLES
 ******************************************************************/
 
-    double *conc_soil_rechr{ NULL };
-    double **conc_soil_rechr_lay{ NULL };
-    double *conc_soil_lower{ NULL };   // concentration of sediment (always zero)
-    double **conc_soil_lower_lay{ NULL };
-
-    const double *runoff{ NULL };
+//    const double *runoff{ NULL };
     const double *scf{ NULL };
 
 // Vars for the modified MMF formulation

@@ -22,6 +22,7 @@ add_library(waterquality OBJECT
     ClassSed_SoilX.cpp
     ClassSed_Detachment.cpp
     ClassSed_Transport__vr.cpp
+    ClassSed_Transport__vr07.cpp
     ClassWQ_Substitute_Hype.cpp
     ClassWQ_Test_Hype.cpp
     WQ_CRHM.cpp

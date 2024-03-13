@@ -656,11 +656,14 @@ void ClassWQ_Netroute_D::run(void) {
                             if (basinflow[0] + gw_Amount * 1000 > minFlow_WQ) {
                                 basinflow_conc_lay[Sub][0] = basinflow_conc_lay[Sub][0] * basinflow[0] + gw_Amount_mWQ * 1000;
                                 basinflow_conc_lay[Sub][0] /= (basinflow[0] + gw_Amount * 1000);
+                                basinflow_mWQ[Sub] = basinflow_conc_lay[Sub][0] * basinflow[0] + Used_mWQ_lay[Sub][hh] * 1000;
+
                                 cumbasinflow_mWQ_lay[Sub][0] += gw_Amount_mWQ;
                                 gwcumoutflow_mWQ_lay[Sub][hh] += gw_Amount_mWQ;
                             }
                             else {
                                 basinflow_conc_lay[Sub][0] = 0.0f;
+                                basinflow_mWQ[Sub] = 0.0;
                             }
                         }
 

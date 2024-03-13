@@ -194,6 +194,8 @@ public:
 	const double* soil_runoff_mWQ{ NULL };    // (g/int)
 	const double** soil_runoff_mWQ_lay{ NULL };   // (g/int)
 
+	const double* cum_redirected_residual{ NULL };  // only used for status display
+
 	// variable puts
 	double* Sd{ NULL };
 	double* Sd_conc{ NULL };
@@ -210,7 +212,7 @@ public:
 	double* redirected_residual{ NULL };
 	double* redirected_residual_conc{ NULL };
 	double** redirected_residual_conc_lay{ NULL };
-	double* cum_redirected_residual{ NULL };
+
 	double* cum_redirected_residual_mWQ{ NULL };
 	double** cum_redirected_residual_mWQ_lay{ NULL };
 	double* gw{ NULL };

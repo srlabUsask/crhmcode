@@ -54,17 +54,11 @@ void ClassSed_Detachment::decl(void) {
 // These units are kept internally within this module and converted to km^2 (the default for CRHM) 
 // as the final step in runoff_sed_by_erosion() for inter-module transfer.
 
-  declstatvar("conc_soil_rechr", TDim::NDEFN, "concentration in soil_rechr: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
-      "(i_srp=3) SRP, (i_dop=4) DOP, (i_pp=5) PP, (i_oc=6) OC", "(mg/l)", &conc_soil_rechr, &conc_soil_rechr_lay, numsubstances); //
-
-  declstatvar("conc_soil_lower", TDim::NDEFN, "concentration in soil_lower: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
-      "(i_srp=3) SRP, (i_dop=4) DOP, (i_pp=5) PP, (i_oc=6) OC", "(mg/l)", &conc_soil_lower, &conc_soil_lower_lay, numsubstances);
-
-  declgetvar("*", "runoff", "(mm)", &runoff);
+//  declgetvar("*", "runoff", "(mm)", &runoff);
   declgetvar("*", "scf", "()", &scf);
 
-  declgetvar("*", "soil_runoff", "(mm)", &soil_runoff);
-  declputvar("*", "soil_runoff_mWQ", "(mm)", &soil_runoff_mWQ,&soil_runoff_mWQ_lay);
+  declgetvar("*", "soil_runoff", "(mm/int)", &soil_runoff);
+  declputvar("*", "soil_runoff_mWQ", "(g/m^2/int)", &soil_runoff_mWQ,&soil_runoff_mWQ_lay);
 
   declstatvar("sedrelpool", TDim::NHRU, "sediment stored in conceptual storage pool", "(g/int)", &sedrelpool);
 
@@ -172,13 +166,6 @@ void ClassSed_Detachment::decl(void) {
 
 void ClassSed_Detachment::init(void) {
 
-  for (long hh = 0; hh < nhru; ++hh) {
-      for (long Sub = 0; Sub < numsubstances; ++Sub) {
-          conc_soil_rechr_lay[Sub][hh] = 0;
-          conc_soil_lower_lay[Sub][hh] = 0;
-      }
-  }
-
   initialize_modMMF();
   initialize_VANRIJN();
 }
@@ -195,8 +182,6 @@ void ClassSed_Detachment::run(void) {
     dayno = julian("now");
 
     for(hh = 0; chkStruct(); ++hh){ // Using inhibit is dangerous
-//        conc_soil_rechr_lay[SED_CHANNEL][hh] = 1;   // mg/L
-//        conc_soil_lower_lay[SED_CHANNEL][hh] = 1;   // mg/L
 
 // This is just for testing and verification.
 // WS_outflow_conc should be approximately the same value at outlet
@@ -234,8 +219,14 @@ void ClassSed_Detachment::runoff_sed_by_erosion() {
     }
 
     // sediment released from delay pool
-    double sedReleased = std::fmin(sedrelpool[hh],
-                            sedrelpool[hh]* pow(soil_runoff[hh]/sedrelmax[hh], sedrelexp[hh])); // (g/m^2/int) export
+    double sedReleased;
+    
+    if ( sedrelmax[hh] > 0.0) {
+      sedReleased = std::fmin(sedrelpool[hh],
+                              sedrelpool[hh]* pow(soil_runoff[hh]/sedrelmax[hh], sedrelexp[hh])); // (g/m^2/int) export
+    } else {
+      sedReleased = sedrelpool[hh];
+    }
     sedrelpool[hh] -= sedReleased;
 
     // sediment concentration for sediment released from delay pool
@@ -244,7 +235,8 @@ void ClassSed_Detachment::runoff_sed_by_erosion() {
 //        assert(newSedConc >= 0);
 //        soil_runoff_cWQ_lay[SED_CHANNEL][hh] = newSedConc;
 
-        double newSedMass = sedReleased*1e6; // g/m2 -> g/km2
+//        double newSedMass = sedReleased*1e6; // g/m2 -> g/km2
+        double newSedMass = sedReleased; 
         assert(newSedMass >= 0);
         soil_runoff_mWQ_lay[SED_CHANNEL][hh] = newSedMass;
     }
@@ -318,12 +310,21 @@ void ClassSed_Detachment::calc_flow_mobilization(double runoff, sed_triple &rslt
 
 // These functions rely on module parameters (not constexpr)
 double ClassSed_Detachment::calc_flowvel_manning(double depth, double n) {
+  if (channel_slope[hh] <= 0.0) {
+    CRHMException TExcept("Sed_Detachment: channel slope must be greater than zero", TExcept::TERMINATE);
+    LogError(TExcept);
+  }
   return pow(depth, 0.667) * pow(channel_slope[hh], 0.5) / n;
 }
 double ClassSed_Detachment::calc_flowvel_veg() {
   // TODO: make this configurable
   const double stem_diam = 0.015;  // (cm)
   const double stem_count = 800;  // count per square meter (m-2)
+
+  if (sfcslope[hh] <= 0.0) {
+    CRHMException TExcept("Sed_Detachment: surface slope must be greater than zero", TExcept::TERMINATE);
+    LogError(TExcept);
+  }
 
   // Slope as a rise over run fraction
   double slope_rr = tan(sfcslope[hh]);
@@ -372,11 +373,11 @@ void ClassSed_Detachment::calc_delivered_to_transport(sed_triple &rslt) {   // g
 //  static sed_triple deposited_pct;
 
   calc_rainsplash_mobilization(detached_rain);
-  calc_flow_mobilization(runoff[hh], detached_flow);
+  calc_flow_mobilization(soil_runoff[hh], detached_flow);
 //  calc_flow_deposition(false, deposited_pct);  // not mixed sed because it occurs at the detachment site
-  rslt.c = (detached_rain.c + detached_flow.c) * ( 1-DEP_immed_c[hh]/100 ); // + UPSLOPE!
-  rslt.z = (detached_rain.z + detached_flow.z) * ( 1-DEP_immed_z[hh]/100 ); // + UPSLOPE!
-  rslt.s = (detached_rain.s + detached_flow.s) * ( 1-DEP_immed_s[hh]/100 ); // + UPSLOPE!
+  rslt.c = (detached_rain.c + detached_flow.c) * ( 1.0 - (DEP_immed_c[hh]/100) ); // + UPSLOPE!
+  rslt.z = (detached_rain.z + detached_flow.z) * ( 1.0 - (DEP_immed_z[hh]/100) ); // + UPSLOPE!
+  rslt.s = (detached_rain.s + detached_flow.s) * ( 1.0 - (DEP_immed_s[hh]/100) ); // + UPSLOPE!
 
   sed_delivered_z[hh] = rslt.z;  // DEBUGGING
 }
@@ -384,7 +385,7 @@ void ClassSed_Detachment::calc_delivered_to_transport(sed_triple &rslt) {   // g
 
 void ClassSed_Detachment::calc_transport_capacity(sed_triple &rslt) {
 
-  const double Q = runoff[hh]*1000; // mm*km2 -> m3
+  const double Q = soil_runoff[hh]*1000; // mm*km2 -> m3
   const double imed = (v_actual[hh]*v_veg[hh]*v_tillage[hh]/ pow(v_std_bare[hh],3) ) * Q * Q * sin(channel_slope[hh]);
 
 // Why is transport capacity dependent on percentage of sediment type?

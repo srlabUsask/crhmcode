@@ -162,6 +162,7 @@
 #include "waterquality/ClassSed_SoilX.h"
 #include "waterquality/ClassSed_Detachment.h"
 #include "waterquality/ClassSed_Transport__vr.h"
+#include "waterquality/ClassSed_Transport__vr07.h"
 
 
 //---------------------------------------------------------------------------
@@ -297,6 +298,7 @@ void MoveModulesToGlobal(string DLLName)
     DLLModules.AddModule(new ClassSed_SoilX("Sed_SoilX", "08/20/22", LMODULE::PROTO));
     DLLModules.AddModule(new ClassSed_Detachment("Sed_Detachment", "08/20/22", LMODULE::PROTO));
     DLLModules.AddModule(new ClassSed_Transport__vr("Sed_Transport", "08/20/22", LMODULE::PROTO));
+    DLLModules.AddModule(new ClassSed_Transport__vr07("Sed_Transport_vr07", "08/20/22", LMODULE::PROTO));
 
     DLLModules.AddModule(new ClassWQ_Netroute("WQ_Netroute", "11/29/18", LMODULE::PROTO));
     DLLModules.AddModule(new ClassWQ_Netroute_D("WQ_Netroute_D", "03/22/19", LMODULE::PROTO));

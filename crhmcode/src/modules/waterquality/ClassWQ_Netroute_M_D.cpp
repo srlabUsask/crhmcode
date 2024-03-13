@@ -17,9 +17,13 @@
 * 
 **/
 #include "ClassWQ_Netroute_M_D.h"
+#include <assert.h>
 
 
 void ClassWQ_Netroute_M_D::decl(void) {
+
+    // Regarding mWQ (mass of water quality features) values, netroute variables that are internal and output use mg/l * mm*km^2/int,
+    // input variables are g/m^2/int (m^2 of surface area)
 
     // kg/km2 = (mg/l)*mm = mg/m2
 
@@ -217,7 +221,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declgetvar("*", "soil_gw_conc", "(mg)", &soil_gw_conc, &soil_gw_conc_lay);
 
-    declgetvar("*", "soil_runoff_mWQ", "(g/int)", &soil_runoff_mWQ, &soil_runoff_mWQ_lay);
+    declgetvar("*", "soil_runoff_mWQ", "(g/m^2/int)", &soil_runoff_mWQ, &soil_runoff_mWQ_lay);
 
 
     declputvar("*", "Sd", "(mm)", &Sd);
@@ -238,7 +242,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declputvar("*", "redirected_residual_conc", "(g)", &redirected_residual_conc, &redirected_residual_conc_lay);
 
-    declputvar("*", "cum_redirected_residual", "(mm*km^2/int)", &cum_redirected_residual);
+    declgetvar("*", "cum_redirected_residual", "(mm*km^2/int)", &cum_redirected_residual);
 
 //    declputvar("*", "cum_redirected_residual_mWQ", "(mg/l * mm*km^2/int)", &cum_redirected_residual_mWQ, &cum_redirected_residual_mWQ_lay);
 
@@ -526,6 +530,10 @@ void ClassWQ_Netroute_M_D::run(void) {
                     break;
             }
 
+            assert(runinflow_mWQ_lay[Sub][hh] >= 0);
+            assert(inflow_mWQ_lay[Sub][hh] >= 0);
+            assert(outflow_mWQ_lay[Sub][hh] >= 0);
+
             if (Sub != 0)
                 Restore(hh);
 
@@ -771,6 +779,7 @@ void ClassWQ_Netroute_M_D::run(void) {
                     }
 
                     basinflow_mWQ[Sub] += Used_mWQ_lay[Sub][hh] * 1000;
+                    assert( basinflow_mWQ[Sub] >= 0 );
                     if (Sub == numsubstances - 1) {
                         basinflow[0] += Used[hh] * 1000; // (m3)
                         cumbasinflow[0] += basinflow[0];

@@ -190,7 +190,7 @@ void ClassSedSoil::decl(void) {
     declvar("soil_ssr_D", TDim::NHRU, "daily accumulation of soil_ssr.", "(mm/d)", &soil_ssr_D);
 
     declvar("soil_runoff", TDim::NHRU, "Portion of excess soil water from a HRU to runoff.", "(mm/int)", &soil_runoff);
-    declvar("soil_runoff_mWQ", TDim::NDEFN, "Concentration: Portion of excess soil water from a HRU to runoff.", "(g/int)", &soil_runoff_mWQ, &soil_runoff_mWQ_lay, numsubstances);
+    declvar("soil_runoff_mWQ", TDim::NDEFN, "Concentration: Portion of excess soil water from a HRU to runoff.", "(g/m^2/int)", &soil_runoff_mWQ, &soil_runoff_mWQ_lay, numsubstances);
 
     declstatdiag("cum_soil_runoff", TDim::NHRU, "Accumulation of Portion of excess soil water from a HRU to runoff.", "(mm)", &cum_soil_runoff);
 
