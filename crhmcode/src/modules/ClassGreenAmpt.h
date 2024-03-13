@@ -24,7 +24,15 @@
 class ClassGreenAmpt : public ClassModule {
 public:
 
-ClassGreenAmpt(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassGreenAmpt(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : 
+	ClassModule(
+		Name, 
+		Version, 
+		Lvl, 
+		1001, // Set PeerRank to ensure proper module ordering below glacier modules 
+		"net_rain_org"
+	) {};
+
 // declared variables
 double *infil{ NULL };
 double *cuminfil{ NULL };

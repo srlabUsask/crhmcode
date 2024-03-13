@@ -1,10 +1,10 @@
 # CRHMcode
 
-CRHMcode is a project to convert the Cold Regions Hydrological Modelling (CRHM) platform from Borland C++ to more modern C++ compilers.
+CRHMcode is a project to convert the Cold Regions Hydrological Modelling (CRHM) platform from Borland C++ to more modern C++ compilers. Further documentation can be found here: https://wiki.usask.ca/display/CRHMdoc/CRHM+-+Cold+Region+Hydrological+Model
 
 ## CRHM: The Cold Regions Hydrological Modelling platform
 
-More information about the original version of CRHM can be found here: https://research-groups.usask.ca/hydrology/modelling/crhm.php#Download
+The original version of CRHM can be found here: https://www.dropbox.com/s/19o5oqpw49ko4ia/CRHM_Distribution.zip?dl=0
 
 This version of CRHM uses the Borland C++ compiler and is referred to as Borland CRHM in further documentation in this repository.
 

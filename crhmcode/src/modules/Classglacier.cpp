@@ -45,7 +45,8 @@ void Classglacier::decl(void) {
                  'glacier using input variable Qnsn_Var (W/m^2*int) from CanopyClearing etc.', \
                  'glacier using input observation Qnsn (W/m^2*int)', \
                  'glacier using input observation QnD (MJ/m^2*d)', \
-                 'glacier using input variable Xmelt ()'";
+                 'glacier using input variable Xmelt ()', \
+                 'glacier using katabatic parameterization'";
 
     variation_set = VARIATION_ORG;
 

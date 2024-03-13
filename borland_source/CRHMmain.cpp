@@ -1,10 +1,9 @@
-// 08/02/22 correcting hru_evap estimation in lake_evap module and volumetric_rechr
-// equation and fallstat value for pavement in volumetric module in 06/28/22
+// 11/14/23 adding variable to output "dimensionless canopy sublimation rate" in canopy modules in 10/04/23
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "08/02/22"
+#define CurrentVersion "11/14/23"
 
 #include <stdexcept>
 #include "CRHMmain.h"

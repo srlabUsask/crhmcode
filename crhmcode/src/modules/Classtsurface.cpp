@@ -175,30 +175,25 @@ void Classtsurface::run(void) {
       }
     }
     else{ // has snowcover
-
+      
+      // 13Mar2023: using hru_t is for original variation and variation#1, place it before other variation
       if(hru_t[hh] > 0.0) // ignore plus temperatures when snow covered
         hru_tsf[hh] = 0.0;
       else
         hru_tsf[hh] = hru_t[hh];
-
+      
       if(variation == VARIATION_1)
         n_factor_T[hh] = 0.0;
       if(variation == VARIATION_2 || variation == VARIATION_4) { // SnobalCRHM case
         SWE_density[hh] = rho[hh];
         if(SWE_density[hh] < 156)  // Sturm et al. 1997. The thermal conductivity of seasonal snow
-          SWE_tc[hh] = 0.023 + 0.234*SWE_density[hh]/1000.0;
+          SWE_tc[hh] = 0.023 + 0.234 * SWE_density[hh]/1000.0; // 14Mar2023 correction using Eq. 4 in Sturm et al. 1997
        else
          SWE_tc[hh] = 0.138 - 1.01* SWE_density[hh]/1000.0 + 3.233*sqr(SWE_density[hh]/1000.0);
-//       hru_tsf[hh] = hru_T_s_D[hh] - G[hh]*0.5*z_s[hh]/SWE_tc[hh];
-
-// **************** PETER VERSION ****************
-//         hru_tsf[hh] = T_s[hh] + G[hh]*0.5*z_s[hh]/SWE_tc[hh];
-
-// **************** LOGAN VERSION ****************
        if(hru_T_s_D[hh] < -70.0) // 13Mar2023: handle the previous daily snow temp when default -75 C deg for snobalCRHM no snowcover, using air t for one day after snowcover
-        hru_tsf[hh] = hru_t[hh];
+         hru_tsf[hh] = hru_t[hh];
        else
-         hru_tsf[hh] = hru_T_s_D[hh] + G[hh]*0.5*z_s[hh]/SWE_tc[hh];
+         hru_tsf[hh] = hru_T_s_D[hh] + G[hh]*0.5*z_s[hh]/SWE_tc[hh]; // 14Mar2023: changing to plus sign for second term G[hh]*0.5*z_s[hh]/SWE_tc[hh], G is positive towards snowpack
       }
 
       if(variation == VARIATION_3 || variation == VARIATION_5){ // ebsm case
@@ -208,7 +203,7 @@ void Classtsurface::run(void) {
           SWE_density[hh] = 0.0;
 
         if(SWE_density[hh] < 156)  // Sturm et al. 1997. The thermal conductivity of seasonal snow
-          SWE_tc[hh] = 0.023 + 0.234*SWE_density[hh]/1000.0;
+          SWE_tc[hh] = 0.023 + 0.234 * SWE_density[hh]/1000.0; // 14Mar2023 correction using Eq. 4 in Sturm et al. 1997
         else
           SWE_tc[hh] = 0.138 - 1.01* SWE_density[hh]/1000.0 + 3.233*sqr(SWE_density[hh]/1000.0);
 
