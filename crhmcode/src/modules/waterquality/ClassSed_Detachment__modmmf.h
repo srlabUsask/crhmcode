@@ -165,6 +165,14 @@ class ClassSed_Detachment : public ClassModule {
 // Vars for the HYPE delay pool
     double *sedrelpool{ NULL }; // (Particulate P release from soil due to erosion (kg/km2=mg/m2) (kg/km2/mm=mg/L)
 
+
+// Consider whether these two should be in separate module ClassWQ_Soil_Null
+    double *conc_soil_rechr{ NULL };
+    double **conc_soil_rechr_lay{ NULL };
+    double *conc_soil_lower{ NULL };   // concentration of organic nitrogen *** from soilstate
+    double **conc_soil_lower_lay{ NULL };
+
+
 /*******************
  * PARAMETERS
  *******************/

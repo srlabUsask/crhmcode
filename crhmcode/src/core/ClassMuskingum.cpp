@@ -67,7 +67,8 @@ ClassMuskingum::ClassMuskingum(const double* inVar, double* outVar, const double
 			// Raising an exception here would put the module into an undefined state maybe					
 //            CRHMException TExcept(S.c_str(), TExcept::WARNING);
 //            LogError(TExcept);
-			printf(S.c_str());
+			printf( (S + " CORRECTING TO 1 0 0\n").c_str() );
+			c0[hh] = 1.0; c1[hh] = 0.0; c2[hh] = 0.0;
 
 
 //            CRHMException TExcept(S.c_str(), TExcept::TERMINATE);

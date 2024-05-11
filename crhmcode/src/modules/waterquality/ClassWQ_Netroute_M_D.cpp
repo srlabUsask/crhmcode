@@ -31,9 +31,11 @@ void ClassWQ_Netroute_M_D::decl(void) {
                     'uses Muskingum,' \
                     'uses Clark.'";
 
+// "(mg/l * mm*km^2/int)" => "kg/int"
+
     declvar("inflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &inflow);
 
-    declvar("inflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
+    declvar("inflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "kg/int", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
 
     declstatvar("cuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &cuminflow);
 
@@ -41,13 +43,13 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declvar("outflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &outflow);
 
-    declvar("outflow_mWQ", TDim::NDEFN, "Substance mass: HRU outflow", "(mg/l * mm*km^2/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
+    declvar("outflow_mWQ", TDim::NDEFN, "Substance mass: HRU outflow", "kg/int", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
 
-    declvar("outflow_cWQ", TDim::NDEFN, "Substance concentration: HRU outflow", "(mg/l * mm*km^2/int)", &outflow_cWQ, &outflow_cWQ_lay, numsubstances);
+    declvar("outflow_cWQ", TDim::NDEFN, "Substance concentration: HRU outflow", "kg/int", &outflow_cWQ, &outflow_cWQ_lay, numsubstances);
 
     declstatvar("cumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &cumoutflow);
 
-    declstatvar("cumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &cumoutflow_mWQ, &cumoutflow_mWQ_lay, numsubstances);
+    declstatvar("cumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "kg/int", &cumoutflow_mWQ, &cumoutflow_mWQ_lay, numsubstances);
 
     declvar("outflow_diverted", TDim::NHRU, "HRU outflow diverted to another HRU", "(mm*km^2/int)", &outflow_diverted);
 
@@ -55,31 +57,31 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declstatvar("cumoutflow_diverted", TDim::NHRU, "cumulative HRU outflow diverted to another HRU", "(mm*km^2/int)", &cumoutflow_diverted);
 
-    declstatvar("cumoutflow_diverted_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow diverted to another HRU", "(mg/l * mm*km^2/int)", &cumoutflow_diverted_mWQ, &cumoutflow_diverted_mWQ_lay, numsubstances);
+    declstatvar("cumoutflow_diverted_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow diverted to another HRU", "kg/int", &cumoutflow_diverted_mWQ, &cumoutflow_diverted_mWQ_lay, numsubstances);
 
     declstatvar("cum_to_Sd", TDim::NHRU, "cumulative other HRU to depressional storage (Sd) of this HRU", "(mm)", &cum_to_Sd);
 
-    declstatvar("cum_to_Sd_mWQ", TDim::NDEFN, "cumulative mass of solute from other HRU to depressional storage (Sd) of this HRU", "(mg/l * mm*km^2/int)", &cum_to_Sd_mWQ, &cum_to_Sd_mWQ_lay, numsubstances);
+    declstatvar("cum_to_Sd_mWQ", TDim::NDEFN, "cumulative mass of solute from other HRU to depressional storage (Sd) of this HRU", "kg/int", &cum_to_Sd_mWQ, &cum_to_Sd_mWQ_lay, numsubstances);
 
     declstatvar("cum_to_soil_rechr", TDim::NHRU, "cumulative other HRU to soil_rechr of this HRU", "(mm)", &cum_to_soil_rechr);
 
-    declstatvar("cum_to_soil_rechr_mWQ", TDim::NDEFN, "cumulative mass of solute from other HRU to soil_rechr of this HRU", "(mg/l * mm*km^2/int)", &cum_to_soil_rechr_mWQ, &cum_to_soil_rechr_mWQ_lay, numsubstances);
+    declstatvar("cum_to_soil_rechr_mWQ", TDim::NDEFN, "cumulative mass of solute from other HRU to soil_rechr of this HRU", "kg/int", &cum_to_soil_rechr_mWQ, &cum_to_soil_rechr_mWQ_lay, numsubstances);
 
     declvar("gwinflow", TDim::NHRU, "ground water inflow", "(mm*km^2/int)", &gwinflow);
 
-    declvar("gwinflow_mWQ", TDim::NDEFN, "Concentration: ground water inflow", "(mg/l * mm*km^2/int)", &gwinflow_mWQ, &gwinflow_mWQ_lay, numsubstances);
+    declvar("gwinflow_mWQ", TDim::NDEFN, "Concentration: ground water inflow", "kg/int", &gwinflow_mWQ, &gwinflow_mWQ_lay, numsubstances);
 
     declstatvar("gwcuminflow", TDim::NHRU, "cumulative gw inflow", "(mm*km^2)", &gwcuminflow);
 
-    declstatvar("gwcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute gw inflow", "(mg/l * mm*km^2/int)", &gwcuminflow_mWQ, &gwcuminflow_mWQ_lay, numsubstances);
+    declstatvar("gwcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute gw inflow", "kg/int", &gwcuminflow_mWQ, &gwcuminflow_mWQ_lay, numsubstances);
 
     declvar("gwoutflow", TDim::NHRU, "HRU gw outflow", "(mm*km^2/int)", &gwoutflow);
 
-    declvar("gwoutflow_mWQ", TDim::NDEFN, "Concentration: HRU gw outflow", "(mg/l * mm*km^2/int)", &gwoutflow_mWQ, &gwoutflow_mWQ_lay, numsubstances);
+    declvar("gwoutflow_mWQ", TDim::NDEFN, "Concentration: HRU gw outflow", "kg/int", &gwoutflow_mWQ, &gwoutflow_mWQ_lay, numsubstances);
 
     declstatvar("gwcumoutflow", TDim::NHRU, "cumulative HRU gw outflow", "(mm*km^2)", &gwcumoutflow);
 
-    declstatvar("gwcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU gw outflow", "(mg/l * mm*km^2/int)", &gwcumoutflow_mWQ, &gwcumoutflow_mWQ_lay, numsubstances);
+    declstatvar("gwcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU gw outflow", "kg/int", &gwcumoutflow_mWQ, &gwcumoutflow_mWQ_lay, numsubstances);
 
     decldiag("gwoutflow_diverted", TDim::NHRU, "HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwoutflow_diverted);
 
@@ -87,43 +89,43 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declstatvar("gwcumoutflow_diverted", TDim::NHRU, "cumulative HRU gw outflow diverted to another HRU", "(mm*km^2/int)", &gwcumoutflow_diverted);
 
-    declstatvar("gwcumoutflow_diverted_mWQ", TDim::NDEFN, "cumulative mass of solute HRU gw outflow diverted to another HRU", "(mg/l * mm*km^2/int)", &gwcumoutflow_diverted_mWQ, &gwcumoutflow_diverted_mWQ_lay, numsubstances);
+    declstatvar("gwcumoutflow_diverted_mWQ", TDim::NDEFN, "cumulative mass of solute HRU gw outflow diverted to another HRU", "kg/int", &gwcumoutflow_diverted_mWQ, &gwcumoutflow_diverted_mWQ_lay, numsubstances);
 
     declvar("ssrinflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &ssrinflow);
 
-    declvar("ssrinflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &ssrinflow_mWQ, &ssrinflow_mWQ_lay, numsubstances);
+    declvar("ssrinflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "kg/int", &ssrinflow_mWQ, &ssrinflow_mWQ_lay, numsubstances);
 
     declstatvar("ssrcuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &ssrcuminflow);
 
-    declstatvar("ssrcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute of inflow from other HRUs", "(mg/l * mm*km^2/int)", &ssrcuminflow_mWQ, &ssrcuminflow_mWQ_lay, numsubstances);
+    declstatvar("ssrcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute of inflow from other HRUs", "kg/int", &ssrcuminflow_mWQ, &ssrcuminflow_mWQ_lay, numsubstances);
 
     declvar("ssroutflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &ssroutflow);
 
-    declvar("ssroutflow_mWQ", TDim::NDEFN, "Concentration: HRU outflow", "(mg/l * mm*km^2/int)", &ssroutflow_mWQ, &ssroutflow_mWQ_lay, numsubstances);
+    declvar("ssroutflow_mWQ", TDim::NDEFN, "Concentration: HRU outflow", "kg/int", &ssroutflow_mWQ, &ssroutflow_mWQ_lay, numsubstances);
 
     declstatvar("ssrcumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &ssrcumoutflow);
 
-    declstatvar("ssrcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &ssrcumoutflow_mWQ, &ssrcumoutflow_mWQ_lay, numsubstances);
+    declstatvar("ssrcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "kg/int", &ssrcumoutflow_mWQ, &ssrcumoutflow_mWQ_lay, numsubstances);
 
     declstatvar("HRU_cumbasinflow", TDim::NHRU, "cumulative HRU to basinflow", "(mm*km^2)", &HRU_cumbasinflow);
 
-    declstatvar("HRU_cumbasinflow_mWQ", TDim::NDEFN, "cumulative HRU to basinflow", "(mg/l * mm*km^2/int)", &HRU_cumbasinflow_mWQ, &HRU_cumbasinflow_mWQ_lay, numsubstances);
+    declstatvar("HRU_cumbasinflow_mWQ", TDim::NDEFN, "cumulative HRU to basinflow", "kg/int", &HRU_cumbasinflow_mWQ, &HRU_cumbasinflow_mWQ_lay, numsubstances);
 
     declvar("runinflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &runinflow);
 
-    declvar("runinflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "(mg/l * mm*km^2/int)", &runinflow_mWQ, &runinflow_mWQ_lay, numsubstances);
+    declvar("runinflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "kg/int", &runinflow_mWQ, &runinflow_mWQ_lay, numsubstances);
 
     declstatvar("runcuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &runcuminflow);
 
-    declstatvar("runcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute inflow from other HRUs", "(mg/l * mm*km^2/int)", &runcuminflow_mWQ, &runcuminflow_mWQ_lay, numsubstances);
+    declstatvar("runcuminflow_mWQ", TDim::NDEFN, "cumulative mass of solute inflow from other HRUs", "kg/int", &runcuminflow_mWQ, &runcuminflow_mWQ_lay, numsubstances);
 
     declvar("runoutflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &runoutflow);
 
-    declvar("runoutflow_mWQ", TDim::NDEFN, "Concentration: HRU outflow", "(mg/l * mm*km^2/int)", &runoutflow_mWQ, &runoutflow_mWQ_lay, numsubstances);
+    declvar("runoutflow_mWQ", TDim::NDEFN, "Concentration: HRU outflow", "kg/int", &runoutflow_mWQ, &runoutflow_mWQ_lay, numsubstances);
 
     declstatvar("runcumoutflow", TDim::NHRU, "cumulative HRU outflow", "(mm*km^2)", &runcumoutflow);
 
-    declstatvar("runcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "(mg/l * mm*km^2/int)", &runcumoutflow_mWQ, &runcumoutflow_mWQ_lay, numsubstances);
+    declstatvar("runcumoutflow_mWQ", TDim::NDEFN, "cumulative mass of solute HRU outflow", "kg/int", &runcumoutflow_mWQ, &runcumoutflow_mWQ_lay, numsubstances);
 
     declstatvar("cum_preferential_flow_to_gw", TDim::NHRU, "cumulative other HRU's runoff to gw of this HRU via preferential flow path", "(mm)", &cum_preferential_flow_to_gw);
 
@@ -135,28 +137,28 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declvar("Used", TDim::NHRU, "directed to basinbasin surface and sub-surface outflow", "()", &Used);
 
-    declvar("Used_mWQ", TDim::NDEFN, "directed to basinbasin surface and sub-surface outflow", "(mg/l * mm*km^2/int)", &Used_mWQ, &Used_mWQ_lay, numsubstances);
+    declvar("Used_mWQ", TDim::NDEFN, "directed to basinbasin surface and sub-surface outflow", "kg/int", &Used_mWQ, &Used_mWQ_lay, numsubstances);
 
     decldiag("basinflow_s", TDim::BASIN, "basin surface and sub-surface outflow", "(m^3/s)", &basinflow_s);
 
     declstatvar("cumbasinflow", TDim::BASIN, "cumulative basin surface and sub-surface outflow", "(m^3)", &cumbasinflow);
 
-    declvar("cumbasinflow_mWQ", TDim::NDEF, "cumulative mass of solute basin surface and sub-surface outflow", "(mg/l * mm*km^2/int)", &cumbasinflow_mWQ, &cumbasinflow_mWQ_lay, numsubstances);
+    declvar("cumbasinflow_mWQ", TDim::NDEF, "cumulative mass of solute basin surface and sub-surface outflow", "kg/int", &cumbasinflow_mWQ, &cumbasinflow_mWQ_lay, numsubstances);
 
-    declvar("basingw", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3/int)", &basingw);
+    declvar("basingw", TDim::BASIN, "basin groundwater outflow", "(m^3/int)", &basingw);
 
-    declvar("basingw_conc", TDim::NDEF, "cumulative basin groundwater outflow", "(m^3/int)", &basingw_conc, &basingw_conc_lay, numsubstances);
+    declvar("basingw_conc", TDim::NDEF, "species concentration in basin groundwater outflow", "(m^3/int)", &basingw_conc, &basingw_conc_lay, numsubstances);
 
     decldiag("basingw_s", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3/s)", &basingw_s);
 
     declstatvar("cumbasingw", TDim::BASIN, "cumulative basin groundwater outflow", "(m^3)", &cumbasingw);
 
-    declstatvar("cumbasingw_mWQ", TDim::NDEF, "cumulative mass of solute basin groundwater outflow", "(mg/l * mm*km^2/int)", &cumbasingw_mWQ, &cumbasingw_mWQ_lay, numsubstances);
+    declstatvar("cumbasingw_mWQ", TDim::NDEF, "cumulative mass of solute basin groundwater outflow", "kg/int", &cumbasingw_mWQ, &cumbasingw_mWQ_lay, numsubstances);
 
 
     decllocal("soil_ssr_Buf", TDim::NHRU, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf);
 
-    declvar("soil_ssr_Buf_conc", TDim::NDEFN, "buffer subsurface runoff", "(mm/d)", &soil_ssr_Buf_conc, &soil_ssr_Buf_conc_lay, numsubstances);
+    declvar("soil_ssr_Buf_conc", TDim::NDEFN, "buffer subsurface runoff", "(g/mm*km2/d)", &soil_ssr_Buf_conc, &soil_ssr_Buf_conc_lay, numsubstances);
 
     decllocal("soil_runoff_Buf", TDim::NHRU, "buffer rain runoff", "(mm/d)", &soil_runoff_Buf);
 
@@ -244,7 +246,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declgetvar("*", "cum_redirected_residual", "(mm*km^2/int)", &cum_redirected_residual);
 
-//    declputvar("*", "cum_redirected_residual_mWQ", "(mg/l * mm*km^2/int)", &cum_redirected_residual_mWQ, &cum_redirected_residual_mWQ_lay);
+//    declputvar("*", "cum_redirected_residual_mWQ", "kg/int", &cum_redirected_residual_mWQ, &cum_redirected_residual_mWQ_lay);
 
     declputvar("*", "gw", "(mm)", &gw);
 
@@ -511,6 +513,7 @@ void ClassWQ_Netroute_M_D::run(void) {
                 if (soil_runoff[hh] == 0) {
                     soil_runoff_Buf_conc_lay[Sub][hh] = 0;
                 } else {
+                    // g/m2 -> g/km2 (* 1e6), interval -> day (* )
                     soil_runoff_Buf_conc_lay[Sub][hh] = soil_runoff_mWQ_lay[Sub][hh] * soil_runoffDiv / soil_runoff[hh];
                 }
             }
@@ -964,6 +967,7 @@ void ClassWQ_Netroute_M_D::run(void) {
                     if (soil_runoff[hh] == 0) {
                         soil_runoff_Buf_conc_lay[Sub][hh] = 0;
                     } else {
+                        // g/m2 -> g/km2 (* 1e6)
                         soil_runoff_Buf_conc_lay[Sub][hh] = soil_runoff_mWQ_lay[Sub][hh] * soil_runoffDiv / soil_runoff[hh];
                     }
             }

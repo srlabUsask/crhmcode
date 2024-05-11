@@ -52,6 +52,8 @@ ClassClark::ClassClark(const double* inVar, double* outVar, const double* kstora
 			c2[hh] = (kstorage[hh] - Global::Interval * 0.5) / (kstorage[hh] + Global::Interval * 0.5); // units of kstorage (days)
 		}
 
+		printf("%d %f %f\n", hh, c01[hh], c2[hh]);
+
         if ( (c01[hh] < 0.0) || (c2[hh] < 0.0) ) {
             string S = string("'") + " (Clark)' constants out of range (do not set Kstorage <- 0): " +
 						to_string(c01[hh]).c_str() + "  " +

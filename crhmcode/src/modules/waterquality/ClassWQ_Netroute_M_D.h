@@ -120,9 +120,9 @@ public:
 	double* soil_ssr_Buf{ NULL };    // buffered
 	double* soil_ssr_Buf_conc{ NULL };    // buffered
 	double** soil_ssr_Buf_conc_lay{ NULL };    // buffered
-	double* soil_runoff_Buf{ NULL }; // buffered
-	double* soil_runoff_Buf_conc{ NULL }; // buffered
-	double** soil_runoff_Buf_conc_lay{ NULL }; // buffered
+	double* soil_runoff_Buf{ NULL }; // buffered [mm/d, nhru]
+	double* soil_runoff_Buf_conc{ NULL }; // buffered [g/mm*km2/d]
+	double** soil_runoff_Buf_conc_lay{ NULL }; // buffered [g/mm*km2/d]
 	double* soil_gw_Buf{ NULL };     // buffered
 	double* soil_gw_Buf_conc{ NULL };     // buffered
 	double** soil_gw_Buf_conc_lay{ NULL };     // buffered
@@ -169,8 +169,8 @@ public:
 	const double* gwLag{ NULL };
 	const long* gwwhereto{ NULL };       // [nhru]
 
-	const double* basin_area{ NULL };      // [BASIN]
-	const double* hru_area{ NULL };        // [nhru]
+	const double* basin_area{ NULL };      // [km^2, BASIN]
+	const double* hru_area{ NULL };        // [km^2, nhru]
 	const double* distrib{ NULL };
 	const double* distrib_Basin{ NULL };
 	const double** distrib_hru{ NULL };
@@ -190,9 +190,9 @@ public:
 	const double* soil_ssr{ NULL };
 	const double* soil_ssr_conc{ NULL };
 	const double** soil_ssr_conc_lay{ NULL };
-	const double* soil_runoff{ NULL };
-	const double* soil_runoff_mWQ{ NULL };    // (g/int)
-	const double** soil_runoff_mWQ_lay{ NULL };   // (g/int)
+	const double* soil_runoff{ NULL };   // [mm/int]
+	const double* soil_runoff_mWQ{ NULL };    // [g/m^2/int]
+	const double** soil_runoff_mWQ_lay{ NULL };   // [g/m^2/int]
 
 	const double* cum_redirected_residual{ NULL };  // only used for status display
 

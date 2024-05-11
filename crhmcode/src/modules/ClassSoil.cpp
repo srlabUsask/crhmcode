@@ -67,7 +67,7 @@ void ClassSoil::decl(void) {
     declparam("stream_runoff", TDim::NHRU, "[0.0]", "0.0", "1.0", "fraction of stream returned to runoff.", "()", &stream_runoff);
 
 
-    declparam("channel_slope", TDim::NHRU, "[0.002]", "0.0001", "0.01", "soil slope to culvert.", "()", &channel_slope);
+    declparam("channel_slope", TDim::NHRU, "[0.002]", "0.0001", "0.01", "soil slope to culvert.", "(radians)", &channel_slope);
 
     declparam("side_slope", TDim::NHRU, "[0.02]", "0.0001", "0.01", "side soil slope mormal to culvert slope.", "()", &side_slope);
 

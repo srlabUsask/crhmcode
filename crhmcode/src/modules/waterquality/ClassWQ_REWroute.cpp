@@ -29,15 +29,15 @@ void ClassWQ_REWroute::decl(void) {
 
 
   inflowCnt = declgrpvar("WS_ALL_inflow", "basinflow", "query variable = 'basinflow'", "(m^3/int)", &rew, &inflow_All);
-  inflowConcCnt = declgrpvar("WS_ALL_inflow_mWQ", "basinflow_mWQ", "query variable = 'basinflow_mWQ'", "(g/l)", &rew_mWQ, &inflow_mWQ_All);
+  inflowConcCnt = declgrpvar("WS_ALL_inflow_mWQ", "basinflow_mWQ", "query variable = 'basinflow_mWQ'", "(kg/int)", &rew_mWQ, &inflow_mWQ_All);
 
   declvar("WS_inflow", TDim::NHRU, "inflow from each RB", "(m^3/int)", &inflow);
-  declvar("WS_inflow_mWQ", TDim::NDEFN, "Concentration: inflow from each RB", "(g/l *m^3/int)", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
+  declvar("WS_inflow_mWQ", TDim::NDEFN, "Concentration: inflow from each RB", "(kg/int)", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
 
   declstatdiag("cum_WSinflow", TDim::NHRU, "cumulative inflow from each RB", "(m^3)", &cuminflow);
 
   declvar("WS_outflow", TDim::NHRU, "outflow of each RB", "(m^3/int)", &outflow);
-  declvar("WS_outflow_mWQ", TDim::NDEFN, "Concentration: outflow of each RB", "(g/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
+  declvar("WS_outflow_mWQ", TDim::NDEFN, "Concentration: outflow of each RB", "(kg/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
   declstatdiag("cum_WSoutflow", TDim::NHRU, "cumulative outflow of each RB", "(m^3)", &cumoutflow);
 
   declvar("WS_flow", TDim::BASIN, "watershed surface and sub-surface outflow", "(m^3/int)", &flow);

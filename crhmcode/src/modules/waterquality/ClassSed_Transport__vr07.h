@@ -140,8 +140,8 @@ double bedload_gamma = 0.5;
 // Vars for the vanRijn formulation
     double *pct_sand{ NULL }; // ()
 
-    double *diam50{ NULL };   // mm
-    double *diam90{ NULL };   // mm
+    double *diam50{ NULL };   // m
+    double *diam90{ NULL };   // m
 //    double *diam_nodim{ NULL };
     double *tau_crit_nodim{ NULL };
 
@@ -165,13 +165,14 @@ double bedload_gamma = 0.5;
 /* Parameters for van Rijn formulation */
 
     const long *route_Cshp{ NULL };
-    const double *channel_width{ NULL };
+    const double *channel_width{ NULL }; // (m)
     const double *channel_slope{ NULL }; // ()
     const double *sidewall_angle{ NULL }; // ()
     const double *channel_pct{ NULL }; // ()
     const double *vr_mannings_n{ NULL }; // ()
-    const double *vr_roughness_height{ NULL }; // ()
-    const double *u_crit{ NULL }; // (m)
+    const double *vr_roughness_height{ NULL }; // (m)
+    const double *u_crit{ NULL }; // (m/s)
+    const double *Nf{ NULL }; // ()
 
 };
 

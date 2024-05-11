@@ -60,6 +60,14 @@ void ClassSed_Detachment::decl(void) {
   declgetvar("*", "soil_runoff", "(mm/int)", &soil_runoff);
   declputvar("*", "soil_runoff_mWQ", "(g/m^2/int)", &soil_runoff_mWQ,&soil_runoff_mWQ_lay);
 
+// Consider whether these two should be in separate module ClassWQ_Soil_Null
+  declstatvar("conc_soil_rechr", TDim::NDEFN, "concentration in soil_rechr: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
+      "(i_srp=3) SRP, (i_dop=4) DOP, (i_pp=5) PP, (i_oc=6) OC", "(mg/l)", &conc_soil_rechr, &conc_soil_rechr_lay, numsubstances); //
+  declstatvar("conc_soil_lower", TDim::NDEFN, "concentration in soil_lower: (i_no3n=0) NO3-N, (i_nh4n=1) NH4-1, (i_don=2) DON, "
+      "(i_srp=3) SRP, (i_dop=4) DOP, (i_pp=5) PP, (i_oc=6) OC", "(mg/l)", &conc_soil_lower, &conc_soil_lower_lay, numsubstances);
+
+
+
   declstatvar("sedrelpool", TDim::NHRU, "sediment stored in conceptual storage pool", "(g/int)", &sedrelpool);
 
 // Vars for the modified MMF formulation
@@ -143,7 +151,7 @@ void ClassSed_Detachment::decl(void) {
 
 // Parameters for the vanRijn formulation
 //  declparam("channel_pct", TDim::NHRU, "[0]", "0","100", "fraction of area containing rills", "()", &channel_pct);
-  declparam("channel_slope", TDim::NHRU, "[0.0001]", "0","10", "slope of the rill channels", "()", &channel_slope);   // CRHM specifies slope in degrees
+  declparam("channel_slope", TDim::NHRU, "[0.0001]", "0","10", "slope of the rill channels", "(m/m)", &channel_slope);   // CRHM specifies slope in degrees
   // check loch et al. 89 for values of mannings n for use in van Rijn
   declparam("vr_mannings_n", TDim::NHRU, "[0.104]", "0","2", "vanrijn mannings n", "()", &vr_mannings_n);
   declparam("vr_roughness_height", TDim::NHRU, "[0.104]", "0","2", "vanrijn roughness height", "(m)", &vr_roughness_height);
@@ -167,7 +175,7 @@ void ClassSed_Detachment::decl(void) {
 void ClassSed_Detachment::init(void) {
 
   initialize_modMMF();
-  initialize_VANRIJN();
+//  initialize_VANRIJN();
 }
 
 #define SED_CHANNEL 0
@@ -386,7 +394,10 @@ void ClassSed_Detachment::calc_delivered_to_transport(sed_triple &rslt) {   // g
 void ClassSed_Detachment::calc_transport_capacity(sed_triple &rslt) {
 
   const double Q = soil_runoff[hh]*1000; // mm*km2 -> m3
-  const double imed = (v_actual[hh]*v_veg[hh]*v_tillage[hh]/ pow(v_std_bare[hh],3) ) * Q * Q * sin(channel_slope[hh]);
+// Use this if channel slope is in radians
+//  const double imed = (v_actual[hh]*v_veg[hh]*v_tillage[hh]/ pow(v_std_bare[hh],3) ) * Q * Q * sin(channel_slope[hh]);
+// Use this if channel slope is in m/m
+  const double imed = (v_actual[hh]*v_veg[hh]*v_tillage[hh]/ pow(v_std_bare[hh],3) ) * Q * Q * channel_slope[hh];
 
 // Why is transport capacity dependent on percentage of sediment type?
   rslt.c = imed * (pct_clay[hh]/100);
@@ -531,6 +542,8 @@ double ClassSed_Detachment::calc_critical_shear_stress_nodim_VANRIJN(double diam
 }
 
 
+#if false
+
 /*****************************************************************
  * 
  * van Rijn Bedload Transport Routines
@@ -544,8 +557,12 @@ double ClassSed_Detachment::calc_nodim_diam( double diam ) {
 
 double ClassSed_Detachment::calc_vanrijn_flowdepth_from_manning(double flow_rate) {
 //  global mannings_n
-  
-  double h = pow (1.342281879 * flow_rate * vr_mannings_n[hh] / sqrt(tan(channel_slope[hh])),
+
+// Use this if channel slope is in radians  
+//  double h = pow (1.342281879 * flow_rate * vr_mannings_n[hh] / sqrt(tan(channel_slope[hh])),
+//                  3.0/8.0);
+// Use this if channel slope is in m/m  
+  double h = pow (1.342281879 * flow_rate * vr_mannings_n[hh] / sqrt(channel_slope[hh]),
                   3.0/8.0);
   return h;
 }    
@@ -555,7 +572,12 @@ double ClassSed_Detachment::calc_vanrijn_flowvel_from_flowdepth(double flow_rate
 }
 
 double ClassSed_Detachment::calc_bed_shear_stress(double stream_depth) {
-  return rho_w * g * stream_depth * tan(channel_slope[hh]);
+// Use this if channel slope is in radians  
+//  return rho_w * g * stream_depth * tan(channel_slope[hh]);
+}
+
+// Use this if channel slope is in m/m  
+  return rho_w * g * stream_depth * channel_slope[hh];
 }
 
 double ClassSed_Detachment::calc_nodim_shear_stress( double tau_b ) {
@@ -608,7 +630,6 @@ double ClassSed_Detachment::calc_bedload_transport_cap(double runoff) {  // runo
 
 
 
-
 /***************************************************************
  * Van Rijn Suspended transport capacity
 */
@@ -649,7 +670,10 @@ double ClassSed_Detachment::calc_bedload_transport_cap(double runoff) {  // runo
 
 
   double ClassSed_Detachment::calc_vr_shearvel(double streamdepth) {
-    return sqrt(g * streamdepth * tan(channel_slope[hh]) );
+    // Use this if channel_slope is in radians
+//    return sqrt(g * streamdepth * tan(channel_slope[hh]) );
+    // Use this if channel_slope is in m/m
+    return sqrt(g * streamdepth * channel_slope[hh]);
   }
 
   double ClassSed_Detachment::calc_vr_beta_factor(double shearvel, double fallvel) {
@@ -690,7 +714,6 @@ double ClassSed_Detachment::calc_bedload_transport_cap(double runoff) {  // runo
     return f_factor * streamvel * streamdepth * ref_conc;
   }
 
-
   // beta is sediment diffusivity coefficient
 //  double susp_load_transport = calc_vr_susp_load_transport();
 
@@ -725,5 +748,6 @@ void ClassSed_Detachment::initialize_VANRIJN() {
     tau_crit_nodim[hh] = calc_critical_shear_stress_nodim_VANRIJN(diam_nodim[hh]);
   }
 }
+#endif
 
 

@@ -64,19 +64,22 @@ void ClassSed_Transport__vr07::decl(void) {
 
   declparam("Channel_shp", TDim::NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
 
-// sidewall angle is in degrees
+// sidewall angle is in degrees, used if v-channel shape is specified
   declparam("sidewall_angle", TDim::NHRU, "[10]", "0","90", "anglular slope of the channel sidewalls for triangular channels", "()", &sidewall_angle);   // CRHM specifies slope in degrees
   // check loch et al. 89 for values of mannings n for use in van Rijn
   declparam("vr_mannings_n", TDim::NHRU, "[0.104]", "0","2", "vanrijn mannings n", "()", &vr_mannings_n);
   // For choosing roughness, can refer to fig. 4 of [ van Rijn 2007, bedload ], or formulation
+  // TODO: This is not used
   declparam("vr_roughness_height", TDim::NHRU, "[0.1]", "0","2", "vanrijn roughness height", "(m)", &vr_roughness_height);
 
 // Critical velocity is usually between 0.25 and 0.5
 // Set to 0.0 to calculate critical velocity using van Rijn (2007) formulation (based on Shields diagram)
   declparam("u_crit", TDim::NHRU, "[0.0]", "0.0", "1.0", "Critical velocity", "(m/s)", &u_crit);
 
+  declparam("Nf", TDim::NHRU, "[0.3]", "0.0", "1.0", "Particle fall number", "(m/s)", &Nf);
 
-  variation_set = VARIATION_1;
+
+  variation_set = VARIATION_1;   // Use this variation with REWs
 
 // Correcting for channel frozen / unfrozen status
   scfCnt = declgrpvar("SCF_ALL", "scf", "query variable = 'scf'", "()", &scf_rew, &scf_All);
@@ -90,7 +93,7 @@ void ClassSed_Transport__vr07::decl(void) {
 
 
 
-  variation_set = VARIATION_2;
+  variation_set = VARIATION_2;    // Use this variation with Netroute
 
   declgetvar("*", "scf", "()", &scf_netroute);
 
@@ -116,7 +119,7 @@ void ClassSed_Transport__vr07::run(void) {
 
   for (hh = 0; chkStruct(); ++hh) {  // hh is object scope
     double vr_massflux = calc_vr_load_transport(outflow[hh]);   // g/int
-    outflow_mWQ_lay[Sub][hh] = vr_massflux;
+    outflow_mWQ_lay[Sub][hh] = Nf[hh]*vr_massflux + (1.0-Nf[hh])*outflow_mWQ_lay[Sub][hh];
     sedvr_outflow_mWQ_lay[Sub][hh] = vr_massflux;
   }
 }
@@ -230,7 +233,8 @@ double ClassSed_Transport__vr07::calc_flowdepth_from_manning__rect(double flow_r
 //  double S = channel_slope[hh];   // tan(channel_slope[hh]);
 // Assume slope is m/m
   double S = channel_slope[hh];   // tan(channel_slope[hh]);
-  double h = pow ( flow_rate * vr_mannings_n[hh] / (sqrt(S) * channel_width[hh]), 3.0/5.0 );
+  double base = flow_rate * vr_mannings_n[hh] / (sqrt(S) * channel_width[hh]);
+  double h = pow ( base, 3.0/5.0 );
 
   return h;
 }    
@@ -352,7 +356,7 @@ double ClassSed_Transport__vr07::calc_bedload_transport_cap_eq12(
 
   double M_e = (streamvel - u_crit_t) / sqrt((s - 1) * g * diam50_t);
   if (M_e < 0) {
-    printf("below thresh %f %f\n", streamvel, u_crit_t);
+//    printf("below thresh %f %f\n", streamvel, u_crit_t);
     return 0;
   }
   return 0.015 * rho_sed * streamvel * streamdepth * pow( (diam50_t/streamdepth), 1.2) * pow(M_e, 1.5);
@@ -391,6 +395,8 @@ double ClassSed_Transport__vr07::calc_suspended_transport_cap(
 
 // returns total sediment load (g/int)
 double ClassSed_Transport__vr07::calc_vr_load_transport(double streamflow ) {
+  if (streamflow <= 0) return 0;  // Protect against spurious input values
+
 //  double flow_rate = streamflow * 1000 * Global::Freq / 86400.0;  // mm*km^2/int -> m^3/s
   double flow_rate = streamflow * Global::Freq / 86400.0;  // m^3/int -> m^3/s
 
@@ -413,6 +419,7 @@ double ClassSed_Transport__vr07::calc_vr_load_transport(double streamflow ) {
   }
 
   stream_depth[hh] = streamdepth;
+  stream_width[hh] = streamwidth;
 
   if (flow_rate == 0) {
     mass_suspended[hh] = 0;
@@ -427,20 +434,18 @@ double ClassSed_Transport__vr07::calc_vr_load_transport(double streamflow ) {
   mass_suspended[hh] = streamwidth * calc_suspended_transport_cap(streamvel, streamwidth, streamdepth);  // kg/s
 
 // The 'per meter' in q_bedload is per unit width of channel (cross-section)
-  double q_bedload_eq10 = calc_bedload_transport_cap_eq10(streamvel, streamwidth, streamdepth);   // kg/s/m
-  double q_bedload_eq12 = calc_bedload_transport_cap_eq12(streamvel, streamwidth, streamdepth);   // kg/s/m
-  printf("BEDLOAD %f vs %f\n", q_bedload_eq10, q_bedload_eq12);
-
   if (false) {
+    double q_bedload_eq10 = calc_bedload_transport_cap_eq10(streamvel, streamwidth, streamdepth);   // kg/s/m
     mass_bedload[hh]   = streamwidth * q_bedload_eq10;  // 
   } else {
+    double q_bedload_eq12 = calc_bedload_transport_cap_eq12(streamvel, streamwidth, streamdepth);   // kg/s/m
     mass_bedload[hh]   = streamwidth * q_bedload_eq12; 
   }
   // convert kg/s to g/int
-  if (variation_set == VARIATION_1) {
+  if (variation == VARIATION_1) {
     return (1.0f - scf_All[0][hh]) * ( mass_suspended[hh] + mass_bedload[hh] ) * 1000.0 * 86400.0 / Global::Freq;
   }
-  if (variation_set == VARIATION_2) {
+  if (variation == VARIATION_2) {
     return (1.0f - scf_netroute[hh]) * ( mass_suspended[hh] + mass_bedload[hh] ) * 1000.0 * 86400.0 / Global::Freq;
   }
 }
