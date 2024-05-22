@@ -1906,7 +1906,7 @@ void CRHMmainDlg::OnClickOnOpenInitState()
 
 		CString filename = fileDlg.GetFileName();
 
-		main->OpenNameState = CT2A(folderPath);
+		main->OpenNameState = CT2A(folderPath + "\\" + filename);
 		main->OpenStateFlag = true;
 
 		updateOpenStateFileMenu();
