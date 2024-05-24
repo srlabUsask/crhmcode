@@ -109,7 +109,7 @@ void Common::GroupEnding(string &AA, int Cnt) {
 	int letter = Cnt % 26;
 	if (!letter) { // 26th letter is 'Z' not "@@"
 		letter = 26;
-		alphas = 0;
+		alphas -= 1;
 	}
 	AA = "@@";
 	AA[1] += letter;
