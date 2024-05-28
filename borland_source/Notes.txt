@@ -673,4 +673,13 @@ CRHM 11/14/23
 
   Adding variable "pot_subl_cpy" to output "dimensionless canopy sublimation rate" in Canopy, CanopyClearing, and CanopyClearingGap modules.
 
+
+CRHM 05/28/24
+
+  Updating comments for interval variables Q, U units in evap, evap_Resist, evapX modules.
+
+  Correcting No_Freeze if statement for all unfrozen condition in SoilX module.
+
+        if((NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0)) // 28May2024: change from if(NO_Freeze[hh])
+          thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
 	

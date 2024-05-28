@@ -1,9 +1,10 @@
-// 11/14/23 adding variable to output "dimensionless canopy sublimation rate" in canopy modules in 10/04/23
+// 05/28/24 changing comments for interval variables Q, U units in evap, evap_Resist, evapX modules
+// correcting No_Freeze if statement for all unfrozen condition in SoilX module in 11/14/23
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "11/14/23"
+#define CurrentVersion "05/28/24"
 
 #include <stdexcept>
 #include "CRHMmain.h"

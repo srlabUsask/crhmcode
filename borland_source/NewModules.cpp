@@ -1,4 +1,4 @@
-// 11/14/23
+// 05/28/24
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -63,9 +63,9 @@ void MoveModulesToGlobal(String DLLName){
 
   DLLModules.AddModule(new Classalbedo("albedo", "08/11/11", CRHM::BASIC));
   DLLModules.AddModule(new Classnetall("netall", "04/04/22", CRHM::BASIC));
-  DLLModules.AddModule(new Classevap("evap", "03/18/22", CRHM::BASIC));
+  DLLModules.AddModule(new Classevap("evap", "05/28/24", CRHM::BASIC));
   DLLModules.AddModule(new ClassevapD("evapD", "11/04/09", CRHM::ADVANCE));
-  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "04/04/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "05/28/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassevapD_Resist("evapD_Resist", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassShutWall("ShuttleWallace", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassShutWallD("ShuttleWallaceD", "04/04/22", CRHM::ADVANCE));
@@ -78,8 +78,8 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new Classfrozen("frozen", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoil("Soil", "04/05/22", CRHM::BASIC));
-  DLLModules.AddModule(new ClassevapX("evapX", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoilX("SoilX", "04/05/22", CRHM::ADVANCE)); // nlay >= 2 check added
+  DLLModules.AddModule(new ClassevapX("evapX", "05/28/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSoilX("SoilX", "05/28/24", CRHM::ADVANCE)); // nlay >= 2 check added
   DLLModules.AddModule(new ClassSoilDS("SoilDetention", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "04/05/22", CRHM::PROTO)); // prototype wetlands
   DLLModules.AddModule(new Classglacier_061718("glacier_061718", "06/10/16", CRHM::PROTO));
@@ -3246,7 +3246,7 @@ void Classevap::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      switch (evap_type[hh]){
 
@@ -16601,7 +16601,7 @@ void Classevap_Resist::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      float Soil_Moist = (soil_moist[hh]/soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3]; // 05/21/20: Soil_Moist is soil saturation for the entire soil column
 
@@ -16613,7 +16613,7 @@ void Classevap_Resist::run(void) {
 
            Z0 = Ht[hh]/7.6;
            d  = Ht[hh]*0.67;
-           U = hru_u[hh]; // Wind speed (m/d)
+           U = hru_u[hh];
            ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*U);
 
            rcstar = rcs[hh]; // rc min
@@ -18036,7 +18036,7 @@ void ClassevapX::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      switch (evap_type[hh]){
 
@@ -18060,7 +18060,7 @@ void ClassevapX::run(void) {
 
              Z0 = Ht[hh]/7.6;
              d  = Ht[hh]*0.67;
-             U = hru_u[hh]; // Wind speed (m/d)
+             U = hru_u[hh];
              ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*U);
 
              rcstar = rcs[hh]; // rc min
@@ -21376,7 +21376,7 @@ void ClassSoilX::run(void) {
     if(nstep == 0){
 
       for(long ll = 0; ll < depths_size; ++ll)
-        if(NO_Freeze[hh])
+        if((NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0)) // 28May2024: change from if(NO_Freeze[hh])
           thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
         else
           thaw_layers_lay[ll][hh] = 0.0; // all frozen
