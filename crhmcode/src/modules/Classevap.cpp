@@ -152,7 +152,7 @@ void Classevap::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      switch (evap_type[hh]){
 
