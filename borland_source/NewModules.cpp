@@ -1,4 +1,4 @@
-// 05/28/24
+// 05/29/24
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -83,7 +83,7 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassSoilDS("SoilDetention", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "04/05/22", CRHM::PROTO)); // prototype wetlands
   DLLModules.AddModule(new Classglacier_061718("glacier_061718", "06/10/16", CRHM::PROTO));
-  DLLModules.AddModule(new Classglacier("glacier", "04/22/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classglacier("glacier", "05/29/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSWEslope_061718("SWESlope_061718", "06/02/16", CRHM::PROTO));
   DLLModules.AddModule(new ClassSWEslope("SWESlope", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassICEflow("ICEflow", "12/31/18", CRHM::ADVANCE));
@@ -27508,7 +27508,7 @@ void Classglacier::run(void){
       }
       // enter new data
       lagT_delayed_lay[0][hh] = hru_t[hh];
-      lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
+      lagSW_delayed_lay[0][hh] = Qsisn_Var[hh]; // 29May2024 correction: from lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
       // lag T and SW
       long LT = lagT[hh];
       long LSW = lagSW[hh];
