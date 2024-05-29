@@ -536,7 +536,7 @@ void Classglacier::run(void) {
             }
             // enter new data
             lagT_delayed_lay[0][hh] = hru_t[hh];
-            lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
+            lagSW_delayed_lay[0][hh] = Qsisn_Var[hh];
             // lag T and SW
             long LT = lagT[hh];
             long LSW = lagSW[hh];
