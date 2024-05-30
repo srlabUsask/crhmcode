@@ -429,7 +429,7 @@ void Classglacier::run(void) {
     if (nstep == 1) { // must be here after 'hru_elev' parameter has been backed up
         for (hh = 0; hh < nhru; ++hh) {
             glacier_h2o[hh] = SWE[hh] + firn[hh] + ice[hh]; // water equivalent(mm)
-            glacier_depth[hh] = (Common::DepthofSnow(SWE[hh]) + firn_depth[hh]) / 1000.0 + ice[hh] / ice_dens[hh]; // (m) thickness
+            glacier_depth[hh] = (Classglacier::DepthofSnow(SWE[hh]) + firn_depth[hh]) / 1000.0 + ice[hh] / ice_dens[hh]; // (m) thickness
             glacier_Surf[hh] = glacier_depth[hh] + topo_elev[hh]; // (m)
 
             Pa[hh] = 101.3f * pow((293.0f - 0.0065f * glacier_Surf[hh]) / 293.0f, 5.26f);  // (kPa)
@@ -536,7 +536,7 @@ void Classglacier::run(void) {
             }
             // enter new data
             lagT_delayed_lay[0][hh] = hru_t[hh];
-            lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
+            lagSW_delayed_lay[0][hh] = Qsisn_Var[hh];
             // lag T and SW
             long LT = lagT[hh];
             long LSW = lagSW[hh];
@@ -878,7 +878,7 @@ void Classglacier::run(void) {
 
         if (GlacierMode[hh] == 1) { // ie glacier
             glacier_h2o[hh] = SWE[hh] + firn[hh] + ice[hh]; // water equivalent(mm)
-            glacier_depth[hh] = (Common::DepthofSnow(SWE[hh]) + firn_depth[hh]) / 1000.0 + ice[hh] / ice_dens[hh]; // (m) thickness
+            glacier_depth[hh] = (Classglacier::DepthofSnow(SWE[hh]) + firn_depth[hh]) / 1000.0 + ice[hh] / ice_dens[hh]; // (m) thickness
             glacier_Surf[hh] = glacier_depth[hh] + topo_elev[hh]; // (m)
 
             net_rain[hh] += (firnmelt_delayed[hh] + icemelt_delayed[hh]) / Global::Freq;
