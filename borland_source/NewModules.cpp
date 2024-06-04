@@ -1,4 +1,4 @@
-// 08/02/22
+// 05/29/24
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -63,9 +63,9 @@ void MoveModulesToGlobal(String DLLName){
 
   DLLModules.AddModule(new Classalbedo("albedo", "08/11/11", CRHM::BASIC));
   DLLModules.AddModule(new Classnetall("netall", "04/04/22", CRHM::BASIC));
-  DLLModules.AddModule(new Classevap("evap", "03/18/22", CRHM::BASIC));
+  DLLModules.AddModule(new Classevap("evap", "05/28/24", CRHM::BASIC));
   DLLModules.AddModule(new ClassevapD("evapD", "11/04/09", CRHM::ADVANCE));
-  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "04/04/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "05/28/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassevapD_Resist("evapD_Resist", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassShutWall("ShuttleWallace", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassShutWallD("ShuttleWallaceD", "04/04/22", CRHM::ADVANCE));
@@ -78,12 +78,12 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new Classfrozen("frozen", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoil("Soil", "04/05/22", CRHM::BASIC));
-  DLLModules.AddModule(new ClassevapX("evapX", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoilX("SoilX", "04/05/22", CRHM::ADVANCE)); // nlay >= 2 check added
+  DLLModules.AddModule(new ClassevapX("evapX", "05/28/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSoilX("SoilX", "05/28/24", CRHM::ADVANCE)); // nlay >= 2 check added
   DLLModules.AddModule(new ClassSoilDS("SoilDetention", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "04/05/22", CRHM::PROTO)); // prototype wetlands
   DLLModules.AddModule(new Classglacier_061718("glacier_061718", "06/10/16", CRHM::PROTO));
-  DLLModules.AddModule(new Classglacier("glacier", "04/22/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classglacier("glacier", "05/29/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSWEslope_061718("SWESlope_061718", "06/02/16", CRHM::PROTO));
   DLLModules.AddModule(new ClassSWEslope("SWESlope", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassICEflow("ICEflow", "12/31/18", CRHM::ADVANCE));
@@ -99,9 +99,9 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "11/21/16", CRHM::ADVANCE));
   DLLModules.AddModule(new ClasspbsmSnobal("pbsmSnobal", "01/05/17", CRHM::ADVANCE));
 
-  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "11/14/23", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "11/14/23", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "11/14/23", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassXG("XG", "04/05/22", CRHM::ADVANCE));
@@ -109,7 +109,7 @@ void MoveModulesToGlobal(String DLLName){
 
   DLLModules.AddModule(new ClassSetSoil("SetSoil", "10/21/09", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassVolumetric("Volumetric", "08/02/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new Classtsurface("tsurface", "04/05/22", CRHM::PROTO));
+  DLLModules.AddModule(new Classtsurface("tsurface", "03/14/23", CRHM::PROTO));
 
   DLLModules.AddModule(new Classalbedoparam("albedo_param", "11/22/05", CRHM::SUPPORT));
   DLLModules.AddModule(new Classalbedoobs("albedo_obs", "11/22/05", CRHM::SUPPORT));
@@ -3246,7 +3246,7 @@ void Classevap::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      switch (evap_type[hh]){
 
@@ -13282,6 +13282,8 @@ void ClassCRHMCanopy::decl(void) {
 
   declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
+  declvar("pot_subl_cpy", NHRU, "potential dimensionless canopy snow sublimation rate", "(s^-1)", &pot_subl_cpy);
+
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
   declstatdiag("cum_Subl_Cpy", NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
@@ -13563,6 +13565,8 @@ void ClassCRHMCanopy::run(void) {
 // sublimation rate of single 'ideal' ice sphere:
 
       float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+
+      pot_subl_cpy[hh] = Vs; // 14Nov2023: export the dimensionless sublimation rate (s^-1)
 
 // snow exposure coefficient (Ce):
 
@@ -16597,7 +16601,7 @@ void Classevap_Resist::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      float Soil_Moist = (soil_moist[hh]/soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3]; // 05/21/20: Soil_Moist is soil saturation for the entire soil column
 
@@ -16609,7 +16613,7 @@ void Classevap_Resist::run(void) {
 
            Z0 = Ht[hh]/7.6;
            d  = Ht[hh]*0.67;
-           U = hru_u[hh]; // Wind speed (m/d)
+           U = hru_u[hh];
            ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*U);
 
            rcstar = rcs[hh]; // rc min
@@ -18032,7 +18036,7 @@ void ClassevapX::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      switch (evap_type[hh]){
 
@@ -18056,7 +18060,7 @@ void ClassevapX::run(void) {
 
              Z0 = Ht[hh]/7.6;
              d  = Ht[hh]*0.67;
-             U = hru_u[hh]; // Wind speed (m/d)
+             U = hru_u[hh];
              ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*U);
 
              rcstar = rcs[hh]; // rc min
@@ -21372,7 +21376,7 @@ void ClassSoilX::run(void) {
     if(nstep == 0){
 
       for(long ll = 0; ll < depths_size; ++ll)
-        if(NO_Freeze[hh])
+        if((NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0)) // 28May2024: change from if(NO_Freeze[hh])
           thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
         else
           thaw_layers_lay[ll][hh] = 0.0; // all frozen
@@ -23489,15 +23493,25 @@ void Classtsurface::run(void) {
       }
     }
     else{ // has snowcover
+
+      // 13Mar2023: using hru_t is for original variation and variation#1, place it before other variation
+	  if(hru_t[hh] > 0.0) // ignore plus temperatures when snow covered
+	     hru_tsf[hh] = 0.0;
+	  else
+        hru_tsf[hh] = hru_t[hh];
+
       if(variation == VARIATION_1)
         n_factor_T[hh] = 0.0;
       if(variation == VARIATION_2 || variation == VARIATION_4) { // SnobalCRHM case
         SWE_density[hh] = rho[hh];
         if(SWE_density[hh] < 156)  // Sturm et al. 1997. The thermal conductivity of seasonal snow
-          SWE_tc[hh] = 0.023 - 1.01* SWE_density[hh]/1000.0 + 0.234*sqr(SWE_density[hh]/1000.0);
+          SWE_tc[hh] = 0.023 + 0.234 * SWE_density[hh]/1000.0; // 14Mar2023 correction using Eq. 4 in Sturm et al. 1997
        else
          SWE_tc[hh] = 0.138 - 1.01* SWE_density[hh]/1000.0 + 3.233*sqr(SWE_density[hh]/1000.0);
-       hru_tsf[hh] = hru_T_s_D[hh] - G[hh]*0.5*z_s[hh]/SWE_tc[hh];
+       if(hru_T_s_D[hh] < -70.0) // 13Mar2023: handle the previous daily snow temp when default -75 C deg for snobalCRHM no snowcover, using air t for one day after snowcover
+         hru_tsf[hh] = hru_t[hh];
+       else
+         hru_tsf[hh] = hru_T_s_D[hh] + G[hh]*0.5*z_s[hh]/SWE_tc[hh]; // 14Mar2023: changing to plus sign for second term G[hh]*0.5*z_s[hh]/SWE_tc[hh], G is positive towards snowpack
       }
 
       if(variation == VARIATION_3 || variation == VARIATION_5){ // ebsm case
@@ -23507,7 +23521,7 @@ void Classtsurface::run(void) {
           SWE_density[hh] = 0.0;
 
         if(SWE_density[hh] < 156)  // Sturm et al. 1997. The thermal conductivity of seasonal snow
-          SWE_tc[hh] = 0.023 - 1.01* SWE_density[hh]/1000.0 + 0.234*sqr(SWE_density[hh]/1000.0);
+          SWE_tc[hh] = 0.023 + 0.234 * SWE_density[hh]/1000.0; // 14Mar2023 correction using Eq. 4 in Sturm et al. 1997
         else
           SWE_tc[hh] = 0.138 - 1.01* SWE_density[hh]/1000.0 + 3.233*sqr(SWE_density[hh]/1000.0);
 
@@ -23518,13 +23532,8 @@ void Classtsurface::run(void) {
 
         float umin = SWE[hh]*(2.115+0.00779*t_minus)*t_minus/1000.0;
 
-        hru_tsf[hh] = hru_t_D[hh] - (umin*1E6/86400)*snowdepth[hh]/SWE_tc[hh]; // 1E6/86400 is conversion: MJ/m^2*d to W/m^2
+        hru_tsf[hh] = hru_t_D[hh] - (umin*1E6/86400)*snowdepth[hh]/SWE_tc[hh]; // 1E6/86400 is conversion: MJ/m^2*d to W/m^2;
       }
-
-      if(hru_t[hh] > 0.0) // ignore plus temperatures when snow covered
-        hru_tsf[hh] = 0.0;
-      else
-        hru_tsf[hh] = hru_t[hh];
     }
 
     if(nstep == 0){
@@ -24721,6 +24730,8 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
+  declvar("pot_subl_cpy", NHRU, "potential dimensionless canopy snow sublimation rate", "(s^-1)", &pot_subl_cpy);
+
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
   declstatdiag("cum_Subl_Cpy", NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
@@ -25017,6 +25028,8 @@ void ClassCRHMCanopyClearing::run(void) {
 
           float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
 
+          pot_subl_cpy[hh] = Vs; // 14Nov2023: export the dimensionless sublimation rate (s^-1)
+
   // snow exposure coefficient (Ce):
 
           float Ce;
@@ -25307,6 +25320,8 @@ void ClassCRHMCanopyClearingGap::decl(void) {
   declvar("net_rain", NHRU, " direct_rain + drip", "(mm/int)", &net_rain);
 
   declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
+
+  declvar("pot_subl_cpy", NHRU, "potential dimensionless canopy snow sublimation rate", "(s^-1)", &pot_subl_cpy);
 
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
@@ -25674,6 +25689,8 @@ void ClassCRHMCanopyClearingGap::run(void){
 // sublimation rate of single 'ideal' ice sphere:
 
           float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+
+          pot_subl_cpy[hh] = Vs; // 14Nov2023: export the dimensionless sublimation rate (s^-1)
 
 // snow exposure coefficient (Ce):
 
@@ -27491,7 +27508,7 @@ void Classglacier::run(void){
       }
       // enter new data
       lagT_delayed_lay[0][hh] = hru_t[hh];
-      lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
+      lagSW_delayed_lay[0][hh] = Qsisn_Var[hh]; // 29May2024 correction: from lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
       // lag T and SW
       long LT = lagT[hh];
       long LSW = lagSW[hh];

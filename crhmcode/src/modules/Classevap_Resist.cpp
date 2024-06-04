@@ -190,7 +190,7 @@ void Classevap_Resist::run(void) {
 
     // calculated every interval
 
-        Q = Rn[hh] * (1.0 - F_Qg[hh]); // (mm/d)
+        Q = Rn[hh] * (1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
         double Soil_Moist = (soil_moist[hh] / soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1]) / SetSoilproperties[soil_type[hh]][3];
 
@@ -202,7 +202,7 @@ void Classevap_Resist::run(void) {
 
                 Z0 = Ht[hh] / 7.6;
                 d = Ht[hh] * 0.67;
-                U = hru_u[hh]; // Wind speed (m/d)
+                U = hru_u[hh];
                 ra = sqr(log((Zwind[hh] - d) / Z0)) / (sqr(CRHM_constants::kappa) * U);
 
                 rcstar = rcs[hh]; // rc min

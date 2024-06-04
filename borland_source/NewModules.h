@@ -1,4 +1,4 @@
-// 08/02/22 with changes to 04/22/22
+// 11/14/23 with changes to 10/04/23
 //---------------------------------------------------------------------------
 
 #ifndef OurModulesH
@@ -931,7 +931,7 @@ void  prob(void);
 class Classcrack : public ClassModule {
 public:
 
-Classcrack(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+Classcrack(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "net_rain_org"), // setting PeerRank, change on 04Oct2023
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables
@@ -1031,7 +1031,7 @@ ClassKevin* klone(string name) const;
 class ClassGreencrack : public ClassModule {
 public:
 
-ClassGreencrack(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+ClassGreencrack(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "net_rain_org"), // setting PeerRank, change on 04Oct2023
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables
@@ -1150,7 +1150,7 @@ Classfrostdepth* klone(string name) const;
 class Classfrozen : public ClassModule {
 public:
 
-Classfrozen(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+Classfrozen(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "net_rain_org"), // setting PeerRank, change on 04Oct2023
                                     infiltype(NULL) {};
 bool SetOpportunityTime;
 bool Update_infil;
@@ -1359,7 +1359,7 @@ Classinterception* klone(string name) const;
 class ClassGreenAmpt : public ClassModule {
 public:
 
-ClassGreenAmpt(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassGreenAmpt(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "net_rain_org") {}; // setting PeerRank, change on 04Oct2023
 // declared variables
 float *infil;
 float *cuminfil;
@@ -2787,7 +2787,7 @@ ClassObstoPar* klone(string name) const;
 class ClassPrairieInfil : public ClassModule {
 public:
 
-ClassPrairieInfil(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+ClassPrairieInfil(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "net_rain_org"), // setting PeerRank, change on 04Oct2023
                                    Xinfil(NULL),
                                    timer(NULL) {};
 // declared variables
@@ -2877,6 +2877,7 @@ float *cum_net_snow;
 float *net_p;
 float *intcp_evap;
 float *cum_intcp_evap;
+float *pot_subl_cpy;
 float *Subl_Cpy;
 float *cum_Subl_Cpy;
 float *cum_SUnload;
@@ -3051,7 +3052,7 @@ Classbrushintcp* klone(string name) const;
 class ClassAyers : public ClassModule {
 public:
 
-ClassAyers(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+ClassAyers(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "net_rain_org") {}; // setting PeerRank, change on 04Oct2023
 
 // declared variables
 float *infil;
@@ -3174,7 +3175,7 @@ ClassSlope_Qsi* klone(string name) const;
 class ClassfrozenAyers : public ClassModule {
 public:
 
-ClassfrozenAyers(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl),
+ClassfrozenAyers(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1001, "net_rain_org"), // setting PeerRank, change on 04Oct2023
                                     infiltype(NULL) {};
 bool SetOpportunityTime;
 bool Update_infil;
@@ -5176,6 +5177,7 @@ float *cum_net_snow;
 float *net_p;
 float *intcp_evap;
 float *cum_intcp_evap;
+float *pot_subl_cpy;
 float *Subl_Cpy;
 float *cum_Subl_Cpy;
 float *cum_SUnload;
@@ -5289,6 +5291,7 @@ float *cum_net_snow;
 float *net_p;
 float *intcp_evap;
 float *cum_intcp_evap;
+float *pot_subl_cpy;
 float *Subl_Cpy;
 float *cum_Subl_Cpy;
 float *cum_SUnload;

@@ -725,6 +725,13 @@ LRESULT ParametersDlg::OnMakeLocalMsg(WPARAM wParam, LPARAM lParam)
 	CT2CA pszConvertedAnsiString(selectedText);
 	std::string selectedString(pszConvertedAnsiString);
 
+	//Check for a variation number and remove the suffix
+	int suffPos;
+	if (suffPos = selectedString.find("#"), suffPos > -1)
+	{
+		selectedString = selectedString.substr(0, selectedString.length() - 2);
+	}
+
 	std::map<std::string, ClassModule* >::iterator module = Global::AllModulesList->find(selectedString);
 
 	if (!module->second->isGroup)

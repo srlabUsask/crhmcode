@@ -141,28 +141,24 @@ BOOL CCRHMGUIApp::InitInstance()
 			return FALSE;
 		AddDocTemplate(pDocTemplate);
 
+		/* Get the command line args */
+		LPCWSTR commandText = GetCommandLine();
+		LPWSTR* argvText;
+		int argc;
+		argvText = CommandLineToArgvW(commandText, &argc);
 
-		CString commandText = GetCommandLine();
-		std::string commandString = CT2A(commandText.GetString());
-		char* cmdLine = new char[commandString.length() + 1];
-		strcpy(cmdLine, commandString.c_str());
-		
-		static int numberOfArgs = __argc;
-		int argc = 0;
+		/* Convert the args to a format usable by CRHMArguments */
 		char ** argv;
-
-		argv = (char**) malloc(sizeof(char*) * numberOfArgs);
-
-		char * pos = strtok(cmdLine, " ");
-		while (pos != NULL)
+		argv = (char**)malloc(sizeof(char*) * argc);
+		for (int i = 0; i < argc; i++)
 		{
-			argv[argc] = pos;
-			pos = strtok(NULL, " ");
-			argc++;
+			std::string tempStr = CT2A(argvText[i]);
+			argv[i] = (char*) malloc(sizeof(char) * (tempStr.length()+1));
+			strcpy(argv[i], tempStr.c_str());
 		}
 
+		/* Create a CRHMArguments object to handle the command line arguments */
 		CRHMArguments* args = new CRHMArguments();
-
 		if (argc > 1)
 		{
 			EnablePrintfAtMFC();
@@ -170,9 +166,14 @@ BOOL CCRHMGUIApp::InitInstance()
 			args->validate();
 		}
 
-		delete[] cmdLine;
+		/* Free the memory used for the command line arguments */
+		LocalFree(argvText);
+		for (int i = 0; i < argc; i++)
+		{
+			free(argv[i]);
+		}
 		free(argv);
-	
+
 		if (args->get_project_name().length() != 0)
 		{
 			CRHMmain* model = new CRHMmain(args);

@@ -644,3 +644,48 @@ CRHM 08/02/22
 
         fallstat [hh] = 100.0;  // i.e. for pavement 
 
+CRHM 03/14/23
+
+  Corrections for hru_tsf and SWE_tc in module tsurface:
+
+        // using hru_t is for original variation and variation#1, place it before other variation
+        if(hru_t[hh] > 0.0) // ignore plus temperatures when snow covered
+	  hru_tsf[hh] = 0.0;
+        else
+          hru_tsf[hh] = hru_t[hh];
+
+        if(SWE_density[hh] < 156)  // Sturm et al. 1997. The thermal conductivity of seasonal snow
+          SWE_tc[hh] = 0.023 + 0.234 * SWE_density[hh]/1000.0; // correction using Eq. 4 in Sturm et al. 1997
+
+        if(hru_T_s_D[hh] < -70.0) // handle the previous daily snow temp when default -75 C deg for snobalCRHM no snowcover, using air t for one day after snowcover
+          hru_tsf[hh] = hru_t[hh];
+        else
+          hru_tsf[hh] = hru_T_s_D[hh] + G[hh]*0.5*z_s[hh]/SWE_tc[hh]; // changing to plus sign for second term G[hh]*0.5*z_s[hh]/SWE_tc[hh], G is positive towards snowpack
+
+
+CRHM 10/04/23
+
+  Fixing module order issue for glacier and infiltration modules when constructing model project in GUI.
+
+
+
+CRHM 11/14/23
+
+  Adding variable "pot_subl_cpy" to output "dimensionless canopy sublimation rate" in Canopy, CanopyClearing, and CanopyClearingGap modules.
+
+
+CRHM 05/28/24
+
+  Updating comments for interval variables Q, U units in evap, evap_Resist, evapX modules.
+
+  Correcting No_Freeze if statement for all unfrozen condition in SoilX module.
+
+        if((NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0)) // 28May2024: change from if(NO_Freeze[hh])
+          thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
+
+CRHM 05/29/24
+
+  lagSW_delayed variable for debris-cover glacier in glacier module.
+
+	lagSW_delayed_lay[0][hh] = Qsisn_Var[hh]; // 29May2024 correction: from lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
+	

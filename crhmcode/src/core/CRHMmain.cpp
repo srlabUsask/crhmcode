@@ -652,22 +652,27 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 						++Cols; // # of HRU's in Basin
 					}
 
-					if ( module ==  "Shared") {
+					if ( module ==  "Shared") 
+					{
 						// write Shared parameters to module parameters
 						// all parameter values are set to basin values.  If re-defined in a module will be changed.
 						MapPar::iterator itPar;
-						for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); ++itPar) {
+						for (itPar = Global::MapPars.begin(); itPar != Global::MapPars.end(); ++itPar) 
+						{
 							thisPar = (*itPar).second;
-							if (thisPar->param == param) {
+							if (thisPar->param == param) 
+							{
 								if (thisPar->dim == Cols / thisPar->lay) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
+								{
 									break;
-								//                else if(Cols > 0 && Cols%thisPar->lay == 0) // find module parameter for template thisPar->varType == CRHM::Int || thisPar->varType == CRHM::Float ||
-								//                  break;
+								}
 								else if (thisPar->varType == TVar::Txt && thisPar->dimen < TDim::NHRU) // text can have variable length
+								{
 									break;
-								else if (thisPar->param == "obs_elev" || thisPar->param == "soil_withdrawal")
-									break;
-								else { // Added to handle 2D parameters
+								}
+								else 
+								{ 
+									// Added to handle 2D parameters
 									if ((thisPar->param == param) && (thisPar->dim == Cols / thisPar->dim))
 									{
 										break;
@@ -676,17 +681,21 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 									{
 										thisPar = NULL;
 									}
-
 								}
 							}
 							else
+							{
 								thisPar = NULL; // required for last loop when parameter not found
+							}
 						}
 					}
-					else {
+					else 
+					{
 						thisPar = ClassParFind(module, param); // find module parameter for template
 						if (thisPar)
+						{
 							module = thisPar->module.c_str(); // set it to found name
+						}
 					}
 
 					if (thisPar) {
@@ -1287,21 +1296,22 @@ void  CRHMmain::Label4Click(void) {
 //---------------------------------------------------------------------------
 
 
-void  CRHMmain::SqueezeParams(void) {
-
+void  CRHMmain::SqueezeParams(void) 
+{
 	paras MapInfo; // holds all parameters - used for processing
 	ClassPar *thisPar, *thisPar2;
 
 	// make multimap: keyed by parameter name holding pointer to parameter
 	MapPar::iterator itPar; // iterator for Global::MapPars
 	itPar = Global::MapPars.begin();
-	while (itPar != Global::MapPars.end()) {
+	while (itPar != Global::MapPars.end()) 
+	{
 		thisPar = (*itPar).second;
 		string S = ((*itPar).second)->param;
 		Pairinfo Item = Pairinfo(S, Pinfo(new Classinfo(thisPar)));
 		MapInfo.insert(Item);
 		++itPar;
-	} // while
+	}
 
 	paras::iterator itPar2, itPar3, itPar4;
 	itPar2 = MapInfo.begin();
@@ -1311,12 +1321,14 @@ void  CRHMmain::SqueezeParams(void) {
 	MapPar MapParsNew; // holds final processed parameters
 
 					   // process multimap by parameter name
-	while (itPar2 != MapInfo.end()) {
+	while (itPar2 != MapInfo.end()) 
+	{
 		string S = (*itPar2).first;
 		long thiscnt = MapInfo.count(S); // # of occurrences of string S
 
 										 // if duplicate parameter name from other module
-		if (thiscnt > 1) {
+		if (thiscnt > 1) 
+		{
 			range = MapInfo.equal_range(S);
 			long greatestCnt = 0;
 			bool first = true;
@@ -1324,28 +1336,36 @@ void  CRHMmain::SqueezeParams(void) {
 			ClassPar *SharedPar = NULL; // set if Simple actual Basin parameter
 
 										// proceed through duplicate list
-			for (itPar3 = range.first; itPar3 != range.second; itPar3++) {
+			for (itPar3 = range.first; itPar3 != range.second; itPar3++) 
+			{
 				Classinfo *info3 = ((*itPar3).second).get();
 
 				if (info3->rootinfo == NULL)
+				{
 					info3->rootinfo = info3;
+				}
 
 				thisPar = info3->thisPar;
 
 				range.first++;
 
 				if (info3->matched) // handled by earlier pass
+				{
 					continue;
+				}
 
 				PairPar Item = PairPar(thisPar->module, thisPar);
 				Matched.insert(Item);
 
 				// compare with following duplicate entries
-				for (itPar4 = range.first; itPar4 != range.second; itPar4++) {
+				for (itPar4 = range.first; itPar4 != range.second; itPar4++) 
+				{
 					Classinfo *info4 = ((*itPar4).second).get();
 
 					if (info4->matched) // skip if already matched
+					{
 						continue;
+					}
 
 					thisPar2 = info4->thisPar;
 
@@ -1353,28 +1373,33 @@ void  CRHMmain::SqueezeParams(void) {
 					bool match = thisPar->Same(*thisPar2);
 
 					// if same values indicate could be merged
-					if (match) {
+					if (match) 
+					{
 						PairPar Item = PairPar(thisPar->module, thisPar2);
 						Matched.insert(Item);
 						info4->matched = true;
-						if (++info3->rootinfo->cnt > greatestCnt) {
+						if (++info3->rootinfo->cnt > greatestCnt) 
+						{
 							greatestCnt = info3->rootinfo->cnt;
 							Key = info3->rootinfo->thisPar->module;
-						} // update Key
-					} // if(match)
+						}
+					}
 
 				} // for(compare successively with first in range
 			} // for(range of S)
 
 			GrpParas::iterator itPar5;
-			if (Matched.count(Key) > 1) {
+			if (Matched.count(Key) > 1) 
+			{
 				pair<GrpParas::iterator, GrpParas::iterator> range2;
 				range2 = Matched.equal_range(Key);
 				bool first = true;
-				for (itPar5 = range2.first; itPar5 != range2.second; itPar5++) {
+				for (itPar5 = range2.first; itPar5 != range2.second; itPar5++) 
+				{
 					thisPar = (*itPar5).second;
 					// save module as shared parameters in MapPars and SharedMapPars
-					if (first) {
+					if (first) 
+					{
 						thisPar->module = "Shared";
 						PairPar Item = PairPar("Shared " + thisPar->param, thisPar);
 						MapParsNew.insert(Item);
@@ -1382,21 +1407,30 @@ void  CRHMmain::SqueezeParams(void) {
 						first = false;
 					} // first
 					else  // remove module parameters so as basin parameters visible
+					{
 						delete thisPar;
+					}
+
 					(*itPar5).second = NULL; // Indicate has been handled
+				
 				} // for(range of S)
 			} // if(greatestCnt > 0)
 
-			for (itPar5 = Matched.begin(); itPar5 != Matched.end(); itPar5++) {
+			for (itPar5 = Matched.begin(); itPar5 != Matched.end(); itPar5++) 
+			{
 				thisPar = (*itPar5).second;
 				if (!thisPar) // already handled
+				{
 					continue;
+				}
 				PairPar Item = PairPar(thisPar->module + ' ' + thisPar->param, thisPar);
 				MapParsNew.insert(Item);
 			}
 			Matched.clear();
+		
 		} // if(thiscnt > 1)
-		else {
+		else 
+		{
 			Classinfo *info = ((*itPar2).second).get();
 			thisPar = info->thisPar;
 			PairPar Item = PairPar(thisPar->module + ' ' + thisPar->param, thisPar);
@@ -1408,6 +1442,7 @@ void  CRHMmain::SqueezeParams(void) {
 
 	Global::MapPars.clear();
 	Global::MapPars = MapParsNew;
+
 
 	/*
 	* Update the internal module references to parameters

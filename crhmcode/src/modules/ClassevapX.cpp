@@ -174,7 +174,7 @@ void ClassevapX::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      switch (evap_type[hh]){
 
@@ -198,7 +198,7 @@ void ClassevapX::run(void) {
 
              Z0 = Ht[hh]/7.6;
              d  = Ht[hh]*0.67;
-             U = hru_u[hh]; // Wind speed (m/d)
+             U = hru_u[hh];
              ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*U);
 
              rcstar = rcs[hh]; // rc min

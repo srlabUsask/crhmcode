@@ -1,10 +1,9 @@
-// 08/02/22 correcting hru_evap estimation in lake_evap module and volumetric_rechr
-// equation and fallstat value for pavement in volumetric module in 06/28/22
+// 05/29/24 correcting lagSW_delayed variable for debris-cover glacier in glacier module in 05/28/24
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "08/02/22"
+#define CurrentVersion "05/29/24"
 
 #include <stdexcept>
 #include "CRHMmain.h"
