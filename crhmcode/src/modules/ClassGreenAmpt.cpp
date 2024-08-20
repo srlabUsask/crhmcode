@@ -111,10 +111,12 @@ void ClassGreenAmpt::init(void) {
     cummeltrunoff[hh] = 0.0;
 
     F1[hh]        = soil_moist_max[hh];
+    F0[hh]        = F1[hh];
     k[hh]         = soilproperties[soil_type[hh]][KSAT];
     dthbot[hh]    = (1.0 - soil_moist_init[hh]/soil_moist_max[hh]);
     psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
     f1[hh]        = calcf1(F1[hh], psidthbot[hh]);
+    f0[hh]        = f1[hh];
   }
 }
 
