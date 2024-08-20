@@ -210,7 +210,6 @@ void ClassGreenAmpt::finish(bool good) {
 void ClassGreenAmpt::infiltrate(void){
 
   F0[hh] = F1[hh];
-  f0[hh] = f1[hh];
 
   if(soil_type[hh] == 0) { // water!
     pond += garain;
