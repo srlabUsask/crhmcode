@@ -149,8 +149,6 @@ void ClassGreenAmpt::run(void) {
           F1[hh] = soil_moist[hh];
           dthbot[hh]    = (1.0 - soil_moist[hh]/soil_moist_max[hh]);
           psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-          if(soil_type[hh] > 0) // not water!
-            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall
 
           infiltrate();
 
