@@ -169,7 +169,7 @@ void ClassGreencrack::init(void) {
     }
 
     psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-    f1[hh]        = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0;
+    f1[hh]        = calcf1(F1[hh], psidthbot[hh]);
   }
 }
 
