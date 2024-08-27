@@ -114,7 +114,7 @@ void ClassGreenAmpt::init(void) {
     k[hh]         = soilproperties[soil_type[hh]][KSAT];
     dthbot[hh]    = (1.0 - soil_moist_init[hh]/soil_moist_max[hh]);
     psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-    f1[hh]        = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0;
+    f1[hh]        = calcf1(F1[hh], psidthbot[hh]);
   }
 }
 
@@ -149,8 +149,6 @@ void ClassGreenAmpt::run(void) {
           F1[hh] = soil_moist[hh];
           dthbot[hh]    = (1.0 - soil_moist[hh]/soil_moist_max[hh]);
           psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-          if(soil_type[hh] > 0) // not water!
-            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall
 
           infiltrate();
 
@@ -220,7 +218,7 @@ void ClassGreenAmpt::infiltrate(void){
   }
   pond = 0.0;
 
-  f0[hh] = calcf1(F0[hh], psidthbot[hh])*Global::Interval*24.0;
+  f0[hh] = calcf1(F0[hh], psidthbot[hh]);
 
   if(intensity > f0[hh]) {
     ponding();
@@ -229,7 +227,7 @@ void ClassGreenAmpt::infiltrate(void){
 
   F1[hh] = F0[hh] + garain;
 
-  f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0;
+  f1[hh] = calcf1(F1[hh], psidthbot[hh]);
 
   if(intensity > f1[hh])
     startponding();
