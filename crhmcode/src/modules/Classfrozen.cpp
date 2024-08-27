@@ -244,7 +244,7 @@ void Classfrozen::run(void) {
               INF[hh] = C[hh]*pow(S0[hh], 2.92f)*pow(1.0f-Si[hh], 1.64f)*
                    pow((273.15f-hru_tsoil[hh])/273.15f, -0.45f)*pow(t0_Var[hh], 0.44f); // (mm)
 
-              double INF0 = INF[hh]/t0_Var[hh];
+              double INF0 = INF[hh]/t0_Var[hh]*24.0/Global::Freq;
 
               if(snowmelt <= INF0 && snowmelt <= capacity) {
                 snowinfil[hh] = snowmelt;
