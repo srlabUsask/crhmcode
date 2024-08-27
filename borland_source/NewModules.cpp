@@ -1,4 +1,4 @@
-// 05/29/24
+// 08/27/24
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -73,10 +73,10 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new Classcrack("crack", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassPrairieInfil("PrairieInfiltration", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassAyers("Ayers", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassGreencrack("Greencrack", "04/04/22", CRHM::BASIC));
-  DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "04/04/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new Classfrozen("frozen", "04/04/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassGreencrack("Greencrack", "08/27/24", CRHM::BASIC));
+  DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "08/27/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classfrozen("frozen", "08/27/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "08/27/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoil("Soil", "04/05/22", CRHM::BASIC));
   DLLModules.AddModule(new ClassevapX("evapX", "05/28/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoilX("SoilX", "05/28/24", CRHM::ADVANCE)); // nlay >= 2 check added
@@ -4461,7 +4461,7 @@ void ClassGreencrack::init(void) {
     }
 
     psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-    f1[hh]        = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0;
+    f1[hh]        = calcf1(F1[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f1 is in mm/h
   }
 }
 
@@ -4591,8 +4591,8 @@ void ClassGreencrack::run(void) {
           F1[hh] = soil_moist[hh];
           dthbot[hh]    = (1.0 - soil_moist[hh]/soil_moist_max[hh]);
           psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-          if(soil_type[hh] > 0) // not water!
-            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall (mm/h)
+//          if(soil_type[hh] > 0) // not water! // 27Aug2024: remove redundant calculation of f1
+//            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall (mm/h)
 
           infiltrate();
 
@@ -5088,7 +5088,7 @@ void Classfrozen::run(void) {
               INF[hh] = C[hh]*pow(S0[hh], 2.92f)*pow(1.0f-Si[hh], 1.64f)*
                    pow((273.15f-hru_tsoil[hh])/273.15f, -0.45f)*pow(t0_Var[hh], 0.44f); // (mm)
 
-              float INF0 = INF[hh]/t0_Var[hh];
+              float INF0 = INF[hh]/t0_Var[hh]*24.0/Global::Freq; // 27Aug2024: add *24.0/Global::Freq because INFO should be in same unit when comparing to snowmelt, ie. mm/int not mm/h
 
               if(snowmelt <= INF0 && snowmelt <= capacity) {
                 snowinfil[hh] = snowmelt;
@@ -5936,7 +5936,7 @@ void ClassGreenAmpt::init(void) {
     k[hh]         = soilproperties[soil_type[hh]][KSAT];
     dthbot[hh]    = (1.0 - soil_moist_init[hh]/soil_moist_max[hh]);
     psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-    f1[hh]        = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0;
+    f1[hh]        = calcf1(F1[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f1 is in mm/h
   }
 }
 
@@ -5971,8 +5971,8 @@ void ClassGreenAmpt::run(void) {
           F1[hh] = soil_moist[hh];
           dthbot[hh]    = (1.0 - soil_moist[hh]/soil_moist_max[hh]);
           psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-          if(soil_type[hh] > 0) // not water!
-            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall
+//          if(soil_type[hh] > 0) // not water! // 27Aug204: remove redundant calculation of f1
+//            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall
 
           infiltrate();
 
@@ -6042,7 +6042,7 @@ void ClassGreenAmpt::infiltrate(void){
   }
   pond = 0.0;
 
-  f0[hh] = calcf1(F0[hh], psidthbot[hh])*Global::Interval*24.0;
+  f0[hh] = calcf1(F0[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f0 is in mm/h
 
   if(intensity > f0[hh]) {
     ponding();
@@ -6051,7 +6051,7 @@ void ClassGreenAmpt::infiltrate(void){
 
   F1[hh] = F0[hh] + garain;
 
-  f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0;
+  f1[hh] = calcf1(F1[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f1 is in mm/h
 
   if(intensity > f1[hh])
     startponding();
@@ -14760,7 +14760,7 @@ void ClassfrozenAyers::run(void) {
               INF[hh] = C[hh]*pow(S0[hh], 2.92f)*pow(1.0f-Si[hh], 1.64f)*
                    pow((273.15f-hru_tsoil[hh])/273.15f, -0.45f)*pow(t0_Var[hh], 0.44f); // (mm)
 
-              float INF0 = INF[hh]/t0_Var[hh];
+              float INF0 = INF[hh]/t0_Var[hh]*24.0/Global::Freq; // 27Aug2024: add *24.0/Global::Freq because INFO should be in same unit when comparing to snowmelt, ie. mm/int not mm/h
 
               if(snowmelt <= INF0 && snowmelt <= capacity) {
                 snowinfil[hh] = snowmelt;

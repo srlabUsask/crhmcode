@@ -1,9 +1,9 @@
-// 05/29/24 correcting lagSW_delayed variable for debris-cover glacier in glacier module in 05/28/24
+// 08/27/24 correcting f0, f1 in GreenAmpt and Greencrack modules and INFO in frozen and frozenAyers modules in 05/29/24
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "05/29/24"
+#define CurrentVersion "08/27/24"
 
 #include <stdexcept>
 #include "CRHMmain.h"
