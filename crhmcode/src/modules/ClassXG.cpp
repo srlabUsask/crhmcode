@@ -185,6 +185,13 @@ void ClassXG::decl(void) {
 
 void ClassXG::init(void) {
 
+    if (hru_tsf == NULL) {
+            string S = string("'") + Name + "You must include TSurface in your project if you use XG";
+            CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
+            LogError(TExcept);
+            throw TExcept;
+    }
+
   nhru = getdim(TDim::NHRU);
   nlay = getdim(TDim::NLAY);
 

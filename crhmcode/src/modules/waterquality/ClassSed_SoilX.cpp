@@ -324,6 +324,13 @@ void ClassSed_SoilX::decl(void) {
 
 void ClassSed_SoilX::init(void) {
 
+    if (Zd_front_array == NULL) {
+            string S = string("'") + Name + "You must include ClassXG in your project if you use SoilX";
+            CRHMException TExcept(S.c_str(), TExcept::TERMINATE);
+            LogError(TExcept);
+            throw TExcept;
+    }
+
     nhru = getdim(TDim::NHRU);
 
     if (snowinfilDiv > 1) {

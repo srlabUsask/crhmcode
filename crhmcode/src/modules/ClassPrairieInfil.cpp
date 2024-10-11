@@ -342,33 +342,38 @@ void ClassPrairieInfil::run(void) {
                           }
 
                           timer[hh] = 1;
-                          // snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
 
-                          // if (snowinfil[hh] > Xinfil[1][hh])
-                          // {
-                          //     snowinfil[hh] = Xinfil[1][hh];
-                          // }
+                          // Fix this code (PRL)
+                          snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
+                          if (snowinfil[hh] > Xinfil[1][hh])
+                          {
+                              snowinfil[hh] = Xinfil[1][hh];
+                          }
+                          meltrunoff[hh] = snowmelt[hh] - snowinfil[hh];
                       }
-                      // else
-                      // {
-                      //     snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
-                      // }
+                      else
+                      {   // Fix this (PRL)
+                          snowinfil[hh] = snowmelt[hh] * Xinfil[0][hh];
+                          meltrunoff[hh] = snowmelt[hh] - snowinfil[hh];
+                      }
 
 
-                      // if (crackstat[hh] > infDays[hh])
-                      // {
-                      //     snowinfil[hh] = 0;
-                      // }
+                      if (crackstat[hh] > infDays[hh])
+                      {
+                          snowinfil[hh] = 0;
+                          meltrunoff[hh] = snowmelt[hh] - snowinfil[hh];
+                      }
 
                   }
-                  // else
-                  // {
-                  //     if (PriorInfiltration[hh])
-                  //     {
-                  //         snowinfil[hh] = snowmelt[hh]; // zero by default
-                  //     }
+                  else
+                  {
+                      if (PriorInfiltration[hh])
+                      {   // This needs to be incorporated into applyCrack (PRL)
+                          snowinfil[hh] = snowmelt[hh]; // zero by default
+                          meltrunoff[hh] = snowmelt[hh] - snowinfil[hh];
+                      }
 
-                  // }
+                  }
 
               }
 
@@ -398,11 +403,12 @@ void ClassPrairieInfil::run(void) {
               RainOnSnowA[hh] = 0.0;
 
           } // end if
-          // else if (snowmelt[hh] > 0.0)
-          // {
-          //     snowinfil[hh] = snowmelt[hh];
-          //     cumsnowinfil[hh] += snowinfil[hh];
-          // }
+          else if (snowmelt[hh] > 0.0)
+          {   // Fix this (PRL)
+              snowinfil[hh] = snowmelt[hh];
+              cumsnowinfil[hh] += snowinfil[hh];
+              meltrunoff[hh] = snowmelt[hh] - snowinfil[hh];
+          }
 
           if (crackstat[hh] > 0 && SWE[hh] <= 0.0)
           {
