@@ -1,9 +1,9 @@
-// 11/14/23 adding variable to output "dimensionless canopy sublimation rate" in canopy modules in 10/04/23
+// 08/27/24 correcting f0, f1 in GreenAmpt and Greencrack modules and INFO in frozen and frozenAyers modules in 05/29/24
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "11/14/23"
+#define CurrentVersion "08/27/24"
 
 #include <stdexcept>
 #include "CRHMmain.h"

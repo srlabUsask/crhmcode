@@ -673,4 +673,39 @@ CRHM 11/14/23
 
   Adding variable "pot_subl_cpy" to output "dimensionless canopy sublimation rate" in Canopy, CanopyClearing, and CanopyClearingGap modules.
 
+
+CRHM 05/28/24
+
+  Updating comments for interval variables Q, U units in evap, evap_Resist, evapX modules.
+
+  Correcting No_Freeze if statement for all unfrozen condition in SoilX module.
+
+        if((NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0)) // 28May2024: change from if(NO_Freeze[hh])
+          thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
+
+CRHM 05/29/24
+
+  lagSW_delayed variable for debris-cover glacier in glacier module.
+
+	lagSW_delayed_lay[0][hh] = Qsisn_Var[hh]; // 29May2024 correction: from lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
 	
+CRHM 08/27/24
+
+  Removing the following redundant calculation of f1 in GreenAmpt and Greencrack
+  	
+//          if(soil_type[hh] > 0) // not water! // 27Aug204: remove redundant calculation of f1
+//            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall
+            
+  Removing *Global::Interval*24.0 in the following for f1 in GreenAmpt::init and Greencrack::init
+  	
+  	f1[hh]        = calcf1(F1[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f1 is in mm/h
+  	
+  Removing *Global::Interval*24.0 in the following for f0 and f1 in GreenAmpt::infiltrate
+  
+  	f0[hh] = calcf1(F0[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f0 is in mm/h
+  	
+  	f1[hh] = calcf1(F1[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f1 is in mm/h
+  	
+  Adding *24.0/Global::Freq in INFO in frozen and frozenAyers
+  
+  	 float INF0 = INF[hh]/t0_Var[hh]*24.0/Global::Freq; // 27Aug2024: add *24.0/Global::Freq because INFO should be in same unit when comparing to snowmelt, ie. mm/int not mm/h

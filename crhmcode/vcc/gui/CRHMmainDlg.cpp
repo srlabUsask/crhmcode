@@ -574,7 +574,7 @@ void CRHMmainDlg::RunClickFunction()
 	int TotalCount = 0;
 
 	int pcount = 0;
-	int last = 0;
+	int last = Global::DTmin;
 	for (int indx = Global::DTmin; indx < Global::DTmax; indx = last)
 	{
 
@@ -1906,7 +1906,7 @@ void CRHMmainDlg::OnClickOnOpenInitState()
 
 		CString filename = fileDlg.GetFileName();
 
-		main->OpenNameState = CT2A(folderPath);
+		main->OpenNameState = CT2A(folderPath + "\\" + filename);
 		main->OpenStateFlag = true;
 
 		updateOpenStateFileMenu();
