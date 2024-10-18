@@ -1,4 +1,4 @@
-// 08/27/24
+// 10/18/24
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -77,11 +77,11 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "08/27/24", CRHM::ADVANCE));
   DLLModules.AddModule(new Classfrozen("frozen", "08/27/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "08/27/24", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoil("Soil", "04/05/22", CRHM::BASIC));
+  DLLModules.AddModule(new ClassSoil("Soil", "10/18/24", CRHM::BASIC));
   DLLModules.AddModule(new ClassevapX("evapX", "05/28/24", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoilX("SoilX", "05/28/24", CRHM::ADVANCE)); // nlay >= 2 check added
-  DLLModules.AddModule(new ClassSoilDS("SoilDetention", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "04/05/22", CRHM::PROTO)); // prototype wetlands
+  DLLModules.AddModule(new ClassSoilX("SoilX", "10/18/24", CRHM::ADVANCE)); // nlay >= 2 check added
+  DLLModules.AddModule(new ClassSoilDS("SoilDetention", "10/18/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "10/18/24", CRHM::PROTO)); // prototype wetlands
   DLLModules.AddModule(new Classglacier_061718("glacier_061718", "06/10/16", CRHM::PROTO));
   DLLModules.AddModule(new Classglacier("glacier", "05/29/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSWEslope_061718("SWESlope_061718", "06/02/16", CRHM::PROTO));
@@ -16303,8 +16303,8 @@ void ClassSoil::run(void) {
           break;
         case 1:
           if(etr > soil_rechr[hh]) {
+            et = soil_rechr[hh]; // 18Oct2024 correction: move up and before soil_rechr = 0
             soil_rechr[hh] = 0.0;
-            et = soil_rechr[hh];
           }
           else{
             soil_rechr[hh] = soil_rechr[hh] - etr;
@@ -19065,8 +19065,8 @@ void ClassSoilPrairie::run(void) {
           break;
         case 1:
           if(etr > soil_rechr[hh]) {
+            et = soil_rechr[hh]; // 18Oct2024 correction: move up and before soil_rechr = 0
             soil_rechr[hh] = 0.0;
-            et = soil_rechr[hh];
           }
           else{
             soil_rechr[hh] = soil_rechr[hh] - etr;
@@ -21811,8 +21811,8 @@ void ClassSoilX::run(void) {
           break;
         case 1:
           if(etr > soil_rechr[hh]) {
+            et = soil_rechr[hh]; // 18Oct2024 correction: move up and before soil_rechr = 0
             soil_rechr[hh] = 0.0;
-            et = soil_rechr[hh];
           }
           else{
             soil_rechr[hh] = soil_rechr[hh] - etr;
@@ -22948,8 +22948,8 @@ void ClassSoilDS::run(void) {
           break;
         case 1:
           if(etr > soil_rechr[hh]) {
+            et = soil_rechr[hh]; // 18Oct2024 correction: move up and before soil_rechr = 0
             soil_rechr[hh] = 0.0;
-            et = soil_rechr[hh];
           }
           else{
             soil_rechr[hh] = soil_rechr[hh] - etr;
