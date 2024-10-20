@@ -174,7 +174,7 @@ CRHM 11/16/12
 
 CRHM 11/28/12
 
-1) Addition of new module K_Estimate to calculate lateral flow rates in soil layers and groundwater layer using Darcy’s law for unsaturated flow.
+1) Addition of new module K_Estimate to calculate lateral flow rates in soil layers and groundwater layer using Darcy s law for unsaturated flow.
 
 2) Added to the "soil" module a variable "infil_act" giving the actual infiltration permitted by "soil". Infiltration modules generate the potential infiltration rate "infil".
    The Log screen expanded to assist in applying a mass balance.
@@ -709,3 +709,13 @@ CRHM 08/27/24
   Adding *24.0/Global::Freq in INFO in frozen and frozenAyers
   
   	 float INF0 = INF[hh]/t0_Var[hh]*24.0/Global::Freq; // 27Aug2024: add *24.0/Global::Freq because INFO should be in same unit when comparing to snowmelt, ie. mm/int not mm/h
+
+CRHM 10/18/24
+
+  Correcting code order for et and soil_rechr when etr > soil_rechr under case 1 in Soil, SoilX, SoilDS, and SoilPrairie modules:
+
+        case 1:
+          if(etr > soil_rechr[hh]) {
+            et = soil_rechr[hh];
+            soil_rechr[hh] = 0.0;
+          }

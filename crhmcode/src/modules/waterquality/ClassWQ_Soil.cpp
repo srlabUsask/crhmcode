@@ -1268,8 +1268,8 @@ void ClassWQ_Soil::run(void) {
                         break;
                     case 1:
                         if (etr > soil_rechr[hh]) {
-                            soil_rechr[hh] = 0.0;
                             et = soil_rechr[hh];
+                            soil_rechr[hh] = 0.0;
                         }
                         else {
                             soil_rechr[hh] = soil_rechr[hh] - etr;

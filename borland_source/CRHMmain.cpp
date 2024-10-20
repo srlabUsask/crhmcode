@@ -1,9 +1,9 @@
-// 08/27/24 correcting f0, f1 in GreenAmpt and Greencrack modules and INFO in frozen and frozenAyers modules in 05/29/24
+// 10/18/24 correcting code order for et and soil_rechr when etr > soil_rechr under case 1 in Soil, SoilX, SoilDS, and SoilPrairie modules in 08/27/24
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "08/27/24"
+#define CurrentVersion "10/18/24"
 
 #include <stdexcept>
 #include "CRHMmain.h"
