@@ -1,9 +1,9 @@
-// 10/04/23 fixing module order issue for glacier and infiltration modules when constructing project in GUI in 03/14/23
+// 10/18/24 correcting code order for et and soil_rechr when etr > soil_rechr under case 1 in Soil, SoilX, SoilDS, and SoilPrairie modules in 08/27/24
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "10/04/23"
+#define CurrentVersion "10/18/24"
 
 #include <stdexcept>
 #include "CRHMmain.h"

@@ -1,4 +1,4 @@
-// 10/04/23 with changes to 08/02/22
+// 11/14/23 with changes to 10/04/23
 //---------------------------------------------------------------------------
 
 #ifndef OurModulesH
@@ -2877,6 +2877,7 @@ float *cum_net_snow;
 float *net_p;
 float *intcp_evap;
 float *cum_intcp_evap;
+float *pot_subl_cpy;
 float *Subl_Cpy;
 float *cum_Subl_Cpy;
 float *cum_SUnload;
@@ -5176,6 +5177,7 @@ float *cum_net_snow;
 float *net_p;
 float *intcp_evap;
 float *cum_intcp_evap;
+float *pot_subl_cpy;
 float *Subl_Cpy;
 float *cum_Subl_Cpy;
 float *cum_SUnload;
@@ -5289,6 +5291,7 @@ float *cum_net_snow;
 float *net_p;
 float *intcp_evap;
 float *cum_intcp_evap;
+float *pot_subl_cpy;
 float *Subl_Cpy;
 float *cum_Subl_Cpy;
 float *cum_SUnload;

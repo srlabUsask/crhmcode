@@ -1,4 +1,4 @@
-// 03/14/23
+// 10/18/24
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -63,9 +63,9 @@ void MoveModulesToGlobal(String DLLName){
 
   DLLModules.AddModule(new Classalbedo("albedo", "08/11/11", CRHM::BASIC));
   DLLModules.AddModule(new Classnetall("netall", "04/04/22", CRHM::BASIC));
-  DLLModules.AddModule(new Classevap("evap", "03/18/22", CRHM::BASIC));
+  DLLModules.AddModule(new Classevap("evap", "05/28/24", CRHM::BASIC));
   DLLModules.AddModule(new ClassevapD("evapD", "11/04/09", CRHM::ADVANCE));
-  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "04/04/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "05/28/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassevapD_Resist("evapD_Resist", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassShutWall("ShuttleWallace", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassShutWallD("ShuttleWallaceD", "04/04/22", CRHM::ADVANCE));
@@ -73,17 +73,17 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new Classcrack("crack", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassPrairieInfil("PrairieInfiltration", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassAyers("Ayers", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassGreencrack("Greencrack", "04/04/22", CRHM::BASIC));
-  DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "04/04/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new Classfrozen("frozen", "04/04/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoil("Soil", "04/05/22", CRHM::BASIC));
-  DLLModules.AddModule(new ClassevapX("evapX", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoilX("SoilX", "04/05/22", CRHM::ADVANCE)); // nlay >= 2 check added
-  DLLModules.AddModule(new ClassSoilDS("SoilDetention", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "04/05/22", CRHM::PROTO)); // prototype wetlands
+  DLLModules.AddModule(new ClassGreencrack("Greencrack", "08/27/24", CRHM::BASIC));
+  DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "08/27/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classfrozen("frozen", "08/27/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "08/27/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSoil("Soil", "10/18/24", CRHM::BASIC));
+  DLLModules.AddModule(new ClassevapX("evapX", "05/28/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSoilX("SoilX", "10/18/24", CRHM::ADVANCE)); // nlay >= 2 check added
+  DLLModules.AddModule(new ClassSoilDS("SoilDetention", "10/18/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "10/18/24", CRHM::PROTO)); // prototype wetlands
   DLLModules.AddModule(new Classglacier_061718("glacier_061718", "06/10/16", CRHM::PROTO));
-  DLLModules.AddModule(new Classglacier("glacier", "04/22/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classglacier("glacier", "05/29/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSWEslope_061718("SWESlope_061718", "06/02/16", CRHM::PROTO));
   DLLModules.AddModule(new ClassSWEslope("SWESlope", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassICEflow("ICEflow", "12/31/18", CRHM::ADVANCE));
@@ -99,9 +99,9 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "11/21/16", CRHM::ADVANCE));
   DLLModules.AddModule(new ClasspbsmSnobal("pbsmSnobal", "01/05/17", CRHM::ADVANCE));
 
-  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "11/14/23", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "11/14/23", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "11/14/23", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassXG("XG", "04/05/22", CRHM::ADVANCE));
@@ -3246,7 +3246,7 @@ void Classevap::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      switch (evap_type[hh]){
 
@@ -4461,7 +4461,7 @@ void ClassGreencrack::init(void) {
     }
 
     psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-    f1[hh]        = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0;
+    f1[hh]        = calcf1(F1[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f1 is in mm/h
   }
 }
 
@@ -4591,8 +4591,8 @@ void ClassGreencrack::run(void) {
           F1[hh] = soil_moist[hh];
           dthbot[hh]    = (1.0 - soil_moist[hh]/soil_moist_max[hh]);
           psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-          if(soil_type[hh] > 0) // not water!
-            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall (mm/h)
+//          if(soil_type[hh] > 0) // not water! // 27Aug2024: remove redundant calculation of f1
+//            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall (mm/h)
 
           infiltrate();
 
@@ -5088,7 +5088,7 @@ void Classfrozen::run(void) {
               INF[hh] = C[hh]*pow(S0[hh], 2.92f)*pow(1.0f-Si[hh], 1.64f)*
                    pow((273.15f-hru_tsoil[hh])/273.15f, -0.45f)*pow(t0_Var[hh], 0.44f); // (mm)
 
-              float INF0 = INF[hh]/t0_Var[hh];
+              float INF0 = INF[hh]/t0_Var[hh]*24.0/Global::Freq; // 27Aug2024: add *24.0/Global::Freq because INFO should be in same unit when comparing to snowmelt, ie. mm/int not mm/h
 
               if(snowmelt <= INF0 && snowmelt <= capacity) {
                 snowinfil[hh] = snowmelt;
@@ -5936,7 +5936,7 @@ void ClassGreenAmpt::init(void) {
     k[hh]         = soilproperties[soil_type[hh]][KSAT];
     dthbot[hh]    = (1.0 - soil_moist_init[hh]/soil_moist_max[hh]);
     psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-    f1[hh]        = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0;
+    f1[hh]        = calcf1(F1[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f1 is in mm/h
   }
 }
 
@@ -5971,8 +5971,8 @@ void ClassGreenAmpt::run(void) {
           F1[hh] = soil_moist[hh];
           dthbot[hh]    = (1.0 - soil_moist[hh]/soil_moist_max[hh]);
           psidthbot[hh] = soilproperties[soil_type[hh]][PSI]*dthbot[hh];
-          if(soil_type[hh] > 0) // not water!
-            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall
+//          if(soil_type[hh] > 0) // not water! // 27Aug204: remove redundant calculation of f1
+//            f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0; // infiltrate first interval rainfall
 
           infiltrate();
 
@@ -6042,7 +6042,7 @@ void ClassGreenAmpt::infiltrate(void){
   }
   pond = 0.0;
 
-  f0[hh] = calcf1(F0[hh], psidthbot[hh])*Global::Interval*24.0;
+  f0[hh] = calcf1(F0[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f0 is in mm/h
 
   if(intensity > f0[hh]) {
     ponding();
@@ -6051,7 +6051,7 @@ void ClassGreenAmpt::infiltrate(void){
 
   F1[hh] = F0[hh] + garain;
 
-  f1[hh] = calcf1(F1[hh], psidthbot[hh])*Global::Interval*24.0;
+  f1[hh] = calcf1(F1[hh], psidthbot[hh]); // 27Aug2024: remove *Global::Interval*24.0 as f1 is in mm/h
 
   if(intensity > f1[hh])
     startponding();
@@ -13282,6 +13282,8 @@ void ClassCRHMCanopy::decl(void) {
 
   declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
+  declvar("pot_subl_cpy", NHRU, "potential dimensionless canopy snow sublimation rate", "(s^-1)", &pot_subl_cpy);
+
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
   declstatdiag("cum_Subl_Cpy", NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
@@ -13563,6 +13565,8 @@ void ClassCRHMCanopy::run(void) {
 // sublimation rate of single 'ideal' ice sphere:
 
       float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+
+      pot_subl_cpy[hh] = Vs; // 14Nov2023: export the dimensionless sublimation rate (s^-1)
 
 // snow exposure coefficient (Ce):
 
@@ -14756,7 +14760,7 @@ void ClassfrozenAyers::run(void) {
               INF[hh] = C[hh]*pow(S0[hh], 2.92f)*pow(1.0f-Si[hh], 1.64f)*
                    pow((273.15f-hru_tsoil[hh])/273.15f, -0.45f)*pow(t0_Var[hh], 0.44f); // (mm)
 
-              float INF0 = INF[hh]/t0_Var[hh];
+              float INF0 = INF[hh]/t0_Var[hh]*24.0/Global::Freq; // 27Aug2024: add *24.0/Global::Freq because INFO should be in same unit when comparing to snowmelt, ie. mm/int not mm/h
 
               if(snowmelt <= INF0 && snowmelt <= capacity) {
                 snowinfil[hh] = snowmelt;
@@ -16299,8 +16303,8 @@ void ClassSoil::run(void) {
           break;
         case 1:
           if(etr > soil_rechr[hh]) {
+            et = soil_rechr[hh]; // 18Oct2024 correction: move up and before soil_rechr = 0
             soil_rechr[hh] = 0.0;
-            et = soil_rechr[hh];
           }
           else{
             soil_rechr[hh] = soil_rechr[hh] - etr;
@@ -16597,7 +16601,7 @@ void Classevap_Resist::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      float Soil_Moist = (soil_moist[hh]/soil_Depth[hh] + SetSoilproperties[soil_type[hh]][1])/SetSoilproperties[soil_type[hh]][3]; // 05/21/20: Soil_Moist is soil saturation for the entire soil column
 
@@ -16609,7 +16613,7 @@ void Classevap_Resist::run(void) {
 
            Z0 = Ht[hh]/7.6;
            d  = Ht[hh]*0.67;
-           U = hru_u[hh]; // Wind speed (m/d)
+           U = hru_u[hh];
            ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*U);
 
            rcstar = rcs[hh]; // rc min
@@ -18032,7 +18036,7 @@ void ClassevapX::run(void) {
 
 // calculated every interval
 
-     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/d)
+     Q = Rn[hh]*(1.0 - F_Qg[hh]); // (mm/int) 28May2024: change the incorrect comment mm/d for units
 
      switch (evap_type[hh]){
 
@@ -18056,7 +18060,7 @@ void ClassevapX::run(void) {
 
              Z0 = Ht[hh]/7.6;
              d  = Ht[hh]*0.67;
-             U = hru_u[hh]; // Wind speed (m/d)
+             U = hru_u[hh];
              ra = sqr(log((Zwind[hh] - d)/Z0))/(sqr(CRHM_constants::kappa)*U);
 
              rcstar = rcs[hh]; // rc min
@@ -19061,8 +19065,8 @@ void ClassSoilPrairie::run(void) {
           break;
         case 1:
           if(etr > soil_rechr[hh]) {
+            et = soil_rechr[hh]; // 18Oct2024 correction: move up and before soil_rechr = 0
             soil_rechr[hh] = 0.0;
-            et = soil_rechr[hh];
           }
           else{
             soil_rechr[hh] = soil_rechr[hh] - etr;
@@ -21372,7 +21376,7 @@ void ClassSoilX::run(void) {
     if(nstep == 0){
 
       for(long ll = 0; ll < depths_size; ++ll)
-        if(NO_Freeze[hh])
+        if((NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0)) // 28May2024: change from if(NO_Freeze[hh])
           thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
         else
           thaw_layers_lay[ll][hh] = 0.0; // all frozen
@@ -21807,8 +21811,8 @@ void ClassSoilX::run(void) {
           break;
         case 1:
           if(etr > soil_rechr[hh]) {
+            et = soil_rechr[hh]; // 18Oct2024 correction: move up and before soil_rechr = 0
             soil_rechr[hh] = 0.0;
-            et = soil_rechr[hh];
           }
           else{
             soil_rechr[hh] = soil_rechr[hh] - etr;
@@ -22944,8 +22948,8 @@ void ClassSoilDS::run(void) {
           break;
         case 1:
           if(etr > soil_rechr[hh]) {
+            et = soil_rechr[hh]; // 18Oct2024 correction: move up and before soil_rechr = 0
             soil_rechr[hh] = 0.0;
-            et = soil_rechr[hh];
           }
           else{
             soil_rechr[hh] = soil_rechr[hh] - etr;
@@ -24726,6 +24730,8 @@ void ClassCRHMCanopyClearing::decl(void) {
 
   declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
+  declvar("pot_subl_cpy", NHRU, "potential dimensionless canopy snow sublimation rate", "(s^-1)", &pot_subl_cpy);
+
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
   declstatdiag("cum_Subl_Cpy", NHRU, "cumulative canopy snow sublimation", "(mm)", &cum_Subl_Cpy);
@@ -25022,6 +25028,8 @@ void ClassCRHMCanopyClearing::run(void) {
 
           float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
 
+          pot_subl_cpy[hh] = Vs; // 14Nov2023: export the dimensionless sublimation rate (s^-1)
+
   // snow exposure coefficient (Ce):
 
           float Ce;
@@ -25312,6 +25320,8 @@ void ClassCRHMCanopyClearingGap::decl(void) {
   declvar("net_rain", NHRU, " direct_rain + drip", "(mm/int)", &net_rain);
 
   declstatdiag("cum_net_rain", NHRU, " cumulative direct_rain + drip", "(mm)", &cum_net_rain);
+
+  declvar("pot_subl_cpy", NHRU, "potential dimensionless canopy snow sublimation rate", "(s^-1)", &pot_subl_cpy);
 
   declvar("Subl_Cpy", NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
@@ -25679,6 +25689,8 @@ void ClassCRHMCanopyClearingGap::run(void){
 // sublimation rate of single 'ideal' ice sphere:
 
           float Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+
+          pot_subl_cpy[hh] = Vs; // 14Nov2023: export the dimensionless sublimation rate (s^-1)
 
 // snow exposure coefficient (Ce):
 
@@ -27496,7 +27508,7 @@ void Classglacier::run(void){
       }
       // enter new data
       lagT_delayed_lay[0][hh] = hru_t[hh];
-      lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
+      lagSW_delayed_lay[0][hh] = Qsisn_Var[hh]; // 29May2024 correction: from lagSW_delayed_lay[0][hh] = Qnsn_Var[hh];
       // lag T and SW
       long LT = lagT[hh];
       long LSW = lagSW[hh];
