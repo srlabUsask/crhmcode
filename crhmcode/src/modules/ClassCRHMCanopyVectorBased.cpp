@@ -168,6 +168,8 @@ void ClassCRHMCanopyVectorBased::decl(void) {
 
   decldiag("u_FHt", TDim::NHRU, "wind speed at forest top (z = FHt)", "(m/s)", &u_FHt);
 
+  decldiag("u_1_third_Ht", TDim::NHRU, "wind speed at one-third forest height (z = 1/3*Ht) following Cebulski & Pomeroy vector based param.", "(m/s)", &u_1_third_Ht);
+
   decldiag("Cc", TDim::NHRU, "Canopy coverage", "()", &Cc);
 
   declvar("intcp_evap", TDim::NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
@@ -200,7 +202,7 @@ void ClassCRHMCanopyVectorBased::decl(void) {
 
   declparam("LAI", TDim::NHRU, "[2.2]", "0.1", "20.0", "leaf-area-index", "()", &LAI);
 
-  declparam("Sbar", TDim::NHRU, "[6.6]", "0.0", "100.0", "maximum canopy snow interception load", "(kg/m^2)", &Sbar);
+  declparam("Lmax", TDim::NHRU, "[50]", "0.0", "100.0", "maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 based on max observed in Storck et al. 2002 and Cebulski & Pomeroy", "(kg/m^2)", &Lmax);
 
   declparam("Zvent", TDim::NHRU, "[0.75]", "0.0", "1.0", "ventilation wind speed height (z/Ht)", "()", &Zvent);
 
@@ -421,50 +423,47 @@ void ClassCRHMCanopyVectorBased::run(void){
     } // switch
 
     switch(CanopyClearing[hh]){
-      case 0: { // canopy
+      case 0: // canopy
 //==============================================================================
 // coupled forest snow interception and sublimation routine:
-// after Hedstom & Pomeroy / Parviainen & Pomeroy:
-// calculate maximum canopy snow load (L*):
+// after Cebulski & Pomeroy 2025:
 
-      if(Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0){ // handle snow interception
+if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
+{ // calculate increase in Snow_load and direct_snow if we are in canopy (i.e., Cc > 0)
+  const double k_cp = -20;    // rate of increase of the sigmoidal curve below
+  const double v_snow = 0.8;  // terminal fall velocity of snowfall taken from Isyumov, 1971
+  const double alpha = 0.836; // based on Cebulski & Pomeroy plot scale observations at Fortress Mountain PWL and Forest Tower plots.
+  double Cp = 0; // leaf contact area (Cp) based on trajectory angle
+  double IP = 0; // interception efficiency (IP)
+  double dL = 0; // change in canopy snow load
 
-        if(Sbar[hh] >= 0.0){
-          double RhoS = 67.92 + 51.25* exp(hru_t[hh]/2.59);
-          double LStar = Sbar[hh]* (0.27 + 46.0/RhoS)* LAI[hh];
+  if (hru_u[hh] > 0 && Cc[hh] < 1)
+  { // increase leaf contact area (Cp) based on wind speed and canopy coverage (Cc)
+    double Ht_1_third = Ht[hh] * (1 / 3);
+    double Cp_inc = 0;
+    if (Ht_1_third - (2.0 / 3.0) * Zwind[hh] > 0.0)
+    {
+      u_1_third_Ht[hh] = hru_u[hh] * log((Ht_1_third - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
+      double snow_traj_angle = atan(u_1_third_Ht[hh] / v_snow);                         // in radians
+      Cp_inc = (1 - Cc[hh]) / (1 + exp(-k_cp * (sin(snow_traj_angle) - (1 - Cc[hh])))); // fractional increas in leaf contact area (Cp) based on horizontal trajectory. This is modified from Cebulski & Pomeroy snow interception paper.
+    }
+    Cp = Cc[hh] + Cp_inc; // calculated leaf contact area (Cp) based on trajectory angle
+  }
+  else
+  {
+    Cp = Cc[hh]; // use leaf contact area from nadir i.e., canopy coverage
+  }
 
-          if(Snow_load[hh] > LStar){ // after increase in temperature
-            direct_snow[hh] = Snow_load[hh] - LStar;
-            Snow_load[hh] = LStar;
-          }
+  IP = Cp * alpha; // interception efficiency (IP)
+  dL = IP * hru_snow[hh]; // change in canopy snow load
 
-// calculate intercepted snowload
-
-          if(Ht[hh] - 2.0/3.0*Zwind[hh] > 0.0)
-            u_FHt[hh] = hru_u[hh]*log((Ht[hh] - 2.0/3.0*Zwind[hh] )/ 0.123*Zwind[hh])/log((Zwind[hh] - 2.0/3.0*Zwind[hh] )/ 0.123*Zwind[hh]);
-          else
-            u_FHt[hh] = 0.0;
-
-          double I1 = 0.0;
-
-      if(hru_snow[hh] > 0.0 && LStar > 0.0){
-        if(fabs(hru_snow[hh]/LStar) < 50.0){
-          if (u_FHt[hh] <= 1.0)  // if wind speed at canopy top > 1 m/s
-            I1 = (LStar-Snow_load[hh])*(1.0-exp(-Cc[hh]*hru_snow[hh]/LStar));
-          else
-            I1 = (LStar-Snow_load[hh])*(1.0-exp(-hru_snow[hh]/LStar));
-
-          if(I1 <= 0)
-            I1 = 0;
-
-          Snow_load[hh] += I1;
-        }
+  Snow_load[hh] += dL;
 
   // calculate canopy snow throughfall before unloading:
 
-        direct_snow[hh] += (hru_snow[hh] - I1);
-      }
+  direct_snow[hh] += (1-IP) * hru_snow[hh];
 
+// Pomeroy et al. (1998) sublimation routine modified by Alex Cebulski to change maximum intercepted load from Hedstrom 1998 calculation to constant based on observations from several studies showing much higher intercepted loads.
 // calculate snow ventilation windspeed:
 
 //=============================================================================
@@ -481,6 +480,15 @@ void ClassCRHMCanopyVectorBased::run(void){
           double xi2 = 1-Zvent[hh];
           double windExt2 = (gamma * LAI[hh] * xi2);
           double uVent = u_FHt[hh] * exp(-1 * windExt2);
+
+// Calculate wind speed at canopy top for sublimation calculation, moved from initial interception chunk by Alex Cebulski November 2024
+
+          if(Ht[hh] - 2.0/3.0*Zwind[hh] > 0.0)
+            u_FHt[hh] = hru_u[hh]*log((Ht[hh] - 2.0/3.0*Zwind[hh] )/ 0.123*Zwind[hh])/log((Zwind[hh] - 2.0/3.0*Zwind[hh] )/ 0.123*Zwind[hh]);
+          else
+            u_FHt[hh] = 0.0;
+
+          double I1 = 0.0;
 
 // calculate sublimation of intercepted snow from ideal intercepted ice sphere (500 microns diameter):
 
@@ -512,10 +520,10 @@ void ClassCRHMCanopyVectorBased::run(void){
 // snow exposure coefficient (Ce):
 
           double Ce;
-          if ((Snow_load[hh]/LStar) <= 0.0)
+          if ((Snow_load[hh]/Lmax[hh]) <= 0.0)
             Ce = 0.07;
           else
-            Ce = ks* pow((Snow_load[hh]/LStar), -Fract);
+            Ce = ks* pow((Snow_load[hh]/Lmax[hh]), -Fract);
 
 // calculate 'potential' canopy sublimation:
 
@@ -569,16 +577,13 @@ void ClassCRHMCanopyVectorBased::run(void){
 // calculate total sub-canopy snow:
 
           net_snow[hh] = direct_snow[hh] + SUnload[hh];
-
-          }// handle snow
-        break;
+          break;
       } // case canopy
       case 1:  // clearing
       case 2:  // gap
         net_snow[hh] = hru_snow[hh];
         net_rain[hh] = hru_rain[hh];
         break;
-      }
     }  // switch
 
 // calculate horizontal canopy-coverage (Cc):

@@ -79,6 +79,7 @@ double *Tauc { NULL };
 double *Pa { NULL };
 double *ra { NULL };
 double *u_FHt { NULL };
+double *u_1_third_Ht { NULL };
 double *Pevap { NULL };
 
 // variable inputs
@@ -109,7 +110,7 @@ const double *hru_area { NULL };
 const double *hru_elev { NULL };
 const double *Ht { NULL };
 const double *LAI { NULL };
-const double *Sbar { NULL };
+const double *Lmax { NULL };
 const double *Z0snow { NULL };
 const double *Zref { NULL };
 const double *Zwind { NULL };
