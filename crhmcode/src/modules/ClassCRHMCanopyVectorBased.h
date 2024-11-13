@@ -20,11 +20,11 @@
 
 #include "../core/ClassModule.h"
 
-class ClassCRHMCanopyClearingGap:public ClassModule {
+class ClassCRHMCanopyVectorBased:public ClassModule {
 
 public:
 
-ClassCRHMCanopyClearingGap(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
+ClassCRHMCanopyVectorBased(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
 double Qsi_{ 0.0 }, Qli_ {0.0};
 
@@ -135,5 +135,5 @@ double gamma(double Pa, double t); // Psychrometric constant (kPa/DEGREE_CELSIUS
 double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
 double lambda(double t); // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
 
-ClassCRHMCanopyClearingGap* klone(string name) const;
+ClassCRHMCanopyVectorBased* klone(string name) const;
 };

@@ -25,7 +25,7 @@
 #include <bitset>
 #include <algorithm>
 
-#include "ClassCRHMCanopyClearingGap.h"
+#include "ClassCRHMCanopyVectorBased.h"
 #include "../core/GlobalDll.h"
 #include "../core/ClassCRHM.h"
 #include "newmodules/SnobalDefines.h"
@@ -33,11 +33,11 @@
 
 using namespace CRHM;
 
-ClassCRHMCanopyClearingGap* ClassCRHMCanopyClearingGap::klone(string name) const{
-  return new ClassCRHMCanopyClearingGap(name);
+ClassCRHMCanopyVectorBased* ClassCRHMCanopyVectorBased::klone(string name) const{
+  return new ClassCRHMCanopyVectorBased(name);
 }
 
-void ClassCRHMCanopyClearingGap::decl(void) {
+void ClassCRHMCanopyVectorBased::decl(void) {
 
   Description = "'Prototype all season canopy/clearing module. Calculates short, long and all-wave radiation components at the snow surface.' \
                  'Inputs are observations Qsi (W/m^2) and Qli (W/m^2), ' \
@@ -215,7 +215,7 @@ void ClassCRHMCanopyClearingGap::decl(void) {
   decldiagparam("B_canopy", TDim::NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter for longwave-radiation. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
 }
 
-void ClassCRHMCanopyClearingGap::init(void) {
+void ClassCRHMCanopyVectorBased::init(void) {
 
   nhru = getdim(TDim::NHRU); // transfers current # of HRU's to module
 
@@ -234,13 +234,13 @@ void ClassCRHMCanopyClearingGap::init(void) {
     cum_SUnload_H2O[hh] = 0.0;
 
     if(Ht[hh] > Zwind[hh]){
-      CRHMException TExcept(string("'" + Name + " (CanopyClearingGap)' Vegetation height greater than wind reference height, i.e. (Ht > Zwind)!").c_str(), TExcept::WARNING);
+      CRHMException TExcept(string("'" + Name + " (CanopyVectorBased)' Vegetation height greater than wind reference height, i.e. (Ht > Zwind)!").c_str(), TExcept::WARNING);
       LogError(TExcept);
     }
   }
 }
 
-void ClassCRHMCanopyClearingGap::run(void){
+void ClassCRHMCanopyVectorBased::run(void){
 
   double Exposure, LAI_, Vf, Vf_, Kstar_H, Kd;
   //double Tau; variable is unreferenced commenting out for now - jhs507
@@ -664,18 +664,18 @@ void ClassCRHMCanopyClearingGap::run(void){
   } // end for
 }
 
-void ClassCRHMCanopyClearingGap::finish(bool good) {
+void ClassCRHMCanopyVectorBased::finish(bool good) {
   for(hh = 0; chkStruct(); ++hh) {
-    LogMessageA(hh, string("'" + Name + " (CanopyClearingGap)'  cum_net_snow    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cum_net_snow[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (CanopyClearingGap)'  cum_net_rain    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cum_net_rain[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (CanopyClearingGap)'  cum_Subl_Cpy    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cum_Subl_Cpy[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (CanopyClearingGap)'  cum_intcp_evap  (mm) (mm*hru) (mm*hru/basin): ").c_str(), cum_intcp_evap[hh], hru_area[hh], basin_area[0]);
-    LogMessageA(hh, string("'" + Name + " (CanopyClearingGap)'  cum_SUnload_H2O (mm) (mm*hru) (mm*hru/basin): ").c_str(), cum_intcp_evap[hh], hru_area[hh], basin_area[0]);
+    LogMessageA(hh, string("'" + Name + " (CanopyVectorBased)'  cum_net_snow    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cum_net_snow[hh], hru_area[hh], basin_area[0]);
+    LogMessageA(hh, string("'" + Name + " (CanopyVectorBased)'  cum_net_rain    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cum_net_rain[hh], hru_area[hh], basin_area[0]);
+    LogMessageA(hh, string("'" + Name + " (CanopyVectorBased)'  cum_Subl_Cpy    (mm) (mm*hru) (mm*hru/basin): ").c_str(), cum_Subl_Cpy[hh], hru_area[hh], basin_area[0]);
+    LogMessageA(hh, string("'" + Name + " (CanopyVectorBased)'  cum_intcp_evap  (mm) (mm*hru) (mm*hru/basin): ").c_str(), cum_intcp_evap[hh], hru_area[hh], basin_area[0]);
+    LogMessageA(hh, string("'" + Name + " (CanopyVectorBased)'  cum_SUnload_H2O (mm) (mm*hru) (mm*hru/basin): ").c_str(), cum_intcp_evap[hh], hru_area[hh], basin_area[0]);
     LogDebug(" ");
   }
 }
 
-double ClassCRHMCanopyClearingGap::delta(double t) // Slope of sat vap p vs t, kPa/DEGREE_CELSIUS
+double ClassCRHMCanopyVectorBased::delta(double t) // Slope of sat vap p vs t, kPa/DEGREE_CELSIUS
 {
   if (t > 0.0)
     return(2504.0*exp(17.27 * t/(t+237.3)) / sqr(t+237.3));
@@ -683,17 +683,17 @@ double ClassCRHMCanopyClearingGap::delta(double t) // Slope of sat vap p vs t, k
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-double ClassCRHMCanopyClearingGap::lambda(double t) // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
+double ClassCRHMCanopyVectorBased::lambda(double t) // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
 {
    return( 2.501 - 0.002361 * t );
 }
 
-double ClassCRHMCanopyClearingGap::gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELSIUS)
+double ClassCRHMCanopyVectorBased::gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELSIUS)
 {
    return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg DEGREE_CELSIUS))
 }
 
-double ClassCRHMCanopyClearingGap::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
+double ClassCRHMCanopyVectorBased::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
   const double R = 2870;
    return (1E4*Pa /(R*( 273.15 + t))*(1.0 - 0.379*(ea/Pa)) ); //
