@@ -172,6 +172,8 @@ void ClassCRHMCanopyVectorBased::decl(void) {
 
   decldiag("Cc", TDim::NHRU, "Canopy coverage", "()", &Cc);
 
+  declvar("Clca", TDim::NHRU, "Leaf contact area adjusted for hydrometeor trajectory angle.", "(s-1)", &Clca);
+
   declvar("intcp_evap", TDim::NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
 
   declstatdiag("cum_intcp_evap", TDim::NHRU, "Cumulative HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
@@ -434,28 +436,28 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
 { // calculate increase in Snow_load and direct_snow if we are in canopy (i.e., Cc > 0)
   const double k_cp = -20;    // rate of increase of the sigmoidal curve below
   const double v_snow = 0.8;  // terminal fall velocity of snowfall taken from Isyumov, 1971
-  double Cp = 0; // leaf contact area (Cp) based on trajectory angle
+  Clca[hh] = 0; // leaf contact area (Clca) based on trajectory angle
   double IP = 0; // interception efficiency (IP)
   double dL = 0; // change in canopy snow load
 
   if (hru_u[hh] > 0 && Cc[hh] < 1)
-  { // increase leaf contact area (Cp) based on wind speed and canopy coverage (Cc)
+  { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
     double Ht_1_third = Ht[hh] * (1 / 3);
     double Cp_inc = 0;
     if (Ht_1_third - (2.0 / 3.0) * Zwind[hh] > 0.0)
     {
       u_1_third_Ht[hh] = hru_u[hh] * log((Ht_1_third - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
       double snow_traj_angle = atan(u_1_third_Ht[hh] / v_snow);                         // in radians
-      Cp_inc = (1 - Cc[hh]) / (1 + exp(-k_cp * (sin(snow_traj_angle) - (1 - Cc[hh])))); // fractional increas in leaf contact area (Cp) based on horizontal trajectory. This is modified from Cebulski & Pomeroy snow interception paper.
+      Cp_inc = (1 - Cc[hh]) / (1 + exp(-k_cp * (sin(snow_traj_angle) - (1 - Cc[hh])))); // fractional increas in leaf contact area (Clca) based on horizontal trajectory. This is modified from Cebulski & Pomeroy snow interception paper.
     }
-    Cp = Cc[hh] + Cp_inc; // calculated leaf contact area (Cp) based on trajectory angle
+    Clca[hh] = Cc[hh] + Cp_inc; // calculated leaf contact area (Clca) based on trajectory angle
   }
   else
   {
-    Cp = Cc[hh]; // use leaf contact area from nadir i.e., canopy coverage
+    Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., canopy coverage
   }
 
-  IP = Cp * alpha[hh]; // interception efficiency (IP)
+  IP = Clca[hh] * alpha[hh]; // interception efficiency (IP)
   dL = IP * hru_snow[hh]; // change in canopy snow load
 
   Snow_load[hh] += dL;

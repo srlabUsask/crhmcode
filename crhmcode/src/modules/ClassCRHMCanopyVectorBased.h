@@ -74,6 +74,7 @@ double *cum_SUnload { NULL };
 double *cum_SUnload_H2O { NULL };
 
 double *Cc { NULL };
+double *Clca { NULL };
 double *k { NULL };
 double *Tauc { NULL };
 double *Pa { NULL };
