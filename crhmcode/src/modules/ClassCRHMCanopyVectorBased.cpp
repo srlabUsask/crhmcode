@@ -204,6 +204,8 @@ void ClassCRHMCanopyVectorBased::decl(void) {
 
   declparam("Lmax", TDim::NHRU, "[50]", "0.0", "100.0", "maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 based on max observed in Storck et al. 2002 and Cebulski & Pomeroy", "(kg/m^2)", &Lmax);
 
+  declparam("alpha", TDim::NHRU, "[0.836]", "0.0", "1.0", "$alpha$ is an efficiency constant which determines the fraction of snowflakes that contact the $C_p$ elements and are stored in the canopy (i.e., intercepted) before canopy snow unloading or ablation processes begin. Default is based on Cebulski & Pomeroy plot scale observations at Fortress Mountain PWL and Forest Tower plots.", "()", &Zvent);
+
   declparam("Zvent", TDim::NHRU, "[0.75]", "0.0", "1.0", "ventilation wind speed height (z/Ht)", "()", &Zvent);
 
   declparam("unload_t", TDim::NHRU, "[1.0]", "-10.0", "20.0", "if ice-bulb temp >= t : canopy snow is unloaded as snow", "(" + string(DEGREE_CELSIUS) + ")", &unload_t);
@@ -432,7 +434,6 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
 { // calculate increase in Snow_load and direct_snow if we are in canopy (i.e., Cc > 0)
   const double k_cp = -20;    // rate of increase of the sigmoidal curve below
   const double v_snow = 0.8;  // terminal fall velocity of snowfall taken from Isyumov, 1971
-  const double alpha = 0.836; // based on Cebulski & Pomeroy plot scale observations at Fortress Mountain PWL and Forest Tower plots.
   double Cp = 0; // leaf contact area (Cp) based on trajectory angle
   double IP = 0; // interception efficiency (IP)
   double dL = 0; // change in canopy snow load
@@ -454,7 +455,7 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
     Cp = Cc[hh]; // use leaf contact area from nadir i.e., canopy coverage
   }
 
-  IP = Cp * alpha; // interception efficiency (IP)
+  IP = Cp * alpha[hh]; // interception efficiency (IP)
   dL = IP * hru_snow[hh]; // change in canopy snow load
 
   Snow_load[hh] += dL;

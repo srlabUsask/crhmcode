@@ -111,6 +111,7 @@ const double *hru_elev { NULL };
 const double *Ht { NULL };
 const double *LAI { NULL };
 const double *Lmax { NULL };
+const double *alpha { NULL };
 const double *Z0snow { NULL };
 const double *Zref { NULL };
 const double *Zwind { NULL };
