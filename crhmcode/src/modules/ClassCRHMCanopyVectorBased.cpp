@@ -594,7 +594,7 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
 
        case 0:  // canopy
 
-        Cc[hh] = 0.29 * log(LAI[hh]) + 0.55;
+        Cc[hh] = std::min(1.0, 0.29 * std::log(LAI[hh]) + 0.55); // update by Alex so Cc is not greater than 1
         if(Cc[hh] <= 0.0)
           Cc[hh] = 0.0;
 
