@@ -434,7 +434,7 @@ void ClassCRHMCanopyVectorBased::run(void){
 
 if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
 { // calculate increase in Snow_load and direct_snow if we are in canopy (i.e., Cc > 0)
-  const double k_cp = -20;    // rate of increase of the sigmoidal curve below
+  const double k_cp = 20;    // rate of increase of the sigmoidal curve below
   const double v_snow = 0.8;  // terminal fall velocity of snowfall taken from Isyumov, 1971
   Clca[hh] = 0; // leaf contact area (Clca) based on trajectory angle
   double IP = 0; // interception efficiency (IP)
@@ -444,7 +444,7 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
   { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
     double Ht_1_third = Ht[hh] * (1.0 / 3.0);
     double Cp_inc = 0;
-    if (Ht_1_third - (2.0 / 3.0) * Zwind[hh] > 0.0)
+    if ((Ht_1_third - (2.0 / 3.0) * Zwind[hh]) > 0.0)
     {
       u_1_third_Ht[hh] = hru_u[hh] * log((Ht_1_third - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
       double snow_traj_angle = atan(u_1_third_Ht[hh] / v_snow);                         // in radians
