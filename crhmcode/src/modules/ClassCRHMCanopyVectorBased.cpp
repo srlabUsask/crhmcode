@@ -442,7 +442,7 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
 
   if (hru_u[hh] > 0 && Cc[hh] < 1)
   { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
-    double Ht_1_third = Ht[hh] * (1 / 3);
+    double Ht_1_third = Ht[hh] * (1.0 / 3.0);
     double Cp_inc = 0;
     if (Ht_1_third - (2.0 / 3.0) * Zwind[hh] > 0.0)
     {
