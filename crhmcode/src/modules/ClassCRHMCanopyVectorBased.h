@@ -125,6 +125,9 @@ const double *Alpha_c { NULL };
 const double *B_canopy { NULL };
 
 const long *CanopyClearing { NULL };
+const long *SublimationSwitch { NULL };
+const long *MassUnloadingSwitch { NULL };
+const long *MeltwaterSwitch { NULL };
 const long *inhibit_evap { NULL };
 
 

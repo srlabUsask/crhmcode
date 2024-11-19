@@ -39,6 +39,8 @@ namespace CRHM_constants {
 	const double emiss = 0.985; // emissivity of the atmosphere and snowpack
 	const double emiss_c = 0.96; // emissivity of the canopy
 	const double em = 0.622;     //
+    const double ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
+
 }
 
 #endif // !CRHM_CONSTANTS

@@ -138,7 +138,7 @@ void ClassCRHMCanopyVectorBased::decl(void) {
 
   declstatdiag("cum_net_rain", TDim::NHRU, "cumulative direct_rain + drip", "(mm)", &cum_net_rain);
 
-  declvar("pot_subl_cpy", TDim::NHRU, "dimensionless canopy snow sublimation rate aka potential sublimation rate to be multiplied by canopy snow load", "(s-1)", &pot_subl_cpy);
+  declvar("pot_subl_cpy", TDim::NHRU, "sublimation rate coefficient for single ice spheres aka potential sublimation rate to be multiplied by canopy snow load and the exposure coeficient", "(s-1)", &pot_subl_cpy);
 
   declvar("Subl_Cpy", TDim::NHRU, "canopy snow sublimation", "(mm/int)", &Subl_Cpy);
 
@@ -168,7 +168,7 @@ void ClassCRHMCanopyVectorBased::decl(void) {
 
   decldiag("u_FHt", TDim::NHRU, "wind speed at forest top (z = FHt)", "(m/s)", &u_FHt);
 
-  decldiag("u_1_third_Ht", TDim::NHRU, "wind speed at one-third forest height (z = 1/3*Ht) following Cebulski & Pomeroy vector based param.", "(m/s)", &u_1_third_Ht);
+  decldiag("u_1_third_Ht", TDim::NHRU, "wind speed at one-third forest height (z = 1/3*Ht) for the Cebulski & Pomeroy vector based param.", "(m/s)", &u_1_third_Ht);
 
   decldiag("Cc", TDim::NHRU, "Canopy coverage", "()", &Cc);
 
@@ -215,6 +215,12 @@ void ClassCRHMCanopyVectorBased::decl(void) {
   declparam("unload_t_water", TDim::NHRU, "[4.0]", "-10.0", "20.0", "if ice-bulb temp >= t: canopy snow is unloaded as water", "(" + string(DEGREE_CELSIUS) + ")", &unload_t_water);
 
   declparam("CanopyClearing", TDim::NHRU, "[0]", "0", "2", "canopy - 0/clearing - 1/gap - 2", "()", &CanopyClearing);
+
+  declparam("SublimationSwitch", TDim::NHRU, "[1]", "0", "1", "Pomeroy 1998 sublimation parameterisation, off - 0, on - 1", "()", &SublimationSwitch);
+  
+  declparam("MassUnloadingSwitch", TDim::NHRU, "[1]", "0", "1", "Canopy snow mass unloading parameterisation options: Hedstrom & Pomeroy 1998 constant time based unloading - 0, Cebulski & Pomeroy exponential curves for wind induced unloading, temperature based unloading, and time based unloading - 1", "()", &MassUnloadingSwitch);
+
+  declparam("MeltwaterSwitch", TDim::NHRU, "[0]", "0", "1", "Canopy snow meltwater drip parameterisation options: Ellis et al. (2010) and Floyd (2012) - 0, CLASS - 1", "()", &MeltwaterSwitch);
 
   decldiagparam("Alpha_c", TDim::NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
 
@@ -432,7 +438,7 @@ void ClassCRHMCanopyVectorBased::run(void){
 // coupled forest snow interception and sublimation routine:
 // after Cebulski & Pomeroy 2025:
 
-if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
+if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0))
 { // calculate increase in Snow_load and direct_snow if we are in canopy (i.e., Cc > 0)
   const double k_cp = 20;    // rate of increase of the sigmoidal curve below
   const double v_snow = 0.8;  // terminal fall velocity of snowfall taken from Isyumov, 1971
@@ -440,7 +446,7 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
   double IP = 0; // interception efficiency (IP)
   double dL = 0; // change in canopy snow load
 
-  if (hru_u[hh] > 0 && Cc[hh] < 1)
+  if (hru_u[hh] > 0 && Cc[hh] < 1 && Cc[hh] > 0)
   { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
     double Ht_1_third = Ht[hh] * (1.0 / 3.0);
     double Cp_inc = 0;
@@ -448,13 +454,13 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
     {
       u_1_third_Ht[hh] = hru_u[hh] * log((Ht_1_third - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
       double snow_traj_angle = atan(u_1_third_Ht[hh] / v_snow);                         // in radians
-      Cp_inc = (1 - Cc[hh]) / (1 + exp(-k_cp * (sin(snow_traj_angle) - (1 - Cc[hh])))); // fractional increas in leaf contact area (Clca) based on horizontal trajectory. This is modified from Cebulski & Pomeroy snow interception paper.
+      Cp_inc = (1 - Cc[hh]) / (1 + exp(-k_cp * (sin(snow_traj_angle) - (1 - Cc[hh])))); // fractional increas in leaf contact area (Clca) based on horizontal trajectory. This is modified from Cebulski & Pomeroy snow interception paper. Has only been tested on forest plots with Cc of .3 and .5.
     }
     Clca[hh] = Cc[hh] + Cp_inc; // calculated leaf contact area (Clca) based on trajectory angle
   }
   else
   {
-    Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., canopy coverage
+    Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., Clca == 1 for Cc == 1 and Clca == 0 when Cc == 0
   }
 
   IP = Clca[hh] * alpha[hh]; // interception efficiency (IP)
@@ -466,6 +472,20 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
 
   direct_snow[hh] += (1-IP) * hru_snow[hh];
 
+  // Finished initial loading now start the ablation paramaterisations 
+
+  double Vi = 0; // submilation rate coefficient for exposed snow (s-1)
+  double IceBulbT = 0; // ice bulb temperature of canopy snow
+  double U = 0; // unloading rate coefficient used in Hedstrom & Pomeroy 1998 param. 
+
+switch(SublimationSwitch[hh]){
+case 0: // do not sublimate, used for debugging or experiments, recommend using case 1 otherwise.
+
+      std::cout << "SublimationSwitch Case 0: No canopy snow sublimation applied.\n";
+      break;
+
+case 1: // canopy snow sublimation with Pomeroy et al. (1998) paramaterisation
+
 // Pomeroy et al. (1998) sublimation routine modified by Alex Cebulski to change maximum intercepted load from Hedstrom 1998 calculation to constant based on observations from several studies showing much higher intercepted loads.
 // calculate snow ventilation windspeed:
 
@@ -476,8 +496,7 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
         const double KinVisc = 1.88e-5;     // kinematic viscosity of air (Sask. avg. value)
         const double ks = 0.0114;           // snow shape coefficient for jack pine
         const double Fract = 0.37;          // fractal dimension of intercepted snow
-        const double ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
-        const double Hs = 2.838e6;          // heat of sublimation (MJ/kg)
+        // const double Hs = 2.838e6;          // heat of sublimation (MJ/kg) changed to PBSM_constants::LATH which has same value.
 //==============================================================================
 
           double xi2 = 1-Zvent[hh];
@@ -506,7 +525,7 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
           Nu = 1.79 + 0.606 * sqrt((double) Nr); // Nusselt number
           SStar = M_PI * sqr(Radius) * (1.0f - AlbedoIce) * Qsi_;  // SW to snow particle !!!! changed
           A1 = Lamb * (hru_t[hh] + 273) * Nu;
-          B1 = Hs * PBSM_constants::M /(PBSM_constants::R * (hru_t[hh] + 273.0f))- 1.0;
+          B1 = PBSM_constants::LATH * PBSM_constants::M /(PBSM_constants::R * (hru_t[hh] + 273.0f))- 1.0;
           J = B1/A1;
           Sigma2 = hru_rh[hh]/100 -1;
           D = 2.06e-5* pow((hru_t[hh]+273.0f)/273.0f, -1.75f); // diffusivity of water vapour
@@ -516,7 +535,7 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
           Mpm = 4.0 / 3.0 * M_PI * PBSM_constants::DICE * Radius * Radius * Radius; // 18Mar2022: remove Gamma Distribution Correction term, *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
 // sublimation rate of single 'ideal' ice sphere:
 
-          double Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(Hs* J + C1)/Mpm;
+          double Vs = (2.0* M_PI* Radius*Sigma2 - SStar* J)/(PBSM_constants::LATH* J + C1)/Mpm;
 
           pot_subl_cpy[hh] = Vs; // export the dimensionless sublimation rate (s-1) added by alex 2023-07-21
 
@@ -530,11 +549,11 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
 
 // calculate 'potential' canopy sublimation:
 
-          double Vi = Vs*Ce;
+          Vi = Vs*Ce;
 
 // limit sublimation to canopy snow available and take sublimated snow away from canopy snow at timestep start
 
-          Subl_Cpy[hh] = -Snow_load[hh]*Vi*Hs*Global::Interval*24*3600/Hs; // make W/m2
+          Subl_Cpy[hh] = -Snow_load[hh]*Vi*PBSM_constants::LATH*Global::Interval*24*3600/PBSM_constants::LATH; // make W/m2
           if(Subl_Cpy[hh] > Snow_load[hh]){
             Subl_Cpy[hh] = Snow_load[hh];
             Snow_load[hh] = 0.0;
@@ -544,38 +563,94 @@ if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0) && Cc[hh] > 0)
             if(Snow_load[hh] < 0.0)
               Snow_load[hh] = 0.0;
           }
+}
 
-// calculate 'ice-bulb' temperature of intercepted snow:
+if(MassUnloadingSwitch[hh] == 0 || MeltwaterSwitch[hh] == 0){
+  // calculate 'ice-bulb' temperature of intercepted snow:
+  double IceBulbT = hru_t[hh] - (Vi* PBSM_constants::LATH/1e6/CRHM_constants::ci);
+  const double U = -1 * log(0.678) / (24 * 7 * Global::Freq / 24); // weekly dimensionless unloading coefficient -> to CRHM time interval // 21Mar2022 correction: invert the term 24/Global::Freq, use unloading rate coefficient U = -log(c)/t for snow unloading determined by inverse function of c = e^(-Ut) = 0.678 based on Eq. 14 in Hedstrom and Pomeroy (1998)
+}
 
-          double IceBulbT = hru_t[hh] - (Vi* Hs/1e6/ci);
-          double Six_Hour_Divisor = Global::Freq/4.0; // used to unload over 6 hours
+switch(MassUnloadingSwitch[hh]){
+  case 0: // This is the mass unloading portion of the latest iteration of the Hedstrom & Pomeroy 1998 unloading with modifications by Ellis et al. (2010) and Floyd (2012). Generally used with MeltwaterSwitch == 0.
+                                                      
+    // determine whether canopy snow is unloaded as mass clumps:
 
-          const double U = -1 * log(0.678) / (24 * 7 * Global::Freq / 24); // weekly dimensionless unloading coefficient -> to CRHM time interval
-                                                       // 21Mar2022 correction: invert the term 24/Global::Freq, use unloading rate coefficient U = -log(c)/t for snow unloading determined by inverse function of c = e^(-Ut) = 0.678 based on Eq. 14 in Hedstrom and Pomeroy (1998)
-  // determine whether canopy snow is unloaded:
+            if(IceBulbT < unload_t[hh]){ // has to be at least one interval. Trip on half step
+              SUnload[hh] = Snow_load[hh] * U; // the dimensionless unloading coefficient already /interval, 21Mar2022 correction: use unloading rate coefficient U
+            }
 
-          if(IceBulbT >= unload_t_water[hh]){
-            drip_Cpy[hh] = Snow_load[hh]/Six_Hour_Divisor;
+  case 1: // This is the updated mass snow unloading parameterisations from Cebulski & Pomeroy to unload based on time, wind, and air temperature.
+    // temperature induced unloading
+    const double a_T = 2.584003e-05; // Cebulski & Pomeroy coef from exponential function of unloading + drip and air temp measurements at Fortress mountain when wind speed <= 1 m/s.
+    const double b_T = 1.646875e-01; // Cebulski & Pomeroy coef from exponential function of unloading + drip and air temp measurements at Fortress mountain when wind speed <= 1 m/s.
+    
+    double fT = a_T * exp(b_T * hru_t[hh]); // unloading rate based on warming of snow in the canopy (s-1), still need to partition out the portion of this that is drip vs mass unloading
+
+    // mechanical wind induced unloading
+    const double a_u = 5.204024e-06; // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
+    const double b_u = 7.363594e-02; // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
+    double Ht_mid = Ht[hh] * (1.0 / 2.0); // half of canopy height
+    double u_mid = 0;
+    double fu = 0;
+    if ((Ht_mid - (2.0 / 3.0) * Zwind[hh]) > 0.0)
+    {
+      u_mid = hru_u[hh] * log((Ht_mid - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
+      double fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
+    }
+
+    // duration based unloading
+    const double a_t =  8.194345e-06; // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
+    const double b_t = -1.540050e+02; // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
+
+    double t_snow_in_canopy = 12 * 60 * 60; // duration snow intercepted in the canopy, set to constant of 12 hours. TODO need to track duration that snow has been intercepted in the canopy. Can do this similar to snowpack albedo calculation.
+    
+    double ft = a_t * exp(b_t * t_snow_in_canopy);
+
+    // ablation via temperature, wind, and duration based unloading
+    double dt = Global::Interval * 24 * 60 * 60; // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
+    SUnload[hh] = Snow_load[hh] * (fT + fu + ft) * dt; // converts our 
+}
+
+// handle mass unloading regardless of what parameterisation is chosen
+if (SUnload[hh] > Snow_load[hh])
+{
+  SUnload[hh] = Snow_load[hh];
+  Snow_load[hh] = 0.0;
+}
+else
+  Snow_load[hh] -= SUnload[hh];
+
+cum_SUnload[hh] += SUnload[hh];
+
+switch(MeltwaterSwitch[hh]) {
+    case 0: { // Block for case 0
+        // This is the meltwater drip portion of the latest iteration of the Hedstrom & Pomeroy 1998 unloading with modifications by Ellis et al. (2010) and Floyd (2012).
+        double Six_Hour_Divisor = Global::Freq / 4.0; // Unload over 6 hours
+
+        if (IceBulbT >= unload_t_water[hh]) {
+            drip_Cpy[hh] = Snow_load[hh] / Six_Hour_Divisor;
             SUnload_H2O[hh] = drip_Cpy[hh];
             Snow_load[hh] -= SUnload_H2O[hh];
             cum_SUnload_H2O[hh] += SUnload_H2O[hh];
-          }
-          else if(IceBulbT >= unload_t[hh]){
-            SUnload[hh] = Snow_load[hh]/Six_Hour_Divisor;
+        }
+        else if (IceBulbT >= unload_t[hh]) {
+            SUnload[hh] = Snow_load[hh] / Six_Hour_Divisor;
             Snow_load[hh] -= SUnload[hh];
             cum_SUnload[hh] += SUnload[hh];
-          }
-          else if(IceBulbT < unload_t[hh]){ // has to be at least one interval. Trip on half step
-            SUnload[hh] = Snow_load[hh] * U; // the dimensionless unloading coefficient already /interval, 21Mar2022 correction: use unloading rate coefficient U
-            if(SUnload[hh] > Snow_load[hh]){
-              SUnload[hh] = Snow_load[hh];
-              Snow_load[hh] = 0.0;
-            }
-            else
-              Snow_load[hh] -= SUnload[hh];
+        }
+        break;
+    }
 
-            cum_SUnload[hh] += SUnload[hh];
-          }
+    case 1: { // Block for case 1
+        // This is the meltwater drip parameterisation from CLASS
+        drip_Cpy[hh] = 0;
+        SUnload_H2O[hh] = drip_Cpy[hh];
+        Snow_load[hh] -= SUnload_H2O[hh];
+        cum_SUnload_H2O[hh] += SUnload_H2O[hh];
+        break;
+    }
+}
 
 // calculate total sub-canopy snow:
 
