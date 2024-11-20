@@ -73,7 +73,6 @@ double *cum_Subl_Cpy { NULL };
 double *cum_SUnload { NULL };
 double *cum_SUnload_H2O { NULL };
 
-double *Cc { NULL };
 double *Clca { NULL };
 double *k { NULL };
 double *Tauc { NULL };
@@ -110,6 +109,7 @@ const double *basin_area { NULL };   // [BASIN]
 const double *hru_area { NULL };
 const double *hru_elev { NULL };
 const double *Ht { NULL };
+const double *Cc { NULL };
 const double *LAI { NULL };
 const double *Lmax { NULL };
 const double *alpha { NULL };

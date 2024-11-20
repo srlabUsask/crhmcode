@@ -149,9 +149,9 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declvar("direct_snow", TDim::NHRU, "snow 'direct' through canopy", "(mm/int)", &direct_snow);
 
-  declvar("SUnload", TDim::NHRU, "unloaded canopy snow", "(mm)", &SUnload);
+  declvar("SUnload", TDim::NHRU, "unloaded canopy snow", "(mm/int)", &SUnload);
 
-  declvar("SUnload_H2O", TDim::NHRU, "unloaded canopy snow as water", "(mm)", &SUnload_H2O);
+  declvar("SUnload_H2O", TDim::NHRU, "unloaded canopy snow as water", "(mm/int)", &SUnload_H2O);
 
   declstatdiag("cum_SUnload_H2O", TDim::NHRU, "Cumulative unloaded canopy snow as water", "(mm)", &cum_SUnload_H2O);
 
@@ -166,8 +166,6 @@ void ClassCRHMCanopyVectorBased::decl(void)
   decldiag("u_FHt", TDim::NHRU, "wind speed at forest top (z = FHt)", "(m/s)", &u_FHt);
 
   decldiag("u_1_third_Ht", TDim::NHRU, "wind speed at one-third forest height (z = 1/3*Ht) for the Cebulski & Pomeroy vector based param.", "(m/s)", &u_1_third_Ht);
-
-  decldiag("Cc", TDim::NHRU, "Canopy coverage", "()", &Cc);
 
   declvar("Clca", TDim::NHRU, "Leaf contact area adjusted for hydrometeor trajectory angle.", "(s-1)", &Clca);
 
@@ -196,6 +194,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
   declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
 
   declparam("Z0snow", TDim::NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
+
+  declparam("Cc", TDim::NHRU, "[1]", "0", "1", "canopy coverage, (1-sky view fraction)", "()", &Cc);
 
   declparam("LAI", TDim::NHRU, "[2.2]", "0.1", "20.0", "leaf-area-index", "()", &LAI);
 
@@ -731,10 +731,6 @@ void ClassCRHMCanopyVectorBased::run(void)
     {
 
     case 0: // canopy
-
-      Cc[hh] = std::min(1.0, 0.29 * std::log(LAI[hh]) + 0.55); // update by Alex so Cc is not greater than 1
-      if (Cc[hh] <= 0.0)
-        Cc[hh] = 0.0;
 
       smax = Cc[hh] * LAI[hh] * 0.2;
 
