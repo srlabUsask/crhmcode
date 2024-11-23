@@ -26,8 +26,15 @@ public:
 ClassPSPnew(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 2000) {};
 
 // declared observation variables
-const double *TsnowG{ NULL };
-const double *Lnot{ NULL };
+// const double *TsnowG{ NULL };
+// const double *Lnot{ NULL };
+
+double Qsi_{ 0.0 }, Qli_ {0.0};
+
+// observation variables
+const double *Qsi { NULL };
+const double *Qli { NULL };
+
 
 // declared variables
 double *Qsubl{ NULL };
@@ -35,6 +42,8 @@ double *Load{ NULL };
 double *Thru{ NULL };
 double *TCanSnow{ NULL };
 double *Tbiomass{ NULL };
+double *Qsisn_Var { NULL };
+double *Qlisn_Var { NULL };
 
 // declared parameters
 const double *Sbar{ NULL };
@@ -57,6 +66,13 @@ const double *hru_u{ NULL };
 const double *hru_p{ NULL };
 const double *TAref{ NULL };
 const double *SolarAng{ NULL };
+const double *hru_ea { NULL };
+const double *QdflatE { NULL };
+const double *QliVt_Var { NULL };
+const double *QsiS_Var { NULL };
+const double *QsiA_Var { NULL };
+
+
 
 // local allocated arrays
 double *T0CanSnow{ NULL };

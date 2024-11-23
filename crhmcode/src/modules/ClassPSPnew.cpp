@@ -18,6 +18,13 @@
 **/
 //created by Manishankar Mondal
 
+// TODO canopy height always subtracted by 10?
+//TODO pull from snowbal declreadobs("TsnowG", TDim::NHRU, "snow temperature", "(" + string(DEGREE_CELSIUS) + ")", &TsnowG, HRU_OBS_misc);
+///TODO pull from interception module declreadobs("Lnot", TDim::NHRU, "tree weight",      "(kg/m^2)", &Lnot, HRU_OBS_misc);
+// declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &QsIn, HRU_OBS_Q);
+// not currently used declreadobs("Qso", TDim::NHRU, "Qso",      "(W/m^2)", &QsOut, HRU_OBS_Q);
+
+
 #include <math.h>
 #include <assert.h>
 #include <iostream>
@@ -33,11 +40,35 @@
 
 using namespace CRHM;
 
-ClassPSPnew* ClassPSPnew::klone(string name) const{
+ClassPSPnew *ClassPSPnew::klone(string name) const{
   return new ClassPSPnew(name);
 }
 
 void ClassPSPnew::decl(void) {
+
+  // Observations
+
+  variation_set = VARIATION_0 + VARIATION_1;
+
+  declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
+
+  variation_set = VARIATION_0 + VARIATION_2;
+
+  declreadobs("Qli", TDim::NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
+
+  variation_set = VARIATION_1 + VARIATION_3 + VARIATION_4;
+
+  declgetvar("*", "QliVt_Var", "(W/m^2)", &QliVt_Var);
+
+  variation_set = VARIATION_2 + VARIATION_3;
+
+  declgetvar("*", "QsiS_Var", "(W/m^2)", &QsiS_Var);
+
+  variation_set = VARIATION_4;
+
+  declgetvar("*", "QsiA_Var", "(W/m^2)", &QsiA_Var);
+
+  variation_set = VARIATION_ORG;
 
   declvar("Qsubl", TDim::NHRU, "Canopy sublimation", "(mm/int)", &Qsubl);
 
@@ -48,7 +79,6 @@ void ClassPSPnew::decl(void) {
   declvar("TCanSnow", TDim::NHRU, "snow Canopy temperature", "(" + string(DEGREE_CELSIUS) + ")", &TCanSnow);
 
   declvar("Tbiomass", TDim::NHRU, "biomass temperature", "(" + string(DEGREE_CELSIUS) + ")", &Tbiomass);
-
 
   declparam("InitN", TDim::NHRU, "0", "0", "200", "Number of periods before calculating sublimation", "()", &InitN);
 
@@ -71,21 +101,18 @@ void ClassPSPnew::decl(void) {
   declparam("WidthJ", TDim::NHRU, "75", "0.0", "100.0", "Canopy ", "(m)", &WidthJ);
 
   declgetvar("obs",    "hru_u",  "(m/s)",   &hru_u);
-  declgetvar("obs",    "hru_t", "(" + string(DEGREE_CELSIUS) + ")",   &TAref);
+  declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &TAref);
   declgetvar("obs",    "hru_rh", "(%)",  &RHref);
   declgetvar("obs",    "hru_p",  "(mm/int)",   &hru_p);
   declgetvar("*",      "SolAng", "(r)",  &SolarAng);
-
-  declreadobs("TsnowG", TDim::NHRU, "snow temperature", "(" + string(DEGREE_CELSIUS) + ")", &TsnowG, HRU_OBS_misc);
-  declreadobs("Lnot", TDim::NHRU, "tree weight",      "(kg/m^2)", &Lnot, HRU_OBS_misc);
-  declreadobs("Qsi", TDim::NHRU, "Qsi",      "(W/m^2)", &QsIn, HRU_OBS_Q);
-  declreadobs("Qso", TDim::NHRU, "Qso",      "(W/m^2)", &QsOut, HRU_OBS_Q);
-
+  declgetvar("*",  "hru_ea", "(kPa)", &hru_ea);
+  declgetvar("*",  "QdflatE", "(W/m^2)", &QdflatE);
 }
 
 void ClassPSPnew::init(void) {
 
   nhru = getdim(TDim::NHRU);
+  std::cout << "Number of HRUs: " << nhru << std::endl;
 
   T0CanSnow = new double[nhru];
   T0biomass = new double[nhru];
@@ -94,15 +121,14 @@ void ClassPSPnew::init(void) {
     Qsubl[hh] = 0.0;
     Load[hh] = 0.0;
     Thru[hh] = 0.0;
+    std::cout << "Initialized HRU " << hh << std::endl;
   }
 }
 
-  double SatVP(double Temp) /* outputs sat. vapor pressure, Pa */
-    {if(Temp > 0.0)  return 611.0*exp(17.27*Temp/(Temp+237.3));
-     else return 611.0*exp(21.88*Temp/(Temp+265.5));
-  }
-
 void ClassPSPnew::run(void) {
+
+std::cout << "Entered RUN PSPnew.\n";
+
 
   const double GapFrac = 0.16;      /* Canopy gap fraction */
   const double UpperGF = 0.58;      /* Mid-canopy level gap fraction */
@@ -135,18 +161,65 @@ void ClassPSPnew::run(void) {
   double SVDensC, SVDensS, LambdaT, CanVent, A, Nr, NuSh, D,
           Vs, Vhr, Ce, Vi; // Pomeroy-Schmidt components
 
-  double QTrans50, QTrUp50, CanSnowFrac; /* Radiation model components */
+  /* Radiation model components */
+  double QTrans50; // short wave radiation transmitted through to the canopy mid point height (W m-2)
+  double Mu; // variable from equation 4 from Parv. & Pom 2000
+  double QTrUp50; // solar radiation reflected off the surface snowpack and back to the canopy midpoint (W m-2)
+  double QTrans100; // solar radiation transmitted through the canopy (W m-2)
+  double CanSnowFrac; 
 
+  double QlwUpC100; // longwave radiation emitted from the subcanopy snowpack and lower portion of the canopy (W m-2) 
+  double tau_atm; // atmospheric transmissivity (-)
+  double hru_ea_mb; // conversion of kpa to mb for clarity
+  double F; // variable to scale incoming longwave radiation based on cloudiness from Sicart et al., (2006)
+  double QlwInAtm; // longwave emission from cloudy skies calculated from Eq. 9 from Sicart et al., (2006)
+  double QsDnStar; // downwelling shortwave radiation to the top of the ice sphere
+  double QsUpStar; // upwelling shortwave radiation reflected from the ground surface hitting the bottom of the ice sphere
+  double QlwUpStar; // upwelling longwave radiation from the surface snowpack and lower portion of the canopy hitting the bottom of the ice sphere
+  double QlwDnStar; // downwelling longwave radiation from the atmosphere passing through the upper canopy gap (UpperGF), plus longwave emission from snow intercepted in the upper half of the canopy and any remaining exposed veg. elements
+  double QlwOutStar; // longwave emission from the top and bottom of the ice sphere plan area
+  double QnetStar; // net radiation to the ice sphere
   double RhoAir, SVDensA, VPref, Ustar, Uh, Ra, Ri,
          Stabil, Qe, Qh, dUdt; // CLASS components
+
+  
+  double RHrefhh; // holds RH as fraction instead of default percentage
 
   static long N;
   static double Z0m, Z0h, Disp, CdragH, CdragE;
 
   const double Cc = 0.82;
   const double Velw = 0.75;
+  const double TsnowG = -4; // set to constant for now
+  const double Lnot = 10; // set to constant for now
 
   for(long hh = 0; hh < nhru; hh++) {
+    std::cout << "timestep = " << getstep() << std::endl; 
+
+
+     switch (variation)
+    {
+    case VARIATION_ORG:
+      Qsi_ = Qsi[hh];
+      Qli_ = Qli[hh];
+      break;
+    case VARIATION_1:
+      Qsi_ = Qsi[hh];
+      Qli_ = QliVt_Var[hh];
+      break;
+    case VARIATION_2:
+      Qsi_ = QsiS_Var[hh];
+      Qli_ = Qli[hh];
+      break;
+    case VARIATION_3:
+      Qsi_ = QsiS_Var[hh];
+      Qli_ = QliVt_Var[hh];
+      break;
+    case VARIATION_4:
+      Qsi_ = QsiA_Var[hh];
+      Qli_ = QliVt_Var[hh];
+      break;
+    } // switch
 
    if(getstep() == 1) {
      Tbiomass[hh] = TAref[hh];
@@ -165,7 +238,7 @@ void ClassPSPnew::run(void) {
    Qsubl[hh] = 0.0;
 
    if (N <= InitN[hh]) {// Starts depletion after Tcanopy is initialized
-     Load[hh] =  Lnot[0];
+     Load[hh] =  Lnot;
      if (N < InitN[hh]) break;
    }
 
@@ -192,7 +265,6 @@ void ClassPSPnew::run(void) {
      break;
    }
 
-   double RHrefhh;
    if(RHref[hh] > 1.5)
      RHrefhh = RHref[hh]/100.0;
    else
@@ -220,14 +292,14 @@ void ClassPSPnew::run(void) {
    NuSh = 1.79+0.606*sqrt(Nr);
 
    if (SolarAng[hh] > 0.001)  {
-     double Mu = LAI[hh]/(Ht[hh]-10)*(0.781*SolarAng[hh]*cos(SolarAng[hh])+0.0591);
-     QTrans50 = QsIn[hh]*exp(-Mu*(Ht[hh]-10)/2/sin(SolarAng[hh]));
-     double QTrans100 = QsIn[hh]*exp(-Mu*(Ht[hh]-10)/sin(SolarAng[hh]));
-     QTrUp50 = (1.0-SnowAlb)*QTrans100*exp(LAI[hh]/(Ht[hh]-10)*0.0591*(Ht[hh]-10)/2);
+     Mu = LAI[hh]/(Ht[hh]-10)*(0.781*SolarAng[hh]*cos(SolarAng[hh])+0.0591); // equation 4 from Parv. & Pom 2000
+     QTrans50 = Qsi_*exp(-Mu*(Ht[hh]-10)/2/sin(SolarAng[hh])); // incoming solar radiation multiplied by the transmissivity calculated from equation 3 in Parv. & Pom 2000, IOW short wave radiation transmitted through to the canopy mid point height
+     QTrans100 = Qsi_*exp(-Mu*(Ht[hh]-10)/sin(SolarAng[hh])); // as above but calculates solar transmitted through the canopy
+     QTrUp50 = (1.0-SnowAlb)*QTrans100*exp(LAI[hh]/(Ht[hh]-10)*0.0591*(Ht[hh]-10)/2); // solar radiation reflected off the surface snowpack and back to the canopy midpoint
    }
    else {
-     QTrans50 = 0;
-     QTrUp50 =0;
+     QTrans50 = 0.0;
+     QTrUp50 = 0.0;
    }
 
    TItNum = 0;
@@ -258,22 +330,36 @@ void ClassPSPnew::run(void) {
            Tbiomass[hh] = DblTbarCan + ((DblTbarCan - DblTCanSnow)*Load[hh]*SpHtIce)
                                        /(Biomass[hh]*SpHtCan);
          }
-              /* Solve for longwave */
-         double QlwOut = SBC*(GapFrac*pow(TsnowG[0]+273.15,4.0) +
+
+         // Subroutine to calculate radiation terms relative to the ice sphere,
+         // this algorithm has been left unchanged but some symbols and comments have
+         // been added for clarity. This differs from CLASS where the ebal is solved for the entire canopy
+         // Values for incoming and outgoing solar rad previously were provided from obs
+         // file and then longwave was calculated as a residual. This has been changed to
+         // used modelled vars for all.
+
+         /* Solve for outgoing longwave for lower portion of canopy */
+         QlwUpC100 = SBC*(GapFrac*pow(TsnowG+273.15,4.0) +
                      (1.0-GapFrac)*((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
                                  + CanSnowFrac*pow(DblTCanSnow+273.15,4.0)));
-//         double QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
-         double QlwIn = QsIn[hh]+QsOut[hh]+QlwOut;
+         //         double QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
 
-              /* Solve for particle net radiation*/
-         double QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-SnowAlb);
-         double QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-CanAlb);
-         double QlwUpStar = M_PI*Radius*Radius*QlwOut;
-         double QlwDnStar = M_PI*Radius*Radius*(QlwIn*UpperGF + SBC*(1.0-UpperGF)*
+         // incoming longwave radiation from cloudy sky following Sicart et al., (2006)
+         tau_atm = Qsi_/QdflatE[hh]; 
+         hru_ea_mb = hru_ea[hh]*10; // kPa to mb 
+         F = (1 + 0.44 * DblRHcan - 0.18 * tau_atm); // scaling factor >= 1 to increase longwave emission due to cloudiness, could update to use non iterating RH if breaking here
+         QlwInAtm = 1.24 * pow(hru_ea_mb / TAref[hh]+273.15, 1.0 / 7.0) * F * SBC * pow(TAref[hh]+273.15, 4); // Eq. 9 from Sicart et al., (2006)
+
+
+          /* Solve for particle net radiation*/
+         QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-SnowAlb);
+         QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-CanAlb);
+         QlwUpStar = M_PI*Radius*Radius*QlwUpC100;
+         QlwDnStar = M_PI*Radius*Radius*(QlwInAtm*UpperGF + SBC*(1.0-UpperGF)*
                               ((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
                                + (CanSnowFrac*pow(DblTCanSnow+273.15,4.0))));
-         double QradStar = 2*M_PI*Radius*Radius*SBC*pow(DblTCanSnow+273.15,4.0);
-         double QnetStar = QsDnStar+QsUpStar+QlwDnStar+QlwUpStar-QradStar;
+         QlwOutStar = 2*M_PI*Radius*Radius*SBC*pow(DblTCanSnow+273.15,4.0);
+         QnetStar = QsDnStar+QsUpStar+QlwDnStar+QlwUpStar-QlwOutStar;
 
          SVDensS = Common::SVDens(DblTCanSnow);
          Vs = (2.0*M_PI*D*Radius*(SVDensC*DblRHcan-SVDensS)*NuSh)*Hs;
@@ -347,6 +433,22 @@ void ClassPSPnew::run(void) {
      }
 //   } while (fabs(Qn[hh]+Qe+Qh-dUdt) >= 0.01);
    } while (fabs(Qe+Qh-dUdt) >= 0.01);
+
+  std::cout << "RHItNum = " << RHItNum << std::endl;
+  std::cout << "TItNum = " << TItNum << std::endl;
+  std::cout << "Qsi = " << Qsi_ << std::endl;
+  std::cout << "TAref = " << TAref[hh] << std::endl;
+  std::cout << "CanSnowFrac = " << CanSnowFrac << std::endl;
+  std::cout << "Tbiomass = " << Tbiomass << std::endl;
+  std::cout << "DblTCanSnow = " << DblTCanSnow << std::endl;
+
+  std::cout << "QlwUpC100 = " << QlwUpC100 << std::endl;
+  std::cout << "QlwInAtm = " << QlwInAtm << std::endl;
+  std::cout << "QsDnStar = " << QnetStar << std::endl; 
+  std::cout << "QsUpStar = " << QnetStar << std::endl; 
+  std::cout << "QlwUpStar = " << QnetStar << std::endl; 
+  std::cout << "QlwDnStar = " << QnetStar << std::endl;
+  std::cout << "QnetStar = " << QnetStar << std::endl;
 
    TCanSnow[hh]  = DblTCanSnow;
    T0CanSnow[hh] = DblTCanSnow;
