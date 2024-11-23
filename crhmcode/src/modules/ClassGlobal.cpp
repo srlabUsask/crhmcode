@@ -53,7 +53,7 @@ void Classglobal::decl(void) {
 
   declvar("Qdflat", TDim::NHRU, "clear-sky 'Qdro + Qdfo' on horizontal surface", "(W/m^2)", &Qdflat);
 
-  declvar("QdflatE", TDim::NHRU, "extraterrestrial radiation, i.e. no atmosheric attenuation. Always independent of slope and aspect", "(W/m^2)", &QdflatE);
+  declvar("QdflatE", TDim::NHRU, "'Qdro' on horizontal surface, no atmosheric attenuation", "(W/m^2)", &QdflatE);
 
   declvar("QdflatD", TDim::NHRU, "daily clear-sky Qdro (with diffuse) on horizontal surface", "(MJ/m^2*d)", &QdflatD);
 

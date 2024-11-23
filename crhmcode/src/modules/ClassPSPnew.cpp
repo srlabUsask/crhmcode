@@ -18,6 +18,8 @@
 **/
 //created by Manishankar Mondal
 
+// handle canopy snow frac
+// TODO consistency with freezing point in kelvin 
 // TODO canopy height always subtracted by 10?
 //TODO pull from snowbal declreadobs("TsnowG", TDim::NHRU, "snow temperature", "(" + string(DEGREE_CELSIUS) + ")", &TsnowG, HRU_OBS_misc);
 ///TODO pull from interception module declreadobs("Lnot", TDim::NHRU, "tree weight",      "(kg/m^2)", &Lnot, HRU_OBS_misc);
@@ -106,7 +108,7 @@ void ClassPSPnew::decl(void) {
   declgetvar("obs", "hru_p", "(mm/int)", &hru_p);
   declgetvar("*", "SolAng", "(r)", &SolarAng);
   declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
-  declgetvar("*", "QdroDext", "(W/m^2)", &QdroDext);
+  declgetvar("*", "QdflatE", "(W/m^2)", &QdflatE);
 }
 
 void ClassPSPnew::init(void) {
@@ -133,7 +135,7 @@ std::cout << "hru_u = " << hru_u[hh] << std::endl;
 std::cout << "RHref = " << RHref[hh] << std::endl;
 std::cout << "SolarAng = " << SolarAng[hh] << std::endl;
 std::cout << "hru_ea = " << hru_ea[hh] << std::endl;
-std::cout << "QdroDext = " << QdroDext[hh] << std::endl;
+std::cout << "QdflatE = " << QdflatE[hh] << std::endl;
 
 
   const double GapFrac = 0.16;      /* Canopy gap fraction */
@@ -351,10 +353,19 @@ std::cout << "QdroDext = " << QdroDext[hh] << std::endl;
          //         double QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
 
          // incoming longwave radiation from cloudy sky following Sicart et al., (2006)
-         tau_atm = Qsi_/QdroDext[hh]; 
+         if (QdflatE[hh] > 0.001 & QdflatE[hh] > Qsi_) // is it daytime ...
+         {
+          tau_atm = Qsi_/QdflatE[hh]; // Sicart et al., (2006) eq. 4 for daytime
+         }
+         else {
+          tau_atm = 0.818; // tau as in Global.cpp else statement as in LongVt
+         }
+         
          hru_ea_mb = hru_ea[hh]*10.0; // kPa to mb 
          F = (1 + 0.44 * DblRHcan - 0.18 * tau_atm); // scaling factor >= 1 to increase longwave emission due to cloudiness, could update to use non iterating RH if breaking here
-         QlwInAtm = 1.24 * pow(hru_ea_mb / TAref[hh]+273.15, 1.0 / 7.0) * F * SBC * pow(TAref[hh]+273.15, 4); // Eq. 9 from Sicart et al., (2006)
+         F = std::max(F, 1.0); // Ensure F is greater than or equal to 1 as in Sicart et al., (2006)
+
+         QlwInAtm = 1.24 * pow(hru_ea_mb / (TAref[hh]+273.15), 1.0 / 7.0) * F * SBC * pow((TAref[hh]+273.15), 4); // Eq. 9 from Sicart et al., (2006)
 
 
           /* Solve for particle net radiation*/
@@ -440,22 +451,20 @@ std::cout << "QdroDext = " << QdroDext[hh] << std::endl;
 //   } while (fabs(Qn[hh]+Qe+Qh-dUdt) >= 0.01);
    } while (fabs(Qe+Qh-dUdt) >= 0.01);
 
-  std::cout << "RHItNum = " << RHItNum << std::endl;
-  std::cout << "TItNum = " << TItNum << std::endl;
   std::cout << "Qsi = " << Qsi_ << std::endl;
-  std::cout << "CanSnowFrac = " << CanSnowFrac << std::endl;
-  std::cout << "Tbiomass = " << Tbiomass << std::endl;
+  std::cout << "DblRHcan = " << DblRHcan << std::endl; 
+  std::cout << "Tbiomass = " << Tbiomass[hh] << std::endl;
   std::cout << "DblTCanSnow = " << DblTCanSnow << std::endl;
 
-  std::cout << "hru_ea_mb = " << hru_ea_mb << std::endl;
-  std::cout << "tau_atm = " << tau_atm << std::endl;
-  std::cout << "DblRHcan = " << DblRHcan << std::endl; 
+  std::cout << "QTrans50 = " << QTrans50 << std::endl;  
+  std::cout << "QTrUp50 = " << QTrUp50 << std::endl;  
+  std::cout << "QlwUpC100 = " << QlwUpC100 << std::endl;  
   std::cout << "QlwUpC100 = " << QlwUpC100 << std::endl;  
   std::cout << "QlwInAtm = " << QlwInAtm << std::endl;
-  std::cout << "QsDnStar = " << QnetStar << std::endl; 
-  std::cout << "QsUpStar = " << QnetStar << std::endl; 
-  std::cout << "QlwUpStar = " << QnetStar << std::endl; 
-  std::cout << "QlwDnStar = " << QnetStar << std::endl;
+  std::cout << "QsDnStar = " << QsDnStar << std::endl; 
+  std::cout << "QsUpStar = " << QsUpStar << std::endl; 
+  std::cout << "QlwUpStar = " << QlwUpStar << std::endl; 
+  std::cout << "QlwDnStar = " << QlwDnStar << std::endl;
   std::cout << "QnetStar = " << QnetStar << std::endl;
 
    TCanSnow[hh]  = DblTCanSnow;

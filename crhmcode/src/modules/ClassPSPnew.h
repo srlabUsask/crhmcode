@@ -67,7 +67,7 @@ const double *hru_p{ NULL };
 const double *TAref{ NULL };
 const double *SolarAng{ NULL };
 const double *hru_ea { NULL };
-const double *QdroDext { NULL };
+const double *QdflatE { NULL };
 const double *QliVt_Var { NULL };
 const double *QsiS_Var { NULL };
 const double *QsiA_Var { NULL };
