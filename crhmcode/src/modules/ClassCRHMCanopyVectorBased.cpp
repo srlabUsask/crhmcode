@@ -252,7 +252,6 @@ void ClassCRHMCanopyVectorBased::init(void)
 
 void ClassCRHMCanopyVectorBased::run(void)
 {
-
   double Exposure, LAI_, Vf, Vf_, Kstar_H, Kd;
   // double Tau; variable is unreferenced commenting out for now - jhs507
 
@@ -296,7 +295,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 
     // Canopy temperature is approximated by the air temperature.
 
-    double T1 = hru_t[hh] + CRHM_constants::Tm;
+    double T1 = hru_t[hh] + CRHM_constants::Tm; // deg. C to kelvin conversion
 
     double rho = Pa[hh] * 1000 / (CRHM_constants::Rgas * T1);
 
@@ -311,7 +310,7 @@ void ClassCRHMCanopyVectorBased::run(void)
     Ts[hh] = T1 + (CRHM_constants::emiss * (Qli_ - CRHM_constants::sbc * pow(T1, 4.0f)) + CRHM_constants::Ls * (q - Common::Qs(Pa[hh], T1)) * rho / ra[hh]) /
                       (4 * CRHM_constants::emiss * CRHM_constants::sbc * pow(T1, 3.0f) + (CRHM_constants::Cp + CRHM_constants::Ls * deltaX) * rho / ra[hh]);
 
-    Ts[hh] -= CRHM_constants::Tm;
+    Ts[hh] -= CRHM_constants::Tm;  // back to deg. C
 
     if (Ts[hh] > 0.0 || SWE[hh] <= 0.0)
       Ts[hh] = 0.0;
@@ -588,7 +587,7 @@ void ClassCRHMCanopyVectorBased::run(void)
         case 0:
         { // This is the mass unloading portion of the latest iteration of the Hedstrom & Pomeroy 1998 unloading with modifications by Ellis et al. (2010) and Floyd (2012). Generally used with MeltwaterSwitch == 0.
           // calculate 'ice-bulb' temperature of intercepted snow:
-          IceBulbT = hru_t[hh] - (Vi * PBSM_constants::LATH / 1e6 / CRHM_constants::ci);
+          IceBulbT = hru_t[hh] - (Vi * PBSM_constants::LATH / CRHM_constants::ci);
           const double U = -1 * log(0.678) / (24 * 7 * Global::Freq / 24); // weekly dimensionless unloading coefficient -> to CRHM time interval // 21Mar2022 correction: invert the term 24/Global::Freq, use unloading rate coefficient U = -log(c)/t for snow unloading determined by inverse function of c = e^(-Ut) = 0.678 based on Eq. 14 in Hedstrom and Pomeroy (1998)
           double Six_Hour_Divisor = Global::Freq / 4.0;                    // Unload over 6 hours
 
@@ -669,47 +668,37 @@ void ClassCRHMCanopyVectorBased::run(void)
         } // case 1
         } // MassUnloadingSwitch
 
-        // handle mass unloading regardless of what parameterisation is chosen
-
         // Meltwater (drip) Section
         // Enters different parameterisations for meltwater drip of canopy snow based on switch.
         // =============================================================================
 
-        // switch (MeltwaterSwitch[hh])
-        // {
-        // case 0:
-        // { // Block for case 0
-        //   // This is the meltwater drip portion of the latest iteration of the Hedstrom & Pomeroy 1998 unloading with modifications by Ellis et al. (2010) and Floyd (2012).
-        //   double Six_Hour_Divisor = Global::Freq / 4.0; // Unload over 6 hours
-        //   std::cout << "IceBulbT: " << IceBulbT << "\n"; // Output the value of IceBulbT to the console
-        //   std::cout << "Six_Hour_Divisor: " << Six_Hour_Divisor << "\n"; // Output the value of IceBulbT to the console
+        switch (MeltwaterSwitch[hh])
+        {
+        case 0:
+        { // do not melt, used for debugging or experiments or with the HP98 mass unloading which calculates drip empirically, recommend using case 1 otherwise.
+          std::cout << "MeltwaterSwitch Case 0: No canopy snow melt applied.\n";
+          break;
+        } // case 0
 
-        //   if (IceBulbT >= unload_t_water[hh])
-        //   {
-        //     drip_Cpy[hh] = Snow_load[hh] / Six_Hour_Divisor;
-        //     SUnload_H2O[hh] = drip_Cpy[hh];
-        //     Snow_load[hh] -= SUnload_H2O[hh];
-        //     cum_SUnload_H2O[hh] += SUnload_H2O[hh];
-        //   }
-        //   else if (IceBulbT >= unload_t[hh])
-        //   {
-        //     SUnload[hh] = Snow_load[hh] / Six_Hour_Divisor;
-        //     Snow_load[hh] -= SUnload[hh];
-        //     cum_SUnload[hh] += SUnload[hh];
-        //   }
-        //   break;
-        // }
+        case 1:
+        { // Block for case 1
+          // This is the meltwater drip parameterisation adapted from CLASSIC v1.0.1 https://gitlab.com/cccma/classic/-/releases
+          // The algorithm calculates the change in internal energy of the vegetation canopy as a result of the phase change processes
+          // Currently the canopy snow temperature is approximated by the air temperature at the begining of this module which 
+          // is unchanged from the original CanopyClearingGap module. Could be revised to use the CLASSIC classEnergyBalVeg module
+          // and/or the CRHM classPSPnew which was developed by Parv. & Pomeroy 1998.
 
-        // case 1:
-        // { // Block for case 1
-        //   // This is the meltwater drip parameterisation from CLASS
-        //   drip_Cpy[hh] = 0;
-        //   SUnload_H2O[hh] = drip_Cpy[hh];
-        //   Snow_load[hh] -= SUnload_H2O[hh];
-        //   cum_SUnload_H2O[hh] += SUnload_H2O[hh];
-        //   break;
-        // }
-        // }
+          Ts[hh];
+
+          CRHM_constants::Lf; 
+
+          CRHM_constants::Tf; 
+
+          break;
+        }
+
+
+        }
 
         // calculate total sub-canopy snow:
 

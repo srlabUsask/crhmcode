@@ -100,13 +100,13 @@ void ClassPSPnew::decl(void) {
 
   declparam("WidthJ", TDim::NHRU, "75", "0.0", "100.0", "Canopy ", "(m)", &WidthJ);
 
-  declgetvar("obs",    "hru_u",  "(m/s)",   &hru_u);
+  declgetvar("obs", "hru_u", "(m/s)", &hru_u);
   declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &TAref);
-  declgetvar("obs",    "hru_rh", "(%)",  &RHref);
-  declgetvar("obs",    "hru_p",  "(mm/int)",   &hru_p);
-  declgetvar("*",      "SolAng", "(r)",  &SolarAng);
-  declgetvar("*",  "hru_ea", "(kPa)", &hru_ea);
-  declgetvar("*",  "QdflatE", "(W/m^2)", &QdflatE);
+  declgetvar("obs", "hru_rh", "(%)", &RHref);
+  declgetvar("obs", "hru_p", "(mm/int)", &hru_p);
+  declgetvar("*", "SolAng", "(r)", &SolarAng);
+  declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
+  declgetvar("*", "QdroDext", "(W/m^2)", &QdroDext);
 }
 
 void ClassPSPnew::init(void) {
@@ -128,6 +128,12 @@ void ClassPSPnew::init(void) {
 void ClassPSPnew::run(void) {
 
 std::cout << "Entered RUN PSPnew.\n";
+std::cout << "TAref = " << TAref[hh] << std::endl;
+std::cout << "hru_u = " << hru_u[hh] << std::endl;
+std::cout << "RHref = " << RHref[hh] << std::endl;
+std::cout << "SolarAng = " << SolarAng[hh] << std::endl;
+std::cout << "hru_ea = " << hru_ea[hh] << std::endl;
+std::cout << "QdroDext = " << QdroDext[hh] << std::endl;
 
 
   const double GapFrac = 0.16;      /* Canopy gap fraction */
@@ -345,8 +351,8 @@ std::cout << "Entered RUN PSPnew.\n";
          //         double QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
 
          // incoming longwave radiation from cloudy sky following Sicart et al., (2006)
-         tau_atm = Qsi_/QdflatE[hh]; 
-         hru_ea_mb = hru_ea[hh]*10; // kPa to mb 
+         tau_atm = Qsi_/QdroDext[hh]; 
+         hru_ea_mb = hru_ea[hh]*10.0; // kPa to mb 
          F = (1 + 0.44 * DblRHcan - 0.18 * tau_atm); // scaling factor >= 1 to increase longwave emission due to cloudiness, could update to use non iterating RH if breaking here
          QlwInAtm = 1.24 * pow(hru_ea_mb / TAref[hh]+273.15, 1.0 / 7.0) * F * SBC * pow(TAref[hh]+273.15, 4); // Eq. 9 from Sicart et al., (2006)
 
@@ -437,12 +443,14 @@ std::cout << "Entered RUN PSPnew.\n";
   std::cout << "RHItNum = " << RHItNum << std::endl;
   std::cout << "TItNum = " << TItNum << std::endl;
   std::cout << "Qsi = " << Qsi_ << std::endl;
-  std::cout << "TAref = " << TAref[hh] << std::endl;
   std::cout << "CanSnowFrac = " << CanSnowFrac << std::endl;
   std::cout << "Tbiomass = " << Tbiomass << std::endl;
   std::cout << "DblTCanSnow = " << DblTCanSnow << std::endl;
 
-  std::cout << "QlwUpC100 = " << QlwUpC100 << std::endl;
+  std::cout << "hru_ea_mb = " << hru_ea_mb << std::endl;
+  std::cout << "tau_atm = " << tau_atm << std::endl;
+  std::cout << "DblRHcan = " << DblRHcan << std::endl; 
+  std::cout << "QlwUpC100 = " << QlwUpC100 << std::endl;  
   std::cout << "QlwInAtm = " << QlwInAtm << std::endl;
   std::cout << "QsDnStar = " << QnetStar << std::endl; 
   std::cout << "QsUpStar = " << QnetStar << std::endl; 

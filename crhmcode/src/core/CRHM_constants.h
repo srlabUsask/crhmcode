@@ -27,6 +27,7 @@ namespace CRHM_constants {
 	const double Cp = 1005;     // (J/kg/K) volumetric heat capacity of dry air
 	const double Rgas = 287.0;  // Gas constant for dry air (J/kg/K)
 	const double Tm = 273.15;   // Melting point (K)
+	const double Tf = 273.16; // Freezing point of water (K) as in CLASS and SNOBAL
 
 	const double Ls = 2.845e6;  // Latent heat of sublimation (J/kg)
 	const double Lv = 2.50e6;  // Latent heat of vaporization (J/kg)
@@ -39,7 +40,10 @@ namespace CRHM_constants {
 	const double emiss = 0.985; // emissivity of the atmosphere and snowpack
 	const double emiss_c = 0.96; // emissivity of the canopy
 	const double em = 0.622;     //
-    const double ci = 2.102e-3;         // heat capacity of ice (MJ/kg/K)
+    const double ci = 2.102e3; // specific heat capacity of ice (J/kg/K)
+	const double cw = 4.186e3; // specific heat capacity of h2o (J/kg/K) from CLASS
+	const double cv = 2.70e3; // specific heat capacity of vegetation (J/kg/K) from CLASS
+
 
 }
 
