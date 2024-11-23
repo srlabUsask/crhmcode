@@ -2308,7 +2308,7 @@ MMSData *  CRHMmain::RunClick2Start()
 		}
 	}
 
-
+	
 	Global::DTmin = (int)((DTstartR - Global::DTstart)* Global::Freq);
 	Global::DTindx = Global::DTmin;
 	Global::DTnow = Global::DTstart + Global::Interval*((long long)Global::DTindx + 1ll);
@@ -2351,13 +2351,19 @@ MMSData *  CRHMmain::RunClick2Start()
 		GoodRun = false;
 	}
 
-
+	
 	ClassData * FileData = NULL;
 	if (ObsFilesList->size() > 0)
 	{
 		FileData = ObsFilesList->begin()->second;
+		const double tolerance = 1e-9; // to handle floating point precision when DTstartR and FileData->Dt1 are effectively equal but have slightly different precision and then entered the first if statement below.
 
-		if (DTstartR < FileData->Dt1) {
+		if (fabs(DTstartR - FileData->Dt1) < tolerance) { // check if effectively equal 
+
+			LogMessageX("DTstartR and FileData->Dt1 are effectively equal but there still may be a small difference due to floating point precision");
+		
+		} else if (DTstartR < FileData->Dt1 - tolerance) {
+
 			LogMessageX("Start Time before first Observation");
 			GoodRun = false;
 		}
