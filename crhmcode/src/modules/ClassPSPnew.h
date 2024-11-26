@@ -45,8 +45,10 @@ double *Qlisn_Var { NULL };
 // declared parameters
 const double *Sbar{ NULL };
 const double *LAI{ NULL };
+const double *Cc{ NULL };
 const double *Zcan{ NULL };
 const double *Zref{ NULL };
+const double *Zwind{ NULL };
 const double *Ht{ NULL };
 const double *Biomass{ NULL };
 const double *k{ NULL };
@@ -72,8 +74,10 @@ const double *QsiA_Var { NULL };
 const double *hru_T_g { NULL };
 const double *T_s_0 { NULL };
 const double *Snow_load { NULL };
+const double *rain_load { NULL };
 const double *Lmax { NULL };
-
+const double *u_FHt { NULL };
+const double *ZwindFHt { NULL };
 
 const long *snowcover{ NULL };  // snow on gnd at start of current timestep?
 
