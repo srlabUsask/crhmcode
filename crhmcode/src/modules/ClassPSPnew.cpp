@@ -73,8 +73,6 @@ void ClassPSPnew::decl(void) {
 
   declvar("Tbiomass", TDim::NHRU, "biomass temperature", "(" + string(DEGREE_CELSIUS) + ")", &Tbiomass);
 
-  declparam("InitN", TDim::NHRU, "0", "0", "200", "Number of periods before calculating sublimation", "()", &InitN);
-
   declparam("Sbar", TDim::NHRU, "6.6", "0.0", "20.0", "Uncorrected snow capacity", "(kg/m^2)", &Sbar);
 
   declparam("LAI", TDim::NHRU, "2.2", "0.0", "20.0", "Leaf area index", "(m^2/m^2)", &LAI);
