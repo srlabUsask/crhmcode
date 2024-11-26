@@ -35,11 +35,8 @@ double Qsi_{ 0.0 }, Qli_ {0.0};
 const double *Qsi { NULL };
 const double *Qli { NULL };
 
-
 // declared variables
 double *Qsubl{ NULL };
-double *Load{ NULL };
-double *Thru{ NULL };
 double *TCanSnow{ NULL };
 double *Tbiomass{ NULL };
 double *Qsisn_Var { NULL };
@@ -57,6 +54,7 @@ const double *HeightH{ NULL };
 const double *WidthJ{ NULL };
 const long *InitN{ NULL };
 
+
 // variable inputs
 const double *RHref{ NULL };
 const double *Qn{ NULL };
@@ -71,8 +69,13 @@ const double *QdflatE { NULL };
 const double *QliVt_Var { NULL };
 const double *QsiS_Var { NULL };
 const double *QsiA_Var { NULL };
+const double *hru_T_g { NULL };
+const double *T_s_0 { NULL };
+const double *Snow_load { NULL };
+const double *Lmax { NULL };
 
 
+const long *snowcover{ NULL };  // snow on gnd at start of current timestep?
 
 // local allocated arrays
 double *T0CanSnow{ NULL };

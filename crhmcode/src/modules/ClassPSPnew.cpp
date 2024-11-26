@@ -18,14 +18,9 @@
 **/
 //created by Manishankar Mondal
 
-// handle canopy snow frac
+// TODO handle canopy snow frac
 // TODO consistency with freezing point in kelvin 
 // TODO canopy height always subtracted by 10?
-//TODO pull from snowbal declreadobs("TsnowG", TDim::NHRU, "snow temperature", "(" + string(DEGREE_CELSIUS) + ")", &TsnowG, HRU_OBS_misc);
-///TODO pull from interception module declreadobs("Lnot", TDim::NHRU, "tree weight",      "(kg/m^2)", &Lnot, HRU_OBS_misc);
-// declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &QsIn, HRU_OBS_Q);
-// not currently used declreadobs("Qso", TDim::NHRU, "Qso",      "(W/m^2)", &QsOut, HRU_OBS_Q);
-
 
 #include <math.h>
 #include <assert.h>
@@ -74,10 +69,6 @@ void ClassPSPnew::decl(void) {
 
   declvar("Qsubl", TDim::NHRU, "Canopy sublimation", "(mm/int)", &Qsubl);
 
-  declvar("SnowLoad", TDim::NHRU, "Canopy snow load", "(kg/m^2)", &Load);
-
-  declvar("Thru", TDim::NHRU, "Canopy fall through", "(kg/m^2)", &Thru);
-
   declvar("TCanSnow", TDim::NHRU, "snow Canopy temperature", "(" + string(DEGREE_CELSIUS) + ")", &TCanSnow);
 
   declvar("Tbiomass", TDim::NHRU, "biomass temperature", "(" + string(DEGREE_CELSIUS) + ")", &Tbiomass);
@@ -102,6 +93,9 @@ void ClassPSPnew::decl(void) {
 
   declparam("WidthJ", TDim::NHRU, "75", "0.0", "100.0", "Canopy ", "(m)", &WidthJ);
 
+  declgetparam("*", "hru_T_g", "(" + string(DEGREE_CELSIUS) + ")", &hru_T_g); // input param for snobal
+  declgetparam("*", "Lmax", "()", &Lmax); // input param for Canopy module
+
   declgetvar("obs", "hru_u", "(m/s)", &hru_u);
   declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &TAref);
   declgetvar("obs", "hru_rh", "(%)", &RHref);
@@ -109,6 +103,9 @@ void ClassPSPnew::decl(void) {
   declgetvar("*", "SolAng", "(r)", &SolarAng);
   declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
   declgetvar("*", "QdflatE", "(W/m^2)", &QdflatE);
+  declgetvar("*", "T_s_0", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0); 
+  declgetvar("*", "snowcover", "()", &snowcover); 
+  declgetvar("*", "Snow_load", "()", &Snow_load); 
 }
 
 void ClassPSPnew::init(void) {
@@ -121,22 +118,11 @@ void ClassPSPnew::init(void) {
 
   for(long hh = 0; hh < nhru; hh++) {
     Qsubl[hh] = 0.0;
-    Load[hh] = 0.0;
-    Thru[hh] = 0.0;
     std::cout << "Initialized HRU " << hh << std::endl;
   }
 }
 
 void ClassPSPnew::run(void) {
-
-std::cout << "Entered RUN PSPnew.\n";
-std::cout << "TAref = " << TAref[hh] << std::endl;
-std::cout << "hru_u = " << hru_u[hh] << std::endl;
-std::cout << "RHref = " << RHref[hh] << std::endl;
-std::cout << "SolarAng = " << SolarAng[hh] << std::endl;
-std::cout << "hru_ea = " << hru_ea[hh] << std::endl;
-std::cout << "QdflatE = " << QdflatE[hh] << std::endl;
-
 
   const double GapFrac = 0.16;      /* Canopy gap fraction */
   const double UpperGF = 0.58;      /* Mid-canopy level gap fraction */
@@ -192,18 +178,16 @@ std::cout << "QdflatE = " << QdflatE[hh] << std::endl;
 
   
   double RHrefhh; // holds RH as fraction instead of default percentage
+  double TsnowG; // snowcover active layer (surface temp) from snobal 
 
   static long N;
   static double Z0m, Z0h, Disp, CdragH, CdragE;
 
   const double Cc = 0.82;
   const double Velw = 0.75;
-  const double TsnowG = -4; // set to constant for now
   const double Lnot = 10; // set to constant for now
 
   for(long hh = 0; hh < nhru; hh++) {
-    std::cout << "timestep = " << getstep() << std::endl; 
-
 
      switch (variation)
     {
@@ -242,35 +226,13 @@ std::cout << "QdflatE = " << QdflatE[hh] << std::endl;
      CdragE = sqr(KARMAN/(log(Zref[hh]/Ht[hh])));
    }
 
-   Thru[hh] = 0.0;
-   Qsubl[hh] = 0.0;
-
-   if (N <= InitN[hh]) {// Starts depletion after Tcanopy is initialized
-     Load[hh] =  Lnot;
-     if (N < InitN[hh]) break;
-   }
-
    RhoS = 67.92 + 51.25*exp(TAref[hh]/2.59);
    Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
 
-   if(Load[hh] > Lstar) { // after increase in temperature
-     Thru[hh] = Load[hh] - Lstar;
-     Load[hh] = Lstar;
-   }
-
-   if(hru_p[hh] > 0.0) {
-     Cp = Cc/(1.0 - (Cc*hru_u[hh]*HeightH[hh])/(Velw*WidthJ[hh]));
-     if(Cp <= 0.0 || Cp > 1.0) Cp = 1.0;
-
-     I1 = (Lstar-Load[hh])*(1 - exp(-Cp*hru_p[hh]/Lstar));
-
-     Load[hh] = Load[hh] + I1; // add new snowfall
-     Thru[hh] = Thru[hh] + (hru_p[hh] - I1); // remainder falls thru
-   }
-
-   if(Load[hh] <= 0.0) {
-     Load[hh] = 0.0;
-     break;
+   if(snowcover[hh] == 1){
+    TsnowG = T_s_0[hh]; // ground temp is equal to snowbal active layer temp when we have snow on the ground
+   } else {
+    TsnowG = hru_T_g[hh]; // if no snowcover set to the ground temperature constant set as param in snobal
    }
 
    if(RHref[hh] > 1.5)
@@ -283,7 +245,7 @@ std::cout << "QdflatE = " << QdflatE[hh] << std::endl;
    DblRHcan = RHrefhh; // RHref[hh]; // fix for precision problem
    DblTCanSnow  = TCanSnow[hh];
 
-   CanSnowFrac = pow(Load[hh]/Lstar,0.8);
+   CanSnowFrac = pow(Snow_load[hh]/Lstar,0.8);
 
    VPref = RHrefhh* Common::estar(TAref[hh]);
    SVDensA = Common::SVDens(TAref[hh]);
@@ -335,7 +297,7 @@ std::cout << "QdflatE = " << QdflatE[hh] << std::endl;
          TItNum2 = TItNum2 + 1;
          if (TItNum2 > 1)  {
            DblTCanSnow += StepT2;
-           Tbiomass[hh] = DblTbarCan + ((DblTbarCan - DblTCanSnow)*Load[hh]*SpHtIce)
+           Tbiomass[hh] = DblTbarCan + ((DblTbarCan - DblTCanSnow)*Snow_load[hh]*SpHtIce)
                                        /(Biomass[hh]*SpHtCan);
          }
 
@@ -366,7 +328,6 @@ std::cout << "QdflatE = " << QdflatE[hh] << std::endl;
          F = std::max(F, 1.0); // Ensure F is greater than or equal to 1 as in Sicart et al., (2006)
 
          QlwInAtm = 1.24 * pow(hru_ea_mb / (TAref[hh]+273.15), 1.0 / 7.0) * F * SBC * pow((TAref[hh]+273.15), 4); // Eq. 9 from Sicart et al., (2006)
-
 
           /* Solve for particle net radiation*/
          QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-SnowAlb);
@@ -399,12 +360,12 @@ std::cout << "QdflatE = " << QdflatE[hh] << std::endl;
              Tup2 = true;
            }
          }
-       } while (fabs(Vs-Vhr) >= 0.000001);
+       } while (fabs(Vs-Vhr) >= 0.000001); /* Canopy Snow and Biomass[hh] T iteration loop */
 
        Vs = Vs/(4.0/3.0*M_PI*pow(Radius, 3.0)*RhoI)/Hs;
-       Ce = k1*pow(Load[hh]/Lstar, -Fract);
+       Ce = k1*pow(Snow_load[hh]/Lstar, -Fract);
        Vi = Vs*Ce;
-       Qsubl[hh] = Load[hh]*Vi*Hs;
+       Qsubl[hh] = Snow_load[hh]*Vi*Hs;
        Qe = Hs*CdragE*(hru_u[hh]-Uh)*(SVDensA*RHrefhh-SVDensC*DblRHcan)*Stabil;
 
        if (Qe-Qsubl[hh] < 0.0)  {
@@ -424,11 +385,11 @@ std::cout << "QdflatE = " << QdflatE[hh] << std::endl;
            RHup = true;
          }
        }
-     } while (fabs(Qsubl[hh]-Qe) >= 0.01);
+     } while (fabs(Qsubl[hh]-Qe) >= 0.01); /* Canopy RH iteration loop */
 
      Qh = RhoAir*SpHtAir/Ra*(TAref[hh]-DblTbarCan)*Stabil;
      dUdt = ((Tbiomass[hh]-T0biomass[hh])*Biomass[hh]*SpHtCan
-             +(DblTCanSnow-T0CanSnow[hh])*Load[hh]*SpHtIce)/(Global::Interval*24*3600.0);
+             +(DblTCanSnow-T0CanSnow[hh])*Snow_load[hh]*SpHtIce)/(Global::Interval*24*3600.0);
 
 //     if (Qn[hh]+Qh+Qe-dUdt < 0.0)  {
      if (Qh+Qe-dUdt < 0.0)  {
@@ -449,44 +410,12 @@ std::cout << "QdflatE = " << QdflatE[hh] << std::endl;
        }
      }
 //   } while (fabs(Qn[hh]+Qe+Qh-dUdt) >= 0.01);
-   } while (fabs(Qe+Qh-dUdt) >= 0.01);
-
-  std::cout << "Qsi = " << Qsi_ << std::endl;
-  std::cout << "DblRHcan = " << DblRHcan << std::endl; 
-  std::cout << "Tbiomass = " << Tbiomass[hh] << std::endl;
-  std::cout << "DblTCanSnow = " << DblTCanSnow << std::endl;
-
-  std::cout << "QTrans50 = " << QTrans50 << std::endl;  
-  std::cout << "QTrUp50 = " << QTrUp50 << std::endl;  
-  std::cout << "QlwUpC100 = " << QlwUpC100 << std::endl;  
-  std::cout << "QlwUpC100 = " << QlwUpC100 << std::endl;  
-  std::cout << "QlwInAtm = " << QlwInAtm << std::endl;
-  std::cout << "QsDnStar = " << QsDnStar << std::endl; 
-  std::cout << "QsUpStar = " << QsUpStar << std::endl; 
-  std::cout << "QlwUpStar = " << QlwUpStar << std::endl; 
-  std::cout << "QlwDnStar = " << QlwDnStar << std::endl;
-  std::cout << "QnetStar = " << QnetStar << std::endl;
+   } while (fabs(Qe+Qh-dUdt) >= 0.01 && TItNum < 1000); /* Canopy T iteration loop */
 
    TCanSnow[hh]  = DblTCanSnow;
    T0CanSnow[hh] = DblTCanSnow;
    T0biomass[hh] = Tbiomass[hh];
 
-   wtsubl = -Qsubl[hh]*Global::Interval*24*3600.0/Hs; // make positive
-
-   if(wtsubl > Load[hh]) {
-     Qsubl[hh] = -Load[hh]/(Global::Interval*24*3600.0/Hs); // make W/m2
-     wtsubl = Load[hh];
-     Load[hh] = 0.0;
-   }
-   else
-     Load[hh] = Load[hh] - wtsubl;
-
-   if(hru_p[hh] > 0.0)
-     if(I1 > wtsubl) {
-       Unld = (I1 - wtsubl)*0.322;
-       Load[hh] = Load[hh] - Unld;
-       Thru[hh] = Thru[hh] + Unld;
-     }
   }  // {for loop}
   N++;
 }
