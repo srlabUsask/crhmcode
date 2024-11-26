@@ -99,6 +99,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declputvar("*", "SWE", "(mm)", &SWE);
 
+  declputvar("*", "TCanSnow", "(" + string(DEGREE_CELSIUS) + ")", &TCanSnow);
+
   // declared observations
 
   declobs("Ts", TDim::NHRU, "snow surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &Ts);
@@ -149,6 +151,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declvar("direct_snow", TDim::NHRU, "snow 'direct' through canopy", "(mm/int)", &direct_snow);
 
+  declvar("canopy_snowmelt", TDim::NHRU, "amount of snow intercepted in the canopy that is melted ", "(mm/int)", &canopy_snowmelt);
+
   declvar("SUnload", TDim::NHRU, "unloaded canopy snow", "(mm/int)", &SUnload);
 
   declvar("SUnload_H2O", TDim::NHRU, "unloaded canopy snow as water", "(mm/int)", &SUnload_H2O);
@@ -172,7 +176,7 @@ void ClassCRHMCanopyVectorBased::decl(void)
   declvar("intcp_evap", TDim::NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
 
   declstatdiag("cum_intcp_evap", TDim::NHRU, "Cumulative HRU Evaporation from interception", "(mm)", &cum_intcp_evap);
-
+  
   // parameters:
 
   declparam("inhibit_evap", TDim::NHRU, "[0]", "0", "1", "inhibit evaporation, 1 -> inhibit", "()", &inhibit_evap);
@@ -198,6 +202,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
   declparam("Cc", TDim::NHRU, "[1]", "0", "1", "canopy coverage, (1-sky view fraction)", "()", &Cc);
 
   declparam("LAI", TDim::NHRU, "[2.2]", "0.1", "20.0", "leaf-area-index", "()", &LAI);
+
+  declparam("Sbar", TDim::NHRU, "6.6", "0.0", "20.0", "Uncorrected snow capacity", "(kg/m^2)", &Sbar);
 
   declparam("Lmax", TDim::NHRU, "[50]", "0.0", "100.0", "maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 based on max observed in Storck et al. 2002 and Cebulski & Pomeroy", "(kg/m^2)", &Lmax);
 
@@ -255,6 +261,15 @@ void ClassCRHMCanopyVectorBased::run(void)
   double Exposure, LAI_, Vf, Vf_, Kstar_H, Kd;
   // double Tau; variable is unreferenced commenting out for now - jhs507
 
+  double Cp_h2o; // Bulk volumetric heat capacity of frozen and liquid h2o intercepted in the canopy.", "(j m-2 K-1)", &Cp_h2o);
+  double U_sink; // energy required to increase h2o in the canopy to 0 deg. IOW the energy sink available to freeze water. As water freezes this sink will decrease as the other parts of the canopy warm as latent heat is released from the freezing process.
+  double U_conv; // energy sink needed to freeze all liquid water
+  double rain_frozen; // rain frozen based on energy sink available
+  double dUdt; // internal energy change to the snowpack
+  double U_cool; // available energy sink left over after freezing all liquid water used to cool canopy snow
+  double U_melt; // energy available for melting snow intercepted in the canopy
+  double U_warm; // remaining energy left over to heat the canopy h2o after melting all snow intercepted in the canopy
+
   for (hh = 0; chkStruct(); ++hh)
   {
 
@@ -292,6 +307,8 @@ void ClassCRHMCanopyVectorBased::run(void)
     SUnload[hh] = 0.0;
     SUnload_H2O[hh] = 0.0;
     Subl_Cpy[hh] = 0.0;
+    canopy_snowmelt[hh] = 0.0;
+
 
     // Canopy temperature is approximated by the air temperature.
 
@@ -443,7 +460,7 @@ void ClassCRHMCanopyVectorBased::run(void)
       // coupled forest snow interception and sublimation routine:
       // after Cebulski & Pomeroy 2025:
 
-      if ((Snow_load[hh] > 0.0 || hru_snow[hh] > 0.0))
+      if ((Snow_load[hh] > 0.0 || rain_load[hh] > 0.0 || hru_snow[hh] > 0.0))
       {                            // calculate increase in Snow_load and direct_snow if we are in canopy (i.e., Cc > 0)
         const double k_cp = 20;    // rate of increase of the sigmoidal curve below
         const double v_snow = 0.8; // terminal fall velocity of snowfall taken from Isyumov, 1971
@@ -510,7 +527,6 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           double xi2 = 1 - Zvent[hh];
           double windExt2 = (gamma * LAI[hh] * xi2);
-          double uVent = u_FHt[hh] * exp(-1 * windExt2);
 
           // Calculate wind speed at canopy top for sublimation calculation, moved from initial interception chunk by Alex Cebulski November 2024
 
@@ -519,7 +535,7 @@ void ClassCRHMCanopyVectorBased::run(void)
           else
             u_FHt[hh] = 0.0;
 
-          double I1 = 0.0;
+          double uVent = u_FHt[hh] * exp(-1 * windExt2);
 
           // calculate sublimation of intercepted snow from ideal intercepted ice sphere (500 microns diameter):
 
@@ -550,11 +566,14 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           // snow exposure coefficient (Ce):
 
-          double Ce;
-          if ((Snow_load[hh] / Lmax[hh]) <= 0.0)
+          double RhoS = 67.92 + 51.25*exp(hru_t[hh]/2.59);
+          double Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
+
+          double Ce; 
+          if ((Snow_load[hh] / Lstar) <= 0.0) // using original Lstar and not Lmax here from HP98 as this is how to sublimation paramaterisation was tested and works well. Justified as Lstar gives better index of fraction of canopy covered by snow while Lmax is the total amount the canopy can hold
             Ce = 0.07;
           else
-            Ce = ks * pow((Snow_load[hh] / Lmax[hh]), -Fract);
+            Ce = ks * pow((Snow_load[hh] / Lstar), -Fract);
 
           // calculate 'potential' canopy sublimation:
 
@@ -676,7 +695,6 @@ void ClassCRHMCanopyVectorBased::run(void)
         {
         case 0:
         { // do not melt, used for debugging or experiments or with the HP98 mass unloading which calculates drip empirically, recommend using case 1 otherwise.
-          std::cout << "MeltwaterSwitch Case 0: No canopy snow melt applied.\n";
           break;
         } // case 0
 
@@ -684,16 +702,51 @@ void ClassCRHMCanopyVectorBased::run(void)
         { // Block for case 1
           // This is the meltwater drip parameterisation adapted from CLASSIC v1.0.1 https://gitlab.com/cccma/classic/-/releases
           // The algorithm calculates the change in internal energy of the vegetation canopy as a result of the phase change processes
-          // Currently the canopy snow temperature is approximated by the air temperature at the begining of this module which 
-          // is unchanged from the original CanopyClearingGap module. Could be revised to use the CLASSIC classEnergyBalVeg module
-          // and/or the CRHM classPSPnew which was developed by Parv. & Pomeroy 1998.
+          // Currently the canopy snow temperature is approximated by the classPSPnew module which was developed by Parv. & Pomeroy 1998.
+          
+          double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
+          Cp_h2o = (CRHM_constants::cw * rain_load[hh]) + (CRHM_constants::ci * Snow_load[hh]); // volumetric heat capacity of frozen and liquid h2o intercepted in the canopy (j m-2 K-1). This is different from CLASS who incorporates the vegetation elements here too but since PSPnew treats veg temp as different we do not have the same here.
+          
+          // Energy sink available for freezing liquid water intercepted in the canopy canopy only if T_snow < 0
+          if (rain_load[hh] > 0 & TCanSnow[hh] < 0){
 
-          Ts[hh];
+            U_sink = Cp_h2o * (0 - TCanSnow[hh]); 
+            U_conv = rain_load[hh] * CRHM_constants::Lf; 
+            
+            if (U_sink <= U_conv){ // not enough energy sink to freeze all liquid water so calculating the portion that will freeze here
+              rain_frozen = U_sink / CRHM_constants::Lf; 
+              Snow_load[hh] += rain_frozen; // frozen rain is added to the canopy snow load, this is what is done in CLASS but should maybe treat this differently as will have different adhesion to the canopy
+              rain_load[hh] -= rain_frozen;
+              TCanSnow[hh] = 0; // canopy snow is set to freezing temp, this will be used as the snow temp initilization in PSPnew
+              // dUdt = dUdt + CRHM_constants::Lf * rain_frozen / dt; // release energy from freezing water into the snow in the canopy
+              
+            } else { // energy sink is large enough to freeze all liquid water intercepted in the canopy
+              Snow_load[hh] += rain_load[hh];
+              U_cool = U_sink - U_conv; 
+              TCanSnow[hh] = -U_cool / (CRHM_constants::ci * Snow_load[hh]); // temperature of snow intercepted in the canopy after freezing liquid water, this will be used as the snow temp initilization in PSPnew
+              // dUdt = dUdt + CRHM_constants::Lf * rain_load[hh] / dt; // internal energy change to the snowpack due to freezing, adding energy here as energy is released by freezing liquid water
+              rain_load[hh] = 0.0;
+            }
+          }
 
-          CRHM_constants::Lf; 
+          if (Snow_load[hh] > 0 & TCanSnow[hh] > 0){ // Canopy snow temperature is above 0
+            U_melt = Cp_h2o * (TCanSnow[hh]);
+            U_conv = Snow_load[hh] * CRHM_constants::Lf; // energy required to melt all snow intercepted in the canopy
 
-          CRHM_constants::Tf; 
-
+            if (U_melt <= U_conv){ // not eneough energy to melt all canopy snow
+              canopy_snowmelt[hh] = U_melt / CRHM_constants::Lf;
+              Snow_load[hh] -= canopy_snowmelt[hh];
+              rain_load[hh] += canopy_snowmelt[hh]; // melting snow will drip off canopy based on rainwater routine below this is different from the Ellis 2010 param above which immediately drips off canopy snow melt with no holding capacity.
+              TCanSnow[hh] = 0; // canopy snow is melting so set to 0 deg. C, this will be used as the snow temp initilization in PSPnew
+              // dUdt = dUdt - CRHM_constants::Lf * canopy_snowmelt[hh] / dt; // internal energy change to the snowpack due to melt, subtracting energy here as energy is required to melt snow
+            } else { // all snow in the canopy will be melted
+              rain_load[hh] += Snow_load[hh]; // move all snow into the rain store
+              U_warm = U_melt - U_conv; 
+              TCanSnow[hh] = U_warm / (CRHM_constants::cw * rain_load[hh]); // temperature of snow intercepted in the canopy after freezing liquid water, this will be used as the snow temp initilization in PSPnew
+              // dUdt = dUdt + CRHM_constants::Lf * Snow_load[hh] / dt; // internal energy change to the snowpack due to melt, subtracting energy here as energy is required to melt snow
+              Snow_load[hh] = 0; // empty the canopy snow store
+            }
+          }
           break;
         }
 
@@ -726,22 +779,22 @@ void ClassCRHMCanopyVectorBased::run(void)
       //  Forest rain interception and evaporation model
       // 'sparse' Rutter interception model (i.e. Valente 1997):
 
-      // calculate direct throughfall:
+      // calculate direct throughfall and drip:
 
-      if (hru_rain[hh] > 0.0)
-      {
+      if (hru_rain[hh] > 0.0 || rain_load[hh] > 0.0){
 
         direct_rain[hh] = hru_rain[hh] * (1 - Cc[hh]);
 
         // calculate rain accumulation on canopy before evap loss:
 
-        if (rain_load[hh] + hru_rain[hh] * Cc[hh] > smax)
-        {
+        if (rain_load[hh] + hru_rain[hh] * Cc[hh] > smax){
           drip_Cpy[hh] += (rain_load[hh] + hru_rain[hh] * Cc[hh] - smax);
           rain_load[hh] = smax;
         }
-        else
+        else {
           rain_load[hh] += hru_rain[hh] * Cc[hh];
+        }
+
 
       } // if hru_rain[hh] > 0.0
 

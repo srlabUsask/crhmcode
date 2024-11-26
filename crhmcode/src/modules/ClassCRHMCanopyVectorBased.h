@@ -82,6 +82,17 @@ double *u_FHt { NULL };
 double *u_1_third_Ht { NULL };
 double *Pevap { NULL };
 
+double *Cp_h20 { NULL };
+double *TCanSnow { NULL };
+double *U_sink { NULL };
+double *U_conv { NULL };
+double *rain_frozen { NULL };
+double *dUdt { NULL };
+double *U_cool { NULL };
+double *U_melt { NULL };
+double *U_warm { NULL };
+double *canopy_snowmelt { NULL };
+
 // variable inputs
 
 const double *hru_t { NULL };
@@ -112,6 +123,7 @@ const double *Ht { NULL };
 const double *Cc { NULL };
 const double *LAI { NULL };
 const double *Lmax { NULL };
+const double *Sbar { NULL };
 const double *alpha { NULL };
 const double *Z0snow { NULL };
 const double *Zref { NULL };
