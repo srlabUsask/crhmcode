@@ -77,6 +77,10 @@ void ClassPSPnew::decl(void) {
 
   declparam("Biomass", TDim::NHRU, "30.0", "0.0", "100.0", "Biomass", "(kg/m^2)", &Biomass);
 
+  declparam("Albedo_canopy", TDim::NHRU, "0.2", "0.0", "1.0", "Albedo for canopy", "(-)", &Albedo_canopy);
+
+  declparam("Albedo_snow", TDim::NHRU, "0.8", "0.0", "1.0", "Albedo for snow in the canopy and on the ground", "(-)", &Albedo_snow);
+
   declgetparam("*", "hru_T_g", "(" + string(DEGREE_CELSIUS) + ")", &hru_T_g); // input param for snobal
   declgetparam("*", "Lmax", "()", &Lmax); // input param for Canopy module
   declgetparam("*", "Zref", "()", &Zref); // input param for Canopy module
@@ -98,6 +102,7 @@ void ClassPSPnew::decl(void) {
   declgetvar("*", "Snow_load", "()", &Snow_load);
   declgetvar("*", "rain_load", "()", &rain_load);
   declgetvar("*", "u_FHt", "()", &u_FHt);
+  declgetvar("*", "Cp_h2o", "()", &Cp_h2o);
 }
 
 void ClassPSPnew::init(void) {
@@ -123,8 +128,6 @@ void ClassPSPnew::run(void) {
   const double RhoI = 900.0;      /* Density of ice, kg/m^3 */
   const double k1 = 0.0114;       /* Snow shape coefficient, Jackpine site */
   const double Fract = 0.4;       /* Fractal dimension */
-  const double SnowAlb = 0.8;     /* Albedo for snow */
-  const double CanAlb = 0.2;      /* Albedo for canopy */
   const double KARMAN = 0.4;      /* Von Karman"s constant */
   const double g = 9.8;           /* Gravitational acceleration, m/s^2 */
   const double SBC = 5.67E-8;     /* Stephan-Boltzmann constant W/m2*/
@@ -234,12 +237,12 @@ void ClassPSPnew::run(void) {
       else
         RHrefhh = RHref[hh];
 
-      DblTbarCan = TAref[hh]; // TODO should this equilibrate back to air temp every timestep or should we set to TBiomass from previous timestep as with canopy snow below
+      DblTbarCan = Tbiomass[hh]; // TODO should this equilibrate back to air temp every timestep or should we set to TBiomass from previous timestep as with canopy snow below
 
       DblRHcan = RHrefhh; // RHref[hh]; // fix for precision problem
       DblTCanSnow  = TCanSnow[hh];
 
-      CanSnowFrac = pow(Snow_load[hh]/Lstar,0.8);
+      CanSnowFrac = pow(Snow_load[hh]/Lmax[hh],0.8); // changed from HP98 Lstar to larger Lmax
 
       VPref = RHrefhh* Common::estar(TAref[hh]);
       SVDensA = Common::SVDens(TAref[hh]);
@@ -259,7 +262,7 @@ void ClassPSPnew::run(void) {
         Mu = LAI[hh]/(Ht[hh])*(0.781*SolarAng[hh]*cos(SolarAng[hh])+0.0591); // equation 4 from Parv. & Pom 2000
         QTrans50 = Qsi_*exp(-Mu*(Ht[hh])/2/sin(SolarAng[hh])); // incoming solar radiation multiplied by the transmissivity calculated from equation 3 in Parv. & Pom 2000, IOW short wave radiation transmitted through to the canopy mid point height
         QTrans100 = Qsi_*exp(-Mu*(Ht[hh])/sin(SolarAng[hh])); // as above but calculates solar transmitted through the canopy
-        QTrUp50 = (1.0-SnowAlb)*QTrans100*exp(LAI[hh]/(Ht[hh])*0.0591*(Ht[hh])/2); // solar radiation reflected off the surface snowpack and back to the canopy midpoint
+        QTrUp50 = (1.0-Albedo_snow[hh])*QTrans100*exp(LAI[hh]/(Ht[hh])*0.0591*(Ht[hh])/2); // solar radiation reflected off the surface snowpack and back to the canopy midpoint
       }
       else {
         QTrans50 = 0.0;
@@ -336,8 +339,8 @@ void ClassPSPnew::run(void) {
             QlwInAtm = 1.24 * pow(hru_ea_mb / (TAref[hh]+273.15), 1.0 / 7.0) * F * SBC * pow((TAref[hh]+273.15), 4); // Eq. 9 from Sicart et al., (2006)
 
               /* Solve for particle net radiation*/
-            QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-SnowAlb);
-            QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-CanAlb);
+            QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-Albedo_snow[hh]);
+            QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-Albedo_canopy[hh]);
             QlwUpStar = M_PI*Radius*Radius*QlwUpC100;
             QlwDnStar = M_PI*Radius*Radius*(QlwInAtm*UpperGF + SBC*(1.0-UpperGF)*
                                   ((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
@@ -369,7 +372,7 @@ void ClassPSPnew::run(void) {
           } while (fabs(Vs-Vhr) >= 0.000001); /* Canopy Snow and Biomass[hh] T iteration loop */
 
           Vs = Vs/(4.0/3.0*M_PI*pow(Radius, 3.0)*RhoI)/Hs;
-          Ce = k1*pow(Snow_load[hh]/Lstar, -Fract);
+          Ce = k1*pow(Snow_load[hh]/Lstar, -Fract); // using Lmax here results in lower canopy temp
           Vi = Vs*Ce;
           Qsubl[hh] = Snow_load[hh]*Vi*Hs;
           Qe = Hs*CdragE*(u_FHt[hh]-CanVent)*(SVDensA*RHrefhh-SVDensC*DblRHcan)*Stabil;
@@ -396,10 +399,10 @@ void ClassPSPnew::run(void) {
 
         Qh = RhoAir*SpHtAir/Ra*(TAref[hh]-DblTbarCan)*Stabil;
         dUdt = ((Tbiomass[hh]-T0biomass[hh])*Biomass[hh]*SpHtCan
-                +(DblTCanSnow-T0CanSnow[hh])*Snow_load[hh]*SpHtIce)/(Global::Interval*24*3600.0);
+                +(DblTCanSnow-T0CanSnow[hh])*Cp_h2o[hh])/(Global::Interval*24*3600.0);
 
       //     if (Qn[hh]+Qh+Qe-dUdt < 0.0)  {
-        if (Qh+Qe-dUdt < 0.0)  {
+        if (QnetStar+Qh+Qe-dUdt < 0.0)  {
           if (TItNum ==1)  {
             Tup = false;
             StepT = -StepT;
@@ -421,7 +424,7 @@ void ClassPSPnew::run(void) {
           CRHMException TExcept("TItNum >= 1000: Exiting Canopy T iteration loop early.", TExcept::WARNING);
           LogError(TExcept);
         }
-      } while (fabs(Qe+Qh-dUdt) >= 0.01 && TItNum < 1000); /* Canopy T iteration loop */
+      } while (fabs(QnetStar+Qe+Qh-dUdt) >= 0.01 && TItNum < 1000); /* Canopy T iteration loop */
 
       TCanSnow[hh]  = DblTCanSnow;
       T0CanSnow[hh] = DblTCanSnow;

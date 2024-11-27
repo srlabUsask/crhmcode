@@ -51,6 +51,8 @@ const double *Zref{ NULL };
 const double *Zwind{ NULL };
 const double *Ht{ NULL };
 const double *Biomass{ NULL };
+const double *Albedo_canopy { NULL };
+const double *Albedo_snow { NULL };
 const double *k{ NULL };
 const double *HeightH{ NULL };
 const double *WidthJ{ NULL };
@@ -78,6 +80,7 @@ const double *rain_load { NULL };
 const double *Lmax { NULL };
 const double *u_FHt { NULL };
 const double *ZwindFHt { NULL };
+const double *Cp_h2o { NULL };
 
 const long *snowcover{ NULL };  // snow on gnd at start of current timestep?
 
