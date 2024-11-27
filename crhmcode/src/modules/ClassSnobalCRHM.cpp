@@ -118,7 +118,7 @@ void ClassSnobalCRHM::decl(void) {
     decllocal("F_g_L", TDim::NHRU, "soil flux at depth z_g", "(W/m^2)", &F_g);
 
     decllocal("m_precip_L", TDim::NHRU, "specific mass of total precip", "(kg/m^2)", &m_precip);
-    declvar  ("rain_on_snow", TDim::NHRU, "specific mass of rain in precip", "(kg/m^2)", &m_rain);
+    declvar("rain_on_snow", TDim::NHRU, "specific mass of rain in precip", "(kg/m^2)", &m_rain);
     decllocal("m_snow_L", TDim::NHRU, "specific mass in snow in precip", "(kg/m^2)", &m_snow);
     decllocal("m_drift_L", TDim::NHRU, "specific mass of drifting snow", "(kg/m^2)", &m_drift);
     decllocal("m_subl_L", TDim::NHRU, "specific mass of drifting snow", "(kg/m^2)", &m_subl);
@@ -286,16 +286,19 @@ void ClassSnobalCRHM::run(void) { // executed every interval
     else
       input_rec2[hh].T_g  = T_g_X[hh] + CRHM_constants::Tm;
 
-    if(m_snow_X[hh] == 0)
+    if(m_snow_X[hh] == 0){
       m_snow[hh] = 0.0;
+    }      
 
     if(snowcover[hh]){
       m_snow[hh]  = m_snow_X[hh];
     }
     else {
-      if(m_snow_X[hh] > 0.0)
+      if(m_snow_X[hh] > 0.0){
         snow_store[hh] += m_snow_X[hh];
-      m_snow[hh] = 0.0;
+      } else {
+          m_snow[hh] = 0.0;
+      }
     }
 
     if((nstep == 1 && snow_store[hh] > 0.0) || snow_store[hh] > 1.0){

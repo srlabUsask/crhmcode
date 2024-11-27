@@ -708,7 +708,7 @@ void ClassCRHMCanopyVectorBased::run(void)
           Cp_h2o = (CRHM_constants::cw * rain_load[hh]) + (CRHM_constants::ci * Snow_load[hh]); // volumetric heat capacity of frozen and liquid h2o intercepted in the canopy (j m-2 K-1). This is different from CLASS who incorporates the vegetation elements here too but since PSPnew treats veg temp as different we do not have the same here.
           
           // Energy sink available for freezing liquid water intercepted in the canopy canopy only if T_snow < 0
-          if (rain_load[hh] > 0 & TCanSnow[hh] < 0){
+          if (rain_load[hh] > 0 && TCanSnow[hh] < 0){
 
             U_sink = Cp_h2o * (0 - TCanSnow[hh]); 
             U_conv = rain_load[hh] * CRHM_constants::Lf; 
@@ -729,7 +729,7 @@ void ClassCRHMCanopyVectorBased::run(void)
             }
           }
 
-          if (Snow_load[hh] > 0 & TCanSnow[hh] > 0){ // Canopy snow temperature is above 0
+          if (Snow_load[hh] > 0 && TCanSnow[hh] > 0){ // Canopy snow temperature is above 0
             U_melt = Cp_h2o * (TCanSnow[hh]);
             U_conv = Snow_load[hh] * CRHM_constants::Lf; // energy required to melt all snow intercepted in the canopy
 

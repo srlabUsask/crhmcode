@@ -321,7 +321,7 @@ void ClassPSPnew::run(void) {
             //         double QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
 
             // incoming longwave radiation from cloudy sky following Sicart et al., (2006)
-            if (QdflatE[hh] > 0.001 & QdflatE[hh] > Qsi_) // is it daytime ...
+            if (QdflatE[hh] > 0.001 && QdflatE[hh] > Qsi_) // is it daytime ...
             {
               tau_atm = Qsi_/QdflatE[hh]; // Sicart et al., (2006) eq. 4 for daytime
             }
