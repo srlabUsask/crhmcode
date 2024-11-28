@@ -53,10 +53,7 @@ const double *Ht{ NULL };
 const double *Biomass{ NULL };
 const double *Albedo_canopy { NULL };
 const double *Albedo_snow { NULL };
-const double *k{ NULL };
-const double *HeightH{ NULL };
-const double *WidthJ{ NULL };
-const long *InitN{ NULL };
+const long *CanopyWindSwitch{ NULL };
 
 
 // variable inputs

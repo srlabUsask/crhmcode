@@ -89,6 +89,7 @@ void ClassPSPnew::decl(void) {
   declgetparam("*", "LAI", "()", &LAI); // input param for Canopy module  
   declgetparam("*", "Cc", "()", &Cc); // input param for Canopy module  
   declgetparam("*", "Sbar", "()", &Sbar); // input param for Canopy module  
+  declgetparam("*", "CanopyWindSwitch", "()", &CanopyWindSwitch); // input param for Canopy module  
 
   declgetvar("obs", "hru_u", "(m/s)", &hru_u);
   declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &TAref);
@@ -127,7 +128,7 @@ void ClassPSPnew::run(void) {
   const double M = 18.01;         /* Molecular weight of water */
   const double RhoI = 900.0;      /* Density of ice, kg/m^3 */
   const double k1 = 0.0114;       /* Snow shape coefficient, Jackpine site */
-  const double Fract = 0.4;       /* Fractal dimension */
+  const double Fract = 0.37;       /* Fractal dimension */
   const double KARMAN = 0.4;      /* Von Karman"s constant */
   const double g = 9.8;           /* Gravitational acceleration, m/s^2 */
   const double SBC = 5.67E-8;     /* Stephan-Boltzmann constant W/m2*/
@@ -135,6 +136,8 @@ void ClassPSPnew::run(void) {
   const double SpHtIce = 2090.0;  /* Specific heat of ice, J/(kg*K) */
   const double SpHtCan = 2700.0;  /* Specific heat of canopy (CLASS value), J/(kg*K) */
   const double Hs = 2838000.0;    // Latent heat of sublimation, J/kg
+
+  // TODO for the initialization of variables below their value is undefined. This means they could contain any value that was previously stored at that memory location. 
 
   long TItNum, RHItNum, TItNum2; // Used in iteration loops
   bool Tup, RHup, Tup2;
@@ -145,7 +148,9 @@ void ClassPSPnew::run(void) {
 
   double RhoS, Lstar; // Hedstrom-Pomeroy, for L/L*
 
-  double SVDensC, SVDensS, LambdaT, CanVent, A, Nr, NuSh, D,
+  double LambdaT; // is the thermal conductivity of air (J m-1 s-1  K-1)
+  double u_Zcan; // wind speed at height Zcan (m s-1)
+  double SVDensC, SVDensS, A, Nr, NuSh, D,
       Vs, Vhr, Ce, Vi; // Pomeroy-Schmidt components
 
   /* Radiation model components */
@@ -157,6 +162,8 @@ void ClassPSPnew::run(void) {
 
   double QlwUpC100;  // longwave radiation emitted from the subcanopy snowpack and lower portion of the canopy (W m-2)
   double tau_atm;    // atmospheric transmissivity (-)
+  double tau_atm_prev_day; // atmospheric transmissivity (-) from the last measurement during the day to be used where we dont have tau estimates at night preferred method outside of Sask.
+  bool is_tau_obs;  // flag to check if tau_atm has been assigned
   double hru_ea_mb;  // conversion of kpa to mb for clarity
   double F;          // variable to scale incoming longwave radiation based on cloudiness from Sicart et al., (2006)
   double QlwInAtm;   // longwave emission from cloudy skies calculated from Eq. 9 from Sicart et al., (2006)
@@ -166,12 +173,14 @@ void ClassPSPnew::run(void) {
   double QlwDnStar;  // downwelling longwave radiation from the atmosphere passing through the upper canopy gap (UpperGF), plus longwave emission from snow intercepted in the upper half of the canopy and any remaining exposed veg. elements
   double QlwOutStar; // longwave emission from the top and bottom of the ice sphere plan area
   double QnetStar;   // net radiation to the ice sphere
-  double RhoAir, SVDensA, VPref, Ustar, Ra,
+  double SVDensA, VPref, Ustar, Ra,
       Stabil, Qe, Qh, dUdt; // CLASS components
   double Ri;                // Richardsons number representing the ratio of shear production of turbulence to buoyancy production
   double dTdz;              // characteristic temperature gradient (change in deg / change in height)
   double dudz;              // characteristic wind gradient (change in wind speed / change in height)
   double TbarLayer;         // mean temperature of the layer (K)
+  double RhoAir;           // density of the canopy air (kg m-3)
+  double ebal_check;       // diagnostic variable to converge on snow and biomass temperature while loop
 
   double RHrefhh; // holds RH as fraction instead of default percentage
   double TsnowG;  // snowcover active layer (surface temp) from snobal
@@ -196,6 +205,8 @@ void ClassPSPnew::run(void) {
       Disp = Ht[hh] * 0.7;
       CdragH = (KARMAN / (log((ZwindFHt - Disp) / Z0h))) * (KARMAN / (log((ZwindFHt - Disp) / Z0m)));
       CdragE = sqr(KARMAN / (log(ZwindFHt / Zcan[hh])));
+      tau_atm_prev_day = 0.818; // only used if it incoming ext. solar is == 0 on first time step, tau as in Global.cpp else statement as in LongVt, from average nightly measurements in Sask. likely biased to more clear skies
+      is_tau_obs = false; 
     }
 
     if ((Snow_load[hh] > 0.0) || rain_load[hh] > 0.0){
@@ -237,7 +248,7 @@ void ClassPSPnew::run(void) {
       else
         RHrefhh = RHref[hh];
 
-      DblTbarCan = Tbiomass[hh]; // TODO should this equilibrate back to air temp every timestep or should we set to TBiomass from previous timestep as with canopy snow below
+      DblTbarCan = Tbiomass[hh];
 
       DblRHcan = RHrefhh; // RHref[hh]; // fix for precision problem
       DblTCanSnow  = TCanSnow[hh];
@@ -248,14 +259,37 @@ void ClassPSPnew::run(void) {
       SVDensA = Common::SVDens(TAref[hh]);
       RhoAir =  10000.0*94.97/(2870.0*(TAref[hh]+273.15))*(1.0-0.379*VPref/94.97);
 
-      Ustar = u_FHt[hh]*KARMAN/(log((ZwindFHt-Disp)/Z0m));
-
       Ra = 1.0/(CdragH*(u_FHt[hh]+0.1));
 
-      A = 2.4338+3.45753*exp(-u_FHt[hh]);                 /* Modified Cionco wind model */
-      CanVent = u_FHt[hh]*exp(A*((Zcan[hh])/(ZwindFHt)-1.0));  /* calculates canopy windspd  */
+      switch (CanopyWindSwitch[hh])
+      {
+        case 0:
+        {  // original using Cionco wind model for dense canopies
+          if ((Zcan[hh] - (2.0 / 3.0) * Zwind[hh]) > 0.0){
+            // u_FHt[hh] = hru_u[hh] * log((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]); // currently calculated in Canopy module
+            A = 2.4338 + 3.45753 * exp(-u_FHt[hh]);                       /* Modified Cionco wind model */
+            u_Zcan = u_FHt[hh] * exp(A * ((Zcan[hh]) / (Ht[hh])-1.0)); /* calculates canopy windspd  */
+          } else {
+            u_Zcan = 0.0;
+          }
+          break;
+        } // case 0
 
-      Nr = 2*Radius*CanVent/KinVisc;
+        case 1:
+        { // Canopy wind profile developed at Fortress sparse canopy
+          double d0 = 0.5791121; // displacement height observed at sparse forest around Fortress Forest Tower
+          double z0m = 0.4995565; // roughness length observed at above site
+          
+          if ((Zcan[hh] - d0) > z0m){
+            Ustar = hru_u[hh]*PBSM_constants::KARMAN/(log((Zwind[hh] - d0)/z0m));
+            u_Zcan = Ustar/PBSM_constants::KARMAN * log((Zcan[hh] - d0)/z0m);
+          } else {
+            u_Zcan = 0.0;
+          }
+        } // case 1
+      } // end of switch CanopyWind
+
+      Nr = 2*Radius*u_Zcan/KinVisc;
       NuSh = 1.79+0.606*sqrt(Nr);
 
       if (SolarAng[hh] > 0.001)  {
@@ -323,13 +357,20 @@ void ClassPSPnew::run(void) {
                                     + CanSnowFrac*pow(DblTCanSnow+273.15,4.0)));
             //         double QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
 
+            if (is_tau_obs){ // was tau observed on the prev. timestep?
+              tau_atm_prev_day = tau_atm;
+            }
+
             // incoming longwave radiation from cloudy sky following Sicart et al., (2006)
             if (QdflatE[hh] > 0.001 && QdflatE[hh] > Qsi_) // is it daytime ...
             {
               tau_atm = Qsi_/QdflatE[hh]; // Sicart et al., (2006) eq. 4 for daytime
+              is_tau_obs = true;
             }
             else {
-              tau_atm = 0.818; // tau as in Global.cpp else statement as in LongVt
+              // tau_atm = 0.818; // tau as in Global.cpp else statement as in LongVt
+              tau_atm = tau_atm_prev_day;
+              is_tau_obs = false;
             }
             
             hru_ea_mb = hru_ea[hh]*10.0; // kPa to mb 
@@ -345,37 +386,42 @@ void ClassPSPnew::run(void) {
             QlwDnStar = M_PI*Radius*Radius*(QlwInAtm*UpperGF + SBC*(1.0-UpperGF)*
                                   ((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
                                   + (CanSnowFrac*pow(DblTCanSnow+273.15,4.0))));
-            QlwOutStar = 2*M_PI*Radius*Radius*SBC*pow(DblTCanSnow+273.15,4.0);
+            QlwOutStar = 2*M_PI*Radius*Radius*SBC*pow(DblTCanSnow+273.15,4.0); // TODO should this be 2piR^2 (i.e., two times the area of a circle for top and bottom or should this be a sphere?)
             QnetStar = QsDnStar+QsUpStar+QlwDnStar+QlwUpStar-QlwOutStar;
 
             SVDensS = Common::SVDens(DblTCanSnow);
-            Vs = (2.0*M_PI*D*Radius*(SVDensC*DblRHcan-SVDensS)*NuSh)*Hs;
-            Vhr = (2.0*M_PI*LambdaT*Radius*(DblTCanSnow-DblTbarCan)*NuSh - QnetStar);
 
-            if ((Vs-Vhr) < 0.0)  {
+            // Vs and Vhr below were originally Eq. 45 in Pom & Gray 1995 and differ from Eq. 7 in Parv. & Pom 2000, NO change in canopy or snow temp between the two equations
+            //Vs = (2.0*M_PI*D*Radius*(SVDensC*DblRHcan-SVDensS)*NuSh)*Hs; // original in PSPnew
+            Vs = (2.0*M_PI*Radius*D*NuSh*(SVDensC*DblRHcan-SVDensS))*Hs; // Latent Heat Energy flux (j/s) relative to the ice sphere (negative for sublimation of particle). SVDensS not multiplied by RH because assumed to be saturated i.e., at 1.0
+            //Vhr = (2.0*M_PI*LambdaT*Radius*(DblTCanSnow-DblTbarCan)*NuSh);  // original in PSPnew except that QnetStar was subtracted here originally, now moved this down to the ebal check
+            Vhr = 2.0*M_PI*Radius*LambdaT*NuSh*(DblTCanSnow-DblTbarCan); // TODO need to confirm if raidus should be squared here as above Sensible heat transfer (j/s), positive when energy is transfered away from the ice sphere
+
+            ebal_check = QnetStar + Vs - Vhr;
+
+            if (ebal_check < 0.0){
               if (TItNum2 == 1)  {
                 Tup2 = false;
                 StepT2 = -StepT2;
-              }
-              else {
+              } else {
                 if (Tup2)  StepT2 = -StepT2/10.0;
                 Tup2 = false;
               }
-            }
-            else {
-              if (TItNum2 == 1)  Tup2 = true;
-              else {
+            } else {
+              if (TItNum2 == 1){
+                Tup2 = true;
+              } else {
                 if (!Tup2)  StepT2 = -StepT2/10.0;
                 Tup2 = true;
               }
             }
-          } while (fabs(Vs-Vhr) >= 0.000001); /* Canopy Snow and Biomass[hh] T iteration loop */
+          } while (fabs(ebal_check) >= 0.000001); /* Canopy Snow and Biomass[hh] T iteration loop */
 
           Vs = Vs/(4.0/3.0*M_PI*pow(Radius, 3.0)*RhoI)/Hs;
           Ce = k1*pow(Snow_load[hh]/Lstar, -Fract); // using Lmax here results in lower canopy temp
           Vi = Vs*Ce;
           Qsubl[hh] = Snow_load[hh]*Vi*Hs;
-          Qe = Hs*CdragE*(u_FHt[hh]-CanVent)*(SVDensA*RHrefhh-SVDensC*DblRHcan)*Stabil;
+          Qe = Hs*CdragE*(u_FHt[hh]-u_Zcan)*(SVDensA*RHrefhh-SVDensC*DblRHcan)*Stabil;
 
 
           if (Qe-Qsubl[hh] < 0.0)  {
@@ -402,7 +448,7 @@ void ClassPSPnew::run(void) {
                 +(DblTCanSnow-T0CanSnow[hh])*Cp_h2o[hh])/(Global::Interval*24*3600.0);
 
       //     if (Qn[hh]+Qh+Qe-dUdt < 0.0)  {
-        if (QnetStar+Qh+Qe-dUdt < 0.0)  {
+        if (Qh+Qe-dUdt < 0.0)  {
           if (TItNum ==1)  {
             Tup = false;
             StepT = -StepT;
@@ -424,11 +470,14 @@ void ClassPSPnew::run(void) {
           CRHMException TExcept("TItNum >= 1000: Exiting Canopy T iteration loop early.", TExcept::WARNING);
           LogError(TExcept);
         }
-      } while (fabs(QnetStar+Qe+Qh-dUdt) >= 0.01 && TItNum < 1000); /* Canopy T iteration loop */
+      } while (fabs(Qe+Qh-dUdt) >= 0.01 && TItNum < 1000); /* Canopy T iteration loop */
 
       TCanSnow[hh]  = DblTCanSnow;
       T0CanSnow[hh] = DblTCanSnow;
       T0biomass[hh] = Tbiomass[hh];
+      // std::cout << "RHtNum: " << RHItNum << std::endl;
+      // std::cout << "TItNum2: " << TItNum2 << std::endl;
+      // std::cout << "TItNum: " << TItNum << std::endl;
     }
 
   } // {for loop}
