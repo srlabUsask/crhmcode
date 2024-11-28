@@ -153,6 +153,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declvar("canopy_snowmelt", TDim::NHRU, "amount of snow intercepted in the canopy that is melted ", "(mm/int)", &canopy_snowmelt);
 
+  declvar("Cp_h2o", TDim::NHRU, "Bulk volumetric heat capacity of frozen and liquid h2o intercepted in the canopy.", "(j m-2 K-1)", &Cp_h2o);
+
   declvar("SUnload", TDim::NHRU, "unloaded canopy snow", "(mm/int)", &SUnload);
 
   declvar("SUnload_H2O", TDim::NHRU, "unloaded canopy snow as water", "(mm/int)", &SUnload_H2O);
@@ -223,6 +225,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declparam("MeltwaterSwitch", TDim::NHRU, "[0]", "0", "1", "Canopy snow meltwater drip parameterisation options: Ellis et al. (2010) and Floyd (2012) - 0, CLASS - 1", "()", &MeltwaterSwitch);
 
+  declparam("CanopyWindSwitch", TDim::NHRU, "[0]", "0", "1", "Canopy wind model to use at height Zcan, 0 - for Cionco, 1 - for Prandtl-von Kármán log-linear relationship", "()", &CanopyWindSwitch);
+
   decldiagparam("Alpha_c", TDim::NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
 
   decldiagparam("B_canopy", TDim::NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter for longwave-radiation. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
@@ -261,7 +265,6 @@ void ClassCRHMCanopyVectorBased::run(void)
   double Exposure, LAI_, Vf, Vf_, Kstar_H, Kd;
   // double Tau; variable is unreferenced commenting out for now - jhs507
 
-  double Cp_h2o; // Bulk volumetric heat capacity of frozen and liquid h2o intercepted in the canopy.", "(j m-2 K-1)", &Cp_h2o);
   double U_sink; // energy required to increase h2o in the canopy to 0 deg. IOW the energy sink available to freeze water. As water freezes this sink will decrease as the other parts of the canopy warm as latent heat is released from the freezing process.
   double U_conv; // energy sink needed to freeze all liquid water
   double rain_frozen; // rain frozen based on energy sink available
@@ -468,23 +471,49 @@ void ClassCRHMCanopyVectorBased::run(void)
         double IP = 0;             // interception efficiency (IP)
         double dL = 0;             // change in canopy snow load
 
-        if (hru_u[hh] > 0 && Cc[hh] < 1 && Cc[hh] > 0)
+        if (hru_u[hh] > 0.0 && Cc[hh] < 1.0 && Cc[hh] > 0.0)
         { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
           double Ht_1_third = Ht[hh] * (1.0 / 3.0);
           double Cp_inc = 0;
-          if ((Ht_1_third - (2.0 / 3.0) * Zwind[hh]) > 0.0)
+          switch (CanopyWindSwitch[hh])
           {
-            u_1_third_Ht[hh] = hru_u[hh] * log((Ht_1_third - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
+            case 0:
+            {  // original using Cionco wind model for dense canopies
+              if ((Ht_1_third - (2.0 / 3.0) * Zwind[hh]) > 0.0){
+                u_FHt[hh] = hru_u[hh] * log((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
+                double A = 2.4338 + 3.45753 * exp(-u_FHt[hh]);                       /* Modified Cionco wind model */
+                u_1_third_Ht[hh] = u_FHt[hh] * exp(A * ((Ht_1_third) / (Ht[hh])-1.0)); /* calculates canopy windspd  */
+              } else {
+                u_1_third_Ht[hh] = 0.0;
+              }
+              break;
+            } // case 0
+
+            case 1:
+            { // Canopy wind profile developed at Fortress sparse canopy
+              double d0 = 0.5791121; // displacement height observed at sparse forest around Fortress Forest Tower
+              double z0m = 0.4995565; // roughness length observed at above site
+              
+              if ((Ht_1_third - d0) > z0m){
+                double Ustar = hru_u[hh]*PBSM_constants::KARMAN/(log((Zwind[hh]-d0)/z0m));
+                u_1_third_Ht[hh] = hru_u[hh]/PBSM_constants::KARMAN * log((Ht_1_third - d0)/z0m);
+              } else {
+                 u_1_third_Ht[hh] = 0.0;
+              }
+            } // case 1
+          } // end of switch CanopyWind
+
+          if(u_1_third_Ht[hh] > 0.0){
             double snow_traj_angle = atan(u_1_third_Ht[hh] / v_snow);                         // in radians
             Cp_inc = (1 - Cc[hh]) / (1 + exp(-k_cp * (sin(snow_traj_angle) - (1 - Cc[hh])))); // fractional increas in leaf contact area (Clca) based on horizontal trajectory. This is modified from Cebulski & Pomeroy snow interception paper. Has only been tested on forest plots with Cc of .3 and .5.
-          }
-          Clca[hh] = Cc[hh] + Cp_inc; // calculated leaf contact area (Clca) based on trajectory angle
-        }
-        else
-        {
+            Clca[hh] = Cc[hh] + Cp_inc; // calculated leaf contact area (Clca) based on trajectory angle
+            } else {
+              Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., Clca == 1 for Cc == 1 and Clca == 0 when Cc == 0
+            }
+        } else {
           Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., Clca == 1 for Cc == 1 and Clca == 0 when Cc == 0
         }
-
+          
         IP = Clca[hh] * alpha[hh]; // interception efficiency (IP)
         dL = IP * hru_snow[hh];    // change in canopy snow load
 
@@ -512,7 +541,7 @@ void ClassCRHMCanopyVectorBased::run(void)
         case 1:
         { // canopy snow sublimation with Pomeroy et al. (1998) paramaterisation
 
-          // Pomeroy et al. (1998) sublimation routine modified by Alex Cebulski to change maximum intercepted load from Hedstrom 1998 calculation to constant based on observations from several studies showing much higher intercepted loads.
+          // Pomeroy et al. (1998) sublimation routine
           // calculate snow ventilation windspeed:
 
           //=============================================================================
@@ -702,15 +731,15 @@ void ClassCRHMCanopyVectorBased::run(void)
         { // Block for case 1
           // This is the meltwater drip parameterisation adapted from CLASSIC v1.0.1 https://gitlab.com/cccma/classic/-/releases
           // The algorithm calculates the change in internal energy of the vegetation canopy as a result of the phase change processes
-          // Currently the canopy snow temperature is approximated by the classPSPnew module which was developed by Parv. & Pomeroy 1998.
+          // Currently the canopy snow temperature is approximated by the classPSPnew module which was developed by Parv. & Pomeroy 2000.
           
           double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
-          Cp_h2o = (CRHM_constants::cw * rain_load[hh]) + (CRHM_constants::ci * Snow_load[hh]); // volumetric heat capacity of frozen and liquid h2o intercepted in the canopy (j m-2 K-1). This is different from CLASS who incorporates the vegetation elements here too but since PSPnew treats veg temp as different we do not have the same here.
+          Cp_h2o[hh] = (CRHM_constants::cw * rain_load[hh]) + (CRHM_constants::ci * Snow_load[hh]); // volumetric heat capacity of frozen and liquid h2o intercepted in the canopy (j m-2 K-1). This is different from CLASS who incorporates the vegetation elements here too but since PSPnew treats veg temp as different we do not have the same here.
           
           // Energy sink available for freezing liquid water intercepted in the canopy canopy only if T_snow < 0
           if (rain_load[hh] > 0 && TCanSnow[hh] < 0){
 
-            U_sink = Cp_h2o * (0 - TCanSnow[hh]); 
+            U_sink = Cp_h2o[hh] * (0 - TCanSnow[hh]); 
             U_conv = rain_load[hh] * CRHM_constants::Lf; 
             
             if (U_sink <= U_conv){ // not enough energy sink to freeze all liquid water so calculating the portion that will freeze here
@@ -730,7 +759,7 @@ void ClassCRHMCanopyVectorBased::run(void)
           }
 
           if (Snow_load[hh] > 0 && TCanSnow[hh] > 0){ // Canopy snow temperature is above 0
-            U_melt = Cp_h2o * (TCanSnow[hh]);
+            U_melt = Cp_h2o[hh] * (TCanSnow[hh]);
             U_conv = Snow_load[hh] * CRHM_constants::Lf; // energy required to melt all snow intercepted in the canopy
 
             if (U_melt <= U_conv){ // not eneough energy to melt all canopy snow
@@ -747,8 +776,11 @@ void ClassCRHMCanopyVectorBased::run(void)
               Snow_load[hh] = 0; // empty the canopy snow store
             }
           }
+
+          // Final part of CLASS phase change to update the heat capacity of h2o in the canopy
+          Cp_h2o[hh] = (CRHM_constants::cw * rain_load[hh]) + (CRHM_constants::ci * Snow_load[hh]); // volumetric heat capacity of frozen and liquid h2o intercepted in the canopy (j m-2 K-1). This is different from CLASS who incorporates the vegetation elements here too but since PSPnew treats veg temp as different we do not have the same here.
           break;
-        }
+        } // Meltwater Switch case [1]
 
 
         }

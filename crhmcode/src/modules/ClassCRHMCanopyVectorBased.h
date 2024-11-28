@@ -92,6 +92,7 @@ double *U_cool { NULL };
 double *U_melt { NULL };
 double *U_warm { NULL };
 double *canopy_snowmelt { NULL };
+double *Cp_h2o { NULL };
 
 // variable inputs
 
@@ -140,8 +141,8 @@ const long *CanopyClearing { NULL };
 const long *SublimationSwitch { NULL };
 const long *MassUnloadingSwitch { NULL };
 const long *MeltwaterSwitch { NULL };
+const long *CanopyWindSwitch { NULL };
 const long *inhibit_evap { NULL };
-
 
 void decl(void);
 void init(void);
