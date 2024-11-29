@@ -270,3 +270,5 @@ __pycache__/
 
 build/
 /crhmcode/src/libs/boost_1_75_0
+.vscode/tasks.json
+.vscode/launch.json
