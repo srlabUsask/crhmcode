@@ -103,7 +103,7 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   // declared observations
 
-  declobs("Ts", TDim::NHRU, "snow surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &Ts);
+  declvar("Ts", TDim::NHRU, "snow surface temperature", "(" + string(DEGREE_CELSIUS) + ")", &Ts);
 
   declobs("Qnsn", TDim::NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
 
@@ -174,6 +174,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
   decldiag("u_1_third_Ht", TDim::NHRU, "wind speed at one-third forest height (z = 1/3*Ht) for the Cebulski & Pomeroy vector based param.", "(m/s)", &u_1_third_Ht);
 
   declvar("Clca", TDim::NHRU, "Leaf contact area adjusted for hydrometeor trajectory angle.", "(s-1)", &Clca);
+
+  declvar("LAI_", TDim::NHRU, "Leaf area index adjusted for snow cover", "(-)", &LAI_);
 
   declvar("intcp_evap", TDim::NHRU, "HRU Evaporation from interception", "(mm/int)", &intcp_evap);
 
@@ -262,7 +264,8 @@ void ClassCRHMCanopyVectorBased::init(void)
 
 void ClassCRHMCanopyVectorBased::run(void)
 {
-  double Exposure, LAI_, Vf, Vf_, Kstar_H, Kd;
+  double Exposure, Vf, Vf_, Kstar_H, Kd;
+  LAI_[hh] = 0.0; 
   // double Tau; variable is unreferenced commenting out for now - jhs507
 
   double U_sink; // energy required to increase h2o in the canopy to 0 deg. IOW the energy sink available to freeze water. As water freezes this sink will decrease as the other parts of the canopy warm as latent heat is released from the freezing process.
@@ -343,19 +346,20 @@ void ClassCRHMCanopyVectorBased::run(void)
       if (Exposure < 0.0)
         Exposure = 0.0;
 
-      LAI_ = LAI[hh] * Exposure / Ht[hh];
+      LAI_[hh] = LAI[hh] * Exposure / Ht[hh];
 
-      Vf = 0.45 - 0.29 * log(LAI[hh]);
+      Vf = Cc[hh];
+      Vf_ = Vf;
 
-      Vf_ = Vf + (1.0 - Vf) * sin((Ht[hh] - Exposure) / Ht[hh] * M_PI_2);
+      //Vf_ = Vf + (1.0 - Vf) * sin((Ht[hh] - Exposure) / Ht[hh] * M_PI_2);
 
       if (SolAng[hh] > 0.001 && cosxs[hh] > 0.001 && cosxsflat[hh] > 0.001)
       {
-        k[hh] = 1.081 * SolAng[hh] * cos(SolAng[hh]) / sin(SolAng[hh]);
+        k[hh] = 1.081 * SolAng[hh] * cos(SolAng[hh]) / sin(SolAng[hh]); // Eq. 8 from Pomeroy 2009
         double limit = cosxsflat[hh] / cosxs[hh];
         if (limit > 2.0)
           limit = 2.0;
-        Tauc[hh] = exp(-k[hh] * LAI_ * limit);
+        Tauc[hh] = exp(-k[hh] * LAI_[hh] * limit);
       }
       else
       {
@@ -363,9 +367,9 @@ void ClassCRHMCanopyVectorBased::run(void)
         Tauc[hh] = 0.0;
       }
 
-      Kstar_H = Qsi_ * (1.0 - Alpha_c[hh] - Tauc[hh] * (1.0 - Albedo[hh]));
+      Kstar_H = Qsi_ * (1.0 - Alpha_c[hh] - Tauc[hh] * (1.0 - Albedo[hh])); // Eq. 6 from Pomeroy 2009
 
-      Qlisn[hh] = Qli_ * Vf_ + (1.0f - Vf_) * CRHM_constants::emiss_c * CRHM_constants::sbc * pow(T1, 4.0f) + B_canopy[hh] * Kstar_H;
+      Qlisn[hh] = Qli_ * Vf_ + (1.0f - Vf_) * CRHM_constants::emiss_c * CRHM_constants::sbc * pow(T1, 4.0f) + B_canopy[hh] * Kstar_H; // looks like modification of Eq. 10 from Pomeroy 2009
 
       Qlisn_Var[hh] = Qlisn[hh];
 
@@ -402,7 +406,7 @@ void ClassCRHMCanopyVectorBased::run(void)
       if (Exposure < 0.0)
         Exposure = 0.0;
 
-      LAI_ = LAI[hh] * Exposure / Surrounding_Ht[hh];
+      LAI_[hh] = LAI[hh] * Exposure / Surrounding_Ht[hh];
 
       Vf = 0.45 - 0.29 * log(LAI[hh]);
 

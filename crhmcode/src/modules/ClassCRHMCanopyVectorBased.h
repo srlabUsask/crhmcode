@@ -93,6 +93,8 @@ double *U_melt { NULL };
 double *U_warm { NULL };
 double *canopy_snowmelt { NULL };
 double *Cp_h2o { NULL };
+double *LAI_ { NULL };
+
 
 // variable inputs
 
