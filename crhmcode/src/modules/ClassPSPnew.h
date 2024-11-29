@@ -51,33 +51,39 @@ const double *Zref{ NULL };
 const double *Zwind{ NULL };
 const double *Ht{ NULL };
 const double *Biomass{ NULL };
-const double *Albedo_canopy { NULL };
-const double *Albedo_snow { NULL };
+const double *Alpha_c { NULL };
+const double *Albedo_Snow { NULL };
 const long *CanopyWindSwitch{ NULL };
 
-
 // variable inputs
-const double *RHref{ NULL };
-const double *Qn{ NULL };
-const double *QsIn{ NULL };
-const double *QsOut{ NULL };
-const double *hru_u{ NULL };
-const double *hru_p{ NULL };
-const double *TAref{ NULL };
-const double *SolarAng{ NULL };
+const double *RHref { NULL };
+const double *Qn { NULL };
+const double *QsIn { NULL };
+const double *QsOut { NULL };
+const double *hru_u { NULL };
+const double *hru_p { NULL };
+const double *TAref { NULL };
+const double *SolarAng { NULL };
 const double *hru_ea { NULL };
 const double *QdflatE { NULL };
 const double *QliVt_Var { NULL };
 const double *QsiS_Var { NULL };
 const double *QsiA_Var { NULL };
 const double *hru_T_g { NULL };
-const double *T_s_0 { NULL };
+const double *Ts { NULL };
 const double *Snow_load { NULL };
 const double *rain_load { NULL };
 const double *Lmax { NULL };
 const double *u_FHt { NULL };
 const double *ZwindFHt { NULL };
 const double *Cp_h2o { NULL };
+const double *LAI_ { NULL };
+const double *Tauc { NULL };
+const double *k { NULL };
+const double *cosxs { NULL };
+const double *cosxsflat { NULL };
+const double *Albedo { NULL };
+const double *B_canopy { NULL };
 
 const long *snowcover{ NULL };  // snow on gnd at start of current timestep?
 

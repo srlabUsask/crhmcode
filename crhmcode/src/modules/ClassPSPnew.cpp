@@ -77,10 +77,6 @@ void ClassPSPnew::decl(void) {
 
   declparam("Biomass", TDim::NHRU, "30.0", "0.0", "100.0", "Biomass", "(kg/m^2)", &Biomass);
 
-  declparam("Albedo_canopy", TDim::NHRU, "0.2", "0.0", "1.0", "Albedo for canopy", "(-)", &Albedo_canopy);
-
-  declparam("Albedo_snow", TDim::NHRU, "0.8", "0.0", "1.0", "Albedo for snow in the canopy and on the ground", "(-)", &Albedo_snow);
-
   declgetparam("*", "hru_T_g", "(" + string(DEGREE_CELSIUS) + ")", &hru_T_g); // input param for snobal
   declgetparam("*", "Lmax", "()", &Lmax); // input param for Canopy module
   declgetparam("*", "Zref", "()", &Zref); // input param for Canopy module
@@ -90,6 +86,10 @@ void ClassPSPnew::decl(void) {
   declgetparam("*", "Cc", "()", &Cc); // input param for Canopy module  
   declgetparam("*", "Sbar", "()", &Sbar); // input param for Canopy module  
   declgetparam("*", "CanopyWindSwitch", "()", &CanopyWindSwitch); // input param for Canopy module  
+  declgetparam("*", "Alpha_c", "()", &Alpha_c); // canopy albedo
+  declgetparam("*", "Albedo_Snow", "()", &Albedo_Snow); // new snow albedo
+  declgetparam("*", "B_canopy", "()", &B_canopy); // new snow albedo
+
 
   declgetvar("obs", "hru_u", "(m/s)", &hru_u);
   declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &TAref);
@@ -98,12 +98,19 @@ void ClassPSPnew::decl(void) {
   declgetvar("*", "SolAng", "(r)", &SolarAng);
   declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
   declgetvar("*", "QdflatE", "(W/m^2)", &QdflatE);
-  declgetvar("*", "T_s_0", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0); 
+  declgetvar("*", "Ts", "(" + string(DEGREE_CELSIUS) + ")", &Ts); // temperature of snowpack from Canopy module
+  // declgetvar("*", "T_s_0", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0); // temperature of the active layer from snobal
   declgetvar("*", "snowcover", "()", &snowcover); 
   declgetvar("*", "Snow_load", "()", &Snow_load);
   declgetvar("*", "rain_load", "()", &rain_load);
   declgetvar("*", "u_FHt", "()", &u_FHt);
   declgetvar("*", "Cp_h2o", "()", &Cp_h2o);
+  declgetvar("*", "LAI_", "()", &LAI_);
+  declgetvar("*", "Tauc", "()", &Tauc);
+  declgetvar("*", "k", "()", &k);
+  declgetvar("*", "cosxsflat", "(r)", &cosxsflat);
+  declgetvar("*", "cosxs", "(r)", &cosxs);
+  declgetvar("*", "Albedo", "()", &Albedo); // ground albedo
 }
 
 void ClassPSPnew::init(void) {
@@ -131,7 +138,6 @@ void ClassPSPnew::run(void) {
   const double Fract = 0.37;       /* Fractal dimension */
   const double KARMAN = 0.4;      /* Von Karman"s constant */
   const double g = 9.8;           /* Gravitational acceleration, m/s^2 */
-  const double SBC = 5.67E-8;     /* Stephan-Boltzmann constant W/m2*/
   const double SpHtAir = 1013.0;  /* Specific heat of air, J/(kg*K) */
   const double SpHtIce = 2090.0;  /* Specific heat of ice, J/(kg*K) */
   const double SpHtCan = 2700.0;  /* Specific heat of canopy (CLASS value), J/(kg*K) */
@@ -156,17 +162,21 @@ void ClassPSPnew::run(void) {
   /* Radiation model components */
   double QTrans50;  // short wave radiation transmitted through to the canopy mid point height (W m-2)
   double Mu;        // variable from equation 4 from Parv. & Pom 2000
+  double Qext;      // extinction efficiency of the canopy from Pomeroy 2009
+  double tau_can100;   // canopy transmittance to shortwave radiation (-)
+  double tau_can50;   // canopy transmittance to shortwave radiation for the upper half of the canopy (-)
   double QTrUp50;   // solar radiation reflected off the surface snowpack and back to the canopy midpoint (W m-2)
   double QTrans100; // solar radiation transmitted through the canopy (W m-2)
   double CanSnowFrac;
 
-  double QlwUpC100;  // longwave radiation emitted from the subcanopy snowpack and lower portion of the canopy (W m-2)
+  double QlwUp;  // upwelling longwave radiation emitted from the subcanopy snowpack and lower portion of the canopy (W m-2)
+  double QlwDn;  // downwelling longwave radiation emitted from the subcanopy snowpack and upper portion of the canopy (W m-2)
   double tau_atm;    // atmospheric transmissivity (-)
   double tau_atm_prev_day; // atmospheric transmissivity (-) from the last measurement during the day to be used where we dont have tau estimates at night preferred method outside of Sask.
   bool is_tau_obs;  // flag to check if tau_atm has been assigned
   double hru_ea_mb;  // conversion of kpa to mb for clarity
   double F;          // variable to scale incoming longwave radiation based on cloudiness from Sicart et al., (2006)
-  double QlwInAtm;   // longwave emission from cloudy skies calculated from Eq. 9 from Sicart et al., (2006)
+  double QlwDnAtm;   // longwave emission from cloudy skies calculated from Eq. 9 from Sicart et al., (2006)
   double QsDnStar;   // downwelling shortwave radiation to the top of the ice sphere
   double QsUpStar;   // upwelling shortwave radiation reflected from the ground surface hitting the bottom of the ice sphere
   double QlwUpStar;  // upwelling longwave radiation from the surface snowpack and lower portion of the canopy hitting the bottom of the ice sphere
@@ -209,6 +219,30 @@ void ClassPSPnew::run(void) {
       is_tau_obs = false; 
     }
 
+    // incoming longwave radiation from cloudy sky following Sicart et al., (2006)
+    // Need to track this on all time steps
+      if (is_tau_obs){ // was tau observed on the prev. timestep?
+        tau_atm_prev_day = tau_atm;
+      }
+
+      if (QdflatE[hh] > 0.001 && QdflatE[hh] > Qsi_) // is it daytime ...
+      {
+        tau_atm = Qsi_/QdflatE[hh]; // Sicart et al., (2006) eq. 4 for daytime
+        is_tau_obs = true;
+      }
+      else {
+        // tau_atm = 0.818; // tau as in Global.cpp else statement as in LongVt
+        tau_atm = tau_atm_prev_day;
+        is_tau_obs = false;
+      }
+      
+      hru_ea_mb = hru_ea[hh]*10.0; // kPa to mb 
+      F = (1 + 0.44 * DblRHcan - 0.18 * tau_atm); // scaling factor >= 1 to increase longwave emission due to cloudiness, could update to use non iterating RH if breaking here
+      F = std::max(F, 1.0); // Ensure F is greater than or equal to 1 as in Sicart et al., (2006)
+
+      QlwDnAtm = 1.24 * pow(hru_ea_mb / (TAref[hh]+273.15), 1.0 / 7.0) * F * CRHM_constants::sbc * pow((TAref[hh]+273.15), 4)*UpperGF; // Eq. 9 from Sicart et al., (2006)
+
+
     if ((Snow_load[hh] > 0.0) || rain_load[hh] > 0.0){
 
       switch (variation){
@@ -238,7 +272,8 @@ void ClassPSPnew::run(void) {
       Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
 
       if(snowcover[hh] == 1){
-        TsnowG = T_s_0[hh]; // ground temp is equal to snowbal active layer temp when we have snow on the ground
+        // TsnowG = T_s_0[hh]; // ground temp is equal to snowbal active layer temp when we have snow on the ground
+        TsnowG = Ts[hh]; // ground temp is equal to snow surface temperature calculated in Canopy module
       } else {
         TsnowG = hru_T_g[hh]; // if no snowcover set to the ground temperature constant set as param in snobal
       }
@@ -292,11 +327,20 @@ void ClassPSPnew::run(void) {
       Nr = 2*Radius*u_Zcan/KinVisc;
       NuSh = 1.79+0.606*sqrt(Nr);
 
+
+
       if (SolarAng[hh] > 0.001)  {
-        Mu = LAI[hh]/(Ht[hh])*(0.781*SolarAng[hh]*cos(SolarAng[hh])+0.0591); // equation 4 from Parv. & Pom 2000
-        QTrans50 = Qsi_*exp(-Mu*(Ht[hh])/2/sin(SolarAng[hh])); // incoming solar radiation multiplied by the transmissivity calculated from equation 3 in Parv. & Pom 2000, IOW short wave radiation transmitted through to the canopy mid point height
-        QTrans100 = Qsi_*exp(-Mu*(Ht[hh])/sin(SolarAng[hh])); // as above but calculates solar transmitted through the canopy
-        QTrUp50 = (1.0-Albedo_snow[hh])*QTrans100*exp(LAI[hh]/(Ht[hh])*0.0591*(Ht[hh])/2); // solar radiation reflected off the surface snowpack and back to the canopy midpoint
+        //Qext = 0.781*SolarAng[hh]*cos(SolarAng[hh])+0.0591; // from Pomeroy and Dion (1996)
+        double limit = cosxsflat[hh] / cosxs[hh];
+        if (limit > 2.0){
+          limit = 2.0;
+        }
+        tau_can100 = Tauc[hh]; // calculated by canopy module
+        tau_can50 = exp(-k[hh] * (LAI_[hh]/2) * limit); // Eq 7. from Pomeroy et al., (2009) but sin of solar angle is appled to k already
+        
+        QTrans50 = Qsi_ * tau_can50; // incoming solar radiation transmitted through to the canopy mid point height, albedo for the ice particle handled below
+        QTrans100 = Qsi_ * tau_can100; // as above but calculates solar transmitted through the canopy
+        QTrUp50 = QTrans100*Albedo[hh]*tau_can50; // solar radiation reflected off the surface snowpack and back to the canopy midpoint
       }
       else {
         QTrans50 = 0.0;
@@ -352,41 +396,30 @@ void ClassPSPnew::run(void) {
             // used modelled vars for all.
 
             /* Solve for outgoing longwave for lower portion of canopy */
-            QlwUpC100 = SBC*(GapFrac*pow(TsnowG+273.15,4.0) +
-                        (1.0-GapFrac)*((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
-                                    + CanSnowFrac*pow(DblTCanSnow+273.15,4.0)));
+            double Kstar_H = Qsi_ * (1.0 - Alpha_c[hh] - Tauc[hh] * (1.0 - Albedo[hh])); // Eq. 6 from Pomeroy 2009, shortwave radiation absorbed by the canopy to be converted to longwave
+
+            double QlwUP_veg = CRHM_constants::sbc * CRHM_constants::emiss_c * pow(Tbiomass[hh] + 273.15, 4.0f) * (1.0 - CanSnowFrac) * (1.0 - GapFrac); // upward longwave from exposed veg on the bottom of the canopy
+            double QlwUP_cansnow = CRHM_constants::sbc * CRHM_constants::emiss * pow(DblTCanSnow + 273.15, 4.0f) * CanSnowFrac; // upward longwve from snow intercepted on the bottom of the canopy
+            double QlwUP_surfsnow = CRHM_constants::sbc * CRHM_constants::emiss * pow(Ts[hh] + 273.15, 4.0f) * GapFrac; // upward longwave from ground
+
+            QlwUp = QlwUP_veg + QlwUP_cansnow + QlwUP_surfsnow + (B_canopy[hh] * Kstar_H)/2; 
+
+            // QlwUpC100 = CRHM_constants::sbc*(GapFrac*pow(TsnowG+273.15,4.0) +
+            //             (1.0-GapFrac)*((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
+            //                         + CanSnowFrac*pow(DblTCanSnow+273.15,4.0)));
             //         double QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
 
-            if (is_tau_obs){ // was tau observed on the prev. timestep?
-              tau_atm_prev_day = tau_atm;
-            }
+            double QlwDn_veg = CRHM_constants::sbc * CRHM_constants::emiss_c * pow(Tbiomass[hh] + 273.15, 4.0f) * (1.0 - CanSnowFrac); // downwelling longwave from b
+            double QlwDn_cansnow = CRHM_constants::sbc * CRHM_constants::emiss * pow(DblTCanSnow + 273.15, 4.0f) * CanSnowFrac; // upward longwve from snow intercepted on the bottom of the canopy
 
-            // incoming longwave radiation from cloudy sky following Sicart et al., (2006)
-            if (QdflatE[hh] > 0.001 && QdflatE[hh] > Qsi_) // is it daytime ...
-            {
-              tau_atm = Qsi_/QdflatE[hh]; // Sicart et al., (2006) eq. 4 for daytime
-              is_tau_obs = true;
-            }
-            else {
-              // tau_atm = 0.818; // tau as in Global.cpp else statement as in LongVt
-              tau_atm = tau_atm_prev_day;
-              is_tau_obs = false;
-            }
-            
-            hru_ea_mb = hru_ea[hh]*10.0; // kPa to mb 
-            F = (1 + 0.44 * DblRHcan - 0.18 * tau_atm); // scaling factor >= 1 to increase longwave emission due to cloudiness, could update to use non iterating RH if breaking here
-            F = std::max(F, 1.0); // Ensure F is greater than or equal to 1 as in Sicart et al., (2006)
-
-            QlwInAtm = 1.24 * pow(hru_ea_mb / (TAref[hh]+273.15), 1.0 / 7.0) * F * SBC * pow((TAref[hh]+273.15), 4); // Eq. 9 from Sicart et al., (2006)
+            QlwDn = QlwDn_veg + QlwDn_cansnow + QlwDnAtm + (B_canopy[hh] * Kstar_H)/2; 
 
               /* Solve for particle net radiation*/
-            QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-Albedo_snow[hh]);
-            QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-Albedo_canopy[hh]);
-            QlwUpStar = M_PI*Radius*Radius*QlwUpC100;
-            QlwDnStar = M_PI*Radius*Radius*(QlwInAtm*UpperGF + SBC*(1.0-UpperGF)*
-                                  ((1.0-CanSnowFrac)*pow(Tbiomass[hh]+273.15,4.0)
-                                  + (CanSnowFrac*pow(DblTCanSnow+273.15,4.0))));
-            QlwOutStar = 2*M_PI*Radius*Radius*SBC*pow(DblTCanSnow+273.15,4.0); // TODO should this be 2piR^2 (i.e., two times the area of a circle for top and bottom or should this be a sphere?)
+            QsDnStar = M_PI*Radius*Radius*QTrans50*(1.0-Albedo_Snow[hh]); // shortwave through to the mid canopy snow particle
+            QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-Alpha_c[hh]);
+            QlwUpStar = M_PI*Radius*Radius*QlwUp;
+            QlwDnStar = M_PI*Radius*Radius*QlwDn;
+            QlwOutStar = 2*M_PI*Radius*Radius*CRHM_constants::sbc*pow(DblTCanSnow+273.15,4.0); // TODO should this be 2piR^2 (i.e., two times the area of a circle for top and bottom or should this be a sphere?)
             QnetStar = QsDnStar+QsUpStar+QlwDnStar+QlwUpStar-QlwOutStar;
 
             SVDensS = Common::SVDens(DblTCanSnow);
@@ -398,6 +431,7 @@ void ClassPSPnew::run(void) {
             Vhr = 2.0*M_PI*Radius*LambdaT*NuSh*(DblTCanSnow-DblTbarCan); // TODO need to confirm if raidus should be squared here as above Sensible heat transfer (j/s), positive when energy is transfered away from the ice sphere
 
             ebal_check = QnetStar + Vs - Vhr;
+            //ebal_check = Vs - Vhr; // this was original, same as above with rearranging and adding -QnetStar to Vhr
 
             if (ebal_check < 0.0){
               if (TItNum2 == 1)  {
