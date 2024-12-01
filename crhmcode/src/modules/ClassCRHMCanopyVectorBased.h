@@ -72,6 +72,7 @@ double *Subl_Cpy { NULL };
 double *cum_Subl_Cpy { NULL };
 double *cum_SUnload { NULL };
 double *cum_SUnload_H2O { NULL };
+double *t_snow_in_canopy { NULL };
 
 double *Clca { NULL };
 double *k { NULL };

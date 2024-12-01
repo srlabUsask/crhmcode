@@ -163,6 +163,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declstatdiag("cum_SUnload", TDim::NHRU, "Cumulative unloaded canopy snow as snow", "(mm)", &cum_SUnload);
 
+  declvar("t_snow_in_canopy", TDim::NHRU, " duration snow intercepted in the canopy", "(seconds)", &t_snow_in_canopy);
+
   declvar("net_snow", TDim::NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
 
   declstatdiag("cum_net_snow", TDim::NHRU, "Cumulative hru_snow minus interception", "(mm)", &cum_net_snow);
@@ -253,6 +255,7 @@ void ClassCRHMCanopyVectorBased::init(void)
     cum_intcp_evap[hh] = 0.0;
     cum_SUnload[hh] = 0.0;
     cum_SUnload_H2O[hh] = 0.0;
+    t_snow_in_canopy[hh] = 0.0;
 
     if (Ht[hh] > Zwind[hh])
     {
@@ -314,6 +317,9 @@ void ClassCRHMCanopyVectorBased::run(void)
     SUnload_H2O[hh] = 0.0;
     Subl_Cpy[hh] = 0.0;
     canopy_snowmelt[hh] = 0.0;
+    if(Snow_load[hh] < 1.0){ // only accumulate duration snow in canopy once above threshold of 1.0 mm
+      t_snow_in_canopy[hh] = 0.0;
+    }
 
 
     // Canopy temperature is approximated by the air temperature.
@@ -606,7 +612,7 @@ void ClassCRHMCanopyVectorBased::run(void)
           if ((Snow_load[hh] / Lstar) <= 0.0) // using original Lstar and not Lmax here from HP98 as this is how to sublimation paramaterisation was tested and works well. Justified as Lstar gives better index of fraction of canopy covered by snow while Lmax is the total amount the canopy can hold
             Ce = 0.07;
           else
-            Ce = ks * pow((Snow_load[hh] / Lstar), -Fract);
+            Ce = ks * pow((Snow_load[hh] / Lstar), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed
 
           // calculate 'potential' canopy sublimation:
 
@@ -614,7 +620,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           // limit sublimation to canopy snow available and take sublimated snow away from canopy snow at timestep start
 
-          Subl_Cpy[hh] = -Snow_load[hh] * Vi * PBSM_constants::LATH * Global::Interval * 24 * 3600 / PBSM_constants::LATH; // make W/m2
+          Subl_Cpy[hh] = -Snow_load[hh] * Vi * Global::Interval * 24 * 3600; // make W/m2
           if (Subl_Cpy[hh] > Snow_load[hh])
           {
             Subl_Cpy[hh] = Snow_load[hh];
@@ -690,19 +696,20 @@ void ClassCRHMCanopyVectorBased::run(void)
           if ((Ht_mid - (2.0 / 3.0) * Zwind[hh]) > 0.0)
           {
             u_mid = hru_u[hh] * log((Ht_mid - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
-            double fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
+            fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
           }
 
           // duration based unloading
-          const double a_t = 8.194345e-06;  // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
-          const double b_t = -1.540050e+02; // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
+          const double a_t = 8.194356e-06;  // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
+          const double b_t = -1.188312e-05; // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
 
-          double t_snow_in_canopy = 12 * 60 * 60; // duration snow intercepted in the canopy, set to constant of 12 hours. TODO need to track duration that snow has been intercepted in the canopy. Can do this similar to snowpack albedo calculation.
+          double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
 
-          double ft = a_t * exp(b_t * t_snow_in_canopy);
+          t_snow_in_canopy[hh] += dt; // duration snow intercepted in the canopy
+          
+          double ft = a_t * exp(b_t * t_snow_in_canopy[hh]);
 
           // ablation via temperature, wind, and duration based unloading
-          double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
           SUnload[hh] = Snow_load[hh] * (fT + fu + ft) * dt; // calculate solid snow unloading over the time interval
 
           if (SUnload[hh] > Snow_load[hh])
