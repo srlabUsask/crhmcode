@@ -772,11 +772,14 @@ void ClassCRHMCanopyVectorBased::run(void)
             if (U_melt <= U_conv){ // not eneough energy to melt all canopy snow
               canopy_snowmelt[hh] = MELT(U_melt);
               Snow_load[hh] -= canopy_snowmelt[hh];
-              rain_load[hh] += canopy_snowmelt[hh]; // melting snow will drip off canopy based on rainwater routine below this is different from the Ellis 2010 param above which immediately drips off canopy snow melt with no holding capacity.
+              drip_Cpy[hh] = canopy_snowmelt[hh]; // no holding capacity for canopy snowmelt immediately drips off and does not evaporate, this is how the original routine was and better matches obs at fortress
+              //rain_load[hh] += canopy_snowmelt[hh]; // melting snow will drip off canopy based on rainwater routine below this is different from the Ellis 2010 param above which immediately drips off canopy snow melt with no holding capacity.
               TCanSnow[hh] = 0; // canopy snow is melting so set to 0 deg. C, this will be used as the snow temp initilization in PSPnew
               // dUdt = dUdt - LH_FUS(FREEZE) * canopy_snowmelt[hh] / dt; // internal energy change to the snowpack due to melt, subtracting energy here as energy is required to melt snow
             } else { // all snow in the canopy will be melted
-              rain_load[hh] += Snow_load[hh]; // move all snow into the rain store
+              canopy_snowmelt[hh] = Snow_load[hh];
+              drip_Cpy[hh] = canopy_snowmelt[hh]; // no holding capacity for canopy snowmelt immediately drips off and does not evaporate, this is how the original routine was and better matches obs at fortress
+              //rain_load[hh] += Snow_load[hh]; // move all snow into the rain store
               U_warm = U_melt - U_conv; 
               TCanSnow[hh] = U_warm / (CRHM_constants::cw * rain_load[hh]); // temperature of snow intercepted in the canopy after freezing liquid water, this will be used as the snow temp initilization in PSPnew
               // dUdt = dUdt + LH_FUS(FREEZE) * Snow_load[hh] / dt; // internal energy change to the snowpack due to melt, subtracting energy here as energy is required to melt snow
@@ -804,7 +807,7 @@ void ClassCRHMCanopyVectorBased::run(void)
       break;
     } // switch
 
-    // calculate horizontal canopy-coverage (Cc):
+    // Canopy Liquid Water Routine
 
     double smax, Q; // cannot be in switch structure
 
