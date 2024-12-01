@@ -71,6 +71,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   variation_set = VARIATION_ORG;
 
+  declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
+
   // get variables:
 
   declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
@@ -263,7 +265,8 @@ void ClassCRHMCanopyVectorBased::init(void)
 }
 
 void ClassCRHMCanopyVectorBased::run(void)
-{
+{ 
+
   double Exposure, Vf, Vf_, Kstar_H, Kd;
   LAI_[hh] = 0.0; 
   // double Tau; variable is unreferenced commenting out for now - jhs507
@@ -887,6 +890,10 @@ void ClassCRHMCanopyVectorBased::run(void)
     net_p[hh] = net_rain[hh] + net_snow[hh];
     cum_net_rain[hh] += net_rain[hh];
     cum_net_snow[hh] += net_snow[hh];
+        // set assimilate observed snow load for begining of select events
+    if(obs_snow_load[hh] < 9999){
+      Snow_load[hh] = obs_snow_load[hh];
+    }
   } // end for
 }
 
