@@ -73,7 +73,7 @@ const double *hru_T_g { NULL };
 const double *Ts { NULL };
 const double *Snow_load { NULL };
 const double *rain_load { NULL };
-const double *Lmax { NULL };
+// const double *Lmax { NULL };
 const double *u_FHt { NULL };
 const double *ZwindFHt { NULL };
 const double *Cp_h2o { NULL };

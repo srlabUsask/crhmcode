@@ -78,7 +78,7 @@ void ClassPSPnew::decl(void) {
   declparam("Biomass", TDim::NHRU, "30.0", "0.0", "100.0", "Biomass", "(kg/m^2)", &Biomass);
 
   declgetparam("*", "hru_T_g", "(" + string(DEGREE_CELSIUS) + ")", &hru_T_g); // input param for snobal
-  declgetparam("*", "Lmax", "()", &Lmax); // input param for Canopy module
+  // declgetparam("*", "Lmax", "()", &Lmax); // input param for Canopy module
   declgetparam("*", "Zref", "()", &Zref); // input param for Canopy module
   declgetparam("*", "Zwind", "()", &Zwind); // input param for Canopy module
   declgetparam("*", "Ht", "()", &Ht); // input param for Canopy module  
@@ -288,7 +288,7 @@ void ClassPSPnew::run(void) {
       DblRHcan = RHrefhh; // RHref[hh]; // fix for precision problem
       DblTCanSnow  = TCanSnow[hh];
 
-      CanSnowFrac = pow(Snow_load[hh]/Lmax[hh],0.8); // changed from HP98 Lstar to larger Lmax
+      CanSnowFrac = pow(Snow_load[hh]/Lstar,0.8); // changed from HP98 Lstar to larger Lmax
 
       VPref = RHrefhh* Common::estar(TAref[hh]);
       SVDensA = Common::SVDens(TAref[hh]);
