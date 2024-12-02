@@ -748,7 +748,11 @@ void ClassCRHMCanopyVectorBased::run(void)
           double ft = a_t * exp(b_t * t_snow_in_canopy[hh]);
 
           // ablation via temperature, wind, and duration based unloading
-          SUnload[hh] += Snow_load[hh] * (fT + fu + ft) * dt; // calculate solid snow unloading over the time interval
+          // SUnload[hh] = Snow_load[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
+
+          // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
+          double kunld = fT + fu + ft;
+          SUnload[hh] = Snow_load[hh] * (1-exp(-kunld * dt)); 
 
           if (SUnload[hh] > Snow_load[hh])
           {
