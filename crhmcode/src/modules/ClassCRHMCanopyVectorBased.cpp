@@ -281,6 +281,7 @@ void ClassCRHMCanopyVectorBased::run(void)
   double U_cool; // available energy sink left over after freezing all liquid water used to cool canopy snow
   double U_melt; // energy available for melting snow intercepted in the canopy
   double U_warm; // remaining energy left over to heat the canopy h2o after melting all snow intercepted in the canopy
+  double u_mid; // wind speed at half canopy height
 
   for (hh = 0; chkStruct(); ++hh)
   {
@@ -492,7 +493,9 @@ void ClassCRHMCanopyVectorBased::run(void)
           {
             case 0:
             {  // original using Cionco wind model for dense canopies
-              if ((Ht_1_third - (2.0 / 3.0) * Zwind[hh]) > 0.0){
+
+              // wind speed used for vector based initial snow interception
+              if ((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) > 0.0){
                 u_FHt[hh] = hru_u[hh] * log((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
                 double A = 2.4338 + 3.45753 * exp(-u_FHt[hh]);                       /* Modified Cionco wind model */
                 u_1_third_Ht[hh] = u_FHt[hh] * exp(A * ((Ht_1_third) / (Ht[hh])-1.0)); /* calculates canopy windspd  */
@@ -507,12 +510,14 @@ void ClassCRHMCanopyVectorBased::run(void)
               double d0 = 0.5791121; // displacement height observed at sparse forest around Fortress Forest Tower
               double z0m = 0.4995565; // roughness length observed at above site
               
+              // wind speed used for vector based initial snow interception
               if ((Ht_1_third - d0) > z0m){
                 double Ustar = hru_u[hh]*PBSM_constants::KARMAN/(log((Zwind[hh]-d0)/z0m));
-                u_1_third_Ht[hh] = hru_u[hh]/PBSM_constants::KARMAN * log((Ht_1_third - d0)/z0m);
+                u_1_third_Ht[hh] = Ustar/PBSM_constants::KARMAN * log((Ht_1_third - d0)/z0m);
               } else {
                  u_1_third_Ht[hh] = 0.0;
               }
+              break;
             } // case 1
           } // end of switch CanopyWind
 
@@ -623,7 +628,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           // limit sublimation to canopy snow available and take sublimated snow away from canopy snow at timestep start
 
-          Subl_Cpy[hh] = -Snow_load[hh] * Vi * Global::Interval * 24 * 3600; // make W/m2
+          Subl_Cpy[hh] = -Snow_load[hh] * Vi * Global::Interval * 24 * 3600;
           if (Subl_Cpy[hh] > Snow_load[hh])
           {
             Subl_Cpy[hh] = Snow_load[hh];
@@ -693,18 +698,44 @@ void ClassCRHMCanopyVectorBased::run(void)
           // mechanical wind induced unloading
           const double a_u = 5.204024e-06;      // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
           const double b_u = 7.363594e-02;      // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
-          double Ht_mid = Ht[hh] * (1.0 / 2.0); // half of canopy height
-          double u_mid = 0;
-          double fu = 0;
-          if ((Ht_mid - (2.0 / 3.0) * Zwind[hh]) > 0.0)
+
+           switch (CanopyWindSwitch[hh])
           {
-            u_mid = hru_u[hh] * log((Ht_mid - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
-            fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
-          }
+            case 0:
+            {  // original using Cionco wind model for dense canopies
+              // wind speed for wind induced unloading at 1/2 canopy height 
+              if ((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) > 0.0){
+                u_FHt[hh] = hru_u[hh] * log((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
+                double A = 2.4338 + 3.45753 * exp(-u_FHt[hh]);                       /* Modified Cionco wind model */
+                u_mid = u_FHt[hh] * exp(A * ((Ht[hh]/2) / (Ht[hh])-1.0)); /* calculates canopy windspd  */
+              } else {
+                u_mid = 0.0;
+              }
+              break;
+            } // case 0
+
+            case 1:
+            { // Canopy wind profile developed at Fortress sparse canopy
+              double d0 = 0.5791121; // displacement height observed at sparse forest around Fortress Forest Tower
+              double z0m = 0.4995565; // roughness length observed at above site
+
+              // wind speed for wind induced unloading at 1/2 canopy height 
+              if ((Ht[hh]/2 - d0) > z0m){
+                double Ustar = hru_u[hh]*PBSM_constants::KARMAN/(log((Zwind[hh]-d0)/z0m));
+                u_mid = Ustar/PBSM_constants::KARMAN * log((Ht[hh]/2 - d0)/z0m);
+              } else {
+                u_mid = 0.0;
+              }
+
+              break;
+            } // case 1
+          } // end of switch CanopyWind
+
+          double fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
 
           // duration based unloading
-          const double a_t = 8.194356e-06;  // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
-          const double b_t = -1.188312e-05; // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
+          const double a_t = 2.058989e-06;  // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
+          const double b_t = -1.188307e-05; // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
 
           double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
 
