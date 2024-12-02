@@ -321,7 +321,7 @@ void ClassCRHMCanopyVectorBased::run(void)
     SUnload_H2O[hh] = 0.0;
     Subl_Cpy[hh] = 0.0;
     canopy_snowmelt[hh] = 0.0;
-    if(Snow_load[hh] < 1.0){ // only accumulate duration snow in canopy once above threshold of 1.0 mm
+    if(Snow_load[hh] <= 0.0){
       t_snow_in_canopy[hh] = 0.0;
     }
 
@@ -617,10 +617,10 @@ void ClassCRHMCanopyVectorBased::run(void)
           double Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
 
           double Ce; 
-          if ((Snow_load[hh] / Lstar) <= 0.0) // using original Lstar and not Lmax here from HP98 as this is how to sublimation paramaterisation was tested and works well. Justified as Lstar gives better index of fraction of canopy covered by snow while Lmax is the total amount the canopy can hold
+          if ((Snow_load[hh] / Lmax[hh]) <= 0.0) // using original Lstar and not Lmax here from HP98 as this is how to sublimation paramaterisation was tested and works well. Justified as Lstar gives better index of fraction of canopy covered by snow while Lmax is the total amount the canopy can hold
             Ce = 0.07;
           else
-            Ce = ks * pow((Snow_load[hh] / Lstar), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed
+            Ce = ks * pow((Snow_load[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed
 
           // calculate 'potential' canopy sublimation:
 
