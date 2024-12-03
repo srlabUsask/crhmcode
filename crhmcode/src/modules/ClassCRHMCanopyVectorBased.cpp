@@ -603,7 +603,7 @@ void ClassCRHMCanopyVectorBased::run(void)
           D = 2.06e-5 * pow((hru_t[hh] + 273.0f) / 273.0f, -1.75f); // diffusivity of water vapour
           C1 = 1.0 / (D * SvDens * Nu);
 
-          Alpha = 5.0;
+          // Alpha = 5.0;
           Mpm = 4.0 / 3.0 * M_PI * PBSM_constants::DICE * Radius * Radius * Radius; // 18Mar2022: remove Gamma Distribution Correction term, *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
                                                                                     // sublimation rate of single 'ideal' ice sphere:
 
@@ -613,14 +613,14 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           // snow exposure coefficient (Ce):
 
-          double RhoS = 67.92 + 51.25*exp(hru_t[hh]/2.59);
-          double Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
+          // double RhoS = 67.92 + 51.25*exp(hru_t[hh]/2.59);
+          // double Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
 
           double Ce; 
           if ((Snow_load[hh] / Lmax[hh]) <= 0.0) // using original Lstar and not Lmax here from HP98 as this is how to sublimation paramaterisation was tested and works well. Justified as Lstar gives better index of fraction of canopy covered by snow while Lmax is the total amount the canopy can hold
             Ce = 0.07;
           else
-            Ce = ks * pow((Snow_load[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed
+            Ce = ks * pow((Snow_load[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar 
 
           // calculate 'potential' canopy sublimation:
 
@@ -790,7 +790,6 @@ void ClassCRHMCanopyVectorBased::run(void)
           // The algorithm calculates the change in internal energy of the vegetation canopy as a result of the phase change processes
           // Currently the canopy snow temperature is approximated by the classPSPnew module which was developed by Parv. & Pomeroy 2000.
           
-          double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
           Cp_h2o[hh] = (CRHM_constants::cw * rain_load[hh]) + (CRHM_constants::ci * Snow_load[hh]); // volumetric heat capacity of frozen and liquid h2o intercepted in the canopy (j m-2 K-1). This is different from CLASS who incorporates the vegetation elements here too but since PSPnew treats veg temp as different we do not have the same here.
           
           // Energy sink available for freezing liquid water intercepted in the canopy canopy only if T_snow < 0
@@ -943,9 +942,13 @@ void ClassCRHMCanopyVectorBased::run(void)
     net_p[hh] = net_rain[hh] + net_snow[hh];
     cum_net_rain[hh] += net_rain[hh];
     cum_net_snow[hh] += net_snow[hh];
-        // set assimilate observed snow load for begining of select events
+
+    // set assimilate observed snow load for begining of select events
     if(obs_snow_load[hh] < 9999){
       Snow_load[hh] = obs_snow_load[hh];
+      SUnload[hh] = 0.0;
+      canopy_snowmelt[hh] = 0.0;
+      Subl_Cpy[hh] = 0.0;
     }
   } // end for
 }
