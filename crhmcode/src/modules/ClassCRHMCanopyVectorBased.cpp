@@ -755,7 +755,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
           double kunld = fT + fu + ft;
-          SUnload[hh] = Snow_load[hh] * (1-exp(-kunld * dt)); 
+          SUnload[hh] += Snow_load[hh] * (1-exp(-kunld * dt)); 
 
           if (SUnload[hh] > Snow_load[hh])
           {
