@@ -689,6 +689,13 @@ void ClassCRHMCanopyVectorBased::run(void)
 
         case 1:
         { // This is the updated mass snow unloading parameterisations from Cebulski & Pomeroy to unload based on time, wind, and air temperature.
+          
+          // check maximum canopy snow load
+          if (Snow_load[hh] > Lmax[hh])
+          {
+            SUnload[hh] = Snow_load[hh] - Lmax[hh];
+          }
+
           // temperature induced unloading
           const double a_T = 2.584003e-05; // Cebulski & Pomeroy coef from exponential function of unloading + drip and air temp measurements at Fortress mountain when wind speed <= 1 m/s.
           const double b_T = 1.646875e-01; // Cebulski & Pomeroy coef from exponential function of unloading + drip and air temp measurements at Fortress mountain when wind speed <= 1 m/s.
@@ -744,7 +751,11 @@ void ClassCRHMCanopyVectorBased::run(void)
           double ft = a_t * exp(b_t * t_snow_in_canopy[hh]);
 
           // ablation via temperature, wind, and duration based unloading
-          SUnload[hh] = Snow_load[hh] * (fT + fu + ft) * dt; // calculate solid snow unloading over the time interval
+          // SUnload[hh] = Snow_load[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
+
+          // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
+          double kunld = fT + fu + ft;
+          SUnload[hh] = Snow_load[hh] * (1-exp(-kunld * dt)); 
 
           if (SUnload[hh] > Snow_load[hh])
           {
@@ -757,7 +768,8 @@ void ClassCRHMCanopyVectorBased::run(void)
           }
 
           cum_SUnload[hh] += SUnload[hh];
-          break;
+          break;          
+
         } // case 1
         } // MassUnloadingSwitch
 
