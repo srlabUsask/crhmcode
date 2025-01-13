@@ -165,8 +165,6 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declstatdiag("cum_SUnload", TDim::NHRU, "Cumulative unloaded canopy snow as snow", "(mm)", &cum_SUnload);
 
-  declvar("t_snow_in_canopy", TDim::NHRU, " duration snow intercepted in the canopy", "(seconds)", &t_snow_in_canopy);
-
   declvar("net_snow", TDim::NHRU, "hru_snow minus interception", "(mm/int)", &net_snow);
 
   declstatdiag("cum_net_snow", TDim::NHRU, "Cumulative hru_snow minus interception", "(mm)", &cum_net_snow);
@@ -257,7 +255,6 @@ void ClassCRHMCanopyVectorBased::init(void)
     cum_intcp_evap[hh] = 0.0;
     cum_SUnload[hh] = 0.0;
     cum_SUnload_H2O[hh] = 0.0;
-    t_snow_in_canopy[hh] = 0.0;
 
     if (Ht[hh] > Zwind[hh])
     {
@@ -321,10 +318,6 @@ void ClassCRHMCanopyVectorBased::run(void)
     SUnload_H2O[hh] = 0.0;
     Subl_Cpy[hh] = 0.0;
     canopy_snowmelt[hh] = 0.0;
-    if(Snow_load[hh] <= 0.0){
-      t_snow_in_canopy[hh] = 0.0;
-    }
-
 
     // Canopy temperature is approximated by the air temperature.
 
@@ -811,21 +804,13 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           double fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
 
-          // duration based unloading
-          const double a_t = 2.058989e-06;  // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
-          const double b_t = -1.188307e-05; // Cebulski & Pomeroy coef from exponential function of unloading + drip and duration snow has been intercepted in the canopy at Fortress mountain when wind speed <= 1 m/s and air temperature < -6 C.
-
           double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
-
-          t_snow_in_canopy[hh] += dt; // duration snow intercepted in the canopy
-          
-          double ft = a_t * exp(b_t * t_snow_in_canopy[hh]);
 
           // ablation via temperature, wind, and duration based unloading
           // SUnload[hh] = Snow_load[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
 
           // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
-          double kunld = fT + fu + ft;
+          double kunld = fT + fu;
           SUnload[hh] += Snow_load[hh] * (1-exp(-kunld * dt)); 
 
           if (SUnload[hh] > Snow_load[hh])
