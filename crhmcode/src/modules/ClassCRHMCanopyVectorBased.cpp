@@ -760,11 +760,15 @@ void ClassCRHMCanopyVectorBased::run(void)
             SUnload[hh] = Snow_load[hh] - Lmax[hh];
           }
 
-          // temperature induced unloading
-          const double a_T = 2.584003e-05; // Cebulski & Pomeroy coef from exponential function of unloading + drip and air temp measurements at Fortress mountain when wind speed <= 1 m/s.
-          const double b_T = 1.646875e-01; // Cebulski & Pomeroy coef from exponential function of unloading + drip and air temp measurements at Fortress mountain when wind speed <= 1 m/s.
+          // // temperature induced unloading based on exponential function
+          // const double a_T = 2.584003e-05; // Cebulski & Pomeroy coef from exponential function of unloading + drip and air temp measurements at Fortress mountain when wind speed <= 1 m/s.
+          // const double b_T = 1.646875e-01; // Cebulski & Pomeroy coef from exponential function of unloading + drip and air temp measurements at Fortress mountain when wind speed <= 1 m/s.
 
-          double fT = a_T * exp(b_T * hru_t[hh]); // unloading rate based on warming of snow in the canopy (s-1), still need to partition out the portion of this that is drip vs mass unloading
+          // double fT = a_T * exp(b_T * hru_t[hh]); // unloading rate based on warming of snow in the canopy (s-1), still need to partition out the portion of this that is drip vs mass unloading
+
+          // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt based on method from Andreadis et al., (2009)
+          double melt_drip_ratio = 1.67; // based on 2023-03-28 ablation event at forest tower (del_drip = 1.5, del_unld = 4, del_temp_unld = 2.5, ratio = 2.5/1.5) 
+          double SUnloadMelt = canopy_snowmelt[hh] * melt_drip_ratio;
 
           // mechanical wind induced unloading
           const double a_u = 5.204024e-06;      // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
@@ -810,8 +814,9 @@ void ClassCRHMCanopyVectorBased::run(void)
           // SUnload[hh] = Snow_load[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
 
           // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
-          double kunld = fT + fu;
+          double kunld = fu;
           SUnload[hh] += Snow_load[hh] * (1-exp(-kunld * dt)); 
+          SUnload[hh] += SUnloadMelt;
 
           if (SUnload[hh] > Snow_load[hh])
           {
