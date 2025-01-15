@@ -141,6 +141,7 @@ const double *Surrounding_Ht { NULL };
 const double *Gap_diameter { NULL };
 const double *Alpha_c { NULL };
 const double *B_canopy { NULL };
+const double *melt_drip_ratio { NULL };
 
 const long *CanopyClearing { NULL };
 const long *SublimationSwitch { NULL };

@@ -209,7 +209,7 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declparam("LAI", TDim::NHRU, "[2.2]", "0.1", "20.0", "leaf-area-index", "()", &LAI);
 
-  declparam("Sbar", TDim::NHRU, "6.6", "0.0", "20.0", "Uncorrected snow capacity", "(kg/m^2)", &Sbar);
+  declparam("Sbar", TDim::NHRU, "[6.6]", "0.0", "20.0", "Uncorrected snow capacity", "(kg/m^2)", &Sbar);
 
   declparam("Lmax", TDim::NHRU, "[50]", "0.0", "100.0", "maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 based on max observed in Storck et al. 2002 and Cebulski & Pomeroy", "(kg/m^2)", &Lmax);
 
@@ -230,6 +230,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
   declparam("MeltwaterSwitch", TDim::NHRU, "[0]", "0", "1", "Canopy snow meltwater drip parameterisation options: Ellis et al. (2010) and Floyd (2012) - 0, CLASS - 1", "()", &MeltwaterSwitch);
 
   declparam("CanopyWindSwitch", TDim::NHRU, "[0]", "0", "1", "Canopy wind model to use at height Zcan, 0 - for Cionco, 1 - for Prandtl-von Kármán log-linear relationship", "()", &CanopyWindSwitch);
+
+  declparam("melt_drip_ratio", TDim::NHRU, "[2]", "0.0", "10", "Ratio of mass unloading of solid snow due to melt compared to canopy snowmelt.", "(-)", &melt_drip_ratio);
 
   decldiagparam("Alpha_c", TDim::NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
 
@@ -767,8 +769,8 @@ void ClassCRHMCanopyVectorBased::run(void)
           // double fT = a_T * exp(b_T * hru_t[hh]); // unloading rate based on warming of snow in the canopy (s-1), still need to partition out the portion of this that is drip vs mass unloading
 
           // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt based on method from Andreadis et al., (2009)
-          double melt_drip_ratio = 1.67; // based on 2023-03-28 ablation event at forest tower (del_drip = 1.5, del_unld = 4, del_temp_unld = 2.5, ratio = 2.5/1.5) 
-          double SUnloadMelt = canopy_snowmelt[hh] * melt_drip_ratio;
+          // double melt_drip_ratio = 1.67; // based on 2023-03-28 ablation event at forest tower (del_drip = 1.5, del_unld = 4, del_temp_unld = 2.5, ratio = 2.5/1.5) 
+          double SUnloadMelt = canopy_snowmelt[hh] * melt_drip_ratio[hh];
 
           // mechanical wind induced unloading
           const double a_u = 5.204024e-06;      // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
