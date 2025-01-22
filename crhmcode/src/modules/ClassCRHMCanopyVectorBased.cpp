@@ -612,7 +612,7 @@ void ClassCRHMCanopyVectorBased::run(void)
           // double Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
 
           double Ce; 
-          if ((Snow_load[hh] / Lmax[hh]) <= 0.0) // using original Lstar and not Lmax here from HP98 as this is how to sublimation paramaterisation was tested and works well. Justified as Lstar gives better index of fraction of canopy covered by snow while Lmax is the total amount the canopy can hold
+          if ((Snow_load[hh] / Lmax[hh]) <= 0.0) // Using Lmax instead of Lstar as gives more appropriate index of canopy fullness
             Ce = 0.07;
           else
             Ce = ks * pow((Snow_load[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar 
