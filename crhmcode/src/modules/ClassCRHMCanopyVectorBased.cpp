@@ -775,6 +775,8 @@ void ClassCRHMCanopyVectorBased::run(void)
           // mechanical wind induced unloading
           const double a_u = 3.166691e-06;      // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
           const double b_u = 1.134114e-01;      // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
+          const double u_mid_th = 1.0; // threshold above which canopy snow unloading due to wind is calculated and is not 0.
+          double fu = 0.0;
 
            switch (CanopyWindSwitch[hh])
           {
@@ -808,7 +810,11 @@ void ClassCRHMCanopyVectorBased::run(void)
             } // case 1
           } // end of switch CanopyWind
 
-          double fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
+          if(u_mid >= u_mid_th){
+            fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
+          } else {
+            fu = 0.0; // less than wind induced unloading threshold so set equal to 0.
+          }
 
           double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
 
