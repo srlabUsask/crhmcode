@@ -88,8 +88,7 @@ void ClassPSPnew::decl(void) {
   declgetparam("*", "CanopyWindSwitch", "()", &CanopyWindSwitch); // input param for Canopy module  
   declgetparam("*", "Alpha_c", "()", &Alpha_c); // canopy albedo
   declgetparam("*", "Albedo_Snow", "()", &Albedo_Snow); // new snow albedo
-  declgetparam("*", "B_canopy", "()", &B_canopy); // new snow albedo
-
+  declgetparam("*", "B_canopy", "()", &B_canopy); // shortwave extinction coefficient for calculating longwave emission from the canopy (Pomeroy et al., 2009)
 
   declgetvar("obs", "hru_u", "(m/s)", &hru_u);
   declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &TAref);
