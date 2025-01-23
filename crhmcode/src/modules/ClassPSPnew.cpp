@@ -78,7 +78,7 @@ void ClassPSPnew::decl(void) {
   declparam("Biomass", TDim::NHRU, "30.0", "0.0", "100.0", "Biomass", "(kg/m^2)", &Biomass);
 
   declgetparam("*", "hru_T_g", "(" + string(DEGREE_CELSIUS) + ")", &hru_T_g); // input param for snobal
-  // declgetparam("*", "Lmax", "()", &Lmax); // input param for Canopy module
+  declgetparam("*", "Lmax", "()", &Lmax); // input param for Canopy module
   declgetparam("*", "Zref", "()", &Zref); // input param for Canopy module
   declgetparam("*", "Zwind", "()", &Zwind); // input param for Canopy module
   declgetparam("*", "Ht", "()", &Ht); // input param for Canopy module  
@@ -203,6 +203,8 @@ void ClassPSPnew::run(void) {
     const double GapFrac = 1-Cc[hh];    /* Canopy gap fraction */
     const double UpperGF = 1-(Cc[hh]/2);    /* Mid-canopy level gap fraction */
 
+    // initilize canopy temperature at air temperature
+    // NOTE: TCanSnow is set equal to 0 in the canopy module if found to be melting
     if (getstep() == 1){
       Tbiomass[hh] = TAref[hh];
       TCanSnow[hh] = TAref[hh];
@@ -268,7 +270,7 @@ void ClassPSPnew::run(void) {
       } // switch
 
       RhoS = 67.92 + 51.25*exp(TAref[hh]/2.59);
-      Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
+      // Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
 
       if(snowcover[hh] == 1){
         // TsnowG = T_s_0[hh]; // ground temp is equal to snowbal active layer temp when we have snow on the ground
@@ -287,7 +289,7 @@ void ClassPSPnew::run(void) {
       DblRHcan = RHrefhh; // RHref[hh]; // fix for precision problem
       DblTCanSnow  = TCanSnow[hh];
 
-      CanSnowFrac = pow(Snow_load[hh]/Lstar,0.8); // changed from HP98 Lstar to larger Lmax
+      CanSnowFrac = pow(Snow_load[hh]/Lmax[hh],0.8); // changed from HP98 Lstar to larger Lmax to better represent canopy
 
       VPref = RHrefhh* Common::estar(TAref[hh]);
       SVDensA = Common::SVDens(TAref[hh]);
@@ -427,7 +429,7 @@ void ClassPSPnew::run(void) {
             //Vs = (2.0*M_PI*D*Radius*(SVDensC*DblRHcan-SVDensS)*NuSh)*Hs; // original in PSPnew
             Vs = (2.0*M_PI*Radius*D*NuSh*(SVDensC*DblRHcan-SVDensS))*Hs; // Latent Heat Energy flux (j/s) relative to the ice sphere (negative for sublimation of particle). SVDensS not multiplied by RH because assumed to be saturated i.e., at 1.0
             //Vhr = (2.0*M_PI*LambdaT*Radius*(DblTCanSnow-DblTbarCan)*NuSh);  // original in PSPnew except that QnetStar was subtracted here originally, now moved this down to the ebal check
-            Vhr = 2.0*M_PI*Radius*LambdaT*NuSh*(DblTCanSnow-DblTbarCan); // TODO need to confirm if raidus should be squared here as above Sensible heat transfer (j/s), positive when energy is transfered away from the ice sphere
+            Vhr = 2.0*M_PI*Radius*LambdaT*NuSh*(DblTCanSnow-DblTbarCan); // Sensible heat transfer (j/s), positive when energy is transfered away from the ice sphere
 
             ebal_check = QnetStar + Vs - Vhr;
             //ebal_check = Vs - Vhr; // this was original, same as above with rearranging and adding -QnetStar to Vhr
@@ -451,7 +453,7 @@ void ClassPSPnew::run(void) {
           } while (fabs(ebal_check) >= 0.000001); /* Canopy Snow and Biomass[hh] T iteration loop */
 
           Vs = Vs/(4.0/3.0*M_PI*pow(Radius, 3.0)*RhoI)/Hs;
-          Ce = k1*pow(Snow_load[hh]/Lstar, -Fract); // using Lmax here results in lower canopy temp
+          Ce = k1*pow(Snow_load[hh]/Lmax[hh], -Fract); // using Lmax here results in lower canopy temp
           Vi = Vs*Ce;
           Qsubl[hh] = Snow_load[hh]*Vi*Hs;
           Qe = Hs*CdragE*(u_FHt[hh]-u_Zcan)*(SVDensA*RHrefhh-SVDensC*DblRHcan)*Stabil;
