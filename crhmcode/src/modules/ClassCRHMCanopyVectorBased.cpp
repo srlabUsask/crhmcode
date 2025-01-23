@@ -155,6 +155,10 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declvar("canopy_snowmelt", TDim::NHRU, "amount of snow intercepted in the canopy that is melted ", "(mm/int)", &canopy_snowmelt);
 
+  declvar("SUnloadMelt", TDim::NHRU, "solid snow unloaded from the canopy proportional to melt. ", "(mm/int)", &SUnloadMelt);
+
+  declvar("SUnloadWind", TDim::NHRU, "solid snow unloading from the canopy induced by wind.", "(mm/int)", &SUnloadWind);
+
   declvar("Cp_h2o", TDim::NHRU, "Bulk volumetric heat capacity of frozen and liquid h2o intercepted in the canopy.", "(j m-2 K-1)", &Cp_h2o);
 
   declvar("SUnload", TDim::NHRU, "unloaded canopy snow", "(mm/int)", &SUnload);
@@ -320,6 +324,8 @@ void ClassCRHMCanopyVectorBased::run(void)
     SUnload_H2O[hh] = 0.0;
     Subl_Cpy[hh] = 0.0;
     canopy_snowmelt[hh] = 0.0;
+    SUnloadMelt[hh] = 0.0;
+    SUnloadWind[hh] = 0.0;
 
     // Canopy temperature is approximated by the air temperature.
 
@@ -770,7 +776,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt based on method from Andreadis et al., (2009)
           // double melt_drip_ratio = 1.67; // based on 2023-03-28 ablation event at forest tower (del_drip = 1.5, del_unld = 4, del_temp_unld = 2.5, ratio = 2.5/1.5) 
-          double SUnloadMelt = canopy_snowmelt[hh] * melt_drip_ratio[hh];
+          SUnloadMelt[hh] = canopy_snowmelt[hh] * melt_drip_ratio[hh];
 
           // mechanical wind induced unloading
           const double a_u = 3.166691e-06;      // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
@@ -822,9 +828,9 @@ void ClassCRHMCanopyVectorBased::run(void)
           // SUnload[hh] = Snow_load[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
 
           // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
-          double kunld = fu;
-          SUnload[hh] += Snow_load[hh] * (1-exp(-kunld * dt)); 
-          SUnload[hh] += SUnloadMelt;
+          SUnloadWind[hh] = Snow_load[hh] * (1-exp(-fu * dt));
+          SUnload[hh] += SUnloadWind[hh]; 
+          SUnload[hh] += SUnloadMelt[hh];
 
           if (SUnload[hh] > Snow_load[hh])
           {
