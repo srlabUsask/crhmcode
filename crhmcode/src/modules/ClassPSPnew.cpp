@@ -431,8 +431,8 @@ void ClassPSPnew::run(void) {
             //Vhr = (2.0*M_PI*LambdaT*Radius*(DblTCanSnow-DblTbarCan)*NuSh);  // original in PSPnew except that QnetStar was subtracted here originally, now moved this down to the ebal check
             Vhr = 2.0*M_PI*Radius*LambdaT*NuSh*(DblTCanSnow-DblTbarCan); // Sensible heat transfer (j/s), positive when energy is transfered away from the ice sphere
 
-            ebal_check = QnetStar + Vs - Vhr;
-            //ebal_check = Vs - Vhr; // this was original, same as above with rearranging and adding -QnetStar to Vhr
+            ebal_check = Vs - Vhr - QnetStar;
+            //ebal_check = Vs - Vhr; // this was original, but Vhr was subtracted by QnetStar above
 
             if (ebal_check < 0.0){
               if (TItNum2 == 1)  {
@@ -450,7 +450,7 @@ void ClassPSPnew::run(void) {
                 Tup2 = true;
               }
             }
-          } while (fabs(ebal_check) >= 0.000001); /* Canopy Snow and Biomass[hh] T iteration loop */
+          } while (fabs(ebal_check) >= 0.000001); /* Canopy Snow and Biomass[hh] T iteration loop. Original threshold was 0.000001 */
 
           Vs = Vs/(4.0/3.0*M_PI*pow(Radius, 3.0)*RhoI)/Hs;
           Ce = k1*pow(Snow_load[hh]/Lmax[hh], -Fract); // using Lmax here results in lower canopy temp
