@@ -411,7 +411,7 @@ void ClassPSPnew::run(void) {
             //         double QlwIn = Qn[hh]-QsIn[hh]+QsOut[hh]+QlwOut;
 
             double QlwDn_veg = CRHM_constants::sbc * CRHM_constants::emiss_c * pow(Tbiomass[hh] + 273.15, 4.0f) * (1.0 - CanSnowFrac); // downwelling longwave from b
-            double QlwDn_cansnow = CRHM_constants::sbc * CRHM_constants::emiss * pow(DblTCanSnow + 273.15, 4.0f) * CanSnowFrac; // upward longwve from snow intercepted on the bottom of the canopy
+            double QlwDn_cansnow = CRHM_constants::sbc * CRHM_constants::emiss * pow(DblTCanSnow + 273.15, 4.0f) * CanSnowFrac; // downwelling longwve from snow intercepted on the top of the canopy
 
             QlwDn = QlwDn_veg + QlwDn_cansnow + QlwDnAtm + (B_canopy[hh] * Kstar_H)/2; 
 
@@ -420,7 +420,7 @@ void ClassPSPnew::run(void) {
             QsUpStar = M_PI*Radius*Radius*QTrUp50*(1.0-Alpha_c[hh]);
             QlwUpStar = M_PI*Radius*Radius*QlwUp;
             QlwDnStar = M_PI*Radius*Radius*QlwDn;
-            QlwOutStar = 2*M_PI*Radius*Radius*CRHM_constants::sbc*pow(DblTCanSnow+273.15,4.0); // TODO should this be 2piR^2 (i.e., two times the area of a circle for top and bottom or should this be a sphere?)
+            QlwOutStar = 2*M_PI*Radius*Radius*CRHM_constants::sbc*pow(DblTCanSnow+273.15,4.0);
             QnetStar = QsDnStar+QsUpStar+QlwDnStar+QlwUpStar-QlwOutStar;
 
             SVDensS = Common::SVDens(DblTCanSnow);
@@ -453,7 +453,7 @@ void ClassPSPnew::run(void) {
           } while (fabs(ebal_check) >= 0.000001); /* Canopy Snow and Biomass[hh] T iteration loop. Original threshold was 0.000001 */
 
           Vs = Vs/(4.0/3.0*M_PI*pow(Radius, 3.0)*RhoI)/Hs;
-          Ce = k1*pow(Snow_load[hh]/Lmax[hh], -Fract); // using Lmax here results in lower canopy temp
+          Ce = k1*pow(Snow_load[hh]/Lmax[hh], -Fract); // using Lmax here instead of Lstar results in lower canopy temp since canopy snow is more exposed and thus increasing Qsubl.
           Vi = Vs*Ce;
           Qsubl[hh] = Snow_load[hh]*Vi*Hs;
           Qe = Hs*CdragE*(u_FHt[hh]-u_Zcan)*(SVDensA*RHrefhh-SVDensC*DblRHcan)*Stabil;
