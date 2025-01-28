@@ -674,7 +674,7 @@ void ClassCRHMCanopyVectorBased::run(void)
               rain_frozen = U_sink / LH_FUS(FREEZE); 
               Snow_load[hh] += rain_frozen; // frozen rain is added to the canopy snow load, this is what is done in CLASS but should maybe treat this differently as will have different adhesion to the canopy
               rain_load[hh] -= rain_frozen;
-              TCanSnow[hh] = 0; // canopy snow is set to freezing temp, this will be used as the snow temp initilization in PSPnew
+              TCanSnow[hh] = 0.0; // canopy snow is set to freezing temp, this will be used as the snow temp initilization in PSPnew
               // dUdt = dUdt + LH_FUS(FREEZE) * rain_frozen / dt; // release energy from freezing water into the snow in the canopy
               
             } else { // energy sink is large enough to freeze all liquid water intercepted in the canopy
@@ -760,7 +760,7 @@ void ClassCRHMCanopyVectorBased::run(void)
         } // case 0
 
         case 1:
-        { // This is the updated mass snow unloading parameterisations from Cebulski & Pomeroy to unload based on time, wind, and air temperature.
+        { // This is the updated mass snow unloading parameterisations from Cebulski & Pomeroy to unload based on wind
           
           // check maximum canopy snow load
           if (Snow_load[hh] > Lmax[hh])
