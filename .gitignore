@@ -272,3 +272,5 @@ build/
 /crhmcode/src/libs/boost_1_75_0
 .vscode/tasks.json
 .vscode/launch.json
+crhmcode/.vscode/tasks.json
+crhmcode/.vscode/launch.json
