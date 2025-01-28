@@ -768,19 +768,14 @@ void ClassCRHMCanopyVectorBased::run(void)
             SUnload[hh] = Snow_load[hh] - Lmax[hh];
           }
 
-          // // temperature induced unloading based on exponential function
-          // const double a_T = 2.584003e-05; // Cebulski & Pomeroy coef from exponential function of unloading + drip and air temp measurements at Fortress mountain when wind speed <= 1 m/s.
-          // const double b_T = 1.646875e-01; // Cebulski & Pomeroy coef from exponential function of unloading + drip and air temp measurements at Fortress mountain when wind speed <= 1 m/s.
-
-          // double fT = a_T * exp(b_T * hru_t[hh]); // unloading rate based on warming of snow in the canopy (s-1), still need to partition out the portion of this that is drip vs mass unloading
-
           // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt based on method from Andreadis et al., (2009)
-          // double melt_drip_ratio = 1.67; // based on 2023-03-28 ablation event at forest tower (del_drip = 1.5, del_unld = 4, del_temp_unld = 2.5, ratio = 2.5/1.5) 
           SUnloadMelt[hh] = canopy_snowmelt[hh] * melt_drip_ratio[hh];
 
           // mechanical wind induced unloading
-          const double a_u = 3.166691e-06;      // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
-          const double b_u = 1.134114e-01;      // Cebulski & Pomeroy coef from exponential function of unloading + drip and wind speed measurements at Fortress mountain when air temp < -6 C.
+          const double a_u = 2.418377e-06;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed, air temperature and canopy load when air temp < -6 C.
+          const double b_u = 2.649564e-01;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed, air temperature and canopy load when air temp < -6 C.
+          const double c_u = 5.367029e-02;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed, air temperature and canopy load when air temp < -6 C.
+          
           const double u_mid_th = 1.0; // threshold above which canopy snow unloading due to wind is calculated and is not 0.
           double fu = 0.0;
 
@@ -817,7 +812,7 @@ void ClassCRHMCanopyVectorBased::run(void)
           } // end of switch CanopyWind
 
           if(u_mid >= u_mid_th){
-            fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
+            fu = u_mid * a_u * exp(b_u * u_mid) * exp(-c_u * (hru_t[hh] + 20.0)); // unloading rate due to wind (s-1)
           } else {
             fu = 0.0; // less than wind induced unloading threshold so set equal to 0.
           }
