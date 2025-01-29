@@ -101,7 +101,7 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declputvar("*", "SWE", "(mm)", &SWE);
 
-  declputvar("*", "TCanSnow", "(" + string(DEGREE_CELSIUS) + ")", &TCanSnow);
+  // declputvar("*", "TCanSnow", "(" + string(DEGREE_CELSIUS) + ")", &TCanSnow); found better performance when just using the ice bulb temp so no need for pspNew module
 
   // declared observations
 
@@ -893,11 +893,11 @@ void ClassCRHMCanopyVectorBased::run(void)
           const double C1 = 1.87e5; // constant provided in Roesch et al., 2001
           double fT = 0.0; // unloading rate per second.
 
-          if ((TCanSnow[hh] + CRHM_constants::Tm) < Tm) // Follows equation 31 in Cebulski & Pomeroy 2025 Wires WATER Review.
+          if ((hru_t[hh] + CRHM_constants::Tm) < Tm) // Follows equation 31 in Cebulski & Pomeroy 2025 Wires WATER Review.
           {
             fT = 0.0;
           } else {
-            fT = ((TCanSnow[hh] + CRHM_constants::Tm) - Tm)/C1;
+            fT = ((hru_t[hh] + CRHM_constants::Tm) - Tm)/C1;
           }
 
           double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
