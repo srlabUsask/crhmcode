@@ -204,7 +204,7 @@ void ClassPSPnew::run(void) {
     const double UpperGF = 1-(Cc[hh]/2);    /* Mid-canopy level gap fraction */
 
     // initilize canopy temperature at air temperature
-    // NOTE: TCanSnow is set equal to 0 in the canopy module if found to be melting
+    // NOTE: TCanSnow is set adjusted in the canopy module if found to be melting or freezing
     if (getstep() == 1){
       Tbiomass[hh] = TAref[hh];
       TCanSnow[hh] = TAref[hh];
