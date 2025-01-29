@@ -482,9 +482,9 @@ void ClassCRHMCanopyVectorBased::run(void)
       {                            // calculate increase in Snow_load and direct_snow if we are in canopy (i.e., Cc > 0)
         const double k_cp = 20;    // rate of increase of the sigmoidal curve below
         const double v_snow = 0.8; // terminal fall velocity of snowfall taken from Isyumov, 1971
-        Clca[hh] = 0;              // leaf contact area (Clca) based on trajectory angle
-        double IP = 0;             // interception efficiency (IP)
-        double dL = 0;             // change in canopy snow load
+        Clca[hh] = 0.0;              // leaf contact area (Clca) based on trajectory angle
+        double IP = 0.0;             // interception efficiency (IP)
+        double dL = 0.0;             // change in canopy snow load
 
         if (hru_u[hh] > 0.0 && Cc[hh] < 1.0 && Cc[hh] > 0.0)
         { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
@@ -768,7 +768,7 @@ void ClassCRHMCanopyVectorBased::run(void)
             SUnload[hh] = Snow_load[hh] - Lmax[hh];
           }
 
-          // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt based on method from Andreadis et al., (2009)
+          // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt similar method from Andreadis et al., (2009) based on Storck's measurements
           SUnloadMelt[hh] = canopy_snowmelt[hh] * melt_drip_ratio[hh];
 
           // mechanical wind induced unloading
@@ -823,7 +823,7 @@ void ClassCRHMCanopyVectorBased::run(void)
           // SUnload[hh] = Snow_load[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
 
           // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
-          SUnloadWind[hh] = Snow_load[hh] * (1-exp(-fu * dt));
+          SUnloadWind[hh] = Snow_load[hh] * (1-exp(-fu * dt)); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
           SUnload[hh] += SUnloadWind[hh]; 
           SUnload[hh] += SUnloadMelt[hh];
 
@@ -841,6 +841,99 @@ void ClassCRHMCanopyVectorBased::run(void)
           break;          
 
         } // case 1
+
+        case 2:
+        { // This is the mass snow unloading parameterisation from Andreadis et al., 2009 based on the snowmelt rate. No wind induced unloading.
+          
+          // check maximum canopy snow load
+          if (Snow_load[hh] > Lmax[hh])
+          {
+            SUnload[hh] = Snow_load[hh] - Lmax[hh];
+          }
+
+          double Lres = 5.0; // threshold above which melt unloading starts to occur.
+
+          if (Snow_load[hh] > Lres)
+          {
+            SUnloadMelt[hh] = canopy_snowmelt[hh] * melt_drip_ratio[hh];
+          } else {
+            SUnloadMelt[hh] = 0.0; // snow load is below threshold and can only melt or sublimate
+          }
+
+          SUnload[hh] += SUnloadMelt[hh];
+
+          if (SUnload[hh] > Snow_load[hh])
+          {
+            SUnload[hh] = Snow_load[hh];
+            Snow_load[hh] = 0.0;
+          }
+          else
+          {
+            Snow_load[hh] -= SUnload[hh];
+          }
+
+          cum_SUnload[hh] += SUnload[hh];
+          break;          
+
+        } // case 2
+
+        case 3:
+        { // This is the mass snow unloading parameterisation from Roesch et al., 2001 based on a temperature and wind speed function.
+          
+          // check maximum canopy snow load
+          if (Snow_load[hh] > Lmax[hh])
+          {
+            SUnload[hh] = Snow_load[hh] - Lmax[hh];
+          }
+
+          // Mass unloading of canopy snow due to melt
+
+          const double Tm = 270.15; // threshold in Kelvin below which temp unloading is equal to 0
+          const double C1 = 1.87e5; // constant provided in Roesch et al., 2001
+          double fT = 0.0; // unloading rate per second.
+
+          if ((TCanSnow[hh] + CRHM_constants::Tm) < Tm) // Follows equation 31 in Cebulski & Pomeroy 2025 Wires WATER Review.
+          {
+            fT = 0.0;
+          } else {
+            fT = ((TCanSnow[hh] + CRHM_constants::Tm) - Tm)/C1;
+          }
+
+          double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
+
+          SUnloadMelt[hh] = Snow_load[hh] * (1-exp(-(fT) * dt)); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
+
+          // Mass unloading of canopy snow due to mechanical removal from wind at canopy top
+          const double C2 = 1.56e5; // wind unloading constant from Roesch et al., 2001
+          const double um = 0.0; // threshold wind speed below which no wind induced unloading occurs not stated in Roesch et al., 2001 so assum
+          double fu = 0.0;
+
+          if(u_FHt[hh] < um){
+            fu = 0.0; // unloading rate due to wind (s-1)
+          } else {
+            fu = u_FHt[hh]/C2; 
+          }
+
+          SUnloadWind[hh] = Snow_load[hh] * (1-exp(-(fu) * dt)); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
+
+          // Unload canopy snow
+          SUnload[hh] += SUnloadWind[hh]; 
+          SUnload[hh] += SUnloadMelt[hh];
+
+          if (SUnload[hh] > Snow_load[hh])
+          {
+            SUnload[hh] = Snow_load[hh];
+            Snow_load[hh] = 0.0;
+          }
+          else
+          {
+            Snow_load[hh] -= SUnload[hh];
+          }
+
+          cum_SUnload[hh] += SUnload[hh];
+          break;        
+
+        } // case 3
         } // MassUnloadingSwitch
 
         // calculate total sub-canopy snow:
