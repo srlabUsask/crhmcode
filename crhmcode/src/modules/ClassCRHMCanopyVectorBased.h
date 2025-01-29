@@ -74,7 +74,6 @@ double *Subl_Cpy { NULL };
 double *cum_Subl_Cpy { NULL };
 double *cum_SUnload { NULL };
 double *cum_SUnload_H2O { NULL };
-double *t_snow_in_canopy { NULL };
 
 double *Clca { NULL };
 double *k { NULL };
@@ -139,6 +138,7 @@ const double *Zwind { NULL };
 const double *Zvent { NULL };
 const double *unload_t { NULL };
 const double *unload_t_water { NULL };
+const double *u_mid_th { NULL };
 const double *Surrounding_Ht { NULL };
 const double *Gap_diameter { NULL };
 const double *Alpha_c { NULL };

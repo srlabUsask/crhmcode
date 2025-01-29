@@ -225,6 +225,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declparam("unload_t_water", TDim::NHRU, "[4.0]", "-10.0", "20.0", "if ice-bulb temp >= t: canopy snow is unloaded as water", "(" + string(DEGREE_CELSIUS) + ")", &unload_t_water);
 
+  declparam("u_mid_th", TDim::NHRU, "[0.0]", "0.0", "20.0", "Minimum wind speed for wind induced unloading to occur.", "m/s", &u_mid_th);
+
   declparam("CanopyClearing", TDim::NHRU, "[0]", "0", "2", "canopy - 0/clearing - 1/gap - 2", "()", &CanopyClearing);
 
   declparam("SublimationSwitch", TDim::NHRU, "[1]", "0", "1", "Pomeroy 1998 sublimation parameterisation, off - 0, on - 1", "()", &SublimationSwitch);
@@ -776,8 +778,6 @@ void ClassCRHMCanopyVectorBased::run(void)
           const double a_u = 2.418377e-06;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed, air temperature and canopy load when air temp < -6 C.
           const double b_u = 2.649564e-01;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed, air temperature and canopy load when air temp < -6 C.
           const double c_u = 5.367029e-02;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed, air temperature and canopy load when air temp < -6 C.
-          
-          const double u_mid_th = 1.0; // threshold above which canopy snow unloading due to wind is calculated and is not 0.
           double fu = 0.0;
 
            switch (CanopyWindSwitch[hh])
@@ -812,7 +812,7 @@ void ClassCRHMCanopyVectorBased::run(void)
             } // case 1
           } // end of switch CanopyWind
 
-          if(u_mid >= u_mid_th){
+          if(u_mid >= u_mid_th[hh]){
             fu = u_mid * a_u * exp(b_u * u_mid) * exp(-c_u * (hru_t[hh] + 20.0)); // unloading rate due to wind (s-1)
           } else {
             fu = 0.0; // less than wind induced unloading threshold so set equal to 0.
@@ -906,10 +906,9 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           // Mass unloading of canopy snow due to mechanical removal from wind at canopy top
           const double C2 = 1.56e5; // wind unloading constant from Roesch et al., 2001
-          const double um = 0.0; // threshold wind speed below which no wind induced unloading occurs not stated in Roesch et al., 2001 so assum
           double fu = 0.0;
 
-          if(u_FHt[hh] < um){
+          if(u_FHt[hh] < u_mid_th[hh]){
             fu = 0.0; // unloading rate due to wind (s-1)
           } else {
             fu = u_FHt[hh]/C2; 
