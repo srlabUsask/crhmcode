@@ -663,31 +663,32 @@ void ClassCRHMCanopyVectorBased::run(void)
           // Currently the canopy snow temperature is approximated by the classPSPnew module which was developed by Parv. & Pomeroy 2000.
           
           Cp_h2o[hh] = (CRHM_constants::cw * rain_load[hh]) + (CRHM_constants::ci * Snow_load[hh]); // volumetric heat capacity of frozen and liquid h2o intercepted in the canopy (j m-2 K-1). This is different from CLASS who incorporates the vegetation elements here too but since PSPnew treats veg temp as different we do not have the same here.
-          
-          // Energy sink available for freezing liquid water intercepted in the canopy canopy only if T_snow < 0
-          if (rain_load[hh] > 0 && TCanSnow[hh] < 0){
+          IceBulbT = hru_t[hh] - (Vi * PBSM_constants::LATH / CRHM_constants::ci);
 
-            U_sink = Cp_h2o[hh] * (0 - TCanSnow[hh]); 
+          // Energy sink available for freezing liquid water intercepted in the canopy canopy only if T_snow < 0
+          if (rain_load[hh] > 0 && IceBulbT < 0){
+
+            U_sink = Cp_h2o[hh] * (0 - IceBulbT); 
             U_conv = rain_load[hh] * LH_FUS(FREEZE); 
             
             if (U_sink <= U_conv){ // not enough energy sink to freeze all liquid water so calculating the portion that will freeze here
               rain_frozen = U_sink / LH_FUS(FREEZE); 
               Snow_load[hh] += rain_frozen; // frozen rain is added to the canopy snow load, this is what is done in CLASS but should maybe treat this differently as will have different adhesion to the canopy
               rain_load[hh] -= rain_frozen;
-              TCanSnow[hh] = 0.0; // canopy snow is set to freezing temp, this will be used as the snow temp initilization in PSPnew
+              IceBulbT = 0.0; // canopy snow is set to freezing temp, this will be used as the snow temp initilization in PSPnew
               // dUdt = dUdt + LH_FUS(FREEZE) * rain_frozen / dt; // release energy from freezing water into the snow in the canopy
               
             } else { // energy sink is large enough to freeze all liquid water intercepted in the canopy
               Snow_load[hh] += rain_load[hh];
               U_cool = U_sink - U_conv; 
-              TCanSnow[hh] = -U_cool / (CRHM_constants::ci * Snow_load[hh]); // temperature of snow intercepted in the canopy after freezing liquid water, this will be used as the snow temp initilization in PSPnew
+              //TCanSnow[hh] = -U_cool / (CRHM_constants::ci * Snow_load[hh]); // temperature of snow intercepted in the canopy after freezing liquid water, this will be used as the snow temp initilization in PSPnew
               // dUdt = dUdt + LH_FUS(FREEZE) * rain_load[hh] / dt; // internal energy change to the snowpack due to freezing, adding energy here as energy is released by freezing liquid water
               rain_load[hh] = 0.0;
             }
           }
 
-          if (Snow_load[hh] > 0 && TCanSnow[hh] > 0){ // Canopy snow temperature is above 0
-            U_melt = Cp_h2o[hh] * (TCanSnow[hh]);
+          if (Snow_load[hh] > 0 && IceBulbT > 0){ // Canopy snow temperature is above 0
+            U_melt = Cp_h2o[hh] * (IceBulbT);
             U_conv = Snow_load[hh] * LH_FUS(FREEZE); // energy required to melt all snow intercepted in the canopy
 
             if (U_melt <= U_conv){ // not eneough energy to melt all canopy snow
@@ -695,14 +696,14 @@ void ClassCRHMCanopyVectorBased::run(void)
               Snow_load[hh] -= canopy_snowmelt[hh];
               drip_Cpy[hh] = canopy_snowmelt[hh]; // no holding capacity for canopy snowmelt immediately drips off and does not evaporate, this is how the original routine was and better matches obs at fortress
               //rain_load[hh] += canopy_snowmelt[hh]; // melting snow will drip off canopy based on rainwater routine below this is different from the Ellis 2010 param above which immediately drips off canopy snow melt with no holding capacity.
-              TCanSnow[hh] = 0; // canopy snow is melting so set to 0 deg. C, this will be used as the snow temp initilization in PSPnew
+             // TCanSnow[hh] = 0; // canopy snow is melting so set to 0 deg. C, this will be used as the snow temp initilization in PSPnew
               // dUdt = dUdt - LH_FUS(FREEZE) * canopy_snowmelt[hh] / dt; // internal energy change to the snowpack due to melt, subtracting energy here as energy is required to melt snow
             } else { // all snow in the canopy will be melted
               canopy_snowmelt[hh] = Snow_load[hh];
               drip_Cpy[hh] = canopy_snowmelt[hh]; // no holding capacity for canopy snowmelt immediately drips off and does not evaporate, this is how the original routine was and better matches obs at fortress
               //rain_load[hh] += Snow_load[hh]; // move all snow into the rain store
               U_warm = U_melt - U_conv; 
-              TCanSnow[hh] = U_warm / (CRHM_constants::cw * rain_load[hh]); // temperature of snow intercepted in the canopy after freezing liquid water, this will be used as the snow temp initilization in PSPnew
+             // TCanSnow[hh] = U_warm / (CRHM_constants::cw * rain_load[hh]); // temperature of snow intercepted in the canopy after freezing liquid water, this will be used as the snow temp initilization in PSPnew
               // dUdt = dUdt + LH_FUS(FREEZE) * Snow_load[hh] / dt; // internal energy change to the snowpack due to melt, subtracting energy here as energy is required to melt snow
               Snow_load[hh] = 0; // empty the canopy snow store
             }
