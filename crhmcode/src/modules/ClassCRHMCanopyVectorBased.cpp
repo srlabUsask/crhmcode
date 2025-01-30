@@ -775,9 +775,9 @@ void ClassCRHMCanopyVectorBased::run(void)
           SUnloadMelt[hh] = canopy_snowmelt[hh] * melt_drip_ratio[hh];
 
           // mechanical wind induced unloading
-          const double a_u = 2.418377e-06;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed, air temperature and canopy load when air temp < -6 C.
-          const double b_u = 2.649564e-01;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed, air temperature and canopy load when air temp < -6 C.
-          const double c_u = 5.367029e-02;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed, air temperature and canopy load when air temp < -6 C.
+          const double a_u = 3.166691e-06;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain when air temp < -6 C.
+          const double b_u = 1.134114e-01;
+
           double fu = 0.0;
 
            switch (CanopyWindSwitch[hh])
@@ -813,7 +813,7 @@ void ClassCRHMCanopyVectorBased::run(void)
           } // end of switch CanopyWind
 
           if(u_mid >= u_mid_th[hh]){
-            fu = u_mid * a_u * exp(b_u * u_mid) * exp(-c_u * (hru_t[hh] + 20.0)); // unloading rate due to wind (s-1)
+            fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
           } else {
             fu = 0.0; // less than wind induced unloading threshold so set equal to 0.
           }
