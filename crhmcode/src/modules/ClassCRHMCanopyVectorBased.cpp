@@ -772,7 +772,10 @@ void ClassCRHMCanopyVectorBased::run(void)
           }
 
           // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt similar method from Andreadis et al., (2009) based on Storck's measurements
-          SUnloadMelt[hh] = canopy_snowmelt[hh] * melt_drip_ratio[hh];
+          const double a_sm = 5.317243;
+          const double b_sm = 1.373854;
+          
+          SUnloadMelt[hh] = a_sm * canopy_snowmelt[hh] * exp(b_sm * canopy_snowmelt[hh]);
 
           // mechanical wind induced unloading
           const double a_u = 1.740917e-06;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain when air temp < -6 C.
