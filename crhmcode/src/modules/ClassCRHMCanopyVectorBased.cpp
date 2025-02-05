@@ -159,6 +159,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declvar("SUnloadWind", TDim::NHRU, "solid snow unloading from the canopy induced by wind.", "(mm/int)", &SUnloadWind);
 
+  declvar("SUnloadSubl", TDim::NHRU, "solid snow unloading from the canopy proportional to sublimation.", "(mm/int)", &SUnloadSubl);
+
   declvar("Cp_h2o", TDim::NHRU, "Bulk volumetric heat capacity of frozen and liquid h2o intercepted in the canopy.", "(j m-2 K-1)", &Cp_h2o);
 
   declvar("SUnload", TDim::NHRU, "unloaded canopy snow", "(mm/int)", &SUnload);
@@ -763,7 +765,7 @@ void ClassCRHMCanopyVectorBased::run(void)
         } // case 0
 
         case 1:
-        { // This is the updated mass snow unloading parameterisations from Cebulski & Pomeroy to unload based on wind
+        { // This is the updated mass snow unloading parameterisations from Cebulski & Pomeroy to unload based on wind, snowmelt, and sublimation
           
           // check maximum canopy snow load
           if (Snow_load[hh] > Lmax[hh])
@@ -774,11 +776,10 @@ void ClassCRHMCanopyVectorBased::run(void)
           // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt similar method from Andreadis et al., (2009) based on Storck's measurements
 
           // exponential
-          // const double a_sm = 5.317243;
-          // const double b_sm = 1.373854;
+          // const double a_sm = 6.9614;
+          // const double b_sm = -0.7134;
           
           // SUnloadMelt[hh] = a_sm * canopy_snowmelt[hh] * exp(b_sm * canopy_snowmelt[hh]);
-
 
           // sigmoidal
           // const double asym = 2.6741;
@@ -794,8 +795,12 @@ void ClassCRHMCanopyVectorBased::run(void)
           // SUnloadMelt[hh] = sigmoidTerm - originOffset;
 
 
-          // linear
+          // // linear
           SUnloadMelt[hh] = canopy_snowmelt[hh] * melt_drip_ratio[hh];
+
+          // mass unloading due to sublimation
+          double subl_unld_ratio = 1.11;
+          SUnloadSubl[hh] = Subl_Cpy[hh] * subl_unld_ratio;
 
           // mechanical wind induced unloading
           const double a_u = 1.740917e-06;      // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain when air temp < -6 C.
@@ -850,6 +855,7 @@ void ClassCRHMCanopyVectorBased::run(void)
           SUnloadWind[hh] = Snow_load[hh] * (1-exp(-fu * dt)); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
           SUnload[hh] += SUnloadWind[hh]; 
           SUnload[hh] += SUnloadMelt[hh];
+          SUnload[hh] += SUnloadSubl[hh];
 
           if (SUnload[hh] > Snow_load[hh])
           {

@@ -96,6 +96,7 @@ double *U_warm { NULL };
 double *canopy_snowmelt { NULL };
 double *SUnloadMelt { NULL };
 double *SUnloadWind { NULL };
+double *SUnloadSubl { NULL };
 double *Cp_h2o { NULL };
 double *LAI_ { NULL };
 
