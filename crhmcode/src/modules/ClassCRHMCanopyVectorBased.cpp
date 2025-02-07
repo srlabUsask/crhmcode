@@ -99,6 +99,8 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declgetvar("*", "Albedo", "()", &Albedo);
 
+  declgetvar("*", "QdflatE", "(W/m^2)", &QdflatE);
+
   declputvar("*", "SWE", "(mm)", &SWE);
 
   // declputvar("*", "TCanSnow", "(" + string(DEGREE_CELSIUS) + ")", &TCanSnow); found better performance when just using the ice bulb temp so no need for pspNew module
@@ -289,9 +291,19 @@ void ClassCRHMCanopyVectorBased::run(void)
   double U_melt; // energy available for melting snow intercepted in the canopy
   double U_warm; // remaining energy left over to heat the canopy h2o after melting all snow intercepted in the canopy
   double u_mid; // wind speed at half canopy height
+  double Tauc_50; // transmissivity of the half the canopy for calculating SW reflected off surface snow incident to the canopy
+  double tau_atm_prev_day; // atmospheric transmissivity (-) from the last measurement during the day to be used where we dont have tau estimates at night preferred method outside of Sask.
+  bool is_tau_obs;  // flag to check if tau_atm has been assigned
+  double tau_atm;    // atmospheric transmissivity (-)
+  double hru_ea_mb;  // conversion of kpa to mb for clarity
+  double F;          // variable to scale incoming longwave radiation based on cloudiness from Sicart et al., (2006)
 
   for (hh = 0; chkStruct(); ++hh)
   {
+    if (getstep() == 1){
+      tau_atm_prev_day = 0.818; // only used if it incoming ext. solar is == 0 on first time step, tau as in Global.cpp else statement as in LongVt, from average nightly measurements in Sask. likely biased to more clear skies
+      is_tau_obs = false; 
+    }
 
     switch (variation)
     {
@@ -307,7 +319,7 @@ void ClassCRHMCanopyVectorBased::run(void)
       Qsi_ = QsiS_Var[hh];
       Qli_ = Qli[hh];
       break;
-    case VARIATION_3:
+    case VARIATION_3: // typical case i.e., CanopyVectorBased#3
       Qsi_ = QsiS_Var[hh];
       Qli_ = QliVt_Var[hh];
       break;
@@ -363,10 +375,9 @@ void ClassCRHMCanopyVectorBased::run(void)
 
       LAI_[hh] = LAI[hh] * Exposure / Ht[hh];
 
-      Vf = Cc[hh];
-      Vf_ = Vf;
+      Vf = 1.0 - Cc[hh]; // changed from approx of LAI to direct calculation from params
 
-      //Vf_ = Vf + (1.0 - Vf) * sin((Ht[hh] - Exposure) / Ht[hh] * M_PI_2);
+      Vf_ = Vf + (1.0 - Vf) * sin((Ht[hh] - Exposure) / Ht[hh] * M_PI_2);
 
       if (SolAng[hh] > 0.001 && cosxs[hh] > 0.001 && cosxsflat[hh] > 0.001)
       {
@@ -375,6 +386,8 @@ void ClassCRHMCanopyVectorBased::run(void)
         if (limit > 2.0)
           limit = 2.0;
         Tauc[hh] = exp(-k[hh] * LAI_[hh] * limit);
+        Tauc_50 = exp(-k[hh] * (LAI_[hh]/2) * limit); // Eq 7. from Pomeroy et al., (2009) but sin of solar angle is appled to k already
+
       }
       else
       {
@@ -386,7 +399,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 
       Qlisn[hh] = Qli_ * Vf_ + (1.0f - Vf_) * CRHM_constants::emiss_c * CRHM_constants::sbc * pow(T1, 4.0f) + B_canopy[hh] * Kstar_H; // looks like modification of Eq. 10 from Pomeroy 2009
 
-      Qlisn_Var[hh] = Qlisn[hh];
+      Qlisn_Var[hh] = Qlisn[hh]; // goes to snobal module
 
       Qsisn[hh] = Qsi_ * Tauc[hh];
 
@@ -403,7 +416,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 
       Qlisn[hh] = Qli_;
 
-      Qlisn_Var[hh] = Qlisn[hh];
+      Qlisn_Var[hh] = Qlisn[hh]; // goes to snobal module
 
       Qsisn[hh] = Qsi_;
 
@@ -458,7 +471,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 
       Qlisn[hh] = Vgap * Qli_ + (1.0 - Vgap) * ((Qli_ * Tau_b_gap + (1.0 - Tau_b_gap) * CRHM_constants::emiss_c * CRHM_constants::sbc * pow(T1, 4.0f)) + B_canopy[hh] * Kd);
 
-      Qlisn_Var[hh] = Qlisn[hh];
+      Qlisn_Var[hh] = Qlisn[hh]; // goes to snobal module
 
       Qsisn[hh] = cosxs[hh] * Qdfo[hh] * Tau_b_gap + Vgap * (Qsi_ - Qdfo[hh]) + (1.0 - Vgap) * Tau_d * (Qsi_ - Qdfo[hh]);
       if (Qsisn[hh] < 0.0)
@@ -548,9 +561,9 @@ void ClassCRHMCanopyVectorBased::run(void)
 
         // Finished initial loading now start the ablation paramaterisations
 
-        double Vi = 0;       // submilation rate coefficient for exposed snow (s-1)
-        double IceBulbT = 0; // ice bulb temperature of canopy snow
-        double U = 0;        // unloading rate coefficient used in Hedstrom & Pomeroy 1998 param.
+        double Vi = 0.0;       // submilation rate coefficient for exposed snow (s-1)
+        double IceBulbT = 0.0; // ice bulb temperature of canopy snow
+        double U = 0.0;        // unloading rate coefficient used in Hedstrom & Pomeroy 1998 param.
 
         switch (SublimationSwitch[hh])
         {
@@ -599,8 +612,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           Lamb = 6.3e-4 * (hru_t[hh] + 273.0) + 0.0673;           // thermal conductivity of atmosphere
           Nr = 2.0 * Radius * uVent / KinVisc;                    // Reynolds number
-          Nu = 1.79 + 0.606 * sqrt((double)Nr);                   // Nusselt number
-          SStar = M_PI * sqr(Radius) * (1.0f - AlbedoIce) * Qsi_; // SW to snow particle !!!! changed
+          Nu = 1.79 + 0.606 * sqrt(Nr);                   // Nusselt number
           A1 = Lamb * (hru_t[hh] + 273) * Nu;
           B1 = PBSM_constants::LATH * PBSM_constants::M / (PBSM_constants::R * (hru_t[hh] + 273.0f)) - 1.0;
           J = B1 / A1;
@@ -612,7 +624,45 @@ void ClassCRHMCanopyVectorBased::run(void)
           Mpm = 4.0 / 3.0 * M_PI * PBSM_constants::DICE * Radius * Radius * Radius; // 18Mar2022: remove Gamma Distribution Correction term, *(1.0 + 3.0/Alpha + 2.0/sqr(Alpha));
                                                                                     // sublimation rate of single 'ideal' ice sphere:
 
-          double Vs = (2.0 * M_PI * Radius * Sigma2 - SStar * J) / (PBSM_constants::LATH * J + C1) / Mpm;
+          double Qs_in = (1.0f - AlbedoIce) * Qsi_; // SW to snow particle !!!! changed
+          double Qs_net_sphere = M_PI * sqr(Radius) * (Qs_in);
+
+          // update by Alex Cebulski Feb 2025 to also consider net longwave flux wrt canopy.
+          // not including upward longwave from snowpack as most blocked by canopy elements on bottom
+          // assuming canopy snow and canopy have the same emissivity
+          // TODO can snow should be at ICE bulb temp from previous timestep?
+
+          // QliVt_Var[hh] computed in the ClassLongVt module using Eq. 9 from Sicart et al., (2006) plus the terrain view factor differs from below as it uses daytime avg solar reading to calculate the  atmospheric emmissivity 
+          // double Ql_in_atm = QliVt_Var[hh];
+
+            // incoming longwave radiation from cloudy sky following Sicart et al., (2006)
+            // Need to track this on all time steps instead of daily avg as in longwave module
+            if (is_tau_obs){ // was tau observed on the prev. timestep?
+              tau_atm_prev_day = tau_atm;
+            }
+
+            if (QdflatE[hh] > 0.001 && QdflatE[hh] > Qsi_) // is it daytime ...
+            {
+              tau_atm = Qsi_/QdflatE[hh]; // Sicart et al., (2006) eq. 4 for daytime
+              is_tau_obs = true;
+            }
+            else {
+              // tau_atm = 0.818; // tau as in Global.cpp else statement as in LongVt
+              tau_atm = tau_atm_prev_day;
+              is_tau_obs = false;
+            }
+            
+            hru_ea_mb = hru_ea[hh]*10.0; // kPa to mb 
+            double DblRHcan = hru_rh[hh]/100.0;
+            F = (1 + 0.44 * DblRHcan - 0.18 * tau_atm); // scaling factor >= 1 to increase longwave emission due to cloudiness, could update to use non iterating RH if breaking here
+            F = std::max(F, 1.0); // Ensure F is greater than or equal to 1 as in Sicart et al., (2006)
+
+          double Ql_in_atm = 1.24 * pow(hru_ea_mb / (hru_t[hh]+273.15), 1.0 / 7.0) * F * CRHM_constants::sbc * pow((hru_t[hh]+273.15), 4)*Vf_; // Eq. 9 from Sicart et al., (2006)
+          double Ql_out_cansnow = CRHM_constants::sbc * CRHM_constants::emiss * pow(IceBulbT + CRHM_constants::Tm, 4.0f) + B_canopy[hh] * Kstar_H; // TODO calculate emissivity as weighed avg of snow/veg coverage downwelling longwve from snow intercepted on the top of the canopy
+          double Ql_net_sphere = 4 * M_PI * sqr(Radius) * (Ql_in_atm - Ql_out_cansnow);
+
+          double Vs = (2.0 * M_PI * Radius * Sigma2 - ((Qs_net_sphere + Ql_net_sphere) * J)) / (PBSM_constants::LATH * J + C1) / Mpm;
+          // double Vs = (2.0 * M_PI * Radius * Sigma2 - Qs_net_sphere * J) / (PBSM_constants::LATH * J + C1) / Mpm;
 
           pot_subl_cpy[hh] = Vs; // export the dimensionless sublimation rate (s-1) added by alex 2023-07-21
 
@@ -631,9 +681,23 @@ void ClassCRHMCanopyVectorBased::run(void)
 
           Vi = Vs * Ce;
 
+          IceBulbT = hru_t[hh] - (Vi * PBSM_constants::LATH / CRHM_constants::ci);
+
+          // calculate the sublimation rate
+
+          double q_subl_cpy = -Snow_load[hh] * Vi; // sublimation rate of snow from the canopy kg m-2 s-1
+
+          // below hacks the latent heat flux by the longwave losses...
+          //double Qle = q_subl_cpy * PBSM_constants::LATH; // latent heat flux from the canopy snowpack W m-2
+
+          //double Ql_out_cansnow = CRHM_constants::sbc * CRHM_constants::emiss * pow(IceBulbT + CRHM_constants::Tm, 4.0f) + B_canopy[hh] * Kstar_H; // TODO calculate emissivity as weighed avg of snow/veg coverage downwelling longwve from snow intercepted on the top of the canopy
+          //double netlw = Ql_in_atm - Ql_out_cansnow; 
+          //double Qle_adjst = Qle + netlw; // latent heat flux from the canopy snowpack after considering longwave losses
+          //double q_subl_cpy_adjst = Qle_adjst/PBSM_constants::LATH;
+
           // limit sublimation to canopy snow available and take sublimated snow away from canopy snow at timestep start
 
-          Subl_Cpy[hh] = -Snow_load[hh] * Vi * Global::Interval * 24 * 3600;
+          Subl_Cpy[hh] = q_subl_cpy * Global::Interval * 24 * 3600;
           if (Subl_Cpy[hh] > Snow_load[hh])
           {
             Subl_Cpy[hh] = Snow_load[hh];
@@ -667,7 +731,6 @@ void ClassCRHMCanopyVectorBased::run(void)
           // Currently the canopy snow temperature is approximated by the classPSPnew module which was developed by Parv. & Pomeroy 2000.
           
           Cp_h2o[hh] = (CRHM_constants::cw * rain_load[hh]) + (CRHM_constants::ci * Snow_load[hh]); // volumetric heat capacity of frozen and liquid h2o intercepted in the canopy (j m-2 K-1). This is different from CLASS who incorporates the vegetation elements here too but since PSPnew treats veg temp as different we do not have the same here.
-          IceBulbT = hru_t[hh] - (Vi * PBSM_constants::LATH / CRHM_constants::ci);
 
           // Energy sink available for freezing liquid water intercepted in the canopy canopy only if T_snow < 0
           if (rain_load[hh] > 0 && IceBulbT < 0){
@@ -1108,5 +1171,5 @@ double ClassCRHMCanopyVectorBased::gamma(double Pa, double t) // Psychrometric c
 double ClassCRHMCanopyVectorBased::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
 {
   const double R = 2870;
-  return (1E4 * Pa / (R * (273.15 + t)) * (1.0 - 0.379 * (ea / Pa))); //
+  return (1E4 * Pa / (R * (CRHM_constants::Tm + t)) * (1.0 - 0.379 * (ea / Pa))); //
 }

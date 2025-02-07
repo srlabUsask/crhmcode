@@ -108,6 +108,7 @@ const double *hru_u { NULL };
 const double *hru_rh { NULL };
 const double *hru_ea { NULL };
 const double *Albedo { NULL };
+const double *QdflatE { NULL };
 
 const double *hru_snow { NULL };
 const double *hru_rain { NULL };

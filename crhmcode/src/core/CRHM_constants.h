@@ -37,7 +37,7 @@ namespace CRHM_constants {
 	const double sbc = 5.67E-8; // Stephan-Boltzmann constant W/m^2/k4
 	const double SB = 4.899e-09; // Stephan-Boltzmann constant MJ/m^2-d
 
-	const double emiss = 0.985; // emissivity of the atmosphere and snowpack
+	const double emiss = 0.99; // emissivity the snowpack changed from 0.985 on 2025-02-06
 	const double emiss_c = 0.96; // emissivity of the canopy
 	const double em = 0.622;     //
     const double ci = 2.102e3; // specific heat capacity of ice (J/kg/K)
