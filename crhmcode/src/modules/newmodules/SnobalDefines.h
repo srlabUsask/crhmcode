@@ -295,3 +295,30 @@
 #define MIN_SNOW_TEMP	-75
 
 #endif
+
+inline double satw(double tk) {   // air temperature (K)
+    double x;
+    double l10;
+
+    if (tk <= 0.) {
+        CRHMException TExcept("satw temperature <= 0.0", TExcept::TERMINATE);
+        LogError(TExcept);
+    }
+
+    errno = 0;
+    l10 = log(1.e1);
+
+    x = -7.90298 * (BOIL / tk - 1.0) + 5.02808 * log(BOIL / tk) / l10 -
+        1.3816e-7 * (pow(1.0e1, 1.1344e1 * (1.0 - tk / BOIL)) - 1.0) +
+        8.1328e-3 * (pow(1.0e1, -3.49149 * (BOIL / tk - 1.0)) - 1.0) +
+        log(SEA_LEVEL) / l10;
+
+    x = pow(1.0e1, x);
+
+    if (errno) {
+        CRHMException TExcept("satw: bad return from log or pow", TExcept::TERMINATE);
+        LogError(TExcept);
+    }
+
+    return x;
+}
