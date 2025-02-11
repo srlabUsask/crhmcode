@@ -37,18 +37,15 @@ public:
     //   snowpack information
 
     double* z_veg_s{ NULL };            // total snowcover thickness (m)
-    double* z_s_veg_0{ NULL };          // active layer depth (m)
     double* rho_veg{ NULL };            // average snowcover density (kg/m^3)
     double* m_s_veg{ NULL };            // snowcover's specific mass (kg/m^2). Init by init_snow.
-    double* m_s_veg_0{ NULL };          // active layer specific mass (kg/m^2). Init by init_snow.
     double* T_s_veg{ NULL };            // average snowcover temp (K). Init by init_snow
-    double* T_s_veg_0{ NULL };          // active snow layer temp (K)
     double* cc_s_veg{ NULL };           // snowcover's cold content (J/m^2). Init by init_snow.
-    double* cc_s_0_veg{ NULL };         // active layer cold content (J/m^2). Init by init_snow.
+    double* cc_s_veg{ NULL };         // active layer cold content (J/m^2). Init by init_snow.
     double* h2o_sat_veg{ NULL };        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
 //                                 to water that snowcover could hold at saturation)
     double* h2o_vol_veg{ NULL };        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow
-    double* h2o_veg{ NULL };            // liquid h2o_veg content as specific mass(kg/m^2)
+    double* liq_h2o_veg{ NULL };            // liquid h2o content as specific mass(kg/m^2)
     double* h2o_max_veg{ NULL };        // max liquid h2o content as specific mass(kg/m^2)
     double* h2o_total_veg{ NULL };      // total liquid h2o: includes h2o in snowcover, melt, and rainfall (kg/m^2)
 
@@ -57,21 +54,22 @@ public:
     double* Qn_veg{ NULL };            // net allwave radiation wrt the canopy (W/m^2)
     double* Qh_veg{ NULL };              // sensible heat xfr wrt the canopy (W/m^2)
     double* Ql_veg{ NULL };          // latent heat xfr wrt the canopy (W/m^2)
-    double* G{ NULL };              // heat xfr by conduction & diffusion from soil to snowcover (W/m^2)
-    double* G_0{ NULL };            // heat xfr by conduction & diffusion from soil or lower layer to active layer (W/m^2)
     double* Qp{ NULL };              // advected heat from precip wrt the canopy (W/m^2)
     double* delta_Q_veg{ NULL };        // change in snowcover's energy wrt the canopy (W/m^2)
-    double* delta_Q_0_veg{ NULL };      // change in active layer's energy wrt the canopy (W/m^2)
 
 //   mass balance vars for current timestep
 
     double* delmelt_veg_int{ NULL };       // specific melt (kg/m^2 or m)
     double* delL{ NULL };       // interval change in SWE
-    double* delsub_veg_0_int{ NULL };	    // mass flux by evap into air from active layer (kg/m^2/s)
-    double* delsub_veg_int{ NULL };	    // mass of evap into air & soil from snowcover (kg/m^2)
-    double* delmelt_veg_int2{ NULL };   // predicted specific runoff (m/sec)
+    double* delsub_veg_int{ NULL };	    // mass of evap into air & soil from snowcover (kg/m^2*int)
+    double* delunld{ NULL };	    // canopy snow unloading rate (kg/m^2*int)
+    double* delunld_wind{ NULL };	    // solid snow unloading from the canopy induced by wind (kg/m^2*int)
+    double* delunld_melt{ NULL };	    // canopy snow unloading rate due to melting (kg/m^2*int)
+    double* delunld_subl{ NULL };	    // canopy snow unloading due to sublimation (kg/m^2*int)
+
     double* delmelt_veg_day{ NULL };      // daily predicted specific runoff (m/sec)
     double* cmlmelt_veg_day{ NULL };      // daily predicted specific runoff accumulator (m/sec)
+
 
 //   mass balance vars for variable timestep
 
@@ -80,10 +78,8 @@ public:
     double* delsub_veg{ NULL };	 // mass of evap into air & soil from snowcover (kg/m^2)
     double* deldrip_veg{ NULL };  // predicted specific runoff (m/sec)
 
-    double* delsub_veg_0{ NULL };        // mass of evaporation to air (kg/m^2)
     double* E_l{ NULL };	  // mass flux by evap/cond to soil (kg/m^2/s)
 
-    double* delsub_veg_0_int2{ NULL };        // mass of evaporation to air (kg/m^2)
 
 //   precipitation info adjusted for current run timestep
 
@@ -110,6 +106,8 @@ public:
     double* u{ NULL };        // wind speed (m/sec)
     double* T_g{ NULL };      // soil temp at depth z_g (C)
     double* F_g{ NULL };      // soil flux at depth z_g (W/m^2)
+    const double *T_s_0 { NULL }; // temp of the surface snowpack active layer (K)
+
 
     long* isothermal{ NULL }; // melting?
     long* vegsnowcover{ NULL };  // snow on veg at start of current timestep?
@@ -154,8 +152,16 @@ public:
     const double* z_u{ NULL };         // height of wind measurement (m)
     const double* z_T{ NULL };         // height of air temp & vapor pressure measurement (m)
     const double* z_0_veg{ NULL };         // roughness length
-    const double* max_z_s_0{ NULL };   // maximum active layer thickness (m)
     const double* max_h2o_vol_veg{ NULL }; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
+    const double  *Cc{ NULL };       // canopy coverage, (1-sky view fraction)
+    const double  *Lmax{ NULL };  // maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 kg m-2 based on max observed in Storck et al. 2002, Floyd 2012 and Cebulski & Pomeroy (kg/m^2)
+    const double  *Ht{ NULL };  // forest/vegetation height (m)
+    const long  *CanopyWindSwitch{ NULL };  // Canopy wind model to use at height Zcan, 0 - for Cionco (dense canopy), 1 - for Prandtl-von Kármán log-linear relationship (sparse forest)".
+    const double  *melt_drip_ratio{ NULL };  // Ratio of mass unloading of solid snow due to melt compared to canopy snowmelt. (-)
+
+
+
+
 
 //    void decl(void);
 
@@ -213,6 +219,8 @@ public:
     void _precip(void);
 
     void _snowmelt(void);
+
+    void _mass_unld(void);
 
     void _new_density(void);
 

@@ -56,21 +56,17 @@ void ClassCanSnobalBase::init(void) {
         P_a[hh] = 101.3f * pow((293.0f - 0.0065f * hru_elev[hh]) / 293.0f, 5.26f) * 1000.0f;  // Pa
 
         T_s_veg[hh] = -75.0; // temperatures inside CanSnobal model are K
-        T_s_veg_0[hh] = -75.0;
 
         rho_veg[hh] = 218.0; // change 10/18/16
         h2o_sat_veg[hh] = 0.0;
 
         z_veg_s[hh] = 0.0;
-        z_s_veg_0[hh] = 0.0;
 
         m_s_veg[hh] = 0.0;
-        m_s_veg_0[hh] = 0.0;
 
         cc_s_veg[hh] = 0.0;
-        cc_s_0_veg[hh] = 0.0;
 
-        h2o_veg[hh] = 0.0;
+        liq_h2o_veg[hh] = 0.0;
         h2o_max_veg[hh] = 0.0;
         h2o_total_veg[hh] = 0.0;
         delmelt_veg[hh] = 0.0;
@@ -103,7 +99,6 @@ void ClassCanSnobalBase::init(void) {
         Qp[hh] = 0.0;
         Qn_veg[hh] = 0.0;
         delta_Q_veg[hh] = 0.0;
-        delta_Q_0_veg[hh] = 0.0;
 
         if (hh < nhru)
         {
@@ -170,23 +165,23 @@ void ClassCanSnobalBase::init_snow(void)
 
     m_s_veg[hh] = rho_veg[hh] * z_veg_s[hh];
 
-        // Compute specific mass for each layer.
+    // Compute specific mass for each layer.
 
-        _layer_mass();
+    _layer_mass();
 
-        cc_s_0_veg[hh] = _cold_content(T_s_veg_0[hh], m_s_veg_0[hh]);
+    cc_s_veg[hh] = _cold_content(T_s_veg[hh], m_s_veg[hh]);
 
-        // Compute liquid water content as volume ratio, and snow density without water.
+    // Compute liquid water content as volume ratio, and snow density without water.
 
-        h2o_vol_veg[hh] = h2o_sat_veg[hh] * max_h2o_vol_veg[hh];
-        rho_dry = DRY_SNO_RHO(rho_veg[hh], h2o_vol_veg[hh]);
+    h2o_vol_veg[hh] = h2o_sat_veg[hh] * max_h2o_vol_veg[hh];
+    rho_dry = DRY_SNO_RHO(rho_veg[hh], h2o_vol_veg[hh]);
 
-        // Determine maximum liquid water content (as specific mass) and the actual liquid water content (as specific mass).
+    // Determine maximum liquid water content (as specific mass) and the actual liquid water content (as specific mass).
 
-        h2o_max_veg[hh] = H2O_LEFT(z_veg_s[hh], rho_dry, max_h2o_vol_veg[hh]);
+    h2o_max_veg[hh] = H2O_LEFT(z_veg_s[hh], rho_dry, max_h2o_vol_veg[hh]);
 
-        h2o_veg[hh] = h2o_sat_veg[hh] * h2o_max_veg[hh];
-        stop_no_snow[hh] = 0; //????
+    liq_h2o_veg[hh] = h2o_sat_veg[hh] * h2o_max_veg[hh];
+    stop_no_snow[hh] = 0; //????
 
 }
 
@@ -201,15 +196,15 @@ void ClassCanSnobalBase::init_snow(void)
 **
 ** GLOBAL VARIABLES READ
 **	rho_veg
-**	z_s_veg_0
+**	z_s_veg
 **
 ** GLOBAL VARIABLES MODIFIED
-**	m_s_veg_0
+**	m_s_veg
 */
 
 void ClassCanSnobalBase::_layer_mass(void)
 {
-    m_s_veg_0[hh] = rho_veg[hh] * z_s_veg_0[hh];
+    m_s_veg[hh] = rho_veg[hh] * z_veg_s[hh];
 }
 
 /*
@@ -328,7 +323,7 @@ void ClassCanSnobalBase::do_data_tstep(void) {
         if ((precip_info[hh]->m_snow > 0.0) && (precip_info[hh]->m_rain > 0.0)) {
             T_snow_veg[hh] = FREEZE;
             h2o_sat_veg_snow[hh] = 1.0;
-            T_rain_veg[hh] = T_pp[hh];
+            T_rain_veg[hh] = T_pp[hh]; // TODO try changing to harder ice bulb temp
         }
 
         // Snow only
@@ -471,7 +466,7 @@ int ClassCanSnobalBase::_divide_tstep(TSTEP_REC* tstep) {  // record of timestep
 **
 ** GLOBAL VARIABLES READ
 **	m_s_veg
-**	m_s_veg_0
+**	m_s_veg
 **
 ** GLOBAL VARIABLES MODIFIED
 */
@@ -516,7 +511,6 @@ int ClassCanSnobalBase::_below_thold(double	threshold) { // current timestep's t
 **
 ** GLOBAL VARIABLES READ
 **	delta_Q_veg
-**	delta_Q_0_veg
 **	delsub_veg
 **	G
 **	Qh_veg
@@ -530,7 +524,6 @@ int ClassCanSnobalBase::_below_thold(double	threshold) { // current timestep's t
 ** GLOBAL VARIABLES MODIFIED
 **	current_time
 **	curr_time_hrs
-**	delta_Q_0_bar
 **	delta_Q_bar
 **	e_a
 **	G_bar
@@ -585,10 +578,8 @@ int ClassCanSnobalBase::_do_tstep(TSTEP_REC* tstep)  // timestep's record
 
     //  update interval values
 
-    delmelt_veg_int2[hh] += deldrip_veg[hh];
+    delmelt_veg_int[hh] += deldrip_veg[hh];
     delsub_veg_int[hh] += delsub_veg[hh];
-    delsub_veg_0_int[hh] += qsub_veg[hh];
-    delsub_veg_0_int2[hh] += delsub_veg_0[hh];
 
     //  Update the model's input parameters
 
@@ -642,13 +633,9 @@ int ClassCanSnobalBase::_e_bal(void) {
 
         // sum qsub_veg.B. terms
 
-        // surface energy budget
+        // veg snowpack energy budget
 
-        delta_Q_0_veg[hh] = Qn_veg[hh] + Qh_veg[hh] + Ql_veg[hh] + Qp[hh];
-
-        // total snowpack energy budget
-
-        delta_Q_veg[hh] = delta_Q_0_veg[hh];
+        delta_Q_veg[hh] = Qn_veg[hh] + Qh_veg[hh] + Ql_veg[hh] + Qp[hh];
 
     }
     else {
@@ -658,7 +645,7 @@ int ClassCanSnobalBase::_e_bal(void) {
 
         Qp[hh] = 0.0;
 
-        delta_Q_veg[hh] = delta_Q_0_veg[hh] = 0.0;
+        delta_Q_veg[hh] = 0.0;
     }
 
     return 1;
@@ -676,7 +663,7 @@ int ClassCanSnobalBase::_e_bal(void) {
 ** GLOBAL VARIABLES READ
 **	I_lw
 **	S_n
-**	T_s_veg_0
+**	T_s_veg
 **
 ** GLOBAL VARIABLES MODIFIED
 **	Qn_veg
@@ -684,8 +671,8 @@ int ClassCanSnobalBase::_e_bal(void) {
 
 void ClassCanSnobalBase::_net_rad(void)
 {
-    //	Qn_veg[hh] = S_n[hh] + (SNOW_EMISSIVITY * (I_lw[hh] - STEF_BOLTZ * pow(T_s_veg_0[hh], 4.0f)));
-    Qn_veg[hh] = S_n[hh] + (I_lw[hh] - SNOW_EMISSIVITY * STEF_BOLTZ * pow(T_s_veg_0[hh], 4.0f)); // correction 07/17/14
+    //	Qn_veg[hh] = S_n[hh] + (SNOW_EMISSIVITY * (I_lw[hh] - STEF_BOLTZ * pow(T_s_veg[hh], 4.0f)));
+    Qn_veg[hh] = S_n[hh] + (I_lw[hh] * Cc[hh] - 2.0 * SNOW_EMISSIVITY * STEF_BOLTZ * pow(T_s_veg[hh], 4.0f)); // after CLASS to multiply incoming LW by canopy coverage (i.e, 1 - sky view) and handle top and bottom of canopy snowpack so multiply outgoing LW by 2, since I_lw[hh] includes incoming atm and surface LW wrt canopy.
 }
 
 /*
@@ -711,7 +698,7 @@ int ClassCanSnobalBase::_h_le(void) {
 
 // calculate saturation vapor pressure
 
-    e_s = sati(T_s_veg_0[hh]);
+    e_s = sati(T_s_veg[hh]);
 
     //*** error check for bad vapor pressures ***
 
@@ -738,7 +725,7 @@ int ClassCanSnobalBase::_h_le(void) {
 
     // calculate Qh_veg & Ql_veg
 
-    if (hle1(P_a[hh], T_a[hh], T_s_veg_0[hh], rel_z_T, e_a_fix, e_s, rel_z_T, u[hh], rel_z_u, z_0_veg[hh], Qh_veg[hh], Ql_veg[hh], qsub_veg[hh]))
+    if (hle1(P_a[hh], T_a[hh], T_s_veg[hh], rel_z_T, e_a_fix, e_s, rel_z_T, u[hh], rel_z_u, z_0_veg[hh], Qh_veg[hh], Ql_veg[hh], qsub_veg[hh]))
         return 1; // !!!!!TB
 
     return 1;
@@ -822,7 +809,7 @@ double ClassCanSnobalBase::g_snow(
 **	m_snow
 **	precip_now
 **	T_rain_veg
-**	T_s_veg_0
+**	T_s_veg
 **	T_snow_veg
 **	time_step
 **
@@ -833,8 +820,8 @@ double ClassCanSnobalBase::g_snow(
 void ClassCanSnobalBase::_advec(void) {
 
     if (precip_now_veg) {
-        Qp[hh] = (heat_stor(CP_WATER(T_rain_veg[hh]), m_rain[hh], (T_rain_veg[hh] - T_s_veg_0[hh])) +
-            heat_stor(CP_ICE(T_snow_veg[hh]), m_snow[hh], (T_snow_veg[hh] - T_s_veg_0[hh]))) / time_step[hh];
+        Qp[hh] = (heat_stor(CP_WATER(T_rain_veg[hh]), m_rain[hh], (T_rain_veg[hh] - T_s_veg[hh])) +
+            heat_stor(CP_ICE(T_snow_veg[hh]), m_snow[hh], (T_snow_veg[hh] - T_s_veg[hh]))) / time_step[hh];
     }
     else
         Qp[hh] = 0.0;
@@ -860,7 +847,7 @@ void ClassCanSnobalBase::_mass_bal(void) {
     // adjust mass and calc. runoff
 
     // age snow by compacting snow due to time passing
-    _time_compact();
+    // _time_compact(); rm for now, likely needs to be adjusted for canopy snow
 
     // process precipitation event
     _precip();
@@ -869,9 +856,13 @@ void ClassCanSnobalBase::_mass_bal(void) {
 
     _snowmelt();
 
-    // calculate evaporation and adjust snowpack
+    // calculate sublimation/evaporation and adjust canopy snowpack
 
     _evap_cond();
+
+    // calculate mass unloading of snow due to wind, sublimation, melting
+
+    _mass_unld();
 
     // compact snow due to H2O generated (melt & rain)
     _h2o_compact();
@@ -884,8 +875,8 @@ void ClassCanSnobalBase::_mass_bal(void) {
     //   timestep and there's still snow on the ground
 
     if (vegsnowcover[hh]) {
-        T_s_veg_0[hh] = new_tsno(m_s_veg_0[hh], T_s_veg_0[hh], cc_s_0_veg[hh]);
-        T_s_veg[hh] = T_s_veg_0[hh];
+        T_s_veg[hh] = new_tsno(m_s_veg[hh], T_s_veg[hh], cc_s_veg[hh]);
+        T_s_veg[hh] = T_s_veg[hh];
     }
 }
 
@@ -983,12 +974,12 @@ void ClassCanSnobalBase::_time_compact(void)
 **	z_snow_veg
 **
 ** GLOBAL VARIABLES MODIFIED
-**	h2o_veg
+**	liq_h2o_veg
 **	h2o_sat_veg
 **	h2o_total_veg
 **	rho_veg
 **	T_s_veg
-**	T_s_veg_0
+**	T_s_veg
 **	z_veg_s[hh]
 **	(and those variables modified by "_adj_snow" and "_init_snow")
 */
@@ -1009,7 +1000,7 @@ void ClassCanSnobalBase::_precip(void)
             //   and then add its mass to liquid water in the whole vegsnowcover.
 
             h2o_vol_veg_snow = h2o_sat_veg_snow[hh] * max_h2o_vol_veg[hh];
-            h2o_veg[hh] += H2O_LEFT(z_snow_veg[hh], rho_snow[hh], h2o_vol_veg_snow);
+            liq_h2o_veg[hh] += H2O_LEFT(z_snow_veg[hh], rho_snow[hh], h2o_vol_veg_snow);
         }
         else { // no vegsnowcover
 
@@ -1019,7 +1010,7 @@ void ClassCanSnobalBase::_precip(void)
                 z_veg_s[hh] = z_snow_veg[hh];
                 rho_veg[hh] = rho_snow[hh];
                 T_s_veg[hh] = T_snow_veg[hh];
-                T_s_veg_0[hh] = T_snow_veg[hh];
+                T_s_veg[hh] = T_snow_veg[hh];
                 h2o_sat_veg[hh] = h2o_sat_veg_snow[hh];
 
                 init_snow();
@@ -1029,12 +1020,11 @@ void ClassCanSnobalBase::_precip(void)
         // Add rainfall and water in the vegsnowcover to total liquid water. ???? !!!!
 
         h2o_total_veg[hh] += m_rain[hh];
-        //    deldrip_veg[hh] += m_rain[hh];
     } // current precip
 
   // Add water in the vegsnowcover to total liquid water.
     else // no precip
-        h2o_total_veg[hh] += h2o_veg[hh];
+        h2o_total_veg[hh] += liq_h2o_veg[hh];
 }
 
 /*
@@ -1055,7 +1045,6 @@ void ClassCanSnobalBase::_precip(void)
 void ClassCanSnobalBase::_snowmelt(void) {
 
     double  Q_0;            // energy available for surface melt
-    double  Q_l;	       // energy available for lower layer melt
     double  Q_freeze;       // energy used for re-freezing
     double  Q_left;         // energy left after re_freezing
     double  h2o_refrozen;   // amount of liquid H2O that was refrozen
@@ -1072,26 +1061,23 @@ void ClassCanSnobalBase::_snowmelt(void) {
     // calculate surface melt
 
     // energy for surface melt
-    Q_0 = (delta_Q_0_veg[hh] * time_step[hh]) + cc_s_0_veg[hh];
+    Q_0 = (delta_Q_veg[hh] * time_step[hh]) + cc_s_veg[hh];
 
     if (Q_0 > 0.0) {
-        delmelt_veg[hh] = MELT(Q_0);
-        cc_s_0_veg[hh] = 0.0;
+        delmelt_veg[hh] = MELT(Q_0); // liquid water will only freeze on next timestep
+        cc_s_veg[hh] = 0.0; // all energy is used to melt snow
     }
     else if (Q_0 == 0.0) {
         delmelt_veg[hh] = 0.0;
-        cc_s_0_veg[hh] = 0.0;
+        cc_s_veg[hh] = 0.0;
     }
     else {
         delmelt_veg[hh] = 0.0;
-        cc_s_0_veg[hh] = Q_0;
+        cc_s_veg[hh] = Q_0;
 
-        if (m_s_veg[hh] < 2.0) // addition TB 06/03/10
-            cc_s_0_veg[hh] = 0.0;
+        if (m_s_veg[hh] < 2.0) // addition TB 06/03/10, TODO mod for canopy snow
+            cc_s_veg[hh] = 0.0;
     }
-
-
-    // calculate lower layer melt
 
     h2o_total_veg[hh] += delmelt_veg[hh];
 
@@ -1101,19 +1087,20 @@ void ClassCanSnobalBase::_snowmelt(void) {
 
     h2o_refrozen = 0.0;
 
-    if (cc_s_0_veg[hh] < 0.0) {
-        // if liquid h2o present, calc refreezing and adj cc_s_0_veg
+    if (cc_s_veg[hh] < 0.0) { // cannot enter here if snow is melting on current timestep
+        // if liquid h2o present, calc refreezing and adj cc_s_veg
         if (h2o_total_veg[hh] > 0.0) {
-            Q_freeze = h2o_total_veg[hh] * (z_s_veg_0[hh] / z_veg_s[hh]) * LH_FUS(FREEZE);
+            Q_freeze = h2o_total_veg[hh] * LH_FUS(FREEZE);
             Q_left = Q_0 + Q_freeze;
 
+            // cold content is negative considering updated Q_0, thus enough energy to freeze all liquid water
             if (Q_left <= 0.0) {
-                h2o_refrozen = h2o_total_veg[hh] * (z_s_veg_0[hh] / z_veg_s[hh]);
-                cc_s_0_veg[hh] = Q_left;
+                h2o_refrozen = h2o_total_veg[hh];
+                cc_s_veg[hh] = Q_left;
             }
             else {
-                h2o_refrozen = (h2o_total_veg[hh] * (z_s_veg_0[hh] / z_veg_s[hh])) - MELT(Q_left);
-                cc_s_0_veg[hh] = 0.0;
+                h2o_refrozen = h2o_total_veg[hh] - MELT(Q_left);
+                cc_s_veg[hh] = 0.0;
             }
         }
     }
@@ -1130,7 +1117,7 @@ void ClassCanSnobalBase::_snowmelt(void) {
 
     // determine if vegsnowcover is isothermal
 
-    if ((vegsnowcover[hh] == 1) && (cc_s_0_veg[hh] == 0.0))
+    if ((vegsnowcover[hh] == 1) && (cc_s_veg[hh] == 0.0))
         isothermal[hh] = 1;
     else
         isothermal[hh] = 0;
@@ -1144,7 +1131,116 @@ void ClassCanSnobalBase::_snowmelt(void) {
         _adj_snow(-(delmelt_veg[hh] / rho_veg[hh]), 0.0);
     }
 
-    cc_s_veg[hh] = cc_s_0_veg[hh];
+    cc_s_veg[hh] = cc_s_veg[hh];
+}
+
+/*
+** NAME
+**      void _mass_unld(void) -- adjust the canopy snowpack's snow storage due to mass unloading of snow
+**
+** DESCRIPTION
+**      This is the updated mass snow unloading parameterisations from
+**  Cebulski & Pomeroy 2025 to unload based on wind, snowmelt, and sublimation
+**
+** GLOBAL VARIABLES READ
+**
+** GLOBAL VARIABLES MODIFIED
+**
+*/
+
+void ClassCanSnobalBase::_mass_unld(void)
+{
+
+    // check maximum canopy snow load spill what is overflowing
+    if (m_s_veg[hh] > Lmax[hh])
+    {
+        delunld[hh] = m_s_veg[hh] - Lmax[hh];
+    }
+
+    // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt similar method
+    // to Andreadis et al., (2009) based on Storck's measurements
+    delunld_melt[hh] = delmelt_veg[hh] * melt_drip_ratio[hh];
+
+    // mass unloading due to sublimation first suggested in JM's thesis
+    const double subl_unld_ratio = 1.11; // TODO move to par file
+    delunld_subl[hh] = delsub_veg_int[hh] * subl_unld_ratio;
+
+    // mechanical wind induced unloading
+    const double a_u = 1.740917e-06; // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain when air temp < -6 C.
+    const double b_u = 3.326246e-01; // TODO move to par file
+
+    double fu = 0.0;
+    double u_mid = 0.0;
+
+    switch (CanopyWindSwitch[hh])
+    {
+    case 0:
+    { // original using Cionco wind model for dense canopies
+        // wind speed for wind induced unloading at 1/2 canopy height
+        if ((Ht[hh] - (2.0 / 3.0) * z_u[hh]) > 0.0)
+        {
+            double u_ht = u[hh] * log((Ht[hh] - (2.0 / 3.0) * z_u[hh]) / 0.123 * z_u[hh]) / log((z_u[hh] - 2.0 / 3.0 * z_u[hh]) / 0.123 * z_u[hh]);
+            double A = 2.4338 + 3.45753 * exp(-u_ht);                /* Modified Cionco wind model */
+            u_mid = u_ht * exp(A * ((Ht[hh] / 2) / (Ht[hh]) - 1.0)); /* calculates canopy windspd  */
+        }
+        else
+        {
+            u_mid = 0.0;
+        }
+        break;
+    } // case 0
+
+    case 1:
+    {                           // Canopy wind profile developed at Fortress sparse canopy
+        double d0 = 0.5791121;  // displacement height observed at sparse forest around Fortress Forest Tower
+        double z0m = 0.4995565; // roughness length observed at above site
+
+        // wind speed for wind induced unloading at 1/2 canopy height
+        if ((Ht[hh] / 2 - d0) > z0m)
+        {
+            double Ustar = u[hh] * PBSM_constants::KARMAN / (log((z_u[hh] - d0) / z0m));
+            u_mid = Ustar / PBSM_constants::KARMAN * log((Ht[hh] / 2 - d0) / z0m);
+        }
+        else
+        {
+            u_mid = 0.0;
+        }
+
+        break;
+    } // case 1
+    } // end of switch CanopyWind
+
+    if (u_mid >= 0.0)
+    {
+        fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
+    }
+    else
+    {
+        fu = 0.0; // less than wind induced unloading threshold so set equal to 0.
+    }
+
+    double dt = Global::Interval * 24 * 60 * 60; // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
+
+    // ablation via temperature, wind, and duration based unloading
+    // delunld[hh] = m_s_veg[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
+
+    // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
+    delunld_wind[hh] = m_s_veg[hh] * (1 - exp(-fu * dt)); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
+    delunld[hh] += delunld_wind[hh];
+    delunld[hh] += delunld_melt[hh];
+    delunld[hh] += delunld_subl[hh];
+
+    if (delunld[hh] > m_s_veg[hh])
+    {
+        delunld[hh] = m_s_veg[hh];
+        m_s_veg[hh] = 0.0;
+    }
+    else
+    {
+        m_s_veg[hh] -= delunld[hh];
+    }
+
+    _adj_snow(-(delunld[hh] / rho_veg[hh]), 0.0);
 }
 
 /*
@@ -1218,7 +1314,7 @@ void ClassCanSnobalBase::_adj_snow(
         rho_veg[hh] = m_s_veg[hh] / z_veg_s[hh];
     else {
         z_veg_s[hh] = 0.0;
-        m_s_veg[hh] = 0.0;
+        // m_s_veg[hh] = 0.0; we could still have liquid water... 
     }
 
     // Clip density at maxium density if necessary.
@@ -1249,7 +1345,7 @@ void ClassCanSnobalBase::_adj_snow(
 **	qsub_veg
 **	P_a
 **	rho_veg
-**	T_s_veg_0
+**	T_s_veg
 **	time_step
 **	z_g
 **
@@ -1263,7 +1359,7 @@ void ClassCanSnobalBase::_adj_snow(
 
 void ClassCanSnobalBase::_evap_cond(void) {
 
-    //        double  delsub_veg_0;          // mass of evaporation to air (kg/m^2)
+    //        double  delsub_veg;          // mass of evaporation to air (kg/m^2)
     double  e_g;            // soil vapor press
     double  k;              // soil diffusion coef
     double  prev_h2o_tot;   // previous value of h2o_total_veg variable
@@ -1274,33 +1370,51 @@ void ClassCanSnobalBase::_evap_cond(void) {
 
 // calculate evaporation or condensation
 
-// If no snow on ground at start of timestep, then just exit.
-
-    if (!vegsnowcover[hh]) {
-        delsub_veg[hh] = 0.0;
-        return;
+// If no snow on canopy set h2o evap equal to ET calculated in evap module
+    if (!vegsnowcover[hh])
+    {
+        if( hru_evap[hh] > 0.0)
+        {
+            if (liq_h2o_veg[hh] >= hru_evap[hh] * Cc[hh])
+            {                                           // (evaporation in mm)
+                delsub_veg[hh] = hru_evap[hh] * Cc[hh]; //
+            }
+            else
+            {
+                delsub_veg[hh] = rain_load[hh];
+            }
+                 _adj_snow(((delsub_veg[hh] + (prev_h2o_tot - h2o_total_veg[hh])) / rho_veg[hh]) / 2.0, delsub_veg[hh]);
+        return;    
+        }
+        else 
+        {
+            delsub_veg[hh] = 0.0;
+            return;
+        }
+        
     }
+    else // there is a canopy snowpack we have no ET 
+    {
+        // Total mass change due to evap/cond at surface during timestep
 
-    // Total mass change due to evap/cond at surface during timestep
-
-    delsub_veg_0[hh] = qsub_veg[hh] * time_step[hh];
+    delsub_veg[hh] = qsub_veg[hh] * time_step[hh];
 
     //  Adjust total h2o for evaporative losses
 
     prev_h2o_tot = h2o_total_veg[hh];
 
     if (h2o_total_veg[hh] > 0.0) {
-        h2o_total_veg[hh] += (delsub_veg_0[hh] * VAP_SUB);
+        h2o_total_veg[hh] += (delsub_veg[hh] * VAP_SUB);
         if (h2o_total_veg[hh] <= 0.0)
             h2o_total_veg[hh] = 0.0;
     }
 
-    delsub_veg[hh] = delsub_veg_0[hh];
-
     //      adj mass and depth for evap/cond
 
-    if (vegsnowcover[hh] > 0)
-        _adj_snow(((delsub_veg[hh] + (prev_h2o_tot - h2o_total_veg[hh])) / rho_veg[hh]) / 2.0, delsub_veg[hh]);
+     _adj_snow(((delsub_veg[hh] + (prev_h2o_tot - h2o_total_veg[hh])) / rho_veg[hh]) / 2.0, delsub_veg[hh]);
+
+    }
+       
 }
 
 /*
@@ -1402,7 +1516,7 @@ void ClassCanSnobalBase::_h2o_compact(void)
 **	z_veg_s
 **
 ** GLOBAL VARIABLES MODIFIED
-**	h2o_veg
+**	liq_h2o_veg
 **	h2o_max_veg
 **	h2o_sat_veg
 **	h2o_vol_veg
@@ -1417,13 +1531,6 @@ void ClassCanSnobalBase::_runoff(void) {
 
 // calculate runoff
 
-// If no snow on ground at start of timestep or no layers currently, then all water (e.g., rain) is runoff.
-
-    if ((!vegsnowcover[hh])) {
-        deldrip_veg[hh] = h2o_total_veg[hh];
-        return;
-    }
-
     //  Determine the snow density without any water, and the maximum liquid water the snow can hold.
 
     m_s_dry = m_s_veg[hh] - h2o_total_veg[hh];
@@ -1434,7 +1541,7 @@ void ClassCanSnobalBase::_runoff(void) {
 
     if (h2o_total_veg[hh] > h2o_max_veg[hh]) {
         deldrip_veg[hh] = h2o_total_veg[hh] - h2o_max_veg[hh];
-        h2o_veg[hh] = h2o_max_veg[hh];
+        liq_h2o_veg[hh] = h2o_max_veg[hh];
         h2o_sat_veg[hh] = 1.0;
         h2o_vol_veg[hh] = max_h2o_vol_veg[hh];
 
@@ -1444,8 +1551,8 @@ void ClassCanSnobalBase::_runoff(void) {
     }
     else {
         deldrip_veg[hh] = 0.0;
-        h2o_veg[hh] = h2o_total_veg[hh];
-        h2o_sat_veg[hh] = h2o_veg[hh] / h2o_max_veg[hh];
+        liq_h2o_veg[hh] = h2o_total_veg[hh];
+        h2o_sat_veg[hh] = liq_h2o_veg[hh] / h2o_max_veg[hh];
         h2o_vol_veg[hh] = h2o_sat_veg[hh] * max_h2o_vol_veg[hh];
     }
 }

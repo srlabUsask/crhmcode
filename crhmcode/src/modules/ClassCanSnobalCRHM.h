@@ -45,25 +45,17 @@ class ClassCanSnobalCRHM : public ClassCanSnobalBase {
     const double  *Albedo_surface{ NULL };     // albedo of surface ()
     const double  *Albedo_veg{ NULL };     // albedo of vegetation ()
     const double  *Albedo_vegsnow{ NULL };     // albedo of snow on vegetation ()
-    const double *Qsw_veg_Var { NULL }; // incoming shortwave radiation through 50% of canopy (W m^-2)
-    const double *Qlw_veg_Var { NULL }; // incoming shortwave radiation through 50% of canopy (W m^-2)
+    const double *Qsw_in_veg{ NULL }; // downwelling shortwave radiation to the canopy (W m^-2)
+    const double *Qlw_out_atm{ NULL }; // downwelling longwave radiation from the atmosphere (W m^-2)
 
 // variable precipitation inputs
 
-    const double  *m_precip_X{ NULL };	// specific mass of total precip     (kg/m^2) net_p
-    const double  *m_snow_X{ NULL };	// specific mass in snow in precip   (kg/m^2) net_snow
-
-// put variable precipitation inputs
-
-    double  *m_rain_X{ NULL };	// specific mass of rain in precip   (kg/m^2) net_rain
+    const double  *new_snow{ NULL };	// specific mass in snow in precip   (kg/m^2) net_snow
+    const double  *new_rain{ NULL };	// specific mass in rain in precip   (kg/m^2) net_rain
 
 // parameters
 
     const double  *rho_snow_X{ NULL };       // density of snowfall               (kg/m^3)
-    const double  *T_g_X{ NULL };            // soil temp at depth z_g (C)
-    const double  *F_g_X{ NULL };            // soil flux at depth z_g (C)
-    const long   *rain_soil_snow{ NULL };  //
-    double *snow_store{ NULL }; // accumulates snow till > 1+mm
 
     void decl(void);
 
