@@ -995,7 +995,7 @@ double ClassSnobalBase::g_snow(
 
 void ClassSnobalBase::_advec(void) {
 
-    if (precip_now) {
+    if (precip_now[hh]) {
         M[hh] = (heat_stor(CP_WATER(T_rain[hh]), m_rain[hh], (T_rain[hh] - T_s_0[hh])) +
             heat_stor(CP_ICE(T_snow[hh]), m_snow[hh], (T_snow[hh] - T_s_0[hh]))) / time_step[hh];
     }
