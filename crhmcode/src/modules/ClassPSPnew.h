@@ -70,7 +70,7 @@ const double *QliVt_Var { NULL };
 const double *QsiS_Var { NULL };
 const double *QsiA_Var { NULL };
 const double *hru_T_g { NULL };
-const double *Ts { NULL };
+const double *T_s_0 { NULL };
 const double *Snow_load { NULL };
 const double *rain_load { NULL };
 const double *Lmax { NULL };

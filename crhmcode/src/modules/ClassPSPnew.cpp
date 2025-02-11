@@ -97,8 +97,8 @@ void ClassPSPnew::decl(void) {
   declgetvar("*", "SolAng", "(r)", &SolarAng);
   declgetvar("*", "hru_ea", "(kPa)", &hru_ea);
   declgetvar("*", "QdflatE", "(W/m^2)", &QdflatE);
-  declgetvar("*", "Ts", "(" + string(DEGREE_CELSIUS) + ")", &Ts); // temperature of snowpack from Canopy module
-  // declgetvar("*", "T_s_0", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0); // temperature of the active layer from snobal
+  // declgetvar("*", "Ts", "(" + string(DEGREE_CELSIUS) + ")", &Ts); // temperature of canopy snowpack from Canopy module approx from air temp
+  declgetvar("*", "T_s_0", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0); // temperature of the active layer from snobal
   declgetvar("*", "snowcover", "()", &snowcover); 
   declgetvar("*", "Snow_load", "()", &Snow_load);
   declgetvar("*", "rain_load", "()", &rain_load);
@@ -273,8 +273,7 @@ void ClassPSPnew::run(void) {
       // Lstar = Sbar[hh]*(0.27 + 46.0/RhoS)*LAI[hh];
 
       if(snowcover[hh] == 1){
-        // TsnowG = T_s_0[hh]; // ground temp is equal to snowbal active layer temp when we have snow on the ground
-        TsnowG = Ts[hh]; // ground temp is equal to snow surface temperature calculated in Canopy module
+        TsnowG = T_s_0[hh]; // ground temp is equal to snowbal active layer temp when we have snow on the ground
       } else {
         TsnowG = hru_T_g[hh]; // if no snowcover set to the ground temperature constant set as param in snobal
       }
@@ -401,7 +400,7 @@ void ClassPSPnew::run(void) {
 
             double QlwUP_veg = CRHM_constants::sbc * CRHM_constants::emiss_c * pow(Tbiomass[hh] + 273.15, 4.0f) * (1.0 - CanSnowFrac) * (1.0 - GapFrac); // upward longwave from exposed veg on the bottom of the canopy
             double QlwUP_cansnow = CRHM_constants::sbc * CRHM_constants::emiss * pow(DblTCanSnow + 273.15, 4.0f) * CanSnowFrac; // upward longwve from snow intercepted on the bottom of the canopy
-            double QlwUP_surfsnow = CRHM_constants::sbc * CRHM_constants::emiss * pow(Ts[hh] + 273.15, 4.0f) * GapFrac; // upward longwave from ground
+            double QlwUP_surfsnow = CRHM_constants::sbc * CRHM_constants::emiss * pow(T_s_0[hh] + 273.15, 4.0f) * GapFrac; // upward longwave from ground
 
             QlwUp = QlwUP_veg + QlwUP_cansnow + QlwUP_surfsnow + (B_canopy[hh] * Kstar_H)/2; 
 
