@@ -155,6 +155,10 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declvar("direct_snow", TDim::NHRU, "snow 'direct' through canopy", "(mm/int)", &direct_snow);
 
+  declvar("intercepted_snow", TDim::NHRU, "initial interception of snow before ablation kicks in.", "(mm/int)", &intercepted_snow);
+
+  declvar("intercepted_rain", TDim::NHRU, "initial interception of rain before ablation kicks in.", "(mm/int)", &intercepted_rain);
+  
   declvar("canopy_snowmelt", TDim::NHRU, "amount of snow intercepted in the canopy that is melted ", "(mm/int)", &canopy_snowmelt);
 
   declvar("SUnloadMelt", TDim::NHRU, "solid snow unloaded from the canopy proportional to melt. ", "(mm/int)", &SUnloadMelt);
@@ -393,17 +397,28 @@ void ClassCRHMCanopyVectorBased::run(void)
       {
         k[hh] = 0.0;
         Tauc[hh] = 0.0;
+        Tauc_50 = 0.0;
       }
 
       Kstar_H = Qsi_ * (1.0 - Alpha_c[hh] - Tauc[hh] * (1.0 - Albedo[hh])); // Eq. 6 from Pomeroy 2009
 
+      // incoming longwave to the surface 
       Qlisn[hh] = Qli_ * Vf_ + (1.0f - Vf_) * CRHM_constants::emiss_c * CRHM_constants::sbc * pow(T1, 4.0f) + B_canopy[hh] * Kstar_H; // looks like modification of Eq. 10 from Pomeroy 2009
 
       Qlisn_Var[hh] = Qlisn[hh]; // goes to snobal module
 
+      // incoming shortwave radiation to the surface
       Qsisn[hh] = Qsi_ * Tauc[hh];
 
       Qsisn_Var[hh] = Qsisn[hh];
+
+      // incoming longwave to the canopy mid point
+
+      Qlw_veg_Var[hh] = Qli_ * (1.0 - (Cc[hh]/2)); // canopy snow is partially exposed to atmosphere so reduce based on view factor
+
+      // incoming shortwave radiation to canopy midpoint
+
+      // Qsw_veg_Var[hh] = Qsi_ * Tauc_50; // for PSP like solar to canopy midpoint
 
       Qlosn[hh] = CRHM_constants::emiss * CRHM_constants::sbc * pow(Ts[hh] + CRHM_constants::Tm, 4.0f);
 
@@ -501,7 +516,7 @@ void ClassCRHMCanopyVectorBased::run(void)
         const double v_snow = 0.8; // terminal fall velocity of snowfall taken from Isyumov, 1971
         Clca[hh] = 0.0;              // leaf contact area (Clca) based on trajectory angle
         double IP = 0.0;             // interception efficiency (IP)
-        double dL = 0.0;             // change in canopy snow load
+        intercepted_snow[hh] = 0.0;             // new snow intercepted in the canopy
 
         if (hru_u[hh] > 0.0 && Cc[hh] < 1.0 && Cc[hh] > 0.0)
         { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
@@ -551,9 +566,9 @@ void ClassCRHMCanopyVectorBased::run(void)
         }
           
         IP = Clca[hh] * alpha[hh]; // interception efficiency (IP)
-        dL = IP * hru_snow[hh];    // change in canopy snow load
+        intercepted_snow[hh] = IP * hru_snow[hh];    // change in canopy snow load
 
-        Snow_load[hh] += dL;
+        Snow_load[hh] += intercepted_snow[hh];
 
         // calculate canopy snow throughfall before unloading:
 
@@ -1067,7 +1082,8 @@ void ClassCRHMCanopyVectorBased::run(void)
           rain_load[hh] = smax;
         }
         else {
-          rain_load[hh] += hru_rain[hh] * Cc[hh];
+          intercepted_rain[hh] = hru_rain[hh] * Cc[hh];
+          rain_load[hh] += intercepted_rain[hh];
         }
 
 

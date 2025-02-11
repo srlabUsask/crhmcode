@@ -56,11 +56,15 @@ double *direct_rain { NULL };
 double *rain_load { NULL };
 double *Snow_load { NULL };
 double *direct_snow { NULL };
+double *intercepted_snow { NULL };
+double *intercepted_rain { NULL };
 double *SUnload { NULL };
 double *SUnload_H2O { NULL };
 double *Qnsn_Var { NULL };
 double *Qsisn_Var { NULL };
 double *Qlisn_Var { NULL };
+double *Qsw_veg_Var { NULL };
+double *Qlw_veg_Var { NULL };
 
 double *net_rain { NULL };
 double *cum_net_rain { NULL };
