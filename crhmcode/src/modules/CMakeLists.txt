@@ -17,6 +17,8 @@ add_library(modules OBJECT
     ClassBasin.cpp
     Classbrushintcp.cpp
     Classcalcsun.cpp
+    ClassCanSnobalBase.cpp
+    ClassCanSnobalCRHM.cpp
     Classcontribution.cpp
     Classcrack.cpp
     ClassCRHMCanopy.cpp
