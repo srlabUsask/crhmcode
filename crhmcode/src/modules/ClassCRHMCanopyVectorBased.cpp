@@ -414,7 +414,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 
       // incoming longwave to the canopy mid point
 
-      Qlw_veg_Var[hh] = Qli_ * (1.0 - (Cc[hh]/2)); // canopy snow is partially exposed to atmosphere so reduce based on view factor
+      // Qlw_veg_Var[hh] = Qli_ * (1.0 - (Cc[hh]/2)); // canopy snow is partially exposed to atmosphere so reduce based on view factor
 
       // incoming shortwave radiation to canopy midpoint
 
@@ -517,6 +517,8 @@ void ClassCRHMCanopyVectorBased::run(void)
         Clca[hh] = 0.0;              // leaf contact area (Clca) based on trajectory angle
         double IP = 0.0;             // interception efficiency (IP)
         intercepted_snow[hh] = 0.0;             // new snow intercepted in the canopy
+        intercepted_rain[hh] = 0.0;             // new rain intercepted in the canopy
+
 
         if (hru_u[hh] > 0.0 && Cc[hh] < 1.0 && Cc[hh] > 0.0)
         { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
