@@ -36,18 +36,15 @@ public:
 
     //   snowpack information
 
+    double* snow_h2o_veg{ NULL };            // snow h2o content as specific mass(kg/m^2)
+    double* liq_h2o_veg{ NULL };            // liquid h2o content as specific mass(kg/m^2)
     double* z_veg_s{ NULL };            // total snowcover thickness (m)
     double* rho_veg{ NULL };            // average snowcover density (kg/m^3)
-    double* m_s_veg{ NULL };            // snowcover's specific mass (kg/m^2). Init by init_snow.
-    double* T_s_veg{ NULL };            // average snowcover temp (K). Init by init_snow
-    double* cc_s_veg{ NULL };           // snowcover's cold content (J/m^2). Init by init_snow.
-    double* cc_s_veg{ NULL };         // active layer cold content (J/m^2). Init by init_snow.
+    double* m_s_veg{ NULL };            // snowcover's specific mass (kg/m^2). Init by init_snow_veg.
+    double* T_s_veg{ NULL };            // average snowcover temp (K). Init by init_snow_veg
+    double* cc_s_veg{ NULL };           // snowcover's cold content (J/m^2). Init by init_snow_veg.
     double* h2o_sat_veg{ NULL };        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
-//                                 to water that snowcover could hold at saturation)
-    double* h2o_vol_veg{ NULL };        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow
-    double* liq_h2o_veg{ NULL };            // liquid h2o content as specific mass(kg/m^2)
-    double* h2o_max_veg{ NULL };        // max liquid h2o content as specific mass(kg/m^2)
-    double* h2o_total_veg{ NULL };      // total liquid h2o: includes h2o in snowcover, melt, and rainfall (kg/m^2)
+    double* h2o_vol_veg{ NULL };        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow_veg
 
 //   energy balance info for current timestep
 
@@ -61,7 +58,8 @@ public:
 
     double* delmelt_veg_int{ NULL };       // specific melt (kg/m^2 or m)
     double* delL{ NULL };       // interval change in SWE
-    double* delsub_veg_int{ NULL };	    // mass of evap into air & soil from snowcover (kg/m^2*int)
+    double* delsub_veg_int{ NULL };	    // mass of evap into air & soil from snowcover (kg/m^2*int) delunld_int
+    double* delunld_int{ NULL };	    // specific mass of canopy snow unloaded to subcanopy (kg/m^2*int)
     double* delunld{ NULL };	    // canopy snow unloading rate (kg/m^2*int)
     double* delunld_wind{ NULL };	    // solid snow unloading from the canopy induced by wind (kg/m^2*int)
     double* delunld_melt{ NULL };	    // canopy snow unloading rate due to melting (kg/m^2*int)
@@ -70,12 +68,13 @@ public:
     double* delmelt_veg_day{ NULL };      // daily predicted specific runoff (m/sec)
     double* cmlmelt_veg_day{ NULL };      // daily predicted specific runoff accumulator (m/sec)
 
+    const double* del_liq_evap{ NULL };      // liquid water evaporated off the canopy. computed in the evap module aka "internal evap". (kg m^-2)
 
 //   mass balance vars for variable timestep
 
     double* delmelt_veg{ NULL };        // specific melt (kg/m^2 or m)
-    double* qsub_veg{ NULL };		 // mass flux by evap into air from active layer (kg/m^2/s)
-    double* delsub_veg{ NULL };	 // mass of evap into air & soil from snowcover (kg/m^2)
+    double* qsub_veg{ NULL };		 // mass flux by subl/evap (+ to surf) (kg/m^2/s)
+    double* delsub_veg{ NULL };	 // mass flux by subl/evap (+ to surf) (kg/m^2/int)
     double* deldrip_veg{ NULL };  // predicted specific runoff (m/sec)
 
     double* E_l{ NULL };	  // mass flux by evap/cond to soil (kg/m^2/s)
@@ -86,16 +85,14 @@ public:
     double* m_precip{ NULL };	// specific mass of total precip (kg/m^2)
     double* m_rain{ NULL };	// specific mass of rain in precip (kg/m^2)
     double* m_snow{ NULL };	// specific mass in snow in precip (kg/m^2)
-    double* m_subl{ NULL };	// specific mass in snow sublimation (kg/m^2)
     double* rho_snow{ NULL };   // density of snowfall (kg/m^3)
     double* T_pp{ NULL };       // precip temp (K)
-    double* z_snow_veg{ NULL };	// depth of snow in precip (m)
 
 //   precipitation info for the current DATA timestep
 
     long* precip_now_veg{ NULL };	// precipitation occur for current timestep?
     double* T_rain_veg{ NULL };	// rain's temp (K)
-    double* T_snow_veg{ NULL };	// snowfall's temp (K)
+    double* T_sf{ NULL };	// snowfall's temp (K)
     double* h2o_sat_veg_snow{ NULL }; // snowfall's % of liquid H2O saturation
 
 //   local climate-data values for the current run timestep
@@ -106,7 +103,7 @@ public:
     double* u{ NULL };        // wind speed (m/sec)
     double* T_g{ NULL };      // soil temp at depth z_g (C)
     double* F_g{ NULL };      // soil flux at depth z_g (W/m^2)
-    const double *T_s_0 { NULL }; // temp of the surface snowpack active layer (K)
+    const double *T_s_0 { NULL }; // temp of the surface snowpack active layer (C)
 
 
     long* isothermal{ NULL }; // melting?
@@ -118,7 +115,6 @@ public:
     double* m_precip_cum{ NULL };   //
     double* m_rain_cum{ NULL };     //
     double* m_snow_cum{ NULL };     //
-    double* m_subl_cum{ NULL };    //
     double* E_s_cum{ NULL };        //
     double* cmlmelt_veg{ NULL };    //
     double* melt_direct_cum{ NULL };       //
@@ -152,6 +148,7 @@ public:
     const double* z_u{ NULL };         // height of wind measurement (m)
     const double* z_T{ NULL };         // height of air temp & vapor pressure measurement (m)
     const double* z_0_veg{ NULL };         // roughness length
+    const double* max_liq_veg{ NULL };        // max liquid h2o content as specific mass(kg/m^2)
     const double* max_h2o_vol_veg{ NULL }; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
     const double  *Cc{ NULL };       // canopy coverage, (1-sky view fraction)
     const double  *Lmax{ NULL };  // maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 kg m-2 based on max observed in Storck et al. 2002, Floyd 2012 and Cebulski & Pomeroy (kg/m^2)
@@ -171,76 +168,41 @@ public:
 
     void finish(bool good); // delete local storage used
 
-    void init_snow(void);
+    void init_snow_veg(void);
 
-    void _calc_layers(void);
+    double _cold_content_veg(double	temp, double	mass); // temperature of layer specific mass of layer
 
-    void _layer_mass(void);
+    void do_data_tstep_veg(void);
 
-    double _cold_content(double	temp, double	mass); // temperature of layer specific mass of layer
+    int _divide_tstep_veg(TSTEP_REC* tstep); // record of timestep to be divided
 
-    void do_data_tstep(void);
+    int _below_thold_veg(double threshold);	 // current timestep's threshold for a layer's mass
 
-    int _divide_tstep(TSTEP_REC* tstep); // record of timestep to be divided
+    int _do_tstep_veg(TSTEP_REC* tstep); // timestep's record
 
-    int _below_thold(double threshold);	 // current timestep's threshold for a layer's mass
+    int _e_bal_veg(void);
 
-    int _do_tstep(TSTEP_REC* tstep); // timestep's record
+    void _net_rad_veg(void);
 
-    int _e_bal(void);
+    int _h_le_veg(void);
 
-    void _net_rad(void);
-
-    int _h_le(void);
-
-    double g_soil(
-        double	rho_veg,	// snow layer's density (kg/m^3)
-        double	tsno,	// snow layer's temperature (K)
-        double	tg,	// soil temperature (K)
-        double	ds,	// snow layer's thickness (m)
-        double	dg,	// dpeth of soil temperature measurement (m)
-        double	pa);	// air pressure (Pa)
-
-    double g_snow(
-        double	rho1,	// upper snow layer's density (kg/m^3)
-        double	rho2,	// lower  "     "        "    (kg/m^3)
-        double	ts1,	// upper snow layer's temperature (K)
-        double	ts2,	// lower  "     "         "       (K)
-        double	ds1,	// upper snow layer's thickness (m)
-        double	ds2,	// lower  "     "         "     (m)
-        double	pa);	// air pressure (Pa)
-
-    void _advec(void);
+    void _advec_veg(void);
 
     void _mass_bal(void);
 
-    void _time_compact(void);
-
-    void _precip(void);
+    void _precip_veg(void);
 
     void _snowmelt(void);
 
     void _mass_unld(void);
 
-    void _new_density(void);
-
-    void _adj_snow(double delta_z_s, double delta_m_s); // change in snowcover's depth change is snowcover's mass
-
-    void _evap_cond(void);
+    void _subl_evap(void);
 
     void _h2o_compact(void);
 
-    void _runoff(void);
+    void _runoff_veg(void);
 
-    double new_tsno(double spm, double t0, double ccon);
-
-    double heat_stor(double cp, double spm, double tdif);
-
-    double sati(double tk);
-
-    double ssxfr(double  k1, double  k2, double  t1, double  t2, double  d1, double  d2);
-
-    double efcon(double k, double t, double p);
+    double new_tsno_veg(double spm, double t0, double ccon);
 
     int hle1(double press, double ta, double ts, double za, double ea, double es, double zq, double u, double zu,
         double z0, double& h, double& le, double& e);

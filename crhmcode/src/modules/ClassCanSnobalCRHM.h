@@ -35,6 +35,7 @@ class ClassCanSnobalCRHM : public ClassCanSnobalBase {
 
     const double *Qsi{ NULL }; // incoming solar radiation (W/m^2)
     const double *Qli{ NULL }; // incoming longwave (thermal) rad (W/m^2) long
+    const double *obs_snow_load { NULL };
 
 // variable climate-data inputs
 

@@ -47,6 +47,7 @@ void ClassCanSnobalCRHM::decl(void) {
 
     declstatvar("isothermal", TDim::NHRU, "melting: 0/1", "()", &isothermal);
     declstatvar("vegsnowcover", TDim::NHRU, "snow on veg at start of current timestep: 0/1", "()", &vegsnowcover);
+    declstatvar("vegliquidcover", TDim::NHRU, "liquid on veg at start of current timestep: 0/1", "()", &vegsnowcover);
 
     declvar("Qn_veg", TDim::NHRU, "net allwave radiation wrt the canopy", "(W/m^2)", &Qn_veg);
     declvar("Qh_veg", TDim::NHRU, "sensible heat xfr wrt the canopy", "(W/m^2)", &Qh_veg);
@@ -55,16 +56,17 @@ void ClassCanSnobalCRHM::decl(void) {
     declvar("delta_Q_veg", TDim::NHRU, "change in snowcover's energy wrt the canopy", "(W/m^2)", &delta_Q_veg);
 
     declstatvar("cc_s_veg", TDim::NHRU, "snowcover's cold content", "(J/m^2)", &cc_s_veg);
-    declstatvar("liq_h2o_veg", TDim::NHRU, "liquid h2o content as specific mass", "(kg/m^2)", &liq_h2o_veg);
+    declstatvar("liq_h2o_veg", TDim::NHRU, "canopy liquid h2o load as specific mass", "(kg/m^2)", &liq_h2o_veg);
+    declstatvar("snow_h2o_veg", TDim::NHRU, "canopy snow load as specific mass", "(kg/m^2)", &snow_h2o_veg);
 
-    decllocal("delsub_veg", TDim::NHRU, "mass of evap from active and lower canopy snowpack layers", "(kg/m^2*int)", &delsub_veg);
+    decllocal("delsub_veg", TDim::NHRU, "mass of subl/evap from canopy snow/liquid (+to surface)", "(kg/m^2*int)", &delsub_veg);
     decllocal("qsub_veg", TDim::NHRU, "mass flux by evap into air from active layer", "(kg/m^2*s)", &qsub_veg);
     decllocal("delmelt_veg", TDim::NHRU, "specific melt (kg/m^2 or m)", "(kg/m^2)", &delmelt_veg);
     declvar("deldrip_veg", TDim::NHRU, "predicted specific runoff", "(kg/m^2)", &deldrip_veg);
-    declvar("h2o_total_veg", TDim::NHRU, "total liquid h2o: includes h2o in snowcover, melt, and rainfall", "(kg/m^2)", &h2o_total_veg);
 
-    decldiag("delsub_veg_int", TDim::NHRU, "mass of evap into air & soil from snowcover", "(kg/m^2*int)", &delsub_veg_int);
+    declvar("delsub_veg_int", TDim::NHRU, "mass of evap into air & soil from snowcover", "(kg/m^2*int)", &delsub_veg_int);
     declvar("delmelt_veg_int", TDim::NHRU, "specific melt (kg/m^2 or m)", "(kg/m^2*int)", &delmelt_veg_int);
+    declvar("delunld_int", TDim::NHRU, "specific mass of canopy snow unloaded to subcanopy", "(kg/m^2*int)", &delunld_int);
     declvar("delunld", TDim::NHRU, "canopy snow unloading rate", "(kg/m^2*int)", &delunld);
     declvar("delunld_wind", TDim::NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*int)", &delunld_wind);
     declvar("delunld_melt", TDim::NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*int)", &delunld_melt);
@@ -84,14 +86,12 @@ void ClassCanSnobalCRHM::decl(void) {
 
     declstatvar("h2o_sat_veg", TDim::NHRU, "fraction of liquid H2O saturation (0 to 1.0)", "()", &h2o_sat_veg);
     declvar("h2o_vol_veg", TDim::NHRU, "liquid h2o content as volume ratio: V_water/(V_snow - V_ice)", "()", &h2o_vol_veg);
-    declvar("h2o_max_veg", TDim::NHRU, "max liquid h2o content as specific mass", "(kg/m^2)", &h2o_max_veg);
 
-    declvar("z_snow_veg", TDim::NHRU, "depth of snow in precip", "(m)", &z_snow_veg);
     declvar("h2o_sat_veg_snow", TDim::NHRU, "snowfall's % of liquid H2O saturation", "()", &h2o_sat_veg_snow);
 
     declvar("precip_now_veg", TDim::NHRU, "precipitation occur for current timestep - 0/1", "()", &precip_now_veg);
     declvar("T_rain_veg", TDim::NHRU, "rain's temp", "(" + string(DEGREE_CELSIUS) + ")", &T_rain_veg);
-    declvar("T_snow_veg", TDim::NHRU, "snowfall's temp", "(" + string(DEGREE_CELSIUS) + ")", &T_snow_veg);
+    declvar("T_sf", TDim::NHRU, "snowfall's temp", "(" + string(DEGREE_CELSIUS) + ")", &T_sf);
 
     decllocal("S_n_L", TDim::NHRU, "net solar radiation", "(W/m^2)", &S_n);
     decllocal("I_lw_L", TDim::NHRU, "incoming longwave (thermal) rad ", "(W/m^2)", &I_lw);
@@ -104,7 +104,6 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("m_precip_L", TDim::NHRU, "specific mass of total precip", "(kg/m^2)", &m_precip);
     declvar("rain_on_snow_veg", TDim::NHRU, "specific mass of rain in precip", "(kg/m^2)", &m_rain);
     decllocal("m_snow_L", TDim::NHRU, "specific mass in snow in precip", "(kg/m^2)", &m_snow);
-    decllocal("m_subl_L", TDim::NHRU, "specific mass of drifting snow", "(kg/m^2)", &m_subl);
     decllocal("rho_snow_L", TDim::NHRU, "density of snowfall", "(kg/m^2)", &rho_snow);
     decllocal("T_pp_L", TDim::NHRU, "precip temp", "(" + string(DEGREE_CELSIUS) + ")", &T_pp);
 
@@ -113,12 +112,11 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("m_precip_cum", TDim::NHRU, "cumulative specific mass of total precip", "(kg/m^2)", &m_precip_cum);
     decllocal("m_rain_cum", TDim::NHRU, "cumulative specific mass of total rain", "(kg/m^2)", &m_rain_cum);
     decllocal("m_snow_cum", TDim::NHRU, "cumulative specific mass of total snow", "(kg/m^2)", &m_snow_cum);
-    decllocal("m_subl_cum", TDim::NHRU, "cumulative specific mass of total sublimation", "(kg/m^2)", &m_subl_cum);
     decllocal("E_s_cum", TDim::NHRU, "cumulative mass flux by evap into air from active layer", "(kg/m^2)", &E_s_cum);
     decllocal("melt_direct_cum", TDim::NHRU, "cumulative melt when SWE < threshold melt", "(kg/m^2)", &melt_direct_cum);
 
     decllocal("stop_no_snow", TDim::NHRU, "snow flag", "()", &stop_no_snow);
-    declparam("max_h2o_vol_veg", TDim::NHRU, "[0.0001]", "0.0001", "0.2", "max liquid h2o content as volume ratio: V_water/(V_snow - V_ice)", "()", &max_h2o_vol_veg);
+    declparam("max_liq_veg", TDim::NHRU, "[0.0001]", "0.0001", "0.2", "max liquid h2o content as specific mass", "(kg/m^2)", &max_liq_veg);
     declparam("z_0_veg", TDim::NHRU, "[0.001]", "0.0001", "0.1", "roughness length", "(m)", &z_0_veg);
 
     declgetparam("*", "z_g", "()", &z_g); // depth of soil temp meas (m)
@@ -135,6 +133,8 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetparam("*", "Ht", "()", &Ht); 
     declgetparam("*", "CanopyWindSwitch", "()", &CanopyWindSwitch); 
     declgetparam("*", "melt_drip_ratio", "()", &melt_drip_ratio); 
+    declgetparam("*", "relative_hts", "()", &relative_hts); 
+
 
     declgetvar("*", "Albedo", "()", &Albedo_surface); // ground albedo
     declgetvar("*", "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &T_a_X);
@@ -142,10 +142,13 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetvar("*", "hru_ea", "(kPa)", &e_a_X);
     declgetvar("*", "hru_u", "(m/s)", &u_X);
     declgetvar("*", "T_s_0", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0); 
+    declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
 
 
     declgetvar("*", "intercepted_snow", "(kg/m^2)", &new_snow); // new snow intercepted in canopy before ablation processes have kicked in
     declgetvar("*", "intercepted_rain", "(kg/m^2)", &new_rain); // new snow intercepted in canopy before ablation processes have kicked in
+    declgetvar("*", "hru_evap", "(kg/m^2)", &del_liq_evap); 
+
 
     variation_set = VARIATION_0 + VARIATION_2;
 
@@ -179,13 +182,9 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
 
   if(getstep() == 1){ // beginning of model run. Handle initial state file problems
     for (hh = 0; chkStruct(); ++hh) {
-      if(m_s_veg[hh] <= 0)
+      if(snow_h2o_veg[hh] <= 0)
         vegsnowcover[hh] = 0;
       else{
-        if(z_veg_s[hh] <= 0.0)
-          rho_veg[hh] = 0.0;
-        else
-          rho_veg[hh] = m_s_veg[hh]/z_veg_s[hh];
           vegsnowcover[hh] = 1;
       }
     }
@@ -200,7 +199,11 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
       break;
       case VARIATION_1: // default if no obs radiation available
         input_rec2[hh].S_n  = Qsw_in_veg[hh]*(1.0 - Albedo_vegsnow[hh]); // after CLASSIC just take the incoming solar to slope which is multiplied by 1 - canopy albedo. Differs slightly from class which uses incoming SW to horizontal surface where this is the SW to slope 
-        input_rec2[hh].I_lw = (Qlw_out_atm[hh] + CRHM_constants::sbc * CRHM_constants::emiss * pow(T_s_0[hh] + CRHM_constants::Tm, 4.0f)); // TODO consider modifying to add pomeroy 2009 solar rad adjustment for additional lonwave emitted from the bare veg elements as well (i.e. + 1.0-CanSnowFrac*(B_canopy[hh]*Kstar_H))
+        if(T_s_0[hh] == MIN_SNOW_TEMP){
+          input_rec2[hh].I_lw = (Qlw_out_atm[hh] + CRHM_constants::sbc * CRHM_constants::emiss * pow(T_s_veg[hh], 4.0f)); // subcanopy snow pack not initilized yet so used canopy snowpack temp which ends up just balancing out the downwelling LW from the canopy
+        } else {
+          input_rec2[hh].I_lw = (Qlw_out_atm[hh] + CRHM_constants::sbc * CRHM_constants::emiss * pow(T_s_0[hh] + FREEZE, 4.0f)); // TODO consider modifying to add pomeroy 2009 solar rad adjustment for additional lonwave emitted from the bare veg elements as well (i.e. + 1.0-CanSnowFrac*(B_canopy[hh]*Kstar_H))
+        }
       break;
       case VARIATION_2:
         input_rec2[hh].S_n  = Qsi[hh]*(1.0 - Albedo_vegsnow[hh]);
@@ -208,57 +211,44 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
       break;
     }
 
-    input_rec2[hh].T_a  = T_a_X[hh] + CRHM_constants::Tm;
+    input_rec2[hh].T_a  = T_a_X[hh] + FREEZE;
     input_rec2[hh].e_a  = e_a_X[hh]*1000;
     input_rec2[hh].u    = u_X[hh];
-
-    T_s_veg[hh] += T_a_X[hh] + CRHM_constants::Tm; // init at air temp. differs from surface snowpack which inits at 0 deg. C temperatures inside Snobal model are K
-
-    delL[hh] = -m_s_veg[hh];
 
     // handles non throughfall precip
     m_precip[hh] = new_snow[hh] + new_rain[hh];
     m_rain[hh] = new_rain[hh];
     m_snow[hh] = new_snow[hh];
 
-    rho_snow[hh] = rho_snow_X[hh];
-
     m_precip_cum[hh] += m_precip[hh]; // change
     m_rain_cum[hh] += m_rain[hh];
     m_snow_cum[hh] += m_snow[hh];
 
-    if(m_snow[hh] > 0.0){
-      if (rho_snow[hh] <= 0.0){
-        CRHMException TExcept("Snobal: rho_snow is <= 0.0 with snow > 0.0", TExcept::TERMINATE);
-        LogError(TExcept);
-      }
-      z_snow_veg[hh]   = m_snow[hh] / rho_snow[hh];
-    }
-    else
-      z_snow_veg[hh]   = 0.0;
-
-    T_pp[hh]     = T_pp_X[hh] + CRHM_constants::Tm;
+    T_pp[hh]     = T_pp_X[hh] + FREEZE;
 
 // clear interval values
 
     delmelt_veg_int[hh] = 0.0;
     delsub_veg_int[hh] = 0.0;
+    delunld_int[hh] = 0.0;
     deldrip_veg[hh] = 0.0;
 
     long Step = getstep();
     if(getstep() > 1){ // Not first step
 
-      if(m_precip[hh] > 0.0){
+      if (m_precip[hh] > 0.0)
+      {
         stop_no_snow[hh] = 0;
-        precip_now_veg[hh]= true;
+        precip_now_veg[hh] = true;
       }
-      else{
-        if(vegsnowcover[hh] == 0)
+      else
+      {
+        if (vegsnowcover[hh] == 0)
           stop_no_snow[hh] = 1;
-        precip_now_veg[hh]= false;
+        precip_now_veg[hh] = false;
       }
 
-      do_data_tstep(); // executes Snobal code
+      do_data_tstep_veg(); // executes Snobal code
 
     }
     else if(m_precip[hh] > 0.0) {
@@ -290,7 +280,17 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     cmlmelt_veg[hh] += delmelt_veg_int[hh];
     melt_direct_cum[hh] += delmelt_veg_int[hh];
 
-    T_s_veg[hh]   -= CRHM_constants::Tm; // temperatures outside Snobal model are DEGREE_CELCIUS
+        // set assimilate observed snow load for begining of select events
+    if(obs_snow_load[hh] < 9999){
+      m_s_veg[hh] = obs_snow_load[hh];
+      snow_h2o_veg[hh] = obs_snow_load[hh];
+      liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
+      delmelt_veg_int[hh] = 0.0;
+      delsub_veg_int[hh] = 0.0;
+      delunld_int[hh] = 0.0;
+      deldrip_veg[hh] = 0.0;
+    }
+
   }
 }
 
