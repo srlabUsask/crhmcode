@@ -89,15 +89,15 @@ void ClassevapX::decl(void) {
   declparam("PM_method", TDim::NHRU, "[0]", "0", "2", "Penman-Monteith method (used by Penman-Monteith), 0 = RC min, 1 = LAI, 2 = bulk.", "()", &PM_method);
 
   declparam("soil_type", TDim::NHRU, "[2]", " 1", "12",
-    "HRU soil type (used by Penman-Monteith) [1->11]: sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay.", "()", &soil_type);
+    "HRU soil type (used by Penman-Monteith) [1->11]: sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay.", "()", &soil_type);
 
   declparam("soil_Depth", TDim::NHRU, "[1.0]", "0.0", "10.0", "depth of soil column (used by Penman-Monteith).", "(m)", &soil_Depth);
 
   declgetvar("*",  "soil_moist", "(mm)", &soil_moist);
 
-  declgetvar("*", "Rn", "(mm/m^2*int)", &Rn);
-  declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
-  declgetvar("*", "RnD_POS", "(mm/m^2*d)", &RnD_POS);
+  declgetvar("*", "Rn", "(mm/int)", &Rn);
+  declgetvar("*", "RnD", "(mm/d)", &RnD);
+  declgetvar("*", "RnD_POS", "(mm/d)", &RnD_POS);
 
   declgetvar("*",  "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
   declgetvar("*",  "hru_u", "(m/s)", &hru_u);
@@ -278,10 +278,10 @@ void ClassevapX::finish(bool good) {
 
 double ClassevapX::gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELSIUS)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg DEGREE_CELSIUS))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
-double ClassevapX::lambda(double t) // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
+double ClassevapX::lambda(double t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
