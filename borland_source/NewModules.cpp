@@ -1,4 +1,4 @@
-// 10/18/24
+// 03/04/25
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -62,23 +62,23 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassSlope_Qsi("Slope_Qsi", "07/14/11", CRHM::ADVANCE));
 
   DLLModules.AddModule(new Classalbedo("albedo", "08/11/11", CRHM::BASIC));
-  DLLModules.AddModule(new Classnetall("netall", "04/04/22", CRHM::BASIC));
-  DLLModules.AddModule(new Classevap("evap", "05/28/24", CRHM::BASIC));
-  DLLModules.AddModule(new ClassevapD("evapD", "11/04/09", CRHM::ADVANCE));
-  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "05/28/24", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassevapD_Resist("evapD_Resist", "04/04/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classnetall("netall", "03/04/25", CRHM::BASIC));
+  DLLModules.AddModule(new Classevap("evap", "03/04/25", CRHM::BASIC));
+  DLLModules.AddModule(new ClassevapD("evapD", "03/04/25", CRHM::ADVANCE));
+  DLLModules.AddModule(new Classevap_Resist("evap_Resist", "03/04/25", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassevapD_Resist("evapD_Resist", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassShutWall("ShuttleWallace", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassShutWallD("ShuttleWallaceD", "04/04/22", CRHM::ADVANCE));
 
   DLLModules.AddModule(new Classcrack("crack", "04/04/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassPrairieInfil("PrairieInfiltration", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassAyers("Ayers", "04/05/22", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassGreencrack("Greencrack", "08/27/24", CRHM::BASIC));
-  DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "08/27/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassGreencrack("Greencrack", "03/04/25", CRHM::BASIC));
+  DLLModules.AddModule(new ClassGreenAmpt("GreenAmpt", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new Classfrozen("frozen", "08/27/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "08/27/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoil("Soil", "10/18/24", CRHM::BASIC));
-  DLLModules.AddModule(new ClassevapX("evapX", "05/28/24", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassevapX("evapX", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoilX("SoilX", "10/18/24", CRHM::ADVANCE)); // nlay >= 2 check added
   DLLModules.AddModule(new ClassSoilDS("SoilDetention", "10/18/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "10/18/24", CRHM::PROTO)); // prototype wetlands
@@ -99,16 +99,16 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "11/21/16", CRHM::ADVANCE));
   DLLModules.AddModule(new ClasspbsmSnobal("pbsmSnobal", "01/05/17", CRHM::ADVANCE));
 
-  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "11/14/23", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "11/14/23", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "11/14/23", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "03/04/25", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "03/04/25", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassXG("XG", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassXGAyers("XGAyers", "05/19/17", CRHM::PROTO));
 
-  DLLModules.AddModule(new ClassSetSoil("SetSoil", "10/21/09", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassVolumetric("Volumetric", "08/02/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSetSoil("SetSoil", "03/04/25", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassVolumetric("Volumetric", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new Classtsurface("tsurface", "03/14/23", CRHM::PROTO));
 
   DLLModules.AddModule(new Classalbedoparam("albedo_param", "11/22/05", CRHM::SUPPORT));
@@ -2162,13 +2162,13 @@ void Classnetall::decl(void) {
 
   declvar("net", NHRU, "net all-wave radiation over time step", "(MJ/m^2*int)", &net);
 
-  decldiag("Rn", NHRU, "net all-wave radiation over time step", "(mm/m^2*int)", &Rn);
+  decldiag("Rn", NHRU, "net all-wave radiation over time step", "(mm/int)", &Rn);
 
   declvar("netD", NHRU, "net all-wave radiation per day", "(MJ/m^2*d)", &netD);
 
-  declvar("RnD", NHRU, "net all-wave radiation per day", "(mm/m^2*d)", &RnD);
+  declvar("RnD", NHRU, "net all-wave radiation per day", "(mm/d)", &RnD);
 
-  decldiag("RnD_POS", NHRU, "Sum of positive net all-wave radiation per day", "(mm/m^2*d)", &RnD_POS);
+  decldiag("RnD_POS", NHRU, "Sum of positive net all-wave radiation per day", "(mm/d)", &RnD_POS);
 
   declstatdiag("cum_net", NHRU, "cumulative net all-wave radiation", "(MJ/m^2)", &cum_net);
 
@@ -2226,7 +2226,7 @@ void Classnetall::run(void) {
         float Net = (shortw*(1.0f-Albedo[hh]) + netlong/Global::Freq); // MJ/interval
         netD[hh] +=  Net;
 
-        Net = Net/(2.501f-0.002361f*tday_intvls[ff][hh]); // MJ/m^2 to mm/m^2
+        Net = Net/(2.501f-0.002361f*tday_intvls[ff][hh]); // MJ/interval to mm/interval
 
         RnD[hh] += Net;
         if(Net > 0.0) RnD_POS[hh] += Net;
@@ -3177,9 +3177,9 @@ void Classevap::decl(void) {
 
   declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height (Penman-Monteith)", "(m)", &Zwind);
 
-  declgetvar("*", "Rn", "(mm/m^2*int)", &Rn);
-  declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
-  declgetvar("*", "RnD_POS", "(mm/m^2*d)", &RnD_POS);
+  declgetvar("*", "Rn", "(mm/int)", &Rn);
+  declgetvar("*", "RnD", "(mm/d)", &RnD);
+  declgetvar("*", "RnD_POS", "(mm/d)", &RnD_POS);
 
   declgetvar("*",  "hru_t", "(°C)", &hru_t);
   declgetvar("*",  "hru_u", "(m/s)", &hru_u);
@@ -3318,10 +3318,10 @@ void Classevap::finish(bool good) {
 
 double Classevap::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
-float Classevap::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+float Classevap::lambda(float t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
@@ -3379,7 +3379,7 @@ void ClassevapD::decl(void) {
 
   decldiagparam("F_Qg", NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
 
-  declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
+  declgetvar("*", "RnD", "(mm/d)", &RnD);
 
   declgetvar("*",  "hru_tmean", "(°C)", &hru_tmean);
   declgetvar("*",  "hru_umean", "(m/s)", &hru_umean);
@@ -3469,11 +3469,11 @@ void ClassevapD::finish(bool good) {
 
 double ClassevapD::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
 
-float ClassevapD::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+float ClassevapD::lambda(float t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
@@ -4385,7 +4385,7 @@ void ClassGreencrack::decl(void) {
   decldiagparam("Major", NHRU, "[5]", "1", "100", "threshold for major melt", "(mm/d)", &Major);
 
   declparam("soil_type", NHRU, "[4]", "0", "12",
-        "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
+        "water/sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soil_type);
 
   declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0",
@@ -5902,7 +5902,7 @@ void ClassGreenAmpt::decl(void) {
   declparam("hru_area", NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
   declparam("soil_type", NHRU, "[4]", "0", "12",
-        "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
+        "water/sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soil_type);
 
   declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0",
@@ -12444,11 +12444,11 @@ void ClassSetSoil::decl(void) {
   declparam("Vol_h2o_content", NHRU, "[0.5]", "0.01", "0.7", "initial volumetric water content", "()", &Vol_h2o_content);
 
   declparam("soil_type_rechr", NHRU, "[4]", "0", "12",
-        "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
+        "water/sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soiltype_rechr);
 
   declparam("soil_type", NHRU, "[4]", "0", "12",
-        "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
+        "water/sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soil_type);
 
   declparam("soil_rechr_max", NHRU, "[60.0]", "0.0", "350.0",
@@ -12556,7 +12556,7 @@ void ClassVolumetric::decl(void) {
   declvar("Si_V", NHRU, "Si_V copy of parameter Si", "()", &Si_V);
 
   declparam("soil_type", NHRU, "[4]", "0", "12",
-        "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
+        "water/sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soil_type);
 
   declparam("soil_moist_max", NHRU, "[375.0]", "0.0", "5000.0",
@@ -13723,14 +13723,14 @@ double ClassCRHMCanopy::delta(float t) // Slope of sat vap p vs t, kPa/°C
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-float ClassCRHMCanopy::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+float ClassCRHMCanopy::lambda(float t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
 
 double ClassCRHMCanopy::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
 float ClassCRHMCanopy::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
@@ -16502,14 +16502,14 @@ void Classevap_Resist::decl(void) {
   declparam("PMmethod", NHRU, "[0]", "0", "1", "Penman-Monteith method, 0 = RC min, 1 = LAI", "()", &PM_method);
 
   declparam("soil_type", NHRU, "[2]", "1", "12",
-    "HRU soil type (1->11): sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay",
+    "HRU soil type (1->11): sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay",
     "()", &soil_type);
 
   declparam("soil_Depth", NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
 
-  declgetvar("*", "Rn", "(mm/m^2*int)", &Rn);
-  declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
-  declgetvar("*", "RnD_POS", "(mm/m^2*d)", &RnD_POS);
+  declgetvar("*", "Rn", "(mm/int)", &Rn);
+  declgetvar("*", "RnD", "(mm/d)", &RnD);
+  declgetvar("*", "RnD_POS", "(mm/d)", &RnD_POS);
 
   declgetvar("*",  "hru_t", "(°C)", &hru_t);
   declgetvar("*",  "hru_u", "(m/s)", &hru_u);
@@ -16731,10 +16731,10 @@ void Classevap_Resist::finish(bool good) {
 
 double Classevap_Resist::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
-float Classevap_Resist::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+float Classevap_Resist::lambda(float t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
@@ -16804,11 +16804,11 @@ void ClassevapD_Resist::decl(void) {
   declparam("PM_method", NHRU, "[0]", "0", "2", "Penman-Monteith method, 0 = RC min, 1 = LAI, 2 = bulk", "()", &PM_method);
 
   declparam("soil_type", NHRU, "[2]", " 1", "12",
-    "HRU soil type (1->11): sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay", "()", &soil_type);
+    "HRU soil type (1->11): sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay", "()", &soil_type);
 
   declparam("soil_Depth", NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
 
-  declgetvar("*",  "RnD", "(mm/m^2*d)", &RnD);
+  declgetvar("*",  "RnD", "(mm/d)", &RnD);
   declgetvar("*",  "hru_tmean", "(°C)", &hru_tmean);
   declgetvar("*",  "hru_umean", "(m/s)", &hru_umean);
   declgetvar("*",  "hru_eamean", "(kPa)", &hru_eamean);
@@ -16969,11 +16969,11 @@ void ClassevapD_Resist::finish(bool good) {
 
 double ClassevapD_Resist::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
 
-float ClassevapD_Resist::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+float ClassevapD_Resist::lambda(float t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
@@ -17951,15 +17951,15 @@ void ClassevapX::decl(void) {
   declparam("PM_method", NHRU, "[0]", "0", "2", "Penman-Monteith method (used by Penman-Monteith), 0 = RC min, 1 = LAI, 2 = bulk.", "()", &PM_method);
 
   declparam("soil_type", NHRU, "[2]", " 1", "12",
-    "HRU soil type (used by Penman-Monteith) [1->11]: sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay.", "()", &soil_type);
+    "HRU soil type (used by Penman-Monteith) [1->11]: sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay.", "()", &soil_type);
 
   declparam("soil_Depth", NHRU, "[1.0]", "0.0", "10.0", "depth of soil column (used by Penman-Monteith).", "(m)", &soil_Depth);
 
   declgetvar("*",  "soil_moist", "(mm)", &soil_moist);
 
-  declgetvar("*", "Rn", "(mm/m^2*int)", &Rn);
-  declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
-  declgetvar("*", "RnD_POS", "(mm/m^2*d)", &RnD_POS);
+  declgetvar("*", "Rn", "(mm/int)", &Rn);
+  declgetvar("*", "RnD", "(mm/d)", &RnD);
+  declgetvar("*", "RnD_POS", "(mm/d)", &RnD_POS);
 
   declgetvar("*",  "hru_t", "(°C)", &hru_t);
   declgetvar("*",  "hru_u", "(m/s)", &hru_u);
@@ -18138,10 +18138,10 @@ void ClassevapX::finish(bool good) {
 
 double ClassevapX::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
-float ClassevapX::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+float ClassevapX::lambda(float t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
@@ -25200,14 +25200,14 @@ double ClassCRHMCanopyClearing::delta(float t) // Slope of sat vap p vs t, kPa/°
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-float ClassCRHMCanopyClearing::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+float ClassCRHMCanopyClearing::lambda(float t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
 
 double ClassCRHMCanopyClearing::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
 float ClassCRHMCanopyClearing::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)
@@ -25866,14 +25866,14 @@ double ClassCRHMCanopyClearingGap::delta(float t) // Slope of sat vap p vs t, kP
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-float ClassCRHMCanopyClearingGap::lambda(float t) // Latent heat of vaporization (mJ/(kg °C))
+float ClassCRHMCanopyClearingGap::lambda(float t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
 
 double ClassCRHMCanopyClearingGap::gamma(float Pa, float t) // Psychrometric constant (kPa/°C)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg °C))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
 float ClassCRHMCanopyClearingGap::RHOa(float t, float ea, float Pa) // atmospheric density (kg/m^3)

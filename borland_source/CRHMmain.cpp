@@ -1,9 +1,11 @@
-// 10/18/24 correcting code order for et and soil_rechr when etr > soil_rechr under case 1 in Soil, SoilX, SoilDS, and SoilPrairie modules in 08/27/24
+// 03/04/25 correcting units description for Rn, RnD, RnD_DOS in netall, evap, evapD, evap_Resist, evapD_Resist, evapX modules
+// correcting units description for lambda function in evap, evapD, evap_Resist, evapD_Resist, evapX, Canopy, CanopyClearing, CanopyClearingGap modules
+// correcting description for soil_type parameter in Greencrack, GreenAmpt, SetSoil, Volumetric, evap_Resist, evapD_Resist, evapX modules in 10/18/24
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "10/18/24"
+#define CurrentVersion "03/04/25"
 
 #include <stdexcept>
 #include "CRHMmain.h"
