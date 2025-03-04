@@ -44,13 +44,13 @@ void Classnetall::decl(void) {
 
   declvar("net", TDim::NHRU, "net all-wave radiation over time step", "(MJ/m^2*int)", &net);
 
-  decldiag("Rn", TDim::NHRU, "net all-wave radiation over time step", "(mm/m^2*int)", &Rn);
+  decldiag("Rn", TDim::NHRU, "net all-wave radiation over time step", "(mm/int)", &Rn);
 
   declvar("netD", TDim::NHRU, "net all-wave radiation per day", "(MJ/m^2*d)", &netD);
 
-  declvar("RnD", TDim::NHRU, "net all-wave radiation per day", "(mm/m^2*d)", &RnD);
+  declvar("RnD", TDim::NHRU, "net all-wave radiation per day", "(mm/d)", &RnD);
 
-  decldiag("RnD_POS", TDim::NHRU, "Sum of positive net all-wave radiation per day", "(mm/m^2*d)", &RnD_POS);
+  decldiag("RnD_POS", TDim::NHRU, "Sum of positive net all-wave radiation per day", "(mm/d)", &RnD_POS);
 
   declstatdiag("cum_net", TDim::NHRU, "cumulative net all-wave radiation", "(MJ/m^2)", &cum_net);
 
@@ -108,7 +108,7 @@ void Classnetall::run(void) {
         double Net = (shortw*(1.0f-Albedo[hh]) + netlong/Global::Freq); // MJ/interval
         netD[hh] +=  Net;
 
-        Net = Net/(2.501f-0.002361f*tday_intvls[ff][hh]); // MJ/m^2 to mm/m^2
+        Net = Net/(2.501f-0.002361f*tday_intvls[ff][hh]); // MJ/interval to mm/interval
 
         RnD[hh] += Net;
         if(Net > 0.0) RnD_POS[hh] += Net;
