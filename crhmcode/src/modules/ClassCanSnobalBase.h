@@ -51,6 +51,7 @@ public:
     double* Qn_veg{ NULL };            // net allwave radiation wrt the canopy (W/m^2)
     double* Qh_veg{ NULL };              // sensible heat xfr wrt the canopy (W/m^2)
     double* Ql_veg{ NULL };          // latent heat xfr wrt the canopy (W/m^2)
+    double* Qsub_veg{ NULL };          // latent heat xfr wrt the canopy snow following pom98 (W/m^2)
     double* Qp{ NULL };              // advected heat from precip wrt the canopy (W/m^2)
     double* delta_Q_veg{ NULL };        // change in snowcover's energy wrt the canopy (W/m^2)
 
@@ -74,6 +75,7 @@ public:
 
     double* delmelt_veg{ NULL };        // specific melt (kg/m^2 or m)
     double* qsub_veg{ NULL };		 // mass flux by subl/evap (+ to surf) (kg/m^2/s)
+    double* Vs_veg{ NULL };		 // dimensionless sublimation rate from an ideal ice-sphere (s^-1)
     double* delsub_veg{ NULL };	 // mass flux by subl/evap (+ to surf) (kg/m^2/int)
     double* deldrip_veg{ NULL };  // predicted specific runoff (m/sec)
 
@@ -119,6 +121,12 @@ public:
     double* cmlmelt_veg{ NULL };    //
     double* melt_direct_cum{ NULL };       //
     double* Fault{ NULL };       //
+    double* I_LW_atm{ NULL };       // Downwelling longwave from the atmoshpere (W/m^2)
+    double* I_LW_gnd{ NULL };       // Upwelling longwave from the ground (W/m^2)
+    double* I_LW_cpy_2_cpy{ NULL };       // Longwave from the canopy reflected off the surface back to the canopy (W/m^2)
+    double* O_LW_cpy{ NULL };       // Longwave radiation emitted from the canopy (W/m^2)
+    double* CanSnowFrac{ NULL };       // Fraction of canopy covered by snow after Pomeroy 1998
+    double* albedo_now{ NULL };       // Albedo of the canopy considering how much snow is on it
 
 // debug variables
 /*    double *Length;
@@ -155,10 +163,6 @@ public:
     const double  *Ht{ NULL };  // forest/vegetation height (m)
     const long  *CanopyWindSwitch{ NULL };  // Canopy wind model to use at height Zcan, 0 - for Cionco (dense canopy), 1 - for Prandtl-von Kármán log-linear relationship (sparse forest)".
     const double  *melt_drip_ratio{ NULL };  // Ratio of mass unloading of solid snow due to melt compared to canopy snowmelt. (-)
-
-
-
-
 
 //    void decl(void);
 
@@ -198,14 +202,25 @@ public:
 
     void _subl_evap(void);
 
-    void _h2o_compact(void);
-
     void _runoff_veg(void);
 
     double new_tsno_veg(double spm, double t0, double ccon);
 
     int hle1(double press, double ta, double ts, double za, double ea, double es, double zq, double u, double zu,
-        double z0, double& h, double& le, double& e);
+        double z0, double& h, double& le);
+    
+    int subl_ice_sphere(double ea, double es, double ta, double ts, double u, double press);
+
+    int init_subl_ice_sphere(void);
+
+    double adst_wind_cpy_top(
+        double veg_ht, /* Height of vegetation (m) */
+        double uz,     /* Wind speed at height z (m/s) */
+        double z,      /* Height of wind speed measurement (m) */
+
+        // output
+        double &u_veg_ht /* Wind speed at canopy top (m/s)*/
+    );
 
     // time step information
 

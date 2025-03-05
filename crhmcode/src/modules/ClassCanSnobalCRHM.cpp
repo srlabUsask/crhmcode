@@ -52,6 +52,7 @@ void ClassCanSnobalCRHM::decl(void) {
     declvar("Qn_veg", TDim::NHRU, "net allwave radiation wrt the canopy", "(W/m^2)", &Qn_veg);
     declvar("Qh_veg", TDim::NHRU, "sensible heat xfr wrt the canopy", "(W/m^2)", &Qh_veg);
     declvar("Ql_veg", TDim::NHRU, "latent heat xfr wrt the canopy", "(W/m^2)", &Ql_veg);
+    declvar("Qsub_veg", TDim::NHRU, "latent heat xfr wrt the canopy snow following pom98", "(W/m^2)", &Qsub_veg);
     declvar("Qp", TDim::NHRU, "advected heat from precip wrt the canopy", "(W/m^2)", &Qp);
     declvar("delta_Q_veg", TDim::NHRU, "change in snowcover's energy wrt the canopy", "(W/m^2)", &delta_Q_veg);
 
@@ -61,6 +62,7 @@ void ClassCanSnobalCRHM::decl(void) {
 
     decllocal("delsub_veg", TDim::NHRU, "mass of subl/evap from canopy snow/liquid (+to surface)", "(kg/m^2*int)", &delsub_veg);
     decllocal("qsub_veg", TDim::NHRU, "mass flux by evap into air from active layer", "(kg/m^2*s)", &qsub_veg);
+    decllocal("Vs_veg", TDim::NHRU, "dimensionless sublimation rate from an ideal ice-sphere", "(s^-1)", &Vs_veg);
     decllocal("delmelt_veg", TDim::NHRU, "specific melt (kg/m^2 or m)", "(kg/m^2)", &delmelt_veg);
     declvar("deldrip_veg", TDim::NHRU, "predicted specific runoff", "(kg/m^2)", &deldrip_veg);
 
@@ -100,6 +102,13 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("u_L", TDim::NHRU, "wind speed", "(m/s)", &u);
     decllocal("T_g_L", TDim::NHRU, "soil temp at depth z_g", "(" + string(DEGREE_CELSIUS) + ")", &T_g);
     decllocal("F_g_L", TDim::NHRU, "soil flux at depth z_g", "(W/m^2)", &F_g);
+    decllocal("I_LW_atm", TDim::NHRU, "Downwelling longwave from the atmoshpere", "(W/m^2)", &I_LW_atm);
+    decllocal("I_LW_gnd", TDim::NHRU, "Upwelling longwave from the ground", "(W/m^2)", &I_LW_gnd);
+    decllocal("I_LW_cpy_2_cpy", TDim::NHRU, "Longwave from the canopy reflected off the surface back to the canopy", "(W/m^2)", &I_LW_cpy_2_cpy);
+    decllocal("O_LW_cpy", TDim::NHRU, "Longwave radiation emitted from the canopy", "(W/m^2)", &O_LW_cpy);
+    decllocal("CanSnowFrac", TDim::NHRU, "Fraction of canopy covered by snow after Pomeroy 1998", "(-)", &CanSnowFrac);
+    decllocal("albedo_now", TDim::NHRU, "Albedo of the canopy considering how much snow is on it", "(-)", &albedo_now);
+
 
     decllocal("m_precip_L", TDim::NHRU, "specific mass of total precip", "(kg/m^2)", &m_precip);
     declvar("rain_on_snow_veg", TDim::NHRU, "specific mass of rain in precip", "(kg/m^2)", &m_rain);
@@ -127,7 +136,7 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetparam("*", "hru_area", "()", &hru_area); // hru area (km^2)
     declgetparam("*", "hru_rho_snow", "()", &rho_snow_X); // rho of falling snow (kg/m^3)
     declgetparam("*", "Alpha_c", "()", &Albedo_veg); // canopy albedo
-    declgetparam("*", "Albedo_Snow", "()", &Albedo_vegsnow); // canopy snow albedo assumed same as surface snow
+    declgetparam("*", "Albedo_Snow", "()", &Albedo_vegsnow); // canopy snow albedo assumed constant as is relatively fresh snow
     declgetparam("*", "Cc", "()", &Cc); // canopy coverage, (1-sky view fraction)
     declgetparam("*", "Lmax", "()", &Lmax); // canopy coverage, (1-sky view fraction)
     declgetparam("*", "Ht", "()", &Ht); 
@@ -198,12 +207,21 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
         input_rec2[hh].I_lw = Qli[hh];
       break;
       case VARIATION_1: // default if no obs radiation available
-        input_rec2[hh].S_n  = Qsw_in_veg[hh]*(1.0 - Albedo_vegsnow[hh]); // after CLASSIC just take the incoming solar to slope which is multiplied by 1 - canopy albedo. Differs slightly from class which uses incoming SW to horizontal surface where this is the SW to slope 
+        CanSnowFrac[hh] = pow(snow_h2o_veg[hh]/5.0, 0.8); 
+        CanSnowFrac[hh] = std::min(CanSnowFrac[hh], 1.0);
+
+        albedo_now[hh] = (Albedo_vegsnow[hh] * CanSnowFrac[hh]) + ((1.0 - CanSnowFrac[hh]) * Albedo_vegsnow[hh]);
+
+        input_rec2[hh].S_n  = Qsw_in_veg[hh]*(1.0 - albedo_now[hh]); // after CLASSIC just take the incoming solar to slope which is multiplied by 1 - canopy albedo. Differs slightly from class which uses incoming SW to horizontal surface where this is the SW to slope 
+        I_LW_atm[hh] = (CAN_EMISSIVITY + (1.0 - CAN_EMISSIVITY)*(1.0 - SNOW_EMISSIVITY)*CAN_EMISSIVITY)*Qlw_out_atm[hh]; //  ! downward atmospheric longwave radiation absorbed by the canopy (W m-2) from SUMMA
+
         if(T_s_0[hh] == MIN_SNOW_TEMP){
-          input_rec2[hh].I_lw = (Qlw_out_atm[hh] + CRHM_constants::sbc * CRHM_constants::emiss * pow(T_s_veg[hh], 4.0f)); // subcanopy snow pack not initilized yet so used canopy snowpack temp which ends up just balancing out the downwelling LW from the canopy
+          I_LW_gnd[hh] = CAN_EMISSIVITY*(CRHM_constants::sbc * SNOW_EMISSIVITY * pow(T_a_X[hh] + FREEZE, 4.0f)); // subcanopy snow pack not initilized yet
         } else {
-          input_rec2[hh].I_lw = (Qlw_out_atm[hh] + CRHM_constants::sbc * CRHM_constants::emiss * pow(T_s_0[hh] + FREEZE, 4.0f)); // TODO consider modifying to add pomeroy 2009 solar rad adjustment for additional lonwave emitted from the bare veg elements as well (i.e. + 1.0-CanSnowFrac*(B_canopy[hh]*Kstar_H))
+          I_LW_gnd[hh] = CAN_EMISSIVITY*(CRHM_constants::sbc * SNOW_EMISSIVITY * pow(T_s_0[hh] + FREEZE, 4.0f)); 
         }
+ 
+        input_rec2[hh].I_lw = I_LW_atm[hh] + I_LW_gnd[hh]; // TODO consider modifying to add pomeroy 2009 solar rad adjustment for additional lonwave emitted from the bare veg elements as well (i.e. + 1.0-CanSnowFrac*(B_canopy[hh]*Kstar_H)), not including outgoing LW from surfance snow as should be relatively similar to canopy.
       break;
       case VARIATION_2:
         input_rec2[hh].S_n  = Qsi[hh]*(1.0 - Albedo_vegsnow[hh]);

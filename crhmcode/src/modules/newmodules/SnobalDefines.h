@@ -148,7 +148,8 @@
 /*
 *  thermal emissivity of snow
 */
-#define SNOW_EMISSIVITY		0.99 // changed from 0.98 03/27/15
+#define SNOW_EMISSIVITY		0.99 // changed from 0.98 03/27/15 as in JULES
+#define CAN_EMISSIVITY      0.98 // as in JULES
 
 /*
 *  Macros
