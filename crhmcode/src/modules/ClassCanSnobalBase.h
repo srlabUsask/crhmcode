@@ -51,9 +51,11 @@ public:
     double* Qn_veg{ NULL };            // net allwave radiation wrt the canopy (W/m^2)
     double* Qh_veg{ NULL };              // sensible heat xfr wrt the canopy (W/m^2)
     double* Ql_veg{ NULL };          // latent heat xfr wrt the canopy (W/m^2)
-    double* Qsub_veg{ NULL };          // latent heat xfr wrt the canopy snow following pom98 (W/m^2)
+    double* Qsub_veg{ NULL };          // latent heat xfr wrt the canopy snow following pom95 eq. 45 (W/m^2)
     double* Qp{ NULL };              // advected heat from precip wrt the canopy (W/m^2)
     double* delta_Q_veg{ NULL };        // change in snowcover's energy wrt the canopy (W/m^2)
+    const double  *Tauc{ NULL };     // Canopy transmittance through the entire canopy calculated in the canopy module
+
 
 //   mass balance vars for current timestep
 
@@ -75,7 +77,6 @@ public:
 
     double* delmelt_veg{ NULL };        // specific melt (kg/m^2 or m)
     double* qsub_veg{ NULL };		 // mass flux by subl/evap (+ to surf) (kg/m^2/s)
-    double* Vs_veg{ NULL };		 // dimensionless sublimation rate from an ideal ice-sphere (s^-1)
     double* delsub_veg{ NULL };	 // mass flux by subl/evap (+ to surf) (kg/m^2/int)
     double* deldrip_veg{ NULL };  // predicted specific runoff (m/sec)
 
@@ -124,8 +125,17 @@ public:
     double* I_LW_atm{ NULL };       // Downwelling longwave from the atmoshpere (W/m^2)
     double* I_LW_gnd{ NULL };       // Upwelling longwave from the ground (W/m^2)
     double* I_LW_cpy_2_cpy{ NULL };       // Longwave from the canopy reflected off the surface back to the canopy (W/m^2)
-    double* O_LW_cpy{ NULL };       // Longwave radiation emitted from the canopy (W/m^2)
+    double* O_LW_cpysnow{ NULL };       // Outgoing longwave radiation emitted from the canopy snow (W/m^2)
+    double* I_LW_cpy{ NULL };       // Incoming longwave radiation emitted from the canopy (W/m^2)
+    double* Qh_ice_sphere{ NULL };       // sensible heat flux + to ice sphere surface (j/s)
+    double* Qe_ice_sphere{ NULL };       // latent heat flux + to ice sphere surface (j/s)
     double* CanSnowFrac{ NULL };       // Fraction of canopy covered by snow after Pomeroy 1998
+    long* niter_ice_sphere{ NULL };     
+    double* Tstep_ice_sphere{ NULL };       // increment to adjust canopy ice sphere temperature by
+ 
+
+    
+
     double* albedo_now{ NULL };       // Albedo of the canopy considering how much snow is on it
 
 // debug variables
@@ -149,13 +159,15 @@ public:
     const double* basin_area{ NULL };  // [BASIN]
     const double* hru_area{ NULL };
     const double* KT_sand{ NULL }; // thermal conductivity of wet sand
+    const double  *Albedo_surface{ NULL };     // albedo of surface ()
+    const double  *Albedo_veg{ NULL };     // albedo of vegetation ()
 
     const long* relative_hts{ NULL }; // true if measurements heights, z_T and z_u, are relative to snow surface
                               // false if they are absolute heights above the ground
     const double* z_g{ NULL };         // depth of soil temp meas (m)
     const double* z_u{ NULL };         // height of wind measurement (m)
     const double* z_T{ NULL };         // height of air temp & vapor pressure measurement (m)
-    const double* z_0_veg{ NULL };         // roughness length
+    const double* Albedo_vegsnow{ NULL };         // albedo of snow on vegetation ()
     const double* max_liq_veg{ NULL };        // max liquid h2o content as specific mass(kg/m^2)
     const double* max_h2o_vol_veg{ NULL }; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
     const double  *Cc{ NULL };       // canopy coverage, (1-sky view fraction)
@@ -206,13 +218,13 @@ public:
 
     double new_tsno_veg(double spm, double t0, double ccon);
 
-    int hle1(double press, double ta, double ts, double za, double ea, double es, double zq, double u, double zu,
-        double z0, double& h, double& le);
-    
+    int hle1(double press, double ta, double rel_z_T, double ts, double ea, double es, double u, double rel_z_u,
+             double &h, double &le);
+
     int subl_ice_sphere(double ea, double es, double ta, double ts, double u, double press);
 
     int init_subl_ice_sphere(void);
-
+    
     double adst_wind_cpy_top(
         double veg_ht, /* Height of vegetation (m) */
         double uz,     /* Wind speed at height z (m/s) */

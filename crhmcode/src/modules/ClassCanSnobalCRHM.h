@@ -43,11 +43,8 @@ class ClassCanSnobalCRHM : public ClassCanSnobalBase {
     const double  *T_pp_X{ NULL };       // precip temp (C) hru_t
     const double  *e_a_X{ NULL };      // vapor pressure (Pa) hru_ea
     const double  *u_X{ NULL };        // wind speed (m/sec)  hru_u
-    const double  *Albedo_surface{ NULL };     // albedo of surface ()
-    const double  *Albedo_veg{ NULL };     // albedo of vegetation ()
-    const double  *Albedo_vegsnow{ NULL };     // albedo of snow on vegetation ()
     const double *Qsw_in_veg{ NULL }; // downwelling shortwave radiation to the canopy (W m^-2)
-    const double *Qlw_out_atm{ NULL }; // downwelling longwave radiation from the atmosphere (W m^-2)
+    const double *Qlw_out_atm{ NULL }; // downwelling longwave radiation from the atmosphere plus terrain (W m^-2)
 
 // variable precipitation inputs
 
