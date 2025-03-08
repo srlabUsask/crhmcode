@@ -52,7 +52,6 @@ void ClassCanSnobalCRHM::decl(void) {
     declvar("Qn_veg", TDim::NHRU, "net allwave radiation wrt the canopy", "(W/m^2)", &Qn_veg);
     declvar("Qh_veg", TDim::NHRU, "sensible heat xfr wrt the canopy", "(W/m^2)", &Qh_veg);
     declvar("Ql_veg", TDim::NHRU, "latent heat xfr wrt the canopy", "(W/m^2)", &Ql_veg);
-    declvar("Qsub_veg", TDim::NHRU, "latent heat xfr wrt the canopy snow following pom95 Eq. 45", "(W/m^2)", &Qsub_veg);
     declvar("Qh_ice_sphere", TDim::NHRU, "sensible heat flux + to ice sphere surface", "(J/s)", &Qh_ice_sphere);
     declvar("Qe_ice_sphere", TDim::NHRU, "latent heat flux + to ice sphere surface", "(J/s)", &Qe_ice_sphere);
     declvar("Qp", TDim::NHRU, "advected heat from precip wrt the canopy", "(W/m^2)", &Qp);

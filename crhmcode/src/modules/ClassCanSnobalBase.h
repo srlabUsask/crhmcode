@@ -49,9 +49,8 @@ public:
 //   energy balance info for current timestep
 
     double* Qn_veg{ NULL };            // net allwave radiation wrt the canopy (W/m^2)
-    double* Qh_veg{ NULL };              // sensible heat xfr wrt the canopy (W/m^2)
-    double* Ql_veg{ NULL };          // latent heat xfr wrt the canopy (W/m^2)
-    double* Qsub_veg{ NULL };          // latent heat xfr wrt the canopy snow following pom95 eq. 45 (W/m^2)
+    double* Qh_veg{ NULL };              // sensible heat xfr positive towards the canopy (W/m^2)
+    double* Ql_veg{ NULL };          // latent heat xfr positive towards the canopy (W/m^2)
     double* Qp{ NULL };              // advected heat from precip wrt the canopy (W/m^2)
     double* delta_Q_veg{ NULL };        // change in snowcover's energy wrt the canopy (W/m^2)
     const double  *Tauc{ NULL };     // Canopy transmittance through the entire canopy calculated in the canopy module
@@ -132,7 +131,7 @@ public:
     double* CanSnowFrac{ NULL };       // Fraction of canopy covered by snow after Pomeroy 1998
     long* niter_ice_sphere{ NULL };     
     double* Tstep_ice_sphere{ NULL };       // increment to adjust canopy ice sphere temperature by
- 
+
 
     
 
