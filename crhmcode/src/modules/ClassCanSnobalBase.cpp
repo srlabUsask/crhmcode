@@ -513,7 +513,7 @@ int ClassCanSnobalBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
 
     // Is there a vegsnowcover?
 
-    vegsnowcover[hh] = (m_s_veg[hh] > 0.0);
+    vegsnowcover[hh] = snow_h2o_veg[hh] > 0.0;
 
     // Calculate energy transfer terms
 
@@ -531,8 +531,9 @@ int ClassCanSnobalBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
 
     //  update interval values
 
-    delmelt_veg_int[hh] += deldrip_veg[hh];
+    delmelt_veg_int[hh] += delmelt_veg[hh];
     delsub_veg_int[hh] += delsub_veg[hh];
+    delevap_veg_int[hh] += delevap_veg[hh];
     delunld_int[hh] += delunld[hh];
 
     //  Update the model's input parameters
@@ -548,10 +549,10 @@ int ClassCanSnobalBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
 
 /*
 ** NAME
-**      int _e_bal_veg(void) -- calculates point energy budget for 2-layer vegsnowcover
+**      int _e_bal_veg(void) -- calculates point energy budget for the vegsnowcover
 **
 ** DESCRIPTION
-**      Calculates point energy budget for 2-layer vegsnowcover.
+**      Calculates point energy budget for 2-layer vegsnowcover and adjusts the canopy snowpack temperature.
 **
 ** RETURN VALUE
 **
@@ -572,30 +573,32 @@ int ClassCanSnobalBase::_e_bal_veg(void)
     if (vegsnowcover[hh] || liq_h2o_veg[hh] > 0.0)
     {
         double resid;               // left over energy not accounted for in the ebal
-        double Tstep = 1.0;         // increment to adjust canopy snow temperature by
+        double Tstep = 0.25;         // increment to adjust canopy snow temperature by
         int niter = 1;
         int max_iter = 100;
         double T0_s_veg = T_s_veg[hh];
 
         do
         { /* iterate on canopy snow e bal */
+
+            // calculate radiative terms
             _net_rad_veg();
 
-            if (!_h_le_veg())
+            // calculate latent and sensible heat transfer
+            if (!init_turb_transfer())
                 return 0;
 
             // calculate advection
-
             _advec_veg();
 
             // veg snowpack energy budget
-
             delta_Q_veg[hh] = ((T_s_veg[hh] - T0_s_veg) * m_s_veg[hh] * CP_ICE(T_s_veg[hh])) / time_step[hh];
-            // resid = Qn_veg[hh] + Qh_veg[hh] + Ql_veg[hh] + Qp[hh] - delta_Q_veg[hh];
-            resid = Qn_veg[hh] + Qh_veg[hh] + Ql_veg[hh] + Qp[hh] - delta_Q_veg[hh]; // swap Ql_veg with Qsub_veg which better represents latent heat transfer from the canopy through exposed snow
 
+            resid = Qn_veg[hh] + Qh_veg[hh] + Ql_veg[hh] + Qp[hh] - delta_Q_veg[hh]; 
+
+            // Check energy budget residual and if too large adjust canopy snow temperature. Temp adjust algorithm below is after CLASS.
             if (fabs(resid) < 5.0 || fabs(Tstep) < 1e-2)
-            { // after CLASS
+            {
                 break;
             }
 
@@ -618,16 +621,13 @@ int ClassCanSnobalBase::_e_bal_veg(void)
                 }
                 T_s_veg[hh] += Tstep;
             }
+            niter += 1;
 
             // if (std::abs(T_s_veg[hh] - FREEZE) < 1.0E-6) // likely uneeded but is in CLASS
             // {
             // T_s_veg[hh] = FREEZE;
             // }
-            // delta_Q_veg[hh] = ((T_s_veg[hh] - Tcan0) * m_s_veg[hh] * CP_ICE(T_s_veg[hh]))/time_step[hh];
 
-            // double T_s_veg_test = new_tsno_veg(m_s_veg[hh], Tcan0, cc_s_veg[hh]+(delta_Q_veg[hh]*time_step[hh]));
-
-            niter += 1;
             // Check if max iterations were reached
             if (niter >= max_iter)
             {
@@ -704,11 +704,11 @@ void ClassCanSnobalBase::_net_rad_veg(void)
 
 /*
 ** NAME
-**      int _h_le_veg(void) -- calculates turbulent transfer at a point
+**      int init_turb_transfer(void) -- calculates turbulent transfer at a point within the canopy
 **
 ** DESCRIPTION
 **      Calculates point turbulent transfer (Qh_veg and Ql_veg) for a 1-layer
-**	vegsnowcover. 
+**	vegsnowcover. Ignores stability corrections since within the roughness elements.
 **
 ** GLOBAL VARIABLES READ
 **
@@ -716,7 +716,7 @@ void ClassCanSnobalBase::_net_rad_veg(void)
 **
 */
 
-int ClassCanSnobalBase::_h_le_veg(void) {
+int ClassCanSnobalBase::init_turb_transfer(void) {
 
     double e_s, e_a_fix;
     double sat_vp;
@@ -752,10 +752,145 @@ int ClassCanSnobalBase::_h_le_veg(void) {
 
     // calculate Qh_veg & Ql_veg
 
-    if (hle1(P_a[hh], T_a[hh], rel_z_T, T_s_veg[hh], e_a_fix, e_s, u[hh], rel_z_u, Qh_veg[hh], Ql_veg[hh]))
+    if (calc_turb_transfer(P_a[hh], T_a[hh], rel_z_T, T_s_veg[hh], e_a_fix, e_s, u[hh], rel_z_u, Qh_veg[hh], Ql_veg[hh]))
         return 1; // !!!!!TB
 
     return 1;
+}
+
+/* ----------------------------------------------------------------------- */
+
+int ClassCanSnobalBase::calc_turb_transfer(
+    double press, // aiFr pressure (Pa)
+    double ta,    // air temperature (K) at height za
+    double tz,    // height of air temp measurement (m)
+    double ts,    // surface temperature (K)
+    double ea,    // vapor pressure (Pa) at height zq
+    double es,    // vapor pressure (Pa) at surface
+    double u,     // wind speed (m/s) at height zu
+    double uz,    // height of wind speed measurement (m)
+
+    // output variables
+
+    double &CRHM_h, // sens heat flux (+ to surf) (W/m^2)
+    double &CRHM_le // latent heat flux (+ to surf) (W/m^2)
+)
+{
+    double h = 0; // sens heat flux (+ to surf) (W/m^2)
+    double e = 0; // mass flux (+ to surf) (kg/m^2/s)
+    double qa;    // specific humidity at height zq
+    double qs;    // specific humidity at surface
+    double dens;  // air density (kg/m3)
+
+    double Nr;                      // Reynolds number
+    double NuSh;                    // Nusselt number (-)
+    double u_veg_ht;                // wind speed at canopy top
+    double u_veg_mid;                // wind speed at mid canopy
+    double z_veg_u;                   // height of within mid canopy wind speed (m)   
+    double D;                       // diffusivity of water vapour in still air (m^2/s)
+    const double KinVisc = 1.88E-5; /* Kinematic viscosity of air (Sask. avg. value) */
+    const double ks = 0.0114;       // snow shape coefficient for jack pine
+    const double Fract = 0.37;      // fractal dimension of intercepted snow
+    double Ce;                      // canopy fullness index to represent how exposed snow is for sublimation, more sublimation for less snow in the canopy
+    const double Radius = 0.0005;   /* Ice sphere radius, metres */
+    double dice = 900.0;            // density of ice from canopy module
+    double ra;                      // aerodynamic roughness (s/m)
+    double ri;                      // resistance of moisture transfer from intercepted snow (s/m)
+    double z_0;                     // roughness length
+    int ier = 0;                    // return error code
+
+    // check for bad input
+
+    // temperatures are Kelvin
+    if (ta <= 0 || ts <= 0)
+    {
+        CRHMException TExcept("temps not K", TExcept::TERMINATE);
+        LogError(TExcept);
+        ier = -2;
+        return (ier);
+    }
+
+    // pressures must be positive
+    if (ea <= 0 || es <= 0 || press <= 0 || ea >= press || es >= press)
+    {
+
+        string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
+        string SS = D + "hh " + to_string(hh) + " 'calc_turb_transfer' " + ". Qh_veg: " + FloatToStrF(h, TFloatFormat::ffFixed, 10, 4) + " le: " + FloatToStrF(e, TFloatFormat::ffFixed, 10, 4);
+        SS = SS + " ta: " + FloatToStrF(ta - FREEZE, TFloatFormat::ffFixed, 10, 4) +
+             ", ts: " + FloatToStrF(ts - FREEZE, TFloatFormat::ffFixed, 10, 4) +
+             ", ea: " + FloatToStrF(ea, TFloatFormat::ffFixed, 10, 4) +
+             ", es: " + FloatToStrF(es, TFloatFormat::ffFixed, 10, 4) +
+             ", u:  " + FloatToStrF(u, TFloatFormat::ffFixed, 10, 4) +
+             ", m_s_veg:  " + FloatToStrF(m_s_veg[hh], TFloatFormat::ffFixed, 10, 4);
+
+        CRHM_le = 0.0; // addition TB 09/23/14
+        CRHM_h = 0.0;
+
+        CRHMException TExcept2(SS.c_str(), TExcept::WARNING);
+        LogError(TExcept2);
+
+        // Manishankar made this change to keep the program running.
+        // CRHMException TExcept("calc_turb_transfer: pressures must be positive", TERMINATE);
+        CRHMException TExcept("calc_turb_transfer: pressures must be positive", TExcept::WARNING);
+        LogError(TExcept);
+
+        ier = -2;
+        return (ier);
+    }
+
+    // vapor pressures can't exceed saturation if way off stop
+    if ((es - 25.0) > sati(ts) || (ea - 25.0) > satw(ta))
+    {
+        CRHMException TExcept("calc_turb_transfer: vapor pressures can't exceed saturation", TExcept::TERMINATE);
+        LogError(TExcept);
+        ier = -2;
+        return (ier);
+    }
+    // else fix them up
+    if (es > sati(ts))
+    {
+        es = sati(ts);
+    }
+    if (ea > satw(ta))
+    {
+        ea = satw(ta);
+    }
+
+    if (u < 0.1) // mod by AC
+        u = 0.1;
+    else if (u > 15)
+        u = 15;
+
+    D = 2.06E-5 * pow(T_a[hh] / 273.15, 1.75);
+    // TODO at plot scale eventualy changed from observed wind to simulated
+    // z_veg_u = Ht[hh]*(2.0/3.0);
+    // adst_wind_cpy_top(Ht[hh], u, z_u[hh], u_veg_ht);
+    // cionco_canopy_wind_spd(Ht[hh], u_veg_ht, z_veg_u, u_veg_mid);
+    Nr = 2 * Radius * u / KinVisc; // TODO update to use within canopy wind speed
+    NuSh = 1.79 + 0.606 * sqrt(Nr);
+
+    // air density at press, virtual temp of geometric mean of air and surface
+    dens = GAS_DEN(press, MOL_AIR, VIR_TEMP(sqrt(ta * ts), sqrt(ea * es), press));
+
+    // convert vapor pressures to specific humidities, to absolute handled within the Qe calc
+    qa = SPEC_HUM(ea, press);
+    qs = SPEC_HUM(es, press);
+
+    // calculates how exposed canopy snow is to the atmosphere based on the fullness of the canopy, more exposed with less snow as more gaps / surface area
+    if ((snow_h2o_veg[hh] / Lmax[hh]) <= 0.0) // Using Lmax instead of Lstar as gives more appropriate index of canopy fullness
+        Ce = 0.07;
+    else
+        Ce = ks * pow((snow_h2o_veg[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar
+
+    // ra = 1 / (u_veg_mid * VON_KARMAN * VON_KARMAN) * log(z_veg_u / Z_0_cansnow[hh]) * log(z_veg_u / Z_0_cansnow[hh]); // Eq. 6 from Pomeroy 2016, TODO switch to adjusted wind for increased applicability
+    ra = 1 / (u * VON_KARMAN * VON_KARMAN) * log(tz / Z_0_cansnow[hh]) * log(tz / Z_0_cansnow[hh]); // Eq. 6 from Pomeroy 2016
+
+    ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * m_s_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
+
+    CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(T_s_veg[hh]); // Eq. 29 from Essery et al., 2003
+    CRHM_h = (dens / ra) * CP_AIR * (T_a[hh] - T_s_veg[hh]); // Eq. 4 Essery et al., 2003 and Pomeroy et al., 2016
+
+    return (ier);
 }
 
 /*
@@ -825,7 +960,7 @@ void ClassCanSnobalBase::_mass_bal(void) {
 
     _mass_unld();
 
-    // calculate runoff, and adjust vegsnowcover */
+    // calculate runoff of liquid water intercepted in the canopy */
 
     _runoff_veg();
 
@@ -834,14 +969,10 @@ void ClassCanSnobalBase::_mass_bal(void) {
 
     if(snow_h2o_veg[hh] > 0.0){
         vegsnowcover[hh] = 1;
+        T_s_veg[hh] = new_tsno_veg(m_s_veg[hh], T_s_veg[hh], cc_s_veg[hh]);
     } else {
         vegsnowcover[hh] = 0;
     }
-
-    if (vegsnowcover[hh]) {
-        T_s_veg[hh] = new_tsno_veg(m_s_veg[hh], T_s_veg[hh], cc_s_veg[hh]);
-    }
-
 
 }
 
@@ -921,7 +1052,7 @@ void ClassCanSnobalBase::_snowmelt(void) {
     double  Q_left;         // energy left after re_freezing
     double  h2o_refrozen;   // amount of liquid H2O that was refrozen
 
-// If no snow in the canopy at start of timestep, then just exit.
+// If no snow in the canopy, then just exit.
 
     if (!vegsnowcover[hh]) {
         delmelt_veg[hh] = 0.0;
@@ -1005,7 +1136,7 @@ void ClassCanSnobalBase::_snowmelt(void) {
 
 /*
 ** NAME
-**      void _mass_unld(void) -- adjust the canopy snowpack's snow storage due to mass unloading of snow
+**      void _mass_unld(void) -- adjust the canopy snowpack's snow storage due to mass unloading of snow liquid water is handled seperately under runoff
 **
 ** DESCRIPTION
 **      This is the updated mass snow unloading parameterisations from
@@ -1020,6 +1151,13 @@ void ClassCanSnobalBase::_snowmelt(void) {
 void ClassCanSnobalBase::_mass_unld(void)
 {
     delunld[hh] = 0.0; // need to clear this val otherwise accumulates due to += below
+
+    if (!vegsnowcover[hh]) { // no snow in the canopy exit early
+        delunld_wind[hh] = 0.0;
+        delunld_melt[hh] = 0.0;
+        delunld_subl[hh] = 0.0;
+        return;
+    }
 
     // check maximum canopy snow load spill what is overflowing
     if (snow_h2o_veg[hh] > Lmax[hh])
@@ -1160,11 +1298,39 @@ void ClassCanSnobalBase::_subl_evap(void) {
 
     if (liq_h2o_veg[hh] > 0.0){
         // liquid water is present; modify liquid water content
-        double del_evap_liq = Ql_veg[hh] * LH_SUB(T_s_veg[hh]) * time_step[hh];
 
-        liq_h2o_veg[hh] += del_evap_liq;
-        if (liq_h2o_veg[hh] < 0.0) {
+         if (inhibit_evap[hh] == 0)
+        { // use Granger when no snowcover
+          if (liq_h2o_veg[hh] >= hru_evap[hh] * Cc[hh])
+          {                                         // (evaporation in mm)
+            delevap_veg[hh] = hru_evap[hh] * Cc[hh]; //
+            liq_h2o_veg[hh] -= hru_evap[hh] * Cc[hh];
+          }
+          else
+          {
+            delevap_veg[hh] = liq_h2o_veg[hh];
             liq_h2o_veg[hh] = 0.0;
+          }
+        }
+        else
+        {                                                            // use Priestley-Taylor when snowcover
+          double Q = S_n[hh] * 86400 / Global::Freq / 1e6 / lambda(T_a[hh]); // convert w/m2 to mm/m2/int
+
+          if (S_n[hh] > 0.0)
+            Pevap[hh] = 1.26 * delta(T_a[hh]) * Q / (delta(T_a[hh]) + gamma(P_a[hh], T_a[hh]));
+          else
+            Pevap[hh] = 0.0;
+
+          if (liq_h2o_veg[hh] >= Pevap[hh] * Cc[hh])
+          {                                      // (evaporation in mm)
+            delevap_veg[hh] = Pevap[hh] * Cc[hh]; // check
+            liq_h2o_veg[hh] -= Pevap[hh] * Cc[hh];
+          }
+          else
+          {
+            delevap_veg[hh] = liq_h2o_veg[hh]; // check
+            liq_h2o_veg[hh] = 0.0;
+          }
         }
     }
 
@@ -1203,11 +1369,11 @@ void ClassCanSnobalBase::_runoff_veg(void) {
 
         deldrip_veg[hh] = liq_h2o_veg[hh] - max_liq_veg[hh];
         liq_h2o_veg[hh] = max_liq_veg[hh];
+        m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh]; 
 
     } else {
         deldrip_veg[hh] = 0.0;
     }
-    m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh]; 
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1236,27 +1402,6 @@ double ClassCanSnobalBase::new_tsno_veg(
     return (tsno);
 }
 /* ----------------------------------------------------------------------- */
-
-/* ----------------------------------------------------------------------- */
-
-double ClassCanSnobalBase::adst_wind_cpy_top(
-    double veg_ht, /* Height of vegetation (m) */
-    double uz,     /* Wind speed at height z (m/s) */
-    double z, /* Height of wind speed measurement (m) */
-
-    // output
-    double& u_veg_ht /* Wind speed at canopy top (m/s)*/
-    )  
-{
-    if(z >= veg_ht){
-        u_veg_ht = uz;
-    } else if (veg_ht - 2.0 / 3.0 * z > 0.0) {
-        u_veg_ht = uz * log((veg_ht - 2.0 / 3.0 * z) / 0.123 * z) / log((z - 2.0 / 3.0 * z) / 0.123 * z);
-    } else {
-        u_veg_ht = 0.0;
-    }
-    return(u_veg_ht);
-}
 
 /*
 ** NAME
@@ -1372,8 +1517,8 @@ int ClassCanSnobalBase::subl_ice_sphere(
         LogError(TExcept2);
 
         // Manishankar made this change to keep the program running.
-        // CRHMException TExcept("hle1: pressures must be positive", TERMINATE);
-        CRHMException TExcept("hle1: pressures must be positive", TExcept::WARNING);
+        // CRHMException TExcept("calc_turb_transfer: pressures must be positive", TERMINATE);
+        CRHMException TExcept("calc_turb_transfer: pressures must be positive", TExcept::WARNING);
         LogError(TExcept);
         return (0);
     }
@@ -1414,137 +1559,3 @@ int ClassCanSnobalBase::subl_ice_sphere(
 
     return (convergence_check);
 }
-
-/* ----------------------------------------------------------------------- */
-
-int ClassCanSnobalBase::hle1(
-    double	press,	// aiFr pressure (Pa)
-    double	ta,	// air temperature (K) at height za
-    double	tz,	// height of air temp measurement (m)
-    double	ts,	// surface temperature (K)
-    double	ea,	// vapor pressure (Pa) at height zq
-    double	es,	// vapor pressure (Pa) at surface
-    double	u,	// wind speed (m/s) at height zu
-    double	uz,	// height of wind speed measurement (m)
-
-// output variables
-
-double& CRHM_h,	// sens heat flux (+ to surf) (W/m^2)
-double& CRHM_le	// latent heat flux (+ to surf) (W/m^2)
-)
-{
-    double h = 0;	// sens heat flux (+ to surf) (W/m^2)
-    double e = 0;	// mass flux (+ to surf) (kg/m^2/s)
-    double	qa;	// specific humidity at height zq
-    double	qs;	// specific humidity at surface
-    double dens; // air density (Pa)
-    
-    double Nr;                      // Reynolds number
-    double NuSh;                    // Nusselt number (-)
-    double u_veg_ht;                // wind speed at canopy top
-    double D;                       // diffusivity of water vapour in still air (m^s/s)
-    const double KinVisc = 1.88E-5; /* Kinematic viscosity of air (Sask. avg. value) */
-    const double ks = 0.0114;       // snow shape coefficient for jack pine
-    const double Fract = 0.37;      // fractal dimension of intercepted snow
-    double Ce; // canopy fullness index to represent how exposed snow is for sublimation, more sublimation for less snow in the canopy
-    const double Radius = 0.0005;   /* Ice sphere radius, metres */
-    double dice = 900.0;            // density of ice from canopy module
-    double ra; // aerodynamic roughness
-    double ri;                       // resistance of moisture transfer from intercepted snow
-    double z_0; // roughness length
-    double lh = 0;	// latent heat of subl
-   
-    int	ier = 0;	// return error code
-
-    static TDateTime LastDTnow;
-
-    // check for bad input
-
-    // temperatures are Kelvin
-    if (ta <= 0 || ts <= 0) {
-        CRHMException TExcept("temps not K", TExcept::TERMINATE);
-        LogError(TExcept);
-        ier = -2;
-        return (ier);
-    }
-
-    // pressures must be positive
-    if (ea <= 0 || es <= 0 || press <= 0 || ea >= press || es >= press) {
-
-        string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
-        string SS = D + "hh " + to_string(hh) + " 'hle1' " + ". Qh_veg: " + FloatToStrF(h, TFloatFormat::ffFixed, 10, 4) + " le: " + FloatToStrF(e, TFloatFormat::ffFixed, 10, 4);
-        SS = SS + " ta: " + FloatToStrF(ta - FREEZE, TFloatFormat::ffFixed, 10, 4) +
-            ", ts: " + FloatToStrF(ts - FREEZE, TFloatFormat::ffFixed, 10, 4) +
-            ", ea: " + FloatToStrF(ea, TFloatFormat::ffFixed, 10, 4) +
-            ", es: " + FloatToStrF(es, TFloatFormat::ffFixed, 10, 4) +
-            ", u:  " + FloatToStrF(u, TFloatFormat::ffFixed, 10, 4) +
-            ", m_s_veg:  " + FloatToStrF(m_s_veg[hh], TFloatFormat::ffFixed, 10, 4);
-
-        CRHM_le = 0.0; // addition TB 09/23/14
-        CRHM_h = 0.0;
-
-        CRHMException TExcept2(SS.c_str(), TExcept::WARNING);
-        LogError(TExcept2);
-
-        //Manishankar made this change to keep the program running.
-        //CRHMException TExcept("hle1: pressures must be positive", TERMINATE);
-        CRHMException TExcept("hle1: pressures must be positive", TExcept::WARNING);
-        LogError(TExcept);
-
-        ier = -2;
-        return (ier);
-    }
-
-    // vapor pressures can't exceed saturation if way off stop
-    if ((es - 25.0) > sati(ts) || (ea - 25.0) > satw(ta)) {
-        CRHMException TExcept("hle1: vapor pressures can't exceed saturation", TExcept::TERMINATE);
-        LogError(TExcept);
-        ier = -2;
-        return (ier);
-    }
-    // else fix them up
-    if (es > sati(ts)) {
-        es = sati(ts);
-    }
-    if (ea > satw(ta)) {
-        ea = satw(ta);
-    }
-
-    if (u < 0.1) // mod by AC
-        u = 0.1;
-    else if (u > 15)
-        u = 15;
-    
-    D = 2.06E-5 * pow(T_a[hh] / 273.15, 1.75);
-    adst_wind_cpy_top(Ht[hh], u, z_u[hh], u_veg_ht);
-    Nr = 2 * Radius * u_veg_ht / KinVisc;
-    NuSh = 1.79 + 0.606 * sqrt(Nr);
-
-
-    // air density at press, virtual temp of geometric mean of air and surface
-    dens = GAS_DEN(press, MOL_AIR, VIR_TEMP(sqrt(ta * ts), sqrt(ea * es), press));
-
-    // convert vapor pressures to specific humidities, to absolute handled within the Qe calc
-    qa = SPEC_HUM(ea, press);
-    qs = SPEC_HUM(es, press);
-
-    // calculates how exposed canopy snow is to the atmosphere based on the fullness of the canopy, more exposed with less snow as more gaps / surface area
-    if ((snow_h2o_veg[hh] / Lmax[hh]) <= 0.0) // Using Lmax instead of Lstar as gives more appropriate index of canopy fullness
-        Ce = 0.07;
-    else
-        Ce = ks * pow((snow_h2o_veg[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar
-
-    z_0 = Ht[hh] / 10.0; // estimate of roughness length for forest canopy
-
-    ra = 1/(u*VON_KARMAN*VON_KARMAN) * log(tz/z_0) * log(uz/z_0); // Eq. 6 from Pomeroy 2016
-
-    ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * m_s_veg[hh] * D * NuSh);
-
-    CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(T_s_veg[hh]);                     // Latent Heat Energy flux (j/s) relative to the ice sphere (negative for sublimation of particle).
-
-    CRHM_h = (dens/ra)*CP_AIR*(T_a[hh]-T_s_veg[hh]); // Eq. 4 Essery et al., 2003 and Pomeroy et al., 2016
-
-    return (ier);
-}
-
-

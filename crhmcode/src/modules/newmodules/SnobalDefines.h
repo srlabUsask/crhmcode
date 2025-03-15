@@ -433,3 +433,58 @@ inline double heat_stor(
 
     return (stor);
 }
+
+/* ----------------------------------------------------------------------- */
+
+inline double lambda(double t) // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
+{
+   return( 2.501 - 0.002361 * t );
+}
+
+inline double delta(double t) // Slope of sat vap p vs t, kPa/DEGREE_CELSIUS
+{
+  if (t > 0.0)
+    return (2504.0 * exp(17.27 * t / (t + 237.3)) / sqr(t + 237.3));
+  else
+    return (3549.0 * exp(21.88 * t / (t + 265.5)) / sqr(t + 265.5));
+}
+
+inline double gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELSIUS)
+{
+  return (0.00163 * Pa / lambda(t)); // lambda (mJ/(kg DEGREE_CELSIUS))
+}
+
+inline double adst_wind_cpy_top(
+    double veg_ht, /* Height of vegetation (m) */
+    double uz,     /* Wind speed at height z (m/s) */
+    double z, /* Height of wind speed measurement (m) */
+
+    // output
+    double& u_veg_ht /* Wind speed at canopy top (m/s)*/
+    )  
+{
+    if(z >= veg_ht){
+        u_veg_ht = uz;
+    } else if (veg_ht - 2.0 / 3.0 * z > 0.0) {
+        u_veg_ht = uz * log((veg_ht - 2.0 / 3.0 * z) / 0.123 * z) / log((z - 2.0 / 3.0 * z) / 0.123 * z);
+    } else {
+        u_veg_ht = 0.0;
+    }
+    return(u_veg_ht);
+}
+
+inline double cionco_canopy_wind_spd(
+    double veg_ht,    /* Height of vegetation (m) */
+    double u_veg_ht,  /* Wind speed at height veg ht (m/s) */
+    double target_ht, /* target height of output wind speed (m) */
+
+    // output
+    double &u_target_ht /* Wind speed at target height (m/s)*/
+) 
+{
+    double A = 2.4338 + 3.45753 * exp(-u_veg_ht);                 /* Modified Cionco wind model */
+    u_target_ht = u_veg_ht * exp(A * (target_ht / veg_ht - 1.0)); /* calculates canopy windspd  */
+
+    return (u_target_ht);
+}
+

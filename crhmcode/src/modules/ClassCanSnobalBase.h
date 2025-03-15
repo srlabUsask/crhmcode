@@ -60,6 +60,7 @@ public:
 
     double* delmelt_veg_int{ NULL };       // specific melt (kg/m^2 or m)
     double* delL{ NULL };       // interval change in SWE
+    double* delevap_veg_int{ NULL };	    // mass of evap into air & soil from snowcover (kg/m^2*int) delunld_int
     double* delsub_veg_int{ NULL };	    // mass of evap into air & soil from snowcover (kg/m^2*int) delunld_int
     double* delunld_int{ NULL };	    // specific mass of canopy snow unloaded to subcanopy (kg/m^2*int)
     double* delunld{ NULL };	    // canopy snow unloading rate (kg/m^2*int)
@@ -70,17 +71,17 @@ public:
     double* delmelt_veg_day{ NULL };      // daily predicted specific runoff (m/sec)
     double* cmlmelt_veg_day{ NULL };      // daily predicted specific runoff accumulator (m/sec)
 
-    const double* del_liq_evap{ NULL };      // liquid water evaporated off the canopy. computed in the evap module aka "internal evap". (kg m^-2)
+    const double* hru_evap{ NULL };      // liquid water evaporated off the canopy. computed in the evap module aka "internal evap". (kg m^-2)
 
 //   mass balance vars for variable timestep
 
     double* delmelt_veg{ NULL };        // specific melt (kg/m^2 or m)
     double* qsub_veg{ NULL };		 // mass flux by subl/evap (+ to surf) (kg/m^2/s)
     double* delsub_veg{ NULL };	 // mass flux by subl/evap (+ to surf) (kg/m^2/int)
+    double* delevap_veg{ NULL };	 // mass flux by subl/evap (+ to surf) (kg/m^2/int)
     double* deldrip_veg{ NULL };  // predicted specific runoff (m/sec)
-
     double* E_l{ NULL };	  // mass flux by evap/cond to soil (kg/m^2/s)
-
+    double *Pevap { NULL }; // used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)
 
 //   precipitation info adjusted for current run timestep
 
@@ -160,13 +161,14 @@ public:
     const double* KT_sand{ NULL }; // thermal conductivity of wet sand
     const double  *Albedo_surface{ NULL };     // albedo of surface ()
     const double  *Albedo_veg{ NULL };     // albedo of vegetation ()
-
+    const long* inhibit_evap{ NULL }; // inhibit evaporation, 1 -> inhibit
     const long* relative_hts{ NULL }; // true if measurements heights, z_T and z_u, are relative to snow surface
                               // false if they are absolute heights above the ground
     const double* z_g{ NULL };         // depth of soil temp meas (m)
     const double* z_u{ NULL };         // height of wind measurement (m)
     const double* z_T{ NULL };         // height of air temp & vapor pressure measurement (m)
     const double* Albedo_vegsnow{ NULL };         // albedo of snow on vegetation ()
+    const double* Z_0_cansnow{ NULL };         // surface roughness length of snow on vegetation (m)
     const double* max_liq_veg{ NULL };        // max liquid h2o content as specific mass(kg/m^2)
     const double* max_h2o_vol_veg{ NULL }; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
     const double  *Cc{ NULL };       // canopy coverage, (1-sky view fraction)
@@ -199,7 +201,7 @@ public:
 
     void _net_rad_veg(void);
 
-    int _h_le_veg(void);
+    int init_turb_transfer(void);
 
     void _advec_veg(void);
 
@@ -217,21 +219,12 @@ public:
 
     double new_tsno_veg(double spm, double t0, double ccon);
 
-    int hle1(double press, double ta, double rel_z_T, double ts, double ea, double es, double u, double rel_z_u,
+    int calc_turb_transfer(double press, double ta, double rel_z_T, double ts, double ea, double es, double u, double rel_z_u,
              double &h, double &le);
 
     int subl_ice_sphere(double ea, double es, double ta, double ts, double u, double press);
 
     int init_subl_ice_sphere(void);
-    
-    double adst_wind_cpy_top(
-        double veg_ht, /* Height of vegetation (m) */
-        double uz,     /* Wind speed at height z (m/s) */
-        double z,      /* Height of wind speed measurement (m) */
-
-        // output
-        double &u_veg_ht /* Wind speed at canopy top (m/s)*/
-    );
 
     // time step information
 
