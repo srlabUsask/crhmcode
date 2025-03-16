@@ -134,6 +134,9 @@ void ClassCanSnobalCRHM::decl(void) {
     declparam("max_liq_veg", TDim::NHRU, "[0.0001]", "0.0001", "0.2", "max liquid h2o content as specific mass", "(kg/m^2)", &max_liq_veg);
     declparam("Albedo_vegsnow", TDim::NHRU, "[0.6]", "0.6", "0.9", "Albedo_vegsnow", "(-)", &Albedo_vegsnow);
     declparam("Z_0_cansnow", TDim::NHRU, "[0.01]", "0.0001", "0.1", "canopy snow roughness length", "(m)", &Z_0_cansnow);
+    declparam("SW_to_LW_fn", TDim::NHRU, "[0.01]", "0.0001", "0.5", "dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.", "(-)", &SW_to_LW_fn);
+    declparam("unld_to_melt_ratio", TDim::NHRU, "[0.4]", "0.0", "10", "Ratio of mass unloading of solid snow due to melt compared to canopy snowmelt. Default is from Storck 2002.", "(-)", &unld_to_melt_ratio);
+    declparam("unld_to_subl_ratio", TDim::NHRU, "[0.2]", "0.0", "10", "Ratio of mass unloading of solid snow due to sublimation compared to canopy snowmelt. Default from J. MacDonald (2010) thesis for colder temps.", "(-)", &unld_to_subl_ratio);
 
     declgetparam("*", "z_g", "()", &z_g); // depth of soil temp meas (m)
     declgetparam("*", "z_u", "()", &z_u); // height of wind measurement (m)
@@ -146,7 +149,6 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetparam("*", "Lmax", "()", &Lmax); // canopy coverage, (1-sky view fraction)
     declgetparam("*", "Ht", "()", &Ht); 
     declgetparam("*", "CanopyWindSwitch", "()", &CanopyWindSwitch); 
-    declgetparam("*", "melt_drip_ratio", "()", &melt_drip_ratio); 
     declgetparam("*", "relative_hts", "()", &relative_hts); 
     declgetparam("*", "inhibit_evap", "()", &inhibit_evap); 
 

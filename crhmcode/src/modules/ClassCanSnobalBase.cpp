@@ -696,9 +696,7 @@ void ClassCanSnobalBase::_net_rad_veg(void)
 
     // TODO move below to a function
     double SW_ext_in_canopy = S_n[hh] * (1-Albedo_veg[hh] - Tauc[hh]*(1-Albedo_surface[hh])); // Eq 6. from Pomeroy et al., (2009)
-    double B = 0.038; // from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.
-    I_LW_cpy[hh] = (CAN_EMISSIVITY * STEF_BOLTZ * pow(T_a[hh], 4.0f)) + B * SW_ext_in_canopy; // Longwave emission from the canopy as in Pomeroy et al., (2009) Eq 10 but modified relative to calculate just the canopy emission assuming canopy is at air temperature at night
-
+    I_LW_cpy[hh] = (CAN_EMISSIVITY * STEF_BOLTZ * pow(T_a[hh], 4.0f)) + SW_to_LW_fn[hh] * SW_ext_in_canopy; // Longwave emission from the canopy as in Pomeroy et al., (2009) Eq 10 but modified relative to calculate just the canopy emission assuming canopy is at air temperature at night
     Qn_veg[hh] = (S_n[hh]*(1-Albedo_vegsnow[hh])) + (I_lw[hh] + I_LW_cpy_2_cpy[hh] + I_LW_cpy[hh] - O_LW_cpysnow[hh]); // assumes canopy snow is getting full atmosphere input of LW on top and LW from canopy on branch may need to adjust contribution on top to also include some canopy emission
 }
 
@@ -1167,15 +1165,12 @@ void ClassCanSnobalBase::_mass_unld(void)
 
     // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt similar method
     // to Andreadis et al., (2009) based on Storck's measurements
-   // delunld_melt[hh] = delmelt_veg[hh] * melt_drip_ratio[hh];
-    delunld_melt[hh] = delmelt_veg[hh] * 0;
+    delunld_melt[hh] = delmelt_veg[hh] * unld_to_melt_ratio[hh];
 
 
     // mass unloading due to sublimation first suggested in JM's thesis
-    const double subl_unld_ratio = 0.0; // TODO move to par file
-
     if(qsub_veg[hh] < 0.0){
-        delunld_subl[hh] = -qsub_veg[hh] * subl_unld_ratio; // if sublimation rate is negative wrt the canopy then apply sublimation based unloading (switch the sign of qsub_veg too as this is how it was parameterized)
+        delunld_subl[hh] = -qsub_veg[hh] * unld_to_subl_ratio[hh]; // if sublimation rate is negative wrt the canopy then apply sublimation based unloading (switch the sign of qsub_veg too as this is how it was parameterized)
     } else {
         delunld_subl[hh] = 0.0; // no sublimation based unloading if deposition of water vapour occurs towards the canopy
     }
