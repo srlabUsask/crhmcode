@@ -274,6 +274,7 @@
 *  Von Karman constant
 */
 #define VON_KARMAN      3.5e-1
+#define VON_KARMAN2     0.41
 
 /*
 *  virtual temperature, i.e. the fictitious temperature that air must

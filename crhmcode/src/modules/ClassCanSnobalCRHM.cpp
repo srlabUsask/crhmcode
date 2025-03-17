@@ -61,20 +61,24 @@ void ClassCanSnobalCRHM::decl(void) {
     declstatvar("liq_h2o_veg", TDim::NHRU, "canopy liquid h2o load as specific mass", "(kg/m^2)", &liq_h2o_veg);
     declstatvar("snow_h2o_veg", TDim::NHRU, "canopy snow load as specific mass", "(kg/m^2)", &snow_h2o_veg);
 
-    decllocal("delevap_veg", TDim::NHRU, "mass of subl/evap from canopy snow/liquid (+to surface)", "(kg/m^2*int)", &delevap_veg);
-    decllocal("delsub_veg", TDim::NHRU, "mass of subl/evap from canopy snow/liquid (+to surface)", "(kg/m^2*int)", &delsub_veg);
+    decllocal("delevap_veg", TDim::NHRU, "mass of subl/evap from canopy snow/liquid (+to surface)", "(kg/m^2*s)", &delevap_veg);
+    decllocal("delsub_veg", TDim::NHRU, "mass of subl/evap from canopy snow/liquid (+to surface)", "(kg/m^2*s)", &delsub_veg);
     decllocal("qsub_veg", TDim::NHRU, "mass flux by evap into air from active layer", "(kg/m^2*s)", &qsub_veg);
     decllocal("delmelt_veg", TDim::NHRU, "specific melt (kg/m^2 or m)", "(kg/m^2)", &delmelt_veg);
+    decllocal("delunld_wind", TDim::NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*s)", &delunld_wind);
+    decllocal("delunld_melt", TDim::NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*s)", &delunld_melt);
+    decllocal("delunld_subl", TDim::NHRU, "canopy snow unloading due to sublimation", "(kg/m^2*s)", &delunld_subl);
+    decllocal("delunld", TDim::NHRU, "canopy snow unloading rate", "(kg/m^2*s)", &delunld);
     declvar("deldrip_veg", TDim::NHRU, "predicted specific runoff", "(kg/m^2)", &deldrip_veg);
 
     declvar("delevap_veg_int", TDim::NHRU, "mass of evap into air from vegsnowcover", "(kg/m^2*int)", &delevap_veg_int);
     declvar("delsub_veg_int", TDim::NHRU, "mass of sublimation into air from vegsnowcover", "(kg/m^2*int)", &delsub_veg_int);
     declvar("delmelt_veg_int", TDim::NHRU, "specific melt (kg/m^2 or m)", "(kg/m^2*int)", &delmelt_veg_int);
     declvar("delunld_int", TDim::NHRU, "specific mass of canopy snow unloaded to subcanopy", "(kg/m^2*int)", &delunld_int);
-    declvar("delunld", TDim::NHRU, "canopy snow unloading rate", "(kg/m^2*s)", &delunld);
-    declvar("delunld_wind", TDim::NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*s)", &delunld_wind);
-    declvar("delunld_melt", TDim::NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*s)", &delunld_melt);
-    declvar("delunld_subl", TDim::NHRU, "canopy snow unloading due to sublimation", "(kg/m^2*s)", &delunld_subl);
+    decllocal("delunld_wind_int", TDim::NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*int)", &delunld_wind_int);
+    decllocal("delunld_melt_int", TDim::NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*int)", &delunld_melt_int);
+    decllocal("delunld_subl_int", TDim::NHRU, "canopy snow unloading due to sublimation", "(kg/m^2*int)", &delunld_subl_int);
+
     declvar("delL", TDim::NHRU, "interval change in SWE", "(kg/m^2*int)", &delL);
     declvar("delmelt_veg_day", TDim::NHRU, "daily snow melt", "(mm/d)", &delmelt_veg_day);
     decllocal("cmlmelt_veg_day", TDim::NHRU, "daily snow melt accumulator", "(mm/d)", &cmlmelt_veg_day);
@@ -84,7 +88,7 @@ void ClassCanSnobalCRHM::decl(void) {
 
     declstatvar("rho_veg", TDim::NHRU, "average snowcover density", "(kg/m^3)", &rho_veg);
 
-    declstatvar("m_s_veg", TDim::NHRU, "snowcover's specific mass", "(kg/m^2)", &m_s_veg);
+    declstatvar("m_s_veg", TDim::NHRU, "snowcover's specific mass, liquid and snow", "(kg/m^2)", &m_s_veg);
 
     declstatvar("T_s_veg", TDim::NHRU, "average snowcover temp", "(" + string(DEGREE_CELSIUS) + ")", &T_s_veg);
 
@@ -254,6 +258,9 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     delmelt_veg_int[hh] = 0.0;
     delsub_veg_int[hh] = 0.0;
     delunld_int[hh] = 0.0;
+    delunld_wind_int[hh] = 0.0;
+    delunld_melt_int[hh] = 0.0;
+    delunld_subl_int[hh] = 0.0;
     deldrip_veg[hh] = 0.0;
 
     long Step = getstep();

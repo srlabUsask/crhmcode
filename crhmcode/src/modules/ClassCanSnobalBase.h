@@ -40,7 +40,7 @@ public:
     double* liq_h2o_veg{ NULL };            // liquid h2o content as specific mass(kg/m^2)
     double* z_veg_s{ NULL };            // total snowcover thickness (m)
     double* rho_veg{ NULL };            // average snowcover density (kg/m^3)
-    double* m_s_veg{ NULL };            // snowcover's specific mass (kg/m^2). Init by init_snow_veg.
+    double* m_s_veg{ NULL };            // snowcover's specific mass, liquid and snow (kg/m^2). Init by init_snow_veg.
     double* T_s_veg{ NULL };            // average snowcover temp (K). Init by init_snow_veg
     double* cc_s_veg{ NULL };           // snowcover's cold content (J/m^2). Init by init_snow_veg.
     double* h2o_sat_veg{ NULL };        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
@@ -63,10 +63,13 @@ public:
     double* delevap_veg_int{ NULL };	    // mass of evap into air & soil from snowcover (kg/m^2*int) delunld_int
     double* delsub_veg_int{ NULL };	    // mass of evap into air & soil from snowcover (kg/m^2*int) delunld_int
     double* delunld_int{ NULL };	    // specific mass of canopy snow unloaded to subcanopy (kg/m^2*int)
-    double* delunld{ NULL };	    // canopy snow unloading rate (kg/m^2*int)
-    double* delunld_wind{ NULL };	    // solid snow unloading from the canopy induced by wind (kg/m^2*int)
-    double* delunld_melt{ NULL };	    // canopy snow unloading rate due to melting (kg/m^2*int)
-    double* delunld_subl{ NULL };	    // canopy snow unloading due to sublimation (kg/m^2*int)
+    double* delunld{ NULL };	    // canopy snow unloading rate (kg/m^2*s)
+    double* delunld_wind{ NULL };	    // solid snow unloading from the canopy induced by wind (kg/m^2*s)
+    double* delunld_melt{ NULL };	    // canopy snow unloading rate due to melting (kg/m^2*s)
+    double* delunld_subl{ NULL };	    // canopy snow unloading due to sublimation (kg/m^2*s)
+    double* delunld_wind_int{ NULL };	    // solid snow unloading from the canopy induced by wind (kg/m^2*int)
+    double* delunld_melt_int{ NULL };	    // canopy snow unloading rate due to melting (kg/m^2*int)
+    double* delunld_subl_int{ NULL };	    // canopy snow unloading due to sublimation (kg/m^2*int)
 
     double* delmelt_veg_day{ NULL };      // daily predicted specific runoff (m/sec)
     double* cmlmelt_veg_day{ NULL };      // daily predicted specific runoff accumulator (m/sec)

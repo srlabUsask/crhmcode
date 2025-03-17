@@ -535,6 +535,9 @@ int ClassCanSnobalBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
     delsub_veg_int[hh] += delsub_veg[hh];
     delevap_veg_int[hh] += delevap_veg[hh];
     delunld_int[hh] += delunld[hh];
+    delunld_wind_int[hh] += delunld_wind[hh];
+    delunld_melt_int[hh] += delunld_melt[hh];
+    delunld_subl_int[hh] += delunld_subl[hh];
 
     //  Update the model's input parameters
 
@@ -787,7 +790,9 @@ int ClassCanSnobalBase::calc_turb_transfer(
     double z_veg_u;                   // height of within mid canopy wind speed (m)   
     double D;                       // diffusivity of water vapour in still air (m^2/s)
     const double KinVisc = 1.88E-5; /* Kinematic viscosity of air (Sask. avg. value) */
-    const double ks = 0.0114;       // snow shape coefficient for jack pine
+    // const double ks = 0.0114;       // snow shape coefficient for jack pine from Pomeroy et al., 1998
+    const double ks = 0.02;       // recalibrated from Essery et al., (2003)
+    // const double ks = 0.2;       // recalibrated from AC
     const double Fract = 0.37;      // fractal dimension of intercepted snow
     double Ce;                      // canopy fullness index to represent how exposed snow is for sublimation, more sublimation for less snow in the canopy
     const double Radius = 0.0005;   /* Ice sphere radius, metres */
@@ -795,6 +800,7 @@ int ClassCanSnobalBase::calc_turb_transfer(
     double ra;                      // aerodynamic roughness (s/m)
     double ri;                      // resistance of moisture transfer from intercepted snow (s/m)
     double z_0;                     // roughness length
+    double d_0;                     // displacement height
     int ier = 0;                    // return error code
 
     // check for bad input
@@ -859,12 +865,12 @@ int ClassCanSnobalBase::calc_turb_transfer(
     else if (u > 15)
         u = 15;
 
-    D = 2.06E-5 * pow(T_a[hh] / 273.15, 1.75);
+    D = 2.06E-5 * pow(T_s_veg[hh] / FREEZE, -1.75);
     // TODO at plot scale eventualy changed from observed wind to simulated
     // z_veg_u = Ht[hh]*(2.0/3.0);
     // adst_wind_cpy_top(Ht[hh], u, z_u[hh], u_veg_ht);
     // cionco_canopy_wind_spd(Ht[hh], u_veg_ht, z_veg_u, u_veg_mid);
-    Nr = 2 * Radius * u / KinVisc; // TODO update to use within canopy wind speed
+    Nr = 2.0 * Radius * u / KinVisc; // TODO update to use within canopy wind speed
     NuSh = 1.79 + 0.606 * sqrt(Nr);
 
     // air density at press, virtual temp of geometric mean of air and surface
@@ -880,10 +886,11 @@ int ClassCanSnobalBase::calc_turb_transfer(
     else
         Ce = ks * pow((snow_h2o_veg[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar
 
-    // ra = 1 / (u_veg_mid * VON_KARMAN * VON_KARMAN) * log(z_veg_u / Z_0_cansnow[hh]) * log(z_veg_u / Z_0_cansnow[hh]); // Eq. 6 from Pomeroy 2016, TODO switch to adjusted wind for increased applicability
-    ra = 1 / (u * VON_KARMAN * VON_KARMAN) * log(tz / Z_0_cansnow[hh]) * log(tz / Z_0_cansnow[hh]); // Eq. 6 from Pomeroy 2016
+    d_0 = Ht[hh]*(2/3);
+    z_0 = Ht[hh] * 0.1;
+    ra = 1/log((tz - d_0)/z_0)*((uz - d_0)/z_0)/(VON_KARMAN2*VON_KARMAN2*u); // Allen 1998 Eq. 4, TODO switch to adjusted wind for increased applicability
 
-    ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * m_s_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
+    ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * snow_h2o_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
 
     CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(T_s_veg[hh]); // Eq. 29 from Essery et al., 2003
     CRHM_h = (dens / ra) * CP_AIR * (T_a[hh] - T_s_veg[hh]); // Eq. 4 Essery et al., 2003 and Pomeroy et al., 2016
@@ -1165,8 +1172,7 @@ void ClassCanSnobalBase::_mass_unld(void)
 
     // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt similar method
     // to Andreadis et al., (2009) based on Storck's measurements
-    delunld_melt[hh] = delmelt_veg[hh] * unld_to_melt_ratio[hh];
-
+    delunld_melt[hh] = delmelt_veg[hh] * snow_h2o_veg[hh] * unld_to_melt_ratio[hh];
 
     // mass unloading due to sublimation first suggested in JM's thesis
     if(qsub_veg[hh] < 0.0){
@@ -1231,7 +1237,7 @@ void ClassCanSnobalBase::_mass_unld(void)
     }
 
     // ablation via temperature, wind, and duration based unloading
-    // delunld[hh] = m_s_veg[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
+    // delunld[hh] = snow_h2o_veg[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
 
     // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
     delunld_wind[hh] = snow_h2o_veg[hh] * (1 - exp(-fu * time_step[hh])); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
@@ -1487,7 +1493,7 @@ int ClassCanSnobalBase::subl_ice_sphere(
     double resid;                   // energy balance residual relative to an ice sphere (j/s)
     double convergence_check = 0; //
 
-    D = 2.06E-5 * pow(ta / 273.15, 1.75);
+    D = 2.06E-5 * pow(ta / 273.15, -1.75);
     adst_wind_cpy_top(Ht[hh], u, z_u[hh], u_veg_ht);
     Nr = 2 * Radius * u_veg_ht / KinVisc;
     NuSh = 1.79 + 0.606 * sqrt(Nr);
