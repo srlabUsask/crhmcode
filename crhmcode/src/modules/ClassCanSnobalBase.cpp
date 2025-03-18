@@ -513,7 +513,7 @@ int ClassCanSnobalBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
 
     // Is there a vegsnowcover?
 
-    vegsnowcover[hh] = snow_h2o_veg[hh] > 0.0;
+    vegsnowcover[hh] = snow_h2o_veg[hh] > 1e-6; // skip energy
 
     // Calculate energy transfer terms
 
@@ -865,7 +865,7 @@ int ClassCanSnobalBase::calc_turb_transfer(
     else if (u > 15)
         u = 15;
 
-    D = 2.06E-5 * pow(T_s_veg[hh] / FREEZE, -1.75);
+    D = 2.06E-5 * pow(ts / FREEZE, -1.75);
     // TODO at plot scale eventualy changed from observed wind to simulated
     // z_veg_u = Ht[hh]*(2.0/3.0);
     // adst_wind_cpy_top(Ht[hh], u, z_u[hh], u_veg_ht);
@@ -886,14 +886,14 @@ int ClassCanSnobalBase::calc_turb_transfer(
     else
         Ce = ks * pow((snow_h2o_veg[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar
 
-    d_0 = Ht[hh]*(2/3);
+    d_0 = Ht[hh] * (2/3);
     z_0 = Ht[hh] * 0.1;
-    ra = 1/log((tz - d_0)/z_0)*((uz - d_0)/z_0)/(VON_KARMAN2*VON_KARMAN2*u); // Allen 1998 Eq. 4, TODO switch to adjusted wind for increased applicability
+    ra = 1.0/log((tz - d_0)/z_0)*((uz - d_0)/z_0)/(VON_KARMAN2*VON_KARMAN2*u); // Allen 1998 Eq. 4, TODO switch to adjusted wind for increased applicability
 
     ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * snow_h2o_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
 
-    CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(T_s_veg[hh]); // Eq. 29 from Essery et al., 2003
-    CRHM_h = (dens / ra) * CP_AIR * (T_a[hh] - T_s_veg[hh]); // Eq. 4 Essery et al., 2003 and Pomeroy et al., 2016
+    CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(ts); // Eq. 29 from Essery et al., 2003
+    CRHM_h = (dens / ra) * CP_AIR * (ta - ts); // Eq. 4 Essery et al., 2003 and Pomeroy et al., 2016
 
     return (ier);
 }
@@ -1176,7 +1176,7 @@ void ClassCanSnobalBase::_mass_unld(void)
 
     // mass unloading due to sublimation first suggested in JM's thesis
     if(qsub_veg[hh] < 0.0){
-        delunld_subl[hh] = -qsub_veg[hh] * unld_to_subl_ratio[hh]; // if sublimation rate is negative wrt the canopy then apply sublimation based unloading (switch the sign of qsub_veg too as this is how it was parameterized)
+        delunld_subl[hh] = -delsub_veg[hh] * snow_h2o_veg[hh] * unld_to_subl_ratio[hh]; // if sublimation rate is negative wrt the canopy then apply sublimation based unloading (switch the sign of qsub_veg too as this is how it was parameterized)
     } else {
         delunld_subl[hh] = 0.0; // no sublimation based unloading if deposition of water vapour occurs towards the canopy
     }

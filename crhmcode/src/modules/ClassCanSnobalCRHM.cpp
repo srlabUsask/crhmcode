@@ -267,7 +267,7 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
 
     // uncomment  below to hop to specific time in debug
 
-    // string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
+    string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 
     // if (test == "6/23/2022 0:15") {
     // // if (test == "10/1/2021 0:15") {
@@ -288,6 +288,14 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
       }
 
       do_data_tstep_veg(); // executes Snobal code
+
+      if (snow_h2o_veg[hh] < 1e-6 & snow_h2o_veg[hh] > 0.0){ // if very small amount of snow on canopy then sublimate it off, handles non-convergence of energy balance for small snow values
+
+        delsub_veg_int[hh] += snow_h2o_veg[hh];
+        snow_h2o_veg[hh] = 0.0;
+        m_s_veg[hh] = snow_h2o_veg[hh] + liq_h2o_veg[hh];
+        vegsnowcover[hh] = 0.0;
+      }
 
     }
     else if(m_precip[hh] > 0.0) {
@@ -319,16 +327,16 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     cmlmelt_veg[hh] += delmelt_veg_int[hh];
     melt_direct_cum[hh] += delmelt_veg_int[hh];
 
-        // set assimilate observed snow load for begining of select events
-    if(obs_snow_load[hh] < 9999){
-      m_s_veg[hh] = obs_snow_load[hh];
-      snow_h2o_veg[hh] = obs_snow_load[hh];
-      liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
-      delmelt_veg_int[hh] = 0.0;
-      delsub_veg_int[hh] = 0.0;
-      delunld_int[hh] = 0.0;
-      deldrip_veg[hh] = 0.0;
-    }
+    // set assimilate observed snow load for begining of select events
+    // if(obs_snow_load[hh] < 9999){
+    //   m_s_veg[hh] = obs_snow_load[hh];
+    //   snow_h2o_veg[hh] = obs_snow_load[hh];
+    //   liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
+    //   delmelt_veg_int[hh] = 0.0;
+    //   delsub_veg_int[hh] = 0.0;
+    //   delunld_int[hh] = 0.0;
+    //   deldrip_veg[hh] = 0.0;
+    // }
 
   }
 }
