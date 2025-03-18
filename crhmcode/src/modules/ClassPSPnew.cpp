@@ -376,7 +376,7 @@ void ClassPSPnew::run(void) {
           RHItNum = RHItNum + 1;
           if (RHItNum > 1)  DblRHcan += StepRH;
           LambdaT = 0.00063*(DblTbarCan+273.15)+0.0673;
-          D = 2.06E-5*pow((DblTbarCan+273.15)/273.15 , 1.75);
+          D = 2.06E-5*pow((DblTbarCan+273.15)/273.15, -1.75);
 
           TItNum2 = 0;
           StepT2 = 0.01;
@@ -428,10 +428,10 @@ void ClassPSPnew::run(void) {
             //Vs = (2.0*M_PI*D*Radius*(SVDensC*DblRHcan-SVDensS)*NuSh)*Hs; // original in PSPnew
             Vs = (2.0*M_PI*Radius*D*NuSh*(SVDensC*DblRHcan-SVDensS))*Hs; // Latent Heat Energy flux (j/s) relative to the ice sphere (negative for sublimation of particle). SVDensS not multiplied by RH because assumed to be saturated i.e., at 1.0
             //Vhr = (2.0*M_PI*LambdaT*Radius*(DblTCanSnow-DblTbarCan)*NuSh);  // original in PSPnew except that QnetStar was subtracted here originally, now moved this down to the ebal check
-            Vhr = 2.0*M_PI*Radius*LambdaT*NuSh*(DblTCanSnow-DblTbarCan); // Sensible heat transfer (j/s), positive when energy is transfered away from the ice sphere
+            Vhr = 2.0*M_PI*Radius*LambdaT*NuSh*(DblTCanSnow-DblTbarCan); // Sensible heat transfer (j/s), + is energy away from surface
 
-            ebal_check = Vs - Vhr - QnetStar;
-            //ebal_check = Vs - Vhr; // this was original, but Vhr was subtracted by QnetStar above
+            ebal_check = Vs - Vhr - QnetStar; // not sure about the sign conventions here ... 
+            //ebal_check = Vs - Vhr; // this was original, but Vhr was subtracted by QnetStar above, and Vhr was pos away from ice sphere
 
             if (ebal_check < 0.0){
               if (TItNum2 == 1)  {
