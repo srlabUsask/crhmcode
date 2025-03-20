@@ -797,7 +797,7 @@ int ClassCanSnobalBase::calc_turb_transfer(
     double Ce;                      // canopy fullness index to represent how exposed snow is for sublimation, more sublimation for less snow in the canopy
     const double Radius = 0.0005;   /* Ice sphere radius, metres */
     double dice = 900.0;            // density of ice from canopy module
-    double ra;                      // aerodynamic roughness (s/m)
+    double ra;                      // aerodynamic resistance (s/m)
     double ri;                      // resistance of moisture transfer from intercepted snow (s/m)
     double z_0;                     // roughness length
     double d_0;                     // displacement height
@@ -888,8 +888,9 @@ int ClassCanSnobalBase::calc_turb_transfer(
 
     d_0 = Ht[hh] * (2/3);
     z_0 = Ht[hh] * 0.1;
-    ra = 1.0/log((tz - d_0)/z_0)*((uz - d_0)/z_0)/(VON_KARMAN2*VON_KARMAN2*u); // Allen 1998 Eq. 4, TODO switch to adjusted wind for increased applicability
 
+    // resitances   
+    ra = 1.0/(VON_KARMAN2*VON_KARMAN2*u)*(log((tz - d_0)/z_0)*log(((uz - d_0)/z_0))); // Allen 1998 Eq. 4, TODO switch to adjusted wind for increased applicability
     ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * snow_h2o_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
 
     CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(ts); // Eq. 29 from Essery et al., 2003
@@ -1175,7 +1176,7 @@ void ClassCanSnobalBase::_mass_unld(void)
     delunld_melt[hh] = delmelt_veg[hh] * snow_h2o_veg[hh] * unld_to_melt_ratio[hh];
 
     // mass unloading due to sublimation first suggested in JM's thesis
-    if(qsub_veg[hh] < 0.0){
+    if(delsub_veg[hh] < 0.0){
         delunld_subl[hh] = -delsub_veg[hh] * snow_h2o_veg[hh] * unld_to_subl_ratio[hh]; // if sublimation rate is negative wrt the canopy then apply sublimation based unloading (switch the sign of qsub_veg too as this is how it was parameterized)
     } else {
         delunld_subl[hh] = 0.0; // no sublimation based unloading if deposition of water vapour occurs towards the canopy

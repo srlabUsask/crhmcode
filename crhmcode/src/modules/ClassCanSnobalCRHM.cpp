@@ -183,7 +183,7 @@ void ClassCanSnobalCRHM::decl(void) {
 
     variation_set = VARIATION_1;
 
-    declgetvar("*", "QsiS_Var", "(W/m^2)", &Qsw_in_veg); // downwelling SW to slope
+    declgetvar("*", "QsiS_Var", "(W/m^2)", &Qsw_in_veg); // downwelling SW to slope simulated from annandale module, same as regular snobal but without the canopy tau applied
     declgetvar("*", "QliVt_Var", "(W/m^2)", &Qlw_out_atm); // downwelling longwave radiation from the atmosphere, adjusted for terrain emission as well
 
 
@@ -230,7 +230,7 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
         //   I_LW_gnd[hh] = CAN_EMISSIVITY*(CRHM_constants::sbc * SNOW_EMISSIVITY * pow(T_s_0[hh] + FREEZE, 4.0f)); 
         // }
  
-        input_rec2[hh].I_lw = I_LW_atm[hh]; // TODO consider modifying to add pomeroy 2009 solar rad adjustment for additional lonwave emitted from the bare veg elements as well (i.e. + 1.0-CanSnowFrac*(B_canopy[hh]*Kstar_H)), not including outgoing LW from surfance snow as should be relatively similar to canopy.
+        input_rec2[hh].I_lw = I_LW_atm[hh]; 
       break;
       case VARIATION_2:
         input_rec2[hh].S_n  = Qsi[hh];
@@ -269,9 +269,10 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
 
     string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 
-    // if (test == "6/23/2022 0:15") {
+    // if (test == "3/25/2023 15:0") {
+    // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
     // // if (test == "10/1/2021 0:15") {
-    //   std::cout << "Breakpoint here: Date matched 2022-06-23" << std::endl;
+    //   std::cout << "Breakpoint here: Date matched" << std::endl;
     // }
     if(getstep() > 1){ // Not first step
 
@@ -328,15 +329,15 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     melt_direct_cum[hh] += delmelt_veg_int[hh];
 
     // set assimilate observed snow load for begining of select events
-    // if(obs_snow_load[hh] < 9999){
-    //   m_s_veg[hh] = obs_snow_load[hh];
-    //   snow_h2o_veg[hh] = obs_snow_load[hh];
-    //   liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
-    //   delmelt_veg_int[hh] = 0.0;
-    //   delsub_veg_int[hh] = 0.0;
-    //   delunld_int[hh] = 0.0;
-    //   deldrip_veg[hh] = 0.0;
-    // }
+    if(obs_snow_load[hh] < 9999){
+      m_s_veg[hh] = obs_snow_load[hh];
+      snow_h2o_veg[hh] = obs_snow_load[hh];
+      liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
+      delmelt_veg_int[hh] = 0.0;
+      delsub_veg_int[hh] = 0.0;
+      delunld_int[hh] = 0.0;
+      deldrip_veg[hh] = 0.0;
+    }
 
   }
 }
