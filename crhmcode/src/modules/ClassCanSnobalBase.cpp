@@ -779,8 +779,8 @@ int ClassCanSnobalBase::calc_turb_transfer(
 {
     double h = 0; // sens heat flux (+ to surf) (W/m^2)
     double e = 0; // mass flux (+ to surf) (kg/m^2/s)
-    double qa;    // specific humidity at height zq
-    double qs;    // specific humidity at surface
+    double qa;    // specific humidity at height zq (kg/kg)
+    double qs;    // specific humidity at surface (kg/kg)
     double dens;  // air density (kg/m3)
 
     double Nr;                      // Reynolds number

@@ -38,7 +38,7 @@
 #define RGAS            8.31432e3
 
 /*
-*  specific humidity
+*  specific humidity (-) / (kg/kg)
 *
 *	e = vapor pressure
 *	P = pressure (same units as e)

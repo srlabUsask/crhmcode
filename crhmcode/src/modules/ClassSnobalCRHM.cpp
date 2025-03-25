@@ -257,7 +257,7 @@ void ClassSnobalCRHM::run(void) { // executed every interval
         input_rec2[hh].S_n  = Qsi[hh]*(1.0 - Albedo[hh]);
         input_rec2[hh].I_lw = Qli[hh];
       break;
-      case VARIATION_1:
+      case VARIATION_1: // this is the default
         input_rec2[hh].S_n  = Qsisn_Var[hh]*(1.0 - Albedo[hh]);
         input_rec2[hh].I_lw = Qlisn_Var[hh];
       break;
