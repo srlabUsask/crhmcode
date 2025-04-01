@@ -1171,13 +1171,25 @@ void ClassCanSnobalBase::_mass_unld(void)
         delunld[hh] = snow_h2o_veg[hh] - Lmax[hh];
     }
 
-    // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt similar method
-    // to Andreadis et al., (2009) based on Storck's measurements
-    delunld_melt[hh] = delmelt_veg[hh] * snow_h2o_veg[hh] * unld_to_melt_ratio[hh];
+    // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt found to be function of canopy snow load for Fortress obs
+    //delunld_melt[hh] = delmelt_veg[hh] * snow_h2o_veg[hh] * unld_to_melt_ratio[hh];
+    double unld_to_melt_ratio_m = 0.17;
+    double unld_to_melt_ratio_b = -0.96;
+
+    double unld_to_melt_ratio = snow_h2o_veg[hh] * unld_to_melt_ratio_m + unld_to_melt_ratio_b; // WARNING this can go negative so handle below
+    unld_to_melt_ratio = std::max(0.0, unld_to_melt_ratio);
+    delunld_melt[hh] = delmelt_veg[hh] * unld_to_melt_ratio;
 
     // mass unloading due to sublimation first suggested in JM's thesis
     if(delsub_veg[hh] < 0.0){
-        delunld_subl[hh] = -delsub_veg[hh] * snow_h2o_veg[hh] * unld_to_subl_ratio[hh]; // if sublimation rate is negative wrt the canopy then apply sublimation based unloading (switch the sign of qsub_veg too as this is how it was parameterized)
+
+        double unld_to_subl_ratio_m = 0.18;
+        double unld_to_subl_ratio_b = -0.51;
+    
+        double unld_to_subl_ratio = snow_h2o_veg[hh] * unld_to_subl_ratio_m + unld_to_subl_ratio_b; // WARNING this can go negative so handle below
+        unld_to_subl_ratio = std::max(0.0, unld_to_subl_ratio);
+
+        delunld_subl[hh] = -delsub_veg[hh] * unld_to_subl_ratio; // if sublimation rate is negative wrt the canopy then apply sublimation based unloading (switch the sign of qsub_veg too as this is how it was parameterized)
     } else {
         delunld_subl[hh] = 0.0; // no sublimation based unloading if deposition of water vapour occurs towards the canopy
     }
