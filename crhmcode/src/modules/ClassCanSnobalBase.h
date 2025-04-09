@@ -171,7 +171,6 @@ public:
     const double* z_u{ NULL };         // height of wind measurement (m)
     const double* z_T{ NULL };         // height of air temp & vapor pressure measurement (m)
     const double* Albedo_vegsnow{ NULL };         // albedo of snow on vegetation ()
-    const double* Z_0_cansnow{ NULL };         // surface roughness length of snow on vegetation (m)
     const double* SW_to_LW_fn{ NULL };         // dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site. (-)
     const double* max_liq_veg{ NULL };        // max liquid h2o content as specific mass(kg/m^2)
     const double* max_h2o_vol_veg{ NULL }; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)

@@ -137,7 +137,6 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("stop_no_snow", TDim::NHRU, "snow flag", "()", &stop_no_snow);
     declparam("max_liq_veg", TDim::NHRU, "[0.0001]", "0.0001", "0.2", "max liquid h2o content as specific mass", "(kg/m^2)", &max_liq_veg);
     declparam("Albedo_vegsnow", TDim::NHRU, "[0.6]", "0.6", "0.9", "Albedo_vegsnow", "(-)", &Albedo_vegsnow);
-    declparam("Z_0_cansnow", TDim::NHRU, "[0.01]", "0.0001", "0.1", "canopy snow roughness length", "(m)", &Z_0_cansnow);
     declparam("SW_to_LW_fn", TDim::NHRU, "[0.01]", "0.0001", "0.5", "dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.", "(-)", &SW_to_LW_fn);
     declparam("unld_to_melt_ratio", TDim::NHRU, "[0.4]", "0.0", "10", "Ratio of mass unloading of solid snow due to melt compared to canopy snowmelt. Default is from Storck 2002.", "(-)", &unld_to_melt_ratio);
     declparam("unld_to_subl_ratio", TDim::NHRU, "[0.2]", "0.0", "10", "Ratio of mass unloading of solid snow due to sublimation compared to canopy snowmelt. Default from J. MacDonald (2010) thesis for colder temps.", "(-)", &unld_to_subl_ratio);
@@ -172,22 +171,24 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetvar("*", "intercepted_rain", "(kg/m^2)", &new_rain); // new snow intercepted in canopy before ablation processes have kicked in
     declgetvar("*", "hru_evap", "(kg/m^2)", &hru_evap); 
 
+    variation_set = VARIATION_0 + VARIATION_1;
 
-    variation_set = VARIATION_0 + VARIATION_2;
-
-    declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
+    declreadobs("Qsi", TDim::NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q, true); // must check for NULL
 
     variation_set = VARIATION_0;
 
-    declreadobs("Qli", TDim::NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
+    declreadobs("Qli", TDim::NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q, true);
 
-    variation_set = VARIATION_1;
+    variation_set = VARIATION_2;
 
     declgetvar("*", "QsiS_Var", "(W/m^2)", &Qsw_in_veg); // downwelling SW to slope simulated from annandale module, same as regular snobal but without the canopy tau applied
+
+    variation_set = VARIATION_1 + VARIATION_2;
+
     declgetvar("*", "QliVt_Var", "(W/m^2)", &Qlw_out_atm); // downwelling longwave radiation from the atmosphere, adjusted for terrain emission as well
 
-
     variation_set = VARIATION_ORG;
+
 }
 
 void ClassCanSnobalCRHM::init(void) {
@@ -214,27 +215,24 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
 
   for (hh = 0; chkStruct(); ++hh) {
 
-    switch (variation){
-      case VARIATION_ORG:
-        input_rec2[hh].S_n  = Qsi[hh];
-        input_rec2[hh].I_lw = Qli[hh];
-      break;
-      case VARIATION_1: // default if no obs radiation available
-        input_rec2[hh].S_n  = Qsw_in_veg[hh]; // after CLASSIC just take the incoming solar to slope which is multiplied by 1 - canopy albedo later on. Differs slightly from class which uses incoming SW to horizontal surface where this is the SW to slope 
-        I_LW_atm[hh] = (CAN_EMISSIVITY + (1.0 - CAN_EMISSIVITY)*(1.0 - SNOW_EMISSIVITY)*CAN_EMISSIVITY)*Qlw_out_atm[hh]; //  ! downward atmospheric longwave radiation absorbed by the canopy (W m-2) from SUMMA
+    switch (variation)
+    {
+    case VARIATION_ORG: // obs SW and obs LW
+      input_rec2[hh].S_n = Qsi[hh];
+      input_rec2[hh].I_lw = Qli[hh];
 
-        // using veg temp instead of surface snowpack
-        // if(T_s_0[hh] == MIN_SNOW_TEMP){
-        //   I_LW_gnd[hh] = CAN_EMISSIVITY*(CRHM_constants::sbc * SNOW_EMISSIVITY * pow(T_a_X[hh] + FREEZE, 4.0f)); // subcanopy snow pack not initilized yet
-        // } else {
-        //   I_LW_gnd[hh] = CAN_EMISSIVITY*(CRHM_constants::sbc * SNOW_EMISSIVITY * pow(T_s_0[hh] + FREEZE, 4.0f)); 
-        // }
- 
-        input_rec2[hh].I_lw = I_LW_atm[hh]; 
       break;
-      case VARIATION_2:
-        input_rec2[hh].S_n  = Qsi[hh];
-        input_rec2[hh].I_lw = Qlw_out_atm[hh];
+    case VARIATION_1: // obs SW and mod LW
+      input_rec2[hh].S_n = Qsi[hh];
+      I_LW_atm[hh] = (CAN_EMISSIVITY + (1.0 - CAN_EMISSIVITY) * (1.0 - SNOW_EMISSIVITY) * CAN_EMISSIVITY) * Qlw_out_atm[hh]; //  ! downward atmospheric longwave radiation absorbed by the canopy (W m-2) from SUMM
+      input_rec2[hh].I_lw = I_LW_atm[hh];
+
+      break;
+    case VARIATION_2: // mod SW and mod LW
+      input_rec2[hh].S_n = Qsw_in_veg[hh];                                                                                   // after CLASSIC just take the incoming solar to slope which is multiplied by 1 - canopy albedo later on. Differs slightly from class which uses incoming SW to horizontal surface where this is the SW to slope
+      I_LW_atm[hh] = (CAN_EMISSIVITY + (1.0 - CAN_EMISSIVITY) * (1.0 - SNOW_EMISSIVITY) * CAN_EMISSIVITY) * Qlw_out_atm[hh]; //  ! downward atmospheric longwave radiation absorbed by the canopy (W m-2) from SUMM
+      input_rec2[hh].I_lw = I_LW_atm[hh];
+
       break;
     }
 

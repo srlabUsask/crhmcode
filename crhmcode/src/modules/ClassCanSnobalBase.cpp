@@ -1294,6 +1294,7 @@ void ClassCanSnobalBase::_subl_evap(void) {
 
     if (!vegsnowcover[hh] && !(liq_h2o_veg[hh] > 0.0)) { // no h2o in the canopy
         delsub_veg[hh] = 0.0;
+        delevap_veg[hh] = 0.0;
         return;
     }
 
