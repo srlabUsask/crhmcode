@@ -1,4 +1,4 @@
-// 03/04/25
+// 04/29/25
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -104,7 +104,7 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassXG("XG", "04/05/22", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassXG("XG", "04/29/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassXGAyers("XGAyers", "05/19/17", CRHM::PROTO));
 
   DLLModules.AddModule(new ClassSetSoil("SetSoil", "03/04/25", CRHM::ADVANCE));
@@ -20824,7 +20824,7 @@ void ClassXG::finish(bool good) {
 
 float ClassXG::get_ftc_lay(long lay){ // unfrozen(thawed) soil to be frozen
   if(calc_coductivity[hh]){
-    return (soil_solid_km_ki_lay[lay][hh] - soil_solid_km_lay[lay][hh])*sqr(h2o_lay[lay][hh]/(1000.0*por_lay[lay][hh])) + soil_solid_km_lay[lay][hh];
+    return (soil_solid_km_kw_lay[lay][hh] - soil_solid_km_lay[lay][hh])*sqr(h2o_lay[lay][hh]/(1000.0*por_lay[lay][hh])) + soil_solid_km_lay[lay][hh]; // 29Apr2025 correction: use soil_solid_km_kw_lay
   }
   else
     return (1.0 - por_lay[lay][hh])*soil_solid_km_lay[lay][hh] + h2o_lay[lay][hh]/1000.0*kw + (por_lay[lay][hh] - h2o_lay[lay][hh]/1000.0)*ka;

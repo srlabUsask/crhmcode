@@ -725,3 +725,15 @@ CRHM 03/04/25
   Correcting units description for Rn, RnD, RnD_DOS in netall, evap, evapD, evap_Resist, evapD_Resist, evapX modules
   Correcting units description for lambda function in evap, evapD, evap_Resist, evapD_Resist, evapX, Canopy, CanopyClearing, CanopyClearingGap modules
   Correcting description for soil_type parameter in Greencrack, GreenAmpt, SetSoil, Volumetric, evap_Resist, evapD_Resist, evapX modules
+
+CRHM 04/29/25
+
+  Correcting get_ftc_lay() for calculating thermal conductivity using Johansen 1975 equation in XG module as
+
+float ClassXG::get_ftc_lay(long lay){ // unfrozen(thawed) soil to be frozen
+  if(calc_coductivity[hh]){
+    return (soil_solid_km_kw_lay[lay][hh] - soil_solid_km_lay[lay][hh])*sqr(h2o_lay[lay][hh]/(1000.0*por_lay[lay][hh])) + soil_solid_km_lay[lay][hh]; // 29Apr2025 correction: use soil_solid_km_kw_lay
+  }
+  else
+    return (1.0 - por_lay[lay][hh])*soil_solid_km_lay[lay][hh] + h2o_lay[lay][hh]/1000.0*kw + (por_lay[lay][hh] - h2o_lay[lay][hh]/1000.0)*ka;
+}

@@ -1,11 +1,10 @@
-// 03/04/25 correcting units description for Rn, RnD, RnD_DOS in netall, evap, evapD, evap_Resist, evapD_Resist, evapX modules
-// correcting units description for lambda function in evap, evapD, evap_Resist, evapD_Resist, evapX, Canopy, CanopyClearing, CanopyClearingGap modules
-// correcting description for soil_type parameter in Greencrack, GreenAmpt, SetSoil, Volumetric, evap_Resist, evapD_Resist, evapX modules in 10/18/24
+// 04/29/25 correcting get_ftc_lay() for calculating thermal conductivity using
+// Johansen 1975 equation in XG module in 03/04/25
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "03/04/25"
+#define CurrentVersion "04/29/25"
 
 #include <stdexcept>
 #include "CRHMmain.h"
