@@ -857,7 +857,7 @@ void ClassXG::finish(bool good) {
 
 double ClassXG::get_ftc_lay(long lay){ // unfrozen(thawed) soil to be frozen
   if(calc_coductivity[hh]){
-    return (soil_solid_km_ki_lay[lay][hh] - soil_solid_km_lay[lay][hh])*sqr(h2o_lay[lay][hh]/(1000.0*por_lay[lay][hh])) + soil_solid_km_lay[lay][hh];
+    return (soil_solid_km_kw_lay[lay][hh] - soil_solid_km_lay[lay][hh])*sqr(h2o_lay[lay][hh]/(1000.0*por_lay[lay][hh])) + soil_solid_km_lay[lay][hh];
   }
   else
     return (1.0 - por_lay[lay][hh])*soil_solid_km_lay[lay][hh] + h2o_lay[lay][hh]/1000.0*kw + (por_lay[lay][hh] - h2o_lay[lay][hh]/1000.0)*ka;
