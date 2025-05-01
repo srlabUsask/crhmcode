@@ -1181,8 +1181,11 @@ void ClassCanSnobalBase::_mass_unld(void)
     delunld_melt[hh] = delmelt_veg[hh] * unld_to_melt_ratio;
 
     // mechanical wind induced unloading
-    const double a_u = 1.282646e-06; // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain w no melt.
-    const double b_u = 3.925391e-01; // TODO move to par file
+    // const double a_u = 1.282646e-06; // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain w no melt.
+    // const double b_u = 3.925391e-01; // TODO move to par file
+
+    // wind induced unloading as function of shear stress
+    const double a_tau = 0.331/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper)
 
     double fu = 0.0;
     double u_mid = 0.0;
@@ -1227,7 +1230,8 @@ void ClassCanSnobalBase::_mass_unld(void)
 
     if (u_mid >= 0.0)
     {
-        fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
+        // fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
+        fu = a_tau * u_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
     }
     else
     {
@@ -1238,10 +1242,9 @@ void ClassCanSnobalBase::_mass_unld(void)
     // delunld[hh] = snow_h2o_veg[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
 
     // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
-    delunld_wind[hh] = snow_h2o_veg[hh] * (1 - exp(-fu * time_step[hh])); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
+    delunld_wind[hh] = snow_h2o_veg[hh] * (1 - exp(-fu * time_step[hh])); // similar analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review ,similar as steps from eq 27 to 28.
     delunld[hh] += delunld_wind[hh];
     delunld[hh] += delunld_melt[hh];
-    delunld[hh] += delunld_subl[hh];
 
     if (delunld[hh] > snow_h2o_veg[hh])
     {
@@ -1263,8 +1266,6 @@ void ClassCanSnobalBase::_mass_unld(void)
 **
 ** DESCRIPTION
 **      Calculates mass lost or gained by sublimation/evaporation/condensation
-**      treats snow intercepted in the canopy using Pomeroy 1998 and liquid/ice as
-**      in snobal.
 **
 ** GLOBAL VARIABLES READ
 **	qsub_veg
