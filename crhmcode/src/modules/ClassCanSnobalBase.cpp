@@ -1180,24 +1180,9 @@ void ClassCanSnobalBase::_mass_unld(void)
     unld_to_melt_ratio = std::max(0.0, unld_to_melt_ratio);
     delunld_melt[hh] = delmelt_veg[hh] * unld_to_melt_ratio;
 
-    // mass unloading due to sublimation first suggested in JM's thesis
-    if(delsub_veg[hh] < 0.0){
-
-        double unld_to_subl_ratio_m = 0.18;
-        double unld_to_subl_ratio_b = -0.51;
-    
-        double unld_to_subl_ratio = snow_h2o_veg[hh] * unld_to_subl_ratio_m + unld_to_subl_ratio_b; // WARNING this can go negative so handle below
-        unld_to_subl_ratio = std::max(0.0, unld_to_subl_ratio);
-
-        delunld_subl[hh] = -delsub_veg[hh] * unld_to_subl_ratio; // if sublimation rate is negative wrt the canopy then apply sublimation based unloading (switch the sign of qsub_veg too as this is how it was parameterized)
-    } else {
-        delunld_subl[hh] = 0.0; // no sublimation based unloading if deposition of water vapour occurs towards the canopy
-    }
-
-
     // mechanical wind induced unloading
-    const double a_u = 1.740917e-06; // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain when air temp < -6 C.
-    const double b_u = 3.326246e-01; // TODO move to par file
+    const double a_u = 1.282646e-06; // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain w no melt.
+    const double b_u = 3.925391e-01; // TODO move to par file
 
     double fu = 0.0;
     double u_mid = 0.0;
