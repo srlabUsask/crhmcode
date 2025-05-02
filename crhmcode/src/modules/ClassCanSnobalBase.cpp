@@ -1231,7 +1231,8 @@ void ClassCanSnobalBase::_mass_unld(void)
     if (u_mid >= 0.0)
     {
         // fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
-        fu = a_tau * u_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
+        double tau_mid = pow(u_mid, 2.0) * 0.02; // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
+        fu = a_tau * tau_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
     }
     else
     {
