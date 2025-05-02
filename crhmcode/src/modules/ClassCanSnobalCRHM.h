@@ -48,8 +48,8 @@ class ClassCanSnobalCRHM : public ClassCanSnobalBase {
 
 // variable precipitation inputs
 
-    const double  *new_snow{ NULL };	// specific mass in snow in precip   (kg/m^2) net_snow
-    const double  *new_rain{ NULL };	// specific mass in rain in precip   (kg/m^2) net_rain
+    const double  *new_snow{ NULL };	// snow intercepted in the canopy before ablation (kg/m^2*int)
+    const double  *new_rain{ NULL };	// rain intercepted in the canopy before ablation (kg/m^2*int)
 
 // parameters
 

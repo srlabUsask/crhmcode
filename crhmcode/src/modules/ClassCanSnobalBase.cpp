@@ -538,6 +538,12 @@ int ClassCanSnobalBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
     delunld_wind_int[hh] += delunld_wind[hh];
     delunld_melt_int[hh] += delunld_melt[hh];
     delunld_subl_int[hh] += delunld_subl[hh];
+    deldrip_veg_int[hh] += deldrip_veg[hh];
+
+    net_rain[hh] = throughfall_rain[hh] + deldrip_veg_int[hh];
+    net_snow[hh] = throughfall_snow[hh] + delunld_int[hh];
+
+    net_p[hh] = net_rain[hh] + net_snow[hh];
 
     //  Update the model's input parameters
 
@@ -1157,6 +1163,8 @@ void ClassCanSnobalBase::_snowmelt(void) {
 void ClassCanSnobalBase::_mass_unld(void)
 {
     delunld[hh] = 0.0; // need to clear this val otherwise accumulates due to += below
+    double u_ht = 0.0;
+    double u_mid = 0.0;
 
     if (!vegsnowcover[hh]) { // no snow in the canopy exit early
         delunld_wind[hh] = 0.0;
@@ -1165,87 +1173,161 @@ void ClassCanSnobalBase::_mass_unld(void)
         return;
     }
 
-    // check maximum canopy snow load spill what is overflowing
-    if (snow_h2o_veg[hh] > Lmax[hh])
-    {
-        delunld[hh] = snow_h2o_veg[hh] - Lmax[hh];
-    }
-
-    // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt found to be function of canopy snow load for Fortress obs
-    //delunld_melt[hh] = delmelt_veg[hh] * snow_h2o_veg[hh] * unld_to_melt_ratio[hh];
-    double unld_to_melt_ratio_m = 0.17;
-    double unld_to_melt_ratio_b = -0.96;
-
-    double unld_to_melt_ratio = snow_h2o_veg[hh] * unld_to_melt_ratio_m + unld_to_melt_ratio_b; // WARNING this can go negative so handle below
-    unld_to_melt_ratio = std::max(0.0, unld_to_melt_ratio);
-    delunld_melt[hh] = delmelt_veg[hh] * unld_to_melt_ratio;
-
-    // mechanical wind induced unloading
-    // const double a_u = 1.282646e-06; // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain w no melt.
-    // const double b_u = 3.925391e-01; // TODO move to par file
-
-    // wind induced unloading as function of shear stress
-    const double a_tau = 0.331/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper)
-
-    double fu = 0.0;
-    double u_mid = 0.0;
-
-    switch (CanopyWindSwitch[hh])
-    {
-    case 0:
-    { // original using Cionco wind model for dense canopies
-        // wind speed for wind induced unloading at 1/2 canopy height
-        if ((Ht[hh] - (2.0 / 3.0) * z_u[hh]) > 0.0)
+    // calculate wind speed at height needed for wind induced unloading
+    switch (CanopyWindSwitchCanSno[hh])
         {
-            double u_ht = u[hh] * log((Ht[hh] - (2.0 / 3.0) * z_u[hh]) / 0.123 * z_u[hh]) / log((z_u[hh] - 2.0 / 3.0 * z_u[hh]) / 0.123 * z_u[hh]);
-            double A = 2.4338 + 3.45753 * exp(-u_ht);                /* Modified Cionco wind model */
-            u_mid = u_ht * exp(A * ((Ht[hh] / 2) / (Ht[hh]) - 1.0)); /* calculates canopy windspd  */
+            case 0:
+            { // original using Cionco wind model for dense canopies
+                // wind speed for wind induced unloading at 1/2 canopy height
+                if ((Ht[hh] - (2.0 / 3.0) * z_u[hh]) > 0.0)
+                {
+                    u_ht = u[hh] * log((Ht[hh] - (2.0 / 3.0) * z_u[hh]) / 0.123 * z_u[hh]) / log((z_u[hh] - 2.0 / 3.0 * z_u[hh]) / 0.123 * z_u[hh]);
+                    double A = 2.4338 + 3.45753 * exp(-u_ht);                /* Modified Cionco wind model */
+                    u_mid = u_ht * exp(A * ((Ht[hh] / 2) / (Ht[hh]) - 1.0)); /* calculates canopy windspd  */
+                }
+                else
+                {
+                    u_mid = 0.0;
+                }
+                break;
+            } // end wind case 0
+
+            case 1:
+            {                           // Canopy wind profile developed at Fortress sparse canopy
+                double d0_wind = 0.5791121;  // displacement height observed at sparse forest around Fortress Forest Tower
+                double z0m_wind = 0.4995565; // roughness length observed at above site
+
+                // wind speed for wind induced unloading at 1/2 canopy height
+                if ((Ht[hh] / 2 - d0_wind) > z0m_wind)
+                {
+                    double Ustar = u[hh] * PBSM_constants::KARMAN / (log((z_u[hh] - d0_wind) / z0m_wind));
+                    u_mid = Ustar / PBSM_constants::KARMAN * log((Ht[hh] / 2 - d0_wind) / z0m_wind);
+                }
+                else
+                {
+                    u_mid = 0.0;
+                }
+
+                break;
+            } // end wind case 1
+        } // end of switch CanopyWind
+
+    switch (MassUnloadingSwitch[hh]) // options are 0 for Cebulski & Pomeroy 2025 ablation paper; 1 for Andreadis 2009; 2 for Roesch 2001. HP98/Ellis is enabled using the original canopyclearinggap module due to major differences in how it handles canopy snowmelt, icebulb temp using the pom98 analytical sublimation, etc.
+    {
+        case 0: // This is the updated mass snow unloading parameterisations from Cebulski & Pomeroy 2025 ablation paper
+        {
+            // check maximum canopy snow load spill what is overflowing
+        if (snow_h2o_veg[hh] > Lmax[hh])
+        {
+            delunld[hh] = snow_h2o_veg[hh] - Lmax[hh];
+        }
+
+        // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt found to be function of canopy snow load for Fortress obs
+        double unld_to_melt_ratio_m = 0.17;
+        double unld_to_melt_ratio_b = -0.96;
+
+        double unld_to_melt_ratio = snow_h2o_veg[hh] * unld_to_melt_ratio_m + unld_to_melt_ratio_b; // WARNING this can go negative so handle below
+        unld_to_melt_ratio = std::max(0.0, unld_to_melt_ratio);
+        delunld_melt[hh] = delmelt_veg[hh] * unld_to_melt_ratio;
+
+        // mechanical wind induced unloading
+        // const double a_u = 1.282646e-06; // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain w no melt.
+        // const double b_u = 3.925391e-01; // TODO move to par file
+
+        // wind induced unloading as function of shear stress
+        const double a_tau = 0.331/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper)
+
+        double fu = 0.0;
+
+        if (u_mid >= 0.0)
+        {
+            // fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
+            double tau_mid = pow(u_mid, 2.0) * 0.02; // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
+            fu = a_tau * tau_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
         }
         else
         {
-            u_mid = 0.0;
+            fu = 0.0; // less than wind induced unloading threshold so set equal to 0.
         }
-        break;
-    } // case 0
 
-    case 1:
-    {                           // Canopy wind profile developed at Fortress sparse canopy
-        double d0_wind = 0.5791121;  // displacement height observed at sparse forest around Fortress Forest Tower
-        double z0m_wind = 0.4995565; // roughness length observed at above site
+        // ablation via temperature, wind, and duration based unloading
+        // delunld[hh] = snow_h2o_veg[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
 
-        // wind speed for wind induced unloading at 1/2 canopy height
-        if ((Ht[hh] / 2 - d0_wind) > z0m_wind)
-        {
-            double Ustar = u[hh] * PBSM_constants::KARMAN / (log((z_u[hh] - d0_wind) / z0m_wind));
-            u_mid = Ustar / PBSM_constants::KARMAN * log((Ht[hh] / 2 - d0_wind) / z0m_wind);
-        }
-        else
-        {
-            u_mid = 0.0;
-        }
+        // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
+        delunld_wind[hh] = snow_h2o_veg[hh] * (1 - exp(-fu * time_step[hh])); // similar analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review ,similar as steps from eq 27 to 28.
+        delunld[hh] += delunld_wind[hh];
+        delunld[hh] += delunld_melt[hh];
 
         break;
-    } // case 1
-    } // end of switch CanopyWind
 
-    if (u_mid >= 0.0)
-    {
-        // fu = u_mid * a_u * exp(b_u * u_mid); // unloading rate due to wind (s-1)
-        double tau_mid = pow(u_mid, 2.0) * 0.02; // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
-        fu = a_tau * tau_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
-    }
-    else
-    {
-        fu = 0.0; // less than wind induced unloading threshold so set equal to 0.
-    }
+        } // end case 0
 
-    // ablation via temperature, wind, and duration based unloading
-    // delunld[hh] = snow_h2o_veg[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
+        case 1:
+        { // This is the mass snow unloading parameterisation from Andreadis et al., 2009 based on the snowmelt rate. No wind induced unloading.
+          
+          double Lres = 5.0; // threshold above which melt unloading starts to occur.
 
-    // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
-    delunld_wind[hh] = snow_h2o_veg[hh] * (1 - exp(-fu * time_step[hh])); // similar analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review ,similar as steps from eq 27 to 28.
-    delunld[hh] += delunld_wind[hh];
-    delunld[hh] += delunld_melt[hh];
+          if (snow_h2o_veg[hh] > Lres)
+          {
+            double melt_drip_ratio_andreadis = 0.4;
+            delunld_melt[hh] = delmelt_veg[hh] * melt_drip_ratio_andreadis;
+          } else {
+            delunld_melt[hh] = 0.0; // snow load is below threshold and can only melt or sublimate
+          }
+
+          delunld[hh] += delunld_melt[hh];
+
+          break;          
+
+        } // case 2
+
+        case 2:
+        { // This is the mass snow unloading parameterisation from Roesch et al., 2001 based on a temperature and wind speed function.
+          
+          // check maximum canopy snow load
+          if (snow_h2o_veg[hh] > Lmax[hh])
+          {
+            delunld[hh] = snow_h2o_veg[hh] - Lmax[hh];
+          }
+          
+          // Mass unloading of canopy snow due to melt
+
+          const double Tm = 270.15; // threshold in Kelvin below which temp unloading is equal to 0
+          const double C1 = 1.87e5; // constant provided in Roesch et al., 2001
+          double fT = 0.0; // unloading rate per second.
+
+          if ((T_a[hh] + CRHM_constants::Tm) < Tm) // Follows equation 31 in Cebulski & Pomeroy 2025 Wires WATER Review.
+          {
+            fT = 0.0;
+          } else {
+            fT = ((T_a[hh] + CRHM_constants::Tm) - Tm)/C1;
+          }
+
+          double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
+
+          delunld_melt[hh] = snow_h2o_veg[hh] * (1-exp(-(fT) * dt)); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
+
+          // Mass unloading of canopy snow due to mechanical removal from wind at canopy top
+          const double C2 = 1.56e5; // wind unloading constant from Roesch et al., 2001
+          double fu = 0.0;
+
+          if(u_ht >= 0.0){
+            fu = u_ht/C2; 
+          } else {
+            fu = 0.0; // unloading rate due to wind (s-1)
+          }
+
+          delunld_wind[hh] = snow_h2o_veg[hh] * (1-exp(-(fu) * dt)); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
+
+          delunld[hh] += delunld_wind[hh];
+          delunld[hh] += delunld_melt[hh];
+
+          break;        
+
+        } // end case 3
+    } // MassUnloadingSwitch
+        
+    
 
     if (delunld[hh] > snow_h2o_veg[hh])
     {

@@ -70,11 +70,19 @@ public:
     double* delunld_wind_int{ NULL };	    // solid snow unloading from the canopy induced by wind (kg/m^2*int)
     double* delunld_melt_int{ NULL };	    // canopy snow unloading rate due to melting (kg/m^2*int)
     double* delunld_subl_int{ NULL };	    // canopy snow unloading due to sublimation (kg/m^2*int)
+    double* deldrip_veg_int{ NULL };	    // canopy snowmelt drainage (kg/m^2*int)
 
     double* delmelt_veg_day{ NULL };      // daily predicted specific runoff (m/sec)
     double* cmlmelt_veg_day{ NULL };      // daily predicted specific runoff accumulator (m/sec)
 
     const double* hru_evap{ NULL };      // liquid water evaporated off the canopy. computed in the evap module aka "internal evap". (kg m^-2)
+
+    double* net_rain { NULL }; // throughfall rain + drip (runoff/melt drainage) of snow intercepted in the canopy (kg/m^2*int)
+    double* net_snow { NULL }; // throughfall snow + unloaded snow from the canopy (kg/m^2*int)
+    double* net_p { NULL }; // net rain + net snow (kg/m^2*int)
+
+    const double *throughfall_rain { NULL }; // throughfall of rain, not in contact with the canopy to be added with canopy drip (kg/m^2*int)
+    const double *throughfall_snow { NULL }; // throughfall of snow, not in contact with the canopy to be added with canopy snow unloading (kg/m^2*int)
 
 //   mass balance vars for variable timestep
 
@@ -177,9 +185,8 @@ public:
     const double  *Cc{ NULL };       // canopy coverage, (1-sky view fraction)
     const double  *Lmax{ NULL };  // maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 kg m-2 based on max observed in Storck et al. 2002, Floyd 2012 and Cebulski & Pomeroy (kg/m^2)
     const double  *Ht{ NULL };  // forest/vegetation height (m)
-    const long  *CanopyWindSwitch{ NULL };  // Canopy wind model to use at height Zcan, 0 - for Cionco (dense canopy), 1 - for Prandtl-von Kármán log-linear relationship (sparse forest)".
-    const double  *unld_to_melt_ratio{ NULL };  // Ratio of mass unloading of solid snow due to melt compared to canopy snowmelt. (-)
-    const double  *unld_to_subl_ratio{ NULL };  // Ratio of mass unloading of solid snow due to sublimation compared to canopy snowmelt. (-)
+    const long  *CanopyWindSwitchCanSno{ NULL };  // Canopy wind model to use at height Zcan, 0 - for Cionco (dense canopy), 1 - for Prandtl-von Kármán log-linear relationship (sparse forest)".
+    const long *MassUnloadingSwitch { NULL }; // canopy snow ablation parameterization to use, 0 - Cebulski & Pomeroy 2025 ablation paper, 1- Andreadis 2009, 2 - Roesch2001 (enable HP98/Ellis2010 using original canopy clearing gap module)
 
 //    void decl(void);
 

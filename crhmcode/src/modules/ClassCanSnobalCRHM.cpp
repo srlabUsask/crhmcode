@@ -75,9 +75,14 @@ void ClassCanSnobalCRHM::decl(void) {
     declvar("delsub_veg_int", TDim::NHRU, "mass of sublimation into air from vegsnowcover", "(kg/m^2*int)", &delsub_veg_int);
     declvar("delmelt_veg_int", TDim::NHRU, "specific melt (kg/m^2 or m)", "(kg/m^2*int)", &delmelt_veg_int);
     declvar("delunld_int", TDim::NHRU, "specific mass of canopy snow unloaded to subcanopy", "(kg/m^2*int)", &delunld_int);
+    declvar("net_rain", TDim::NHRU, "throughfall rain + drip (runoff/melt drainage) of snow intercepted in the canopy", "(kg/m^2*int)", &net_rain);
+    declvar("net_snow", TDim::NHRU, "throughfall snow + unloaded snow from the canopy", "(kg/m^2*int)", &net_snow);
+    declvar("net_p", TDim::NHRU, "net rain + net snow", "(kg/m^2*int)", &net_p);
     decllocal("delunld_wind_int", TDim::NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*int)", &delunld_wind_int);
     decllocal("delunld_melt_int", TDim::NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*int)", &delunld_melt_int);
     decllocal("delunld_subl_int", TDim::NHRU, "canopy snow unloading due to sublimation", "(kg/m^2*int)", &delunld_subl_int);
+    decllocal("deldrip_veg_int", TDim::NHRU, "canopy snowmelt drainage", "(kg/m^2*int)", &deldrip_veg_int);
+
 
     declvar("delL", TDim::NHRU, "interval change in SWE", "(kg/m^2*int)", &delL);
     declvar("delmelt_veg_day", TDim::NHRU, "daily snow melt", "(mm/d)", &delmelt_veg_day);
@@ -138,8 +143,6 @@ void ClassCanSnobalCRHM::decl(void) {
     declparam("max_liq_veg", TDim::NHRU, "[0.0001]", "0.0001", "0.2", "max liquid h2o content as specific mass", "(kg/m^2)", &max_liq_veg);
     declparam("Albedo_vegsnow", TDim::NHRU, "[0.6]", "0.6", "0.9", "Albedo_vegsnow", "(-)", &Albedo_vegsnow);
     declparam("SW_to_LW_fn", TDim::NHRU, "[0.01]", "0.0001", "0.5", "dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.", "(-)", &SW_to_LW_fn);
-    declparam("unld_to_melt_ratio", TDim::NHRU, "[0.4]", "0.0", "10", "Ratio of mass unloading of solid snow due to melt compared to canopy snowmelt. Default is from Storck 2002.", "(-)", &unld_to_melt_ratio);
-    declparam("unld_to_subl_ratio", TDim::NHRU, "[0.2]", "0.0", "10", "Ratio of mass unloading of solid snow due to sublimation compared to canopy snowmelt. Default from J. MacDonald (2010) thesis for colder temps.", "(-)", &unld_to_subl_ratio);
 
     declgetparam("*", "z_g", "()", &z_g); // depth of soil temp meas (m)
     declgetparam("*", "z_u", "()", &z_u); // height of wind measurement (m)
@@ -149,11 +152,12 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetparam("*", "hru_area", "()", &hru_area); // hru area (km^2)
     declgetparam("*", "hru_rho_snow", "()", &rho_snow_X); // rho of falling snow (kg/m^3)
     declgetparam("*", "Cc", "()", &Cc); // canopy coverage, (1-sky view fraction)
-    declgetparam("*", "Lmax", "()", &Lmax); // canopy coverage, (1-sky view fraction)
     declgetparam("*", "Ht", "()", &Ht); 
-    declgetparam("*", "CanopyWindSwitch", "()", &CanopyWindSwitch); 
+    declparam("Lmax", TDim::NHRU, "[50]", "0", "100", "maximum canopy snow load", "(kg m-2)", &Lmax);
+    declparam("CanopyWindSwitchCanSno", TDim::NHRU, "[0]", "0", "1", "Canopy wind model to use for wind induced unloading at 1/2 canopy height, 0 - for Cionco, 1 - for Prandtl-von Kármán log-linear relationship", "()", &CanopyWindSwitchCanSno);
+    declparam("MassUnloadingSwitch", TDim::NHRU, "[0]", "0", "1", "canopy snow ablation parameterization to use, 0 - Cebulski & Pomeroy 2025 ablation paper, 1- Andreadis 2009, 2 - Roesch2001 (enable HP98/Ellis2010 using original canopy clearing gap module)", "()", &MassUnloadingSwitch);
     declgetparam("*", "relative_hts", "()", &relative_hts); 
-    declgetparam("*", "inhibit_evap", "()", &inhibit_evap); 
+    declgetparam("*", "inhibit_evap", "()", &inhibit_evap);     
 
     declgetparam("*", "Alpha_c", "()", &Albedo_veg); // canopy albedo
     declgetvar("*", "Albedo", "()", &Albedo_surface);
@@ -167,8 +171,10 @@ void ClassCanSnobalCRHM::decl(void) {
     declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
 
     decldiag("Pevap", TDim::NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
-    declgetvar("*", "intercepted_snow", "(kg/m^2)", &new_snow); // new snow intercepted in canopy before ablation processes have kicked in
-    declgetvar("*", "intercepted_rain", "(kg/m^2)", &new_rain); // new snow intercepted in canopy before ablation processes have kicked in
+    declgetvar("*", "intercepted_snow", "(kg/m^2)", &new_snow); // new snow intercepted in canopy before ablation processes have kicked in, from vector based module
+    declgetvar("*", "intercepted_rain", "(kg/m^2)", &new_rain); // new snow intercepted in canopy before ablation processes have kicked in, from vector based module
+    declgetvar("*", "throughfall_rain", "(kg/m^2)", &throughfall_rain); // throughfall of rain to be added with canopy drip
+    declgetvar("*", "throughfall_snow", "(kg/m^2)", &throughfall_snow); // throughfall of snow to be added with canopy snow unloading
     declgetvar("*", "hru_evap", "(kg/m^2)", &hru_evap); 
 
     variation_set = VARIATION_0 + VARIATION_1;
@@ -259,13 +265,13 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     delunld_wind_int[hh] = 0.0;
     delunld_melt_int[hh] = 0.0;
     delunld_subl_int[hh] = 0.0;
-    deldrip_veg[hh] = 0.0;
+    deldrip_veg_int[hh] = 0.0;
 
     long Step = getstep();
 
     // uncomment  below to hop to specific time in debug
 
-    string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
+    // string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 
     // if (test == "3/25/2023 15:0") {
     // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
