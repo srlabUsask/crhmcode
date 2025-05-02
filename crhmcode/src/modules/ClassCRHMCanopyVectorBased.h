@@ -40,8 +40,6 @@ double *Qnsn { NULL };
 double *Qsisn { NULL };
 double *Qlisn { NULL };
 double *Qlosn { NULL };
-const double *obs_snow_load { NULL };
-
 
 // put variables
 
@@ -49,35 +47,15 @@ double *SWE { NULL };
 
 // declared variables
 
-double *drip_Cpy { NULL };
-double *thrufall_Cpy { NULL };
-double *netRain_Cpy { NULL };
-double *direct_rain { NULL };
-double *rain_load { NULL };
-double *Snow_load { NULL };
-double *direct_snow { NULL };
+double *throughfall_rain { NULL };
+double *throughfall_snow { NULL };
 double *intercepted_snow { NULL };
 double *intercepted_rain { NULL };
-double *SUnload { NULL };
-double *SUnload_H2O { NULL };
 double *Qnsn_Var { NULL };
 double *Qsisn_Var { NULL };
 double *Qlisn_Var { NULL };
 double *Qsw_veg_Var { NULL };
 double *Qlw_veg_Var { NULL };
-
-double *net_rain { NULL };
-double *cum_net_rain { NULL };
-double *net_snow { NULL };
-double *cum_net_snow { NULL };
-double *net_p { NULL };
-double *intcp_evap { NULL };
-double *cum_intcp_evap { NULL };
-double *pot_subl_cpy { NULL };
-double *Subl_Cpy { NULL };
-double *cum_Subl_Cpy { NULL };
-double *cum_SUnload { NULL };
-double *cum_SUnload_H2O { NULL };
 
 double *Clca { NULL };
 double *k { NULL };
@@ -86,22 +64,7 @@ double *Pa { NULL };
 double *ra { NULL };
 double *u_FHt { NULL };
 double *u_1_third_Ht { NULL };
-double *Pevap { NULL };
 
-double *Cp_h20 { NULL };
-double *TCanSnow { NULL };
-double *U_sink { NULL };
-double *U_conv { NULL };
-double *rain_frozen { NULL };
-double *dUdt { NULL };
-double *U_cool { NULL };
-double *U_melt { NULL };
-double *U_warm { NULL };
-double *canopy_snowmelt { NULL };
-double *SUnloadMelt { NULL };
-double *SUnloadWind { NULL };
-double *SUnloadSubl { NULL };
-double *Cp_h2o { NULL };
 double *LAI_ { NULL };
 
 
@@ -110,13 +73,11 @@ double *LAI_ { NULL };
 const double *hru_t { NULL };
 const double *hru_u { NULL };
 const double *hru_rh { NULL };
-const double *hru_ea { NULL };
 const double *Albedo { NULL };
 const double *QdflatE { NULL };
 
 const double *hru_snow { NULL };
 const double *hru_rain { NULL };
-const double *hru_evap { NULL };
 
 const double *SolAng { NULL };
 const double *cosxs { NULL };
@@ -129,44 +90,27 @@ const double *QliVt_Var { NULL };
 
 // declared parameters:
 
-const double *basin_area { NULL };   // [BASIN]
-const double *hru_area { NULL };
 const double *hru_elev { NULL };
 const double *Ht { NULL };
 const double *Cc { NULL };
 const double *LAI { NULL };
-const double *Lmax { NULL };
-const double *Sbar { NULL };
 const double *alpha { NULL };
 const double *Z0snow { NULL };
 const double *Zref { NULL };
 const double *Zwind { NULL };
 const double *Zvent { NULL };
-const double *unload_t { NULL };
-const double *unload_t_water { NULL };
-const double *u_mid_th { NULL };
 const double *Surrounding_Ht { NULL };
 const double *Gap_diameter { NULL };
 const double *Alpha_c { NULL };
 const double *B_canopy { NULL };
-const double *melt_drip_ratio { NULL };
 
 const long *CanopyClearing { NULL };
-const long *SublimationSwitch { NULL };
-const long *MassUnloadingSwitch { NULL };
-const long *MeltwaterSwitch { NULL };
-const long *CanopyWindSwitch { NULL };
-const long *inhibit_evap { NULL };
+const long *CanopyWindSwitchIP { NULL };
 
 void decl(void);
 void init(void);
 void run(void);
 void finish(bool good);
-
-double delta(double t); // Slope of sat vap p vs t, kPa/DEGREE_CELSIUS
-double gamma(double Pa, double t); // Psychrometric constant (kPa/DEGREE_CELSIUS)
-double RHOa(double t, double ea, double Pa); // atmospheric density (kg/m^3)
-double lambda(double t); // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
 
 ClassCRHMCanopyVectorBased* klone(string name) const;
 };
