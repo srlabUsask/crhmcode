@@ -231,6 +231,9 @@ void ClassCRHMCanopyVectorBased::run(void)
     throughfall_rain[hh] = 0.0;
     throughfall_snow[hh] = 0.0;
 
+    intercepted_rain[hh] = 0.0;       
+    intercepted_snow[hh] = 0.0;             
+
     // Canopy temperature is approximated by the air temperature.
 
     double T1 = hru_t[hh] + CRHM_constants::Tm; // deg. C to kelvin conversion
@@ -396,9 +399,6 @@ void ClassCRHMCanopyVectorBased::run(void)
         const double v_snow = 0.8; // terminal fall velocity of snowfall taken from Isyumov, 1971
         Clca[hh] = 0.0;              // leaf contact area (Clca) based on trajectory angle
         double IP = 0.0;             // interception efficiency (IP)
-        intercepted_snow[hh] = 0.0;             // new snow intercepted in the canopy
-        intercepted_rain[hh] = 0.0;             // new rain intercepted in the canopy
-
 
         if (hru_u[hh] > 0.0 && Cc[hh] < 1.0 && Cc[hh] > 0.0)
         { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
