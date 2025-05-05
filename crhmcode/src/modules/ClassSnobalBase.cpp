@@ -1209,9 +1209,12 @@ void ClassSnobalBase::_precip(void)
         //    ro_predict[hh] += m_rain[hh];
     } // current precip
 
-  // Add water in the snowcover to total liquid water.
+    // Add water in the snowcover to total liquid water.
     else // no precip
         h2o_total[hh] += h2o[hh];
+
+    // Uncomment below (comment lines above) to fix obvious bug and add water in the snowcover from prev timestep to total liquid water regardless of new precip or not. 
+   // h2o_total[hh] += h2o[hh];
 }
 
 void ClassSnobalBase::_drift(void)
