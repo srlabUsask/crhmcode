@@ -40,7 +40,7 @@ ClassCRHMCanopyVectorBased *ClassCRHMCanopyVectorBased::klone(string name) const
 void ClassCRHMCanopyVectorBased::decl(void)
 {
 
-  Description = "'Prototype all season canopy/clearing module. Calculates short, long and all-wave radiation components at the snow surface. Calculates initial snow interception after Cebulski & Pomeroy (2025, HP) canopy snow ablation is handled by the cansnobal module.' \
+  Description = "'Prototype all season canopy/clearing module. Calculates short, long and all-wave radiation components at the snow surface even for open areas. Calculates initial snow interception after Cebulski & Pomeroy (2025, HP) canopy snow ablation is handled by the cansnobal module.' \
                  'Inputs are observations Qsi (W/m^2) and Qli (W/m^2), ' \
                  'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2), ' \
                  'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and observation Qli (W/m^2), ' \
@@ -386,101 +386,82 @@ void ClassCRHMCanopyVectorBased::run(void)
       break;
     } // switch
 
-    switch (CanopyClearing[hh])
-    {
-    case 0: // canopy
-      //==============================================================================
-      // coupled forest snow interception routine:
-      // after Cebulski & Pomeroy 2025:
+    //==============================================================================
+    // coupled forest snow interception routine:
+    // after Cebulski & Pomeroy 2025:
 
-      if (hru_snow[hh] > 0.0)
-      {                            // calculate increase in Snow_load and throughfall_snow if we are in canopy (i.e., Cc > 0)
-        const double k_cp = 20;    // rate of increase of the sigmoidal curve below
-        const double v_snow = 0.8; // terminal fall velocity of snowfall taken from Isyumov, 1971
-        Clca[hh] = 0.0;              // leaf contact area (Clca) based on trajectory angle
-        double IP = 0.0;             // interception efficiency (IP)
+    if (hru_snow[hh] > 0.0)
+    {                            // calculate increase in Snow_load and throughfall_snow if we are in canopy (i.e., Cc > 0)
+      const double v_snow = 0.8; // terminal fall velocity of snowfall taken from Isyumov, 1971
+      Clca[hh] = 0.0;              // leaf contact area (Clca) based on trajectory angle
+      double IP = 0.0;             // interception efficiency (IP)
 
-        if (hru_u[hh] > 0.0 && Cc[hh] < 1.0 && Cc[hh] > 0.0)
-        { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
-          double Ht_1_third = Ht[hh] * (1.0 / 3.0);
-          double Cp_inc = 0;
-          switch (CanopyWindSwitchIP[hh])
-          {
-            case 0:
-            {  // original using Cionco wind model for dense canopies
+      if (hru_u[hh] > 0.0 && Cc[hh] < 1.0 && Cc[hh] > 0.0)
+      { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
+        double Ht_1_third = Ht[hh] * (1.0 / 3.0);
+        double Cp_inc = 0;
+        switch (CanopyWindSwitchIP[hh])
+        {
+          case 0:
+          {  // original using Cionco wind model for dense canopies
 
-              // wind speed used for vector based initial snow interception
-              if ((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) > 0.0){
-                u_FHt[hh] = hru_u[hh] * log((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
-                double A = 2.4338 + 3.45753 * exp(-u_FHt[hh]);                       /* Modified Cionco wind model */
-                u_1_third_Ht[hh] = u_FHt[hh] * exp(A * ((Ht_1_third) / (Ht[hh])-1.0)); /* calculates canopy windspd  */
-              } else {
-                u_1_third_Ht[hh] = 0.0;
-              }
-              break;
-            } // case 0
-
-            case 1:
-            { // Canopy wind profile developed at Fortress sparse canopy
-              double d0 = 0.5791121; // displacement height observed at sparse forest around Fortress Forest Tower
-              double z0m = 0.4995565; // roughness length observed at above site
-              
-              // wind speed used for vector based initial snow interception
-              if ((Ht_1_third - d0) > z0m){
-                double Ustar = hru_u[hh]*PBSM_constants::KARMAN/(log((Zwind[hh]-d0)/z0m));
-                u_1_third_Ht[hh] = Ustar/PBSM_constants::KARMAN * log((Ht_1_third - d0)/z0m);
-              } else {
-                 u_1_third_Ht[hh] = 0.0;
-              }
-              break;
-            } // case 1
-          } // end of switch CanopyWind
-
-          if(u_1_third_Ht[hh] > 0.0){
-            double snow_traj_angle = atan(u_1_third_Ht[hh] / v_snow);                         // in radians
-            Cp_inc = (1 - Cc[hh]) / (1 + exp(-k_cp * (sin(snow_traj_angle) - (1 - Cc[hh])))); // fractional increas in leaf contact area (Clca) based on horizontal trajectory. This is modified from Cebulski & Pomeroy snow interception paper. Has only been tested on forest plots with Cc of .3 and .5.
-            Clca[hh] = Cc[hh] + Cp_inc; // calculated leaf contact area (Clca) based on trajectory angle
+            // wind speed used for vector based initial snow interception
+            if ((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) > 0.0){
+              u_FHt[hh] = hru_u[hh] * log((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
+              double A = 2.4338 + 3.45753 * exp(-u_FHt[hh]);                       /* Modified Cionco wind model */
+              u_1_third_Ht[hh] = u_FHt[hh] * exp(A * ((Ht_1_third) / (Ht[hh])-1.0)); /* calculates canopy windspd  */
             } else {
-              Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., Clca == 1 for Cc == 1 and Clca == 0 when Cc == 0
+              u_1_third_Ht[hh] = 0.0;
             }
-        } else {
-          Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., Clca == 1 for Cc == 1 and Clca == 0 when Cc == 0
-        }
-          
-        IP = Clca[hh] * alpha[hh]; // interception efficiency (IP)
-        intercepted_snow[hh] = IP * hru_snow[hh];    // change in canopy snow load
+            break;
+          } // case 0
 
-        // calculate canopy snow throughfall before unloading:
+          case 1:
+          { // Canopy wind profile developed at Fortress sparse canopy
+            double d0 = 0.5791121; // displacement height observed at sparse forest around Fortress Forest Tower
+            double z0m = 0.4995565; // roughness length observed at above site
+            
+            // wind speed used for vector based initial snow interception
+            if ((Ht_1_third - d0) > z0m){
+              double Ustar = hru_u[hh]*PBSM_constants::KARMAN/(log((Zwind[hh]-d0)/z0m));
+              u_1_third_Ht[hh] = Ustar/PBSM_constants::KARMAN * log((Ht_1_third - d0)/z0m);
+            } else {
+                u_1_third_Ht[hh] = 0.0;
+            }
+            break;
+          } // case 1
+        } // end of switch CanopyWind
 
-        throughfall_snow[hh] += (1 - IP) * hru_snow[hh];
+        if(u_1_third_Ht[hh] > 0.0){
+          double snow_traj_angle = atan(u_1_third_Ht[hh] / v_snow);                         // in radians
+          double b_lca = 0.91; // fitting coef found at fortress powerline/forest tower 
+          double f_theta = b_lca * pow(sin(snow_traj_angle), 2.0);
+          Cp_inc = (1 - Cc[hh]) * f_theta; // fractional increas in leaf contact area (Clca) based on horizontal trajectory. This is modified from Cebulski & Pomeroy snow interception paper. Has only been tested on forest plots with Cc of .3 and .5.
+          Clca[hh] = Cc[hh] + Cp_inc; // calculated leaf contact area (Clca) based on trajectory angle
+          } else {
+            Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., Clca == 1 for Cc == 1 and Clca == 0 when Cc == 0
+          }
+      } else {
+        Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., Clca == 1 for Cc == 1 and Clca == 0 when Cc == 0
+      }
+        
+      IP = Clca[hh] * alpha[hh]; // interception efficiency (IP)
+      intercepted_snow[hh] = IP * hru_snow[hh];    // change in canopy snow load
 
-        // net snow / rain is computed in can snobal after ablation of intercepted snow.
+      // calculate canopy snow throughfall before unloading:
 
-        break;
-      } // case canopy
-    case 1: // clearing
-    case 2: // gap
-      throughfall_snow[hh] = hru_snow[hh];
-      throughfall_rain[hh] = hru_rain[hh];
+      throughfall_snow[hh] = (1.0 - IP) * hru_snow[hh];
+
+      // net snow / rain is computed in can snobal after ablation of intercepted snow.
+
       break;
-    } // switch
+    } // end snow routine
 
-    // Canopy Liquid Water Routine
-
-    switch (CanopyClearing[hh])
-    {
-
-    case 0: // canopy
-    {
-      throughfall_rain[hh] = hru_rain[hh] * (1 - Cc[hh]);
+    if(hru_rain[hh] > 0){
+      // Canopy Liquid Water Routine
+      throughfall_rain[hh] = hru_rain[hh] * (1.0 - Cc[hh]);
       intercepted_rain[hh] = hru_rain[hh] * Cc[hh];
-
-      break;
     }
-
-    default: // clearing and gap
-      break;
-    } // switch
 
   } // end for
 }
