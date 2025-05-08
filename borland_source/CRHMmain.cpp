@@ -1,10 +1,10 @@
-// 04/29/25 correcting get_ftc_lay() for calculating thermal conductivity using
-// Johansen 1975 equation in XG module in 03/04/25
+// 05/07/25 correcting Zdt in find_thaw_D for
+// check for thaw front in XG module in 04/29/25
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "04/29/25"
+#define CurrentVersion "05/07/25"
 
 #include <stdexcept>
 #include "CRHMmain.h"

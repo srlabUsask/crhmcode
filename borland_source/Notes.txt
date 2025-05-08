@@ -737,3 +737,9 @@ float ClassXG::get_ftc_lay(long lay){ // unfrozen(thawed) soil to be frozen
   else
     return (1.0 - por_lay[lay][hh])*soil_solid_km_lay[lay][hh] + h2o_lay[lay][hh]/1000.0*kw + (por_lay[lay][hh] - h2o_lay[lay][hh]/1000.0)*ka;
 }
+
+CRHM 05/07/25
+
+  Correcting Zdt in find_thaw_D for check for thaw front in XG module
+
+	find_thaw_D(Zdt[hh])

@@ -1,4 +1,4 @@
-// 04/29/25
+// 05/07/25
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -104,7 +104,7 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassXG("XG", "04/29/25", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassXG("XG", "05/07/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassXGAyers("XGAyers", "05/19/17", CRHM::PROTO));
 
   DLLModules.AddModule(new ClassSetSoil("SetSoil", "03/04/25", CRHM::ADVANCE));
@@ -20486,7 +20486,7 @@ void ClassXG::run(void) {
                 float Last = last_front();
                 if(Last > 0.0){ // thaw front
                   Zdt[hh] = pop_front();
-                  find_thaw_D(Zdf[hh]);
+                  find_thaw_D(Zdt[hh]); // 7May2025 correction: use Zdt not Zdf
                   Zd_front_array[1][hh] = Zdt[hh];
                 }
                 else if(Last < 0.0){ // never two frozen fronts together
