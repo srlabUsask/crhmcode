@@ -400,21 +400,16 @@ void ClassCRHMCanopyVectorBased::run(void)
       { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
         double Ht_1_third = Ht[hh] * (1.0 / 3.0);
         double Cp_inc = 0;
+                    
+        // wind speed used for vector based initial snow interception
         switch (CanopyWindSwitchIP[hh])
         {
           case 0:
           {  // original using Cionco wind model for dense canopies
-
-            // wind speed used for vector based initial snow interception
-            if ((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) > 0.0){
-              u_FHt[hh] = hru_u[hh] * log((Ht[hh] - (2.0 / 3.0) * Zwind[hh]) / 0.123 * Zwind[hh]) / log((Zwind[hh] - 2.0 / 3.0 * Zwind[hh]) / 0.123 * Zwind[hh]);
-              double A = 2.4338 + 3.45753 * exp(-u_FHt[hh]);                       /* Modified Cionco wind model */
-              u_1_third_Ht[hh] = u_FHt[hh] * exp(A * ((Ht_1_third) / (Ht[hh])-1.0)); /* calculates canopy windspd  */
-            } else {
-              u_1_third_Ht[hh] = 0.0;
-            }
+            adst_wind_cpy_top(Ht[hh], hru_u[hh], Zwind[hh], u_FHt[hh]);
+            cionco_canopy_wind_spd(Ht[hh], u_FHt[hh], Ht_1_third, u_1_third_Ht[hh]);
             break;
-          } // case 0
+          } // end case 0
 
           case 1:
           { // Canopy wind profile developed at Fortress sparse canopy
@@ -429,7 +424,7 @@ void ClassCRHMCanopyVectorBased::run(void)
                 u_1_third_Ht[hh] = 0.0;
             }
             break;
-          } // case 1
+          } // end case 1
         } // end of switch CanopyWind
 
         if(u_1_third_Ht[hh] > 0.0){
@@ -453,8 +448,6 @@ void ClassCRHMCanopyVectorBased::run(void)
       throughfall_snow[hh] = (1.0 - IP) * hru_snow[hh];
 
       // net snow / rain is computed in can snobal after ablation of intercepted snow.
-
-      break;
     } // end snow routine
 
     if(hru_rain[hh] > 0){

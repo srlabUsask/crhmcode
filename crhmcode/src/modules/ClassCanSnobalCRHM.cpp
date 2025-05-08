@@ -95,6 +95,8 @@ void ClassCanSnobalCRHM::decl(void) {
 
     declstatvar("m_s_veg", TDim::NHRU, "snowcover's specific mass, liquid and snow", "(kg/m^2)", &m_s_veg);
 
+    declstatvar("max_liq_veg", TDim::NHRU, "maximum veg snowcover's liquid mass", "(kg/m^2)", &max_liq_veg);
+
     declstatvar("T_s_veg", TDim::NHRU, "average snowcover temp", "(" + string(DEGREE_CELSIUS) + ")", &T_s_veg);
 
     declstatvar("h2o_sat_veg", TDim::NHRU, "fraction of liquid H2O saturation (0 to 1.0)", "()", &h2o_sat_veg);
@@ -140,7 +142,7 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("melt_direct_cum", TDim::NHRU, "cumulative melt when SWE < threshold melt", "(kg/m^2)", &melt_direct_cum);
 
     decllocal("stop_no_snow", TDim::NHRU, "snow flag", "()", &stop_no_snow);
-    declparam("max_liq_veg", TDim::NHRU, "[0.0001]", "0.0001", "0.2", "max liquid h2o content as specific mass", "(kg/m^2)", &max_liq_veg);
+    declparam("max_liq_veg_frac", TDim::NHRU, "[0.0001]", "0.0001", "0.2", "max liquid h2o content as fraction of specific snow mass", "(-)", &max_liq_veg_frac);
     declparam("Albedo_vegsnow", TDim::NHRU, "[0.6]", "0.6", "0.9", "Albedo_vegsnow", "(-)", &Albedo_vegsnow);
     declparam("SW_to_LW_fn", TDim::NHRU, "[0.01]", "0.0001", "0.5", "dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.", "(-)", &SW_to_LW_fn);
 
@@ -168,7 +170,7 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetvar("*", "hru_ea", "(kPa)", &e_a_X);
     declgetvar("*", "hru_u", "(m/s)", &u_X);
     declgetvar("*", "T_s_0", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0); 
-    declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
+    // declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
 
     decldiag("Pevap", TDim::NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
     declgetvar("*", "intercepted_snow", "(kg/m^2)", &new_snow); // new snow intercepted in canopy before ablation processes have kicked in, from vector based module
@@ -266,14 +268,15 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     delunld_melt_int[hh] = 0.0;
     delunld_subl_int[hh] = 0.0;
     deldrip_veg_int[hh] = 0.0;
+    delevap_veg_int[hh] = 0.0;
 
     long Step = getstep();
 
     // uncomment  below to hop to specific time in debug
 
-    // string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
+    string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 
-    // if (test == "3/25/2023 15:0") {
+    // if (test == "10/6/2021 19:0") {
     // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
     // // if (test == "10/1/2021 0:15") {
     //   std::cout << "Breakpoint here: Date matched" << std::endl;
@@ -333,15 +336,15 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     melt_direct_cum[hh] += delmelt_veg_int[hh];
 
     // set assimilate observed snow load for begining of select events
-    if(obs_snow_load[hh] < 9999){
-      m_s_veg[hh] = obs_snow_load[hh];
-      snow_h2o_veg[hh] = obs_snow_load[hh];
-      liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
-      delmelt_veg_int[hh] = 0.0;
-      delsub_veg_int[hh] = 0.0;
-      delunld_int[hh] = 0.0;
-      deldrip_veg[hh] = 0.0;
-    }
+    // if(obs_snow_load[hh] < 9999){
+    //   m_s_veg[hh] = obs_snow_load[hh];
+    //   snow_h2o_veg[hh] = obs_snow_load[hh];
+    //   liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
+    //   delmelt_veg_int[hh] = 0.0;
+    //   delsub_veg_int[hh] = 0.0;
+    //   delunld_int[hh] = 0.0;
+    //   deldrip_veg[hh] = 0.0;
+    // }
 
   }
 }

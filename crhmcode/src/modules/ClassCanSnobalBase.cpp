@@ -530,7 +530,6 @@ int ClassCanSnobalBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
     current_time[hh] += time_step[hh];
 
     //  update interval values
-
     delmelt_veg_int[hh] += delmelt_veg[hh];
     delsub_veg_int[hh] += delsub_veg[hh];
     delevap_veg_int[hh] += delevap_veg[hh];
@@ -540,13 +539,13 @@ int ClassCanSnobalBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
     delunld_subl_int[hh] += delunld_subl[hh];
     deldrip_veg_int[hh] += deldrip_veg[hh];
 
+    // dont need to accumulate below
     net_rain[hh] = throughfall_rain[hh] + deldrip_veg_int[hh];
     net_snow[hh] = throughfall_snow[hh] + delunld_int[hh];
 
     net_p[hh] = net_rain[hh] + net_snow[hh];
 
     //  Update the model's input parameters
-
     S_n[hh] += input_deltas[hh][tstep->level].S_n;
     I_lw[hh] += input_deltas[hh][tstep->level].I_lw;
     T_a[hh] += input_deltas[hh][tstep->level].T_a;
@@ -866,17 +865,47 @@ int ClassCanSnobalBase::calc_turb_transfer(
         ea = satw(ta);
     }
 
-    if (u < 0.1) // mod by AC
-        u = 0.1;
-    else if (u > 15)
-        u = 15;
-
     D = 2.06E-5 * pow(ts / FREEZE, -1.75);
-    // TODO at plot scale eventualy changed from observed wind to simulated
-    // z_veg_u = Ht[hh]*(2.0/3.0);
-    // adst_wind_cpy_top(Ht[hh], u, z_u[hh], u_veg_ht);
-    // cionco_canopy_wind_spd(Ht[hh], u_veg_ht, z_veg_u, u_veg_mid);
-    Nr = 2.0 * Radius * u / KinVisc; // TODO update to use within canopy wind speed
+
+    // calculate wind speed at height needed for wind induced unloading
+    switch (CanopyWindSwitchCanSno[hh])
+    {
+        case 0:
+        { // original using Cionco wind model for dense canopies
+            // scale wind to top of canopy and then down to within canopy using cionco
+            z_veg_u = Ht[hh]*(2.0/3.0);
+
+            adst_wind_cpy_top(Ht[hh], u, uz, u_veg_ht);
+            cionco_canopy_wind_spd(Ht[hh], u_veg_ht, z_veg_u, u_veg_mid);
+            break;
+        } // end wind case 0
+
+        case 1:
+        {                           // Canopy wind profile developed at Fortress sparse canopy
+            double d0_wind = 0.5791121;  // displacement height observed at sparse forest around Fortress Forest Tower
+            double z0m_wind = 0.4995565; // roughness length observed at above site
+
+            // wind speed for wind induced unloading at 1/2 canopy height
+            if ((Ht[hh] / 2 - d0_wind) > z0m_wind)
+            {
+                double Ustar = u * PBSM_constants::KARMAN / (log((z_u[hh] - d0_wind) / z0m_wind));
+                u_veg_mid = Ustar / PBSM_constants::KARMAN * log((Ht[hh] / 2 - d0_wind) / z0m_wind);
+            }
+            else
+            {
+                u_veg_mid = 0.0;
+            }
+
+            break;
+        } // end wind case 1
+    } // end of switch CanopyWind
+
+    if (u_veg_mid < 0.1)
+        u_veg_mid = 0.1;
+    else if (u_veg_mid > 15)
+        u_veg_mid = 15;
+
+    Nr = 2.0 * Radius * u_veg_mid / KinVisc; // TODO update to use within canopy wind speed
     NuSh = 1.79 + 0.606 * sqrt(Nr);
 
     // air density at press, virtual temp of geometric mean of air and surface
@@ -896,7 +925,7 @@ int ClassCanSnobalBase::calc_turb_transfer(
     z_0 = Ht[hh] * 0.1;
 
     // resitances   
-    ra = 1.0/(VON_KARMAN2*VON_KARMAN2*u)*(log((tz - d_0)/z_0)*log(((uz - d_0)/z_0))); // Allen 1998 Eq. 4, TODO switch to adjusted wind for increased applicability
+    ra = 1.0/(VON_KARMAN2*VON_KARMAN2*u_veg_mid)*(log((tz - d_0)/z_0)*log(((uz - d_0)/z_0))); // Allen 1998 Eq. 4,
     ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * snow_h2o_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
 
     CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(ts); // Eq. 29 from Essery et al., 2003
@@ -1361,29 +1390,32 @@ void ClassCanSnobalBase::_mass_unld(void)
 
 void ClassCanSnobalBase::_subl_evap(void) {
 
-    if (!vegsnowcover[hh] && !(liq_h2o_veg[hh] > 0.0)) { // no h2o in the canopy
+    if (!vegsnowcover[hh] && !(snow_h2o_veg[hh] > 0.0)) { // no h2o in the canopy
         delsub_veg[hh] = 0.0;
-        delevap_veg[hh] = 0.0;
         return;
-    }
+    } else {
+        // Compute total mass change due to sublimation/evaporation over the time step
+        qsub_veg[hh] = Ql_veg[hh] / LH_SUB(T_s_veg[hh]);
+        delsub_veg[hh] = qsub_veg[hh] * time_step[hh];
 
-    // Compute total mass change due to sublimation/evaporation over the time step
-    qsub_veg[hh] = Ql_veg[hh] / LH_SUB(T_s_veg[hh]);
-    delsub_veg[hh] = qsub_veg[hh] * time_step[hh];
+        // Apply mass changes based on the presence of snow or liquid water
+        if (snow_h2o_veg[hh] > -delsub_veg[hh]) {
+            // Snow is present in the canopy; modify snow water equivalent
+            snow_h2o_veg[hh] += delsub_veg[hh];
 
-    // Apply mass changes based on the presence of snow or liquid water
-    if (vegsnowcover[hh]) {
-        // Snow is present in the canopy; modify snow water equivalent
-        snow_h2o_veg[hh] += delsub_veg[hh];
-        if (snow_h2o_veg[hh] < 0.0) {
+        } else {
             snow_h2o_veg[hh] = 0.0;
         }
-    } 
 
-    if (liq_h2o_veg[hh] > 0.0){
+    }
+
+    if (!(liq_h2o_veg[hh] > 0.0)){
+        delevap_veg[hh] = 0.0;
+        return;    
+    } else {
         // liquid water is present; modify liquid water content
 
-         if (inhibit_evap[hh] == 0)
+        if (inhibit_evap[hh] == 0)
         { // use Granger when no snowcover
           if (liq_h2o_veg[hh] >= hru_evap[hh] * Cc[hh])
           {                                         // (evaporation in mm)
@@ -1416,8 +1448,8 @@ void ClassCanSnobalBase::_subl_evap(void) {
             liq_h2o_veg[hh] = 0.0;
           }
         }
-    }
 
+    }        
     m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh]; 
 }
 
@@ -1438,7 +1470,7 @@ void ClassCanSnobalBase::_subl_evap(void) {
 **
 ** GLOBAL VARIABLES MODIFIED
 **	liq_h2o_veg
-**	max_liq_veg
+**	max_liq_veg_frac
 **	h2o_sat_veg
 **	h2o_vol_veg
 **	rho_veg
@@ -1448,6 +1480,7 @@ void ClassCanSnobalBase::_subl_evap(void) {
 void ClassCanSnobalBase::_runoff_veg(void) {
 
     // Determine runoff, and water left in the snow
+    max_liq_veg[hh] = m_s_veg[hh] * max_liq_veg_frac[hh];
 
     if (liq_h2o_veg[hh] > max_liq_veg[hh]) {
 

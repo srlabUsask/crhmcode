@@ -252,6 +252,16 @@ void ClassSnobalCRHM::run(void) { // executed every interval
 
     SWE_change[hh] = -m_s[hh];
 
+    // // uncomment  below to hop to specific time in debug
+
+    // string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
+
+    // if (test == "6/15/2022 15:0") {
+    // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
+    // // if (test == "10/1/2021 0:15") {
+    //   std::cout << "Breakpoint here: Date matched" << std::endl;
+    // }
+
     switch (variation){
       case VARIATION_ORG:
         input_rec2[hh].S_n  = Qsi[hh]*(1.0 - Albedo[hh]);

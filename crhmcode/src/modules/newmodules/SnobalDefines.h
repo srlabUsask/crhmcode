@@ -483,7 +483,9 @@ inline double cionco_canopy_wind_spd(
     double &u_target_ht /* Wind speed at target height (m/s)*/
 ) 
 {
-    double A = 2.4338 + 3.45753 * exp(-u_veg_ht);                 /* Modified Cionco wind model */
+    double A = 2.4338 + 3.45753 * exp(-u_veg_ht);                 /* Modified Cionco wind model from Parviainen & Pomeroy 2000 for mature forest*/
+    //double A = 2.97 + 3.2 * exp(-u_veg_ht);                 /* Modified Cionco wind model from Parviainen & Pomeroy 2000 for regen forest*/
+    
     u_target_ht = u_veg_ht * exp(A * (target_ht / veg_ht - 1.0)); /* calculates canopy windspd  */
 
     return (u_target_ht);

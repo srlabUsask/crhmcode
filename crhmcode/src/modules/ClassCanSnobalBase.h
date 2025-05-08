@@ -45,6 +45,8 @@ public:
     double* cc_s_veg{ NULL };           // snowcover's cold content (J/m^2). Init by init_snow_veg.
     double* h2o_sat_veg{ NULL };        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
     double* h2o_vol_veg{ NULL };        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow_veg
+    double* max_liq_veg{ NULL };        // max liquid h2o content as specific mass(kg/m^2)
+
 
 //   energy balance info for current timestep
 
@@ -143,9 +145,7 @@ public:
     double* CanSnowFrac{ NULL };       // Fraction of canopy covered by snow after Pomeroy 1998
     long* niter_ice_sphere{ NULL };     
     double* Tstep_ice_sphere{ NULL };       // increment to adjust canopy ice sphere temperature by
-
-
-    
+ 
 
     double* albedo_now{ NULL };       // Albedo of the canopy considering how much snow is on it
 
@@ -180,8 +180,7 @@ public:
     const double* z_T{ NULL };         // height of air temp & vapor pressure measurement (m)
     const double* Albedo_vegsnow{ NULL };         // albedo of snow on vegetation ()
     const double* SW_to_LW_fn{ NULL };         // dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site. (-)
-    const double* max_liq_veg{ NULL };        // max liquid h2o content as specific mass(kg/m^2)
-    const double* max_h2o_vol_veg{ NULL }; // max liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless)
+    const double* max_liq_veg_frac{ NULL };        // max liquid h2o content as fraction of snow mass (-)
     const double  *Cc{ NULL };       // canopy coverage, (1-sky view fraction)
     const double  *Lmax{ NULL };  // maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 kg m-2 based on max observed in Storck et al. 2002, Floyd 2012 and Cebulski & Pomeroy (kg/m^2)
     const double  *Ht{ NULL };  // forest/vegetation height (m)
