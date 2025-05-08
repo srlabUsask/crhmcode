@@ -519,7 +519,7 @@ void ClassXG::run(void) {
                 double Last = last_front();
                 if(Last > 0.0){ // thaw front
                   Zdt[hh] = pop_front();
-                  find_thaw_D(Zdf[hh]);
+                  find_thaw_D(Zdt[hh]);
                   Zd_front_array[1][hh] = Zdt[hh];
                 }
                 else if(Last < 0.0){ // never two frozen fronts together
