@@ -1207,18 +1207,13 @@ void ClassCanSnobalBase::_mass_unld(void)
         {
             case 0:
             { // original using Cionco wind model for dense canopies
-                // wind speed for wind induced unloading at 1/2 canopy height
-                if ((Ht[hh] - (2.0 / 3.0) * z_u[hh]) > 0.0)
-                {
-                    u_ht = u[hh] * log((Ht[hh] - (2.0 / 3.0) * z_u[hh]) / 0.123 * z_u[hh]) / log((z_u[hh] - 2.0 / 3.0 * z_u[hh]) / 0.123 * z_u[hh]);
-                    double A = 2.4338 + 3.45753 * exp(-u_ht);                /* Modified Cionco wind model */
-                    u_mid = u_ht * exp(A * ((Ht[hh] / 2) / (Ht[hh]) - 1.0)); /* calculates canopy windspd  */
-                }
-                else
-                {
-                    u_mid = 0.0;
-                }
+
+                double z_veg_u = Ht[hh]*(2.0/3.0);
+
+                adst_wind_cpy_top(Ht[hh], u[hh], z_u[hh], u_ht);
+                cionco_canopy_wind_spd(Ht[hh], u_ht, z_veg_u, u_mid);
                 break;
+
             } // end wind case 0
 
             case 1:
@@ -1236,6 +1231,14 @@ void ClassCanSnobalBase::_mass_unld(void)
                 {
                     u_mid = 0.0;
                 }
+
+                break;
+            } // end wind case 1
+
+            case 2:
+            { // No wind adjustment for unloading
+
+                u_mid = u[hh];
 
                 break;
             } // end wind case 1
