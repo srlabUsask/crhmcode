@@ -117,6 +117,7 @@
 #include "../ClassXGAyers.h" //added by Manishankar Mondal
 #include "../ClassCRHMCanopyClearing.h" //added by Manishankar Mondal
 #include "../ClassCRHMCanopyClearingGap.h" //added by Manishankar Mondal
+#include "../ClassCRHMCanopyVectorBased.h" //added by Alex Cebulski
 #include "../ClassREWroute_stream.h" //added by Manishankar Mondal
 #include "../ClassICEflow.h" //added by Manishankar Mondal
 #include "../Classglacier.h" //added by Manishankar Mondal
@@ -211,6 +212,7 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyVectorBased("CanopyVectorBased", "11/12/24", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassXG("XG", "04/05/22", LMODULE::ADVANCE));
