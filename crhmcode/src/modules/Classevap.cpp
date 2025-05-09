@@ -83,9 +83,9 @@ void Classevap::decl(void) {
 
   declparam("Zwind", TDim::NHRU, "[10]", "0.01", "100.0", "wind measurement height (Penman-Monteith)", "(m)", &Zwind);
 
-  declgetvar("*", "Rn", "(mm/m^2*int)", &Rn);
-  declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
-  declgetvar("*", "RnD_POS", "(mm/m^2*d)", &RnD_POS);
+  declgetvar("*", "Rn", "(mm/int)", &Rn);
+  declgetvar("*", "RnD", "(mm/d)", &RnD);
+  declgetvar("*", "RnD_POS", "(mm/d)", &RnD_POS);
 
   declgetvar("*",  "hru_t", "(" + string(DEGREE_CELSIUS) + ")", &hru_t);
   declgetvar("*",  "hru_u", "(m/s)", &hru_u);
@@ -226,10 +226,10 @@ void Classevap::finish(bool good) {
 
 double Classevap::gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELSIUS
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg DEGREE_CELSIUS))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
-double Classevap::lambda(double t) // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
+double Classevap::lambda(double t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
