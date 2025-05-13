@@ -1226,6 +1226,10 @@ void ClassCanSnobalBase::_mass_unld(void)
                 {
                     double Ustar = u[hh] * PBSM_constants::KARMAN / (log((z_u[hh] - d0_wind) / z0m_wind));
                     u_mid = Ustar / PBSM_constants::KARMAN * log((Ht[hh] / 2 - d0_wind) / z0m_wind);
+
+                    if(MassUnloadingSwitch[hh] == 2){ // only need cpy top wind for roesch2001
+                        u_ht = Ustar / PBSM_constants::KARMAN * log((Ht[hh] - d0_wind) / z0m_wind);
+                    }
                 }
                 else
                 {
@@ -1255,8 +1259,8 @@ void ClassCanSnobalBase::_mass_unld(void)
         }
 
         // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt found to be function of canopy snow load for Fortress obs
-        double unld_to_melt_ratio_m = 0.17;
-        double unld_to_melt_ratio_b = -0.96;
+        double unld_to_melt_ratio_m = 0.16;
+        double unld_to_melt_ratio_b = -0.50;
 
         double unld_to_melt_ratio = snow_h2o_veg[hh] * unld_to_melt_ratio_m + unld_to_melt_ratio_b; // WARNING this can go negative so handle below
         unld_to_melt_ratio = std::max(0.0, unld_to_melt_ratio);
@@ -1324,24 +1328,23 @@ void ClassCanSnobalBase::_mass_unld(void)
           
           // Mass unloading of canopy snow due to melt
 
-          const double Tm = 270.15; // threshold in Kelvin below which temp unloading is equal to 0
           const double C1 = 1.87e5; // constant provided in Roesch et al., 2001
           double fT = 0.0; // unloading rate per second.
 
-          if ((T_a[hh] + CRHM_constants::Tm) < Tm) // Follows equation 31 in Cebulski & Pomeroy 2025 Wires WATER Review.
+          if ((T_a[hh]) < CRHM_constants::Tm) // Follows equation 31 in Cebulski & Pomeroy 2025 Wires WATER Review.
           {
             fT = 0.0;
           } else {
-            fT = ((T_a[hh] + CRHM_constants::Tm) - Tm)/C1;
+            fT = (T_a[hh] - CRHM_constants::Tm)/C1;
           }
 
-          double dt = Global::Interval * 24 * 60 * 60;       // converts the interval which is a time period (i.e., time/cycles, 1 day/# obs) to timestep in seconds.
-
-          delunld_melt[hh] = snow_h2o_veg[hh] * (1-exp(-(fT) * dt)); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
+          delunld_melt[hh] = snow_h2o_veg[hh] * (1-exp(-(fT) * time_step[hh])); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
 
           // Mass unloading of canopy snow due to mechanical removal from wind at canopy top
           const double C2 = 1.56e5; // wind unloading constant from Roesch et al., 2001
           double fu = 0.0;
+
+          adst_wind_cpy_top(Ht[hh], u[hh], z_u[hh], u_ht);
 
           if(u_ht >= 0.0){
             fu = u_ht/C2; 
@@ -1349,7 +1352,7 @@ void ClassCanSnobalBase::_mass_unld(void)
             fu = 0.0; // unloading rate due to wind (s-1)
           }
 
-          delunld_wind[hh] = snow_h2o_veg[hh] * (1-exp(-(fu) * dt)); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
+          delunld_wind[hh] = snow_h2o_veg[hh] * (1-exp(-(fu) * time_step[hh])); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
 
           delunld[hh] += delunld_wind[hh];
           delunld[hh] += delunld_melt[hh];

@@ -170,7 +170,7 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetvar("*", "hru_ea", "(kPa)", &e_a_X);
     declgetvar("*", "hru_u", "(m/s)", &u_X);
     declgetvar("*", "T_s_0", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0); 
-    // declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
+    declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
 
     decldiag("Pevap", TDim::NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
     declgetvar("*", "intercepted_snow", "(kg/m^2)", &new_snow); // new snow intercepted in canopy before ablation processes have kicked in, from vector based module
@@ -276,11 +276,11 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
 
     string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 
-    // if (test == "10/6/2021 19:0") {
-    // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
-    // // if (test == "10/1/2021 0:15") {
-    //   std::cout << "Breakpoint here: Date matched" << std::endl;
-    // }
+    if (test == "4/23/2022 9:0") {
+    // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
+    // if (test == "10/1/2021 0:15") {
+      std::cout << "Breakpoint here: Date matched" << std::endl;
+    }
     if(getstep() > 1){ // Not first step
 
       if (m_precip[hh] > 0.0)
@@ -336,15 +336,15 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     melt_direct_cum[hh] += delmelt_veg_int[hh];
 
     // set assimilate observed snow load for begining of select events
-    // if(obs_snow_load[hh] < 9999){
-    //   m_s_veg[hh] = obs_snow_load[hh];
-    //   snow_h2o_veg[hh] = obs_snow_load[hh];
-    //   liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
-    //   delmelt_veg_int[hh] = 0.0;
-    //   delsub_veg_int[hh] = 0.0;
-    //   delunld_int[hh] = 0.0;
-    //   deldrip_veg[hh] = 0.0;
-    // }
+    if(obs_snow_load[hh] < 9999){
+      m_s_veg[hh] = obs_snow_load[hh];
+      snow_h2o_veg[hh] = obs_snow_load[hh];
+      liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
+      delmelt_veg_int[hh] = 0.0;
+      delsub_veg_int[hh] = 0.0;
+      delunld_int[hh] = 0.0;
+      deldrip_veg[hh] = 0.0;
+    }
 
   }
 }
