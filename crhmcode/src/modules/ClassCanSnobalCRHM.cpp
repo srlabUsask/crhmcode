@@ -154,6 +154,7 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetparam("*", "hru_area", "()", &hru_area); // hru area (km^2)
     declgetparam("*", "hru_rho_snow", "()", &rho_snow_X); // rho of falling snow (kg/m^3)
     declgetparam("*", "Cc", "()", &Cc); // canopy coverage, (1-sky view fraction)
+    declgetparam("*", "LAI", "()", &LAI); 
     declgetparam("*", "Ht", "()", &Ht); 
     declparam("Lmax", TDim::NHRU, "[50]", "0", "100", "maximum canopy snow load", "(kg m-2)", &Lmax);
     declparam("CanopyWindSwitchCanSno", TDim::NHRU, "[0]", "0", "1", "Canopy wind model to use for wind induced unloading at 1/2 canopy height, 0 - for Cionco, 1 - for Prandtl-von Kármán log-linear relationship", "()", &CanopyWindSwitchCanSno);

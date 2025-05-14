@@ -989,13 +989,13 @@ void ClassCanSnobalBase::_mass_bal(void) {
     // process precipitation event
     _precip_veg();
 
-    // calculate melt or freezing and adjust cold content
-
-    _snowmelt();
-
     // calculate sublimation/evaporation and adjust canopy snowpack
 
     _subl_evap();
+
+    // calculate melt or freezing and adjust cold content
+
+    _snowmelt();
 
     // calculate mass unloading of snow due to wind, sublimation, melting
 
@@ -1398,7 +1398,6 @@ void ClassCanSnobalBase::_subl_evap(void) {
 
     if (!vegsnowcover[hh] && !(snow_h2o_veg[hh] > 0.0)) { // no h2o in the canopy
         delsub_veg[hh] = 0.0;
-        return;
     } else {
         // Compute total mass change due to sublimation/evaporation over the time step
         qsub_veg[hh] = Ql_veg[hh] / LH_SUB(T_s_veg[hh]);
@@ -1417,7 +1416,6 @@ void ClassCanSnobalBase::_subl_evap(void) {
 
     if (!(liq_h2o_veg[hh] > 0.0)){
         delevap_veg[hh] = 0.0;
-        return;    
     } else {
         // liquid water is present; modify liquid water content
 
@@ -1486,7 +1484,7 @@ void ClassCanSnobalBase::_subl_evap(void) {
 void ClassCanSnobalBase::_runoff_veg(void) {
 
     // Determine runoff, and water left in the snow
-    max_liq_veg[hh] = m_s_veg[hh] * max_liq_veg_frac[hh];
+    max_liq_veg[hh] = m_s_veg[hh] * max_liq_veg_frac[hh] + Cc[hh]*LAI[hh]*0.2;
 
     if (liq_h2o_veg[hh] > max_liq_veg[hh]) {
 

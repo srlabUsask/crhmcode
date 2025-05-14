@@ -182,6 +182,7 @@ public:
     const double* SW_to_LW_fn{ NULL };         // dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site. (-)
     const double* max_liq_veg_frac{ NULL };        // max liquid h2o content as fraction of snow mass (-)
     const double  *Cc{ NULL };       // canopy coverage, (1-sky view fraction)
+    const double  *LAI{ NULL };       // LAI
     const double  *Lmax{ NULL };  // maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 kg m-2 based on max observed in Storck et al. 2002, Floyd 2012 and Cebulski & Pomeroy (kg/m^2)
     const double  *Ht{ NULL };  // forest/vegetation height (m)
     const long  *CanopyWindSwitchCanSno{ NULL };  // Canopy wind model to use at height Zcan, 0 - for Cionco (dense canopy), 1 - for Prandtl-von Kármán log-linear relationship (sparse forest)".
