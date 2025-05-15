@@ -142,7 +142,7 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("melt_direct_cum", TDim::NHRU, "cumulative melt when SWE < threshold melt", "(kg/m^2)", &melt_direct_cum);
 
     decllocal("stop_no_snow", TDim::NHRU, "snow flag", "()", &stop_no_snow);
-    declparam("max_liq_veg_frac", TDim::NHRU, "[0.0001]", "0.0001", "0.2", "max liquid h2o content as fraction of specific snow mass", "(-)", &max_liq_veg_frac);
+    declparam("max_liq_veg_frac", TDim::NHRU, "[0.01]", "0.0001", "0.2", "max liquid h2o content as fraction of specific snow mass", "(-)", &max_liq_veg_frac);
     declparam("Albedo_vegsnow", TDim::NHRU, "[0.6]", "0.6", "0.9", "Albedo_vegsnow", "(-)", &Albedo_vegsnow);
     declparam("SW_to_LW_fn", TDim::NHRU, "[0.01]", "0.0001", "0.5", "dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.", "(-)", &SW_to_LW_fn);
 
@@ -277,7 +277,7 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
 
     string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 
-    if (test == "4/23/2022 9:0") {
+    if (test == "4/23/2022 18:0") {
     // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
     // if (test == "10/1/2021 0:15") {
       std::cout << "Breakpoint here: Date matched" << std::endl;
@@ -291,8 +291,8 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
       }
       else
       {
-        if (vegsnowcover[hh] == 0)
-          stop_no_snow[hh] = 1;
+        if (!(vegsnowcover[hh] || liq_h2o_veg[hh] > 0.0))
+          stop_no_snow[hh] = 1; // _do_tstep_veg will not execute
         precip_now_veg[hh] = false;
       }
 

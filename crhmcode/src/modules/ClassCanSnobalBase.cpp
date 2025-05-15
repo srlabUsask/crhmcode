@@ -428,7 +428,7 @@ int ClassCanSnobalBase::_divide_tstep_veg(TSTEP_REC* tstep) {  // record of time
 
 int ClassCanSnobalBase::_below_thold_veg(double	threshold) { // current timestep's threshold for a layer's mass
 
-    if (vegsnowcover[hh] == 0)
+    if (!(vegsnowcover[hh] || liq_h2o_veg[hh] > 0.0))
         return 0;
     else
         return (m_s_veg[hh] < threshold);
@@ -916,17 +916,17 @@ int ClassCanSnobalBase::calc_turb_transfer(
     qs = SPEC_HUM(es, press);
 
     // calculates how exposed canopy snow is to the atmosphere based on the fullness of the canopy, more exposed with less snow as more gaps / surface area
-    if ((snow_h2o_veg[hh] / Lmax[hh]) <= 0.0) // Using Lmax instead of Lstar as gives more appropriate index of canopy fullness
+    if ((m_s_veg[hh] / Lmax[hh]) <= 0.0) // Using Lmax instead of Lstar as gives more appropriate index of canopy fullness
         Ce = 0.07;
     else
-        Ce = ks * pow((snow_h2o_veg[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar
+        Ce = ks * pow((m_s_veg[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar
 
     d_0 = Ht[hh] * (2/3);
     z_0 = Ht[hh] * 0.1;
 
     // resitances   
     ra = 1.0/(VON_KARMAN2*VON_KARMAN2*u_veg_mid)*(log((tz - d_0)/z_0)*log(((uz - d_0)/z_0))); // Allen 1998 Eq. 4,
-    ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * snow_h2o_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
+    ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * m_s_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
 
     CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(ts); // Eq. 29 from Essery et al., 2003
     CRHM_h = (dens / ra) * CP_AIR * (ta - ts); // Eq. 4 Essery et al., 2003 and Pomeroy et al., 2016
@@ -1409,6 +1409,7 @@ void ClassCanSnobalBase::_subl_evap(void) {
             snow_h2o_veg[hh] += delsub_veg[hh];
 
         } else {
+            delsub_veg[hh] = -snow_h2o_veg[hh];
             snow_h2o_veg[hh] = 0.0;
         }
 
@@ -1418,39 +1419,17 @@ void ClassCanSnobalBase::_subl_evap(void) {
         delevap_veg[hh] = 0.0;
     } else {
         // liquid water is present; modify liquid water content
+        // Compute total mass change due to sublimation/evaporation over the time step
+        delevap_veg[hh] = (Ql_veg[hh] / LH_VAP(T_s_veg[hh])) * time_step[hh];
 
-        if (inhibit_evap[hh] == 0)
-        { // use Granger when no snowcover
-          if (liq_h2o_veg[hh] >= hru_evap[hh] * Cc[hh])
-          {                                         // (evaporation in mm)
-            delevap_veg[hh] = hru_evap[hh] * Cc[hh]; //
-            liq_h2o_veg[hh] -= hru_evap[hh] * Cc[hh];
-          }
-          else
-          {
-            delevap_veg[hh] = liq_h2o_veg[hh];
+        // Apply mass changes based on the presence of snow or liquid water
+        if (liq_h2o_veg[hh] > -delevap_veg[hh]) {
+            // Snow is present in the canopy; modify snow water equivalent
+            liq_h2o_veg[hh] += delevap_veg[hh];
+
+        } else {
+            delevap_veg[hh] = -liq_h2o_veg[hh];
             liq_h2o_veg[hh] = 0.0;
-          }
-        }
-        else
-        {                                                            // use Priestley-Taylor when snowcover
-          double Q = S_n[hh] * 86400 / Global::Freq / 1e6 / lambda(T_a[hh]); // convert w/m2 to mm/m2/int
-
-          if (S_n[hh] > 0.0)
-            Pevap[hh] = 1.26 * delta(T_a[hh]) * Q / (delta(T_a[hh]) + gamma(P_a[hh], T_a[hh]));
-          else
-            Pevap[hh] = 0.0;
-
-          if (liq_h2o_veg[hh] >= Pevap[hh] * Cc[hh])
-          {                                      // (evaporation in mm)
-            delevap_veg[hh] = Pevap[hh] * Cc[hh]; // check
-            liq_h2o_veg[hh] -= Pevap[hh] * Cc[hh];
-          }
-          else
-          {
-            delevap_veg[hh] = liq_h2o_veg[hh]; // check
-            liq_h2o_veg[hh] = 0.0;
-          }
         }
 
     }        
