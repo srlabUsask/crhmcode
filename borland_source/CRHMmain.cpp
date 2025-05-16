@@ -1,10 +1,10 @@
-// 05/07/25 correcting Zdt in find_thaw_D for
-// check for thaw front in XG module in 04/29/25
+// 05/16/25 Correcting No_Freeze if statement for all unfrozen condition
+//  in SoilX module in 05/07/25
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "05/07/25"
+#define CurrentVersion "05/16/25"
 
 #include <stdexcept>
 #include "CRHMmain.h"

@@ -743,3 +743,11 @@ CRHM 05/07/25
   Correcting Zdt in find_thaw_D for check for thaw front in XG module
 
 	find_thaw_D(Zdt[hh])
+
+
+CRHM 05/16/25
+
+  Correcting No_Freeze if statement for all unfrozen condition in SoilX module.
+
+        if((NO_Freeze[hh] == 1) || (Zd_front_array[0][hh] == 0.0)) // 16May2025: change from if((NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0))
+          thaw_layers_lay[ll][hh] = 1.0; // all unfrozen

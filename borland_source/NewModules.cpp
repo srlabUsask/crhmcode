@@ -1,4 +1,4 @@
-// 05/07/25
+// 05/16/25
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -79,7 +79,7 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassfrozenAyers("frozenAyers", "08/27/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoil("Soil", "10/18/24", CRHM::BASIC));
   DLLModules.AddModule(new ClassevapX("evapX", "03/04/25", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassSoilX("SoilX", "10/18/24", CRHM::ADVANCE)); // nlay >= 2 check added
+  DLLModules.AddModule(new ClassSoilX("SoilX", "05/16/25", CRHM::ADVANCE)); // nlay >= 2 check added
   DLLModules.AddModule(new ClassSoilDS("SoilDetention", "10/18/24", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassSoilPrairie("SoilPrairie", "10/18/24", CRHM::PROTO)); // prototype wetlands
   DLLModules.AddModule(new Classglacier_061718("glacier_061718", "06/10/16", CRHM::PROTO));
@@ -21376,7 +21376,7 @@ void ClassSoilX::run(void) {
     if(nstep == 0){
 
       for(long ll = 0; ll < depths_size; ++ll)
-        if((NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0)) // 28May2024: change from if(NO_Freeze[hh])
+        if((NO_Freeze[hh] == 1) || (Zd_front_array[0][hh] == 0.0)) // 16May2025: change from if((NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0))
           thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
         else
           thaw_layers_lay[ll][hh] = 0.0; // all frozen
