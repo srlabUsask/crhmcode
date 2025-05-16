@@ -436,7 +436,7 @@ void ClassSoilX::run(void) {
 
             for (long ll = 0; ll < depths_size; ++ll) {
                 //bdisher, 2023 - modification to allow infiltration of precipitation when zd_front_array == 0
-                if ( (NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0) )
+                if ( (NO_Freeze[hh] == 1) || (Zd_front_array[0][hh] == 0.0) )
                     thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
                 else
                     thaw_layers_lay[ll][hh] = 0.0; // all frozen
