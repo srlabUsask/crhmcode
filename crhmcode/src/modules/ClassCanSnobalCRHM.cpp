@@ -277,11 +277,11 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
 
     string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 
-    if (test == "4/23/2022 18:0") {
-    // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
-    // if (test == "10/1/2021 0:15") {
-      std::cout << "Breakpoint here: Date matched" << std::endl;
-    }
+    // if (test == "4/23/2022 12:0") {
+    // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
+    // // if (test == "10/1/2021 0:15") {
+    //   std::cout << "Breakpoint here: Date matched" << std::endl;
+    // }
     if(getstep() > 1){ // Not first step
 
       if (m_precip[hh] > 0.0)
