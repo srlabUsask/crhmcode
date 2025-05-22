@@ -1463,17 +1463,23 @@ void ClassCanSnobalBase::_subl_evap(void) {
 void ClassCanSnobalBase::_runoff_veg(void) {
 
     // Determine runoff, and water left in the snow
-    max_liq_veg[hh] = m_s_veg[hh] * max_liq_veg_frac[hh] + Cc[hh]*LAI[hh]*0.2;
+    if(MassUnloadingSwitch[hh] == 1){ // Andreadis2009
+        max_liq_veg[hh] = m_s_veg[hh] * max_liq_veg_frac[hh] + exp(-4.0) * LAI[hh] * 2.0; // times 2 for two sided lai as in Andreadis2009
+    } else { // From CRHM Canopy
+        max_liq_veg[hh] = m_s_veg[hh] * max_liq_veg_frac[hh] + Cc[hh]*LAI[hh]*0.2;
+    }
 
     if (liq_h2o_veg[hh] > max_liq_veg[hh]) {
 
-        deldrip_veg[hh] = liq_h2o_veg[hh] - max_liq_veg[hh];
-        liq_h2o_veg[hh] = max_liq_veg[hh];
-        m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh]; 
+            deldrip_veg[hh] = liq_h2o_veg[hh] - max_liq_veg[hh];
+            liq_h2o_veg[hh] = max_liq_veg[hh];
+            m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh]; 
 
-    } else {
-        deldrip_veg[hh] = 0.0;
+        } else {
+            deldrip_veg[hh] = 0.0;
     }
+
+
 }
 
 /* ----------------------------------------------------------------------- */
