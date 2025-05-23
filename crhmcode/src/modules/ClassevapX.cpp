@@ -224,7 +224,7 @@ void ClassevapX::run(void) {
 
              f4 = 1.0;
              if(hru_t[hh] < 5.0 || hru_t[hh] > 40.0)
-               f4 = 5000/50;
+               f4 = 5000 / rcs[hh]; // 05/21/20 correcting f4 = 5000/50;
 
              if(RnObs && RnObs[hh] <= 0)
                rc[hh] = 5000.0;
