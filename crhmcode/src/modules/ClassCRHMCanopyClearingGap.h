@@ -40,6 +40,8 @@ double *Qnsn { NULL };
 double *Qsisn { NULL };
 double *Qlisn { NULL };
 double *Qlosn { NULL };
+const double *obs_snow_load { NULL };
+
 
 // put variables
 

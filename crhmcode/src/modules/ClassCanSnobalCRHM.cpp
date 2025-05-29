@@ -120,11 +120,11 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("I_LW_cpy_2_cpy", TDim::NHRU, "Longwave from the canopy reflected off the surface back to the canopy", "(W/m^2)", &I_LW_cpy_2_cpy);
     decllocal("I_LW_cpy", TDim::NHRU, "Incoming longwave radiation emitted from the canopy", "(W/m^2)", &I_LW_cpy);
     decllocal("O_LW_cpysnow", TDim::NHRU, "Outgoing longwave radiation emitted from the canopy snow", "(W/m^2)", &O_LW_cpysnow);
-    decllocal("CanSnowFrac", TDim::NHRU, "Fraction of canopy covered by snow after Pomeroy 1998", "(-)", &CanSnowFrac);
-    decllocal("niter_ice_sphere", TDim::NHRU, "N iterations for the ice sphere energy balance", "(-)", &niter_ice_sphere);
+    decllocal("CanSnowFrac", TDim::NHRU, "Fraction of canopy covered by snow after Pomeroy 1998", "()", &CanSnowFrac);
+    decllocal("niter_ice_sphere", TDim::NHRU, "N iterations for the ice sphere energy balance", "()", &niter_ice_sphere);
     decllocal("Tstep_ice_sphere", TDim::NHRU, "Temp increment the ice sphere energy balance", "(" + string(DEGREE_CELSIUS) + ")", &Tstep_ice_sphere);
 
-    decllocal("albedo_now", TDim::NHRU, "Albedo of the canopy considering how much snow is on it", "(-)", &albedo_now);
+    decllocal("albedo_now", TDim::NHRU, "Albedo of the canopy considering how much snow is on it", "()", &albedo_now);
 
 
     decllocal("m_precip_L", TDim::NHRU, "specific mass of total precip", "(kg/m^2)", &m_precip);
@@ -142,9 +142,9 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("melt_direct_cum", TDim::NHRU, "cumulative melt when SWE < threshold melt", "(kg/m^2)", &melt_direct_cum);
 
     decllocal("stop_no_snow", TDim::NHRU, "snow flag", "()", &stop_no_snow);
-    declparam("max_liq_veg_frac", TDim::NHRU, "[0.01]", "0.0001", "0.2", "max liquid h2o content as fraction of specific snow mass", "(-)", &max_liq_veg_frac);
-    declparam("Albedo_vegsnow", TDim::NHRU, "[0.6]", "0.6", "0.9", "Albedo_vegsnow", "(-)", &Albedo_vegsnow);
-    declparam("SW_to_LW_fn", TDim::NHRU, "[0.01]", "0.0001", "0.5", "dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.", "(-)", &SW_to_LW_fn);
+    declparam("max_liq_veg_frac", TDim::NHRU, "[0.01]", "0.0001", "0.2", "max liquid h2o content as fraction of specific snow mass", "()", &max_liq_veg_frac);
+    declparam("Albedo_vegsnow", TDim::NHRU, "[0.6]", "0.6", "0.9", "Albedo_vegsnow", "()", &Albedo_vegsnow);
+    declparam("SW_to_LW_fn", TDim::NHRU, "[0.01]", "0.0001", "0.5", "dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.", "()", &SW_to_LW_fn);
 
     declgetparam("*", "z_g", "()", &z_g); // depth of soil temp meas (m)
     declgetparam("*", "z_u", "()", &z_u); // height of wind measurement (m)
@@ -156,7 +156,7 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetparam("*", "Cc", "()", &Cc); // canopy coverage, (1-sky view fraction)
     declgetparam("*", "LAI", "()", &LAI); 
     declgetparam("*", "Ht", "()", &Ht); 
-    declparam("Lmax", TDim::NHRU, "[50]", "0", "100", "maximum canopy snow load", "(kg m-2)", &Lmax);
+    declparam("Lmax", TDim::NHRU, "[50]", "0", "100", "maximum canopy snow load", "(kg/m^2)", &Lmax);
     declparam("CanopyWindSwitchCanSno", TDim::NHRU, "[0]", "0", "1", "Canopy wind model to use for wind induced unloading at 1/2 canopy height, 0 - for Cionco, 1 - for Prandtl-von Kármán log-linear relationship", "()", &CanopyWindSwitchCanSno);
     declparam("MassUnloadingSwitch", TDim::NHRU, "[0]", "0", "1", "canopy snow ablation parameterization to use, 0 - Cebulski & Pomeroy 2025 ablation paper, 1- Andreadis 2009, 2 - Roesch2001 (enable HP98/Ellis2010 using original canopy clearing gap module)", "()", &MassUnloadingSwitch);
     declgetparam("*", "relative_hts", "()", &relative_hts); 
@@ -171,7 +171,7 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetvar("*", "hru_ea", "(kPa)", &e_a_X);
     declgetvar("*", "hru_u", "(m/s)", &u_X);
     declgetvar("*", "T_s_0", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0); 
-    declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
+    // declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
 
     decldiag("Pevap", TDim::NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
     declgetvar("*", "intercepted_snow", "(kg/m^2)", &new_snow); // new snow intercepted in canopy before ablation processes have kicked in, from vector based module
@@ -337,15 +337,15 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     melt_direct_cum[hh] += delmelt_veg_int[hh];
 
     // set assimilate observed snow load for begining of select events
-    if(obs_snow_load[hh] < 9999){
-      m_s_veg[hh] = obs_snow_load[hh];
-      snow_h2o_veg[hh] = obs_snow_load[hh];
-      liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
-      delmelt_veg_int[hh] = 0.0;
-      delsub_veg_int[hh] = 0.0;
-      delunld_int[hh] = 0.0;
-      deldrip_veg[hh] = 0.0;
-    }
+    // if(obs_snow_load[hh] < 9999){
+    //   m_s_veg[hh] = obs_snow_load[hh];
+    //   snow_h2o_veg[hh] = obs_snow_load[hh];
+    //   liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
+    //   delmelt_veg_int[hh] = 0.0;
+    //   delsub_veg_int[hh] = 0.0;
+    //   delunld_int[hh] = 0.0;
+    //   deldrip_veg[hh] = 0.0;
+    // }
 
   }
 }

@@ -120,6 +120,8 @@ void ClassCRHMCanopyClearingGap::decl(void) {
 
   declobs("Qlosn", TDim::NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
 
+  declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
+
 // declared variables
 
   decldiag("k", TDim::NHRU, "extinction coefficient", "()", &k);
@@ -246,6 +248,16 @@ void ClassCRHMCanopyClearingGap::run(void){
   //double Tau; variable is unreferenced commenting out for now - jhs507
 
   for (hh = 0; chkStruct(); ++hh){
+
+    // uncomment  below to hop to specific time in debug
+
+    string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
+
+    // if (test == "3/14/2023 11:0") {
+    // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
+    // // if (test == "10/1/2021 0:15") {
+    //   std::cout << "Breakpoint here: Date matched" << std::endl;
+    // }
 
     switch (variation){
       case VARIATION_ORG:
@@ -661,6 +673,14 @@ void ClassCRHMCanopyClearingGap::run(void){
     net_p[hh] = net_rain[hh] + net_snow[hh];
     cum_net_rain[hh] += net_rain[hh];
     cum_net_snow[hh] += net_snow[hh];
+
+    // // set assimilate observed snow load for begining of select events
+    // if(obs_snow_load[hh] < 9999){
+    //   Snow_load[hh] = obs_snow_load[hh];
+    //   SUnload[hh] = 0.0;
+    //   SUnload_H2O[hh] = 0.0;
+    //   Subl_Cpy[hh] = 0.0;
+    // }
   } // end for
 }
 
