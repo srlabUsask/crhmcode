@@ -120,7 +120,7 @@ void ClassCRHMCanopyClearingGap::decl(void) {
 
   declobs("Qlosn", TDim::NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
 
-  declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
+  // declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
 
 // declared variables
 
@@ -251,7 +251,7 @@ void ClassCRHMCanopyClearingGap::run(void){
 
     // uncomment  below to hop to specific time in debug
 
-    string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
+    // string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 
     // if (test == "3/14/2023 11:0") {
     // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO

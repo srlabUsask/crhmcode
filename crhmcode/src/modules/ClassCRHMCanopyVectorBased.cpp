@@ -204,7 +204,7 @@ void ClassCRHMCanopyVectorBased::run(void)
   for (hh = 0; chkStruct(); ++hh)
   {
 
-    switch (variation)
+    switch ((int)variation)
     {
     case VARIATION_ORG:
       Qsi_ = Qsi[hh];
@@ -256,7 +256,7 @@ void ClassCRHMCanopyVectorBased::run(void)
     if (Ts[hh] > 0.0 || SWE[hh] <= 0.0)
       Ts[hh] = 0.0;
 
-    switch (CanopyClearing[hh])
+    switch ((int)CanopyClearing[hh])
     {
     case 0: // canopy
 
@@ -402,7 +402,7 @@ void ClassCRHMCanopyVectorBased::run(void)
         double Cp_inc = 0;
                     
         // wind speed used for vector based initial snow interception
-        switch (CanopyWindSwitchIP[hh])
+        switch ((int)CanopyWindSwitchIP[hh])
         {
           case 0:
           {  // original using Cionco wind model for dense canopies

@@ -539,12 +539,6 @@ int ClassCanSnobalBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
     delunld_subl_int[hh] += delunld_subl[hh];
     deldrip_veg_int[hh] += deldrip_veg[hh];
 
-    // dont need to accumulate below
-    net_rain[hh] = throughfall_rain[hh] + deldrip_veg_int[hh];
-    net_snow[hh] = throughfall_snow[hh] + delunld_int[hh];
-
-    net_p[hh] = net_rain[hh] + net_snow[hh];
-
     //  Update the model's input parameters
     S_n[hh] += input_deltas[hh][tstep->level].S_n;
     I_lw[hh] += input_deltas[hh][tstep->level].I_lw;
@@ -868,7 +862,7 @@ int ClassCanSnobalBase::calc_turb_transfer(
     D = 2.06E-5 * pow(ts / FREEZE, -1.75);
 
     // calculate wind speed at height needed for wind induced unloading
-    switch (CanopyWindSwitchCanSno[hh])
+    switch ((int)CanopyWindSwitchCanSno[hh])
     {
         case 0:
         { // original using Cionco wind model for dense canopies
@@ -1203,7 +1197,7 @@ void ClassCanSnobalBase::_mass_unld(void)
     }
 
     // calculate wind speed at height needed for wind induced unloading
-    switch (CanopyWindSwitchCanSno[hh])
+    switch ((int)CanopyWindSwitchCanSno[hh])
         {
             case 0:
             { // original using Cionco wind model for dense canopies
@@ -1227,7 +1221,7 @@ void ClassCanSnobalBase::_mass_unld(void)
                     double Ustar = u[hh] * PBSM_constants::KARMAN / (log((z_u[hh] - d0_wind) / z0m_wind));
                     u_mid = Ustar / PBSM_constants::KARMAN * log((Ht[hh] / 2 - d0_wind) / z0m_wind);
 
-                    if(MassUnloadingSwitch[hh] == 2){ // only need cpy top wind for roesch2001
+                    if((int)MassUnloadingSwitch[hh] == 2){ // only need cpy top wind for roesch2001
                         u_ht = Ustar / PBSM_constants::KARMAN * log((Ht[hh] - d0_wind) / z0m_wind);
                     }
                 }
@@ -1248,7 +1242,7 @@ void ClassCanSnobalBase::_mass_unld(void)
             } // end wind case 1
         } // end of switch CanopyWind
 
-    switch (MassUnloadingSwitch[hh]) // options are 0 for Cebulski & Pomeroy 2025 ablation paper; 1 for Andreadis 2009; 2 for Roesch 2001. HP98/Ellis is enabled using the original canopyclearinggap module due to major differences in how it handles canopy snowmelt, icebulb temp using the pom98 analytical sublimation, etc.
+    switch ((int)MassUnloadingSwitch[hh]) // options are 0 for Cebulski & Pomeroy 2025 ablation paper; 1 for Andreadis 2009; 2 for Roesch 2001. HP98/Ellis is enabled using the original canopyclearinggap module due to major differences in how it handles canopy snowmelt, icebulb temp using the pom98 analytical sublimation, etc.
     {
         case 0: // This is the updated mass snow unloading parameterisations from Cebulski & Pomeroy 2025 ablation paper
         {
@@ -1463,7 +1457,7 @@ void ClassCanSnobalBase::_subl_evap(void) {
 void ClassCanSnobalBase::_runoff_veg(void) {
 
     // Determine runoff, and water left in the snow
-    if(MassUnloadingSwitch[hh] == 1){ // Andreadis2009
+    if((int)MassUnloadingSwitch[hh] == 1){ // Andreadis2009
         max_liq_veg[hh] = m_s_veg[hh] * max_liq_veg_frac[hh] + exp(-4.0) * LAI[hh] * 2.0; // times 2 for two sided lai as in Andreadis2009
     } else { // From CRHM Canopy
         max_liq_veg[hh] = m_s_veg[hh] * max_liq_veg_frac[hh] + Cc[hh]*LAI[hh]*0.2;

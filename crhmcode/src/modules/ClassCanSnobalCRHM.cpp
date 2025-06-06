@@ -224,7 +224,7 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
 
   for (hh = 0; chkStruct(); ++hh) {
 
-    switch (variation)
+    switch ((int)variation)
     {
     case VARIATION_ORG: // obs SW and obs LW
       input_rec2[hh].S_n = Qsi[hh];
@@ -275,13 +275,15 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
 
     // uncomment  below to hop to specific time in debug
 
-    string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
+    // string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 
     // if (test == "4/23/2022 12:0") {
     // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
     // // if (test == "10/1/2021 0:15") {
     //   std::cout << "Breakpoint here: Date matched" << std::endl;
     // }
+
+
     if(getstep() > 1){ // Not first step
 
       if (m_precip[hh] > 0.0)
@@ -296,7 +298,7 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
         precip_now_veg[hh] = false;
       }
 
-      do_data_tstep_veg(); // executes Snobal code
+      do_data_tstep_veg(); // executes Snobal code only if new snow intercepted/snow is in canopy, will not execute for hrus w.o. canopy.
 
       if (snow_h2o_veg[hh] < 1e-6 & snow_h2o_veg[hh] > 0.0){ // if very small amount of snow on canopy then sublimate it off, handles non-convergence of energy balance for small snow values
 
@@ -307,6 +309,7 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
       }
 
     }
+
     else if(m_precip[hh] > 0.0) {
          CRHMException TExcept("Snobal - cannot handle precipitation during first day of model run", TExcept::WARNING);
          LogError(TExcept);
@@ -335,6 +338,12 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     delL[hh] += m_s_veg[hh];
     cmlmelt_veg[hh] += delmelt_veg_int[hh];
     melt_direct_cum[hh] += delmelt_veg_int[hh];
+
+    // net rain and snow falling to the subcanopy/open snowpack
+    net_rain[hh] = throughfall_rain[hh] + deldrip_veg_int[hh];
+    net_snow[hh] = throughfall_snow[hh] + delunld_int[hh];
+
+    net_p[hh] = net_rain[hh] + net_snow[hh];
 
     // set assimilate observed snow load for begining of select events
     // if(obs_snow_load[hh] < 9999){
