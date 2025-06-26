@@ -39,7 +39,7 @@ ClassSlope_Qsi* ClassSlope_Qsi::klone(string name) const{
 
 void ClassSlope_Qsi::decl(void) {
 
-  Description = "'Estimates interval short-wave on a slope from measured horizontal Qsi and theoretical values on the slope.',  \
+  Description = "'Estimates interval short-wave on a slope from measured horizontal Qsi and theoretical values on the slope. Only needed if using observed Qsi otherwise this is handled withing the annandale module.',  \
                  ' Output as observations, QsiS (W/m^2) and QsiD_Obs (W/m^2),' \
                  ' Output as variables, QsiS_Var (W/m^2) and QsiD_Var (W/m^2).'";
 
