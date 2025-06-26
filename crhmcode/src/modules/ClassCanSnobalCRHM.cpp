@@ -69,7 +69,7 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("delunld_melt", TDim::NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*s)", &delunld_melt);
     decllocal("delunld_subl", TDim::NHRU, "canopy snow unloading due to sublimation", "(kg/m^2*s)", &delunld_subl);
     decllocal("delunld", TDim::NHRU, "canopy snow unloading rate", "(kg/m^2*s)", &delunld);
-    declvar("deldrip_veg", TDim::NHRU, "predicted specific runoff", "(kg/m^2)", &deldrip_veg);
+    declvar("deldrip_veg", TDim::NHRU, "drip from canopy snowmelt and intercepted rainfall", "(kg/m^2*s)", &deldrip_veg);
 
     declvar("delevap_veg_int", TDim::NHRU, "mass of evap into air from vegsnowcover", "(kg/m^2*int)", &delevap_veg_int);
     declvar("delsub_veg_int", TDim::NHRU, "mass of sublimation into air from vegsnowcover", "(kg/m^2*int)", &delsub_veg_int);
@@ -81,8 +81,7 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("delunld_wind_int", TDim::NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*int)", &delunld_wind_int);
     decllocal("delunld_melt_int", TDim::NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*int)", &delunld_melt_int);
     decllocal("delunld_subl_int", TDim::NHRU, "canopy snow unloading due to sublimation", "(kg/m^2*int)", &delunld_subl_int);
-    decllocal("deldrip_veg_int", TDim::NHRU, "canopy snowmelt drainage", "(kg/m^2*int)", &deldrip_veg_int);
-
+    decllocal("deldrip_veg_int", TDim::NHRU, "drip from canopy snowmelt and intercepted rainfall", "(kg/m^2*int)", &deldrip_veg_int);
 
     declvar("delL", TDim::NHRU, "interval change in SWE", "(kg/m^2*int)", &delL);
     declvar("delmelt_veg_day", TDim::NHRU, "daily snow melt", "(mm/d)", &delmelt_veg_day);
@@ -190,7 +189,7 @@ void ClassCanSnobalCRHM::decl(void) {
 
     variation_set = VARIATION_2;
 
-    declgetvar("*", "QsiS_Var", "(W/m^2)", &Qsw_in_veg); // downwelling SW to slope simulated from annandale module, same as regular snobal but without the canopy tau applied
+    declgetvar("*", "QsiS_Var", "(W/m^2)", &Qsw_in_veg); // downwelling SW to slope simulated from annandale module or Slope_Qsi module depending on if obs Qsi are used, same as regular snobal but without the canopy tau applied
 
     variation_set = VARIATION_1 + VARIATION_2;
 
@@ -237,7 +236,7 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
       input_rec2[hh].I_lw = I_LW_atm[hh];
 
       break;
-    case VARIATION_2: // mod SW and mod LW
+    case VARIATION_2: // obs or mod SW (depends on annandale vs slope_qsi module selection) and mod LW
       input_rec2[hh].S_n = Qsw_in_veg[hh];                                                                                   // after CLASSIC just take the incoming solar to slope which is multiplied by 1 - canopy albedo later on. Differs slightly from class which uses incoming SW to horizontal surface where this is the SW to slope
       I_LW_atm[hh] = (CAN_EMISSIVITY + (1.0 - CAN_EMISSIVITY) * (1.0 - SNOW_EMISSIVITY) * CAN_EMISSIVITY) * Qlw_out_atm[hh]; //  ! downward atmospheric longwave radiation absorbed by the canopy (W m-2) from SUMM
       input_rec2[hh].I_lw = I_LW_atm[hh];
@@ -277,7 +276,7 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
 
     // string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
 
-    // if (test == "4/23/2022 12:0") {
+    // if (test == "10/24/2022 14:0") {
     // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
     // // if (test == "10/1/2021 0:15") {
     //   std::cout << "Breakpoint here: Date matched" << std::endl;
