@@ -878,12 +878,14 @@ int ClassCanSnobalBase::calc_turb_transfer(
         {                           // Canopy wind profile developed at Fortress sparse canopy
             double d0_wind = 0.5791121;  // displacement height observed at sparse forest around Fortress Forest Tower
             double z0m_wind = 0.4995565; // roughness length observed at above site
+            double z_veg_u = Ht[hh]*(2.0/3.0);
+
 
             // wind speed for wind induced unloading at 1/2 canopy height
-            if ((Ht[hh] / 2 - d0_wind) > z0m_wind)
+            if ((z_veg_u - d0_wind) > z0m_wind)
             {
                 double Ustar = u * PBSM_constants::KARMAN / (log((z_u[hh] - d0_wind) / z0m_wind));
-                u_veg_mid = Ustar / PBSM_constants::KARMAN * log((Ht[hh] / 2 - d0_wind) / z0m_wind);
+                u_veg_mid = Ustar / PBSM_constants::KARMAN * log((z_veg_u - d0_wind) / z0m_wind);
             }
             else
             {
@@ -1214,12 +1216,13 @@ void ClassCanSnobalBase::_mass_unld(void)
             {                           // Canopy wind profile developed at Fortress sparse canopy
                 double d0_wind = 0.5791121;  // displacement height observed at sparse forest around Fortress Forest Tower
                 double z0m_wind = 0.4995565; // roughness length observed at above site
+                double z_veg_u = Ht[hh]*(2.0/3.0);
 
                 // wind speed for wind induced unloading at 1/2 canopy height
-                if ((Ht[hh] / 2 - d0_wind) > z0m_wind)
+                if ((z_veg_u - d0_wind) > z0m_wind)
                 {
                     double Ustar = u[hh] * PBSM_constants::KARMAN / (log((z_u[hh] - d0_wind) / z0m_wind));
-                    u_mid = Ustar / PBSM_constants::KARMAN * log((Ht[hh] / 2 - d0_wind) / z0m_wind);
+                    u_mid = Ustar / PBSM_constants::KARMAN * log((z_veg_u - d0_wind) / z0m_wind);
 
                     if((int)MassUnloadingSwitch[hh] == 2){ // only need cpy top wind for roesch2001
                         u_ht = Ustar / PBSM_constants::KARMAN * log((Ht[hh] - d0_wind) / z0m_wind);
@@ -1265,7 +1268,7 @@ void ClassCanSnobalBase::_mass_unld(void)
         // const double b_u = 3.925391e-01; // TODO move to par file
 
         // wind induced unloading as function of shear stress
-        const double a_tau = 0.331/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper)
+        const double a_tau = 0.331/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
 
         double fu = 0.0;
 
