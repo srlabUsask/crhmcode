@@ -39,7 +39,7 @@ ClassCanSnobalCRHM* ClassCanSnobalCRHM::klone(string name) const{
 
 void ClassCanSnobalCRHM::decl(void) {
 
-    Description = "'A model using the energy balance to calculate the canopy snow mass and energy balance following the surface snowpack routine (Marks, et. al (1997)). Standard CRHM module.' \
+    Description = "Handles the mass and energy balance of snow intercepted in the canopy. Should be paired with the CanopyVectorBased module which does the initial loading of precip in the canopy and some radiation calculations. There is a timestep subset routine in this module following the surface snowpack routine. Standard CRHM module.' \
                  'use Qsi (W/m^2) and Qli (W/m^2) observations,' \
                  'use variables Qsisn_Var (W/m^2) and Qlisn_Var (W/m^2) from module CanopyClearing.' \
                  'use observation Qsi (W/m^2) and QliVt_Var (W/m^2) from module longVt.' \
@@ -52,8 +52,6 @@ void ClassCanSnobalCRHM::decl(void) {
     declvar("Qn_veg", TDim::NHRU, "net allwave radiation wrt the canopy", "(W/m^2)", &Qn_veg);
     declvar("Qh_veg", TDim::NHRU, "sensible heat xfr wrt the canopy", "(W/m^2)", &Qh_veg);
     declvar("Ql_veg", TDim::NHRU, "latent heat xfr wrt the canopy", "(W/m^2)", &Ql_veg);
-    declvar("Qh_ice_sphere", TDim::NHRU, "sensible heat flux + to ice sphere surface", "(J/s)", &Qh_ice_sphere);
-    declvar("Qe_ice_sphere", TDim::NHRU, "latent heat flux + to ice sphere surface", "(J/s)", &Qe_ice_sphere);
     declvar("Qp", TDim::NHRU, "advected heat from precip wrt the canopy", "(W/m^2)", &Qp);
     declvar("delta_Q_veg", TDim::NHRU, "change in snowcover's energy wrt the canopy", "(W/m^2)", &delta_Q_veg);
 
@@ -88,10 +86,6 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("cmlmelt_veg_day", TDim::NHRU, "daily snow melt accumulator", "(mm/d)", &cmlmelt_veg_day);
     declvar("cmlmelt_veg", TDim::NHRU, "cumulative melt", "(mm)", &cmlmelt_veg);
 
-    declstatvar("z_veg_s", TDim::NHRU, "total snowcover thickness", "(m)", &z_veg_s);
-
-    declstatvar("rho_veg", TDim::NHRU, "average snowcover density", "(kg/m^3)", &rho_veg);
-
     declstatvar("m_s_veg", TDim::NHRU, "snowcover's specific mass, liquid and snow", "(kg/m^2)", &m_s_veg);
 
     declstatvar("max_liq_veg", TDim::NHRU, "maximum veg snowcover's liquid mass", "(kg/m^2)", &max_liq_veg);
@@ -120,16 +114,10 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("I_LW_cpy", TDim::NHRU, "Incoming longwave radiation emitted from the canopy", "(W/m^2)", &I_LW_cpy);
     decllocal("O_LW_cpysnow", TDim::NHRU, "Outgoing longwave radiation emitted from the canopy snow", "(W/m^2)", &O_LW_cpysnow);
     decllocal("CanSnowFrac", TDim::NHRU, "Fraction of canopy covered by snow after Pomeroy 1998", "()", &CanSnowFrac);
-    decllocal("niter_ice_sphere", TDim::NHRU, "N iterations for the ice sphere energy balance", "()", &niter_ice_sphere);
-    decllocal("Tstep_ice_sphere", TDim::NHRU, "Temp increment the ice sphere energy balance", "(" + string(DEGREE_CELSIUS) + ")", &Tstep_ice_sphere);
-
-    decllocal("albedo_now", TDim::NHRU, "Albedo of the canopy considering how much snow is on it", "()", &albedo_now);
-
 
     decllocal("m_precip_L", TDim::NHRU, "specific mass of total precip", "(kg/m^2)", &m_precip);
     declvar("rain_on_snow_veg", TDim::NHRU, "specific mass of rain in precip", "(kg/m^2)", &m_rain);
     decllocal("m_snow_L", TDim::NHRU, "specific mass in snow in precip", "(kg/m^2)", &m_snow);
-    decllocal("rho_snow_L", TDim::NHRU, "density of snowfall", "(kg/m^2)", &rho_snow);
     decllocal("T_pp_L", TDim::NHRU, "precip temp", "(" + string(DEGREE_CELSIUS) + ")", &T_pp);
 
     decllocal("P_a", TDim::NHRU, "air pressure", "(Pa)", &P_a);
@@ -138,7 +126,6 @@ void ClassCanSnobalCRHM::decl(void) {
     decllocal("m_rain_cum", TDim::NHRU, "cumulative specific mass of total rain", "(kg/m^2)", &m_rain_cum);
     decllocal("m_snow_cum", TDim::NHRU, "cumulative specific mass of total snow", "(kg/m^2)", &m_snow_cum);
     decllocal("E_s_cum", TDim::NHRU, "cumulative mass flux by evap into air from active layer", "(kg/m^2)", &E_s_cum);
-    decllocal("melt_direct_cum", TDim::NHRU, "cumulative melt when SWE < threshold melt", "(kg/m^2)", &melt_direct_cum);
 
     decllocal("stop_no_snow", TDim::NHRU, "snow flag", "()", &stop_no_snow);
     declparam("max_liq_veg_frac", TDim::NHRU, "[0.01]", "0.0001", "0.2", "max liquid h2o content as fraction of specific snow mass", "()", &max_liq_veg_frac);
@@ -172,12 +159,12 @@ void ClassCanSnobalCRHM::decl(void) {
     declgetvar("*", "T_s_0", "(" + string(DEGREE_CELSIUS) + ")", &T_s_0); 
     // declreadobs("obs_snow_load", TDim::NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
 
-    decldiag("Pevap", TDim::NHRU, "used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)", "(mm)", &Pevap);
+    declgetvar("*", "z_s", "(m)", &z_s); // height of surface snowpack used for relative height calculation
     declgetvar("*", "intercepted_snow", "(kg/m^2)", &new_snow); // new snow intercepted in canopy before ablation processes have kicked in, from vector based module
     declgetvar("*", "intercepted_rain", "(kg/m^2)", &new_rain); // new snow intercepted in canopy before ablation processes have kicked in, from vector based module
     declgetvar("*", "throughfall_rain", "(kg/m^2)", &throughfall_rain); // throughfall of rain to be added with canopy drip
     declgetvar("*", "throughfall_snow", "(kg/m^2)", &throughfall_snow); // throughfall of snow to be added with canopy snow unloading
-    declgetvar("*", "hru_evap", "(kg/m^2)", &hru_evap); 
+    declgetvar("*", "hru_evap", "(kg/m^2)", &hru_evap);
 
     variation_set = VARIATION_0 + VARIATION_1;
 
@@ -336,7 +323,6 @@ void ClassCanSnobalCRHM::run(void) { // executed every interval
     E_s_cum[hh] += delsub_veg_int[hh];
     delL[hh] += m_s_veg[hh];
     cmlmelt_veg[hh] += delmelt_veg_int[hh];
-    melt_direct_cum[hh] += delmelt_veg_int[hh];
 
     // net rain and snow falling to the subcanopy/open snowpack
     net_rain[hh] = throughfall_rain[hh] + deldrip_veg_int[hh];

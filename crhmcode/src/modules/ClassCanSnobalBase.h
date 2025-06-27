@@ -38,15 +38,12 @@ public:
 
     double* snow_h2o_veg{ NULL };            // snow h2o content as specific mass(kg/m^2)
     double* liq_h2o_veg{ NULL };            // liquid h2o content as specific mass(kg/m^2)
-    double* z_veg_s{ NULL };            // total snowcover thickness (m)
-    double* rho_veg{ NULL };            // average snowcover density (kg/m^3)
     double* m_s_veg{ NULL };            // snowcover's specific mass, liquid and snow (kg/m^2). Init by init_snow_veg.
     double* T_s_veg{ NULL };            // average snowcover temp (K). Init by init_snow_veg
     double* cc_s_veg{ NULL };           // snowcover's cold content (J/m^2). Init by init_snow_veg.
     double* h2o_sat_veg{ NULL };        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
     double* h2o_vol_veg{ NULL };        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow_veg
     double* max_liq_veg{ NULL };        // max liquid h2o content as specific mass(kg/m^2)
-
 
 //   energy balance info for current timestep
 
@@ -85,6 +82,7 @@ public:
 
     const double *throughfall_rain { NULL }; // throughfall of rain, not in contact with the canopy to be added with canopy drip (kg/m^2*int)
     const double *throughfall_snow { NULL }; // throughfall of snow, not in contact with the canopy to be added with canopy snow unloading (kg/m^2*int)
+    const double *z_s { NULL }; // total surface snowcover thickness from snobal module for relative heights calculation (m)
 
 //   mass balance vars for variable timestep
 
@@ -94,14 +92,12 @@ public:
     double* delevap_veg{ NULL };	 // mass flux by subl/evap (+ to surf) (kg/m^2/int)
     double* deldrip_veg{ NULL };  // predicted specific runoff (m/sec)
     double* E_l{ NULL };	  // mass flux by evap/cond to soil (kg/m^2/s)
-    double *Pevap { NULL }; // used when ground is snow covered to calculate canopy evaporation (Priestley-Taylor)
 
 //   precipitation info adjusted for current run timestep
 
     double* m_precip{ NULL };	// specific mass of total precip (kg/m^2)
     double* m_rain{ NULL };	// specific mass of rain in precip (kg/m^2)
     double* m_snow{ NULL };	// specific mass in snow in precip (kg/m^2)
-    double* rho_snow{ NULL };   // density of snowfall (kg/m^3)
     double* T_pp{ NULL };       // precip temp (K)
 
 //   precipitation info for the current DATA timestep
@@ -133,21 +129,13 @@ public:
     double* m_snow_cum{ NULL };     //
     double* E_s_cum{ NULL };        //
     double* cmlmelt_veg{ NULL };    //
-    double* melt_direct_cum{ NULL };       //
     double* Fault{ NULL };       //
     double* I_LW_atm{ NULL };       // Downwelling longwave from the atmoshpere (W/m^2)
     double* I_LW_gnd{ NULL };       // Upwelling longwave from the ground (W/m^2)
     double* I_LW_cpy_2_cpy{ NULL };       // Longwave from the canopy reflected off the surface back to the canopy (W/m^2)
     double* O_LW_cpysnow{ NULL };       // Outgoing longwave radiation emitted from the canopy snow (W/m^2)
     double* I_LW_cpy{ NULL };       // Incoming longwave radiation emitted from the canopy (W/m^2)
-    double* Qh_ice_sphere{ NULL };       // sensible heat flux + to ice sphere surface (j/s)
-    double* Qe_ice_sphere{ NULL };       // latent heat flux + to ice sphere surface (j/s)
     double* CanSnowFrac{ NULL };       // Fraction of canopy covered by snow after Pomeroy 1998
-    long* niter_ice_sphere{ NULL };     
-    double* Tstep_ice_sphere{ NULL };       // increment to adjust canopy ice sphere temperature by
- 
-
-    double* albedo_now{ NULL };       // Albedo of the canopy considering how much snow is on it
 
 // debug variables
 /*    double *Length;
@@ -169,7 +157,6 @@ public:
     const double* hru_elev{ NULL };    // HRU elevation
     const double* basin_area{ NULL };  // [BASIN]
     const double* hru_area{ NULL };
-    const double* KT_sand{ NULL }; // thermal conductivity of wet sand
     const double  *Albedo_surface{ NULL };     // albedo of surface ()
     const double  *Albedo_veg{ NULL };     // albedo of vegetation ()
     const long* inhibit_evap{ NULL }; // inhibit evaporation, 1 -> inhibit

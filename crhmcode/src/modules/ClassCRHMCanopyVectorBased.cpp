@@ -40,7 +40,7 @@ ClassCRHMCanopyVectorBased *ClassCRHMCanopyVectorBased::klone(string name) const
 void ClassCRHMCanopyVectorBased::decl(void)
 {
 
-  Description = "'Prototype all season canopy/clearing module. Calculates short, long and all-wave radiation components at the snow surface even for open areas. Calculates initial snow interception after Cebulski & Pomeroy (2025, HP) canopy snow ablation is handled by the cansnobal module.' \
+  Description = "'Prototype all season canopy/clearing module. Calculates short, long and all-wave radiation components at the snow surface even for open areas. Calculates initial snow interception after Cebulski & Pomeroy (2025, Hyrological Proc.) canopy snow ablation is handled by the cansnobal module.' \
                  'Inputs are observations Qsi (W/m^2) and Qli (W/m^2), ' \
                  'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2), ' \
                  'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and observation Qli (W/m^2), ' \

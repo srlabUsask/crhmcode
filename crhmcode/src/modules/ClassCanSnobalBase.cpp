@@ -55,9 +55,7 @@ void ClassCanSnobalBase::init(void) {
     for (hh = 0; chkStruct(); ++hh) {
         P_a[hh] = 101.3f * pow((293.0f - 0.0065f * hru_elev[hh]) / 293.0f, 5.26f) * 1000.0f;  // Pa
 
-        rho_veg[hh] = 218.0; // change 10/18/16
         h2o_sat_veg[hh] = 0.0;
-
 
         snow_h2o_veg[hh] = 0.0;
         liq_h2o_veg[hh] = 0.0;
@@ -79,7 +77,6 @@ void ClassCanSnobalBase::init(void) {
         }
 
 
-        melt_direct_cum[hh] = 0.0;
         E_s_cum[hh] = 0.0;
 
         m_precip_cum[hh] = 0.0;
@@ -93,8 +90,6 @@ void ClassCanSnobalBase::init(void) {
         Qp[hh] = 0.0;
         Qn_veg[hh] = 0.0;
         delta_Q_veg[hh] = 0.0;
-        Qe_ice_sphere[hh] = 0.0;
-        Qh_ice_sphere[hh] = 0.0;
 
         if (hh < nhru)
         {
@@ -132,7 +127,6 @@ void ClassCanSnobalBase::finish(bool good) { // only required for local storage 
         LogDebug(" ");
         LogMessageA(hh, string("'" + Name + " (CanSnobal)' E_s_cum         (mm) (mm*hru) (mm*hru/basin): ").c_str(), E_s_cum[hh], hru_area[hh], basin_area[0]);
         LogMessageA(hh, string("'" + Name + " (CanSnobal)' cmlmelt_veg     (mm) (mm*hru) (mm*hru/basin): ").c_str(), cmlmelt_veg[hh], hru_area[hh], basin_area[0]);
-        LogMessageA(hh, string("'" + Name + " (CanSnobal)' melt_direct_cum (mm) (mm*hru) (mm*hru/basin): ").c_str(), melt_direct_cum[hh], hru_area[hh], basin_area[0]);
         LogDebug(" ");
     }
 
@@ -213,7 +207,6 @@ double ClassCanSnobalBase::_cold_content_veg(
 **
 **		m_pp
 **		percent_snow
-**		rho_snow
 **		T_pp
 **
 **	This routine divides the data timestep into the appropriate number
@@ -742,10 +735,10 @@ int ClassCanSnobalBase::init_turb_transfer(void) {
         rel_z_u = z_u[hh];
     }
     else {
-        rel_z_T = z_T[hh] - z_veg_s[hh];
+        rel_z_T = z_T[hh] - z_s[hh];
         if (rel_z_T < 1.0)
             rel_z_T = 1.0;
-        rel_z_u = z_u[hh] - z_veg_s[hh];
+        rel_z_u = z_u[hh] - z_s[hh];
         if (rel_z_u < 1.0)
             rel_z_u = 1.0;
     }
@@ -1029,7 +1022,6 @@ void ClassCanSnobalBase::_mass_bal(void) {
 **	m_precip
 **	max_h2o_vol_veg
 **	precip_now_veg
-**	rho_snow
 **	vegsnowcover
 **	T_sf
 **	z_snow_veg
@@ -1038,10 +1030,8 @@ void ClassCanSnobalBase::_mass_bal(void) {
 **	liq_h2o_veg
 **	h2o_sat_veg
 **	liq_h2o_veg
-**	rho_veg
 **	T_s_veg
 **	T_s_veg
-**	z_veg_s[hh]
 */
 
 void ClassCanSnobalBase::_precip_veg(void)
@@ -1446,14 +1436,12 @@ void ClassCanSnobalBase::_subl_evap(void) {
 **	liq_h2o_veg
 **	vegsnowcover
 **	max_h2o_vol_veg
-**	z_veg_s
 **
 ** GLOBAL VARIABLES MODIFIED
 **	liq_h2o_veg
 **	max_liq_veg_frac
 **	h2o_sat_veg
 **	h2o_vol_veg
-**	rho_veg
 **	deldrip_veg
 */
 
@@ -1505,160 +1493,3 @@ double ClassCanSnobalBase::new_tsno_veg(
     return (tsno);
 }
 /* ----------------------------------------------------------------------- */
-
-/*
-** NAME
-**      int init_subl_ice_sphere -- calculates potential sublimation of an ice sphere (s^-1)
-**
-**
-** GLOBAL VARIABLES READ
-**
-** GLOBAL VARIABLES MODIFIED
-** 
-*/
-
-int ClassCanSnobalBase::init_subl_ice_sphere(void) {
-
-    double e_s, e_a_fix;
-    double sat_vp;
-    double rel_z_T; // relative z_T (temperature measurement height) above snow surface
-    double rel_z_u; // relative z_u (windspeed measurement height) above snow surface
-
-// calculate saturation vapor pressure
-
-    e_s = sati(T_s_veg[hh]);
-
-    //*** error check for bad vapor pressures ***
-
-    sat_vp = sati(T_a[hh]);
-    if (e_a[hh] > sat_vp)
-        e_a_fix = sat_vp;
-    //		const_cast<double*> (e_a)[hh] = sat_vp;
-    else
-        e_a_fix = e_a[hh];
-
-    // determine relative measurement heights
-    if (!relative_hts[hh]) {
-        rel_z_T = z_T[hh];
-        rel_z_u = z_u[hh];
-    }
-    else {
-        rel_z_T = z_T[hh] - z_veg_s[hh];
-        if (rel_z_T < 1.0)
-            rel_z_T = 1.0;
-        rel_z_u = z_u[hh] - z_veg_s[hh];
-        if (rel_z_u < 1.0)
-            rel_z_u = 1.0;
-    }
-
-    // calculate Qh_veg & Ql_veg
-
-    if (subl_ice_sphere(e_a_fix, e_s, T_a[hh], T_s_veg[hh], u[hh], P_a[hh]))
-        return 1; // !!!!!TB
-
-    return 0;
-}
-
-/* ----------------------------------------------------------------------- */
-
-/*
-** NAME subl_ice_sphere -- Sublimation rate from an ice sphere in the canopy (negative for sublimation of particle)
-**
-** DESCRIPTION -- Based on Eq. 45 from Pom 1995, requires iteration on canopy snow surface temp. Differs from Pom 1998 which is an analytical solution.
-**
-** RETURN -- 1 if ice bulb ebal convergence is met, 0 otherwise. Values are used for while loop on upper level.
-**
-** 
-** 
-*/
-int ClassCanSnobalBase::subl_ice_sphere(
-    double	ea,	// vapor pressure (Pa) at height zq
-    double  es, // vapour pressure (Pa) at the canopy snow surface
-    double	ta,	// air temperature (K) at height za
-    double	ts,	// surface temperature (K)
-    double  u, // wind speed (m/s) at height zu
-    double	press)	// aiFr pressure (Pa)
-
-{
-    const double Radius = 0.0005;   /* Ice sphere radius, metres */
-    const double KinVisc = 1.88E-5; /* Kinematic viscosity of air (Sask. avg. value) */
-    double dice = 900.0;            // density of ice from canopy module
-    double D;                       // diffusivity of water vapour in still air (m^s/s)
-    double Nr;                      // Reynolds number
-    double NuSh;                    // Nusselt number (-)
-    double Lamb;                    // thermal conductivity of atmosphere
-    double qa;                      // specific humidity at height zq
-    double qs;                      // specific humidity at surface
-    double dens;                    // air density (Pa)
-    double u_veg_ht;                // wind speed at canopy top
-    double QnetStar;                // net radiation to the ice sphere
-    double resid;                   // energy balance residual relative to an ice sphere (j/s)
-    double convergence_check = 0; //
-
-    D = 2.06E-5 * pow(ta / 273.15, -1.75);
-    adst_wind_cpy_top(Ht[hh], u, z_u[hh], u_veg_ht);
-    Nr = 2 * Radius * u_veg_ht / KinVisc;
-    NuSh = 1.79 + 0.606 * sqrt(Nr);
-    Lamb = 0.00063*(ta)+0.0673;
-
-
-    // air density at press, virtual temp of geometric mean of air and surface
-    dens = GAS_DEN(press, MOL_AIR, VIR_TEMP(sqrt(ta * ts), sqrt(ea * es), press));
-
-    // convert vapor pressures to specific humidities and then to absolute
-    qa = SPEC_HUM(ea, press) * dens;
-    qs = SPEC_HUM(es, press) * dens;
-
-    // pressures must be positive
-    if (ea <= 0 || es <= 0 || press <= 0 || ea >= press || es >= press)
-    {
-
-        string D = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
-        string SS = D + "hh " + to_string(hh);
-
-        CRHMException TExcept2(SS.c_str(), TExcept::WARNING);
-        LogError(TExcept2);
-
-        // Manishankar made this change to keep the program running.
-        // CRHMException TExcept("calc_turb_transfer: pressures must be positive", TERMINATE);
-        CRHMException TExcept("calc_turb_transfer: pressures must be positive", TExcept::WARNING);
-        LogError(TExcept);
-        return (0);
-    }
-
-    Qe_ice_sphere[hh] = (2.0 * M_PI * Radius * D * NuSh * (qa - qs)) * LH_SUB(ts);                     // Latent Heat Energy flux (j/s) relative to the ice sphere (negative for sublimation of particle).
-    Qh_ice_sphere[hh] = 2.0 * M_PI * Radius * Lamb * NuSh * (ta - ts);                                 // Sensible heat transfer (j/s), +to surface
-
-    QnetStar = M_PI * Radius * Radius * Qn_veg[hh];
-
-    resid = QnetStar + Qe_ice_sphere[hh] + Qh_ice_sphere[hh];
-
-    if (fabs(resid) < 1e-3 || fabs(Tstep_ice_sphere[hh]) < 1e-2)
-    {                         
-        convergence_check = 1; // ebal is satisfied while loop will exit on higher level
-    }
-    else
-    { // ebal is NOT satisfied while loop will continue on higher level
-        if (niter_ice_sphere[hh] == 1)
-        {
-            if (resid > 0.0)
-            { // we overshot the canopy snow surface temperature so try reducing it 1 k step at a time
-                T_s_veg[hh] += Tstep_ice_sphere[hh];
-            }
-            else
-            {
-                T_s_veg[hh] -= Tstep_ice_sphere[hh];
-            }
-        }
-        else
-        {
-            if ((resid > 0.0 && Tstep_ice_sphere[hh] < 0.0) || (resid < 0.0 && Tstep_ice_sphere[hh] > 0.0))
-            {
-                Tstep_ice_sphere[hh] = -Tstep_ice_sphere[hh] / 2.0;
-            }
-            T_s_veg[hh] += Tstep_ice_sphere[hh];
-        }
-    }
-
-    return (convergence_check);
-}
