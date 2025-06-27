@@ -166,25 +166,25 @@ void ClassCanSnobalBase::init_snow_veg(void)
 
 /*
 ** NAME
-**      _cold_content_veg -- calculates cold content for a layer
+**      _cold_content_veg -- calculates cold content for canopy snow
 **
 **      double
 **	_cold_content_veg(
-**	    double  temp,		|* temperature of layer *|
-**	    double  mass)		|* specific mass of layer *|
+**	    double  temp,		|* temperature of canopy snow *|
+**	    double  mass)		|* specific mass of canopy snow *|
 **
 ** DESCRIPTION
-**      This routine calculates the cold content for a layer (i.e., the
+**      This routine calculates the cold content for canopy snow (i.e., the
 **	energy required to bring its temperature to freezing) from the
-**	layer's temperature and specific mass.
+**  temperature and specific mass.
 **
 ** RETURN VALUE
-**	The layer's cold content.
+**	The canopy snow's cold content.
 */
 
 double ClassCanSnobalBase::_cold_content_veg(
-    double	temp,		// temperature of layer
-    double	mass)		// specific mass of layer
+    double	temp,		// temperature of canopy snow
+    double	mass)		// specific mass of canopy snow
 {
     if (temp < FREEZE)
         return heat_stor(CP_ICE(temp), mass, (temp - FREEZE));
@@ -544,10 +544,10 @@ int ClassCanSnobalBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
 
 /*
 ** NAME
-**      int _e_bal_veg(void) -- calculates point energy budget for the vegsnowcover
+**      int _e_bal_veg(void) -- calculates point energy budget for the vegsnowcover. uses a similar iteration scheme as in CLASS canopy snow.
 **
 ** DESCRIPTION
-**      Calculates point energy budget for 2-layer vegsnowcover and adjusts the canopy snowpack temperature.
+**      Calculates point energy budget for the vegsnowcover and adjusts the canopy snowpack temperature.
 **
 ** RETURN VALUE
 **
@@ -634,8 +634,6 @@ int ClassCanSnobalBase::_e_bal_veg(void)
 
                 CRHMException TExcept("Warning: Max iterations reached in canopy snow energy balance", TExcept::WARNING);
                 LogError(TExcept);
-
-                Qe_ice_sphere[hh] = 0.0;
             }
         } while (niter < max_iter); // breaks inside based on resid or temp step
 
@@ -697,7 +695,7 @@ void ClassCanSnobalBase::_net_rad_veg(void)
 
 /*
 ** NAME
-**      int init_turb_transfer(void) -- calculates turbulent transfer at a point within the canopy
+**      int init_turb_transfer(void) -- calculates turbulent transfer at a point within the canopy after Essery et al., 2003.
 **
 ** DESCRIPTION
 **      Calculates point turbulent transfer (Qh_veg and Ql_veg) for a 1-layer
@@ -956,10 +954,10 @@ void ClassCanSnobalBase::_advec_veg(void) {
 
 /*
 ** NAME
-**      void _mass_bal(void) -- calculates point mass budget of 2-layer vegsnowcover
+**      void _mass_bal(void) -- calculates point mass budget of snow intercepted in the canopy
 **
 ** DESCRIPTION
-**      Calculates the point mass budget for 2-layer energy budget snowmelt
+**      Calculates the point mass budget for snow intercepted in the canopy (i.e., adds new precip, sublimation/evap mass removal, melt/drip, unloading)
 **	model.  It then solves for new snow temperatures.
 **
 ** GLOBAL VARIABLES READ
