@@ -82,11 +82,11 @@ void ClassSetSoil::decl(void) {
     declparam("Vol_h2o_content", TDim::NHRU, "[0.5]", "0.01", "0.7", "initial volumetric water content", "()", &Vol_h2o_content);
 
     declparam("soil_type_rechr", TDim::NHRU, "[4]", "0", "12",
-        "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
+        "water/sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soiltype_rechr);
 
     declparam("soil_type", TDim::NHRU, "[4]", "0", "12",
-        "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
+        "water/sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soil_type);
 
     declparam("soil_rechr_max", TDim::NHRU, "[60.0]", "0.0", "350.0",

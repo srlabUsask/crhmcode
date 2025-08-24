@@ -72,7 +72,7 @@ void ClassevapD::decl(void) {
 
   decldiagparam("F_Qg", TDim::NHRU, "[0.1]", "0.0", "1.0", "fraction to ground flux, Qg = F_Qg*Rn", "()", &F_Qg);
 
-  declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
+  declgetvar("*", "RnD", "(mm/d)", &RnD);
 
   declgetvar("*",  "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmean);
   declgetvar("*",  "hru_umean", "(m/s)", &hru_umean);
@@ -165,11 +165,11 @@ void ClassevapD::finish(bool good) {
 
 double ClassevapD::gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELSIUS)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg DEGREE_CELSIUS))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
 
-double ClassevapD::lambda(double t) // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
+double ClassevapD::lambda(double t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }

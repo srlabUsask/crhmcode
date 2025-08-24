@@ -604,14 +604,14 @@ double ClassCRHMCanopyClearing::delta(double t) // Slope of sat vap p vs t, kPa/
     return(3549.0*exp( 21.88 * t/(t+265.5)) / sqr(t+265.5));
 }
 
-double ClassCRHMCanopyClearing::lambda(double t) // Latent heat of vaporization (mJ/(kg DEGREE_CELCIUS))
+double ClassCRHMCanopyClearing::lambda(double t) // Latent heat of vaporization (MJ/kg)
 {
    return( 2.501 - 0.002361 * t );
 }
 
 double ClassCRHMCanopyClearing::gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELCIUS)
 {
-   return( 0.00163 * Pa / lambda(t)); // lambda (mJ/(kg DEGREE_CELCIUS))
+   return( 0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
 double ClassCRHMCanopyClearing::RHOa(double t, double ea, double Pa) // atmospheric density (kg/m^3)
