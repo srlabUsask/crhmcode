@@ -68,8 +68,9 @@ void ClassSed_Transport__vr07::decl(void) {
   declparam("sidewall_angle", TDim::NHRU, "[10]", "0","90", "anglular slope of the channel sidewalls for triangular channels", "()", &sidewall_angle);   // CRHM specifies slope in degrees
   // check loch et al. 89 for values of mannings n for use in van Rijn
   declparam("vr_mannings_n", TDim::NHRU, "[0.104]", "0","2", "vanrijn mannings n", "()", &vr_mannings_n);
-  // For choosing roughness, can refer to fig. 4 of [ van Rijn 2007, bedload ], or formulation
+
   // TODO: This is not used
+  // For choosing roughness height, can refer to fig. 4 of [ van Rijn 2007, bedload ], or formulation
   declparam("vr_roughness_height", TDim::NHRU, "[0.1]", "0","2", "vanrijn roughness height", "(m)", &vr_roughness_height);
 
 // Critical velocity is usually between 0.25 and 0.5
@@ -78,8 +79,8 @@ void ClassSed_Transport__vr07::decl(void) {
 
   declparam("Nf", TDim::NHRU, "[0.3]", "0.0", "1.0", "Particle fall number", "(m/s)", &Nf);
 
-
-  variation_set = VARIATION_1;   // Use this variation with REWs
+  // TODO: PRL: Correct this to be VARIATION_0 here and VARIATION_1 below
+  variation_set = VARIATION_0 + VARIATION_1;   // Use this variation with REWs
 
 // Correcting for channel frozen / unfrozen status
   scfCnt = declgrpvar("SCF_ALL", "scf", "query variable = 'scf'", "()", &scf_rew, &scf_All);
@@ -120,7 +121,7 @@ void ClassSed_Transport__vr07::run(void) {
   for (hh = 0; chkStruct(); ++hh) {  // hh is object scope
     double vr_massflux = calc_vr_load_transport(outflow[hh]);   // g/int
     outflow_mWQ_lay[Sub][hh] = Nf[hh]*vr_massflux + (1.0-Nf[hh])*outflow_mWQ_lay[Sub][hh];
-    sedvr_outflow_mWQ_lay[Sub][hh] = vr_massflux;
+    sedvr_outflow_mWQ_lay[Sub][hh] = vr_massflux;   // For debugging
   }
 }
 
@@ -270,6 +271,7 @@ double ClassSed_Transport__vr07::calc_flowwidth_from_flowdepth__Vchannel(double 
  * Van Rijn Bedload transport capacity
 */
 
+
 // This is stream load per unit of stream width (kg/s/m)
 double ClassSed_Transport__vr07::calc_bedload_transport_cap_eq10(
   double streamvel,   // m/s
@@ -332,6 +334,32 @@ double ClassSed_Transport__vr07::calc_bedload_transport_cap_eq10(
 }
 
 
+double ClassSed_Transport__vr07::calc_mobility_parameter( 
+  double streamvel,   // m/s
+  double streamdepth)   // m
+// returns: mobbility parameter > 0, or 0 if no mobilization
+{
+  double u_crit_t;
+
+  if (u_crit[hh] == 0.0) {
+    u_crit_t = calc_critical_velocity(diam50[hh], diam90[hh], streamdepth); 
+  } else {
+    u_crit_t = u_crit[hh];
+  }
+
+  if (u_crit_t <= 0.0) {
+    return 0;
+  }
+
+  if (streamvel < u_crit[hh])
+    return 0.0;
+
+  double M_e = (streamvel - u_crit[hh]) / sqrt((s - 1) * g * diam50[hh]);  
+
+  return M_e;
+}
+
+
 // This is stream load per unit of stream width (kg/s/m)
 double ClassSed_Transport__vr07::calc_bedload_transport_cap_eq12(
   double streamvel,   // m/s
@@ -341,25 +369,30 @@ double ClassSed_Transport__vr07::calc_bedload_transport_cap_eq12(
 
   // f_silt: silt factor ( fsilt=1 for d50 / dsand )
 
-  double diam90_t = diam90[hh];  // m
-  double diam50_t = diam50[hh];  // m
+//  double diam90_t = diam90[hh];  // m
+//  double diam50_t = diam50[hh];  // m
 
   // v: depth-averaged velocity
   // v_cr: critical depth-averaged velocity
 
-  double u_crit_t;
-  if (u_crit[hh] == 0.0) {
-    u_crit_t = calc_critical_velocity(diam50_t, diam90_t, streamdepth); 
-  } else {
-    u_crit_t = u_crit[hh];
-  }
+  // double u_crit_t;
+  // if (u_crit[hh] == 0.0) {
+  //   u_crit_t = calc_critical_velocity(diam50_t, diam90_t, streamdepth); 
+  // } else {
+  //   u_crit_t = u_crit[hh];
+  // }
 
-  double M_e = (streamvel - u_crit_t) / sqrt((s - 1) * g * diam50_t);
-  if (M_e < 0) {
+  // if (u_crit_t <= 0.0) {
+  //   return 0;
+  // }
+
+  // double M_e = (streamvel - u_crit_t) / sqrt((s - 1) * g * diam50_t);
+  double M_e = calc_mobility_parameter(streamvel, streamdepth);
+  if (M_e <= 0) {
 //    printf("below thresh %f %f\n", streamvel, u_crit_t);
     return 0;
   }
-  return 0.015 * rho_sed * streamvel * streamdepth * pow( (diam50_t/streamdepth), 1.2) * pow(M_e, 1.5);
+  return 0.015 * rho_sed * streamvel * streamdepth * pow( (diam50[hh]/streamdepth), 1.2) * pow(M_e, 1.5);
 }
 
 
@@ -374,21 +407,29 @@ double ClassSed_Transport__vr07::calc_suspended_transport_cap(
   double streamwidth,   // m
   double streamdepth)   // m
 {
-  double u_crit_t;
-  if (u_crit[hh] == 0.0) {
-    u_crit_t = calc_critical_velocity(diam50[hh], diam90[hh], streamdepth); 
-  } else {
-    u_crit_t = u_crit[hh];
+  // double u_crit_t;
+  // if (u_crit[hh] == 0.0) {
+  //   u_crit_t = calc_critical_velocity(diam50[hh], diam90[hh], streamdepth); 
+  // } else {
+  //   u_crit_t = u_crit[hh];
+  // }
+
+  // if (u_crit_t <= 0.0) {
+  //   return 0;
+  // }
+
+  // if (streamvel < u_crit[hh])
+  //   return 0.0;
+
+  // double M_e = (streamvel - u_crit[hh]) / sqrt((s - 1) * g * diam50[hh]);
+  double M_e = calc_mobility_parameter(streamvel, streamdepth);
+  if (M_e <= 0) {
+    //    printf("below thresh %f %f\n", streamvel, u_crit_t);
+    return 0;
   }
 
-
-  if (streamvel < u_crit[hh])
-    return 0.0;
-
   double diam_nodim = calc_nodim_diam(diam50[hh]);
-  double M_e = (streamvel - u_crit[hh]) / sqrt((s - 1) * g * diam50[hh]);
-
-  return 0.012 *
+  return 0.012 * rho_sed *
          streamvel * diam50[hh] * pow(M_e, 2.4) * pow(diam_nodim, -0.6);
 }
 
@@ -421,7 +462,7 @@ double ClassSed_Transport__vr07::calc_vr_load_transport(double streamflow ) {
   stream_depth[hh] = streamdepth;
   stream_width[hh] = streamwidth;
 
-  if (flow_rate == 0) {
+  if ( (flow_rate <= 0) || (streamdepth <= 0)) {
     mass_suspended[hh] = 0;
     mass_bedload[hh] = 0;
     return 0;

@@ -68,8 +68,14 @@ double bedload_gamma = 0.5;
 ******************************************************************/
 
     double calc_critical_shear_stress_nodim(double diam_nodim);
-    double calc_critical_velocity(double d50, double d90, double streamdepth);
+    double calc_critical_velocity(
+        double d50,   // m
+        double d90,   // m
+        double streamdepth);   // m
 
+    double calc_mobility_parameter( 
+        double streamvel,   // m/s
+        double streamdepth);  // m
 /*****************************************************************
  * van Rijn Bedload Transport Routines
 ******************************************************************/
@@ -130,7 +136,7 @@ double bedload_gamma = 0.5;
     const double *scf_netroute{ NULL };
 
 
-    const double *outflow{ NULL };       // [nhru]
+    const double *outflow{ NULL };       // [nhru] [m^3/int]
 //    const double *scf{ NULL };       // [nhru]
     double *outflow_mWQ{ NULL };       // [ndefn]
     double **outflow_mWQ_lay{ NULL };       // [ndefn]

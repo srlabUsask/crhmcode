@@ -555,7 +555,7 @@ bool CRHMmain::DoPrjOpen(string OpenNamePrj, string PD)
 					it++
 					)
 				{
-					string Name = it->first;
+					const string Name = it->first;
 					int jj = Global::AllModulesList->count(Name);
 					if (jj == 0)
 					{

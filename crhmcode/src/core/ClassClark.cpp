@@ -52,13 +52,13 @@ ClassClark::ClassClark(const double* inVar, double* outVar, const double* kstora
 			c2[hh] = (kstorage[hh] - Global::Interval * 0.5) / (kstorage[hh] + Global::Interval * 0.5); // units of kstorage (days)
 		}
 
-		printf("%d %f %f\n", hh, c01[hh], c2[hh]);
+//		printf("%d %f %f\n", hh, c01[hh], c2[hh]);  For debugging (PRL)
 
         if ( (c01[hh] < 0.0) || (c2[hh] < 0.0) ) {
-            string S = string("'") + " (Clark)' constants out of range (do not set Kstorage <- 0): " +
+            string S = string("Clark constants out of range for HRU=") + to_string(hh) + "(do not set Kstorage <- 0): " +
 						to_string(c01[hh]).c_str() + "  " +
 						to_string(c2[hh]).c_str() + "  " +
-						to_string(kstorage[hh]).c_str() + "  ";
+						to_string(kstorage[hh]).c_str() + "\n";
 			// Raising an exception here would put the module into an undefined state maybe					
 //            CRHMException TExcept(S.c_str(), TExcept::WARNING);
 //            LogError(TExcept);

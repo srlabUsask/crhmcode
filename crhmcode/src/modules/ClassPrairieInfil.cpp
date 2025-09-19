@@ -91,9 +91,9 @@ void ClassPrairieInfil::decl(void) {
 
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmeltD);
 
-// This is sort of tricky (daily vs interval). Apologies. (PRL)
+// Variation 0 for daily snowmelt, Variation 1 for interval snowmelt
   variation_set = VARIATION_0;
-  declvar("snowinfil", TDim::NHRU, "interval snowmelt infiltration", "(mm/d)", &snowinfil);
+  declvar("snowinfil", TDim::NHRU, "daily snowmelt infiltration", "(mm/d)", &snowinfil);
   declvar("meltrunoff", TDim::NHRU, "daily melt runoff", "(mm/d)", &meltrunoff);
   declgetvar("*",  "snowmeltD", "(mm/d)", &snowmelt);
 
@@ -410,14 +410,36 @@ void ClassPrairieInfil::run(void) {
               meltrunoff[hh] = snowmelt[hh] - snowinfil[hh];
           }
 
-          if (crackstat[hh] > 0 && SWE[hh] <= 0.0)
+          // Problem: sometimes there is no major melt event, crackstat remains <0, but SWE = 0
+          // In this case 'crackon' will be enabled even into spring/summer
+          // Solution: as below
+
+          if (SWE[hh] <= 0.0)
           {
+            if (crackstat[hh] > 0) {
               crackon[hh] = false;
               crackstat[hh] = 0;
+            } else {
+              if (hru_tmax[hh] > 0) {
+                crackstat[hh]++;
+              }
+            }
           }
+
+          // if (crackstat[hh] > 0 && SWE[hh] <= 0.0)
+          // {
+          //     crackon[hh] = false;
+          //     crackstat[hh] = 0;
+          // }
       }   // end for
   }
 
+  // for(hh = 0; chkStruct(); ++hh){ // every interval
+  //   if (abs(runoff[hh] + infil[hh] - net_rain[hh]) > 1e-5 ) {
+  //     printf("%f %f != %f\n",runoff[hh], infil[hh], net_rain[hh]);
+  //   }
+  //   assert(abs(runoff[hh] + infil[hh] - net_rain[hh]) < 1e-5 );
+  // }
 }
 
 void ClassPrairieInfil::finish(bool good) {

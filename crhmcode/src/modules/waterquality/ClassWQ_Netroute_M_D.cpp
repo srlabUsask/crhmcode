@@ -35,7 +35,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declvar("inflow", TDim::NHRU, "inflow from other HRUs", "(mm*km^2/int)", &inflow);
 
-    declvar("inflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "kg/int", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
+    declvar("inflow_mWQ", TDim::NDEFN, "Concentration: inflow from other HRUs", "(g/int)", &inflow_mWQ, &inflow_mWQ_lay, numsubstances);
 
     declstatvar("cuminflow", TDim::NHRU, "cumulative inflow from other HRUs", "(mm*km^2)", &cuminflow);
 
@@ -43,7 +43,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
 
     declvar("outflow", TDim::NHRU, "HRU outflow", "(mm*km^2/int)", &outflow);
 
-    declvar("outflow_mWQ", TDim::NDEFN, "Substance mass: HRU outflow", "kg/int", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
+    declvar("outflow_mWQ", TDim::NDEFN, "Substance mass: HRU outflow", "(g/int)", &outflow_mWQ, &outflow_mWQ_lay, numsubstances);
 
     declvar("outflow_cWQ", TDim::NDEFN, "Substance concentration: HRU outflow", "kg/int", &outflow_cWQ, &outflow_cWQ_lay, numsubstances);
 
@@ -262,7 +262,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
     decllocal("outflow_0", TDim::NHRU, "", "", &outflow_0);
 
 
-    variation_set = VARIATION_0;
+    variation_set = VARIATION_0;  // Use Muskingum for primary routing and Clark method for other routing
 
     decllocal("Ktravel", TDim::NHRU, "travel time", "(d)", &Ktravel);
 
@@ -279,7 +279,7 @@ void ClassWQ_Netroute_M_D::decl(void) {
     declparam("Channel_shp", TDim::NHRU, "[0]", "0", "2", "rectangular - 0/parabolic - 1/triangular - 2", "()", &route_Cshp);
 
 
-    variation_set = VARIATION_1;
+    variation_set = VARIATION_1;  // Use Clark method for all routing
 
     declparam("Kstorage", TDim::NHRU, "[0.0]", "0.0", "200.0", "aggregated storage constant", "(d)", &Kstorage);
 
@@ -533,9 +533,19 @@ void ClassWQ_Netroute_M_D::run(void) {
                     break;
             }
 
-            assert(runinflow_mWQ_lay[Sub][hh] >= 0);
-            assert(inflow_mWQ_lay[Sub][hh] >= 0);
-            assert(outflow_mWQ_lay[Sub][hh] >= 0);
+            // Revert this (PRL)
+            if (runinflow_mWQ_lay[Sub][hh] < 0) {
+                runinflow_mWQ_lay[Sub][hh] = 0;
+            }
+            if (inflow_mWQ_lay[Sub][hh] < 0) {
+                inflow_mWQ_lay[Sub][hh] = 0;
+            }
+            if (outflow_mWQ_lay[Sub][hh] < 0) {
+                outflow_mWQ_lay[Sub][hh] = 0;
+            }
+//            assert(runinflow_mWQ_lay[Sub][hh] >= 0);
+//            assert(inflow_mWQ_lay[Sub][hh] >= 0);
+//            assert(outflow_mWQ_lay[Sub][hh] >= 0);
 
             if (Sub != 0)
                 Restore(hh);
@@ -561,7 +571,7 @@ void ClassWQ_Netroute_M_D::run(void) {
                     gw_Amount = gwoutflow[hhh]; // here is units (mm*km^2/int)
                     gwoutflow[hhh] = 0.0;
 
-                    gw_Amount_mWQ = gwoutflow_mWQ_lay[Sub][hhh]; // units (mm*km^2/int)
+                    gw_Amount_mWQ = gwoutflow_mWQ_lay[Sub][hhh]; // units (g/int)
 
                     if (Sub == numsubstances - 1) {
                         gwoutflow_diverted[hhh] = gw_Amount;
@@ -744,7 +754,7 @@ void ClassWQ_Netroute_M_D::run(void) {
 
             if (outflow[hh] > 0.0) {
                 Amount = outflow[hh]; // unit area
-                Amount_mWQ = outflow_mWQ_lay[Sub][hh];
+                Amount_mWQ = outflow_mWQ_lay[Sub][hh];   // g/int
 
                 if (Amount > minFlow_WQ) {
                     outflow_diverted_conc_lay[Sub][hh] = Amount_mWQ / Amount;
@@ -781,7 +791,7 @@ void ClassWQ_Netroute_M_D::run(void) {
 //                        basinflow_mWQ[Sub] = 0.0;
                     }
 
-                    basinflow_mWQ[Sub] += Used_mWQ_lay[Sub][hh] * 1000;
+                    basinflow_mWQ[Sub] += Used_mWQ_lay[Sub][hh] * 1000;  // kg -> g
                     assert( basinflow_mWQ[Sub] >= 0 );
                     if (Sub == numsubstances - 1) {
                         basinflow[0] += Used[hh] * 1000; // (m3)

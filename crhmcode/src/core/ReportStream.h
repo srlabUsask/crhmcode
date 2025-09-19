@@ -32,6 +32,7 @@ class ReportStream
 {
 private:
 	std::basic_ofstream<char, std::char_traits<char>> * reportFileStream;
+	std::ofstream* reportBinaryFileStream;
 
 public:
 	ReportStream(std::string reportName);
@@ -39,6 +40,7 @@ public:
 	void OutputSummaryHeaders(std::list<std::pair<std::string, TSeries*>>* series);
 	void OutputSummaryLines(std::list<std::pair<std::string, TSeries*>>* series);
 	void SendTimeStepToReport(CRHMmain* instance);
+	void SendTimeStepToBinaryReport(CRHMmain* instance);
 	void CloseStream();
 	std::list<std::string> * RprtHeader(CRHMmain * instance);
 	std::list<std::string> * RprtHeaderObs(CRHMmain* instance);

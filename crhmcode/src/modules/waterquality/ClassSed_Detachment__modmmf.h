@@ -52,7 +52,7 @@ class ClassSed_Detachment : public ClassModule {
 
     constexpr double calc_rainsplash_energy(double intensity);
     void calc_rainsplash_mobilization( sed_triple &rslt);
-    void calc_flow_mobilization(double runoff, sed_triple &rslt);
+    void calc_flow_mobilization(double runoff, sed_triple &rslt);    // runoff: mm/int
     void calc_flow_deposition( bool mixed_sed, sed_triple &rslt);
     void calc_delivered_to_transport(sed_triple &rslt);
     void calc_transport_capacity(sed_triple &rslt);

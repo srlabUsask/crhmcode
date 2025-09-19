@@ -510,8 +510,10 @@ void ClassSedSoil::run(void) {
 
             if (variation == VARIATION_1) { // For culvert stream flow is put into complete soil module. For weir is put into depressional storage
                 if (stream[hh] > 0.0 && stream_runoff[hh] > 0.0) {
-                    runoff_buf[hh] += stream[hh - 1] * stream_runoff[hh] / hru_area[hh]; // convert to (mm/int)
-                    stream[hh] = stream[hh] * (1.0 - stream_runoff[hh]); // volume (mm*km^2)
+                    if (hru_area[hh] > 0) {
+                        runoff_buf[hh] += stream[hh - 1] * stream_runoff[hh] / hru_area[hh]; // convert to (mm/int)
+                        stream[hh] = stream[hh] * (1.0 - stream_runoff[hh]); // volume (mm*km^2)
+                    }
                 }
             }
         }
@@ -616,7 +618,10 @@ void ClassSedSoil::run(void) {
 
         double runoff_to_Sd = 0.0;
 
-        soil_runoff[hh] = meltrunoff_buf[hh] + runoff_buf[hh] + excs + redirected_residual[hh] / hru_area[hh]; // last term (mm*km^2/int)
+        soil_runoff[hh] = meltrunoff_buf[hh] + runoff_buf[hh] + excs;
+        if (hru_area[hh] > 0) {
+            soil_runoff[hh] += redirected_residual[hh] / hru_area[hh]; // last term (mm*km^2/int)
+        }
 
         cum_redirected_residual[hh] += redirected_residual[hh];
 
@@ -711,14 +716,16 @@ void ClassSedSoil::run(void) {
         if (variation == VARIATION_2) {
             stream_to_Sd[hh] = 0.0;
             if (stream[hh] > 0.0001 && stream_Sd[hh] > 0.0001) { // For weir the stream flow is put into Sd
-                double possible = stream[hh] * stream_Sd[hh] / hru_area[hh];
-                if (Sd[hh] + possible > Sdmax[hh])
-                    possible = Sdmax[hh] - Sd[hh];
+                if ( hru_area[hh] > 0) {
+                    double possible = stream[hh] * stream_Sd[hh] / hru_area[hh];
+                    if (Sd[hh] + possible > Sdmax[hh])
+                        possible = Sdmax[hh] - Sd[hh];
 
-                Sd[hh] += possible; // convert to (mm/int)
-                stream_to_Sd[hh] = possible;
+                    Sd[hh] += possible; // convert to (mm/int)
+                    stream_to_Sd[hh] = possible;
 
-                stream[hh] = stream[hh] - possible * hru_area[hh]; // volume (mm*km^2)
+                    stream[hh] = stream[hh] - possible * hru_area[hh]; // volume (mm*km^2)
+                }
             }
 
             if (weir_b[hh] > 0.0) { // soil_runoff already added to Sd
@@ -747,13 +754,17 @@ void ClassSedSoil::run(void) {
 
                         weir_outflow[hh] = weir_outflow_m3s[hh] * interval_secs; // (m3/s) to (m3)  hru_area - (km2) Sd - (mm)
 
-                        Sd[hh] = Sd[hh] - weir_outflow[hh] / hru_area[hh] / 1000.0; // (mm)
+                        if (hru_area[hh] > 0) {
+                            Sd[hh] = Sd[hh] - weir_outflow[hh] / hru_area[hh] / 1000.0; // (mm)
+                        }
 
                         weir_water_h[hh] = pow(weir_water_V[hh] * (1.0 + 2.0 / lake_p[hh]) / lake_S[hh], 1.0 / (1.0 + 2.0 / lake_p[hh]));
 
                         weir_water_A[hh] = lake_S[hh] * pow(weir_water_h[hh], 2.0 / lake_p[hh]); // surface area before any discarge
 
-                        soil_runoff[hh] += weir_outflow[hh] / hru_area[hh] / 1000.0; // (m3/s) to (mm/int)
+                        if (hru_area[hh] > 0) {
+                            soil_runoff[hh] += weir_outflow[hh] / hru_area[hh] / 1000.0; // (m3/s) to (mm/int)
+                        }
 
                     }
                     else {
@@ -976,8 +987,8 @@ void ClassSedSoil::run(void) {
                 break;
             case 1:
                 if (etr > soil_rechr[hh]) {
-                    soil_rechr[hh] = 0.0;
                     et = soil_rechr[hh];
+                    soil_rechr[hh] = 0.0;
                 }
                 else {
                     soil_rechr[hh] = soil_rechr[hh] - etr;

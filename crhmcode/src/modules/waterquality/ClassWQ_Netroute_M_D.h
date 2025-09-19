@@ -67,9 +67,9 @@ public:
 	double* cuminflow{ NULL };
 	double* cuminflow_mWQ{ NULL };
 	double** cuminflow_mWQ_lay{ NULL };
-	double* outflow{ NULL };
+	double* outflow{ NULL };   // mm*km^2/int
 	double* outflow_mWQ{ NULL };
-	double** outflow_mWQ_lay{ NULL };
+	double** outflow_mWQ_lay{ NULL };   // g/int
 	double* outflow_cWQ{ NULL };
 	double** outflow_cWQ_lay{ NULL };
 	double* outflow_diverted{ NULL };
@@ -102,7 +102,7 @@ public:
 	double** gwcumoutflow_mWQ_lay{ NULL };
 
 	double* basinflow{ NULL };     // [BASIN] all HRUs
-	double* basinflow_mWQ{ NULL };     // [NDEF2]
+	double* basinflow_mWQ{ NULL };     // [NDEF2] [g/int]
 	double* basinflow_conc{ NULL };     // [BASIN] all HRUs
 	double** basinflow_conc_lay{ NULL };     // [BASIN] all HRUs
 	double* basinflow_s{ NULL };   // [BASIN] all HRUs
@@ -138,7 +138,7 @@ public:
 	double** cum_to_soil_rechr_mWQ_lay{ NULL };
 	double* Used{ NULL };    // [BASIN}
 	double* Used_mWQ{ NULL };    // [BASIN}
-	double** Used_mWQ_lay{ NULL };    // [BASIN}
+	double** Used_mWQ_lay{ NULL };    // kg/int [BASIN}
 
 	double* distrib_sum{ NULL };
 	double* Ktravel{ NULL };         // [nhru] Muskingum

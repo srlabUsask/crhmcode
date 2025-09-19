@@ -518,7 +518,7 @@ static void Pbsm(double E_StubHt, double Uthr, double& DriftH, double& SublH,
 	B = PBSM_constants::LATH * PBSM_constants::M / (PBSM_constants::R * Temp) - 1.0;
 
 	// find undersaturation of w. vapour at 2 metres
-	Es = 611.15f * exp(22.452f * (Temp - 273.0f) / Temp);  //{sat pressure}
+	Es = 611.15f * exp(22.452f * (Temp - 273.0f) / Temp);  //{sat pressure over ice}, modified Buck 1981
 	SvDens = (Es * PBSM_constants::M) / (PBSM_constants::R * Temp);                       //{sat density}
 	Sigma2 = rh - 1.0;                              //{undersaturation at 2 m}
 

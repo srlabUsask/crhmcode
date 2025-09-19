@@ -109,27 +109,43 @@ void Classglobal::init(void) {
 
 }
 
-void Classglobal::air_mass (const double czen, double &oam){
 
-  double diff;
+// void Classglobal::air_mass (const double czen, double &oam){
 
-  double Z = acos(czen);
-  oam = fabs(1.0f/(czen + 0.50572f*pow(96.07995f-Z, -1.6364f)));       // oam by cosecant approx.
+//   double diff;
 
-  if(oam < 2.9)                          // zenith < 70 deg
+//   double Z = acos(czen);
+
+void Classglobal::air_mass (const double czen_in, double &oam_out){  // performance improvement (PRL)
+
+  // double diff;
+  // double Z = acos(czen);
+
+  float czen = czen_in;
+  float diff;
+  float Z = acos(czen);
+
+  float oam = fabs(1.0f/(czen + 0.50572f*pow(96.07995f-Z, -1.6364f)));       // oam by cosecant approx.
+
+  if(oam < 2.9) {                         // zenith < 70 deg
+    oam_out = oam;
     return;
+  }
   else if(oam < 16.38) {                 // zenith < 86.5 deg
     diff = pow(10.0f, 2.247f*log10(oam) - 2.104f);
     oam = oam - diff;
+    oam_out = oam;
     return;
-    }
+  }
   else if(oam <= 114.6){                 // zenith < 89.5 deg
 	diff = pow(10.0f, 1.576f*log10(oam) - 1.279f);
     oam = oam - diff;
+    oam_out = oam;
     return;
   }
 
   oam = 30.0;                             // computed oam >114.6
+  oam_out = oam;
 }
 
 void Classglobal::run(void) {

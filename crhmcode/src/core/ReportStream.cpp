@@ -28,6 +28,16 @@ ReportStream::ReportStream(std::string reportName)
 		CRHMException e = CRHMException("Cannot open file " + reportName + " to save report.", TExcept::ERR);
 		CRHMLogger::instance()->log_run_error(e);
 	}
+
+    // Open the binary output stream
+    reportBinaryFileStream = new std::ofstream(reportName+".bin", std::ios::binary | std::ios::out);
+    if (!reportBinaryFileStream->is_open()) {
+		CRHMException e = CRHMException("Cannot open file " + reportName+".bin" + " to save report.", TExcept::ERR);
+		CRHMLogger::instance()->log_run_error(e);
+        delete reportBinaryFileStream;
+        reportBinaryFileStream = nullptr;
+    }
+
 }
 
 void ReportStream::OutputHeaders(CRHMmain * instance)
@@ -147,6 +157,7 @@ void ReportStream::OutputSummaryLines(std::list<std::pair<std::string, TSeries*>
 void ReportStream::SendTimeStepToReport(CRHMmain * instance) 
 {
 
+	if (true) {
 	long index = Global::DTindx - Global::DTmin;
 
 	std::string Sx = FloatToStrF(instance->cdSeries[0]->XValue(index), TFloatFormat::ffGeneral, 10, 0);
@@ -189,12 +200,43 @@ void ReportStream::SendTimeStepToReport(CRHMmain * instance)
 
 	*(this->reportFileStream)<<(Sx);
 	*(this->reportFileStream)<<("\n");
+	}
+
+	SendTimeStepToBinaryReport(instance);
+}
+
+void ReportStream::SendTimeStepToBinaryReport(CRHMmain* instance) 
+{
+    long index = Global::DTindx - Global::DTmin;
+
+    // Write time step value to the binary stream directly
+    float timeStepValue = instance->cdSeries[0]->XValue(index);
+    this->reportBinaryFileStream->write(reinterpret_cast<const char*>(&timeStepValue), sizeof(timeStepValue));
+
+    for (size_t vv = 0; vv < instance->SelectedVariables->size(); ++vv) 
+    {
+        // Check if the series lengths are consistent
+        if (instance->cdSeries[0]->Count() == instance->cdSeries[vv]->Count()) 
+        { 
+            ClassVar* thisVar = instance->cdSeries[vv]->getTag();
+            
+            if (thisVar) // Ensure `thisVar` is not null to avoid segmentation faults
+            {
+                // Write Y-value to the binary stream directly
+                float yValue = instance->cdSeries[vv]->YValue(index);
+                this->reportBinaryFileStream->write(reinterpret_cast<const char*>(&yValue), sizeof(yValue));
+            }
+        }
+    }
 }
 
 void ReportStream::CloseStream() 
 {
 	this->reportFileStream->flush();
 	this->reportFileStream->close();
+
+	this->reportBinaryFileStream->flush();
+	this->reportBinaryFileStream->close();
 }
 
 std::list<std::string> * ReportStream::RprtHeader(CRHMmain* instance)
