@@ -751,3 +751,45 @@ CRHM 05/16/25
 
         if((NO_Freeze[hh] == 1) || (Zd_front_array[0][hh] == 0.0)) // 16May2025: change from if((NO_Freeze[hh] == 0) || (Zd_front_array[0][hh] == 0.0))
           thaw_layers_lay[ll][hh] = 1.0; // all unfrozen
+
+CRHM 10/15/25
+
+  Add Kochendorfer2017b-SingleAlter option for snowfall undercatch correction in obs module.
+
+  Apply the catchratio up to maximum wind speed that snowfall undercatch correction methods are developed for.
+
+        case 1:  // Nipher
+          if(umean > 8.0) umean = 8;
+          catchratio = 0.01*(-0.387*sqr(umean)-2.022*umean+100.0);
+          if(catchratio < 0.3) catchratio = 0.3;
+
+        break;
+
+        case 2:  // MacDonald-Alter (not correct, use Smith-Alter)
+          catchratio = 1.01*exp(-0.09*umean);
+
+          if(catchratio > 1.0) catchratio = 1.0;
+
+        break;
+
+        case 3:  // Smith-Alter
+          if(hru_u[hh] > 9.5) hru_u[hh] = 9.5;
+
+          if(umean > 9.5) umean = 9.5;
+
+          if(p != NULL)
+            catchratio = 1.18*exp(-0.18*hru_u[hh]);  // for hourly observed wind and precipitation
+          if(ppt != NULL)
+            catchratio = exp(-0.2*umean);  // for daily observed wind and precipitation
+
+          if(catchratio > 1.0) catchratio = 1.0;
+
+        break;
+
+        case 4:  // Kochendorfer2017b-SingleAlter
+          if(hru_u[hh] > 7.2) hru_u[hh] = 7.2;
+          catchratio = 0.728*exp(-0.23*hru_u[hh]) + 0.336; // Kochendorfer2017b transfer function for single-Alter and gauge height wind
+
+          if(catchratio > 1.0) catchratio = 1.0;
+
+        break;

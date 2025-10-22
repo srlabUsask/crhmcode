@@ -1,10 +1,11 @@
-// 05/16/25 Correcting No_Freeze if statement for all unfrozen condition
-//  in SoilX module in 05/07/25
+// 10/15/25 Add Kochendorfer2017b-SingleAlter option for snowfall undercatch correction
+// and apply the catchratio up to maximum wind speed for both Smith and Kochendorfer2017b
+// in obs module in 05/16/25
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "05/16/25"
+#define CurrentVersion "10/15/25"
 
 #include <stdexcept>
 #include "CRHMmain.h"
