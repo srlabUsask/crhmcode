@@ -167,7 +167,7 @@ void Classobs::decl(void) {
 
   variation_set = VARIATION_0 + VARIATION_1;
 
-  declparam("catchadjust", TDim::NHRU, "[0]", "0", "3", "none - 0/Nipher - 1/MacDonald-Alter - 2 (not recommended)/Smith-Alter - 3", "()", &catchadjust);
+  declparam("catchadjust", TDim::NHRU, "[0]", "0", "4", "wind undercatch correction for snowfall up to maximum wind speed (Umax): 0 - none, 1 - Nipher with Umax = 8 m/s, 2 - MacDonald-Alter (not recommended), 3 - Smith-Alter with Umax = 9.5 m/s, 4 - Kochendorfer2017b-SingleAlter with Umax = 7.2 m/s", "()", &catchadjust);
 
   decldiagparam("ppt_daily_distrib", TDim::NHRU, "[1]", "0", "1", "0 - daily precip in first interval, 1 - equally divided over the day", "()", &ppt_daily_distrib);
 
@@ -347,7 +347,6 @@ DTindx[0] = Global::DTindx;
     }
 
     double umean = hru_umean[hh];
-    if(umean > 8.0) umean = 8;
 
     if(variation != VARIATION_2){
 
@@ -355,6 +354,7 @@ DTindx[0] = Global::DTindx;
 
 
         case 1:  // Nipher
+          if(umean > 8.0) umean = 8;
           catchratio = 0.01*(-0.387*sqr(umean)-2.022*umean+100.0);
           if(catchratio < 0.3) catchratio = 0.3;
 
@@ -369,14 +369,24 @@ DTindx[0] = Global::DTindx;
 
         case 3:  // Smith-Alter
           if(p != NULL)
+            if(hru_u[hh] > 9.5) hru_u[hh] = 9.5;
             catchratio = 1.18*exp(-0.18*hru_u[hh]);  // for hourly observed wind and precipitation
           if(ppt != NULL)
+            if(umean > 9.5) umean = 9.5;
             catchratio = exp(-0.2*umean);  // for daily observed wind and precipitation
 
           if(catchratio > 1.0) catchratio = 1.0;
 
         break;
+        
+        case 4:  // Kochendorfer2017b-SingleAlter
+          if(hru_u[hh] > 7.2) hru_u[hh] = 7.2;
+          catchratio = 0.728*exp(-0.23*hru_u[hh]) + 0.336; // Kochendorfer2017b transfer function for single-Alter and gauge height wind
 
+          if(catchratio > 1.0) catchratio = 1.0;
+
+        break;
+        
         default: // none
 
           catchratio = 1.0;
