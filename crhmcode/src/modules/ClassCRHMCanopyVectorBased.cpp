@@ -32,8 +32,7 @@
 
 using namespace CRHM;
 
-ClassCRHMCanopyVectorBased *ClassCRHMCanopyVectorBased::klone(string name) const
-{
+ClassCRHMCanopyVectorBased* ClassCRHMCanopyVectorBased::klone(string name) const{
   return new ClassCRHMCanopyVectorBased(name);
 }
 
