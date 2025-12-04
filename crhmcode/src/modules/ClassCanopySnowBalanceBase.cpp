@@ -1225,8 +1225,8 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
         }
 
         // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt found to be function of canopy snow load for Fortress obs
-        double unld_to_melt_ratio_m = 0.16;
-        double unld_to_melt_ratio_b = -0.50;
+        double unld_to_melt_ratio_m = 0.15;
+        double unld_to_melt_ratio_b = -0.43;
 
         double unld_to_melt_ratio = snow_h2o_veg[hh] * unld_to_melt_ratio_m + unld_to_melt_ratio_b; // WARNING this can go negative so handle below
         unld_to_melt_ratio = std::max(0.0, unld_to_melt_ratio);
@@ -1237,7 +1237,7 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
         // const double b_u = 3.925391e-01; // TODO move to par file
 
         // wind induced unloading as function of shear stress
-        const double a_tau = 0.331/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
+        const double a_tau = 0.371/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
 
         double fu = 0.0;
 
