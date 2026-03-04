@@ -1382,7 +1382,7 @@ void ClassCanopySnowBalanceBase::_subl_evap(void) {
 
     }
 
-    if (!(liq_h2o_veg[hh] > 0.0)){
+    if (!(liq_h2o_veg[hh] > 0.0) || (snow_h2o_veg[hh] > 0.0)){
         delevap_veg[hh] = 0.0;
     } else {
         // liquid water is present; modify liquid water content
