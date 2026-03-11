@@ -1,11 +1,10 @@
-// 10/15/25 Add Kochendorfer2017b-SingleAlter option for snowfall undercatch correction
-// and apply the catchratio up to maximum wind speed for both Smith and Kochendorfer2017b
-// in obs module in 05/16/25
+// 03/03/26 Modifiy if (precip_now[hh]) in ClassSnobalBase::_advec
+// in 10/15/25
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "10/15/25"
+#define CurrentVersion "03/03/26"
 
 #include <stdexcept>
 #include "CRHMmain.h"

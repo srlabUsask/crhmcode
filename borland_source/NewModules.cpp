@@ -1,4 +1,4 @@
-// 10/15/25
+// 03/03/26
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -1010,11 +1010,13 @@ DTindx[0] = Global::DTindx;
         break;
 
         case 3:  // Smith-Alter
+          if(hru_u[hh] > 9.5) hru_u[hh] = 9.5;
+
+          if(umean > 9.5) umean = 9.5;
+
           if(p != NULL)
-            if(hru_u[hh] > 9.5) hru_u[hh] = 9.5;
             catchratio = 1.18*exp(-0.18*hru_u[hh]);  // for hourly observed wind and precipitation
           if(ppt != NULL)
-            if(umean > 9.5) umean = 9.5;
             catchratio = exp(-0.2*umean);  // for daily observed wind and precipitation
 
           if(catchratio > 1.0) catchratio = 1.0;
@@ -7836,7 +7838,7 @@ float ClassSnobalBase::g_snow(
 
 void ClassSnobalBase::_advec(void){
 
-	if (precip_now) {
+	if (precip_now[hh]) { // 3Mar2026: change from if (precip_now)
 		M[hh] = (heat_stor(CP_WATER(T_rain[hh]), m_rain[hh], (T_rain[hh] - T_s_0[hh])) +
          heat_stor(CP_ICE(T_snow[hh]), m_snow[hh], (T_snow[hh] - T_s_0[hh])))/time_step[hh];
 	}
