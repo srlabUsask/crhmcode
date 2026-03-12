@@ -130,6 +130,9 @@
 #include "../Classshared.h" //added by Manishankar Mondal
 #include "../ClassNOP.h" //added by Manishankar Mondal
 
+#include "../ClassCRHMCanopyVectorBased.h" //added by Alex Cebulski
+#include "../ClassCanopySnowBalanceBase.h" //added by Alex Cebulski
+#include "../ClassCanopySnowBalanceCRHM.h" //added by Alex Cebulski
 
 //---------------------------------------------------------------------------
 
@@ -158,7 +161,7 @@ bool RELEASE = false;
 
 void MoveModulesToGlobal(string DLLName)
 {
-
+  
   DLLModules.AddModule(new Classshared("Shared", "10/25/10", LMODULE::CUSTOM)); // essential for parameter screen
   DLLModules.AddModule(new ClassNOP("NOP", "05/20/16", LMODULE::ADVANCE)); // essential for parameter screen
   DLLModules.AddModule(new Classbasin("basin", "02/24/12", LMODULE::BASIC));
@@ -211,6 +214,9 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "04/05/22", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyVectorBased("CanopyVectorBased", "11/12/24", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassCanopySnowBalanceBase("CanopySnowBalanceBase", "02/07/25", LMODULE::ADVANCE));
+  DLLModules.AddModule(new ClassCanopySnowBalanceCRHM("CanopySnowBalanceCRHM", "02/07/25", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassXG("XG", "04/05/22", LMODULE::ADVANCE));

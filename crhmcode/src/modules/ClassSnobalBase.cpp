@@ -995,7 +995,7 @@ double ClassSnobalBase::g_snow(
 
 void ClassSnobalBase::_advec(void) {
 
-    if (precip_now) {
+    if (precip_now[hh]) {
         M[hh] = (heat_stor(CP_WATER(T_rain[hh]), m_rain[hh], (T_rain[hh] - T_s_0[hh])) +
             heat_stor(CP_ICE(T_snow[hh]), m_snow[hh], (T_snow[hh] - T_s_0[hh]))) / time_step[hh];
     }
@@ -1209,9 +1209,12 @@ void ClassSnobalBase::_precip(void)
         //    ro_predict[hh] += m_rain[hh];
     } // current precip
 
-  // Add water in the snowcover to total liquid water.
+    // Add water in the snowcover to total liquid water.
     else // no precip
         h2o_total[hh] += h2o[hh];
+
+    // Uncomment below (comment lines above) to fix obvious bug and add water in the snowcover from prev timestep to total liquid water regardless of new precip or not. 
+   // h2o_total[hh] += h2o[hh];
 }
 
 void ClassSnobalBase::_drift(void)
@@ -1841,145 +1844,6 @@ void ClassSnobalBase::_runoff(void) {
     }
 }
 
-double satw(
-    double  tk) {		/* air temperature (K)		*/
-
-    double  x;
-    double  l10;
-
-    if (tk <= 0.) {
-        CRHMException TExcept("satw temperature <= 0.0", TExcept::TERMINATE);
-        LogError(TExcept);
-    }
-
-    errno = 0;
-    l10 = log(1.e1);
-
-    x = -7.90298 * (BOIL / tk - 1.0f) + 5.02808f * log(BOIL / tk) / l10 -
-        1.3816e-7 * (pow(1.0e1, 1.1344e1f * (1.0 - tk / BOIL)) - 1.0f) +
-        8.1328e-3 * (pow(1.0e1, -3.49149f * (BOIL / tk - 1.0f)) - 1.0f) +
-        log(SEA_LEVEL) / l10;
-
-    x = pow(1.0e1f, x);
-
-    if (errno) {
-        CRHMException TExcept("satw: bad return from log or pow", TExcept::TERMINATE);
-        LogError(TExcept);
-    }
-
-    return(x);
-}
-
-
-// psi-functions
-//	code =	SM	momentum
-//		SH	sensible heat flux
-//		SV	latent heat flux
-
-static double
-psi(double zeta,		// z/lo
-    int	code)		// which psi function? (see above)
-{
-    double	x;		// height function variable
-    double	result{};
-
-    if (zeta > 0) // stable
-    {
-        if (zeta > 1)
-        {
-            zeta = 1;
-        }
-        result = -BETA_S * zeta;
-    }
-    else if (zeta < 0) // unstable
-    {
-        x = sqrt(sqrt(1.0 - BETA_U * zeta));
-
-        switch (code)
-        {
-            case SM:
-                result = 2.0 * log((1.0 + x) / 2.0) + log((1.0 + x * x) / 2.0) -
-                    2.0 * atan(x) + M_PI_2;
-                break;
-
-            case SH:
-            case SV:
-                result = 2.0 * log((1.0 + x * x) / 2.0);
-                break;
-
-            default: // shouldn't reach
-                CRHMException TExcept("psi-function code not of these: SM, SH, SV", TExcept::TERMINATE);
-                LogError(TExcept);
-        }
-    }
-    else //Zeta == 1, neutral
-    {
-        result = 0.0;
-    }
-
-    return (result);
-}
-
-
-
-double ClassSnobalBase::sati(double  tk) { //* air temperature (K)
-
-    double  l10;
-    double  x;
-
-    if (tk <= 0.0) {
-        CRHMException TExcept("sati temperature <= 0.0", TExcept::TERMINATE);
-        LogError(TExcept);
-        //            tk = FREEZE + 0.01;
-    }
-
-    if (tk > FREEZE) {
-        x = satw(tk);
-        return(x);
-    }
-
-    errno = 0;
-    l10 = log(1.e1);
-
-    x = pow(1.e1, -9.09718 * ((FREEZE / tk) - 1.0) - 3.56654 * log(FREEZE / tk) / l10 +
-        8.76793e-1 * (1.0 - (tk / FREEZE)) + log(6.1071) / l10);
-
-    if (errno) {
-        CRHMException TExcept("sati: bad return from log or pow", TExcept::TERMINATE);
-        LogError(TExcept);
-    }
-
-    return(x * 1.e2);
-}
-/* ----------------------------------------------------------------------- */
-
-double ClassSnobalBase::ssxfr(
-    double	k1,	/* layer 1's thermal conductivity (J / (m K sec))  */
-    double	k2,	/* layer 2's    "         "                        */
-    double	t1,	/* layer 1's average layer temperature (K)	   */
-    double	t2,	/* layer 2's    "      "        "         	   */
-    double	d1,     /* layer 1's thickness (m)			   */
-    double	d2)     /* layer 2's    "       "			   */
-{
-    double	xfr;
-
-    xfr = 2.0 * (k1 * k2 * (t2 - t1)) / ((k2 * d1) + (k1 * d2));
-
-    return (xfr);
-}
-/* ----------------------------------------------------------------------- */
-
-double ClassSnobalBase::heat_stor(
-    double	cp,	/* specific heat of layer (J/kg K) */
-    double	spm,	/* layer specific mass (kg/m^2)    */
-    double	tdif)	/* temperature change (K)          */
-{
-    double	stor;
-
-    stor = cp * spm * tdif;
-
-    return (stor);
-}
 /* ----------------------------------------------------------------------- */
 
 double ClassSnobalBase::new_tsno(

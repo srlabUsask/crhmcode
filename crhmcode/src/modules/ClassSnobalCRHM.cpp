@@ -118,7 +118,7 @@ void ClassSnobalCRHM::decl(void) {
     decllocal("F_g_L", TDim::NHRU, "soil flux at depth z_g", "(W/m^2)", &F_g);
 
     decllocal("m_precip_L", TDim::NHRU, "specific mass of total precip", "(kg/m^2)", &m_precip);
-    declvar  ("rain_on_snow", TDim::NHRU, "specific mass of rain in precip", "(kg/m^2)", &m_rain);
+    declvar("rain_on_snow", TDim::NHRU, "specific mass of rain in precip", "(kg/m^2)", &m_rain);
     decllocal("m_snow_L", TDim::NHRU, "specific mass in snow in precip", "(kg/m^2)", &m_snow);
     decllocal("m_drift_L", TDim::NHRU, "specific mass of drifting snow", "(kg/m^2)", &m_drift);
     decllocal("m_subl_L", TDim::NHRU, "specific mass of drifting snow", "(kg/m^2)", &m_subl);
@@ -252,12 +252,22 @@ void ClassSnobalCRHM::run(void) { // executed every interval
 
     SWE_change[hh] = -m_s[hh];
 
+    // // uncomment  below to hop to specific time in debug
+
+    // string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
+
+    // if (test == "6/15/2022 15:0") {
+    // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
+    // // if (test == "10/1/2021 0:15") {
+    //   std::cout << "Breakpoint here: Date matched" << std::endl;
+    // }
+
     switch (variation){
       case VARIATION_ORG:
         input_rec2[hh].S_n  = Qsi[hh]*(1.0 - Albedo[hh]);
         input_rec2[hh].I_lw = Qli[hh];
       break;
-      case VARIATION_1:
+      case VARIATION_1: // this is the default
         input_rec2[hh].S_n  = Qsisn_Var[hh]*(1.0 - Albedo[hh]);
         input_rec2[hh].I_lw = Qlisn_Var[hh];
       break;
@@ -286,16 +296,19 @@ void ClassSnobalCRHM::run(void) { // executed every interval
     else
       input_rec2[hh].T_g  = T_g_X[hh] + CRHM_constants::Tm;
 
-    if(m_snow_X[hh] == 0)
+    if(m_snow_X[hh] == 0){
       m_snow[hh] = 0.0;
+    }      
 
     if(snowcover[hh]){
       m_snow[hh]  = m_snow_X[hh];
     }
     else {
-      if(m_snow_X[hh] > 0.0)
+      if(m_snow_X[hh] > 0.0){
         snow_store[hh] += m_snow_X[hh];
-      m_snow[hh] = 0.0;
+      } else {
+          m_snow[hh] = 0.0;
+      }
     }
 
     if((nstep == 1 && snow_store[hh] > 0.0) || snow_store[hh] > 1.0){
