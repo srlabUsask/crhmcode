@@ -1225,10 +1225,10 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
         }
 
         // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt found to be function of canopy snow load for Fortress obs
-        double unld_to_melt_ratio_m = 0.15;
-        double unld_to_melt_ratio_b = -0.43;
+        // double unld_to_melt_ratio_m = 0.15; // include it as parameter
+        // double unld_to_melt_ratio_b = -0.43; // include it as parameter
 
-        double unld_to_melt_ratio = snow_h2o_veg[hh] * unld_to_melt_ratio_m + unld_to_melt_ratio_b; // WARNING this can go negative so handle below
+        double unld_to_melt_ratio = snow_h2o_veg[hh] * unld_to_melt_ratio_m[hh] + unld_to_melt_ratio_b[hh]; // WARNING this can go negative so handle below
         unld_to_melt_ratio = std::max(0.0, unld_to_melt_ratio);
         delunld_melt[hh] = delmelt_veg[hh] * unld_to_melt_ratio;
 
