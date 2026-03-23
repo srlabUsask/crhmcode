@@ -520,7 +520,7 @@ void Classobs::Harder(void) {
 
   else
 
-    ratio = 1.0/(1.0 + 2.50286*pow(0.125006, hru_icebulb)); 
+    ratio = 1.0/(1.0 + 2.50286*pow(0.125006, hru_icebulb));
 
   hru_snow[hh] = 0.0;
 
