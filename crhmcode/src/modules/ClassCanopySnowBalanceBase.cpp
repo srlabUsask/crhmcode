@@ -1366,7 +1366,7 @@ void ClassCanopySnowBalanceBase::_subl_evap(void) {
     if (!vegsnowcover[hh] && !(snow_h2o_veg[hh] > 0.0)) { // no h2o in the canopy
         delsub_veg[hh] = 0.0;
     } else {
-        // Compute total mass change due to sublimation/evaporation over the time step
+        // Compute total mass change due to sublimation over the time step
         qsub_veg[hh] = Ql_veg[hh] / LH_SUB(T_s_veg[hh]);
         delsub_veg[hh] = qsub_veg[hh] * time_step[hh];
 
@@ -1383,7 +1383,7 @@ void ClassCanopySnowBalanceBase::_subl_evap(void) {
     }
 
     if (!(liq_h2o_veg[hh] > 0.0) || (snow_h2o_veg[hh] > 0.0)){
-        delevap_veg[hh] = 0.0;
+        delevap_veg[hh] = 0.0; // no evap if no liquid water or if snow is present since snow will sublimate before liquid water evaporates, TODO maybe need to adjust this if we want to allow for evaporation of liquid water in the canopy when snow is present as well
     } else {
         // liquid water is present; modify liquid water content
         // Compute total mass change due to sublimation/evaporation over the time step
