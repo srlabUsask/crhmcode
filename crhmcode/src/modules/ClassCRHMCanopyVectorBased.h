@@ -99,12 +99,9 @@ const double *Z0snow { NULL };
 const double *Zref { NULL };
 const double *Zwind { NULL };
 const double *Zvent { NULL };
-const double *Surrounding_Ht { NULL };
-const double *Gap_diameter { NULL };
 const double *Alpha_c { NULL };
 const double *B_canopy { NULL };
 
-const long *CanopyClearing { NULL };
 const long *CanopyWindSwitchIP { NULL };
 
 void decl(void);
