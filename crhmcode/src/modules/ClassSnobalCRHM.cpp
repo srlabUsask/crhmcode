@@ -252,22 +252,12 @@ void ClassSnobalCRHM::run(void) { // executed every interval
 
     SWE_change[hh] = -m_s[hh];
 
-    // // uncomment  below to hop to specific time in debug
-
-    // string test = StandardConverterUtility::GetDateTimeInString(Global::DTnow);
-
-    // if (test == "6/15/2022 15:0") {
-    // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
-    // // if (test == "10/1/2021 0:15") {
-    //   std::cout << "Breakpoint here: Date matched" << std::endl;
-    // }
-
     switch (variation){
       case VARIATION_ORG:
         input_rec2[hh].S_n  = Qsi[hh]*(1.0 - Albedo[hh]);
         input_rec2[hh].I_lw = Qli[hh];
       break;
-      case VARIATION_1: // this is the default
+      case VARIATION_1:
         input_rec2[hh].S_n  = Qsisn_Var[hh]*(1.0 - Albedo[hh]);
         input_rec2[hh].I_lw = Qlisn_Var[hh];
       break;
@@ -304,11 +294,9 @@ void ClassSnobalCRHM::run(void) { // executed every interval
       m_snow[hh]  = m_snow_X[hh];
     }
     else {
-      if(m_snow_X[hh] > 0.0){
+      if(m_snow_X[hh] > 0.0)
         snow_store[hh] += m_snow_X[hh];
-      } else {
-          m_snow[hh] = 0.0;
-      }
+      m_snow[hh] = 0.0;
     }
 
     if((nstep == 1 && snow_store[hh] > 0.0) || snow_store[hh] > 1.0){
