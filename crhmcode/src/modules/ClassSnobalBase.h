@@ -242,12 +242,6 @@ public:
 
     double new_tsno(double spm, double t0, double ccon);
 
-    double heat_stor(double cp, double spm, double tdif);
-
-    double sati(double tk);
-
-    double ssxfr(double  k1, double  k2, double  t1, double  t2, double  d1, double  d2);
-
     double efcon(double k, double t, double p);
 
     int hle1(double press, double ta, double ts, double za, double ea, double es, double zq, double u, double zu,

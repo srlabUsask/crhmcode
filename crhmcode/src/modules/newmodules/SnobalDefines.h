@@ -38,7 +38,7 @@
 #define RGAS            8.31432e3
 
 /*
-*  specific humidity
+*  specific humidity (-) / (kg/kg)
 *
 *	e = vapor pressure
 *	P = pressure (same units as e)
@@ -148,7 +148,8 @@
 /*
 *  thermal emissivity of snow
 */
-#define SNOW_EMISSIVITY		0.99 // changed from 0.98 03/27/15
+#define SNOW_EMISSIVITY		0.99 // changed from 0.98 03/27/15 as in JULES
+#define CAN_EMISSIVITY      0.98 // as in JULES
 
 /*
 *  Macros
@@ -273,6 +274,7 @@
 *  Von Karman constant
 */
 #define VON_KARMAN      3.5e-1
+#define VON_KARMAN2     0.41
 
 /*
 *  virtual temperature, i.e. the fictitious temperature that air must
@@ -295,3 +297,197 @@
 #define MIN_SNOW_TEMP	-75
 
 #endif
+
+inline double satw(double tk) {   // air temperature (K)
+    double x;
+    double l10;
+
+    if (tk <= 0.) {
+        CRHMException TExcept("satw temperature <= 0.0", TExcept::TERMINATE);
+        LogError(TExcept);
+    }
+
+    errno = 0;
+    l10 = log(1.e1);
+
+    x = -7.90298 * (BOIL / tk - 1.0) + 5.02808 * log(BOIL / tk) / l10 -
+        1.3816e-7 * (pow(1.0e1, 1.1344e1 * (1.0 - tk / BOIL)) - 1.0) +
+        8.1328e-3 * (pow(1.0e1, -3.49149 * (BOIL / tk - 1.0)) - 1.0) +
+        log(SEA_LEVEL) / l10;
+
+    x = pow(1.0e1, x);
+
+    if (errno) {
+        CRHMException TExcept("satw: bad return from log or pow", TExcept::TERMINATE);
+        LogError(TExcept);
+    }
+
+    return x;
+}
+
+// psi-functions
+//	code =	SM	momentum
+//		SH	sensible heat flux
+//		SV	latent heat flux
+
+inline double
+psi(double zeta,		// z/lo
+    int	code)		// which psi function? (see above)
+{
+    double	x;		// height function variable
+    double	result{};
+
+    if (zeta > 0) // stable
+    {
+        if (zeta > 1)
+        {
+            zeta = 1;
+        }
+        result = -BETA_S * zeta;
+    }
+    else if (zeta < 0) // unstable
+    {
+        x = sqrt(sqrt(1.0 - BETA_U * zeta));
+
+        switch (code)
+        {
+            case SM:
+                result = 2.0 * log((1.0 + x) / 2.0) + log((1.0 + x * x) / 2.0) -
+                    2.0 * atan(x) + M_PI_2;
+                break;
+
+            case SH:
+            case SV:
+                result = 2.0 * log((1.0 + x * x) / 2.0);
+                break;
+
+            default: // shouldn't reach
+                CRHMException TExcept("psi-function code not of these: SM, SH, SV", TExcept::TERMINATE);
+                LogError(TExcept);
+        }
+    }
+    else //Zeta == 1, neutral
+    {
+        result = 0.0;
+    }
+
+    return (result);
+}
+
+
+
+inline double sati(double  tk) { //* air temperature (K)
+
+    double  l10;
+    double  x;
+
+    if (tk <= 0.0) {
+        CRHMException TExcept("sati temperature <= 0.0", TExcept::TERMINATE);
+        LogError(TExcept);
+        //            tk = FREEZE + 0.01;
+    }
+
+    if (tk > FREEZE) {
+        x = satw(tk);
+        return(x);
+    }
+
+    errno = 0;
+    l10 = log(1.e1);
+
+    x = pow(1.e1, -9.09718 * ((FREEZE / tk) - 1.0) - 3.56654 * log(FREEZE / tk) / l10 +
+        8.76793e-1 * (1.0 - (tk / FREEZE)) + log(6.1071) / l10);
+
+    if (errno) {
+        CRHMException TExcept("sati: bad return from log or pow", TExcept::TERMINATE);
+        LogError(TExcept);
+    }
+
+    return(x * 1.e2);
+}
+/* ----------------------------------------------------------------------- */
+
+inline double ssxfr(
+    double	k1,	/* layer 1's thermal conductivity (J / (m K sec))  */
+    double	k2,	/* layer 2's    "         "                        */
+    double	t1,	/* layer 1's average layer temperature (K)	   */
+    double	t2,	/* layer 2's    "      "        "         	   */
+    double	d1,     /* layer 1's thickness (m)			   */
+    double	d2)     /* layer 2's    "       "			   */
+{
+    double	xfr;
+
+    xfr = 2.0 * (k1 * k2 * (t2 - t1)) / ((k2 * d1) + (k1 * d2));
+
+    return (xfr);
+}
+/* ----------------------------------------------------------------------- */
+
+inline double heat_stor(
+    double	cp,	/* specific heat of layer (J/kg K) */
+    double	spm,	/* layer specific mass (kg/m^2)    */
+    double	tdif)	/* temperature change (K)          */
+{
+    double	stor;
+
+    stor = cp * spm * tdif;
+
+    return (stor);
+}
+
+/* ----------------------------------------------------------------------- */
+
+inline double lambda(double t) // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
+{
+   return( 2.501 - 0.002361 * t );
+}
+
+inline double delta(double t) // Slope of sat vap p vs t, kPa/DEGREE_CELSIUS
+{
+  if (t > 0.0)
+    return (2504.0 * exp(17.27 * t / (t + 237.3)) / sqr(t + 237.3));
+  else
+    return (3549.0 * exp(21.88 * t / (t + 265.5)) / sqr(t + 265.5));
+}
+
+inline double gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELSIUS)
+{
+  return (0.00163 * Pa / lambda(t)); // lambda (mJ/(kg DEGREE_CELSIUS))
+}
+
+inline double adst_wind_cpy_top(
+    double veg_ht, /* Height of vegetation (m) */
+    double uz,     /* Wind speed at height z (m/s) */
+    double z, /* Height of wind speed measurement (m) */
+
+    // output
+    double& u_veg_ht /* Wind speed at canopy top (m/s)*/
+    )  
+{
+    if(z >= veg_ht){
+        u_veg_ht = uz;
+    } else if (veg_ht - 2.0 / 3.0 * z > 0.0) {
+        u_veg_ht = uz * log((veg_ht - 2.0 / 3.0 * z) / 0.123 * z) / log((z - 2.0 / 3.0 * z) / 0.123 * z);
+    } else {
+        u_veg_ht = 0.0;
+    }
+    return(u_veg_ht);
+}
+
+inline double cionco_canopy_wind_spd(
+    double veg_ht,    /* Height of vegetation (m) */
+    double u_veg_ht,  /* Wind speed at height veg ht (m/s) */
+    double target_ht, /* target height of output wind speed (m) */
+
+    // output
+    double &u_target_ht /* Wind speed at target height (m/s)*/
+) 
+{
+    double A = 2.4338 + 3.45753 * exp(-u_veg_ht);                 /* Modified Cionco wind model from Parviainen & Pomeroy 2000 for mature forest*/
+    //double A = 2.97 + 3.2 * exp(-u_veg_ht);                 /* Modified Cionco wind model from Parviainen & Pomeroy 2000 for regen forest*/
+    
+    u_target_ht = u_veg_ht * exp(A * (target_ht / veg_ht - 1.0)); /* calculates canopy windspd  */
+
+    return (u_target_ht);
+}
+

@@ -17,11 +17,14 @@ add_library(modules OBJECT
     ClassBasin.cpp
     Classbrushintcp.cpp
     Classcalcsun.cpp
+    ClassCanopySnowBalanceBase.cpp
+    ClassCanopySnowBalanceCRHM.cpp
     Classcontribution.cpp
     Classcrack.cpp
     ClassCRHMCanopy.cpp
     ClassCRHMCanopyClearing.cpp
     ClassCRHMCanopyClearingGap.cpp
+    ClassCRHMCanopyVectorBased.cpp
     Classebsm.cpp
     Classevap_Resist.cpp
     Classevap.cpp
