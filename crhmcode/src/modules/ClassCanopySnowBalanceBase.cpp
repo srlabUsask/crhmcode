@@ -1281,7 +1281,7 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
 
           break;          
 
-        } // case 2
+        } // end case 1
 
         case 2:
         { // This is the mass snow unloading parameterisation from Roesch et al., 2001 based on a temperature and wind speed function.
@@ -1326,7 +1326,7 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
 
           break;        
 
-        } // end case 3
+        } // end case 2
     } // MassUnloadingSwitch
         
     
