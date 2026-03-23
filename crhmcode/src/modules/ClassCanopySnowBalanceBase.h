@@ -173,6 +173,8 @@ public:
     const double  *Ht{ NULL };  // forest/vegetation height (m)
     const long  *CanopyWindSwitchCanSno{ NULL };  // Canopy wind model to use at height Zcan, 0 - for Cionco (dense canopy), 1 - for Prandtl-von Kármán log-linear relationship (sparse forest)".
     const long *MassUnloadingSwitch { NULL }; // canopy snow ablation parameterization to use, 0 - Cebulski & Pomeroy 2025 ablation paper, 1- Andreadis 2009, 2 - Roesch2001 (enable HP98/Ellis2010 using original canopy clearing gap module)
+    const double  *unld_to_melt_ratio_m{ NULL };  // Slope coefficient for unloading to melt ratio (-)
+    const double  *unld_to_melt_ratio_b{ NULL };  // Intercept coefficient for unloading to melt ratio (-)
 
 //    void decl(void);
 
