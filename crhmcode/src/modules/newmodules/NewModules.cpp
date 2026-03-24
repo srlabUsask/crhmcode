@@ -215,7 +215,6 @@ void MoveModulesToGlobal(string DLLName)
   DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassCRHMCanopyVectorBased("CanopyVectorBased", "11/12/24", LMODULE::ADVANCE));
-  DLLModules.AddModule(new ClassCanopySnowBalanceBase("CanopySnowBalanceBase", "02/07/25", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassCanopySnowBalanceCRHM("CanopySnowBalanceCRHM", "02/07/25", LMODULE::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", LMODULE::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", LMODULE::ADVANCE));
