@@ -53,7 +53,7 @@ ClassalbedoBaker.o Classalbedoobs.o Classalbedoobs2.o Classalbedoparam.o \
 ClassalbedoRichard.o ClassalbedoWinstral.o ClassAnnan.o ClassAyers.o \
 ClassBasin.o Classbrushintcp.o Classcalcsun.o Classcontribution.o \
 Classcrack.o ClassCRHMCanopy.o ClassCRHMCanopyClearing.o \
-ClassCRHMCanopyClearingGap.o ClassCRHMCanopyVectorBased.o \
+ClassCRHMCanopyClearingGap.o ClassCRHMCanopyVectorBased.o ClassCRHMCanopyVectorBasedClearingGap.o \
 ClassCanopySnowBalanceBase.o ClassCanopySnowBalanceCRHM.o Classebsm.o Classevap.o \
 Classevap_Resist.o ClassevapD.o ClassevapD_Resist.o ClassevapX.o ClassFlowInSnow.o \
 Classfrostdepth.o Classfrozen.o ClassfrozenAyers.o Classglacier.o \
