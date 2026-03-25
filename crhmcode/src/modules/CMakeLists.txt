@@ -25,6 +25,7 @@ add_library(modules OBJECT
     ClassCRHMCanopyClearing.cpp
     ClassCRHMCanopyClearingGap.cpp
     ClassCRHMCanopyVectorBased.cpp
+    ClassCRHMCanopyVectorBasedClearingGap.cpp
     Classebsm.cpp
     Classevap_Resist.cpp
     Classevap.cpp
