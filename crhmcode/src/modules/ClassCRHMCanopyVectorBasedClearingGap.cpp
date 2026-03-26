@@ -273,6 +273,9 @@ void ClassCRHMCanopyVectorBasedClearingGap::run(void)
 
       double Kd = Qsi_*(1.0 - Alpha_c[hh] - Tau_b_gap*(1.0 - Albedo[hh]));
 
+      // Canopy temperature is approximated by the air temperature
+      double T1 = hru_t[hh] + CRHM_constants::Tm; // deg C -> K
+
       Qlisn[hh] = Vgap*Qli_ + (1.0 - Vgap)*((Qli_*Tau_b_gap + (1.0 - Tau_b_gap)*CRHM_constants::emiss_c*CRHM_constants::sbc*pow(T1, 4.0f)) + B_canopy[hh]*Kd);
 
       Qlisn_Var[hh] = Qlisn[hh];
