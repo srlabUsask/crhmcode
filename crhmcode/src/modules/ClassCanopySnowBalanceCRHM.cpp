@@ -287,12 +287,12 @@ void ClassCanopySnowBalanceCRHM::run(void) { // executed every interval
 
       do_data_tstep_veg(); // executes Snobal code only if new snow intercepted/snow is in canopy, will not execute for hrus w.o. canopy.
 
-      if (snow_h2o_veg[hh] < 1e-6 & snow_h2o_veg[hh] > 0.0){ // if very small amount of snow on canopy then sublimate it off, handles non-convergence of energy balance for small snow values
+      if (snow_h2o_veg[hh] < 1e-6 && snow_h2o_veg[hh] > 0.0){ // if very small amount of snow on canopy then sublimate it off, handles non-convergence of energy balance for small snow values
 
         delsub_veg_int[hh] += snow_h2o_veg[hh];
         snow_h2o_veg[hh] = 0.0;
         m_s_veg[hh] = snow_h2o_veg[hh] + liq_h2o_veg[hh];
-        vegsnowcover[hh] = 0.0;
+        vegsnowcover[hh] = 0;
       }
 
     }
