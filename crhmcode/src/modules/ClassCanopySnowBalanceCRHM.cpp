@@ -39,7 +39,7 @@ ClassCanopySnowBalanceCRHM* ClassCanopySnowBalanceCRHM::klone(string name) const
 
 void ClassCanopySnowBalanceCRHM::decl(void) {
 
-    Description = "Handles the mass and energy balance of snow intercepted in the canopy. Should be paired with the CanopyVectorBased module which does the initial loading of precip in the canopy and some radiation calculations. There is a timestep subset routine in this module following the surface snowpack routine. Standard CRHM module.' \
+    Description = "'Handles the mass and energy balance of snow intercepted in the canopy. Should be paired with the CanopyVectorBased module which does the initial loading of precip in the canopy and some radiation calculations. There is a timestep subset routine in this module following the surface snowpack routine. Standard CRHM module.' \
                  'use Qsi (W/m^2) and Qli (W/m^2) observations,' \
                  'use variables Qsisn_Var (W/m^2) and Qlisn_Var (W/m^2) from module CanopyClearing.' \
                  'use observation Qsi (W/m^2) and QliVt_Var (W/m^2) from module longVt.' \
@@ -129,7 +129,7 @@ void ClassCanopySnowBalanceCRHM::decl(void) {
 
     decllocal("stop_no_snow", TDim::NHRU, "snow flag", "()", &stop_no_snow);
     declparam("max_liq_veg_frac", TDim::NHRU, "[0.01]", "0.0001", "0.2", "max liquid h2o content as fraction of specific snow mass", "()", &max_liq_veg_frac);
-    declparam("Albedo_vegsnow", TDim::NHRU, "[0.6]", "0.6", "0.9", "Albedo_vegsnow", "()", &Albedo_vegsnow);
+    declparam("Albedo_vegsnow", TDim::NHRU, "[0.6]", "0.6", "0.9", "Albedo of intercepted snow", "()", &Albedo_vegsnow);
     declparam("SW_to_LW_fn", TDim::NHRU, "[0.01]", "0.0001", "0.5", "dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.", "()", &SW_to_LW_fn);
 
     declgetparam("*", "z_u", "()", &z_u); // height of wind measurement (m)
