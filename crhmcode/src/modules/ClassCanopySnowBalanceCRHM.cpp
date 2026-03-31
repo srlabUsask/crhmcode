@@ -45,7 +45,7 @@ void ClassCanopySnowBalanceCRHM::decl(void) {
                  'use observation Qsi (W/m^2) and QliVt_Var (W/m^2) from module longVt.' \
                  'use variables QsiS_Var (W/m^2) from Annandale and QliVt_Var (W/m^2) from module longVt.'";
 
-    declstatvar("isothermal", TDim::NHRU, "melting: 0/1", "()", &isothermal);
+    declstatvar("isothermal_veg", TDim::NHRU, "melting: 0/1", "()", &isothermal);
     declstatvar("vegsnowcover", TDim::NHRU, "snow on veg at start of current timestep: 0/1", "()", &vegsnowcover);
 
     declvar("Qn_veg", TDim::NHRU, "net allwave radiation wrt the canopy", "(W/m^2)", &Qn_veg);
@@ -100,11 +100,11 @@ void ClassCanopySnowBalanceCRHM::decl(void) {
     declvar("T_rain_veg", TDim::NHRU, "rain's temp", "(" + string(DEGREE_CELSIUS) + ")", &T_rain_veg);
     declvar("T_sf", TDim::NHRU, "snowfall's temp", "(" + string(DEGREE_CELSIUS) + ")", &T_sf);
 
-    decllocal("S_n_L", TDim::NHRU, "net solar radiation", "(W/m^2)", &S_n);
-    decllocal("I_lw_L", TDim::NHRU, "incoming longwave (thermal) rad ", "(W/m^2)", &I_lw);
-    decllocal("T_a_L", TDim::NHRU, "air temp", "(" + string(DEGREE_CELSIUS) + ")", &T_a);
-    decllocal("e_a_L", TDim::NHRU, "vapor pressure", "(Pa)", &e_a);
-    decllocal("u_L", TDim::NHRU, "wind speed", "(m/s)", &u);
+    decllocal("S_n_L_veg", TDim::NHRU, "net solar radiation", "(W/m^2)", &S_n);
+    decllocal("I_lw_L_veg", TDim::NHRU, "incoming longwave (thermal) rad ", "(W/m^2)", &I_lw);
+    decllocal("T_a_L_veg", TDim::NHRU, "air temp", "(" + string(DEGREE_CELSIUS) + ")", &T_a);
+    decllocal("e_a_L_veg", TDim::NHRU, "vapor pressure", "(Pa)", &e_a);
+    decllocal("u_L_veg", TDim::NHRU, "wind speed", "(m/s)", &u);
     decllocal("I_LW_atm", TDim::NHRU, "Downwelling longwave from the atmoshpere", "(W/m^2)", &I_LW_atm);
     decllocal("I_LW_gnd", TDim::NHRU, "Upwelling longwave from the ground", "(W/m^2)", &I_LW_gnd);
     decllocal("I_LW_cpy_2_cpy", TDim::NHRU, "Longwave from the canopy reflected off the surface back to the canopy", "(W/m^2)", &I_LW_cpy_2_cpy);
@@ -120,14 +120,14 @@ void ClassCanopySnowBalanceCRHM::decl(void) {
     decllocal("m_snow_L", TDim::NHRU, "specific mass in snow in precip", "(kg/m^2)", &m_snow);
     decllocal("T_pp_L", TDim::NHRU, "precip temp", "(" + string(DEGREE_CELSIUS) + ")", &T_pp);
 
-    decllocal("P_a", TDim::NHRU, "air pressure", "(Pa)", &P_a);
+    decllocal("P_a_veg", TDim::NHRU, "air pressure", "(Pa)", &P_a);
 
-    decllocal("m_precip_cum", TDim::NHRU, "cumulative specific mass of total precip", "(kg/m^2)", &m_precip_cum);
-    decllocal("m_rain_cum", TDim::NHRU, "cumulative specific mass of total rain", "(kg/m^2)", &m_rain_cum);
-    decllocal("m_snow_cum", TDim::NHRU, "cumulative specific mass of total snow", "(kg/m^2)", &m_snow_cum);
-    decllocal("E_s_cum", TDim::NHRU, "cumulative mass flux by evap into air from active layer", "(kg/m^2)", &E_s_cum);
+    decllocal("m_precip_veg_cum", TDim::NHRU, "cumulative specific mass of total precip", "(kg/m^2)", &m_precip_cum);
+    decllocal("m_rain_veg_cum", TDim::NHRU, "cumulative specific mass of total rain", "(kg/m^2)", &m_rain_cum);
+    decllocal("m_snow_veg_cum", TDim::NHRU, "cumulative specific mass of total snow", "(kg/m^2)", &m_snow_cum);
+    decllocal("E_s_veg_cum", TDim::NHRU, "cumulative mass flux by evap into air from active layer", "(kg/m^2)", &E_s_cum);
 
-    decllocal("stop_no_snow", TDim::NHRU, "snow flag", "()", &stop_no_snow);
+    decllocal("stop_no_snow_veg", TDim::NHRU, "snow flag", "()", &stop_no_snow);
     declparam("max_liq_veg_frac", TDim::NHRU, "[0.01]", "0.0001", "0.2", "max liquid h2o content as fraction of specific snow mass", "()", &max_liq_veg_frac);
     declparam("Albedo_vegsnow", TDim::NHRU, "[0.6]", "0.6", "0.9", "Albedo of intercepted snow", "()", &Albedo_vegsnow);
     declparam("SW_to_LW_fn", TDim::NHRU, "[0.01]", "0.0001", "0.5", "dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.", "()", &SW_to_LW_fn);
