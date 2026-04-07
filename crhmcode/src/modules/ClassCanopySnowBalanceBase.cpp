@@ -545,7 +545,6 @@ int ClassCanopySnowBalanceBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's r
     delunld_int[hh] += delunld[hh];
     delunld_wind_int[hh] += delunld_wind[hh];
     delunld_melt_int[hh] += delunld_melt[hh];
-    delunld_subl_int[hh] += delunld_subl[hh];
     deldrip_veg_int[hh] += deldrip_veg[hh];
 
     //  Update the model's input parameters
@@ -1210,7 +1209,6 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
     if (!vegsnowcover[hh]) { // no snow in the canopy exit early
         delunld_wind[hh] = 0.0;
         delunld_melt[hh] = 0.0;
-        delunld_subl[hh] = 0.0;
         return;
     }
 
