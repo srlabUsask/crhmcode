@@ -68,7 +68,6 @@ public:
     double* delunld_subl{ NULL };	    // canopy snow unloading due to sublimation (kg/m^2*s)
     double* delunld_wind_int{ NULL };	    // solid snow unloading from the canopy induced by wind (kg/m^2*int)
     double* delunld_melt_int{ NULL };	    // canopy snow unloading rate due to melting (kg/m^2*int)
-    double* delunld_subl_int{ NULL };	    // canopy snow unloading due to sublimation (kg/m^2*int)
     double* deldrip_veg_int{ NULL };	    // canopy snowmelt drainage (kg/m^2*int)
 
     double* delmelt_veg_day{ NULL };      // daily predicted specific runoff (m/sec)
