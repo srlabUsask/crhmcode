@@ -75,10 +75,9 @@ void ClassCanopySnowBalanceCRHM::decl(void) {
     declvar("net_rain", TDim::NHRU, "throughfall rain + drip (runoff/melt drainage) of snow intercepted in the canopy", "(kg/m^2*int)", &net_rain);
     declvar("net_snow", TDim::NHRU, "throughfall snow + unloaded snow from the canopy", "(kg/m^2*int)", &net_snow);
     declvar("net_p", TDim::NHRU, "net rain + net snow", "(kg/m^2*int)", &net_p);
-    decllocal("delunld_wind_int", TDim::NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*int)", &delunld_wind_int);
-    decllocal("delunld_melt_int", TDim::NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*int)", &delunld_melt_int);
-    decllocal("delunld_subl_int", TDim::NHRU, "canopy snow unloading due to sublimation", "(kg/m^2*int)", &delunld_subl_int);
-    decllocal("deldrip_veg_int", TDim::NHRU, "drip from canopy snowmelt and intercepted rainfall", "(kg/m^2*int)", &deldrip_veg_int);
+    declvar("delunld_wind_int", TDim::NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*int)", &delunld_wind_int);
+    declvar("delunld_melt_int", TDim::NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*int)", &delunld_melt_int);
+    declvar("deldrip_veg_int", TDim::NHRU, "drip from canopy snowmelt and intercepted rainfall", "(kg/m^2*int)", &deldrip_veg_int);
 
     declvar("delL", TDim::NHRU, "interval change in SWE", "(kg/m^2*int)", &delL);
     declvar("delmelt_veg_day", TDim::NHRU, "daily snow melt", "(mm/d)", &delmelt_veg_day);
@@ -254,7 +253,6 @@ void ClassCanopySnowBalanceCRHM::run(void) { // executed every interval
     delunld_int[hh] = 0.0;
     delunld_wind_int[hh] = 0.0;
     delunld_melt_int[hh] = 0.0;
-    delunld_subl_int[hh] = 0.0;
     deldrip_veg_int[hh] = 0.0;
     delevap_veg_int[hh] = 0.0;
 
