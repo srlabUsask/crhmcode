@@ -64,7 +64,6 @@ void ClassCanopySnowBalanceCRHM::decl(void) {
     decllocal("delmelt_veg", TDim::NHRU, "specific melt (kg/m^2 or m)", "(kg/m^2)", &delmelt_veg);
     decllocal("delunld_wind", TDim::NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*s)", &delunld_wind);
     decllocal("delunld_melt", TDim::NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*s)", &delunld_melt);
-    decllocal("delunld_subl", TDim::NHRU, "canopy snow unloading due to sublimation", "(kg/m^2*s)", &delunld_subl);
     decllocal("delunld", TDim::NHRU, "canopy snow unloading rate", "(kg/m^2*s)", &delunld);
     declvar("deldrip_veg", TDim::NHRU, "drip from canopy snowmelt and intercepted rainfall", "(kg/m^2*s)", &deldrip_veg);
 
