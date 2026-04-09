@@ -144,6 +144,7 @@ void ClassCanopySnowBalanceCRHM::decl(void) {
     declparam("MassUnloadingSwitch", TDim::NHRU, "[0]", "0", "2", "canopy snow unloading parameterization to use, 0 - Cebulski & Pomeroy 2025 ablation paper, 1- Andreadis 2009, 2 - Roesch2001 (enable HP98/Ellis2010 using original canopy clearing gap module)", "()", &MassUnloadingSwitch);
     declparam("unld_to_melt_ratio_m", TDim::NHRU, "[0.15]", "-20.0", "20.0", "Slope coefficient for unloading to melt ratio", "()", &unld_to_melt_ratio_m);
     declparam("unld_to_melt_ratio_b", TDim::NHRU, "[-0.43]", "-20.0", "20.0", "Intercept coefficient for unloading to melt ratio", "()", &unld_to_melt_ratio_b);
+    declparam("a_tau", TDim::NHRU, "[0.371]", "0.0", "20.0", "Shear stress coefficient for dry-snow unloading", "()", &a_tau);
     declgetparam("*", "relative_hts", "()", &relative_hts); 
     declgetparam("*", "inhibit_evap", "()", &inhibit_evap);     
 
