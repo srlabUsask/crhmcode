@@ -1236,7 +1236,7 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
 
         // wind induced unloading as function of shear stress
         // const double a_tau = 0.371/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
-        double a_tau = a_tau[hh]/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
+        double a_tau_s = a_tau[hh]/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
 
         double fu = 0.0;
 
@@ -1244,7 +1244,7 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
         {
             // fu = u_2_3rds[hh] * a_u * exp(b_u * u_2_3rds[hh]); // unloading rate due to wind (s-1)
             double tau_mid = u_2_3rds[hh] * u_2_3rds[hh] * 0.02; // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
-            fu = a_tau * tau_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
+            fu = a_tau_s * tau_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
         }
         else
         {
