@@ -173,6 +173,7 @@ public:
     const long *MassUnloadingSwitch { NULL }; // canopy snow ablation parameterization to use, 0 - Cebulski & Pomeroy 2025 ablation paper, 1- Andreadis 2009, 2 - Roesch2001 (enable HP98/Ellis2010 using original canopy clearing gap module)
     const double  *unld_to_melt_ratio_m{ NULL };  // Slope coefficient for unloading to melt ratio (-)
     const double  *unld_to_melt_ratio_b{ NULL };  // Intercept coefficient for unloading to melt ratio (-)
+    const double  *a_tau{ NULL };  // Shear stress coefficient for dry-snow unloading (-)
 
 //    void decl(void);
 
