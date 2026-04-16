@@ -1205,7 +1205,7 @@ void ClassSnobalBase::_precip(void)
 
         // Add rainfall and water in the snowcover to total liquid water. ???? !!!!
 
-        h2o_total[hh] += m_rain[hh];
+        h2o_total[hh] += h2o[hh] + m_rain[hh];
         //    ro_predict[hh] += m_rain[hh];
     } // current precip
 
