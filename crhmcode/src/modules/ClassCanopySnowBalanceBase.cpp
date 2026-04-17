@@ -585,20 +585,17 @@ void ClassCanopySnowBalanceBase::compute_canopy_snow_wind(void)
     {
         case 0:
         { // used if wind speed is measured within canopy
-            // scale wind to top of canopy and then down to within canopy using cionco
-            double z_veg_u = Ht[hh]*(2.0/3.0);
-            double u_veg_ht = 0.0;
-
-            adst_wind_cpy_top(Ht[hh], u[hh], rel_z_u[hh], u_veg_ht);
-            cionco_canopy_wind_spd(Ht[hh], u_veg_ht, z_veg_u, u_2_3rds[hh]);
+            u_2_3rds[hh] = u[hh];
             break;
         } // end wind case 0
 
         case 1:
         { // used if wind speed is measured at or above canopy, then wind speed is scaled down to within canopy using cionco
             double z_veg_u = Ht[hh]*(2.0/3.0);
+            double u_veg_ht = 0.0;
 
-            cionco_canopy_wind_spd(Ht[hh], u[hh], z_veg_u, u_2_3rds[hh]);
+            adst_wind_cpy_top(Ht[hh], u[hh], rel_z_u[hh], u_veg_ht);
+            cionco_canopy_wind_spd(Ht[hh], u_veg_ht, z_veg_u, u_2_3rds[hh]);
             break;
         } // end wind case 1
 
