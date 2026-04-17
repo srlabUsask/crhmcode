@@ -934,11 +934,10 @@ int ClassCanopySnowBalanceBase::calc_turb_transfer(
     else
         Ce = ks * pow((m_s_veg[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar
 
-    d_0 = Ht[hh] * (2/3);
     z_0 = Ht[hh] * 0.1;
 
     // resitances   
-    ra = 1.0/(VON_KARMAN2*VON_KARMAN2*u)*(log((tz - d_0)/z_0)*log(((uz - d_0)/z_0))); // Allen 1998 Eq. 4
+    ra = 1.0/(PBSM_constants::KARMAN*PBSM_constants::KARMAN*u)*(log(tz/z_0)*log((uz/z_0))); // Allen 1998 Eq. 4 but without displacement height as in original crhm canopy
     ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * m_s_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
 
     CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(ts); // Eq. 29 from Essery et al., 2003
