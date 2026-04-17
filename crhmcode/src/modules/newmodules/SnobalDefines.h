@@ -464,9 +464,7 @@ inline double adst_wind_cpy_top(
     double& u_veg_ht /* Wind speed at canopy top (m/s)*/
     )  
 {
-    if(z >= veg_ht){
-        u_veg_ht = uz;
-    } else if (veg_ht - 2.0 / 3.0 * z > 0.0) {
+    if (veg_ht - 2.0 / 3.0 * z > 0.0) {
         u_veg_ht = uz * log((veg_ht - 2.0 / 3.0 * z) / 0.123 * z) / log((z - 2.0 / 3.0 * z) / 0.123 * z);
     } else {
         u_veg_ht = 0.0;
