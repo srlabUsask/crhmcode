@@ -1238,8 +1238,21 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
 
         if (u_2_3rds[hh] >= 0.0)
         {
-            // fu = u_2_3rds[hh] * a_u * exp(b_u * u_2_3rds[hh]); // unloading rate due to wind (s-1)
-            double tau_mid = u_2_3rds[hh] * u_2_3rds[hh] * 0.02; // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
+            double tau_mid = 0.0;
+
+            if (CanopyWindSwitchCanSno[hh] == 0){ // if using measured mid canopy wind approx tau as square of mid canopy wind speed as developed from obs at fortress mountain
+                tau_mid = u_2_3rds[hh] * u_2_3rds[hh] * 0.02; // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
+            } else { // assume wind speed was measured at canopy top so estimate mid canopy tau from above canopy tau estimated from above canopy wind (See description in Cebulski et al., 2026, HP)
+                double air_density = GAS_DEN(P_a[hh], MOL_AIR, T_a[hh]);
+                double d0 = Ht[hh] * (2.0/3.0);
+                double z0 = Ht[hh] * 0.1;
+
+                double u_veg_ht = 0.0;
+                adst_wind_cpy_top(Ht[hh], u[hh], rel_z_u[hh], u_veg_ht);
+                double ustar_top = (u_veg_ht * PBSM_constants::KARMAN)/log((z_u[hh] - d0)/z0); // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
+                double tau_top = ustar_top * ustar_top * air_density; // estimate mid canopy tau from above canopy tau using log wind profile
+                tau_mid = tau_top * 0.08; // empirical transfer function developed from fortress mountain obs adjusted to get closer match to Marmot hanging tree snow load to relate mid canopy tau to above canopy tau
+            }
             fu = a_tau_s * tau_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
         }
         else
