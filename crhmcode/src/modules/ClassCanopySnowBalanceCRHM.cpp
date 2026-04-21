@@ -140,7 +140,7 @@ void ClassCanopySnowBalanceCRHM::decl(void) {
     declgetparam("*", "LAI", "()", &LAI); 
     declgetparam("*", "Ht", "()", &Ht); 
     declparam("Lmax", TDim::NHRU, "[50]", "0", "100", "maximum canopy snow load", "(kg/m^2)", &Lmax);
-    declparam("CanopyWindSwitchCanSno", TDim::NHRU, "[0]", "0", "2", "Canopy wind model to use for wind induced unloading at 2/3rd canopy height, 0 - for Cionco, 1 - for Prandtl-von Kármán log-linear relationship, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchCanSno);
+    declparam("CanopyWindSwitchCanSno", TDim::NHRU, "[0]", "0", "2", "Canopy wind model to use for wind induced unloading at 2/3rd canopy height, 0 - no adjustment, 1 - for Prandtl-von Kármán log-linear relationship for above canopy adjustment and Cionco 1965 for within canopy, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchCanSno);
     declparam("MassUnloadingSwitch", TDim::NHRU, "[0]", "0", "2", "canopy snow unloading parameterization to use, 0 - Cebulski & Pomeroy 2025 ablation paper, 1- Andreadis 2009, 2 - Roesch2001 (enable HP98/Ellis2010 using original canopy clearing gap module)", "()", &MassUnloadingSwitch);
     declparam("unld_to_melt_ratio_m", TDim::NHRU, "[0.15]", "-20.0", "20.0", "Slope coefficient for unloading to melt ratio", "()", &unld_to_melt_ratio_m);
     declparam("unld_to_melt_ratio_b", TDim::NHRU, "[-0.43]", "-20.0", "20.0", "Intercept coefficient for unloading to melt ratio", "()", &unld_to_melt_ratio_b);

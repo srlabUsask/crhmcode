@@ -166,7 +166,7 @@ void ClassCRHMCanopyVectorBasedClearingGap::decl(void)
 
   declparam("CanopyClearing", TDim::NHRU, "[0]", "0", "2", "canopy - 0/clearing - 1/gap - 2", "()", &CanopyClearing);
 
-  declparam("CanopyWindSwitchIP", TDim::NHRU, "[0]", "0", "2", "Canopy wind model to use at height Zcan, 0 - for Cionco, 1 - for Prandtl-von Kármán log-linear relationship, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchIP);
+  declparam("CanopyWindSwitchIP", TDim::NHRU, "[0]", "0", "2", "Canopy wind model to use at height Zcan, 0 - for within or above canopy wind speed measured and Prandtl-von Kármán log-linear relationship is used to bring to canopy top and then Cionco 1965 is used to adjust within Canopy, 1 - if measured wind is at canopy top and then just Cionco 1965 is used to bring within canopy, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchIP);
 
   decldiagparam("Alpha_c", TDim::NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
 

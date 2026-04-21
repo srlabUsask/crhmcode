@@ -53,6 +53,15 @@ void ClassCanopySnowBalanceBase::init(void) {
     }
 
     for (hh = 0; chkStruct(); ++hh) {
+
+        WindTypeCanSno canopytype = static_cast<WindTypeCanSno>(CanopyWindSwitchCanSno[hh]);
+
+        if(canopytype != WindTypeCanSno::NO_ADJUSTMENT && canopytype != WindTypeCanSno::ADJUST_CIONCO && canopytype != WindTypeCanSno::FORTRESS_SPARSE_CANOPY)
+        {
+            CRHMException Except(string("Invalid canopy wind model switch for HRU ") + to_string(hh) + string(": ") + to_string(CanopyWindSwitchCanSno[hh]) + string(". Valid values are 0 (measured within canopy), 1 (measured above canopy) and 2 (Fortress sparse canopy)."), TExcept::TERMINATE);
+            LogError(Except);
+        }
+
         P_a[hh] = 101.3f * pow((293.0f - 0.0065f * hru_elev[hh]) / 293.0f, 5.26f) * 1000.0f;  // Pa
 
         h2o_sat_veg[hh] = 0.0;
@@ -581,16 +590,17 @@ int ClassCanopySnowBalanceBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's r
 */
 void ClassCanopySnowBalanceBase::compute_canopy_snow_wind(void)
 {
-    switch ((int)CanopyWindSwitchCanSno[hh])
+
+    switch (static_cast<WindTypeCanSno>(CanopyWindSwitchCanSno[hh]))
     {
-        case 0:
-        { // used if wind speed is measured within canopy
+        case WindTypeCanSno::NO_ADJUSTMENT:
+        { 
             u_2_3rds[hh] = u[hh];
             break;
         } // end wind case 0
 
-        case 1:
-        { // used if wind speed is measured at or above canopy, then wind speed is scaled down to within canopy using cionco
+        case WindTypeCanSno::ADJUST_CIONCO:
+        { 
             double z_veg_u = Ht[hh]*(2.0/3.0);
             double u_veg_ht = 0.0;
 
@@ -599,8 +609,8 @@ void ClassCanopySnowBalanceBase::compute_canopy_snow_wind(void)
             break;
         } // end wind case 1
 
-        case 2:
-        {                           // Canopy wind profile developed at Fortress sparse canopy
+        case WindTypeCanSno::FORTRESS_SPARSE_CANOPY:
+        {                           
             double d0_wind = 0.5791121;  // displacement height observed at sparse forest around Fortress Forest Tower
             double z0m_wind = 0.4995565; // roughness length observed at above site
             double z_veg_u = Ht[hh]*(2.0/3.0);
