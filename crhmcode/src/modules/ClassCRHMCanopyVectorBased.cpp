@@ -160,7 +160,7 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declparam("alpha", TDim::NHRU, "[0.836]", "0.0", "1.0", "$alpha$ is an efficiency constant which determines the fraction of snowflakes that contact the $C_p$ elements and are stored in the canopy (i.e., intercepted) before canopy snow unloading or ablation processes begin. Default is based on Cebulski & Pomeroy plot scale observations at Fortress Mountain PWL and Forest Tower plots.", "()", &alpha);
 
-  declparam("CanopyWindSwitchIP", TDim::NHRU, "[0]", "0", "2", "Canopy wind model to use at height Zcan, 0 - for Cionco, 1 - for Prandtl-von Kármán log-linear relationship, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchIP);
+  declparam("CanopyWindSwitchIP", TDim::NHRU, "[0]", "0", "2", "Canopy wind model to use at height Zcan, 0 - for within or above canopy wind speed measured and Prandtl-von Kármán log-linear relationship is used to bring to canopy top and then Cionco 1965 is used to adjust within Canopy, 1 - if measured wind is at canopy top and then just Cionco 1965 is used to bring within canopy, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchIP);
 
   decldiagparam("Alpha_c", TDim::NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
 
