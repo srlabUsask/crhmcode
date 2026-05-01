@@ -20,11 +20,11 @@
 
 #include "../core/ClassModule.h"
 
-class ClassCRHMCanopyVectorBased:public ClassModule {
+class ClassCRHMCanopyVectorBasedClearingGap:public ClassModule {
 
 public:
 
-ClassCRHMCanopyVectorBased(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
+ClassCRHMCanopyVectorBasedClearingGap(string Name, string Version = "undefined", LMODULE Lvl = LMODULE::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
 
 double Qsi_{ 0.0 }, Qli_ {0.0};
 
@@ -98,9 +98,12 @@ const double *alpha { NULL };
 const double *Z0snow { NULL };
 const double *Zref { NULL };
 const double *Zwind { NULL };
+const double *Surrounding_Ht { NULL };
+const double *Gap_diameter { NULL };
 const double *Alpha_c { NULL };
 const double *B_canopy { NULL };
 
+const long *CanopyClearing { NULL };
 const long *CanopyWindSwitchIP { NULL };
 
 void decl(void);
@@ -108,7 +111,7 @@ void init(void);
 void run(void);
 void finish(bool good);
 
-ClassCRHMCanopyVectorBased* klone(string name) const;
+ClassCRHMCanopyVectorBasedClearingGap* klone(string name) const;
 
 private:
     void choose_solar_data(void);

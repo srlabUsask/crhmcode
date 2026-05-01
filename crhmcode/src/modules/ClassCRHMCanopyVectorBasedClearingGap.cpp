@@ -25,21 +25,21 @@
 #include <bitset>
 #include <algorithm>
 
-#include "ClassCRHMCanopyVectorBased.h"
+#include "ClassCRHMCanopyVectorBasedClearingGap.h"
 #include "../core/GlobalDll.h"
 #include "../core/ClassCRHM.h"
 #include "newmodules/SnobalDefines.h"
 
 using namespace CRHM;
 
-ClassCRHMCanopyVectorBased* ClassCRHMCanopyVectorBased::klone(string name) const{
-  return new ClassCRHMCanopyVectorBased(name);
+ClassCRHMCanopyVectorBasedClearingGap *ClassCRHMCanopyVectorBasedClearingGap::klone(string name) const{
+  return new ClassCRHMCanopyVectorBasedClearingGap(name);
 }
 
-void ClassCRHMCanopyVectorBased::decl(void)
+void ClassCRHMCanopyVectorBasedClearingGap::decl(void)
 {
 
-  Description = "'Calculates initial snow interception after Cebulski & Pomeroy (2025, Hyrological Proc.) canopy snow ablation is handled by the CanopySnowBalance module. Assumptions are for this to be applied on a forested HRU without significant clear cuts/large gaps in the forest with width many times the canopy height. This module also does some radiation calcs for consistency with the CanopyClearingGap module which this one replaces.' \
+  Description = "'Calculates initial snow interception for forest canopy after Cebulski & Pomeroy (2025, Hyrological Proc.) canopy snow ablation is handled by the CanopySnowBalance module, with assumptions that are for this to be applied on a forested HRU without significant clear cuts/large gaps in the forest with width many times the canopy height. For surface radiation calculations for canopy, clearing, and gap cases and mass calculations for clearing and gap cases, this module is consistent with the CanopyClearingGap module.' \
                  'Inputs are observations Qsi (W/m^2) and Qli (W/m^2), ' \
                  'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2), ' \
                  'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and observation Qli (W/m^2), ' \
@@ -141,10 +141,14 @@ void ClassCRHMCanopyVectorBased::decl(void)
   declvar("Clca", TDim::NHRU, "Leaf contact area adjusted for hydrometeor trajectory angle.", "()", &Clca);
 
   declvar("LAI_", TDim::NHRU, "Leaf area index adjusted for snow cover", "()", &LAI_);
-  
+
   // parameters:
 
   declparam("hru_elev", TDim::NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+
+  declparam("Surrounding_Ht", TDim::NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "surrounding canopy height", "(m)", &Surrounding_Ht);
+
+  declparam("Gap_diameter", TDim::NHRU, "[100]", "10", "1000", "representative gap diameter", "(m)", &Gap_diameter);
 
   declparam("Ht", TDim::NHRU, "[20.0]", "0.001", "100.0", "forest/vegetation height", "(m)", &Ht);
 
@@ -160,14 +164,16 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   declparam("alpha", TDim::NHRU, "[0.836]", "0.0", "1.0", "$alpha$ is an efficiency constant which determines the fraction of snowflakes that contact the $C_p$ elements and are stored in the canopy (i.e., intercepted) before canopy snow unloading or ablation processes begin. Default is based on Cebulski & Pomeroy plot scale observations at Fortress Mountain PWL and Forest Tower plots.", "()", &alpha);
 
-  declparam("CanopyWindSwitchIP", TDim::NHRU, "[0]", "0", "2", "Canopy wind model to use at height Zcan, 0 - for Cionco, 1 - for Prandtl-von Kármán log-linear relationship, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchIP);
+  declparam("CanopyClearing", TDim::NHRU, "[0]", "0", "2", "canopy - 0/clearing - 1/gap - 2", "()", &CanopyClearing);
+
+  declparam("CanopyWindSwitchIP", TDim::NHRU, "[0]", "0", "2", "Canopy wind model to use at height Zcan, 0 - for within or above canopy wind speed measured and Prandtl-von Kármán log-linear relationship is used to bring to canopy top and then Cionco 1965 is used to adjust within Canopy, 1 - if measured wind is at canopy top and then just Cionco 1965 is used to bring within canopy, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchIP);
 
   decldiagparam("Alpha_c", TDim::NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
 
   decldiagparam("B_canopy", TDim::NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter for longwave-radiation. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
 }
 
-void ClassCRHMCanopyVectorBased::init(void)
+void ClassCRHMCanopyVectorBasedClearingGap::init(void)
 {
 
   nhru = getdim(TDim::NHRU); // transfers current # of HRU's to module
@@ -185,21 +191,107 @@ void ClassCRHMCanopyVectorBased::init(void)
   }
 }
 
-void ClassCRHMCanopyVectorBased::run(void)
-{ 
+void ClassCRHMCanopyVectorBasedClearingGap::run(void)
+{
   for (hh = 0; chkStruct(); ++hh)
   {
     throughfall_rain[hh] = 0.0;
     throughfall_snow[hh] = 0.0;
 
-    intercepted_rain[hh] = 0.0;       
-    intercepted_snow[hh] = 0.0;  
+    intercepted_rain[hh] = 0.0;
+    intercepted_snow[hh] = 0.0;
 
     choose_solar_data(); // decide what solar data to use based on module variation defined in prj file
     compute_canopy_temp(); // compute canopy temperature as input for surface snow energy balance
 
-    adjust_lai_for_snow_height(Ht[hh]);
-    compute_canopy_long_short_rads(); // compute canopy long and short wave radiation components sent to canopy snow ebal and surface snowbal modules
+  switch(CanopyClearing[hh]){
+
+	case 0: // canopy
+
+      adjust_lai_for_snow_height(Ht[hh]);
+      compute_canopy_long_short_rads(); // compute canopy long and short wave radiation components sent to canopy snow ebal and surface snowbal modules
+
+      break;
+
+    case 1:  // clearing
+
+      Qlisn[hh] = Qli_;
+
+      Qlisn_Var[hh] = Qlisn[hh];
+
+      Qsisn[hh] = Qsi_;
+
+      Qsisn_Var[hh] = Qsisn[hh];
+
+      Qlosn[hh] = CRHM_constants::emiss*CRHM_constants::sbc*pow(Ts[hh] + CRHM_constants::Tm, 4.0f);
+
+      Qnsn[hh] = Qlisn[hh] - Qlosn[hh] + Qsisn[hh]*(1.0 - Albedo[hh]);
+
+      Qnsn_Var[hh] = Qnsn[hh];
+
+      break;
+
+    case 2:  // gap
+
+      double Exposure = Surrounding_Ht[hh] - Common::DepthofSnow (SWE[hh]); /* depths(m) SWE(mm) */
+      if(Exposure < 0.0)
+        Exposure = 0.0;
+
+      double LAI_ = LAI[hh]*Exposure/Surrounding_Ht[hh];
+
+      double Vf = 0.45 - 0.29*log(LAI[hh]);
+
+      double Tau_d = Vf + (1.0 - Vf)*sin((Surrounding_Ht[hh] - Exposure)/Surrounding_Ht[hh]*M_PI_2); // previously Vf_
+
+// calculate forest clearing sky view factor (Vgap) via Reifsnyder and Lull’s (1965) expression:
+
+      double Vgap = sqr(sin(atan2(Gap_diameter[hh], 2.0*Surrounding_Ht[hh])));
+
+// calculate beam pathlength correction (variable “Gap_beam_corr”) for gap:
+
+      double Gap_beam_corr = 0;
+      if(Qsi_ > 0.0 && SolAng[hh] > 0.001){
+        double cosxsLim = 3;
+        if(cosxs[hh] >  0.33)
+          cosxsLim = 1.0/cosxs[hh];
+
+        Gap_beam_corr = cosxsLim*Surrounding_Ht[hh]*(1.0/cos(SolAng[hh]) - Gap_diameter[hh]/(2.0*Surrounding_Ht[hh])/sin(SolAng[hh]));
+        if(Gap_beam_corr > 10.0)
+          Gap_beam_corr = 10.0;
+        else if(Gap_beam_corr < 0.0)
+          Gap_beam_corr = 0.0;
+        }
+// calculate beam shortwave transmittance of the gap:
+
+      double product = LAI[hh]*Gap_beam_corr;
+      if(product > 50)
+        product = 50;
+
+      double Tau_b_gap = exp(-product);
+
+      double Kd = Qsi_*(1.0 - Alpha_c[hh] - Tau_b_gap*(1.0 - Albedo[hh]));
+
+      // Canopy temperature is approximated by the air temperature
+      double T1 = hru_t[hh] + CRHM_constants::Tm; // deg C -> K
+
+      Qlisn[hh] = Vgap*Qli_ + (1.0 - Vgap)*((Qli_*Tau_b_gap + (1.0 - Tau_b_gap)*CRHM_constants::emiss_c*CRHM_constants::sbc*pow(T1, 4.0f)) + B_canopy[hh]*Kd);
+
+      Qlisn_Var[hh] = Qlisn[hh];
+
+      Qsisn[hh] = cosxs[hh]*Qdfo[hh]*Tau_b_gap + Vgap*(Qsi_ - Qdfo[hh]) + (1.0 - Vgap)*Tau_d*(Qsi_ - Qdfo[hh]);
+      if(Qsisn[hh] < 0.0)
+        Qsisn[hh] = 0.0;
+
+      Qsisn_Var[hh] = Qsisn[hh];
+
+      Qlosn[hh] = CRHM_constants::emiss*CRHM_constants::sbc*pow(Ts[hh] + CRHM_constants::Tm, 4.0f);
+
+      Qnsn[hh] = Qlisn[hh] - Qlosn[hh] + Qsisn[hh]*(1-Albedo[hh]);
+
+      Qnsn_Var[hh] = Qnsn[hh];
+
+      break;
+  } // switch
 
     //==============================================================================
     // coupled forest snow interception routine:
@@ -216,11 +308,11 @@ void ClassCRHMCanopyVectorBased::run(void)
 
         get_wind_for_leaf_contact_calc();
         compute_leaf_contact_area(v_snow);
-        
+
       } else { // do not adjust snow-leaf contact area for wind effects
         Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., Clca == 1 for Cc == 1 and Clca == 0 when Cc == 0
       }
-        
+
       IP = Clca[hh] * alpha[hh]; // interception efficiency (IP)
       intercepted_snow[hh] = IP * hru_snow[hh];    // change in canopy snow load
 
@@ -243,7 +335,7 @@ void ClassCRHMCanopyVectorBased::run(void)
 // helper functions
 
 // this function chooses which solar data to use based on the module variation defined in the prj file
-void ClassCRHMCanopyVectorBased::choose_solar_data(void)
+void ClassCRHMCanopyVectorBasedClearingGap::choose_solar_data(void)
 {
     switch ((int)variation)
     {
@@ -275,7 +367,7 @@ void ClassCRHMCanopyVectorBased::choose_solar_data(void)
 }
 
 // this function computes canopy temperature based on air temperature and radiation balance used in the Snobal module
-void ClassCRHMCanopyVectorBased::compute_canopy_temp(void)
+void ClassCRHMCanopyVectorBasedClearingGap::compute_canopy_temp(void)
 {
     // Canopy temperature is approximated by the air temperature
     double T1 = hru_t[hh] + CRHM_constants::Tm; // deg C -> K
@@ -289,9 +381,9 @@ void ClassCRHMCanopyVectorBased::compute_canopy_temp(void)
 
     double q = (hru_rh[hh] / 100) * Common::Qs(Pa[hh], T1); // specific humidity
 
-    Ts[hh] = T1 + (CRHM_constants::emiss * (Qli_ - CRHM_constants::sbc * pow(T1, 4.0)) 
+    Ts[hh] = T1 + (CRHM_constants::emiss * (Qli_ - CRHM_constants::sbc * pow(T1, 4.0))
                  + CRHM_constants::Ls * (q - Common::Qs(Pa[hh], T1)) * rho / ra[hh])
-                 / (4 * CRHM_constants::emiss * CRHM_constants::sbc * pow(T1, 3.0) 
+                 / (4 * CRHM_constants::emiss * CRHM_constants::sbc * pow(T1, 3.0)
                  + (CRHM_constants::Cp + CRHM_constants::Ls * deltaX) * rho / ra[hh]);
 
     Ts[hh] -= CRHM_constants::Tm; // back to deg C
@@ -302,7 +394,7 @@ void ClassCRHMCanopyVectorBased::compute_canopy_temp(void)
 }
 
 // this function adjusts the effective LAI based on snow height as the bottom of the canopy may be buried in snow
-void ClassCRHMCanopyVectorBased::adjust_lai_for_snow_height(double Ht)
+void ClassCRHMCanopyVectorBasedClearingGap::adjust_lai_for_snow_height(double Ht)
 {
     // Compute canopy exposure above snow
     double exposure = Ht - Common::DepthofSnow(SWE[hh]); // Ht in meters, SWE in mm
@@ -314,7 +406,7 @@ void ClassCRHMCanopyVectorBased::adjust_lai_for_snow_height(double Ht)
 }
 
 // this function computes canopy longwave and shortwave radiation components sent to canopy snow ebal and surface snowbal modules
-void ClassCRHMCanopyVectorBased::compute_canopy_long_short_rads(void)
+void ClassCRHMCanopyVectorBasedClearingGap::compute_canopy_long_short_rads(void)
 {
     double T1 = hru_t[hh] + CRHM_constants::Tm; // deg C -> K
     double Vf = 1.0 - Cc[hh]; // changed from approx of LAI to direct calculation from params
@@ -336,7 +428,7 @@ void ClassCRHMCanopyVectorBased::compute_canopy_long_short_rads(void)
 
     double Kstar_H = Qsi_ * (1.0 - Alpha_c[hh] - Tauc[hh] * (1.0 - Albedo[hh])); // Eq. 6 from Pomeroy 2009
 
-    // incoming longwave to the surface 
+    // incoming longwave to the surface
     Qlisn[hh] = Qli_ * Vf_ + (1.0f - Vf_) * CRHM_constants::emiss_c * CRHM_constants::sbc * pow(T1, 4.0f) + B_canopy[hh] * Kstar_H; // looks like modification of Eq. 10 from Pomeroy 2009
 
     Qlisn_Var[hh] = Qlisn[hh]; // goes to snobal module
@@ -362,10 +454,10 @@ void ClassCRHMCanopyVectorBased::compute_canopy_long_short_rads(void)
 }
 
 // this function computes wind speed, variations are defined in the prj file using the CanopyWindSwitchIP parameter
-void ClassCRHMCanopyVectorBased::get_wind_for_leaf_contact_calc(void)
+void ClassCRHMCanopyVectorBasedClearingGap::get_wind_for_leaf_contact_calc(void)
 {
     double Ht_1_third = Ht[hh] * (1.0 / 3.0);
-                
+
     // wind speed used for vector based initial snow interception
     switch ((int)CanopyWindSwitchIP[hh])
     {
@@ -386,7 +478,7 @@ void ClassCRHMCanopyVectorBased::get_wind_for_leaf_contact_calc(void)
       { // Canopy wind profile developed at Fortress sparse canopy
         double d0 = 0.5791121; // displacement height observed at sparse forest around Fortress Forest Tower
         double z0m = 0.4995565; // roughness length observed at above site
-        
+
         // wind speed used for vector based initial snow interception
         if ((Ht_1_third - d0) > z0m){
           double Ustar = hru_u[hh]*PBSM_constants::KARMAN/(log((Zwind[hh]-d0)/z0m));
@@ -400,7 +492,7 @@ void ClassCRHMCanopyVectorBased::get_wind_for_leaf_contact_calc(void)
 }
 
 // this function computes leaf contact area based on hydrometeor trajectory angle as in Cebulski & Pomeroy 2025 (hp)
-void ClassCRHMCanopyVectorBased::compute_leaf_contact_area(double v_snow)
+void ClassCRHMCanopyVectorBasedClearingGap::compute_leaf_contact_area(double v_snow)
 {
     if (u_1_third_Ht[hh] > 0.0)
     {
@@ -417,7 +509,7 @@ void ClassCRHMCanopyVectorBased::compute_leaf_contact_area(double v_snow)
     }
 }
 
-void ClassCRHMCanopyVectorBased::finish(bool good)
+void ClassCRHMCanopyVectorBasedClearingGap::finish(bool good)
 {
   for (hh = 0; chkStruct(); ++hh)
   {

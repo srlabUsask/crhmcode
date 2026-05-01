@@ -80,7 +80,7 @@ void ClassGreenAmpt::decl(void) {
   declparam("hru_area", TDim::NHRU, "[1]", "1e-6", "1e+09", "hru area", "(km^2)", &hru_area);
 
   declparam("soil_type", TDim::NHRU, "[4]", "0", "12",
-        "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
+        "water/sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soil_type);
 
   declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0",

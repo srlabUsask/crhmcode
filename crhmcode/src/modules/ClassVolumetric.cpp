@@ -50,7 +50,7 @@ void ClassVolumetric::decl(void) {
     declvar("Si_V", TDim::NHRU, "Si_V copy of parameter Si", "()", &Si_V);
 
     declparam("soil_type", TDim::NHRU, "[4]", "0", "12",
-        "water/sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
+        "water/sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay/pavement" //
         " 0 - 12", "()", &soil_type);
 
     declparam("soil_moist_max", TDim::NHRU, "[375.0]", "0.0", "5000.0",

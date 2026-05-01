@@ -53,6 +53,15 @@ void ClassCanopySnowBalanceBase::init(void) {
     }
 
     for (hh = 0; chkStruct(); ++hh) {
+
+        WindTypeCanSno canopytype = static_cast<WindTypeCanSno>(CanopyWindSwitchCanSno[hh]);
+
+        if(canopytype != WindTypeCanSno::NO_ADJUSTMENT && canopytype != WindTypeCanSno::ADJUST_CIONCO && canopytype != WindTypeCanSno::FORTRESS_SPARSE_CANOPY)
+        {
+            CRHMException Except(string("Invalid canopy wind model switch for HRU ") + to_string(hh) + string(": ") + to_string(CanopyWindSwitchCanSno[hh]) + string(". Valid values are 0 (measured within canopy), 1 (measured above canopy) and 2 (Fortress sparse canopy)."), TExcept::TERMINATE);
+            LogError(Except);
+        }
+
         P_a[hh] = 101.3f * pow((293.0f - 0.0065f * hru_elev[hh]) / 293.0f, 5.26f) * 1000.0f;  // Pa
 
         h2o_sat_veg[hh] = 0.0;
@@ -545,7 +554,6 @@ int ClassCanopySnowBalanceBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's r
     delunld_int[hh] += delunld[hh];
     delunld_wind_int[hh] += delunld_wind[hh];
     delunld_melt_int[hh] += delunld_melt[hh];
-    delunld_subl_int[hh] += delunld_subl[hh];
     deldrip_veg_int[hh] += deldrip_veg[hh];
 
     //  Update the model's input parameters
@@ -582,29 +590,27 @@ int ClassCanopySnowBalanceBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's r
 */
 void ClassCanopySnowBalanceBase::compute_canopy_snow_wind(void)
 {
-    switch ((int)CanopyWindSwitchCanSno[hh])
+
+    switch (static_cast<WindTypeCanSno>(CanopyWindSwitchCanSno[hh]))
     {
-        case 0:
-        { // used if wind speed is measured within canopy
-            // scale wind to top of canopy and then down to within canopy using cionco
+        case WindTypeCanSno::NO_ADJUSTMENT:
+        { 
+            u_2_3rds[hh] = u[hh];
+            break;
+        } // end wind case 0
+
+        case WindTypeCanSno::ADJUST_CIONCO:
+        { 
             double z_veg_u = Ht[hh]*(2.0/3.0);
             double u_veg_ht = 0.0;
 
             adst_wind_cpy_top(Ht[hh], u[hh], rel_z_u[hh], u_veg_ht);
             cionco_canopy_wind_spd(Ht[hh], u_veg_ht, z_veg_u, u_2_3rds[hh]);
             break;
-        } // end wind case 0
-
-        case 1:
-        { // used if wind speed is measured at or above canopy, then wind speed is scaled down to within canopy using cionco
-            double z_veg_u = Ht[hh]*(2.0/3.0);
-
-            cionco_canopy_wind_spd(Ht[hh], u[hh], z_veg_u, u_2_3rds[hh]);
-            break;
         } // end wind case 1
 
-        case 2:
-        {                           // Canopy wind profile developed at Fortress sparse canopy
+        case WindTypeCanSno::FORTRESS_SPARSE_CANOPY:
+        {                           
             double d0_wind = 0.5791121;  // displacement height observed at sparse forest around Fortress Forest Tower
             double z0m_wind = 0.4995565; // roughness length observed at above site
             double z_veg_u = Ht[hh]*(2.0/3.0);
@@ -938,11 +944,10 @@ int ClassCanopySnowBalanceBase::calc_turb_transfer(
     else
         Ce = ks * pow((m_s_veg[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar
 
-    d_0 = Ht[hh] * (2/3);
     z_0 = Ht[hh] * 0.1;
 
     // resitances   
-    ra = 1.0/(VON_KARMAN2*VON_KARMAN2*u)*(log((tz - d_0)/z_0)*log(((uz - d_0)/z_0))); // Allen 1998 Eq. 4
+    ra = 1.0/(PBSM_constants::KARMAN*PBSM_constants::KARMAN*u)*(log(tz/z_0)*log((uz/z_0))); // Allen 1998 Eq. 4 but without displacement height as in original crhm canopy
     ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * m_s_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
 
     CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(ts); // Eq. 29 from Essery et al., 2003
@@ -1210,7 +1215,6 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
     if (!vegsnowcover[hh]) { // no snow in the canopy exit early
         delunld_wind[hh] = 0.0;
         delunld_melt[hh] = 0.0;
-        delunld_subl[hh] = 0.0;
         return;
     }
 
@@ -1237,15 +1241,29 @@ void ClassCanopySnowBalanceBase::_mass_unld(void)
         // const double b_u = 3.925391e-01; // TODO move to par file
 
         // wind induced unloading as function of shear stress
-        const double a_tau = 0.371/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
+        // const double a_tau = 0.371/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
+        double a_tau_s = a_tau[hh]/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
 
         double fu = 0.0;
 
         if (u_2_3rds[hh] >= 0.0)
         {
-            // fu = u_2_3rds[hh] * a_u * exp(b_u * u_2_3rds[hh]); // unloading rate due to wind (s-1)
-            double tau_mid = u_2_3rds[hh] * u_2_3rds[hh] * 0.02; // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
-            fu = a_tau * tau_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
+            double tau_mid = 0.0;
+
+            if (CanopyWindSwitchCanSno[hh] == 0){ // if using measured mid canopy wind approx tau as square of mid canopy wind speed as developed from obs at fortress mountain
+                tau_mid = u_2_3rds[hh] * u_2_3rds[hh] * 0.02; // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
+            } else { // assume wind speed was measured at canopy top so estimate mid canopy tau from above canopy tau estimated from above canopy wind (See description in Cebulski et al., 2026, HP)
+                double air_density = GAS_DEN(P_a[hh], MOL_AIR, T_a[hh]);
+                double d0 = Ht[hh] * (2.0/3.0);
+                double z0 = Ht[hh] * 0.1;
+
+                double u_veg_ht = 0.0;
+                adst_wind_cpy_top(Ht[hh], u[hh], rel_z_u[hh], u_veg_ht);
+                double ustar_top = (u_veg_ht * PBSM_constants::KARMAN)/log((z_u[hh] - d0)/z0); // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
+                double tau_top = ustar_top * ustar_top * air_density; // estimate mid canopy tau from above canopy tau using log wind profile
+                tau_mid = tau_top * 0.08; // empirical transfer function developed from fortress mountain obs adjusted to get closer match to Marmot hanging tree snow load to relate mid canopy tau to above canopy tau
+            }
+            fu = a_tau_s * tau_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
         }
         else
         {

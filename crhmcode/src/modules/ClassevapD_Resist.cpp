@@ -84,11 +84,11 @@ void ClassevapD_Resist::decl(void) {
     declparam("PM_method", TDim::NHRU, "[0]", "0", "2", "Penman-Monteith method, 0 = RC min, 1 = LAI, 2 = bulk", "()", &PM_method);
 
     declparam("soil_type", TDim::NHRU, "[2]", " 1", "12",
-        "HRU soil type (1->11): sand/loamsand/sandloam/loam/siltloam/sasclloam/clayloam/siclloam/sandclay/siltclay/clay", "()", &soil_type);
+        "HRU soil type (1->11): sand/loamsand/sandloam/loam/siltloam/saclloam/clayloam/siclloam/sandclay/siltclay/clay", "()", &soil_type);
 
     declparam("soil_Depth", TDim::NHRU, "[1.0]", "0.0", "10.0", "depth of soil column", "(m)", &soil_Depth);
 
-    declgetvar("*", "RnD", "(mm/m^2*d)", &RnD);
+    declgetvar("*", "RnD", "(mm/d)", &RnD);
     declgetvar("*", "hru_tmean", "(" + string(DEGREE_CELSIUS) + ")", &hru_tmean);
     declgetvar("*", "hru_umean", "(m/s)", &hru_umean);
     declgetvar("*", "hru_eamean", "(kPa)", &hru_eamean);
@@ -251,11 +251,11 @@ void ClassevapD_Resist::finish(bool good) {
 
 double ClassevapD_Resist::gamma(double Pa, double t) // Psychrometric constant (kPa/DEGREE_CELSIUS)
 {
-    return(0.00163 * Pa / lambda(t)); // lambda (mJ/(kg DEGREE_CELSIUS))
+    return(0.00163 * Pa / lambda(t)); // lambda (MJ/kg)
 }
 
 
-double ClassevapD_Resist::lambda(double t) // Latent heat of vaporization (mJ/(kg DEGREE_CELSIUS))
+double ClassevapD_Resist::lambda(double t) // Latent heat of vaporization (MJ/kg)
 {
     return(2.501 - 0.002361 * t);
 }
