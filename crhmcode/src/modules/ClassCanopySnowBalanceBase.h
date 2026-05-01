@@ -169,11 +169,18 @@ public:
     const double  *LAI{ NULL };       // LAI
     const double  *Lmax{ NULL };  // maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 kg m-2 based on max observed in Storck et al. 2002, Floyd 2012 and Cebulski & Pomeroy (kg/m^2)
     const double  *Ht{ NULL };  // forest/vegetation height (m)
-    const long  *CanopyWindSwitchCanSno{ NULL };  // Canopy wind model to use at height Zcan, 0 - for Cionco (dense canopy), 1 - for Prandtl-von Kármán log-linear relationship (sparse forest)".
+    const long  *CanopyWindSwitchCanSno{ NULL };  // Canopy wind model to use for wind induced unloading at 2/3rd canopy height, 0 - no adjustment, 1 - for Prandtl-von Kármán log-linear relationship for above canopy adjustment and Cionco 1965 for within canopy, 2 - for wind profile developed at Fortress sparse canopy".
     const long *MassUnloadingSwitch { NULL }; // canopy snow ablation parameterization to use, 0 - Cebulski & Pomeroy 2025 ablation paper, 1- Andreadis 2009, 2 - Roesch2001 (enable HP98/Ellis2010 using original canopy clearing gap module)
     const double  *unld_to_melt_ratio_m{ NULL };  // Slope coefficient for unloading to melt ratio (-)
     const double  *unld_to_melt_ratio_b{ NULL };  // Intercept coefficient for unloading to melt ratio (-)
     const double  *a_tau{ NULL };  // Shear stress coefficient for dry-snow unloading (-)
+
+    enum class WindTypeCanSno
+    {
+        NO_ADJUSTMENT = 0, // used if wind speed is measured within canopy
+        ADJUST_CIONCO = 1, // used if wind speed is measured at or above canopy, then wind speed is scaled down to within canopy using Cionco 1965 for dense canopy
+        FORTRESS_SPARSE_CANOPY = 2 // Canopy wind profile developed at Fortress sparse canopy
+    };
 
 //    void decl(void);
 
