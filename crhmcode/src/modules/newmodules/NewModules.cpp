@@ -129,6 +129,7 @@
 #include "../ClassSnobalCRHM.h" //added by Manishankar Mondal
 #include "../Classshared.h" //added by Manishankar Mondal
 #include "../ClassNOP.h" //added by Manishankar Mondal
+#include "../ClassRotate_Crop.h" //added by Peter Lawford
 
 #include "../ClassCRHMCanopyVectorBased.h" //added by Alex Cebulski
 #include "../ClassCanopySnowBalanceBase.h" //added by Alex Cebulski
