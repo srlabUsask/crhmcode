@@ -77,6 +77,7 @@ add_library(modules OBJECT
     ClassREWroute.cpp
     ClassREWroute.cpp
     ClassREWroute2.cpp
+    ClassRotate_Crop.cpp
     Classsbsm.cpp
     ClassSetSoil.cpp
     Classshared.cpp
