@@ -19,7 +19,7 @@
 #define RGAS            8.31432e3
 
 /*
- *  specific humidity
+ *  specific humidity (-) / (kg/kg)
  *
  *	e = vapor pressure
  *	P = pressure (same units as e)
@@ -115,7 +115,7 @@
  *  Stefan-Boltzmann constant (W / m^2 / deg^4)
  */
 #define STEF_BOLTZ      5.67032e-8
- 
+
 /*
  *  Convert calories to Joules
  */
@@ -130,23 +130,24 @@
  *  thermal emissivity of snow
  */
 #define SNOW_EMISSIVITY		0.99 // changed from 0.98 03/27/15
+#define CAN_EMISSIVITY      0.98 // as in JULES
 
 /*
  *  Macros
  */
 
 /*
- *  equation of state, to give density of a gas (kg/m^3) 
+ *  equation of state, to give density of a gas (kg/m^3)
  *
  *	p = pressure (Pa)
  *	m = molecular weight (kg/kmole)
- *	t = temperature (K)	
+ *	t = temperature (K)
  *
  *  or, inversely, to give pressure (Pa)
  *
  *      rho = density (kg/m^3)
  *	m   = molecular weight (kg/kmole)
- *	t   = temperature (K)	
+ *	t   = temperature (K)
  */
 #define GAS_DEN(p,m,t)          ((p)*(m)/(RGAS*(t)))
 #define EQ_STATE(rho,m,t)       ((rho)*(RGAS)*(t)/(m))
@@ -254,6 +255,7 @@
  *  Von Karman constant
  */
 #define VON_KARMAN      3.5e-1
+#define VON_KARMAN2     0.41
 
 /*
  *  virtual temperature, i.e. the fictitious temperature that air must
@@ -276,4 +278,3 @@
 #define MIN_SNOW_TEMP	-75
 
 #endif
- 

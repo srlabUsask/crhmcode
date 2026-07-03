@@ -1,4 +1,4 @@
-// 11/14/23 with changes to 10/04/23
+// 07/03/26 with changes to 11/14/23
 //---------------------------------------------------------------------------
 
 #ifndef OurModulesH
@@ -5936,6 +5936,503 @@ void Add_mass_first(TStringList* In_Vars_obs, bool View = NULL);
 void Subtract_mass_last(TStringList* In_Vars_obs, bool View = NULL);
 
 ClassGen_Mass_Bal* klone(string name) const;
+};
+
+class ClassCRHMCanopyVectorBased:public ClassModule {
+
+public:
+
+ClassCRHMCanopyVectorBased(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
+
+float Qsi_, Qli_;
+
+// observation variables
+
+const float *Qsi;
+const float *Qli;
+
+// declared observation variables
+
+float *Ts;
+float *Qnsn;
+float *Qsisn;
+float *Qlisn;
+float *Qlosn;
+
+// put variables
+
+float *SWE;
+
+// declared variables
+
+float *throughfall_rain;
+float *throughfall_snow;
+float *intercepted_snow;
+float *intercepted_rain;
+float *Qnsn_Var;
+float *Qsisn_Var;
+float *Qlisn_Var;
+float *Qsw_veg_Var;
+float *Qlw_veg_Var;
+
+float *Clca;
+float *k;
+float *Tauc;
+float *Pa;
+float *ra;
+float *u_FHt;
+float *u_1_third_Ht;
+
+float *LAI_;
+
+
+// variable inputs
+
+const float *hru_t;
+const float *hru_u;
+const float *hru_rh;
+const float *Albedo;
+const float *QdflatE;
+
+const float *hru_snow;
+const float *hru_rain;
+
+const float *SolAng;
+const float *cosxs;
+const float *cosxsflat;
+const float *Qdfo;
+
+const float *QsiS_Var;
+const float *QsiA_Var;
+const float *QliVt_Var;
+
+// declared parameters:
+
+const float *hru_elev;
+const float *Ht;
+const float *Cc;
+const float *LAI;
+const float *alpha;
+const float *Z0snow;
+const float *Zref;
+const float *Zwind;
+const float *Alpha_c;
+const float *B_canopy;
+
+const long *CanopyWindSwitchIP;
+
+void decl(void);
+void init(void);
+void run(void);
+void finish(bool good);
+
+//private:
+    void choose_solar_data(void);
+    void compute_canopy_temp(void);
+    void adjust_lai_for_snow_height(float Ht);
+    void compute_canopy_long_short_rads(void);
+    void compute_leaf_contact_area(float v_snow);
+    void get_wind_for_leaf_contact_calc(void);
+
+float adst_wind_cpy_top(float veg_ht, float uz, float z, float &u_veg_ht);
+float cionco_canopy_wind_spd(float veg_ht, float u_veg_ht, float target_ht, float &u_target_ht);
+
+ClassCRHMCanopyVectorBased* klone(string name) const;
+
+};
+
+class ClassCRHMCanopyVectorBasedClearingGap:public ClassModule {
+
+public:
+
+ClassCRHMCanopyVectorBasedClearingGap(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl, 1000, " , QliVt_Var, QsiS_Var, QsiS_Var, QsiA_Var") {};
+
+float Qsi_, Qli_;
+
+// observation variables
+
+const float *Qsi;
+const float *Qli;
+
+// declared observation variables
+
+float *Ts;
+float *Qnsn;
+float *Qsisn;
+float *Qlisn;
+float *Qlosn;
+
+// put variables
+
+float *SWE;
+
+// declared variables
+
+float *throughfall_rain;
+float *throughfall_snow;
+float *intercepted_snow;
+float *intercepted_rain;
+float *Qnsn_Var;
+float *Qsisn_Var;
+float *Qlisn_Var;
+float *Qsw_veg_Var;
+float *Qlw_veg_Var;
+
+float *Clca;
+float *k;
+float *Tauc;
+float *Pa;
+float *ra;
+float *u_FHt;
+float *u_1_third_Ht;
+
+float *LAI_;
+
+
+// variable inputs
+
+const float *hru_t;
+const float *hru_u;
+const float *hru_rh;
+const float *Albedo;
+const float *QdflatE;
+
+const float *hru_snow;
+const float *hru_rain;
+
+const float *SolAng;
+const float *cosxs;
+const float *cosxsflat;
+const float *Qdfo;
+
+const float *QsiS_Var;
+const float *QsiA_Var;
+const float *QliVt_Var;
+
+// declared parameters:
+
+const float *hru_elev;
+const float *Ht;
+const float *Cc;
+const float *LAI;
+const float *alpha;
+const float *Z0snow;
+const float *Zref;
+const float *Zwind;
+const float *Surrounding_Ht;
+const float *Gap_diameter;
+const float *Alpha_c;
+const float *B_canopy;
+
+const long *CanopyClearing;
+const long *CanopyWindSwitchIP;
+
+void decl(void);
+void init(void);
+void run(void);
+void finish(bool good);
+
+//private:
+    void choose_solar_data(void);
+    void compute_canopy_temp(void);
+    void adjust_lai_for_snow_height(float Ht);
+    void compute_canopy_long_short_rads(void);
+    void compute_leaf_contact_area(float v_snow);
+    void get_wind_for_leaf_contact_calc(void);
+
+float adst_wind_cpy_top(float veg_ht, float uz, float z, float &u_veg_ht);
+float cionco_canopy_wind_spd(float veg_ht, float u_veg_ht, float target_ht, float &u_target_ht);
+
+ClassCRHMCanopyVectorBasedClearingGap* klone(string name) const;
+
+};
+
+class ClassCanopySnowBalanceBase : public ClassModule {
+
+	public:
+
+    ClassCanopySnowBalanceBase(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassModule(Name, Version, Lvl) {};
+
+    // declared variables
+
+    //   snowpack information
+
+    float *snow_h2o_veg;            // snow h2o content as specific mass(kg/m^2)
+    float *liq_h2o_veg;            // liquid h2o content as specific mass(kg/m^2)
+    float *m_s_veg;            // snowcover's specific mass, liquid and snow (kg/m^2). Init by init_snow_veg.
+    float *T_s_veg;            // average snowcover temp (K). Init by init_snow_veg
+    float *cc_s_veg;           // snowcover's cold content (J/m^2). Init by init_snow_veg.
+    float *h2o_sat_veg;        // % of liquid H2O saturation (relative water content, i.e., ratio of water in snowcover
+    float *h2o_vol_veg;        // liquid h2o content as volume ratio: V_water/(V_snow - V_ice) (unitless).init_snow_veg
+    float *max_liq_veg;        // max liquid h2o content as specific mass(kg/m^2)
+
+//   energy balance info for current timestep
+
+    float *Qn_veg;            // net allwave radiation wrt the canopy (W/m^2)
+    float *Qh_veg;              // sensible heat xfr positive towards the canopy (W/m^2)
+    float *Ql_veg;          // latent heat xfr positive towards the canopy (W/m^2)
+    float *Qp;              // advected heat from precip wrt the canopy (W/m^2)
+    float *delta_Q_veg;        // change in snowcover's energy wrt the canopy (W/m^2)
+    const float  *Tauc;     // Canopy transmittance through the entire canopy calculated in the canopy module
+
+
+//   mass balance vars for current timestep
+
+    float *delmelt_veg_int;       // specific melt (kg/m^2 or m)
+    float *delL;       // interval change in SWE
+    float *delevap_veg_int;	    // mass of evap into air & soil from snowcover (kg/m^2*int) delunld_int
+    float *delsub_veg_int;	    // mass of evap into air & soil from snowcover (kg/m^2*int) delunld_int
+    float *delunld_int;	    // specific mass of canopy snow unloaded to subcanopy (kg/m^2*int)
+    float *delunld;	    // canopy snow unloading rate (kg/m^2*s)
+    float *delunld_wind;	    // solid snow unloading from the canopy induced by wind (kg/m^2*s)
+    float *delunld_melt;	    // canopy snow unloading rate due to melting (kg/m^2*s)
+    float *delunld_wind_int;	    // solid snow unloading from the canopy induced by wind (kg/m^2*int)
+    float *delunld_melt_int;	    // canopy snow unloading rate due to melting (kg/m^2*int)
+    float *deldrip_veg_int;	    // canopy snowmelt drainage (kg/m^2*int)
+
+    float *delmelt_veg_day;      // daily predicted specific runoff (m/sec)
+    float *cmlmelt_veg_day;      // daily predicted specific runoff accumulator (m/sec)
+
+    const float *hru_evap;      // liquid water evaporated off the canopy. computed in the evap module aka "internal evap". (kg m^-2)
+
+    float *net_rain; // throughfall rain + drip (runoff/melt drainage) of snow intercepted in the canopy (kg/m^2*int)
+    float *net_snow; // throughfall snow + unloaded snow from the canopy (kg/m^2*int)
+    float *net_p; // net rain + net snow (kg/m^2*int)
+
+    const float *throughfall_rain; // throughfall of rain, not in contact with the canopy to be added with canopy drip (kg/m^2*int)
+    const float *throughfall_snow; // throughfall of snow, not in contact with the canopy to be added with canopy snow unloading (kg/m^2*int)
+    const float *z_s; // total surface snowcover thickness from snobal module for relative heights calculation (m)
+
+//   mass balance vars for variable timestep
+
+    float *delmelt_veg;        // specific melt (kg/m^2 or m)
+    float *qsub_veg;		 // mass flux by subl/evap (+ to surf) (kg/m^2/s)
+    float *delsub_veg;	 // mass flux by subl/evap (+ to surf) (kg/m^2/int)
+    float *delevap_veg;	 // mass flux by subl/evap (+ to surf) (kg/m^2/int)
+    float *deldrip_veg;  // predicted specific runoff (m/sec)
+    float *E_l;	  // mass flux by evap/cond to soil (kg/m^2/s)
+
+//   precipitation info adjusted for current run timestep
+
+    float *m_precip;	// specific mass of total precip (kg/m^2)
+    float *m_rain;	// specific mass of rain in precip (kg/m^2)
+    float *m_snow;	// specific mass in snow in precip (kg/m^2)
+    float *T_pp;       // precip temp (K)
+
+//   precipitation info for the current DATA timestep
+
+    long *precip_now_veg;	// precipitation occur for current timestep?
+    float *T_rain_veg;	// rain's temp (K)
+    float *T_sf;	// snowfall's temp (K)
+    float *h2o_sat_veg_snow; // snowfall's % of liquid H2O saturation
+
+//   local climate-data values for the current run timestep
+    float *S_n;      // net solar radiation (W/m^2)
+    float *I_lw;     // incoming longwave (thermal) rad (W/m^2)
+    float *T_a;      // air temp (K)
+    float *e_a;      // vapor pressure (Pa)
+    float *u;        // wind speed (m/sec)
+    const float *T_s_0; // temp of the surface snowpack active layer (C)
+
+
+    long *isothermal; // melting?
+    long *vegsnowcover;  // snow on veg at start of current timestep?
+    long *stop_no_snow;       //
+
+//   local variables
+    float *P_a;            // air pressure (Pa)
+    float *m_precip_cum;   //
+    float *m_rain_cum;     //
+    float *m_snow_cum;     //
+    float *E_s_cum;        //
+    float *cmlmelt_veg;    //
+    float *Fault;       //
+    float *I_LW_atm;       // Downwelling longwave from the atmoshpere (W/m^2)
+    float *I_LW_gnd;       // Upwelling longwave from the ground (W/m^2)
+    float *I_LW_cpy_2_cpy;       // Longwave from the canopy reflected off the surface back to the canopy (W/m^2)
+    float *O_LW_cpysnow;       // Outgoing longwave radiation emitted from the canopy snow (W/m^2)
+    float *I_LW_cpy;       // Incoming longwave radiation emitted from the canopy (W/m^2)
+    float *u_2_3rds;       // Wind speed at 2/3 canopy height for canopy snow energy balance and unloading (m s^-1)
+    float *rel_z_u;       // Height of wind speed measurement relative to top of snowpack, only implemented if relative_hts[hh] == 1 (m)
+    float *rel_z_T;       // Height of temp measurement relative to top of snowpack, only implemented if relative_hts[hh] == 1 (m)
+
+// debug variables
+/*    float *Length;
+    float **Length_array;
+    float *Ustar;
+    float **Ustar_array;
+    float *e;
+    float **e_array;
+    float *h;
+    float **h_array;
+    long *ier;
+    long **ier_array;
+    long  *ArrayCnt; */
+
+    // declared parameters
+
+    //   measurement heights/depths
+
+    const float *hru_elev;    // HRU elevation
+    const float *basin_area;  // [BASIN]
+    const float *hru_area;
+    const float  *Albedo_surface;     // albedo of surface ()
+    const float  *Albedo_veg;     // albedo of vegetation ()
+    const long *inhibit_evap; // inhibit evaporation, 1 -> inhibit
+    const long *relative_hts; // true if measurements heights, z_T and z_u, are relative to snow surface
+                              // false if they are absolute heights above the ground
+    const float *z_u;         // height of wind measurement (m)
+    const float *z_T;         // height of air temp & vapor pressure measurement (m)
+    const float *Albedo_vegsnow;         // albedo of snow on vegetation ()
+    const float *SW_to_LW_fn;         // dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site. (-)
+    const float *max_liq_veg_frac;        // max liquid h2o content as fraction of snow mass (-)
+    const float  *Cc;       // canopy coverage, (1-sky view fraction)
+    const float  *LAI;       // LAI
+    const float  *Lmax;  // maximum canopy snow interception load, currently just used for sublimation exposure coef. 50 kg m-2 based on max observed in Storck et al. 2002, Floyd 2012 and Cebulski & Pomeroy (kg/m^2)
+    const float  *Ht;  // forest/vegetation height (m)
+    const long  *CanopyWindSwitchCanSno;  // Canopy wind model to use for wind induced unloading at 2/3rd canopy height, 0 - no adjustment, 1 - for Prandtl-von Kármán log-linear relationship for above canopy adjustment and Cionco 1965 for within canopy, 2 - for wind profile developed at Fortress sparse canopy".
+    const long *MassUnloadingSwitch; // canopy snow ablation parameterization to use, 0 - Cebulski & Pomeroy 2025 ablation paper, 1- Andreadis 2009, 2 - Roesch2001 (enable HP98/Ellis2010 using original canopy clearing gap module)
+    const float  *unld_to_melt_ratio_m;  // Slope coefficient for unloading to melt ratio (-)
+    const float  *unld_to_melt_ratio_b;  // Intercept coefficient for unloading to melt ratio (-)
+    const float  *a_tau;  // Shear stress coefficient for dry-snow unloading (-)
+
+    /*enum class WindTypeCanSno
+    {
+        NO_ADJUSTMENT = 0, // used if wind speed is measured within canopy
+        ADJUST_CIONCO = 1, // used if wind speed is measured at or above canopy, then wind speed is scaled down to within canopy using Cionco 1965 for dense canopy
+        FORTRESS_SPARSE_CANOPY = 2 // Canopy wind profile developed at Fortress sparse canopy
+    };*/
+
+//    void decl(void);
+
+    void init(void);
+
+    //    void run(void);
+
+    void finish(bool good); // delete local storage used
+
+    void init_snow_veg(void);
+
+    float _cold_content_veg(float	temp, float	mass); // temperature of layer specific mass of layer
+
+    void do_data_tstep_veg(void);
+
+    int _divide_tstep_veg(TSTEP_REC *tstep); // record of timestep to be divided
+
+    int _below_thold_veg(float threshold);	 // current timestep's threshold for a layer's mass
+
+    int _do_tstep_veg(TSTEP_REC *tstep); // timestep's record
+
+    void compute_canopy_snow_wind(void);
+
+    int _e_bal_veg(void);
+
+    void _net_rad_veg(void);
+
+    int init_turb_transfer(void);
+
+    void _advec_veg(void);
+
+    void _mass_bal(void);
+
+    void _precip_veg(void);
+
+    void _snowmelt(void);
+
+    void _mass_unld(void);
+
+    void _subl_evap(void);
+
+    void _runoff_veg(void);
+
+    float new_tsno_veg(float spm, float t0, float ccon);
+
+    int calc_turb_transfer(float press, float ta, float rel_z_T, float ts, float ea, float es, float u, float rel_z_u,
+             float &h, float &le);
+
+    int subl_ice_sphere(float ea, float es, float ta, float ts, float u, float press);
+
+    int init_subl_ice_sphere(void);
+
+	float satw(float tk);
+
+	float sati(float tk);
+
+	float heat_stor(float cp, float spm, float tdif);
+
+	float adst_wind_cpy_top(float veg_ht, float uz, float z, float &u_veg_ht);
+
+	float cionco_canopy_wind_spd(float veg_ht, float u_veg_ht, float target_ht, float &u_target_ht);
+
+    // time step information
+
+    TSTEP_REC **tstep_info; 	// array of info for each timestep [nhru] [4]:
+                                  //           0 : data timestep
+                                  //           1 : normal run timestep
+                                  //           2 : medium  "     "
+                                  //           3 : small   "     "
+
+    long *time_step;     // length current timestep (sec)
+    long *current_time;  // start time of current time step (sec)
+
+  // climate-data input records
+
+    INPUT_REC *input_rec1;	// input data for start of data timestep [nhru]
+    INPUT_REC *input_rec2;	//   "     "   "  end   "   "      "     [nhru]
+
+    INPUT_REC **input_deltas;	// deltas for climate-input parameters
+                                  //  over each timestep [nhru] [4]
+
+    PRECIP_REC **precip_info;	// array of precip info adjusted for
+                                  //  each timestep [nhru] [4]
+
+    int **computed;		// array of flags for each timestep;
+                                  //  true if computed values for input
+                                  //   deltas and precip arrays [nhru] [4]
+};
+
+class ClassCanopySnowBalanceCRHM : public ClassCanopySnowBalanceBase {
+
+    public:
+
+    ClassCanopySnowBalanceCRHM(string Name, String Version = "undefined", CRHM::LMODULE Lvl = CRHM::PROTO) : ClassCanopySnowBalanceBase(Name, Version, Lvl) {};
+
+    ClassCanopySnowBalanceCRHM* klone(string name) const;
+
+    float Qsi_;
+    float Qli_;
+
+// Observations
+
+    const float *Qsi; // incoming solar radiation (W/m^2)
+    const float *Qli; // incoming longwave (thermal) rad (W/m^2) long
+    const float *obs_snow_load;
+
+// variable climate-data inputs
+
+    const float  *T_a_X;      // air temp (C) hru_t
+    const float  *T_pp_X;       // precip temp (C) hru_t
+    const float  *e_a_X;      // vapor pressure (Pa) hru_ea
+    const float  *u_X;        // wind speed (m/sec)  hru_u
+    const float *Qsw_in_veg; // downwelling shortwave radiation to the canopy (W m^-2)
+    const float *Qlw_out_atm; // downwelling longwave radiation from the atmosphere plus terrain (W m^-2)
+
+// variable precipitation inputs
+
+    const float  *new_snow;	// snow intercepted in the canopy before ablation (kg/m^2*int)
+    const float  *new_rain;	// rain intercepted in the canopy before ablation (kg/m^2*int)
+
+// parameters
+
+    const float  *rho_snow_X;       // density of snowfall               (kg/m^3)
+
+    void decl(void);
+
+    void init(void);
+
+    void run(void);
+
+    void finish(bool good); // delete local storage used
 };
 
 #endif

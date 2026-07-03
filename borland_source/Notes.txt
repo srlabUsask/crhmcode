@@ -799,3 +799,11 @@ CRHM 03/03/26
   Modifying if statement in ClassSnobalBase::_advec(void)
 
   if (precip_now[hh]) to replace if (precip_now)
+
+CRHM 07/03/26
+
+  Fixing h2o bug when there is precip in ClassSnobalBase::_precip(void)
+
+  	h2o_total[hh] += h2o[hh] + m_rain[hh];
+
+  Adding CanopySnowBalanceCRHM, CanopyVectorBased, CanopyVectorBasedClearingGap modules

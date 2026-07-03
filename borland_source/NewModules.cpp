@@ -1,4 +1,4 @@
-// 03/03/26
+// 07/03/26
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -96,12 +96,15 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassREWroute_stream("REW_route_stream", "07/09/18", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassREWroute2("REW_route2", "06/27/22", CRHM::ADVANCE));
 
-  DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "11/21/16", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassSnobalCRHM("SnobalCRHM", "07/02/26", CRHM::ADVANCE));
   DLLModules.AddModule(new ClasspbsmSnobal("pbsmSnobal", "01/05/17", CRHM::ADVANCE));
 
   DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "03/04/25", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyVectorBased("CanopyVectorBased", "07/03/26", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyVectorBasedClearingGap("CanopyVectorBasedClearingGap", "07/03/26", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCanopySnowBalanceCRHM("CanopySnowBalanceCRHM", "07/03/26", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassXG("XG", "05/07/25", CRHM::ADVANCE));
@@ -8048,7 +8051,7 @@ void ClassSnobalBase::_precip(void)
 
 // Add rainfall and water in the snowcover to total liquid water. ???? !!!!
 
-    h2o_total[hh] += m_rain[hh];
+    h2o_total[hh] += h2o[hh] + m_rain[hh]; //mod2Jul2026: for srlab chrm Issue#476
 //    ro_predict[hh] += m_rain[hh];
   } // current precip
 
@@ -28484,8 +28487,2828 @@ void ClassGen_Mass_Bal::Transfer_mass(TStringList* In_Vars_obs, bool View){
   LogDebug(" ");
 }
 
+ClassCRHMCanopyVectorBased* ClassCRHMCanopyVectorBased::klone(string name) const{
+  return new ClassCRHMCanopyVectorBased(name);
+}
+
+void ClassCRHMCanopyVectorBased::decl(void)
+{
+
+  Description = "'Calculates initial snow interception after Cebulski & Pomeroy (2025, Hyrological Proc.) canopy snow ablation is handled by the CanopySnowBalance module. Assumptions are for this to be applied on a forested HRU without significant clear cuts/large gaps in the forest with width many times the canopy height. This module also does some radiation calcs for consistency with the CanopyClearingGap module which this one replaces.' \
+                 'Inputs are observations Qsi (W/m^2) and Qli (W/m^2), ' \
+                 'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2), ' \
+                 'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and observation Qli (W/m^2), ' \
+                 'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and variable QliVt_Var (W/m^2), ' \
+                 'Inputs are variable QsiA_Var (W/m^2)(horizontal) from Annandale and variable QliVt_Var (W/m^2).'";
+
+  // Observations
+
+  variation_set = VARIATION_0 + VARIATION_1;
+
+  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
+
+  variation_set = VARIATION_0 + VARIATION_2;
+
+  declreadobs("Qli", NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
+
+  variation_set = VARIATION_1 + VARIATION_3 + VARIATION_4;
+
+  declgetvar("*", "QliVt_Var", "(W/m^2)", &QliVt_Var);
+
+  variation_set = VARIATION_2 + VARIATION_3;
+
+  declgetvar("*", "QsiS_Var", "(W/m^2)", &QsiS_Var);
+
+  variation_set = VARIATION_4;
+
+  declgetvar("*", "QsiA_Var", "(W/m^2)", &QsiA_Var);
+
+  variation_set = VARIATION_ORG;
+
+  // get variables:
+
+  declgetvar("*", "hru_t", "(°C)", &hru_t);
+
+  declgetvar("*", "hru_u", "(m/s)", &hru_u);
+
+  declgetvar("*", "hru_rh", "()", &hru_rh);
+
+  declgetvar("*", "hru_snow", "(mm/int)", &hru_snow);
+
+  declgetvar("*", "hru_rain", "(mm/int)", &hru_rain);
+
+  declgetvar("*", "SolAng", "(r)", &SolAng);
+
+  declgetvar("*", "cosxs", "(r)", &cosxs);
+
+  declgetvar("*", "cosxsflat", "(r)", &cosxsflat);
+
+  declgetvar("*", "Qdfo", "(W/m^2)", &Qdfo);
+
+  declgetvar("*", "Albedo", "()", &Albedo);
+
+  declgetvar("*", "QdflatE", "(W/m^2)", &QdflatE);
+
+  declputvar("*", "SWE", "(mm)", &SWE);
+
+  // declputvar("*", "TCanSnow", "(°C)", &TCanSnow); found better performance when just using the ice bulb temp so no need for pspNew module
+
+  // declared observations
+
+  declvar("Ts", NHRU, "snow surface temperature", "(°C)", &Ts);
+
+  declobs("Qnsn", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
+
+  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn_Var);
+
+  declobs("Qsisn", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn);
+
+  declvar("Qsisn_Var", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn_Var);
+
+  declobs("Qlisn", NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn);
+
+  declvar("Qlisn_Var", NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn_Var);
+
+  declobs("Qlosn", NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
+
+  // declared variables
+
+  decldiag("k", NHRU, "extinction coefficient", "()", &k);
+
+  decldiag("Tauc", NHRU, "short-wave transmissity", "", &Tauc);
+
+  decllocal("Pa", NHRU, "Average surface pressure", "(kPa)", &Pa);
+
+  declvar("ra", NHRU, "resistance", "(s/m)", &ra);
+
+  declvar("throughfall_rain", NHRU, "throughfall of rain through canopy (not in contact with canopy).", "(mm/int)", &throughfall_rain);
+
+  declvar("throughfall_snow", NHRU, "throughfall of snow not in contact with the canopy", "(mm/int)", &throughfall_snow);
+
+  declvar("intercepted_snow", NHRU, "initial interception of snow before ablation kicks in.", "(mm/int)", &intercepted_snow);
+
+  declvar("intercepted_rain", NHRU, "initial interception of rain before ablation kicks in.", "(mm/int)", &intercepted_rain);
+
+  decldiag("u_FHt", NHRU, "wind speed at forest top (z = FHt)", "(m/s)", &u_FHt);
+
+  decldiag("u_1_third_Ht", NHRU, "wind speed at one-third forest height (z = 1/3*Ht) for the Cebulski & Pomeroy vector based param.", "(m/s)", &u_1_third_Ht);
+
+  declvar("Clca", NHRU, "Leaf contact area adjusted for hydrometeor trajectory angle.", "()", &Clca);
+
+  declvar("LAI_", NHRU, "Leaf area index adjusted for snow cover", "()", &LAI_);
+
+  // parameters:
+
+  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+
+  declparam("Ht", NHRU, "[20.0]", "0.001", "100.0", "forest/vegetation height", "(m)", &Ht);
+
+  declparam("Zref", NHRU, "[1.5]", "0.01", "100.0", "temperature measurement height", "(m)", &Zref);
+
+  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
+
+  declparam("Z0snow", NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
+
+  declparam("Cc", NHRU, "[1]", "0", "1", "canopy coverage, (1-sky view fraction)", "()", &Cc);
+
+  declparam("LAI", NHRU, "[2.2]", "0.1", "20.0", "leaf-area-index", "()", &LAI);
+
+  declparam("alpha", NHRU, "[0.836]", "0.0", "1.0", "alpha is an efficiency constant which determines the fraction of snowflakes that contact the leaf contact area elements and are stored in the canopy (i.e., intercepted) before canopy snow unloading or ablation processes begin. Default is based on Cebulski & Pomeroy plot scale observations at Fortress Mountain PWL and Forest Tower plots.", "()", &alpha);
+
+  declparam("CanopyWindSwitchIP", NHRU, "[0]", "0", "2", "Canopy wind model to use at height Zcan, 0 - for within or above canopy wind speed measured and Prandtl-von Kármán log-linear relationship is used to bring to canopy top and then Cionco 1965 is used to adjust within Canopy, 1 - if measured wind is at canopy top and then just Cionco 1965 is used to bring within canopy, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchIP);
+
+  decldiagparam("Alpha_c", NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
+
+  decldiagparam("B_canopy", NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter for longwave-radiation. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
+}
+
+void ClassCRHMCanopyVectorBased::init(void)
+{
+
+  nhru = getdim(NHRU); // transfers current # of HRU's to module
+
+  for (hh = 0; hh < nhru; ++hh)
+  {
+
+    Pa[hh] = 101.3f * pow((293.0f - 0.0065f * hru_elev[hh]) / 293.0f, 5.26f); // kPa
+
+    if (Ht[hh] > Zwind[hh])
+    {
+      CRHMException TExcept(string("'" + Name + " (CanopyVectorBased)' Vegetation height greater than wind reference height, i.e. (Ht > Zwind)!").c_str(), WARNING);
+      LogError(TExcept);
+    }
+  }
+}
+
+void ClassCRHMCanopyVectorBased::run(void)
+{
+  for (hh = 0; chkStruct(); ++hh)
+  {
+    throughfall_rain[hh] = 0.0;
+    throughfall_snow[hh] = 0.0;
+
+    intercepted_rain[hh] = 0.0;
+    intercepted_snow[hh] = 0.0;
+
+    choose_solar_data(); // decide what solar data to use based on module variation defined in prj file
+    compute_canopy_temp(); // compute canopy temperature as input for surface snow energy balance
+
+    adjust_lai_for_snow_height(Ht[hh]);
+    compute_canopy_long_short_rads(); // compute canopy long and short wave radiation components sent to canopy snow ebal and surface snowbal modules
+
+    //==============================================================================
+    // coupled forest snow interception routine:
+    // after Cebulski & Pomeroy 2025:
+
+    if (hru_snow[hh] > 0.0)
+    {                            // calculate increase in Snow_load and throughfall_snow if we are in canopy (i.e., Cc > 0)
+      const float v_snow = 0.8; // terminal fall velocity of snowfall taken from Isyumov, 1971
+      Clca[hh] = 0.0;              // leaf contact area (Clca) based on trajectory angle
+      float IP = 0.0;             // interception efficiency (IP)
+
+      if (hru_u[hh] > 0.0 && Cc[hh] < 1.0 && Cc[hh] > 0.0)
+      { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
+
+        get_wind_for_leaf_contact_calc();
+        compute_leaf_contact_area(v_snow);
+
+      } else { // do not adjust snow-leaf contact area for wind effects
+        Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., Clca == 1 for Cc == 1 and Clca == 0 when Cc == 0
+      }
+
+      IP = Clca[hh] * alpha[hh]; // interception efficiency (IP)
+      intercepted_snow[hh] = IP * hru_snow[hh];    // change in canopy snow load
+
+      // calculate canopy snow throughfall before unloading:
+
+      throughfall_snow[hh] = (1.0 - IP) * hru_snow[hh];
+
+      // net snow / rain is computed in can snobal after ablation of intercepted snow.
+    } // end snow routine
+
+    if(hru_rain[hh] > 0){
+      // Canopy Liquid Water Routine
+      throughfall_rain[hh] = hru_rain[hh] * (1.0 - Cc[hh]);
+      intercepted_rain[hh] = hru_rain[hh] * Cc[hh];
+    }
+
+  } // end for
+}
+
+// helper functions
+
+// this function chooses which solar data to use based on the module variation defined in the prj file
+void ClassCRHMCanopyVectorBased::choose_solar_data(void)
+{
+    switch ((int)variation)
+    {
+        case VARIATION_ORG:
+            Qsi_ = Qsi[hh];
+            Qli_ = Qli[hh];
+            break;
+        case VARIATION_1:
+            Qsi_ = Qsi[hh];
+            Qli_ = QliVt_Var[hh];
+            break;
+        case VARIATION_2:
+            Qsi_ = QsiS_Var[hh];
+            Qli_ = Qli[hh];
+            break;
+        case VARIATION_3:
+            Qsi_ = QsiS_Var[hh];
+            Qli_ = QliVt_Var[hh];
+            break;
+        case VARIATION_4:
+            Qsi_ = QsiA_Var[hh];
+            Qli_ = QliVt_Var[hh];
+            break;
+        default:
+            Qsi_ = 0.0;
+            Qli_ = 0.0;
+            break;
+    }
+}
+
+// this function computes canopy temperature based on air temperature and radiation balance used in the Snobal module
+void ClassCRHMCanopyVectorBased::compute_canopy_temp(void)
+{
+    // Canopy temperature is approximated by the air temperature
+    float T1 = hru_t[hh] + CRHM_constants::Tm; // deg C -> K
+
+    float rho = Pa[hh] * 1000 / (CRHM_constants::Rgas * T1); // air density
+
+    float U1 = hru_u[hh]; // wind speed (m/s)
+    ra[hh] = (log(Zref[hh] / Z0snow[hh]) * log(Zwind[hh] / Z0snow[hh])) / sqr(CRHM_constants::kappa) / U1;
+
+    float deltaX = 0.622 * CRHM_constants::Ls * Qs(Pa[hh], T1) / (CRHM_constants::Rgas * sqr(T1));
+
+    float q = (hru_rh[hh] / 100) * Qs(Pa[hh], T1); // specific humidity
+
+    Ts[hh] = T1 + (CRHM_constants::emiss * (Qli_ - CRHM_constants::sbc * pow(T1, 4.0))
+                 + CRHM_constants::Ls * (q - Qs(Pa[hh], T1)) * rho / ra[hh])
+                 / (4 * CRHM_constants::emiss * CRHM_constants::sbc * pow(T1, 3.0)
+                 + (CRHM_constants::Cp + CRHM_constants::Ls * deltaX) * rho / ra[hh]);
+
+    Ts[hh] -= CRHM_constants::Tm; // back to deg C
+
+    // Apply boundary conditions
+    if (Ts[hh] > 0.0 || SWE[hh] <= 0.0)
+        Ts[hh] = 0.0;
+}
+
+// this function adjusts the effective LAI based on snow height as the bottom of the canopy may be buried in snow
+void ClassCRHMCanopyVectorBased::adjust_lai_for_snow_height(float Ht)
+{
+    // Compute canopy exposure above snow
+    float exposure = Ht - DepthofSnow(SWE[hh]); // Ht in meters, SWE in mm
+    if (exposure < 0.0)
+        exposure = 0.0;
+
+    // Update effective LAI
+    LAI_[hh] = LAI[hh] * exposure / Ht;
+}
+
+// this function computes canopy longwave and shortwave radiation components sent to canopy snow ebal and surface snowbal modules
+void ClassCRHMCanopyVectorBased::compute_canopy_long_short_rads(void)
+{
+    float T1 = hru_t[hh] + CRHM_constants::Tm; // deg C -> K
+    float Vf = 1.0 - Cc[hh]; // changed from approx of LAI to direct calculation from params
+
+    float Vf_ = Vf + (1.0 - Vf) * sin((Ht[hh] - (Ht[hh] - DepthofSnow(SWE[hh]))) / Ht[hh] * M_PI_2);
+
+    if (SolAng[hh] > 0.001 && cosxs[hh] > 0.001 && cosxsflat[hh] > 0.001)
+    {
+      k[hh] = 1.081 * SolAng[hh] * cos(SolAng[hh]) / sin(SolAng[hh]); // Eq. 8 from Pomeroy 2009
+      float limit = cosxsflat[hh] / cosxs[hh];
+      if (limit > 2.0)
+        limit = 2.0;
+      Tauc[hh] = exp(-k[hh] * LAI_[hh] * limit);
+    }
+    else
+    {
+      k[hh] = 0.0;
+    }
+
+    float Kstar_H = Qsi_ * (1.0 - Alpha_c[hh] - Tauc[hh] * (1.0 - Albedo[hh])); // Eq. 6 from Pomeroy 2009
+
+    // incoming longwave to the surface
+    Qlisn[hh] = Qli_ * Vf_ + (1.0f - Vf_) * CRHM_constants::emiss_c * CRHM_constants::sbc * pow(T1, 4.0f) + B_canopy[hh] * Kstar_H; // looks like modification of Eq. 10 from Pomeroy 2009
+
+    Qlisn_Var[hh] = Qlisn[hh]; // goes to snobal module
+
+    // incoming shortwave radiation to the surface
+    Qsisn[hh] = Qsi_ * Tauc[hh];
+
+    Qsisn_Var[hh] = Qsisn[hh];
+
+    // incoming longwave to the canopy mid point
+
+    // Qlw_veg_Var[hh] = Qli_ * (1.0 - (Cc[hh]/2)); // canopy snow is partially exposed to atmosphere so reduce based on view factor
+
+    // incoming shortwave radiation to canopy midpoint
+
+    // Qsw_veg_Var[hh] = Qsi_ * Tauc_50; // for PSP like solar to canopy midpoint
+
+    Qlosn[hh] = CRHM_constants::emiss * CRHM_constants::sbc * pow(Ts[hh] + CRHM_constants::Tm, 4.0f);
+
+    Qnsn[hh] = Qlisn[hh] - Qlosn[hh] + Qsisn[hh] * (1.0 - Albedo[hh]);
+
+    Qnsn_Var[hh] = Qnsn[hh];
+}
+
+// this function computes wind speed, variations are defined in the prj file using the CanopyWindSwitchIP parameter
+void ClassCRHMCanopyVectorBased::get_wind_for_leaf_contact_calc(void)
+{
+    float Ht_1_third = Ht[hh] * (1.0 / 3.0);
+
+    // wind speed used for vector based initial snow interception
+    switch ((int)CanopyWindSwitchIP[hh])
+    {
+      case 0:
+      {  // increase wind speed to canopy top then bring back down using using Cionco wind model for dense canopies, use this one if wind speed is below/within canopy
+        adst_wind_cpy_top(Ht[hh], hru_u[hh], Zwind[hh], u_FHt[hh]);
+        cionco_canopy_wind_spd(Ht[hh], u_FHt[hh], Ht_1_third, u_1_third_Ht[hh]);
+        break;
+      } // end case 0
+
+      case 1:
+      { // use if forcing wind speed is above/at canopy top
+        cionco_canopy_wind_spd(Ht[hh], hru_u[hh], Ht_1_third, u_1_third_Ht[hh]);
+        break;
+      } // end case 1
+
+      case 2:
+      { // Canopy wind profile developed at Fortress sparse canopy
+        double d0 = 0.5791121; // displacement height observed at sparse forest around Fortress Forest Tower
+        double z0m = 0.4995565; // roughness length observed at above site
+
+        // wind speed used for vector based initial snow interception
+        if ((Ht_1_third - d0) > z0m){
+          float Ustar = hru_u[hh]*PBSM_constants::KARMAN/(log((Zwind[hh]-d0)/z0m));
+          u_1_third_Ht[hh] = Ustar/PBSM_constants::KARMAN * log((Ht_1_third - d0)/z0m);
+        } else {
+            u_1_third_Ht[hh] = 0.0;
+        }
+        break;
+      } // end case 2
+    } // end of switch CanopyWind
+}
+
+// this function computes leaf contact area based on hydrometeor trajectory angle as in Cebulski & Pomeroy 2025 (hp)
+void ClassCRHMCanopyVectorBased::compute_leaf_contact_area(float v_snow)
+{
+    if (u_1_third_Ht[hh] > 0.0)
+    {
+        float snow_traj_angle = atan(u_1_third_Ht[hh] / v_snow); // trajectory angle in radians
+        float b_lca = 0.91; // empirical coefficient
+        float f_theta = b_lca * pow(sin(snow_traj_angle), 2.0);
+
+        float Cp_inc = (1.0 - Cc[hh]) * f_theta; // fractional increase in leaf contact area
+        Clca[hh] = Cc[hh] + Cp_inc;
+    }
+    else
+    {
+        Clca[hh] = Cc[hh]; // nadir contact area
+    }
+}
+
+void ClassCRHMCanopyVectorBased::finish(bool good)
+{
+  for (hh = 0; chkStruct(); ++hh)
+  {
+    LogDebug(" ");
+  }
+}
+
+float ClassCRHMCanopyVectorBased::adst_wind_cpy_top(
+    float veg_ht, /* Height of vegetation (m) */
+    float uz,     /* Wind speed at height z (m/s) */
+    float z, /* Height of wind speed measurement (m) */
+
+    // output
+    float &u_veg_ht /* Wind speed at canopy top (m/s)*/
+    )
+{
+    if (veg_ht - 2.0 / 3.0 * z > 0.0) {
+        u_veg_ht = uz * log((veg_ht - 2.0 / 3.0 * z) / 0.123 * z) / log((z - 2.0 / 3.0 * z) / 0.123 * z);
+    } else {
+        u_veg_ht = 0.0;
+    }
+    return(u_veg_ht);
+}
+
+float ClassCRHMCanopyVectorBased::cionco_canopy_wind_spd(
+    float veg_ht,    /* Height of vegetation (m) */
+    float u_veg_ht,  /* Wind speed at height veg ht (m/s) */
+    float target_ht, /* target height of output wind speed (m) */
+
+    // output
+    float &u_target_ht /* Wind speed at target height (m/s)*/
+)
+{
+    float A = 2.4338 + 3.45753 * exp(-u_veg_ht);                 /* Modified Cionco wind model from Parviainen & Pomeroy 2000 for mature forest*/
+    //double A = 2.97 + 3.2 * exp(-u_veg_ht);                 /* Modified Cionco wind model from Parviainen & Pomeroy 2000 for regen forest*/
+
+    u_target_ht = u_veg_ht * exp(A * (target_ht / veg_ht - 1.0)); /* calculates canopy windspd  */
+
+    return (u_target_ht);
+}
+
+ClassCRHMCanopyVectorBasedClearingGap *ClassCRHMCanopyVectorBasedClearingGap::klone(string name) const{
+  return new ClassCRHMCanopyVectorBasedClearingGap(name);
+}
+
+void ClassCRHMCanopyVectorBasedClearingGap::decl(void)
+{
+
+  Description = "'Calculates initial snow interception for forest canopy after Cebulski & Pomeroy (2025, Hyrological Proc.) canopy snow ablation is handled by the CanopySnowBalance module, with assumptions that are for this to be applied on a forested HRU without significant clear cuts/large gaps in the forest with width many times the canopy height. For surface radiation calculations for canopy, clearing, and gap cases and mass calculations for clearing and gap cases, this module is consistent with the CanopyClearingGap module.' \
+                 'Inputs are observations Qsi (W/m^2) and Qli (W/m^2), ' \
+                 'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2), ' \
+                 'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and observation Qli (W/m^2), ' \
+                 'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and variable QliVt_Var (W/m^2), ' \
+                 'Inputs are variable QsiA_Var (W/m^2)(horizontal) from Annandale and variable QliVt_Var (W/m^2).'";
+
+  // Observations
+
+  variation_set = VARIATION_0 + VARIATION_1;
+
+  declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q);
+
+  variation_set = VARIATION_0 + VARIATION_2;
+
+  declreadobs("Qli", NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q);
+
+  variation_set = VARIATION_1 + VARIATION_3 + VARIATION_4;
+
+  declgetvar("*", "QliVt_Var", "(W/m^2)", &QliVt_Var);
+
+  variation_set = VARIATION_2 + VARIATION_3;
+
+  declgetvar("*", "QsiS_Var", "(W/m^2)", &QsiS_Var);
+
+  variation_set = VARIATION_4;
+
+  declgetvar("*", "QsiA_Var", "(W/m^2)", &QsiA_Var);
+
+  variation_set = VARIATION_ORG;
+
+  // get variables:
+
+  declgetvar("*", "hru_t", "(°C)", &hru_t);
+
+  declgetvar("*", "hru_u", "(m/s)", &hru_u);
+
+  declgetvar("*", "hru_rh", "()", &hru_rh);
+
+  declgetvar("*", "hru_snow", "(mm/int)", &hru_snow);
+
+  declgetvar("*", "hru_rain", "(mm/int)", &hru_rain);
+
+  declgetvar("*", "SolAng", "(r)", &SolAng);
+
+  declgetvar("*", "cosxs", "(r)", &cosxs);
+
+  declgetvar("*", "cosxsflat", "(r)", &cosxsflat);
+
+  declgetvar("*", "Qdfo", "(W/m^2)", &Qdfo);
+
+  declgetvar("*", "Albedo", "()", &Albedo);
+
+  declgetvar("*", "QdflatE", "(W/m^2)", &QdflatE);
+
+  declputvar("*", "SWE", "(mm)", &SWE);
+
+  // declputvar("*", "TCanSnow", "(°C)", &TCanSnow); found better performance when just using the ice bulb temp so no need for pspNew module
+
+  // declared observations
+
+  declvar("Ts", NHRU, "snow surface temperature", "(°C)", &Ts);
+
+  declobs("Qnsn", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn);
+
+  declvar("Qnsn_Var", NHRU, "net all-wave at snow surface", "(W/m^2)", &Qnsn_Var);
+
+  declobs("Qsisn", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn);
+
+  declvar("Qsisn_Var", NHRU, "incident short-wave at surface", "(W/m^2)", &Qsisn_Var);
+
+  declobs("Qlisn", NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn);
+
+  declvar("Qlisn_Var", NHRU, "incident long-wave at surface", "(W/m^2)", &Qlisn_Var);
+
+  declobs("Qlosn", NHRU, "reflected long-wave at surface", "(W/m^2)", &Qlosn);
+
+  // declared variables
+
+  decldiag("k", NHRU, "extinction coefficient", "()", &k);
+
+  decldiag("Tauc", NHRU, "short-wave transmissity", "", &Tauc);
+
+  decllocal("Pa", NHRU, "Average surface pressure", "(kPa)", &Pa);
+
+  declvar("ra", NHRU, "resistance", "(s/m)", &ra);
+
+  declvar("throughfall_rain", NHRU, "throughfall of rain through canopy (not in contact with canopy).", "(mm/int)", &throughfall_rain);
+
+  declvar("throughfall_snow", NHRU, "throughfall of snow not in contact with the canopy", "(mm/int)", &throughfall_snow);
+
+  declvar("intercepted_snow", NHRU, "initial interception of snow before ablation kicks in.", "(mm/int)", &intercepted_snow);
+
+  declvar("intercepted_rain", NHRU, "initial interception of rain before ablation kicks in.", "(mm/int)", &intercepted_rain);
+
+  decldiag("u_FHt", NHRU, "wind speed at forest top (z = FHt)", "(m/s)", &u_FHt);
+
+  decldiag("u_1_third_Ht", NHRU, "wind speed at one-third forest height (z = 1/3*Ht) for the Cebulski & Pomeroy vector based param.", "(m/s)", &u_1_third_Ht);
+
+  declvar("Clca", NHRU, "Leaf contact area adjusted for hydrometeor trajectory angle.", "()", &Clca);
+
+  declvar("LAI_", NHRU, "Leaf area index adjusted for snow cover", "()", &LAI_);
+
+  // parameters:
+
+  declparam("hru_elev", NHRU, "[637]", "0.0", "100000.0", "altitude", "(m)", &hru_elev);
+
+  declparam("Surrounding_Ht", NHRU, "[0.1, 0.25, 1.0]", "0.001", "100.0", "surrounding canopy height", "(m)", &Surrounding_Ht);
+
+  declparam("Gap_diameter", NHRU, "[100]", "10", "1000", "representative gap diameter", "(m)", &Gap_diameter);
+
+  declparam("Ht", NHRU, "[20.0]", "0.001", "100.0", "forest/vegetation height", "(m)", &Ht);
+
+  declparam("Zref", NHRU, "[1.5]", "0.01", "100.0", "temperature measurement height", "(m)", &Zref);
+
+  declparam("Zwind", NHRU, "[10]", "0.01", "100.0", "wind measurement height", "(m)", &Zwind);
+
+  declparam("Z0snow", NHRU, "[0.01]", "0.0001", "0.01", "snow roughness length", "(m)", &Z0snow);
+
+  declparam("Cc", NHRU, "[1]", "0", "1", "canopy coverage, (1-sky view fraction)", "()", &Cc);
+
+  declparam("LAI", NHRU, "[2.2]", "0.1", "20.0", "leaf-area-index", "()", &LAI);
+
+  declparam("alpha", NHRU, "[0.836]", "0.0", "1.0", "alpha is an efficiency constant which determines the fraction of snowflakes that contact the leaf contact area elements and are stored in the canopy (i.e., intercepted) before canopy snow unloading or ablation processes begin. Default is based on Cebulski & Pomeroy plot scale observations at Fortress Mountain PWL and Forest Tower plots.", "()", &alpha);
+
+  declparam("CanopyClearing", NHRU, "[0]", "0", "2", "canopy - 0/clearing - 1/gap - 2", "()", &CanopyClearing);
+
+  declparam("CanopyWindSwitchIP", NHRU, "[0]", "0", "2", "Canopy wind model to use at height Zcan, 0 - for within or above canopy wind speed measured and Prandtl-von Kármán log-linear relationship is used to bring to canopy top and then Cionco 1965 is used to adjust within Canopy, 1 - if measured wind is at canopy top and then just Cionco 1965 is used to bring within canopy, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchIP);
+
+  decldiagparam("Alpha_c", NHRU, "[0.1]", "0.05", "0.2", "canopy albedo, used for longwave-radiation enhancement estimation", "()", &Alpha_c);
+
+  decldiagparam("B_canopy", NHRU, "[0.038]", "0.0", "0.2", "canopy enhancement parameter for longwave-radiation. Suggestions are Colorado - 0.023 and Alberta - 0.038", "()", &B_canopy);
+}
+
+void ClassCRHMCanopyVectorBasedClearingGap::init(void)
+{
+
+  nhru = getdim(NHRU); // transfers current # of HRU's to module
+
+  for (hh = 0; hh < nhru; ++hh)
+  {
+
+    Pa[hh] = 101.3f * pow((293.0f - 0.0065f * hru_elev[hh]) / 293.0f, 5.26f); // kPa
+
+    if (Ht[hh] > Zwind[hh])
+    {
+      CRHMException TExcept(string("'" + Name + " (CanopyVectorBasedClearingGap)' Vegetation height greater than wind reference height, i.e. (Ht > Zwind)!").c_str(), WARNING);
+      LogError(TExcept);
+    }
+  }
+}
+
+void ClassCRHMCanopyVectorBasedClearingGap::run(void)
+{
+  for (hh = 0; chkStruct(); ++hh)
+  {
+    throughfall_rain[hh] = 0.0;
+    throughfall_snow[hh] = 0.0;
+
+    intercepted_rain[hh] = 0.0;
+    intercepted_snow[hh] = 0.0;
+
+    choose_solar_data(); // decide what solar data to use based on module variation defined in prj file
+    compute_canopy_temp(); // compute canopy temperature as input for surface snow energy balance
+
+  switch(CanopyClearing[hh]){
+
+	case 0: // canopy
+
+      adjust_lai_for_snow_height(Ht[hh]);
+      compute_canopy_long_short_rads(); // compute canopy long and short wave radiation components sent to canopy snow ebal and surface snowbal modules
+
+      break;
+
+    case 1:  // clearing
+
+      Qlisn[hh] = Qli_;
+
+      Qlisn_Var[hh] = Qlisn[hh];
+
+      Qsisn[hh] = Qsi_;
+
+      Qsisn_Var[hh] = Qsisn[hh];
+
+      Qlosn[hh] = CRHM_constants::emiss*CRHM_constants::sbc*pow(Ts[hh] + CRHM_constants::Tm, 4.0f);
+
+      Qnsn[hh] = Qlisn[hh] - Qlosn[hh] + Qsisn[hh]*(1.0 - Albedo[hh]);
+
+      Qnsn_Var[hh] = Qnsn[hh];
+
+      break;
+
+    case 2:  // gap
+
+      float Exposure = Surrounding_Ht[hh] - DepthofSnow (SWE[hh]); /* depths(m) SWE(mm) */
+      if(Exposure < 0.0)
+        Exposure = 0.0;
+
+      float LAI_ = LAI[hh]*Exposure/Surrounding_Ht[hh];
+
+      float Vf = 0.45 - 0.29*log(LAI[hh]);
+
+      float Tau_d = Vf + (1.0 - Vf)*sin((Surrounding_Ht[hh] - Exposure)/Surrounding_Ht[hh]*M_PI_2); // previously Vf_
+
+// calculate forest clearing sky view factor (Vgap) via Reifsnyder and Lull’s (1965) expression:
+
+      float Vgap = sqr(sin(atan2(Gap_diameter[hh], 2.0*Surrounding_Ht[hh])));
+
+// calculate beam pathlength correction (variable “Gap_beam_corr”) for gap:
+
+      float Gap_beam_corr = 0;
+      if(Qsi_ > 0.0 && SolAng[hh] > 0.001){
+        float cosxsLim = 3;
+        if(cosxs[hh] >  0.33)
+          cosxsLim = 1.0/cosxs[hh];
+
+        Gap_beam_corr = cosxsLim*Surrounding_Ht[hh]*(1.0/cos(SolAng[hh]) - Gap_diameter[hh]/(2.0*Surrounding_Ht[hh])/sin(SolAng[hh]));
+        if(Gap_beam_corr > 10.0)
+          Gap_beam_corr = 10.0;
+        else if(Gap_beam_corr < 0.0)
+          Gap_beam_corr = 0.0;
+        }
+// calculate beam shortwave transmittance of the gap:
+
+      float product = LAI[hh]*Gap_beam_corr;
+      if(product > 50)
+        product = 50;
+
+      float Tau_b_gap = exp(-product);
+
+      float Kd = Qsi_*(1.0 - Alpha_c[hh] - Tau_b_gap*(1.0 - Albedo[hh]));
+
+      // Canopy temperature is approximated by the air temperature
+      float T1 = hru_t[hh] + CRHM_constants::Tm; // deg C -> K
+
+      Qlisn[hh] = Vgap*Qli_ + (1.0 - Vgap)*((Qli_*Tau_b_gap + (1.0 - Tau_b_gap)*CRHM_constants::emiss_c*CRHM_constants::sbc*pow(T1, 4.0f)) + B_canopy[hh]*Kd);
+
+      Qlisn_Var[hh] = Qlisn[hh];
+
+      Qsisn[hh] = cosxs[hh]*Qdfo[hh]*Tau_b_gap + Vgap*(Qsi_ - Qdfo[hh]) + (1.0 - Vgap)*Tau_d*(Qsi_ - Qdfo[hh]);
+      if(Qsisn[hh] < 0.0)
+        Qsisn[hh] = 0.0;
+
+      Qsisn_Var[hh] = Qsisn[hh];
+
+      Qlosn[hh] = CRHM_constants::emiss*CRHM_constants::sbc*pow(Ts[hh] + CRHM_constants::Tm, 4.0f);
+
+      Qnsn[hh] = Qlisn[hh] - Qlosn[hh] + Qsisn[hh]*(1-Albedo[hh]);
+
+      Qnsn_Var[hh] = Qnsn[hh];
+
+      break;
+  } // switch
+
+    //==============================================================================
+    // coupled forest snow interception routine:
+    // after Cebulski & Pomeroy 2025:
+
+    if (hru_snow[hh] > 0.0)
+    {                            // calculate increase in Snow_load and throughfall_snow if we are in canopy (i.e., Cc > 0)
+      const float v_snow = 0.8; // terminal fall velocity of snowfall taken from Isyumov, 1971
+      Clca[hh] = 0.0;              // leaf contact area (Clca) based on trajectory angle
+      float IP = 0.0;             // interception efficiency (IP)
+
+      if (hru_u[hh] > 0.0 && Cc[hh] < 1.0 && Cc[hh] > 0.0)
+      { // increase leaf contact area (Clca) based on wind speed and canopy coverage (Cc)
+
+        get_wind_for_leaf_contact_calc();
+        compute_leaf_contact_area(v_snow);
+
+      } else { // do not adjust snow-leaf contact area for wind effects
+        Clca[hh] = Cc[hh]; // use leaf contact area from nadir i.e., Clca == 1 for Cc == 1 and Clca == 0 when Cc == 0
+      }
+
+      IP = Clca[hh] * alpha[hh]; // interception efficiency (IP)
+      intercepted_snow[hh] = IP * hru_snow[hh];    // change in canopy snow load
+
+      // calculate canopy snow throughfall before unloading:
+
+      throughfall_snow[hh] = (1.0 - IP) * hru_snow[hh];
+
+      // net snow / rain is computed in can snobal after ablation of intercepted snow.
+    } // end snow routine
+
+    if(hru_rain[hh] > 0){
+      // Canopy Liquid Water Routine
+      throughfall_rain[hh] = hru_rain[hh] * (1.0 - Cc[hh]);
+      intercepted_rain[hh] = hru_rain[hh] * Cc[hh];
+    }
+
+  } // end for
+}
+
+// helper functions
+
+// this function chooses which solar data to use based on the module variation defined in the prj file
+void ClassCRHMCanopyVectorBasedClearingGap::choose_solar_data(void)
+{
+    switch ((int)variation)
+    {
+        case VARIATION_ORG:
+            Qsi_ = Qsi[hh];
+            Qli_ = Qli[hh];
+            break;
+        case VARIATION_1:
+            Qsi_ = Qsi[hh];
+            Qli_ = QliVt_Var[hh];
+            break;
+        case VARIATION_2:
+            Qsi_ = QsiS_Var[hh];
+            Qli_ = Qli[hh];
+            break;
+        case VARIATION_3:
+            Qsi_ = QsiS_Var[hh];
+            Qli_ = QliVt_Var[hh];
+            break;
+        case VARIATION_4:
+            Qsi_ = QsiA_Var[hh];
+            Qli_ = QliVt_Var[hh];
+            break;
+        default:
+            Qsi_ = 0.0;
+            Qli_ = 0.0;
+            break;
+    }
+}
+
+// this function computes canopy temperature based on air temperature and radiation balance used in the Snobal module
+void ClassCRHMCanopyVectorBasedClearingGap::compute_canopy_temp(void)
+{
+    // Canopy temperature is approximated by the air temperature
+    float T1 = hru_t[hh] + CRHM_constants::Tm; // deg C -> K
+
+    float rho = Pa[hh] * 1000 / (CRHM_constants::Rgas * T1); // air density
+
+    float U1 = hru_u[hh]; // wind speed (m/s)
+    ra[hh] = (log(Zref[hh] / Z0snow[hh]) * log(Zwind[hh] / Z0snow[hh])) / sqr(CRHM_constants::kappa) / U1;
+
+    float deltaX = 0.622 * CRHM_constants::Ls * Qs(Pa[hh], T1) / (CRHM_constants::Rgas * sqr(T1));
+
+    float q = (hru_rh[hh] / 100) * Qs(Pa[hh], T1); // specific humidity
+
+    Ts[hh] = T1 + (CRHM_constants::emiss * (Qli_ - CRHM_constants::sbc * pow(T1, 4.0))
+                 + CRHM_constants::Ls * (q - Qs(Pa[hh], T1)) * rho / ra[hh])
+                 / (4 * CRHM_constants::emiss * CRHM_constants::sbc * pow(T1, 3.0)
+                 + (CRHM_constants::Cp + CRHM_constants::Ls * deltaX) * rho / ra[hh]);
+
+    Ts[hh] -= CRHM_constants::Tm; // back to deg C
+
+    // Apply boundary conditions
+    if (Ts[hh] > 0.0 || SWE[hh] <= 0.0)
+        Ts[hh] = 0.0;
+}
+
+// this function adjusts the effective LAI based on snow height as the bottom of the canopy may be buried in snow
+void ClassCRHMCanopyVectorBasedClearingGap::adjust_lai_for_snow_height(float Ht)
+{
+    // Compute canopy exposure above snow
+    float exposure = Ht - DepthofSnow(SWE[hh]); // Ht in meters, SWE in mm
+    if (exposure < 0.0)
+        exposure = 0.0;
+
+    // Update effective LAI
+    LAI_[hh] = LAI[hh] * exposure / Ht;
+}
+
+// this function computes canopy longwave and shortwave radiation components sent to canopy snow ebal and surface snowbal modules
+void ClassCRHMCanopyVectorBasedClearingGap::compute_canopy_long_short_rads(void)
+{
+    float T1 = hru_t[hh] + CRHM_constants::Tm; // deg C -> K
+    float Vf = 1.0 - Cc[hh]; // changed from approx of LAI to direct calculation from params
+
+    float Vf_ = Vf + (1.0 - Vf) * sin((Ht[hh] - (Ht[hh] - DepthofSnow(SWE[hh]))) / Ht[hh] * M_PI_2);
+
+    if (SolAng[hh] > 0.001 && cosxs[hh] > 0.001 && cosxsflat[hh] > 0.001)
+    {
+      k[hh] = 1.081 * SolAng[hh] * cos(SolAng[hh]) / sin(SolAng[hh]); // Eq. 8 from Pomeroy 2009
+      float limit = cosxsflat[hh] / cosxs[hh];
+      if (limit > 2.0)
+        limit = 2.0;
+      Tauc[hh] = exp(-k[hh] * LAI_[hh] * limit);
+    }
+    else
+    {
+      k[hh] = 0.0;
+    }
+
+    float Kstar_H = Qsi_ * (1.0 - Alpha_c[hh] - Tauc[hh] * (1.0 - Albedo[hh])); // Eq. 6 from Pomeroy 2009
+
+    // incoming longwave to the surface
+    Qlisn[hh] = Qli_ * Vf_ + (1.0f - Vf_) * CRHM_constants::emiss_c * CRHM_constants::sbc * pow(T1, 4.0f) + B_canopy[hh] * Kstar_H; // looks like modification of Eq. 10 from Pomeroy 2009
+
+    Qlisn_Var[hh] = Qlisn[hh]; // goes to snobal module
+
+    // incoming shortwave radiation to the surface
+    Qsisn[hh] = Qsi_ * Tauc[hh];
+
+    Qsisn_Var[hh] = Qsisn[hh];
+
+    // incoming longwave to the canopy mid point
+
+    // Qlw_veg_Var[hh] = Qli_ * (1.0 - (Cc[hh]/2)); // canopy snow is partially exposed to atmosphere so reduce based on view factor
+
+    // incoming shortwave radiation to canopy midpoint
+
+    // Qsw_veg_Var[hh] = Qsi_ * Tauc_50; // for PSP like solar to canopy midpoint
+
+    Qlosn[hh] = CRHM_constants::emiss * CRHM_constants::sbc * pow(Ts[hh] + CRHM_constants::Tm, 4.0f);
+
+    Qnsn[hh] = Qlisn[hh] - Qlosn[hh] + Qsisn[hh] * (1.0 - Albedo[hh]);
+
+    Qnsn_Var[hh] = Qnsn[hh];
+}
+
+// this function computes wind speed, variations are defined in the prj file using the CanopyWindSwitchIP parameter
+void ClassCRHMCanopyVectorBasedClearingGap::get_wind_for_leaf_contact_calc(void)
+{
+    float Ht_1_third = Ht[hh] * (1.0 / 3.0);
+
+    // wind speed used for vector based initial snow interception
+    switch ((int)CanopyWindSwitchIP[hh])
+    {
+      case 0:
+      {  // increase wind speed to canopy top then bring back down using using Cionco wind model for dense canopies, use this one if wind speed is below/within canopy
+        adst_wind_cpy_top(Ht[hh], hru_u[hh], Zwind[hh], u_FHt[hh]);
+        cionco_canopy_wind_spd(Ht[hh], u_FHt[hh], Ht_1_third, u_1_third_Ht[hh]);
+        break;
+      } // end case 0
+
+      case 1:
+      { // use if forcing wind speed is above/at canopy top
+        cionco_canopy_wind_spd(Ht[hh], hru_u[hh], Ht_1_third, u_1_third_Ht[hh]);
+        break;
+      } // end case 1
+
+      case 2:
+      { // Canopy wind profile developed at Fortress sparse canopy
+        double d0 = 0.5791121; // displacement height observed at sparse forest around Fortress Forest Tower
+        double z0m = 0.4995565; // roughness length observed at above site
+
+        // wind speed used for vector based initial snow interception
+        if ((Ht_1_third - d0) > z0m){
+          float Ustar = hru_u[hh]*PBSM_constants::KARMAN/(log((Zwind[hh]-d0)/z0m));
+          u_1_third_Ht[hh] = Ustar/PBSM_constants::KARMAN * log((Ht_1_third - d0)/z0m);
+        } else {
+            u_1_third_Ht[hh] = 0.0;
+        }
+        break;
+      } // end case 2
+    } // end of switch CanopyWind
+}
+
+// this function computes leaf contact area based on hydrometeor trajectory angle as in Cebulski & Pomeroy 2025 (hp)
+void ClassCRHMCanopyVectorBasedClearingGap::compute_leaf_contact_area(float v_snow)
+{
+    if (u_1_third_Ht[hh] > 0.0)
+    {
+        float snow_traj_angle = atan(u_1_third_Ht[hh] / v_snow); // trajectory angle in radians
+        float b_lca = 0.91; // empirical coefficient
+        float f_theta = b_lca * pow(sin(snow_traj_angle), 2.0);
+
+        float Cp_inc = (1.0 - Cc[hh]) * f_theta; // fractional increase in leaf contact area
+        Clca[hh] = Cc[hh] + Cp_inc;
+    }
+    else
+    {
+        Clca[hh] = Cc[hh]; // nadir contact area
+    }
+}
+
+void ClassCRHMCanopyVectorBasedClearingGap::finish(bool good)
+{
+  for (hh = 0; chkStruct(); ++hh)
+  {
+    LogDebug(" ");
+  }
+}
+
+float ClassCRHMCanopyVectorBasedClearingGap::adst_wind_cpy_top(
+    float veg_ht, /* Height of vegetation (m) */
+    float uz,     /* Wind speed at height z (m/s) */
+    float z, /* Height of wind speed measurement (m) */
+
+    // output
+    float &u_veg_ht /* Wind speed at canopy top (m/s)*/
+    )
+{
+    if (veg_ht - 2.0 / 3.0 * z > 0.0) {
+        u_veg_ht = uz * log((veg_ht - 2.0 / 3.0 * z) / 0.123 * z) / log((z - 2.0 / 3.0 * z) / 0.123 * z);
+    } else {
+        u_veg_ht = 0.0;
+    }
+    return(u_veg_ht);
+}
+
+float ClassCRHMCanopyVectorBasedClearingGap::cionco_canopy_wind_spd(
+    float veg_ht,    /* Height of vegetation (m) */
+    float u_veg_ht,  /* Wind speed at height veg ht (m/s) */
+    float target_ht, /* target height of output wind speed (m) */
+
+    // output
+    float &u_target_ht /* Wind speed at target height (m/s)*/
+)
+{
+    float A = 2.4338 + 3.45753 * exp(-u_veg_ht);                 /* Modified Cionco wind model from Parviainen & Pomeroy 2000 for mature forest*/
+    //double A = 2.97 + 3.2 * exp(-u_veg_ht);                 /* Modified Cionco wind model from Parviainen & Pomeroy 2000 for regen forest*/
+
+    u_target_ht = u_veg_ht * exp(A * (target_ht / veg_ht - 1.0)); /* calculates canopy windspd  */
+
+    return (u_target_ht);
+}
+
+ClassCanopySnowBalanceCRHM* ClassCanopySnowBalanceCRHM::klone(string name) const{
+  return new ClassCanopySnowBalanceCRHM(name);
+}
+
+void ClassCanopySnowBalanceCRHM::decl(void) {
+
+    Description = "'Handles the mass and energy balance of snow intercepted in the canopy. Should be paired with the CanopyVectorBased module which does the initial loading of precip in the canopy and some radiation calculations. There is a timestep subset routine in this module following the surface snowpack routine. Standard CRHM module.' \
+                 'use Qsi (W/m^2) and Qli (W/m^2) observations,' \
+                 'use variables Qsisn_Var (W/m^2) and Qlisn_Var (W/m^2) from module CanopyClearing.' \
+                 'use observation Qsi (W/m^2) and QliVt_Var (W/m^2) from module longVt.' \
+                 'use variables QsiS_Var (W/m^2) from Annandale and QliVt_Var (W/m^2) from module longVt.'";
+
+    declstatvar("isothermal_veg", NHRU, "melting: 0/1", "()", &isothermal);
+    declstatvar("vegsnowcover", NHRU, "snow on veg at start of current timestep: 0/1", "()", &vegsnowcover);
+
+    declvar("Qn_veg", NHRU, "net allwave radiation wrt the canopy", "(W/m^2)", &Qn_veg);
+    declvar("Qh_veg", NHRU, "sensible heat xfr wrt the canopy", "(W/m^2)", &Qh_veg);
+    declvar("Ql_veg", NHRU, "latent heat xfr wrt the canopy", "(W/m^2)", &Ql_veg);
+    declvar("Qp", NHRU, "advected heat from precip wrt the canopy", "(W/m^2)", &Qp);
+    declvar("delta_Q_veg", NHRU, "change in canopy snow's energy wrt the canopy", "(W/m^2)", &delta_Q_veg);
+
+    declstatvar("cc_s_veg", NHRU, "canopy snow's cold content", "(J/m^2)", &cc_s_veg);
+    declstatvar("liq_h2o_veg", NHRU, "canopy liquid h2o load as specific mass", "(kg/m^2)", &liq_h2o_veg);
+    declstatvar("snow_h2o_veg", NHRU, "canopy snow load as specific mass", "(kg/m^2)", &snow_h2o_veg);
+
+    decllocal("delevap_veg", NHRU, "mass of subl/evap from canopy snow/liquid (+to surface)", "(kg/m^2*s)", &delevap_veg);
+    decllocal("delsub_veg", NHRU, "mass of subl/evap from canopy snow/liquid (+to surface)", "(kg/m^2*s)", &delsub_veg);
+    decllocal("qsub_veg", NHRU, "mass flux by evap into air from active layer", "(kg/m^2*s)", &qsub_veg);
+    decllocal("delmelt_veg", NHRU, "specific melt (kg/m^2 or m)", "(kg/m^2)", &delmelt_veg);
+    decllocal("delunld_wind", NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*s)", &delunld_wind);
+    decllocal("delunld_melt", NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*s)", &delunld_melt);
+    decllocal("delunld", NHRU, "canopy snow unloading rate", "(kg/m^2*s)", &delunld);
+    declvar("deldrip_veg", NHRU, "drip from canopy snowmelt and intercepted rainfall", "(kg/m^2*s)", &deldrip_veg);
+
+    declvar("delevap_veg_int", NHRU, "mass of evap into air from vegsnowcover", "(kg/m^2*int)", &delevap_veg_int);
+    declvar("delsub_veg_int", NHRU, "mass of sublimation into air from vegsnowcover", "(kg/m^2*int)", &delsub_veg_int);
+    declvar("delmelt_veg_int", NHRU, "specific melt (kg/m^2 or m)", "(kg/m^2*int)", &delmelt_veg_int);
+    declvar("delunld_int", NHRU, "specific mass of canopy snow unloaded to subcanopy", "(kg/m^2*int)", &delunld_int);
+    declvar("net_rain", NHRU, "throughfall rain + drip (runoff/melt drainage) of snow intercepted in the canopy", "(kg/m^2*int)", &net_rain);
+    declvar("net_snow", NHRU, "throughfall snow + unloaded snow from the canopy", "(kg/m^2*int)", &net_snow);
+    declvar("net_p", NHRU, "net rain + net snow", "(kg/m^2*int)", &net_p);
+    declvar("delunld_wind_int", NHRU, "solid snow unloading from the canopy induced by wind", "(kg/m^2*int)", &delunld_wind_int);
+    declvar("delunld_melt_int", NHRU, "canopy snow unloading rate due to melting", "(kg/m^2*int)", &delunld_melt_int);
+    declvar("deldrip_veg_int", NHRU, "drip from canopy snowmelt and intercepted rainfall", "(kg/m^2*int)", &deldrip_veg_int);
+
+    declvar("delL", NHRU, "interval change in SWE", "(kg/m^2*int)", &delL);
+    declvar("delmelt_veg_day", NHRU, "daily snow melt", "(mm/d)", &delmelt_veg_day);
+    decllocal("cmlmelt_veg_day", NHRU, "daily snow melt accumulator", "(mm/d)", &cmlmelt_veg_day);
+    declvar("cmlmelt_veg", NHRU, "cumulative melt", "(mm)", &cmlmelt_veg);
+
+    declstatvar("m_s_veg", NHRU, "canopy snow's specific mass, liquid and snow", "(kg/m^2)", &m_s_veg);
+
+    declstatvar("max_liq_veg", NHRU, "maximum veg canopy snow's liquid mass", "(kg/m^2)", &max_liq_veg);
+
+    declstatvar("T_s_veg", NHRU, "average canopy snow temp", "(°C)", &T_s_veg);
+
+    declstatvar("h2o_sat_veg", NHRU, "fraction of liquid H2O saturation (0 to 1.0)", "()", &h2o_sat_veg);
+    declvar("h2o_vol_veg", NHRU, "liquid h2o content as volume ratio: V_water/(V_snow - V_ice)", "()", &h2o_vol_veg);
+
+    declvar("h2o_sat_veg_snow", NHRU, "snowfall's % of liquid H2O saturation", "()", &h2o_sat_veg_snow);
+
+    declvar("precip_now_veg", NHRU, "precipitation occur for current timestep - 0/1", "()", &precip_now_veg);
+    declvar("T_rain_veg", NHRU, "rain's temp", "(°C)", &T_rain_veg);
+    declvar("T_sf", NHRU, "snowfall's temp", "(°C)", &T_sf);
+
+    decllocal("S_n_L_veg", NHRU, "net solar radiation", "(W/m^2)", &S_n);
+    decllocal("I_lw_L_veg", NHRU, "incoming longwave (thermal) rad ", "(W/m^2)", &I_lw);
+    decllocal("T_a_L_veg", NHRU, "air temp", "(°C)", &T_a);
+    decllocal("e_a_L_veg", NHRU, "vapor pressure", "(Pa)", &e_a);
+    decllocal("u_L_veg", NHRU, "wind speed", "(m/s)", &u);
+    decllocal("I_LW_atm", NHRU, "Downwelling longwave from the atmoshpere", "(W/m^2)", &I_LW_atm);
+    decllocal("I_LW_gnd", NHRU, "Upwelling longwave from the ground", "(W/m^2)", &I_LW_gnd);
+    decllocal("I_LW_cpy_2_cpy", NHRU, "Longwave from the canopy reflected off the surface back to the canopy", "(W/m^2)", &I_LW_cpy_2_cpy);
+    decllocal("I_LW_cpy", NHRU, "Incoming longwave radiation emitted from the canopy", "(W/m^2)", &I_LW_cpy);
+    decllocal("O_LW_cpysnow", NHRU, "Outgoing longwave radiation emitted from the canopy snow", "(W/m^2)", &O_LW_cpysnow);
+    decllocal("u_2_3rds", NHRU, "Wind speed at 2/3 canopy height for canopy snow energy balance and unloading", "(m s^-1)", &u_2_3rds);
+    decllocal("rel_z_u", NHRU, "Height of wind speed measurement relative to top of snowpack, only implemented if relative_hts[hh] == 1", "(m)", &rel_z_u);
+    decllocal("rel_z_T", NHRU, "Height of temp measurement relative to top of snowpack, only implemented if relative_hts[hh] == 1", "(m)", &rel_z_T);
+
+
+    decllocal("m_precip_L", NHRU, "specific mass of total precip", "(kg/m^2)", &m_precip);
+    declvar("rain_on_snow_veg", NHRU, "specific mass of rain in precip", "(kg/m^2)", &m_rain);
+    decllocal("m_snow_L", NHRU, "specific mass in snow in precip", "(kg/m^2)", &m_snow);
+    decllocal("T_pp_L", NHRU, "precip temp", "(°C)", &T_pp);
+
+    decllocal("P_a_veg", NHRU, "air pressure", "(Pa)", &P_a);
+
+    decllocal("m_precip_veg_cum", NHRU, "cumulative specific mass of total precip", "(kg/m^2)", &m_precip_cum);
+    decllocal("m_rain_veg_cum", NHRU, "cumulative specific mass of total rain", "(kg/m^2)", &m_rain_cum);
+    decllocal("m_snow_veg_cum", NHRU, "cumulative specific mass of total snow", "(kg/m^2)", &m_snow_cum);
+    decllocal("E_s_veg_cum", NHRU, "cumulative mass flux by evap into air from active layer", "(kg/m^2)", &E_s_cum);
+
+    decllocal("stop_no_snow_veg", NHRU, "snow flag", "()", &stop_no_snow);
+    declparam("max_liq_veg_frac", NHRU, "[0.01]", "0.0001", "0.2", "max liquid h2o content as fraction of specific snow mass", "()", &max_liq_veg_frac);
+    declparam("Albedo_vegsnow", NHRU, "[0.6]", "0.6", "0.9", "Albedo of intercepted snow", "()", &Albedo_vegsnow);
+    declparam("SW_to_LW_fn", NHRU, "[0.01]", "0.0001", "0.5", "dimensionless shortwave to longwave transfer efficiency function. 0.038 from Pomeroy et al., (2009) for marmot forced through the origin, alternative value is 0.023 from Fraser site.", "()", &SW_to_LW_fn);
+
+    declgetparam("*", "z_u", "()", &z_u); // height of wind measurement (m)
+    declgetparam("*", "z_T", "()", &z_T); // height of air temp & vapor pressure measurement(m)
+    declgetparam("*", "hru_elev", "()", &hru_elev); // altitude (m)
+    declgetparam("*", "basin_area", "()", &basin_area); // total basin area (km^2)
+    declgetparam("*", "hru_area", "()", &hru_area); // hru area (km^2)
+    declgetparam("*", "hru_rho_snow", "()", &rho_snow_X); // rho of falling snow (kg/m^3)
+    declgetparam("*", "Cc", "()", &Cc); // canopy coverage, (1-sky view fraction)
+    declgetparam("*", "LAI", "()", &LAI);
+    declgetparam("*", "Ht", "()", &Ht);
+    declparam("Lmax", NHRU, "[50]", "0", "100", "maximum canopy snow load", "(kg/m^2)", &Lmax);
+    declparam("CanopyWindSwitchCanSno", NHRU, "[0]", "0", "2", "Canopy wind model to use for wind induced unloading at 2/3rd canopy height, 0 - no adjustment, 1 - for Prandtl-von Kármán log-linear relationship for above canopy adjustment and Cionco 1965 for within canopy, 2 - for wind profile developed at Fortress sparse canopy", "()", &CanopyWindSwitchCanSno);
+    declparam("MassUnloadingSwitch", NHRU, "[0]", "0", "2", "canopy snow unloading parameterization to use, 0 - Cebulski & Pomeroy 2025 ablation paper, 1- Andreadis 2009, 2 - Roesch2001 (enable HP98/Ellis2010 using original canopy clearing gap module)", "()", &MassUnloadingSwitch);
+    declparam("unld_to_melt_ratio_m", NHRU, "[0.15]", "-20.0", "20.0", "Slope coefficient for unloading to melt ratio", "()", &unld_to_melt_ratio_m);
+    declparam("unld_to_melt_ratio_b", NHRU, "[-0.43]", "-20.0", "20.0", "Intercept coefficient for unloading to melt ratio", "()", &unld_to_melt_ratio_b);
+    declparam("a_tau", NHRU, "[0.371]", "0.0", "20.0", "Shear stress coefficient for dry-snow unloading", "()", &a_tau);
+    declgetparam("*", "relative_hts", "()", &relative_hts);
+    declgetparam("*", "inhibit_evap", "()", &inhibit_evap);
+
+    declgetparam("*", "Alpha_c", "()", &Albedo_veg); // canopy albedo
+    declgetvar("*", "Albedo", "()", &Albedo_surface);
+    declgetvar("*", "Tauc", "(r)", &Tauc);
+
+    declgetvar("*", "hru_t", "(°C)", &T_a_X);
+    declgetvar("*", "hru_t", "(°C)", &T_pp_X); // default precipitation temperature to air
+    declgetvar("*", "hru_ea", "(kPa)", &e_a_X);
+    declgetvar("*", "hru_u", "(m/s)", &u_X);
+    declgetvar("*", "T_s_0", "(°C)", &T_s_0);
+    // declreadobs("obs_snow_load", NHRU, "Weighed tree canopy snow load", "(kg/m^2)", &obs_snow_load, HRU_OBS_misc);
+
+    declgetvar("*", "z_s", "(m)", &z_s); // height of surface snowpack used for relative height calculation
+    declgetvar("*", "intercepted_snow", "(kg/m^2)", &new_snow); // new snow intercepted in canopy before ablation processes have kicked in, from vector based module
+    declgetvar("*", "intercepted_rain", "(kg/m^2)", &new_rain); // new snow intercepted in canopy before ablation processes have kicked in, from vector based module
+    declgetvar("*", "throughfall_rain", "(kg/m^2)", &throughfall_rain); // throughfall of rain to be added with canopy drip
+    declgetvar("*", "throughfall_snow", "(kg/m^2)", &throughfall_snow); // throughfall of snow to be added with canopy snow unloading
+    declgetvar("*", "hru_evap", "(kg/m^2)", &hru_evap);
+
+    variation_set = VARIATION_0 + VARIATION_1;
+
+    declreadobs("Qsi", NHRU, "incident short-wave", "(W/m^2)", &Qsi, HRU_OBS_Q, true); // must check for NULL
+
+    variation_set = VARIATION_0;
+
+    declreadobs("Qli", NHRU, "incident long-wave", "(W/m^2)", &Qli, HRU_OBS_Q, true);
+
+    variation_set = VARIATION_2;
+
+    declgetvar("*", "QsiS_Var", "(W/m^2)", &Qsw_in_veg); // downwelling SW to slope simulated from annandale module or Slope_Qsi module depending on if obs Qsi are used, same as regular snobal but without the canopy tau applied
+
+    variation_set = VARIATION_1 + VARIATION_2;
+
+    declgetvar("*", "QliVt_Var", "(W/m^2)", &Qlw_out_atm); // downwelling longwave radiation from the atmosphere, adjusted for terrain emission as well
+
+    variation_set = VARIATION_ORG;
+
+}
+
+void ClassCanopySnowBalanceCRHM::init(void) {
+
+  ClassCanopySnowBalanceBase::init();
+  for (hh = 0; chkStruct(); ++hh) {
+    delmelt_veg_day[hh] = 0.0;
+  }
+}
+
+void ClassCanopySnowBalanceCRHM::run(void) { // executed every interval
+
+  long nstep = getstep() % Global::Freq;
+
+  if(getstep() == 1){ // beginning of model run. Handle initial state file problems
+    for (hh = 0; chkStruct(); ++hh) {
+      if(snow_h2o_veg[hh] <= 0)
+        vegsnowcover[hh] = 0;
+      else{
+          vegsnowcover[hh] = 1;
+      }
+    }
+  }
+
+  for (hh = 0; chkStruct(); ++hh) {
+
+    switch ((int)variation)
+    {
+    case VARIATION_ORG: // obs SW and obs LW
+      input_rec2[hh].S_n = Qsi[hh];
+      input_rec2[hh].I_lw = Qli[hh];
+
+      break;
+    case VARIATION_1: // obs SW and mod LW
+      input_rec2[hh].S_n = Qsi[hh];
+      I_LW_atm[hh] = (CAN_EMISSIVITY + (1.0 - CAN_EMISSIVITY) * (1.0 - SNOW_EMISSIVITY) * CAN_EMISSIVITY) * Qlw_out_atm[hh]; //  ! downward atmospheric longwave radiation absorbed by the canopy (W m-2) from SUMM
+      input_rec2[hh].I_lw = I_LW_atm[hh];
+
+      break;
+    case VARIATION_2: // obs or mod SW (depends on annandale vs slope_qsi module selection) and mod LW
+      input_rec2[hh].S_n = Qsw_in_veg[hh];                                                                                   // after CLASSIC just take the incoming solar to slope which is multiplied by 1 - canopy albedo later on. Differs slightly from class which uses incoming SW to horizontal surface where this is the SW to slope
+      I_LW_atm[hh] = (CAN_EMISSIVITY + (1.0 - CAN_EMISSIVITY) * (1.0 - SNOW_EMISSIVITY) * CAN_EMISSIVITY) * Qlw_out_atm[hh]; //  ! downward atmospheric longwave radiation absorbed by the canopy (W m-2) from SUMM
+      input_rec2[hh].I_lw = I_LW_atm[hh];
+
+      break;
+    }
+
+    input_rec2[hh].T_a  = T_a_X[hh] + FREEZE;
+    input_rec2[hh].e_a  = e_a_X[hh]*1000;
+    input_rec2[hh].u    = u_X[hh];
+
+    // handles non throughfall precip
+    m_precip[hh] = new_snow[hh] + new_rain[hh];
+    m_rain[hh] = new_rain[hh];
+    m_snow[hh] = new_snow[hh];
+
+    m_precip_cum[hh] += m_precip[hh]; // change
+    m_rain_cum[hh] += m_rain[hh];
+    m_snow_cum[hh] += m_snow[hh];
+
+    T_pp[hh]     = T_pp_X[hh] + FREEZE;
+
+// clear interval values
+
+    delmelt_veg_int[hh] = 0.0;
+    delsub_veg_int[hh] = 0.0;
+    delunld_int[hh] = 0.0;
+    delunld_wind_int[hh] = 0.0;
+    delunld_melt_int[hh] = 0.0;
+    deldrip_veg_int[hh] = 0.0;
+    delevap_veg_int[hh] = 0.0;
+
+    long Step = getstep();
+
+    // uncomment  below to hop to specific time in debug
+
+    // string test = Global::DTnow.FormatString(" yy mm dd hh nn ");
+
+    // if (test == "10/24/2022 14:0") {
+    // // if (test == "3/26/2023 15:0") { // TOP OF THE HOUR IS ONE ZERO
+    // // if (test == "10/1/2021 0:15") {
+    //   std::cout << "Breakpoint here: Date matched" << std::endl;
+    // }
+
+
+    if(getstep() > 1){ // Not first step
+
+      if (m_precip[hh] > 0.0)
+      {
+        stop_no_snow[hh] = 0;
+        precip_now_veg[hh] = true;
+      }
+      else
+      {
+        if (!(vegsnowcover[hh] || liq_h2o_veg[hh] > 0.0))
+          stop_no_snow[hh] = 1; // _do_tstep_veg will not execute
+        precip_now_veg[hh] = false;
+      }
+
+      do_data_tstep_veg(); // executes Snobal code only if new snow intercepted/snow is in canopy, will not execute for hrus w.o. canopy.
+
+      if (snow_h2o_veg[hh] < 1e-6 && snow_h2o_veg[hh] > 0.0){ // if very small amount of snow on canopy then sublimate it off, handles non-convergence of energy balance for small snow values
+
+        delsub_veg_int[hh] += snow_h2o_veg[hh];
+        snow_h2o_veg[hh] = 0.0;
+        m_s_veg[hh] = snow_h2o_veg[hh] + liq_h2o_veg[hh];
+        vegsnowcover[hh] = 0;
+      }
+
+    }
+
+    else if(m_precip[hh] > 0.0) {
+         CRHMException TExcept("Snobal - cannot handle precipitation during first day of model run", WARNING);
+         LogError(TExcept);
+    }
+
+    Step = Step % Global::Freq;
+    if(Step == 1)
+       cmlmelt_veg_day[hh] = delmelt_veg_int[hh];
+    else
+       cmlmelt_veg_day[hh] += delmelt_veg_int[hh];
+
+    if(Step == 0){
+      delmelt_veg_day[hh] = cmlmelt_veg_day[hh];
+      cmlmelt_veg_day[hh] = 0.0;
+    }
+
+    input_rec1[hh].S_n  = input_rec2[hh].S_n;
+    input_rec1[hh].I_lw = input_rec2[hh].I_lw;
+    input_rec1[hh].T_a  = input_rec2[hh].T_a;
+    input_rec1[hh].e_a  = input_rec2[hh].e_a;
+    input_rec1[hh].u    = input_rec2[hh].u;
+
+    E_s_cum[hh] += delsub_veg_int[hh];
+    delL[hh] += m_s_veg[hh];
+    cmlmelt_veg[hh] += delmelt_veg_int[hh];
+
+    // net rain and snow falling to the subcanopy/open snowpack
+    net_rain[hh] = throughfall_rain[hh] + deldrip_veg_int[hh];
+    net_snow[hh] = throughfall_snow[hh] + delunld_int[hh];
+
+    net_p[hh] = net_rain[hh] + net_snow[hh];
+
+    // set assimilate observed snow load for begining of select events
+    // if(obs_snow_load[hh] < 9999){
+    //   m_s_veg[hh] = obs_snow_load[hh];
+    //   snow_h2o_veg[hh] = obs_snow_load[hh];
+    //   liq_h2o_veg[hh] = 0.0; // could be incorrect for first timestep but will be small impact as all liq water assumed to drain on each timestep
+    //   delmelt_veg_int[hh] = 0.0;
+    //   delsub_veg_int[hh] = 0.0;
+    //   delunld_int[hh] = 0.0;
+    //   deldrip_veg[hh] = 0.0;
+    // }
+
+  }
+}
+
+void ClassCanopySnowBalanceCRHM::finish(bool good) { // only required for local storage and final output
+
+  ClassCanopySnowBalanceBase::finish(good);
+}
+
+void ClassCanopySnowBalanceBase::init(void) {
+
+    input_rec1 = new INPUT_REC[nhru]; // input data for start of data timestep [nhru]
+    input_rec2 = new INPUT_REC[nhru]; // input data for start of data timestep [nhru]
+    time_step = new long[nhru];	     // length current timestep (sec)
+    current_time = new long[nhru];    // start time of current time step (sec)
+
+    computed = new int* [nhru];		// array of flags for each timestep;
+    input_deltas = new INPUT_REC * [nhru]; // deltas for climate-input parameters for each timestep
+    precip_info = new PRECIP_REC * [nhru]; // array of precip info adjusted for each timestep
+    tstep_info = new TSTEP_REC * [nhru]; 	// array of info for each timestep:
+
+    for (long ii = 0; ii < nhru; ++ii) {
+        computed[ii] = new int[4];           // [nhru] [4]
+        input_deltas[ii] = new INPUT_REC[4]; // [nhru] [4]
+        precip_info[ii] = new PRECIP_REC[4]; // [nhru] [4]
+        tstep_info[ii] = new TSTEP_REC[4];   // [nhru] [4]
+    }
+
+    for (hh = 0; chkStruct(); ++hh) {
+
+        //WindTypeCanSno canopytype = static_cast<WindTypeCanSno>(CanopyWindSwitchCanSno[hh]);
+
+        //if(canopytype != WindTypeCanSno::NO_ADJUSTMENT && canopytype != WindTypeCanSno::ADJUST_CIONCO && canopytype != WindTypeCanSno::FORTRESS_SPARSE_CANOPY)
+        if(CanopyWindSwitchCanSno[hh] != 0 && CanopyWindSwitchCanSno[hh] != 1 && CanopyWindSwitchCanSno[hh] != 2)
+        {
+            CRHMException Except(String(String("Invalid canopy wind model switch for HRU ") + String(hh) + String(": ") + String(CanopyWindSwitchCanSno[hh]) + String(". Valid values are 0 (measured within canopy), 1 (measured above canopy) and 2 (Fortress sparse canopy).")).c_str(), TERMINATE);
+            LogError(Except);
+        }
+
+        P_a[hh] = 101.3f * pow((293.0f - 0.0065f * hru_elev[hh]) / 293.0f, 5.26f) * 1000.0f;  // Pa
+
+        h2o_sat_veg[hh] = 0.0;
+
+        snow_h2o_veg[hh] = 0.0;
+        liq_h2o_veg[hh] = 0.0;
+        m_s_veg[hh] = snow_h2o_veg[hh] + liq_h2o_veg[hh];
+
+        cc_s_veg[hh] = 0.0;
+
+        delmelt_veg[hh] = 0.0;
+        deldrip_veg[hh] = 0.0;
+        T_sf[hh] = 0.0;
+        T_rain_veg[hh] = 0.0;
+
+        isothermal[hh] = 0;
+        vegsnowcover[hh] = 0;
+        stop_no_snow[hh] = 0;
+        if (hh < nhru)
+        {
+            current_time[hh] = 0;
+        }
+
+
+        E_s_cum[hh] = 0.0;
+
+        m_precip_cum[hh] = 0.0;
+        m_rain_cum[hh] = 0.0;
+        m_snow_cum[hh] = 0.0;
+        cmlmelt_veg[hh] = 0.0;
+
+        Ql_veg[hh] = 0.0;
+        qsub_veg[hh] = 0.0;
+        Qh_veg[hh] = 0.0;
+        Qp[hh] = 0.0;
+        Qn_veg[hh] = 0.0;
+        delta_Q_veg[hh] = 0.0;
+
+        if (hh < nhru)
+        {
+            tstep_info[hh][DATA_TSTEP].level = DATA_TSTEP;
+            tstep_info[hh][DATA_TSTEP].time_step = 24 * 3600 / Global::Freq;
+            tstep_info[hh][DATA_TSTEP].intervals = 0;
+            tstep_info[hh][DATA_TSTEP].threshold = DEFAULT_NORMAL_THRESHOLD;
+
+            tstep_info[hh][NORMAL_TSTEP].level = NORMAL_TSTEP;
+            tstep_info[hh][NORMAL_TSTEP].time_step = 24 * 3600 / Global::Freq;
+            tstep_info[hh][NORMAL_TSTEP].intervals = 1;
+            tstep_info[hh][NORMAL_TSTEP].threshold = DEFAULT_NORMAL_THRESHOLD; // 60
+
+            tstep_info[hh][MEDIUM_TSTEP].level = MEDIUM_TSTEP;
+            tstep_info[hh][MEDIUM_TSTEP].time_step = 24 * 3600 / Global::Freq / 4;
+            tstep_info[hh][MEDIUM_TSTEP].intervals = 4;
+            tstep_info[hh][MEDIUM_TSTEP].threshold = DEFAULT_MEDIUM_THRESHOLD; // 10
+
+            tstep_info[hh][SMALL_TSTEP].level = SMALL_TSTEP;
+            tstep_info[hh][SMALL_TSTEP].time_step = 24 * 3600 / Global::Freq / 60;
+            tstep_info[hh][SMALL_TSTEP].intervals = 15;
+            tstep_info[hh][SMALL_TSTEP].threshold = DEFAULT_SMALL_THRESHOLD;  // 1
+        }
+
+    }
+}
+
+void ClassCanopySnowBalanceBase::finish(bool good) { // only required for local storage and final output
+
+    for (hh = 0; chkStruct(); ++hh) {
+        LogMessageA(hh, string("'" + Name + " (CanopySnowBalance)' m_precip_cum    (mm) (mm*hru) (mm*hru/basin): ").c_str(), m_precip_cum[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (CanopySnowBalance)' m_rain_cum      (mm) (mm*hru) (mm*hru/basin): ").c_str(), m_rain_cum[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (CanopySnowBalance)' m_snow_cum      (mm) (mm*hru) (mm*hru/basin): ").c_str(), m_snow_cum[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (CanopySnowBalance)' SWE             (mm) (mm*hru) (mm*hru/basin): ").c_str(), m_s_veg[hh], hru_area[hh], basin_area[0]);
+        LogDebug(" ");
+        LogMessageA(hh, string("'" + Name + " (CanopySnowBalance)' E_s_cum         (mm) (mm*hru) (mm*hru/basin): ").c_str(), E_s_cum[hh], hru_area[hh], basin_area[0]);
+        LogMessageA(hh, string("'" + Name + " (CanopySnowBalance)' cmlmelt_veg     (mm) (mm*hru) (mm*hru/basin): ").c_str(), cmlmelt_veg[hh], hru_area[hh], basin_area[0]);
+        LogDebug(" ");
+    }
+
+    delete[] input_rec1;   // [nhru]
+    delete[] input_rec2;   // [nhru]
+    delete[] time_step;    // [nhru]
+    delete[] current_time; // [nhru]
+
+    for (long ii = 0; ii < nhru; ++ii) {
+        delete[] computed[ii];         // [nhru] [4]
+        delete[] input_deltas[ii];     // [nhru] [4]
+        delete[] precip_info[ii];      // [nhru] [4]
+        delete[] tstep_info[ii];       // [nhru] [4]
+    }
+
+    delete[] computed;
+    delete[] input_deltas;
+    delete[] precip_info;
+    delete[] tstep_info;
+}
+
+// Initialize canopy snowpack on this timestep, i.e., no snow load on timestep start
+void ClassCanopySnowBalanceBase::init_snow_veg(void)
+{
+
+    liq_h2o_veg[hh] += m_rain[hh];
+    snow_h2o_veg[hh] += m_snow[hh];
+    m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh];
+
+    T_s_veg[hh] = T_sf[hh]; // init canopy snow temperature at precip temp
+
+    cc_s_veg[hh] = _cold_content_veg(T_s_veg[hh], m_s_veg[hh]);
+
+    stop_no_snow[hh] = 0;
+    vegsnowcover[hh] = 1;
+}
+
+/*
+** NAME
+**      _cold_content_veg -- calculates cold content for canopy snow
+**
+**      double
+**	_cold_content_veg(
+**	    double  temp,		|* temperature of canopy snow *|
+**	    double  mass)		|* specific mass of canopy snow *|
+**
+** DESCRIPTION
+**      This routine calculates the cold content for canopy snow (i.e., the
+**	energy required to bring its temperature to freezing) from the
+**  temperature and specific mass.
+**
+** RETURN VALUE
+**	The canopy snow's cold content.
+*/
+
+float ClassCanopySnowBalanceBase::_cold_content_veg(
+    float	temp,		// temperature of canopy snow
+    float	mass)		// specific mass of canopy snow
+{
+    if (temp < FREEZE)
+        return heat_stor(CP_ICE(temp), mass, (temp - FREEZE));
+    else
+        return 0.0;
+}
+
+/*
+** NAME
+**      int do_data_tstep_veg(void) -- run model for 1 data timestep between 2 input records
+**
+** DESCRIPTION
+**	This routine performs the model's calculations for 1 data timestep
+**	between 2 input-data records which are in 'input_rec1' and
+**	'input_rec2'.
+**
+**	If there's precipitation during the data timestep, the flag
+**	'precip_now_veg' used be true.  Furthermore, the routine requires
+**	that the following precipitation variables have been initialized:
+**
+**		m_pp
+**		percent_snow
+**		T_pp
+**
+**	This routine divides the data timestep into the appropriate number
+**	of normal run timesteps.  The input values for each normal timestep
+**	are computed from the two input records by linear interpolation.
+**
+** RETURN VALUE
+**
+**	true	The model's calculations were completed.
+**
+**	false	An error occured, and a message explaining the error has
+**		been stored with the 'usrerr' routine.
+**
+** GLOBAL VARIABLES READ
+**	e_a
+**	I_lw
+**	in_rec
+**	m_pp_data
+**	m_rain_data
+**	m_snow_data
+**	more_pr_recs
+**	precip_data
+**	S_n
+**	T_a
+**	tstep_info
+**	u
+**	z_snow_data
+**
+** GLOBAL VARIABLES MODIFIED
+**	precip_now_veg
+*/
+
+void ClassCanopySnowBalanceBase::do_data_tstep_veg(void) {
+
+    int level; // loop index
+
+  //  Copy values from first input record into global variables.
+
+    S_n[hh] = input_rec1[hh].S_n;
+    I_lw[hh] = input_rec1[hh].I_lw;
+    T_a[hh] = input_rec1[hh].T_a;
+    e_a[hh] = input_rec1[hh].e_a;
+    u[hh] = input_rec1[hh].u;
+
+    // Compute deltas for the climate input parameters over the CRHM data timestep.
+
+    input_deltas[hh][DATA_TSTEP].S_n = input_rec2[hh].S_n - input_rec1[hh].S_n;
+    input_deltas[hh][DATA_TSTEP].I_lw = input_rec2[hh].I_lw - input_rec1[hh].I_lw;
+    input_deltas[hh][DATA_TSTEP].T_a = input_rec2[hh].T_a - input_rec1[hh].T_a;
+    input_deltas[hh][DATA_TSTEP].e_a = input_rec2[hh].e_a - input_rec1[hh].e_a;
+    input_deltas[hh][DATA_TSTEP].u = input_rec2[hh].u - input_rec1[hh].u;
+
+    // If there is precipitation, then compute the amount of rain & snow in it.
+
+    if (precip_now_veg[hh]) {
+        precip_info[hh]->m_pp = m_precip[hh];
+        precip_info[hh]->m_snow = m_snow[hh];
+        precip_info[hh]->m_rain = m_rain[hh];
+
+        // Mixed snow and rain
+
+        if ((precip_info[hh]->m_snow > 0.0) && (precip_info[hh]->m_rain > 0.0)) {
+            T_sf[hh] = FREEZE;
+            h2o_sat_veg_snow[hh] = 1.0;
+            T_rain_veg[hh] = T_pp[hh]; // TODO try changing to harder ice bulb temp
+        }
+
+        // Snow only
+
+        else if (precip_info[hh]->m_snow > 0.0) {
+            if (T_pp[hh] < FREEZE) {	/* Cold snow */
+                T_sf[hh] = T_pp[hh];
+                h2o_sat_veg_snow[hh] = 0.0;
+            }
+            else {				/* Warm snow */
+                T_sf[hh] = FREEZE;
+                h2o_sat_veg_snow[hh] = 1.0;
+            }
+        }
+
+        // Rain only
+
+        else if (precip_info[hh]->m_rain > 0.0) {
+            T_rain_veg[hh] = T_pp[hh];
+        }
+    }
+    else {
+        precip_info[hh]->m_pp = 0.0;
+        precip_info[hh]->m_snow = 0.0;
+        precip_info[hh]->m_rain = 0.0;
+        precip_info[hh]->z_snow = 0.0;
+    }
+
+    //  Clear the 'computed' flag at the other timestep levels.
+
+    for (level = NORMAL_TSTEP; level <= SMALL_TSTEP; ++level)
+        computed[hh][level] = 0;
+
+    // Divide the data timestep into normal run timesteps.
+
+    _divide_tstep_veg(tstep_info[hh]);
+}
+
+/*
+** NAME
+**      int _divide_tstep_veg( -- divide a timestep into smaller timesteps
+**
+**	int
+**	_divide_tstep_veg(
+**	    TSTEP_REC *tstep;	|* record of timestep to be divided *|
+**
+** DESCRIPTION
+**	This routine divides a timestep into smaller timesteps.  For
+**	each of these smaller timestep, the routine either run the
+**	model for that timestep, or further subdivides that timestep
+**	into even smaller timesteps.
+**
+** RETURN VALUE
+**
+**	true	The timestep was successfully divided into smaller timesteps.
+**
+**	false	An error occured while running the model during one of the
+**		smaller timesteps.  An message explaining the error has
+**		been stored with the 'usrerr' routine.
+**
+** GLOBAL VARIABLES READ
+**	precip_now_veg
+**	tstep_info
+**
+** GLOBAL VARIABLES MODIFIED
+*/
+
+int ClassCanopySnowBalanceBase::_divide_tstep_veg(TSTEP_REC* tstep) {  // record of timestep to be divided
+
+    TSTEP_REC* next_lvl_tstep;	// info of next level of timestep
+    INPUT_REC* curr_lvl_deltas;	// -> input-deltas of current level
+    INPUT_REC* next_lvl_deltas;	// -> input-deltas of next level
+    PRECIP_REC* curr_lvl_precip;	// -> precip data of current level
+    PRECIP_REC* next_lvl_precip;	// -> precip data of next level
+    int next_level;
+    // Fetch the record for the timestep at the next level.
+
+    next_level = tstep->level + 1;
+    next_lvl_tstep = &tstep_info[hh][next_level];
+
+    curr_lvl_deltas = &input_deltas[hh][tstep->level];
+    next_lvl_deltas = &input_deltas[hh][next_level];
+
+    curr_lvl_precip = &precip_info[hh][tstep->level];
+    next_lvl_precip = &precip_info[hh][next_level];
+
+    //  If this is the first time this new level has been used during
+    //  the current data timestep, then calculate its input deltas and precipitation values.
+
+    if (!computed[hh][next_level]) {
+        next_lvl_deltas->S_n = curr_lvl_deltas->S_n / next_lvl_tstep->intervals;
+        next_lvl_deltas->I_lw = curr_lvl_deltas->I_lw / next_lvl_tstep->intervals;
+        next_lvl_deltas->T_a = curr_lvl_deltas->T_a / next_lvl_tstep->intervals;
+        next_lvl_deltas->e_a = curr_lvl_deltas->e_a / next_lvl_tstep->intervals;
+        next_lvl_deltas->u = curr_lvl_deltas->u / next_lvl_tstep->intervals;
+
+        next_lvl_precip->m_pp = curr_lvl_precip->m_pp / next_lvl_tstep->intervals;
+        next_lvl_precip->m_rain = curr_lvl_precip->m_rain / next_lvl_tstep->intervals;
+        next_lvl_precip->m_snow = curr_lvl_precip->m_snow / next_lvl_tstep->intervals;
+        next_lvl_precip->z_snow = curr_lvl_precip->z_snow / next_lvl_tstep->intervals;
+
+        computed[hh][next_level] = 1;
+    }
+
+    // For each the new smaller timestep, either subdivide them if below their mass threshold, or run the model for them.
+
+    for (int ii = 0; (ii < next_lvl_tstep->intervals) && !stop_no_snow[hh]; ++ii) { // execute every interval
+
+        if ((next_level < SMALL_TSTEP) && _below_thold_veg(next_lvl_tstep->threshold)) {
+            if (!_divide_tstep_veg(next_lvl_tstep)) // call self (this routine)
+                return 0; // cannot get here unless _hl_e is coded to return error!
+        }
+        else {
+            if (!_do_tstep_veg(next_lvl_tstep)) // execute code
+                return 0; // cannot get here unless _hl_e is coded to return error!
+        }
+    } // for
+
+    return 1;
+} // _divide_tstep_veg
+
+/*
+** NAME
+**      _below_thold_veg -- is a layer's mass below a threshold ?
+**
+**      int
+**	_below_thold_veg(
+**	    float  threshold)	|* current timestep's threshold for a
+**				   layer's mass *|
+**
+** DESCRIPTION
+**      This routine determines if any individual layer's mass is below
+**	a given threshold for the current timestep.
+**
+** RETURN VALUE
+**      	1	A layer's mass is less than the threshold.
+**
+**		0	All layers' masses are greater than the threshold.
+**
+** GLOBAL VARIABLES READ
+**	m_s_veg
+**	m_s_veg
+**
+** GLOBAL VARIABLES MODIFIED
+*/
+
+int ClassCanopySnowBalanceBase::_below_thold_veg(float	threshold) { // current timestep's threshold for a layer's mass
+
+    if (!(vegsnowcover[hh] || liq_h2o_veg[hh] > 0.0))
+        return 0;
+    else
+        return (m_s_veg[hh] < threshold);
+}
+
+/*
+** NAME
+**      _do_tstep_veg -- do model calculations for 1 timestep
+**
+**      int
+**	_do_tstep_veg(
+**	    TSTEP_REC *tstep;  |* timestep's record *|
+**
+** DESCRIPTION
+**      This routine performs the model's calculations for a single timestep.
+**      It requires that these climate variables have been initialized:
+**
+**      	S_n
+**      	I_lw
+**      	T_a
+**      	e_a
+**      	u
+**
+**	The routine also requires the precipitation data have been adjusted
+**	for the timestep, and have been stored in the array:
+**
+**		precip_info
+**
+** RETURN VALUE
+**
+**	true	The model's calculations were completed.
+**
+**	false	An error occured, and a message explaining the error has
+**		been stored with the 'usrerr' routine.
+**
+** GLOBAL VARIABLES READ
+**	delta_Q_veg
+**	delsub_veg
+**	G
+**	Qh_veg
+**	Ql_veg
+**	Qp
+**	delmelt_veg
+**	precip_now_veg
+**	Qn_veg
+**	deldrip_veg
+**
+** GLOBAL VARIABLES MODIFIED
+**	current_time
+**	curr_time_hrs
+**	delta_Q_bar
+**	e_a
+**	G_bar
+**	H_bar
+**	liq_h2o_veg
+**	I_lw
+**	L_v_E_bar
+**	M_bar
+**	m_precip
+**	m_rain
+
+**	m_snow
+**	R_n_bar
+**	S_n
+**	vegsnowcover
+**	T_a
+**	u
+**	time_step
+**	z_snow_veg
+*/
+
+int ClassCanopySnowBalanceBase::_do_tstep_veg(TSTEP_REC* tstep)  // timestep's record
+{
+    time_step[hh] = tstep->time_step;
+
+    m_precip[hh] = precip_info[hh][tstep->level].m_pp;
+    m_rain[hh] = precip_info[hh][tstep->level].m_rain;
+    m_snow[hh] = precip_info[hh][tstep->level].m_snow;
+
+    delmelt_veg[hh] = 0.0;
+    delta_Q_veg[hh] = 0.0;
+
+    // Is there a vegsnowcover?
+
+    vegsnowcover[hh] = snow_h2o_veg[hh] > 1e-6; // skip energy
+
+    // determine relative measurement heights
+    if (!relative_hts[hh]) {
+        rel_z_T[hh] = z_T[hh];
+        rel_z_u[hh] = z_u[hh];
+    }
+    else {
+        rel_z_T[hh] = z_T[hh] - z_s[hh];
+        if (rel_z_T[hh] < 1.0)
+            rel_z_T[hh] = 1.0;
+        rel_z_u[hh] = z_u[hh] - z_s[hh];
+        if (rel_z_u[hh] < 1.0)
+            rel_z_u[hh] = 1.0;
+    }
+
+    // Calculate wind speed used in both the ebal and mass bal routines wrt snow intercepted in the canopy.
+    compute_canopy_snow_wind();
+
+    // Calculate energy transfer terms
+
+    if (!_e_bal_veg())
+        return 0;
+
+    // Adjust mass and calculate runoff
+
+    _mass_bal();
+
+    //  Update the averages for the energy terms and the totals for mass changes since the last output.
+
+    // increment time
+    current_time[hh] += time_step[hh];
+
+    //  update interval values
+    delmelt_veg_int[hh] += delmelt_veg[hh];
+    delsub_veg_int[hh] += delsub_veg[hh];
+    delevap_veg_int[hh] += delevap_veg[hh];
+    delunld_int[hh] += delunld[hh];
+    delunld_wind_int[hh] += delunld_wind[hh];
+    delunld_melt_int[hh] += delunld_melt[hh];
+    deldrip_veg_int[hh] += deldrip_veg[hh];
+
+    //  Update the model's input parameters
+    S_n[hh] += input_deltas[hh][tstep->level].S_n;
+    I_lw[hh] += input_deltas[hh][tstep->level].I_lw;
+    T_a[hh] += input_deltas[hh][tstep->level].T_a;
+    e_a[hh] += input_deltas[hh][tstep->level].e_a;
+    u[hh] += input_deltas[hh][tstep->level].u;
+
+    return 1;
+}
+
+/*
+** NAME
+**      void compute_canopy_snow_wind.
+**
+** DESCRIPTION
+**      Calculate wind speed used in both the ebal and mass bal routines wrt snow intercepted in the canopy.
+**
+** RETURN VALUE
+**    void
+**
+** GLOBAL VARIABLES READ
+**
+** CanopyWindSwitchCanSno[hh]
+**  Ht[hh]
+**  u[hh]
+**  rel_z_u[hh]
+**  z_u[hh]
+**
+** GLOBAL VARIABLES MODIFIED
+** u_2_3rds[hh]
+**
+*/
+void ClassCanopySnowBalanceBase::compute_canopy_snow_wind(void)
+{
+
+    //switch (static_cast<WindTypeCanSno>(CanopyWindSwitchCanSno[hh]))
+    switch ((int)CanopyWindSwitchCanSno[hh])
+    {
+        //case WindTypeCanSno::NO_ADJUSTMENT:
+        case 0:
+        {
+            u_2_3rds[hh] = u[hh];
+            break;
+        } // end wind case 0
+
+        //case WindTypeCanSno::ADJUST_CIONCO:
+        case 1:
+        {
+            float z_veg_u = Ht[hh]*(2.0/3.0);
+            float u_veg_ht = 0.0;
+
+            adst_wind_cpy_top(Ht[hh], u[hh], rel_z_u[hh], u_veg_ht);
+            cionco_canopy_wind_spd(Ht[hh], u_veg_ht, z_veg_u, u_2_3rds[hh]);
+            break;
+        } // end wind case 1
+
+        //case WindTypeCanSno::FORTRESS_SPARSE_CANOPY:
+        case 2:
+        {
+            float d0_wind = 0.5791121;  // displacement height observed at sparse forest around Fortress Forest Tower
+            float z0m_wind = 0.4995565; // roughness length observed at above site
+            float z_veg_u = Ht[hh]*(2.0/3.0);
+
+
+            // wind speed for wind induced unloading at 2/3 canopy height
+            if ((z_veg_u - d0_wind) > z0m_wind)
+            {
+                float Ustar = u[hh] * PBSM_constants::KARMAN / (log((z_u[hh] - d0_wind) / z0m_wind));
+                u_2_3rds[hh] = Ustar / PBSM_constants::KARMAN * log((z_veg_u - d0_wind) / z0m_wind);
+            }
+            else
+            {
+                u_2_3rds[hh] = 0.0;
+            }
+
+            break;
+        } // end wind case 2
+    } // end of switch CanopyWindSwitchCanSno
+}
+
+/*
+** NAME
+**      int _e_bal_veg(void) -- calculates point energy budget for the vegsnowcover. uses a similar iteration scheme as in CLASS canopy snow.
+**
+** DESCRIPTION
+**      Calculates point energy budget for the vegsnowcover and adjusts the canopy snowpack temperature.
+**
+** RETURN VALUE
+**
+**	true	The calculations were completed.
+**
+**	false	An error occured, and a message explaining the error has
+**		been stored with the 'usrerr' routine.
+**
+** GLOBAL VARIABLES READ
+**
+** GLOBAL VARIABLES MODIFIED
+**
+*/
+
+int ClassCanopySnowBalanceBase::_e_bal_veg(void)
+{
+
+    if (vegsnowcover[hh] || liq_h2o_veg[hh] > 0.0)
+    {
+        float resid;               // left over energy not accounted for in the ebal
+        float Tstep = 0.25;         // increment to adjust canopy snow temperature by
+        int niter = 1;
+        int max_iter = 100;
+        float T0_s_veg = T_s_veg[hh];
+
+        do
+        { /* iterate on canopy snow e bal */
+
+            // calculate radiative terms
+            _net_rad_veg();
+
+            // calculate latent and sensible heat transfer
+            if (!init_turb_transfer())
+                return 0;
+
+            // calculate advection
+            _advec_veg();
+
+            // veg snowpack energy budget
+            delta_Q_veg[hh] = ((T_s_veg[hh] - T0_s_veg) * m_s_veg[hh] * CP_ICE(T_s_veg[hh])) / time_step[hh];
+
+            resid = Qn_veg[hh] + Qh_veg[hh] + Ql_veg[hh] + Qp[hh] - delta_Q_veg[hh];
+
+            // Check energy budget residual and if too large adjust canopy snow temperature. Temp adjust algorithm below is after CLASS.
+            if (fabs(resid) < 5.0 || fabs(Tstep) < 1e-2)
+            {
+                break;
+            }
+
+            if (niter == 1)
+            {
+                if (resid > 0.0)
+                { // we overshot the canopy snow surface temperature so try reducing it 1 k step at a time
+                    T_s_veg[hh] += Tstep;
+                }
+                else
+                {
+                    T_s_veg[hh] -= Tstep;
+                }
+            }
+            else
+            {
+                if ((resid > 0.0 && Tstep < 0.0) || (resid < 0.0 && Tstep > 0.0))
+                {
+                    Tstep = -Tstep / 2.0;
+                }
+                T_s_veg[hh] += Tstep;
+            }
+            niter += 1;
+
+            // if (std::abs(T_s_veg[hh] - FREEZE) < 1.0E-6) // likely uneeded but is in CLASS
+            // {
+            // T_s_veg[hh] = FREEZE;
+            // }
+
+            // Check if max iterations were reached
+            if (niter >= max_iter)
+            {
+                String D = Global::DTnow.FormatString(" yy mm dd hh nn ");
+                String SS = D + "hh " + String(hh);
+
+                CRHMException TExcept2(SS.c_str(), WARNING);
+                LogError(TExcept2);
+
+                CRHMException TExcept("Warning: Max iterations reached in canopy snow energy balance", WARNING);
+                LogError(TExcept);
+            }
+        } while (niter < max_iter); // breaks inside based on resid or temp step
+
+        if (niter > max_iter)
+        { // solution has not been reached, set canopy temp equal to air temperature
+            T_s_veg[hh] = T_a[hh];
+
+            Qn_veg[hh] = 0.0;
+
+            Qh_veg[hh] = Ql_veg[hh] = qsub_veg[hh] = 0.0;
+
+            Qp[hh] = 0.0;
+
+            delta_Q_veg[hh] = 0.0;
+        }
+    }
+    else
+    {
+        Qn_veg[hh] = 0.0;
+
+        Qh_veg[hh] = Ql_veg[hh] = qsub_veg[hh] = 0.0;
+
+        Qp[hh] = 0.0;
+
+        delta_Q_veg[hh] = 0.0;
+    }
+    return 1;
+}
+
+/*
+** NAME
+**      void _net_rad_veg(void) -- calculates net allwave radiation
+**
+** DESCRIPTION
+**      Calculates net allwave radiation from the net solar radiation
+**	incoming thermal/longwave radiation, and the snow surface
+**	temperature. This is relative to a snow clump sitting on the canopy.
+**
+** GLOBAL VARIABLES READ
+**	I_lw
+**	S_n
+**	T_s_veg
+**
+** GLOBAL VARIABLES MODIFIED
+**	Qn_veg
+*/
+
+void ClassCanopySnowBalanceBase::_net_rad_veg(void)
+{
+    //	Qn_veg[hh] = S_n[hh] + (SNOW_EMISSIVITY * (I_lw[hh] - STEF_BOLTZ * pow(T_s_veg[hh], 4.0f)));
+    O_LW_cpysnow[hh] = 2.0 * SNOW_EMISSIVITY * STEF_BOLTZ * pow(T_s_veg[hh], 4.0f); // since we include incoming from atmosphere and from branch elements we multiply by two
+    I_LW_cpy_2_cpy[hh] = CAN_EMISSIVITY*(1.0 - SNOW_EMISSIVITY)*O_LW_cpysnow[hh]; // canopy longwave reflected from ground and absorbed by the canopy (W m-2)
+
+    // TODO move below to a function
+    float SW_ext_in_canopy = S_n[hh] * (1-Albedo_veg[hh] - Tauc[hh]*(1-Albedo_surface[hh])); // Eq 6. from Pomeroy et al., (2009)
+    I_LW_cpy[hh] = (CAN_EMISSIVITY * STEF_BOLTZ * pow(T_a[hh], 4.0f)) + SW_to_LW_fn[hh] * SW_ext_in_canopy; // Longwave emission from the canopy as in Pomeroy et al., (2009) Eq 10 but modified relative to calculate just the canopy emission assuming canopy is at air temperature at night
+    Qn_veg[hh] = (S_n[hh]*(1-Albedo_vegsnow[hh])) + (I_lw[hh] + I_LW_cpy_2_cpy[hh] + I_LW_cpy[hh] - O_LW_cpysnow[hh]); // assumes canopy snow is getting full atmosphere input of LW on top and LW from canopy on branch may need to adjust contribution on top to also include some canopy emission
+}
+
+/*
+** NAME
+**      int init_turb_transfer(void) -- calculates turbulent transfer at a point within the canopy after Essery et al., 2003.
+**
+** DESCRIPTION
+**      Calculates point turbulent transfer (Qh_veg and Ql_veg) for a 1-layer
+**	vegsnowcover. Ignores stability corrections since within the roughness elements.
+**
+** GLOBAL VARIABLES READ
+**
+** GLOBAL VARIABLES MODIFIED
+**
+*/
+
+int ClassCanopySnowBalanceBase::init_turb_transfer(void) {
+
+    float e_s, e_a_fix;
+    float sat_vp;
+
+// calculate saturation vapor pressure
+
+    e_s = sati(T_s_veg[hh]);
+
+    //*** error check for bad vapor pressures ***
+
+    sat_vp = sati(T_a[hh]);
+    if (e_a[hh] > sat_vp)
+        e_a_fix = sat_vp;
+    //		const_cast<float*> (e_a)[hh] = sat_vp;
+    else
+        e_a_fix = e_a[hh];
+
+    // calculate Qh_veg & Ql_veg
+
+    if (calc_turb_transfer(P_a[hh], T_a[hh], rel_z_T[hh], T_s_veg[hh], e_a_fix, e_s, u_2_3rds[hh], rel_z_u[hh], Qh_veg[hh], Ql_veg[hh]))
+        return 1; // !!!!!TB
+
+    return 1;
+}
+
+/* ----------------------------------------------------------------------- */
+
+int ClassCanopySnowBalanceBase::calc_turb_transfer(
+    float press, // aiFr pressure (Pa)
+    float ta,    // air temperature (K) at height za
+    float tz,    // height of air temp measurement (m)
+    float ts,    // surface temperature (K)
+    float ea,    // vapor pressure (Pa) at height zq
+    float es,    // vapor pressure (Pa) at surface
+    float u,     // wind speed (m/s) at height zu
+    float uz,    // height of wind speed measurement (m)
+
+    // output variables
+
+    float &CRHM_h, // sens heat flux (+ to surf) (W/m^2)
+    float &CRHM_le // latent heat flux (+ to surf) (W/m^2)
+)
+{
+    float h = 0; // sens heat flux (+ to surf) (W/m^2)
+    float e = 0; // mass flux (+ to surf) (kg/m^2/s)
+    float qa;    // specific humidity at height zq (kg/kg)
+    float qs;    // specific humidity at surface (kg/kg)
+    float dens;  // air density (kg/m3)
+
+    float Nr;                      // Reynolds number
+    float NuSh;                    // Nusselt number (-)
+    float D;                       // diffusivity of water vapour in still air (m^2/s)
+    const float KinVisc = 1.88E-5; /* Kinematic viscosity of air (Sask. avg. value) */
+    // const float ks = 0.0114;       // snow shape coefficient for jack pine from Pomeroy et al., 1998
+    const float ks = 0.02;       // recalibrated from Essery et al., (2003)
+    // const float ks = 0.2;       // recalibrated from AC
+    const float Fract = 0.37;      // fractal dimension of intercepted snow
+    float Ce;                      // canopy fullness index to represent how exposed snow is for sublimation, more sublimation for less snow in the canopy
+    const float Radius = 0.0005;   /* Ice sphere radius, metres */
+    float dice = 900.0;            // density of ice from canopy module
+    float ra;                      // aerodynamic resistance (s/m)
+    float ri;                      // resistance of moisture transfer from intercepted snow (s/m)
+    float z_0;                     // roughness length
+    float d_0;                     // displacement height
+    int ier = 0;                    // return error code
+
+    // check for bad input
+
+    // temperatures are Kelvin
+    if (ta <= 0 || ts <= 0)
+    {
+        CRHMException TExcept("temps not K", TERMINATE);
+        LogError(TExcept);
+        ier = -2;
+        return (ier);
+    }
+
+    // pressures must be positive
+    if (ea <= 0 || es <= 0 || press <= 0 || ea >= press || es >= press)
+    {
+
+        String D = Global::DTnow.FormatString(" yy mm dd hh nn ");
+        String SS = D + "hh " + String(hh) + " 'calc_turb_transfer' " + ". Qh_veg: " + FloatToStrF(h, ffFixed, 10, 4) + " le: " + FloatToStrF(e, ffFixed, 10, 4);
+        SS = SS + " ta: " + FloatToStrF(ta - FREEZE, ffFixed, 10, 4) +
+             ", ts: " + FloatToStrF(ts - FREEZE, ffFixed, 10, 4) +
+             ", ea: " + FloatToStrF(ea, ffFixed, 10, 4) +
+             ", es: " + FloatToStrF(es, ffFixed, 10, 4) +
+             ", u:  " + FloatToStrF(u, ffFixed, 10, 4) +
+             ", m_s_veg:  " + FloatToStrF(m_s_veg[hh], ffFixed, 10, 4);
+
+        CRHM_le = 0.0; // addition TB 09/23/14
+        CRHM_h = 0.0;
+
+        CRHMException TExcept2(SS.c_str(), WARNING);
+        LogError(TExcept2);
+
+        // Manishankar made this change to keep the program running.
+        // CRHMException TExcept("calc_turb_transfer: pressures must be positive", TERMINATE);
+        CRHMException TExcept("calc_turb_transfer: pressures must be positive", WARNING);
+        LogError(TExcept);
+
+        ier = -2;
+        return (ier);
+    }
+
+    // vapor pressures can't exceed saturation if way off stop
+    if ((es - 25.0) > sati(ts) || (ea - 25.0) > satw(ta))
+    {
+        CRHMException TExcept("calc_turb_transfer: vapor pressures can't exceed saturation", TERMINATE);
+        LogError(TExcept);
+        ier = -2;
+        return (ier);
+    }
+    // else fix them up
+    if (es > sati(ts))
+    {
+        es = sati(ts);
+    }
+    if (ea > satw(ta))
+    {
+        ea = satw(ta);
+    }
+
+    D = 2.06E-5 * pow(ts / FREEZE, -1.75);
+
+    if (u < 0.1)
+        u = 0.1;
+    else if (u > 15)
+        u = 15;
+
+    Nr = 2.0 * Radius * u / KinVisc;
+    NuSh = 1.79 + 0.606 * sqrt(Nr);
+
+    // air density at press, virtual temp of geometric mean of air and surface
+    dens = GAS_DEN(press, MOL_AIR, VIR_TEMP(sqrt(ta * ts), sqrt(ea * es), press));
+
+    // convert vapor pressures to specific humidities, to absolute handled within the Qe calc
+    qa = SPEC_HUM(ea, press);
+    qs = SPEC_HUM(es, press);
+
+    // calculates how exposed canopy snow is to the atmosphere based on the fullness of the canopy, more exposed with less snow as more gaps / surface area
+    if ((m_s_veg[hh] / Lmax[hh]) <= 0.0) // Using Lmax instead of Lstar as gives more appropriate index of canopy fullness
+        Ce = 0.07;
+    else
+        Ce = ks * pow((m_s_veg[hh] / Lmax[hh]), -Fract); // Ce is higher when the canopy is less full with snow as more of it is exposed, TODO maybe limit snow canopy fraction to 1.0 also need to reconsider Lstar
+
+    z_0 = Ht[hh] * 0.1;
+
+    // resitances
+    ra = 1.0/(PBSM_constants::KARMAN*PBSM_constants::KARMAN*u)*(log(tz/z_0)*log((uz/z_0))); // Allen 1998 Eq. 4 but without displacement height as in original crhm canopy
+    ri = 2.0 * dice * Radius * Radius / (3.0 * Ce * m_s_veg[hh] * D * NuSh); // Eq. 28 from Essery et al., 2003
+
+    CRHM_le = (dens / (ra + ri)) * (qa - qs) * LH_SUB(ts); // Eq. 29 from Essery et al., 2003
+    CRHM_h = (dens / ra) * CP_AIR * (ta - ts); // Eq. 4 Essery et al., 2003 and Pomeroy et al., 2016
+
+    return (ier);
+}
+
+/*
+** NAME
+**      void _advec_veg(void) -- calculates advected energy at a point
+**
+** DESCRIPTION
+**      This routine calculates the advected energy for a 2-layer vegsnowcover
+**	if there's precipitation for the current timestep.
+**
+** GLOBAL VARIABLES READ
+**	m_rain
+**	m_snow
+**	precip_now_veg
+**	T_rain_veg
+**	T_s_veg
+**	T_sf
+**	time_step
+**
+** GLOBAL VARIABLES MODIFIED
+**	Qp
+*/
+
+void ClassCanopySnowBalanceBase::_advec_veg(void) {
+
+    if (precip_now_veg[hh]) {
+        Qp[hh] = (heat_stor(CP_WATER(T_rain_veg[hh]), m_rain[hh], (T_rain_veg[hh] - T_s_veg[hh])) +
+            heat_stor(CP_ICE(T_sf[hh]), m_snow[hh], (T_sf[hh] - T_s_veg[hh]))) / time_step[hh];
+    }
+    else
+        Qp[hh] = 0.0;
+}
+
+/*
+** NAME
+**      void _mass_bal(void) -- calculates point mass budget of snow intercepted in the canopy
+**
+** DESCRIPTION
+**      Calculates the point mass budget for snow intercepted in the canopy (i.e., adds new precip, sublimation/evap mass removal, melt/drip, unloading)
+**	model.  It then solves for new snow temperatures.
+**
+** GLOBAL VARIABLES READ
+**
+** GLOBAL VARIABLES MODIFIED
+**
+*/
+
+void ClassCanopySnowBalanceBase::_mass_bal(void) {
+
+    // adjust mass and calc. runoff
+
+    // age snow by compacting snow due to time passing
+    // _time_compact(); rm for now, likely needs to be adjusted for canopy snow
+
+    // process precipitation event
+    _precip_veg();
+
+    // calculate sublimation/evaporation and adjust canopy snowpack
+
+    _subl_evap();
+
+    // calculate melt or freezing and adjust cold content
+
+    _snowmelt();
+
+    // calculate mass unloading of snow due to wind, sublimation, melting
+
+    _mass_unld();
+
+    // calculate runoff of liquid water intercepted in the canopy */
+
+    _runoff_veg();
+
+    // adjust layer temps if there was a vegsnowcover at start of the
+    //   timestep and there's still snow on the ground
+
+    if(snow_h2o_veg[hh] > 0.0){
+        vegsnowcover[hh] = 1;
+        T_s_veg[hh] = new_tsno_veg(m_s_veg[hh], T_s_veg[hh], cc_s_veg[hh]);
+    } else {
+        vegsnowcover[hh] = 0;
+    }
+
+}
+
+/*
+** NAME
+**      void _precip_veg(void) -- process a precipitation event
+**
+** DESCRIPTION
+**      This routine processes a precipitation event, i.e., the current
+**	precip record, if there's one for the current timestep.  It
+**	determines if the precip is rain or snow which increases the
+**	vegsnowcover.
+**
+** GLOBAL VARIABLES READ
+**	h2o_sat_veg_snow
+**	m_rain
+**	m_precip
+**	max_h2o_vol_veg
+**	precip_now_veg
+**	vegsnowcover
+**	T_sf
+**	z_snow_veg
+**
+** GLOBAL VARIABLES MODIFIED
+**	liq_h2o_veg
+**	h2o_sat_veg
+**	liq_h2o_veg
+**	T_s_veg
+**	T_s_veg
+*/
+
+void ClassCanopySnowBalanceBase::_precip_veg(void)
+{
+
+    if (precip_now_veg[hh]) {
+        if (vegsnowcover[hh] || liq_h2o_veg[hh] > 0.0) {
+
+            // Adjust vegsnowcover's load by new snow/rain.
+            liq_h2o_veg[hh] += m_rain[hh];
+            snow_h2o_veg[hh] += m_snow[hh];
+            m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh];
+        }
+        else { // no vegsnowcover
+
+    // Use snowfall, if any, to setup a new vegsnowcover.
+
+            if (m_precip[hh] > 0.0) {
+                init_snow_veg();
+            }
+        }
+
+    }
+
+}
+
+/*
+** NAME
+**      void _snowmelt(void) -- calculates melt or re-freezing at a point
+**
+** DESCRIPTION
+**      Calculates melting or re-freezing for point 2-layer energy balance
+**      snowmelt model.
+**
+** GLOBAL VARIABLES READ
+**
+** GLOBAL VARIABLES MODIFIED
+**
+*/
+
+void ClassCanopySnowBalanceBase::_snowmelt(void) {
+
+    float  Q_0;            // energy available for surface melt
+    float  Q_freeze;       // energy used for re-freezing
+    float  Q_left;         // energy left after re_freezing
+    float  h2o_refrozen;   // amount of liquid H2O that was refrozen
+
+// If no snow in the canopy, then just exit.
+
+    if (!vegsnowcover[hh]) {
+        delmelt_veg[hh] = 0.0;
+        return;
+    }
+
+    // calculate melt or freezing, and adjust cold content
+
+    // calculate surface melt
+
+    // energy for surface melt
+    Q_0 = (delta_Q_veg[hh] * time_step[hh]) + cc_s_veg[hh];
+
+    if (Q_0 > 0.0) {
+        delmelt_veg[hh] = MELT(Q_0); // liquid water will only freeze on next timestep
+        if(snow_h2o_veg[hh] - delmelt_veg[hh] < 0.0){
+            delmelt_veg[hh] = snow_h2o_veg[hh]; // cannot melt more than the amount of snow in the canopy
+        }
+        cc_s_veg[hh] = 0.0; // all energy is used to melt snow
+    }
+    else if (Q_0 == 0.0) {
+        delmelt_veg[hh] = 0.0;
+        cc_s_veg[hh] = 0.0;
+    }
+    else {
+        delmelt_veg[hh] = 0.0;
+        cc_s_veg[hh] = Q_0;
+
+        // if (m_s_veg[hh] < 2.0) // addition TB 06/03/10, TODO mod for canopy snow
+        //     cc_s_veg[hh] = 0.0;
+    }
+
+    liq_h2o_veg[hh] += delmelt_veg[hh];
+    snow_h2o_veg[hh] -= delmelt_veg[hh];
+
+    // adjust layers for re-freezing
+
+    // adjust surface layer
+
+    h2o_refrozen = 0.0;
+
+    if (cc_s_veg[hh] < 0.0) { // cannot enter here if snow is melting on current timestep since cc_s_veg == 0
+        // if liquid h2o present, calc refreezing and adj cc_s_veg, assumes liquid is at freezing point
+        if (liq_h2o_veg[hh] > 0.0) {
+            Q_freeze = liq_h2o_veg[hh] * LH_FUS(FREEZE);
+            Q_left = Q_0 + Q_freeze;
+
+            // cold content is negative considering updated Q_0, thus enough energy to freeze all liquid water
+            if (Q_left <= 0.0) {
+                h2o_refrozen = liq_h2o_veg[hh];
+                cc_s_veg[hh] = Q_left;
+            }
+            else {
+                h2o_refrozen = liq_h2o_veg[hh] - MELT(Q_left);
+                cc_s_veg[hh] = 0.0;
+            }
+        }
+    }
+
+    // Note:  because of rounding errors, h2o_refrozen may not
+    //   be exactly the same as liq_h2o_veg.  Check for this case, and if so, then just zero out liq_h2o_veg.
+
+    if (fabs(liq_h2o_veg[hh] - h2o_refrozen) <= 1e-8) {
+        liq_h2o_veg[hh] = 0.0;
+    }
+    else {
+        liq_h2o_veg[hh] -= h2o_refrozen;
+        snow_h2o_veg[hh] += h2o_refrozen;
+
+    }
+
+    // determine if vegsnowcover is isothermal
+
+    if ((vegsnowcover[hh] == 1) && (cc_s_veg[hh] == 0.0))
+        isothermal[hh] = 1;
+    else
+        isothermal[hh] = 0;
+
+    m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh];
+}
+
+/*
+** NAME
+**      void _mass_unld(void) -- adjust the canopy snowpack's snow storage due to mass unloading of snow liquid water is handled seperately under runoff
+**
+** DESCRIPTION
+**      This is the updated mass snow unloading parameterisations from
+**  Cebulski & Pomeroy 2025 to unload based on wind, snowmelt, and sublimation
+**
+** GLOBAL VARIABLES READ
+**
+** GLOBAL VARIABLES MODIFIED
+**
+*/
+
+void ClassCanopySnowBalanceBase::_mass_unld(void)
+{
+    delunld[hh] = 0.0; // need to clear this val otherwise accumulates due to += below
+
+    if (!vegsnowcover[hh]) { // no snow in the canopy exit early
+        delunld_wind[hh] = 0.0;
+        delunld_melt[hh] = 0.0;
+        return;
+    }
+
+    switch ((int)MassUnloadingSwitch[hh]) // options are 0 for Cebulski & Pomeroy 2025 ablation paper; 1 for Andreadis 2009; 2 for Roesch 2001. HP98/Ellis is enabled using the original canopyclearinggap module due to major differences in how it handles canopy snowmelt, icebulb temp using the pom98 analytical sublimation, etc.
+    {
+        case 0: // This is the updated mass snow unloading parameterisations from Cebulski & Pomeroy 2025 ablation paper
+        {
+            // check maximum canopy snow load spill what is overflowing
+        if (snow_h2o_veg[hh] > Lmax[hh])
+        {
+            delunld[hh] = snow_h2o_veg[hh] - Lmax[hh];
+        }
+
+        // melt induced mass unloading of solid snow based on ratio relative to canopy snowmelt found to be function of canopy snow load for Fortress obs
+        // float unld_to_melt_ratio_m = 0.15; // include it as parameter
+        // float unld_to_melt_ratio_b = -0.43; // include it as parameter
+
+        float unld_to_melt_ratio = snow_h2o_veg[hh] * unld_to_melt_ratio_m[hh] + unld_to_melt_ratio_b[hh]; // WARNING this can go negative so handle below
+        unld_to_melt_ratio = std::max(0.0, unld_to_melt_ratio);
+        delunld_melt[hh] = delmelt_veg[hh] * unld_to_melt_ratio;
+
+        // mechanical wind induced unloading
+        // const float a_u = 1.282646e-06; // Cebulski & Pomeroy coef from exponential function of unloading as function of wind speed and canopy snow load measurements at Fortress mountain w no melt.
+        // const float b_u = 3.925391e-01; // TODO move to par file
+
+        // wind induced unloading as function of shear stress
+        // const float a_tau = 0.371/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
+        float a_tau_s = a_tau[hh]/(60.0*60.0); // derrived from unloading vs. shear stress relationship presented in Cebulski & Pomeroy 2025 (HESS paper) converting from per hour to per sec here.
+
+        float fu = 0.0;
+
+        if (u_2_3rds[hh] >= 0.0)
+        {
+            float tau_mid = 0.0;
+
+            if (CanopyWindSwitchCanSno[hh] == 0){ // if using measured mid canopy wind approx tau as square of mid canopy wind speed as developed from obs at fortress mountain
+                tau_mid = u_2_3rds[hh] * u_2_3rds[hh] * 0.02; // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
+            } else { // assume wind speed was measured at canopy top so estimate mid canopy tau from above canopy tau estimated from above canopy wind (See description in Cebulski et al., 2026, HP)
+                float air_density = GAS_DEN(P_a[hh], MOL_AIR, T_a[hh]);
+                float d0 = Ht[hh] * (2.0/3.0);
+                float z0 = Ht[hh] * 0.1;
+
+                float u_veg_ht = 0.0;
+                adst_wind_cpy_top(Ht[hh], u[hh], rel_z_u[hh], u_veg_ht);
+                float ustar_top = (u_veg_ht * PBSM_constants::KARMAN)/log((z_u[hh] - d0)/z0); // wind to tau conversion developed at forest tower using obs shear stress vs. wind speed
+                float tau_top = ustar_top * ustar_top * air_density; // estimate mid canopy tau from above canopy tau using log wind profile
+                tau_mid = tau_top * 0.08; // empirical transfer function developed from fortress mountain obs adjusted to get closer match to Marmot hanging tree snow load to relate mid canopy tau to above canopy tau
+            }
+            fu = a_tau_s * tau_mid; // unloading rate due to wind as predicted by shear stress (s-1) multiplied by canopy load later
+        }
+        else
+        {
+            fu = 0.0; // less than wind induced unloading threshold so set equal to 0.
+        }
+
+        // ablation via temperature, wind, and duration based unloading
+        // delunld[hh] = snow_h2o_veg[hh] * (fT + fu + ft) * dt; // ODE solution: calculate solid snow unloading over the time interval
+
+        // analytical solution which is more exact over longer time intervals, following from Cebulski & Pomeroy derivation of the HP98 unloading parameterisation
+        delunld_wind[hh] = snow_h2o_veg[hh] * (1 - exp(-fu * time_step[hh])); // similar analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review ,similar as steps from eq 27 to 28.
+        delunld[hh] += delunld_wind[hh];
+        delunld[hh] += delunld_melt[hh];
+
+        break;
+
+        } // end case 0
+
+        case 1:
+        { // This is the mass snow unloading parameterisation from Andreadis et al., 2009 based on the snowmelt rate. No wind induced unloading.
+
+          float Lres = 5.0; // threshold above which melt unloading starts to occur.
+
+          if (snow_h2o_veg[hh] > Lres)
+          {
+            float melt_drip_ratio_andreadis = 0.4;
+            delunld_melt[hh] = delmelt_veg[hh] * melt_drip_ratio_andreadis;
+          } else {
+            delunld_melt[hh] = 0.0; // snow load is below threshold and can only melt or sublimate
+          }
+
+          delunld[hh] += delunld_melt[hh];
+
+          break;
+
+        } // end case 1
+
+        case 2:
+        { // This is the mass snow unloading parameterisation from Roesch et al., 2001 based on a temperature and wind speed function.
+
+          // check maximum canopy snow load
+          if (snow_h2o_veg[hh] > Lmax[hh])
+          {
+            delunld[hh] = snow_h2o_veg[hh] - Lmax[hh];
+          }
+
+          // Mass unloading of canopy snow due to melt
+
+          const float C1 = 1.87e5; // constant provided in Roesch et al., 2001
+          float fT = 0.0; // unloading rate per second.
+
+          if ((T_a[hh]) < CRHM_constants::Tm) // Follows equation 31 in Cebulski & Pomeroy 2025 Wires WATER Review.
+          {
+            fT = 0.0;
+          } else {
+            fT = (T_a[hh] - CRHM_constants::Tm)/C1;
+          }
+
+          delunld_melt[hh] = snow_h2o_veg[hh] * (1-exp(-(fT) * time_step[hh])); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
+
+          // Mass unloading of canopy snow due to mechanical removal from wind at canopy top
+          const float C2 = 1.56e5; // wind unloading constant from Roesch et al., 2001
+          float fu = 0.0;
+          float u_ht = 0.0;
+
+          adst_wind_cpy_top(Ht[hh], u[hh], z_u[hh], u_ht);
+
+          if(u_ht >= 0.0){
+            fu = u_ht/C2;
+          } else {
+            fu = 0.0; // unloading rate due to wind (s-1)
+          }
+
+          delunld_wind[hh] = snow_h2o_veg[hh] * (1-exp(-(fu) * time_step[hh])); // analytical solution for ODE equation 30 in Cebulski & Pomeroy 2025 Wires WATER Review
+
+          delunld[hh] += delunld_wind[hh];
+          delunld[hh] += delunld_melt[hh];
+
+          break;
+
+        } // end case 2
+    } // MassUnloadingSwitch
 
 
 
+    if (delunld[hh] > snow_h2o_veg[hh])
+    {
+        delunld[hh] = snow_h2o_veg[hh];
+        snow_h2o_veg[hh] = 0.0;
+    }
+    else
+    {
+        snow_h2o_veg[hh] -= delunld[hh];
+    }
+
+    m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh];
+
+}
+
+/*
+** NAME
+**      void _subl_evap(void) -- calculates evaporation/condensation at a point
+**
+** DESCRIPTION
+**      Calculates mass lost or gained by sublimation/evaporation/condensation
+**
+** GLOBAL VARIABLES READ
+**	qsub_veg
+**	time_step
+**
+** GLOBAL VARIABLES MODIFIED
+**	delsub_veg snow_h2o_veg liq_h2o_veg
+**
+*/
+
+void ClassCanopySnowBalanceBase::_subl_evap(void) {
+
+    if (!vegsnowcover[hh] && !(snow_h2o_veg[hh] > 0.0)) { // no h2o in the canopy
+        delsub_veg[hh] = 0.0;
+    } else {
+        // Compute total mass change due to sublimation over the time step
+        qsub_veg[hh] = Ql_veg[hh] / LH_SUB(T_s_veg[hh]);
+        delsub_veg[hh] = qsub_veg[hh] * time_step[hh];
+
+        // Apply mass changes based on the presence of snow or liquid water
+        if (snow_h2o_veg[hh] > -delsub_veg[hh]) {
+            // Snow is present in the canopy; modify snow water equivalent
+            snow_h2o_veg[hh] += delsub_veg[hh];
+
+        } else {
+            delsub_veg[hh] = -snow_h2o_veg[hh];
+            snow_h2o_veg[hh] = 0.0;
+        }
+
+    }
+
+    if (!(liq_h2o_veg[hh] > 0.0) || (snow_h2o_veg[hh] > 0.0)){
+        delevap_veg[hh] = 0.0; // no evap if no liquid water or if snow is present since snow will sublimate before liquid water evaporates, TODO maybe need to adjust this if we want to allow for evaporation of liquid water in the canopy when snow is present as well
+    } else {
+        // liquid water is present; modify liquid water content
+        // Compute total mass change due to sublimation/evaporation over the time step
+        delevap_veg[hh] = (Ql_veg[hh] / LH_VAP(T_s_veg[hh])) * time_step[hh];
+
+        // Apply mass changes based on the presence of snow or liquid water
+        if (liq_h2o_veg[hh] > -delevap_veg[hh]) {
+            // Snow is present in the canopy; modify snow water equivalent
+            liq_h2o_veg[hh] += delevap_veg[hh];
+
+        } else {
+            delevap_veg[hh] = -liq_h2o_veg[hh];
+            liq_h2o_veg[hh] = 0.0;
+        }
+
+    }
+    m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh];
+}
+
+#define	BB	0.4 // changed from 0.05
+
+/*
+** NAME
+**      void _runoff_veg(void) -- calculates runoff from vegsnowcover
+**
+** DESCRIPTION
+**      Calculates runoff for point energy budget 2-layer snowmelt model
+**
+** GLOBAL VARIABLES READ
+**	liq_h2o_veg
+**	vegsnowcover
+**	max_h2o_vol_veg
+**
+** GLOBAL VARIABLES MODIFIED
+**	liq_h2o_veg
+**	max_liq_veg_frac
+**	h2o_sat_veg
+**	h2o_vol_veg
+**	deldrip_veg
+*/
+
+void ClassCanopySnowBalanceBase::_runoff_veg(void) {
+
+    // Determine runoff, and water left in the snow
+    if((int)MassUnloadingSwitch[hh] == 1){ // Andreadis2009
+        max_liq_veg[hh] = m_s_veg[hh] * max_liq_veg_frac[hh] + exp(-4.0) * LAI[hh] * 2.0; // times 2 for two sided lai as in Andreadis2009
+    } else { // From CRHM Canopy
+        max_liq_veg[hh] = m_s_veg[hh] * max_liq_veg_frac[hh] + Cc[hh]*LAI[hh]*0.2;
+    }
+
+    if (liq_h2o_veg[hh] > max_liq_veg[hh]) {
+
+            deldrip_veg[hh] = liq_h2o_veg[hh] - max_liq_veg[hh];
+            liq_h2o_veg[hh] = max_liq_veg[hh];
+            m_s_veg[hh] = liq_h2o_veg[hh] + snow_h2o_veg[hh];
+
+        } else {
+            deldrip_veg[hh] = 0.0;
+    }
 
 
+}
+
+/* ----------------------------------------------------------------------- */
+
+float ClassCanopySnowBalanceBase::new_tsno_veg(
+    float	spm,	/* layer's specific mass (kg/m^2) 	 */
+    float	t0,	/* layer's last temperature (K) 	 */
+    float	ccon)	/* layer's adjusted cold content (J/m^2) */
+{
+    float	tsno;
+    float	cp;
+    float	tdif;
+
+    cp = CP_ICE(t0);
+
+    tdif = ccon / (spm * cp);
+    tsno = tdif + FREEZE;
+
+    if (tsno < MIN_SNOW_TEMP + FREEZE)
+        tsno = MIN_SNOW_TEMP + FREEZE;
+    else {
+        if (tsno > FREEZE)
+            tsno = FREEZE;
+    }
+
+    return (tsno);
+}
+/* ----------------------------------------------------------------------- */
+
+float ClassCanopySnowBalanceBase::satw(float tk) {   // air temperature (K)
+    double x;
+    double l10;
+
+    if (tk <= 0.) {
+        CRHMException TExcept("satw temperature <= 0.0", TERMINATE);
+        LogError(TExcept);
+    }
+
+    errno = 0;
+    l10 = log(1.e1);
+
+    x = -7.90298 * (BOIL / tk - 1.0) + 5.02808 * log(BOIL / tk) / l10 -
+        1.3816e-7 * (pow(1.0e1, 1.1344e1 * (1.0 - tk / BOIL)) - 1.0) +
+        8.1328e-3 * (pow(1.0e1, -3.49149 * (BOIL / tk - 1.0)) - 1.0) +
+        log(SEA_LEVEL) / l10;
+
+    x = pow(1.0e1, x);
+
+    if (errno) {
+        CRHMException TExcept("satw: bad return from log or pow", TERMINATE);
+        LogError(TExcept);
+    }
+
+    return x;
+}
+
+float ClassCanopySnowBalanceBase::sati(float  tk) { //* air temperature (K)
+
+    double  l10;
+    double  x;
+
+    if (tk <= 0.0) {
+        CRHMException TExcept("sati temperature <= 0.0", TERMINATE);
+        LogError(TExcept);
+        //            tk = FREEZE + 0.01;
+    }
+
+    if (tk > FREEZE) {
+        x = satw(tk);
+        return(x);
+    }
+
+    errno = 0;
+    l10 = log(1.e1);
+
+    x = pow(1.e1, -9.09718 * ((FREEZE / tk) - 1.0) - 3.56654 * log(FREEZE / tk) / l10 +
+        8.76793e-1 * (1.0 - (tk / FREEZE)) + log(6.1071) / l10);
+
+    if (errno) {
+        CRHMException TExcept("sati: bad return from log or pow", TERMINATE);
+        LogError(TExcept);
+    }
+
+    return(x * 1.e2);
+}
+
+float ClassCanopySnowBalanceBase::heat_stor(
+	float	cp,	/* specific heat of layer (J/kg K) */
+	float	spm,	/* layer specific mass (kg/m^2)    */
+	float	tdif)	/* temperature change (K)          */
+{
+	float	stor;
+
+	stor = cp * spm * tdif;
+
+	return (stor);
+}
+
+float ClassCanopySnowBalanceBase::adst_wind_cpy_top(
+    float veg_ht, /* Height of vegetation (m) */
+    float uz,     /* Wind speed at height z (m/s) */
+    float z, /* Height of wind speed measurement (m) */
+
+    // output
+    float &u_veg_ht /* Wind speed at canopy top (m/s)*/
+    )
+{
+    if (veg_ht - 2.0 / 3.0 * z > 0.0) {
+        u_veg_ht = uz * log((veg_ht - 2.0 / 3.0 * z) / 0.123 * z) / log((z - 2.0 / 3.0 * z) / 0.123 * z);
+    } else {
+        u_veg_ht = 0.0;
+    }
+    return(u_veg_ht);
+}
+
+float ClassCanopySnowBalanceBase::cionco_canopy_wind_spd(
+    float veg_ht,    /* Height of vegetation (m) */
+    float u_veg_ht,  /* Wind speed at height veg ht (m/s) */
+    float target_ht, /* target height of output wind speed (m) */
+
+    // output
+    float &u_target_ht /* Wind speed at target height (m/s)*/
+)
+{
+    float A = 2.4338 + 3.45753 * exp(-u_veg_ht);                 /* Modified Cionco wind model from Parviainen & Pomeroy 2000 for mature forest*/
+    //double A = 2.97 + 3.2 * exp(-u_veg_ht);                 /* Modified Cionco wind model from Parviainen & Pomeroy 2000 for regen forest*/
+
+    u_target_ht = u_veg_ht * exp(A * (target_ht / veg_ht - 1.0)); /* calculates canopy windspd  */
+
+    return (u_target_ht);
+}
