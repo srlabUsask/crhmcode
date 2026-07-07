@@ -41,10 +41,10 @@ void ClassCRHMCanopyVectorBasedClearingGap::decl(void)
 
   Description = "'Calculates initial snow interception for forest canopy after Cebulski & Pomeroy (2025, Hyrological Proc.) canopy snow ablation is handled by the CanopySnowBalance module, with assumptions that are for this to be applied on a forested HRU without significant clear cuts/large gaps in the forest with width many times the canopy height. For surface radiation calculations for canopy, clearing, and gap cases and mass calculations for clearing and gap cases, this module is consistent with the CanopyClearingGap module.' \
                  'Inputs are observations Qsi (W/m^2) and Qli (W/m^2), ' \
-                 'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2), ' \
-                 'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and observation Qli (W/m^2), ' \
-                 'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and variable QliVt_Var (W/m^2), ' \
-                 'Inputs are variable QsiA_Var (W/m^2)(horizontal) from Annandale and variable QliVt_Var (W/m^2).'";
+                 'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2) from module longVt, ' \
+                 'Inputs are variable QsiS_Var (W/m^2)(slope) from module Slope_Qsi#1, etc. and observation Qli (W/m^2), ' \
+                 'Inputs are variable QsiS_Var (W/m^2)(slope) from module Slope_Qsi#1, etc. and variable QliVt_Var (W/m^2) from module longVt, ' \
+                 'Inputs are variable QsiA_Var (W/m^2)(horizontal) from module Annandale, etc. and variable QliVt_Var (W/m^2) from module longVt.'";
 
   // Observations
 
