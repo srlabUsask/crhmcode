@@ -1,10 +1,10 @@
-// 07/03/26 Fix h2o bug in ClassSnobalBase::_precip, Add CanopySnowBalanceCRHM,
+// 07/07/26 Fix h2o bug in ClassSnobalBase::_precip, Add CanopySnowBalanceCRHM,
 // CanopyVectorBased, CanopyVectorBasedClearingGap modules in 03/03/26
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
 
-#define CurrentVersion "07/03/26"
+#define CurrentVersion "07/07/26"
 
 #include <stdexcept>
 #include "CRHMmain.h"

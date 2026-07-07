@@ -1,4 +1,4 @@
-// 07/03/26
+// 07/07/26
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -102,9 +102,9 @@ void MoveModulesToGlobal(String DLLName){
   DLLModules.AddModule(new ClassCRHMCanopy("Canopy", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassCRHMCanopyClearing("CanopyClearing", "03/04/25", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassCRHMCanopyClearingGap("CanopyClearingGap", "03/04/25", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyVectorBased("CanopyVectorBased", "07/03/26", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCRHMCanopyVectorBasedClearingGap("CanopyVectorBasedClearingGap", "07/03/26", CRHM::ADVANCE));
-  DLLModules.AddModule(new ClassCanopySnowBalanceCRHM("CanopySnowBalanceCRHM", "07/03/26", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyVectorBased("CanopyVectorBased", "07/07/26", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCRHMCanopyVectorBasedClearingGap("CanopyVectorBasedClearingGap", "07/07/26", CRHM::ADVANCE));
+  DLLModules.AddModule(new ClassCanopySnowBalanceCRHM("CanopySnowBalanceCRHM", "07/07/26", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassNeedle("NeedleLeaf", "04/05/22", CRHM::ADVANCE));
   DLLModules.AddModule(new Classwalmsley_wind("walmsley_wind", "07/30/08", CRHM::ADVANCE));
   DLLModules.AddModule(new ClassXG("XG", "05/07/25", CRHM::ADVANCE));
@@ -28496,10 +28496,10 @@ void ClassCRHMCanopyVectorBased::decl(void)
 
   Description = "'Calculates initial snow interception after Cebulski & Pomeroy (2025, Hyrological Proc.) canopy snow ablation is handled by the CanopySnowBalance module. Assumptions are for this to be applied on a forested HRU without significant clear cuts/large gaps in the forest with width many times the canopy height. This module also does some radiation calcs for consistency with the CanopyClearingGap module which this one replaces.' \
                  'Inputs are observations Qsi (W/m^2) and Qli (W/m^2), ' \
-                 'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2), ' \
-                 'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and observation Qli (W/m^2), ' \
-                 'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and variable QliVt_Var (W/m^2), ' \
-                 'Inputs are variable QsiA_Var (W/m^2)(horizontal) from Annandale and variable QliVt_Var (W/m^2).'";
+                 'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2) from module longVt, ' \
+                 'Inputs are variable QsiS_Var (W/m^2)(slope) from module Slope_Qsi#1, etc. and observation Qli (W/m^2), ' \
+                 'Inputs are variable QsiS_Var (W/m^2)(slope) from module Slope_Qsi#1, etc. and variable QliVt_Var (W/m^2) from module longVt, ' \
+                 'Inputs are variable QsiA_Var (W/m^2)(horizontal) from module Annandale, etc. and variable QliVt_Var (W/m^2) from module longVt.'";
 
   // Observations
 
@@ -28923,10 +28923,10 @@ void ClassCRHMCanopyVectorBasedClearingGap::decl(void)
 
   Description = "'Calculates initial snow interception for forest canopy after Cebulski & Pomeroy (2025, Hyrological Proc.) canopy snow ablation is handled by the CanopySnowBalance module, with assumptions that are for this to be applied on a forested HRU without significant clear cuts/large gaps in the forest with width many times the canopy height. For surface radiation calculations for canopy, clearing, and gap cases and mass calculations for clearing and gap cases, this module is consistent with the CanopyClearingGap module.' \
                  'Inputs are observations Qsi (W/m^2) and Qli (W/m^2), ' \
-                 'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2), ' \
-                 'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and observation Qli (W/m^2), ' \
-                 'Inputs are variable QsiS_Var (W/m^2)(slope) from Annandale and variable QliVt_Var (W/m^2), ' \
-                 'Inputs are variable QsiA_Var (W/m^2)(horizontal) from Annandale and variable QliVt_Var (W/m^2).'";
+                 'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2) from module longVt, ' \
+                 'Inputs are variable QsiS_Var (W/m^2)(slope) from module Slope_Qsi#1, etc. and observation Qli (W/m^2), ' \
+                 'Inputs are variable QsiS_Var (W/m^2)(slope) from module Slope_Qsi#1, etc. and variable QliVt_Var (W/m^2) from module longVt, ' \
+                 'Inputs are variable QsiA_Var (W/m^2)(horizontal) from module Annandale, etc. and variable QliVt_Var (W/m^2) from module longVt.'";
 
   // Observations
 
@@ -29441,9 +29441,8 @@ void ClassCanopySnowBalanceCRHM::decl(void) {
 
     Description = "'Handles the mass and energy balance of snow intercepted in the canopy. Should be paired with the CanopyVectorBased module which does the initial loading of precip in the canopy and some radiation calculations. There is a timestep subset routine in this module following the surface snowpack routine. Standard CRHM module.' \
                  'use Qsi (W/m^2) and Qli (W/m^2) observations,' \
-                 'use variables Qsisn_Var (W/m^2) and Qlisn_Var (W/m^2) from module CanopyClearing.' \
-                 'use observation Qsi (W/m^2) and QliVt_Var (W/m^2) from module longVt.' \
-                 'use variables QsiS_Var (W/m^2) from Annandale and QliVt_Var (W/m^2) from module longVt.'";
+                 'use variables Qsi (W/m^2) from observation and QliVt_Var (W/m^2) from module longVt.' \
+                 'use variables QsiS_Var (W/m^2) from module Slope_Qsi#1, etc. and QliVt_Var (W/m^2) from module longVt.'";
 
     declstatvar("isothermal_veg", NHRU, "melting: 0/1", "()", &isothermal);
     declstatvar("vegsnowcover", NHRU, "snow on veg at start of current timestep: 0/1", "()", &vegsnowcover);
