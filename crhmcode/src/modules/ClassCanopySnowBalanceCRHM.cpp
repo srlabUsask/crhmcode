@@ -41,9 +41,8 @@ void ClassCanopySnowBalanceCRHM::decl(void) {
 
     Description = "'Handles the mass and energy balance of snow intercepted in the canopy. Should be paired with the CanopyVectorBased module which does the initial loading of precip in the canopy and some radiation calculations. There is a timestep subset routine in this module following the surface snowpack routine. Standard CRHM module.' \
                  'use Qsi (W/m^2) and Qli (W/m^2) observations,' \
-                 'use variables Qsisn_Var (W/m^2) and Qlisn_Var (W/m^2) from module CanopyClearing.' \
-                 'use observation Qsi (W/m^2) and QliVt_Var (W/m^2) from module longVt.' \
-                 'use variables QsiS_Var (W/m^2) from Annandale and QliVt_Var (W/m^2) from module longVt.'";
+                 'use variables Qsi (W/m^2) from observation and QliVt_Var (W/m^2) from module longVt.' \
+                 'use variables QsiS_Var (W/m^2) from module Slope_Qsi#1, etc. and QliVt_Var (W/m^2) from module longVt.'";
 
     declstatvar("isothermal_veg", TDim::NHRU, "melting: 0/1", "()", &isothermal);
     declstatvar("vegsnowcover", TDim::NHRU, "snow on veg at start of current timestep: 0/1", "()", &vegsnowcover);
