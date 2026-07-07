@@ -44,7 +44,7 @@ void ClassCRHMCanopyVectorBased::decl(void)
                  'Inputs are observation Qsi (W/m^2) and variable QliVt_Var (W/m^2) from module longVt, ' \
                  'Inputs are variable QsiS_Var (W/m^2)(slope) from module Slope_Qsi#1, etc. and observation Qli (W/m^2), ' \
                  'Inputs are variable QsiS_Var (W/m^2)(slope) from module Slope_Qsi#1, etc. and variable QliVt_Var (W/m^2) from module longVt, ' \
-                 'Inputs are variable QsiA_Var (W/m^2)(horizontal) from Annandale, etc. and variable QliVt_Var (W/m^2) from module longVt.'";
+                 'Inputs are variable QsiA_Var (W/m^2)(horizontal) from module Annandale, etc. and variable QliVt_Var (W/m^2) from module longVt.'";
 
   // Observations
 
